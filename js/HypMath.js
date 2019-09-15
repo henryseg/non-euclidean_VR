@@ -60,15 +60,7 @@ function setInverse(boost1, boost2){  //set boost1 to be the inverse of boost2
     boost1[0].getInverse(boost2[0]);
 }
 
-// Constructs a point on the hyperboloid from a direction and a hyperbolic distance from the origin.
-// This is only used to place lights, later in this file.
-function constructHyperboloidPoint(direction, distance){
-	var w = Math.cosh(distance);
-	var magSquared = w * w - 1;
-	direction.normalize();
-	direction.multiplyScalar(Math.sqrt(magSquared));
-	return new THREE.Vector4(direction.x, direction.y, direction.z, w);
-}
+
 
 //----------------------------------------------------------------------
 //	Matrix - Generators
@@ -132,13 +124,48 @@ function fixOutsideCentralCell( boost ) {
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
+//  Tiling Generators Constructors
+//-----------------------------------------------------------------------------------------------------------------------------
+
+
+var hCWH = 0.6584789485;
+var createGenerators = function(){   /// generators for the tiling by cubes. 
+  var gen0 = translateByVector(new THREE.Vector3(2.0*hCWH,0.0,0.0));
+  var gen1 = translateByVector(new THREE.Vector3(-2.0*hCWH,0.0,0.0));
+  var gen2 = translateByVector(new THREE.Vector3(0.0,2.0*hCWH,0.0));
+  var gen3 = translateByVector(new THREE.Vector3(0.0,-2.0*hCWH,0.0));
+  var gen4 = translateByVector(new THREE.Vector3(0.0,0.0,2.0*hCWH));
+  var gen5 = translateByVector(new THREE.Vector3(0.0,0.0,-2.0*hCWH));
+  return [gen0, gen1, gen2, gen3, gen4, gen5];
+}
+
+var invGenerators = function(genArr){
+  return [genArr[1],genArr[0],genArr[3],genArr[2],genArr[5],genArr[4]];
+}
+
+// The position of the camera, and transformations coming from movement or rotation are all packaged as "boosts"
+// For H^3, our boosts are arrays containing a single element: an elt of SO(3,1). 
+// For other geometries there may be multiple objects in the array. For example, for non-isotropic spaces,
+// we have to deal with rotation carefully: the camera can turn in ways that the geometry has no isometry for.
+var packageBoosts = function(genArr){   
+  return [[genArr[0]], [genArr[1]], [genArr[2]], [genArr[3]], [genArr[4]], [genArr[5]]]
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
 //	Object Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var PointLightObject = function(pos, colorInt){ //position is a euclidean Vector3
-	var posMag = pos.length();
-	var posDir = pos.normalize();
-	lightPositions.push(constructHyperboloidPoint(posDir, posMag));
-	lightIntensities.push(colorInt);
+  lightPositions.push(new THREE.Vector4(0,0,0,1).applyMatrix4(translateByVector(pos)));
+  lightIntensities.push(colorInt);
 }
+
+var initObjects = function(){
+  PointLightObject(new THREE.Vector3(0.8,0,0), new THREE.Vector4(1,0,0,1));
+  PointLightObject(new THREE.Vector3(0,0.8,0), new THREE.Vector4(0,1,0,1));
+  PointLightObject(new THREE.Vector3(0,0,0.8), new THREE.Vector4(0,0,1,1));
+  PointLightObject(new THREE.Vector3(-0.8,-0.8,-0.8), new THREE.Vector4(1,1,1,1));
+  globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5,0,0)));
+}
+
 

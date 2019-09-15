@@ -67,7 +67,7 @@ THREE.Controls = function(done){
         reduceBoostError(g_currentBoost);
         if(fixIndex !== -1){
            preTranslate(g_cellBoost, invGenBoosts[fixIndex]);
-           reduceBoostError(g_currentBoost);
+           reduceBoostError(g_cellBoost);
            setInverse(g_invCellBoost, g_cellBoost);
         }
 
