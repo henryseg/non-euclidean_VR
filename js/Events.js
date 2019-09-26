@@ -70,4 +70,13 @@ function getScreenOrientation(event){
     g_phoneOrient[2] = event.alpha;
 }
 
-window.addEventListener('deviceorientation', getScreenOrientation);
+// window.addEventListener('deviceorientation', getScreenOrientation);
+
+// try to enable device orientation, taken from https://medium.com/@leemartin/how-to-request-device-motion-and-orientation-permission-in-ios-13-74fc9d6cd140
+DeviceOrientationEvent.requestPermission()
+.then(response => {
+  if (response == 'granted') {
+    window.addEventListener('deviceorientation', getScreenOrientation)
+  }
+})
+.catch(console.error)
