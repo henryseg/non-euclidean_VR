@@ -152,8 +152,17 @@ var packageBoosts = function(genArr){
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
-//	Object Constructors
+//	Initialise things
 //-----------------------------------------------------------------------------------------------------------------------------
+
+var initGeometry = function(){
+  g_currentBoost = [ new THREE.Matrix4() ];  
+  g_cellBoost = [ new THREE.Matrix4() ]; 
+  g_invCellBoost = [ new THREE.Matrix4() ];
+  gens = createGenerators(); 
+  invGens = invGenerators(gens); 
+  invGenBoosts = packageBoosts(invGens);
+}
 
 var PointLightObject = function(pos, colorInt){ //position is a euclidean Vector3
   lightPositions.push(new THREE.Vector4(0,0,0,1).applyMatrix4(translateByVector(pos)));
@@ -168,4 +177,26 @@ var initObjects = function(){
   globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5,0,0)));
 }
 
+//-------------------------------------------------------
+// Set up shader
+//-------------------------------------------------------
+// We must unpackage the boost data here for sending to the shader.
+
+var raymarchPass = function(screenRes){
+  var pass = new THREE.ShaderPass(THREE.ray);
+  pass.uniforms.isStereo.value = g_vr;
+  pass.uniforms.screenResolution.value = screenRes;
+  pass.uniforms.lightIntensities.value = lightIntensities;
+
+  //--- geometry dependent stuff here ---//
+  pass.uniforms.invGenerators.value = invGens;
+  pass.uniforms.currentBoost.value = g_currentBoost[0];  //currentBoost is an array
+  pass.uniforms.cellBoost.value = g_cellBoost[0];
+  pass.uniforms.invCellBoost.value = g_invCellBoost[0];
+  pass.uniforms.lightPositions.value = lightPositions;
+  pass.uniforms.globalObjectBoost.value = globalObjectBoost;
+  //--- end of geometry dependent stuff ---//
+
+  return pass;
+}
 

@@ -36,25 +36,6 @@ var lightIntensities = [];
 var globalObjectBoost;
 
 //-------------------------------------------------------
-// Set up shader
-//-------------------------------------------------------
-// We must unpackage the boost data here for sending to the shader.
-
-var raymarchPass = function(screenRes){
-  var pass = new THREE.ShaderPass(THREE.ray);
-  pass.uniforms.isStereo.value = g_vr;
-  pass.uniforms.screenResolution.value = screenRes;
-  pass.uniforms.invGenerators.value = invGens;
-  pass.uniforms.currentBoost.value = g_currentBoost[0];  //currentBoost is an array
-  pass.uniforms.cellBoost.value = g_cellBoost[0];
-  pass.uniforms.invCellBoost.value = g_invCellBoost[0];
-  pass.uniforms.lightPositions.value = lightPositions;
-  pass.uniforms.lightIntensities.value = lightIntensities;
-  pass.uniforms.globalObjectBoost.value = globalObjectBoost;
-  return pass;
-}
-
-//-------------------------------------------------------
 // Sets up the scene
 //-------------------------------------------------------
 var init = function(){
@@ -67,12 +48,7 @@ var init = function(){
   //Initialize varirables, objects, and stats
   stats = new Stats(); stats.showPanel(1); stats.showPanel(2); stats.showPanel(0); document.body.appendChild(stats.dom);
   g_controls = new THREE.Controls(); 
-  g_currentBoost = [ new THREE.Matrix4() ];  
-  g_cellBoost = [ new THREE.Matrix4() ]; 
-  g_invCellBoost = [ new THREE.Matrix4() ];
-  gens = createGenerators(); 
-  invGens = invGenerators(gens); 
-  invGenBoosts = packageBoosts(invGens);
+  initGeometry();
   initObjects();
   g_phoneOrient = [null, null, null];
 
