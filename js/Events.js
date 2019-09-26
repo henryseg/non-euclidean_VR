@@ -54,7 +54,10 @@ document.addEventListener('touchend', function(event){tap(event, -1);}, false);
 // Listen for mouse clicks
 //--------------------------------------------------------------------
 function click(event){
-
+    if(event.target.id === "vr-icon"){
+        if(g_vr === 1) resetToMono();
+        else{ g_raymarch.uniforms.isStereo.value = 1; g_vr = 1; }
+    }
     // window.addEventListener('deviceorientation', getScreenOrientation);
 
     // enable device orientation, taken from https://medium.com/@leemartin/how-to-request-device-motion-and-orientation-permission-in-ios-13-74fc9d6cd140
@@ -65,11 +68,6 @@ function click(event){
       }
     })
     .catch(console.error)
-
-    if(event.target.id === "vr-icon"){
-        if(g_vr === 1) resetToMono();
-        else{ g_raymarch.uniforms.isStereo.value = 1; g_vr = 1; }
-    }
 }
 document.addEventListener('click', click);
 
