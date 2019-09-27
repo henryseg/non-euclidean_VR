@@ -27,6 +27,7 @@ var stats;
 //-------------------------------------------------------
 var gens;
 var invGens;
+var cuspators = [new THREE.Matrix4(), new THREE.Matrix4()]; // ARNAUD
 
 //-------------------------------------------------------
 // Sets up the global objects

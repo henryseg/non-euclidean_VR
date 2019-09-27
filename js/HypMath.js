@@ -130,12 +130,21 @@ function fixOutsideCentralCell( boost ) {
 
 var hCWH = 0.6584789485;
 var createGenerators = function(){   /// generators for the tiling by cubes. 
-  var gen0 = translateByVector(new THREE.Vector3(2.0*hCWH,0.0,0.0));
-  var gen1 = translateByVector(new THREE.Vector3(-2.0*hCWH,0.0,0.0));
-  var gen2 = translateByVector(new THREE.Vector3(0.0,2.0*hCWH,0.0));
-  var gen3 = translateByVector(new THREE.Vector3(0.0,-2.0*hCWH,0.0));
-  var gen4 = translateByVector(new THREE.Vector3(0.0,0.0,2.0*hCWH));
-  var gen5 = translateByVector(new THREE.Vector3(0.0,0.0,-2.0*hCWH));
+  // since transposed matrices are used, we multiply on the right by the later transform
+  var gen0 = translateByVector(new THREE.Vector3(2.0*hCWH,0.0,0.0)).multiply(new THREE.Matrix4().makeRotationX(-tau/4).transpose());
+  var gen1 = translateByVector(new THREE.Vector3(-2.0*hCWH,0.0,0.0)).multiply(new THREE.Matrix4().makeRotationX(tau/4).transpose());
+  var gen2 = translateByVector(new THREE.Vector3(0.0,2.0*hCWH,0.0)).multiply(new THREE.Matrix4().makeRotationY(-tau/4).transpose());
+  var gen3 = translateByVector(new THREE.Vector3(0.0,-2.0*hCWH,0.0)).multiply(new THREE.Matrix4().makeRotationY(tau/4).transpose());
+  var gen4 = translateByVector(new THREE.Vector3(0.0,0.0,2.0*hCWH)).multiply(new THREE.Matrix4().makeRotationZ(-tau/4).transpose());
+  var gen5 = translateByVector(new THREE.Vector3(0.0,0.0,-2.0*hCWH)).multiply(new THREE.Matrix4().makeRotationZ(tau/4).transpose());
+/*
+  var gen0 = new THREE.Matrix4().makeRotationX(-tau/4).multiply(translateByVector(new THREE.Vector3(2.0*hCWH,0.0,0.0)));
+  var gen1 = new THREE.Matrix4().makeRotationX(tau/4).multiply(translateByVector(new THREE.Vector3(-2.0*hCWH,0.0,0.0)));
+  var gen2 = new THREE.Matrix4().makeRotationY(-tau/4).multiply(translateByVector(new THREE.Vector3(0.0,2.0*hCWH,0.0)));
+  var gen3 = new THREE.Matrix4().makeRotationY(tau/4).multiply(translateByVector(new THREE.Vector3(0.0,-2.0*hCWH,0.0)));
+  var gen4 = new THREE.Matrix4().makeRotationZ(-tau/4).multiply(translateByVector(new THREE.Vector3(0.0,0.0,2.0*hCWH)));
+  var gen5 = new THREE.Matrix4().makeRotationZ(tau/4).multiply(translateByVector(new THREE.Vector3(0.0,0.0,-2.0*hCWH)));
+*/
   return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -151,6 +160,28 @@ var packageBoosts = function(genArr){
   return [[genArr[0]], [genArr[1]], [genArr[2]], [genArr[3]], [genArr[4]], [genArr[5]]]
 }
 
+// ARNAUD
+var tau = 2*Math.PI;
+var createCuspators = function() {
+  // we first create m in mathematician's notation
+  // matrix m should send the cube corner to infinity
+  // and the sphere to a paraboloid zt = x^2+y^2
+  var m = new THREE.Matrix4().makeRotationZ(tau/8);
+  m.premultiply(new THREE.Matrix4().makeRotationX(Math.acos(1/Math.sqrt(3))));
+  m.premultiply(new THREE.Matrix4().set(
+     1 , 0 , 0 , 0
+   , 0 , 1 , 0 , 0
+   , 0 , 0 , 1 , 1
+   , 0 , 0 ,-1 , 1
+  ));
+  // var aux = 1/Math.sqrt(3);
+  // TEST: console.log(new THREE.Vector4(aux,aux,aux,1).applyMatrix4(m)); // should return 0,0,2,0 // PASSED 
+  // In this program, transposed matrices are used
+  m.transpose();
+  return [m, new THREE.Matrix4().getInverse(m)];
+};
+// END - ARNAUD
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Initialise things
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -162,6 +193,7 @@ var initGeometry = function(){
   gens = createGenerators(); 
   invGens = invGenerators(gens); 
   invGenBoosts = packageBoosts(invGens);
+  cuspators = createCuspators();
 }
 
 var PointLightObject = function(pos, colorInt){ //position is a euclidean Vector3
@@ -190,6 +222,7 @@ var raymarchPass = function(screenRes){
 
   //--- geometry dependent stuff here ---//
   pass.uniforms.invGenerators.value = invGens;
+  pass.uniforms.cuspators.value = cuspators; // ARNAUD
   pass.uniforms.currentBoost.value = g_currentBoost[0];  //currentBoost is an array
   pass.uniforms.cellBoost.value = g_cellBoost[0];
   pass.uniforms.invCellBoost.value = g_invCellBoost[0];
