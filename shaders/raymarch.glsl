@@ -47,6 +47,7 @@ BEGIN FRAGMENT
   vec4 sampleTangentVector = vec4(1, 1, 1, 1);
   vec4 globalLightColor = ORIGIN;
   int hitWhich = 0;
+  vec3 debugColor = vec3(1.0,0.0,1.0);
   //-------------------------------------------
   //Translation & Utility Variables
   //--------------------------------------------
@@ -394,6 +395,12 @@ BEGIN FRAGMENT
     // rescale to get translation vector in (x/t, y/t) coordinates
     float dx = sqrt2*proj_dx;
     float dy = sqrt2*proj_dy;
+
+    if(dist > 1.0){
+      hitWhich = 5;
+      debugColor = 0.01*vec3(dx, dy, 0.0);
+      return true;
+    }
     
     // specs say matrices are input with the constructor in column major order
     // however, everywhere in this code we use the transpose multiplication vec4*mat4
@@ -618,6 +625,10 @@ BEGIN FRAGMENT
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if(hitWhich == 0){ //Didn't hit anything ------------------------
       gl_FragColor = vec4(0.0);
+      return;
+    }
+    else if(hitWhich == 5){ // debug ------------------------
+      gl_FragColor = vec4(debugColor,0.0);
       return;
     }
     else if(hitWhich == 1){ // global lights
