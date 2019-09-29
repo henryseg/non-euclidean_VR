@@ -1,5 +1,4 @@
 /// Edit this file, then run the python 3 script "shaderToPPScript.py" to convert it into a javascript file, "ray.js". 
-
 BEGIN VERTEX
   void main()
   {
@@ -396,20 +395,20 @@ BEGIN FRAGMENT
     float dx = sqrt2*proj_dx;
     float dy = sqrt2*proj_dy;
 
-    if(dist > 1.0){
-      hitWhich = 5;
-      debugColor = 0.01*vec3(dx, dy, 0.0);
-      return true;
-    }
+    // if(dist > 1.0){
+    //   hitWhich = 5;
+    //   debugColor = 0.1*vec3(log(abs(dx)), log(abs(dy)), 0.0);
+    //   return true;
+    // }
     
     // specs say matrices are input with the constructor in column major order
     // however, everywhere in this code we use the transpose multiplication vec4*mat4
     // so we can do as if we were inputing in row major a non-transposed matrix
     mat4 horo = mat4(
-        1.0 , 0.0 , 0.0 , dx
-      , 0.0 , 1.0 , 0.0 , dy
-      , 2.0*dx, 2.0*dy , 1.0, dx*dx+dy*dy
-      , 0.0, 0.0 , 0.0 , 1.0
+        1.0 ,   0.0 ,    0.0 , dx
+      , 0.0 ,   1.0 ,    0.0 , dy
+      , 2.0*dx, 2.0*dy , 1.0 , dx*dx+dy*dy
+      , 0.0,    0.0 ,    0.0 , 1.0
     );
 
     // thanks to the choice of using the transposed product,
@@ -429,11 +428,42 @@ BEGIN FRAGMENT
     
     fixMatrix = cuspators[0] * horo * cuspators[1];
 
+    // if(dist > 1.0){
+    //   hitWhich = 5;
+    //   float foo = fixMatrix[0][0];// + fixMatrix[0][1];// + fixMatrix[0][2] + fixMatrix[0][3];
+    //   float bar = fixMatrix[1][0]; // + fixMatrix[1][1];// + fixMatrix[1][2] + fixMatrix[1][3];
+    //   float spam = fixMatrix[2][0];// + fixMatrix[2][1];// + fixMatrix[2][2] + fixMatrix[2][3];
+    //   debugColor = vec3(fract(log(abs(foo))), fract(log(abs(bar))), fract(log(abs(spam))) );
+    //   return true;
+    // }
+
     // below we do a transposed product vec4 * mat4 which really means T(mat4) * vec4
 
+    // samplePoint  = p * fixMatrix;
+    // sampleVector = v * fixMatrix;
 
-    samplePoint  = p * fixMatrix;
-    sampleVector = v * fixMatrix;
+    p = p*cuspators[0];
+    p.w = (p.x*p.x + p.y*p.y + 1.0)/p.z;   // normalize
+    p = p*horo;
+    p.w = (p.x*p.x + p.y*p.y + 1.0)/p.z;
+    samplePoint = p*cuspators[1];
+    samplePoint = hypNormalize(samplePoint);
+
+    v = v*cuspators[0];
+    v.w = (v.x*v.x + v.y*v.y - 1.0)/v.z;   // normalize
+    v = v*horo;
+    v.w = (v.x*v.x + v.y*v.y - 1.0)/v.z; 
+    sampleVector = v*cuspators[1];
+    sampleVector = hypNormalize(sampleVector);
+
+    // if(dist > 1.0){
+    //   hitWhich = 5;
+    //   float foo = log(abs(samplePoint[0]));
+    //   float bar = log(abs(samplePoint[1]));
+    //   float spam = log(abs(samplePoint[2]));
+    //   debugColor = vec3(fract(foo), fract(bar), fract(spam));
+    //   return true;
+    // }
   
     // 3. we don't forget to correct for the sign
 
