@@ -8,6 +8,7 @@ BEGIN VERTEX
 END VERTEX
 
 BEGIN FRAGMENT
+
   //--------------------------------------------
   //Global Constants
   //--------------------------------------------
@@ -61,7 +62,7 @@ BEGIN FRAGMENT
   uniform vec4 lightPositions[4];
   uniform vec4 lightIntensities[4];
   uniform mat4 globalObjectBoost;
-  
+
   //--------------------------------------------------------------------
   // Hyperbolic Functions
   //--------------------------------------------------------------------
@@ -164,45 +165,6 @@ BEGIN FRAGMENT
     return distance;
   }
   
-  //--------------------------------------------------------------------
-  // Lighting Functions
-  //--------------------------------------------------------------------
-  //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-  vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
-    //Calculations - Phong Reflection Model
-    vec4 L = hypDirection(SP, TLP);
-    vec4 R = 2.0*hypDot(L, N)*N - L;
-    //Calculate Diffuse Component
-    float nDotL = max(hypDot(N, L),0.0);
-    vec3 diffuse = lightIntensity.rgb * nDotL;
-    //Calculate Specular Component
-    float rDotV = max(hypDot(R, V),0.0);
-    vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
-    //Attenuation - Inverse Square
-    float distToLight = hypDistance(SP, TLP);
-    float att = 0.6/(0.01 + lightIntensity.w * distToLight);
-    //Compute final color
-    return att*((diffuse*baseColor) + specular);
-  }
-  
-  vec3 phongModel(mat4 totalFixMatrix){
-    vec4 SP = sampleEndPoint;
-    vec4 TLP; //translated light position
-    vec4 V = -sampleTangentVector;
-    vec3 color = vec3(0.0);
-    //--------------------------------------------------
-    //Lighting Calculations
-    //--------------------------------------------------
-    //usually we'd check to ensure there are 4 lights
-    //however this is version is hardcoded so we won't
-    for(int i = 0; i<4; i++){ 
-        TLP = lightPositions[i]*invCellBoost*totalFixMatrix;
-        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
-    }
-    return color;
-  }
-  
-  
   //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
@@ -224,17 +186,6 @@ BEGIN FRAGMENT
           basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
           basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z)));
       }
-  }
-  
-  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a point that our ray will go through
-    if(isStereo == 1){
-      resolution.x = resolution.x * 0.5;
-      if(!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
-    }
-    vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
-    float z = 0.1/tan(radians(fov*0.5));
-    vec4 p =  hypNormalize(vec4(xy,-z,1.0));
-    return p;
   }
   
   // This function is intended to be hyp-agnostic.
@@ -316,6 +267,64 @@ BEGIN FRAGMENT
     }
   }
   
+
+  //--------------------------------------------------------------------
+  // Lighting Functions
+  //--------------------------------------------------------------------
+  //SP - Sample Point | TLP - Translated Light Position | V - View Vector
+  vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
+    //Calculations - Phong Reflection Model
+    vec4 L = hypDirection(SP, TLP);
+    vec4 R = 2.0*hypDot(L, N)*N - L;
+    //Calculate Diffuse Component
+    float nDotL = max(hypDot(N, L),0.0);
+    vec3 diffuse = lightIntensity.rgb * nDotL;
+    //Calculate Specular Component
+    float rDotV = max(hypDot(R, V),0.0);
+    vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
+    //Attenuation - Inverse Square
+    float distToLight = hypDistance(SP, TLP);
+    float att = 0.6/(0.01 + lightIntensity.w * distToLight);
+    //Compute final color
+    return att*((diffuse*baseColor) + specular);
+  }
+  
+  vec3 phongModel(mat4 totalFixMatrix){
+    vec4 SP = sampleEndPoint;
+    vec4 TLP; //translated light position
+    vec4 V = -sampleTangentVector;
+    vec3 color = vec3(0.0);
+    //--------------------------------------------------
+    //Lighting Calculations
+    //--------------------------------------------------
+    //usually we'd check to ensure there are 4 lights
+    //however this is version is hardcoded so we won't
+    for(int i = 0; i<4; i++){ 
+        TLP = lightPositions[i]*invCellBoost*totalFixMatrix;
+        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
+    }
+    return color;
+  }
+
+  //--------------------------------------------------------------------
+  // Tangent Space Functions
+  //--------------------------------------------------------------------
+
+  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a point that our ray will go through
+    if(isStereo == 1){
+      resolution.x = resolution.x * 0.5;
+      if(!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
+    }
+    vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
+    float z = 0.1/tan(radians(fov*0.5));
+    vec4 p =  hypNormalize(vec4(xy,-z,1.0));
+    return p;
+  }
+
+  //--------------------------------------------------------------------
+  // Main
+  //--------------------------------------------------------------------
+
   void main(){
     vec4 rayOrigin = ORIGIN;
 
