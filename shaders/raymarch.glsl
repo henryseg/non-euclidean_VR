@@ -230,8 +230,9 @@ BEGIN FRAGMENT
       vec4 localEndPoint = pointOnGeodesic(localrO, localrD, localDepth);
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix *= fixMatrix;
+        vec4 localEndTangent = tangentVectorOnGeodesic(localrO, localrD, localDepth);
         localrO = hypNormalize(localEndPoint*fixMatrix);
-        localrD = hypDirection(localrO, localrD*fixMatrix);
+        localrD = hypDirection(localrO, localEndTangent*fixMatrix);
         localDepth = MIN_DIST;
       }
       else{
