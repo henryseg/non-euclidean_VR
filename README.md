@@ -7,4 +7,4 @@ which is in turn based on the full simulation at https://github.com/mtwoodard/hy
 
 We plan to make this version as independent of the underlying geometry as possible, so that we can convert it to simulate other geometries, e.g. the other eight Thurston geometries.
 
-This project started at the Illustrating Mathematics semester program at ICERM (icerm.brown.edu)
+This project started at the Illustrating Mathematics semester program at ICERM (https://icerm.brown.edu)
