@@ -6,3 +6,5 @@ Based on the ray marching hyperbolic virtual reality simulation (for mobile devi
 which is in turn based on the full simulation at https://github.com/mtwoodard/hypVR-Ray. 
 
 We plan to make this version as independent of the underlying geometry as possible, so that we can convert it to simulate other geometries, e.g. the other eight Thurston geometries.
+
+This project started at the Illustrating Mathematics semester program at ICERM (icerm.brown.edu)
