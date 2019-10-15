@@ -1,3 +1,9 @@
+// console.log(m) prints column by column, which is not what you expect...
+
+// v.applyMatrix4(m) does m*v
+
+// m.multiply(n) does m*n
+
 //----------------------------------------------------------------------
 //	Dot Product
 //----------------------------------------------------------------------
@@ -24,7 +30,7 @@ THREE.Matrix4.prototype.add = function (m) {
 };
 
 function reduceBoostError(boost){ // for H^3, this is gramSchmidt
-    var m = boost[0].transpose(); 
+    var m = boost[0]; 
     var n = m.elements; //elements are stored in column major order we need row major
     var temp = new THREE.Vector4();
     var temp2 = new THREE.Vector4();
@@ -41,19 +47,23 @@ function reduceBoostError(boost){ // for H^3, this is gramSchmidt
         }
     }
     m.elements = n;
-    boost[0].elements = m.transpose().elements;
+    boost[0].elements = m.elements;
 }
 
 //----------------------------------------------------------------------
 //  Boost Operations  (The boost may not be a single matrix for some geometries)
 //----------------------------------------------------------------------
 
-function preTranslate(boost1, boost2){  // deal with a translation of the camera
-    boost1[0].premultiply(boost2[0]);
+function translate(boost, trans){  // deal with a translation of the camera
+    boost[0].multiply(trans[0]);
+    // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
+    // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
+
+    // In other words, translate boost by the conjugate of trans by boost
 }
 
-function preRotate(boost1, rotMatrix){  // deal with a rotation of the camera
-    boost1[0].premultiply(rotMatrix);
+function rotate(boost1, rotMatrix){  // deal with a rotation of the camera
+    boost1[0].multiply(rotMatrix);
 }
 
 function setInverse(boost1, boost2){  //set boost1 to be the inverse of boost2
@@ -80,10 +90,10 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
       dy /= len;
       dz /= len;
       var m = new THREE.Matrix4().set(
-        0, 0, 0, m03,
-        0, 0, 0, m13,
-        0, 0, 0, m23,
-        dx,dy,dz, 0.0);
+        0, 0, 0, dx,
+        0, 0, 0, dy,
+        0, 0, 0, dz,
+        m03, m13, m23, 0.0);
       var m2 = new THREE.Matrix4().copy(m).multiply(m);
       m.multiplyScalar(c1);
       m2.multiplyScalar(c2);
@@ -104,19 +114,19 @@ function fakeDist( v ){  //good enough for comparison of distances on the hyperb
 
 ////////check if we are still inside the central fund dom, alter boost if so
 function fixOutsideCentralCell( boost ) { 
-    //assume first in Gens is identity, should probably fix when we get a proper list of matrices
     var cPos = new THREE.Vector4(0,0,0,1).applyMatrix4( boost[0] ); //central
     var bestDist = fakeDist(cPos);
     var bestIndex = -1;
     for (var i=0; i < gens.length; i++){
-        pos = new THREE.Vector4(0,0,0,1).applyMatrix4( gens[i] ).applyMatrix4( boost[0] );
+        var pos = cPos.clone();
+        pos.applyMatrix4( gens[i] );
         if (fakeDist(pos) < bestDist) {
             bestDist = fakeDist(pos);
             bestIndex = i;
         }
     }
     if (bestIndex != -1){
-        boost[0] = boost[0].multiply(gens[bestIndex]);
+        boost[0].premultiply(gens[bestIndex]); 
         return bestIndex;
     }
     else

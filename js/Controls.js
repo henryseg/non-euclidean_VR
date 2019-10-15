@@ -60,13 +60,13 @@ THREE.Controls = function(done){
         }
         if(deltaPosition !== undefined){
             var m = translateByVector(deltaPosition);   
-            preTranslate(g_currentBoost, [m]);
+            translate(g_currentBoost, [m]);
         }
 
         var fixIndex = fixOutsideCentralCell(g_currentBoost); //moves camera back to main cell
         reduceBoostError(g_currentBoost);
         if(fixIndex !== -1){
-           preTranslate(g_cellBoost, invGenBoosts[fixIndex]);
+           translate(g_cellBoost, invGenBoosts[fixIndex]);
            reduceBoostError(g_cellBoost);
            setInverse(g_invCellBoost, g_cellBoost);
         }
@@ -89,8 +89,8 @@ THREE.Controls = function(done){
         deltaRotation.normalize();
         
         if(deltaRotation !== undefined){
-            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation.inverse());
-            preRotate(g_currentBoost, m);
+            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            rotate(g_currentBoost, m);
         }
 
         reduceBoostError(g_currentBoost);        
