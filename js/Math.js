@@ -8,32 +8,11 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 
-var cubeHalfWidth = 1;
+var cubeHalfWidth = 1.;
 
-
-THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z;
-}
-
-THREE.Vector4.prototype.geomLength = function () {
-    return Math.sqrt(Math.abs(this.geomDot(this)));
-}
-
-THREE.Vector4.prototype.geomNormalize = function () {
-    return this.divideScalar(this.geomLength());
-}
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
     return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-}
-
-//----------------------------------------------------------------------
-//	Matrix Operations
-//----------------------------------------------------------------------
-
-
-function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-
 }
 
 
@@ -61,38 +40,29 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
 
 
 
-/*
 
-function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
-    var dx = v.x;
-    var dy = v.y;
-    var dz = v.z;
-    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+//----------------------------------------------------------------------
+//	Matrix Operations
+//----------------------------------------------------------------------
 
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
-
-    if (len == 0) return new THREE.Matrix4().identity();
-    else {
-        dx /= len;
-        dy /= len;
-        dz /= len;
-        var m = new THREE.Matrix4().set(
-            0, 0, 0, dx,
-            0, 0, 0, dy,
-            0, 0, 0, dz,
-            dx, dy, dz, 0.0);
-        var m2 = new THREE.Matrix4().copy(m).multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        var result = new THREE.Matrix4().identity();
-        result.add(m);
-        result.add(m2);
-        return result;
-    }
+THREE.Vector4.prototype.geomDot = function (v) {
+    return this.x * v.x + this.y * v.y + this.z * v.z;
 }
 
-*/
+THREE.Vector4.prototype.geomLength = function () {
+    return Math.sqrt(Math.abs(this.geomDot(this)));
+}
+
+THREE.Vector4.prototype.geomNormalize = function () {
+    return this.divideScalar(this.geomLength());
+}
+
+function reduceBoostError(boost) { // for H^3, this is gramSchmidt
+
+}
+
+
+
 
 
 
@@ -198,10 +168,10 @@ var PointLightObject = function (pos, colorInt) { //position is a euclidean Vect
 }
 
 var initObjects = function () {
-    PointLightObject(new THREE.Vector3(0.8, 0, 0), new THREE.Vector4(1, 0, 0, 1));
-    PointLightObject(new THREE.Vector3(0, 0.8, 0), new THREE.Vector4(0, 1, 0, 1));
-    PointLightObject(new THREE.Vector3(0, 0, 0.8), new THREE.Vector4(0, 0, 1, 1));
-    PointLightObject(new THREE.Vector3(-0.8, -0.8, -0.8), new THREE.Vector4(1, 1, 1, 1));
+    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), new THREE.Vector4(1, 0, 0, 1));
+    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), new THREE.Vector4(0, 1, 0, 1));
+    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), new THREE.Vector4(0, 0, 1, 1));
+    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), new THREE.Vector4(1, 1, 1, 1));
     globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5, 0, 0)));
 }
 

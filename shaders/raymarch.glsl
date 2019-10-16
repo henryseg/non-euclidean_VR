@@ -13,6 +13,10 @@ BEGIN FRAGMENT
 
 
 
+
+
+
+
   //--------------------------------------------------------------------
   // Hyperbolic Functions
   //--------------------------------------------------------------------
@@ -49,9 +53,7 @@ BEGIN FRAGMENT
 
 
 
-
-
-
+  
 
 
 
@@ -74,9 +76,11 @@ BEGIN FRAGMENT
   //--------------------------------------------
   //Geometry Constants
   //--------------------------------------------
+const float modelHalfCube = 1.;
+const float HalfCube=1.;
   const float vertexSphereSize = 0.2;//In this case its a horosphere
-  const float centerSphereSize = 1.3;
-  const float modelHalfCube = 1.;
+  const float centerSphereSize = 1.25*HalfCube;
+  
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
   const vec4 modelCubeCorner = vec4(1.,1.,1.,1.);
   const float globalObjectRadius = 0.2;
@@ -99,23 +103,22 @@ BEGIN FRAGMENT
 
 
 
+
+
   //--------------------------------------------
   //Geometry of the Models
   //--------------------------------------------
 
 //Hyperboloid Model
 
-//dot product in 3-space
   float geomDot(vec4 u, vec4 v){
-    return u.x*v.x + u.y*v.y + u.z*v.z; // Lorentz Dot
+    return u.x*v.x + u.y*v.y + u.z*v.z; // 
   }//this is the NEGATIVE of the standard dot product so that now the vectors on the hyperboloid have positive lengths.
 
-//norm in 3-space
   float geomNorm(vec4 v){
     return sqrt(abs(geomDot(v,v)));
   }
 
-//dot in 3 space
   float tangDot(vec4 u, vec4 v){
     return u.x*v.x + u.y*v.y + u.z*v.z; // Lorentz Dot
   }
@@ -146,7 +149,7 @@ BEGIN FRAGMENT
   }
 
   float lightAtt(float dist){//light intensity as a fn of distance
-      return dist; //fake linear falloff (correct is below)
+      return dist*dist; //fake linear falloff (correct is below)
       //return sinh(dist)*sinh(dist);
   }
 
@@ -166,7 +169,9 @@ BEGIN FRAGMENT
     return u/tangNorm(u);
   }
   
-
+float cosAng(vec4 u, vec4 v){
+    return tangDot(u,v);
+}
 
   //-------------------------------------------------------
   //GEODESIC FUNCTIONS
@@ -178,14 +183,13 @@ BEGIN FRAGMENT
   }
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
-  vec4 pointOnGeodesic(vec4 u, vec4 vPrime, float dist){
+  vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
     return u + vPrime*dist;
   }
   
 //get unit tangent vec at endpt of geodesic
-  vec4 tangentVectorOnGeodesic(vec4 u, vec4 vPrime, float dist){
-    // note that this point has geomDot with itself of -1, so it is on other hyperboloid
-    return  vPrime;
+  vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
+    return vPrime;
   }
 
 
@@ -246,10 +250,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //--------------------------------------------
 
 
-
-
-
-  //--------------------------------------------
+ //--------------------------------------------
   //Global Constants
   //--------------------------------------------
   const int MAX_MARCHING_STEPS = 48;
@@ -260,8 +261,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   
 
 
-  
-  //--------------------------------------------
+
+ //--------------------------------------------
   //Global Variables
   //--------------------------------------------
   vec4 N = ORIGIN; //normal vector
@@ -284,6 +285,41 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   uniform vec4 lightPositions[4];
   uniform vec4 lightIntensities[4];
   uniform mat4 globalObjectBoost;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   
@@ -392,9 +428,9 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
       float newEp = EPSILON * 10.0;
-      vec4 basis_x = vec4(1,0,0,0);  
-      vec4 basis_y = vec4(0,1,0,0);  
-      vec4 basis_z = vec4(0,0,1,0); 
+      vec4 basis_x = tangNormalize(vec4(1.,0,0,0));  
+      vec4 basis_y = vec4(0,1.,0.0,0);  
+      vec4 basis_z = vec4(0.0,0.0,1,0);  
       if(hitWhich != 3){ //global light scene
         return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
@@ -454,11 +490,10 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 localEndPoint = pointOnGeodesic(localrO, localrD, localDepth);
-        
+      vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix = fixMatrix * totalFixMatrix;
-        vec4 localEndTangent = tangentVectorOnGeodesic(localrO, localrD, localDepth);
+        vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
         localrO = geomNormalize(fixMatrix * localEndPoint);
         localrD = tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
@@ -468,7 +503,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
         if(localDist < EPSILON){
           hitWhich = 3;
           sampleEndPoint = localEndPoint;
-          sampleTangentVector = tangentVectorOnGeodesic(localrO, localrD, localDepth);
+          sampleTangentVector = tangToGeodesicEndpt(localrO, localrD, localDepth);
           break;
         }
         localDepth += localDist;
@@ -480,13 +515,13 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 globalEndPoint = pointOnGeodesic(rO, rD, globalDepth);
+      vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
       float globalDist = globalSceneSDF(globalEndPoint);
       if(globalDist < EPSILON){
         // hitWhich has now been set
         totalFixMatrix = mat4(1.0);
         sampleEndPoint = globalEndPoint;
-        sampleTangentVector = tangentVectorOnGeodesic(rO, rD, globalDepth);
+        sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
         return;
       }
       globalDepth += globalDist;
@@ -505,12 +540,12 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
     vec4 L = tangDirection(SP, TLP);
-    vec4 R = 2.0*tangDot(L, N)*N-L;
+    vec4 R = 2.0*cosAng(L, N)*N-L;
     //Calculate Diffuse Component
-    float nDotL = max(tangDot(N, L),0.0);
+    float nDotL = max(cosAng(N, L),0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(tangDot(R, V),0.0);
+    float rDotV = max(cosAng(R, V),0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
     //Attenuation - Inverse Square
     float distToLight = geomDistance(SP, TLP);
