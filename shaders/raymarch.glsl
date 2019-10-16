@@ -164,7 +164,9 @@ BEGIN FRAGMENT
     return u/tangNorm(u);
   }
   
-
+float cosAng(vec4 u, vec4 v){
+    return tangDot(u,v);
+}
 
   //-------------------------------------------------------
   //GEODESIC FUNCTIONS
@@ -177,13 +179,12 @@ BEGIN FRAGMENT
   }
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
-  vec4 pointOnGeodesic(vec4 u, vec4 vPrime, float dist){
+  vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
     return u*cosh(dist) + vPrime*sinh(dist);
   }
   
 //get unit tangent vec at endpt of geodesic
-  vec4 tangentVectorOnGeodesic(vec4 u, vec4 vPrime, float dist){
-    // note that this point has geomDot with itself of -1, so it is on other hyperboloid
+  vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
     return u*sinh(dist) + vPrime*cosh(dist);
   }
 
@@ -394,8 +395,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
       vec4 basis_x = tangNormalize(vec4(p.w,0.0,0.0,p.x));  // dw/dx = x/w on hyperboloid
       vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  // dw/dy = y/denom
       vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  // dw/dz = z/denom  /// note that these are not orthonormal!
-      basis_y = tangNormalize(basis_y - tangDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt
-      basis_z = tangNormalize(basis_z - tangDot(basis_z, basis_x)*basis_x - tangDot(basis_z, basis_y)*basis_y);
+      basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt
+      basis_z = tangNormalize(basis_z - cosAng(basis_z, basis_x)*basis_x - cosAng(basis_z, basis_y)*basis_y);
       if(hitWhich != 3){ //global light scene
         return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
@@ -455,10 +456,10 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 localEndPoint = pointOnGeodesic(localrO, localrD, localDepth);
+      vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix = fixMatrix * totalFixMatrix;
-        vec4 localEndTangent = tangentVectorOnGeodesic(localrO, localrD, localDepth);
+        vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
         localrO = geomNormalize(fixMatrix * localEndPoint);
         localrD = tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
@@ -468,7 +469,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
         if(localDist < EPSILON){
           hitWhich = 3;
           sampleEndPoint = localEndPoint;
-          sampleTangentVector = tangentVectorOnGeodesic(localrO, localrD, localDepth);
+          sampleTangentVector = tangToGeodesicEndpt(localrO, localrD, localDepth);
           break;
         }
         localDepth += localDist;
@@ -480,13 +481,13 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 globalEndPoint = pointOnGeodesic(rO, rD, globalDepth);
+      vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
       float globalDist = globalSceneSDF(globalEndPoint);
       if(globalDist < EPSILON){
         // hitWhich has now been set
         totalFixMatrix = mat4(1.0);
         sampleEndPoint = globalEndPoint;
-        sampleTangentVector = tangentVectorOnGeodesic(rO, rD, globalDepth);
+        sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
         return;
       }
       globalDepth += globalDist;
@@ -505,12 +506,12 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
     vec4 L = tangDirection(SP, TLP);
-    vec4 R = 2.0*tangDot(L, N)*N-L;
+    vec4 R = 2.0*cosAng(L, N)*N-L;
     //Calculate Diffuse Component
-    float nDotL = max(tangDot(N, L),0.0);
+    float nDotL = max(cosAng(N, L),0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(tangDot(R, V),0.0);
+    float rDotV = max(cosAng(R, V),0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
     //Attenuation - Inverse Square
     float distToLight = geomDistance(SP, TLP);
