@@ -100,12 +100,12 @@ BEGIN FRAGMENT
 
 
   //--------------------------------------------
-  //Geometric Functions
+  //Geometry of the Space
   //--------------------------------------------
 
   float geomDot(vec4 u, vec4 v){
-    return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
-  }
+    return -u.x*v.x - u.y*v.y - u.z*v.z + u.w*v.w; // Lorentz Dot
+  }//this is the NEGATIVE of the standard dot product so that now the vectors on the hyperboloid have positive lengths.
   
   float geomNorm(vec4 v){
     return sqrt(abs(geomDot(v,v)));
@@ -116,14 +116,34 @@ BEGIN FRAGMENT
   }
   
   float geomDistance(vec4 u, vec4 v){
-    float bUV = -geomDot(u,v);
+    float bUV = geomDot(u,v);
     return acosh(bUV);
   }
-
 
   vec4 modelProject(vec4 u){
     return u/u.w;
   }
+
+
+  //--------------------------------------------
+  //Geometry of the Tangent Space
+  //--------------------------------------------
+
+
+  float tangDot(vec4 u, vec4 v){
+    return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
+  }
+  
+  float tangNorm(vec4 v){
+    return sqrt(abs(geomDot(v,v)));
+  }
+  
+  vec4 tangNormalize(vec4 u){
+    return u/geomNorm(u);
+  }
+  
+
+
 
   
   //-------------------------------------------------------
@@ -131,11 +151,10 @@ BEGIN FRAGMENT
   //-------------------------------------------------------
 
 
-  vec4 geomDirection(vec4 u, vec4 v){
-    vec4 w = v + geomDot(u,v)*u;
-    return geomNormalize(w);
+  vec4 tangDirection(vec4 u, vec4 v){
+    vec4 w = v - geomDot(u,v)*u;
+    return tangNormalize(w);
   }
-
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
   vec4 pointOnGeodesic(vec4 u, vec4 vPrime, float dist){
@@ -146,6 +165,13 @@ BEGIN FRAGMENT
     // note that this point has geomDot with itself of -1, so it is on other hyperboloid
     return u*sinh(dist) + vPrime*cosh(dist);
   }
+
+
+  float lightAtt(float dist){//light intensity as a fn of distance
+      return dist; //fake linear falloff (correct is below)
+      //return sinh(dist)*sinh(dist);
+  }
+
   
   //---------------------------------------------------------------------
   //Raymarch Primitives
@@ -155,7 +181,7 @@ BEGIN FRAGMENT
   // and go through the origin. Negative offsets will shrink it.
   float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
     return log(-geomDot(samplePoint, lightPoint)) - offset;
-  }
+  }//DONT KNOW if this should be geomdot or tangdot
   
   float sphereSDF(vec4 samplePoint, vec4 center, float radius){
     return geomDistance(samplePoint, center) - radius;
@@ -347,19 +373,19 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
       float newEp = EPSILON * 10.0;
-      vec4 basis_x = geomNormalize(vec4(p.w,0.0,0.0,p.x));  // dw/dx = x/w on hyperboloid
+      vec4 basis_x = tangNormalize(vec4(p.w,0.0,0.0,p.x));  // dw/dx = x/w on hyperboloid
       vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  // dw/dy = y/denom
       vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  // dw/dz = z/denom  /// note that these are not orthonormal!
-      basis_y = geomNormalize(basis_y - geomDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt
-      basis_z = geomNormalize(basis_z - geomDot(basis_z, basis_x)*basis_x - geomDot(basis_z, basis_y)*basis_y);
+      basis_y = tangNormalize(basis_y - tangDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt
+      basis_z = tangNormalize(basis_z - tangDot(basis_z, basis_x)*basis_x - tangDot(basis_z, basis_y)*basis_y);
       if(hitWhich != 3){ //global light scene
-        return geomNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
+        return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
           basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
           basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z)));
       }
       else{ //local scene
-        return geomNormalize(
+        return tangNormalize(
           basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
           basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
           basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z)));
@@ -416,7 +442,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
         totalFixMatrix = fixMatrix * totalFixMatrix;
         vec4 localEndTangent = tangentVectorOnGeodesic(localrO, localrD, localDepth);
         localrO = geomNormalize(fixMatrix * localEndPoint);
-        localrD = geomDirection(localrO, fixMatrix * localEndTangent);
+        localrD = tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
       }
       else{
@@ -460,17 +486,17 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //SP - Sample Point | TLP - Translated Light Position | V - View Vector
   vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
-    vec4 L = geomDirection(SP, TLP);
-    vec4 R = 2.0*geomDot(L, N)*N - L;
+    vec4 L = tangDirection(SP, TLP);
+    vec4 R = 2.0*tangDot(L, N)*N-L;
     //Calculate Diffuse Component
-    float nDotL = max(geomDot(N, L),0.0);
+    float nDotL = max(tangDot(N, L),0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(geomDot(R, V),0.0);
+    float rDotV = max(tangDot(R, V),0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
     //Attenuation - Inverse Square
     float distToLight = geomDistance(SP, TLP);
-    float att = 0.6/(0.01 + lightIntensity.w * distToLight);
+    float att = 0.6/(0.01 + lightIntensity.w * lightAtt(distToLight));
     //Compute final color
     return att*((diffuse*baseColor) + specular);
   }
@@ -532,7 +558,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     rayOrigin = currentBoost * rayOrigin;
     rayDirV = currentBoost * rayDirV;
     //generate direction then transform to hyperboloid ------------------------
-    vec4 rayDirVPrime = geomDirection(rayOrigin, rayDirV);
+    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
     raymarch(rayOrigin, rayDirVPrime, totalFixMatrix);
