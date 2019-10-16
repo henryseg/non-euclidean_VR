@@ -24,7 +24,7 @@ THREE.Vector4.prototype.geomNormalize = function () {
 }
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return v.x * v.x + v.y * v.y + v.z * v.z;
+    return acos(v.w);
 }
 
 //----------------------------------------------------------------------
