@@ -24,7 +24,7 @@ THREE.Vector4.prototype.geomNormalize = function () {
 }
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return acosh(v.w);
+    return Math.acosh(v.w);
 }
 
 //----------------------------------------------------------------------
@@ -115,7 +115,10 @@ function translate(boost, trans) { // deal with a translation of the camera
 }
 
 function rotate(boost1, rotMatrix) { // deal with a rotation of the camera
+    console.log(boost1[0]);
     boost1[0].multiply(rotMatrix);
+    console.log(rotMatrix);
+    console.log(boost1[0]);
 }
 
 function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
