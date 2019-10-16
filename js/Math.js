@@ -63,8 +63,8 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     var dz = v.z;
     var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
+    var c1 = Math.sin(len);
+    var c2 = 1 - Math.cos(len);
 
     if (len == 0) return new THREE.Matrix4().identity();
     else {
