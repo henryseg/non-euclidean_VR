@@ -8,11 +8,11 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 
-var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 1;
 
 
 THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+    return this.x * v.x + this.y * v.y + this.z * v.z;
 }
 
 THREE.Vector4.prototype.geomLength = function () {
@@ -24,7 +24,7 @@ THREE.Vector4.prototype.geomNormalize = function () {
 }
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return acos(v.w);
+    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
 //----------------------------------------------------------------------
@@ -33,30 +33,36 @@ function geomDist(v) { //good enough for comparison of distances on the hyperbol
 
 
 function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-    var m = boost[0];
-    var n = m.elements; //elements are stored in column major order we need row major
-    var temp = new THREE.Vector4();
-    var temp2 = new THREE.Vector4();
-    for (var i = 0; i < 4; i++) { ///normalize row
-        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
-        for (var l = 0; l < 4; l++) {
-            n[4 * i + l] = n[4 * i + l] * invRowNorm;
-        }
-        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
-            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
-            for (var l = 0; l < 4; l++) {
-                n[4 * j + l] -= component * n[4 * i + l];
-            }
-        }
-    }
-    m.elements = n;
-    boost[0].elements = m.elements;
+
 }
 
 
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
+function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
+    var dx = v.x;
+    var dy = v.y;
+    var dz = v.z;
+    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+    if (len == 0) return new THREE.Matrix4().identity();
+    else {
+        var m = new THREE.Matrix4().set(
+            1, 0, 0, dx,
+            0, 1, 0, dy,
+            0, 0, 1, dz,
+            0, 0, 0, 1);
+        return m;
+    }
+}
+
+
+
+
+
+/*
+
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
     var dx = v.x;
     var dy = v.y;
@@ -86,10 +92,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     }
 }
 
-
-
-
-
+*/
 
 
 
