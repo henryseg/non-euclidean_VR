@@ -195,10 +195,10 @@ var PointLightObject = function (pos, colorInt) { //position is a euclidean Vect
 }
 
 var initObjects = function () {
-    PointLightObject(new THREE.Vector3(0.8, 0, 0), new THREE.Vector4(1, 0, 0, 1));
-    PointLightObject(new THREE.Vector3(0, 0.8, 0), new THREE.Vector4(0, 1, 0, 1));
-    PointLightObject(new THREE.Vector3(0, 0, 0.8), new THREE.Vector4(0, 0, 1, 1));
-    PointLightObject(new THREE.Vector3(-0.8, -0.8, -0.8), new THREE.Vector4(1, 1, 1, 1));
+    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), new THREE.Vector4(1, 0, 0, 1));
+    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), new THREE.Vector4(0, 1, 0, 1));
+    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), new THREE.Vector4(0, 0, 1, 1));
+    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), new THREE.Vector4(1, 1, 1, 1));
     globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5, 0, 0)));
 }
 

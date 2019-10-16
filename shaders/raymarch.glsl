@@ -13,6 +13,10 @@ BEGIN FRAGMENT
 
 
 
+
+
+
+
   //--------------------------------------------------------------------
   // Hyperbolic Functions
   //--------------------------------------------------------------------
@@ -49,9 +53,7 @@ BEGIN FRAGMENT
 
 
 
-
-
-
+  
 
 
 
@@ -94,6 +96,8 @@ BEGIN FRAGMENT
                                0, 1, 0, 0,
                                0, 0, 1, 0,
                                0.032, 0, 0, 1.);
+
+
 
 
 
@@ -246,10 +250,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //--------------------------------------------
 
 
-
-
-
-  //--------------------------------------------
+ //--------------------------------------------
   //Global Constants
   //--------------------------------------------
   const int MAX_MARCHING_STEPS = 48;
@@ -260,8 +261,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   
 
 
-  
-  //--------------------------------------------
+
+ //--------------------------------------------
   //Global Variables
   //--------------------------------------------
   vec4 N = ORIGIN; //normal vector
@@ -284,6 +285,41 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   uniform vec4 lightPositions[4];
   uniform vec4 lightIntensities[4];
   uniform mat4 globalObjectBoost;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   
