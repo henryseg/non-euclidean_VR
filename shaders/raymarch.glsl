@@ -156,12 +156,12 @@ BEGIN FRAGMENT
 
 //calculate the length of a tangent vector
   float tangNorm(vec4 v){
-    return sqrt(abs(geomDot(v,v)));
+    return sqrt(abs(tangDot(v,v)));
   }
   
 //create a unit tangent vector in a given direction
   vec4 tangNormalize(vec4 u){
-    return u/geomNorm(u);
+    return u/tangNorm(u);
   }
   
 
