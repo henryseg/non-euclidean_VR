@@ -47,7 +47,7 @@ fragmentShader: [
 "  //--------------------------------------------",
 "  //Geometry Constants",
 "  //--------------------------------------------",
-"  const float vertexSphereSize = 0.;//In this case its a horosphere",
+"  const float vertexSphereSize = 0.2;//In this case its a horosphere",
 "  const float centerSphereSize = 1.3;",
 "  const float modelHalfCube = 1.;",
 "//This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.",

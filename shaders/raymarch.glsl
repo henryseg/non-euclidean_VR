@@ -74,7 +74,7 @@ BEGIN FRAGMENT
   //--------------------------------------------
   //Geometry Constants
   //--------------------------------------------
-  const float vertexSphereSize = 0.;//In this case its a horosphere
+  const float vertexSphereSize = 0.2;//In this case its a horosphere
   const float centerSphereSize = 1.3;
   const float modelHalfCube = 1.;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
@@ -455,6 +455,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
       vec4 localEndPoint = pointOnGeodesic(localrO, localrD, localDepth);
+        
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix = fixMatrix * totalFixMatrix;
         vec4 localEndTangent = tangentVectorOnGeodesic(localrO, localrD, localDepth);
