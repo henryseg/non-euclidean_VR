@@ -8,7 +8,7 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 
-var cubeHalfWidth = 3.14159 / 4.;
+var cubeHalfWidth = 3.1415 / 4.;
 
 
 THREE.Vector4.prototype.geomDot = function (v) {
@@ -24,7 +24,7 @@ THREE.Vector4.prototype.geomNormalize = function () {
 }
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acos(v.w);
+    return acos(v.w);
 }
 
 //----------------------------------------------------------------------
@@ -195,10 +195,10 @@ var PointLightObject = function (pos, colorInt) { //position is a euclidean Vect
 }
 
 var initObjects = function () {
-    PointLightObject(new THREE.Vector3(0.8, 0, 0), new THREE.Vector4(1, 0, 0, 1));
-    PointLightObject(new THREE.Vector3(0, 0.8, 0), new THREE.Vector4(0, 1, 0, 1));
-    PointLightObject(new THREE.Vector3(0, 0, 0.8), new THREE.Vector4(0, 0, 1, 1));
-    PointLightObject(new THREE.Vector3(-0.8, -0.8, -0.8), new THREE.Vector4(1, 1, 1, 1));
+    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), new THREE.Vector4(1, 0, 0, 1));
+    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), new THREE.Vector4(0, 1, 0, 1));
+    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), new THREE.Vector4(0, 0, 1, 1));
+    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), new THREE.Vector4(1, 1, 1, 1));
     globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5, 0, 0)));
 }
 
