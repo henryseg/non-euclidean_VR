@@ -428,9 +428,9 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
       float newEp = EPSILON * 10.0;
-      vec4 basis_x = tangNormalize(vec4(1.,0,0,0));  
-      vec4 basis_y = vec4(0,1.,0.0,0);  
-      vec4 basis_z = vec4(0.0,0.0,1,0);  
+      vec4 basis_x = tangNormalize(vec4(1.,0.,0.,0.));  
+      vec4 basis_y = vec4(0.,1.,0.,0.);  
+      vec4 basis_z = vec4(0.,0.,1.,0.);  
       if(hitWhich != 3){ //global light scene
         return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
