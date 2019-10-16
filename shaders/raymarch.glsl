@@ -74,27 +74,26 @@ BEGIN FRAGMENT
   //--------------------------------------------
   //Geometry Constants
   //--------------------------------------------
-  const float vertexSphereSize = -0.951621;//In this case its a horosphere
-  const float centerSphereSize = 0.996216;
-  const float modelHalfCube = 0.5773502692;
+  const float vertexSphereSize = 0.78;
+  const float centerSphereSize = 0.93;
+  const float modelHalfCube = 1.;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+  const vec4 modelCubeCorner = vec4(0.5,0.5,0.5,0.5);
   const float globalObjectRadius = 0.2;
-  const vec4 ORIGIN = vec4(0,0,0,1);
+  const vec4 ORIGIN = vec4(0.,0.,0.,1.);
 
 
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-  const mat4 leftBoost = mat4(1.0005120437408037, 0, 0, -0.032005463133657125,
+  const mat4 leftBoost = mat4(1., 0, 0, 0.032,
                               0, 1, 0, 0,
                               0, 0, 1, 0,
-                              -0.032005463133657125, 0, 0, 1.0005120437408037);
+                              -0.032, 0, 0, 1.);
                               
   //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-  const mat4 rightBoost = mat4(1.0005120437408037, 0, 0, 0.032005463133657125,
-                               0, 1, 0, 0,
-                               0, 0, 1, 0,
-                               0.032005463133657125, 0, 0, 1.0005120437408037);
-
+  const mat4 rightBoost = mat4(1,0,0,-0.032,
+                               0,1,0,0,
+                               0,0,1,0,
+                            0.032,0,0,1);
 
 
 
@@ -104,7 +103,7 @@ BEGIN FRAGMENT
   //--------------------------------------------
 
   float geomDot(vec4 u, vec4 v){
-    return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
+    return u.x*v.x + u.y*v.y + u.z*v.z + u.w*v.w; // Lorentz Dot
   }
   
   float geomNorm(vec4 v){
@@ -116,9 +115,13 @@ BEGIN FRAGMENT
   }
   
   float geomDistance(vec4 u, vec4 v){
-    float bUV = -geomDot(u,v);
-    return acosh(bUV);
+    float bUV = geomDot(u,v);
+    return acos(bUV);
   }
+
+float geomCosAng(vec4 u, vec4 v){
+    return geomDot(u,v);
+}
 
 
   vec4 modelProject(vec4 u){
@@ -132,21 +135,25 @@ BEGIN FRAGMENT
 
 
   vec4 geomDirection(vec4 u, vec4 v){
-    vec4 w = v + geomDot(u,v)*u;
+    vec4 w = v - geomDot(u,v)*u;
     return geomNormalize(w);
-  }
+  }//This was a + in the hyperbolic case b/c sign of dot prod
 
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
   vec4 pointOnGeodesic(vec4 u, vec4 vPrime, float dist){
-    return u*cosh(dist) + vPrime*sinh(dist);
+    return u*cos(dist) + vPrime*sin(dist);
   }
   
   vec4 tangentVectorOnGeodesic(vec4 u, vec4 vPrime, float dist){
     // note that this point has geomDot with itself of -1, so it is on other hyperboloid
-    return u*sinh(dist) + vPrime*cosh(dist);
+    return -u*sin(dist) + vPrime*cos(dist);
   }
   
+
+float lightAtt(float dist){
+    return sin(dist)*sin(dist);
+}
   //---------------------------------------------------------------------
   //Raymarch Primitives
   //---------------------------------------------------------------------
@@ -169,7 +176,7 @@ float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 }
 
 float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
-    return  horosphereHSDF(samplePoint, cornerPoint, size);
+    return  sphereSDF(samplePoint, cornerPoint, size);
 }
 
 
@@ -246,10 +253,11 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //Scene Definitions
   //---------------------------------------------------------------------
   float localSceneSDF(vec4 samplePoint){
-    float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
+    float centerSphere=0.0;
+    centerSphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
-    float final = -min(vertexSphere,sphere); //unionSDF
+    float final = -min(vertexSphere,centerSphere); //unionSDF
     return final;
   }
   
@@ -341,15 +349,21 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
 
 
-
+//SHOULD WRITE A BETTER VERSION OF THIS 
   
   //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
       float newEp = EPSILON * 10.0;
-      vec4 basis_x = geomNormalize(vec4(p.w,0.0,0.0,p.x));  // dw/dx = x/w on hyperboloid
-      vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  // dw/dy = y/denom
-      vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  // dw/dz = z/denom  /// note that these are not orthonormal!
+      vec4 basis_x = geomNormalize(vec4(p.w,0.0,0.0,-p.x));  // dw/dx = x/w on hyperboloid
+      vec4 basis_y = vec4(0.0,p.w,0.0,-p.y);  // dw/dy = y/denom
+      vec4 basis_z = vec4(0.0,0.0,p.w,-p.z);  // dw/dz = z/denom  /// note that these are not orthonormal!
+      
+      
+      
+      
+      
+      
       basis_y = geomNormalize(basis_y - geomDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt
       basis_z = geomNormalize(basis_z - geomDot(basis_z, basis_x)*basis_x - geomDot(basis_z, basis_y)*basis_y);
       if(hitWhich != 3){ //global light scene
@@ -403,7 +417,55 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
 
   
-  void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
+ 
+  
+
+
+  //--------------------------------------------------------------------
+  // Lighting Functions
+  //--------------------------------------------------------------------
+  //SP - Sample Point | TLP - Translated Light Position | V - View Vector
+  vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
+    //Calculations - Phong Reflection Model
+    vec4 L = geomDirection(SP, TLP);
+    vec4 R = L-2.0*geomDot(L, N)*N; //THIS IS A DIFFERENT SIGN THAN THE HYPERBOLIC CASE! IS THE HYPERBOLIC DOT PRODUCT WRONG SIGN PROBABLY?
+    //Calculate Diffuse Component
+    float nDotL = max(geomDot(N, L),0.0);
+    vec3 diffuse = lightIntensity.rgb * nDotL;
+    //Calculate Specular Component
+    float rDotV = max(geomDot(R, V),0.0);
+    vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
+    //Attenuation - Inverse Square
+    float distToLight = geomDistance(SP, TLP);
+    float att = lightIntensity.w *0.6/(0.01 +  lightAtt(distToLight));
+    //Compute final color
+    return att*((diffuse*baseColor) + specular);
+  }
+  
+  vec3 phongModel(mat4 totalFixMatrix){
+    vec4 SP = sampleEndPoint;
+    vec4 TLP; //translated light position
+    vec4 V = -sampleTangentVector;
+    vec3 color = vec3(0.0);
+    //--------------------------------------------------
+    //Lighting Calculations
+    //--------------------------------------------------
+    //usually we'd check to ensure there are 4 lights
+    //however this is version is hardcoded so we won't
+    for(int i = 0; i<4; i++){ 
+        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
+        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
+    }
+    return color;
+  }
+
+
+
+  //--------------------------------------------------------------------
+  // The RayMarch
+  //--------------------------------------------------------------------
+
+ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
     float globalDepth = MIN_DIST; float localDepth = globalDepth;
     vec4 localrO = rO; vec4 localrD = rD;
@@ -451,46 +513,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
       }
     }
   }
-  
 
 
-  //--------------------------------------------------------------------
-  // Lighting Functions
-  //--------------------------------------------------------------------
-  //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-  vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
-    //Calculations - Phong Reflection Model
-    vec4 L = geomDirection(SP, TLP);
-    vec4 R = 2.0*geomDot(L, N)*N - L;
-    //Calculate Diffuse Component
-    float nDotL = max(geomDot(N, L),0.0);
-    vec3 diffuse = lightIntensity.rgb * nDotL;
-    //Calculate Specular Component
-    float rDotV = max(geomDot(R, V),0.0);
-    vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
-    //Attenuation - Inverse Square
-    float distToLight = geomDistance(SP, TLP);
-    float att = 0.6/(0.01 + lightIntensity.w * distToLight);
-    //Compute final color
-    return att*((diffuse*baseColor) + specular);
-  }
-  
-  vec3 phongModel(mat4 totalFixMatrix){
-    vec4 SP = sampleEndPoint;
-    vec4 TLP; //translated light position
-    vec4 V = -sampleTangentVector;
-    vec3 color = vec3(0.0);
-    //--------------------------------------------------
-    //Lighting Calculations
-    //--------------------------------------------------
-    //usually we'd check to ensure there are 4 lights
-    //however this is version is hardcoded so we won't
-    for(int i = 0; i<4; i++){ 
-        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
-        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
-    }
-    return color;
-  }
 
   //--------------------------------------------------------------------
   // Tangent Space Functions

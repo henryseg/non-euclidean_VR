@@ -8,11 +8,11 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 
-var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 3.14159 / 4.;
 
 
 THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+    return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
 }
 
 THREE.Vector4.prototype.geomLength = function () {
@@ -24,7 +24,7 @@ THREE.Vector4.prototype.geomNormalize = function () {
 }
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return v.x * v.x + v.y * v.y + v.z * v.z;
+    return Math.acos(v.w);
 }
 
 //----------------------------------------------------------------------
@@ -75,7 +75,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
             0, 0, 0, dx,
             0, 0, 0, dy,
             0, 0, 0, dz,
-            dx, dy, dz, 0.0);
+            -dx, -dy, -dz, 0.0);
         var m2 = new THREE.Matrix4().copy(m).multiply(m);
         m.multiplyScalar(c1);
         m2.multiplyScalar(c2);
