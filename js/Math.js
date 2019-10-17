@@ -57,7 +57,8 @@ THREE.Vector4.prototype.geomNormalize = function () {
     return this.divideScalar(this.geomLength());
 }
 
-function reduceBoostError(boost) { // for H^3, this is gramSchmidt
+function reduceBoostError(boost) {
+    return boost; // for H^3, this is gramSchmidt
 
 }
 
@@ -87,8 +88,8 @@ function translate(boost, trans) { // deal with a translation of the camera
     // In other words, translate boost by the conjugate of trans by boost
 }
 
-function rotate(boost1, rotMatrix) { // deal with a rotation of the camera
-    boost1[0].multiply(rotMatrix);
+function rotate(boost, rotMatrix) { // deal with a rotation of the camera
+    boost[0].multiply(rotMatrix);
 }
 
 function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
@@ -134,12 +135,18 @@ var createGenerators = function () { /// generators for the tiling by cubes.
     var gen3 = translateByVector(new THREE.Vector3(0.0, -2.0 * cubeHalfWidth, 0.0));
     var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 2.0 * cubeHalfWidth));
     var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, -2.0 * cubeHalfWidth));
+
+    //verifying points are being moved correctly by the generators.
+    console.log(new THREE.Vector3(0, 0, 0, 1).applyMatrix4(gen4));
+
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
 var invGenerators = function (genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
 }
+
+
 
 // The position of the camera, and transformations coming from movement or rotation are all packaged as "boosts"
 // For H^3, our boosts are arrays containing a single element: an elt of SO(3,1). 

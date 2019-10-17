@@ -126,7 +126,7 @@ const float HalfCube=1.;
 
 //Project onto the Klein Model
   vec4 modelProject(vec4 u){
-    return u/u.w;
+    return u;
   }
 
 
@@ -149,8 +149,8 @@ const float HalfCube=1.;
   }
 
   float lightAtt(float dist){//light intensity as a fn of distance
-      return dist*dist; //fake linear falloff (correct is below)
-      //return sinh(dist)*sinh(dist);
+      return dist; //fake linear falloff (correct is below)
+      
   }
 
 
@@ -179,17 +179,17 @@ float cosAng(vec4 u, vec4 v){
 
 //give the unit tangent to geodesic connecting u to v.
   vec4 tangDirection(vec4 u, vec4 v){
-    return tangNormalize(v-u);
+    return tangNormalize(v-u);//should this be u-v or v-u?
   }
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
   vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    return u + vPrime*dist;
+    return u + tangNormalize(vPrime)*dist;
   }
   
 //get unit tangent vec at endpt of geodesic
   vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    return vPrime;
+    return tangNormalize(vPrime);
   }
 
 
@@ -363,7 +363,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   // This function is intended to be hyp-agnostic.
   // We should update some of the variable names.
   bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
-    vec4 modelSamplePoint = modelProject(samplePoint); //project to klein
+      //NOT Running the normalization right now.
+    vec4 modelSamplePoint = modelProject(samplePoint); //project to affine patch
     if(modelSamplePoint.x > modelHalfCube){
       fixMatrix = invGenerators[0];
       return true;
@@ -428,11 +429,11 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
       float newEp = EPSILON * 10.0;
-      vec4 basis_x = tangNormalize(vec4(1.,0.,0.,0.));  
+      vec4 basis_x = vec4(1.,0.,0.,0.);  
       vec4 basis_y = vec4(0.,1.,0.,0.);  
       vec4 basis_z = vec4(0.,0.,1.,0.);  
       if(hitWhich != 3){ //global light scene
-        return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
+        return tangNormalize( 
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
           basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
           basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z)));
@@ -456,7 +457,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
 
 
-
+ 
 
 
 
@@ -484,18 +485,23 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   
   void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
-    float globalDepth = MIN_DIST; float localDepth = globalDepth;
-    vec4 localrO = rO; vec4 localrD = rD;
+    float globalDepth = MIN_DIST; 
+    float localDepth = globalDepth;
+    vec4 localrO = rO; 
+    vec4 localrD = rD;
     totalFixMatrix = mat4(1.0);
 
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
+      vec4 localEndPoint = 
+          geodesicEndpt(localrO, localrD, localDepth);
+        
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix = fixMatrix * totalFixMatrix;
         vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
         localrO = geomNormalize(fixMatrix * localEndPoint);
-        localrD = tangDirection(localrO, fixMatrix * localEndTangent);
+        localrD = tangNormalize(fixMatrix * localEndTangent);
+          //used to be tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
       }
       else{
