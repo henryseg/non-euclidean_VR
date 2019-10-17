@@ -335,6 +335,84 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     float final = -min(vertexSphere,sphere); //unionSDF
     return final;
   }
+
+
+
+
+
+/*
+//HERE's the Fancy Scene
+  float localSceneSDF(vec4 samplePoint){
+           //HYPERCUBE
+      float centersphere=0.0;
+    centersphere = sphereSDF(samplePoint, ORIGIN, 0.93);
+   float vertexSphere = 0.0;
+vertexSphere = sphereSDF(abs(samplePoint), vec4(0.5,0.5,0.5,0.5), 0.2);
+float firstobj = -min(vertexSphere,centersphere); //unionSDF
+      //16 CELL
+float dualVSphere=0.0;
+ dualVSphere = sphereSDF(abs(samplePoint), vec4(0.5,0.5,0.5,0.5), 0.78);
+      float dualCSphere = 0.0;
+      dualCSphere=sphereSDF(samplePoint, ORIGIN,0.33);
+      float sixteenCellMain = min(dualVSphere,dualCSphere);
+    //Removing an extra ball from each side
+      float edgeZSph=0.0;
+      edgeZSph=min(sphereSDF(samplePoint,vec4(0,0, -0.38, 0.92),0.14),sphereSDF(samplePoint,vec4(0,0, 0.38, 0.92),0.14));
+     float edgeXSph=0.0;
+    edgeXSph=min(sphereSDF(samplePoint,vec4( -0.38, 0,0,0.92),0.14),sphereSDF(samplePoint,vec4(0.38,0,0, 0.92),0.14));
+     float edgeYSph=0.0;
+     edgeYSph=min(sphereSDF(samplePoint,vec4( 0,-0.38, 0,0.92),0.14),sphereSDF(samplePoint,vec4(0,0.38,0, 0.92),0.14));
+      float edgSph=0.0;
+     edgSph=min(min(edgeXSph,edgeZSph),edgeYSph);
+      //it seems like you can only do a min of two things at once...
+      //this is the final 16-cell construction
+       float secondobj = -min(sixteenCellMain,edgSph); //unionSDF
+      //take the union of the first two objects created
+      float final=min(firstobj,secondobj);
+    return final;
+  }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
   float globalSceneSDF(vec4 samplePoint){
