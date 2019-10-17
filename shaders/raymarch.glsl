@@ -480,25 +480,28 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   // NOT GEOM DEPENDENT
   //--------------------------------------------
 
-
-
-
-
-  
-  void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
+ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
-    float globalDepth = MIN_DIST; float localDepth = globalDepth;
-    vec4 localrO = rO; vec4 localrD = rD;
+    float globalDepth = MIN_DIST; 
+    float localDepth = globalDepth;
+    vec4 localrO = rO; 
+    vec4 localrD = rD;
     totalFixMatrix = mat4(1.0);
 
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
+      vec4 localEndPoint = 
+          geodesicEndpt(localrO, localrD, localDepth);
+        
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix = fixMatrix * totalFixMatrix;
         vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
         localrO = geomNormalize(fixMatrix * localEndPoint);
-        localrD = tangDirection(localrO, fixMatrix * localEndTangent);
+          //the version working in the other geometries is below.
+          //there is flickering when we do this in hyperbolic space though
+        //  localrD = tangNormalize(fixMatrix * localEndTangent);
+          //used to be this, which seems to work better here
+          localrD=tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
       }
       else{
@@ -533,6 +536,12 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
       }
     }
   }
+  
+ 
+
+
+
+
   
 
 
