@@ -78,7 +78,7 @@ BEGIN FRAGMENT
   //--------------------------------------------
 const float modelHalfCube = 1.;
 const float HalfCube=1.;
-  const float vertexSphereSize = 0.2;//In this case its a horosphere
+  const float vertexSphereSize = 0.56;//In this case its a horosphere
   const float centerSphereSize = 1.25*HalfCube;
   
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
