@@ -1,5 +1,7 @@
 /// Edit this file, then run the python 3 script "shaderToPPScript.py" to convert it into a javascript file, "ray.js". 
 
+
+//what does this vertex shader do?
 BEGIN VERTEX
   void main()
   {
@@ -9,7 +11,274 @@ END VERTEX
 
 BEGIN FRAGMENT
 
+
+
+
+
+
+
+  //--------------------------------------------------------------------
+  // Hyperbolic Functions
+  //--------------------------------------------------------------------
+  float cosh(float x){
+    float eX = exp(x);
+    return (0.5 * (eX + 1.0/eX));
+  }
+  
+  float acosh(float x){ //must be more than 1
+    return log(x + sqrt(x*x-1.0));
+  }
+  
+  float sinh(float x){
+    float eX = exp(x);
+    return (0.5 * (eX - 1.0/eX));
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
   //--------------------------------------------
+  //GEOM DEPENDENT
+  //--------------------------------------------
+
+
+
+
+  //--------------------------------------------
+  //Geometry Constants
+  //--------------------------------------------
+  const float HalfCube=0.6584789485;
+  const float modelHalfCube = 0.5773502692;
+  const float vertexSphereSize = -0.98;//In this case its a horosphere
+  const float centerSphereSize = 1.55* HalfCube;
+//This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
+  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+  const float globalObjectRadius = 0.2;
+  const vec4 ORIGIN = vec4(0,0,0,1);
+
+
+//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
+  const mat4 leftBoost = mat4(1., 0, 0, -0.032,
+                              0, 1, 0, 0,
+                              0, 0, 1, 0,
+                              -0.032, 0, 0, 1.);
+                              
+  //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
+  const mat4 rightBoost = mat4(1., 0, 0, 0.032,
+                               0, 1, 0, 0,
+                               0, 0, 1, 0,
+                               0.032, 0, 0, 1.);
+
+
+
+
+
+
+
+  //--------------------------------------------
+  //Geometry of the Models
+  //--------------------------------------------
+
+//Hyperboloid Model
+
+  float geomDot(vec4 u, vec4 v){
+    return -u.x*v.x - u.y*v.y - u.z*v.z + u.w*v.w; // Lorentz Dot
+  }//this is the NEGATIVE of the standard dot product so that now the vectors on the hyperboloid have positive lengths.
+
+  float geomNorm(vec4 v){
+    return sqrt(abs(geomDot(v,v)));
+  }
+
+  float tangDot(vec4 u, vec4 v){
+    return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
+  }
+
+
+//Project onto the Klein Model
+  vec4 modelProject(vec4 u){
+    return u/u.w;
+  }
+
+
+
+
+
+
+  //--------------------------------------------
+  //Geometry of Space
+  //--------------------------------------------
+  
+//project point back onto the geometry
+  vec4 geomNormalize(vec4 u){
+    return u/geomNorm(u);
+  }
+  
+//measure the distance between two points in the geometry
+  float geomDistance(vec4 u, vec4 v){
+    float bUV = geomDot(u,v);
+    return acosh(bUV);
+  }
+
+  float lightAtt(float dist){//light intensity as a fn of distance
+      return dist; //fake linear falloff (correct is below)
+      //return sinh(dist)*sinh(dist);
+  }
+
+
+
+  //--------------------------------------------
+  //Geometry of the Tangent Space
+  //--------------------------------------------
+
+//calculate the length of a tangent vector
+  float tangNorm(vec4 v){
+    return sqrt(abs(tangDot(v,v)));
+  }
+  
+//create a unit tangent vector in a given direction
+  vec4 tangNormalize(vec4 u){
+    return u/tangNorm(u);
+  }
+  
+float cosAng(vec4 u, vec4 v){
+    return tangDot(u,v);
+}
+
+
+
+
+mat4 tangBasis(vec4 p){
+    vec4 basis_x = tangNormalize(vec4(p.w,0.0,0.0,p.x));  
+      vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  
+      vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  
+    //make this orthonormal
+      basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt
+      basis_z = tangNormalize(basis_z - cosAng(basis_z, basis_x)*basis_x - cosAng(basis_z, basis_y)*basis_y);
+      mat4 theBasis=mat4(0.);
+      theBasis[0]=basis_x;
+      theBasis[1]=basis_y;
+      theBasis[2]=basis_z;
+    return theBasis;
+}
+
+
+
+
+
+
+
+
+
+  //-------------------------------------------------------
+  //GEODESIC FUNCTIONS
+  //-------------------------------------------------------
+
+//give the unit tangent to geodesic connecting u to v.
+  vec4 tangDirection(vec4 u, vec4 v){
+    vec4 w = v - geomDot(u,v)*u;
+    return tangNormalize(w);
+  }
+
+  // Get point at distance dist on the geodesic from u in the direction vPrime
+  vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
+    return u*cosh(dist) + vPrime*sinh(dist);
+  }
+  
+//get unit tangent vec at endpt of geodesic
+  vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
+    return u*sinh(dist) + vPrime*cosh(dist);
+  }
+
+
+
+
+
+
+  
+  //---------------------------------------------------------------------
+  //Raymarch Primitives
+  //---------------------------------------------------------------------
+  // A horosphere can be constructed by offseting from a standard horosphere.
+  // Our standard horosphere will have a center in the direction of lightPoint
+  // and go through the origin. Negative offsets will shrink it.
+  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+    return log(-geomDot(samplePoint, lightPoint)) - offset;
+  }//im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
+  
+  float sphereSDF(vec4 samplePoint, vec4 center, float radius){
+    return geomDistance(samplePoint, center) - radius;
+  }
+
+
+//NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
+
+float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
+    return sphereSDF(samplePoint, cornerPoint,size);
+}
+
+float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
+    return  horosphereHSDF(samplePoint, cornerPoint, size);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //--------------------------------------------
+  //NOT GEOM DEPENDENT
+  //--------------------------------------------
+
+
+ //--------------------------------------------
   //Global Constants
   //--------------------------------------------
   const int MAX_MARCHING_STEPS = 48;
@@ -17,29 +286,11 @@ BEGIN FRAGMENT
   const float MAX_DIST = 100.0;
   const float EPSILON = 0.0001;
   const float fov = 90.0;
-  const float horosphereSize = -0.951621;
-  const float sphereRad = 0.996216;
-  const float halfCubeWidthKlein = 0.5773502692;
-  const float globalObjectRadius = 0.2;
-  const vec4 ORIGIN = vec4(0,0,0,1);
+  
 
-  //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-  const mat4 leftBoost = mat4(1.0005120437408037, 0, 0, -0.032005463133657125,
-                              0, 1, 0, 0,
-                              0, 0, 1, 0,
-                              -0.032005463133657125, 0, 0, 1.0005120437408037);
-                              
-  //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-  const mat4 rightBoost = mat4(1.0005120437408037, 0, 0, 0.032005463133657125,
-                               0, 1, 0, 0,
-                               0, 0, 1, 0,
-                               0.032005463133657125, 0, 0, 1.0005120437408037);
-  //--------------------------------------------
-  //Generated Constants
-  //--------------------------------------------
-  const float halfIdealCubeWidthKlein = 0.5773502692;
-  const vec4 idealCubeCornerKlein = vec4(halfIdealCubeWidthKlein, halfIdealCubeWidthKlein, halfIdealCubeWidthKlein, 1.0);
-  //--------------------------------------------
+
+
+ //--------------------------------------------
   //Global Variables
   //--------------------------------------------
   vec4 N = ORIGIN; //normal vector
@@ -63,79 +314,50 @@ BEGIN FRAGMENT
   uniform vec4 lightIntensities[4];
   uniform mat4 globalObjectBoost;
 
-  //--------------------------------------------------------------------
-  // Hyperbolic Functions
-  //--------------------------------------------------------------------
-  float cosh(float x){
-    float eX = exp(x);
-    return (0.5 * (eX + 1.0/eX));
-  }
-  
-  float acosh(float x){ //must be more than 1
-    return log(x + sqrt(x*x-1.0));
-  }
-  
-  float sinh(float x){
-    float eX = exp(x);
-    return (0.5 * (eX - 1.0/eX));
-  }
-  
-  float hypDot(vec4 u, vec4 v){
-    return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
-  }
-  
-  float hypNorm(vec4 v){
-    return sqrt(abs(hypDot(v,v)));
-  }
-  
-  vec4 hypNormalize(vec4 u){
-    return u/hypNorm(u);
-  }
-  
-  float hypDistance(vec4 u, vec4 v){
-    float bUV = -hypDot(u,v);
-    return acosh(bUV);
-  }
-  
-  vec4 hypDirection(vec4 u, vec4 v){
-    vec4 w = v + hypDot(u,v)*u;
-    return hypNormalize(w);
-  }
-  
-  //-------------------------------------------------------
-  //Hyperboloid Functions
-  //-------------------------------------------------------
-  // Get point at distance dist on the geodesic from u in the direction vPrime
-  vec4 pointOnGeodesic(vec4 u, vec4 vPrime, float dist){
-    return u*cosh(dist) + vPrime*sinh(dist);
-  }
-  
-  vec4 tangentVectorOnGeodesic(vec4 u, vec4 vPrime, float dist){
-    // note that this point has hypDot with itself of -1, so it is on other hyperboloid
-    return u*sinh(dist) + vPrime*cosh(dist);
-  }
-  
-  //---------------------------------------------------------------------
-  //Raymarch Primitives
-  //---------------------------------------------------------------------
-  // A horosphere can be constructed by offseting from a standard horosphere.
-  // Our standard horosphere will have a center in the direction of lightPoint
-  // and go through the origin. Negative offsets will shrink it.
-  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
-    return log(-hypDot(samplePoint, lightPoint)) - offset;
-  }
-  
-  float sphereSDF(vec4 samplePoint, vec4 center, float radius){
-    return hypDistance(samplePoint, center) - radius;
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   //---------------------------------------------------------------------
   //Scene Definitions
   //---------------------------------------------------------------------
   float localSceneSDF(vec4 samplePoint){
-    float sphere = sphereSDF(samplePoint, ORIGIN, sphereRad);
+    float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
     float vertexSphere = 0.0;
-    vertexSphere = horosphereHSDF(abs(samplePoint), idealCubeCornerKlein, horosphereSize);
+    vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
     float final = -min(vertexSphere,sphere); //unionSDF
     return final;
   }
@@ -164,75 +386,148 @@ BEGIN FRAGMENT
     }
     return distance;
   }
+
+
+  // This function is intended to be hyp-agnostic.
+  // We should update some of the variable names.
+  bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
+    vec4 modelSamplePoint = modelProject(samplePoint); //project to klein
+    if(modelSamplePoint.x > modelHalfCube){
+      fixMatrix = invGenerators[0];
+      return true;
+    }
+    if(modelSamplePoint.x < -modelHalfCube){
+      fixMatrix = invGenerators[1];
+      return true;
+    }
+    if(modelSamplePoint.y > modelHalfCube){
+      fixMatrix = invGenerators[2];
+      return true;
+    }
+    if(modelSamplePoint.y < -modelHalfCube){
+      fixMatrix = invGenerators[3];
+      return true;
+    }
+    if(modelSamplePoint.z > modelHalfCube){
+      fixMatrix = invGenerators[4];
+      return true;
+    }
+    if(modelSamplePoint.z < -modelHalfCube){
+      fixMatrix = invGenerators[5];
+      return true;
+    }
+    return false;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //--------------------------------------------
+  //GEOM DEPENDENT
+  //--------------------------------------------
+
+
+
+
   
   //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
   vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
       // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
       float newEp = EPSILON * 10.0;
-      vec4 basis_x = hypNormalize(vec4(p.w,0.0,0.0,p.x));  // dw/dx = x/w on hyperboloid
-      vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  // dw/dy = y/denom
-      vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  // dw/dz = z/denom  /// note that these are not orthonormal!
-      basis_y = hypNormalize(basis_y - hypDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt
-      basis_z = hypNormalize(basis_z - hypDot(basis_z, basis_x)*basis_x - hypDot(basis_z, basis_y)*basis_y);
+      mat4 theBasis= tangBasis(p);
+      vec4 basis_x = theBasis[0];
+      vec4 basis_y = theBasis[1];
+      vec4 basis_z = theBasis[2];
       if(hitWhich != 3){ //global light scene
-        return hypNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
+        return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
           basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
           basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z)));
       }
       else{ //local scene
-        return hypNormalize(
+        return tangNormalize(
           basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
           basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
           basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z)));
       }
   }
   
-  // This function is intended to be hyp-agnostic.
-  // We should update some of the variable names.
-  bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
-    vec4 kleinSamplePoint = samplePoint/samplePoint.w; //project to klein
-    if(kleinSamplePoint.x > halfCubeWidthKlein){
-      fixMatrix = invGenerators[0];
-      return true;
-    }
-    if(kleinSamplePoint.x < -halfCubeWidthKlein){
-      fixMatrix = invGenerators[1];
-      return true;
-    }
-    if(kleinSamplePoint.y > halfCubeWidthKlein){
-      fixMatrix = invGenerators[2];
-      return true;
-    }
-    if(kleinSamplePoint.y < -halfCubeWidthKlein){
-      fixMatrix = invGenerators[3];
-      return true;
-    }
-    if(kleinSamplePoint.z > halfCubeWidthKlein){
-      fixMatrix = invGenerators[4];
-      return true;
-    }
-    if(kleinSamplePoint.z < -halfCubeWidthKlein){
-      fixMatrix = invGenerators[5];
-      return true;
-    }
-    return false;
-  }
-  
-  void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //--------------------------------------------
+  // NOT GEOM DEPENDENT
+  //--------------------------------------------
+
+ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
-    float globalDepth = MIN_DIST; float localDepth = globalDepth;
-    vec4 localrO = rO; vec4 localrD = rD;
+    float globalDepth = MIN_DIST; 
+    float localDepth = globalDepth;
+    vec4 localrO = rO; 
+    vec4 localrD = rD;
     totalFixMatrix = mat4(1.0);
 
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 localEndPoint = pointOnGeodesic(localrO, localrD, localDepth);
+      vec4 localEndPoint = 
+          geodesicEndpt(localrO, localrD, localDepth);
+        
       if(isOutsideCell(localEndPoint, fixMatrix)){
         totalFixMatrix = fixMatrix * totalFixMatrix;
-        vec4 localEndTangent = tangentVectorOnGeodesic(localrO, localrD, localDepth);
-        localrO = hypNormalize(fixMatrix * localEndPoint);
-        localrD = hypDirection(localrO, fixMatrix * localEndTangent);
+        vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
+        localrO = geomNormalize(fixMatrix * localEndPoint);
+          //the version working in the other geometries is below.
+          //there is flickering when we do this in hyperbolic space though
+        //  localrD = tangNormalize(fixMatrix * localEndTangent);
+          //used to be this, which seems to work better here
+          localrD=tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
       }
       else{
@@ -240,7 +535,7 @@ BEGIN FRAGMENT
         if(localDist < EPSILON){
           hitWhich = 3;
           sampleEndPoint = localEndPoint;
-          sampleTangentVector = tangentVectorOnGeodesic(localrO, localrD, localDepth);
+          sampleTangentVector = tangToGeodesicEndpt(localrO, localrD, localDepth);
           break;
         }
         localDepth += localDist;
@@ -252,13 +547,13 @@ BEGIN FRAGMENT
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
-      vec4 globalEndPoint = pointOnGeodesic(rO, rD, globalDepth);
+      vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
       float globalDist = globalSceneSDF(globalEndPoint);
       if(globalDist < EPSILON){
         // hitWhich has now been set
         totalFixMatrix = mat4(1.0);
         sampleEndPoint = globalEndPoint;
-        sampleTangentVector = tangentVectorOnGeodesic(rO, rD, globalDepth);
+        sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
         return;
       }
       globalDepth += globalDist;
@@ -268,6 +563,13 @@ BEGIN FRAGMENT
     }
   }
   
+ 
+
+
+
+
+  
+
 
   //--------------------------------------------------------------------
   // Lighting Functions
@@ -275,17 +577,17 @@ BEGIN FRAGMENT
   //SP - Sample Point | TLP - Translated Light Position | V - View Vector
   vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
-    vec4 L = hypDirection(SP, TLP);
-    vec4 R = 2.0*hypDot(L, N)*N - L;
+    vec4 L = tangDirection(SP, TLP);
+    vec4 R = 2.0*cosAng(L, N)*N-L;
     //Calculate Diffuse Component
-    float nDotL = max(hypDot(N, L),0.0);
+    float nDotL = max(cosAng(N, L),0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(hypDot(R, V),0.0);
+    float rDotV = max(cosAng(R, V),0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
     //Attenuation - Inverse Square
-    float distToLight = hypDistance(SP, TLP);
-    float att = 0.6/(0.01 + lightIntensity.w * distToLight);
+    float distToLight = geomDistance(SP, TLP);
+    float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
     //Compute final color
     return att*((diffuse*baseColor) + specular);
   }
@@ -318,7 +620,7 @@ BEGIN FRAGMENT
     }
     vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1/tan(radians(fov*0.5));
-    vec4 p =  hypNormalize(vec4(xy,-z,1.0));
+    vec4 p =  geomNormalize(vec4(xy,-z,1.0));
     return p;
   }
 
@@ -347,7 +649,7 @@ BEGIN FRAGMENT
     rayOrigin = currentBoost * rayOrigin;
     rayDirV = currentBoost * rayDirV;
     //generate direction then transform to hyperboloid ------------------------
-    vec4 rayDirVPrime = hypDirection(rayOrigin, rayDirV);
+    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
     raymarch(rayOrigin, rayDirVPrime, totalFixMatrix);

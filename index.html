@@ -1,33 +1,33 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <!-- Basic Page Needs –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Hyperbolic Raymarching</title>
-  <!-- Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <!-- Style –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <style>
-      body {
-          background-color: #000;
-          color: #fff;
-          margin: 0px;
-          padding: 0;
-          overflow: hidden;
-      }
-  </style>
-  <!-- Favicon –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- Basic Page Needs –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Hyperbolic Raymarching</title>
+    <!-- Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- Style –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            margin: 0px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+    </style>
+    <!-- Favicon –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 
 <body>
-    <img id="vr-icon" src="images/vr-icon.png" height="50px"
-        style="
+    <img id="vr-icon" src="images/vr-icon.png" height="50px" style="
         position: fixed;
         bottom: 30px;
         right: 50px;
-        display: block;"
-    />
+        display: block;" />
 </body>
 
 <!-- Libraries ––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -41,8 +41,9 @@
 <!-- Post Processing Shaders --------------------------------- -->
 <script src="shaders/ray.js"></script>
 <!-- Main Scripts -------------------------------------------- -->
-<script src="js/HypMath.js"></script>
+<script src="js/Math.js"></script>
 <script src="js/Events.js"></script>
 <script src="js/Controls.js"></script>
 <script src="js/Main.js" id="mainCode"></script>
+
 </html>
