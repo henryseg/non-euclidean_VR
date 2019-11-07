@@ -7,21 +7,13 @@
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
+//CHANGE THIS to 0,0,1,0
 var Origin = new THREE.Vector4(0, 0, 0, 1);
+
+
 var cubeHalfWidth = 0.6584789485;
+var cubeHalfHeight = 0.65847; //in general could be different
 
-
-THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
-}
-
-THREE.Vector4.prototype.geomLength = function () {
-    return Math.sqrt(Math.abs(this.geomDot(this)));
-}
-
-THREE.Vector4.prototype.geomNormalize = function () {
-    return this.divideScalar(this.geomLength());
-}
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
     return Math.acosh(v.w);
@@ -31,26 +23,42 @@ function geomDist(v) { //good enough for comparison of distances on the hyperbol
 //	Matrix Operations
 //----------------------------------------------------------------------
 
+//REWRITE ALL OF THIS
+
+THREE.Vector4.prototype.geomDot = function (v) {
+    // return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+}
+
+THREE.Vector4.prototype.geomLength = function () {
+    //  return Math.sqrt(Math.abs(this.geomDot(this)));
+}
+
+THREE.Vector4.prototype.geomNormalize = function () {
+    // return this.divideScalar(this.geomLength());
+}
+
+
 
 function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-    var m = boost[0];
-    var n = m.elements; //elements are stored in column major order we need row major
-    var temp = new THREE.Vector4();
-    var temp2 = new THREE.Vector4();
-    for (var i = 0; i < 4; i++) { ///normalize row
-        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
-        for (var l = 0; l < 4; l++) {
-            n[4 * i + l] = n[4 * i + l] * invRowNorm;
-        }
-        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
-            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
-            for (var l = 0; l < 4; l++) {
-                n[4 * j + l] -= component * n[4 * i + l];
-            }
-        }
-    }
-    m.elements = n;
-    boost[0].elements = m.elements;
+    /*  var m = boost[0];
+      var n = m.elements; //elements are stored in column major order we need row major
+      var temp = new THREE.Vector4();
+      var temp2 = new THREE.Vector4();
+      for (var i = 0; i < 4; i++) { ///normalize row
+          var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
+          for (var l = 0; l < 4; l++) {
+              n[4 * i + l] = n[4 * i + l] * invRowNorm;
+          }
+          for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
+              var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
+              for (var l = 0; l < 4; l++) {
+                  n[4 * j + l] -= component * n[4 * i + l];
+              }
+          }
+      }
+      m.elements = n;
+      boost[0].elements = m.elements;
+      */
 }
 
 
@@ -86,6 +94,45 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         return [new THREE.Matrix4().identity()];
     }
 }
+
+
+
+//The correct version of translate by vector is below:
+
+/*
+function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
+    var dx = v.x;
+    var dy = v.y;
+    var dz = v.z;
+    var len = Math.sqrt(dx * dx + dy * dy);
+
+    var c1 = Math.sinh(len);
+    var c2 = Math.cosh(len) - 1;
+
+    if (len != 0) {
+         dx /= len;
+        dy /= len;
+        dz /= len;
+        var m = new THREE.Matrix4().set(
+            0, 0, dx, 0,
+            0, 0, dy, 0,
+            dx, dy, 0, 0,
+            0, 0, 0, 0.0);
+        var m2 = new THREE.Matrix4().copy(m).multiply(m);
+        m.multiplyScalar(c1);
+        m2.multiplyScalar(c2);
+        var result = new THREE.Matrix4().identity();
+        result.add(m);
+        result.add(m2);
+        return [result,dz];
+    } else {
+        return [new THREE.Matrix4().identity(),dz];
+    }
+}
+*/
+
+
+
 
 //----------------------------------------------------------------------
 //  Boost Operations  (The boost may not be a single matrix for some geometries)
