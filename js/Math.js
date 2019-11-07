@@ -102,7 +102,6 @@ function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
     boost1[0].getInverse(boost2[0]);
 }
 
-
 function composeIsom(boost, trans) { // sitting at boost, 
     boost[0].multiply(trans[0]);
     // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
@@ -126,28 +125,6 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //	Teleporting Back to Central Cell
 //-----------------------------------------------------------------------------------------------------------------------------
 
-////////check if we are still inside the central fund dom, alter boost if so
-/*function fixOutsideCentralCell(boost) {
-    var cPos = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(boost[0]); //central
-    var bestDist = geomDist(cPos);
-    var bestIndex = -1;
-    for (var i = 0; i < gens.length; i++) {
-        var pos = cPos.clone();
-        pos.applyMatrix4(gens[i]);
-        if (geomDist(pos) < bestDist) {
-            bestDist = geomDist(pos);
-            bestIndex = i;
-        }
-    }
-    if (bestIndex != -1) {
-        boost[0].premultiply(gens[bestIndex]);
-        return bestIndex;
-    } else
-        return -1;
-}*/
-
-//COde seems to run without fix outside central cell....
-//When we run tis version rotation breaks
 function fixOutsideCentralCell(boost) {
     var cPos = new THREE.Vector4(0, 0, 0, 1);
     applyIsom(cPos, boost);
@@ -186,14 +163,7 @@ var invGenerators = function (genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
 }
 
-// The position of the camera, and transformations coming from movement or rotation are all packaged as "boosts"
-// For H^3, our boosts are arrays containing a single element: an elt of SO(3,1). 
-// For other geometries there may be multiple objects in the array. For example, for non-isotropic spaces,
-// we have to deal with rotation carefully: the camera can turn in ways that the geometry has no isometry for.
-var packageBoosts = function (genArr) {
-    return [[genArr[0]], [genArr[1]], [genArr[2]], [genArr[3]], [genArr[4]], [genArr[5]]]
-}
-
+//Unpackage boosts into their components (for hyperbolic space, just pull out the matrix which is the first component)
 var unpackage = function (genArr, i) {
     var out = [];
     for (var j = 0; j < genArr.length; j++) {
@@ -218,16 +188,28 @@ var initGeometry = function () {
     invGensMatrices = unpackage(invGens, 0);
 }
 
+
+
 var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3
-    lightPositions.push(new THREE.Vector4(0, 0, 0, 1).applyMatrix4(translateByVector(pos)[0]));
+    var lp = Origin.clone();
+    applyIsom(lp, translateByVector(pos));
+    lightPositions.push(lp);
     lightIntensities.push(colorInt);
 }
 
+
+//DEFINE THE LIGHT COLORS
+var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
+var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
+var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
+var lightColor4 = new THREE.Vector4(238 / 256, 142 / 256, 226 / 256, 1);
+
+
 var initObjects = function () {
-    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1));
-    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1));
-    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1));
-    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), new THREE.Vector4(238 / 256, 142 / 256, 226 / 256, 1));
+    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), lightColor1);
+    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), lightColor2);
+    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), lightColor3);
+    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(-0.5, 0, 0));
 }
 
