@@ -305,6 +305,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   uniform vec2 screenResolution;
   uniform mat4 invGenerators[6];
   uniform mat4 currentBoost;
+  uniform mat4 facing;
   uniform mat4 cellBoost; 
   uniform mat4 invCellBoost;
   //--------------------------------------------
@@ -613,15 +614,15 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   // Tangent Space Functions
   //--------------------------------------------------------------------
 
-  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a point that our ray will go through
+  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray 
     if(isStereo == 1){
       resolution.x = resolution.x * 0.5;
       if(!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
     }
     vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1/tan(radians(fov*0.5));
-    vec4 p =  geomNormalize(vec4(xy,-z,1.0));
-    return p;
+    vec4 v =  tangNormalize(vec4(xy,-z,0.0));
+    return v;
   }
 
   //--------------------------------------------------------------------
@@ -646,13 +647,18 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     }
 
     //camera position must be translated in hyperboloid -----------------------
+    
+    if(isStereo == 1){
+        rayOrigin = facing * rayOrigin;
+    }
     rayOrigin = currentBoost * rayOrigin;
+    rayDirV = facing * rayDirV;
     rayDirV = currentBoost * rayDirV;
     //generate direction then transform to hyperboloid ------------------------
-    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
+//    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
-    raymarch(rayOrigin, rayDirVPrime, totalFixMatrix);
+    raymarch(rayOrigin, rayDirV, totalFixMatrix);
   
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if(hitWhich == 0){ //Didn't hit anything ------------------------

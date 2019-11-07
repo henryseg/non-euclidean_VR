@@ -7,7 +7,7 @@
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
-
+var Origin = new THREE.Vector4(0, 0, 0, 1);
 var cubeHalfWidth = 0.6584789485;
 
 
@@ -66,8 +66,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     var c1 = Math.sinh(len);
     var c2 = Math.cosh(len) - 1;
 
-    if (len == 0) return new THREE.Matrix4().identity();
-    else {
+    if (len != 0) {
         dx /= len;
         dy /= len;
         dz /= len;
@@ -82,17 +81,11 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         var result = new THREE.Matrix4().identity();
         result.add(m);
         result.add(m2);
-        return result;
+        return [result];
+    } else {
+        return [new THREE.Matrix4().identity()];
     }
 }
-
-
-
-
-
-
-
-
 
 //----------------------------------------------------------------------
 //  Boost Operations  (The boost may not be a single matrix for some geometries)
@@ -105,36 +98,36 @@ THREE.Matrix4.prototype.add = function (m) {
     }));
 };
 
-
-function translate(boost, trans) { // deal with a translation of the camera
-    boost[0].multiply(trans[0]);
-    // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
-    // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
-
-    // In other words, translate boost by the conjugate of trans by boost
-}
-
-function rotate(boost1, rotMatrix) { // deal with a rotation of the camera
-    console.log(boost1[0]);
-    boost1[0].multiply(rotMatrix);
-    console.log(rotMatrix);
-    console.log(boost1[0]);
-}
-
 function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
     boost1[0].getInverse(boost2[0]);
 }
 
 
+function composeIsom(boost, trans) { // sitting at boost, 
+    boost[0].multiply(trans[0]);
+    // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
+    // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
+    // In other words, translate boost by the conjugate of trans by boost
+}
 
+function preComposeIsom(boost, trans) { // deal with a translation of the camera
+    boost[0].premultiply(trans[0]);
+}
 
+function applyIsom(point, trans) {
+    point.applyMatrix4(trans[0]);
+}
+
+function rotate(facing, rotMatrix) { // deal with a rotation of the camera
+    facing.multiply(rotMatrix);
+}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting Back to Central Cell
 //-----------------------------------------------------------------------------------------------------------------------------
 
 ////////check if we are still inside the central fund dom, alter boost if so
-function fixOutsideCentralCell(boost) {
+/*function fixOutsideCentralCell(boost) {
     var cPos = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(boost[0]); //central
     var bestDist = geomDist(cPos);
     var bestIndex = -1;
@@ -148,6 +141,28 @@ function fixOutsideCentralCell(boost) {
     }
     if (bestIndex != -1) {
         boost[0].premultiply(gens[bestIndex]);
+        return bestIndex;
+    } else
+        return -1;
+}*/
+
+//COde seems to run without fix outside central cell....
+//When we run tis version rotation breaks
+function fixOutsideCentralCell(boost) {
+    var cPos = new THREE.Vector4(0, 0, 0, 1);
+    applyIsom(cPos, boost);
+    var bestDist = geomDist(cPos);
+    var bestIndex = -1;
+    for (var i = 0; i < gens.length; i++) {
+        var pos = cPos.clone();
+        applyIsom(pos, gens[i]);
+        if (geomDist(pos) < bestDist) {
+            bestDist = geomDist(pos);
+            bestIndex = i;
+        }
+    }
+    if (bestIndex != -1) {
+        preComposeIsom(boost, gens[bestIndex]);
         return bestIndex;
     } else
         return -1;
@@ -179,21 +194,32 @@ var packageBoosts = function (genArr) {
     return [[genArr[0]], [genArr[1]], [genArr[2]], [genArr[3]], [genArr[4]], [genArr[5]]]
 }
 
+var unpackage = function (genArr, i) {
+    var out = [];
+    for (var j = 0; j < genArr.length; j++) {
+        out.push(genArr[j][i]);
+    }
+    return out;
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Initialise things
 //-----------------------------------------------------------------------------------------------------------------------------
 
+var invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
+
 var initGeometry = function () {
     g_currentBoost = [new THREE.Matrix4()];
+    g_facing = new THREE.Matrix4();
     g_cellBoost = [new THREE.Matrix4()];
     g_invCellBoost = [new THREE.Matrix4()];
     gens = createGenerators();
     invGens = invGenerators(gens);
-    invGenBoosts = packageBoosts(invGens);
+    invGensMatrices = unpackage(invGens, 0);
 }
 
 var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3
-    lightPositions.push(new THREE.Vector4(0, 0, 0, 1).applyMatrix4(translateByVector(pos)));
+    lightPositions.push(new THREE.Vector4(0, 0, 0, 1).applyMatrix4(translateByVector(pos)[0]));
     lightIntensities.push(colorInt);
 }
 
@@ -202,13 +228,14 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1));
     PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1));
     PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), new THREE.Vector4(238 / 256, 142 / 256, 226 / 256, 1));
-    globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5, 0, 0)));
+    globalObjectBoost = translateByVector(new THREE.Vector3(-0.5, 0, 0));
 }
 
 //-------------------------------------------------------
-// Set up shader
+// Set up shader 
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
+
 
 var raymarchPass = function (screenRes) {
     var pass = new THREE.ShaderPass(THREE.ray);
@@ -217,12 +244,17 @@ var raymarchPass = function (screenRes) {
     pass.uniforms.lightIntensities.value = lightIntensities;
 
     //--- geometry dependent stuff here ---//
-    pass.uniforms.invGenerators.value = invGens;
-    pass.uniforms.currentBoost.value = g_currentBoost[0]; //currentBoost is an array
+    //--- lists of stuff that goes into each invGenerator
+    pass.uniforms.invGenerators.value = invGensMatrices;
+    //--- end of invGen stuff
+
+    pass.uniforms.currentBoost.value = g_currentBoost[0];
+    //currentBoost is an array
+    pass.uniforms.facing.value = g_facing;
     pass.uniforms.cellBoost.value = g_cellBoost[0];
     pass.uniforms.invCellBoost.value = g_invCellBoost[0];
     pass.uniforms.lightPositions.value = lightPositions;
-    pass.uniforms.globalObjectBoost.value = globalObjectBoost;
+    pass.uniforms.globalObjectBoost.value = globalObjectBoost[0];
     //--- end of geometry dependent stuff ---//
 
     return pass;
