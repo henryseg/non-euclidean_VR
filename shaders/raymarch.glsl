@@ -77,83 +77,114 @@ BEGIN FRAGMENT
   //Geometry Constants
   //--------------------------------------------
   const float HalfCube=0.6584789485;
+  const float HalfHeight=0.6584789485;
   const float modelHalfCube = 0.5773502692;
+  const float modelHalfHeight=0.65847;//projection doesnt change w direction here
   const float vertexSphereSize = -0.98;//In this case its a horosphere
   const float centerSphereSize = 1.55* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
   const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
-  const vec4 ORIGIN = vec4(0,0,0,1);
+
+  const vec4 ORIGIN = vec4(0,0,1,0);
 
 
-//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-  const mat4 leftBoost = mat4(1., 0, 0, -0.032,
+//these translate the eyes along the x-axis (in the hyperbolic direction, so youre standing up vertically)
+//NEED TO FIGURE OUT WHAT TO DO ABT Z DIRECTION IF ANYTHING
+  const mat4 leftBoost = mat4(1., 0, -0.032, 0,
                               0, 1, 0, 0,
-                              0, 0, 1, 0,
-                              -0.032, 0, 0, 1.);
+                              -0.032, 0, 1, 0,
+                              0, 0, 0, 1.);
                               
-  //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-  const mat4 rightBoost = mat4(1., 0, 0, 0.032,
+  const mat4 rightBoost = mat4(1., 0,  0.032,0,
                                0, 1, 0, 0,
-                               0, 0, 1, 0,
-                               0.032, 0, 0, 1.);
+                               0.032, 0, 1, 0,
+                               0, 0, 0, 1.);
 
 
 
 
 
 
-
-  //--------------------------------------------
+//--------------------------------------------
   //Geometry of the Models
   //--------------------------------------------
 
 //Hyperboloid Model
 
-  float geomDot(vec4 u, vec4 v){
-    return -u.x*v.x - u.y*v.y - u.z*v.z + u.w*v.w; // Lorentz Dot
-  }//this is the NEGATIVE of the standard dot product so that now the vectors on the hyperboloid have positive lengths.
+//there is a hyperbolic dot product on the slices tho
+  float hypDot(vec4 u, vec4 v){
+    return -u.x*v.x - u.y*v.y + u.z*v.z; // Neg Lorentz Dot
+  }
 
+//norm of a point in the xyz minkowski space
+float hypNorm(vec4 v){
+    return sqrt(abs(hypDot(v,v)));
+}
+
+//distance between two points projections into hyperboloid:
+float hypDist(vec4 u, vec4 v){
+     float bUV = hypDot(u,v);
+    return acosh(bUV);
+}
+
+//norm of a point in the Euclidean direction
+float eucDist(vec4 u,vec4 v){
+    return abs(u.w-v.w);
+}
+
+
+//There won't be a geomDot here:
+//Need to replace its uses in finding distance
+  float geomDot(vec4 u, vec4 v){
+    return -u.x*v.x - u.y*v.y + u.z*v.z; // Neg Lorentz Dot
+  }
+
+//There is NO NORM on this geometry (we aren't the leve set of anything.  This needs to go.)
   float geomNorm(vec4 v){
     return sqrt(abs(geomDot(v,v)));
   }
 
+
+
+//dot product on the tangent spaces to H2xE
   float tangDot(vec4 u, vec4 v){
-    return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
+    return u.x*v.x + u.y*v.y - u.z*v.z + u.w*v.w; // Lorentz Dot for xyz, cartesian product with w-direction
   }
 
 
-//Project onto the Klein Model
+//Project onto the Klein Model, for each hyperbolic slice, which here means dividing by the z coordinate.
   vec4 modelProject(vec4 u){
-    return u/u.w;
+    return u/u.z;
   }
 
 
 
-
-
+//THESE SHOULD BE GOOD
 
   //--------------------------------------------
   //Geometry of Space
   //--------------------------------------------
   
-//project point back onto the geometry
+//project point back onto the geometry: project onto hyperboloid, leave w direction unchanged.
   vec4 geomNormalize(vec4 u){
-    return u/geomNorm(u);
+    return vec4(u.x/hypNorm(u),u.y/hypNorm(u),u.z/hypNorm(u),u.w);
   }
+
   
 //measure the distance between two points in the geometry
   float geomDistance(vec4 u, vec4 v){
-    float bUV = geomDot(u,v);
-    return acosh(bUV);
+    return sqrt(eucDist(u,v)*eucDist(u,v)+hypDist(u,v)*hypDist(u,v));
   }
 
   float lightAtt(float dist){//light intensity as a fn of distance
-      return dist; //fake linear falloff (correct is below)
-      //return sinh(dist)*sinh(dist);
+      return dist; //fake linear falloff (worry about this later)
   }
 
 
+
+
+//THESE SHOULD BE GOOD
 
   //--------------------------------------------
   //Geometry of the Tangent Space
@@ -173,22 +204,20 @@ float cosAng(vec4 u, vec4 v){
     return tangDot(u,v);
 }
 
-
-
-
 mat4 tangBasis(vec4 p){
-    vec4 basis_x = tangNormalize(vec4(p.w,0.0,0.0,p.x));  
-      vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  
-      vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  
+    vec4 basis_x = tangNormalize(vec4(p.z,0.0,p.x,0.0));  
+      vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
+      vec4 basis_z = vec4(0.0,0.0,0,1);  
     //make this orthonormal
-      basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt
-      basis_z = tangNormalize(basis_z - cosAng(basis_z, basis_x)*basis_x - cosAng(basis_z, basis_y)*basis_y);
+      basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
       mat4 theBasis=mat4(0.);
       theBasis[0]=basis_x;
       theBasis[1]=basis_y;
       theBasis[2]=basis_z;
     return theBasis;
 }
+
+
 
 
 
@@ -304,6 +333,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   uniform int isStereo;
   uniform vec2 screenResolution;
   uniform mat4 invGenerators[6];
+//NEED SOMETHING FOR THE REAL NUMBER COMPONENTS
   uniform mat4 currentBoost;
   uniform mat4 facing;
   uniform mat4 cellBoost; 
@@ -357,9 +387,11 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //---------------------------------------------------------------------
   float localSceneSDF(vec4 samplePoint){
     float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
-    float vertexSphere = 0.0;
-    vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
-    float final = -min(vertexSphere,sphere); //unionSDF
+   // float vertexSphere = 0.0;
+   // vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
+   // float final = -min(vertexSphere,sphere); 
+//unionSDF
+      float final=-sphere;
     return final;
   }
   

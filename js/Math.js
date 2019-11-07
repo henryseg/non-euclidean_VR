@@ -71,7 +71,6 @@ function translateByVector(v) {
         result.add(m2);
         // return result; //only translate in hyperbolic directions
     }
-    console.log(result);
     return [result, dz];
 }
 
@@ -228,7 +227,8 @@ var raymarchPass = function (screenRes) {
     //--- geometry dependent stuff here ---//
     //--- lists of stuff that goes into each invGenerator
     pass.uniforms.invGenerators.value = invGensMatrices;
-    pass.uniforms.invGeneratorsReals.value = invGensReals;
+    //NEED ANOTHER LINE LIKE BELOW:
+    // pass.uniforms.invGeneratorsReals.value = invGensReals;
     //--- end of invGen stuff
 
     pass.uniforms.currentBoost.value = g_currentBoost[0];
