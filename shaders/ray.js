@@ -57,7 +57,7 @@ fragmentShader: [
 "//This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.",
 "  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);",
 "  const float globalObjectRadius = 0.2;",
-"  const vec4 ORIGIN = vec4(0,0,1,0);",
+"  const vec4 ORIGIN = vec4(0,0,1,1);",
 "//these translate the eyes along the x-axis (in the hyperbolic direction, so youre standing up vertically)",
 "//NEED TO FIGURE OUT WHAT TO DO ABT Z DIRECTION IF ANYTHING",
 "  const mat4 leftBoost = mat4(1., 0, -0.032, 0,",
