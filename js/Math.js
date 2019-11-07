@@ -7,84 +7,72 @@
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
-var Origin = new THREE.Vector4(0, 0, 0, 1);
+var Origin = new THREE.Vector4(0, 0, 1, 0);
 var cubeHalfWidth = 0.6584789485;
+var cubeHalfHeight = 0.65847; //Height of the cube is the same
 
-
-THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+function geomDist(v) { //pythagorean theorem for H2xE.
+    return Math.sqrt(Math.acosh(v.z) * Math.acosh(v.z) + v.w * v.w);
 }
 
-THREE.Vector4.prototype.geomLength = function () {
-    return Math.sqrt(Math.abs(this.geomDot(this)));
-}
-
-THREE.Vector4.prototype.geomNormalize = function () {
-    return this.divideScalar(this.geomLength());
-}
-
-function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acosh(v.w);
-}
 
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
 
+THREE.Vector4.prototype.geomDot = function (v) {
+    //only needed for reduceBoostError;
+}
 
-function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-    var m = boost[0];
-    var n = m.elements; //elements are stored in column major order we need row major
-    var temp = new THREE.Vector4();
-    var temp2 = new THREE.Vector4();
-    for (var i = 0; i < 4; i++) { ///normalize row
-        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
-        for (var l = 0; l < 4; l++) {
-            n[4 * i + l] = n[4 * i + l] * invRowNorm;
-        }
-        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
-            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
-            for (var l = 0; l < 4; l++) {
-                n[4 * j + l] -= component * n[4 * i + l];
-            }
-        }
-    }
-    m.elements = n;
-    boost[0].elements = m.elements;
+THREE.Vector4.prototype.geomLength = function () {
+    // only needed for reduce BoostError;
+}
+
+THREE.Vector4.prototype.geomNormalize = function () {
+    // only needed for reduceBoostError
+}
+
+
+
+function reduceBoostError(boost) { // rewrite this for H2xE
 }
 
 
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
-function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
+
+//translate by vector spits out an isometry which has components of a matrix and a height.
+function translateByVector(v) {
+
     var dx = v.x;
     var dy = v.y;
     var dz = v.z;
-    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    var len = Math.sqrt(dx * dx + dy * dy);
 
     var c1 = Math.sinh(len);
     var c2 = Math.cosh(len) - 1;
 
-    if (len != 0) {
+    if (len == 0) result = new THREE.Matrix4().identity();
+    else {
         dx /= len;
         dy /= len;
         dz /= len;
         var m = new THREE.Matrix4().set(
-            0, 0, 0, dx,
-            0, 0, 0, dy,
-            0, 0, 0, dz,
-            dx, dy, dz, 0.0);
+            0, 0, dx, 0,
+            0, 0, dy, 0,
+            dx, dy, 0, 0,
+            0, 0, 0, 0.0);
         var m2 = new THREE.Matrix4().copy(m).multiply(m);
         m.multiplyScalar(c1);
         m2.multiplyScalar(c2);
         var result = new THREE.Matrix4().identity();
         result.add(m);
         result.add(m2);
-        return [result];
-    } else {
-        return [new THREE.Matrix4().identity()];
+        // return result; //only translate in hyperbolic directions
     }
+    console.log(result);
+    return [result, dz];
 }
 
 //----------------------------------------------------------------------
@@ -98,23 +86,31 @@ THREE.Matrix4.prototype.add = function (m) {
     }));
 };
 
+
+
 function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
+
     boost1[0].getInverse(boost2[0]);
+    boost1[1] = -boost2[1]; // set the second component of the boost to the negative of the original
+
 }
 
 function composeIsom(boost, trans) { // sitting at boost, 
-    boost[0].multiply(trans[0]);
+    boost[0].multiply(trans[0]); //multiply matrices
+    boost[1] += trans[1]; //add R components
     // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
     // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
     // In other words, translate boost by the conjugate of trans by boost
 }
 
 function preComposeIsom(boost, trans) { // deal with a translation of the camera
-    boost[0].premultiply(trans[0]);
+    boost[0].premultiply(trans[0]); //multiply matrices
+    boost[1] += trans[1]; //add R components
 }
 
 function applyIsom(point, trans) {
-    point.applyMatrix4(trans[0]);
+    point.applyMatrix4(trans[0]); //multiply matrices
+    point.w += trans[1]; //add R components
 }
 
 function rotate(facing, rotMatrix) { // deal with a rotation of the camera
@@ -124,9 +120,10 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting Back to Central Cell
 //-----------------------------------------------------------------------------------------------------------------------------
+//This should be geometry indepenendent
 
 function fixOutsideCentralCell(boost) {
-    var cPos = new THREE.Vector4(0, 0, 0, 1);
+    var cPos = Origin.clone();
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
     var bestIndex = -1;
@@ -176,7 +173,9 @@ var unpackage = function (genArr, i) {
 //	Initialise things
 //-----------------------------------------------------------------------------------------------------------------------------
 
-var invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
+var invGensMatrices;
+var invGensReals;
+// need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 
 var initGeometry = function () {
     g_currentBoost = [new THREE.Matrix4()];
@@ -186,6 +185,7 @@ var initGeometry = function () {
     gens = createGenerators();
     invGens = invGenerators(gens);
     invGensMatrices = unpackage(invGens, 0);
+    invGensReals = unpackage(invGens, 1);
 }
 
 
@@ -228,6 +228,7 @@ var raymarchPass = function (screenRes) {
     //--- geometry dependent stuff here ---//
     //--- lists of stuff that goes into each invGenerator
     pass.uniforms.invGenerators.value = invGensMatrices;
+    pass.uniforms.invGeneratorsReals.value = invGensReals;
     //--- end of invGen stuff
 
     pass.uniforms.currentBoost.value = g_currentBoost[0];
