@@ -76,12 +76,12 @@ BEGIN FRAGMENT
   //--------------------------------------------
   //Geometry Constants
   //--------------------------------------------
-  const float HalfCube=0.6584789485;
-  const float modelHalfCube = 0.5773502692;
-  const float vertexSphereSize = -0.98;//In this case its a horosphere
-  const float centerSphereSize = 1.55* HalfCube;
+//  const float HalfCube=0.6584789485;
+  //const float modelHalfCube = 0.5773502692;
+ // const float vertexSphereSize = -0.98;//In this case its a horosphere
+ // const float centerSphereSize = 1.55* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+//  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
   const vec4 ORIGIN = vec4(0,0,0,1);
 
@@ -230,9 +230,12 @@ mat4 tangBasis(vec4 p){
   // A horosphere can be constructed by offseting from a standard horosphere.
   // Our standard horosphere will have a center in the direction of lightPoint
   // and go through the origin. Negative offsets will shrink it.
-  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+
+ /* float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
     return log(-geomDot(samplePoint, lightPoint)) - offset;
-  }//im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
+  }*/
+
+  //im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
   
   float sphereSDF(vec4 samplePoint, vec4 center, float radius){
     return geomDistance(samplePoint, center) - radius;
@@ -241,13 +244,13 @@ mat4 tangBasis(vec4 p){
 
 //NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
 
-float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
+/*float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     return sphereSDF(samplePoint, cornerPoint,size);
-}
+}*/
 
-float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
+/*float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     return  horosphereHSDF(samplePoint, cornerPoint, size);
-}
+}*/
 
 
 
@@ -362,7 +365,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
     float final = -min(vertexSphere,sphere); //unionSDF
     */
-    return 100.;
+    return 101.;
   }
   
   //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++

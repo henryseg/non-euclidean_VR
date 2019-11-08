@@ -8,20 +8,20 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 0.6584789485;
+//var cubeHalfWidth = 0.6584789485;
 
 
-THREE.Vector4.prototype.geomDot = function (v) {
-    // return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
-}
+//THREE.Vector4.prototype.geomDot = function (v) {
+// return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+//}
 
-THREE.Vector4.prototype.geomLength = function () {
-    //return Math.sqrt(Math.abs(this.geomDot(this)));
-}
+//THREE.Vector4.prototype.geomLength = function () {
+//return Math.sqrt(Math.abs(this.geomDot(this)));
+//}
 
-THREE.Vector4.prototype.geomNormalize = function () {
-    // return this.divideScalar(this.geomLength());
-}
+//THREE.Vector4.prototype.geomNormalize = function () {
+// return this.divideScalar(this.geomLength());
+//}
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
     return Math.acosh(v.w);
@@ -133,12 +133,12 @@ function fixOutsideCentralCell(boost) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var createGenerators = function () { /// generators for the tiling by cubes. 
-    var gen0 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
-    var gen1 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
-    var gen2 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
-    var gen3 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
-    var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
-    var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
+    var gen0 = new THREE.Matrix4(1.);
+    var gen1 = new THREE.Matrix4(1.);
+    var gen2 = new THREE.Matrix4(1.);
+    var gen3 = new THREE.Matrix4(1.);
+    var gen4 = new THREE.Matrix4(1.);
+    var gen5 = new THREE.Matrix4(1.);
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -189,10 +189,10 @@ var lightColor4 = new THREE.Vector4(238 / 256, 142 / 256, 226 / 256, 1);
 
 
 var initObjects = function () {
-    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), lightColor1);
-    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), lightColor2);
-    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), lightColor3);
-    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), lightColor4);
+    PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
+    PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
+    PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
+    PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
 }
 
