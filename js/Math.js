@@ -7,8 +7,8 @@
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
-//CHANGE THIS to 0,0,1,0
-var Origin = new THREE.Vector4(0, 0, 0, 1);
+
+var Origin = new THREE.Vector4(0, 0, 1, 0);
 
 
 var cubeHalfWidth = 0.6584789485;
@@ -65,41 +65,10 @@ function reduceBoostError(boost) { // for H^3, this is gramSchmidt
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
-function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
-    var dx = v.x;
-    var dy = v.y;
-    var dz = v.z;
-    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
-
-    if (len != 0) {
-        dx /= len;
-        dy /= len;
-        dz /= len;
-        var m = new THREE.Matrix4().set(
-            0, 0, 0, dx,
-            0, 0, 0, dy,
-            0, 0, 0, dz,
-            dx, dy, dz, 0.0);
-        var m2 = new THREE.Matrix4().copy(m).multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        var result = new THREE.Matrix4().identity();
-        result.add(m);
-        result.add(m2);
-        return [result, 0.];
-    } else {
-        return [new THREE.Matrix4().identity(), 0.];
-    }
-}
 
 
 
-//The correct version of translate by vector is below:
-//BUT running it now makes the world go black
-/*
+
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
     var dx = v.x;
     var dy = v.y;
@@ -124,12 +93,14 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         var result = new THREE.Matrix4().identity();
         result.add(m);
         result.add(m2);
+        // console.log(result, dz);
         return [result,dz];
     } else {
+        // console.log(new THREE.Matrix4().identity(), dz);
         return [new THREE.Matrix4().identity(),dz];
     }
 }
-*/
+
 
 
 
@@ -177,6 +148,7 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(boost) {
+    // console.log(boost);
     var cPos = new THREE.Vector4(0, 0, 0, 1);
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
@@ -228,6 +200,7 @@ var unpackage = function (genArr, i) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
+var invGensRs;
 
 var initGeometry = function () {
     g_currentBoost = [new THREE.Matrix4(), 0];
@@ -235,8 +208,10 @@ var initGeometry = function () {
     g_cellBoost = [new THREE.Matrix4(), 0.];
     g_invCellBoost = [new THREE.Matrix4(), 0.];
     gens = createGenerators();
+    console.log('made gens');
     invGens = invGenerators(gens);
     invGensMatrices = unpackage(invGens, 0);
+    invGensRs = unpackage(invGens, 1);
 }
 
 
@@ -261,6 +236,7 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), lightColor3);
     PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), lightColor4);
+    console.log('made objects');
     globalObjectBoost = translateByVector(new THREE.Vector3(-0.5, 0, 0));
 }
 
@@ -278,16 +254,22 @@ var raymarchPass = function (screenRes) {
 
     //--- geometry dependent stuff here ---//
     //--- lists of stuff that goes into each invGenerator
-    pass.uniforms.invGenerators.value = invGensMatrices;
+    pass.uniforms.invGeneratorMats.value = invGensMatrices;
+    pass.uniforms.invGeneratorRs.value = invGensRs;
     //--- end of invGen stuff
 
-    pass.uniforms.currentBoost.value = g_currentBoost[0];
+    pass.uniforms.currentBoostMat.value = g_currentBoost[0];
+    pass.uniforms.currentBoostR.value = g_currentBoost[1];
     //currentBoost is an array
     pass.uniforms.facing.value = g_facing;
-    pass.uniforms.cellBoost.value = g_cellBoost[0];
-    pass.uniforms.invCellBoost.value = g_invCellBoost[0];
+    pass.uniforms.cellBoostMat.value = g_cellBoost[0];
+    pass.uniforms.cellBoostR.value = g_cellBoost[1];
+    pass.uniforms.invCellBoostMat.value = g_invCellBoost[0];
+    pass.uniforms.invCellBoostR.value = g_invCellBoost[1];
+
     pass.uniforms.lightPositions.value = lightPositions;
-    pass.uniforms.globalObjectBoost.value = globalObjectBoost[0];
+    pass.uniforms.globalObjectBoostMat.value = globalObjectBoost[0];
+    pass.uniforms.globalObjectBoostR.value = globalObjectBoost[1];
     //--- end of geometry dependent stuff ---//
 
     return pass;

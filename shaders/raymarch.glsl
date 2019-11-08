@@ -86,7 +86,7 @@ BEGIN FRAGMENT
   const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
 
-  const vec4 ORIGIN = vec4(0,0,1,1);
+  const vec4 ORIGIN = vec4(0,0,1,0);
 
 
 //these translate the eyes along the x-axis (in the hyperbolic direction, so youre standing up vertically)
@@ -101,7 +101,7 @@ BEGIN FRAGMENT
                                0.032, 0, 1, 0,
                                0, 0, 0, 1.);
 
-
+  vec3 debugColor = vec3(1,0,1);
 
 
 
@@ -140,7 +140,7 @@ float eucDist(vec4 u,vec4 v){
     return -u.x*v.x - u.y*v.y + u.z*v.z; // Neg Lorentz Dot
   }
 
-//There is NO NORM on this geometry (we aren't the leve set of anything.  This needs to go.)
+//There is NO NORM on this geometry (we aren't the level set of anything.  This needs to go.)
   float geomNorm(vec4 v){
     return sqrt(abs(geomDot(v,v)));
   }
@@ -155,7 +155,7 @@ float eucDist(vec4 u,vec4 v){
 
 //Project onto the Klein Model, for each hyperbolic slice, which here means dividing by the z coordinate.
   vec4 modelProject(vec4 u){
-    return u/u.z;
+    return vec4(u.xyz/u.z, u.w);
   }
 
 
@@ -233,18 +233,27 @@ mat4 tangBasis(vec4 p){
 
 //give the unit tangent to geodesic connecting u to v.
   vec4 tangDirection(vec4 u, vec4 v){
-    vec4 w = v - geomDot(u,v)*u;
-    return tangNormalize(w);
+    vec3 hypPart = v.xyz - hypDot(u,v)*u.xyz;
+    float RPart = v.w - u.w;
+    return tangNormalize(vec4(hypPart, RPart));
   }
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
   vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    return u*cosh(dist) + vPrime*sinh(dist);
+    float hypComp = hypNorm(vPrime);
+    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
+    float hypDist = dist * hypComp; 
+    float eucDist = dist * vPrime.w;
+    return vec4( u.xyz*cosh(hypDist) + vPrimeHypPart*sinh(hypDist), u.w + eucDist);
   }
   
 //get unit tangent vec at endpt of geodesic
   vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    return u*sinh(dist) + vPrime*cosh(dist);
+    float hypComp = hypNorm(vPrime);
+    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
+    float hypDist = dist * hypComp; 
+    float eucDist = dist * vPrime.w;
+    return vec4( hypComp * (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
   }
 
 
@@ -332,18 +341,23 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //--------------------------------------------
   uniform int isStereo;
   uniform vec2 screenResolution;
-  uniform mat4 invGenerators[6];
+  uniform mat4 invGeneratorMats[6];
+  uniform float invGeneratorRs[6];
 //NEED SOMETHING FOR THE REAL NUMBER COMPONENTS
-  uniform mat4 currentBoost;
+  uniform mat4 currentBoostMat;
+  uniform float currentBoostR;
   uniform mat4 facing;
-  uniform mat4 cellBoost; 
-  uniform mat4 invCellBoost;
+  uniform mat4 cellBoostMat; 
+  uniform float cellBoostR; 
+  uniform mat4 invCellBoostMat;
+  uniform float invCellBoostR;
   //--------------------------------------------
   //Lighting Variables & Global Object Variables
   //--------------------------------------------
   uniform vec4 lightPositions[4];
   uniform vec4 lightIntensities[4];
-  uniform mat4 globalObjectBoost;
+  uniform mat4 globalObjectBoostMat;
+  uniform float globalObjectBoostR;
 
 
 
@@ -397,7 +411,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   
   //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
   float globalSceneSDF(vec4 samplePoint){
-    vec4 absoluteSamplePoint = cellBoost * samplePoint; // correct for the fact that we have been moving
+    vec4 absoluteSamplePoint = cellBoostMat * samplePoint; // correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
     for(int i=0; i<4; i++){
@@ -412,7 +426,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     }
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absoluteSamplePoint, globalObjectBoost[3], globalObjectRadius);
+    objDist = sphereSDF(absoluteSamplePoint, globalObjectBoostMat[3], globalObjectRadius);
     distance = min(distance, objDist);
     if(distance < EPSILON){
       hitWhich = 2;
@@ -423,30 +437,36 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
   // This function is intended to be hyp-agnostic.
   // We should update some of the variable names.
-  bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
+  bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix, out float fixR){
     vec4 modelSamplePoint = modelProject(samplePoint); //project to klein
     if(modelSamplePoint.x > modelHalfCube){
-      fixMatrix = invGenerators[0];
+      fixMatrix = invGeneratorMats[0];
+      fixR = invGeneratorRs[0];
       return true;
     }
     if(modelSamplePoint.x < -modelHalfCube){
-      fixMatrix = invGenerators[1];
+      fixMatrix = invGeneratorMats[1];
+      fixR = invGeneratorRs[1];
       return true;
     }
     if(modelSamplePoint.y > modelHalfCube){
-      fixMatrix = invGenerators[2];
+      fixMatrix = invGeneratorMats[2];
+      fixR = invGeneratorRs[2];
       return true;
     }
     if(modelSamplePoint.y < -modelHalfCube){
-      fixMatrix = invGenerators[3];
+      fixMatrix = invGeneratorMats[3];
+      fixR = invGeneratorRs[3];
       return true;
     }
-    if(modelSamplePoint.z > modelHalfCube){
-      fixMatrix = invGenerators[4];
+    if(modelSamplePoint.w > modelHalfHeight){
+      fixMatrix = invGeneratorMats[4];
+      fixR = invGeneratorRs[4];
       return true;
     }
-    if(modelSamplePoint.z < -modelHalfCube){
-      fixMatrix = invGenerators[5];
+    if(modelSamplePoint.w < -modelHalfHeight){
+      fixMatrix = invGeneratorMats[5];
+      fixR = invGeneratorRs[5];
       return true;
     }
     return false;
@@ -539,22 +559,32 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   // NOT GEOM DEPENDENT
   //--------------------------------------------
 
- void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
+ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix, out float totalFixR){
     mat4 fixMatrix;
+    float fixR;
     float globalDepth = MIN_DIST; 
     float localDepth = globalDepth;
     vec4 localrO = rO; 
     vec4 localrD = rD;
     totalFixMatrix = mat4(1.0);
+    totalFixR = 0.0;
 
     // Trace the local scene, then the global scene:
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
       vec4 localEndPoint = 
-          geodesicEndpt(localrO, localrD, localDepth);
-        
-      if(isOutsideCell(localEndPoint, fixMatrix)){
+          geodesicEndpt(localrO, localrD, localDepth); 
+      //   if(i==2){
+      //   debugColor = vec3(1.0,0.0,0.0);
+      //   hitWhich = 5;
+      //   return;
+      // }
+      if(isOutsideCell(localEndPoint, fixMatrix, fixR)){
+        // hitWhich = 5;
+        // return;
         totalFixMatrix = fixMatrix * totalFixMatrix;
+        totalFixR = fixR + totalFixR;
         vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
+
         localrO = geomNormalize(fixMatrix * localEndPoint);
           //the version working in the other geometries is below.
           //there is flickering when we do this in hyperbolic space though
@@ -579,6 +609,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     // Set for localDepth to our new max tracing distance:
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
+
     for(int i = 0; i < MAX_MARCHING_STEPS; i++){
       vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
       float globalDist = globalSceneSDF(globalEndPoint);
@@ -636,7 +667,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
     for(int i = 0; i<4; i++){ 
-        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
+        TLP = totalFixMatrix*invCellBoostMat*lightPositions[i];
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
     return color;
@@ -646,15 +677,16 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   // Tangent Space Functions
   //--------------------------------------------------------------------
 
-  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray 
+  vec3 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray 
     if(isStereo == 1){
       resolution.x = resolution.x * 0.5;
       if(!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
     }
     vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1/tan(radians(fov*0.5));
-    vec4 v =  tangNormalize(vec4(xy,-z,0.0));
-    return v;
+    return vec3(xy,-z);
+    // vec4 v =  tangNormalize(vec4(xy,0.0,-z));
+    // return v;
   }
 
   //--------------------------------------------------------------------
@@ -666,32 +698,33 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    vec4 rayDirV = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-    if(isStereo == 1){
-      if(isLeft){
-        rayOrigin = leftBoost * rayOrigin;
-        rayDirV = leftBoost * rayDirV;
-      }
-      else{
-        rayOrigin = rightBoost * rayOrigin;
-        rayDirV = rightBoost * rayDirV;
-      }
-    }
+    vec3 rayDir3 = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    // if(isStereo == 1){  // FIX. Have to translate eyes ...
+    //   if(isLeft){
+    //     rayOrigin = leftBoost * rayOrigin;
+    //     rayDirV = leftBoost * rayDirV;
+    //   }
+    //   else{
+    //     rayOrigin = rightBoost * rayOrigin;
+    //     rayDirV = rightBoost * rayDirV;
+    //   }
+    // }
 
     //camera position must be translated in hyperboloid -----------------------
     
-    if(isStereo == 1){
-        rayOrigin = facing * rayOrigin;
-    }
-    rayOrigin = currentBoost * rayOrigin;
-    rayDirV = facing * rayDirV;
-    rayDirV = currentBoost * rayDirV;
+    // if(isStereo == 1){
+    //     rayOrigin = facing * rayOrigin;
+    // }
+    rayDir3 = (facing * vec4(rayDir3,0.0)).xyz;
+    vec4 rayDirV = tangNormalize( vec4(rayDir3.xy, 0.0, rayDir3.z) );
+    rayOrigin = currentBoostMat * rayOrigin;
+    rayDirV = currentBoostMat * rayDirV;
     //generate direction then transform to hyperboloid ------------------------
 //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
-    raymarch(rayOrigin, rayDirV, totalFixMatrix);
-  
+    float totalFixR = 0.0;
+    raymarch(rayOrigin, rayDirV, totalFixMatrix, totalFixR);
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if(hitWhich == 0){ //Didn't hit anything ------------------------
       gl_FragColor = vec4(0.0);
@@ -700,6 +733,9 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     else if(hitWhich == 1){ // global lights
       gl_FragColor = vec4(globalLightColor.rgb, 1.0);
       return;
+    }
+    else if(hitWhich == 5){ //debug
+      gl_FragColor = vec4(debugColor, 1.0);
     }
     else{ // objects
       N = estimateNormal(sampleEndPoint);
