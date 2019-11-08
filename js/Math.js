@@ -89,16 +89,16 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         var result = new THREE.Matrix4().identity();
         result.add(m);
         result.add(m2);
-        return [result];
+        return [result, 0.];
     } else {
-        return [new THREE.Matrix4().identity()];
+        return [new THREE.Matrix4().identity(), 0.];
     }
 }
 
 
 
 //The correct version of translate by vector is below:
-
+//BUT running it now makes the world go black
 /*
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
     var dx = v.x;
@@ -147,10 +147,12 @@ THREE.Matrix4.prototype.add = function (m) {
 
 function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
     boost1[0].getInverse(boost2[0]);
+    boost1[1] = -boost2[1]; //set vert translate to negative
 }
 
 function composeIsom(boost, trans) { // sitting at boost, 
     boost[0].multiply(trans[0]);
+    boost[1] += trans[1];
     // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
     // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
     // In other words, translate boost by the conjugate of trans by boost
@@ -158,10 +160,12 @@ function composeIsom(boost, trans) { // sitting at boost,
 
 function preComposeIsom(boost, trans) { // deal with a translation of the camera
     boost[0].premultiply(trans[0]);
+    boost[1] += trans[1];
 }
 
 function applyIsom(point, trans) {
     point.applyMatrix4(trans[0]);
+    point.w += trans[1];
 }
 
 function rotate(facing, rotMatrix) { // deal with a rotation of the camera
@@ -226,10 +230,10 @@ var unpackage = function (genArr, i) {
 var invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 
 var initGeometry = function () {
-    g_currentBoost = [new THREE.Matrix4()];
+    g_currentBoost = [new THREE.Matrix4(), 0];
     g_facing = new THREE.Matrix4();
-    g_cellBoost = [new THREE.Matrix4()];
-    g_invCellBoost = [new THREE.Matrix4()];
+    g_cellBoost = [new THREE.Matrix4(), 0.];
+    g_invCellBoost = [new THREE.Matrix4(), 0.];
     gens = createGenerators();
     invGens = invGenerators(gens);
     invGensMatrices = unpackage(invGens, 0);
