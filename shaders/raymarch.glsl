@@ -669,7 +669,8 @@ mat4 tangBasis(vec4 p){
   
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if(hitWhich == 0){ //Didn't hit anything ------------------------
-      gl_FragColor = vec4(0.0);
+        //COLOR THE FRAME DARK GRAY
+      gl_FragColor = vec4(0.2);
       return;
     }
     else if(hitWhich == 1){ // global lights
@@ -680,7 +681,8 @@ mat4 tangBasis(vec4 p){
       N = estimateNormal(sampleEndPoint);
       vec3 color;
       color = phongModel(totalFixMatrix);
-      gl_FragColor = vec4(color, 1.0);
+        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
+      gl_FragColor = vec4(0.8*color+0.2, 1.0);
     }
   }
 END FRAGMENT

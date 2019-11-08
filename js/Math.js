@@ -23,9 +23,9 @@ var Origin = new THREE.Vector4(0, 0, 0, 1);
 // return this.divideScalar(this.geomLength());
 //}
 
-function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
+/*function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
     return Math.acosh(v.w);
-}
+}*/
 
 //----------------------------------------------------------------------
 //	Matrix Operations
@@ -40,6 +40,22 @@ function reduceBoostError(boost) { // for H^3, this is gramSchmidt
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
+
+/*
+function nilMatrix(v) {
+    return new THREE.Matrix4(
+        1, 0, 0, v.x,
+        0, 1, 0, v.y,
+        -v.y / 2, v.x / 2, 1, v.z,
+        0, 0, 0, 1
+    );
+}
+
+function geodesicEndPt(v) {
+
+}
+*/
+
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
     var dx = v.x;
     var dy = v.y;
