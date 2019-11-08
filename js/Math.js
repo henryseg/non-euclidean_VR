@@ -12,15 +12,15 @@ var cubeHalfWidth = 0.6584789485;
 
 
 THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+    // return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
 }
 
 THREE.Vector4.prototype.geomLength = function () {
-    return Math.sqrt(Math.abs(this.geomDot(this)));
+    //return Math.sqrt(Math.abs(this.geomDot(this)));
 }
 
 THREE.Vector4.prototype.geomNormalize = function () {
-    return this.divideScalar(this.geomLength());
+    // return this.divideScalar(this.geomLength());
 }
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
@@ -33,24 +33,7 @@ function geomDist(v) { //good enough for comparison of distances on the hyperbol
 
 
 function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-    var m = boost[0];
-    var n = m.elements; //elements are stored in column major order we need row major
-    var temp = new THREE.Vector4();
-    var temp2 = new THREE.Vector4();
-    for (var i = 0; i < 4; i++) { ///normalize row
-        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
-        for (var l = 0; l < 4; l++) {
-            n[4 * i + l] = n[4 * i + l] * invRowNorm;
-        }
-        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
-            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
-            for (var l = 0; l < 4; l++) {
-                n[4 * j + l] -= component * n[4 * i + l];
-            }
-        }
-    }
-    m.elements = n;
-    boost[0].elements = m.elements;
+
 }
 
 
@@ -126,23 +109,23 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(boost) {
-    var cPos = new THREE.Vector4(0, 0, 0, 1);
-    applyIsom(cPos, boost);
-    var bestDist = geomDist(cPos);
-    var bestIndex = -1;
-    for (var i = 0; i < gens.length; i++) {
-        var pos = cPos.clone();
-        applyIsom(pos, gens[i]);
-        if (geomDist(pos) < bestDist) {
-            bestDist = geomDist(pos);
-            bestIndex = i;
-        }
-    }
-    if (bestIndex != -1) {
-        preComposeIsom(boost, gens[bestIndex]);
-        return bestIndex;
-    } else
-        return -1;
+    /* var cPos = new THREE.Vector4(0, 0, 0, 1);
+     applyIsom(cPos, boost);
+     var bestDist = geomDist(cPos);
+     var bestIndex = -1;
+     for (var i = 0; i < gens.length; i++) {
+         var pos = cPos.clone();
+         applyIsom(pos, gens[i]);
+         if (geomDist(pos) < bestDist) {
+             bestDist = geomDist(pos);
+             bestIndex = i;
+         }
+     }
+     if (bestIndex != -1) {
+         preComposeIsom(boost, gens[bestIndex]);
+         return bestIndex;
+     } else*/
+    return -1;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -150,12 +133,12 @@ function fixOutsideCentralCell(boost) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var createGenerators = function () { /// generators for the tiling by cubes. 
-    var gen0 = translateByVector(new THREE.Vector3(2.0 * cubeHalfWidth, 0.0, 0.0));
-    var gen1 = translateByVector(new THREE.Vector3(-2.0 * cubeHalfWidth, 0.0, 0.0));
-    var gen2 = translateByVector(new THREE.Vector3(0.0, 2.0 * cubeHalfWidth, 0.0));
-    var gen3 = translateByVector(new THREE.Vector3(0.0, -2.0 * cubeHalfWidth, 0.0));
-    var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 2.0 * cubeHalfWidth));
-    var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, -2.0 * cubeHalfWidth));
+    var gen0 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
+    var gen1 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
+    var gen2 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
+    var gen3 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
+    var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
+    var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, 0.0));
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -210,7 +193,7 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), lightColor3);
     PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), lightColor4);
-    globalObjectBoost = translateByVector(new THREE.Vector3(-0.5, 0, 0));
+    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
 }
 
 //-------------------------------------------------------

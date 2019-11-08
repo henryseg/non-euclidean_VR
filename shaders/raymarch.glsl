@@ -355,12 +355,14 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //---------------------------------------------------------------------
   //Scene Definitions
   //---------------------------------------------------------------------
+//Turn off the local scene
   float localSceneSDF(vec4 samplePoint){
-    float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
+    /*float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
     float final = -min(vertexSphere,sphere); //unionSDF
-    return final;
+    */
+    return 100.;
   }
   
   //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -391,8 +393,10 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
   // This function is intended to be hyp-agnostic.
   // We should update some of the variable names.
+//TURN OFF TELEPORTING
   bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
     vec4 modelSamplePoint = modelProject(samplePoint); //project to klein
+      /*
     if(modelSamplePoint.x > modelHalfCube){
       fixMatrix = invGenerators[0];
       return true;
@@ -416,7 +420,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     if(modelSamplePoint.z < -modelHalfCube){
       fixMatrix = invGenerators[5];
       return true;
-    }
+    }*/
     return false;
   }
 
