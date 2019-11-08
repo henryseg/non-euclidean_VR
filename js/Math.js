@@ -81,7 +81,6 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     if (len != 0) {
          dx /= len;
         dy /= len;
-        dz /= len;
         var m = new THREE.Matrix4().set(
             0, 0, dx, 0,
             0, 0, dy, 0,
@@ -149,6 +148,7 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 
 function fixOutsideCentralCell(boost) {
     // console.log(boost);
+    console.log(g_currentBoost[1]);
     var cPos = new THREE.Vector4(0, 0, 0, 1);
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
@@ -203,7 +203,7 @@ var invGensMatrices; // need lists of things to give to the shader, lists of typ
 var invGensRs;
 
 var initGeometry = function () {
-    g_currentBoost = [new THREE.Matrix4(), 0];
+    g_currentBoost = [new THREE.Matrix4(), 0.];
     g_facing = new THREE.Matrix4();
     g_cellBoost = [new THREE.Matrix4(), 0.];
     g_invCellBoost = [new THREE.Matrix4(), 0.];
@@ -248,6 +248,8 @@ var initObjects = function () {
 
 var raymarchPass = function (screenRes) {
     var pass = new THREE.ShaderPass(THREE.ray);
+    // var temp = new THREE.Vector4(0.0,0.0,0.0,g_currentBoost[1]);
+    // console.log(temp);
     pass.uniforms.isStereo.value = g_vr;
     pass.uniforms.screenResolution.value = screenRes;
     pass.uniforms.lightIntensities.value = lightIntensities;
@@ -259,7 +261,8 @@ var raymarchPass = function (screenRes) {
     //--- end of invGen stuff
 
     pass.uniforms.currentBoostMat.value = g_currentBoost[0];
-    pass.uniforms.currentBoostR.value = g_currentBoost[1];
+    // pass.uniforms.currentBoostR = { value: g_currentBoost[1] };
+    // pass.uniforms.currentBoostR.value = lightPositions[0];
     //currentBoost is an array
     pass.uniforms.facing.value = g_facing;
     pass.uniforms.cellBoostMat.value = g_cellBoost[0];
