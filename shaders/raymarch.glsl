@@ -77,11 +77,11 @@ BEGIN FRAGMENT
   //Geometry Constants
   //--------------------------------------------
   const float HalfCube=0.6584789485;
-  const float HalfHeight=0.6584789485;
+  const float HalfHeight=0.6584;
   const float modelHalfCube = 0.5773502692;
-  const float modelHalfHeight=0.65847;//projection doesnt change w direction here
-  const float vertexSphereSize = -0.98;//In this case its a horosphere
-  const float centerSphereSize = 1.55* HalfCube;
+  const float modelHalfHeight=0.6584;//projection doesnt change w direction here
+  const float vertexSphereSize = 0.5;//In this case its a horosphere
+  const float centerSphereSize = 1.35* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
   const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
@@ -253,7 +253,7 @@ mat4 tangBasis(vec4 p){
     vec3 vPrimeHypPart = vPrime.xyz / hypComp;
     float hypDist = dist * hypComp; 
     float eucDist = dist * vPrime.w;
-    return vec4( hypComp * (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
+    return vec4(hypComp* (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
   }
 
 
@@ -587,9 +587,9 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
         localrO = geomNormalize(fixMatrix * localEndPoint);
           //the version working in the other geometries is below.
           //there is flickering when we do this in hyperbolic space though
-        //  localrD = tangNormalize(fixMatrix * localEndTangent);
+         localrD = tangNormalize(fixMatrix * localEndTangent);
           //used to be this, which seems to work better here
-          localrD=tangDirection(localrO, fixMatrix * localEndTangent);
+         // localrD=tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
       }
       else{
@@ -714,7 +714,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     // if(isStereo == 1){
     //     rayOrigin = facing * rayOrigin;
     // }
-    rayDir3 = (facing * vec4(rayDir3,0.0)).xyz;
+    rayDir3 = (facing * vec4(rayDir3,0.0)).xyz;//multiply facing by 3-vector giving direction 
     vec4 rayDirV = tangNormalize( vec4(rayDir3.xy, 0.0, rayDir3.z) );
     rayOrigin = currentBoostMat * rayOrigin + currentBoostR; //vec4(0.0,0.0,0.0,currentBoostR);
     rayDirV = currentBoostMat * rayDirV;

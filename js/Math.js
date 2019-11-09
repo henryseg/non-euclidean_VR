@@ -12,7 +12,7 @@ var Origin = new THREE.Vector4(0, 0, 1, 0);
 
 
 var cubeHalfWidth = 0.6584789485;
-var cubeHalfHeight = 0.65847; //in general could be different
+var cubeHalfHeight = 0.6584; //in general could be different
 
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
@@ -79,7 +79,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     var c2 = Math.cosh(len) - 1;
 
     if (len != 0) {
-         dx /= len;
+        dx /= len;
         dy /= len;
         var m = new THREE.Matrix4().set(
             0, 0, dx, 0,
@@ -93,10 +93,10 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         result.add(m);
         result.add(m2);
         // console.log(result, dz);
-        return [result,dz];
+        return [result, dz];
     } else {
         // console.log(new THREE.Matrix4().identity(), dz);
-        return [new THREE.Matrix4().identity(),dz];
+        return [new THREE.Matrix4().identity(), dz];
     }
 }
 
