@@ -250,8 +250,8 @@ float cosAng(vec4 u, vec4 v){
 }
 
 mat4 tangBasis(vec4 p){
-    vec4 basis_x = tangNormalize(vec4(p.z,0.0,p.x,0.0));  
-      vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
+    vec4 basis_x = tangNormalize(vec4(p.z,0.0,-p.x,0.0));  
+      vec4 basis_y = vec4(0.0,p.z,-p.y,0.0);  
       vec4 basis_z = vec4(0.0,0.0,0,1);  
     //make this orthonormal
       basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
