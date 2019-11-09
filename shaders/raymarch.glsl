@@ -80,8 +80,8 @@ BEGIN FRAGMENT
   const float HalfHeight=0.6584;
   const float modelHalfCube = 0.5773502692;
   const float modelHalfHeight=0.6584;//projection doesnt change w direction here
-  const float vertexSphereSize = 0.5;//In this case its a horosphere
-  const float centerSphereSize = 1.35* HalfCube;
+  const float vertexSphereSize =    0.4;
+  const float centerSphereSize = 1.25* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
   const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
@@ -267,10 +267,7 @@ mat4 tangBasis(vec4 p){
   //---------------------------------------------------------------------
   // A horosphere can be constructed by offseting from a standard horosphere.
   // Our standard horosphere will have a center in the direction of lightPoint
-  // and go through the origin. Negative offsets will shrink it.
-  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
-    return log(-geomDot(samplePoint, lightPoint)) - offset;
-  }//im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
+ 
   
   float sphereSDF(vec4 samplePoint, vec4 center, float radius){
     return geomDistance(samplePoint, center) - radius;
@@ -279,12 +276,12 @@ mat4 tangBasis(vec4 p){
 
 //NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
 
-float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
-    return sphereSDF(samplePoint, cornerPoint,size);
+float centerSDF(vec4 samplePoint, vec4 centerPoint, float size){
+    return sphereSDF(samplePoint, centerPoint,size);
 }
 
 float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
-    return  horosphereHSDF(samplePoint, cornerPoint, size);
+    return  sphereSDF(samplePoint, cornerPoint, size);
 }
 
 
@@ -400,11 +397,11 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //---------------------------------------------------------------------
   float localSceneSDF(vec4 samplePoint){
     float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
-   // float vertexSphere = 0.0;
-   // vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
-   // float final = -min(vertexSphere,sphere); 
+   float vertexSphere = 0.0;
+   vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
+   float final = -min(vertexSphere,sphere); 
 //unionSDF
-      float final=-sphere;
+     // float final=-sphere;
     return final;
   }
   
@@ -588,7 +585,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
           //the version working in the other geometries is below.
           //there is flickering when we do this in hyperbolic space though
          localrD = tangNormalize(fixMatrix * localEndTangent);
-          //used to be this, which seems to work better here
+          //used to be this, which seems to work better in hyperbolic space
+          //what is going on here?
          // localrD=tangDirection(localrO, fixMatrix * localEndTangent);
         localDepth = MIN_DIST;
       }
