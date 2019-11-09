@@ -34,7 +34,7 @@ var invGens;
 //-------------------------------------------------------
 var lightPositions = [];
 var lightIntensities = [];
-var globalObjectBoost;
+var globalObjectPosn;
 
 //-------------------------------------------------------
 // Sets up the scene
