@@ -76,12 +76,13 @@ BEGIN FRAGMENT
   //--------------------------------------------
   //Geometry Constants
   //--------------------------------------------
-  const float HalfCube=0.6584789485;
-  const float HalfHeight=0.6584;
-  const float modelHalfCube = 0.5773502692;
-  const float modelHalfHeight=0.6584;//projection doesnt change w direction here
-  const float vertexSphereSize =    0.4;
-  const float centerSphereSize = 1.25* HalfCube;
+  const float HalfCube=0.7853;
+  const float HalfHeight=0.7853;
+  const float modelHalfCube = 1.;
+  const float modelHalfHeight=0.7853;//projection doesnt change w direction here
+  const float vertexSphereSize =0.1;
+
+  const float centerSphereSize = 1.15* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
   const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
@@ -114,7 +115,7 @@ BEGIN FRAGMENT
 
 //there is a hyperbolic dot product on the slices tho
   float hypDot(vec4 u, vec4 v){
-    return -u.x*v.x - u.y*v.y + u.z*v.z; // Neg Lorentz Dot
+    return u.x*v.x + u.y*v.y + u.z*v.z; // Neg Lorentz Dot
   }
 
 //norm of a point in the xyz minkowski space
@@ -125,7 +126,7 @@ float hypNorm(vec4 v){
 //distance between two points projections into hyperboloid:
 float hypDist(vec4 u, vec4 v){
      float bUV = hypDot(u,v);
-    return acosh(bUV);
+    return acos(bUV);
 }
 
 //norm of a point in the Euclidean direction
@@ -137,7 +138,7 @@ float eucDist(vec4 u,vec4 v){
 //There won't be a geomDot here:
 //Need to replace its uses in finding distance
   float geomDot(vec4 u, vec4 v){
-    return -u.x*v.x - u.y*v.y + u.z*v.z; // Neg Lorentz Dot
+    return u.x*v.x + u.y*v.y + u.z*v.z; // Neg Lorentz Dot
   }
 
 //There is NO NORM on this geometry (we aren't the level set of anything.  This needs to go.)
@@ -149,7 +150,7 @@ float eucDist(vec4 u,vec4 v){
 
 //dot product on the tangent spaces to H2xE
   float tangDot(vec4 u, vec4 v){
-    return u.x*v.x + u.y*v.y - u.z*v.z + u.w*v.w; // Lorentz Dot for xyz, cartesian product with w-direction
+    return u.x*v.x + u.y*v.y + u.z*v.z + u.w*v.w; // Lorentz Dot for xyz, cartesian product with w-direction
   }
 
 
@@ -205,8 +206,8 @@ float cosAng(vec4 u, vec4 v){
 }
 
 mat4 tangBasis(vec4 p){
-    vec4 basis_x = tangNormalize(vec4(p.z,0.0,p.x,0.0));  
-      vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
+    vec4 basis_x = tangNormalize(vec4(p.z,0.0,-p.x,0.0));  
+      vec4 basis_y = vec4(0.0,p.z,-p.y,0.0);  
       vec4 basis_z = vec4(0.0,0.0,0,1);  
     //make this orthonormal
       basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
@@ -244,7 +245,7 @@ mat4 tangBasis(vec4 p){
     vec3 vPrimeHypPart = vPrime.xyz / hypComp;
     float hypDist = dist * hypComp; 
     float eucDist = dist * vPrime.w;
-    return vec4( u.xyz*cosh(hypDist) + vPrimeHypPart*sinh(hypDist), u.w + eucDist);
+    return vec4( u.xyz*cos(hypDist) + vPrimeHypPart*sin(hypDist), u.w + eucDist);
   }
   
 //get unit tangent vec at endpt of geodesic
@@ -253,7 +254,7 @@ mat4 tangBasis(vec4 p){
     vec3 vPrimeHypPart = vPrime.xyz / hypComp;
     float hypDist = dist * hypComp; 
     float eucDist = dist * vPrime.w;
-    return vec4(hypComp* (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
+    return vec4(hypComp* (-u.xyz*sin(hypDist) + vPrimeHypPart*cos(hypDist)), vPrime.w);
   }
 
 
