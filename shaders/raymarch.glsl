@@ -122,14 +122,15 @@ BEGIN FRAGMENT
   //--------------------------------------------
   const float HalfCube=0.6584789485;
   // const float HalfHeight=0.881373; 
+  const float HalfHeight=0.6584789485; 
   const float modelHalfCube = 0.5773502692;
   // const float modelHalfHeight=0.881373; //projection doesnt change w direction here
   const float modelHalfHeight=0.6584789485; //projection doesnt change w direction here
 
-  const float vertexSphereSize =    0.63;
+  const float vertexSphereSize =    0.55;
   const float centerSphereSize = 1.3* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 cubeCorner = vec4(0.99987, 0.99987, 1.7319, 0.881373);
+  const vec4 cubeCorner = vec4(0.99987, 0.99987, 1.7319, HalfHeight);
   const float globalObjectRadius = 0.2;
 
 
