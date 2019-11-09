@@ -4,12 +4,24 @@
 
 // m.multiply(n) does m*n
 
+// Very strange behaviour in getting currentBoost to work:
+
+// Could not get a single float across to the shader as a uniform. Would always be zero?
+
+// Instead, we switched to isoms being [mat4, vec4], where the first three entries of vec4 are zero.
+// This did very strange things to the vec. Doing console.log(g_currentBoost[1]) would have it log a string along the lines of "Object[Object]" (?!)
+
+// So we switched back to [mat4, float], which seems to work ok, but we still needed to get the float to the shader.
+// So we have the new global vec4 foobar, whose .w gets updated to g_currentBoost[1] every frame in isOutsideCell...
+// We then pass foobar, and it works...
+
+
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 
 var Origin = new THREE.Vector4(0, 0, 1, 0);
-
+var foobar = new THREE.Vector4(0, 0, 0, 0);
 
 var cubeHalfWidth = 0.6584789485;
 var cubeHalfHeight = 0.6584; //in general could be different
@@ -148,7 +160,8 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 
 function fixOutsideCentralCell(boost) {
     // console.log(boost);
-    console.log(g_currentBoost[1]);
+    foobar.w = g_currentBoost[1]; // this happens every frame... so we can do other things that are apparently necessary too...
+    // console.log(foobar);
     var cPos = new THREE.Vector4(0, 0, 0, 1);
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
@@ -237,7 +250,9 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), lightColor3);
     PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), lightColor4);
     console.log('made objects');
-    globalObjectBoost = translateByVector(new THREE.Vector3(-0.5, 0, 0));
+    // edited main.js to change globalObjectBoost to globalObjectPosn
+    globalObjectPosn = Origin.clone();
+    applyIsom(globalObjectPosn, translateByVector(new THREE.Vector3(-0.5, 0, 0)));
 }
 
 //-------------------------------------------------------
@@ -248,21 +263,16 @@ var initObjects = function () {
 
 var raymarchPass = function (screenRes) {
     var pass = new THREE.ShaderPass(THREE.ray);
-    // var temp = new THREE.Vector4(0.0,0.0,0.0,g_currentBoost[1]);
-    // console.log(temp);
     pass.uniforms.isStereo.value = g_vr;
     pass.uniforms.screenResolution.value = screenRes;
     pass.uniforms.lightIntensities.value = lightIntensities;
-
     //--- geometry dependent stuff here ---//
     //--- lists of stuff that goes into each invGenerator
     pass.uniforms.invGeneratorMats.value = invGensMatrices;
     pass.uniforms.invGeneratorRs.value = invGensRs;
     //--- end of invGen stuff
-
     pass.uniforms.currentBoostMat.value = g_currentBoost[0];
-    // pass.uniforms.currentBoostR = { value: g_currentBoost[1] };
-    // pass.uniforms.currentBoostR.value = lightPositions[0];
+    pass.uniforms.currentBoostR.value = foobar;
     //currentBoost is an array
     pass.uniforms.facing.value = g_facing;
     pass.uniforms.cellBoostMat.value = g_cellBoost[0];
@@ -271,8 +281,7 @@ var raymarchPass = function (screenRes) {
     pass.uniforms.invCellBoostR.value = g_invCellBoost[1];
 
     pass.uniforms.lightPositions.value = lightPositions;
-    pass.uniforms.globalObjectBoostMat.value = globalObjectBoost[0];
-    pass.uniforms.globalObjectBoostR.value = globalObjectBoost[1];
+    pass.uniforms.globalObjectPosn.value = globalObjectPosn;
     //--- end of geometry dependent stuff ---//
 
     return pass;

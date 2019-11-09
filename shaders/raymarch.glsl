@@ -83,7 +83,7 @@ BEGIN FRAGMENT
   const float vertexSphereSize =    0.4;
   const float centerSphereSize = 1.25* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+  const vec4 modelCubeCorner = vec4(0.810496989476, 0.810496989476, 1.52112154, modelHalfHeight);
   const float globalObjectRadius = 0.2;
 
   const vec4 ORIGIN = vec4(0,0,1,0);
@@ -341,7 +341,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   uniform mat4 invGeneratorMats[6];
   uniform float invGeneratorRs[6];
   uniform mat4 currentBoostMat;
-  uniform float currentBoostR;  // ????
+  uniform vec4 currentBoostR;
   uniform mat4 facing;
   uniform mat4 cellBoostMat; 
   uniform float cellBoostR; 
@@ -352,8 +352,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //--------------------------------------------
   uniform vec4 lightPositions[4];
   uniform vec4 lightIntensities[4];
-  uniform mat4 globalObjectBoostMat;
-  uniform float globalObjectBoostR;
+  uniform vec4 globalObjectPosn;
 
 
 
@@ -422,7 +421,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     }
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absoluteSamplePoint, globalObjectBoostMat[3], globalObjectRadius);
+    objDist = sphereSDF(absoluteSamplePoint, globalObjectPosn, globalObjectRadius);
     distance = min(distance, objDist);
     if(distance < EPSILON){
       hitWhich = 2;
@@ -581,7 +580,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
         totalFixR = fixR + totalFixR;
         vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
 
-        localrO = geomNormalize(fixMatrix * localEndPoint);
+        localrO = geomNormalize(fixMatrix * localEndPoint) + vec4(0.0,0.0,0.0,fixR);
           //the version working in the other geometries is below.
           //there is flickering when we do this in hyperbolic space though
          localrD = tangNormalize(fixMatrix * localEndTangent);
@@ -714,7 +713,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     // }
     rayDir3 = (facing * vec4(rayDir3,0.0)).xyz;//multiply facing by 3-vector giving direction 
     vec4 rayDirV = tangNormalize( vec4(rayDir3.xy, 0.0, rayDir3.z) );
-    rayOrigin = currentBoostMat * rayOrigin + currentBoostR; //vec4(0.0,0.0,0.0,currentBoostR);
+    rayOrigin = currentBoostMat * rayOrigin + currentBoostR;
     rayDirV = currentBoostMat * rayDirV;
     //generate direction then transform to hyperboloid ------------------------
 //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
@@ -722,7 +721,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     mat4 totalFixMatrix = mat4(1.0);
     float totalFixR = 0.0;
     // hitWhich = 5;
-    // debugColor = vec3(abs(currentBoostR.w),1.0,0);
+    // debugColor = vec3(abs(invGeneratorRs[4]),1.0,0);
     raymarch(rayOrigin, rayDirV, totalFixMatrix, totalFixR);
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
