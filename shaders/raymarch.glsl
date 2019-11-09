@@ -84,9 +84,9 @@ BEGIN FRAGMENT
   uniform vec4 currentBoostR;
   uniform mat4 facing;
   uniform mat4 cellBoostMat; 
-  uniform float cellBoostR; 
+  uniform vec4 cellBoostR; 
   uniform mat4 invCellBoostMat;
-  uniform float invCellBoostR;
+  uniform vec4 invCellBoostR;
   //--------------------------------------------
   //Lighting Variables & Global Object Variables
   //--------------------------------------------
@@ -406,7 +406,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   
   //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
   float globalSceneSDF(vec4 samplePoint){
-    vec4 absoluteSamplePoint = cellBoostMat * samplePoint; // correct for the fact that we have been moving
+    vec4 absoluteSamplePoint = cellBoostMat * samplePoint + cellBoostR; // correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
     for(int i=0; i<4; i++){
@@ -612,6 +612,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
       if(globalDist < EPSILON){
         // hitWhich has now been set
         totalFixMatrix = mat4(1.0);
+        totalFixR = 0.0;
         sampleEndPoint = globalEndPoint;
         sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
         return;
@@ -652,7 +653,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     return att*((diffuse*baseColor) + specular);
   }
   
-  vec3 phongModel(mat4 totalFixMatrix){
+  vec3 phongModel(mat4 totalFixMatrix, float totalFixR){
     vec4 SP = sampleEndPoint;
     vec4 TLP; //translated light position
     vec4 V = -sampleTangentVector;
@@ -663,7 +664,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
     for(int i = 0; i<4; i++){ 
-        TLP = totalFixMatrix*invCellBoostMat*lightPositions[i];
+        TLP = totalFixMatrix*invCellBoostMat*lightPositions[i] + invCellBoostR + vec4(0.0,0.0,0.0,totalFixR);
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
     return color;
@@ -739,7 +740,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     else{ // objects
       N = estimateNormal(sampleEndPoint);
       vec3 color;
-      color = phongModel(totalFixMatrix);
+      color = phongModel(totalFixMatrix, totalFixR);
       gl_FragColor = vec4(color, 1.0);
     }
   }

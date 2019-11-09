@@ -22,13 +22,15 @@
 
 var Origin = new THREE.Vector4(0, 0, 1, 0);
 var foobar = new THREE.Vector4(0, 0, 0, 0);
+var foobar2 = new THREE.Vector4(0, 0, 0, 0);
+var foobar3 = new THREE.Vector4(0, 0, 0, 0);
 
 var cubeHalfWidth = 0.6584789485;
 // var cubeHalfHeight = 0.881373; // euclidean height that makes euc sidelength the same as the hyp sidelength
 var cubeHalfHeight = 0.6584789485; // dist from center of cube to center of face is same in all directions
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acosh(v.w);
+    return Math.sqrt(Math.acosh(v.z) + v.w*v.w);
 }
 
 //----------------------------------------------------------------------
@@ -159,10 +161,12 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(boost) {
-    // console.log(boost);
     foobar.w = g_currentBoost[1]; // this happens every frame... so we can do other things that are apparently necessary too...
+    foobar2.w = g_cellBoost[1]; // this happens every frame... so we can do other things that are apparently necessary too...
+    foobar3.w = g_invCellBoost[1]; // this happens every frame... so we can do other things that are apparently necessary too...
+
     // console.log(foobar);
-    var cPos = new THREE.Vector4(0, 0, 0, 1);
+    var cPos = Origin.clone();
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
     var bestIndex = -1;
@@ -175,6 +179,7 @@ function fixOutsideCentralCell(boost) {
         }
     }
     if (bestIndex != -1) {
+        //console.log(g_cellBoost); //never gets called??
         preComposeIsom(boost, gens[bestIndex]);
         return bestIndex;
     } else
@@ -276,9 +281,9 @@ var raymarchPass = function (screenRes) {
     //currentBoost is an array
     pass.uniforms.facing.value = g_facing;
     pass.uniforms.cellBoostMat.value = g_cellBoost[0];
-    pass.uniforms.cellBoostR.value = g_cellBoost[1];
+    pass.uniforms.cellBoostR.value = foobar2;
     pass.uniforms.invCellBoostMat.value = g_invCellBoost[0];
-    pass.uniforms.invCellBoostR.value = g_invCellBoost[1];
+    pass.uniforms.invCellBoostR.value = foobar3;
 
     pass.uniforms.lightPositions.value = lightPositions;
     pass.uniforms.globalObjectPosn.value = globalObjectPosn;
