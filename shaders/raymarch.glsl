@@ -77,13 +77,13 @@ BEGIN FRAGMENT
   //Geometry Constants
   //--------------------------------------------
   const float HalfCube=0.6584789485;
-  const float HalfHeight=0.6584;
+  const float HalfHeight=0.881373;
   const float modelHalfCube = 0.5773502692;
-  const float modelHalfHeight=0.6584;//projection doesnt change w direction here
-  const float vertexSphereSize =    0.4;
+  const float modelHalfHeight=0.881373;//projection doesnt change w direction here
+  const float vertexSphereSize =    0.65;
   const float centerSphereSize = 1.25* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 modelCubeCorner = vec4(0.810496989476, 0.810496989476, 1.52112154, modelHalfHeight);
+  const vec4 cubeCorner = vec4(0.99987, 0.99987, 1.7319, 0.881373);
   const float globalObjectRadius = 0.2;
 
   const vec4 ORIGIN = vec4(0,0,1,0);
@@ -397,7 +397,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   float localSceneSDF(vec4 samplePoint){
     float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
    float vertexSphere = 0.0;
-   vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
+   vertexSphere = vertexSDF(abs(samplePoint), cubeCorner, vertexSphereSize);
    float final = -min(vertexSphere,sphere); 
 //unionSDF
      // float final=-sphere;

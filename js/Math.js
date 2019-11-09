@@ -24,7 +24,7 @@ var Origin = new THREE.Vector4(0, 0, 1, 0);
 var foobar = new THREE.Vector4(0, 0, 0, 0);
 
 var cubeHalfWidth = 0.6584789485;
-var cubeHalfHeight = 0.6584; //in general could be different
+var cubeHalfHeight = 0.881373; // euclidean height that makes euc sidelength the same as the hyp sidelength
 
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
@@ -190,8 +190,8 @@ var createGenerators = function () { /// generators for the tiling by cubes.
     var gen1 = translateByVector(new THREE.Vector3(-2.0 * cubeHalfWidth, 0.0, 0.0));
     var gen2 = translateByVector(new THREE.Vector3(0.0, 2.0 * cubeHalfWidth, 0.0));
     var gen3 = translateByVector(new THREE.Vector3(0.0, -2.0 * cubeHalfWidth, 0.0));
-    var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 2.0 * cubeHalfWidth));
-    var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, -2.0 * cubeHalfWidth));
+    var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 2.0 * cubeHalfHeight));
+    var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, -2.0 * cubeHalfHeight));
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
