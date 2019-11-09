@@ -130,7 +130,7 @@ BEGIN FRAGMENT
   const float vertexSphereSize = 0.32;
   const float centerSphereSize = 1.2* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 cubeCorner = vec4(0.577,0.577,0.577, HalfHeight);
+  const vec4 cubeCorner = vec4(0.577350,0.577350,0.577350, HalfHeight);
   const float globalObjectRadius = 0.2;
 
 
@@ -158,18 +158,18 @@ BEGIN FRAGMENT
 //Hyperboloid Model
 
 //there is a hyperbolic dot product on the slices tho
-  float hypDot(vec4 u, vec4 v){
+  float sphDot(vec4 u, vec4 v){
     return u.x*v.x + u.y*v.y + u.z*v.z; // Neg Lorentz Dot
   }
 
 //norm of a point in the xyz minkowski space
-float hypNorm(vec4 v){
-    return sqrt(abs(hypDot(v,v)));
+float sphNorm(vec4 v){
+    return sqrt(abs(sphDot(v,v)));
 }
 
 //distance between two points projections into hyperboloid:
-float hypDist(vec4 u, vec4 v){
-     float bUV = hypDot(u,v);
+float sphDist(vec4 u, vec4 v){
+     float bUV = sphDot(u,v);
     return acos(bUV);
 }
 
@@ -213,13 +213,13 @@ float eucDist(vec4 u,vec4 v){
   
 //project point back onto the geometry: project onto hyperboloid, leave w direction unchanged.
   vec4 geomNormalize(vec4 u){
-    return vec4(u.x/hypNorm(u),u.y/hypNorm(u),u.z/hypNorm(u),u.w);
+    return vec4(u.x/sphNorm(u),u.y/sphNorm(u),u.z/sphNorm(u),u.w);
   }
 
   
 //measure the distance between two points in the geometry
   float geomDistance(vec4 u, vec4 v){
-    return sqrt(eucDist(u,v)*eucDist(u,v)+hypDist(u,v)*hypDist(u,v));
+    return sqrt(eucDist(u,v)*eucDist(u,v)+sphDist(u,v)*sphDist(u,v));
   }
 
   float lightAtt(float dist){//light intensity as a fn of distance
@@ -278,27 +278,27 @@ mat4 tangBasis(vec4 p){
 
 //give the unit tangent to geodesic connecting u to v.
   vec4 tangDirection(vec4 u, vec4 v){
-    vec3 hypPart = v.xyz - hypDot(u,v)*u.xyz;
+    vec3 sphPart = v.xyz - sphDot(u,v)*u.xyz;
     float RPart = v.w - u.w;
-    return tangNormalize(vec4(hypPart, RPart));
+    return tangNormalize(vec4(sphPart, RPart));
   }
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
   vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    float hypComp = hypNorm(vPrime);
-    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
-    float hypDist = dist * hypComp; 
+    float sphComp = sphNorm(vPrime);
+    vec3 vPrimeSphPart = vPrime.xyz / sphComp;
+    float sphDist = dist * sphComp; 
     float eucDist = dist * vPrime.w;
-    return vec4( u.xyz*cos(hypDist) + vPrimeHypPart*sin(hypDist), u.w + eucDist);
+    return vec4( u.xyz*cos(sphDist) + vPrimeSphPart*sin(sphDist), u.w + eucDist);
   }
   
 //get unit tangent vec at endpt of geodesic
   vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    float hypComp = hypNorm(vPrime);
-    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
-    float hypDist = dist * hypComp; 
+    float sphComp = sphNorm(vPrime);
+    vec3 vPrimeSphPart = vPrime.xyz / sphComp;
+    float sphDist = dist * sphComp; 
     float eucDist = dist * vPrime.w;
-    return vec4(hypComp* (-u.xyz*sin(hypDist) + vPrimeHypPart*cos(hypDist)), vPrime.w);
+    return vec4(sphComp* (-u.xyz*sin(sphDist) + vPrimeSphPart*cos(sphDist)), vPrime.w);
   }
 
 
