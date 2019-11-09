@@ -48,7 +48,51 @@ BEGIN FRAGMENT
 
 
 
+ //--------------------------------------------
+  //NOT GEOM DEPENDENT
+  //--------------------------------------------
 
+
+ //--------------------------------------------
+  //Global Constants
+  //--------------------------------------------
+  const int MAX_MARCHING_STEPS = 48;
+  const float MIN_DIST = 0.0;
+  const float MAX_DIST = 100.0;
+  const float EPSILON = 0.0001;
+  const float fov = 90.0;
+  const vec4 ORIGIN = vec4(0,0,1,0);
+
+
+
+ //--------------------------------------------
+  //Global Variables
+  //--------------------------------------------
+  vec4 N = ORIGIN; //normal vector
+  vec4 sampleEndPoint = vec4(1, 1, 1, 1);
+  vec4 sampleTangentVector = vec4(1, 1, 1, 1);
+  vec4 globalLightColor = ORIGIN;
+  int hitWhich = 0;
+  //-------------------------------------------
+  //Translation & Utility Variables
+  //--------------------------------------------
+  uniform int isStereo;
+  uniform vec2 screenResolution;
+  uniform mat4 invGeneratorMats[6];
+  uniform float invGeneratorRs[6];
+  uniform mat4 currentBoostMat;
+  uniform vec4 currentBoostR;
+  uniform mat4 facing;
+  uniform mat4 cellBoostMat; 
+  uniform float cellBoostR; 
+  uniform mat4 invCellBoostMat;
+  uniform float invCellBoostR;
+  //--------------------------------------------
+  //Lighting Variables & Global Object Variables
+  //--------------------------------------------
+  uniform vec4 lightPositions[4];
+  uniform vec4 lightIntensities[4];
+  uniform vec4 globalObjectPosn;
 
 
 
@@ -77,16 +121,16 @@ BEGIN FRAGMENT
   //Geometry Constants
   //--------------------------------------------
   const float HalfCube=0.6584789485;
-  const float HalfHeight=0.881373;
+  // const float HalfHeight=0.881373; 
   const float modelHalfCube = 0.5773502692;
-  const float modelHalfHeight=0.881373;//projection doesnt change w direction here
-  const float vertexSphereSize =    0.65;
-  const float centerSphereSize = 1.25* HalfCube;
+  // const float modelHalfHeight=0.881373; //projection doesnt change w direction here
+  const float modelHalfHeight=0.6584789485; //projection doesnt change w direction here
+
+  const float vertexSphereSize =    0.63;
+  const float centerSphereSize = 1.3* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
   const vec4 cubeCorner = vec4(0.99987, 0.99987, 1.7319, 0.881373);
   const float globalObjectRadius = 0.2;
-
-  const vec4 ORIGIN = vec4(0,0,1,0);
 
 
 //these translate the eyes along the x-axis (in the hyperbolic direction, so youre standing up vertically)
@@ -308,51 +352,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
 
 
- //--------------------------------------------
-  //NOT GEOM DEPENDENT
-  //--------------------------------------------
 
-
- //--------------------------------------------
-  //Global Constants
-  //--------------------------------------------
-  const int MAX_MARCHING_STEPS = 48;
-  const float MIN_DIST = 0.0;
-  const float MAX_DIST = 100.0;
-  const float EPSILON = 0.0001;
-  const float fov = 90.0;
-  
-
-
-
- //--------------------------------------------
-  //Global Variables
-  //--------------------------------------------
-  vec4 N = ORIGIN; //normal vector
-  vec4 sampleEndPoint = vec4(1, 1, 1, 1);
-  vec4 sampleTangentVector = vec4(1, 1, 1, 1);
-  vec4 globalLightColor = ORIGIN;
-  int hitWhich = 0;
-  //-------------------------------------------
-  //Translation & Utility Variables
-  //--------------------------------------------
-  uniform int isStereo;
-  uniform vec2 screenResolution;
-  uniform mat4 invGeneratorMats[6];
-  uniform float invGeneratorRs[6];
-  uniform mat4 currentBoostMat;
-  uniform vec4 currentBoostR;
-  uniform mat4 facing;
-  uniform mat4 cellBoostMat; 
-  uniform float cellBoostR; 
-  uniform mat4 invCellBoostMat;
-  uniform float invCellBoostR;
-  //--------------------------------------------
-  //Lighting Variables & Global Object Variables
-  //--------------------------------------------
-  uniform vec4 lightPositions[4];
-  uniform vec4 lightIntensities[4];
-  uniform vec4 globalObjectPosn;
 
 
 

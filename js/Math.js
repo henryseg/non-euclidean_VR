@@ -24,8 +24,8 @@ var Origin = new THREE.Vector4(0, 0, 1, 0);
 var foobar = new THREE.Vector4(0, 0, 0, 0);
 
 var cubeHalfWidth = 0.6584789485;
-var cubeHalfHeight = 0.881373; // euclidean height that makes euc sidelength the same as the hyp sidelength
-
+// var cubeHalfHeight = 0.881373; // euclidean height that makes euc sidelength the same as the hyp sidelength
+var cubeHalfHeight = 0.6584789485; // dist from center of cube to center of face is same in all directions
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
     return Math.acosh(v.w);
@@ -252,7 +252,7 @@ var initObjects = function () {
     console.log('made objects');
     // edited main.js to change globalObjectBoost to globalObjectPosn
     globalObjectPosn = Origin.clone();
-    applyIsom(globalObjectPosn, translateByVector(new THREE.Vector3(-0.5, 0, 0)));
+    applyIsom(globalObjectPosn, translateByVector(new THREE.Vector3(-0.7, 0, 0)));
 }
 
 //-------------------------------------------------------
