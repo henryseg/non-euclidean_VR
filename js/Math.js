@@ -25,12 +25,12 @@ var foobar = new THREE.Vector4(0, 0, 0, 0);
 var foobar2 = new THREE.Vector4(0, 0, 0, 0);
 var foobar3 = new THREE.Vector4(0, 0, 0, 0);
 
-var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 0.785;
 // var cubeHalfHeight = 0.881373; // euclidean height that makes euc sidelength the same as the hyp sidelength
-var cubeHalfHeight = 0.6584789485; // dist from center of cube to center of face is same in all directions
+var cubeHalfHeight = 0.785; // dist from center of cube to center of face is same in all directions
 
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.sqrt(Math.acosh(v.z) + v.w*v.w);
+    return Math.sqrt(Math.acos(v.z) + v.w*v.w);
 }
 
 //----------------------------------------------------------------------
@@ -89,8 +89,8 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     var dz = v.z;
     var len = Math.sqrt(dx * dx + dy * dy);
 
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
+    var c1 = Math.sin(len);
+    var c2 =1- Math.cos(len);
 
     if (len != 0) {
         dx /= len;
@@ -98,7 +98,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         var m = new THREE.Matrix4().set(
             0, 0, dx, 0,
             0, 0, dy, 0,
-            dx, dy, 0, 0,
+            -dx, -dy, 0, 0,
             0, 0, 0, 0.0);
         var m2 = new THREE.Matrix4().copy(m).multiply(m);
         m.multiplyScalar(c1);
