@@ -66,23 +66,24 @@ const mat4 rightBoost = mat4(1., 0, 0, 0.032,
 //--------------------------------------------
 
 //Hyperboloid Model
-
+/*
 float geomDot(vec4 u, vec4 v){
     return -u.x*v.x - u.y*v.y - u.z*v.z + u.w*v.w;// Lorentz Dot
 }//this is the NEGATIVE of the standard dot product so that now the vectors on the hyperboloid have positive lengths.
 
 float geomNorm(vec4 v){
     return sqrt(abs(geomDot(v, v)));
-}
+}*/
 
 float tangDot(vec4 p, vec4 u, vec4 v){
     // metric tensor at the point p
     mat3 g = mat3(
-    0.25*pow(p.y, 2.) +1, -0.25*p.x*p.y, 0.5*p.y,
-    -0.25*p.x*p.y, 0.25*pow(p.x, 2.)+1, -0.5*p.x,
-    0.5*p.y, -0.5*p.x, 1
+    0.25*pow(p.y, 2.) +1., -0.25*p.x*p.y, 0.5*p.y,
+    -0.25*p.x*p.y, 0.25*pow(p.x, 2.)+1., -0.5*p.x,
+    0.5*p.y, -0.5*p.x, 1.
     );
-    return u.xyz * g * v.xyz;
+    return dot(u.xyz , g * v.xyz);
+   
 }
 
 
@@ -104,20 +105,20 @@ vec4 geomNormalize(vec4 u){
 mat4 nilMatrix(vec4 p) {
     // return the Heisenberg isometry sending the origin to p
     return mat4(
-    1, 0, 0, p.x,
-    0, 1, 0, p.y,
-    -p.y / 2, p.x / 2, 1, p.z,
-    0, 0, 0, 1
+    1., 0., 0., p.x,
+    0., 1., 0., p.y,
+    -p.y / 2., p.x / 2., 1., p.z,
+    0., 0., 0., 1.
     );
 }
 
 mat4 nilMatrixInv(vec4 p) {
     // return the Heisenberg isometry sending the p to origin
     return mat4(
-    1, 0, 0, -p.x,
-    0, 1, 0, -p.y,
-    p.y / 2, -p.x / 2, 1, -p.z,
-    0, 0, 0, 1
+    1., 0., 0., -p.x,
+    0., 1., 0., -p.y,
+    p.y / 2., -p.x / 2., 1., -p.z,
+    0., 0., 0., 1.
     );
 }
 
@@ -127,8 +128,8 @@ float fakeHeight(float z) {
     if (z < sqrt(6.)){
         return z;
     }
-    else if (z < 4*sqrt(3)){
-        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1);
+    else if (z < 4.*sqrt(3.)){
+        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1.);
     }
     else {
         return sqrt(2.*sqrt(3.)*z);
@@ -186,9 +187,10 @@ mat4 tangBasis(vec4 p){
     mat4 theBasis=mat4(0.);
     */
 
-    basis_x = vec4(1., 0., 0., 0.);
-    basis_y = vec4(0., 1., 0., 0.);
-    basis_z = vec4(0., 0., 1., 0.);
+    vec4 basis_x = vec4(1., 0., 0., 0.);
+    vec4 basis_y = vec4(0., 1., 0., 0.);
+    vec4 basis_z = vec4(0., 0., 1., 0.);
+    mat4 theBasis=mat4(0.);
     theBasis[0]=basis_x;
     theBasis[1]=basis_y;
     theBasis[2]=basis_z;
@@ -276,32 +278,6 @@ float newton_zero(float rho, float x3) {
     return phi;
 }
 
-//
-vec4 solve(vec4 position) {
-
-    float x3 = position.z;
-
-    if (x3 == 0.0) {
-        return vec4(position.z, position.y, position.z, 0);
-    }
-    else {
-        float rho = sqrt(pow(position.x, 2.) + pow(position.y, 2.));
-        float phi = newton_zero(rho, x3);
-        float sign = 0.0;
-        if (x3 > 0.0) {
-            sign = 1.0;
-        }
-        else {
-            sign = -1.0;
-        }
-        float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
-        float c = sqrt(1.0  - pow(w, 2.0));
-        float alpha = atan(position.y, position.x) - 0.5 * phi;
-        float t = phi / w;
-
-        return t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
-    }
-}
 
 //-------------------------------------------------------
 //GEODESIC FUNCTIONS
@@ -336,7 +312,7 @@ vec4 tangDirection(vec4 p, vec4 q){
         }
         float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
         float c = sqrt(1.0  - pow(w, 2.0));
-        float alpha = atan(position.y, position.x) - 0.5 * phi;
+        float alpha = atan(qOrigin.y, qOrigin.x) - 0.5 * phi;
         float t = phi / w;
 
         resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
@@ -370,7 +346,7 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
         vec4 achievedFromOrigin = vec4(
         2. * (c/w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
         2. * (c/w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
-        w * t + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
+        w * dist + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
         1.
         );
     }

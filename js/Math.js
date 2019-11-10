@@ -43,7 +43,7 @@ function reduceBoostError(boost) { // for H^3, this is gramSchmidt
 
 
 function nilMatrix(v) {
-    return new THREE.Matrix4(
+    return new THREE.Matrix4().set(
         1, 0, 0, v.x,
         0, 1, 0, v.y,
         -v.y / 2, v.x / 2, 1, v.z,
@@ -63,6 +63,8 @@ function translateByVector(v) {
     let achievedPoint = new THREE.Vector3();
 
     if (dz == 0.) {
+        achievedPoint = v;
+    } else if (dx == 0 && dy == 0) {
         achievedPoint = v;
     } else {
         const normalizedV = v / len;
@@ -87,37 +89,48 @@ function translateFacingByVector(v) {
     const dz = v.z;
     const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-    const normalizedV = v / len;
-    const alpha = Math.atan2(normalizedV.y, normalizedV.x);
-    const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
-    const w = normalizedV.z;
+    if (len == 0) {
+        return new THREE.Matrix4();
+    } else {
+        const normalizedV = v / len;
+        let alpha = 0.;
+        if (dx != 0 || dy != 0) {
+            alpha = Math.atan2(normalizedV.y, normalizedV.x);
+        }
+        const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
+        const w = normalizedV.z;
 
-    // Matrix catching the rotation of the unit tangent vector pulled back that the origin
-    const R = THREE.Matrix4(
-        Math.cos(w * len + alpha), -Math.sin(w * len + alpha), 0, 0,
-        Math.sin(w * len + alpha), Math.cos(w * len + alpha), 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    );
-    // Matrix fixing the rotation around the unit tangent vector
-    // Change of basis matrix
-    const P = THREE.Matrix4(
-        c, 0, -w, 0,
-        0, 1, 0, 0,
-        w, 0, c, 0,
-        0, 0, 0, 1
-    );
-    // Rotation
-    const S = THREE.Matrix4(
-        1, 0, 0, 0,
-        0, Math.cos(0.5 * len), -Math.sin(0.5 * len), 0,
-        0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
-        0, 0, 0, 1
-    );
+        // Matrix catching the rotation of the unit tangent vector pulled back that the origin
+        var R = new THREE.Matrix4().set(
+            Math.cos(w * len + alpha), -Math.sin(w * len + alpha), 0, 0,
+            Math.sin(w * len + alpha), Math.cos(w * len + alpha), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+        // Matrix fixing the rotation around the unit tangent vector
+        // Change of basis matrix
+        let P = new THREE.Matrix4().set(
+            c, 0, -w, 0,
+            0, 1, 0, 0,
+            w, 0, c, 0,
+            0, 0, 0, 1
+        );
+    
+        // Rotation
+        let S = new THREE.Matrix4().set(
+            1, 0, 0, 0,
+            0, Math.cos(0.5 * len), -Math.sin(0.5 * len), 0,
+            0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
+            0, 0, 0, 1
+        );
+       
+        let Pinv = new THREE.Matrix4();
+        Pinv.getInverse(P);
+      
+        return R * P * S * Pinv;
 
-    const Pinv = new THREE.Matrix4();
-    Pinv.getInverse(P);
-    return R * P * S * Pinv;
+    }
+
 }
 
 //----------------------------------------------------------------------
@@ -183,12 +196,12 @@ function fixOutsideCentralCell(boost) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var createGenerators = function () { /// generators for the tiling by cubes. 
-    var gen0 = new THREE.Matrix4(1.);
-    var gen1 = new THREE.Matrix4(1.);
-    var gen2 = new THREE.Matrix4(1.);
-    var gen3 = new THREE.Matrix4(1.);
-    var gen4 = new THREE.Matrix4(1.);
-    var gen5 = new THREE.Matrix4(1.);
+    var gen0 = new THREE.Matrix4().set(1.);
+    var gen1 = new THREE.Matrix4().set(1.);
+    var gen2 = new THREE.Matrix4().set(1.);
+    var gen3 = new THREE.Matrix4().set(1.);
+    var gen4 = new THREE.Matrix4().set(1.);
+    var gen5 = new THREE.Matrix4().set(1.);
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
