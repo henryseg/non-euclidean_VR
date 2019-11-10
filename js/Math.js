@@ -41,7 +41,7 @@ function reduceBoostError(boost) { // for H^3, this is gramSchmidt
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
 
-/*
+
 function nilMatrix(v) {
     return new THREE.Matrix4(
         1, 0, 0, v.x,
@@ -51,39 +51,73 @@ function nilMatrix(v) {
     );
 }
 
-function geodesicEndPt(v) {
 
-}
-*/
+function translateByVector(v) {
+    // return the Heisenberg isometry sending the origin to the point reached by the geodesic,
+    // whose unit tangent vector at the origin is v
+    const dx = v.x;
+    const dy = v.y;
+    const dz = v.z;
+    const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
-    var dx = v.x;
-    var dy = v.y;
-    var dz = v.z;
-    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    let achievedPoint = new THREE.Vector3();
 
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
-
-    if (len != 0) {
-        dx /= len;
-        dy /= len;
-        dz /= len;
-        var m = new THREE.Matrix4().set(
-            0, 0, 0, dx,
-            0, 0, 0, dy,
-            0, 0, 0, dz,
-            dx, dy, dz, 0.0);
-        var m2 = new THREE.Matrix4().copy(m).multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        var result = new THREE.Matrix4().identity();
-        result.add(m);
-        result.add(m2);
-        return [result];
+    if (dz == 0.) {
+        achievedPoint = v;
     } else {
-        return [new THREE.Matrix4().identity()];
+        const normalizedV = v / len;
+        const alpha = Math.atan2(normalizedV.y, normalizedV.x);
+        const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
+        const w = normalizedV.z;
+
+        achievedPoint = new THREE.Vector3(
+            2. * (c / w) * Math.sin(w * len / 2.) * Math.cos(w * len / 2 + alpha),
+            2. * (c / w) * Math.sin(w * len / 2.) * Math.sin(w * len / 2 + alpha),
+            w * len + 0.5 * Math.pow(c / w, 2.) * (w * len - Math.sin(w * len))
+        );
     }
+
+    return [nilMatrix(achievedPoint)];
+}
+
+function translateFacingByVector(v) {
+    // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
+    const dx = v.x;
+    const dy = v.y;
+    const dz = v.z;
+    const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+    const normalizedV = v / len;
+    const alpha = Math.atan2(normalizedV.y, normalizedV.x);
+    const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
+    const w = normalizedV.z;
+
+    // Matrix catching the rotation of the unit tangent vector pulled back that the origin
+    const R = THREE.Matrix4(
+        Math.cos(w * len + alpha), -Math.sin(w * len + alpha), 0, 0,
+        Math.sin(w * len + alpha), Math.cos(w * len + alpha), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    // Matrix fixing the rotation around the unit tangent vector
+    // Change of basis matrix
+    const P = THREE.Matrix4(
+        c, 0, -w, 0,
+        0, 1, 0, 0,
+        w, 0, c, 0,
+        0, 0, 0, 1
+    );
+    // Rotation
+    const S = THREE.Matrix4(
+        1, 0, 0, 0,
+        0, Math.cos(0.5 * len), -Math.sin(0.5 * len), 0,
+        0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
+        0, 0, 0, 1
+    );
+
+    const Pinv = new THREE.Matrix4();
+    Pinv.getInverse(P);
+    return R * P * S * Pinv;
 }
 
 //----------------------------------------------------------------------
@@ -186,7 +220,6 @@ var initGeometry = function () {
     invGens = invGenerators(gens);
     invGensMatrices = unpackage(invGens, 0);
 }
-
 
 
 var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3

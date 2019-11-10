@@ -111,6 +111,8 @@ THREE.Controls = function (done) {
         if (deltaPosition !== undefined) {
             var m = translateByVector(deltaPosition);
             composeIsom(g_currentBoost, m);
+            var r = translateFacingByVector(deltaPosition);
+            rotate(g_facing, r);
         }
 
         var fixIndex = fixOutsideCentralCell(g_currentBoost); //moves camera back to main cell
