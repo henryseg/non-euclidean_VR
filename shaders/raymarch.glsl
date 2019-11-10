@@ -76,12 +76,12 @@ BEGIN FRAGMENT
   //--------------------------------------------
   //Geometry Constants
   //--------------------------------------------
-  const float HalfCube=0.6584789485;
-  const float modelHalfCube = 0.5773502692;
-  const float vertexSphereSize = -0.98;//In this case its a horosphere
-  const float centerSphereSize = 1.55* HalfCube;
+//  const float HalfCube=0.6584789485;
+  //const float modelHalfCube = 0.5773502692;
+ // const float vertexSphereSize = -0.98;//In this case its a horosphere
+ // const float centerSphereSize = 1.55* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+//  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
   const float globalObjectRadius = 0.2;
   const vec4 ORIGIN = vec4(0,0,0,1);
 
@@ -118,7 +118,7 @@ BEGIN FRAGMENT
     return sqrt(abs(geomDot(v,v)));
   }
 
-  float tangDot(vec4 u, vec4 v){
+  float tangDot(vec4 p, vec4 u, vec4 v){
     return u.x*v.x + u.y*v.y + u.z*v.z - u.w*v.w; // Lorentz Dot
   }
 
@@ -160,29 +160,30 @@ BEGIN FRAGMENT
   //--------------------------------------------
 
 //calculate the length of a tangent vector
-  float tangNorm(vec4 v){
-    return sqrt(abs(tangDot(v,v)));
+  float tangNorm(vec4 p, vec4 v){
+    return sqrt(abs(tangDot(p, v,v)));
   }
   
 //create a unit tangent vector in a given direction
-  vec4 tangNormalize(vec4 u){
-    return u/tangNorm(u);
+  vec4 tangNormalize(vec4 p, vec4 u){
+    return u/tangNorm(p,u);
   }
   
-float cosAng(vec4 u, vec4 v){
-    return tangDot(u,v);
+//cosAng takes in a point p
+float cosAng(vec4 p, vec4 u, vec4 v){
+    return tangDot(p,u,v);
 }
 
 
 
 
 mat4 tangBasis(vec4 p){
-    vec4 basis_x = tangNormalize(vec4(p.w,0.0,0.0,p.x));  
+    vec4 basis_x = tangNormalize(p, vec4(p.w,0.0,0.0,p.x));  
       vec4 basis_y = vec4(0.0,p.w,0.0,p.y);  
       vec4 basis_z = vec4(0.0,0.0,p.w,p.z);  
     //make this orthonormal
-      basis_y = tangNormalize(basis_y - cosAng(basis_y, basis_x)*basis_x); // need to Gram Schmidt
-      basis_z = tangNormalize(basis_z - cosAng(basis_z, basis_x)*basis_x - cosAng(basis_z, basis_y)*basis_y);
+      basis_y = tangNormalize(p, basis_y - cosAng(p,basis_y, basis_x)*basis_x); // need to Gram Schmidt
+      basis_z = tangNormalize(p, basis_z - cosAng(p,basis_z, basis_x)*basis_x - cosAng(p,basis_z, basis_y)*basis_y);
       mat4 theBasis=mat4(0.);
       theBasis[0]=basis_x;
       theBasis[1]=basis_y;
@@ -203,19 +204,19 @@ mat4 tangBasis(vec4 p){
   //-------------------------------------------------------
 
 //give the unit tangent to geodesic connecting u to v.
-  vec4 tangDirection(vec4 u, vec4 v){
-    vec4 w = v - geomDot(u,v)*u;
-    return tangNormalize(w);
+  vec4 tangDirection(vec4 p, vec4 q){
+    vec4 w = q - geomDot(p,q)*p;
+    return tangNormalize(p, w);
   }
 
   // Get point at distance dist on the geodesic from u in the direction vPrime
-  vec4 geodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    return u*cosh(dist) + vPrime*sinh(dist);
+  vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
+    return p*cosh(dist) + v*sinh(dist);
   }
   
 //get unit tangent vec at endpt of geodesic
-  vec4 tangToGeodesicEndpt(vec4 u, vec4 vPrime, float dist){
-    return u*sinh(dist) + vPrime*cosh(dist);
+  vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
+    return p*sinh(dist) + v*cosh(dist);
   }
 
 
@@ -230,9 +231,12 @@ mat4 tangBasis(vec4 p){
   // A horosphere can be constructed by offseting from a standard horosphere.
   // Our standard horosphere will have a center in the direction of lightPoint
   // and go through the origin. Negative offsets will shrink it.
-  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+
+ /* float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
     return log(-geomDot(samplePoint, lightPoint)) - offset;
-  }//im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
+  }*/
+
+  //im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
   
   float sphereSDF(vec4 samplePoint, vec4 center, float radius){
     return geomDistance(samplePoint, center) - radius;
@@ -241,13 +245,13 @@ mat4 tangBasis(vec4 p){
 
 //NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
 
-float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
+/*float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     return sphereSDF(samplePoint, cornerPoint,size);
-}
+}*/
 
-float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
+/*float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     return  horosphereHSDF(samplePoint, cornerPoint, size);
-}
+}*/
 
 
 
@@ -305,6 +309,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   uniform vec2 screenResolution;
   uniform mat4 invGenerators[6];
   uniform mat4 currentBoost;
+  uniform mat4 facing;
   uniform mat4 cellBoost; 
   uniform mat4 invCellBoost;
   //--------------------------------------------
@@ -354,12 +359,14 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   //---------------------------------------------------------------------
   //Scene Definitions
   //---------------------------------------------------------------------
+//Turn off the local scene
   float localSceneSDF(vec4 samplePoint){
-    float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
+    /*float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
     float final = -min(vertexSphere,sphere); //unionSDF
-    return final;
+    */
+    return 101.;
   }
   
   //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -390,8 +397,10 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
 
   // This function is intended to be hyp-agnostic.
   // We should update some of the variable names.
+//TURN OFF TELEPORTING
   bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
     vec4 modelSamplePoint = modelProject(samplePoint); //project to klein
+      /*
     if(modelSamplePoint.x > modelHalfCube){
       fixMatrix = invGenerators[0];
       return true;
@@ -415,7 +424,7 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     if(modelSamplePoint.z < -modelHalfCube){
       fixMatrix = invGenerators[5];
       return true;
-    }
+    }*/
     return false;
   }
 
@@ -461,13 +470,13 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
       vec4 basis_y = theBasis[1];
       vec4 basis_z = theBasis[2];
       if(hitWhich != 3){ //global light scene
-        return tangNormalize( //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
+        return tangNormalize(p,//p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
           basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
           basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
           basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z)));
       }
       else{ //local scene
-        return tangNormalize(
+        return tangNormalize(p,
           basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
           basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
           basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z)));
@@ -578,12 +587,12 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
     vec4 L = tangDirection(SP, TLP);
-    vec4 R = 2.0*cosAng(L, N)*N-L;
+    vec4 R = 2.0*cosAng(SP,L, N)*N-L;
     //Calculate Diffuse Component
-    float nDotL = max(cosAng(N, L),0.0);
+    float nDotL = max(cosAng(SP,N, L),0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(cosAng(R, V),0.0);
+    float rDotV = max(cosAng(SP,R, V),0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV,10.0);
     //Attenuation - Inverse Square
     float distToLight = geomDistance(SP, TLP);
@@ -613,15 +622,15 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   // Tangent Space Functions
   //--------------------------------------------------------------------
 
-  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a point that our ray will go through
+  vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray 
     if(isStereo == 1){
       resolution.x = resolution.x * 0.5;
       if(!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
     }
     vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1/tan(radians(fov*0.5));
-    vec4 p =  geomNormalize(vec4(xy,-z,1.0));
-    return p;
+    vec4 v =  tangNormalize(vec4(0.,0.,0,1), vec4(xy,-z,0.0));
+    return v;
   }
 
   //--------------------------------------------------------------------
@@ -646,17 +655,23 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     }
 
     //camera position must be translated in hyperboloid -----------------------
+    
+    if(isStereo == 1){
+        rayOrigin = facing * rayOrigin;
+    }
     rayOrigin = currentBoost * rayOrigin;
+    rayDirV = facing * rayDirV;
     rayDirV = currentBoost * rayDirV;
     //generate direction then transform to hyperboloid ------------------------
-    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
+//    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
-    raymarch(rayOrigin, rayDirVPrime, totalFixMatrix);
+    raymarch(rayOrigin, rayDirV, totalFixMatrix);
   
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if(hitWhich == 0){ //Didn't hit anything ------------------------
-      gl_FragColor = vec4(0.0);
+        //COLOR THE FRAME DARK GRAY
+      gl_FragColor = vec4(0.2);
       return;
     }
     else if(hitWhich == 1){ // global lights
@@ -667,7 +682,8 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
       N = estimateNormal(sampleEndPoint);
       vec3 color;
       color = phongModel(totalFixMatrix);
-      gl_FragColor = vec4(color, 1.0);
+        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
+      gl_FragColor = vec4(0.8*color+0.2, 1.0);
     }
   }
 END FRAGMENT
