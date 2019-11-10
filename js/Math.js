@@ -89,10 +89,10 @@ function translateFacingByVector(v) {
     const dz = v.z;
     const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-    if (len == 0) {
+    if (len == 0.0) {
         return new THREE.Matrix4();
     } else {
-        const normalizedV = v / len;
+        var normalizedV = v.clone().setLength(1.);
         let alpha = 0.;
         if (dx != 0 || dy != 0) {
             alpha = Math.atan2(normalizedV.y, normalizedV.x);
@@ -107,6 +107,8 @@ function translateFacingByVector(v) {
             0, 0, 1, 0,
             0, 0, 0, 1
         );
+        // console.log('R');
+        // console.log(R);
         // Matrix fixing the rotation around the unit tangent vector
         // Change of basis matrix
         let P = new THREE.Matrix4().set(
@@ -115,7 +117,8 @@ function translateFacingByVector(v) {
             w, 0, c, 0,
             0, 0, 0, 1
         );
-    
+        // console.log('P');
+        //console.log(P);
         // Rotation
         let S = new THREE.Matrix4().set(
             1, 0, 0, 0,
@@ -123,11 +126,11 @@ function translateFacingByVector(v) {
             0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
             0, 0, 0, 1
         );
-       
+        //console.log('S');
+        //console.log(S);
         let Pinv = new THREE.Matrix4();
         Pinv.getInverse(P);
-      
-        return R * P * S * Pinv;
+        return R.multiply(P).multiply(S).multiply(Pinv);
 
     }
 
@@ -247,7 +250,7 @@ var PointLightObject = function (pos, colorInt) { //position is a euclidean Vect
 var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
 var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
 var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
-var lightColor4 = new THREE.Vector4(238 / 256, 142 / 256, 226 / 256, 1);
+var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 
 
 var initObjects = function () {
