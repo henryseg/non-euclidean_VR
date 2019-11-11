@@ -491,16 +491,14 @@ float globalSceneSDF(vec4 samplePoint){
     //Light Objects
     for (int i=0; i<4; i++){
         float objDist;
-        objDist = sphereSDF(absoluteSamplePoint, lightPositions[i],
-        0.1                   
- //1.0/(10.0*lightIntensities[i].w)
+        objDist = sphereSDF(
+            absoluteSamplePoint, 
+            lightPositions[i],
+            1.0/(10.0*lightIntensities[i].w
+        )
                            );
         distance = min(distance, objDist);
         if (distance < EPSILON){
-            //hitWhich = 5;
-            //debugColor = lightPositions[i].xyz;
-            //return distance;
-            
             hitWhich = 1;
             globalLightColor = lightIntensities[i];
             return distance;
