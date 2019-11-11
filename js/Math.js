@@ -55,29 +55,23 @@ function nilMatrix(v) {
 function translateByVector(v) {
     // return the Heisenberg isometry sending the origin to the point reached by the geodesic,
     // whose unit tangent vector at the origin is v
-    const dx = v.x;
-    const dy = v.y;
-    const dz = v.z;
-    const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
+    const len = v.length();
     let achievedPoint = new THREE.Vector3();
 
-    if (dz == 0.) {
-        achievedPoint = v;
-    } else if (dx == 0 && dy == 0) {
+    if (v.z == 0.) {
         achievedPoint = v;
     } else {
-        var normalizedV = v.clone().setLength(1.);
+        var normalizedV = v.clone().normalize();
         let alpha = 0.;
-        if (dx != 0 || dy != 0) {
+        if (normalizedV.x * normalizedV.y != 0.) {
             alpha = Math.atan2(normalizedV.y, normalizedV.x);
         }
-        const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
         const w = normalizedV.z;
+        const c = Math.sqrt(1 - Math.pow(w, 2.));
 
         achievedPoint = new THREE.Vector3(
-            2. * (c / w) * Math.sin(w * len / 2.) * Math.cos(w * len / 2 + alpha),
-            2. * (c / w) * Math.sin(w * len / 2.) * Math.sin(w * len / 2 + alpha),
+            2. * (c / w) * Math.sin(0.5 * w * len) * Math.cos(0.5 * w * len + alpha),
+            2. * (c / w) * Math.sin(0.5 * w * len) * Math.sin(0.5 * w * len + alpha),
             w * len + 0.5 * Math.pow(c / w, 2.) * (w * len - Math.sin(w * len))
         );
     }
@@ -87,26 +81,23 @@ function translateByVector(v) {
 
 function translateFacingByVector(v) {
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
-    const dx = v.x;
-    const dy = v.y;
-    const dz = v.z;
-    const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    const len = v.length();
 
     if (len == 0.0) {
         return new THREE.Matrix4();
     } else {
-        var normalizedV = v.clone().setLength(1.);
+        var normalizedV = v.clone().normalize();
         let alpha = 0.;
-        if (dx != 0 || dy != 0) {
-            alpha = Math.atan2(normalizedV.y, normalizedV.x);
+        if (normalizedV.x * normalizedV.y != 0.) {
+            //alpha = Math.atan2(normalizedV.y, normalizedV.x);
         }
-        const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
         const w = normalizedV.z;
+        const c = Math.sqrt(1 - Math.pow(w, 2.));
 
         // Matrix catching the rotation of the unit tangent vector pulled back that the origin
-        var R = new THREE.Matrix4().set(
-            Math.cos(w * len + alpha), -Math.sin(w * len + alpha), 0, 0,
-            Math.sin(w * len + alpha), Math.cos(w * len + alpha), 0, 0,
+        const R = new THREE.Matrix4().set(
+            Math.cos(w * len), -Math.sin(w * len), 0, 0,
+            Math.sin(w * len), Math.cos(w * len), 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
         );
@@ -133,7 +124,22 @@ function translateFacingByVector(v) {
         //console.log(S);
         let Pinv = new THREE.Matrix4();
         Pinv.getInverse(P);
-        return R.multiply(P).multiply(S).multiply(Pinv);
+
+        // Rotation by alpha
+        const Ralpha = new THREE.Matrix4().set(
+            Math.cos(alpha), -Math.sin(alpha), 0, 0,
+            Math.sin(alpha), Math.cos(alpha), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+        const RalphaInv = new THREE.Matrix4().set(
+            Math.cos(alpha), Math.sin(alpha), 0, 0,
+            -Math.sin(alpha), Math.cos(alpha), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+
+        return Ralpha.multiply(R).multiply(P).multiply(S).multiply(Pinv).multiply(RalphaInv);
 
     }
 
@@ -246,7 +252,7 @@ var PointLightObject = function (pos, colorInt) { //position is a euclidean Vect
     applyIsom(lp, translateByVector(pos));
     // console.log(translateByVector(pos));
     lightPositions.push(lp);
-    console.log(lp);
+    //console.log(lp);
     lightIntensities.push(colorInt);
 }
 
