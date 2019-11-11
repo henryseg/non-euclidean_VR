@@ -106,22 +106,28 @@ vec4 geomNormalize(vec4 u){
 
 mat4 nilMatrix(vec4 p) {
     // return the Heisenberg isometry sending the origin to p
+    //this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
     return mat4(
-    1., 0., 0., p.x,
-    0., 1., 0., p.y,
-    -p.y / 2., p.x / 2., 1., p.z,
-    0., 0., 0., 1.
-    );
+        1., 0., -p.y/2., 0.,
+        0.,1., p.x/2., 0.,
+        0.,0.,1.,0.,
+        p.x,p.y,p.z,1.);  
 }
 
 mat4 nilMatrixInv(vec4 p) {
     // return the Heisenberg isometry sending the p to origin
     return mat4(
-    1., 0., 0., -p.x,
-    0., 1., 0., -p.y,
-    p.y / 2., -p.x / 2., 1., -p.z,
-    0., 0., 0., 1.
-    );
+        1., 0., p.y/2., 0.,
+        0.,1., -p.x/2., 0.,
+        0.,0.,1.,0.,
+        -p.x,-p.y,-p.z,1.);  
+    
+//    return mat4(
+//    1., 0., 0., -p.x,
+//    0., 1., 0., -p.y,
+//    0., 0., 1., -p.z,
+//    0., 0., 0., 1.
+//    );
 }
 
 float fakeHeight(float z) {
@@ -142,13 +148,21 @@ float fakeHeight(float z) {
 
 // measure the distance between two points in the geometry
 // fake distance
-float geomDistance(vec4 u, vec4 v){
-    mat4 isomInv = nilMatrixInv(u);
-    //vec4 p = isomInv * v;
-    vec4 p = v-u;
+float geomDistance(vec4 p, vec4 q){
+    mat4 isomInv = nilMatrixInv(p);
+  /*)  mat4 isomInv = mat4(
+        1., 0., 0., -p.x,
+        0., 1., 0., -p.y,
+        0., 0., 1., -p.z,
+        0., 0., 0., 1.
+    );
+    */
+   // vec4 qTemp = vec4(q.xyz, 1.0);
+   vec4 qOrigin = isomInv*q;
+ //  vec4 qOrigin = vec4 ( q.x-p.x, q.y-p.y, q.z-p.z+0.5*(p.y*q.x-p.x*q.y),1);
     // we now need the distance between the origin and p
-    float rho = sqrt(pow(p.x, 2.)+pow(p.y, 2.));
-    float h = fakeHeight(p.z);
+    float rho = sqrt(pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.));
+    float h = fakeHeight(qOrigin.z);
     
     return pow(0.2*pow(rho, 4.) + 0.8*pow(h, 4.), 0.25);
     //return length(v-u);
