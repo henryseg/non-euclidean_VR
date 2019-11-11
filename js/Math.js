@@ -72,7 +72,7 @@ function translateByVector(v) {
     } else {
         const normalizedV = v.clone().normalize();
         let alpha = 0.;
-        if (normalizedV.x * normalizedV.y !== 0.) {
+        if (normalizedV.x !== 0 || normalizedV.y !== 0.) {
             alpha = Math.atan2(normalizedV.y, normalizedV.x);
         }
         const w = normalizedV.z;
@@ -99,8 +99,9 @@ function translateFacingByVector(v) {
     } else {
         const normalizedV = v.clone().normalize();
         let alpha = 0.;
-        if (normalizedV.x * normalizedV.y !== 0.) {
-            //alpha = Math.atan2(normalizedV.y, normalizedV.x);
+        if (normalizedV.x !== 0 || normalizedV.y !== 0.) {
+            console.log('alpha', alpha);
+            alpha = Math.atan2(normalizedV.y, normalizedV.x);
         }
         const w = normalizedV.z;
         const c = Math.sqrt(1 - Math.pow(w, 2.));
@@ -112,7 +113,7 @@ function translateFacingByVector(v) {
             0, 0, 1, 0,
             0, 0, 0, 1
         );
-        // console.log('R',R)
+        console.log('R',R)
 
         // Matrix fixing the rotation around the unit tangent vector
         // Change of basis matrix
@@ -122,7 +123,7 @@ function translateFacingByVector(v) {
             w, 0., c, 0.,
             0., 0., 0., 1.
         );
-        // console.log('P',P);
+        console.log('P',P);
 
         // Rotation
         let S = new THREE.Matrix4().set(
@@ -131,12 +132,14 @@ function translateFacingByVector(v) {
             0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
             0, 0, 0, 1
         );
-        //console.log('S',S);
+        console.log('S',S);
 
         let Pinv = new THREE.Matrix4();
         Pinv.getInverse(P);
 
         // Rotation by alpha
+
+
         const Ralpha = new THREE.Matrix4().set(
             Math.cos(alpha), -Math.sin(alpha), 0, 0,
             Math.sin(alpha), Math.cos(alpha), 0, 0,
