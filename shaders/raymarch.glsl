@@ -12,7 +12,7 @@ END VERTEX
 BEGIN FRAGMENT
 
 
-vec3 debugColor = vec3(0.5,0,0.8);
+vec3 debugColor = vec3(0.5, 0, 0.8);
 
 //--------------------------------------------------------------------
 // Hyperbolic Functions
@@ -84,8 +84,8 @@ float tangDot(vec4 p, vec4 u, vec4 v){
     -0.25*p.x*p.y, 0.25*pow(p.x, 2.)+1., -0.5*p.x,
     0.5*p.y, -0.5*p.x, 1.
     );
-    return dot(u.xyz , g * v.xyz);
-   
+    return dot(u.xyz, g * v.xyz);
+
 }
 
 
@@ -108,25 +108,25 @@ mat4 nilMatrix(vec4 p) {
     // return the Heisenberg isometry sending the origin to p
     // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
     return mat4(
-        1., 0., -p.y/2., 0.,
-        0.,1., p.x/2., 0.,
-        0.,0.,1.,0.,
-        p.x,p.y,p.z,1.);  
+    1., 0., -p.y/2., 0.,
+    0., 1., p.x/2., 0.,
+    0., 0., 1., 0.,
+    p.x, p.y, p.z, 1.);
 }
 
 mat4 nilMatrixInv(vec4 p) {
     // return the Heisenberg isometry sending the p to origin
     return mat4(
-        1., 0., p.y/2., 0.,
-        0.,1., -p.x/2., 0.,
-        0.,0.,1.,0.,
-        -p.x,-p.y,-p.z,1.);
+    1., 0., p.y/2., 0.,
+    0., 1., -p.x/2., 0.,
+    0., 0., 1., 0.,
+    -p.x, -p.y, -p.z, 1.);
 }
 
 float fakeHeight(float z) {
     // fake height : bound on the height of the ball centered at the origin passing through p
     // (whose z coordinate is the argument)
-    
+
     if (z < sqrt(6.)){
         return z;
     }
@@ -147,7 +147,7 @@ float geomDistance(vec4 p, vec4 q){
     // we now need the distance between the origin and p
     float rho = sqrt(pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.));
     float h = fakeHeight(qOrigin.z);
-    
+
     return pow(0.2*pow(rho, 4.) + 0.8*pow(h, 4.), 0.25);
     //return length(v-u);
 }
@@ -282,6 +282,32 @@ float newton_zero(float rho, float x3) {
 }
 
 
+float exactDist(vec4 p, vec4 q) {
+    // move p to the origin
+    mat4 isomInv = nilMatrixInv(p);
+    vec4 qOrigin = isomInv * q;
+
+    // solve the problem !
+    float x3 = qOrigin.z;
+    float rho = sqrt(pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.));
+
+    if (x3 == 0.0) {
+        return rho;
+    }
+    else {
+        float phi = newton_zero(rho, x3);
+        float sign = 0.0;
+        if (x3 > 0.0) {
+            sign = 1.0;
+        }
+        else {
+            sign = -1.0;
+        }
+        float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
+        return abs(phi/w);
+    }
+}
+
 //-------------------------------------------------------
 //GEODESIC FUNCTIONS
 //-------------------------------------------------------
@@ -316,12 +342,13 @@ vec4 tangDirection(vec4 p, vec4 q){
         float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
         float c = sqrt(1.0  - pow(w, 2.0));
         float alpha = - 0.5 * phi;
-        if(qOrigin.x*qOrigin.y != 0.0){
+        if (qOrigin.x*qOrigin.y != 0.0){
             alpha = alpha + atan(qOrigin.y, qOrigin.x);
         }
-        float t = phi / w;
+        //float t = phi / w;
 
-        resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
+        //resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
+        resOrigin =  vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
     }
 
     // move back to p
@@ -341,15 +368,15 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
     // solve the problem !
     float c = sqrt(pow(vOrigin.x, 2.)+ pow(vOrigin.y, 2.));
     float alpha = 0.;
-    if(vOrigin.x*vOrigin.y != 0.0){
+    if (vOrigin.x*vOrigin.y != 0.0){
         alpha = atan(vOrigin.y, vOrigin.x);
     }
     float w = vOrigin.z;
 
-    vec4 achievedFromOrigin = vec4(0.,0.,0.,1.);
+    vec4 achievedFromOrigin = vec4(0., 0., 0., 1.);
 
     if (w == 0.0){
-        achievedFromOrigin = vec4(dist * vOrigin.xyz,1);
+        achievedFromOrigin = vec4(dist * vOrigin.xyz, 1);
     }
     else {
         achievedFromOrigin = vec4(
@@ -377,7 +404,7 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
     // solve the problem !
     float c = sqrt(pow(vOrigin.x, 2.)+ pow(vOrigin.y, 2.));
     float alpha = 0.;
-    if(vOrigin.x*vOrigin.y != 0.0){
+    if (vOrigin.x*vOrigin.y != 0.0){
         alpha = atan(vOrigin.y, vOrigin.x);
     }
     float w = vOrigin.z;
@@ -415,7 +442,15 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
 //im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
 
 float sphereSDF(vec4 samplePoint, vec4 center, float radius){
-    return geomDistance(samplePoint, center) - radius;
+    // more precise computation
+    float fakeDist = geomDistance(samplePoint, center);
+    if (fakeDist > 10. * radius) {
+        return fakeDist - radius;
+    }
+    else {
+        return exactDist(samplePoint, center) - radius;
+    }
+    //return geomDistance(samplePoint, center) - radius;
 }
 
 
@@ -492,11 +527,11 @@ float globalSceneSDF(vec4 samplePoint){
     for (int i=0; i<4; i++){
         float objDist;
         objDist = sphereSDF(
-            absoluteSamplePoint, 
-            lightPositions[i],
-            1.0/(10.0*lightIntensities[i].w
+        absoluteSamplePoint,
+        lightPositions[i],
+        1.0/(10.0*lightIntensities[i].w
         )
-                           );
+        );
         distance = min(distance, objDist);
         if (distance < EPSILON){
             hitWhich = 1;
@@ -552,7 +587,6 @@ bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
 //--------------------------------------------
 //GEOM DEPENDENT
 //--------------------------------------------
-
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -623,10 +657,10 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     globalDepth = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
-//        hitWhich = 5;
-//        debugColor = abs(rO.xyz);
-//        break;
-        
+        //        hitWhich = 5;
+        //        debugColor = abs(rO.xyz);
+        //        break;
+
         float globalDist = globalSceneSDF(globalEndPoint);
         if (globalDist < EPSILON){
             // hitWhich has now been set
@@ -741,8 +775,8 @@ void main(){
         gl_FragColor = vec4(globalLightColor.rgb, 1.0);
         return;
     }
-    else if(hitWhich == 5){ //debug
-      gl_FragColor = vec4(debugColor, 1.0);
+    else if (hitWhich == 5){ //debug
+        gl_FragColor = vec4(debugColor, 1.0);
     }
     else { // objects
         N = estimateNormal(sampleEndPoint);
