@@ -44,10 +44,19 @@ function reduceBoostError(boost) { // for H^3, this is gramSchmidt
 
 function nilMatrix(v) {
     return new THREE.Matrix4().set(
-        1, 0, 0, v.x,
-        0, 1, 0, v.y,
-        -v.y / 2, v.x / 2, 1, v.z,
-        0, 0, 0, 1
+        1., 0., 0., v.x,
+        0., 1., 0., v.y,
+        -0.5 * v.y, 0.5 * v.x, 1., v.z,
+        0., 0., 0., 1.
+    );
+}
+
+function nilMatrixInv(v) {
+    return new THREE.Matrix4().set(
+        1., 0., 0., -v.x,
+        0., 1., 0., -v.y,
+        0.5 * v.y, -0.5 * v.x, 1., -v.z,
+        0., 0., 0., 1.
     );
 }
 
@@ -58,37 +67,39 @@ function translateByVector(v) {
     const len = v.length();
     let achievedPoint = new THREE.Vector3();
 
-    if (v.z == 0.) {
+    if (v.z === 0.) {
         achievedPoint = v;
     } else {
-        var normalizedV = v.clone().normalize();
+        const normalizedV = v.clone().normalize();
         let alpha = 0.;
-        if (normalizedV.x * normalizedV.y != 0.) {
+        if (normalizedV.x * normalizedV.y !== 0.) {
             alpha = Math.atan2(normalizedV.y, normalizedV.x);
         }
         const w = normalizedV.z;
-        const c = Math.sqrt(1 - Math.pow(w, 2.));
+        const c = Math.sqrt(1 - Math.pow(w, 2));
 
         achievedPoint = new THREE.Vector3(
             2. * (c / w) * Math.sin(0.5 * w * len) * Math.cos(0.5 * w * len + alpha),
             2. * (c / w) * Math.sin(0.5 * w * len) * Math.sin(0.5 * w * len + alpha),
             w * len + 0.5 * Math.pow(c / w, 2.) * (w * len - Math.sin(w * len))
         );
-    }
 
-    return [nilMatrix(achievedPoint)];
+    }
+    const trans = nilMatrix(achievedPoint);
+    //console.log(trans.elements[12], trans.elements[13], trans.elements[14]);
+    return [trans];
 }
 
 function translateFacingByVector(v) {
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
     const len = v.length();
 
-    if (len == 0.0) {
+    if (len === 0.0) {
         return new THREE.Matrix4();
     } else {
-        var normalizedV = v.clone().normalize();
+        const normalizedV = v.clone().normalize();
         let alpha = 0.;
-        if (normalizedV.x * normalizedV.y != 0.) {
+        if (normalizedV.x * normalizedV.y !== 0.) {
             //alpha = Math.atan2(normalizedV.y, normalizedV.x);
         }
         const w = normalizedV.z;
@@ -101,27 +112,27 @@ function translateFacingByVector(v) {
             0, 0, 1, 0,
             0, 0, 0, 1
         );
-        // console.log('R');
-        // console.log(R);
+        // console.log('R',R)
+
         // Matrix fixing the rotation around the unit tangent vector
         // Change of basis matrix
         let P = new THREE.Matrix4().set(
-            c, 0, -w, 0,
-            0, 1, 0, 0,
-            w, 0, c, 0,
-            0, 0, 0, 1
+            c, 0., -w, 0.,
+            0., 1., 0., 0.,
+            w, 0., c, 0.,
+            0., 0., 0., 1.
         );
-        // console.log('P');
-        //console.log(P);
+        // console.log('P',P);
+
         // Rotation
         let S = new THREE.Matrix4().set(
             1, 0, 0, 0,
-            0, Math.cos(0.5 * len), -Math.sin(0.5 * len), 0,
+            0, Math.cos(0.5 * len), Math.sin(0.5 * len), 0,
             0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
             0, 0, 0, 1
         );
-        //console.log('S');
-        //console.log(S);
+        //console.log('S',S);
+
         let Pinv = new THREE.Matrix4();
         Pinv.getInverse(P);
 
@@ -140,6 +151,7 @@ function translateFacingByVector(v) {
         );
 
         return Ralpha.multiply(R).multiply(P).multiply(S).multiply(Pinv).multiply(RalphaInv);
+        //return new THREE.Matrix4();
 
     }
 
@@ -208,12 +220,12 @@ function fixOutsideCentralCell(boost) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var createGenerators = function () { /// generators for the tiling by cubes. 
-    var gen0 = new THREE.Matrix4().set(1.);
-    var gen1 = new THREE.Matrix4().set(1.);
-    var gen2 = new THREE.Matrix4().set(1.);
-    var gen3 = new THREE.Matrix4().set(1.);
-    var gen4 = new THREE.Matrix4().set(1.);
-    var gen5 = new THREE.Matrix4().set(1.);
+    var gen0 = new THREE.Matrix4();
+    var gen1 = new THREE.Matrix4();
+    var gen2 = new THREE.Matrix4();
+    var gen3 = new THREE.Matrix4();
+    var gen4 = new THREE.Matrix4();
+    var gen5 = new THREE.Matrix4();
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -250,9 +262,7 @@ var initGeometry = function () {
 var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3
     var lp = Origin.clone();
     applyIsom(lp, translateByVector(pos));
-    // console.log(translateByVector(pos));
     lightPositions.push(lp);
-    //console.log(lp);
     lightIntensities.push(colorInt);
 }
 

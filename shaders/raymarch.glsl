@@ -106,7 +106,7 @@ vec4 geomNormalize(vec4 u){
 
 mat4 nilMatrix(vec4 p) {
     // return the Heisenberg isometry sending the origin to p
-    //this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
+    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
     return mat4(
         1., 0., -p.y/2., 0.,
         0.,1., p.x/2., 0.,
@@ -120,19 +120,12 @@ mat4 nilMatrixInv(vec4 p) {
         1., 0., p.y/2., 0.,
         0.,1., -p.x/2., 0.,
         0.,0.,1.,0.,
-        -p.x,-p.y,-p.z,1.);  
-    
-//    return mat4(
-//    1., 0., 0., -p.x,
-//    0., 1., 0., -p.y,
-//    0., 0., 1., -p.z,
-//    0., 0., 0., 1.
-//    );
+        -p.x,-p.y,-p.z,1.);
 }
 
 float fakeHeight(float z) {
     // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinat is the argument)
+    // (whose z coordinate is the argument)
     
     if (z < sqrt(6.)){
         return z;
@@ -150,16 +143,7 @@ float fakeHeight(float z) {
 // fake distance
 float geomDistance(vec4 p, vec4 q){
     mat4 isomInv = nilMatrixInv(p);
-  /*)  mat4 isomInv = mat4(
-        1., 0., 0., -p.x,
-        0., 1., 0., -p.y,
-        0., 0., 1., -p.z,
-        0., 0., 0., 1.
-    );
-    */
-   // vec4 qTemp = vec4(q.xyz, 1.0);
-   vec4 qOrigin = isomInv*q;
- //  vec4 qOrigin = vec4 ( q.x-p.x, q.y-p.y, q.z-p.z+0.5*(p.y*q.x-p.x*q.y),1);
+    vec4 qOrigin = isomInv*q;
     // we now need the distance between the origin and p
     float rho = sqrt(pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.));
     float h = fakeHeight(qOrigin.z);
@@ -377,8 +361,7 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
     }
 
     // move back to p
-    return achievedFromOrigin;
-    //return isom * achievedFromOrigin;
+    return isom * achievedFromOrigin;
 }
 
 //get unit tangent vec at endpt of geodesic
@@ -642,6 +625,9 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     globalDepth = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
+//        hitWhich = 5;
+//        debugColor = abs(rO.xyz);
+//        break;
         
         float globalDist = globalSceneSDF(globalEndPoint);
         if (globalDist < EPSILON){
