@@ -32,8 +32,8 @@ var Origin = new THREE.Vector4(0, 0, 0, 1);
 //----------------------------------------------------------------------
 
 
-function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-
+function reduceBoostError(boost) {
+    // A priori nothing to do, since we are working in R^3 (with the Nil metric)
 }
 
 
@@ -43,6 +43,7 @@ function reduceBoostError(boost) { // for H^3, this is gramSchmidt
 
 
 function nilMatrix(v) {
+    // the matrix realizing the left translation by v = (x,y,z)
     return new THREE.Matrix4().set(
         1., 0., 0., v.x,
         0., 1., 0., v.y,
@@ -52,6 +53,7 @@ function nilMatrix(v) {
 }
 
 function nilMatrixInv(v) {
+    // the inverse of the matrix realizing the left translation by v = (x,y,z)
     return new THREE.Matrix4().set(
         1., 0., 0., -v.x,
         0., 1., 0., -v.y,
@@ -86,7 +88,6 @@ function translateByVector(v) {
 
     }
     const trans = nilMatrix(achievedPoint);
-    //console.log(trans.elements[12], trans.elements[13], trans.elements[14]);
     return [trans];
 }
 
@@ -154,10 +155,7 @@ function translateFacingByVector(v) {
         );
 
         return Ralpha.multiply(R).multiply(P).multiply(S).multiply(Pinv).multiply(RalphaInv);
-        //return new THREE.Matrix4();
-
     }
-
 }
 
 //----------------------------------------------------------------------
@@ -222,13 +220,41 @@ function fixOutsideCentralCell(boost) {
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
-var createGenerators = function () { /// generators for the tiling by cubes. 
-    var gen0 = new THREE.Matrix4();
-    var gen1 = new THREE.Matrix4();
-    var gen2 = new THREE.Matrix4();
-    var gen3 = new THREE.Matrix4();
-    var gen4 = new THREE.Matrix4();
-    var gen5 = new THREE.Matrix4();
+var createGenerators = function () { /// generators for the tiling by cubes.
+    var aux0 = nilMatrix(new THREE.Vector3(1., 0., 0.));
+    var aux1 = nilMatrixInv(new THREE.Vector3(1., 0., 0.));
+    var aux2 = nilMatrix(new THREE.Vector3(0., 1., 0.));
+    var aux3 = nilMatrixInv(new THREE.Vector3(0., 1., 0.));
+    var aux4 = nilMatrix(new THREE.Vector3(0., 0., 1.));
+    var aux5 = nilMatrixInv(new THREE.Vector3(0., 0., 1.));
+
+    // var aux4 = new THREE.Matrix4().set(
+    //     1., 0, 0, 0,
+    //     0, 1., 0, 0,
+    //     0, 0, 1., 1.,
+    //     0, 0, 0, 1.
+    // );
+    //
+    // var aux5 = new THREE.Matrix4().set(
+    //     1., 0, 0, 0,
+    //     0, 1., 0, 0,
+    //     0, 0, 1., -1.,
+    //     0, 0, 0, 1.
+    // );
+
+
+    var gen0 = [aux0];
+    var gen1 = [aux1];
+    var gen2 = [aux2];
+    var gen3 = [aux3];
+    var gen4 = [aux4];
+    var gen5 = [aux5];
+    /*var gen0 = translateByVector(new THREE.Vector3(1., 0., 0.));
+    var gen1 = translateByVector(new THREE.Vector3(-1., 0., 0.));
+    var gen2 = translateByVector(new THREE.Vector3(0., 1., 0.));
+    var gen3 = translateByVector(new THREE.Vector3(0., -1., 0.));
+    var gen4 = translateByVector(new THREE.Vector3(0., 0., 1.));
+    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1.));*/
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 

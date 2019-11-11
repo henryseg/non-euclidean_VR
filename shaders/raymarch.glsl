@@ -14,34 +14,38 @@ BEGIN FRAGMENT
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
-//--------------------------------------------------------------------
-// Hyperbolic Functions
-//--------------------------------------------------------------------
-/*float cosh(float x){
-    float eX = exp(x);
-    return (0.5 * (eX + 1.0/eX));
-}
-
-float acosh(float x){ //must be more than 1
-    return log(x + sqrt(x*x-1.0));
-}
-
-float sinh(float x){
-    float eX = exp(x);
-    return (0.5 * (eX - 1.0/eX));
-}*/
-
-
 //--------------------------------------------
-//GEOM DEPENDENT
+//AUXILIARY
 //--------------------------------------------
+
+const float PI = 3.1415926538;
+
+
+// According to the doc, atan is not defined whenever x = 0
+// We fix this here
+float fixedatan(float y, float x) {
+    if (x == 0.0 && y == 0.0) {
+        return 0.0;
+    }
+    else if (x == 0.0) {
+        if (y > 0.0) {
+            return 0.5* PI;
+        }
+        else {
+            return -0.5*PI;
+        }
+    }
+    else {
+        return atan(y, x);
+    }
+}
 
 
 //--------------------------------------------
 //Geometry Constants
 //--------------------------------------------
 //  const float HalfCube=0.6584789485;
-//const float modelHalfCube = 0.5773502692;
+const float modelHalfCube = 0.5;
 // const float vertexSphereSize = -0.98;//In this case its a horosphere
 // const float centerSphereSize = 1.55* HalfCube;
 //This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
@@ -67,15 +71,6 @@ const mat4 rightBoost = mat4(1., 0, 0, 0.032,
 //Geometry of the Models
 //--------------------------------------------
 
-//Hyperboloid Model
-/*
-float geomDot(vec4 u, vec4 v){
-    return -u.x*v.x - u.y*v.y - u.z*v.z + u.w*v.w;// Lorentz Dot
-}//this is the NEGATIVE of the standard dot product so that now the vectors on the hyperboloid have positive lengths.
-
-float geomNorm(vec4 v){
-    return sqrt(abs(geomDot(v, v)));
-}*/
 
 float tangDot(vec4 p, vec4 u, vec4 v){
     // metric tensor at the point p
@@ -154,7 +149,8 @@ float geomDistance(vec4 p, vec4 q){
 
 //light intensity as a fn of distance
 float lightAtt(float dist){
-    return dist;//fake linear falloff (correct is below)
+    //fake linear falloff
+    return dist;
 
 }
 
@@ -204,7 +200,7 @@ mat4 tangBasis(vec4 p){
 //AUXILIARY FUNCTIONS FOR TANGENT DIRECTION
 //-------------------------------------------------------
 
-const float PI = 3.1415926538;
+
 const int MAX_NEWTON_INIT_ITERATION = 10000;
 const int MAX_NEWTON_ITERATION = 10000;
 const float MAX_NEWTON_INIT_TOLERANCE = 0.1;
@@ -366,12 +362,9 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
     vec4 vOrigin = isomInv * v;
 
     // solve the problem !
-    float c = sqrt(pow(vOrigin.x, 2.)+ pow(vOrigin.y, 2.));
-    float alpha = 0.;
-    if (vOrigin.x*vOrigin.y != 0.0){
-        alpha = atan(vOrigin.y, vOrigin.x);
-    }
     float w = vOrigin.z;
+    float c = sqrt(1. - w * w);
+    float alpha = fixedatan(vOrigin.y, vOrigin.x);
 
     vec4 achievedFromOrigin = vec4(0., 0., 0., 1.);
 
@@ -380,8 +373,8 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
     }
     else {
         achievedFromOrigin = vec4(
-        2. * (c/w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
-        2. * (c/w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
+        2. * (c / w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
+        2. * (c / w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
         w * dist + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
         1.
         );
@@ -389,6 +382,8 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
 
     // move back to p
     return isom * achievedFromOrigin;
+
+    //return p + dist * v;
 }
 
 //get unit tangent vec at endpt of geodesic
@@ -402,12 +397,9 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
     vec4 vOrigin = isomInv * v;
 
     // solve the problem !
-    float c = sqrt(pow(vOrigin.x, 2.)+ pow(vOrigin.y, 2.));
-    float alpha = 0.;
-    if (vOrigin.x*vOrigin.y != 0.0){
-        alpha = atan(vOrigin.y, vOrigin.x);
-    }
     float w = vOrigin.z;
+    float c = sqrt(1. - w * w);
+    float alpha = fixedatan(vOrigin.y, vOrigin.x);
 
     vec4 achievedFromOrigin = vec4(0.);
 
@@ -415,7 +407,7 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
         achievedFromOrigin = dist * vOrigin;
     }
     else {
-        vec4 achievedFromOrigin = vec4(
+        achievedFromOrigin = vec4(
         c * cos(w * dist + alpha),
         c * sin(w * dist + alpha),
         w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * dist) / w,
@@ -425,6 +417,7 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
 
     // move back to p
     return isom * achievedFromOrigin;
+    //return v;
 }
 
 
@@ -435,30 +428,27 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
 // Our standard horosphere will have a center in the direction of lightPoint
 // and go through the origin. Negative offsets will shrink it.
 
-/* float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
-   return log(-geomDot(samplePoint, lightPoint)) - offset;
- }*/
 
 //im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
 
 float sphereSDF(vec4 samplePoint, vec4 center, float radius){
     // more precise computation
-    float fakeDist = geomDistance(samplePoint, center);
-    if (fakeDist > 10. * radius) {
-        return fakeDist - radius;
-    }
-    else {
-        return exactDist(samplePoint, center) - radius;
-    }
-    //return geomDistance(samplePoint, center) - radius;
+    //    float fakeDist = geomDistance(samplePoint, center);
+    //    if (fakeDist > 10. * radius) {
+    //        return fakeDist - radius;
+    //    }
+    //    else {
+    //        return exactDist(samplePoint, center) - radius;
+    //    }
+    return geomDistance(samplePoint, center) - radius;
 }
 
 
 //NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
 
-/*float centerSDF(vec4 samplePoint, vec4 cornerPoint, float size){
-    return sphereSDF(samplePoint, cornerPoint,size);
-}*/
+float centerSDF(vec4 samplePoint, vec4 center, float radius){
+    return sphereSDF(samplePoint, center, radius);
+}
 
 /*float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
     return  horosphereHSDF(samplePoint, cornerPoint, size);
@@ -511,12 +501,14 @@ uniform mat4 globalObjectBoost;
 //---------------------------------------------------------------------
 //Turn off the local scene
 float localSceneSDF(vec4 samplePoint){
+    vec4 center = vec4(0, 0, 0., 1.);
+    return centerSDF(samplePoint, center, 0.01);
     /*float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
     float final = -min(vertexSphere,sphere); //unionSDF
-    */
     return 101.;
+    */
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -554,32 +546,30 @@ float globalSceneSDF(vec4 samplePoint){
 // We should update some of the variable names.
 //TURN OFF TELEPORTING
 bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
-    vec4 modelSamplePoint = modelProject(samplePoint);//project to klein
-    /*
-  if(modelSamplePoint.x > modelHalfCube){
-    fixMatrix = invGenerators[0];
-    return true;
-  }
-  if(modelSamplePoint.x < -modelHalfCube){
-    fixMatrix = invGenerators[1];
-    return true;
-  }
-  if(modelSamplePoint.y > modelHalfCube){
-    fixMatrix = invGenerators[2];
-    return true;
-  }
-  if(modelSamplePoint.y < -modelHalfCube){
-    fixMatrix = invGenerators[3];
-    return true;
-  }
-  if(modelSamplePoint.z > modelHalfCube){
-    fixMatrix = invGenerators[4];
-    return true;
-  }
-  if(modelSamplePoint.z < -modelHalfCube){
-    fixMatrix = invGenerators[5];
-    return true;
-  }*/
+    //    if (samplePoint.x > modelHalfCube){
+    //        fixMatrix = invGenerators[0];
+    //        return true;
+    //    }
+    //    if (samplePoint.x < -modelHalfCube){
+    //        fixMatrix = invGenerators[1];
+    //        return true;
+    //    }
+    //    if (samplePoint.y > modelHalfCube){
+    //        fixMatrix = invGenerators[2];
+    //        return true;
+    //    }
+    //    if (samplePoint.y < -modelHalfCube){
+    //        fixMatrix = invGenerators[3];
+    //        return true;
+    //    }
+    if (samplePoint.z > modelHalfCube){
+        fixMatrix = invGenerators[4];
+        return true;
+    }
+    if (samplePoint.z < -modelHalfCube){
+        fixMatrix = invGenerators[5];
+        return true;
+    }
     return false;
 }
 
@@ -619,61 +609,64 @@ vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyper
 void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
     float globalDepth = MIN_DIST;
-    float localDepth = globalDepth;
+    float localDepth = MIN_DIST;
     vec4 localrO = rO;
     vec4 localrD = rD;
     totalFixMatrix = mat4(1.0);
 
-    // Trace the local scene, then the global scene:
-    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
 
-        if (isOutsideCell(localEndPoint, fixMatrix)){
-            totalFixMatrix = fixMatrix * totalFixMatrix;
+    // Trace the local scene, then the global scene:
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
             vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
-            localrO = geomNormalize(fixMatrix * localEndPoint);
-            //the version working in the other geometries is below.
-            //there is flickering when we do this in hyperbolic space though
-            //  localrD = tangNormalize(fixMatrix * localEndTangent);
-            //used to be this, which seems to work better here
-            localrD=tangDirection(localrO, fixMatrix * localEndTangent);
-            localDepth = MIN_DIST;
-        }
-        else {
-            float localDist = min(0.5, localSceneSDF(localEndPoint));
-            if (localDist < EPSILON){
-                hitWhich = 3;
-                sampleEndPoint = localEndPoint;
-                sampleTangentVector = tangToGeodesicEndpt(localrO, localrD, localDepth);
-                break;
+
+            if (isOutsideCell(localEndPoint, fixMatrix)){
+                totalFixMatrix = fixMatrix * totalFixMatrix;
+                localrO = fixMatrix * localEndPoint;
+                localrD = fixMatrix * localEndTangent;
+                localDepth = MIN_DIST;
+                //if (fixMatrix[3].z != 0.) {
+                //hitWhich = 5;
+                //debugColor = vec3(abs(localrO.y), 0., 0.);
+                //debugColor = vec3(0.75)*abs(fixMatrix[3].xyz)+ 0.25*fixMatrix[3].xyz;
+                //break;
+                //}
             }
-            localDepth += localDist;
-            globalDepth += localDist;
+            else {
+                //float localDist = min(1., localSceneSDF(localEndPoint));
+                float localDist = localSceneSDF(localEndPoint);
+                //float localDist = 0.1;
+                if (localDist < EPSILON){
+                    hitWhich = 3;
+                    sampleEndPoint = localEndPoint;
+                    sampleTangentVector = localEndTangent;
+                    break;
+                }
+                localDepth += localDist;
+                globalDepth += localDist;
+            }
         }
-    }
+
 
     // Set for localDepth to our new max tracing distance:
-    localDepth = min(globalDepth, MAX_DIST);
-    globalDepth = MIN_DIST;
-    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
-        //        hitWhich = 5;
-        //        debugColor = abs(rO.xyz);
-        //        break;
-
-        float globalDist = globalSceneSDF(globalEndPoint);
-        if (globalDist < EPSILON){
-            // hitWhich has now been set
-            totalFixMatrix = mat4(1.0);
-            sampleEndPoint = globalEndPoint;
-            sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
-            return;
-        }
-        globalDepth += globalDist;
-        if (globalDepth >= localDepth){
-            break;
-        }
-    }
+    //    localDepth = min(globalDepth, MAX_DIST);
+    //    globalDepth = MIN_DIST;
+    //    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+    //        vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
+    //
+    //        float globalDist = globalSceneSDF(globalEndPoint);
+    //        if (globalDist < EPSILON){
+    //            // hitWhich has now been set
+    //            totalFixMatrix = mat4(1.0);
+    //            sampleEndPoint = globalEndPoint;
+    //            sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
+    //            return;
+    //        }
+    //        globalDepth += globalDist;
+    //        if (globalDepth >= localDepth){
+    //            break;
+    //        }
+    //    }
 }
 
 
