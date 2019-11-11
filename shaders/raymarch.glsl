@@ -12,6 +12,8 @@ END VERTEX
 BEGIN FRAGMENT
 
 
+vec3 debugColor = vec3(0.5,0,0.8);
+
 //--------------------------------------------------------------------
 // Hyperbolic Functions
 //--------------------------------------------------------------------
@@ -125,6 +127,7 @@ mat4 nilMatrixInv(vec4 p) {
 float fakeHeight(float z) {
     // fake height : bound on the height of the ball centered at the origin passing through p
     // (whose z coordinat is the argument)
+    
     if (z < sqrt(6.)){
         return z;
     }
@@ -140,13 +143,15 @@ float fakeHeight(float z) {
 // measure the distance between two points in the geometry
 // fake distance
 float geomDistance(vec4 u, vec4 v){
-    mat4 isom = nilMatrixInv(u);
-    vec4 p = isom * v;
+    mat4 isomInv = nilMatrixInv(u);
+    //vec4 p = isomInv * v;
+    vec4 p = v-u;
     // we now need the distance between the origin and p
     float rho = sqrt(pow(p.x, 2.)+pow(p.y, 2.));
     float h = fakeHeight(p.z);
-
+    
     return pow(0.2*pow(rho, 4.) + 0.8*pow(h, 4.), 0.25);
+    //return length(v-u);
 }
 
 //light intensity as a fn of distance
@@ -312,7 +317,10 @@ vec4 tangDirection(vec4 p, vec4 q){
         }
         float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
         float c = sqrt(1.0  - pow(w, 2.0));
-        float alpha = atan(qOrigin.y, qOrigin.x) - 0.5 * phi;
+        float alpha = - 0.5 * phi;
+        if(qOrigin.x*qOrigin.y != 0.0){
+            alpha = alpha + atan(qOrigin.y, qOrigin.x);
+        }
         float t = phi / w;
 
         resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
@@ -334,16 +342,19 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
 
     // solve the problem !
     float c = sqrt(pow(vOrigin.x, 2.)+ pow(vOrigin.y, 2.));
-    float alpha = atan(vOrigin.y, vOrigin.x);
+    float alpha = 0.;
+    if(vOrigin.x*vOrigin.y != 0.0){
+        alpha = atan(vOrigin.y, vOrigin.x);
+    }
     float w = vOrigin.z;
 
-    vec4 achievedFromOrigin = vec4(0.);
+    vec4 achievedFromOrigin = vec4(0.,0.,0.,1.);
 
     if (w == 0.0){
-        achievedFromOrigin = dist * vOrigin;
+        achievedFromOrigin = vec4(dist * vOrigin.xyz,1);
     }
     else {
-        vec4 achievedFromOrigin = vec4(
+        achievedFromOrigin = vec4(
         2. * (c/w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
         2. * (c/w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
         w * dist + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
@@ -352,7 +363,8 @@ vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
     }
 
     // move back to p
-    return isom * achievedFromOrigin;
+    return achievedFromOrigin;
+    //return isom * achievedFromOrigin;
 }
 
 //get unit tangent vec at endpt of geodesic
@@ -367,7 +379,10 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
 
     // solve the problem !
     float c = sqrt(pow(vOrigin.x, 2.)+ pow(vOrigin.y, 2.));
-    float alpha = atan(vOrigin.y, vOrigin.x);
+    float alpha = 0.;
+    if(vOrigin.x*vOrigin.y != 0.0){
+        alpha = atan(vOrigin.y, vOrigin.x);
+    }
     float w = vOrigin.z;
 
     vec4 achievedFromOrigin = vec4(0.);
@@ -479,9 +494,16 @@ float globalSceneSDF(vec4 samplePoint){
     //Light Objects
     for (int i=0; i<4; i++){
         float objDist;
-        objDist = sphereSDF(absoluteSamplePoint, lightPositions[i], 1.0/(10.0*lightIntensities[i].w));
+        objDist = sphereSDF(absoluteSamplePoint, lightPositions[i],
+        0.1                   
+ //1.0/(10.0*lightIntensities[i].w)
+                           );
         distance = min(distance, objDist);
         if (distance < EPSILON){
+            //hitWhich = 5;
+            //debugColor = lightPositions[i].xyz;
+            //return distance;
+            
             hitWhich = 1;
             globalLightColor = lightIntensities[i];
             return distance;
@@ -535,6 +557,7 @@ bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
 //--------------------------------------------
 //GEOM DEPENDENT
 //--------------------------------------------
+
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -605,6 +628,7 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     globalDepth = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
+        
         float globalDist = globalSceneSDF(globalEndPoint);
         if (globalDist < EPSILON){
             // hitWhich has now been set
@@ -718,6 +742,9 @@ void main(){
     else if (hitWhich == 1){ // global lights
         gl_FragColor = vec4(globalLightColor.rgb, 1.0);
         return;
+    }
+    else if(hitWhich == 5){ //debug
+      gl_FragColor = vec4(debugColor, 1.0);
     }
     else { // objects
         N = estimateNormal(sampleEndPoint);

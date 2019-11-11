@@ -67,8 +67,11 @@ function translateByVector(v) {
     } else if (dx == 0 && dy == 0) {
         achievedPoint = v;
     } else {
-        const normalizedV = v / len;
-        const alpha = Math.atan2(normalizedV.y, normalizedV.x);
+        var normalizedV = v.clone().setLength(1.);
+        let alpha = 0.;
+        if (dx != 0 || dy != 0) {
+            alpha = Math.atan2(normalizedV.y, normalizedV.x);
+        }
         const c = Math.sqrt(Math.pow(normalizedV.x, 2.) + Math.pow(normalizedV.y, 2.));
         const w = normalizedV.z;
 
@@ -241,7 +244,9 @@ var initGeometry = function () {
 var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3
     var lp = Origin.clone();
     applyIsom(lp, translateByVector(pos));
+    // console.log(translateByVector(pos));
     lightPositions.push(lp);
+    console.log(lp);
     lightIntensities.push(colorInt);
 }
 
