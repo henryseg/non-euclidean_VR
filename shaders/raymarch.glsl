@@ -85,11 +85,11 @@ float fixedatan(float y, float x) {
 const float modelHalfCube = 0.5;
 // const float vertexSphereSize = -0.98;//In this case its a horosphere
 // const float centerSphereSize = 1.55* HalfCube;
-//This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-//  const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+
+// This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
+// const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
 const float globalObjectRadius = 0.2;
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-
 
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
 const mat4 leftBoost = mat4(1., 0, 0, -0.032,
@@ -123,18 +123,6 @@ float tangDot(tangVector u, tangVector v){
     return dot(u.dir.xyz, g * v.dir.xyz);
 
 }
-
-
-//float tangDot(vec4 p, vec4 u, vec4 v){
-//    // metric tensor at the point p
-//    mat3 g = mat3(
-//    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
-//    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
-//    0.5 * p.y, -0.5 * p.x, 1.
-//    );
-//    return dot(u.xyz, g * v.xyz);
-//
-//}
 
 
 //Project onto the Klein Model
@@ -197,8 +185,13 @@ float geomDistance(vec4 p, vec4 q){
     float h = fakeHeight(qOrigin.z);
 
     return pow(0.2*pow(rho, 4.) + 0.8*pow(h, 4.), 0.25);
-    //return length(v-u);
 }
+
+// overload of the previous function in case we work with tangent vectors
+float geomDistance(tangVector u, tangVector v){
+    return geomDistance(u.pos, v.pos);
+}
+
 
 //light intensity as a fn of distance
 float lightAtt(float dist){
@@ -357,96 +350,106 @@ float exactDist(vec4 p, vec4 q) {
     }
 }
 
+// overload of the previous function in case we work with tangent vectors
+float exactDist(tangVector u, tangVector v){
+    return exactDist(u.pos, v.pos);
+}
+
 //-------------------------------------------------------
 //GEODESIC FUNCTIONS
 //-------------------------------------------------------
 
-// return the tangent vector at p pointing toward q
-tangVector tangDirection(vec4 p, vec4 q){
-    return tangVector(p, normalize(q-p));
-    //return normalize(q-p);
-}
+
+const bool FAKE_LIGHT = true;
 
 
-
-/*
 //give the unit tangent to geodesic connecting p to q.
-vec4 tangDirection(vec4 p, vec4 q){
 
-    // move p to the origin
-    mat4 isom = nilMatrix(p);
-    mat4 isomInv = nilMatrixInv(p);
+tangVector tangDirection(vec4 p, vec4 q){
 
-    vec4 qOrigin = isomInv*q;
-
-    // solve the problem !
-    float x3 = qOrigin.z;
-
-    vec4 resOrigin = vec4(0.);
-    if (x3 == 0.0) {
-        // probably not needed (case contained in the next one)
-        resOrigin =  vec4(qOrigin.z, qOrigin.y, qOrigin.z, 0.0);
+    if (FAKE_LIGHT) {
+        // if FAKE_LIGHT is ON, just return the Euclidean vector pointing to q
+        return tangVector(p, normalize(q-p));
     }
+
     else {
-        float rho = sqrt(pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.));
-        float phi = newton_zero(rho, x3);
-        float sign = 0.0;
-        if (x3 > 0.0) {
-            sign = 1.0;
+        // move p to the origin
+        mat4 isom = nilMatrix(p);
+        mat4 isomInv = nilMatrixInv(p);
+
+        vec4 qOrigin = isomInv*q;
+
+        // solve the problem !
+        float x3 = qOrigin.z;
+
+        vec4 resOrigin = vec4(0.);
+        if (x3 == 0.0) {
+            // probably not needed (case contained in the next one)
+            resOrigin =  vec4(qOrigin.z, qOrigin.y, qOrigin.z, 0.0);
         }
         else {
-            sign = -1.0;
-        }
-        float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
-        float c = sqrt(1.0  - pow(w, 2.0));
-        float alpha = - 0.5 * phi;
-        if (qOrigin.x*qOrigin.y != 0.0){
-            alpha = alpha + atan(qOrigin.y, qOrigin.x);
-        }
-        //float t = phi / w;
+            float rho = sqrt(pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.));
+            float phi = newton_zero(rho, x3);
+            float sign = 0.0;
+            if (x3 > 0.0) {
+                sign = 1.0;
+            }
+            else {
+                sign = -1.0;
+            }
+            float w = sign * 2.0 * sin(0.5 * phi) / sqrt(pow(rho, 2.0) + 4.0 * pow(sin(0.5 * phi), 2.0));
+            float c = sqrt(1.0  - pow(w, 2.0));
+            float alpha = - 0.5 * phi;
+            if (qOrigin.x*qOrigin.y != 0.0){
+                alpha = alpha + atan(qOrigin.y, qOrigin.x);
+            }
+            //float t = phi / w;
 
-        //resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
-        resOrigin =  vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
+            //resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
+            resOrigin =  vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
+        }
+
+        // move back to p
+        return tangVector(p, isom * resOrigin);
     }
-
-    // move back to p
-    // return isom * resOrigin;
-    retunrn tangVector(p, isom * resOrigin);
 }
-*/
+
+// overload of the previous function in case we work with tangent vectors
+tangVector tangDirection(tangVector u, tangVector v){
+    return tangDirection(u.pos, v.pos);
+}
 
 
 // Follow the geodesic flow during a time dist
-tangVector geodesicEndpt(tangVector tv, float dist){
+tangVector flow(tangVector tv, float dist){
 
     // move p to the origin
     mat4 isom = nilMatrix(tv.pos);
     mat4 isomInv = nilMatrixInv(tv.pos);
 
     // vector at the origin
-    vec4 vOrigin = isomInv * tv.dir;
+    tangVector tvOrigin = translate(isomInv, tv);
 
     // solve the problem !
-    float w = vOrigin.z;
+    float w = tvOrigin.dir.z;
     float c = sqrt(1. - w * w);
-    float alpha = fixedatan(vOrigin.y, vOrigin.x);
+    float alpha = fixedatan(tvOrigin.dir.y, tvOrigin.dir.x);
 
-    vec4 achievedPosFromOrigin = vec4(0., 0., 0., 1.);
-    vec4 achievedDirFromOrigin = vec4(0.);
+    tangVector achievedFromOrigin = tangVector(ORIGIN, vec4(0.));
 
     if (w == 0.){
-        achievedPosFromOrigin = vec4(dist * vOrigin.xyz, 1);
-        achievedDirFromOrigin =  vOrigin;
+        achievedFromOrigin.pos = vec4(dist * tvOrigin.dir.xyz, 1);
+        achievedFromOrigin.dir =  tvOrigin.dir;
     }
     else {
-        achievedPosFromOrigin = vec4(
+        achievedFromOrigin.pos = vec4(
         2. * (c / w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
         2. * (c / w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
         w * dist + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
         1.
         );
 
-        achievedDirFromOrigin = vec4(
+        achievedFromOrigin.dir = vec4(
         c * cos(w * dist + alpha),
         c * sin(w * dist + alpha),
         w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * dist) / w,
@@ -455,7 +458,7 @@ tangVector geodesicEndpt(tangVector tv, float dist){
     }
 
     // move back to p
-    tangVector res = tangVector(isom * achievedPosFromOrigin, isom * achievedDirFromOrigin);
+    tangVector res = translate(isom, achievedFromOrigin);
     return res;
 }
 
@@ -628,10 +631,12 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
     vec4 basis_y = theBasis[1];
     vec4 basis_z = theBasis[2];
     if (hitWhich != 3){ //global light scene
-        //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
-        tangVector tv = tangVector(p, basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
+        tangVector tv = tangVector(p,
+        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
         basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z)));
+        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
+        );
         return tangNormalize(tv);
 
     }
@@ -639,7 +644,8 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
         tangVector tv = tangVector(p,
         basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
         basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z)));
+        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
+        );
         return tangNormalize(tv);
     }
 }
@@ -660,7 +666,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        tangVector localEndtv = geodesicEndpt(localtv, localDepth);
+        tangVector localEndtv = flow(localtv, localDepth);
 
         if (isOutsideCell(localEndtv.pos, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
@@ -686,7 +692,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        tangVector globalEndtv = geodesicEndpt(tv, globalDepth);
+        tangVector globalEndtv = flow(tv, globalDepth);
 
         float globalDist = globalSceneSDF(globalEndtv.pos);
         if (globalDist < EPSILON){
@@ -768,22 +774,22 @@ void main(){
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-    //    if (isStereo == 1){
-    //        if (isLeft){
-    //            rayOrigin = leftBoost * rayOrigin;
-    //            rayDirV = leftBoost * rayDirV;
-    //        }
-    //        else {
-    //            rayOrigin = rightBoost * rayOrigin;
-    //            rayDirV = rightBoost * rayDirV;
-    //        }
-    //    }
+    if (isStereo == 1){
+        // REMI : to be checked...
+        if (isLeft){
+            rayDir = translate(leftBoost, rayDir);
+        }
+        else {
+            rayDir = translate(rightBoost, rayDir);
+        }
+    }
 
     //camera position must be translated in hyperboloid -----------------------
 
-    //    if (isStereo == 1){
-    //        rayOrigin = facing * rayOrigin;
-    //    }
+    if (isStereo == 1){
+        // REMI : Not sur about what is this
+        rayDir = tangVector(facing * rayDir.pos, rayDir.dir);
+    }
 
     //rayOrigin = currentBoost * rayOrigin;
     rayDir = applyMatrixToDir(facing, rayDir);
