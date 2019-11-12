@@ -433,14 +433,14 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
 
 float sphereSDF(vec4 samplePoint, vec4 center, float radius){
     // more precise computation
-    //    float fakeDist = geomDistance(samplePoint, center);
-    //    if (fakeDist > 10. * radius) {
-    //        return fakeDist - radius;
-    //    }
-    //    else {
-    //        return exactDist(samplePoint, center) - radius;
-    //    }
-    return geomDistance(samplePoint, center) - radius;
+    float fakeDist = geomDistance(samplePoint, center);
+    if (fakeDist > 10. * radius) {
+        return fakeDist - radius;
+    }
+    else {
+        return exactDist(samplePoint, center) - radius;
+    }
+    //return geomDistance(samplePoint, center) - radius;
 }
 
 
@@ -463,11 +463,11 @@ float centerSDF(vec4 samplePoint, vec4 center, float radius){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS = 48;
+const int MAX_MARCHING_STEPS = 100;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 100.0;
+const float MAX_DIST = 1000.0;
 const float EPSILON = 0.0001;
-const float fov = 90.0;
+const float fov = 120.0;
 
 
 //--------------------------------------------
@@ -502,13 +502,14 @@ uniform mat4 globalObjectBoost;
 //Turn off the local scene
 float localSceneSDF(vec4 samplePoint){
     vec4 center = vec4(0, 0, 0., 1.);
-    return centerSDF(samplePoint, center, 0.01);
-    /*float sphere = centerSDF(samplePoint, ORIGIN, centerSphereSize);
-    float vertexSphere = 0.0;
-    vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
-    float final = -min(vertexSphere,sphere); //unionSDF
-    return 101.;
-    */
+    //return centerSDF(samplePoint, center, 0.1);
+    float sphere = centerSDF(samplePoint, ORIGIN, 0.65);
+    //float vertexSphere = 0.0;
+    //vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
+    float final = -sphere;
+    return final;
+
+
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -546,22 +547,22 @@ float globalSceneSDF(vec4 samplePoint){
 // We should update some of the variable names.
 //TURN OFF TELEPORTING
 bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
-    //    if (samplePoint.x > modelHalfCube){
-    //        fixMatrix = invGenerators[0];
-    //        return true;
-    //    }
-    //    if (samplePoint.x < -modelHalfCube){
-    //        fixMatrix = invGenerators[1];
-    //        return true;
-    //    }
-    //    if (samplePoint.y > modelHalfCube){
-    //        fixMatrix = invGenerators[2];
-    //        return true;
-    //    }
-    //    if (samplePoint.y < -modelHalfCube){
-    //        fixMatrix = invGenerators[3];
-    //        return true;
-    //    }
+    if (samplePoint.x > modelHalfCube){
+        fixMatrix = invGenerators[0];
+        return true;
+    }
+    if (samplePoint.x < -modelHalfCube){
+        fixMatrix = invGenerators[1];
+        return true;
+    }
+    if (samplePoint.y > modelHalfCube){
+        fixMatrix = invGenerators[2];
+        return true;
+    }
+    if (samplePoint.y < -modelHalfCube){
+        fixMatrix = invGenerators[3];
+        return true;
+    }
     if (samplePoint.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
@@ -633,8 +634,8 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
                 //}
             }
             else {
-                //float localDist = min(1., localSceneSDF(localEndPoint));
-                float localDist = localSceneSDF(localEndPoint);
+                float localDist = min(0.1, localSceneSDF(localEndPoint));
+                //float localDist = localSceneSDF(localEndPoint);
                 //float localDist = 0.1;
                 if (localDist < EPSILON){
                     hitWhich = 3;
