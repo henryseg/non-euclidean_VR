@@ -664,8 +664,13 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // NOT GEOM DEPENDENT
 //--------------------------------------------
 
+
+// variation on the raymarch algorithm
+// now each step is the march is made from the previously achieved position (useful later for Sol).
+
 void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     mat4 fixMatrix;
+    float marchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     tangVector tv = rayDir;
@@ -675,45 +680,98 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        tangVector localEndtv = flow(localtv, localDepth);
+        localtv = flow(localtv, marchStep);
 
-        if (isOutsideCell(localEndtv, fixMatrix)){
+        if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
-            localtv = translate(fixMatrix, localEndtv);
-            localDepth = MIN_DIST;
+            localtv = translate(fixMatrix, localtv);
+            marchStep = MIN_DIST;
         }
         else {
-            float localDist = min(0.1, localSceneSDF(localEndtv.pos));
+            float localDist = min(0.1, localSceneSDF(localtv.pos));
             if (localDist < EPSILON){
                 hitWhich = 3;
-                sampletv = localEndtv;
+                sampletv = localtv;
                 break;
             }
-            localDepth += localDist;
+            marchStep = localDist;
             globalDepth += localDist;
         }
     }
 
-
     // Set for localDepth to our new max tracing distance:
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
+    marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        tangVector globalEndtv = flow(tv, globalDepth);
+        tv = flow(tv, marchStep);
 
-        float globalDist = globalSceneSDF(globalEndtv.pos);
+        float globalDist = globalSceneSDF(tv.pos);
         if (globalDist < EPSILON){
             // hitWhich has now been set
             totalFixMatrix = mat4(1.0);
-            sampletv = globalEndtv;
+            sampletv = tv;
             return;
         }
+        marchStep = globalDist;
         globalDepth += globalDist;
         if (globalDepth >= localDepth){
             break;
         }
     }
 }
+
+
+//void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
+//    mat4 fixMatrix;
+//    float globalDepth = MIN_DIST;
+//    float localDepth = MIN_DIST;
+//    tangVector tv = rayDir;
+//    tangVector localtv = rayDir;
+//    totalFixMatrix = mat4(1.0);
+//
+//
+//    // Trace the local scene, then the global scene:
+//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//        tangVector localEndtv = flow(localtv, localDepth);
+//
+//        if (isOutsideCell(localEndtv, fixMatrix)){
+//            totalFixMatrix = fixMatrix * totalFixMatrix;
+//            localtv = translate(fixMatrix, localEndtv);
+//            localDepth = MIN_DIST;
+//        }
+//        else {
+//            float localDist = min(0.1, localSceneSDF(localEndtv.pos));
+//            if (localDist < EPSILON){
+//                hitWhich = 3;
+//                sampletv = localEndtv;
+//                break;
+//            }
+//            localDepth += localDist;
+//            globalDepth += localDist;
+//        }
+//    }
+//
+//
+//    // Set for localDepth to our new max tracing distance:
+//    localDepth = min(globalDepth, MAX_DIST);
+//    globalDepth = MIN_DIST;
+//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//        tangVector globalEndtv = flow(tv, globalDepth);
+//
+//        float globalDist = globalSceneSDF(globalEndtv.pos);
+//        if (globalDist < EPSILON){
+//            // hitWhich has now been set
+//            totalFixMatrix = mat4(1.0);
+//            sampletv = globalEndtv;
+//            return;
+//        }
+//        globalDepth += globalDist;
+//        if (globalDepth >= localDepth){
+//            break;
+//        }
+//    }
+//}
 
 
 //--------------------------------------------------------------------
