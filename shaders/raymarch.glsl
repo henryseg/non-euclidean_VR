@@ -626,17 +626,9 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
                 localrO = fixMatrix * localEndPoint;
                 localrD = fixMatrix * localEndTangent;
                 localDepth = MIN_DIST;
-                //if (fixMatrix[3].z != 0.) {
-                //hitWhich = 5;
-                //debugColor = vec3(abs(localrO.y), 0., 0.);
-                //debugColor = vec3(0.75)*abs(fixMatrix[3].xyz)+ 0.25*fixMatrix[3].xyz;
-                //break;
-                //}
             }
             else {
                 float localDist = min(0.1, localSceneSDF(localEndPoint));
-                //float localDist = localSceneSDF(localEndPoint);
-                //float localDist = 0.1;
                 if (localDist < EPSILON){
                     hitWhich = 3;
                     sampleEndPoint = localEndPoint;
@@ -650,24 +642,24 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
 
 
     // Set for localDepth to our new max tracing distance:
-    //    localDepth = min(globalDepth, MAX_DIST);
-    //    globalDepth = MIN_DIST;
-    //    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-    //        vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
-    //
-    //        float globalDist = globalSceneSDF(globalEndPoint);
-    //        if (globalDist < EPSILON){
-    //            // hitWhich has now been set
-    //            totalFixMatrix = mat4(1.0);
-    //            sampleEndPoint = globalEndPoint;
-    //            sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
-    //            return;
-    //        }
-    //        globalDepth += globalDist;
-    //        if (globalDepth >= localDepth){
-    //            break;
-    //        }
-    //    }
+        localDepth = min(globalDepth, MAX_DIST);
+        globalDepth = MIN_DIST;
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
+
+            float globalDist = globalSceneSDF(globalEndPoint);
+            if (globalDist < EPSILON){
+                // hitWhich has now been set
+                totalFixMatrix = mat4(1.0);
+                sampleEndPoint = globalEndPoint;
+                sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
+                return;
+            }
+            globalDepth += globalDist;
+            if (globalDepth >= localDepth){
+                break;
+            }
+        }
 }
 
 
