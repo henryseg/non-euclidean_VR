@@ -19,12 +19,38 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 // STRUCT
 //--------------------------------------------
 
-
 struct tangVector {
 // data type for a tangent vector
-    vec4 pos;   // position on the manifold
-    vec4 dir;   // vector in the tangent space at the point pos
+    vec4 pos;// position on the manifold
+    vec4 dir;// vector in the tangent space at the point pos
 };
+
+tangVector add(tangVector v1, tangVector v2) {
+    // add two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return tangVector(v1.pos, v1.dir + v2.dir);
+}
+
+tangVector sub(tangVector v1, tangVector v2) {
+    // subtract two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return tangVector(v1.pos, v1.dir - v2.dir);
+}
+
+tangVector scalarMult(float a, tangVector v) {
+    // scalar multiplication of a tangent vector
+    return tangVector(v.pos, a * v.dir);
+}
+
+tangVector translate(mat4 isom, tangVector v) {
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(isom * v.pos, isom * v.dir);
+}
+
+tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
+    // apply the given given matrix only to the direction of the tangent vector
+    return tangVector(v.pos, matrix* v.dir);
+}
 
 //--------------------------------------------
 //AUXILIARY
@@ -83,16 +109,32 @@ const mat4 rightBoost = mat4(1., 0, 0, 0.032,
 //--------------------------------------------
 
 
-float tangDot(vec4 p, vec4 u, vec4 v){
-    // metric tensor at the point p
+float tangDot(tangVector u, tangVector v){
+    // dot product between two vectors in the tangent bundle
+    // we assume that the underlying points are the same
+    // TODO : make a test if the underlying points are indeed the same ?
+    vec4 p = u.pos;
     mat3 g = mat3(
     0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
     -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
     0.5 * p.y, -0.5 * p.x, 1.
     );
-    return dot(u.xyz, g * v.xyz);
+
+    return dot(u.dir.xyz, g * v.dir.xyz);
 
 }
+
+
+//float tangDot(vec4 p, vec4 u, vec4 v){
+//    // metric tensor at the point p
+//    mat3 g = mat3(
+//    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
+//    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
+//    0.5 * p.y, -0.5 * p.x, 1.
+//    );
+//    return dot(u.xyz, g * v.xyz);
+//
+//}
 
 
 //Project onto the Klein Model
@@ -171,18 +213,18 @@ float lightAtt(float dist){
 //--------------------------------------------
 
 //calculate the length of a tangent vector
-float tangNorm(vec4 p, vec4 v){
-    return sqrt(abs(tangDot(p, v, v)));
+float tangNorm(tangVector v){
+    return sqrt(abs(tangDot(v, v)));
 }
 
-//create a unit tangent vector in a given direction
-vec4 tangNormalize(vec4 p, vec4 u){
-    return u/tangNorm(p, u);
+//create a unit tangent vector (in the tangle bundle)
+tangVector tangNormalize(tangVector v){
+    return tangVector(v.pos, v.dir/tangNorm(v));
 }
 
-//cosAng takes in a point p
-float cosAng(vec4 p, vec4 u, vec4 v){
-    return tangDot(p, u, v);
+//cosAng between two vector in the tangent bundle
+float cosAng(tangVector u, tangVector v){
+    return tangDot(u, v);
 }
 
 
@@ -319,8 +361,10 @@ float exactDist(vec4 p, vec4 q) {
 //GEODESIC FUNCTIONS
 //-------------------------------------------------------
 
-vec4 tangDirection(vec4 p, vec4 q){
-    return normalize(q-p);
+// return the tangent vector at p pointing toward q
+tangVector tangDirection(vec4 p, vec4 q){
+    return tangVector(p, normalize(q-p));
+    //return normalize(q-p);
 }
 
 
@@ -366,7 +410,8 @@ vec4 tangDirection(vec4 p, vec4 q){
     }
 
     // move back to p
-    return isom * resOrigin;
+    // return isom * resOrigin;
+    retunrn tangVector(p, isom * resOrigin);
 }
 */
 
@@ -413,7 +458,6 @@ tangVector geodesicEndpt(tangVector tv, float dist){
     tangVector res = tangVector(isom * achievedPosFromOrigin, isom * achievedDirFromOrigin);
     return res;
 }
-
 
 
 //---------------------------------------------------------------------
@@ -468,7 +512,7 @@ const float fov = 120.0;
 //--------------------------------------------
 //Global Variables
 //--------------------------------------------
-vec4 N = ORIGIN;//normal vector
+tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
 vec4 sampleEndPoint = vec4(1, 1, 1, 1);
 vec4 sampleTangentVector = vec4(1, 1, 1, 1);
 vec4 globalLightColor = ORIGIN;
@@ -576,7 +620,7 @@ bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
+tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
     // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
     float newEp = EPSILON * 10.0;
     mat4 theBasis= tangBasis(p);
@@ -584,16 +628,19 @@ vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyper
     vec4 basis_y = theBasis[1];
     vec4 basis_z = theBasis[2];
     if (hitWhich != 3){ //global light scene
-        return tangNormalize(p, //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
-        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        //p+EPSILON*basis_x should be lorentz normalized however it is close enough to be good enough
+        tangVector tv = tangVector(p, basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
         basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
         basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z)));
+        return tangNormalize(tv);
+
     }
     else { //local scene
-        return tangNormalize(p,
+        tangVector tv = tangVector(p,
         basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
         basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
         basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z)));
+        return tangNormalize(tv);
     }
 }
 
@@ -602,12 +649,12 @@ vec4 estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyper
 // NOT GEOM DEPENDENT
 //--------------------------------------------
 
-void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
+void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     mat4 fixMatrix;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
-    tangVector tv = tangVector(rO, rD);
-    tangVector localtv = tangVector(rO, rD);
+    tangVector tv = rayDir;
+    tangVector localtv = rayDir;
     totalFixMatrix = mat4(1.0);
 
 
@@ -661,15 +708,15 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
 // Lighting Functions
 //--------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightIntensity){
+vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
-    vec4 L = tangDirection(SP, TLP);
-    vec4 R = 2.0*cosAng(SP, L, N)*N-L;
+    tangVector L = tangDirection(SP, TLP);
+    tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
-    float nDotL = max(cosAng(SP, N, L), 0.0);
+    float nDotL = max(cosAng(N, L), 0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(cosAng(SP, R, V), 0.0);
+    float rDotV = max(cosAng(R, V), 0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
     //Attenuation - Inverse Square
     float distToLight = geomDistance(SP, TLP);
@@ -681,7 +728,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, vec4 V, vec3 baseColor, vec4 lightI
 vec3 phongModel(mat4 totalFixMatrix){
     vec4 SP = sampleEndPoint;
     vec4 TLP;//translated light position
-    vec4 V = -sampleTangentVector;
+    tangVector V = tangVector(SP, -sampleTangentVector);
     vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
@@ -699,14 +746,15 @@ vec3 phongModel(mat4 totalFixMatrix){
 // Tangent Space Functions
 //--------------------------------------------------------------------
 
-vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
+tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
     if (isStereo == 1){
         resolution.x = resolution.x * 0.5;
         if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
     }
     vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1/tan(radians(fov*0.5));
-    vec4 v =  tangNormalize(ORIGIN, vec4(xy, -z, 0.0));
+    tangVector tv = tangVector(ORIGIN, vec4(xy, -z, 0.0));
+    tangVector v =  tangNormalize(tv);
     return v;
 }
 
@@ -715,35 +763,36 @@ vec4 getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tang
 //--------------------------------------------------------------------
 
 void main(){
-    vec4 rayOrigin = ORIGIN;
+    //vec4 rayOrigin = ORIGIN;
 
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    vec4 rayDirV = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-    if (isStereo == 1){
-        if (isLeft){
-            rayOrigin = leftBoost * rayOrigin;
-            rayDirV = leftBoost * rayDirV;
-        }
-        else {
-            rayOrigin = rightBoost * rayOrigin;
-            rayDirV = rightBoost * rayDirV;
-        }
-    }
+    tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    //    if (isStereo == 1){
+    //        if (isLeft){
+    //            rayOrigin = leftBoost * rayOrigin;
+    //            rayDirV = leftBoost * rayDirV;
+    //        }
+    //        else {
+    //            rayOrigin = rightBoost * rayOrigin;
+    //            rayDirV = rightBoost * rayDirV;
+    //        }
+    //    }
 
     //camera position must be translated in hyperboloid -----------------------
 
-    if (isStereo == 1){
-        rayOrigin = facing * rayOrigin;
-    }
-    rayOrigin = currentBoost * rayOrigin;
-    rayDirV = facing * rayDirV;
-    rayDirV = currentBoost * rayDirV;
+    //    if (isStereo == 1){
+    //        rayOrigin = facing * rayOrigin;
+    //    }
+
+    //rayOrigin = currentBoost * rayOrigin;
+    rayDir = applyMatrixToDir(facing, rayDir);
+    rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
-    raymarch(rayOrigin, rayDirV, totalFixMatrix);
+    raymarch(rayDir, totalFixMatrix);
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
