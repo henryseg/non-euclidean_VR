@@ -473,27 +473,34 @@ tangVector flow(tangVector tv, float dist){
 
 //im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
 
-float sphereSDF(vec4 samplePoint, vec4 center, float radius){
+const bool FAKE_DIST_SPHERE = false;
+
+float sphereSDF(vec4 p, vec4 center, float radius){
     // more precise computation
-    float fakeDist = geomDistance(samplePoint, center);
-    if (fakeDist > 10. * radius) {
+    float fakeDist = geomDistance(p, center);
+
+    if(FAKE_DIST_SPHERE) {
         return fakeDist - radius;
     }
     else {
-        return exactDist(samplePoint, center) - radius;
+        if (fakeDist > 10. * radius) {
+            return fakeDist - radius;
+        }
+        else {
+            return exactDist(p, center) - radius;
+        }
     }
-    //return geomDistance(samplePoint, center) - radius;
 }
 
 
 //NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
 
-float centerSDF(vec4 samplePoint, vec4 center, float radius){
-    return sphereSDF(samplePoint, center, radius);
+float centerSDF(vec4 p, vec4 center, float radius){
+    return sphereSDF(p, center, radius);
 }
 
-/*float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
-    return  horosphereHSDF(samplePoint, cornerPoint, size);
+/*float vertexSDF(vec4 p, vec4 cornerPoint, float size){
+    return  horosphereHSDF(p, cornerPoint, size);
 }*/
 
 
@@ -516,8 +523,7 @@ const float fov = 120.0;
 //Global Variables
 //--------------------------------------------
 tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
-vec4 sampleEndPoint = vec4(1, 1, 1, 1);
-vec4 sampleTangentVector = vec4(1, 1, 1, 1);
+tangVector sampletv = tangVector(vec4(1., 1., 1., 1.), vec4(1., 1., 1., 0.));
 vec4 globalLightColor = ORIGIN;
 int hitWhich = 0;
 //-------------------------------------------
@@ -541,13 +547,13 @@ uniform mat4 globalObjectBoost;
 //---------------------------------------------------------------------
 //Scene Definitions
 //---------------------------------------------------------------------
-//Turn off the local scene
-float localSceneSDF(vec4 samplePoint){
+// Turn off the local scene
+// Local signed distance function : distance from p to an object in the local scene
+float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
-    //return centerSDF(samplePoint, center, 0.1);
-    float sphere = centerSDF(samplePoint, ORIGIN, 0.65);
-    //float vertexSphere = 0.0;
-    //vertexSphere = vertexSDF(abs(samplePoint), modelCubeCorner, vertexSphereSize);
+    float sphere = centerSDF(p, ORIGIN, 0.68);
+    // variation on the preivous one... to be used with fake distance
+    // float sphere = centerSDF(p, ORIGIN, 0.475);
     float final = -sphere;
     return final;
 
@@ -555,17 +561,17 @@ float localSceneSDF(vec4 samplePoint){
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
-float globalSceneSDF(vec4 samplePoint){
-    vec4 absoluteSamplePoint = cellBoost * samplePoint;// correct for the fact that we have been moving
+// Global signed distance function : distance from cellBoost * p to an object in the global scene
+float globalSceneSDF(vec4 p){
+    vec4 absolutep = cellBoost * p;// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
     for (int i=0; i<4; i++){
         float objDist;
         objDist = sphereSDF(
-        absoluteSamplePoint,
+        absolutep,
         lightPositions[i],
-        1.0/(10.0*lightIntensities[i].w
-        )
+        1.0/(10.0*lightIntensities[i].w)
         );
         distance = min(distance, objDist);
         if (distance < EPSILON){
@@ -576,7 +582,7 @@ float globalSceneSDF(vec4 samplePoint){
     }
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absoluteSamplePoint, globalObjectBoost[3], globalObjectRadius);
+    objDist = sphereSDF(absolutep, globalObjectBoost[3], globalObjectRadius);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -585,35 +591,38 @@ float globalSceneSDF(vec4 samplePoint){
 }
 
 
-// This function is intended to be hyp-agnostic.
-// We should update some of the variable names.
-//TURN OFF TELEPORTING
-bool isOutsideCell(vec4 samplePoint, out mat4 fixMatrix){
-    if (samplePoint.x > modelHalfCube){
+// check if the given point p is in the fundamental domain of the lattice.
+bool isOutsideCell(vec4 p, out mat4 fixMatrix){
+    if (p.x > modelHalfCube){
         fixMatrix = invGenerators[0];
         return true;
     }
-    if (samplePoint.x < -modelHalfCube){
+    if (p.x < -modelHalfCube){
         fixMatrix = invGenerators[1];
         return true;
     }
-    if (samplePoint.y > modelHalfCube){
+    if (p.y > modelHalfCube){
         fixMatrix = invGenerators[2];
         return true;
     }
-    if (samplePoint.y < -modelHalfCube){
+    if (p.y < -modelHalfCube){
         fixMatrix = invGenerators[3];
         return true;
     }
-    if (samplePoint.z > modelHalfCube){
+    if (p.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
     }
-    if (samplePoint.z < -modelHalfCube){
+    if (p.z < -modelHalfCube){
         fixMatrix = invGenerators[5];
         return true;
     }
     return false;
+}
+
+// overload of the previous method with tangent vector
+bool isOutsideCell(tangVector v, out mat4 fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
 }
 
 
@@ -668,18 +677,16 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         tangVector localEndtv = flow(localtv, localDepth);
 
-        if (isOutsideCell(localEndtv.pos, fixMatrix)){
+        if (isOutsideCell(localEndtv, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
-            localtv = tangVector(fixMatrix * localEndtv.pos, fixMatrix * localEndtv.dir);
+            localtv = translate(fixMatrix, localEndtv);
             localDepth = MIN_DIST;
-
         }
         else {
             float localDist = min(0.1, localSceneSDF(localEndtv.pos));
             if (localDist < EPSILON){
                 hitWhich = 3;
-                sampleEndPoint = localEndtv.pos;
-                sampleTangentVector = localEndtv.dir;
+                sampletv = localEndtv;
                 break;
             }
             localDepth += localDist;
@@ -698,8 +705,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         if (globalDist < EPSILON){
             // hitWhich has now been set
             totalFixMatrix = mat4(1.0);
-            sampleEndPoint = globalEndtv.pos;
-            sampleTangentVector = globalEndtv.dir;
+            sampletv = globalEndtv;
             return;
         }
         globalDepth += globalDist;
@@ -732,9 +738,9 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
 }
 
 vec3 phongModel(mat4 totalFixMatrix){
-    vec4 SP = sampleEndPoint;
+    vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
-    tangVector V = tangVector(SP, -sampleTangentVector);
+    tangVector V = tangVector(SP, -sampletv.dir);
     vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
@@ -814,7 +820,7 @@ void main(){
         gl_FragColor = vec4(debugColor, 1.0);
     }
     else { // objects
-        N = estimateNormal(sampleEndPoint);
+        N = estimateNormal(sampletv.pos);
         vec3 color;
         color = phongModel(totalFixMatrix);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
