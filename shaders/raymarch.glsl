@@ -308,6 +308,12 @@ float exactDist(vec4 p, vec4 q) {
 //GEODESIC FUNCTIONS
 //-------------------------------------------------------
 
+vec4 tangDirection(vec4 p, vec4 q){
+     return normalize(q-p);
+}
+
+
+/*
 //give the unit tangent to geodesic connecting p to q.
 vec4 tangDirection(vec4 p, vec4 q){
 
@@ -350,6 +356,7 @@ vec4 tangDirection(vec4 p, vec4 q){
     // move back to p
     return isom * resOrigin;
 }
+*/
 
 // Get point at distance dist on the geodesic from u in the direction v (unit tangent vector)
 vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
