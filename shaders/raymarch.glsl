@@ -14,20 +14,31 @@ BEGIN FRAGMENT
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
+
+//--------------------------------------------
+// STRUCT
+//--------------------------------------------
+
+
+struct Ray {
+// data type for a geodesic rayd
+    vec4 pos;// position on the geodesic ray
+    vec4 dir;// direction of the geodesic ray, whihc is assumed to be UNIT vector
+};
+
 //--------------------------------------------
 //AUXILIARY
 //--------------------------------------------
 
 const float PI = 3.1415926538;
 
-
 // According to the doc, atan is not defined whenever x = 0
 // We fix this here
 float fixedatan(float y, float x) {
-    if (x == 0.0 && y == 0.0) {
+    if (x == 0. && y == 0.) {
         return 0.0;
     }
-    else if (x == 0.0) {
+    else if (x == 0.) {
         if (y > 0.0) {
             return 0.5* PI;
         }
@@ -75,9 +86,9 @@ const mat4 rightBoost = mat4(1., 0, 0, 0.032,
 float tangDot(vec4 p, vec4 u, vec4 v){
     // metric tensor at the point p
     mat3 g = mat3(
-    0.25*pow(p.y, 2.) +1., -0.25*p.x*p.y, 0.5*p.y,
-    -0.25*p.x*p.y, 0.25*pow(p.x, 2.)+1., -0.5*p.x,
-    0.5*p.y, -0.5*p.x, 1.
+    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
+    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
+    0.5 * p.y, -0.5 * p.x, 1.
     );
     return dot(u.xyz, g * v.xyz);
 
@@ -309,8 +320,9 @@ float exactDist(vec4 p, vec4 q) {
 //-------------------------------------------------------
 
 vec4 tangDirection(vec4 p, vec4 q){
-     return normalize(q-p);
+    return normalize(q-p);
 }
+
 
 
 /*
@@ -358,63 +370,38 @@ vec4 tangDirection(vec4 p, vec4 q){
 }
 */
 
-// Get point at distance dist on the geodesic from u in the direction v (unit tangent vector)
-vec4 geodesicEndpt(vec4 p, vec4 v, float dist){
+
+// Get ray (pos, dir) at distance dist on the geodesic ray
+Ray geodesicEndpt(Ray ray, float dist){
 
     // move p to the origin
-    mat4 isom = nilMatrix(p);
-    mat4 isomInv = nilMatrixInv(p);
+    mat4 isom = nilMatrix(ray.pos);
+    mat4 isomInv = nilMatrixInv(ray.pos);
 
     // vector at the origin
-    vec4 vOrigin = isomInv * v;
+    vec4 vOrigin = isomInv * ray.dir;
 
     // solve the problem !
     float w = vOrigin.z;
     float c = sqrt(1. - w * w);
     float alpha = fixedatan(vOrigin.y, vOrigin.x);
 
-    vec4 achievedFromOrigin = vec4(0., 0., 0., 1.);
+    vec4 achievedPosFromOrigin = vec4(0., 0., 0., 1.);
+    vec4 achievedDirFromOrigin = vec4(0.);
 
-    if (w == 0.0){
-        achievedFromOrigin = vec4(dist * vOrigin.xyz, 1);
+    if (w == 0.){
+        achievedPosFromOrigin = vec4(dist * vOrigin.xyz, 1);
+        achievedDirFromOrigin =  vOrigin;
     }
     else {
-        achievedFromOrigin = vec4(
+        achievedPosFromOrigin = vec4(
         2. * (c / w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
         2. * (c / w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
         w * dist + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
         1.
         );
-    }
 
-    // move back to p
-    return isom * achievedFromOrigin;
-
-    //return p + dist * v;
-}
-
-//get unit tangent vec at endpt of geodesic
-vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
-
-    // move p to the origin
-    mat4 isom = nilMatrix(p);
-    mat4 isomInv = nilMatrixInv(p);
-
-    // vector at the origin
-    vec4 vOrigin = isomInv * v;
-
-    // solve the problem !
-    float w = vOrigin.z;
-    float c = sqrt(1. - w * w);
-    float alpha = fixedatan(vOrigin.y, vOrigin.x);
-
-    vec4 achievedFromOrigin = vec4(0.);
-
-    if (w == 0.0){
-        achievedFromOrigin = dist * vOrigin;
-    }
-    else {
-        achievedFromOrigin = vec4(
+        achievedDirFromOrigin = vec4(
         c * cos(w * dist + alpha),
         c * sin(w * dist + alpha),
         w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * dist) / w,
@@ -423,9 +410,10 @@ vec4 tangToGeodesicEndpt(vec4 p, vec4 v, float dist){
     }
 
     // move back to p
-    return isom * achievedFromOrigin;
-    //return v;
+    Ray res = Ray(isom * achievedPosFromOrigin, isom * achievedDirFromOrigin);
+    return res;
 }
+
 
 
 //---------------------------------------------------------------------
@@ -618,55 +606,54 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
-    vec4 localrO = rO;
-    vec4 localrD = rD;
+    Ray ray = Ray(rO, rD);
+    Ray localRay = Ray(rO, rD);
     totalFixMatrix = mat4(1.0);
 
 
     // Trace the local scene, then the global scene:
-        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            vec4 localEndPoint = geodesicEndpt(localrO, localrD, localDepth);
-            vec4 localEndTangent = tangToGeodesicEndpt(localrO, localrD, localDepth);
+    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+        Ray localEndPoint = geodesicEndpt(localRay, localDepth);
 
-            if (isOutsideCell(localEndPoint, fixMatrix)){
-                totalFixMatrix = fixMatrix * totalFixMatrix;
-                localrO = fixMatrix * localEndPoint;
-                localrD = fixMatrix * localEndTangent;
-                localDepth = MIN_DIST;
-            }
-            else {
-                float localDist = min(0.1, localSceneSDF(localEndPoint));
-                if (localDist < EPSILON){
-                    hitWhich = 3;
-                    sampleEndPoint = localEndPoint;
-                    sampleTangentVector = localEndTangent;
-                    break;
-                }
-                localDepth += localDist;
-                globalDepth += localDist;
-            }
+        if (isOutsideCell(localEndPoint.pos, fixMatrix)){
+            totalFixMatrix = fixMatrix * totalFixMatrix;
+            localRay = Ray(fixMatrix * localEndPoint.pos, fixMatrix * localEndPoint.dir);
+            localDepth = MIN_DIST;
+
         }
+        else {
+            float localDist = min(0.1, localSceneSDF(localEndPoint.pos));
+            if (localDist < EPSILON){
+                hitWhich = 3;
+                sampleEndPoint = localEndPoint.pos;
+                sampleTangentVector = localEndPoint.dir;
+                break;
+            }
+            localDepth += localDist;
+            globalDepth += localDist;
+        }
+    }
 
 
     // Set for localDepth to our new max tracing distance:
-        localDepth = min(globalDepth, MAX_DIST);
-        globalDepth = MIN_DIST;
-        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            vec4 globalEndPoint = geodesicEndpt(rO, rD, globalDepth);
+    localDepth = min(globalDepth, MAX_DIST);
+    globalDepth = MIN_DIST;
+    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+        Ray globalEndPoint = geodesicEndpt(ray, globalDepth);
 
-            float globalDist = globalSceneSDF(globalEndPoint);
-            if (globalDist < EPSILON){
-                // hitWhich has now been set
-                totalFixMatrix = mat4(1.0);
-                sampleEndPoint = globalEndPoint;
-                sampleTangentVector = tangToGeodesicEndpt(rO, rD, globalDepth);
-                return;
-            }
-            globalDepth += globalDist;
-            if (globalDepth >= localDepth){
-                break;
-            }
+        float globalDist = globalSceneSDF(globalEndPoint.pos);
+        if (globalDist < EPSILON){
+            // hitWhich has now been set
+            totalFixMatrix = mat4(1.0);
+            sampleEndPoint = globalEndPoint.pos;
+            sampleTangentVector = globalEndPoint.dir;
+            return;
         }
+        globalDepth += globalDist;
+        if (globalDepth >= localDepth){
+            break;
+        }
+    }
 }
 
 
