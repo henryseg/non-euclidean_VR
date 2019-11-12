@@ -20,10 +20,10 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //--------------------------------------------
 
 
-struct Ray {
-// data type for a geodesic rayd
-    vec4 pos;// position on the geodesic ray
-    vec4 dir;// direction of the geodesic ray, whihc is assumed to be UNIT vector
+struct tangVector {
+// data type for a tangent vector
+    vec4 pos;   // position on the manifold
+    vec4 dir;   // vector in the tangent space at the point pos
 };
 
 //--------------------------------------------
@@ -371,15 +371,15 @@ vec4 tangDirection(vec4 p, vec4 q){
 */
 
 
-// Get ray (pos, dir) at distance dist on the geodesic ray
-Ray geodesicEndpt(Ray ray, float dist){
+// Follow the geodesic flow during a time dist
+tangVector geodesicEndpt(tangVector tv, float dist){
 
     // move p to the origin
-    mat4 isom = nilMatrix(ray.pos);
-    mat4 isomInv = nilMatrixInv(ray.pos);
+    mat4 isom = nilMatrix(tv.pos);
+    mat4 isomInv = nilMatrixInv(tv.pos);
 
     // vector at the origin
-    vec4 vOrigin = isomInv * ray.dir;
+    vec4 vOrigin = isomInv * tv.dir;
 
     // solve the problem !
     float w = vOrigin.z;
@@ -410,7 +410,7 @@ Ray geodesicEndpt(Ray ray, float dist){
     }
 
     // move back to p
-    Ray res = Ray(isom * achievedPosFromOrigin, isom * achievedDirFromOrigin);
+    tangVector res = tangVector(isom * achievedPosFromOrigin, isom * achievedDirFromOrigin);
     return res;
 }
 
@@ -606,27 +606,27 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     mat4 fixMatrix;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
-    Ray ray = Ray(rO, rD);
-    Ray localRay = Ray(rO, rD);
+    tangVector tv = tangVector(rO, rD);
+    tangVector localtv = tangVector(rO, rD);
     totalFixMatrix = mat4(1.0);
 
 
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        Ray localEndPoint = geodesicEndpt(localRay, localDepth);
+        tangVector localEndtv = geodesicEndpt(localtv, localDepth);
 
-        if (isOutsideCell(localEndPoint.pos, fixMatrix)){
+        if (isOutsideCell(localEndtv.pos, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
-            localRay = Ray(fixMatrix * localEndPoint.pos, fixMatrix * localEndPoint.dir);
+            localtv = tangVector(fixMatrix * localEndtv.pos, fixMatrix * localEndtv.dir);
             localDepth = MIN_DIST;
 
         }
         else {
-            float localDist = min(0.1, localSceneSDF(localEndPoint.pos));
+            float localDist = min(0.1, localSceneSDF(localEndtv.pos));
             if (localDist < EPSILON){
                 hitWhich = 3;
-                sampleEndPoint = localEndPoint.pos;
-                sampleTangentVector = localEndPoint.dir;
+                sampleEndPoint = localEndtv.pos;
+                sampleTangentVector = localEndtv.dir;
                 break;
             }
             localDepth += localDist;
@@ -639,14 +639,14 @@ void raymarch(vec4 rO, vec4 rD, out mat4 totalFixMatrix){
     localDepth = min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        Ray globalEndPoint = geodesicEndpt(ray, globalDepth);
+        tangVector globalEndtv = geodesicEndpt(tv, globalDepth);
 
-        float globalDist = globalSceneSDF(globalEndPoint.pos);
+        float globalDist = globalSceneSDF(globalEndtv.pos);
         if (globalDist < EPSILON){
             // hitWhich has now been set
             totalFixMatrix = mat4(1.0);
-            sampleEndPoint = globalEndPoint.pos;
-            sampleTangentVector = globalEndPoint.dir;
+            sampleEndPoint = globalEndtv.pos;
+            sampleTangentVector = globalEndtv.dir;
             return;
         }
         globalDepth += globalDist;
