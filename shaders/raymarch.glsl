@@ -868,7 +868,8 @@ void main(){
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
-        gl_FragColor = vec4(0.2);
+        //0.2 is medium gray, 0 is black
+        gl_FragColor = vec4(0.01);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -879,9 +880,12 @@ void main(){
         gl_FragColor = vec4(debugColor, 1.0);
     }
     else { // objects
-         float x=sampletv.pos[0]/sampletv.pos[3];
-      float y=sampletv.pos[1]/sampletv.pos[3];
-      float z=sampletv.pos[2]/sampletv.pos[3];
+        
+    //color the object based on its position in the cube
+    //interpreting the cube as the color cube
+      float x=sampletv.pos[0];
+      float y=sampletv.pos[1];
+      float z=sampletv.pos[2];
       x = x * sqrt3;
       y = y * sqrt3;
       z = z * sqrt3;
@@ -891,11 +895,11 @@ void main(){
       vec3 pixelcolor = vec3(x,y,z);
 
         
-        N = estimateNormal(sampletv.pos);
-        vec3 color;
-        color = phongModel(totalFixMatrix,0.2*pixelcolor);
+      N = estimateNormal(sampletv.pos);
+      vec3 color;
+      color = phongModel(totalFixMatrix,0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        gl_FragColor = vec4(0.8*color+0.2, 1.0);
+      gl_FragColor = vec4(0.9*color+0.1, 1.0);
     }
 }
 END FRAGMENT
