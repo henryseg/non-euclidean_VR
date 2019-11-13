@@ -218,7 +218,7 @@ var initObjects = function () {
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
-var finishInit = function(fShader){
+var setupMaterial = function(fShader){
   g_material = new THREE.ShaderMaterial({
     uniforms:{
 
@@ -242,23 +242,5 @@ var finishInit = function(fShader){
     fragmentShader: fShader,
     transparent:true
   });
-
-  g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
-
-  //Setup a "quad" to render on-------------------------
-  var geom = new THREE.BufferGeometry();
-  var vertices = new Float32Array([
-    -1.0, -1.0, 0.0,
-     1.0, -1.0, 0.0,
-     1.0,  1.0, 0.0,
-
-    -1.0, -1.0, 0.0,
-     1.0,  1.0, 0.0,
-    -1.0,  1.0, 0.0
-  ]);
-  geom.addAttribute('position',new THREE.BufferAttribute(vertices,3));
-  mesh = new THREE.Mesh(geom, g_material);
-  scene.add(mesh);
-  animate();
 }
 

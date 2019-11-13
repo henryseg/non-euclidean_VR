@@ -61,10 +61,7 @@ var init = function() {
     g_phoneOrient = [null, null, null];
 
     loadShaders();
-    //------------------------------------------------------
-    //Let's get rendering
-    //------------------------------------------------------
-    // animate();
+    stats = new Stats(); stats.showPanel(1); stats.showPanel(2); stats.showPanel(0); document.body.appendChild(stats.dom);
 }
 
 var mainFrag;
@@ -73,8 +70,25 @@ var loadShaders = function(){ //Since our shader is made up of strings we can co
   var loader = new THREE.FileLoader();
   loader.setResponseType('text');
   loader.load('shaders/raymarch.glsl',function(main){
-      mainFrag = main;
-      finishInit(main);
+    mainFrag = main;
+    setupMaterial(main);
+    g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+
+    //Setup a "quad" to render on-------------------------
+    var geom = new THREE.BufferGeometry();
+    var vertices = new Float32Array([
+        -1.0, -1.0, 0.0,
+         1.0, -1.0, 0.0,
+         1.0,  1.0, 0.0,
+
+        -1.0, -1.0, 0.0,
+         1.0,  1.0, 0.0,
+        -1.0,  1.0, 0.0
+        ]);
+    geom.addAttribute('position',new THREE.BufferAttribute(vertices,3));
+    mesh = new THREE.Mesh(geom, g_material);
+    scene.add(mesh);
+    animate();
     });
 }
 
@@ -83,11 +97,11 @@ var loadShaders = function(){ //Since our shader is made up of strings we can co
 // Where our scene actually renders out to screen
 //-------------------------------------------------------
 var animate = function(){
-  // stats.begin();
+  stats.begin();
   g_controls.update();
   THREE.VRController.update();
   g_effect.render(scene, camera, animate);
-  // stats.end();
+  stats.end();
 }
 
 //-------------------------------------------------------
