@@ -1,7 +1,5 @@
 // console.log(m) prints column by column, which is not what you expect...
-
 // v.applyMatrix4(m) does m*v
-
 // m.multiply(n) does m*n
 
 //----------------------------------------------------------------------
@@ -10,22 +8,6 @@
 var Origin = new THREE.Vector4(0, 0, 0, 1);
 //var cubeHalfWidth = 0.6584789485;
 
-
-//THREE.Vector4.prototype.geomDot = function (v) {
-// return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
-//}
-
-//THREE.Vector4.prototype.geomLength = function () {
-//return Math.sqrt(Math.abs(this.geomDot(this)));
-//}
-
-//THREE.Vector4.prototype.geomNormalize = function () {
-// return this.divideScalar(this.geomLength());
-//}
-
-/*function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acosh(v.w);
-}*/
 
 //----------------------------------------------------------------------
 //	Matrix Operations

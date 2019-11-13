@@ -1,51 +1,53 @@
 #version 300 es
 out vec4 out_FragColor;
 
-vec3 debugColor = vec3(0.5, 0, 0.8);
+
+//--------------------------------------------
+// PARAMETERS
+//--------------------------------------------
+
+/*
+
+Some parameters that can be changed to change the scence
+
+*/
+
+const bool FAKE_LIGHT = true;
+const bool FAKE_DIST_SPHERE = false;
+const float globalObjectRadius = 0.2;
 
 
 //--------------------------------------------
-// STRUCT
-//--------------------------------------------
-
-struct tangVector {
-// data type for a tangent vector
-    vec4 pos;// position on the manifold
-    vec4 dir;// vector in the tangent space at the point pos
-};
-
-tangVector add(tangVector v1, tangVector v2) {
-    // add two tangent vector at the same point
-    // TODO : check if the underlyig point are indeed the same ?
-    return tangVector(v1.pos, v1.dir + v2.dir);
-}
-
-tangVector sub(tangVector v1, tangVector v2) {
-    // subtract two tangent vector at the same point
-    // TODO : check if the underlyig point are indeed the same ?
-    return tangVector(v1.pos, v1.dir - v2.dir);
-}
-
-tangVector scalarMult(float a, tangVector v) {
-    // scalar multiplication of a tangent vector
-    return tangVector(v.pos, a * v.dir);
-}
-
-tangVector translate(mat4 isom, tangVector v) {
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(isom * v.pos, isom * v.dir);
-}
-
-tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
-    // apply the given given matrix only to the direction of the tangent vector
-    return tangVector(v.pos, matrix* v.dir);
-}
-
-//--------------------------------------------
-//AUXILIARY
+// "TRUE" CONSTANTS
 //--------------------------------------------
 
 const float PI = 3.1415926538;
+
+const vec4 ORIGIN = vec4(0, 0, 0, 1);
+const float modelHalfCube = 0.5;
+
+//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
+const mat4 leftBoost = mat4(1., 0, 0, -0.032,
+0, 1, 0, 0,
+0, 0, 1, 0,
+-0.032, 0, 0, 1.);
+
+//generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
+const mat4 rightBoost = mat4(1., 0, 0, 0.032,
+0, 1, 0, 0,
+0, 0, 1, 0,
+0.032, 0, 0, 1.);
+
+vec3 debugColor = vec3(0.5, 0, 0.8);
+
+//--------------------------------------------
+// AUXILIARY (BASICS)
+//--------------------------------------------
+
+/*
+Some auxiliary methods
+*/
+
 
 // According to the doc, atan is not defined whenever x = 0
 // We fix this here
@@ -67,174 +69,18 @@ float fixedatan(float y, float x) {
 }
 
 
-//--------------------------------------------
-//Geometry Constants
-//--------------------------------------------
-//  const float HalfCube=0.6584789485;
-const float modelHalfCube = 0.5;
-// const float vertexSphereSize = -0.98;//In this case its a horosphere
-// const float centerSphereSize = 1.55* HalfCube;
-
-// This next part is specific still to hyperbolic space as the horosphere takes an ideal point in the Klein Model as its center.
-// const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
-const float globalObjectRadius = 0.2;
-const vec4 ORIGIN = vec4(0, 0, 0, 1);
-
-//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-const mat4 leftBoost = mat4(1., 0, 0, -0.032,
-0, 1, 0, 0,
-0, 0, 1, 0,
--0.032, 0, 0, 1.);
-
-//generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-const mat4 rightBoost = mat4(1., 0, 0, 0.032,
-0, 1, 0, 0,
-0, 0, 1, 0,
-0.032, 0, 0, 1.);
-
-
-//--------------------------------------------
-//Geometry of the Models
-//--------------------------------------------
-
-
-float tangDot(tangVector u, tangVector v){
-    // dot product between two vectors in the tangent bundle
-    // we assume that the underlying points are the same
-    // TODO : make a test if the underlying points are indeed the same ?
-    vec4 p = u.pos;
-    mat3 g = mat3(
-    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
-    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
-    0.5 * p.y, -0.5 * p.x, 1.
-    );
-
-    return dot(u.dir.xyz, g * v.dir.xyz);
-
-}
-
-
-//Project onto the Klein Model
-vec4 modelProject(vec4 u){
-    return u;
-}
-
-
-//--------------------------------------------
-//Geometry of Space
-//--------------------------------------------
-
-//project point back onto the geometry
-vec4 geomNormalize(vec4 u){
-    return u;
-}
-
-mat4 nilMatrix(vec4 p) {
-    // return the Heisenberg isometry sending the origin to p
-    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
-    return mat4(
-    1., 0., -p.y/2., 0.,
-    0., 1., p.x/2., 0.,
-    0., 0., 1., 0.,
-    p.x, p.y, p.z, 1.);
-}
-
-mat4 nilMatrixInv(vec4 p) {
-    // return the Heisenberg isometry sending the p to origin
-    return mat4(
-    1., 0., p.y/2., 0.,
-    0., 1., -p.x/2., 0.,
-    0., 0., 1., 0.,
-    -p.x, -p.y, -p.z, 1.);
-}
-
-float fakeHeight(float z) {
-    // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinate is the argument)
-
-    if (z < sqrt(6.)){
-        return z;
-    }
-    else if (z < 4.*sqrt(3.)){
-        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1.);
-    }
-    else {
-        return sqrt(2.*sqrt(3.)*z);
-    }
-}
-
-
-// measure the distance between two points in the geometry
-// fake distance
-float geomDistance(vec4 p, vec4 q){
-    mat4 isomInv = nilMatrixInv(p);
-    vec4 qOrigin = isomInv*q;
-    // we now need the distance between the origin and p
-    float rho = sqrt(pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.));
-    float h = fakeHeight(qOrigin.z);
-
-    return pow(0.2*pow(rho, 4.) + 0.8*pow(h, 4.), 0.25);
-}
-
-// overload of the previous function in case we work with tangent vectors
-float geomDistance(tangVector u, tangVector v){
-    return geomDistance(u.pos, v.pos);
-}
-
-
-//light intensity as a fn of distance
-float lightAtt(float dist){
-    //fake linear falloff
-    return dist;
-
-}
-
-
-//--------------------------------------------
-//Geometry of the Tangent Space
-//--------------------------------------------
-
-//calculate the length of a tangent vector
-float tangNorm(tangVector v){
-    return sqrt(abs(tangDot(v, v)));
-}
-
-//create a unit tangent vector (in the tangle bundle)
-tangVector tangNormalize(tangVector v){
-    return tangVector(v.pos, v.dir/tangNorm(v));
-}
-
-//cosAng between two vector in the tangent bundle
-float cosAng(tangVector u, tangVector v){
-    return tangDot(u, v);
-}
-
-
-mat4 tangBasis(vec4 p){
-    /*
-    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
-    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
-    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
-    //make this orthonormal
-    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
-    mat4 theBasis=mat4(0.);
-    */
-
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis=mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
-    return theBasis;
-}
-
 //-------------------------------------------------------
-//AUXILIARY FUNCTIONS FOR TANGENT DIRECTION
+// AUXILIARY (NEWTON METHOD)
 //-------------------------------------------------------
 
+/*
+
+Compute the zeros between 0 and 2*PI of the function f given below
+Usefull for the methods
+- tangDirection
+- exactDistance
+
+*/
 
 const int MAX_NEWTON_INIT_ITERATION = 1000;
 const int MAX_NEWTON_ITERATION = 1000;
@@ -313,6 +159,178 @@ float newton_zero(float rho, float x3) {
 }
 
 
+//--------------------------------------------
+// STRUCT tangVector
+//--------------------------------------------
+
+/*
+  Data type for manipulating points in the tangent bundler
+  A tangVector is given by
+  - pos : a point in the space
+  - dir: a tangent vector at pos
+
+  Implement various basic methods to manipulate them
+*/
+
+struct tangVector {
+    vec4 pos;// position on the manifold
+    vec4 dir;// vector in the tangent space at the point pos
+};
+
+
+//--------------------------------------------
+// LOCAL GEOMETRY
+//--------------------------------------------
+
+/*
+  Methods perfoming computations in the tangent space at a given point.
+*/
+
+tangVector add(tangVector v1, tangVector v2) {
+    // add two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return tangVector(v1.pos, v1.dir + v2.dir);
+}
+
+tangVector sub(tangVector v1, tangVector v2) {
+    // subtract two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return tangVector(v1.pos, v1.dir - v2.dir);
+}
+
+tangVector scalarMult(float a, tangVector v) {
+    // scalar multiplication of a tangent vector
+    return tangVector(v.pos, a * v.dir);
+}
+
+tangVector translate(mat4 isom, tangVector v) {
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(isom * v.pos, isom * v.dir);
+}
+
+tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
+    // apply the given given matrix only to the direction of the tangent vector
+    return tangVector(v.pos, matrix* v.dir);
+}
+
+
+float tangDot(tangVector u, tangVector v){
+    // dot product between two vectors in the tangent bundle
+    // we assume that the underlying points are the same
+    // TODO : make a test if the underlying points are indeed the same ?
+    vec4 p = u.pos;
+    mat3 g = mat3(
+    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
+    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
+    0.5 * p.y, -0.5 * p.x, 1.
+    );
+
+    return dot(u.dir.xyz, g * v.dir.xyz);
+
+}
+
+float tangNorm(tangVector v){
+    // calculate the length of a tangent vector
+    return sqrt(abs(tangDot(v, v)));
+}
+
+tangVector tangNormalize(tangVector v){
+    // create a unit tangent vector (in the tangle bundle)
+    return tangVector(v.pos, v.dir/tangNorm(v));
+}
+
+float cosAng(tangVector u, tangVector v){
+    // cosAng between two vector in the tangent bundle
+    return tangDot(u, v);
+}
+
+
+mat4 tangBasis(vec4 p){
+    // return a basis of vectors at the point p
+
+    /*
+    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
+    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
+    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
+    //make this orthonormal
+    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
+    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
+    mat4 theBasis=mat4(0.);
+    */
+
+    vec4 basis_x = vec4(1., 0., 0., 0.);
+    vec4 basis_y = vec4(0., 1., 0., 0.);
+    vec4 basis_z = vec4(0., 0., 1., 0.);
+    mat4 theBasis=mat4(0.);
+    theBasis[0]=basis_x;
+    theBasis[1]=basis_y;
+    theBasis[2]=basis_z;
+    return theBasis;
+}
+
+
+//--------------------------------------------
+// GLOBAL GEOMETRY
+//--------------------------------------------
+
+/*
+  Methods computing ``global'' objects
+*/
+
+
+mat4 nilMatrix(vec4 p) {
+    // return the Heisenberg isometry sending the origin to p
+    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
+    return mat4(
+    1., 0., -p.y/2., 0.,
+    0., 1., p.x/2., 0.,
+    0., 0., 1., 0.,
+    p.x, p.y, p.z, 1.);
+}
+
+mat4 nilMatrixInv(vec4 p) {
+    // return the Heisenberg isometry sending the p to origin
+    return mat4(
+    1., 0., p.y/2., 0.,
+    0., 1., -p.x/2., 0.,
+    0., 0., 1., 0.,
+    -p.x, -p.y, -p.z, 1.);
+}
+
+float fakeHeight(float z) {
+    // fake height : bound on the height of the ball centered at the origin passing through p
+    // (whose z coordinate is the argument)
+
+    if (z < sqrt(6.)){
+        return z;
+    }
+    else if (z < 4.*sqrt(3.)){
+        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1.);
+    }
+    else {
+        return sqrt(2.*sqrt(3.)*z);
+    }
+}
+
+float fakeDistance(vec4 p, vec4 q){
+    // measure the distance between two points in the geometry
+    // fake distance
+
+    mat4 isomInv = nilMatrixInv(p);
+    vec4 qOrigin = isomInv*q;
+    // we now need the distance between the origin and p
+    float rho = sqrt(pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.));
+    float h = fakeHeight(qOrigin.z);
+
+    return pow(0.2*pow(rho, 4.) + 0.8*pow(h, 4.), 0.25);
+}
+
+float fakeDistance(tangVector u, tangVector v){
+    // overload of the previous function in case we work with tangent vectors
+    return fakeDistance(u.pos, v.pos);
+}
+
+
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
     mat4 isomInv = nilMatrixInv(p);
@@ -339,22 +357,16 @@ float exactDist(vec4 p, vec4 q) {
     }
 }
 
-// overload of the previous function in case we work with tangent vectors
+
 float exactDist(tangVector u, tangVector v){
+    // overload of the previous function in case we work with tangent vectors
     return exactDist(u.pos, v.pos);
 }
 
-//-------------------------------------------------------
-//GEODESIC FUNCTIONS
-//-------------------------------------------------------
-
-
-const bool FAKE_LIGHT = true;
-
-
-//give the unit tangent to geodesic connecting p to q.
 
 tangVector tangDirection(vec4 p, vec4 q){
+    // return the unit tangent to geodesic connecting p to q.
+    // if FAKE_LIGHT is true, use the Euclidean metric for the computation (straight lines).
 
     if (FAKE_LIGHT) {
         // if FAKE_LIGHT is ON, just return the Euclidean vector pointing to q
@@ -403,14 +415,16 @@ tangVector tangDirection(vec4 p, vec4 q){
     }
 }
 
-// overload of the previous function in case we work with tangent vectors
+
 tangVector tangDirection(tangVector u, tangVector v){
+    // overload of the previous function in case we work with tangent vectors
     return tangDirection(u.pos, v.pos);
 }
 
 
-// Follow the geodesic flow during a time dist
-tangVector flow(tangVector tv, float dist){
+
+tangVector flow(tangVector tv, float t){
+    // follow the geodesic flow during a time t
 
     // move p to the origin
     mat4 isom = nilMatrix(tv.pos);
@@ -427,21 +441,21 @@ tangVector flow(tangVector tv, float dist){
     tangVector achievedFromOrigin = tangVector(ORIGIN, vec4(0.));
 
     if (w == 0.){
-        achievedFromOrigin.pos = vec4(dist * tvOrigin.dir.xyz, 1);
+        achievedFromOrigin.pos = vec4(t * tvOrigin.dir.xyz, 1);
         achievedFromOrigin.dir =  tvOrigin.dir;
     }
     else {
         achievedFromOrigin.pos = vec4(
-        2. * (c / w) * sin(0.5 * w * dist) * cos(0.5 * w * dist + alpha),
-        2. * (c / w) * sin(0.5 * w * dist) * sin(0.5 * w * dist + alpha),
-        w * dist + 0.5 * pow(c / w, 2.) * (w * dist - sin(w * dist)),
+        2. * (c / w) * sin(0.5 * w * t) * cos(0.5 * w * t + alpha),
+        2. * (c / w) * sin(0.5 * w * t) * sin(0.5 * w * t + alpha),
+        w * t + 0.5 * pow(c / w, 2.) * (w * t - sin(w * t)),
         1.
         );
 
         achievedFromOrigin.dir = vec4(
-        c * cos(w * dist + alpha),
-        c * sin(w * dist + alpha),
-        w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * dist) / w,
+        c * cos(w * t + alpha),
+        c * sin(w * t + alpha),
+        w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * t) / w,
         0.
         );
     }
@@ -452,45 +466,67 @@ tangVector flow(tangVector tv, float dist){
 }
 
 
+//--------------------------------------------
+//Geometry of the Models
+//--------------------------------------------
+
+
+//Project onto the Klein Model
+vec4 modelProject(vec4 u){
+    return u;
+}
+
+
+//--------------------------------------------
+//Geometry of Space
+//--------------------------------------------
+
+//project point back onto the geometry
+vec4 geomNormalize(vec4 u){
+    return u;
+}
+
+
+
+//-------------------------------------------------------
+// LIGHT
+//-------------------------------------------------------
+//light intensity as a fn of distance
+float lightAtt(float dist){
+    //fake linear falloff
+    return dist;
+
+}
+
+
 //---------------------------------------------------------------------
 //Raymarch Primitives
 //---------------------------------------------------------------------
 
 
-const bool FAKE_DIST_SPHERE = false;
-
 float sphereSDF(vec4 p, vec4 center, float radius){
     // more precise computation
-    float fakeDist = geomDistance(p, center);
+    float fakeDist = fakeDistance(p, center);
 
     if (FAKE_DIST_SPHERE) {
         return fakeDist - radius;
     }
     else {
-        /* if (fakeDist > 10. * radius) {
-             return fakeDist - radius;
-         }
-         else {*/
-        return exactDist(p, center) - radius;
-        // }
+        if (fakeDist > 10. * radius) {
+            return fakeDist - radius;
+        }
+        else {
+            return exactDist(p, center) - radius;
+        }
     }
 }
 
-
-//NEXT: We are going to determine which of these functions gets used for building the cube (deleting centers/corners)
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
 }
 
-/*float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return  horosphereHSDF(p, cornerPoint, size);
-}*/
 
-
-//--------------------------------------------
-//NOT GEOM DEPENDENT
-//--------------------------------------------
 
 
 //--------------------------------------------
@@ -522,7 +558,7 @@ uniform mat4 facing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;
 //--------------------------------------------
-//Lighting Variables & Global Object Variables
+// Lighting Variables & Global Object Variables
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
@@ -530,19 +566,16 @@ uniform mat4 globalObjectBoost;
 
 
 //---------------------------------------------------------------------
-//Scene Definitions
+// Scene Definitions
 //---------------------------------------------------------------------
 // Turn off the local scene
 // Local signed distance function : distance from p to an object in the local scene
+
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
     float sphere = centerSDF(p, ORIGIN, 0.68);
-    // variation on the preivous one... to be used with fake distance
-    // float sphere = centerSDF(p, ORIGIN, 0.475);
     float final = -sphere;
     return final;
-
-
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -774,7 +807,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     float rDotV = max(cosAng(R, V), 0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
     //Attenuation - Inverse Square
-    float distToLight = geomDistance(SP, TLP);
+    float distToLight = fakeDistance(SP, TLP);
     float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
     //Compute final color
     return att*((diffuse*baseColor) + specular);
