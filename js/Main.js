@@ -92,7 +92,6 @@ var loadShaders = function(){ //Since our shader is made up of strings we can co
     });
 }
 
-
 //-------------------------------------------------------
 // Where our scene actually renders out to screen
 //-------------------------------------------------------

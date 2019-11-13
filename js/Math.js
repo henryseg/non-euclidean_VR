@@ -188,15 +188,12 @@ var initGeometry = function () {
     invGensMatrices = unpackage(invGens, 0);
 }
 
-
-
 var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3
     var lp = Origin.clone();
     applyIsom(lp, translateByVector(pos));
     lightPositions.push(lp);
     lightIntensities.push(colorInt);
 }
-
 
 //DEFINE THE LIGHT COLORS
 var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);

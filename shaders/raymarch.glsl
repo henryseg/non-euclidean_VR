@@ -1,54 +1,6 @@
 #version 300 es
 
 out vec4 out_FragColor;
-  //--------------------------------------------------------------------
-  // Hyperbolic Functions
-  //--------------------------------------------------------------------
-  // float cosh(float x){
-  //   float eX = exp(x);
-  //   return (0.5 * (eX + 1.0/eX));
-  // }
-  
-  // float acosh(float x){ //must be more than 1
-  //   return log(x + sqrt(x*x-1.0));
-  // }
-  
-  // float sinh(float x){
-  //   float eX = exp(x);
-  //   return (0.5 * (eX - 1.0/eX));
-  // }
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
 
   //--------------------------------------------
   //GEOM DEPENDENT
