@@ -4,11 +4,13 @@
 // Handle window resize
 //--------------------------------------------------------------------
 var onResize = function(){
-    g_renderer.setSize(window.innerWidth, window.innerHeight);
-    g_raymarch.uniforms.screenResolution.value.x = window.innerWidth;
-    g_raymarch.uniforms.screenResolution.value.y = window.innerHeight;
-}
-window.addEventListener('resize', onResize, false);
+        g_effect.setSize(window.innerWidth, window.innerHeight);
+        if(g_material != null){
+            g_material.uniforms.screenResolution.value.x = window.innerWidth;
+            g_material.uniforms.screenResolution.value.y = window.innerHeight;
+        }
+  }
+  window.addEventListener('resize', onResize, false);
 
 //EVENTS**************************************************************
 //--------------------------------------------------------------------
@@ -33,16 +35,16 @@ document.addEventListener('keyup', function(event){key(event, -1);}, false);
 //--------------------------------------------------------------------
 function resetToMono(){
     g_vr = 0;
-    //set raymarch info
-    g_raymarch.uniforms.isStereo.value = 0;
-    g_raymarch.uniforms.screenResolution.value.x = window.innerWidth;
-    g_raymarch.uniforms.screenResolution.value.y = window.innerHeight;
+    //set material info
+    g_material.uniforms.isStereo.value = 0;
+    g_material.uniforms.screenResolution.value.x = window.innerWidth;
+    g_material.uniforms.screenResolution.value.y = window.innerHeight;
 }
 
 function tap(event, sign){
     if(event.target.id === "vr-icon"){
         if(g_vr === 1) resetToMono();
-        else { g_raymarch.uniforms.isStereo.value = 1; g_vr = 1; }
+        else { g_material.uniforms.isStereo.value = 1; g_vr = 1; }
     }
     g_controls.manualMoveRate[0] += sign;
 }
@@ -56,18 +58,18 @@ document.addEventListener('touchend', function(event){tap(event, -1);}, false);
 function click(event){
     if(event.target.id === "vr-icon"){
         if(g_vr === 1) resetToMono();
-        else{ g_raymarch.uniforms.isStereo.value = 1; g_vr = 1; }
+        else{ g_material.uniforms.isStereo.value = 1; g_vr = 1; }
     }
     // window.addEventListener('deviceorientation', getScreenOrientation);
 
     // enable device orientation, taken from https://medium.com/@leemartin/how-to-request-device-motion-and-orientation-permission-in-ios-13-74fc9d6cd140
-    DeviceOrientationEvent.requestPermission()
-    .then(response => {
-      if (response == 'granted') {
-        window.addEventListener('deviceorientation', getScreenOrientation)
-      }
-    })
-    .catch(console.error)
+    // DeviceOrientationEvent.requestPermission()
+    // .then(response => {
+    //   if (response == 'granted') {
+    //     window.addEventListener('deviceorientation', getScreenOrientation)
+    //   }
+    // })
+    // .catch(console.error)
 }
 document.addEventListener('click', click);
 

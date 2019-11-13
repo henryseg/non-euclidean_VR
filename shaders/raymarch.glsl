@@ -1,16 +1,5 @@
-/// Edit this file, then run the python 3 script "shaderToPPScript.py" to convert it into a javascript file, "ray.js". 
-
-
-//what does this vertex shader do?
-BEGIN VERTEX
-void main()
-{
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xyz, 1.0);
-}
-END VERTEX
-
-BEGIN FRAGMENT
-
+#version 300 es
+out vec4 out_FragColor;
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -466,12 +455,7 @@ tangVector flow(tangVector tv, float dist){
 //---------------------------------------------------------------------
 //Raymarch Primitives
 //---------------------------------------------------------------------
-// A horosphere can be constructed by offseting from a standard horosphere.
-// Our standard horosphere will have a center in the direction of lightPoint
-// and go through the origin. Negative offsets will shrink it.
 
-
-//im assuming the log here measures distance somehow (hence geomdot....log probably related to acosh somehow)
 
 const bool FAKE_DIST_SPHERE = false;
 
@@ -479,16 +463,16 @@ float sphereSDF(vec4 p, vec4 center, float radius){
     // more precise computation
     float fakeDist = geomDistance(p, center);
 
-    if(FAKE_DIST_SPHERE) {
+    if (FAKE_DIST_SPHERE) {
         return fakeDist - radius;
     }
     else {
-       /* if (fakeDist > 10. * radius) {
-            return fakeDist - radius;
-        }
-        else {*/
-            return exactDist(p, center) - radius;
-       // }
+        /* if (fakeDist > 10. * radius) {
+             return fakeDist - radius;
+         }
+         else {*/
+        return exactDist(p, center) - radius;
+        // }
     }
 }
 
@@ -796,11 +780,11 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     return att*((diffuse*baseColor) + specular);
 }
 
-vec3 phongModel(mat4 totalFixMatrix,vec3 color){
+vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     tangVector V = tangVector(SP, -sampletv.dir);
-//    vec3 color = vec3(0.0);
+    //    vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
     //--------------------------------------------------
@@ -869,37 +853,36 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        gl_FragColor = vec4(0.01);
+        out_FragColor = vec4(0.01);
         return;
     }
     else if (hitWhich == 1){ // global lights
-        gl_FragColor = vec4(globalLightColor.rgb, 1.0);
+        out_FragColor = vec4(globalLightColor.rgb, 1.0);
         return;
     }
     else if (hitWhich == 5){ //debug
-        gl_FragColor = vec4(debugColor, 1.0);
+        out_FragColor = vec4(debugColor, 1.0);
     }
     else { // objects
-        
-    //color the object based on its position in the cube
-    //interpreting the cube as the color cube
-      float x=sampletv.pos[0];
-      float y=sampletv.pos[1];
-      float z=sampletv.pos[2];
-      x = x * sqrt3;
-      y = y * sqrt3;
-      z = z * sqrt3;
-      x = (x+1.0)/2.0;
-      y = (y+1.0)/2.0;
-      z = (z+1.0)/2.0;
-      vec3 pixelcolor = vec3(x,y,z);
 
-        
-      N = estimateNormal(sampletv.pos);
-      vec3 color;
-      color = phongModel(totalFixMatrix,0.2*pixelcolor);
+        //color the object based on its position in the cube
+        //interpreting the cube as the color cube
+        float x=sampletv.pos[0];
+        float y=sampletv.pos[1];
+        float z=sampletv.pos[2];
+        x = x * sqrt3;
+        y = y * sqrt3;
+        z = z * sqrt3;
+        x = (x+1.0)/2.0;
+        y = (y+1.0)/2.0;
+        z = (z+1.0)/2.0;
+        vec3 pixelcolor = vec3(x, y, z);
+
+
+        N = estimateNormal(sampletv.pos);
+        vec3 color;
+        color = phongModel(totalFixMatrix, 0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-      gl_FragColor = vec4(0.9*color+0.1, 1.0);
+        out_FragColor = vec4(0.9*color+0.1, 1.0);
     }
 }
-END FRAGMENT
