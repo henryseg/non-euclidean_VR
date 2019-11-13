@@ -1,0 +1,9 @@
+# Apple file system
+
+*.DS_Store
+
+# Workspace of Webstorm
+
+.idea/**
+**/.idea/**
+
