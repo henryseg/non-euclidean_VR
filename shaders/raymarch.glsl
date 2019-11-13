@@ -247,10 +247,10 @@ mat4 tangBasis(vec4 p){
 //-------------------------------------------------------
 
 
-const int MAX_NEWTON_INIT_ITERATION = 10000;
-const int MAX_NEWTON_ITERATION = 10000;
-const float MAX_NEWTON_INIT_TOLERANCE = 0.1;
-const float NEWTON_TOLERANCE = 0.01;
+const int MAX_NEWTON_INIT_ITERATION = 1000;
+const int MAX_NEWTON_ITERATION = 1000;
+const float MAX_NEWTON_INIT_TOLERANCE = 0.001;
+const float NEWTON_TOLERANCE = 0.0001;
 
 
 // the function f whose zeros need to be found
@@ -483,12 +483,12 @@ float sphereSDF(vec4 p, vec4 center, float radius){
         return fakeDist - radius;
     }
     else {
-        if (fakeDist > 10. * radius) {
+       /* if (fakeDist > 10. * radius) {
             return fakeDist - radius;
         }
-        else {
+        else {*/
             return exactDist(p, center) - radius;
-        }
+       // }
     }
 }
 
@@ -512,11 +512,12 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS = 100;
+const int MAX_MARCHING_STEPS =  100;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 1000.0;
+const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
 const float fov = 120.0;
+const float sqrt3 = 1.7320508075688772;
 
 
 //--------------------------------------------
@@ -795,11 +796,11 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     return att*((diffuse*baseColor) + specular);
 }
 
-vec3 phongModel(mat4 totalFixMatrix){
+vec3 phongModel(mat4 totalFixMatrix,vec3 color){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     tangVector V = tangVector(SP, -sampletv.dir);
-    vec3 color = vec3(0.0);
+//    vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
     //--------------------------------------------------
@@ -878,9 +879,21 @@ void main(){
         gl_FragColor = vec4(debugColor, 1.0);
     }
     else { // objects
+         float x=sampletv.pos[0]/sampletv.pos[3];
+      float y=sampletv.pos[1]/sampletv.pos[3];
+      float z=sampletv.pos[2]/sampletv.pos[3];
+      x = x * sqrt3;
+      y = y * sqrt3;
+      z = z * sqrt3;
+      x = (x+1.0)/2.0;
+      y = (y+1.0)/2.0;
+      z = (z+1.0)/2.0;
+      vec3 pixelcolor = vec3(x,y,z);
+
+        
         N = estimateNormal(sampletv.pos);
         vec3 color;
-        color = phongModel(totalFixMatrix);
+        color = phongModel(totalFixMatrix,0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
         gl_FragColor = vec4(0.8*color+0.2, 1.0);
     }
