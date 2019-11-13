@@ -218,26 +218,47 @@ var initObjects = function () {
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
+var finishInit = function(fShader){
+  g_material = new THREE.ShaderMaterial({
+    uniforms:{
 
-var raymarchPass = function (screenRes) {
-    var pass = new THREE.ShaderPass(THREE.ray);
-    pass.uniforms.isStereo.value = g_vr;
-    pass.uniforms.screenResolution.value = screenRes;
-    pass.uniforms.lightIntensities.value = lightIntensities;
-
-    //--- geometry dependent stuff here ---//
+        isStereo:{type:"bool", value: g_vr},
+        screenResolution:{type:"v2", value: g_screenResolution},
+        lightIntensities:{type:"v4", value: lightIntensities},
+        //--- geometry dependent stuff here ---//
     //--- lists of stuff that goes into each invGenerator
-    pass.uniforms.invGenerators.value = invGensMatrices;
+        invGenerators:{type:"m4", value: invGensMatrices},
     //--- end of invGen stuff
-
-    pass.uniforms.currentBoost.value = g_currentBoost[0];
+        currentBoost:{type:"m4", value: g_currentBoost[0]},
     //currentBoost is an array
-    pass.uniforms.facing.value = g_facing;
-    pass.uniforms.cellBoost.value = g_cellBoost[0];
-    pass.uniforms.invCellBoost.value = g_invCellBoost[0];
-    pass.uniforms.lightPositions.value = lightPositions;
-    pass.uniforms.globalObjectBoost.value = globalObjectBoost[0];
-    //--- end of geometry dependent stuff ---//
+        facing:{type:"m4", value: g_facing},
+        cellBoost:{type:"m4", value: g_cellBoost[0]},
+        invCellBoost:{type:"m4", value: g_invCellBoost[0]},
+        lightPositions:{type:"v4", value: lightPositions},
+        globalObjectBoost:{type:"m4", value: globalObjectBoost[0]}
+    },
 
-    return pass;
+    vertexShader: document.getElementById('vertexShader').textContent,
+    fragmentShader: fShader,
+    transparent:true
+  });
+
+  g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+
+  //Setup a "quad" to render on-------------------------
+  var geom = new THREE.BufferGeometry();
+  var vertices = new Float32Array([
+    -1.0, -1.0, 0.0,
+     1.0, -1.0, 0.0,
+     1.0,  1.0, 0.0,
+
+    -1.0, -1.0, 0.0,
+     1.0,  1.0, 0.0,
+    -1.0,  1.0, 0.0
+  ]);
+  geom.addAttribute('position',new THREE.BufferAttribute(vertices,3));
+  mesh = new THREE.Mesh(geom, g_material);
+  scene.add(mesh);
+  animate();
 }
+

@@ -1,38 +1,22 @@
-/// Edit this file, then run the python 3 script "shaderToPPScript.py" to convert it into a javascript file, "ray.js". 
+#version 300 es
 
-
-//what does this vertex shader do?
-BEGIN VERTEX
-  void main()
-  {
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xyz, 1.0);
-  }
-END VERTEX
-
-BEGIN FRAGMENT
-
-
-
-
-
-
-
+out vec4 out_FragColor;
   //--------------------------------------------------------------------
   // Hyperbolic Functions
   //--------------------------------------------------------------------
-  float cosh(float x){
-    float eX = exp(x);
-    return (0.5 * (eX + 1.0/eX));
-  }
+  // float cosh(float x){
+  //   float eX = exp(x);
+  //   return (0.5 * (eX + 1.0/eX));
+  // }
   
-  float acosh(float x){ //must be more than 1
-    return log(x + sqrt(x*x-1.0));
-  }
+  // float acosh(float x){ //must be more than 1
+  //   return log(x + sqrt(x*x-1.0));
+  // }
   
-  float sinh(float x){
-    float eX = exp(x);
-    return (0.5 * (eX - 1.0/eX));
-  }
+  // float sinh(float x){
+  //   float eX = exp(x);
+  //   return (0.5 * (eX - 1.0/eX));
+  // }
   
 
 
@@ -662,18 +646,17 @@ float vertexSDF(vec4 samplePoint, vec4 cornerPoint, float size){
   
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if(hitWhich == 0){ //Didn't hit anything ------------------------
-      gl_FragColor = vec4(0.0);
+      out_FragColor = vec4(0.0);
       return;
     }
     else if(hitWhich == 1){ // global lights
-      gl_FragColor = vec4(globalLightColor.rgb, 1.0);
+      out_FragColor = vec4(globalLightColor.rgb, 1.0);
       return;
     }
     else{ // objects
       N = estimateNormal(sampleEndPoint);
       vec3 color;
       color = phongModel(totalFixMatrix);
-      gl_FragColor = vec4(color, 1.0);
+      out_FragColor = vec4(color, 1.0);
     }
   }
-END FRAGMENT
