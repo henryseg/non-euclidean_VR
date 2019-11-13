@@ -6,16 +6,50 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-//var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 0.6584789485;
 
+
+function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
+    return Math.acosh(v.w);
+}
 
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
 
 
+THREE.Vector4.prototype.geomDot = function (v) {
+    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
+}
+
+THREE.Vector4.prototype.geomLength = function () {
+    return Math.sqrt(Math.abs(this.geomDot(this)));
+}
+
+THREE.Vector4.prototype.geomNormalize = function () {
+    return this.divideScalar(this.geomLength());
+}
+
+
 function reduceBoostError(boost) {
-    // A priori nothing to do, since we are working in R^3 (with the Nil metric)
+    var m = boost[0];
+    var n = m.elements; //elements are stored in column major order we need row major
+    var temp = new THREE.Vector4();
+    var temp2 = new THREE.Vector4();
+    for (var i = 0; i < 4; i++) { ///normalize row
+        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
+        for (var l = 0; l < 4; l++) {
+            n[4 * i + l] = n[4 * i + l] * invRowNorm;
+        }
+        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
+            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
+            for (var l = 0; l < 4; l++) {
+                n[4 * j + l] -= component * n[4 * i + l];
+            }
+        }
+    }
+    m.elements = n;
+    boost[0].elements = m.elements;
 }
 
 
@@ -45,99 +79,44 @@ function nilMatrixInv(v) {
 }
 
 
-function translateByVector(v) {
-    // return the Heisenberg isometry sending the origin to the point reached by the geodesic,
-    // whose unit tangent vector at the origin is v
-    const len = v.length();
-    let achievedPoint = new THREE.Vector3();
 
-    if (v.z === 0.) {
-        achievedPoint = v;
-    } else {
-        const normalizedV = v.clone().normalize();
-        let alpha = 0.;
-        if (normalizedV.x !== 0 || normalizedV.y !== 0.) {
-            alpha = Math.atan2(normalizedV.y, normalizedV.x);
-        }
-        const w = normalizedV.z;
-        const c = Math.sqrt(1 - Math.pow(w, 2));
+function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
+    var dx = v.x;
+    var dy = v.y;
+    var dz = v.z;
+    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-        achievedPoint = new THREE.Vector3(
-            2. * (c / w) * Math.sin(0.5 * w * len) * Math.cos(0.5 * w * len + alpha),
-            2. * (c / w) * Math.sin(0.5 * w * len) * Math.sin(0.5 * w * len + alpha),
-            w * len + 0.5 * Math.pow(c / w, 2.) * (w * len - Math.sin(w * len))
-        );
+    var c1 = Math.sinh(len);
+    var c2 = Math.cosh(len) - 1;
 
+    if (len == 0) return [new THREE.Matrix4().identity()];
+    else {
+        dx /= len;
+        dy /= len;
+        dz /= len;
+        var m = new THREE.Matrix4().set(
+            0, 0, 0, dx,
+            0, 0, 0, dy,
+            0, 0, 0, dz,
+            dx, dy, dz, 0.0);
+        var m2 = new THREE.Matrix4().copy(m).multiply(m);
+        m.multiplyScalar(c1);
+        m2.multiplyScalar(c2);
+        var result = new THREE.Matrix4().identity();
+        result.add(m);
+        result.add(m2);
+        return [result];
     }
-    const trans = nilMatrix(achievedPoint);
-    return [trans];
 }
 
+
+
+
 function translateFacingByVector(v) {
+
+    return new THREE.Matrix4();
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
-    const len = v.length();
 
-    if (len === 0.0) {
-        return new THREE.Matrix4();
-    } else {
-        const normalizedV = v.clone().normalize();
-        let alpha = 0.;
-        if (normalizedV.x !== 0 || normalizedV.y !== 0.) {
-            //console.log('alpha', alpha);
-            alpha = Math.atan2(normalizedV.y, normalizedV.x);
-        }
-        const w = normalizedV.z;
-        const c = Math.sqrt(1 - Math.pow(w, 2.));
-
-        // Matrix catching the rotation of the unit tangent vector pulled back that the origin
-        const R = new THREE.Matrix4().set(
-            Math.cos(w * len), -Math.sin(w * len), 0, 0,
-            Math.sin(w * len), Math.cos(w * len), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
-        // console.log('R',R)
-
-        // Matrix fixing the rotation around the unit tangent vector
-        // Change of basis matrix
-        let P = new THREE.Matrix4().set(
-            c, 0., -w, 0.,
-            0., 1., 0., 0.,
-            w, 0., c, 0.,
-            0., 0., 0., 1.
-        );
-        // console.log('P',P);
-
-        // Rotation
-        let S = new THREE.Matrix4().set(
-            1, 0, 0, 0,
-            0, Math.cos(0.5 * len), Math.sin(0.5 * len), 0,
-            0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
-            0, 0, 0, 1
-        );
-        //console.log('S',S);
-
-        let Pinv = new THREE.Matrix4();
-        Pinv.getInverse(P);
-
-        // Rotation by alpha
-
-
-        const Ralpha = new THREE.Matrix4().set(
-            Math.cos(alpha), -Math.sin(alpha), 0, 0,
-            Math.sin(alpha), Math.cos(alpha), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
-        const RalphaInv = new THREE.Matrix4().set(
-            Math.cos(alpha), Math.sin(alpha), 0, 0,
-            -Math.sin(alpha), Math.cos(alpha), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
-
-        return Ralpha.multiply(R).multiply(P).multiply(S).multiply(Pinv).multiply(RalphaInv);
-    }
 }
 
 //----------------------------------------------------------------------
@@ -179,22 +158,23 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(boost) {
-    /* var cPos = new THREE.Vector4(0, 0, 0, 1);
-     applyIsom(cPos, boost);
-     var bestDist = geomDist(cPos);
-     var bestIndex = -1;
-     for (var i = 0; i < gens.length; i++) {
-         var pos = cPos.clone();
-         applyIsom(pos, gens[i]);
-         if (geomDist(pos) < bestDist) {
-             bestDist = geomDist(pos);
-             bestIndex = i;
-         }
-     }
-     if (bestIndex != -1) {
-         preComposeIsom(boost, gens[bestIndex]);
-         return bestIndex;
-     } else*/
+    /*
+        var cPos = new THREE.Vector4(0, 0, 0, 1);
+        applyIsom(cPos, boost);
+        var bestDist = geomDist(cPos);
+        var bestIndex = -1;
+        for (var i = 0; i < gens.length; i++) {
+            var pos = cPos.clone();
+            applyIsom(pos, gens[i]);
+            if (geomDist(pos) < bestDist) {
+                bestDist = geomDist(pos);
+                bestIndex = i;
+            }
+        }
+        if (bestIndex != -1) {
+            preComposeIsom(boost, gens[bestIndex]);
+            return bestIndex;
+        } else*/
     return -1;
 }
 
@@ -203,40 +183,13 @@ function fixOutsideCentralCell(boost) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var createGenerators = function () { /// generators for the tiling by cubes.
-    var aux0 = nilMatrix(new THREE.Vector3(1., 0., 0.));
-    var aux1 = nilMatrixInv(new THREE.Vector3(1., 0., 0.));
-    var aux2 = nilMatrix(new THREE.Vector3(0., 1., 0.));
-    var aux3 = nilMatrixInv(new THREE.Vector3(0., 1., 0.));
-    var aux4 = nilMatrix(new THREE.Vector3(0., 0., 1.));
-    var aux5 = nilMatrixInv(new THREE.Vector3(0., 0., 1.));
 
-    // var aux4 = new THREE.Matrix4().set(
-    //     1., 0, 0, 0,
-    //     0, 1., 0, 0,
-    //     0, 0, 1., 1.,
-    //     0, 0, 0, 1.
-    // );
-    //
-    // var aux5 = new THREE.Matrix4().set(
-    //     1., 0, 0, 0,
-    //     0, 1., 0, 0,
-    //     0, 0, 1., -1.,
-    //     0, 0, 0, 1.
-    // );
-
-
-    var gen0 = [aux0];
-    var gen1 = [aux1];
-    var gen2 = [aux2];
-    var gen3 = [aux3];
-    var gen4 = [aux4];
-    var gen5 = [aux5];
-    /*var gen0 = translateByVector(new THREE.Vector3(1., 0., 0.));
-    var gen1 = translateByVector(new THREE.Vector3(-1., 0., 0.));
-    var gen2 = translateByVector(new THREE.Vector3(0., 1., 0.));
-    var gen3 = translateByVector(new THREE.Vector3(0., -1., 0.));
-    var gen4 = translateByVector(new THREE.Vector3(0., 0., 1.));
-    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1.));*/
+    var gen0 = translateByVector(new THREE.Vector3(1. * cubeHalfWidth, 0., 0.));
+    var gen1 = translateByVector(new THREE.Vector3(-1. * cubeHalfWidth, 0., 0.));
+    var gen2 = translateByVector(new THREE.Vector3(0., 1. * cubeHalfWidth, 0.));
+    var gen3 = translateByVector(new THREE.Vector3(0., -1. * cubeHalfWidth, 0.));
+    var gen4 = translateByVector(new THREE.Vector3(0., 0., 1. * cubeHalfWidth));
+    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1. * cubeHalfWidth));
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -298,29 +251,58 @@ var initObjects = function () {
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
-var setupMaterial = function(fShader){
-  g_material = new THREE.ShaderMaterial({
-    uniforms:{
+var setupMaterial = function (fShader) {
+    g_material = new THREE.ShaderMaterial({
+        uniforms: {
 
-        isStereo:{type:"bool", value: g_vr},
-        screenResolution:{type:"v2", value: g_screenResolution},
-        lightIntensities:{type:"v4", value: lightIntensities},
-        //--- geometry dependent stuff here ---//
-    //--- lists of stuff that goes into each invGenerator
-        invGenerators:{type:"m4", value: invGensMatrices},
-    //--- end of invGen stuff
-        currentBoost:{type:"m4", value: g_currentBoost[0]},
-    //currentBoost is an array
-        facing:{type:"m4", value: g_facing},
-        cellBoost:{type:"m4", value: g_cellBoost[0]},
-        invCellBoost:{type:"m4", value: g_invCellBoost[0]},
-        lightPositions:{type:"v4", value: lightPositions},
-        globalObjectBoost:{type:"m4", value: globalObjectBoost[0]}
-    },
+            isStereo: {
+                type: "bool",
+                value: g_vr
+            },
+            screenResolution: {
+                type: "v2",
+                value: g_screenResolution
+            },
+            lightIntensities: {
+                type: "v4",
+                value: lightIntensities
+            },
+            //--- geometry dependent stuff here ---//
+            //--- lists of stuff that goes into each invGenerator
+            invGenerators: {
+                type: "m4",
+                value: invGensMatrices
+            },
+            //--- end of invGen stuff
+            currentBoost: {
+                type: "m4",
+                value: g_currentBoost[0]
+            },
+            //currentBoost is an array
+            facing: {
+                type: "m4",
+                value: g_facing
+            },
+            cellBoost: {
+                type: "m4",
+                value: g_cellBoost[0]
+            },
+            invCellBoost: {
+                type: "m4",
+                value: g_invCellBoost[0]
+            },
+            lightPositions: {
+                type: "v4",
+                value: lightPositions
+            },
+            globalObjectBoost: {
+                type: "m4",
+                value: globalObjectBoost[0]
+            }
+        },
 
-    vertexShader: document.getElementById('vertexShader').textContent,
-    fragmentShader: fShader,
-    transparent:true
-  });
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: fShader,
+        transparent: true
+    });
 }
-

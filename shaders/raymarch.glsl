@@ -23,20 +23,22 @@ const float globalObjectRadius = 0.2;
 
 const float PI = 3.1415926538;
 
-const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube = 0.5;
+const vec4 ORIGIN = vec4(0., 0., 0., 1.);
+const float HalfCube=0.6584789485;
+const float modelHalfCube = 0.5773502692;
 
-//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-const mat4 leftBoost = mat4(1., 0, 0, -0.032,
-0, 1, 0, 0,
-0, 0, 1, 0,
--0.032, 0, 0, 1.);
 
-//generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-const mat4 rightBoost = mat4(1., 0, 0, 0.032,
-0, 1, 0, 0,
-0, 0, 1, 0,
-0.032, 0, 0, 1.);
+  const mat4 leftBoost = mat4(1., 0, 0, -0.032,
+                              0, 1, 0, 0,
+                              0, 0, 1, 0,
+                              -0.032, 0, 0, 1.);
+                              
+
+  const mat4 rightBoost = mat4(1., 0, 0, 0.032,
+                               0, 1, 0, 0,
+                               0, 0, 1, 0,
+                               0.032, 0, 0, 1.);
+
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -68,107 +70,6 @@ float fixedatan(float y, float x) {
     }
 }
 
-
-//-------------------------------------------------------
-// AUXILIARY (NEWTON METHOD)
-//-------------------------------------------------------
-
-/*
-
-Compute the zeros between 0 and 2*PI of the function f given below
-Usefull for the methods
-- tangDirection
-- exactDistance
-
-*/
-
-const int MAX_NEWTON_INIT_ITERATION = 1000;
-const int MAX_NEWTON_ITERATION = 1000;
-const float MAX_NEWTON_INIT_TOLERANCE = 0.001;
-const float NEWTON_TOLERANCE = 0.0001;
-
-
-// the function f whose zeros need to be found
-float f(float rhosq, float x3, float phi){
-    // - rhosq is the square the the radius in cylindrical coordinates
-    // - x3 is the height in the cylindrical coordinates
-    return rhosq * (phi - sin(phi)) - 8.0 * (x3 - phi) * pow(sin(0.5 * phi), 2.0);
-}
-
-// the derivative of f (with respect to phi)
-float df(float rhosq, float x3, float phi){
-    // - rhosq is the square the the radius in cylindrical coordinates
-    // - x3 is the height in the cylindrical coordinates
-    return 2.0 * sin(0.5 * phi) * (rhosq + 4.0) * sin(0.5 * phi) - 4.0 * (x3 -phi) * cos(0.5 * phi);
-}
-
-// the second derivative of f (with respect to phi)
-float d2f(float rhosq, float x3, float phi){
-    // - rhosq is the square the the radius in cylindrical coordinates
-    // - x3 is the height in the cylindrical coordinates
-    return (rhosq + 8.0) * sin(phi) - 4.0 * (x3 - phi) * cos(phi);
-}
-
-// rough zero, to start newton method (with a check on convexity)
-float newton_init(float rhosq, float x3) {
-    // - rhosq is the square the the radius in cylindrical coordinates
-    // - x3 is the height in the cylindrical coordinates
-
-    if (x3 < PI) {
-        // if x3 < pi, x3 is a good start for the Newthon method
-        return x3;
-    }
-    else {
-        // if x3 > pi, do a dichotomy to find the best start
-        float phi0 = 0.0;
-        float d20 = d2f(rhosq, x3, phi0);
-        float phi1 = min(2.0 * PI, x3);
-        float d21 = d2f(rhosq, x3, phi1);
-
-        for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++) {
-            // step of the dichotomy
-            float phi_aux = 0.5 * phi0 + 0.5 * phi1;
-            float val = f(rhosq, x3, phi_aux);
-            float d2_aux = d2f(rhosq, x3, phi_aux);
-            if (val < 0.0) {
-                phi0 = phi_aux;
-                d20 = d2_aux;
-            }
-            else {
-                phi1 = phi_aux;
-                d21 = d2_aux;
-            }
-            // stop test
-            if ((phi1 - phi0) < 0.1 &&  d20 * d21 > 0.0){
-                break;
-            }
-        }
-        // the starting value depends on the concavity of the map f
-        if (d20 > 0.0) {
-            return phi1;
-        }
-        else {
-            return phi0;
-        }
-    }
-}
-
-// newton's method for finding the zeros of f
-float newton_zero(float rhosq, float x3) {
-    // - rhosq is the square the the radius in cylindrical coordinates
-    // - x3 is the height in the cylindrical coordinates
-
-    float phi = newton_init(rhosq, x3);
-    float val = f(rhosq, x3, phi);
-    for (int i=0; i < MAX_NEWTON_ITERATION; i++){
-        if (abs(val) < NEWTON_TOLERANCE){
-            return phi;
-        }
-        phi = phi - val/df(rhosq, x3, phi);
-        val = f(rhosq, x3, phi);
-    }
-    return phi;
-}
 
 
 //--------------------------------------------
@@ -231,13 +132,14 @@ float tangDot(tangVector u, tangVector v){
     // we assume that the underlying points are the same
     // TODO : make a test if the underlying points are indeed the same ?
     vec4 p = u.pos;
-    mat3 g = mat3(
-    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
-    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
-    0.5 * p.y, -0.5 * p.x, 1.
+    mat4 g = mat4(
+    1.,0.,0.,0.,
+    0.,1.,0.,0.,
+    0.,0.,1.,0.,
+    0.,0.,0.,-1.
     );
 
-    return dot(u.dir.xyz, g * v.dir.xyz);
+    return dot(u.dir, g * v.dir);
 
 }
 
@@ -260,23 +162,20 @@ float cosAng(tangVector u, tangVector v){
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
-    /*
-    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
-    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
-    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
+    tangVector basis_x = tangNormalize(tangVector(p, vec4(p.w, 0.0, 0.0, p.x)));
+    tangVector basis_y = tangNormalize(tangVector(p, vec4(0.0, p.w, 0.0, p.y)));
+    tangVector basis_z = tangNormalize(
+        tangVector(p,vec4(0.0, 0.0, p.w, p.z)));
     //make this orthonormal
-    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
+   // basis_x=tangNormalize(basis_x);                                
+//    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
+//    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
+//                            
     mat4 theBasis=mat4(0.);
-    */
-
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis=mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
+    
+    theBasis[0]=basis_x.dir;
+    theBasis[1]=basis_y.dir;
+    theBasis[2]=basis_z.dir;
     return theBasis;
 }
 
@@ -289,102 +188,24 @@ mat4 tangBasis(vec4 p){
   Methods computing ``global'' objects
 */
 
-
-mat4 nilMatrix(vec4 p) {
-    // return the Heisenberg isometry sending the origin to p
-    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
-    return mat4(
-    1., 0., -p.y/2., 0.,
-    0., 1., p.x/2., 0.,
-    0., 0., 1., 0.,
-    p.x, p.y, p.z, 1.);
-}
-
-mat4 nilMatrixInv(vec4 p) {
-    // return the Heisenberg isometry sending the p to origin
-    return mat4(
-    1., 0., p.y/2., 0.,
-    0., 1., -p.x/2., 0.,
-    0., 0., 1., 0.,
-    -p.x, -p.y, -p.z, 1.);
-}
-
-float fakeHeightSq(float z) {
-    // square of the fake height.
-    // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinate is the argument)
-
-    if (z < sqrt(6.)){
-        return z * z;
-    }
-    else if (z < 4.*sqrt(3.)){
-        return 12. * (pow(0.75 * z, 2. / 3.) - 1.);
-    }
-    else {
-        return 2. * sqrt(3.) * z;
-    }
-}
-
-float fakeHeight(float z) {
-    // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinate is the argument)
-
-    return sqrt(fakeHeightSq(z));
-//    if (z < sqrt(6.)){
-//        return z;
-//    }
-//    else if (z < 4.*sqrt(3.)){
-//        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1.);
-//    }
-//    else {
-//        return sqrt(2.*sqrt(3.)*z);
-//    }
+float hypAng(vec4 p, vec4 q){
+        //negative the lorentz dot product gives the hyperbolic angle between the two points
+    return -p.x*q.x-p.y*q.y-p.z*q.z-p.w*q.w;
 }
 
 
-
-float fakeDistance(vec4 p, vec4 q){
-    // measure the distance between two points in the geometry
-    // fake distance
-
-    mat4 isomInv = nilMatrixInv(p);
-    vec4 qOrigin = isomInv*q;
-    // we now need the distance between the origin and p
-    float rhosq = pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.);
-    float hsq = fakeHeightSq(qOrigin.z);
-
-    return pow(0.2*pow(rhosq, 2.) + 0.8*pow(hsq, 2.), 0.25);
+float fakeDistance(vec4 p, vec4 q) {//For hyperbolic space this is unnecessary
+    return acosh(hypAng(p,q));
 }
 
-float fakeDistance(tangVector u, tangVector v){
-    // overload of the previous function in case we work with tangent vectors
-    return fakeDistance(u.pos, v.pos);
+
+float fakeDistance(tangVector p, tangVector q) {//overload of the previous case
+    return acosh(hypAng(p.pos,q.pos));
 }
+
 
 float exactDist(vec4 p, vec4 q) {
-    // move p to the origin
-    mat4 isomInv = nilMatrixInv(p);
-    vec4 qOrigin = isomInv * q;
-
-    // solve the problem !
-    float x3 = qOrigin.z;
-    float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
-
-    if (x3 == 0.0) {
-        return sqrt(rhosq);
-    }
-    else {
-        float phi = newton_zero(rhosq, x3);
-        float sign = 0.0;
-        if (x3 > 0.0) {
-            sign = 1.0;
-        }
-        else {
-            sign = -1.0;
-        }
-        float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
-        return abs(phi/w);
-    }
+    return acosh(hypAng(p,q));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -402,44 +223,7 @@ tangVector tangDirection(vec4 p, vec4 q){
     }
 
     else {
-        // move p to the origin
-        mat4 isom = nilMatrix(p);
-        mat4 isomInv = nilMatrixInv(p);
-
-        vec4 qOrigin = isomInv*q;
-
-        // solve the problem !
-        float x3 = qOrigin.z;
-
-        vec4 resOrigin = vec4(0.);
-        if (x3 == 0.0) {
-            // probably not needed (case contained in the next one)
-            resOrigin =  vec4(qOrigin.z, qOrigin.y, qOrigin.z, 0.0);
-        }
-        else {
-            float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
-            float phi = newton_zero(rhosq, x3);
-            float sign = 0.0;
-            if (x3 > 0.0) {
-                sign = 1.0;
-            }
-            else {
-                sign = -1.0;
-            }
-            float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
-            float c = sqrt(1.0  - pow(w, 2.0));
-            float alpha = - 0.5 * phi;
-            if (qOrigin.x*qOrigin.y != 0.0){
-                alpha = alpha + atan(qOrigin.y, qOrigin.x);
-            }
-            //float t = phi / w;
-
-            //resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
-            resOrigin =  vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
-        }
-
-        // move back to p
-        return tangVector(p, isom * resOrigin);
+        return tangNormalize(tangVector(p, q - hypAng(p,q)*p));
     }
 }
 
@@ -448,45 +232,13 @@ tangVector tangDirection(tangVector u, tangVector v){
     return tangDirection(u.pos, v.pos);
 }
 
+
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
-    // move p to the origin
-    mat4 isom = nilMatrix(tv.pos);
-    mat4 isomInv = nilMatrixInv(tv.pos);
-
-    // vector at the origin
-    tangVector tvOrigin = translate(isomInv, tv);
-
-    // solve the problem !
-    float w = tvOrigin.dir.z;
-    float c = sqrt(1. - w * w);
-    float alpha = fixedatan(tvOrigin.dir.y, tvOrigin.dir.x);
-
-    tangVector achievedFromOrigin = tangVector(ORIGIN, vec4(0.));
-
-    if (w == 0.){
-        achievedFromOrigin.pos = vec4(t * tvOrigin.dir.xyz, 1);
-        achievedFromOrigin.dir =  tvOrigin.dir;
-    }
-    else {
-        achievedFromOrigin.pos = vec4(
-        2. * (c / w) * sin(0.5 * w * t) * cos(0.5 * w * t + alpha),
-        2. * (c / w) * sin(0.5 * w * t) * sin(0.5 * w * t + alpha),
-        w * t + 0.5 * pow(c / w, 2.) * (w * t - sin(w * t)),
-        1.
-        );
-
-        achievedFromOrigin.dir = vec4(
-        c * cos(w * t + alpha),
-        c * sin(w * t + alpha),
-        w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * t) / w,
-        0.
-        );
-    }
-
     // move back to p
-    tangVector res = translate(isom, achievedFromOrigin);
+    tangVector res = tangVector(tv.pos*cosh(t) + tv.dir*sinh(t),
+                      tv.pos*sinh(t) + tv.dir*cosh(t));
     return res;
 }
 
@@ -496,20 +248,17 @@ tangVector flow(tangVector tv, float t){
 //--------------------------------------------
 
 
+//project point back onto the geometry
+vec4 geomProject(vec4 p){
+    return p/sqrt(hypAng(p,p));
+}
+
+
 //Project onto the Klein Model
 vec4 modelProject(vec4 u){
-    return u;
+    return u/u.w;
 }
 
-
-//--------------------------------------------
-//Geometry of Space
-//--------------------------------------------
-
-//project point back onto the geometry
-vec4 geomNormalize(vec4 u){
-    return u;
-}
 
 
 //-------------------------------------------------------
@@ -530,19 +279,8 @@ float lightAtt(float dist){
 
 float sphereSDF(vec4 p, vec4 center, float radius){
     // more precise computation
-    float fakeDist = fakeDistance(p, center);
+    return exactDist(p, center) - radius;
 
-    if (FAKE_DIST_SPHERE) {
-        return fakeDist - radius;
-    }
-    else {
-        if (fakeDist > 10. * radius) {
-            return fakeDist - radius;
-        }
-        else {
-            return exactDist(p, center) - radius;
-        }
-    }
 }
 
 
@@ -554,7 +292,7 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  100;
+const int MAX_MARCHING_STEPS =  50;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
@@ -633,27 +371,28 @@ float globalSceneSDF(vec4 p){
 
 // check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out mat4 fixMatrix){
-    if (p.x > modelHalfCube){
+    vec4 ModelP= modelProject(p);
+    if (ModelP.x > modelHalfCube){
         fixMatrix = invGenerators[0];
         return true;
     }
-    if (p.x < -modelHalfCube){
+    if (ModelP.x < -modelHalfCube){
         fixMatrix = invGenerators[1];
         return true;
     }
-    if (p.y > modelHalfCube){
+    if (ModelP.y > modelHalfCube){
         fixMatrix = invGenerators[2];
         return true;
     }
-    if (p.y < -modelHalfCube){
+    if (ModelP.y < -modelHalfCube){
         fixMatrix = invGenerators[3];
         return true;
     }
-    if (p.z > modelHalfCube){
+    if (ModelP.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
     }
-    if (p.z < -modelHalfCube){
+    if (ModelP.z < -modelHalfCube){
         fixMatrix = invGenerators[5];
         return true;
     }
