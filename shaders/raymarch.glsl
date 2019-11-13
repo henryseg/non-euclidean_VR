@@ -6,15 +6,13 @@ out vec4 out_FragColor;
 // PARAMETERS
 //--------------------------------------------
 
-/*
+//Some parameters that can be changed to change the scence
 
-Some parameters that can be changed to change the scence
-
-*/
 
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
+const float centerSphereRadius =0.7;
 
 
 //--------------------------------------------
@@ -51,24 +49,6 @@ Some auxiliary methods
 */
 
 
-// According to the doc, atan is not defined whenever x = 0
-// We fix this here
-float fixedatan(float y, float x) {
-    if (x == 0. && y == 0.) {
-        return 0.0;
-    }
-    else if (x == 0.) {
-        if (y > 0.0) {
-            return 0.5* PI;
-        }
-        else {
-            return -0.5*PI;
-        }
-    }
-    else {
-        return atan(y, x);
-    }
-}
 
 
 
@@ -131,7 +111,6 @@ float tangDot(tangVector u, tangVector v){
     // dot product between two vectors in the tangent bundle
     // we assume that the underlying points are the same
     // TODO : make a test if the underlying points are indeed the same ?
-    vec4 p = u.pos;
     mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
@@ -155,21 +134,25 @@ tangVector tangNormalize(tangVector v){
 
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
-    return tangDot(u, v);
+    return tangDot(u, v)/(tangNorm(u)*tangNorm(v));
 }
 
 
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
-    tangVector basis_x = tangNormalize(tangVector(p, vec4(p.w, 0.0, 0.0, p.x)));
-    tangVector basis_y = tangNormalize(tangVector(p, vec4(0.0, p.w, 0.0, p.y)));
-    tangVector basis_z = tangNormalize(
-        tangVector(p,vec4(0.0, 0.0, p.w, p.z)));
+    tangVector basis_x = tangVector(p, vec4(p.w, 0.0, 0.0, p.x));
+    tangVector basis_y = tangVector(p, vec4(0.0, p.w, 0.0, p.y));
+    tangVector basis_z = 
+        tangVector(p,vec4(0.0, 0.0, p.w, p.z));
     //make this orthonormal
-   // basis_x=tangNormalize(basis_x);                                
-//    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-//    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
+   basis_x=tangNormalize(basis_x);                                
+   basis_y = tangNormalize(
+    sub(basis_y, 
+        scalarMult(tangDot(basis_y, basis_x),basis_x)));// need to Gram Schmidt
+    basis_z = tangNormalize(
+        sub(basis_z,
+            sub(scalarMult(tangDot( basis_z, basis_x),basis_x), scalarMult(tangDot( basis_z, basis_y),basis_y))));
 //                            
     mat4 theBasis=mat4(0.);
     
@@ -268,7 +251,7 @@ vec4 modelProject(vec4 u){
 float lightAtt(float dist){
     //fake linear falloff
     return dist;
-
+//return sinh(dist)*sinh(dist);
 }
 
 
@@ -333,7 +316,7 @@ uniform mat4 globalObjectBoost;
 
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
-    float sphere = centerSDF(p, ORIGIN, 0.68);
+    float sphere = centerSDF(p, center, centerSphereRadius);
     float final = -sphere;
     return final;
 }
@@ -460,7 +443,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
-
+        
         if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
             localtv = translate(fixMatrix, localtv);
@@ -642,12 +625,11 @@ void main(){
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
     raymarch(rayDir, totalFixMatrix);
-
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.01);
+        out_FragColor = vec4(0.3);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -677,6 +659,6 @@ void main(){
         vec3 color;
         color = phongModel(totalFixMatrix, 0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.1, 1.0);
+        out_FragColor = vec4(0.9*color+0.3, 1.0);
     }
 }

@@ -9,15 +9,11 @@ var Origin = new THREE.Vector4(0, 0, 0, 1);
 var cubeHalfWidth = 0.6584789485;
 
 
-function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acosh(v.w);
-}
 
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
-
-
+/*
 THREE.Vector4.prototype.geomDot = function (v) {
     return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
 }
@@ -29,9 +25,10 @@ THREE.Vector4.prototype.geomLength = function () {
 THREE.Vector4.prototype.geomNormalize = function () {
     return this.divideScalar(this.geomLength());
 }
-
+*/
 
 function reduceBoostError(boost) {
+    /*
     var m = boost[0];
     var n = m.elements; //elements are stored in column major order we need row major
     var temp = new THREE.Vector4();
@@ -50,34 +47,13 @@ function reduceBoostError(boost) {
     }
     m.elements = n;
     boost[0].elements = m.elements;
+    */
 }
 
 
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
-
-
-function nilMatrix(v) {
-    // the matrix realizing the left translation by v = (x,y,z)
-    return new THREE.Matrix4().set(
-        1., 0., 0., v.x,
-        0., 1., 0., v.y,
-        -0.5 * v.y, 0.5 * v.x, 1., v.z,
-        0., 0., 0., 1.
-    );
-}
-
-function nilMatrixInv(v) {
-    // the inverse of the matrix realizing the left translation by v = (x,y,z)
-    return new THREE.Matrix4().set(
-        1., 0., 0., -v.x,
-        0., 1., 0., -v.y,
-        0.5 * v.y, -0.5 * v.x, 1., -v.z,
-        0., 0., 0., 1.
-    );
-}
-
 
 
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
@@ -114,7 +90,11 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
 
 function translateFacingByVector(v) {
 
-    return new THREE.Matrix4();
+    return new THREE.Matrix4().set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1);
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
 
 }
@@ -156,6 +136,10 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting Back to Central Cell
 //-----------------------------------------------------------------------------------------------------------------------------
+function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
+    return Math.acosh(v.w);
+}
+
 
 function fixOutsideCentralCell(boost) {
     /*
