@@ -15,7 +15,7 @@ Some parameters that can be changed to change the scence
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
-const float centerSphereRadius =0.9;
+const float centerSphereRadius =1.1;
 
 
 //--------------------------------------------
@@ -25,7 +25,7 @@ const float centerSphereRadius =0.9;
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube = 0.549;//projection of cube to klein model
+const float modelHalfCube =  0.5773502692;//projection of cube to klein model
 
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
 const mat4 leftBoost = mat4(1., 0, 0, -0.032,
@@ -223,8 +223,8 @@ vec4 geomProject(vec4 p){
 
 
 //Project onto the Klein Model
-vec4 modelProject(vec4 u){
-    return u/u.w;
+vec4 modelProject(vec4 p){
+    return p/p.w;
  
 }
 
@@ -259,9 +259,9 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  50;
+const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 100.0;
+const float MAX_DIST = 200.0;
 const float EPSILON = 0.0001;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
@@ -644,8 +644,8 @@ void main(){
 
         N = estimateNormal(sampletv.pos);
         vec3 color;
-        color = phongModel(totalFixMatrix, 0.2*pixelcolor);
+        color = phongModel(totalFixMatrix, 0.1*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(color, 1.0);
+        out_FragColor = vec4(0.9*color+0.1, 1.0);
     }
 }
