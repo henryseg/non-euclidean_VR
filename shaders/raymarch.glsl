@@ -16,8 +16,8 @@ const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
-const float centerSphereRadius =1.1;
-
+const float centerSphereRadius =1.;
+const float vertexSphereSize = -0.95;//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -27,6 +27,7 @@ const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
 const float modelHalfCube =  0.5773502692;//projection of cube to klein model
+const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
 
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
 const mat4 leftBoost = mat4(1., 0, 0, -0.032,
@@ -254,10 +255,22 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 }
 
 
+  // A horosphere can be constructed by offseting from a standard horosphere.
+  // Our standard horosphere will have a center in the direction of lightPoint
+  // and go through the origin. Negative offsets will shrink it.
+  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+    return log(-hypAng(samplePoint, lightPoint)) - offset;
+  }
+
+
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
 }
 
+
+float vertexSDF(vec4 p, vec4 cornerPoint, float size){
+    return  horosphereHSDF(p, cornerPoint, size);
+}
 
 //--------------------------------------------
 //Global Constants
@@ -304,8 +317,13 @@ uniform mat4 globalObjectBoost;
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
     float sphere = centerSDF(p,  center, centerSphereRadius);
-    float final = -sphere;
+    float vertexSphere = 0.0;
+    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
+    float final = -min(vertexSphere,sphere); //unionSDF
     return final;
+    
+   // float final = -sphere;
+    //return final;
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
