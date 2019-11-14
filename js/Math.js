@@ -306,11 +306,11 @@ var setupMaterial = function(fShader){
         screenResolution:{type:"v2", value: g_screenResolution},
         lightIntensities:{type:"v4", value: lightIntensities},
         //--- geometry dependent stuff here ---//
-    //--- lists of stuff that goes into each invGenerator
+        //--- lists of stuff that goes into each invGenerator
         invGenerators:{type:"m4", value: invGensMatrices},
-    //--- end of invGen stuff
+        //--- end of invGen stuff
         currentBoost:{type:"m4", value: g_currentBoost[0]},
-    //currentBoost is an array
+        //currentBoost is an array
         facing:{type:"m4", value: g_facing},
         cellBoost:{type:"m4", value: g_cellBoost[0]},
         invCellBoost:{type:"m4", value: g_invCellBoost[0]},

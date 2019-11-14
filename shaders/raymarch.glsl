@@ -225,7 +225,6 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
     return tangVector(v.pos, matrix* v.dir);
 }
 
-
 float tangDot(tangVector u, tangVector v){
     // dot product between two vectors in the tangent bundle
     // we assume that the underlying points are the same
@@ -238,7 +237,6 @@ float tangDot(tangVector u, tangVector v){
     );
 
     return dot(u.dir.xyz, g * v.dir.xyz);
-
 }
 
 float tangNorm(tangVector v){
@@ -324,23 +322,6 @@ float fakeHeightSq(float z) {
         return 2. * sqrt(3.) * z;
     }
 }
-
-float fakeHeight(float z) {
-    // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinate is the argument)
-
-    return sqrt(fakeHeightSq(z));
-//    if (z < sqrt(6.)){
-//        return z;
-//    }
-//    else if (z < 4.*sqrt(3.)){
-//        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1.);
-//    }
-//    else {
-//        return sqrt(2.*sqrt(3.)*z);
-//    }
-}
-
 
 
 float fakeDistance(vec4 p, vec4 q){
@@ -593,6 +574,7 @@ uniform mat4 globalObjectBoost;
 // Turn off the local scene
 // Local signed distance function : distance from p to an object in the local scene
 
+// LOCAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
     float sphere = centerSDF(p, ORIGIN, 0.68);
@@ -600,7 +582,7 @@ float localSceneSDF(vec4 p){
     return final;
 }
 
-//GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
+// GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
     vec4 absolutep = cellBoost * p;// correct for the fact that we have been moving
@@ -631,8 +613,8 @@ float globalSceneSDF(vec4 p){
 }
 
 
-// check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out mat4 fixMatrix){
+    // check if the given point p is in the fundamental domain of the lattice.
     if (p.x > modelHalfCube){
         fixMatrix = invGenerators[0];
         return true;
@@ -660,8 +642,8 @@ bool isOutsideCell(vec4 p, out mat4 fixMatrix){
     return false;
 }
 
-// overload of the previous method with tangent vector
 bool isOutsideCell(tangVector v, out mat4 fixMatrix){
+    // overload of the previous method with tangent vector
     return isOutsideCell(v.pos, fixMatrix);
 }
 
@@ -856,7 +838,8 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
 // Tangent Space Functions
 //--------------------------------------------------------------------
 
-tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
+tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft) {
+    //creates a tangent vector for our ray
     if (isStereo == 1){
         resolution.x = resolution.x * 0.5;
         if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
