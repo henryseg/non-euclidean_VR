@@ -15,7 +15,7 @@ const bool FAKE_LIGHT_FALLOFF=true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
-const float globalObjectRadius = 0.2;
+const float globalObjectRadius = 0.1;
 const float centerSphereRadius =1.;
 const float vertexSphereSize = -0.95;//In this case its a horosphere
 
