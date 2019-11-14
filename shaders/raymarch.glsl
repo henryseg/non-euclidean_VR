@@ -26,6 +26,8 @@ const float PI = 3.1415926538;
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
 const float modelHalfCube = 0.5;
 
+
+/*
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
 const mat4 leftBoost = mat4(1., 0, 0, -0.032,
 0, 1, 0, 0,
@@ -37,6 +39,8 @@ const mat4 rightBoost = mat4(1., 0, 0, 0.032,
 0, 1, 0, 0,
 0, 0, 1, 0,
 0.032, 0, 0, 1.);
+*/
+
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -557,7 +561,11 @@ uniform int isStereo;
 uniform vec2 screenResolution;
 uniform mat4 invGenerators[6];
 uniform mat4 currentBoost;
+uniform mat4 leftBoost;
+uniform mat4 rightBoost;
 uniform mat4 facing;
+uniform mat4 leftFacing;
+uniform mat4 rightFacing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;
 //--------------------------------------------
@@ -699,7 +707,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     tangVector localtv = rayDir;
     totalFixMatrix = mat4(1.0);
 
-
+/*
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
@@ -719,10 +727,11 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
             marchStep = localDist;
             globalDepth += localDist;
         }
-    }
+    }*/
 
     // Set for localDepth to our new max tracing distance:
-    localDepth = min(globalDepth, MAX_DIST);
+    //localDepth = min(globalDepth, MAX_DIST);
+    localDepth= MAX_DIST;
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
@@ -861,27 +870,33 @@ void main(){
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    
+        //camera position must be translated in hyperboloid -----------------------
+    rayDir=applyMatrixToDir(facing, rayDir);
+    
+    
     if (isStereo == 1){
-        // REMI : to be checked...
+         
+    
         if (isLeft){
+            rayDir=applyMatrixToDir(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
         }
         else {
+            rayDir=applyMatrixToDir(rightFacing, rayDir);
             rayDir = translate(rightBoost, rayDir);
         }
     }
 
-    //camera position must be translated in hyperboloid -----------------------
-
-    if (isStereo == 1){
-        // REMI : Not sur about what is this
-        rayDir = tangVector(facing * rayDir.pos, rayDir.dir);
-    }
-
-    //rayOrigin = currentBoost * rayOrigin;
-    rayDir = applyMatrixToDir(facing, rayDir);
+    
+  // in other geometries, the facing will not be an isom, so applying facing is probably not good.
+   // rayDir = translate(facing, rayDir);
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
+    
+    
+    
+    
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);

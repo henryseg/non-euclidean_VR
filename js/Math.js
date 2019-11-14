@@ -298,29 +298,91 @@ var initObjects = function () {
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
-var setupMaterial = function(fShader){
-  g_material = new THREE.ShaderMaterial({
-    uniforms:{
+var setupMaterial = function (fShader) {
 
-        isStereo:{type:"bool", value: g_vr},
-        screenResolution:{type:"v2", value: g_screenResolution},
-        lightIntensities:{type:"v4", value: lightIntensities},
-        //--- geometry dependent stuff here ---//
-        //--- lists of stuff that goes into each invGenerator
-        invGenerators:{type:"m4", value: invGensMatrices},
-        //--- end of invGen stuff
-        currentBoost:{type:"m4", value: g_currentBoost[0]},
-        //currentBoost is an array
-        facing:{type:"m4", value: g_facing},
-        cellBoost:{type:"m4", value: g_cellBoost[0]},
-        invCellBoost:{type:"m4", value: g_invCellBoost[0]},
-        lightPositions:{type:"v4", value: lightPositions},
-        globalObjectBoost:{type:"m4", value: globalObjectBoost[0]}
-    },
+    //facing is a 4x4 matrix, need 3-vector to feed into translatebyvector.
+    var preVectorLeft = (new THREE.Vector4(-0.032, 0, 0).applyMatrix4(g_facing));
+    var vectorLeft = new THREE.Vector3(preVectorLeft.x, preVectorLeft.y, preVectorLeft.z);
 
-    vertexShader: document.getElementById('vertexShader').textContent,
-    fragmentShader: fShader,
-    transparent:true
-  });
+    var preVectorRight = (new THREE.Vector4(0.032, 0, 0).applyMatrix4(g_facing));
+    var vectorRight = new THREE.Vector3(preVectorRight.x, preVectorRight.y, preVectorRight.z);
+
+
+    var leftBoost = translateByVector(vectorLeft);
+    var rightBoost = translateByVector(vectorRight);
+    var leftFacing = translateFacingByVector(vectorLeft);
+    var rightFacing = translateFacingByVector(vectorRight);
+
+
+
+    g_material = new THREE.ShaderMaterial({
+        uniforms: {
+
+            isStereo: {
+                type: "bool",
+                value: g_vr
+            },
+            screenResolution: {
+                type: "v2",
+                value: g_screenResolution
+            },
+            lightIntensities: {
+                type: "v4",
+                value: lightIntensities
+            },
+            //--- geometry dependent stuff here ---//
+            //--- lists of stuff that goes into each invGenerator
+            invGenerators: {
+                type: "m4",
+                value: invGensMatrices
+            },
+            //--- end of invGen stuff
+            currentBoost: {
+                type: "m4",
+                value: g_currentBoost[0]
+            },
+            leftBoost: {
+                type: "m4",
+                value: leftBoost[0]
+            },
+            rightBoost: {
+                type: "m4",
+                value: rightBoost[0]
+            },
+            //currentBoost is an array
+            facing: {
+                type: "m4",
+                value: g_facing
+            },
+            leftFacing: {
+                type: "m4",
+                value: leftFacing
+            },
+            rightFacing: {
+                type: "m4",
+                value: rightFacing
+            },
+            cellBoost: {
+                type: "m4",
+                value: g_cellBoost[0]
+            },
+
+            invCellBoost: {
+                type: "m4",
+                value: g_invCellBoost[0]
+            },
+            lightPositions: {
+                type: "v4",
+                value: lightPositions
+            },
+            globalObjectBoost: {
+                type: "m4",
+                value: globalObjectBoost[0]
+            }
+        },
+
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: fShader,
+        transparent: true
+    });
 }
-
