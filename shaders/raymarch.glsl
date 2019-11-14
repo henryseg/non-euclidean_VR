@@ -707,7 +707,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     tangVector localtv = rayDir;
     totalFixMatrix = mat4(1.0);
 
-/*
+
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
@@ -727,11 +727,11 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
             marchStep = localDist;
             globalDepth += localDist;
         }
-    }*/
+    }
 
     // Set for localDepth to our new max tracing distance:
-    //localDepth = min(globalDepth, MAX_DIST);
-    localDepth= MAX_DIST;
+    localDepth = min(globalDepth, MAX_DIST);
+   // localDepth= MAX_DIST;
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
