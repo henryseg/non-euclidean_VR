@@ -301,6 +301,8 @@ uniform mat4 currentBoost;
 uniform mat4 leftBoost;
 uniform mat4 rightBoost;
 uniform mat4 facing;
+uniform mat4 leftFacing;
+uniform mat4 rightFacing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;
 //--------------------------------------------
@@ -612,23 +614,28 @@ void main(){
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
     
         //camera position must be translated in hyperboloid -----------------------
-
+    rayDir=applyMatrixToDir(facing, rayDir);
+    
     
     if (isStereo == 1){
          
     
         if (isLeft){
+            rayDir=applyMatrixToDir(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
         }
         else {
+            rayDir=applyMatrixToDir(rightFacing, rayDir);
             rayDir = translate(rightBoost, rayDir);
         }
     }
 
+    
   // in other geometries, the facing will not be an isom, so applying facing is probably not good.
-    rayDir = translate(facing, rayDir);
+   // rayDir = translate(facing, rayDir);
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
+    
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);

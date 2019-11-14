@@ -217,8 +217,6 @@ var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
 var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 
 
-var leftBoost = translateByVector(new THREE.Vector3(0.032, 0, 0));
-var rightBoost = translateByVector(new THREE.Vector3(-0.032, 0, 0));
 
 var initObjects = function () {
     PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
@@ -235,6 +233,22 @@ var initObjects = function () {
 // We must unpackage the boost data here for sending to the shader.
 
 var setupMaterial = function (fShader) {
+    //these are the left/right translations, rotations and facing corrections for stereo motion
+
+    //facing is a 4x4 matrix, need 3-vector to feed into translatebyvector.
+    var preVectorLeft = (new THREE.Vector4(-0.032, 0, 0).applyMatrix4(g_facing));
+    var vectorLeft = new THREE.Vector3(preVectorLeft.x, preVectorLeft.y, preVectorLeft.z);
+
+    var preVectorRight = (new THREE.Vector4(0.032, 0, 0).applyMatrix4(g_facing));
+    var vectorRight = new THREE.Vector3(preVectorRight.x, preVectorRight.y, preVectorRight.z);
+
+
+    var leftBoost = translateByVector(vectorLeft);
+    var rightBoost = translateByVector(vectorRight);
+    var leftFacing = new THREE.Matrix4();
+    var rightFacing = new THREE.Matrix4();
+
+
     g_material = new THREE.ShaderMaterial({
         uniforms: {
 
@@ -273,6 +287,14 @@ var setupMaterial = function (fShader) {
             facing: {
                 type: "m4",
                 value: g_facing
+            },
+            leftFacing: {
+                type: "m4",
+                value: leftFacing
+            },
+            rightFacing: {
+                type: "m4",
+                value: rightFacing
             },
             cellBoost: {
                 type: "m4",
