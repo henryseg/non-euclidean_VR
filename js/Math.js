@@ -24,120 +24,29 @@ function reduceBoostError(boost) {
 //----------------------------------------------------------------------
 
 
-function nilMatrix(v) {
-    // the matrix realizing the left translation by v = (x,y,z)
-    return new THREE.Matrix4().set(
-        1., 0., 0., v.x,
-        0., 1., 0., v.y,
-        -0.5 * v.y, 0.5 * v.x, 1., v.z,
-        0., 0., 0., 1.
-    );
-}
-
-function nilMatrixInv(v) {
-    // the inverse of the matrix realizing the left translation by v = (x,y,z)
-    return new THREE.Matrix4().set(
-        1., 0., 0., -v.x,
-        0., 1., 0., -v.y,
-        0.5 * v.y, -0.5 * v.x, 1., -v.z,
-        0., 0., 0., 1.
-    );
-}
-
-
 function translateByVector(v) {
-    // return the Heisenberg isometry sending the origin to the point reached by the geodesic,
-    // whose unit tangent vector at the origin is v
-    const len = v.length();
-    let achievedPoint = new THREE.Vector3();
+    var dx = v.x;
+    var dy = v.y;
+    var dz = v.z;
 
-    if (v.z === 0.) {
-        achievedPoint = v;
-    } else {
-        const normalizedV = v.clone().normalize();
-        let alpha = 0.;
-        if (normalizedV.x !== 0 || normalizedV.y !== 0.) {
-            alpha = Math.atan2(normalizedV.y, normalizedV.x);
-        }
-        const w = normalizedV.z;
-        const c = Math.sqrt(1 - Math.pow(w, 2));
-
-        achievedPoint = new THREE.Vector3(
-            2. * (c / w) * Math.sin(0.5 * w * len) * Math.cos(0.5 * w * len + alpha),
-            2. * (c / w) * Math.sin(0.5 * w * len) * Math.sin(0.5 * w * len + alpha),
-            w * len + 0.5 * Math.pow(c / w, 2.) * (w * len - Math.sin(w * len))
-        );
-
-    }
-    const trans = nilMatrix(achievedPoint);
-    return [trans];
+    var m = new THREE.Matrix4().set(
+        1, 0, 0, dx,
+        0, 1, 0, dy,
+        0, 0, 1, dz,
+        0, 0, 0, 1);
+    return [m];
 }
+
+
 
 function translateFacingByVector(v) {
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
-    const len = v.length();
+    return new THREE.Matrix4().set(1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
 
-    if (len === 0.0) {
-        return new THREE.Matrix4();
-    } else {
-        const normalizedV = v.clone().normalize();
-        let alpha = 0.;
-        if (normalizedV.x !== 0 || normalizedV.y !== 0.) {
-            //console.log('alpha', alpha);
-            alpha = Math.atan2(normalizedV.y, normalizedV.x);
-        }
-        const w = normalizedV.z;
-        const c = Math.sqrt(1 - Math.pow(w, 2.));
-
-        // Matrix catching the rotation of the unit tangent vector pulled back that the origin
-        const R = new THREE.Matrix4().set(
-            Math.cos(w * len), -Math.sin(w * len), 0, 0,
-            Math.sin(w * len), Math.cos(w * len), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
-        // console.log('R',R)
-
-        // Matrix fixing the rotation around the unit tangent vector
-        // Change of basis matrix
-        let P = new THREE.Matrix4().set(
-            c, 0., -w, 0.,
-            0., 1., 0., 0.,
-            w, 0., c, 0.,
-            0., 0., 0., 1.
-        );
-        // console.log('P',P);
-
-        // Rotation
-        let S = new THREE.Matrix4().set(
-            1, 0, 0, 0,
-            0, Math.cos(0.5 * len), Math.sin(0.5 * len), 0,
-            0, -Math.sin(0.5 * len), Math.cos(0.5 * len), 0,
-            0, 0, 0, 1
-        );
-        //console.log('S',S);
-
-        let Pinv = new THREE.Matrix4();
-        Pinv.getInverse(P);
-
-        // Rotation by alpha
-
-
-        const Ralpha = new THREE.Matrix4().set(
-            Math.cos(alpha), -Math.sin(alpha), 0, 0,
-            Math.sin(alpha), Math.cos(alpha), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
-        const RalphaInv = new THREE.Matrix4().set(
-            Math.cos(alpha), Math.sin(alpha), 0, 0,
-            -Math.sin(alpha), Math.cos(alpha), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
-
-        return Ralpha.multiply(R).multiply(P).multiply(S).multiply(Pinv).multiply(RalphaInv);
-    }
 }
 
 //----------------------------------------------------------------------
@@ -203,40 +112,13 @@ function fixOutsideCentralCell(boost) {
 //-----------------------------------------------------------------------------------------------------------------------------
 
 var createGenerators = function () { /// generators for the tiling by cubes.
-    var aux0 = nilMatrix(new THREE.Vector3(1., 0., 0.));
-    var aux1 = nilMatrixInv(new THREE.Vector3(1., 0., 0.));
-    var aux2 = nilMatrix(new THREE.Vector3(0., 1., 0.));
-    var aux3 = nilMatrixInv(new THREE.Vector3(0., 1., 0.));
-    var aux4 = nilMatrix(new THREE.Vector3(0., 0., 1.));
-    var aux5 = nilMatrixInv(new THREE.Vector3(0., 0., 1.));
 
-    // var aux4 = new THREE.Matrix4().set(
-    //     1., 0, 0, 0,
-    //     0, 1., 0, 0,
-    //     0, 0, 1., 1.,
-    //     0, 0, 0, 1.
-    // );
-    //
-    // var aux5 = new THREE.Matrix4().set(
-    //     1., 0, 0, 0,
-    //     0, 1., 0, 0,
-    //     0, 0, 1., -1.,
-    //     0, 0, 0, 1.
-    // );
-
-
-    var gen0 = [aux0];
-    var gen1 = [aux1];
-    var gen2 = [aux2];
-    var gen3 = [aux3];
-    var gen4 = [aux4];
-    var gen5 = [aux5];
-    /*var gen0 = translateByVector(new THREE.Vector3(1., 0., 0.));
+    var gen0 = translateByVector(new THREE.Vector3(1., 0., 0.));
     var gen1 = translateByVector(new THREE.Vector3(-1., 0., 0.));
     var gen2 = translateByVector(new THREE.Vector3(0., 1., 0.));
     var gen3 = translateByVector(new THREE.Vector3(0., -1., 0.));
     var gen4 = translateByVector(new THREE.Vector3(0., 0., 1.));
-    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1.));*/
+    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1.));
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -298,29 +180,58 @@ var initObjects = function () {
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
-var setupMaterial = function(fShader){
-  g_material = new THREE.ShaderMaterial({
-    uniforms:{
+var setupMaterial = function (fShader) {
+    g_material = new THREE.ShaderMaterial({
+        uniforms: {
 
-        isStereo:{type:"bool", value: g_vr},
-        screenResolution:{type:"v2", value: g_screenResolution},
-        lightIntensities:{type:"v4", value: lightIntensities},
-        //--- geometry dependent stuff here ---//
-    //--- lists of stuff that goes into each invGenerator
-        invGenerators:{type:"m4", value: invGensMatrices},
-    //--- end of invGen stuff
-        currentBoost:{type:"m4", value: g_currentBoost[0]},
-    //currentBoost is an array
-        facing:{type:"m4", value: g_facing},
-        cellBoost:{type:"m4", value: g_cellBoost[0]},
-        invCellBoost:{type:"m4", value: g_invCellBoost[0]},
-        lightPositions:{type:"v4", value: lightPositions},
-        globalObjectBoost:{type:"m4", value: globalObjectBoost[0]}
-    },
+            isStereo: {
+                type: "bool",
+                value: g_vr
+            },
+            screenResolution: {
+                type: "v2",
+                value: g_screenResolution
+            },
+            lightIntensities: {
+                type: "v4",
+                value: lightIntensities
+            },
+            //--- geometry dependent stuff here ---//
+            //--- lists of stuff that goes into each invGenerator
+            invGenerators: {
+                type: "m4",
+                value: invGensMatrices
+            },
+            //--- end of invGen stuff
+            currentBoost: {
+                type: "m4",
+                value: g_currentBoost[0]
+            },
+            //currentBoost is an array
+            facing: {
+                type: "m4",
+                value: g_facing
+            },
+            cellBoost: {
+                type: "m4",
+                value: g_cellBoost[0]
+            },
+            invCellBoost: {
+                type: "m4",
+                value: g_invCellBoost[0]
+            },
+            lightPositions: {
+                type: "v4",
+                value: lightPositions
+            },
+            globalObjectBoost: {
+                type: "m4",
+                value: globalObjectBoost[0]
+            }
+        },
 
-    vertexShader: document.getElementById('vertexShader').textContent,
-    fragmentShader: fShader,
-    transparent:true
-  });
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: fShader,
+        transparent: true
+    });
 }
-

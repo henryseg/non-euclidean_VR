@@ -227,17 +227,9 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 
 float tangDot(tangVector u, tangVector v){
-    // dot product between two vectors in the tangent bundle
-    // we assume that the underlying points are the same
-    // TODO : make a test if the underlying points are indeed the same ?
-    vec4 p = u.pos;
-    mat3 g = mat3(
-    0.25 * pow(p.y, 2.) +1., -0.25 * p.x * p.y, 0.5 * p.y,
-    -0.25 * p.x * p.y, 0.25 * pow(p.x, 2.)+1., -0.5 * p.x,
-    0.5 * p.y, -0.5 * p.x, 1.
-    );
+  
 
-    return dot(u.dir.xyz, g * v.dir.xyz);
+    return dot(u.dir.xyz,  v.dir.xyz);
 
 }
 
@@ -346,14 +338,7 @@ float fakeHeight(float z) {
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-
-    mat4 isomInv = nilMatrixInv(p);
-    vec4 qOrigin = isomInv*q;
-    // we now need the distance between the origin and p
-    float rhosq = pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.);
-    float hsq = fakeHeightSq(qOrigin.z);
-
-    return pow(0.2*pow(rhosq, 2.) + 0.8*pow(hsq, 2.), 0.25);
+    return length(q-p);
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -363,28 +348,7 @@ float fakeDistance(tangVector u, tangVector v){
 
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-    mat4 isomInv = nilMatrixInv(p);
-    vec4 qOrigin = isomInv * q;
-
-    // solve the problem !
-    float x3 = qOrigin.z;
-    float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
-
-    if (x3 == 0.0) {
-        return sqrt(rhosq);
-    }
-    else {
-        float phi = newton_zero(rhosq, x3);
-        float sign = 0.0;
-        if (x3 > 0.0) {
-            sign = 1.0;
-        }
-        else {
-            sign = -1.0;
-        }
-        float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
-        return abs(phi/w);
-    }
+   return length(q-p);
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -394,53 +358,7 @@ float exactDist(tangVector u, tangVector v){
 
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-    // if FAKE_LIGHT is true, use the Euclidean metric for the computation (straight lines).
-
-    if (FAKE_LIGHT) {
-        // if FAKE_LIGHT is ON, just return the Euclidean vector pointing to q
         return tangVector(p, normalize(q-p));
-    }
-
-    else {
-        // move p to the origin
-        mat4 isom = nilMatrix(p);
-        mat4 isomInv = nilMatrixInv(p);
-
-        vec4 qOrigin = isomInv*q;
-
-        // solve the problem !
-        float x3 = qOrigin.z;
-
-        vec4 resOrigin = vec4(0.);
-        if (x3 == 0.0) {
-            // probably not needed (case contained in the next one)
-            resOrigin =  vec4(qOrigin.z, qOrigin.y, qOrigin.z, 0.0);
-        }
-        else {
-            float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
-            float phi = newton_zero(rhosq, x3);
-            float sign = 0.0;
-            if (x3 > 0.0) {
-                sign = 1.0;
-            }
-            else {
-                sign = -1.0;
-            }
-            float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
-            float c = sqrt(1.0  - pow(w, 2.0));
-            float alpha = - 0.5 * phi;
-            if (qOrigin.x*qOrigin.y != 0.0){
-                alpha = alpha + atan(qOrigin.y, qOrigin.x);
-            }
-            //float t = phi / w;
-
-            //resOrigin =  t * vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
-            resOrigin =  vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
-        }
-
-        // move back to p
-        return tangVector(p, isom * resOrigin);
-    }
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
@@ -450,44 +368,8 @@ tangVector tangDirection(tangVector u, tangVector v){
 
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
-
-    // move p to the origin
-    mat4 isom = nilMatrix(tv.pos);
-    mat4 isomInv = nilMatrixInv(tv.pos);
-
-    // vector at the origin
-    tangVector tvOrigin = translate(isomInv, tv);
-
-    // solve the problem !
-    float w = tvOrigin.dir.z;
-    float c = sqrt(1. - w * w);
-    float alpha = fixedatan(tvOrigin.dir.y, tvOrigin.dir.x);
-
-    tangVector achievedFromOrigin = tangVector(ORIGIN, vec4(0.));
-
-    if (w == 0.){
-        achievedFromOrigin.pos = vec4(t * tvOrigin.dir.xyz, 1);
-        achievedFromOrigin.dir =  tvOrigin.dir;
-    }
-    else {
-        achievedFromOrigin.pos = vec4(
-        2. * (c / w) * sin(0.5 * w * t) * cos(0.5 * w * t + alpha),
-        2. * (c / w) * sin(0.5 * w * t) * sin(0.5 * w * t + alpha),
-        w * t + 0.5 * pow(c / w, 2.) * (w * t - sin(w * t)),
-        1.
-        );
-
-        achievedFromOrigin.dir = vec4(
-        c * cos(w * t + alpha),
-        c * sin(w * t + alpha),
-        w + 0.5 * pow(c, 2.) / w  - 0.5 * pow(c, 2.) * cos(w * t) / w,
-        0.
-        );
-    }
-
-    // move back to p
-    tangVector res = translate(isom, achievedFromOrigin);
-    return res;
+return tangVector(tv.pos+t*tv.dir,tv.dir);
+  
 }
 
 
@@ -529,20 +411,8 @@ float lightAtt(float dist){
 
 
 float sphereSDF(vec4 p, vec4 center, float radius){
-    // more precise computation
-    float fakeDist = fakeDistance(p, center);
-
-    if (FAKE_DIST_SPHERE) {
-        return fakeDist - radius;
-    }
-    else {
-        if (fakeDist > 10. * radius) {
-            return fakeDist - radius;
-        }
-        else {
             return exactDist(p, center) - radius;
-        }
-    }
+      
 }
 
 
