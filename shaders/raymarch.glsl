@@ -6,8 +6,11 @@ out vec4 out_FragColor;
 // PARAMETERS
 //--------------------------------------------
 
-//Some parameters that can be changed to change the scence
+/*
 
+Some parameters that can be changed to change the scence
+
+*/
 
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
@@ -21,22 +24,20 @@ const float centerSphereRadius =0.7;
 
 const float PI = 3.1415926538;
 
-const vec4 ORIGIN = vec4(0., 0., 0., 1.);
-const float HalfCube=0.6584789485;
-const float modelHalfCube = 0.5773502692;
+const vec4 ORIGIN = vec4(0, 0, 0, 1);
+const float modelHalfCube = 0.5;
 
+//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
+const mat4 leftBoost = mat4(1., 0, 0, -0.032,
+0, 1, 0, 0,
+0, 0, 1, 0,
+-0.032, 0, 0, 1.);
 
-  const mat4 leftBoost = mat4(1., 0, 0, -0.032,
-                              0, 1, 0, 0,
-                              0, 0, 1, 0,
-                              -0.032, 0, 0, 1.);
-                              
-
-  const mat4 rightBoost = mat4(1., 0, 0, 0.032,
-                               0, 1, 0, 0,
-                               0, 0, 1, 0,
-                               0.032, 0, 0, 1.);
-
+//generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
+const mat4 rightBoost = mat4(1., 0, 0, 0.032,
+0, 1, 0, 0,
+0, 0, 1, 0,
+0.032, 0, 0, 1.);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -49,6 +50,29 @@ Some auxiliary methods
 */
 
 
+// According to the doc, atan is not defined whenever x = 0
+// We fix this here
+float fixedatan(float y, float x) {
+    if (x == 0. && y == 0.) {
+        return 0.0;
+    }
+    else if (x == 0.) {
+        if (y > 0.0) {
+            return 0.5* PI;
+        }
+        else {
+            return -0.5*PI;
+        }
+    }
+    else {
+        return atan(y, x);
+    }
+}
+
+
+//-------------------------------------------------------
+// AUXILIARY (NEWTON METHOD)
+//-------------------------------------------------------
 
 
 
@@ -108,17 +132,15 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 
 float tangDot(tangVector u, tangVector v){
-    // dot product between two vectors in the tangent bundle
-    // we assume that the underlying points are the same
-    // TODO : make a test if the underlying points are indeed the same ?
-    mat4 g = mat4(
+  
+        mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
     0.,0.,1.,0.,
     0.,0.,0.,-1.
     );
 
-    return dot(u.dir, g * v.dir);
+    return dot(u.dir,  g*v.dir);
 
 }
 
@@ -134,10 +156,10 @@ tangVector tangNormalize(tangVector v){
 
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
-    return tangDot(u, v)/(tangNorm(u)*tangNorm(v));
+    return tangDot(u, v);
 }
 
-
+/*
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
@@ -160,6 +182,29 @@ mat4 tangBasis(vec4 p){
     theBasis[1]=basis_y.dir;
     theBasis[2]=basis_z.dir;
     return theBasis;
+}*/
+
+mat4 tangBasis(vec4 p){
+    // return a basis of vectors at the point p
+
+    /*
+    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
+    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
+    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
+    //make this orthonormal
+    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
+    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
+    mat4 theBasis=mat4(0.);
+    */
+
+    vec4 basis_x = vec4(1., 0., 0., 0.);
+    vec4 basis_y = vec4(0., 1., 0., 0.);
+    vec4 basis_z = vec4(0., 0., 1., 0.);
+    mat4 theBasis=mat4(0.);
+    theBasis[0]=basis_x;
+    theBasis[1]=basis_y;
+    theBasis[2]=basis_z;
+    return theBasis;
 }
 
 
@@ -173,22 +218,23 @@ mat4 tangBasis(vec4 p){
 
 float hypAng(vec4 p, vec4 q){
         //negative the lorentz dot product gives the hyperbolic angle between the two points
-    return -p.x*q.x-p.y*q.y-p.z*q.z-p.w*q.w;
+    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
 }
 
-
-float fakeDistance(vec4 p, vec4 q) {//For hyperbolic space this is unnecessary
+float fakeDistance(vec4 p, vec4 q){
+    // measure the distance between two points in the geometry
+    // fake distance
     return acosh(hypAng(p,q));
 }
 
-
-float fakeDistance(tangVector p, tangVector q) {//overload of the previous case
-    return acosh(hypAng(p.pos,q.pos));
+float fakeDistance(tangVector u, tangVector v){
+    // overload of the previous function in case we work with tangent vectors
+    return fakeDistance(u.pos, v.pos);
 }
-
 
 float exactDist(vec4 p, vec4 q) {
-    return acosh(hypAng(p,q));
+    // move p to the origin
+   return acosh(hypAng(p,q));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -198,23 +244,13 @@ float exactDist(tangVector u, tangVector v){
 
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-    // if FAKE_LIGHT is true, use the Euclidean metric for the computation (straight lines).
-
-    if (FAKE_LIGHT) {
-        // if FAKE_LIGHT is ON, just return the Euclidean vector pointing to q
-        return tangVector(p, normalize(q-p));
-    }
-
-    else {
-        return tangNormalize(tangVector(p, q - hypAng(p,q)*p));
-    }
+        return tangNormalize(tangVector(p, q + hypAng(p,q)*p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
-    return tangDirection(u.pos, v.pos);
+     return tangDirection(u.pos, v.pos);
 }
-
 
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
@@ -240,8 +276,8 @@ vec4 geomProject(vec4 p){
 //Project onto the Klein Model
 vec4 modelProject(vec4 u){
     return u/u.w;
+ 
 }
-
 
 
 //-------------------------------------------------------
@@ -251,7 +287,7 @@ vec4 modelProject(vec4 u){
 float lightAtt(float dist){
     //fake linear falloff
     return dist;
-//return sinh(dist)*sinh(dist);
+   //return sinh(dist)*sinh(dist);
 }
 
 
@@ -261,9 +297,8 @@ float lightAtt(float dist){
 
 
 float sphereSDF(vec4 p, vec4 center, float radius){
-    // more precise computation
-    return exactDist(p, center) - radius;
-
+            return exactDist(p, center) - radius;
+      
 }
 
 
@@ -316,7 +351,7 @@ uniform mat4 globalObjectBoost;
 
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
-    float sphere = centerSDF(p, center, centerSphereRadius);
+    float sphere = centerSDF(p, ORIGIN, 0.68);
     float final = -sphere;
     return final;
 }
@@ -354,28 +389,27 @@ float globalSceneSDF(vec4 p){
 
 // check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out mat4 fixMatrix){
-    vec4 ModelP= modelProject(p);
-    if (ModelP.x > modelHalfCube){
+    if (p.x > modelHalfCube){
         fixMatrix = invGenerators[0];
         return true;
     }
-    if (ModelP.x < -modelHalfCube){
+    if (p.x < -modelHalfCube){
         fixMatrix = invGenerators[1];
         return true;
     }
-    if (ModelP.y > modelHalfCube){
+    if (p.y > modelHalfCube){
         fixMatrix = invGenerators[2];
         return true;
     }
-    if (ModelP.y < -modelHalfCube){
+    if (p.y < -modelHalfCube){
         fixMatrix = invGenerators[3];
         return true;
     }
-    if (ModelP.z > modelHalfCube){
+    if (p.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
     }
-    if (ModelP.z < -modelHalfCube){
+    if (p.z < -modelHalfCube){
         fixMatrix = invGenerators[5];
         return true;
     }
@@ -443,7 +477,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
-        
+
         if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
             localtv = translate(fixMatrix, localtv);
@@ -625,11 +659,12 @@ void main(){
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
     raymarch(rayDir, totalFixMatrix);
+
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.3);
+        out_FragColor = vec4(0.01);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -659,6 +694,6 @@ void main(){
         vec3 color;
         color = phongModel(totalFixMatrix, 0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.3, 1.0);
+        out_FragColor = vec4(0.9*color+0.1, 1.0);
     }
 }

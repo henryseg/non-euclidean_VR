@@ -9,7 +9,6 @@ var Origin = new THREE.Vector4(0, 0, 0, 1);
 var cubeHalfWidth = 0.6584789485;
 
 
-
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
@@ -51,9 +50,24 @@ function reduceBoostError(boost) {
 }
 
 
+
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
+
+/*
+function translateByVector(v) {
+    var dx = v.x;
+    var dy = v.y;
+    var dz = v.z;
+
+    var m = new THREE.Matrix4().set(
+        1, 0, 0, dx,
+        0, 1, 0, dy,
+        0, 0, 1, dz,
+        0, 0, 0, 1);
+    return [m];
+}*/
 
 
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
@@ -86,16 +100,13 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
 }
 
 
-
-
 function translateFacingByVector(v) {
-
-    return new THREE.Matrix4().set(
-        1, 0, 0, 0,
+    // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
+    return new THREE.Matrix4().set(1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
-        0, 0, 0, 1);
-    // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
+        0, 0, 0, 1
+    );
 
 }
 
@@ -142,24 +153,23 @@ function geomDist(v) { //good enough for comparison of distances on the hyperbol
 
 
 function fixOutsideCentralCell(boost) {
-    /*
-        var cPos = new THREE.Vector4(0, 0, 0, 1);
-        applyIsom(cPos, boost);
-        var bestDist = geomDist(cPos);
-        var bestIndex = -1;
-        for (var i = 0; i < gens.length; i++) {
-            var pos = cPos.clone();
-            applyIsom(pos, gens[i]);
-            if (geomDist(pos) < bestDist) {
-                bestDist = geomDist(pos);
-                bestIndex = i;
-            }
+    var cPos = new THREE.Vector4(0, 0, 0, 1);
+    applyIsom(cPos, boost);
+    var bestDist = geomDist(cPos);
+    var bestIndex = -1;
+    for (var i = 0; i < gens.length; i++) {
+        var pos = cPos.clone();
+        applyIsom(pos, gens[i]);
+        if (geomDist(pos) < bestDist) {
+            bestDist = geomDist(pos);
+            bestIndex = i;
         }
-        if (bestIndex != -1) {
-            preComposeIsom(boost, gens[bestIndex]);
-            return bestIndex;
-        } else*/
-    return -1;
+    }
+    if (bestIndex != -1) {
+        preComposeIsom(boost, gens[bestIndex]);
+        return bestIndex;
+    } else
+        return -1;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
