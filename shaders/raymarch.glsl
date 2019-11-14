@@ -27,13 +27,13 @@ const vec4 ORIGIN = vec4(0, 0, 0, 1);
 const float modelHalfCube = 0.5;
 
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-const mat4 leftBoost = mat4(1., 0, 0, -0.032,
+const mat4 leftBoost = mat4(1., 0, 0, 0,
 0, 1, 0, 0,
 0, 0, 1, 0,
 -0.032, 0, 0, 1.);
 
 //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-const mat4 rightBoost = mat4(1., 0, 0, 0.032,
+const mat4 rightBoost = mat4(1., 0, 0, 0,
 0, 1, 0, 0,
 0, 0, 1, 0,
 0.032, 0, 0, 1.);
