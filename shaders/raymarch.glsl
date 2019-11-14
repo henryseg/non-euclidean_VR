@@ -105,7 +105,7 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 float tangDot(tangVector u, tangVector v){
   
-        mat4 g = mat4(
+    mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
     0.,0.,1.,0.,
@@ -167,13 +167,13 @@ mat4 tangBasis(vec4 p){
 
 float hypAng(vec4 p, vec4 q){
         //negative the lorentz dot product gives the hyperbolic angle between the two points
-    return p.x*q.x+p.y*q.y+p.z*q.z-p.w*q.w;
+    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
 }
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-    return acosh(-hypAng(p,q));
+    return acosh(hypAng(p,q));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -183,7 +183,7 @@ float fakeDistance(tangVector u, tangVector v){
 
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-   return acosh(-hypAng(p,q));
+   return acosh(hypAng(p,q));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -218,7 +218,7 @@ tangVector flow(tangVector tv, float t){
 
 //project point back onto the geometry
 vec4 geomProject(vec4 p){
-    return p/sqrt(hypAng(p,p));
+    return p/sqrt(abs(hypAng(p,p)));
 }
 
 
@@ -263,7 +263,7 @@ const int MAX_MARCHING_STEPS =  50;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
-const float fov = 120.0;
+const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
 
 
@@ -646,6 +646,6 @@ void main(){
         vec3 color;
         color = phongModel(totalFixMatrix, 0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.3, 1.0);
+        out_FragColor = vec4(color, 1.0);
     }
 }

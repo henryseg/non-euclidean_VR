@@ -178,12 +178,12 @@ function fixOutsideCentralCell(boost) {
 
 var createGenerators = function () { /// generators for the tiling by cubes.
 
-    var gen0 = translateByVector(new THREE.Vector3(1. * cubeHalfWidth, 0., 0.));
-    var gen1 = translateByVector(new THREE.Vector3(-1. * cubeHalfWidth, 0., 0.));
-    var gen2 = translateByVector(new THREE.Vector3(0., 1. * cubeHalfWidth, 0.));
-    var gen3 = translateByVector(new THREE.Vector3(0., -1. * cubeHalfWidth, 0.));
-    var gen4 = translateByVector(new THREE.Vector3(0., 0., 1. * cubeHalfWidth));
-    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1. * cubeHalfWidth));
+    var gen0 = translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
+    var gen1 = translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
+    var gen2 = translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
+    var gen3 = translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
+    var gen4 = translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
+    var gen5 = translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
