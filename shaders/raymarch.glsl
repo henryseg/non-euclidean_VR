@@ -616,7 +616,7 @@ void main(){
     
     if (isStereo == 1){
          
-        // REMI : to be checked...
+    
         if (isLeft){
             rayDir = translate(leftBoost, rayDir);
         }
@@ -625,16 +625,8 @@ void main(){
         }
     }
 
-    
-  if (isStereo == 1){
-        // REMI : Not sur about what is this
-        rayDir = applyMatrixToDir(facing, rayDir);
-            
-           // tangVector(facing *rayDir.pos,  rayDir.dir);
-    }
-
-    //rayOrigin = currentBoost * rayOrigin;
-    rayDir = applyMatrixToDir(facing, rayDir);
+  // in other geometries, the facing will not be an isom, so applying facing is probably not good.
+    rayDir = translate(facing, rayDir);
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
