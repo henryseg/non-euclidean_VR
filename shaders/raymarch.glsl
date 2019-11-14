@@ -28,18 +28,19 @@ const float PI = 3.1415926538;
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
 const float modelHalfCube =  0.5773502692;//projection of cube to klein model
 const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-
+/*
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-const mat4 leftBoost = mat4(1., 0, 0, -0.032,
-0, 1, 0, 0,
-0, 0, 1, 0,
--0.032, 0, 0, 1.);
+const mat4 leftBoost = mat4(1.000512043692158,0.,0.,0.03200546161296042,
+0.,1.,0.,0.,
+0.,0.,1.,0.,
+ 0.03200546161296042, 0.,0.,1.000512043692158);
 
 //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-const mat4 rightBoost = mat4(1., 0, 0, 0.032,
-0, 1, 0, 0,
-0, 0, 1, 0,
-0.032, 0, 0, 1.);
+const mat4 rightBoost = mat4(1.000512043692158,0.,0.,-0.03200546161296042,
+0.,1.,0.,0.,
+0.,0.,1.,0.,
+ -0.03200546161296042, 0.,0.,1.000512043692158);
+*/
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -297,6 +298,8 @@ uniform int isStereo;
 uniform vec2 screenResolution;
 uniform mat4 invGenerators[6];
 uniform mat4 currentBoost;
+uniform mat4 leftBoost;
+uniform mat4 rightBoost;
 uniform mat4 facing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;

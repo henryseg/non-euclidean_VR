@@ -217,12 +217,16 @@ var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
 var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 
 
+var leftBoost = translateByVector(new THREE.Vector3(0.032, 0, 0));
+var rightBoost = translateByVector(new THREE.Vector3(-0.032, 0, 0));
+
 var initObjects = function () {
     PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
+    console.log(translateByVector(new THREE.Vector3(0.032, 0, 0)));
 }
 
 //-------------------------------------------------------
@@ -256,6 +260,14 @@ var setupMaterial = function (fShader) {
             currentBoost: {
                 type: "m4",
                 value: g_currentBoost[0]
+            },
+            leftBoost: {
+                type: "m4",
+                value: leftBoost[0]
+            },
+            rightBoost: {
+                type: "m4",
+                value: rightBoost[0]
             },
             //currentBoost is an array
             facing: {
