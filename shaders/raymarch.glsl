@@ -15,7 +15,7 @@ Some parameters that can be changed to change the scence
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
-const float centerSphereRadius =0.7;
+const float centerSphereRadius =0.9;
 
 
 //--------------------------------------------
@@ -25,7 +25,7 @@ const float centerSphereRadius =0.7;
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube = 0.5;
+const float modelHalfCube = 0.549;//projection of cube to klein model
 
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
 const mat4 leftBoost = mat4(1., 0, 0, -0.032,
@@ -45,34 +45,6 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 // AUXILIARY (BASICS)
 //--------------------------------------------
 
-/*
-Some auxiliary methods
-*/
-
-
-// According to the doc, atan is not defined whenever x = 0
-// We fix this here
-float fixedatan(float y, float x) {
-    if (x == 0. && y == 0.) {
-        return 0.0;
-    }
-    else if (x == 0.) {
-        if (y > 0.0) {
-            return 0.5* PI;
-        }
-        else {
-            return -0.5*PI;
-        }
-    }
-    else {
-        return atan(y, x);
-    }
-}
-
-
-//-------------------------------------------------------
-// AUXILIARY (NEWTON METHOD)
-//-------------------------------------------------------
 
 
 
@@ -159,7 +131,7 @@ float cosAng(tangVector u, tangVector v){
     return tangDot(u, v);
 }
 
-/*
+
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
@@ -182,29 +154,6 @@ mat4 tangBasis(vec4 p){
     theBasis[1]=basis_y.dir;
     theBasis[2]=basis_z.dir;
     return theBasis;
-}*/
-
-mat4 tangBasis(vec4 p){
-    // return a basis of vectors at the point p
-
-    /*
-    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
-    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
-    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
-    //make this orthonormal
-    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
-    mat4 theBasis=mat4(0.);
-    */
-
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis=mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
-    return theBasis;
 }
 
 
@@ -218,13 +167,13 @@ mat4 tangBasis(vec4 p){
 
 float hypAng(vec4 p, vec4 q){
         //negative the lorentz dot product gives the hyperbolic angle between the two points
-    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
+    return p.x*q.x+p.y*q.y+p.z*q.z-p.w*q.w;
 }
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-    return acosh(hypAng(p,q));
+    return acosh(-hypAng(p,q));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -234,7 +183,7 @@ float fakeDistance(tangVector u, tangVector v){
 
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-   return acosh(hypAng(p,q));
+   return acosh(-hypAng(p,q));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -244,7 +193,7 @@ float exactDist(tangVector u, tangVector v){
 
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-        return tangNormalize(tangVector(p, q + hypAng(p,q)*p));
+        return tangNormalize(tangVector(p, q - hypAng(p,q)*p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
@@ -254,11 +203,11 @@ tangVector tangDirection(tangVector u, tangVector v){
 
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
+    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
+    //tangent is derivative of position
+    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
 
-    // move back to p
-    tangVector res = tangVector(tv.pos*cosh(t) + tv.dir*sinh(t),
-                      tv.pos*sinh(t) + tv.dir*cosh(t));
-    return res;
+    return tangVector(resPos,resDir);
 }
 
 
@@ -351,7 +300,7 @@ uniform mat4 globalObjectBoost;
 
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
-    float sphere = centerSDF(p, ORIGIN, 0.68);
+    float sphere = centerSDF(p,  center, centerSphereRadius);
     float final = -sphere;
     return final;
 }
@@ -389,32 +338,35 @@ float globalSceneSDF(vec4 p){
 
 // check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out mat4 fixMatrix){
-    if (p.x > modelHalfCube){
+    vec4 ModelP= modelProject(p);
+    if (ModelP.x > modelHalfCube){
         fixMatrix = invGenerators[0];
         return true;
     }
-    if (p.x < -modelHalfCube){
+    if (ModelP.x < -modelHalfCube){
         fixMatrix = invGenerators[1];
         return true;
     }
-    if (p.y > modelHalfCube){
+    if (ModelP.y > modelHalfCube){
         fixMatrix = invGenerators[2];
         return true;
     }
-    if (p.y < -modelHalfCube){
+    if (ModelP.y < -modelHalfCube){
         fixMatrix = invGenerators[3];
         return true;
     }
-    if (p.z > modelHalfCube){
+    if (ModelP.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
     }
-    if (p.z < -modelHalfCube){
+    if (ModelP.z < -modelHalfCube){
         fixMatrix = invGenerators[5];
         return true;
     }
     return false;
 }
+
+
 
 // overload of the previous method with tangent vector
 bool isOutsideCell(tangVector v, out mat4 fixMatrix){
@@ -694,6 +646,6 @@ void main(){
         vec3 color;
         color = phongModel(totalFixMatrix, 0.2*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.1, 1.0);
+        out_FragColor = vec4(0.9*color+0.3, 1.0);
     }
 }
