@@ -658,19 +658,25 @@ void main(){
     else { // objects
 
         
-        if(SURFACE_COLOR){
+        
+         if(SURFACE_COLOR){
                //color the object based on its position in the cube
         //interpreting the cube as the color cube
-        float x=sampletv.pos[0];
-        float y=sampletv.pos[1];
-        float z=sampletv.pos[2];
-        x = x * sqrt3;
-        y = y * sqrt3;
-        z = z * sqrt3;
-        x = (x+1.0)/2.0;
-        y = (y+1.0)/2.0;
-        z = (z+1.0)/2.0;
-        vec3 pixelcolor = vec3(x, y, z);
+        vec4 samplePos=modelProject(sampletv.pos);
+        //Point in the Klein Model unit cube    
+        float x=samplePos.x;
+        float y=samplePos.y;
+        float z=samplePos.z;
+        x = x/modelHalfCube;    
+        y = y/modelHalfCube; 
+        z = z/modelHalfCube; 
+       // x = x * sqrt3;
+       // y = y * sqrt3;
+       // z = z * sqrt3;
+        //x = (x+1.0)/2.0;
+        //y = (y+1.0)/2.0;
+       // z = (z+1.0)/2.0;
+        vec3 pixelcolor = vec3(x,y,z);
 
 
         N = estimateNormal(sampletv.pos);
@@ -690,3 +696,15 @@ void main(){
         }
     }
 }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
