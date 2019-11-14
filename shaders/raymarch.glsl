@@ -11,11 +11,13 @@ out vec4 out_FragColor;
 Some parameters that can be changed to change the scence
 
 */
-
+const bool FAKE_LIGHT_FALLOFF=true;
+const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
-const float globalObjectRadius = 0.2;
-
+const float globalObjectRadius = 0.1;
+const float centerSphereRadius =0.67;
+const float vertexSphereSize = 0.23;//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -24,19 +26,21 @@ const float globalObjectRadius = 0.2;
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube = 0.5;
-
+const float modelHalfCube =  0.5;//projection of cube to klein model
+const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
+/*
 //generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-const mat4 leftBoost = mat4(1., 0,  0,0,
-0, 1, 0, 0,
-0, 0, 1, 0,
--0.32, 0, 0, 1.);
+const mat4 leftBoost = mat4(1.000512043692158,0.,0.,0.03200546161296042,
+0.,1.,0.,0.,
+0.,0.,1.,0.,
+ 0.03200546161296042, 0.,0.,1.000512043692158);
 
 //generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-const mat4 rightBoost = mat4(1., 0,  0,0,
-0, 1, 0, 0,
-0, 0, 1, 0,
-0.032, 0, 0, 1.);
+const mat4 rightBoost = mat4(1.000512043692158,0.,0.,-0.03200546161296042,
+0.,1.,0.,0.,
+0.,0.,1.,0.,
+ -0.03200546161296042, 0.,0.,1.000512043692158);
+*/
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -44,34 +48,6 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 // AUXILIARY (BASICS)
 //--------------------------------------------
 
-/*
-Some auxiliary methods
-*/
-
-
-// According to the doc, atan is not defined whenever x = 0
-// We fix this here
-float fixedatan(float y, float x) {
-    if (x == 0. && y == 0.) {
-        return 0.0;
-    }
-    else if (x == 0.) {
-        if (y > 0.0) {
-            return 0.5* PI;
-        }
-        else {
-            return -0.5*PI;
-        }
-    }
-    else {
-        return atan(y, x);
-    }
-}
-
-
-//-------------------------------------------------------
-// AUXILIARY (NEWTON METHOD)
-//-------------------------------------------------------
 
 
 
@@ -132,8 +108,7 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 float tangDot(tangVector u, tangVector v){
   
-
-    return dot(u.dir.xyz,  v.dir.xyz);
+     return dot(u.dir.xyz,  v.dir.xyz);
 
 }
 
@@ -156,16 +131,6 @@ float cosAng(tangVector u, tangVector v){
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
-    /*
-    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
-    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
-    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
-    //make this orthonormal
-    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
-    mat4 theBasis=mat4(0.);
-    */
-
     vec4 basis_x = vec4(1., 0., 0., 0.);
     vec4 basis_y = vec4(0., 1., 0., 0.);
     vec4 basis_z = vec4(0., 0., 1., 0.);
@@ -177,6 +142,7 @@ mat4 tangBasis(vec4 p){
 }
 
 
+
 //--------------------------------------------
 // GLOBAL GEOMETRY
 //--------------------------------------------
@@ -185,59 +151,10 @@ mat4 tangBasis(vec4 p){
   Methods computing ``global'' objects
 */
 
-
-mat4 nilMatrix(vec4 p) {
-    // return the Heisenberg isometry sending the origin to p
-    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
-    return mat4(
-    1., 0., -p.y/2., 0.,
-    0., 1., p.x/2., 0.,
-    0., 0., 1., 0.,
-    p.x, p.y, p.z, 1.);
+float hypAng(vec4 p, vec4 q){
+        //negative the lorentz dot product gives the hyperbolic angle between the two points
+    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
 }
-
-mat4 nilMatrixInv(vec4 p) {
-    // return the Heisenberg isometry sending the p to origin
-    return mat4(
-    1., 0., p.y/2., 0.,
-    0., 1., -p.x/2., 0.,
-    0., 0., 1., 0.,
-    -p.x, -p.y, -p.z, 1.);
-}
-
-float fakeHeightSq(float z) {
-    // square of the fake height.
-    // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinate is the argument)
-
-    if (z < sqrt(6.)){
-        return z * z;
-    }
-    else if (z < 4.*sqrt(3.)){
-        return 12. * (pow(0.75 * z, 2. / 3.) - 1.);
-    }
-    else {
-        return 2. * sqrt(3.) * z;
-    }
-}
-
-float fakeHeight(float z) {
-    // fake height : bound on the height of the ball centered at the origin passing through p
-    // (whose z coordinate is the argument)
-
-    return sqrt(fakeHeightSq(z));
-//    if (z < sqrt(6.)){
-//        return z;
-//    }
-//    else if (z < 4.*sqrt(3.)){
-//        return 2.*sqrt(3.)*sqrt(pow(0.75*z, 2./3.)-1.);
-//    }
-//    else {
-//        return sqrt(2.*sqrt(3.)*z);
-//    }
-}
-
-
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
@@ -262,12 +179,12 @@ float exactDist(tangVector u, tangVector v){
 
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-        return tangVector(p, normalize(q-p));
+        return tangNormalize(tangVector(p, q - p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
-    return tangDirection(u.pos, v.pos);
+     return tangDirection(u.pos, v.pos);
 }
 
 tangVector flow(tangVector tv, float t){
@@ -282,19 +199,16 @@ return tangVector(tv.pos+t*tv.dir,tv.dir);
 //--------------------------------------------
 
 
-//Project onto the Klein Model
-vec4 modelProject(vec4 u){
-    return u;
+//project point back onto the geometry
+vec4 geomProject(vec4 p){
+    return p;
 }
 
 
-//--------------------------------------------
-//Geometry of Space
-//--------------------------------------------
-
-//project point back onto the geometry
-vec4 geomNormalize(vec4 u){
-    return u;
+//Project onto the Klein Model
+vec4 modelProject(vec4 p){
+    return p;
+ 
 }
 
 
@@ -303,9 +217,11 @@ vec4 geomNormalize(vec4 u){
 //-------------------------------------------------------
 //light intensity as a fn of distance
 float lightAtt(float dist){
-    //fake linear falloff
+    if(FAKE_LIGHT_FALLOFF){
+           //fake linear falloff
     return dist;
-
+    }
+ return dist*dist;
 }
 
 
@@ -320,19 +236,24 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 }
 
 
+
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
 }
 
 
+float vertexSDF(vec4 p, vec4 cornerPoint, float size){
+    return  sphereSDF(abs(p), cornerPoint, size);
+}
+
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  100;
+const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 100.0;
+const float MAX_DIST = 200.0;
 const float EPSILON = 0.0001;
-const float fov = 120.0;
+const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
 
 
@@ -350,7 +271,11 @@ uniform int isStereo;
 uniform vec2 screenResolution;
 uniform mat4 invGenerators[6];
 uniform mat4 currentBoost;
+uniform mat4 leftBoost;
+uniform mat4 rightBoost;
 uniform mat4 facing;
+uniform mat4 leftFacing;
+uniform mat4 rightFacing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;
 //--------------------------------------------
@@ -369,9 +294,14 @@ uniform mat4 globalObjectBoost;
 
 float localSceneSDF(vec4 p){
     vec4 center = vec4(0, 0, 0., 1.);
-    float sphere = centerSDF(p, ORIGIN, 0.68);
-    float final = -sphere;
+    float sphere = centerSDF(p,  center, centerSphereRadius);
+    float vertexSphere = 0.0;
+    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
+    float final = -min(vertexSphere,sphere); //unionSDF
     return final;
+    
+   // float final = -sphere;
+    //return final;
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -407,32 +337,35 @@ float globalSceneSDF(vec4 p){
 
 // check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out mat4 fixMatrix){
-    if (p.x > modelHalfCube){
+    vec4 ModelP= modelProject(p);
+    if (ModelP.x > modelHalfCube){
         fixMatrix = invGenerators[0];
         return true;
     }
-    if (p.x < -modelHalfCube){
+    if (ModelP.x < -modelHalfCube){
         fixMatrix = invGenerators[1];
         return true;
     }
-    if (p.y > modelHalfCube){
+    if (ModelP.y > modelHalfCube){
         fixMatrix = invGenerators[2];
         return true;
     }
-    if (p.y < -modelHalfCube){
+    if (ModelP.y < -modelHalfCube){
         fixMatrix = invGenerators[3];
         return true;
     }
-    if (p.z > modelHalfCube){
+    if (ModelP.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
     }
-    if (p.z < -modelHalfCube){
+    if (ModelP.z < -modelHalfCube){
         fixMatrix = invGenerators[5];
         return true;
     }
     return false;
 }
+
+
 
 // overload of the previous method with tangent vector
 bool isOutsideCell(tangVector v, out mat4 fixMatrix){
@@ -475,7 +408,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 
 
 //--------------------------------------------
-// NOT GEOM DEPENDENT
+// DOING THE RAYMARCH
 //--------------------------------------------
 
 
@@ -602,7 +535,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
-    //Attenuation - Inverse Square
+    //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
     float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
     //Compute final color
@@ -652,27 +585,30 @@ void main(){
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    
+        //camera position must be translated in hyperboloid -----------------------
+    rayDir=applyMatrixToDir(facing, rayDir);
+    
+    
     if (isStereo == 1){
-        // REMI : to be checked...
+         
+    
         if (isLeft){
+            rayDir=applyMatrixToDir(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
         }
         else {
+            rayDir=applyMatrixToDir(rightFacing, rayDir);
             rayDir = translate(rightBoost, rayDir);
         }
     }
 
-    //camera position must be translated in hyperboloid -----------------------
-
-    if (isStereo == 1){
-        // REMI : Not sur about what is this
-        rayDir = tangVector(facing * rayDir.pos, rayDir.dir);
-    }
-    rayDir = tangNormalize(rayDir);
-    //rayOrigin = currentBoost * rayOrigin;
-    rayDir = applyMatrixToDir(facing, rayDir);
+    
+  // in other geometries, the facing will not be an isom, so applying facing is probably not good.
+   // rayDir = translate(facing, rayDir);
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
+    
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
@@ -694,24 +630,54 @@ void main(){
     }
     else { // objects
 
-        //color the object based on its position in the cube
+        
+        
+         if(SURFACE_COLOR){
+               //color the object based on its position in the cube
         //interpreting the cube as the color cube
-        float x=sampletv.pos[0];
-        float y=sampletv.pos[1];
-        float z=sampletv.pos[2];
-        x = x * sqrt3;
-        y = y * sqrt3;
-        z = z * sqrt3;
-        x = (x+1.0)/2.0;
-        y = (y+1.0)/2.0;
-        z = (z+1.0)/2.0;
-        vec3 pixelcolor = vec3(x, y, z);
+        vec4 samplePos=modelProject(sampletv.pos);
+        //Point in the Klein Model unit cube    
+        float x=samplePos.x;
+        float y=samplePos.y;
+        float z=samplePos.z;
+        x = x/modelHalfCube;    
+        y = y/modelHalfCube; 
+        z = z/modelHalfCube; 
+       // x = x * sqrt3;
+       // y = y * sqrt3;
+       // z = z * sqrt3;
+        //x = (x+1.0)/2.0;
+        //y = (y+1.0)/2.0;
+       // z = (z+1.0)/2.0;
+        vec3 pixelcolor = vec3(x,y,z);
 
 
         N = estimateNormal(sampletv.pos);
         vec3 color;
-        color = phongModel(totalFixMatrix, 0.2*pixelcolor);
+        color = phongModel(totalFixMatrix, 0.1*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.1, 1.0);
+        out_FragColor = vec4(0.9*color+0.1, 1.0);  
+        }
+        
+        else{
+            // objects
+        N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
+        out_FragColor = vec4(color, 1.0);
+        }
     }
 }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

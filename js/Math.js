@@ -6,7 +6,7 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-//var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 0.5;
 
 
 //----------------------------------------------------------------------
@@ -15,14 +15,14 @@ var Origin = new THREE.Vector4(0, 0, 0, 1);
 
 
 function reduceBoostError(boost) {
-    // A priori nothing to do, since we are working in R^3 (with the Nil metric)
+
 }
+
 
 
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
-
 
 function translateByVector(v) {
     var dx = v.x;
@@ -86,25 +86,29 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting Back to Central Cell
 //-----------------------------------------------------------------------------------------------------------------------------
+function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
+    return Math.acosh(v.w);
+}
+
 
 function fixOutsideCentralCell(boost) {
-    /* var cPos = new THREE.Vector4(0, 0, 0, 1);
-     applyIsom(cPos, boost);
-     var bestDist = geomDist(cPos);
-     var bestIndex = -1;
-     for (var i = 0; i < gens.length; i++) {
-         var pos = cPos.clone();
-         applyIsom(pos, gens[i]);
-         if (geomDist(pos) < bestDist) {
-             bestDist = geomDist(pos);
-             bestIndex = i;
-         }
-     }
-     if (bestIndex != -1) {
-         preComposeIsom(boost, gens[bestIndex]);
-         return bestIndex;
-     } else*/
-    return -1;
+    var cPos = new THREE.Vector4(0, 0, 0, 1);
+    applyIsom(cPos, boost);
+    var bestDist = geomDist(cPos);
+    var bestIndex = -1;
+    for (var i = 0; i < gens.length; i++) {
+        var pos = cPos.clone();
+        applyIsom(pos, gens[i]);
+        if (geomDist(pos) < bestDist) {
+            bestDist = geomDist(pos);
+            bestIndex = i;
+        }
+    }
+    if (bestIndex != -1) {
+        preComposeIsom(boost, gens[bestIndex]);
+        return bestIndex;
+    } else
+        return -1;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -113,12 +117,12 @@ function fixOutsideCentralCell(boost) {
 
 var createGenerators = function () { /// generators for the tiling by cubes.
 
-    var gen0 = translateByVector(new THREE.Vector3(1., 0., 0.));
-    var gen1 = translateByVector(new THREE.Vector3(-1., 0., 0.));
-    var gen2 = translateByVector(new THREE.Vector3(0., 1., 0.));
-    var gen3 = translateByVector(new THREE.Vector3(0., -1., 0.));
-    var gen4 = translateByVector(new THREE.Vector3(0., 0., 1.));
-    var gen5 = translateByVector(new THREE.Vector3(0., 0., -1.));
+    var gen0 = translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
+    var gen1 = translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
+    var gen2 = translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
+    var gen3 = translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
+    var gen4 = translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
+    var gen5 = translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -167,12 +171,14 @@ var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
 var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 
 
+
 var initObjects = function () {
     PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
+    globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
+    console.log(translateByVector(new THREE.Vector3(0.032, 0, 0)));
 }
 
 //-------------------------------------------------------
@@ -181,6 +187,22 @@ var initObjects = function () {
 // We must unpackage the boost data here for sending to the shader.
 
 var setupMaterial = function (fShader) {
+    //these are the left/right translations, rotations and facing corrections for stereo motion
+
+    //facing is a 4x4 matrix, need 3-vector to feed into translatebyvector.
+    var preVectorLeft = (new THREE.Vector4(-0.032, 0, 0).applyMatrix4(g_facing));
+    var vectorLeft = new THREE.Vector3(preVectorLeft.x, preVectorLeft.y, preVectorLeft.z);
+
+    var preVectorRight = (new THREE.Vector4(0.032, 0, 0).applyMatrix4(g_facing));
+    var vectorRight = new THREE.Vector3(preVectorRight.x, preVectorRight.y, preVectorRight.z);
+
+
+    var leftBoost = translateByVector(vectorLeft);
+    var rightBoost = translateByVector(vectorRight);
+    var leftFacing = translateFacingByVector(vectorLeft);
+    var rightFacing = translateFacingByVector(vectorRight);
+
+
     g_material = new THREE.ShaderMaterial({
         uniforms: {
 
@@ -207,10 +229,26 @@ var setupMaterial = function (fShader) {
                 type: "m4",
                 value: g_currentBoost[0]
             },
+            leftBoost: {
+                type: "m4",
+                value: leftBoost[0]
+            },
+            rightBoost: {
+                type: "m4",
+                value: rightBoost[0]
+            },
             //currentBoost is an array
             facing: {
                 type: "m4",
                 value: g_facing
+            },
+            leftFacing: {
+                type: "m4",
+                value: leftFacing
+            },
+            rightFacing: {
+                type: "m4",
+                value: rightFacing
             },
             cellBoost: {
                 type: "m4",
