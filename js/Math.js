@@ -12,7 +12,7 @@ var cubeHalfWidth = 0.6584789485;
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
-/*
+
 THREE.Vector4.prototype.geomDot = function (v) {
     return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
 }
@@ -24,10 +24,10 @@ THREE.Vector4.prototype.geomLength = function () {
 THREE.Vector4.prototype.geomNormalize = function () {
     return this.divideScalar(this.geomLength());
 }
-*/
+
 
 function reduceBoostError(boost) {
-    /*
+
     var m = boost[0];
     var n = m.elements; //elements are stored in column major order we need row major
     var temp = new THREE.Vector4();
@@ -46,7 +46,7 @@ function reduceBoostError(boost) {
     }
     m.elements = n;
     boost[0].elements = m.elements;
-    */
+
 }
 
 

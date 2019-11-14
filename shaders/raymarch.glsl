@@ -430,7 +430,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 
 
 //--------------------------------------------
-// NOT GEOM DEPENDENT
+// DOING THE RAYMARCH
 //--------------------------------------------
 
 
@@ -557,7 +557,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
     vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
-    //Attenuation - Inverse Square
+    //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
     float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
     //Compute final color
@@ -607,7 +607,12 @@ void main(){
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    
+        //camera position must be translated in hyperboloid -----------------------
+
+    
     if (isStereo == 1){
+         
         // REMI : to be checked...
         if (isLeft){
             rayDir = translate(leftBoost, rayDir);
@@ -617,11 +622,12 @@ void main(){
         }
     }
 
-    //camera position must be translated in hyperboloid -----------------------
-
-    if (isStereo == 1){
+    
+  if (isStereo == 1){
         // REMI : Not sur about what is this
-        rayDir = tangVector(facing * rayDir.pos, rayDir.dir);
+        rayDir = applyMatrixToDir(facing, rayDir);
+            
+           // tangVector(facing *rayDir.pos,  rayDir.dir);
     }
 
     //rayOrigin = currentBoost * rayOrigin;
