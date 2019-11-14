@@ -11,7 +11,8 @@ out vec4 out_FragColor;
 Some parameters that can be changed to change the scence
 
 */
-
+const bool FAKE_LIGHT_FALLOFF=true;
+const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
@@ -234,9 +235,11 @@ vec4 modelProject(vec4 p){
 //-------------------------------------------------------
 //light intensity as a fn of distance
 float lightAtt(float dist){
-    //fake linear falloff
+    if(FAKE_LIGHT_FALLOFF){
+           //fake linear falloff
     return dist;
-   //return sinh(dist)*sinh(dist);
+    }
+ return sinh(dist)*sinh(dist);
 }
 
 
@@ -628,7 +631,9 @@ void main(){
     }
     else { // objects
 
-        //color the object based on its position in the cube
+        
+        if(SURFACE_COLOR){
+               //color the object based on its position in the cube
         //interpreting the cube as the color cube
         float x=sampletv.pos[0];
         float y=sampletv.pos[1];
@@ -646,6 +651,16 @@ void main(){
         vec3 color;
         color = phongModel(totalFixMatrix, 0.1*pixelcolor);
         //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.1, 1.0);
+        out_FragColor = vec4(0.9*color+0.1, 1.0);  
+        }
+        
+        else{
+            // objects
+        N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
+        out_FragColor = vec4(color, 1.0);
+        }
     }
 }

@@ -55,21 +55,6 @@ function reduceBoostError(boost) {
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
 
-/*
-function translateByVector(v) {
-    var dx = v.x;
-    var dy = v.y;
-    var dz = v.z;
-
-    var m = new THREE.Matrix4().set(
-        1, 0, 0, dx,
-        0, 1, 0, dy,
-        0, 0, 1, dz,
-        0, 0, 0, 1);
-    return [m];
-}*/
-
-
 function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
     var dx = v.x;
     var dy = v.y;
