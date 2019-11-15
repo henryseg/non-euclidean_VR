@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
+const PI = 3.1415926535;
 var Origin = new THREE.Vector4(0, 0, 0, 1);
 var cubeHalfWidth = 0.6584789485;;
 
@@ -165,12 +166,23 @@ function fixOutsideCentralCell(boost) {
 
 var createGenerators = function () { /// generators for the tiling by cubes.
 
-    var gen0 = translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
-    var gen1 = translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
-    var gen2 = translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
-    var gen3 = translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
-    var gen4 = translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
-    var gen5 = translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
+    var gen0 = [translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.))[0].multiply(new THREE.Matrix4().makeRotationX(-PI / 2).transpose())];
+
+    var gen1 = [translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.))[0].multiply(new THREE.Matrix4().makeRotationX(PI / 2).transpose())];
+
+
+    var gen2 = [translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.))[0].multiply(new THREE.Matrix4().makeRotationY(-PI / 2).transpose())];
+
+
+    var gen3 = [translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.))[0].multiply(new THREE.Matrix4().makeRotationY(PI / 2).transpose())];
+
+
+    var gen4 = [translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth))[0].multiply(new THREE.Matrix4().makeRotationZ(-PI / 2).transpose())];
+
+
+    var gen5 = [translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth))[0].multiply(new THREE.Matrix4().makeRotationZ(PI / 2).transpose())];
+
+
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
