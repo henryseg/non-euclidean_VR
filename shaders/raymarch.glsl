@@ -332,7 +332,7 @@ const float MAX_DIST = 200.0;
 const float EPSILON = 0.0001;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
-
+const isom identityIsom=isom(mat4(1.0));
 
 //--------------------------------------------
 //Global Variables
@@ -342,11 +342,12 @@ tangVector sampletv;
 vec4 globalLightColor;
 int hitWhich = 0;
 
-isom currentBoost = isom(mat4(1.0));
-isom leftBoost = isom(mat4(1.0));
-isom rightBoost = isom(mat4(1.0));
-isom cellBoost = isom(mat4(1.0));
-isom invCellBoost = isom(mat4(1.0));
+isom currentBoost = identityIsom;
+isom leftBoost = identityIsom;
+isom rightBoost = identityIsom;
+isom cellBoost = identityIsom;
+isom invCellBoost = identityIsom;
+isom globalObjectBoost=identityIsom;
 
 //-------------------------------------------
 //Translation & Utility Variables
@@ -367,7 +368,7 @@ uniform mat4 invCellBoostMat;
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
-uniform mat4 globalObjectBoost;
+uniform mat4 globalObjectBoostMat;
 
 //--------------------------------------------
 // Building things from our uniforms
@@ -381,6 +382,7 @@ leftBoost = isom(leftBoostMat);
 rightBoost = isom(rightBoostMat);
 cellBoost = isom(cellBoostMat);
 invCellBoost = isom(invCellBoostMat);
+globalObjectBoost=isom(globalObjectBoostMat);
 
 //---------------------------------------------------------------------
 // Scene Definitions
@@ -411,7 +413,8 @@ float globalSceneSDF(vec4 p){
         objDist = sphereSDF(
         absolutep,
         lightPositions[i],
-        1.0/(10.0*lightIntensities[i].w)
+        0.1
+       // 1.0/(10.0*lightIntensities[i].w)
         );
         distance = min(distance, objDist);
         if (distance < EPSILON){
