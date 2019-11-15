@@ -1,7 +1,7 @@
 /**
  * Based off code created by:
  * dmarcos / https://github.com/dmarcos
- * hawksley / https://github.com/hawksley 
+ * hawksley / https://github.com/hawksley
  */
 
 // This file should be geometry independent
@@ -9,22 +9,22 @@
 //----------------------------------------------------------------------
 //  Vector - Generators
 //----------------------------------------------------------------------
-function getFwdVector() {
-    return new THREE.Vector3(0, 0, -1).applyMatrix4(g_facing);
-}
-
-function getRightVector() {
-    return new THREE.Vector3(1, 0, 0).applyMatrix4(g_facing);
-}
-
-function getUpVector() {
-    return new THREE.Vector3(0, 1, 0).applyMatrix4(g_facing);
-}
+// function getFwdVector() {
+//     return new THREE.Vector3(0, 0, -1).applyMatrix4(g_facing);
+// }
+//
+// function getRightVector() {
+//     return new THREE.Vector3(1, 0, 0).applyMatrix4(g_facing);
+// }
+//
+// function getUpVector() {
+//     return new THREE.Vector3(0, 1, 0).applyMatrix4(g_facing);
+// }
 
 THREE.Controls = function (done) {
     // this.phoneVR = new PhoneVR();
-    var speed = 0.2;
-    this.defaultPosition = new THREE.Vector3();
+    let speed = 0.2;
+    //this.defaultPosition = new THREE.Vector3();
     this.manualRotateRate = new Float32Array([0.0, 0.0, 0.0]);
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
@@ -93,47 +93,55 @@ THREE.Controls = function (done) {
     };
 
     this.update = function () {
-        var oldTime = this.updateTime;
-        var newTime = Date.now();
+        let oldTime = this.updateTime;
+        let newTime = Date.now();
         this.updateTime = newTime;
 
         //--------------------------------------------------------------------
         // Translation
         //--------------------------------------------------------------------
-        var deltaTime = (newTime - oldTime) * 0.001;
-        var deltaPosition = new THREE.Vector3();
+        let deltaTime = (newTime - oldTime) * 0.001;
+        let deltaPosition = new THREE.Vector3();
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
-            deltaPosition = getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0])).add(
-                getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1])).add(
-                getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
+            deltaPosition = g_position.getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0]));
+            deltaPosition = deltaPosition.add(g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
+            deltaPosition = deltaPosition.add(g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
+        g_position = g_position.flow(deltaPosition);
+
+        /*
         if (deltaPosition !== undefined) {
             var m = translateByVector(deltaPosition);
             composeIsom(g_currentBoost, m);
             var r = translateFacingByVector(deltaPosition);
             rotate(g_facing, r);
-            //console.log(g_currentBoost[0].elements[12],g_currentBoost[0].elements[13],g_currentBoost[0].elements[14]);
+            console.log(g_currentBoost[0].elements[12],g_currentBoost[0].elements[13],g_currentBoost[0].elements[14]);
         }
+        */
 
-        var fixIndex = fixOutsideCentralCell(g_currentBoost); //moves camera back to main cell
-        reduceBoostError(g_currentBoost);
+        let fixIndex = fixOutsideCentralCell(g_position); //moves camera back to main cell
         if (fixIndex !== -1) {
-            composeIsom(g_cellBoost, invGens[fixIndex]);
-            reduceBoostError(g_cellBoost);
-            setInverse(g_invCellBoost, g_cellBoost);
+            g_cellPosition = g_cellPosition.localTranslateBy(invGens[fixIndex]);
+            g_invCellPosition = g_cellPosition.inverse();
+            //composeIsom(g_cellBoost, invGens[fixIndex]);
+            //reduceBoostError(g_cellBoost);
+            //setInverse(g_invCellBoost, g_cellBoost);
         }
 
         //--------------------------------------------------------------------
         // Rotation
         //--------------------------------------------------------------------
-        var deltaRotation = new THREE.Quaternion(this.manualRotateRate[0] * speed * deltaTime,
+        let deltaRotation = new THREE.Quaternion(
+            this.manualRotateRate[0] * speed * deltaTime,
             this.manualRotateRate[1] * speed * deltaTime,
-            this.manualRotateRate[2] * speed * deltaTime, 1.0);
+            this.manualRotateRate[2] * speed * deltaTime,
+            1.0
+        );
 
         //Handle Phone Input
         if (g_phoneOrient[0] !== null) {
-            var rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
+            let rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
             if (this.oldRotation === undefined) this.oldRotation = rotation;
             deltaRotation = new THREE.Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
             this.oldRotation = rotation;
@@ -141,11 +149,16 @@ THREE.Controls = function (done) {
 
         deltaRotation.normalize();
 
+        let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+        g_position = g_position.rotateFacingBy(m);
+        /*
         if (deltaRotation !== undefined) {
             m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             rotate(g_facing, m);
         }
+         */
 
+        //g_position.reduceError();
         //reduceBoostError(g_currentBoost);
     };
 
@@ -163,36 +176,39 @@ THREE.Controls = function (done) {
             case 'portrait-primary':
                 return 0;
         }
+        // REMI. It seems that there is something deprecated here. Fix it ?
         if (window.orientation !== undefined)
             return window.orientation;
-    }
+    };
 
 
     this.getQuatFromPhoneAngles = function (angles) {
-        var degtorad = Math.PI / 180; // Degree-to-Radian conversion
-        var z = angles.z * degtorad / 2;
-        var x = angles.x * degtorad / 2;
-        var y = angles.y * degtorad / 2;
-        var cX = Math.cos(x);
-        var cY = Math.cos(y);
-        var cZ = Math.cos(z);
-        var sX = Math.sin(x);
-        var sY = Math.sin(y);
-        var sZ = Math.sin(z);
+        const degtorad = Math.PI / 180; // Degree-to-Radian conversion
+        let z = angles.z * degtorad / 2;
+        let x = angles.x * degtorad / 2;
+        let y = angles.y * degtorad / 2;
+        let cX = Math.cos(x);
+        let cY = Math.cos(y);
+        let cZ = Math.cos(z);
+        let sX = Math.sin(x);
+        let sY = Math.sin(y);
+        let sZ = Math.sin(z);
 
         // ZXY quaternion construction.
-        var w = cX * cY * cZ - sX * sY * sZ;
-        var x = sX * cY * cZ - cX * sY * sZ;
-        var y = cX * sY * cZ + sX * cY * sZ;
-        var z = cX * cY * sZ + sX * sY * cZ;
+        let w = cX * cY * cZ - sX * sY * sZ;
+        x = sX * cY * cZ - cX * sY * sZ;
+        y = cX * sY * cZ + sX * cY * sZ;
+        z = cX * cY * sZ + sX * sY * cZ;
 
-        var deviceQuaternion = new THREE.Quaternion(x, y, z, w);
+        // REMI: x,y,z are used above for two different quantities, not very good practice.
+
+        let deviceQuaternion = new THREE.Quaternion(x, y, z, w);
 
         // Correct for the screen orientation.
-        var screenOrientation = (this.getScreenOrientation() * degtorad) / 2;
-        var screenTransform = new THREE.Quaternion(0, 0, -Math.sin(screenOrientation), Math.cos(screenOrientation));
+        let screenOrientation = (this.getScreenOrientation() * degtorad) / 2;
+        let screenTransform = new THREE.Quaternion(0, 0, -Math.sin(screenOrientation), Math.cos(screenOrientation));
 
-        var deviceRotation = new THREE.Quaternion();
+        let deviceRotation = new THREE.Quaternion();
         deviceRotation.multiplyQuaternions(deviceQuaternion, screenTransform);
 
         // deviceRotation is the quaternion encoding of the transformation
@@ -202,7 +218,7 @@ THREE.Controls = function (done) {
         // spec uses different coordinates (+x = East, +y = North, +z = up).
         // To fix the mismatch, we need to fix this.  We'll arbitrarily choose
         // North to correspond to -z (the default camera direction).
-        var r22 = Math.sqrt(0.5);
+        const r22 = Math.sqrt(0.5);
         deviceRotation.multiplyQuaternions(new THREE.Quaternion(-r22, 0, 0, r22), deviceRotation);
 
         return deviceRotation;
