@@ -6,46 +6,15 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 3.14159 / 4;
 
 
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
 
-THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
-}
-
-THREE.Vector4.prototype.geomLength = function () {
-    return Math.sqrt(Math.abs(this.geomDot(this)));
-}
-
-THREE.Vector4.prototype.geomNormalize = function () {
-    return this.divideScalar(this.geomLength());
-}
-
 
 function reduceBoostError(boost) {
-
-    var m = boost[0];
-    var n = m.elements; //elements are stored in column major order we need row major
-    var temp = new THREE.Vector4();
-    var temp2 = new THREE.Vector4();
-    for (var i = 0; i < 4; i++) { ///normalize row
-        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
-        for (var l = 0; l < 4; l++) {
-            n[4 * i + l] = n[4 * i + l] * invRowNorm;
-        }
-        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
-            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
-            for (var l = 0; l < 4; l++) {
-                n[4 * j + l] -= component * n[4 * i + l];
-            }
-        }
-    }
-    m.elements = n;
-    boost[0].elements = m.elements;
 
 }
 
@@ -61,8 +30,8 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
     var dz = v.z;
     var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
+    var c1 = Math.sin(len);
+    var c2 = 1 - Math.cos(len);
 
     if (len == 0) return [new THREE.Matrix4().identity()];
     else {
@@ -73,7 +42,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
             0, 0, 0, dx,
             0, 0, 0, dy,
             0, 0, 0, dz,
-            dx, dy, dz, 0.0);
+            -dx, -dy, -dz, 0.0);
         var m2 = new THREE.Matrix4().copy(m).multiply(m);
         m.multiplyScalar(c1);
         m2.multiplyScalar(c2);
@@ -87,7 +56,8 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
 
 function translateFacingByVector(v) {
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
-    return new THREE.Matrix4().set(1, 0, 0, 0,
+    return new THREE.Matrix4().set(
+        1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
@@ -133,7 +103,7 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
 //	Teleporting Back to Central Cell
 //-----------------------------------------------------------------------------------------------------------------------------
 function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acosh(v.w);
+    return Math.acos(v.w);
 }
 
 
@@ -224,7 +194,6 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
-    console.log(translateByVector(new THREE.Vector3(0.032, 0, 0)));
 }
 
 //-------------------------------------------------------

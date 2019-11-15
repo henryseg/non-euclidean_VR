@@ -11,13 +11,13 @@ out vec4 out_FragColor;
 Some parameters that can be changed to change the scence
 
 */
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.1;
-const float centerSphereRadius =1.;
-const float vertexSphereSize = -0.95;//In this case its a horosphere
+const float centerSphereRadius =0.9;
+const float vertexSphereSize = 0.2;
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -25,22 +25,9 @@ const float vertexSphereSize = -0.95;//In this case its a horosphere
 
 const float PI = 3.1415926538;
 
-const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube =  0.5773502692;//projection of cube to klein model
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-/*
-//generated in JS using translateByVector(new THREE.Vector3(-c_ipDist,0,0));
-const mat4 leftBoost = mat4(1.000512043692158,0.,0.,0.03200546161296042,
-0.,1.,0.,0.,
-0.,0.,1.,0.,
- 0.03200546161296042, 0.,0.,1.000512043692158);
-
-//generated in JS using translateByVector(new THREE.Vector3(c_ipDist,0,0));
-const mat4 rightBoost = mat4(1.000512043692158,0.,0.,-0.03200546161296042,
-0.,1.,0.,0.,
-0.,0.,1.,0.,
- -0.03200546161296042, 0.,0.,1.000512043692158);
-*/
+const vec4 ORIGIN = vec4(0, 0, 0, 1.);
+const float modelHalfCube =  1.;//projection of cube to klein model
+const vec4 modelCubeCorner = vec4(0.5,0.5,0.5,0.5);//corner of cube 
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -107,15 +94,8 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 
 float tangDot(tangVector u, tangVector v){
-  
-    mat4 g = mat4(
-    1.,0.,0.,0.,
-    0.,1.,0.,0.,
-    0.,0.,1.,0.,
-    0.,0.,0.,-1.
-    );
 
-    return dot(u.dir,  g*v.dir);
+    return dot(u.dir,  v.dir);
 
 }
 
@@ -138,10 +118,9 @@ float cosAng(tangVector u, tangVector v){
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
-    tangVector basis_x = tangVector(p, vec4(p.w, 0.0, 0.0, p.x));
-    tangVector basis_y = tangVector(p, vec4(0.0, p.w, 0.0, p.y));
-    tangVector basis_z = 
-        tangVector(p,vec4(0.0, 0.0, p.w, p.z));
+    tangVector basis_x = tangVector(p, vec4(p.w, 0.0, 0.0, -p.x));
+    tangVector basis_y = tangVector(p, vec4(0.0, p.w, 0.0, -p.y));
+    tangVector basis_z = tangVector(p,vec4(0.0, 0.0, p.w, -p.z));
     //make this orthonormal
    basis_x=tangNormalize(basis_x);                                
    basis_y = tangNormalize(
@@ -168,15 +147,15 @@ mat4 tangBasis(vec4 p){
   Methods computing ``global'' objects
 */
 
-float hypAng(vec4 p, vec4 q){
+float sphAng(vec4 p, vec4 q){
         //negative the lorentz dot product gives the hyperbolic angle between the two points
-    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
+    return p.x*q.x+p.y*q.y+p.z*q.z+p.w*q.w;
 }
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-    return acosh(hypAng(p,q));
+    return acos(sphAng(p,q));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -186,7 +165,7 @@ float fakeDistance(tangVector u, tangVector v){
 
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-   return acosh(hypAng(p,q));
+   return acos(sphAng(p,q));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -196,7 +175,7 @@ float exactDist(tangVector u, tangVector v){
 
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-        return tangNormalize(tangVector(p, q - hypAng(p,q)*p));
+        return tangNormalize(tangVector(p, q - sphAng(p,q)*p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
@@ -206,9 +185,9 @@ tangVector tangDirection(tangVector u, tangVector v){
 
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
-    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
+    vec4 resPos=tv.pos*cos(t) + tv.dir*sin(t);
     //tangent is derivative of position
-    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
+    vec4 resDir=-tv.pos*sin(t) + tv.dir*cos(t);
 
     return tangVector(resPos,resDir);
 }
@@ -221,7 +200,7 @@ tangVector flow(tangVector tv, float t){
 
 //project point back onto the geometry
 vec4 geomProject(vec4 p){
-    return p/sqrt(abs(hypAng(p,p)));
+    return p/sqrt(abs(sphAng(p,p)));
 }
 
 
@@ -241,7 +220,7 @@ float lightAtt(float dist){
            //fake linear falloff
     return dist;
     }
- return sinh(dist)*sinh(dist);
+ return sin(dist)*sin(dist);
 }
 
 
@@ -256,13 +235,6 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 }
 
 
-  // A horosphere can be constructed by offseting from a standard horosphere.
-  // Our standard horosphere will have a center in the direction of lightPoint
-  // and go through the origin. Negative offsets will shrink it.
-  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
-    return log(-hypAng(samplePoint, lightPoint)) - offset;
-  }
-
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
@@ -270,7 +242,7 @@ float centerSDF(vec4 p, vec4 center, float radius){
 
 
 float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return  horosphereHSDF(p, cornerPoint, size);
+    return  sphereSDF(p, cornerPoint, size);
 }
 
 //--------------------------------------------
@@ -287,9 +259,9 @@ const float sqrt3 = 1.7320508075688772;
 //--------------------------------------------
 //Global Variables
 //--------------------------------------------
-tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
-tangVector sampletv = tangVector(vec4(1., 1., 1., 1.), vec4(1., 1., 1., 0.));
-vec4 globalLightColor = ORIGIN;
+tangVector N ;//normal vector
+tangVector sampletv;
+vec4 globalLightColor;
 int hitWhich = 0;
 //-------------------------------------------
 //Translation & Utility Variables
@@ -645,7 +617,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.01);
+        out_FragColor = vec4(0.4);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -667,9 +639,9 @@ void main(){
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
-        x = x/modelHalfCube;    
-        y = y/modelHalfCube; 
-        z = z/modelHalfCube; 
+        x = 0.9*x/modelHalfCube;    
+        y = 0.9*y/modelHalfCube; 
+        z = 0.9*z/modelHalfCube; 
        // x = x * sqrt3;
        // y = y * sqrt3;
        // z = z * sqrt3;
