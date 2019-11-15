@@ -6,7 +6,7 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 3.14159 / 4;
+var cubeHalfWidth = 3.1415926535 / 4;
 
 
 //----------------------------------------------------------------------
@@ -56,12 +56,25 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
 
 function translateFacingByVector(v) {
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
+
     return new THREE.Matrix4().set(
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
     );
+
+    /*
+    var dx = v.x;
+    var dy = v.y;
+    var dz = v.z;
+    var L = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        return new THREE.Matrix4().set(
+        Math.cos(L), -Math.sin(L), 0, 0,
+        Math.sin(L), Math.cos(L), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );*/
 
 }
 
