@@ -194,7 +194,7 @@ tangVector applyIsom(isom A, tangVector v) {
 
 vec4 applyIsom(isom A, vec4 v) {
     // overload for when only applied to a point
-    return A.matrix * v.pos;
+    return A.matrix * v;
 }
 
 
@@ -341,11 +341,13 @@ tangVector N;//normal vector
 tangVector sampletv;
 vec4 globalLightColor;
 int hitWhich = 0;
-isom currentBoost;
-isom leftBoost;
-isom rightBoost;
-isom cellBoost;
-isom invCellBoost;
+
+isom currentBoost = isom(mat4(1.0));
+isom leftBoost = isom(mat4(1.0));
+isom rightBoost = isom(mat4(1.0));
+isom cellBoost = isom(mat4(1.0));
+isom invCellBoost = isom(mat4(1.0));
+
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
@@ -370,6 +372,10 @@ uniform mat4 globalObjectBoost;
 //--------------------------------------------
 // Building things from our uniforms
 //--------------------------------------------
+
+//IS THIS HOW I DO THIS?
+//GETTING SYNTAX ERRORS HERE
+ 
 currentBoost = isom(currentBoostMat);
 leftBoost = isom(leftBoostMat);
 rightBoost = isom(rightBoostMat);
@@ -426,30 +432,30 @@ float globalSceneSDF(vec4 p){
 
 
 // check if the given point p is in the fundamental domain of the lattice.
-bool isOutsideCell(vec4 p, out mat4 fixMatrix){
+bool isOutsideCell(vec4 p, out isom fixMatrix){
     vec4 ModelP= modelProject(p);
     if (ModelP.x > modelHalfCube){
-        fixMatrix = invGenerators[0];
+        fixMatrix = isom(invGenerators[0]);
         return true;
     }
     if (ModelP.x < -modelHalfCube){
-        fixMatrix = invGenerators[1];
+        fixMatrix = isom(invGenerators[1]);
         return true;
     }
     if (ModelP.y > modelHalfCube){
-        fixMatrix = invGenerators[2];
+        fixMatrix = isom(invGenerators[2]);
         return true;
     }
     if (ModelP.y < -modelHalfCube){
-        fixMatrix = invGenerators[3];
+        fixMatrix = isom(invGenerators[3]);
         return true;
     }
     if (ModelP.z > modelHalfCube){
-        fixMatrix = invGenerators[4];
+        fixMatrix = isom(invGenerators[4]);
         return true;
     }
     if (ModelP.z < -modelHalfCube){
-        fixMatrix = invGenerators[5];
+        fixMatrix = isom(invGenerators[5]);
         return true;
     }
     return false;
@@ -458,7 +464,7 @@ bool isOutsideCell(vec4 p, out mat4 fixMatrix){
 
 
 // overload of the previous method with tangent vector
-bool isOutsideCell(tangVector v, out mat4 fixMatrix){
+bool isOutsideCell(tangVector v, out isom fixMatrix){
     return isOutsideCell(v.pos, fixMatrix);
 }
 
@@ -505,14 +511,14 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 
-void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
-    mat4 fixMatrix;
+void raymarch(tangVector rayDir, out isom totalFixMatrix){
+    isom fixMatrix;
     float marchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     tangVector tv = rayDir;
     tangVector localtv = rayDir;
-    totalFixMatrix = mat4(1.0);
+    totalFixMatrix = isom(mat4(1.0));
 
 
     // Trace the local scene, then the global scene:
@@ -520,7 +526,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         localtv = flow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
-            totalFixMatrix = fixMatrix * totalFixMatrix;
+            totalFixMatrix = composeIsom(fixMatrix,totalFixMatrix);
             localtv = applyIsom(fixMatrix, localtv);
             marchStep = MIN_DIST;
         }
@@ -546,7 +552,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         float globalDist = globalSceneSDF(tv.pos);
         if (globalDist < EPSILON){
             // hitWhich has now been set
-            totalFixMatrix = mat4(1.0);
+            totalFixMatrix = isom(mat4(1.0));
             sampletv = tv;
             return;
         }
@@ -632,7 +638,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     return att*((diffuse*baseColor) + specular);
 }
 
-vec3 phongModel(mat4 totalFixMatrix, vec3 color){
+vec3 phongModel(isom totalFixMatrix, vec3 color){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     tangVector V = tangVector(SP, -sampletv.dir);
@@ -643,7 +649,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
     for (int i = 0; i<4; i++){
-        mat4 transf=composeIsom(totalFixMatrix,invCellBoost);
+        isom transf=composeIsom(totalFixMatrix,invCellBoost);
         TLP = applyIsom(transf,lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
@@ -654,7 +660,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
 
 
 
-vec3 localColor(mat4 totalFixMatrix, tangVector sampletv){
+vec3 localColor(isom totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
@@ -664,7 +670,7 @@ vec3 localColor(mat4 totalFixMatrix, tangVector sampletv){
 }
 
 
-vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
+vec3 globalColor(isom totalFixMatrix, tangVector sampletv){
      if(SURFACE_COLOR){//color the object based on its position in the cube
     vec4 samplePos=modelProject(sampletv.pos);
         //Point in the Klein Model unit cube    
@@ -747,7 +753,7 @@ void main(){
     
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
-    mat4 totalFixMatrix = mat4(1.0);
+    isom totalFixMatrix = isom(mat4(1.0));
     raymarch(rayDir, totalFixMatrix);
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
