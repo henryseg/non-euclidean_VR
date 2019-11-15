@@ -225,15 +225,15 @@ var setupMaterial = function (fShader) {
                 value: invGensMatrices
             },
             //--- end of invGen stuff
-            currentBoost: {
+            currentBoostMat: {
                 type: "m4",
                 value: g_currentBoost[0]
             },
-            leftBoost: {
+            leftBoostMat: {
                 type: "m4",
                 value: leftBoost[0]
             },
-            rightBoost: {
+            rightBoostMat: {
                 type: "m4",
                 value: rightBoost[0]
             },
@@ -250,11 +250,11 @@ var setupMaterial = function (fShader) {
                 type: "m4",
                 value: rightFacing
             },
-            cellBoost: {
+            cellBoostMat: {
                 type: "m4",
                 value: g_cellBoost[0]
             },
-            invCellBoost: {
+            invCellBoostMat: {
                 type: "m4",
                 value: g_invCellBoost[0]
             },
@@ -262,7 +262,7 @@ var setupMaterial = function (fShader) {
                 type: "v4",
                 value: lightPositions
             },
-            globalObjectBoost: {
+            globalObjectBoostMat: {
                 type: "m4",
                 value: globalObjectBoost[0]
             }
