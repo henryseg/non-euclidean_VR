@@ -70,6 +70,23 @@ struct tangVector {
 };
 
 
+
+//--------------------------------------------
+// STRUCT isom
+//--------------------------------------------
+
+/*
+  Data type for storing isometries of the space
+  An isom is given by (in hyperbolic space)
+  - mat : a matrix*/
+
+struct isom {
+    mat4 matrix;// position on the manifold
+};
+
+// use this in H2xR, S2xR for cases where the isometries have matrix and real number components.
+
+
 //--------------------------------------------
 // LOCAL GEOMETRY
 //--------------------------------------------
@@ -95,15 +112,6 @@ tangVector scalarMult(float a, tangVector v) {
     return tangVector(v.pos, a * v.dir);
 }
 
-tangVector translate(mat4 isom, tangVector v) {
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(isom * v.pos, isom * v.dir);
-}
-
-tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
-    // apply the given given matrix only to the direction of the tangent vector
-    return tangVector(v.pos, matrix* v.dir);
-}
 
 
 float tangDot(tangVector u, tangVector v){
@@ -158,6 +166,48 @@ mat4 tangBasis(vec4 p){
     theBasis[2]=basis_z.dir;
     return theBasis;
 }
+
+
+
+
+
+
+//--------------------------------------------
+// ISOMETRIES & TANGENT BUNDLE
+//--------------------------------------------
+
+/*
+tangVector applyIsom(mat4 A, tangVector v) {
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(A * v.pos, A* v.dir);
+}
+*/
+
+isom composeIsom(isom A, isom B){
+    return isom(A.matrix*B.matrix);
+}
+
+tangVector applyIsom(isom A, tangVector v) {
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
+}
+
+vec4 applyIsom(isom A, vec4 v) {
+    // overload for when only applied to a point
+    return A.matrix * v.pos;
+}
+
+
+tangVector changeFacing(mat4 matrix, tangVector v) {
+    // apply the given given matrix only to the direction of the tangent vector
+    return tangVector(v.pos, matrix* v.dir);
+}
+
+
+
+
+
+
 
 
 //--------------------------------------------
@@ -259,7 +309,7 @@ float sphereSDF(vec4 p, vec4 center, float radius){
   // A horosphere can be constructed by offseting from a standard horosphere.
   // Our standard horosphere will have a center in the direction of lightPoint
   // and go through the origin. Negative offsets will shrink it.
-  float horosphereHSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+  float horosphereSDF(vec4 samplePoint, vec4 lightPoint, float offset){
     return log(-hypAng(samplePoint, lightPoint)) - offset;
   }
 
@@ -270,7 +320,7 @@ float centerSDF(vec4 p, vec4 center, float radius){
 
 
 float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return  horosphereHSDF(p, cornerPoint, size);
+    return  horosphereSDF(p, cornerPoint, size);
 }
 
 //--------------------------------------------
@@ -287,24 +337,29 @@ const float sqrt3 = 1.7320508075688772;
 //--------------------------------------------
 //Global Variables
 //--------------------------------------------
-tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
-tangVector sampletv = tangVector(vec4(1., 1., 1., 1.), vec4(1., 1., 1., 0.));
-vec4 globalLightColor = ORIGIN;
+tangVector N;//normal vector
+tangVector sampletv;
+vec4 globalLightColor;
 int hitWhich = 0;
+isom currentBoost;
+isom leftBoost;
+isom rightBoost;
+isom cellBoost;
+isom invCellBoost;
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
 uniform int isStereo;
 uniform vec2 screenResolution;
-uniform mat4 invGenerators[6];
-uniform mat4 currentBoost;
-uniform mat4 leftBoost;
-uniform mat4 rightBoost;
+uniform mat4 invGenerators[6];  //NEED TO UPDATE TO ISOM 
+uniform mat4 currentBoostMat;
+uniform mat4 leftBoostMat;
+uniform mat4 rightBoostMat;
 uniform mat4 facing;
 uniform mat4 leftFacing;
 uniform mat4 rightFacing;
-uniform mat4 cellBoost;
-uniform mat4 invCellBoost;
+uniform mat4 cellBoostMat;
+uniform mat4 invCellBoostMat;
 //--------------------------------------------
 // Lighting Variables & Global Object Variables
 //--------------------------------------------
@@ -312,6 +367,14 @@ uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoost;
 
+//--------------------------------------------
+// Building things from our uniforms
+//--------------------------------------------
+currentBoost = isom(currentBoostMat);
+leftBoost = isom(leftBoostMat);
+rightBoost = isom(rightBoostMat);
+cellBoost = isom(cellBoostMat);
+invCellBoost = isom(invCellBoostMat);
 
 //---------------------------------------------------------------------
 // Scene Definitions
@@ -334,7 +397,7 @@ float localSceneSDF(vec4 p){
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
-    vec4 absolutep = cellBoost * p;// correct for the fact that we have been moving
+    vec4 absolutep = applyIsom(cellBoost, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
     for (int i=0; i<4; i++){
@@ -458,7 +521,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 
         if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = fixMatrix * totalFixMatrix;
-            localtv = translate(fixMatrix, localtv);
+            localtv = applyIsom(fixMatrix, localtv);
             marchStep = MIN_DIST;
         }
         else {
@@ -580,7 +643,8 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
     for (int i = 0; i<4; i++){
-        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
+        mat4 transf=composeIsom(totalFixMatrix,invCellBoost);
+        TLP = applyIsom(transf,lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
     return color;
@@ -659,26 +723,26 @@ void main(){
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
     
         //camera position must be translated in hyperboloid -----------------------
-    rayDir=applyMatrixToDir(facing, rayDir);
+    rayDir=changeFacing(facing, rayDir);
     
     
     if (isStereo == 1){
          
     
         if (isLeft){
-            rayDir=applyMatrixToDir(leftFacing, rayDir);
-            rayDir = translate(leftBoost, rayDir);
+            rayDir=changeFacing(leftFacing, rayDir);
+            rayDir = applyIsom(leftBoost, rayDir);
         }
         else {
-            rayDir=applyMatrixToDir(rightFacing, rayDir);
-            rayDir = translate(rightBoost, rayDir);
+            rayDir=changeFacing(rightFacing, rayDir);
+            rayDir = applyIsom(rightBoost, rayDir);
         }
     }
 
     
   // in other geometries, the facing will not be an isom, so applying facing is probably not good.
    // rayDir = translate(facing, rayDir);
-    rayDir = translate(currentBoost, rayDir);
+    rayDir = applyIsom(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
     
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
@@ -690,7 +754,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.4);
+        out_FragColor = vec4(0.2);
         return;
     }
     else if (hitWhich == 1){ // global lights
