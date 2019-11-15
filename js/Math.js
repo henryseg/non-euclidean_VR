@@ -2,6 +2,71 @@
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
 
+
+//----------------------------------------------------------------------
+//	Object oriented version of the geometry
+//----------------------------------------------------------------------
+
+
+// Representation of an isometry
+
+function Isometry(data) {
+    // In the euclidean geometry an Isometry is just a 4x4 matrix.
+    // This may change in the H^2 x R case, where we need an additional translation in the z direction
+    this.matrix = data[0];
+
+    this.leftMultiply = function (isom) {
+        // return the current isometry multiplied on the left by isom
+        // i.e. return isom * this
+        let resData = [isom.matrix.multiply(this.matrix)];
+        return new Isometry(resData);
+    };
+}
+
+
+// Representation of the position of the observer
+// A position is given by
+// - a boost which is an Isometry moving the origin to the point where the observer is
+// - a facing which determines where the observer is looking at. Is is a element of SO(3) encoded as a 4x4 matrix
+// More precisely the observer is looking at dL * A * e_z where
+// - e_z the tangent vector at the origin in the z-direction
+// - A is the matrix defining the facing
+// - dL is the differential of the isometry
+
+function Position(isom, facing) {
+    this.boost = isom
+    this.facing = facing;
+
+    this.translate = function (isom) {
+        // translate the position by the given isometry
+        let resBoost = this.boost.leftMultiply(isom);
+        let resFacing = isom.matrix.multiply(this.facing);
+        return new Position(resBoost, resFacing);
+    };
+
+    this.applyMatrixToFacing = function(matrix) {
+        // apply the given matrix (on the left) to the current facing and return the new result
+        let newFacing = matrix.multiply(this.facing);
+        return new Position(this.boost, newFacing);
+    };
+
+    this.reduceBoostError = function() {
+        // Nothing to do in Euclidean geometry
+    };
+
+    this.reduceFacingError = function() {
+        // Gram-Schmidt
+        
+    };
+
+    this.reduceError = function() {
+        this.reduceBoostError();
+        this.reduceFacingError();
+    };
+}
+
+
+
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
@@ -17,7 +82,6 @@ var cubeHalfWidth = 0.5;
 function reduceBoostError(boost) {
 
 }
-
 
 
 //----------------------------------------------------------------------
@@ -36,7 +100,6 @@ function translateByVector(v) {
         0, 0, 0, 1);
     return [m];
 }
-
 
 
 function translateFacingByVector(v) {
@@ -169,7 +232,6 @@ var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
 var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
 var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
 var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
-
 
 
 var initObjects = function () {
