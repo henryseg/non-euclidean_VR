@@ -13,6 +13,7 @@ Some parameters that can be changed to change the scence
 */
 
 const bool FAKE_LIGHT = true;
+const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
 
@@ -843,12 +844,55 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     return color;
 }
 
+
+
+
+vec3 localColor(mat4 totalFixMatrix, tangVector sampletv){
+    N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        color = 0.9*color+0.1;
+        return color;
+        //generically gray object (color= black, glowing slightly because of the 0.1)
+}
+
+
+vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
+     if(SURFACE_COLOR){//color the object based on its position in the cube
+    vec4 samplePos=modelProject(sampletv.pos);
+        //Point in the Klein Model unit cube    
+        float x=samplePos.x;
+        float y=samplePos.y;
+        float z=samplePos.z;
+        x = 0.9*x/modelHalfCube;    
+        y = 0.9*y/modelHalfCube; 
+        z = 0.9*z/modelHalfCube;   
+        vec3 color = vec3(x,y,z);
+        N = estimateNormal(sampletv.pos);
+        color = phongModel(totalFixMatrix, 0.1*color);
+        return 0.9*color+0.1;
+        //adding a small constant makes it glow slightly
+     }
+    else{
+            // objects
+        N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        return color;
+        }
+}
+        
+    
+
+
+
+
+
 //--------------------------------------------------------------------
 // Tangent Space Functions
 //--------------------------------------------------------------------
 
-tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft) {
-    //creates a tangent vector for our ray
+tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
     if (isStereo == 1){
         resolution.x = resolution.x * 0.5;
         if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
@@ -894,9 +938,6 @@ void main(){
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
     
-    
-    
-    
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
@@ -906,7 +947,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.01);
+        out_FragColor = vec4(0.4);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -916,26 +957,22 @@ void main(){
     else if (hitWhich == 5){ //debug
         out_FragColor = vec4(debugColor, 1.0);
     }
-    else { // objects
-
-        //color the object based on its position in the cube
-        //interpreting the cube as the color cube
-        float x=sampletv.pos[0];
-        float y=sampletv.pos[1];
-        float z=sampletv.pos[2];
-        x = x * sqrt3;
-        y = y * sqrt3;
-        z = z * sqrt3;
-        x = (x+1.0)/2.0;
-        y = (y+1.0)/2.0;
-        z = (z+1.0)/2.0;
-        vec3 pixelcolor = vec3(x, y, z);
-
-
-        N = estimateNormal(sampletv.pos);
-        vec3 color;
-        color = phongModel(totalFixMatrix, 0.2*pixelcolor);
-        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.1, 1.0);
+    
+        else if (hitWhich == 2){ // global object
+            
+        vec3 pixelColor=localColor(totalFixMatrix, sampletv);
+            
+        out_FragColor = vec4( pixelColor,1.0);
+            
+        return;
     }
+    
+    else { // objects
+        
+        vec3 pixelColor= globalColor(totalFixMatrix, sampletv);
+        
+        out_FragColor=vec4(pixelColor,1.0);
+      
+}
+
 }
