@@ -42,8 +42,8 @@ float hypAng(vec4 p, vec4 q){
     return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
 }
 
-vec4 hypProject(vec4 p){//Project a point onto the hyperboloid of two sheets.
-    return p/sqrt(hypAng(p,p));
+vec4 hypProject(vec4 p){//Project a point onto the hyperboloid of one sheet or two sheets depending on original vector.
+    return p/sqrt(abs(hypAng(p,p)));
 }
 
 
@@ -134,10 +134,41 @@ tangVector tangNormalize(tangVector v){
 
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
-    return tangDot(u, v);
+    return tangDot(u, v)/(tangNorm(u)*tangNorm(v));
 }
 
 
+//produce isometry to move from 0 to a point in direction v, of distance d 
+// using this to test out an alternative definition of the tangBasis function
+mat4 translateByVector(vec4 v){
+    float len=length(v);
+    float c1= sinh(len);
+    float c2=cosh(len)-1.;
+    if(len!=0.){
+     float dx=v.x/len;
+     float dy=v.y/len;
+     float dz=v.z/len;
+    
+     mat4 m=mat4(
+         0,0,0,dx,
+         0,0,0,dy,
+         0,0,0,dz,
+         dx,dy,dz,0.
+     );
+    
+    mat4 result = mat4(1.)+c1* m+c2*m*m;
+    return result;
+    }
+    else{
+    return mat4(1.);
+    }
+}
+
+
+// moved tangBasis computation down below in global geometry
+
+
+/*
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
 
@@ -161,6 +192,42 @@ mat4 tangBasis(vec4 p){
     theBasis[2]=basis_z.dir;
     return theBasis;
 }
+*/
+
+
+/*
+
+mat4 tangBasis(vec4 p){
+    // return a basis of vectors at the point p
+    //these vectors lie in the tangent space to p
+    
+    
+    vec4 basis_x = vec4(p.w, 0.0, 0.0, p.x);
+    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
+    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
+    
+    
+    //make this orthonormal as EUCLIDEAN VECTORS
+    //we are going to use this to construct the gradient after all...
+   basis_x=normalize(basis_x);                                
+   basis_y =basis_y-dot(basis_y,basis_x)*basis_x;
+   basis_y=normalize(basis_y);
+   basis_z=basis_z-dot(basis_z, basis_x)*basis_x-dot(basis_z,basis_y)*basis_y;
+    basis_z=normalize(basis_z);
+       
+//                            
+    mat4 theBasis=mat4(0.);
+    
+    theBasis[0]=basis_x;
+    theBasis[1]=basis_y;
+    theBasis[2]=basis_z;
+    return theBasis;
+}
+
+
+*/
+
+
 
 
 
@@ -250,7 +317,7 @@ tangVector tangDirection(tangVector u, tangVector v){
 }
 
 
-
+//flow along the geodesic starting at tv for a time t
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
     vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
@@ -259,6 +326,15 @@ tangVector flow(tangVector tv, float t){
     
     return geomProject(tangVector(resPos,resDir));
 }
+
+
+//basis for the tangent space at a point
+mat4 tangBasis(vec4 p){
+    float dist=acosh(p.w);
+    vec4 direction = tangDirection(ORIGIN,p).dir;
+    return translateByVector(dist*direction);
+}
+
 
 
 //--------------------------------------------
