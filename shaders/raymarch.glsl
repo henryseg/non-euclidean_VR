@@ -342,12 +342,12 @@ tangVector sampletv;
 vec4 globalLightColor;
 int hitWhich = 0;
 
-isom currentBoost = identityIsom;
-isom leftBoost = identityIsom;
-isom rightBoost = identityIsom;
-isom cellBoost = identityIsom;
-isom invCellBoost = identityIsom;
-isom globalObjectBoost=identityIsom;
+isom currentBoost;
+isom leftBoost;
+isom rightBoost;
+isom cellBoost;
+isom invCellBoost;
+isom globalObjectBoost;
 
 //-------------------------------------------
 //Translation & Utility Variables
@@ -374,15 +374,11 @@ uniform mat4 globalObjectBoostMat;
 // Building things from our uniforms
 //--------------------------------------------
 
+
 //IS THIS HOW I DO THIS?
 //GETTING SYNTAX ERRORS HERE
  
-currentBoost = isom(currentBoostMat);
-leftBoost = isom(leftBoostMat);
-rightBoost = isom(rightBoostMat);
-cellBoost = isom(cellBoostMat);
-invCellBoost = isom(invCellBoostMat);
-globalObjectBoost=isom(globalObjectBoostMat);
+
 
 //---------------------------------------------------------------------
 // Scene Definitions
@@ -425,7 +421,7 @@ float globalSceneSDF(vec4 p){
     }
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absolutep, globalObjectBoost[3], globalObjectRadius);
+    objDist = sphereSDF(absolutep, vec4(0.,0.,0.,1.), globalObjectRadius);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -725,6 +721,14 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 //--------------------------------------------------------------------
 
 void main(){
+    
+    //Repackage all the stuff coming from the shader
+    currentBoost = isom(currentBoostMat);
+    leftBoost = isom(leftBoostMat);
+    rightBoost = isom(rightBoostMat);
+    cellBoost = isom(cellBoostMat);
+    invCellBoost = isom(invCellBoostMat);
+    globalObjectBoost=isom(globalObjectBoostMat);
     //vec4 rayOrigin = ORIGIN;
 
     //stereo translations ----------------------------------------------------
