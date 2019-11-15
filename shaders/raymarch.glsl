@@ -13,11 +13,11 @@ Some parameters that can be changed to change the scence
 */
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool SURFACE_COLOR=true;
-const bool FAKE_LIGHT = false;
+const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.1;
 const float centerSphereRadius =0.9;
-const float vertexSphereSize = -0.95;//In this case its a horosphere//In this case its a horosphere
+const float vertexSphereSize = 0.2;//In this case its a horosphere//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -142,11 +142,12 @@ mat4 translateByVector(vec4 v){
      float dy=v.y/len;
      float dz=v.z/len;
     
+        //this is GLSL so the matrix is the TRANSPOSE
      mat4 m=mat4(
-         0,0,0,dx,
-         0,0,0,dy,
-         0,0,0,dz,
-         -dx,-dy,-dz,0.
+         0,0,0,-dx,
+         0,0,0,-dy,
+         0,0,0,-dz,
+         dx,dy,dz,0.
      );
     
     mat4 result = mat4(1.)+c1* m+c2*m*m;
