@@ -5,8 +5,9 @@
 //----------------------------------------------------------------------
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
+const PI = 3.1415926535;
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 3.1415926535 / 4;
+var cubeHalfWidth = PI / 4.;
 
 
 //----------------------------------------------------------------------
@@ -14,10 +15,11 @@ var cubeHalfWidth = 3.1415926535 / 4;
 //----------------------------------------------------------------------
 
 
+
 function reduceBoostError(boost) {
 
-}
 
+}
 
 
 //----------------------------------------------------------------------
@@ -54,27 +56,14 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
 }
 
 
+
 function translateFacingByVector(v) {
     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
-
-    return new THREE.Matrix4().set(
-        1, 0, 0, 0,
+    return new THREE.Matrix4().set(1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
     );
-
-    /*
-    var dx = v.x;
-    var dy = v.y;
-    var dz = v.z;
-    var L = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        return new THREE.Matrix4().set(
-        Math.cos(L), -Math.sin(L), 0, 0,
-        Math.sin(L), Math.cos(L), 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    );*/
 
 }
 
@@ -146,12 +135,23 @@ function fixOutsideCentralCell(boost) {
 
 var createGenerators = function () { /// generators for the tiling by cubes.
 
-    var gen0 = translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
-    var gen1 = translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
-    var gen2 = translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
-    var gen3 = translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
-    var gen4 = translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
-    var gen5 = translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
+    var gen0 = [translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.))[0].multiply(new THREE.Matrix4().makeRotationX(-PI / 2).transpose())];
+
+    var gen1 = [translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.))[0].multiply(new THREE.Matrix4().makeRotationX(PI / 2).transpose())];
+
+
+    var gen2 = [translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.))[0].multiply(new THREE.Matrix4().makeRotationY(-PI / 2).transpose())];
+
+
+    var gen3 = [translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.))[0].multiply(new THREE.Matrix4().makeRotationY(PI / 2).transpose())];
+
+
+    var gen4 = [translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth))[0].multiply(new THREE.Matrix4().makeRotationZ(-PI / 2).transpose())];
+
+
+    var gen5 = [translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth))[0].multiply(new THREE.Matrix4().makeRotationZ(PI / 2).transpose())];
+
+
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -227,8 +227,8 @@ var setupMaterial = function (fShader) {
 
     var leftBoost = translateByVector(vectorLeft);
     var rightBoost = translateByVector(vectorRight);
-    var leftFacing = new THREE.Matrix4();
-    var rightFacing = new THREE.Matrix4();
+    var leftFacing = translateFacingByVector(vectorLeft);
+    var rightFacing = translateFacingByVector(vectorRight);
 
 
     g_material = new THREE.ShaderMaterial({
@@ -253,15 +253,15 @@ var setupMaterial = function (fShader) {
                 value: invGensMatrices
             },
             //--- end of invGen stuff
-            currentBoost: {
+            currentBoostMat: {
                 type: "m4",
                 value: g_currentBoost[0]
             },
-            leftBoost: {
+            leftBoostMat: {
                 type: "m4",
                 value: leftBoost[0]
             },
-            rightBoost: {
+            rightBoostMat: {
                 type: "m4",
                 value: rightBoost[0]
             },
@@ -278,11 +278,11 @@ var setupMaterial = function (fShader) {
                 type: "m4",
                 value: rightFacing
             },
-            cellBoost: {
+            cellBoostMat: {
                 type: "m4",
                 value: g_cellBoost[0]
             },
-            invCellBoost: {
+            invCellBoostMat: {
                 type: "m4",
                 value: g_invCellBoost[0]
             },
@@ -290,7 +290,7 @@ var setupMaterial = function (fShader) {
                 type: "v4",
                 value: lightPositions
             },
-            globalObjectBoost: {
+            globalObjectBoostMat: {
                 type: "m4",
                 value: globalObjectBoost[0]
             }
