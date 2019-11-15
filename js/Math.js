@@ -6,12 +6,13 @@
 //	Basic Geometric Operations
 //----------------------------------------------------------------------
 var Origin = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 0.6584789485;
+var cubeHalfWidth = 0.6584789485;;
 
 
 //----------------------------------------------------------------------
 //	Matrix Operations
 //----------------------------------------------------------------------
+
 
 THREE.Vector4.prototype.geomDot = function (v) {
     return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
@@ -24,6 +25,7 @@ THREE.Vector4.prototype.geomLength = function () {
 THREE.Vector4.prototype.geomNormalize = function () {
     return this.divideScalar(this.geomLength());
 }
+
 
 
 function reduceBoostError(boost) {
@@ -48,7 +50,6 @@ function reduceBoostError(boost) {
     boost[0].elements = m.elements;
 
 }
-
 
 
 //----------------------------------------------------------------------
@@ -83,6 +84,7 @@ function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Space
         return [result];
     }
 }
+
 
 
 function translateFacingByVector(v) {
@@ -138,7 +140,6 @@ function geomDist(v) { //good enough for comparison of distances on the hyperbol
 
 
 function fixOutsideCentralCell(boost) {
-    /*
     var cPos = new THREE.Vector4(0, 0, 0, 1);
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
@@ -155,8 +156,7 @@ function fixOutsideCentralCell(boost) {
         preComposeIsom(boost, gens[bestIndex]);
         return bestIndex;
     } else
-    */
-    return -1;
+        return -1;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
-
+    console.log(translateByVector(new THREE.Vector3(0.032, 0, 0)));
 }
 
 //-------------------------------------------------------
@@ -247,8 +247,8 @@ var setupMaterial = function (fShader) {
 
     var leftBoost = translateByVector(vectorLeft);
     var rightBoost = translateByVector(vectorRight);
-    var leftFacing = new THREE.Matrix4();
-    var rightFacing = new THREE.Matrix4();
+    var leftFacing = translateFacingByVector(vectorLeft);
+    var rightFacing = translateFacingByVector(vectorRight);
 
 
     g_material = new THREE.ShaderMaterial({
