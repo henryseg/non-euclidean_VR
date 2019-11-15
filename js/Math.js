@@ -194,10 +194,14 @@ var PointLightObject = function (pos, colorInt) { //position is a euclidean Vect
 
 
 //DEFINE THE LIGHT COLORS
-var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
-var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
-var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
-var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
+var lightColor1 = new THREE.Vector4(
+    68 / 256, 197 / 256, 203 / 256, 1);
+var lightColor2 = new THREE.Vector4(
+    252 / 256, 227 / 256, 21 / 256, 1);
+var lightColor3 = new THREE.Vector4(
+    245 / 256, 61 / 256, 82 / 256, 1);
+var lightColor4 = new THREE.Vector4(
+    256 / 256, 142 / 256, 226 / 256, 1);
 
 
 
