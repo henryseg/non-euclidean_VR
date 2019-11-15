@@ -37,6 +37,15 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //--------------------------------------------
 
 
+float hypAng(vec4 p, vec4 q){
+        //negative the lorentz dot product gives the hyperbolic angle between the two points on the hyperboloid model
+    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
+}
+
+vec4 hypProject(vec4 p){//Project a point onto the hyperboloid of two sheets.
+    return p/sqrt(hypAng(p,p));
+}
+
 
 
 //--------------------------------------------
@@ -155,18 +164,32 @@ mat4 tangBasis(vec4 p){
 
 
 
+//project back onto the geometry model
+tangVector geomProject(tangVector tv){
+    
+   vec4 projPos=hypProject(tv.pos);
+   return tangVector(projPos, tv.dir);
+}
+
+vec4 geomProject(vec4 p){
+    //overloading previous function
+   return hypProject(p);
+}
+
 //--------------------------------------------
 // Applying Isometries, Facings
 //--------------------------------------------
 
 tangVector translate(Isometry A, tangVector v) {
     // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
+    tangVector newVec= tangVector(A.matrix * v.pos, A.matrix * v.dir);
+    return geomProject(newVec);
 }
 
 vec4 translate(Isometry A, vec4 v) {
     // overload of translate for moving only a point
-    return A.matrix * v;
+   vec4 newVec= A.matrix * v;
+   return geomProject(newVec);
 }
 
 
@@ -193,10 +216,7 @@ Isometry composeIsometry(Isometry A, Isometry B)
 */
 
 
-float hypAng(vec4 p, vec4 q){
-        //negative the lorentz dot product gives the hyperbolic angle between the two points
-    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
-}
+
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
@@ -236,21 +256,14 @@ tangVector flow(tangVector tv, float t){
     vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
     //tangent is derivative of position
     vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
-
-    return tangVector(resPos,resDir);
+    
+    return geomProject(tangVector(resPos,resDir));
 }
 
 
 //--------------------------------------------
 //Geometry of the Models
 //--------------------------------------------
-
-
-//project point back onto the geometry
-vec4 geomProject(vec4 p){
-   return p/sqrt(abs(hypAng(p,p)));
-}
-
 
 //Project onto the Klein Model
 vec4 modelProject(vec4 p){
