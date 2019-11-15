@@ -138,6 +138,7 @@ function geomDist(v) { //good enough for comparison of distances on the hyperbol
 
 
 function fixOutsideCentralCell(boost) {
+    /*
     var cPos = new THREE.Vector4(0, 0, 0, 1);
     applyIsom(cPos, boost);
     var bestDist = geomDist(cPos);
@@ -154,7 +155,8 @@ function fixOutsideCentralCell(boost) {
         preComposeIsom(boost, gens[bestIndex]);
         return bestIndex;
     } else
-        return -1;
+    */
+    return -1;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -224,7 +226,7 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
-    console.log(translateByVector(new THREE.Vector3(0.032, 0, 0)));
+
 }
 
 //-------------------------------------------------------

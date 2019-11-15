@@ -421,7 +421,8 @@ float globalSceneSDF(vec4 p){
     }
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absolutep, vec4(0.,0.,0.,1.), globalObjectRadius);
+    vec4 objPos=applyIsom(globalObjectBoost,ORIGIN);
+    objDist = sphereSDF(absolutep, objPos, globalObjectRadius);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
