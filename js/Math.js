@@ -408,9 +408,14 @@ function unpackageMatrix(genArr) {
 
 let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 
+let g_positionBoosMat;
+let g_positionFacingMat;
+
 function initGeometry() {
     //g_currentBoost = [new THREE.Matrix4()];
     g_position = ORIGIN_POSITION.clone();
+    g_positionBoosMat = g_position.boost.matrix;
+    g_positionFacingMat = g_position.facing;
     //g_facing = new THREE.Matrix4();
     g_cellPosition = ORIGIN_POSITION.clone();
     g_invCellPosition = ORIGIN_POSITION.clone();
@@ -474,6 +479,8 @@ function setupMaterial(fShader) {
      var leftFacing = translateFacingByVector(vectorLeft);
      var rightFacing = translateFacingByVector(vectorRight);*/
 
+    console.log(g_position.boost.matrix.elements);
+
 
     g_material = new THREE.ShaderMaterial({
         uniforms: {
@@ -499,7 +506,7 @@ function setupMaterial(fShader) {
             //--- end of invGen stuff
             currentBoost: {
                 type: "m4",
-                value: g_position.boost.matrix
+                value: g_positionBoosMat
             },
             leftBoost: {
                 type: "m4",
@@ -512,7 +519,7 @@ function setupMaterial(fShader) {
             //currentBoost is an array
             facing: {
                 type: "m4",
-                value: g_position.facing
+                value: g_positionFacingMat
             },
             leftFacing: {
                 type: "m4",
