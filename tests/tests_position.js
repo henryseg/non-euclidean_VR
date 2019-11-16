@@ -52,7 +52,25 @@ QUnit.test("Equality of positions", function (assert) {
 
 });
 
-QUnit.test("Translation of a positions", function (assert) {
+QUnit.test("Origin Position", function (assert) {
+
+    let isom = new Isometry([
+        new THREE.Matrix4().set(
+            1, 0, 0, 1,
+            0, 1, 0, 2,
+            0, 0, 1, 3,
+            0, 0, 0, 1
+        )
+    ]);
+    let temp  = ORIGIN_POSITION.translateBy(isom);
+    let boost = new Isometry([new THREE.Matrix4()]);
+    let facing = new THREE.Matrix4();
+    let expected = new Position(boost, facing);
+    assert.ok(ORIGIN_POSITION.equals(expected), "Check it a translaation of the ORIGIN_POSITION, mess up the ORIGIN_POSITION");
+
+});
+
+QUnit.test("Translation of a position", function (assert) {
 
     let boost = new Isometry([new THREE.Matrix4().set(
         1, 0, 0, 2,
@@ -62,6 +80,8 @@ QUnit.test("Translation of a positions", function (assert) {
     )]);
     let facing = new THREE.Matrix4();
     let position = new Position(boost, facing);
+    //console.log('pre mult',position.boost.matrix.elements);
+    //console.log('boost',boost.matrix.elements);
 
     let isom = new Isometry([
         new THREE.Matrix4().set(
@@ -83,10 +103,10 @@ QUnit.test("Translation of a positions", function (assert) {
     let computed = position.translateBy(isom);
     let expected = new Position(trans, facing);
 
-
+    //console.log('post mult',position.boost.matrix.elements);
     assert.ok(computed.equals(expected));
+    assert.ok(position.boost.equals(boost));
 });
-
 
 QUnit.test("Local translation of a positions", function (assert) {
 
@@ -123,7 +143,6 @@ QUnit.test("Local translation of a positions", function (assert) {
     assert.ok(computed.equals(expected));
 });
 
-
 QUnit.test("Rotation of the facing", function (assert) {
 
     let boost = new Isometry([new THREE.Matrix4().set(
@@ -154,8 +173,6 @@ QUnit.test("Rotation of the facing", function (assert) {
     assert.ok(computed.equals(expected));
 });
 
-
-
 QUnit.test("Flowing a position", function (assert) {
 
     let boost = new Isometry([new THREE.Matrix4().set(
@@ -184,6 +201,22 @@ QUnit.test("Flowing a position", function (assert) {
     let computed = position.flow(v);
     let expected = new Position(expectedBoost, facing);
 
+    assert.ok(computed.equals(expected));
+
+});
+
+QUnit.test("Flowing from origin", function (assert) {
+
+    let computed = ORIGIN_POSITION.flow(new THREE.Vector3(1, 0., 0.));
+    let temp  = ORIGIN_POSITION.flow(new THREE.Vector3(0, 1., 0.));
+    let expectedBoost = new Isometry([new THREE.Matrix4().set(
+        1, 0, 0, 1,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    )]);
+    let expectedFacing = new THREE.Matrix4();
+    let expected = new Position(expectedBoost, expectedFacing);
     assert.ok(computed.equals(expected));
 });
 

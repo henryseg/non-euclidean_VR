@@ -26,25 +26,25 @@
 function Isometry(data) {
     // In the euclidean geometry an Isometry is just a 4x4 matrix.
     // This may change in the H^2 x R case, where we need an additional translation in the z direction
-    this.matrix = data[0];
+    this.matrix = data[0].clone();
 
     this.leftMultiply = function (isom) {
         // return the current isometry multiplied on the left by isom
         // i.e. return isom * this
-        let resMatrix = isom.matrix.multiply(this.matrix);
+        let resMatrix = isom.matrix.clone().multiply(this.matrix);
         return new Isometry([resMatrix]);
     };
 
     this.rightMultiply = function (isom) {
         // return the current isometry multiplied on the left by isom
         // i.e. return this * isom
-        let resMatrix = this.matrix.multiply(isom.matrix);
+        let resMatrix = this.matrix.clone().multiply(isom.matrix);
         return new Isometry([resMatrix]);
     };
 
     this.multiply = function (isom) {
         // return this * isom (which is the "natural order" if you read from left to right)
-        return this.leftMultiply(isom);
+        return this.rightMultiply(isom);
     };
 
     this.inverse = function () {
@@ -55,7 +55,7 @@ function Isometry(data) {
 
     this.translate = function (point) {
         // apply the isometry to the given point
-        return point.applyMatrix4(this.matrix);
+        return point.clone().applyMatrix4(this.matrix);
     };
 
     this.equals = function (isom) {
@@ -64,7 +64,7 @@ function Isometry(data) {
     };
 
     this.clone = function () {
-        return new Isometry([this.matrix.clone()]);
+        return new Isometry([this.matrix]);
     };
 }
 
@@ -91,13 +91,13 @@ function Isometry(data) {
 */
 
 function Position(isom, facing) {
-    this.boost = isom;
-    this.facing = facing;
+    this.boost = isom.clone();
+    this.facing = facing.clone();
 
     this.translateBy = function (isom) {
         // translate the position by the given isometry
         let resBoost = isom.multiply(this.boost);
-        let resFacing = isom.matrix.multiply(this.facing);
+        let resFacing = isom.matrix.clone().multiply(this.facing);
         // at this point the facing is not correct as it contains the translation part from isom
         // fixed by the line below
         resFacing.setPosition(new THREE.Vector3(0.,0.,0.));
@@ -112,15 +112,15 @@ function Position(isom, facing) {
         // In other words, translate boost by the conjugate of isom by boost
         // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ?
         let resBoost = this.boost.multiply(isom);
-        let res = new Position(resBoost, this.facing.clone());
+        let res = new Position(resBoost, this.facing);
         res.reduceBoostError();
         return res;
     };
 
     this.rotateFacingBy = function (rotation) {
         // apply the given matrix (on the left) to the current facing and return the new result
-        let resFacing = rotation.multiply(this.facing);
-        let res = new Position(this.boost.clone(), resFacing);
+        let resFacing = rotation.clone().multiply(this.facing);
+        let res = new Position(this.boost, resFacing);
         res.reduceFacingError();
         return res;
     };
@@ -217,7 +217,7 @@ function Position(isom, facing) {
     };
 
     this.clone = function () {
-        return new Position(this.boost.clone(), this.facing.clone());
+        return new Position(this.boost, this.facing);
     }
 }
 
@@ -364,13 +364,21 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen4 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
     const gen5 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
 
+    //console.log('ORIGIN_POSITION', ORIGIN_POSITION.boost.matrix.elements, ORIGIN_POSITION.facing.elements);
     // var gen0 = translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
     // var gen1 = translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
     // var gen2 = translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
     // var gen3 = translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
     // var gen4 = translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
     // var gen5 = translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
-    return [gen0, gen1, gen2, gen3, gen4, gen5];
+    let res =  [gen0, gen1, gen2, gen3, gen4, gen5];
+   /* console.log(gen0.matrix.elements);
+    console.log(gen1.matrix.elements);
+    console.log(gen2.matrix.elements);
+    console.log(gen3.matrix.elements);
+    console.log(gen4.matrix.elements);
+    console.log(gen5.matrix.elements);*/
+    return res;
 }
 
 function invGenerators(genArr) {
@@ -383,7 +391,7 @@ function unpackageMatrix(genArr) {
     for (let i = 0; i < genArr.length; i++) {
         out.push(genArr[i].matrix);
     }
-    return out;
+    return out
 }
 
 // var unpackage = function (genArr, i) {
