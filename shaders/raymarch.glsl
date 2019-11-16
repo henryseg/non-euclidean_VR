@@ -12,7 +12,7 @@ Some parameters that can be changed to change the scence
 
 */
 
-const bool FAKE_LIGHT = true;
+const bool FAKE_LIGHT = false;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.2;
@@ -87,8 +87,8 @@ Usefull for the methods
 
 */
 
-const int MAX_NEWTON_INIT_ITERATION = 1000;
-const int MAX_NEWTON_ITERATION = 1000;
+const int MAX_NEWTON_INIT_ITERATION = 100;
+const int MAX_NEWTON_ITERATION = 100;
 const float MAX_NEWTON_INIT_TOLERANCE = 0.001;
 const float NEWTON_TOLERANCE = 0.0001;
 
@@ -540,11 +540,11 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  100;
+const int MAX_MARCHING_STEPS =  50;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 100.0;
+const float MAX_DIST = 60.0;
 const float EPSILON = 0.0001;
-const float fov = 120.0;
+const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
 
 
@@ -575,7 +575,7 @@ uniform mat4 invCellBoost;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoost;
-
+uniform sampler2D earthTex;
 
 //---------------------------------------------------------------------
 // Scene Definitions
@@ -708,7 +708,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     tangVector localtv = rayDir;
     totalFixMatrix = mat4(1.0);
 
-
+/*
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
@@ -729,10 +729,12 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
             globalDepth += localDist;
         }
     }
+    */
 
     // Set for localDepth to our new max tracing distance:
-    localDepth = min(globalDepth, MAX_DIST);
-   // localDepth= MAX_DIST;
+    //localDepth = min(globalDepth, MAX_DIST);
+    
+   localDepth= MAX_DIST;
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
@@ -904,6 +906,32 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
     return v;
 }
 
+
+
+
+
+
+
+
+vec2 sphereLatLong(mat4 globalObjectBoost, vec4 pt){
+    pt = cellBoost*pt;
+    pt = inverse(globalObjectBoost) * pt;
+    vec3 P = tangDirection(ORIGIN, pt).dir.xyz;
+    float r = sqrt(P.x*P.x + P.y*P.y);
+    return vec2(0.5 + 0.5*atan(P.y, P.x)/PI, 0.5 + atan(P.z, r)/PI);
+}
+
+vec3 earthColor(mat4 totalFixMatrix, tangVector sampletv){
+    N = estimateNormal(sampletv.pos);
+    //vec3 color=vec3(0.,0.,0.);
+    vec3 color = texture(earthTex, sphereLatLong(globalObjectBoost, sampletv.pos)).xyz;
+    vec3 color2 = phongModel(totalFixMatrix, color);
+    //color = 0.9*color+0.1;
+    return 0.5*color + 0.5*color2; //tone down the lighting a bit 
+    //generically gray object (color= black, glowing slightly because of the 0.1)
+}
+
+
 //--------------------------------------------------------------------
 // Main
 //--------------------------------------------------------------------
@@ -947,7 +975,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.4);
+        out_FragColor = vec4(0.1);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -960,7 +988,7 @@ void main(){
     
         else if (hitWhich == 2){ // global object
             
-        vec3 pixelColor=localColor(totalFixMatrix, sampletv);
+        vec3 pixelColor=earthColor(totalFixMatrix, sampletv);
             
         out_FragColor = vec4( pixelColor,1.0);
             

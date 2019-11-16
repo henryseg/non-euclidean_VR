@@ -288,7 +288,7 @@ var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 var initObjects = function () {
     PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
-    PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
+    PointLightObject(new THREE.Vector3(0, 0.5, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
 }
@@ -312,6 +312,7 @@ var setupMaterial = function (fShader) {
     var rightBoost = translateByVector(vectorRight);
     var leftFacing = translateFacingByVector(vectorLeft);
     var rightFacing = translateFacingByVector(vectorRight);
+    var earthTex;
 
 
 
@@ -378,6 +379,10 @@ var setupMaterial = function (fShader) {
             globalObjectBoost: {
                 type: "m4",
                 value: globalObjectBoost[0]
+            },
+            earthTex: {
+                type: "t",
+                value: new THREE.TextureLoader().load("images/earthmap400.png")
             }
         },
 
