@@ -286,9 +286,9 @@ var lightColor4 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
 
 
 var initObjects = function () {
-    PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
-    PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
-    PointLightObject(new THREE.Vector3(0, 0.5, 1.), lightColor3);
+    PointLightObject(new THREE.Vector3(10., 0, -50), lightColor1);
+    PointLightObject(new THREE.Vector3(10, 10., -50.), lightColor2);
+    PointLightObject(new THREE.Vector3(0, 0.5, -50), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
 }
