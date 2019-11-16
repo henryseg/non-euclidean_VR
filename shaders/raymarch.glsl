@@ -15,7 +15,7 @@ const bool FAKE_LIGHT_FALLOFF=true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
-const float globalObjectRadius = 0.1;
+const float globalObjectRadius = 0.2;
 const float centerSphereRadius =1.;
 const float vertexSphereSize = -0.95;//In this case its a horosphere//In this case its a horosphere
 
@@ -69,7 +69,7 @@ struct tangVector {
 
 
 //--------------------------------------------
-// STRUCT isometrt
+// STRUCT isometry
 //--------------------------------------------
 
 /*
@@ -436,6 +436,7 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
+uniform sampler2D earthTex;
 
 
 
@@ -724,15 +725,22 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     return color;
 }
 
-
+vec2 sphereLatLong(Isometry globalObjectBoost, vec4 pt){
+    pt = translate(cellBoost, pt);
+    pt = inverse(globalObjectBoost.matrix) * pt;
+    vec3 P = tangDirection(ORIGIN, pt).dir.xyz;
+    float r = sqrt(P.x*P.x + P.y*P.y);
+    return vec2(0.5 + 0.5*atan(P.y, P.x)/PI, 0.5 + atan(P.z, r)/PI);
+}
 
 vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0.,0.,0.);
-        color = phongModel(totalFixMatrix, color);
-        color = 0.9*color+0.1;
-        return color;
-        //generically gray object (color= black, glowing slightly because of the 0.1)
+    //vec3 color=vec3(0.,0.,0.);
+    vec3 color = texture(earthTex, sphereLatLong(globalObjectBoost, sampletv.pos)).xyz;
+    vec3 color2 = phongModel(totalFixMatrix, color);
+    //color = 0.9*color+0.1;
+    return 0.5*color + 0.5*color2; //tone down the lighting a bit 
+    //generically gray object (color= black, glowing slightly because of the 0.1)
 }
 
 
@@ -749,7 +757,7 @@ vec3 globalColor(Isometry totalFixMatrix, tangVector sampletv){
         vec3 color = vec3(x,y,z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
-        return 0.9*color+0.1;
+        return 0.9*color-0.1;
         //adding a small constant makes it glow slightly
      }
     else{

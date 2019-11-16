@@ -237,7 +237,7 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
+    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0.0, -0.5));
     console.log(translateByVector(new THREE.Vector3(0.032, 0, 0)));
 }
 
@@ -325,6 +325,10 @@ var setupMaterial = function (fShader) {
             globalObjectBoostMat: {
                 type: "m4",
                 value: globalObjectBoost[0]
+            },
+            earthTex: {
+                type:"t", 
+                value: new THREE.TextureLoader().load("images/earthmap400.png")
             }
         },
 
