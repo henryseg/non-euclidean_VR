@@ -108,7 +108,7 @@ THREE.Controls = function (done) {
         }
         */
 
-        /*
+
         let fixIndex = fixOutsideCentralCell(g_position); //moves camera back to main cell
         if (fixIndex !== -1) {
             g_cellPosition = g_cellPosition.localTranslateBy(invGens[fixIndex]);
@@ -117,7 +117,7 @@ THREE.Controls = function (done) {
             //reduceBoostError(g_cellBoost);
             //setInverse(g_invCellBoost, g_cellBoost);
         }
-        */
+
 
 
 
@@ -144,7 +144,7 @@ THREE.Controls = function (done) {
         let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
 
         //console.log('deltaRotation', deltaRotation);
-        console.log(g_positionFacingMat.elements);
+        //console.log(g_positionFacingMat.elements);
         g_position = g_position.rotateFacingBy(m);
         /*
         if (deltaRotation !== undefined) {
@@ -156,8 +156,6 @@ THREE.Controls = function (done) {
         //g_position.reduceError();
         //reduceBoostError(g_currentBoost);
 
-        g_positionBoosMat = g_position.boost.matrix;
-        g_positionFacingMat = g_position.facing;
     };
 
     //--------------------------------------------------------------------

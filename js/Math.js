@@ -236,7 +236,6 @@ const ORIGIN_POSITION = new Position(IDENTITY.clone(), new THREE.Matrix4());
 
 const cubeHalfWidth = 0.5;
 
-
 //----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
@@ -307,7 +306,6 @@ function geomDist(v) {
 }
 
 
-// TODO. Desactivated for the moment in Controls.js. Need to be fixed
 function fixOutsideCentralCell(position) {
     let cPos = position.boost.translate(ORIGIN);
     let bestDist = geomDist(cPos);
@@ -408,14 +406,10 @@ function unpackageMatrix(genArr) {
 
 let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 
-let g_positionBoosMat;
-let g_positionFacingMat;
 
 function initGeometry() {
     //g_currentBoost = [new THREE.Matrix4()];
     g_position = ORIGIN_POSITION.clone();
-    g_positionBoosMat = g_position.boost.matrix;
-    g_positionFacingMat = g_position.facing;
     //g_facing = new THREE.Matrix4();
     g_cellPosition = ORIGIN_POSITION.clone();
     g_invCellPosition = ORIGIN_POSITION.clone();
@@ -454,7 +448,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = ORIGIN_POSITION.flow(new THREE.Vector3(0, -1.0, 0));
+    globalObjectPosition = ORIGIN_POSITION.flow(new THREE.Vector3(0, -1, 0.));
     //globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
 }
 
@@ -465,8 +459,6 @@ function initObjects() {
 
 function setupMaterial(fShader) {
     //these are the left/right translations, rotations and facing corrections for stereo motion
-
-
     /* var preVectorLeft = (new THREE.Vector4(-0.032, 0, 0).applyMatrix4(g_facing));
      var vectorLeft = new THREE.Vector3(preVectorLeft.x, preVectorLeft.y, preVectorLeft.z);
 
@@ -479,7 +471,7 @@ function setupMaterial(fShader) {
      var leftFacing = translateFacingByVector(vectorLeft);
      var rightFacing = translateFacingByVector(vectorRight);*/
 
-    console.log(g_position.boost.matrix.elements);
+    //console.log(g_position.boost.matrix.elements);
 
 
     g_material = new THREE.ShaderMaterial({
@@ -506,7 +498,7 @@ function setupMaterial(fShader) {
             //--- end of invGen stuff
             currentBoost: {
                 type: "m4",
-                value: g_positionBoosMat
+                value: g_position.boost.matrix
             },
             leftBoost: {
                 type: "m4",
@@ -519,7 +511,7 @@ function setupMaterial(fShader) {
             //currentBoost is an array
             facing: {
                 type: "m4",
-                value: g_positionFacingMat
+                value: g_position.facing
             },
             leftFacing: {
                 type: "m4",
@@ -559,4 +551,14 @@ function setupMaterial(fShader) {
         fragmentShader: fShader,
         transparent: true
     });
+}
+
+
+function updateMaterial() {
+    // update the uniforms passed to the shaders
+    // normally called at every frame
+
+    g_material.uniforms.currentBoost.value = g_position.boost.matrix;
+    g_material.uniforms.facing.value = g_position.facing;
+
 }

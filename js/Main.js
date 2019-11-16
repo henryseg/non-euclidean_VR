@@ -118,6 +118,7 @@ function loadShaders() {
 function animate() {
     stats.begin();
     g_controls.update();
+    updateMaterial();
     THREE.VRController.update();
     g_effect.render(scene, camera, animate);
     stats.end();
