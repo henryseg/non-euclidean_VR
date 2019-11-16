@@ -542,9 +542,9 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //--------------------------------------------
 const int MAX_MARCHING_STEPS =  50;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 60.0;
+const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
-const float fov = 90.0;
+const float fov = 120.0;
 const float sqrt3 = 1.7320508075688772;
 
 
