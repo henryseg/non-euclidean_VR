@@ -132,11 +132,19 @@ function Position(isom, facing) {
 
         // in Euclidean geometry, just apply a translation
         // Nothing to do on the facing
-        console.log('vector', v);
         let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
         isom = new Isometry([matrix]);
         return this.translateBy(isom);
     };
+
+    this.localFlow = function(v) {
+        // move the position following the geodesic flow FROM THE POINT WE ARE AT
+        // v is the pull back at the origin of the direction we want to follow
+        // TODO. Check the facing
+        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
+        isom = new Isometry([matrix]);
+        return this.localTranslateBy(isom);
+    }
 
     this.rotateByFacing = function (v) {
         // rotate the given vector by the facing
@@ -155,7 +163,7 @@ function Position(isom, facing) {
         return res;
 
     };
-    
+
     this.getFwdVector = function () {
         // return the vector moving forward (taking into account the facing)
         let v = new THREE.Vector3(0, 0, -1);
