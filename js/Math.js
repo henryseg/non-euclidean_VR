@@ -238,16 +238,6 @@ const cubeHalfWidth = 0.5;
 
 
 //----------------------------------------------------------------------
-//	Matrix Operations
-//----------------------------------------------------------------------
-
-
-// function reduceBoostError(boost) {
-//
-// }
-
-
-//----------------------------------------------------------------------
 //	Moving Around - Translate By Vector
 //----------------------------------------------------------------------
 
@@ -317,6 +307,7 @@ function geomDist(v) {
 }
 
 
+// TODO. Desactivated for the moment in Controls.js. Need to be fixed
 function fixOutsideCentralCell(position) {
     let cPos = position.boost.translate(ORIGIN);
     let bestDist = geomDist(cPos);

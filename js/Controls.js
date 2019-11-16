@@ -6,21 +6,6 @@
 
 // This file should be geometry independent
 
-//----------------------------------------------------------------------
-//  Vector - Generators
-//----------------------------------------------------------------------
-// function getFwdVector() {
-//     return new THREE.Vector3(0, 0, -1).applyMatrix4(g_facing);
-// }
-//
-// function getRightVector() {
-//     return new THREE.Vector3(1, 0, 0).applyMatrix4(g_facing);
-// }
-//
-// function getUpVector() {
-//     return new THREE.Vector3(0, 1, 0).applyMatrix4(g_facing);
-// }
-
 THREE.Controls = function (done) {
     // this.phoneVR = new PhoneVR();
     let speed = 0.2;
@@ -108,7 +93,10 @@ THREE.Controls = function (done) {
             deltaPosition = deltaPosition.add(g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        g_position = g_position.flow(deltaPosition);
+        //console.log('deltaPosition', deltaPosition);
+        //console.log(g_position.boost.matrix.elements);
+        g_position = g_position.localFlow(deltaPosition);
+
 
         /*
         if (deltaPosition !== undefined) {
@@ -120,6 +108,7 @@ THREE.Controls = function (done) {
         }
         */
 
+        /*
         let fixIndex = fixOutsideCentralCell(g_position); //moves camera back to main cell
         if (fixIndex !== -1) {
             g_cellPosition = g_cellPosition.localTranslateBy(invGens[fixIndex]);
@@ -128,6 +117,7 @@ THREE.Controls = function (done) {
             //reduceBoostError(g_cellBoost);
             //setInverse(g_invCellBoost, g_cellBoost);
         }
+        */
 
         //--------------------------------------------------------------------
         // Rotation
@@ -150,6 +140,9 @@ THREE.Controls = function (done) {
         deltaRotation.normalize();
 
         let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+
+        //console.log('deltaRotation', deltaRotation);
+        //console.log(g_position.facing.elements);
         g_position = g_position.rotateFacingBy(m);
         /*
         if (deltaRotation !== undefined) {
