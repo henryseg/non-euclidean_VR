@@ -125,6 +125,14 @@ function Position(isom, facing) {
         return res;
     };
 
+    this.localRotateFacingBy = function (rotation) {
+        // apply the given matrix (on the right) to the current facing and return the new result
+        let resFacing = this.facing.clone().multiply(rotation);
+        let res = new Position(this.boost, resFacing);
+        res.reduceFacingError();
+        return res;
+    };
+
     this.flow = function(v) {
         // move the position following the geodesic flow
         // the geodesic starts at the origin, its tangent vector is v
@@ -236,68 +244,6 @@ const ORIGIN_POSITION = new Position(IDENTITY.clone(), new THREE.Matrix4());
 
 const cubeHalfWidth = 0.5;
 
-//----------------------------------------------------------------------
-//	Moving Around - Translate By Vector
-//----------------------------------------------------------------------
-
-// function translateByVector(v) {
-//     var dx = v.x;
-//     var dy = v.y;
-//     var dz = v.z;
-//
-//     var m = new THREE.Matrix4().set(
-//         1, 0, 0, dx,
-//         0, 1, 0, dy,
-//         0, 0, 1, dz,
-//         0, 0, 0, 1);
-//     return [m];
-// }
-//
-//
-// function translateFacingByVector(v) {
-//     // parallel transport the facing along the geodesic whose unit tangent vector at the origin is v
-//     return new THREE.Matrix4().set(1, 0, 0, 0,
-//         0, 1, 0, 0,
-//         0, 0, 1, 0,
-//         0, 0, 0, 1
-//     );
-//
-// }
-
-//----------------------------------------------------------------------
-//  Boost Operations  (The boost may not be a single matrix for some geometries)
-//----------------------------------------------------------------------
-
-// //adding matrices
-// THREE.Matrix4.prototype.add = function (m) {
-//     this.set.apply(this, [].map.call(this.elements, function (c, i) {
-//         return c + m.elements[i]
-//     }));
-// };
-//
-// function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
-//     boost1[0].getInverse(boost2[0]);
-// }
-//
-// function composeIsom(boost, trans) { // sitting at boost,
-//     boost[0].multiply(trans[0]);
-//     // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
-//     // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
-//     // In other words, translate boost by the conjugate of trans by boost
-// }
-//
-// function preComposeIsom(boost, trans) { // deal with a translation of the camera
-//     boost[0].premultiply(trans[0]);
-// }
-//
-// function applyIsom(point, trans) {
-//     point.applyMatrix4(trans[0]);
-// }
-//
-// function rotate(facing, rotMatrix) { // deal with a rotation of the camera
-//     facing.multiply(rotMatrix);
-// }
-
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -328,27 +274,6 @@ function fixOutsideCentralCell(position) {
 
 }
 
-/*
-function fixOutsideCentralCell(boost) {
-    var cPos = new THREE.Vector4(0, 0, 0, 1);
-    applyIsom(cPos, boost);
-    var bestDist = geomDist(cPos);
-    var bestIndex = -1;
-    for (var i = 0; i < gens.length; i++) {
-        var pos = cPos.clone();
-        applyIsom(pos, gens[i]);
-        if (geomDist(pos) < bestDist) {
-            bestDist = geomDist(pos);
-            bestIndex = i;
-        }
-    }
-    if (bestIndex != -1) {
-        preComposeIsom(boost, gens[bestIndex]);
-        return bestIndex;
-    } else
-        return -1;
-}*/
-
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -362,20 +287,7 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen4 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
     const gen5 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
 
-    //console.log('ORIGIN_POSITION', ORIGIN_POSITION.boost.matrix.elements, ORIGIN_POSITION.facing.elements);
-    // var gen0 = translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
-    // var gen1 = translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
-    // var gen2 = translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
-    // var gen3 = translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
-    // var gen4 = translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
-    // var gen5 = translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
     let res =  [gen0, gen1, gen2, gen3, gen4, gen5];
-   /* console.log(gen0.matrix.elements);
-    console.log(gen1.matrix.elements);
-    console.log(gen2.matrix.elements);
-    console.log(gen3.matrix.elements);
-    console.log(gen4.matrix.elements);
-    console.log(gen5.matrix.elements);*/
     return res;
 }
 
@@ -392,13 +304,6 @@ function unpackageMatrix(genArr) {
     return out
 }
 
-// var unpackage = function (genArr, i) {
-//     var out = [];
-//     for (var j = 0; j < genArr.length; j++) {
-//         out.push(genArr[j][i]);
-//     }
-//     return out;
-// }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Initialise things
@@ -408,13 +313,9 @@ let invGensMatrices; // need lists of things to give to the shader, lists of typ
 
 
 function initGeometry() {
-    //g_currentBoost = [new THREE.Matrix4()];
     g_position = ORIGIN_POSITION.clone();
-    //g_facing = new THREE.Matrix4();
     g_cellPosition = ORIGIN_POSITION.clone();
     g_invCellPosition = ORIGIN_POSITION.clone();
-    // g_cellBoost = [new THREE.Matrix4()];
-    // g_invCellBoost = [new THREE.Matrix4()];
     gens = createGenerators();
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
@@ -449,7 +350,6 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectPosition = ORIGIN_POSITION.flow(new THREE.Vector3(0, -1, 0.));
-    //globalObjectBoost = translateByVector(new THREE.Vector3(0, -1.0, 0));
 }
 
 //-------------------------------------------------------
@@ -458,21 +358,6 @@ function initObjects() {
 // We must unpackage the boost data here for sending to the shader.
 
 function setupMaterial(fShader) {
-    //these are the left/right translations, rotations and facing corrections for stereo motion
-    /* var preVectorLeft = (new THREE.Vector4(-0.032, 0, 0).applyMatrix4(g_facing));
-     var vectorLeft = new THREE.Vector3(preVectorLeft.x, preVectorLeft.y, preVectorLeft.z);
-
-     var preVectorRight = (new THREE.Vector4(0.032, 0, 0).applyMatrix4(g_facing));
-     var vectorRight = new THREE.Vector3(preVectorRight.x, preVectorRight.y, preVectorRight.z);
-
-
-     var leftBoost = translateByVector(vectorLeft);
-     var rightBoost = translateByVector(vectorRight);
-     var leftFacing = translateFacingByVector(vectorLeft);
-     var rightFacing = translateFacingByVector(vectorRight);*/
-
-    //console.log(g_position.boost.matrix.elements);
-
 
     g_material = new THREE.ShaderMaterial({
         uniforms: {

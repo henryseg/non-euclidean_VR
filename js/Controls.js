@@ -93,29 +93,13 @@ THREE.Controls = function (done) {
             deltaPosition = deltaPosition.add(g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        //console.log('deltaPosition', deltaPosition);
-        //console.log(g_position.boost.matrix.elements);
         g_position = g_position.localFlow(deltaPosition);
-
-
-        /*
-        if (deltaPosition !== undefined) {
-            var m = translateByVector(deltaPosition);
-            composeIsom(g_currentBoost, m);
-            var r = translateFacingByVector(deltaPosition);
-            rotate(g_facing, r);
-            console.log(g_currentBoost[0].elements[12],g_currentBoost[0].elements[13],g_currentBoost[0].elements[14]);
-        }
-        */
 
 
         let fixIndex = fixOutsideCentralCell(g_position); //moves camera back to main cell
         if (fixIndex !== -1) {
             g_cellPosition = g_cellPosition.localTranslateBy(invGens[fixIndex]);
             g_invCellPosition = g_cellPosition.inverse();
-            //composeIsom(g_cellBoost, invGens[fixIndex]);
-            //reduceBoostError(g_cellBoost);
-            //setInverse(g_invCellBoost, g_cellBoost);
         }
 
 
@@ -142,19 +126,7 @@ THREE.Controls = function (done) {
         deltaRotation.normalize();
 
         let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-
-        //console.log('deltaRotation', deltaRotation);
-        //console.log(g_positionFacingMat.elements);
-        g_position = g_position.rotateFacingBy(m);
-        /*
-        if (deltaRotation !== undefined) {
-            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-            rotate(g_facing, m);
-        }
-         */
-
-        //g_position.reduceError();
-        //reduceBoostError(g_currentBoost);
+        g_position = g_position.localRotateFacingBy(m);
 
     };
 

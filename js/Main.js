@@ -10,14 +10,10 @@ let g_effect;
 let g_material;
 let g_controls;
 
-//var g_currentBoost;
-//var g_facing;
 
 let g_position;
 
 let g_cellPosition, g_invCellPosition;
-// var g_cellBoost;
-// var g_invCellBoost;
 
 
 let g_phoneOrient;
@@ -27,7 +23,6 @@ let g_screenResolution;
 let g_vr = 0;
 
 let g_leftPosition, g_rightPosition;
-//var g_leftBoost, g_rightBoost;
 
 //-------------------------------------------------------
 // Scene Variables
@@ -71,7 +66,6 @@ function init() {
     g_effect = new THREE.VREffect(g_renderer);
     camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
     g_controls = new THREE.Controls();
-    // g_rotation = new THREE.Quaternion();
     initGeometry();
     initObjects();
     g_phoneOrient = [null, null, null];
