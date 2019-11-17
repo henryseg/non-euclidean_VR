@@ -733,7 +733,7 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 
 vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
-    vec3 color = textureCube(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+    vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2; //tone down the lighting a bit 
