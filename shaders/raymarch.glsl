@@ -15,8 +15,9 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
+const bool EARTH=false;
 
-const bool EARTH=true;
+
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = false;
 const bool FAKE_DIST_SPHERE = false;
@@ -334,7 +335,7 @@ uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
-
+uniform samplerCube earthCubeTex;
 
 
 //--------------------------------------------

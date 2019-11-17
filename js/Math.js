@@ -370,7 +370,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = new Position().flow(new THREE.Vector3(0, -1, 0.));
+    globalObjectPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
 }
 
 //-------------------------------------------------------
