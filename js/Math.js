@@ -328,8 +328,8 @@ var setupMaterial = function (fShader) {
             },
             earthTex: {
                 type:"t", 
-                value: new THREE.TextureLoader().load("images/earthmap400.png")
-            }
+                value: new THREE.TextureLoader().load("images/earthmap2048.jpg")
+            } // from https://visibleearth.nasa.gov/images/73580/january-blue-marble-next-generation-w-topography-and-bathymetry
         },
 
         vertexShader: document.getElementById('vertexShader').textContent,

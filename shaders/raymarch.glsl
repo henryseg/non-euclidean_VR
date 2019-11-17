@@ -736,7 +736,8 @@ vec2 sphereLatLong(Isometry globalObjectBoost, vec4 pt){
 vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
     //vec3 color=vec3(0.,0.,0.);
-    vec3 color = texture(earthTex, sphereLatLong(globalObjectBoost, sampletv.pos)).xyz;
+    vec3 color = textureGrad(earthTex, sphereLatLong(globalObjectBoost, sampletv.pos), vec2(0.0,0.0), vec2(0.0,0.0)).xyz;
+    // textureGrad adds gradient info for the map from xy to uv. Setting these to zero makes it not do silly things on the wraparound from theta = 0 to 2pi
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2; //tone down the lighting a bit 
