@@ -328,7 +328,7 @@ var setupMaterial = function (fShader) {
             },
             earthCubeTex: {
                 type: "",
-                value: new THREE.CubeTextureLoader().setPath( 'images/cubemap/' )
+                value: new THREE.CubeTextureLoader().setPath( 'images/cubemap1024/' )
                 .load( [  //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
                     'posx.jpg',
                     'negx.jpg',
