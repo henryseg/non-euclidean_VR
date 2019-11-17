@@ -11,10 +11,17 @@ out vec4 out_FragColor;
 Some parameters that can be changed to change the scence
 
 */
+
+//determine what we draw: ball and lights, 
+const bool UNIV_COVER_SCENE=true;
+const bool TILING_SCENE=true;
+
+
 const bool FAKE_LIGHT_FALLOFF=true;
-const bool SURFACE_COLOR=true;
-const bool FAKE_LIGHT = true;
+const bool FAKE_LIGHT = false;
 const bool FAKE_DIST_SPHERE = false;
+
+
 const float globalObjectRadius = 0.1;
 const float centerSphereRadius =0.67;
 const float vertexSphereSize = 0.23;//In this case its a horosphere
@@ -478,7 +485,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     tangVector localtv = rayDir;
     totalFixMatrix = identityIsometry;
 
-
+if(TILING_SCENE){
     // Trace the local scene, then the global scene:
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
@@ -499,9 +506,11 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             globalDepth += localDist;
         }
     }
+}
 
-    // Set for localDepth to our new max tracing distance:
-    localDepth = min(globalDepth, MAX_DIST);
+    
+if(UNIV_COVER_SCENE){
+    localDepth=min(globalDepth, MAX_DIST);
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
@@ -516,12 +525,13 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         }
         marchStep = globalDist;
         globalDepth += globalDist;
-        if (globalDepth >= localDepth){
+        //if we traced the tiling scene, stop light rays when they hit a tile.
+        if (globalDepth >= localDepth && TILING_SCENE){
             break;
         }
     }
 }
-
+}
 
 //void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 //    mat4 fixMatrix;
@@ -616,7 +626,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
 
 
-vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
+vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
@@ -626,8 +636,10 @@ vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
-vec3 globalColor(Isometry totalFixMatrix, tangVector sampletv){
-     if(SURFACE_COLOR){//color the object based on its position in the cube
+vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
+     if(FAKE_LIGHT){
+         //make the objects have their own color
+         //color the object based on its position in the cube
     vec4 samplePos=modelProject(sampletv.pos);
         //Point in the Klein Model unit cube    
         float x=samplePos.x;
@@ -643,7 +655,8 @@ vec3 globalColor(Isometry totalFixMatrix, tangVector sampletv){
         //adding a small constant makes it glow slightly
      }
     else{
-            // objects
+            //if we are doing TRUE LIGHTING
+            // objects have no natural color, only lit by the lights
         N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
@@ -725,7 +738,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.2);
+        out_FragColor = vec4(0.1);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -738,7 +751,7 @@ void main(){
     
         else if (hitWhich == 2){ // global object
             
-        vec3 pixelColor=localColor(totalFixMatrix, sampletv);
+        vec3 pixelColor=ballColor(totalFixMatrix, sampletv);
             
         out_FragColor = vec4( pixelColor,1.0);
             
@@ -747,7 +760,7 @@ void main(){
     
     else { // objects
         
-        vec3 pixelColor= globalColor(totalFixMatrix, sampletv);
+        vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
         
         out_FragColor=vec4(pixelColor,1.0);
       
