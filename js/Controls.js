@@ -14,135 +14,136 @@ THREE.Controls = function (done) {
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
 
-    if(g_keyboard === 'fr') {
-        this.manualControls = {
-            81: {
-                index: 1,
-                sign: 1,
-                active: 0
-            }, // q
-            68: {
-                index: 1,
-                sign: -1,
-                active: 0
-            }, // d
-            90: {
-                index: 0,
-                sign: 1,
-                active: 0
-            }, // z
-            83: {
-                index: 0,
-                sign: -1,
-                active: 0
-            }, // s
-            65: {
-                index: 2,
-                sign: -1,
-                active: 0
-            }, // a
-            69: {
-                index: 2,
-                sign: 1,
-                active: 0
-            }, // e
-            38: {
-                index: 3,
-                sign: 1,
-                active: 0
-            }, // up
-            40: {
-                index: 3,
-                sign: -1,
-                active: 0
-            }, // down
-            37: {
-                index: 4,
-                sign: -1,
-                active: 0
-            }, // left
-            39: {
-                index: 4,
-                sign: 1,
-                active: 0
-            }, // right
-            165: {
-                index: 5,
-                sign: 1,
-                active: 0
-            }, // ù
-            61: {
-                index: 5,
-                sign: -1,
-                active: 0
-            }, // =
-        };
-    }
-    else {
-        this.manualControls = {
-            65: {
-                index: 1,
-                sign: 1,
-                active: 0
-            }, // a
-            68: {
-                index: 1,
-                sign: -1,
-                active: 0
-            }, // d
-            87: {
-                index: 0,
-                sign: 1,
-                active: 0
-            }, // w
-            83: {
-                index: 0,
-                sign: -1,
-                active: 0
-            }, // s
-            81: {
-                index: 2,
-                sign: -1,
-                active: 0
-            }, // q
-            69: {
-                index: 2,
-                sign: 1,
-                active: 0
-            }, // e
-            38: {
-                index: 3,
-                sign: 1,
-                active: 0
-            }, // up
-            40: {
-                index: 3,
-                sign: -1,
-                active: 0
-            }, // down
-            37: {
-                index: 4,
-                sign: -1,
-                active: 0
-            }, // left
-            39: {
-                index: 4,
-                sign: 1,
-                active: 0
-            }, // right
-            222: {
-                index: 5,
-                sign: 1,
-                active: 0
-            }, // single quote
-            191: {
-                index: 5,
-                sign: -1,
-                active: 0
-            }, // fwd slash
-        };
-    }
 
+    switch (g_keyboard) {
+        case 'fr':
+            this.manualControls = {
+                81: {
+                    index: 1,
+                    sign: 1,
+                    active: 0
+                }, // q
+                68: {
+                    index: 1,
+                    sign: -1,
+                    active: 0
+                }, // d
+                90: {
+                    index: 0,
+                    sign: 1,
+                    active: 0
+                }, // z
+                83: {
+                    index: 0,
+                    sign: -1,
+                    active: 0
+                }, // s
+                65: {
+                    index: 2,
+                    sign: -1,
+                    active: 0
+                }, // a
+                69: {
+                    index: 2,
+                    sign: 1,
+                    active: 0
+                }, // e
+                38: {
+                    index: 3,
+                    sign: 1,
+                    active: 0
+                }, // up
+                40: {
+                    index: 3,
+                    sign: -1,
+                    active: 0
+                }, // down
+                37: {
+                    index: 4,
+                    sign: -1,
+                    active: 0
+                }, // left
+                39: {
+                    index: 4,
+                    sign: 1,
+                    active: 0
+                }, // right
+                165: {
+                    index: 5,
+                    sign: 1,
+                    active: 0
+                }, // ù
+                61: {
+                    index: 5,
+                    sign: -1,
+                    active: 0
+                }, // =
+            };
+            break;
+        default:
+            this.manualControls = {
+                65: {
+                    index: 1,
+                    sign: 1,
+                    active: 0
+                }, // a
+                68: {
+                    index: 1,
+                    sign: -1,
+                    active: 0
+                }, // d
+                87: {
+                    index: 0,
+                    sign: 1,
+                    active: 0
+                }, // w
+                83: {
+                    index: 0,
+                    sign: -1,
+                    active: 0
+                }, // s
+                81: {
+                    index: 2,
+                    sign: -1,
+                    active: 0
+                }, // q
+                69: {
+                    index: 2,
+                    sign: 1,
+                    active: 0
+                }, // e
+                38: {
+                    index: 3,
+                    sign: 1,
+                    active: 0
+                }, // up
+                40: {
+                    index: 3,
+                    sign: -1,
+                    active: 0
+                }, // down
+                37: {
+                    index: 4,
+                    sign: -1,
+                    active: 0
+                }, // left
+                39: {
+                    index: 4,
+                    sign: 1,
+                    active: 0
+                }, // right
+                222: {
+                    index: 5,
+                    sign: 1,
+                    active: 0
+                }, // single quote
+                191: {
+                    index: 5,
+                    sign: -1,
+                    active: 0
+                }, // fwd slash
+            };
+    }
 
 
     this.update = function () {
@@ -169,8 +170,6 @@ THREE.Controls = function (done) {
             g_cellPosition.localTranslateBy(invGens[fixIndex]);
             g_invCellPosition.getInverse(g_cellPosition);
         }
-
-
 
 
         //--------------------------------------------------------------------
