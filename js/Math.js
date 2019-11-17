@@ -330,6 +330,10 @@ var setupMaterial = function (fShader) {
                 type: "m4",
                 value: globalObjectBoost[0]
             },
+            globalSphereRad: {
+                type: "f",
+                value: 0.2
+            },
             earthCubeTex: {
                 type: "",
                 value: new THREE.CubeTextureLoader().setPath( 'images/cubemap512/' )

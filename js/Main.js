@@ -61,6 +61,7 @@ var init = function() {
     g_phoneOrient = [null, null, null];
 
     loadShaders();
+    initGui();
     stats = new Stats(); stats.showPanel(1); stats.showPanel(2); stats.showPanel(0); document.body.appendChild(stats.dom);
 }
 

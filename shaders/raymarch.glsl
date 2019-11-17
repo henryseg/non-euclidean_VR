@@ -15,7 +15,6 @@ const bool FAKE_LIGHT_FALLOFF=true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
-const float globalObjectRadius = 0.2;
 const float centerSphereRadius =1.;
 const float vertexSphereSize = -0.95;//In this case its a horosphere//In this case its a horosphere
 
@@ -436,6 +435,7 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
+uniform float globalSphereRad;
 uniform sampler2D rockTex;
 uniform samplerCube earthCubeTex;
 
@@ -491,7 +491,7 @@ float globalSceneSDF(vec4 p){
     //Global Sphere Object
     float objDist;
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, globalObjectRadius);
+    objDist = sphereSDF(absolutep, globalObjPos, globalSphereRad);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
