@@ -1,6 +1,12 @@
-QUnit.test("Equality of isometries", function (assert) {
+QUnit.test("Constructor", function (assert) {
 
-    let isom1 = new Isometry([
+    let isom = new Isometry();
+    assert.ok(isom.matrix.equals(new THREE.Matrix4()));
+});
+
+QUnit.test("Set", function (assert) {
+
+    let isom = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, 1,
             0, 1, 0, 2,
@@ -8,7 +14,26 @@ QUnit.test("Equality of isometries", function (assert) {
             0, 0, 0, 1
         )
     ]);
-    let isom2 = new Isometry([
+    assert.ok(isom.matrix.equals(new THREE.Matrix4().set(
+        1, 0, 0, 1,
+        0, 1, 0, 2,
+        0, 0, 1, 3,
+        0, 0, 0, 1
+    )));
+});
+
+
+QUnit.test("Equality of isometries", function (assert) {
+
+    let isom1 = new Isometry().set([
+        new THREE.Matrix4().set(
+            1, 0, 0, 1,
+            0, 1, 0, 2,
+            0, 0, 1, 3,
+            0, 0, 0, 1
+        )
+    ]);
+    let isom2 = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, 1,
             0, 1, 0, 2,
@@ -17,7 +42,7 @@ QUnit.test("Equality of isometries", function (assert) {
         )
     ]);
 
-    let isom3 = new Isometry([
+    let isom3 = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, 1,
             0, 1, 0, 2,
@@ -30,34 +55,27 @@ QUnit.test("Equality of isometries", function (assert) {
 });
 
 
-QUnit.test("Identity", function (assert) {
-
-    let isom = new Isometry([new THREE.Matrix4()]);
-    assert.ok(IDENTITY.equals(isom));
-
-});
-
-
 QUnit.test("Multiplication of two isometries", function (assert) {
 
-    let mat1 = new THREE.Matrix4().set(
-        1, 0, 0, 1,
-        0, 1, 0, 2,
-        0, 0, 1, 3,
-        0, 0, 0, 1
-    );
-    let isom1 = new Isometry([mat1]);
+    let isom1 = new Isometry().set([
+        new THREE.Matrix4().set(
+            1, 0, 0, 1,
+            0, 1, 0, 2,
+            0, 0, 1, 3,
+            0, 0, 0, 1
+        )
+    ]);
+    let isom2  = new Isometry().set([
+        new THREE.Matrix4().set(
+            1, 0, 0, 1,
+            0, 1, 0, 2,
+            0, 0, 1, 4,
+            0, 0, 0, 1
+        )
+    ]);
 
-    let mat2 =  new THREE.Matrix4().set(
-        1, 0, 0, 1,
-        0, 1, 0, 2,
-        0, 0, 1, 4,
-        0, 0, 0, 1
-    );
-    let isom2 = new Isometry([mat2]);
-
-    let computed = isom1.multiply(isom2);
-    let expected = new Isometry([
+    isom1.multiply(isom2);
+    let expected = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, 2,
             0, 1, 0, 4,
@@ -66,15 +84,16 @@ QUnit.test("Multiplication of two isometries", function (assert) {
         )
     ]);
 
-    assert.ok(computed.equals(expected), "Check if the product is correct");
-    assert.ok(isom1.matrix.equals(mat1), "Check if the first isom has not changed");
-    assert.ok(isom2.matrix.equals(mat2), "Check if the second isom has not changed");
-});
+    assert.ok(isom1.equals(expected), "Check if the product is correct");
+    assert.ok(isom2.matrix.equals(new THREE.Matrix4().set(
+        1, 0, 0, 1,
+        0, 1, 0, 2,
+        0, 0, 1, 4,
+        0, 0, 0, 1
+    )), "Check if the second isom has not changed");
 
 
-QUnit.test("Inverse of an isometry", function (assert) {
-
-    let isom1 = new Isometry([
+    isom1 = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, 1,
             0, 1, 0, 2,
@@ -82,7 +101,49 @@ QUnit.test("Inverse of an isometry", function (assert) {
             0, 0, 0, 1
         )
     ]);
-    let isom2 = new Isometry([
+    isom2  = new Isometry().set([
+        new THREE.Matrix4().set(
+            1, 0, 0, 1,
+            0, 1, 0, 2,
+            0, 0, 1, 4,
+            0, 0, 0, 1
+        )
+    ]);
+
+    isom2.premultiply(isom1);
+    expected = new Isometry().set([
+        new THREE.Matrix4().set(
+            1, 0, 0, 2,
+            0, 1, 0, 4,
+            0, 0, 1, 7,
+            0, 0, 0, 1
+        )
+    ]);
+
+    assert.ok(isom2.equals(expected), "Check if the product is correct");
+    assert.ok(isom1.matrix.equals(new THREE.Matrix4().set(
+        1, 0, 0, 1,
+        0, 1, 0, 2,
+        0, 0, 1, 3,
+        0, 0, 0, 1
+    )), "Check if the second isom has not changed");
+
+});
+
+
+QUnit.test("Inverse of an isometry", function (assert) {
+
+    let isom = new Isometry().set([
+        new THREE.Matrix4().set(
+            1, 0, 0, 1,
+            0, 1, 0, 2,
+            0, 0, 1, 3,
+            0, 0, 0, 1
+        )
+    ]);
+
+    let computed = new Isometry().getInverse(isom)
+    let expected = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, -1,
             0, 1, 0, -2,
@@ -91,12 +152,12 @@ QUnit.test("Inverse of an isometry", function (assert) {
         )
     ]);
 
-    assert.ok(isom1.inverse().equals(isom2));
+    assert.ok(computed.equals(expected));
 });
 
 QUnit.test("Translating a point by an isometry", function (assert) {
 
-    let isom = new Isometry([
+    let isom = new Isometry().set([
         new THREE.Matrix4().set(
             1, 0, 0, 1,
             0, 1, 0, 2,

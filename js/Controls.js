@@ -93,13 +93,13 @@ THREE.Controls = function (done) {
             deltaPosition = deltaPosition.add(g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        g_position = g_position.localFlow(deltaPosition);
+        g_position.localFlow(deltaPosition);
 
 
         let fixIndex = fixOutsideCentralCell(g_position); //moves camera back to main cell
         if (fixIndex !== -1) {
-            g_cellPosition = g_cellPosition.localTranslateBy(invGens[fixIndex]);
-            g_invCellPosition = g_cellPosition.inverse();
+            g_cellPosition.localTranslateBy(invGens[fixIndex]);
+            g_invCellPosition.getInverse(g_cellPosition);
         }
 
 
@@ -126,7 +126,7 @@ THREE.Controls = function (done) {
         deltaRotation.normalize();
 
         let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        g_position = g_position.localRotateFacingBy(m);
+        g_position.localRotateFacingBy(m);
 
     };
 

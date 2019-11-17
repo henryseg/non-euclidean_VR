@@ -15,42 +15,57 @@
     - Every tangent vector at the origin is represented by a THREE.Vector3 object
       i.e. we identify the tangent space at the origin with R^3.
 
+
+     The style follow the one of three.js :
+     Every operation modifies the current object.
+     To make a copy of an object, use the clone method.
+     Not sure yet what is the right philosophy for the setters.
  */
 
 /*
 
     Representation of an isometry
 
+    TODO:
+     - Add an `applyIsom` method to the class Vector4 ?
+     - Same with the rotationByFacing ?
+
  */
 
-function Isometry(data) {
+function Isometry() {
     // In the euclidean geometry an Isometry is just a 4x4 matrix.
     // This may change in the H^2 x R case, where we need an additional translation in the z direction
-    this.matrix = data[0].clone();
 
-    this.leftMultiply = function (isom) {
-        // return the current isometry multiplied on the left by isom
-        // i.e. return isom * this
-        let resMatrix = isom.matrix.clone().multiply(this.matrix);
-        return new Isometry([resMatrix]);
+
+    // By default the return isometry is the identity
+    this.matrix = new THREE.Matrix4();
+
+    this.set = function(data) {
+        this.matrix = data[0].clone();
+        return this;
     };
 
-    this.rightMultiply = function (isom) {
-        // return the current isometry multiplied on the left by isom
-        // i.e. return this * isom
-        let resMatrix = this.matrix.clone().multiply(isom.matrix);
-        return new Isometry([resMatrix]);
+    this.premultiply = function (isom) {
+        // return the current isometry multiplied on the left by isom, i.e. isom * this
+        this.matrix.premultiply(isom.matrix);
+        return this;
     };
 
     this.multiply = function (isom) {
-        // return this * isom (which is the "natural order" if you read from left to right)
-        return this.rightMultiply(isom);
+        // return the current isometry multiplied on the left by isom, i.e. this * isom
+        this.matrix.multiply(isom.matrix);
+        return this;
     };
 
-    this.inverse = function () {
-        // return the inverse of the given isometry
-        let resMatrix = new THREE.Matrix4().getInverse(this.matrix);
-        return new Isometry([resMatrix]);
+    // this.multiply = function (isom) {
+    //     // return this * isom (which is the "natural order" if you read from left to right)
+    //     return this.rightMultiply(isom);
+    // };
+
+    this.getInverse = function (isom) {
+        // set the current isometry to the inverse of the passed isometry isom,
+        this.matrix.getInverse(isom.matrix);
+        return this;
     };
 
     this.translate = function (point) {
@@ -64,7 +79,7 @@ function Isometry(data) {
     };
 
     this.clone = function () {
-        return new Isometry([this.matrix]);
+        return new Isometry().set([this.matrix]);
     };
 }
 
@@ -90,20 +105,37 @@ function Isometry(data) {
 
 */
 
-function Position(isom, facing) {
-    this.boost = isom.clone();
-    this.facing = facing.clone();
+function Position() {
+
+    // By default the return position is the origin (with the "default" facing - negative z-direction ?)
+    this.boost = new Isometry();
+    this.facing = new THREE.Matrix4();
+
+    this.setBoost = function (boost) {
+        this.boost = boost.clone();
+        return this;
+    };
+
+    this.setFacing = function (facing) {
+        this.facing = facing.clone();
+        return this;
+    };
+
+    this.set = function (boost, facing) {
+        this.setBoost(boost);
+        this.setFacing(facing);
+        return this;
+    };
 
     this.translateBy = function (isom) {
         // translate the position by the given isometry
-        let resBoost = isom.multiply(this.boost);
-        let resFacing = isom.matrix.clone().multiply(this.facing);
+        this.boost.premultiply(isom);
+        this.facing.premultiply(isom.matrix);
         // at this point the facing is not correct as it contains the translation part from isom
         // fixed by the line below
-        resFacing.setPosition(new THREE.Vector3(0.,0.,0.));
-        let res = new Position(resBoost, resFacing);
-        res.reduceError();
-        return res;
+        this.facing.setPosition(new THREE.Vector3(0., 0., 0.));
+        this.reduceError();
+        return this;
     };
 
     this.localTranslateBy = function (isom) {
@@ -111,29 +143,27 @@ function Position(isom, facing) {
         // tells me how to do this if I were at 0. So I want to apply b * isom * b^{-1} to b * 0, and I get b * isom * 0.
         // In other words, translate boost by the conjugate of isom by boost
         // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ?
-        let resBoost = this.boost.multiply(isom);
-        let res = new Position(resBoost, this.facing);
-        res.reduceBoostError();
-        return res;
+        //  or the local translate should actually be a composition of positions ?
+        this.boost.multiply(isom);
+        this.reduceBoostError();
+        return this;
     };
 
     this.rotateFacingBy = function (rotation) {
         // apply the given matrix (on the left) to the current facing and return the new result
-        let resFacing = rotation.clone().multiply(this.facing);
-        let res = new Position(this.boost, resFacing);
-        res.reduceFacingError();
-        return res;
+        this.facing.premultiply(rotation);
+        this.reduceFacingError();
+        return this;
     };
 
     this.localRotateFacingBy = function (rotation) {
         // apply the given matrix (on the right) to the current facing and return the new result
-        let resFacing = this.facing.clone().multiply(rotation);
-        let res = new Position(this.boost, resFacing);
-        res.reduceFacingError();
-        return res;
+        this.facing.multiply(rotation);
+        this.reduceFacingError();
+        return this;
     };
 
-    this.flow = function(v) {
+    this.flow = function (v) {
         // move the position following the geodesic flow
         // the geodesic starts at the origin, its tangent vector is v
         // parallel transport the facing along the geodesic
@@ -141,18 +171,18 @@ function Position(isom, facing) {
         // in Euclidean geometry, just apply a translation
         // Nothing to do on the facing
         let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        isom = new Isometry([matrix]);
+        let isom = new Isometry().set([matrix]);
         return this.translateBy(isom);
     };
 
-    this.localFlow = function(v) {
+    this.localFlow = function (v) {
         // move the position following the geodesic flow FROM THE POINT WE ARE AT
         // v is the pull back at the origin of the direction we want to follow
         // TODO. Check the facing
         let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        isom = new Isometry([matrix]);
+        let isom = new Isometry().set([matrix]);
         return this.localTranslateBy(isom);
-    }
+    };
 
     this.rotateByFacing = function (v) {
         // rotate the given vector by the facing
@@ -162,13 +192,12 @@ function Position(isom, facing) {
         return new THREE.Vector3(preRes.x, preRes.y, preRes.z)
     };
 
-    this.inverse = function () {
-        // return a position that can bring back the current position to the origin position
-        let resBoost = this.boost.inverse();
-        let resFacing = new THREE.Matrix4().getInverse(this.facing);
-        let res = new Position(resBoost, resFacing);
-        res.reduceError();
-        return res;
+    this.getInverse = function (position) {
+        // set the current position to the position that can bring back the passed position to the origin position
+        this.boost.getInverse(position.boost);
+        this.facing.getInverse(position.facing);
+        this.reduceError();
+        return this;
 
     };
 
@@ -225,7 +254,7 @@ function Position(isom, facing) {
     };
 
     this.clone = function () {
-        return new Position(this.boost, this.facing);
+        return new Position().set(this.boost, this.facing);
     }
 }
 
@@ -234,14 +263,8 @@ function Position(isom, facing) {
 //	Geometry constants
 //----------------------------------------------------------------------
 
-// The identity isometry
-const IDENTITY = new Isometry([new THREE.Matrix4()]);
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-// The origin position : observer at the origin, looking the the negative z-direction
-const ORIGIN_POSITION = new Position(IDENTITY.clone(), new THREE.Matrix4());
-
-
 const cubeHalfWidth = 0.5;
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -265,8 +288,7 @@ function fixOutsideCentralCell(position) {
         }
     }
     if (bestIndex !== -1) {
-        position = position.translateBy(gens[bestIndex]);
-        position.reduceBoostError();
+        position.translateBy(gens[bestIndex]);
         return bestIndex;
     } else {
         return -1;
@@ -280,15 +302,14 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = ORIGIN_POSITION.flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = ORIGIN_POSITION.flow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = ORIGIN_POSITION.flow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = ORIGIN_POSITION.flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    const gen0 = new Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen1 = new Position().flow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen2 = new Position().flow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
+    const gen3 = new Position().flow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
+    const gen4 = new Position().flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
+    const gen5 = new Position().flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
 
-    let res =  [gen0, gen1, gen2, gen3, gen4, gen5];
-    return res;
+    return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
 function invGenerators(genArr) {
@@ -313,24 +334,24 @@ let invGensMatrices; // need lists of things to give to the shader, lists of typ
 
 
 function initGeometry() {
-    g_position = ORIGIN_POSITION.clone();
-    g_cellPosition = ORIGIN_POSITION.clone();
-    g_invCellPosition = ORIGIN_POSITION.clone();
+    g_position = new Position();
+    g_cellPosition = new Position();
+    g_invCellPosition = new Position();
     gens = createGenerators();
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
 
     let vectorLeft = g_position.rotateByFacing(new THREE.Vector3(-c_ipDist, 0, 0));
-    g_leftPosition = ORIGIN_POSITION.flow(vectorLeft);
+    g_leftPosition = new Position().flow(vectorLeft);
 
     let vectorRight = g_position.rotateByFacing(new THREE.Vector3(c_ipDist, 0, 0));
-    g_rightPosition = ORIGIN_POSITION.flow(vectorRight);
+    g_rightPosition = new Position().flow(vectorRight);
 }
 
 
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
-    let isom = ORIGIN_POSITION.flow(v).boost;
+    let isom = new Position().flow(v).boost;
     let lp = isom.translate(ORIGIN);
     lightPositions.push(lp);
     lightIntensities.push(colorInt);
@@ -349,7 +370,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = ORIGIN_POSITION.flow(new THREE.Vector3(0, -1, 0.));
+    globalObjectPosition = new Position().flow(new THREE.Vector3(0, -1, 0.));
 }
 
 //-------------------------------------------------------
