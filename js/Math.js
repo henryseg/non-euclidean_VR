@@ -40,7 +40,7 @@ function Isometry() {
     // By default the return isometry is the identity
     this.matrix = new THREE.Matrix4();
 
-    this.set = function(data) {
+    this.set = function (data) {
         this.matrix = data[0].clone();
         return this;
     };
@@ -402,15 +402,15 @@ function setupMaterial(fShader) {
                 value: invGensMatrices
             },
             //--- end of invGen stuff
-            currentBoost: {
+            currentBoostMat: {
                 type: "m4",
                 value: g_position.boost.matrix
             },
-            leftBoost: {
+            leftBoostMat: {
                 type: "m4",
                 value: g_leftPosition.boost.matrix
             },
-            rightBoost: {
+            rightBoostMat: {
                 type: "m4",
                 value: g_rightPosition.boost.matrix
             },
@@ -427,11 +427,11 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: g_rightPosition.facing
             },
-            cellBoost: {
+            cellBoostMat: {
                 type: "m4",
                 value: g_cellPosition.boost.matrix
             },
-            invCellBoost: {
+            invCellBoostMat: {
                 type: "m4",
                 value: g_invCellPosition.boost.matrix
             },

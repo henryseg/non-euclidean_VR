@@ -21,7 +21,7 @@ const float vertexSphereSize = 0.23;//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
-//--------------------------------------------
+//----- ---------------------------------------
 
 const float PI = 3.1415926538;
 
@@ -56,6 +56,23 @@ struct tangVector {
     vec4 pos;// position on the manifold
     vec4 dir;// vector in the tangent space at the point pos
 };
+
+
+//--------------------------------------------
+// STRUCT isometry
+//--------------------------------------------
+
+/*
+  Data type for manipulating isometries of the space
+  A tangVector is given by
+  - matrix : a 4x4 matrix
+*/
+
+struct Isometry {
+    mat4 matrix;// isometry of the space
+};
+
+
 
 
 //--------------------------------------------
@@ -131,6 +148,39 @@ mat4 tangBasis(vec4 p){
 
 
 
+
+
+//--------------------------------------------
+// Applying Isometries, Facings
+//--------------------------------------------
+
+tangVector translate(Isometry A, tangVector v) {
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
+}
+
+vec4 translate(Isometry A, vec4 v) {
+    // overload of translate for moving only a point
+    return A.matrix * v;
+}
+
+
+tangVector rotateFacing(mat4 A, tangVector v){
+        // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(v.pos, A*v.dir);
+}
+
+Isometry composeIsometry(Isometry A, Isometry B)
+{
+    return Isometry(A.matrix*B.matrix);
+}
+
+
+
+
+
+
+
 //--------------------------------------------
 // GLOBAL GEOMETRY
 //--------------------------------------------
@@ -138,11 +188,6 @@ mat4 tangBasis(vec4 p){
 /*
   Methods computing ``global'' objects
 */
-
-float hypAng(vec4 p, vec4 q){
-        //negative the lorentz dot product gives the hyperbolic angle between the two points
-    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
-}
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
@@ -157,7 +202,7 @@ float fakeDistance(tangVector u, tangVector v){
 
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-   return length(q-p);
+   return fakeDistance(p,q);
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -248,30 +293,50 @@ const float sqrt3 = 1.7320508075688772;
 //--------------------------------------------
 //Global Variables
 //--------------------------------------------
-tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
-tangVector sampletv = tangVector(vec4(1., 1., 1., 1.), vec4(1., 1., 1., 0.));
-vec4 globalLightColor = ORIGIN;
+tangVector N;//normal vector
+tangVector sampletv;
+vec4 globalLightColor;
 int hitWhich = 0;
+Isometry identityIsometry=Isometry(mat4(1.0));
+
+Isometry currentBoost;
+Isometry leftBoost;
+Isometry rightBoost;
+Isometry cellBoost;
+Isometry invCellBoost;
+Isometry globalObjectBoost;
+
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
 uniform int isStereo;
 uniform vec2 screenResolution;
 uniform mat4 invGenerators[6];
-uniform mat4 currentBoost;
-uniform mat4 leftBoost;
-uniform mat4 rightBoost;
+uniform mat4 currentBoostMat;
+uniform mat4 leftBoostMat;
+uniform mat4 rightBoostMat;
 uniform mat4 facing;
 uniform mat4 leftFacing;
 uniform mat4 rightFacing;
-uniform mat4 cellBoost;
-uniform mat4 invCellBoost;
+uniform mat4 cellBoostMat;
+uniform mat4 invCellBoostMat;
 //--------------------------------------------
 // Lighting Variables & Global Object Variables
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
-uniform mat4 globalObjectBoost;
+uniform mat4 globalObjectBoostMat;
+
+
+
+//--------------------------------------------
+// Re-packaging isometries, facings in the shader
+//--------------------------------------------
+
+//This actually occurs at the beginning of main() as it needs to be inside of a function
+
+
+
 
 
 //---------------------------------------------------------------------
@@ -281,7 +346,7 @@ uniform mat4 globalObjectBoost;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
-    vec4 center = vec4(0, 0, 0., 1.);
+    vec4 center = ORIGIN;
     float sphere = centerSDF(p,  center, centerSphereRadius);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
@@ -295,7 +360,7 @@ float localSceneSDF(vec4 p){
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
-    vec4 absolutep = cellBoost * p;// correct for the fact that we have been moving
+    vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
     for (int i=0; i<4; i++){
@@ -314,7 +379,8 @@ float globalSceneSDF(vec4 p){
     }
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absolutep, globalObjectBoost[3], globalObjectRadius);
+    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
+    objDist = sphereSDF(absolutep, globalObjPos, globalObjectRadius);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -324,30 +390,30 @@ float globalSceneSDF(vec4 p){
 
 
 // check if the given point p is in the fundamental domain of the lattice.
-bool isOutsideCell(vec4 p, out mat4 fixMatrix){
+bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     vec4 ModelP= modelProject(p);
     if (ModelP.x > modelHalfCube){
-        fixMatrix = invGenerators[0];
+        fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
     if (ModelP.x < -modelHalfCube){
-        fixMatrix = invGenerators[1];
+        fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
     if (ModelP.y > modelHalfCube){
-        fixMatrix = invGenerators[2];
+        fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
     if (ModelP.y < -modelHalfCube){
-        fixMatrix = invGenerators[3];
+        fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
     if (ModelP.z > modelHalfCube){
-        fixMatrix = invGenerators[4];
+        fixMatrix = Isometry(invGenerators[4]);
         return true;
     }
     if (ModelP.z < -modelHalfCube){
-        fixMatrix = invGenerators[5];
+        fixMatrix = Isometry(invGenerators[5]);
         return true;
     }
     return false;
@@ -356,7 +422,7 @@ bool isOutsideCell(vec4 p, out mat4 fixMatrix){
 
 
 // overload of the previous method with tangent vector
-bool isOutsideCell(tangVector v, out mat4 fixMatrix){
+bool isOutsideCell(tangVector v, out Isometry fixMatrix){
     return isOutsideCell(v.pos, fixMatrix);
 }
 
@@ -403,14 +469,14 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 
-void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
-    mat4 fixMatrix;
+void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
+    Isometry fixMatrix;
     float marchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     tangVector tv = rayDir;
     tangVector localtv = rayDir;
-    totalFixMatrix = mat4(1.0);
+    totalFixMatrix = identityIsometry;
 
 
     // Trace the local scene, then the global scene:
@@ -418,7 +484,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         localtv = flow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
-            totalFixMatrix = fixMatrix * totalFixMatrix;
+            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
             localtv = translate(fixMatrix, localtv);
             marchStep = MIN_DIST;
         }
@@ -444,7 +510,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         float globalDist = globalSceneSDF(tv.pos);
         if (globalDist < EPSILON){
             // hitWhich has now been set
-            totalFixMatrix = mat4(1.0);
+            totalFixMatrix = identityIsometry;
             sampletv = tv;
             return;
         }
@@ -530,7 +596,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     return att*((diffuse*baseColor) + specular);
 }
 
-vec3 phongModel(mat4 totalFixMatrix, vec3 color){
+vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     tangVector V = tangVector(SP, -sampletv.dir);
@@ -541,11 +607,55 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
     for (int i = 0; i<4; i++){
-        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
+        Isometry totalIsom=composeIsometry(totalFixMatrix,invCellBoost);
+        TLP = translate(totalIsom,lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
     return color;
 }
+
+
+
+vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
+    N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        color = 0.9*color+0.1;
+        return color;
+        //generically gray object (color= black, glowing slightly because of the 0.1)
+}
+
+
+vec3 globalColor(Isometry totalFixMatrix, tangVector sampletv){
+     if(SURFACE_COLOR){//color the object based on its position in the cube
+    vec4 samplePos=modelProject(sampletv.pos);
+        //Point in the Klein Model unit cube    
+        float x=samplePos.x;
+        float y=samplePos.y;
+        float z=samplePos.z;
+        x = 0.9*x/modelHalfCube;    
+        y = 0.9*y/modelHalfCube; 
+        z = 0.9*z/modelHalfCube;   
+        vec3 color = vec3(x,y,z);
+        N = estimateNormal(sampletv.pos);
+        color = phongModel(totalFixMatrix, 0.1*color);
+        return 0.9*color+0.1;
+        //adding a small constant makes it glow slightly
+     }
+    else{
+            // objects
+        N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        return color;
+        }
+}
+        
+    
+
+
+
+
 
 //--------------------------------------------------------------------
 // Tangent Space Functions
@@ -568,6 +678,15 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 //--------------------------------------------------------------------
 
 void main(){
+    
+    currentBoost=Isometry(currentBoostMat);
+    leftBoost=Isometry(leftBoostMat);
+    rightBoost=Isometry(rightBoostMat);
+    cellBoost=Isometry(cellBoostMat);
+    invCellBoost=Isometry(invCellBoostMat);
+    globalObjectBoost=Isometry(globalObjectBoostMat);
+    
+
     //vec4 rayOrigin = ORIGIN;
 
     //stereo translations ----------------------------------------------------
@@ -575,18 +694,18 @@ void main(){
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
     
         //camera position must be translated in hyperboloid -----------------------
-    rayDir=applyMatrixToDir(facing, rayDir);
+    rayDir=rotateFacing(facing, rayDir);
     
     
     if (isStereo == 1){
          
     
         if (isLeft){
-            rayDir=applyMatrixToDir(leftFacing, rayDir);
+            rayDir=rotateFacing(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
         }
         else {
-            rayDir=applyMatrixToDir(rightFacing, rayDir);
+            rayDir=rotateFacing(rightFacing, rayDir);
             rayDir = translate(rightBoost, rayDir);
         }
     }
@@ -599,14 +718,14 @@ void main(){
     
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
-    mat4 totalFixMatrix = mat4(1.0);
+    Isometry totalFixMatrix = identityIsometry;
     raymarch(rayDir, totalFixMatrix);
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.01);
+        out_FragColor = vec4(0.2);
         return;
     }
     else if (hitWhich == 1){ // global lights
@@ -616,56 +735,22 @@ void main(){
     else if (hitWhich == 5){ //debug
         out_FragColor = vec4(debugColor, 1.0);
     }
-    else { // objects
-
-        
-        
-         if(SURFACE_COLOR){
-               //color the object based on its position in the cube
-        //interpreting the cube as the color cube
-        vec4 samplePos=modelProject(sampletv.pos);
-        //Point in the Klein Model unit cube    
-        float x=samplePos.x;
-        float y=samplePos.y;
-        float z=samplePos.z;
-        x = x/modelHalfCube;    
-        y = y/modelHalfCube; 
-        z = z/modelHalfCube; 
-       // x = x * sqrt3;
-       // y = y * sqrt3;
-       // z = z * sqrt3;
-        //x = (x+1.0)/2.0;
-        //y = (y+1.0)/2.0;
-       // z = (z+1.0)/2.0;
-        vec3 pixelcolor = vec3(x,y,z);
-
-
-        N = estimateNormal(sampletv.pos);
-        vec3 color;
-        color = phongModel(totalFixMatrix, 0.1*pixelcolor);
-        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(0.9*color+0.1, 1.0);  
-        }
-        
-        else{
-            // objects
-        N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0.,0.,0.);
-        color = phongModel(totalFixMatrix, color);
-        //just COLOR is the normal here.  Adding a constant makes it glow a little (in case we mess up lighting)
-        out_FragColor = vec4(color, 1.0);
-        }
+    
+        else if (hitWhich == 2){ // global object
+            
+        vec3 pixelColor=localColor(totalFixMatrix, sampletv);
+            
+        out_FragColor = vec4( pixelColor,1.0);
+            
+        return;
     }
+    
+    else { // objects
+        
+        vec3 pixelColor= globalColor(totalFixMatrix, sampletv);
+        
+        out_FragColor=vec4(pixelColor,1.0);
+      
 }
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+}
