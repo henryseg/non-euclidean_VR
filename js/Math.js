@@ -450,6 +450,10 @@ function setupMaterial(fShader) {
             globalObjectBoostMat: {
                 type: "m4",
                 value: globalObjectPosition.boost.matrix
+            },
+            globalSphereRad: {
+                type: "f",
+                value: 0.2
             }
         },
 

@@ -333,6 +333,7 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
+uniform float globalSphereRad;
 
 
 
@@ -387,7 +388,7 @@ float globalSceneSDF(vec4 p){
     //Global Sphere Object
     float objDist;
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, globalObjectRadius);
+    objDist = sphereSDF(absolutep, globalObjPos, globalSphereRad);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
