@@ -26,7 +26,7 @@ var initGui = function(){
 
   // ------------------------------
   // UI Controllers
-  // ------------------------------
+  // ------------ ------------------
 
   globalSphereRadController.onChange(function(value){
     g_material.uniforms.globalSphereRad.value = value; 

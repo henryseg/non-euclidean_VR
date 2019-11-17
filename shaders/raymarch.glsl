@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 
 
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -22,7 +22,7 @@ const bool FAKE_LIGHT = false;
 const bool FAKE_DIST_SPHERE = false;
 
 
-const float globalObjectRadius = 0.4;
+//const float globalObjectRadius = 0.4;
 const float centerSphereRadius =0.67;
 const float vertexSphereSize = 0.23;//In this case its a horosphere
 
@@ -376,7 +376,8 @@ float globalSceneSDF(vec4 p){
         objDist = sphereSDF(
         absolutep,
         lightPositions[i],
-        1.0/(10.0*lightIntensities[i].w)
+            0.1
+    //    1.0/(10.0*lightIntensities[i].w)
         );
         distance = min(distance, objDist);
         if (distance < EPSILON){
