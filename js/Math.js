@@ -461,10 +461,22 @@ function setupMaterial(fShader) {
 
 
 function updateMaterial() {
-    // update the uniforms passed to the shaders
-    // normally called at every frame
+    /*
+        It seems that to be properly passed to the shader,
+        a uniform `foo` cannot be updated on the js side by a statement of the form
+        > foo = new_value_of_foo
+        One has to use a statement that alter the object `foo` e.g.
+        > foo. attribute = new_value of the attribute
+        (Maybe some subtleties in the pointer management ?)
 
-    g_material.uniforms.currentBoost.value = g_position.boost.matrix;
-    g_material.uniforms.facing.value = g_position.facing;
+        This can be an issue when passing float to the shader
+        (Remark: is foo += 1 totally equivalent to foo = foo + 1 in this context?)
+        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
+        > g_material.uniforms.foo.value = new_value_of_foo
+
+     */
+
+    //g_material.uniform.foo.value = 0;
+
 
 }
