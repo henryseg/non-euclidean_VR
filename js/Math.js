@@ -36,7 +36,7 @@ function Isometry() {
     // By default the return isometry is the identity
     this.matrix = new THREE.Matrix4();
 
-    this.set = function(data) {
+    this.set = function (data) {
         this.matrix = data[0].clone();
         return this;
     };
@@ -74,7 +74,7 @@ function Isometry() {
     Translating a point by an isometry
 
  */
-THREE.Vector4.prototype.translateBy = function(isom) {
+THREE.Vector4.prototype.translateBy = function (isom) {
     return this.applyMatrix4(isom.matrix);
 };
 
@@ -210,22 +210,26 @@ function Position() {
 
     this.reduceFacingError = function () {
         // Gram-Schmidt
-        // TODO...
-        // Right now there is a bug with elements
-        /*let columns = this.facing.elements();
-        let col0 = columns[0].normalize();
-        let aux10 = col0.multiplyScalar(columns[1].dot(col0));
-        let col1 = columns[1].sub(aux10).normalize();
-        let aux20 = col0.multiplyScalar(columns[2].dot(col0));
-        let aux21 = col0.multiplyScalar(columns[2].dot(col1));
-        let col2 = columns[2].sub(aux20).sub(aux21).normalize();
+        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.facing);
+        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.facing);
+        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.facing);
+        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.facing);
 
-        this.facing = new THREE.Matrix4().set(
+        col0.normalize();
+
+        let aux10 = col0.clone().multiplyScalar(col0.dot(col1));
+        col1.sub(aux10).normalize();
+
+        let aux20 = col0.clone().multiplyScalar(col0.dot(col2));
+        let aux21 = col1.clone().multiplyScalar(col1.dot(col2));
+        col2.sub(aux20).sub(aux21).normalize();
+        
+        this.facing.set(
             col0.x, col1.x, col2.x, 0.,
             col0.y, col1.y, col2.y, 0.,
             col0.z, col1.z, col2.z, 0.,
             0., 0., 0., 1.
-        )*/
+        );
         return this;
     };
 
@@ -247,11 +251,11 @@ function Position() {
 
 /*
 
-    Rotating a vector by a facing
+    Rotating a vector
 
  */
 
-THREE.Vector3.prototype.rotateByFacing = function(position) {
+THREE.Vector3.prototype.rotateByFacing = function (position) {
     let aux = new THREE.Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
     this.set(aux.x, aux.y, aux.z);
     return this;
