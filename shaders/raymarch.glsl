@@ -436,8 +436,8 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
-uniform sampler2D earthTex;
-
+// uniform sampler2D earthTex;
+uniform samplerCube earthCubeTex;
 
 
 //--------------------------------------------
@@ -725,19 +725,32 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     return color;
 }
 
-vec2 sphereLatLong(Isometry globalObjectBoost, vec4 pt){
+// vec2 sphereLatLong(Isometry globalObjectBoost, vec4 pt, out vec2 uv2){
+//     pt = translate(cellBoost, pt);
+//     pt = inverse(globalObjectBoost.matrix) * pt;
+//     vec3 p = tangDirection(ORIGIN, pt).dir.xyz;
+    
+//     float r = sqrt(p.x*p.x + p.y*p.y);
+//     vec2 uv = vec2(0.5 + 0.5*atan(p.y, p.x)/PI, 0.5 + atan(p.z, r)/PI);
+//     uv2     = vec2(0.5 + 0.5*atan(p.y,abs(p.x))/PI, uv.y ); // magic derived from https://www.shadertoy.com/view/Ms2SWW
+//     return uv;
+// }
+
+vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);
     pt = inverse(globalObjectBoost.matrix) * pt;
-    vec3 P = tangDirection(ORIGIN, pt).dir.xyz;
-    float r = sqrt(P.x*P.x + P.y*P.y);
-    return vec2(0.5 + 0.5*atan(P.y, P.x)/PI, 0.5 + atan(P.z, r)/PI);
+    return tangDirection(ORIGIN, pt).dir.xyz;
 }
 
 vec3 localColor(Isometry totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
     //vec3 color=vec3(0.,0.,0.);
-    vec3 color = textureGrad(earthTex, sphereLatLong(globalObjectBoost, sampletv.pos), vec2(0.0,0.0), vec2(0.0,0.0)).xyz;
+    // vec2 uv2 = vec2(0.0,0.0);
+    // vec2 uv = sphereLatLong(globalObjectBoost, sampletv.pos, uv2);
+    // vec3 color = textureGrad(earthTex, uv, dFdx(uv2), dFdy(uv2)).xyz;
+    // vec3 color = textureGrad(earthTex, uv, vec2(0.0,0.0), vec2(0.0,0.0)).xyz;
     // textureGrad adds gradient info for the map from xy to uv. Setting these to zero makes it not do silly things on the wraparound from theta = 0 to 2pi
+    vec3 color = textureCube(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2; //tone down the lighting a bit 

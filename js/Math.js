@@ -326,11 +326,20 @@ var setupMaterial = function (fShader) {
                 type: "m4",
                 value: globalObjectBoost[0]
             },
-            earthTex: {
-                type:"t", 
-                value: new THREE.TextureLoader().load("images/earthmap2048.jpg")
-            } // from https://visibleearth.nasa.gov/images/73580/january-blue-marble-next-generation-w-topography-and-bathymetry
+            earthCubeTex: {
+                type: "",
+                value: new THREE.CubeTextureLoader().setPath( 'images/cubemap/' )
+                .load( [  //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
+                    'posx.jpg',
+                    'negx.jpg',
+                    'posy.jpg',
+                    'negy.jpg',
+                    'posz.jpg',
+                    'negz.jpg'
+                ] )
+            }
         },
+
 
         vertexShader: document.getElementById('vertexShader').textContent,
         fragmentShader: fShader,
