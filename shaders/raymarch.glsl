@@ -15,17 +15,17 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
-const bool EARTH=false;
+const bool TILING_TEXTURE=false;
+const bool EARTH=true;
 
-
+const bool FAKE_LIGHT = true;
 const bool FAKE_LIGHT_FALLOFF=true;
-const bool FAKE_LIGHT = false;
 const bool FAKE_DIST_SPHERE = false;
 
 
 //const float globalObjectRadius = 0.4;
-const float centerSphereRadius =0.67;
-const float vertexSphereSize = 0.23;//In this case its a horosphere
+const float centerSphereRadius =1.;
+const float vertexSphereSize =-0.95;//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -34,7 +34,7 @@ const float vertexSphereSize = 0.23;//In this case its a horosphere
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube =  0.5;//projection of cube to klein model
+const float modelHalfCube =  0.5773502692;//projection of cube to klein model
 const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
 
 
@@ -43,6 +43,16 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //--------------------------------------------
 // AUXILIARY (BASICS)
 //--------------------------------------------
+
+
+float hypAng(vec4 p, vec4 q){
+        //negative the lorentz dot product gives the hyperbolic angle between the two points on the hyperboloid model
+    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
+}
+
+vec4 hypProject(vec4 p){//Project a point onto the hyperboloid of one sheet or two sheets depending on original vector.
+    return p/sqrt(abs(hypAng(p,p)));
+}
 
 
 
@@ -121,7 +131,14 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 float tangDot(tangVector u, tangVector v){
   
-     return dot(u.dir.xyz,  v.dir.xyz);
+    mat4 g = mat4(
+    1.,0.,0.,0.,
+    0.,1.,0.,0.,
+    0.,0.,1.,0.,
+    0.,0.,0.,-1.
+    );
+
+    return dot(u.dir,  g*v.dir);
 
 }
 
@@ -141,20 +158,59 @@ float cosAng(tangVector u, tangVector v){
 }
 
 
-mat4 tangBasis(vec4 p){
-    // return a basis of vectors at the point p
-
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis=mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
-    return theBasis;
+//produce isometry to move from 0 to a point in direction v, of distance d 
+// using this to test out an alternative definition of the tangBasis function
+mat4 translateByVector(vec4 v){
+    float len=length(v);
+    float c1= sinh(len);
+    float c2=cosh(len)-1.;
+    if(len!=0.){
+     float dx=v.x/len;
+     float dy=v.y/len;
+     float dz=v.z/len;
+    
+     mat4 m=mat4(
+         0,0,0,dx,
+         0,0,0,dy,
+         0,0,0,dz,
+         dx,dy,dz,0.
+     );
+    
+    mat4 result = mat4(1.)+c1* m+c2*m*m;
+    return result;
+    }
+    else{
+    return mat4(1.);
+    }
 }
 
 
+// moved tangBasis computation down below in global geometry
+
+
+
+//--------------------------------------------
+//Geometry of the Models
+//--------------------------------------------
+
+
+//project back onto the geometry model
+tangVector geomProject(tangVector tv){
+    
+   vec4 projPos=hypProject(tv.pos);
+   return tangVector(projPos, tv.dir);
+}
+
+vec4 geomProject(vec4 p){
+    //overloading previous function
+   return hypProject(p);
+}
+
+
+//Project onto the Klein Model
+vec4 modelProject(vec4 p){
+    return p/p.w;
+}
 
 
 
@@ -164,12 +220,14 @@ mat4 tangBasis(vec4 p){
 
 tangVector translate(Isometry A, tangVector v) {
     // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
+    tangVector newVec= tangVector(A.matrix * v.pos, A.matrix * v.dir);
+    return geomProject(newVec);
 }
 
 vec4 translate(Isometry A, vec4 v) {
     // overload of translate for moving only a point
-    return A.matrix * v;
+   vec4 newVec= A.matrix * v;
+   return geomProject(newVec);
 }
 
 
@@ -200,7 +258,7 @@ Isometry composeIsometry(Isometry A, Isometry B)
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-    return length(q-p);
+    return acosh(hypAng(p,q));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -220,7 +278,7 @@ float exactDist(tangVector u, tangVector v){
 
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-        return tangNormalize(tangVector(p, q - p));
+        return tangNormalize(tangVector(p, q - hypAng(p,q)*p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
@@ -228,29 +286,25 @@ tangVector tangDirection(tangVector u, tangVector v){
      return tangDirection(u.pos, v.pos);
 }
 
+//flow along the geodesic starting at tv for a time t
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
-return tangVector(tv.pos+t*tv.dir,tv.dir);
-  
+    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
+    //tangent is derivative of position
+    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
+    
+    return geomProject(tangVector(resPos,resDir));
 }
 
 
-//--------------------------------------------
-//Geometry of the Models
-//--------------------------------------------
-
-
-//project point back onto the geometry
-vec4 geomProject(vec4 p){
-    return p;
+//basis for the tangent space at a point
+mat4 tangBasis(vec4 p){
+    float dist=acosh(p.w);
+    vec4 direction = tangDirection(ORIGIN,p).dir;
+    return translateByVector(dist*direction);
 }
 
 
-//Project onto the Klein Model
-vec4 modelProject(vec4 p){
-    return p;
- 
-}
 
 
 //-------------------------------------------------------
@@ -262,7 +316,7 @@ float lightAtt(float dist){
            //fake linear falloff
     return dist;
     }
- return dist*dist;
+ return sinh(dist)*sinh(dist);
 }
 
 
@@ -277,6 +331,13 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 }
 
 
+ // A horosphere can be constructed by offseting from a standard horosphere.
+  // Our standard horosphere will have a center in the direction of lightPoint
+  // and go through the origin. Negative offsets will shrink it.
+  float horosphereSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+    return log(-hypAng(samplePoint, lightPoint)) - offset;
+  }
+
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
@@ -284,7 +345,7 @@ float centerSDF(vec4 p, vec4 center, float radius){
 
 
 float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return  sphereSDF(abs(p), cornerPoint, size);
+    return  horosphereSDF(abs(p), cornerPoint, size);
 }
 
 //--------------------------------------------
@@ -292,7 +353,7 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
 //--------------------------------------------
 const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 200.0;
+const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
@@ -336,7 +397,7 @@ uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
-
+uniform sampler2D rockTex;
 
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
@@ -686,6 +747,11 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
+
+
+
+
+
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
      if(FAKE_LIGHT){
          //make the objects have their own color
@@ -701,15 +767,22 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         vec3 color = vec3(x,y,z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
+   if(TILING_TEXTURE){
+         //STILL NEED TO ADD TEXTURE SOMEHOW
+//color = color*pow(boxMapping( rockTex, sampletv ),vec3(0.75));
+   }
         return 0.9*color+0.1;
         //adding a small constant makes it glow slightly
      }
     else{
-            //if we are doing TRUE LIGHTING
-            // objects have no natural color, only lit by the lights
+       //if we are doing TRUE LIGHTING
+       // objects have no natural color, only lit by the lights
         N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
+     if(TILING_TEXTURE){
+  color *= pow(boxMapping( rockTex, sampletv ), vec3(0.75));
+     }
         return color;
         }
 }

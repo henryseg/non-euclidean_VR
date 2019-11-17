@@ -2,10 +2,44 @@
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
 
-
+let PI = 3.1415926535;
 //----------------------------------------------------------------------
 //	Object oriented version of the geometry
 //----------------------------------------------------------------------
+
+//matrices don't come with addition in JS?!
+//adding matrices
+THREE.Matrix4.prototype.add = function (m) {
+    this.set.apply(this, [].map.call(this.elements, function (c, i) {
+        return c + m.elements[i]
+    }));
+};
+
+
+
+function translateByVector(v) {
+    let matrix = new THREE.Matrix4().identity();
+    let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+
+    if (len != 0) {
+        var c1 = Math.sinh(len);
+        var c2 = Math.cosh(len) - 1;
+        let dx = v.x / len;
+        let dy = v.y / len;
+        let dz = v.z / len;
+        var m = new THREE.Matrix4().set(
+            0, 0, 0, dx,
+            0, 0, 0, dy,
+            0, 0, 0, dz,
+            dx, dy, dz, 0.0);
+        var m2 = m.clone().multiply(m);
+        m.multiplyScalar(c1);
+        m2.multiplyScalar(c2);
+        matrix.add(m);
+        matrix.add(m2);
+    }
+    return matrix;
+}
 
 /*
 
@@ -163,23 +197,33 @@ function Position() {
         return this;
     };
 
+
     this.flow = function (v) {
         // move the position following the geodesic flow
         // the geodesic starts at the origin, its tangent vector is v
+        let matrix = translateByVector(v);
         // parallel transport the facing along the geodesic
 
-        // in Euclidean geometry, just apply a translation
+        // in Hyperbolic geometry, just apply a translation
         // Nothing to do on the facing
-        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
+
         let isom = new Isometry().set([matrix]);
         return this.translateBy(isom);
     };
 
+
+
+
     this.localFlow = function (v) {
         // move the position following the geodesic flow FROM THE POINT WE ARE AT
         // v is the pull back at the origin of the direction we want to follow
+        //how should we compute this?  Should we have a function that gives isometries translating each point back to the origin to get the right vector?
+
         // TODO. Check the facing
-        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
+
+        let matrix = translateByVector(v);
+
+        // let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
         let isom = new Isometry().set([matrix]);
         return this.localTranslateBy(isom);
     };
@@ -265,17 +309,18 @@ function Position() {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-const cubeHalfWidth = 0.5;
+const cubeHalfWidth = 0.6584789485;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
 function geomDist(v) {
-    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    return Math.acosh(v.w);
 }
 
 
 function fixOutsideCentralCell(position) {
+    /*
     let cPos = position.boost.translate(ORIGIN);
     let bestDist = geomDist(cPos);
     let bestIndex = -1;
@@ -291,8 +336,9 @@ function fixOutsideCentralCell(position) {
         position.translateBy(gens[bestIndex]);
         return bestIndex;
     } else {
-        return -1;
-    }
+   */
+    return -1;
+    //}
 
 }
 
@@ -308,6 +354,10 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen3 = new Position().flow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
     const gen4 = new Position().flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
     const gen5 = new Position().flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+
+
+    //these generators do generate the tiling, but don't give a manifold.  need to also twist as we glue opposing faces correctly
+
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
