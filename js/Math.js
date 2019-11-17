@@ -69,7 +69,11 @@ function Isometry() {
     };
 }
 
+/*
 
+    Translating a point by an isometry
+
+ */
 THREE.Vector4.prototype.translateBy = function(isom) {
     return this.applyMatrix4(isom.matrix);
 };
@@ -240,6 +244,12 @@ function Position() {
         return new Position().set(this.boost, this.facing);
     }
 }
+
+/*
+
+    Rotating a vector by a facing
+
+ */
 
 THREE.Vector3.prototype.rotateByFacing = function(position) {
     let aux = new THREE.Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
