@@ -447,7 +447,7 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: lightPositions
             },
-            globalObjectBoost: {
+            globalObjectBoostMat: {
                 type: "m4",
                 value: globalObjectPosition.boost.matrix
             }

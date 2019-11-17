@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool UNIV_COVER_SCENE=true;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 
 
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -22,7 +22,7 @@ const bool FAKE_LIGHT = false;
 const bool FAKE_DIST_SPHERE = false;
 
 
-const float globalObjectRadius = 0.1;
+const float globalObjectRadius = 0.4;
 const float centerSphereRadius =0.67;
 const float vertexSphereSize = 0.23;//In this case its a horosphere
 
@@ -485,8 +485,11 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     tangVector localtv = rayDir;
     totalFixMatrix = identityIsometry;
 
-if(TILING_SCENE){
+
     // Trace the local scene, then the global scene:
+    
+    
+    if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
 
@@ -506,11 +509,12 @@ if(TILING_SCENE){
             globalDepth += localDist;
         }
     }
-}
+    localDepth=min(globalDepth, MAX_DIST);    
+    }
+    else{localDepth=MAX_DIST;}
 
-    
-if(UNIV_COVER_SCENE){
-    localDepth=min(globalDepth, MAX_DIST);
+
+    if(GLOBAL_SCENE){
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
@@ -525,13 +529,13 @@ if(UNIV_COVER_SCENE){
         }
         marchStep = globalDist;
         globalDepth += globalDist;
-        //if we traced the tiling scene, stop light rays when they hit a tile.
-        if (globalDepth >= localDepth && TILING_SCENE){
+        if (globalDepth >= localDepth){
             break;
         }
     }
+    }
 }
-}
+
 
 //void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 //    mat4 fixMatrix;
