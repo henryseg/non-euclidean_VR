@@ -213,7 +213,6 @@ function Position() {
         let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.facing);
         let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.facing);
         let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.facing);
-        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.facing);
 
         col0.normalize();
 
@@ -223,7 +222,7 @@ function Position() {
         let aux20 = col0.clone().multiplyScalar(col0.dot(col2));
         let aux21 = col1.clone().multiplyScalar(col1.dot(col2));
         col2.sub(aux20).sub(aux21).normalize();
-        
+
         this.facing.set(
             col0.x, col1.x, col2.x, 0.,
             col0.y, col1.y, col2.y, 0.,
