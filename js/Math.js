@@ -26,10 +26,6 @@
 
     Representation of an isometry
 
-    TODO:
-     - Add an `applyIsom` method to the class Vector4 ?
-     - Same with the rotationByFacing ?
-
  */
 
 function Isometry() {
@@ -57,20 +53,10 @@ function Isometry() {
         return this;
     };
 
-    // this.multiply = function (isom) {
-    //     // return this * isom (which is the "natural order" if you read from left to right)
-    //     return this.rightMultiply(isom);
-    // };
-
     this.getInverse = function (isom) {
         // set the current isometry to the inverse of the passed isometry isom,
         this.matrix.getInverse(isom.matrix);
         return this;
-    };
-
-    this.translate = function (point) {
-        // apply the isometry to the given point
-        return point.clone().applyMatrix4(this.matrix);
     };
 
     this.equals = function (isom) {
@@ -82,6 +68,11 @@ function Isometry() {
         return new Isometry().set([this.matrix]);
     };
 }
+
+
+THREE.Vector4.prototype.translateBy = function(isom) {
+    return this.applyMatrix4(isom.matrix);
+};
 
 /*
 
@@ -96,7 +87,7 @@ function Isometry() {
 
     TODO.
         the set of position is probably a group
-        (a semi-direct projection of Isom(X) by SO(3), where Isom(X) acts on SO(3) by conjugation ?)
+        (a semi-direct projection of Isom(X) by SO(3), where Isom(X) acts on SO(3) by conjugation ?, a direct product ?)
         acting on the underlying Lie group as follows :
         (boost, facing) * g = boost * g * facing
         so that the inverse of a position if (boost^{-1}, facing^{-1})
@@ -142,7 +133,7 @@ function Position() {
         // if we are at boost of b, our position is b.0. We want to fly forward, and isom
         // tells me how to do this if I were at 0. So I want to apply b * isom * b^{-1} to b * 0, and I get b * isom * 0.
         // In other words, translate boost by the conjugate of isom by boost
-        // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ?
+        // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ? Do nothing ?
         //  or the local translate should actually be a composition of positions ?
         this.boost.multiply(isom);
         this.reduceBoostError();
@@ -184,14 +175,6 @@ function Position() {
         return this.localTranslateBy(isom);
     };
 
-    this.rotateByFacing = function (v) {
-        // rotate the given vector by the facing
-        // TODO: find a better way to go from Vector3 to Vector4 and conversely
-        let aux = new THREE.Vector4(v.x, v.y, v.z, 0);
-        let preRes = aux.applyMatrix4(this.facing);
-        return new THREE.Vector3(preRes.x, preRes.y, preRes.z)
-    };
-
     this.getInverse = function (position) {
         // set the current position to the position that can bring back the passed position to the origin position
         this.boost.getInverse(position.boost);
@@ -203,24 +186,22 @@ function Position() {
 
     this.getFwdVector = function () {
         // return the vector moving forward (taking into account the facing)
-        let v = new THREE.Vector3(0, 0, -1);
-        return this.rotateByFacing(v);
+        return new THREE.Vector3(0, 0, -1).rotateByFacing(this);
     };
 
     this.getRightVector = function () {
         // return the vector moving right (taking into account the facing)
-        let v = new THREE.Vector3(1, 0, 0);
-        return this.rotateByFacing(v);
+        return new THREE.Vector3(1, 0, 0).rotateByFacing(this);
     };
 
     this.getUpVector = function () {
         // return the vector moving up (taking into account the facing)
-        let v = new THREE.Vector3(0, 1, 0);
-        return this.rotateByFacing(v);
+        return new THREE.Vector3(0, 1, 0).rotateByFacing(this);
     };
 
     this.reduceBoostError = function () {
         // Nothing to do in Euclidean geometry
+        return this;
     };
 
     this.reduceFacingError = function () {
@@ -241,11 +222,13 @@ function Position() {
             col0.z, col1.z, col2.z, 0.,
             0., 0., 0., 1.
         )*/
+        return this;
     };
 
     this.reduceError = function () {
         this.reduceBoostError();
         this.reduceFacingError();
+        return this;
     };
 
     this.equals = function (position) {
@@ -257,6 +240,12 @@ function Position() {
         return new Position().set(this.boost, this.facing);
     }
 }
+
+THREE.Vector3.prototype.rotateByFacing = function(position) {
+    let aux = new THREE.Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
+    this.set(aux.x, aux.y, aux.z);
+    return this;
+};
 
 
 //----------------------------------------------------------------------
@@ -276,11 +265,11 @@ function geomDist(v) {
 
 
 function fixOutsideCentralCell(position) {
-    let cPos = position.boost.translate(ORIGIN);
+    let cPos = ORIGIN.clone().translateBy(position.boost);
     let bestDist = geomDist(cPos);
     let bestIndex = -1;
     for (let i = 0; i < gens.length; i++) {
-        let pos = gens[i].translate(cPos);
+        let pos = cPos.clone().translateBy(gens[i]);
         let dist = geomDist(pos);
         if (dist < bestDist) {
             bestDist = dist;
@@ -341,10 +330,10 @@ function initGeometry() {
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
 
-    let vectorLeft = g_position.rotateByFacing(new THREE.Vector3(-c_ipDist, 0, 0));
+    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
     g_leftPosition = new Position().flow(vectorLeft);
 
-    let vectorRight = g_position.rotateByFacing(new THREE.Vector3(c_ipDist, 0, 0));
+    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
     g_rightPosition = new Position().flow(vectorRight);
 }
 
@@ -352,7 +341,7 @@ function initGeometry() {
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
     let isom = new Position().flow(v).boost;
-    let lp = isom.translate(ORIGIN);
+    let lp = ORIGIN.clone().translateBy(isom);
     lightPositions.push(lp);
     lightIntensities.push(colorInt);
 }

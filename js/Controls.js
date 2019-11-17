@@ -145,7 +145,6 @@ THREE.Controls = function (done) {
             };
     }
 
-
     this.update = function () {
         let oldTime = this.updateTime;
         let newTime = Date.now();
