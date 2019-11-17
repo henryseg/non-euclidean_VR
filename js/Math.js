@@ -246,6 +246,10 @@ var initObjects = function () {
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
+var rockTexture = new THREE.TextureLoader().load("images/concrete.jpg")
+    rockTexture.wrapS = THREE.RepeatWrapping;
+    rockTexture.wrapT = THREE.RepeatWrapping;
+
 var setupMaterial = function (fShader) {
     //these are the left/right translations, rotations and facing corrections for stereo motion
 
@@ -337,7 +341,11 @@ var setupMaterial = function (fShader) {
                     'posz.jpg',
                     'negz.jpg'
                 ] )
-            }
+            },
+            rockTex: {
+                type:"t", 
+                value: rockTexture
+            } 
         },
 
 
