@@ -76,8 +76,8 @@ THREE.VREffect = function ( renderer, done ) {
 					self._vrHMD = vrHMD;
 					var parametersLeft = vrHMD.getEyeParameters( "left" );
 					var parametersRight = vrHMD.getEyeParameters( "right" );
-					//self.leftEyeTranslation.x = parametersLeft.offset[0];
-					//self.rightEyeTranslation.x = parametersRight.offset[0];
+					self.leftEyeTranslation.x = parametersLeft.offset[0];
+					self.rightEyeTranslation.x = parametersRight.offset[0];
 					//self.getEyeRotation(self.leftEyeTranslation.x);
 					break; // We keep the first we encounter
 				}
