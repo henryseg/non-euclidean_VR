@@ -357,7 +357,7 @@ function createGenerators() { /// generators for the tiling by cubes.
 
 
     //these generators do generate the tiling, but don't give a manifold.  need to also twist as we glue opposing faces correctly
-
+    //Need to add in rotation to the generators.
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -427,6 +427,12 @@ function initObjects() {
 // Set up shader 
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
+
+
+var rockTexture = new THREE.TextureLoader().load("images/concrete.jpg")
+rockTexture.wrapS = THREE.RepeatWrapping;
+rockTexture.wrapT = THREE.RepeatWrapping;
+
 
 function setupMaterial(fShader) {
 
@@ -516,6 +522,10 @@ function setupMaterial(fShader) {
                     'posz.jpg',
                     'negz.jpg'
                 ])
+            },
+            rockTex: {
+                type: "t",
+                value: rockTexture
             }
         },
 

@@ -15,10 +15,10 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
-const bool TILING_TEXTURE=false;
+const bool TILING_TEXTURE=true;
 const bool EARTH=true;
 
-const bool FAKE_LIGHT = true;
+const bool FAKE_LIGHT = false;
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_DIST_SPHERE = false;
 
@@ -697,6 +697,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
 //EARTH TEXTURING COLOR COMMANDS
 
+
 // return the two smallest numbers in a triplet
 vec2 smallest( in vec3 v )
 {
@@ -728,6 +729,8 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 }
 
 
+
+
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     if(EARTH){
     N = estimateNormal(sampletv.pos);
@@ -756,7 +759,7 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
      if(FAKE_LIGHT){
          //make the objects have their own color
          //color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
+                vec4 samplePos=modelProject(sampletv.pos);
         //Point in the Klein Model unit cube    
         float x=samplePos.x;
         float y=samplePos.y;
@@ -767,22 +770,25 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         vec3 color = vec3(x,y,z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
-   if(TILING_TEXTURE){
-         //STILL NEED TO ADD TEXTURE SOMEHOW
-//color = color*pow(boxMapping( rockTex, sampletv ),vec3(0.75));
-   }
-        return 0.9*color+0.1;
-        //adding a small constant makes it glow slightly
+        
+         
+        if(TILING_TEXTURE){
+          color *= pow(boxMapping( rockTex, sampletv ),vec3(0.75));
+        }
+   
+        return color;
+        //add a small constant makes it glow slightly
      }
-    else{
-       //if we are doing TRUE LIGHTING
+    else{//if we are doing TRUE LIGHTING
        // objects have no natural color, only lit by the lights
         N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
-     if(TILING_TEXTURE){
-  color *= pow(boxMapping( rockTex, sampletv ), vec3(0.75));
-     }
+     
+        if(TILING_TEXTURE){
+        color *= pow(boxMapping( rockTex, sampletv ),vec3(0.75));
+        }
+        
         return color;
         }
 }
