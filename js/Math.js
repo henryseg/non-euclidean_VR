@@ -282,7 +282,7 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-const cubeHalfWidth = 2.5;
+const cubeHalfWidth = 0.5;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
