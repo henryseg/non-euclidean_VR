@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 
@@ -44,7 +44,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 // AUXILIARY (BASICS)
 //--------------------------------------------
 
-
+const float EULER_STEP = 0.01;
 //--------------------------------------------
 // STRUCT tangVector
 //--------------------------------------------
@@ -180,25 +180,36 @@ Isometry composeIsometry(Isometry A, Isometry B)
     return Isometry(A.matrix*B.matrix);
 }
 
-Isometry makeLeftTranslation(float x, float y, float z) {
+Isometry makeLeftTranslation(vec4 p) {
     mat4 matrix =  mat4(
-    exp(-z), 0., 0., 0.,
-    0., exp(z), 0., 0., 0.,
+    exp(-p.z), 0., 0., 0.,
+    0., exp(p.z), 0., 0.,
     0., 0., 1., 0,
-    x, y, z, 1.
+    p.x, p.y, p.z, 1.
     );
     return Isometry(matrix);
 }
 
-Isometry makeInvLeftTranslation(float x, float y, float z) {
+Isometry makeLeftTranslation(tangVector v) {
+    // overlaod using tangVector
+    return makeLeftTranslation(v.pos);
+}
+
+Isometry makeInvLeftTranslation(vec4 p) {
     mat4 matrix =  mat4(
-    exp(z), 0., 0., 0.,
-    0., exp(-z), 0., 0., 0.,
+    exp(p.z), 0., 0., 0.,
+    0., exp(-p.z), 0., 0.,
     0., 0., 1., 0,
-    -exp(z) * x, -exp(-z) * y, z, 1.
+    -exp(p.z) * p.x, -exp(-p.z) * p.y, p.z, 1.
     );
     return Isometry(matrix);
 }
+
+Isometry makeInvLeftTranslation(tangVector v) {
+    // overlaod using tangVector
+    return makeInvLeftTranslation(v.pos);
+}
+
 
 //--------------------------------------------
 // GLOBAL GEOMETRY
@@ -211,6 +222,12 @@ Isometry makeInvLeftTranslation(float x, float y, float z) {
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
+
+    // Isometry moving back to the origin and conversely
+    //Isometry isomInv = makeInvLeftTranslation(p);
+
+    //vec4 qOrigin = translate(isomInv, q);
+    //return 0.1 * sqrt(exp(2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(-2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
     return length(q-p);
 }
 
@@ -242,9 +259,38 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
-    // Isometry moving back to the origin
-    
-    return tangVector(tv.pos+t*tv.dir, tv.dir);
+    // Isometry moving back to the origin and conversely
+    Isometry isom = makeLeftTranslation(tv);
+    Isometry isomInv = makeInvLeftTranslation(tv);
+
+    tangVector tvOrigin = translate(isomInv, tv);
+
+    // represent at every step the pull back of the tangent vector at the origin
+    vec4 u = tvOrigin.dir;
+    // the position along the geodesic
+    vec4 posAux = ORIGIN;
+    // isometry to move the origin to the given position
+    Isometry isomAux = Isometry(mat4(1.0));
+    vec4 field;
+
+    // integrate numerically the flow
+    int n = int(floor(t/EULER_STEP));
+    for (int i = 0; i < n; i++){
+        posAux = posAux + EULER_STEP * translate(isomAux, u);
+        isomAux = makeLeftTranslation(posAux);
+        if (i != n-1) {
+            field = vec4(
+            -u.x * u.z,
+            u.y * u.z,
+            u.x * u.x - u.y * u.y,
+            0.
+            );
+            u = normalize(u + EULER_STEP*field);
+        }
+    }
+    tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
+
+    return translate(isom, resOrigin);
 
 }
 
@@ -368,7 +414,7 @@ float localSceneSDF(vec4 p){
     float sphere = centerSDF(p, center, centerSphereRadius);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
-    float final = -min(vertexSphere, sphere); //unionSDF
+    float final = -min(vertexSphere, sphere);//unionSDF
     return final;
 
     // float final = -sphere;
@@ -520,7 +566,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 globalDepth += localDist;
             }
         }
-        localDepth=min(globalDepth, MAX_DIST);
+        localDepth = min(globalDepth, MAX_DIST);
     }
     else { localDepth=MAX_DIST; }
 

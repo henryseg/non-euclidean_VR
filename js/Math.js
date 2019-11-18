@@ -217,13 +217,13 @@ function Position() {
         const n = dist / EULER_STEP;
         let u = v.clone();
         let field = new THREE.Vector3();
-        let pos_aux = new THREE.Vector4();
+        let pos_aux = ORIGIN.clone();
         let vec_aux = new THREE.Vector4();
         let mat_aux = new THREE.Matrix4();
 
         for (let i = 0; i < n; i++) {
             // position of the geodesic at time i*step
-            pos_aux = ORIGIN.clone().translateBy(this.boost);
+            //pos_aux = ORIGIN.clone().translateBy(this.boost);
 
             // computing the position of the geodesic at time (i+1)*step
             vec_aux = new THREE.Vector4(u.x, u.y, u.z, 0);
