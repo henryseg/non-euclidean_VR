@@ -17,6 +17,7 @@ let g_position;
 
 let g_cellPosition, g_invCellPosition;
 
+var g_currentBoost;
 
 let g_phoneOrient;
 

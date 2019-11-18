@@ -78,10 +78,6 @@ THREE.VREffect = function ( renderer, done ) {
 					var parametersRight = vrHMD.getEyeParameters( "right" );
 					self.leftEyeTranslation.x = parametersLeft.offset[0];
 					self.rightEyeTranslation.x = parametersRight.offset[0];
-					document.getElementById("crosshairLeft").style.visibility = 'visible';
-        			document.getElementById("crosshairRight").style.visibility = 'visible';
-        			document.getElementById("crosshair").style.visibility = 'hidden';
-					guiInfo.toggleStereo = true;
 					self.getEyeRotation(self.leftEyeTranslation.x);
 					break; // We keep the first we encounter
 				}
@@ -104,10 +100,6 @@ THREE.VREffect = function ( renderer, done ) {
 					var parametersRight = vrHMD.getEyeParameters( "right" );
 					self.leftEyeTranslation.x = parametersLeft.offset[0];
 					self.rightEyeTranslation.x = parametersRight.offset[0];
-					document.getElementById("crosshairLeft").style.visibility = 'visible';
-        			document.getElementById("crosshairRight").style.visibility = 'visible';
-        			document.getElementById("crosshair").style.visibility = 'hidden';
-					guiInfo.toggleStereo = true;
 					self.getEyeRotation(self.leftEyeTranslation.x);
 					break; // We keep the first we encounter
 				}
