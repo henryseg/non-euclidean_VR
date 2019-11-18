@@ -37,7 +37,22 @@ function Isometry() {
     this.matrix = new THREE.Matrix4();
 
     this.set = function (data) {
+        // set the data
         this.matrix = data[0].clone();
+        return this;
+    };
+
+    this.makeLeftTranslation = function (x, y, z) {
+        // return the left translation by (x,y,z)
+        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+        this.matrix.makeTranslation(x, y, z);
+        return this;
+    };
+
+    this.makeInvLeftTranslation = function (x, y, z) {
+        // return the inverse of the left translation by (x,y,z)
+        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+        this.matrix.makeTranslation(-x, -y, -z);
         return this;
     };
 
@@ -461,13 +476,13 @@ function setupMaterial(fShader) {
                 type: "",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
                     .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
-                    'posx.jpg',
-                    'negx.jpg',
-                    'posy.jpg',
-                    'negy.jpg',
-                    'posz.jpg',
-                    'negz.jpg'
-                ])
+                        'posx.jpg',
+                        'negx.jpg',
+                        'posy.jpg',
+                        'negy.jpg',
+                        'posz.jpg',
+                        'negz.jpg'
+                    ])
             }
         },
 
