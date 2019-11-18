@@ -43,11 +43,11 @@ THREE.VREffect = function ( renderer, done ) {
 		}
 
 		// default some stuff for mobile VR
-		self.leftEyeTranslation = { x: -0.03200000151991844, y: -0, z: -0, w: 0 };
-		self.rightEyeTranslation = { x: 0.03200000151991844, y: -0, z: -0, w: 0 };
+		self.leftEyeTranslation = { x: -0.03200000151991844, y: 0, z: 0, w: 0 };
+		self.rightEyeTranslation = { x: 0.03200000151991844, y: 0, z: 0, w: 0 };
 		// g_stereoBoosts[0] = translateByVector(g_geometry, self.leftEyeTranslation);
 		// g_stereoBoosts[1] = translateByVector(g_geometry, self.rightEyeTranslation);
-		self.getEyeRotation(self.leftEyeTranslation.x);
+		//self.getEyeRotation(self.leftEyeTranslation.x);
 
 		if (!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices) {
 			if(done) done("Your browser is not VR Ready");
@@ -76,9 +76,9 @@ THREE.VREffect = function ( renderer, done ) {
 					self._vrHMD = vrHMD;
 					var parametersLeft = vrHMD.getEyeParameters( "left" );
 					var parametersRight = vrHMD.getEyeParameters( "right" );
-					self.leftEyeTranslation.x = parametersLeft.offset[0];
-					self.rightEyeTranslation.x = parametersRight.offset[0];
-					self.getEyeRotation(self.leftEyeTranslation.x);
+					//self.leftEyeTranslation.x = parametersLeft.offset[0];
+					//self.rightEyeTranslation.x = parametersRight.offset[0];
+					//self.getEyeRotation(self.leftEyeTranslation.x);
 					break; // We keep the first we encounter
 				}
 			}
