@@ -543,7 +543,7 @@ function setupMaterial(fShader) {
     });
 }
 
-
+// hi steve 
 function updateMaterial() {
     /*
         It seems that to be properly passed to the shader,
