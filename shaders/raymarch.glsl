@@ -24,8 +24,8 @@ const bool FAKE_DIST_SPHERE = false;
 
 
 //const float globalObjectRadius = 0.4;
-const float centerSphereRadius =1.;
-const float vertexSphereSize =-0.95;//In this case its a horosphere
+//const float centerSphereRadius =1.;
+//const float vertexSphereSize =-0.95;//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -395,9 +395,14 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
-uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 uniform sampler2D rockTex;
+//--------------------------------------------
+// Sliders
+//--------------------------------------------
+uniform float globalSphereRad;
+uniform float centerSphereRad;
+uniform float vertexSphereRad;
 
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
@@ -417,9 +422,9 @@ uniform sampler2D rockTex;
 
 float localSceneSDF(vec4 p){
     vec4 center = ORIGIN;
-    float sphere = centerSDF(p,  center, centerSphereRadius);
+    float sphere = centerSDF(p,  center, centerSphereRad);
     float vertexSphere = 0.0;
-    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
+    vertexSphere = vertexSDF(p, modelCubeCorner, vertexSphereRad);
     float final = -min(vertexSphere,sphere); //unionSDF
     return final;
     

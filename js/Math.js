@@ -511,6 +511,14 @@ function setupMaterial(fShader) {
                 type: "f",
                 value: 0.2
             },
+            centerSphereRad: {
+                type: "f",
+                value: 0.99
+            },
+            vertexSphereRad: {
+                type: "f",
+                value: -0.95
+            },
             earthCubeTex: { //earth texture to global object
                 type: "",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
