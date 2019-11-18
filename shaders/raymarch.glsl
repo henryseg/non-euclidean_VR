@@ -115,12 +115,12 @@ tangVector translate(mat4 isom, tangVector v) {
 
 tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
     // apply the given given matrix only to the direction of the tangent vector
-    return tangVector(v.pos, matrix* v.dir);
+    return tangVector(v.pos, matrix * v.dir);
 }
 
 
 float tangDot(tangVector u, tangVector v){
-  
+     mat4 g = mat4();
      return dot(u.dir.xyz,  v.dir.xyz);
 
 }

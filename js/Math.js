@@ -3,6 +3,10 @@
 // m.multiply(n) does m*n
 
 
+// length of the step when integrating the geodesic flow with an Euler method
+const EULER_STEP = 0.1;
+
+
 //----------------------------------------------------------------------
 //	Object oriented version of the geometry
 //----------------------------------------------------------------------
@@ -22,9 +26,19 @@
      Not sure yet what is the right philosophy for the setters.
  */
 
-/*
+THREE.Matrix4.prototype.add = function (matrix) {
+    // addition of tow 4x4 matrices
+    this.set.apply(this, [].map.call(this.elements, function (c, i) {
+        return c + matrix.elements[i];
+    }));
+    return this;
+};
 
+/*
     Representation of an isometry
+
+    The law chosen for Sol is the following
+    (a,b,c) * (x,y,z) = (e^{-c) x + a, e^c y + b, z + c)
 
  */
 
@@ -45,14 +59,24 @@ function Isometry() {
     this.makeLeftTranslation = function (x, y, z) {
         // return the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(x, y, z);
+        this.matrix.set(
+            Math.exp(-z), 0, 0, x,
+            0, Math.exp(z), 0, y,
+            0, 0, 1, z,
+            0, 0, 0, 1
+        );
         return this;
     };
 
     this.makeInvLeftTranslation = function (x, y, z) {
         // return the inverse of the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(-x, -y, -z);
+        this.matrix.set(
+            Math.exp(-z), 0, 0, -Math.exp(z) * x,
+            0, Math.exp(z), 0, -Math.exp(-z) * y,
+            0, 0, 1, -z,
+            0, 0, 0, 1
+        );
         return this;
     };
 
@@ -173,7 +197,7 @@ function Position() {
         return this;
     };
 
-    this.flow = function (v) {
+/*    this.flow = function (v) {
         // move the position following the geodesic flow
         // the geodesic starts at the origin, its tangent vector is v
         // parallel transport the facing along the geodesic
@@ -183,15 +207,52 @@ function Position() {
         let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
         let isom = new Isometry().set([matrix]);
         return this.translateBy(isom);
-    };
+    };*/
 
     this.localFlow = function (v) {
         // move the position following the geodesic flow FROM THE POINT WE ARE AT
         // v is the pull back at the origin of the direction we want to follow
-        // TODO. Check the facing
-        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        let isom = new Isometry().set([matrix]);
-        return this.localTranslateBy(isom);
+
+        const dist = v.length();
+        const n = dist / EULER_STEP;
+        let u = v.clone();
+        let field = new THREE.Vector3();
+        let pos_aux = new THREE.Vector4();
+        let vec_aux = new THREE.Vector4();
+        let mat_aux = new THREE.Matrix4();
+
+        for (let i = 0; i < n; i++) {
+            // position of the geodesic at time i*step
+            pos_aux = ORIGIN.clone().translateBy(this.boost);
+
+            // computing the position of the geodesic at time (i+1)*step
+            vec_aux = new THREE.Vector4(u.x, u.y, u.z, 0);
+            vec_aux.translateBy(this.boost).multiplyScalar(EULER_STEP);
+            pos_aux.add(vec_aux);
+            // update the boost accordingly
+            this.boost.makeLeftTranslation(pos_aux.x, pos_aux.y, pos_aux.z);
+
+            // updating the facing using parallel transport
+            mat_aux.set(
+                0, 0, u.x, 0,
+                0, 0, -u.y, 0,
+                -u.x, u.y, 0, 0,
+                0, 0, 0, 1
+            );
+            mat_aux.multiplyScalar(-EULER_STEP);
+            mat_aux.multiply(this.facing);
+            this.facing.add(mat_aux);
+            this.reduceFacingError();
+
+            // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
+            field.set(
+                -u.x * u.z,
+                u.y * u.z,
+                u.x * u.x - u.y * u.y
+            );
+            u.add(field.multiplyScalar(EULER_STEP)).normalize();
+        }
+        return this;
     };
 
     this.getInverse = function (position) {
@@ -294,16 +355,27 @@ function geomDist(v) {
 
 function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
-    let bestDist = geomDist(cPos);
     let bestIndex = -1;
-    for (let i = 0; i < gens.length; i++) {
-        let pos = cPos.clone().translateBy(gens[i]);
-        let dist = geomDist(pos);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-        }
+
+    if(cPos.x > cubeHalfWidth) {
+        bestIndex = 1;
     }
+    else if(cPos.x < -cubeHalfWidth) {
+        bestIndex = 0;
+    }
+    else if(cPos.y > cubeHalfWidth) {
+        bestIndex = 3;
+    }
+    else if(cPos.y < -cubeHalfWidth) {
+        bestIndex = 2;
+    }
+    else if(cPos.z > cubeHalfWidth) {
+        bestIndex = 5;
+    }
+    else if(cPos.z < -cubeHalfWidth) {
+        bestIndex = 4;
+    }
+
     if (bestIndex !== -1) {
         position.translateBy(gens[bestIndex]);
         return bestIndex;
@@ -319,12 +391,12 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().flow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().flow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().flow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
+    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
+    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
+    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -359,16 +431,16 @@ function initGeometry() {
     invGensMatrices = unpackageMatrix(invGens);
 
     let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = new Position().flow(vectorLeft);
+    g_leftPosition = new Position().localFlow(vectorLeft);
 
     let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = new Position().flow(vectorRight);
+    g_rightPosition = new Position().localFlow(vectorRight);
 }
 
 
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
-    let isom = new Position().flow(v).boost;
+    let isom = new Position().localFlow(v).boost;
     let lp = ORIGIN.clone().translateBy(isom);
     lightPositions.push(lp);
     lightIntensities.push(colorInt);
@@ -387,7 +459,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
+    globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
 }
 
 //-------------------------------------------------------
