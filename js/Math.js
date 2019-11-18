@@ -372,7 +372,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = new Position().flow(new THREE.Vector3(0, -1, 0.));
+    globalObjectPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
 }
 
 //-------------------------------------------------------
@@ -404,15 +404,15 @@ function setupMaterial(fShader) {
                 value: invGensMatrices
             },
             //--- end of invGen stuff
-            currentBoost: {
+            currentBoostMat: {
                 type: "m4",
                 value: g_position.boost.matrix
             },
-            leftBoost: {
+            leftBoostMat: {
                 type: "m4",
                 value: g_leftPosition.boost.matrix
             },
-            rightBoost: {
+            rightBoostMat: {
                 type: "m4",
                 value: g_rightPosition.boost.matrix
             },
@@ -429,11 +429,11 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: g_rightPosition.facing
             },
-            cellBoost: {
+            cellBoostMat: {
                 type: "m4",
                 value: g_cellPosition.boost.matrix
             },
-            invCellBoost: {
+            invCellBoostMat: {
                 type: "m4",
                 value: g_invCellPosition.boost.matrix
             },
@@ -449,9 +449,25 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: lightPositions
             },
-            globalObjectBoost: {
+            globalObjectBoostMat: {
                 type: "m4",
                 value: globalObjectPosition.boost.matrix
+            },
+            globalSphereRad: {
+                type: "f",
+                value: 0.2
+            },
+            earthCubeTex: { //earth texture to global object
+                type: "",
+                value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
+                    .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
+                    'posx.jpg',
+                    'negx.jpg',
+                    'posy.jpg',
+                    'negy.jpg',
+                    'posz.jpg',
+                    'negz.jpg'
+                ])
             }
         },
 

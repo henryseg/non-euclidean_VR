@@ -62,7 +62,10 @@ function init() {
     scene = new THREE.Scene();
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('webgl2');
-    g_renderer = new THREE.WebGLRenderer({canvas: canvas, context: context});
+    g_renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        context: context
+    });
     document.body.appendChild(g_renderer.domElement);
     g_screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     g_effect = new THREE.VREffect(g_renderer);
@@ -73,12 +76,14 @@ function init() {
     g_phoneOrient = [null, null, null];
 
     loadShaders();
+    initGui();
     stats = new Stats();
     stats.showPanel(1);
     stats.showPanel(2);
     stats.showPanel(0);
     document.body.appendChild(stats.dom);
 }
+
 
 
 function loadShaders() {
