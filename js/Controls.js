@@ -246,7 +246,7 @@ THREE.Controls = function (done) {
             rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation.inverse());
-            g_position.premultiply(m);
+            g_position.boost.premultiply(m);
         }
 
     };
