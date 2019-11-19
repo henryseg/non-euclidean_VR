@@ -47,10 +47,10 @@ var initGui = function(){
 
   ipDistController.onChange(function(value){
     let vectorLeft = new THREE.Vector3(-value, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = new Position().flow(vectorLeft);
+    g_leftPosition = new Position().localFlow(vectorLeft);
     g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
     let vectorRight = new THREE.Vector3(value, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = new Position().flow(vectorRight);
+    g_rightPosition = new Position().localFlow(vectorRight);
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
   });
 }
