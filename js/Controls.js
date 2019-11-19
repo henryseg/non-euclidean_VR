@@ -246,7 +246,7 @@ THREE.Controls = function (done) {
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
-            deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation, vrState.hmd.rotation);
+            deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             //g_position.localRotateFacingBy(m);
         }
