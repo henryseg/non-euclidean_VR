@@ -260,7 +260,7 @@ THREE.Controls = function (done) {
             deltaRotation.normalize();
             m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
         }         
-        console.log(deltaRotation);
+        //console.log(deltaRotation);
         g_position.localRotateFacingBy(m);
 
     };
