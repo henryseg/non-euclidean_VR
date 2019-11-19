@@ -240,12 +240,13 @@ THREE.Controls = function (done) {
         //g_position.localRotateFacingBy(m);       
 
         let deltaRotation= new THREE.Quaternion();
+        let m=new THREE.Matrix4();
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
-            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             //g_position.localRotateFacingBy(m);
         }
         //Check for keyboard
@@ -257,7 +258,7 @@ THREE.Controls = function (done) {
                 1.0
             );
             deltaRotation.normalize();
-            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
         }         
         console.log(deltaRotation);
         g_position.localRotateFacingBy(m);
