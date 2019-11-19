@@ -239,6 +239,8 @@ THREE.Controls = function (done) {
 
         //g_position.localRotateFacingBy(m);       
 
+        let deltaRotation= new THREE.Quaternion();
+
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
@@ -248,7 +250,7 @@ THREE.Controls = function (done) {
         }
         //Check for keyboard
         if (this.manualRotateRate[0] !== 0 || this.manualRotateRate[1] !== 0 || this.manualRotateRate[2] !== 0) {
-            let deltaRotation = new THREE.Quaternion(
+            deltaRotation.set(
                 this.manualRotateRate[0] * speed * deltaTime,
                 this.manualRotateRate[1] * speed * deltaTime,
                 this.manualRotateRate[2] * speed * deltaTime,
