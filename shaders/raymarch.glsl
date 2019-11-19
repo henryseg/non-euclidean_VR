@@ -117,8 +117,8 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 float tangDot(tangVector u, tangVector v){
     mat3 g = mat3(
-    exp(2. * u.pos.z), 0., 0.,
-    0., exp(-2. * u.pos.z), 0.,
+    exp(-2. * u.pos.z), 0., 0.,
+    0., exp(2. * u.pos.z), 0.,
     0., 0., 1.
     );
     return dot(u.dir.xyz, g * v.dir.xyz);
@@ -182,8 +182,8 @@ Isometry composeIsometry(Isometry A, Isometry B)
 
 Isometry makeLeftTranslation(vec4 p) {
     mat4 matrix =  mat4(
-    exp(-p.z), 0., 0., 0.,
-    0., exp(p.z), 0., 0.,
+    exp(p.z), 0., 0., 0.,
+    0., exp(-p.z), 0., 0.,
     0., 0., 1., 0,
     p.x, p.y, p.z, 1.
     );
@@ -197,10 +197,10 @@ Isometry makeLeftTranslation(tangVector v) {
 
 Isometry makeInvLeftTranslation(vec4 p) {
     mat4 matrix =  mat4(
-    exp(p.z), 0., 0., 0.,
-    0., exp(-p.z), 0., 0.,
+    exp(-p.z), 0., 0., 0.,
+    0., exp(p.z), 0., 0.,
     0., 0., 1., 0,
-    -exp(p.z) * p.x, -exp(-p.z) * p.y, p.z, 1.
+    -exp(-p.z) * p.x, -exp(p.z) * p.y, -p.z, 1.
     );
     return Isometry(matrix);
 }
@@ -259,6 +259,8 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
+    return tangVector(tv.pos+t*tv.dir, tv.dir);
+  /*
     // Isometry moving back to the origin and conversely
     Isometry isom = makeLeftTranslation(tv);
     Isometry isomInv = makeInvLeftTranslation(tv);
@@ -291,7 +293,7 @@ tangVector flow(tangVector tv, float t){
     tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
 
     return translate(isom, resOrigin);
-
+*/
 }
 
 

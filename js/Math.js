@@ -210,7 +210,7 @@ function Position() {
         const n = dist / EULER_STEP;
         let u = v.clone();
         let field = new THREE.Vector3();
-        let pos_aux = ORIGIN.clone();
+        let pos_aux = ORIGIN.clone().translateBy(this.boost);
         let vec_aux = new THREE.Vector4();
         let mat_aux = new THREE.Matrix4();
 
