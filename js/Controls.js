@@ -199,8 +199,8 @@ THREE.Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            var quat = vrState.hmd.rotation.clone();
-            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.lastPosition, vrState.hmd.position)//.applyQuaternion(quat);        
+            var quat = vrState.hmd.rotation.clone().inverse();
+            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);        
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
