@@ -355,7 +355,11 @@ function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
     let bestIndex = -1;
 
-    if (cPos.x > cubeHalfWidth) {
+    if (cPos.z > cubeHalfWidth) {
+        bestIndex = 5;
+    } else if (cPos.z < -cubeHalfWidth) {
+        bestIndex = 4;
+    } else if (cPos.x > cubeHalfWidth) {
         bestIndex = 1;
     } else if (cPos.x < -cubeHalfWidth) {
         bestIndex = 0;
@@ -363,10 +367,6 @@ function fixOutsideCentralCell(position) {
         bestIndex = 3;
     } else if (cPos.y < -cubeHalfWidth) {
         bestIndex = 2;
-    } else if (cPos.z > cubeHalfWidth) {
-        bestIndex = 5;
-    } else if (cPos.z < -cubeHalfWidth) {
-        bestIndex = 4;
     }
 
     if (bestIndex !== -1) {
@@ -384,13 +384,20 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
-
+    const gen0 = new Isometry().makeLeftTranslation(2. * cubeHalfWidth, 0., 0.);
+    const gen1 = new Isometry().makeLeftTranslation(-2. * cubeHalfWidth, 0., 0.);
+    const gen2 = new Isometry().makeLeftTranslation(0, 2. * cubeHalfWidth, 0.);
+    const gen3 = new Isometry().makeLeftTranslation(0, -2. * cubeHalfWidth, 0.);
+    const gen4 = new Isometry().makeLeftTranslation(0, 0, 2. * cubeHalfWidth,);
+    const gen5 = new Isometry().makeLeftTranslation(0, 0, -2. * cubeHalfWidth,);
+    /*
+        const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+        const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
+        const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
+        const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
+        const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
+        const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    */
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 

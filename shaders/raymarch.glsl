@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
@@ -224,10 +224,10 @@ float fakeDistance(vec4 p, vec4 q){
     // fake distance
 
     // Isometry moving back to the origin and conversely
-    //Isometry isomInv = makeInvLeftTranslation(p);
+    Isometry isomInv = makeInvLeftTranslation(p);
 
-    //vec4 qOrigin = translate(isomInv, q);
-    //return 0.1 * sqrt(exp(2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(-2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
+    vec4 qOrigin = translate(isomInv, q);
+    //return 1.2 * sqrt(exp(-2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
     return length(q-p);
 }
 
@@ -260,40 +260,40 @@ tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
     return tangVector(tv.pos + t * tv.dir, tv.dir);
-  /*
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-    Isometry isomInv = makeInvLeftTranslation(tv);
+    /*
+      // Isometry moving back to the origin and conversely
+      Isometry isom = makeLeftTranslation(tv);
+      Isometry isomInv = makeInvLeftTranslation(tv);
 
-    tangVector tvOrigin = translate(isomInv, tv);
+      tangVector tvOrigin = translate(isomInv, tv);
 
-    // represent at every step the pull back of the tangent vector at the origin
-    vec4 u = tvOrigin.dir;
-    // the position along the geodesic
-    vec4 posAux = ORIGIN;
-    // isometry to move the origin to the given position
-    Isometry isomAux = Isometry(mat4(1.0));
-    vec4 field;
+      // represent at every step the pull back of the tangent vector at the origin
+      vec4 u = tvOrigin.dir;
+      // the position along the geodesic
+      vec4 posAux = ORIGIN;
+      // isometry to move the origin to the given position
+      Isometry isomAux = Isometry(mat4(1.0));
+      vec4 field;
 
-    // integrate numerically the flow
-    int n = int(floor(t/EULER_STEP));
-    for (int i = 0; i < n; i++){
-        posAux = posAux + EULER_STEP * translate(isomAux, u);
-        isomAux = makeLeftTranslation(posAux);
-        if (i != n-1) {
-            field = vec4(
-            -u.x * u.z,
-            u.y * u.z,
-            u.x * u.x - u.y * u.y,
-            0.
-            );
-            u = normalize(u + EULER_STEP*field);
-        }
-    }
-    tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
+      // integrate numerically the flow
+      int n = int(floor(t/EULER_STEP));
+      for (int i = 0; i < n; i++){
+          posAux = posAux + EULER_STEP * translate(isomAux, u);
+          isomAux = makeLeftTranslation(posAux);
+          if (i != n-1) {
+              field = vec4(
+              -u.x * u.z,
+              u.y * u.z,
+              u.x * u.x - u.y * u.y,
+              0.
+              );
+              u = normalize(u + EULER_STEP*field);
+          }
+      }
+      tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
 
-    return translate(isom, resOrigin);
-*/
+      return translate(isom, resOrigin);
+  */
 }
 
 
@@ -459,6 +459,14 @@ float globalSceneSDF(vec4 p){
 // check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     vec4 ModelP= modelProject(p);
+    if (ModelP.z > modelHalfCube){
+        fixMatrix = Isometry(invGenerators[4]);
+        return true;
+    }
+    if (ModelP.z < -modelHalfCube){
+        fixMatrix = Isometry(invGenerators[5]);
+        return true;
+    }
     if (ModelP.x > modelHalfCube){
         fixMatrix = Isometry(invGenerators[0]);
         return true;
@@ -473,14 +481,6 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     }
     if (ModelP.y < -modelHalfCube){
         fixMatrix = Isometry(invGenerators[3]);
-        return true;
-    }
-    if (ModelP.z > modelHalfCube){
-        fixMatrix = Isometry(invGenerators[4]);
-        return true;
-    }
-    if (ModelP.z < -modelHalfCube){
-        fixMatrix = Isometry(invGenerators[5]);
         return true;
     }
     return false;
