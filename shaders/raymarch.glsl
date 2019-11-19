@@ -259,7 +259,7 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
-    return tangVector(tv.pos+t*tv.dir, tv.dir);
+    return tangVector(tv.pos + t * tv.dir, tv.dir);
   /*
     // Isometry moving back to the origin and conversely
     Isometry isom = makeLeftTranslation(tv);

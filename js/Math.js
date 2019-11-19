@@ -232,10 +232,12 @@ function Position() {
                 u.x, -u.y, 0, 0,
                 0, 0, 0, 0
             );
-            mat_aux.multiplyScalar(-EULER_STEP);
             mat_aux.multiply(this.facing);
+            mat_aux.multiplyScalar(-EULER_STEP);
             this.facing.add(mat_aux);
             this.reduceFacingError();
+            console.log('boost', this.boost.matrix.elements);
+            console.log('facing', this.facing.elements);
 
             // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
             field.set(
