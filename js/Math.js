@@ -282,7 +282,7 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-const cubeHalfWidth = 0.5;
+var cubeHalfWidth = 0.5;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
@@ -391,7 +391,7 @@ function initObjects() {
 }
 
 //-------------------------------------------------------
-// Set up shader 
+// Set up shader
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
@@ -473,16 +473,20 @@ function setupMaterial(fShader) {
                 value: 0.2
             },
             earthCubeTex: { //earth texture to global object
-                type: "",
+                type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
                     .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
-                        'posx.jpg',
-                        'negx.jpg',
-                        'posy.jpg',
-                        'negy.jpg',
-                        'posz.jpg',
-                        'negz.jpg'
-                    ])
+                    'posx.jpg',
+                    'negx.jpg',
+                    'posy.jpg',
+                    'negy.jpg',
+                    'posz.jpg',
+                    'negz.jpg'
+                ])
+            },
+            modelHalfCube: {
+                type: "f",
+                value: 0.5
             }
         },
 

@@ -12,7 +12,7 @@ Some parameters that can be changed to change the scence
 
 */
 
-//determine what we draw: ball and lights, 
+//determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
@@ -24,7 +24,7 @@ const bool FAKE_DIST_SPHERE = false;
 
 
 //const float globalObjectRadius = 0.4;
-const float centerSphereRadius =0.67;
+// const float centerSphereRadius =0.67;
 const float vertexSphereSize = 0.23;//In this case its a horosphere
 
 //--------------------------------------------
@@ -34,9 +34,6 @@ const float vertexSphereSize = 0.23;//In this case its a horosphere
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube =  0.5;//projection of cube to klein model
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -120,7 +117,7 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 
 float tangDot(tangVector u, tangVector v){
-  
+
      return dot(u.dir.xyz,  v.dir.xyz);
 
 }
@@ -231,7 +228,7 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 return tangVector(tv.pos+t*tv.dir,tv.dir);
-  
+
 }
 
 
@@ -249,7 +246,7 @@ vec4 geomProject(vec4 p){
 //Project onto the Klein Model
 vec4 modelProject(vec4 p){
     return p;
- 
+
 }
 
 
@@ -273,10 +270,8 @@ float lightAtt(float dist){
 
 float sphereSDF(vec4 p, vec4 center, float radius){
             return exactDist(p, center) - radius;
-      
+
 }
-
-
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
@@ -337,6 +332,8 @@ uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 
+uniform float modelHalfCube;//projection of cube to klein model
+
 
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
@@ -355,13 +352,15 @@ uniform samplerCube earthCubeTex;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
+    vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
+    float centerSphereRadius = 1.333 * modelHalfCube;
     vec4 center = ORIGIN;
     float sphere = centerSDF(p,  center, centerSphereRadius);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
     float final = -min(vertexSphere,sphere); //unionSDF
     return final;
-    
+
    // float final = -sphere;
     //return final;
 }
@@ -490,8 +489,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
 
     // Trace the local scene, then the global scene:
-    
-    
+
+
     if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
@@ -512,7 +511,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             globalDepth += localDist;
         }
     }
-    localDepth=min(globalDepth, MAX_DIST);    
+    localDepth=min(globalDepth, MAX_DIST);
     }
     else{localDepth=MAX_DIST;}
 
@@ -673,7 +672,7 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
-    return 0.5*color + 0.5*color2; 
+    return 0.5*color + 0.5*color2;
     }
     else{
     N = estimateNormal(sampletv.pos);
@@ -691,13 +690,13 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
          //make the objects have their own color
          //color the object based on its position in the cube
     vec4 samplePos=modelProject(sampletv.pos);
-        //Point in the Klein Model unit cube    
+        //Point in the Klein Model unit cube
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
-        x = 0.9*x/modelHalfCube;    
-        y = 0.9*y/modelHalfCube; 
-        z = 0.9*z/modelHalfCube;   
+        x = 0.9*x/modelHalfCube;
+        y = 0.9*y/modelHalfCube;
+        z = 0.9*z/modelHalfCube;
         vec3 color = vec3(x,y,z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
@@ -713,8 +712,8 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         return color;
         }
 }
-        
-    
+
+
 
 
 
@@ -741,28 +740,28 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 //--------------------------------------------------------------------
 
 void main(){
-    
+
     currentBoost=Isometry(currentBoostMat);
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);
     cellBoost=Isometry(cellBoostMat);
     invCellBoost=Isometry(invCellBoostMat);
     globalObjectBoost=Isometry(globalObjectBoostMat);
-    
+
 
     //vec4 rayOrigin = ORIGIN;
 
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-    
+
         //camera position must be translated in hyperboloid -----------------------
     rayDir=rotateFacing(facing, rayDir);
-    
-    
+
+
     if (isStereo == 1){
-         
-    
+
+
         if (isLeft){
             rayDir=rotateFacing(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
@@ -773,12 +772,12 @@ void main(){
         }
     }
 
-    
+
   // in other geometries, the facing will not be an isom, so applying facing is probably not good.
    // rayDir = translate(facing, rayDir);
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
-    
+
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
@@ -798,22 +797,22 @@ void main(){
     else if (hitWhich == 5){ //debug
         out_FragColor = vec4(debugColor, 1.0);
     }
-    
+
         else if (hitWhich == 2){ // global object
-            
+
         vec3 pixelColor=ballColor(totalFixMatrix, sampletv);
-            
+
         out_FragColor = vec4( pixelColor,1.0);
-            
+
         return;
     }
-    
+
     else { // objects
-        
+
         vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
-        
+
         out_FragColor=vec4(pixelColor,1.0);
-      
+
 }
 
 }
