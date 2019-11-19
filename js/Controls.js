@@ -200,7 +200,7 @@ THREE.Controls = function (done) {
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
             var quat = vrState.hmd.rotation.clone();
-            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);        
+            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.lastPosition, vrState.hmd.position)//.applyQuaternion(quat);        
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
@@ -208,7 +208,7 @@ THREE.Controls = function (done) {
             deltaPosition = deltaPosition.add(g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        g_position.localFlow(-deltaPosition);
+        g_position.localFlow(deltaPosition);
 
 
         let fixIndex = fixOutsideCentralCell(g_position); //moves camera back to main cell
