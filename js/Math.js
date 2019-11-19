@@ -354,10 +354,10 @@ function initGeometry() {
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
 
-    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
+    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0);//.rotateByFacing(g_position);
     g_leftPosition = new Position().localFlow(vectorLeft);
 
-    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
+    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0);//.rotateByFacing(g_position);
     g_rightPosition = new Position().localFlow(vectorRight);
 }
 
