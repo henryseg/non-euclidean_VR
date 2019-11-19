@@ -220,24 +220,24 @@ THREE.Controls = function (done) {
         //--------------------------------------------------------------------
         // Rotation
         //--------------------------------------------------------------------
-        let deltaRotation = new THREE.Quaternion(
-            this.manualRotateRate[0] * speed * deltaTime,
-            this.manualRotateRate[1] * speed * deltaTime,
-            this.manualRotateRate[2] * speed * deltaTime,
-            1.0
-        );
-        deltaRotation.normalize();
-        let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+        // let deltaRotation = new THREE.Quaternion(
+        //     this.manualRotateRate[0] * speed * deltaTime,
+        //     this.manualRotateRate[1] * speed * deltaTime,
+        //     this.manualRotateRate[2] * speed * deltaTime,
+        //     1.0
+        // );
+        // deltaRotation.normalize();
+        // let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
 
         //Handle Phone Input
-        if (g_phoneOrient[0] !== null) {
-            let rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
-            if (this.oldRotation === undefined) this.oldRotation = rotation;
-            deltaRotation = new THREE.Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
-            this.oldRotation = rotation;
-        }
+        // if (g_phoneOrient[0] !== null) {
+        //     let rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
+        //     if (this.oldRotation === undefined) this.oldRotation = rotation;
+        //     deltaRotation = new THREE.Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
+        //     this.oldRotation = rotation;
+        // }
 
-        //g_position.localRotateFacingBy(m);
+        //g_position.localRotateFacingBy(m);       
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
@@ -246,6 +246,17 @@ THREE.Controls = function (done) {
             m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             //g_position.localRotateFacingBy(m);
         }
+        //Check for keyboard
+        if (this.manualRotateRate[0] !== 0 || this.manualRotateRate[1] !== 0 || this.manualRotateRate[2] !== 0) {
+            let deltaRotation = new THREE.Quaternion(
+                this.manualRotateRate[0] * speed * deltaTime,
+                this.manualRotateRate[1] * speed * deltaTime,
+                this.manualRotateRate[2] * speed * deltaTime,
+                1.0
+            );
+            deltaRotation.normalize();
+            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+        }         
         console.log(deltaRotation);
         g_position.localRotateFacingBy(m);
 
