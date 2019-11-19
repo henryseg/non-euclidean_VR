@@ -199,8 +199,7 @@ THREE.Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            var quat = vrState.hmd.rotation.clone().inverse();
-            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition);//.applyQuaternion(quat);
+            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition);
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
@@ -227,6 +226,8 @@ THREE.Controls = function (done) {
             this.manualRotateRate[2] * speed * deltaTime,
             1.0
         );
+        deltaRotation.normalize();
+        let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
 
         //Handle Phone Input
         if (g_phoneOrient[0] !== null) {
@@ -236,18 +237,17 @@ THREE.Controls = function (done) {
             this.oldRotation = rotation;
         }
 
-        deltaRotation.normalize();
-
-        let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        g_position.localRotateFacingBy(m);
+        //g_position.localRotateFacingBy(m);
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-            g_position.localRotateFacingBy(m);
+            //g_position.localRotateFacingBy(m);
         }
+
+        g_position.localRotateFacingBy(m);
 
     };
 
