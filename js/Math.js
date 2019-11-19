@@ -113,7 +113,7 @@ function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
     boost1[0].getInverse(boost2[0]);
 }
 
-function composeIsom(boost, trans) { // sitting at boost, 
+function composeIsom(boost, trans) { // sitting at boost,
     boost[0].multiply(trans[0]);
     // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
     // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
@@ -242,7 +242,7 @@ var initObjects = function () {
 }
 
 //-------------------------------------------------------
-// Set up shader 
+// Set up shader
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
@@ -335,7 +335,7 @@ var setupMaterial = function (fShader) {
                 value: 0.2
             },
             earthCubeTex: {
-                type: "",
+                type: "t",
                 value: new THREE.CubeTextureLoader().setPath( 'images/cubemap512/' )
                 .load( [  //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
                     'posx.jpg',
@@ -347,9 +347,9 @@ var setupMaterial = function (fShader) {
                 ] )
             },
             rockTex: {
-                type:"t", 
+                type:"t",
                 value: rockTexture
-            } 
+            }
         },
 
 
