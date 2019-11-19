@@ -38,7 +38,7 @@ THREE.Matrix4.prototype.add = function (matrix) {
     Representation of an isometry
 
     The law chosen for Sol is the following
-    (a,b,c) * (x,y,z) = (e^{-c) x + a, e^c y + b, z + c)
+    (a,b,c) * (x,y,z) = (e^c x + a, e^{-c) y + b, z + c)
 
  */
 
@@ -60,8 +60,8 @@ function Isometry() {
         // return the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
         this.matrix.set(
-            Math.exp(-z), 0, 0, x,
-            0, Math.exp(z), 0, y,
+            Math.exp(z), 0, 0, x,
+            0, Math.exp(-z), 0, y,
             0, 0, 1, z,
             0, 0, 0, 1
         );
@@ -72,8 +72,8 @@ function Isometry() {
         // return the inverse of the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
         this.matrix.set(
-            Math.exp(-z), 0, 0, -Math.exp(z) * x,
-            0, Math.exp(z), 0, -Math.exp(-z) * y,
+            Math.exp(-z), 0, 0, -Math.exp(-z) * x,
+            0, Math.exp(z), 0, -Math.exp(z) * y,
             0, 0, 1, -z,
             0, 0, 0, 1
         );
@@ -164,11 +164,6 @@ function Position() {
     this.translateBy = function (isom) {
         // translate the position by the given isometry
         this.boost.premultiply(isom);
-        this.facing.premultiply(isom.matrix);
-        // at this point the facing is not correct as it contains the translation part from isom
-        // fixed by the line below
-        this.facing.setPosition(new THREE.Vector3(0., 0., 0.));
-        this.reduceError();
         return this;
     };
 
@@ -176,8 +171,6 @@ function Position() {
         // if we are at boost of b, our position is b.0. We want to fly forward, and isom
         // tells me how to do this if I were at 0. So I want to apply b * isom * b^{-1} to b * 0, and I get b * isom * 0.
         // In other words, translate boost by the conjugate of isom by boost
-        // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ? Do nothing ?
-        //  or the local translate should actually be a composition of positions ?
         this.boost.multiply(isom);
         this.reduceBoostError();
         return this;
@@ -197,17 +190,17 @@ function Position() {
         return this;
     };
 
-/*    this.flow = function (v) {
-        // move the position following the geodesic flow
-        // the geodesic starts at the origin, its tangent vector is v
-        // parallel transport the facing along the geodesic
+    /*    this.flow = function (v) {
+            // move the position following the geodesic flow
+            // the geodesic starts at the origin, its tangent vector is v
+            // parallel transport the facing along the geodesic
 
-        // in Euclidean geometry, just apply a translation
-        // Nothing to do on the facing
-        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        let isom = new Isometry().set([matrix]);
-        return this.translateBy(isom);
-    };*/
+            // in Euclidean geometry, just apply a translation
+            // Nothing to do on the facing
+            let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
+            let isom = new Isometry().set([matrix]);
+            return this.translateBy(isom);
+        };*/
 
     this.localFlow = function (v) {
         // move the position following the geodesic flow FROM THE POINT WE ARE AT
@@ -234,10 +227,10 @@ function Position() {
 
             // updating the facing using parallel transport
             mat_aux.set(
-                0, 0, u.x, 0,
-                0, 0, -u.y, 0,
-                -u.x, u.y, 0, 0,
-                0, 0, 0, 1
+                0, 0, -u.x, 0,
+                0, 0, u.y, 0,
+                u.x, -u.y, 0, 0,
+                0, 0, 0, 0
             );
             mat_aux.multiplyScalar(-EULER_STEP);
             mat_aux.multiply(this.facing);
@@ -246,9 +239,9 @@ function Position() {
 
             // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
             field.set(
-                -u.x * u.z,
-                u.y * u.z,
-                u.x * u.x - u.y * u.y
+                u.x * u.z,
+                -u.y * u.z,
+                -u.x * u.x + u.y * u.y
             );
             u.add(field.multiplyScalar(EULER_STEP)).normalize();
         }
@@ -357,22 +350,17 @@ function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
     let bestIndex = -1;
 
-    if(cPos.x > cubeHalfWidth) {
+    if (cPos.x > cubeHalfWidth) {
         bestIndex = 1;
-    }
-    else if(cPos.x < -cubeHalfWidth) {
+    } else if (cPos.x < -cubeHalfWidth) {
         bestIndex = 0;
-    }
-    else if(cPos.y > cubeHalfWidth) {
+    } else if (cPos.y > cubeHalfWidth) {
         bestIndex = 3;
-    }
-    else if(cPos.y < -cubeHalfWidth) {
+    } else if (cPos.y < -cubeHalfWidth) {
         bestIndex = 2;
-    }
-    else if(cPos.z > cubeHalfWidth) {
+    } else if (cPos.z > cubeHalfWidth) {
         bestIndex = 5;
-    }
-    else if(cPos.z < -cubeHalfWidth) {
+    } else if (cPos.z < -cubeHalfWidth) {
         bestIndex = 4;
     }
 
