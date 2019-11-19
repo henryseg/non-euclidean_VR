@@ -199,7 +199,7 @@ THREE.Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            var quat = vrState.hmd.rotation.clone().inverse();
+            var quat = vrState.hmd.rotation.clone();
             deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition).applyQuaternion(quat);        
         }
 
@@ -246,8 +246,8 @@ THREE.Controls = function (done) {
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
-            deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
-            m.makeRotationFromQuaternion(deltaRotation.inverse()); //removed an inverse here
+            deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation, vrState.hmd.rotation);
+            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             //g_position.localRotateFacingBy(m);
         }
         //Check for keyboard
@@ -259,7 +259,7 @@ THREE.Controls = function (done) {
                 1.0
             );
             deltaRotation.normalize();
-            m.makeRotationFromQuaternion(deltaRotation.inverse()); //removed an inverse here
+            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
         }         
         //console.log(deltaRotation);
         g_position.localRotateFacingBy(m);
