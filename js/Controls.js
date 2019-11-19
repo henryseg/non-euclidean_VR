@@ -199,7 +199,8 @@ THREE.Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition);
+            var quat = vrState.hmd.rotation.clone().inverse();
+            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition).applyQuaternion(quat);        
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
@@ -246,7 +247,7 @@ THREE.Controls = function (done) {
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
-            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            m.makeRotationFromQuaternion(deltaRotation.inverse()); //removed an inverse here
             //g_position.localRotateFacingBy(m);
         }
         //Check for keyboard
@@ -258,7 +259,7 @@ THREE.Controls = function (done) {
                 1.0
             );
             deltaRotation.normalize();
-            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            m.makeRotationFromQuaternion(deltaRotation.inverse()); //removed an inverse here
         }         
         //console.log(deltaRotation);
         g_position.localRotateFacingBy(m);
