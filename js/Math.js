@@ -4,7 +4,7 @@
 
 
 // length of the step when integrating the geodesic flow with an Euler method
-const EULER_STEP = 0.1;
+const EULER_STEP = 0.001;
 
 
 //----------------------------------------------------------------------
@@ -208,11 +208,12 @@ function Position() {
 
         const dist = v.length();
         const n = dist / EULER_STEP;
-        let u = v.clone();
+        let u = v.clone().normalize();
         let field = new THREE.Vector3();
         let pos_aux = ORIGIN.clone().translateBy(this.boost);
         let vec_aux = new THREE.Vector4();
         let mat_aux = new THREE.Matrix4();
+        let parallel = new THREE.Matrix4();
 
         for (let i = 0; i < n; i++) {
             // position of the geodesic at time i*step
@@ -234,7 +235,7 @@ function Position() {
             );
             mat_aux.multiply(this.facing);
             mat_aux.multiplyScalar(-EULER_STEP);
-            this.facing.add(mat_aux);
+            parallel.add(mat_aux);
             this.reduceFacingError();
             console.log('boost', this.boost.matrix.elements);
             console.log('facing', this.facing.elements);
@@ -247,6 +248,8 @@ function Position() {
             );
             u.add(field.multiplyScalar(EULER_STEP)).normalize();
         }
+
+        this.rotateFacingBy(parallel);
         return this;
     };
 
