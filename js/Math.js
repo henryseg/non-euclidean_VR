@@ -140,10 +140,6 @@ function Position() {
     this.translateBy = function (isom) {
         // translate the position by the given isometry
         this.boost.premultiply(isom);
-        this.facing.premultiply(isom.matrix);
-        // at this point the facing is not correct as it contains the translation part from isom
-        // fixed by the line below
-        this.facing.setPosition(new THREE.Vector3(0., 0., 0.));
         this.reduceError();
         return this;
     };
@@ -319,12 +315,12 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().flow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().flow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().flow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
+    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
+    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
+    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -359,16 +355,16 @@ function initGeometry() {
     invGensMatrices = unpackageMatrix(invGens);
 
     let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = new Position().flow(vectorLeft);
+    g_leftPosition = new Position().localFlow(vectorLeft);
 
     let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = new Position().flow(vectorRight);
+    g_rightPosition = new Position().localFlow(vectorRight);
 }
 
 
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
-    let isom = new Position().flow(v).boost;
+    let isom = new Position().localFlow(v).boost;
     let lp = ORIGIN.clone().translateBy(isom);
     lightPositions.push(lp);
     lightIntensities.push(colorInt);
@@ -387,7 +383,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
+    globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
 }
 
 //-------------------------------------------------------
