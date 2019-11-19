@@ -246,7 +246,7 @@ THREE.Controls = function (done) {
             m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             //g_position.localRotateFacingBy(m);
         }
-
+        console.log(deltaRotation);
         g_position.localRotateFacingBy(m);
 
     };
