@@ -199,8 +199,8 @@ THREE.Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            var quat = vrState.hmd.rotation.clone();
-            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.lastPosition, vrState.hmd.position)//.applyQuaternion(quat);        
+            var quat = vrState.hmd.rotation.clone().inverse();
+            deltaPosition = new THREE.Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);        
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
@@ -221,50 +221,79 @@ THREE.Controls = function (done) {
         //--------------------------------------------------------------------
         // Rotation
         //--------------------------------------------------------------------
-        // let deltaRotation = new THREE.Quaternion(
-        //     this.manualRotateRate[0] * speed * deltaTime,
-        //     this.manualRotateRate[1] * speed * deltaTime,
-        //     this.manualRotateRate[2] * speed * deltaTime,
-        //     1.0
-        // );
-        // deltaRotation.normalize();
-        // let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+        let deltaRotation = new THREE.Quaternion(
+            this.manualRotateRate[0] * speed * deltaTime,
+            this.manualRotateRate[1] * speed * deltaTime,
+            this.manualRotateRate[2] * speed * deltaTime,
+            1.0
+        );
 
         //Handle Phone Input
-        // if (g_phoneOrient[0] !== null) {
-        //     let rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
-        //     if (this.oldRotation === undefined) this.oldRotation = rotation;
-        //     deltaRotation = new THREE.Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
-        //     this.oldRotation = rotation;
-        // }
+        if (g_phoneOrient[0] !== null) {
+            let rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
+            if (this.oldRotation === undefined) this.oldRotation = rotation;
+            deltaRotation = new THREE.Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
+            this.oldRotation = rotation;
+        }
 
-        //g_position.localRotateFacingBy(m);       
+        deltaRotation.normalize();
 
-        let deltaRotation= new THREE.Quaternion();
-        let m=new THREE.Matrix4();
+        let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+        g_position.localRotateFacingBy(m);
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
-            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-            //g_position.localRotateFacingBy(m);
+            m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            g_position.localRotateFacingBy(m);
         }
-        //Check for keyboard
-        if (this.manualRotateRate[0] !== 0 || this.manualRotateRate[1] !== 0 || this.manualRotateRate[2] !== 0) {
-            deltaRotation.set(
-                this.manualRotateRate[0] * speed * deltaTime,
-                this.manualRotateRate[1] * speed * deltaTime,
-                this.manualRotateRate[2] * speed * deltaTime,
-                1.0
-            );
-            deltaRotation.normalize();
-            m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        }         
-        //console.log(deltaRotation);
-        g_position.localRotateFacingBy(m);
 
     };
+    //     // let deltaRotation = new THREE.Quaternion(
+    //     //     this.manualRotateRate[0] * speed * deltaTime,
+    //     //     this.manualRotateRate[1] * speed * deltaTime,
+    //     //     this.manualRotateRate[2] * speed * deltaTime,
+    //     //     1.0
+    //     // );
+    //     // deltaRotation.normalize();
+    //     // let m = new THREE.Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+
+    //     //Handle Phone Input
+    //     // if (g_phoneOrient[0] !== null) {
+    //     //     let rotation = this.getQuatFromPhoneAngles(new THREE.Vector3().fromArray(g_phoneOrient));
+    //     //     if (this.oldRotation === undefined) this.oldRotation = rotation;
+    //     //     deltaRotation = new THREE.Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
+    //     //     this.oldRotation = rotation;
+    //     // }
+
+    //     //g_position.localRotateFacingBy(m);       
+
+    //     let deltaRotation= new THREE.Quaternion();
+    //     let m=new THREE.Matrix4();
+
+    //     //Check for headset rotation (tracking)
+    //     if(vrState !== null && vrState.hmd.lastRotation !== undefined){
+    //         rotation = vrState.hmd.rotation;
+    //         deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
+    //         m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+    //         //g_position.localRotateFacingBy(m);
+    //     }
+    //     //Check for keyboard
+    //     if (this.manualRotateRate[0] !== 0 || this.manualRotateRate[1] !== 0 || this.manualRotateRate[2] !== 0) {
+    //         deltaRotation.set(
+    //             this.manualRotateRate[0] * speed * deltaTime,
+    //             this.manualRotateRate[1] * speed * deltaTime,
+    //             this.manualRotateRate[2] * speed * deltaTime,
+    //             1.0
+    //         );
+    //         deltaRotation.normalize();
+    //         m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+    //     }         
+    //     //console.log(deltaRotation);
+    //     g_position.localRotateFacingBy(m);
+
+    // };
 
     this.getVRState = function(){
         var vrInput = this._vrInput;
