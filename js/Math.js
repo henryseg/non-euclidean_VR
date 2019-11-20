@@ -17,30 +17,6 @@ THREE.Matrix4.prototype.add = function (m) {
 
 
 
-function translateByVector(v) {
-    let matrix = new THREE.Matrix4().identity();
-    let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-
-    if (len != 0) {
-        var c1 = Math.sinh(len);
-        var c2 = Math.cosh(len) - 1;
-        let dx = v.x / len;
-        let dy = v.y / len;
-        let dz = v.z / len;
-        var m = new THREE.Matrix4().set(
-            0, 0, 0, dx,
-            0, 0, 0, dy,
-            0, 0, 0, dz,
-            dx, dy, dz, 0.0);
-        var m2 = m.clone().multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        matrix.add(m);
-        matrix.add(m2);
-    }
-    return matrix;
-}
-
 /*
 
     On the JS part
@@ -78,6 +54,48 @@ function Isometry() {
         this.matrix = data[0].clone();
         return this;
     };
+
+
+    this.translateByVector = function (v) {
+        let matrix = new THREE.Matrix4().identity();
+        let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+
+        if (len != 0) {
+            var c1 = Math.sinh(len);
+            var c2 = Math.cosh(len) - 1;
+            let dx = v.x / len;
+            let dy = v.y / len;
+            let dz = v.z / len;
+            var m = new THREE.Matrix4().set(
+                0, 0, 0, dx,
+                0, 0, 0, dy,
+                0, 0, 0, dz,
+                dx, dy, dz, 0.0);
+            var m2 = m.clone().multiply(m);
+            m.multiplyScalar(c1);
+            m2.multiplyScalar(c2);
+            matrix.add(m);
+            matrix.add(m2);
+        }
+        this.matrix = matrix;
+        return this;
+    }
+
+    //For geometries whose model space is R3: give the matrix that translates the origin to (x,y,z);
+
+    //    this.makeLeftTranslation = function (x, y, z) {
+    //        // return the left translation by (x,y,z)
+    //        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+    //        this.matrix.makeTranslation(x, y, z);
+    //        return this;
+    //    };
+    //
+    //    this.makeInvLeftTranslation = function (x, y, z) {
+    //        // return the inverse of the left translation by (x,y,z)
+    //        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+    //        this.matrix.makeTranslation(-x, -y, -z);
+    //        return this;
+    //    };
 
     this.premultiply = function (isom) {
         // return the current isometry multiplied on the left by isom, i.e. isom * this
@@ -200,14 +218,14 @@ function Position() {
 
     this.flow = function (v) {
         // move the position following the geodesic flow
-        // the geodesic starts at the origin, its tangent vector is v
-        let matrix = translateByVector(v);
+        // the geodesic starts at the origin, its tangent vector is 
+
         // parallel transport the facing along the geodesic
 
         // in Hyperbolic geometry, just apply a translation
         // Nothing to do on the facing
 
-        let isom = new Isometry().set([matrix]);
+        let isom = new Isometry().translateByVector(v);
         return this.translateBy(isom);
     };
 
@@ -221,10 +239,9 @@ function Position() {
 
         // TODO. Check the facing
 
-        let matrix = translateByVector(v);
 
         // let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        let isom = new Isometry().set([matrix]);
+        let isom = new Isometry().translateByVector(v);
         return this.localTranslateBy(isom);
     };
 
@@ -348,12 +365,13 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().flow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().flow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().flow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().flow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().flow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    const gen0 = new Isometry().translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
+    //Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen1 = new Isometry().translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
+    const gen2 = new Isometry().translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
+    const gen3 = new Isometry().translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
+    const gen4 = new Isometry().translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
+    const gen5 = new Isometry().translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
 
 
     //these generators do generate the tiling, but don't give a manifold.  need to also twist as we glue opposing faces correctly
@@ -399,6 +417,14 @@ function initGeometry() {
 }
 
 
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//	Set Up Lighting
+//-----------------------------------------------------------------------------------------------------------------------------
+
+let numLights = 5;
+
+
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
     let isom = new Position().flow(v).boost;
@@ -408,11 +434,15 @@ function PointLightObject(v, colorInt) {
 }
 
 
+
 //DEFINE THE LIGHT COLORS
 const lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
 const lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
 const lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
 const lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
+
+const lightColor5 = new THREE.Vector4(1, 1, 1, 1);
+
 
 
 function initObjects() {
@@ -420,7 +450,11 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
+    PointLightObject(new THREE.Vector3(-1., 0, 0), lightColor5);
+
+    earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
+
+    moonPosition = new Position().flow(new THREE.Vector3(0, 1., -1.));
 }
 
 //-------------------------------------------------------
@@ -503,14 +537,29 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: lightPositions
             },
-            globalObjectBoostMat: {
+            earthBoostMat: {
                 type: "m4",
-                value: globalObjectPosition.boost.matrix
+                value: earthPosition.boost.matrix
             },
+            earthRad: {
+                type: "f",
+                value: 0.2
+            },
+
+            moonBoostMat: {
+                type: "m4",
+                value: moonPosition.boost.matrix
+            },
+            moonRad: {
+                type: "f",
+                value: 0.07
+            },
+
             globalSphereRad: {
                 type: "f",
                 value: 0.2
             },
+
             centerSphereRad: {
                 type: "f",
                 value: 0.99
@@ -518,6 +567,10 @@ function setupMaterial(fShader) {
             vertexSphereRad: {
                 type: "f",
                 value: -0.95
+            },
+            numLights: {
+                type: "i",
+                value: numLights
             },
             earthCubeTex: { //earth texture to global object
                 type: "",

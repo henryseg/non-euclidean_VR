@@ -373,7 +373,8 @@ Isometry leftBoost;
 Isometry rightBoost;
 Isometry cellBoost;
 Isometry invCellBoost;
-Isometry globalObjectBoost;
+Isometry earthBoost;
+Isometry moonBoost;
 
 //-------------------------------------------
 //Translation & Utility Variables
@@ -389,21 +390,26 @@ uniform mat4 leftFacing;
 uniform mat4 rightFacing;
 uniform mat4 cellBoostMat;
 uniform mat4 invCellBoostMat;
+uniform int numLights;
 //--------------------------------------------
 // Lighting Variables & Global Object Variables
 //--------------------------------------------
-uniform vec4 lightPositions[4];
-uniform vec4 lightIntensities[4];
-uniform mat4 globalObjectBoostMat;
+uniform vec4 lightPositions[5];
+uniform vec4 lightIntensities[5];
+
+uniform mat4 earthBoostMat;
+uniform mat4 moonBoostMat;
+
+
 uniform samplerCube earthCubeTex;
 uniform sampler2D rockTex;
 //--------------------------------------------
 // Sliders
 //--------------------------------------------
-uniform float globalSphereRad;
 uniform float centerSphereRad;
 uniform float vertexSphereRad;
-
+uniform float earthRad;
+uniform float moonRad;
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
 //--------------------------------------------
@@ -438,7 +444,7 @@ float globalSceneSDF(vec4 p){
     vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
-    for (int i=0; i<4; i++){
+    for (int i=0; i<numLights; i++){
         float objDist;
         objDist = sphereSDF(
         absolutep,
@@ -455,8 +461,8 @@ float globalSceneSDF(vec4 p){
     }
     //Global Sphere Object
     float objDist;
-    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, globalSphereRad);
+    vec4 earthPos=translate(earthBoost, ORIGIN);
+    objDist = sphereSDF(absolutep,earthPos, earthRad);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -727,9 +733,9 @@ vec3 boxMapping( in sampler2D sam, in tangVector point )
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
-vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
+vec3 sphereOffset(Isometry objectBoost, vec4 pt){
     pt = translate(cellBoost, pt);
-    pt = inverse(globalObjectBoost.matrix) * pt;
+    pt = inverse(objectBoost.matrix) * pt;
     return tangDirection(ORIGIN, pt).dir.xyz;
 }
 
@@ -739,7 +745,7 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     if(EARTH){
     N = estimateNormal(sampletv.pos);
-    vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+    vec3 color = texture(earthCubeTex, sphereOffset(earthBoost, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2; 
@@ -831,8 +837,8 @@ void main(){
     rightBoost=Isometry(rightBoostMat);
     cellBoost=Isometry(cellBoostMat);
     invCellBoost=Isometry(invCellBoostMat);
-    globalObjectBoost=Isometry(globalObjectBoostMat);
-    
+    earthBoost=Isometry(earthBoostMat);
+    moonBoost=Isometry(moonBoostMat);
 
     //vec4 rayOrigin = ORIGIN;
 
