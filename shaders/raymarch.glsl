@@ -16,7 +16,8 @@ Some parameters that can be changed to change the scence
 const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
 const bool TILING_TEXTURE=true;
-const bool EARTH=true;
+const bool EARTH=true;//turn on / off earth texture
+const bool MOON=true; //turn on / off moon completely.
 
 const bool FAKE_LIGHT = false;
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -419,7 +420,6 @@ uniform float moonRad;
 
 
 
-
 //---------------------------------------------------------------------
 // Scene Definitions
 //---------------------------------------------------------------------
@@ -472,14 +472,14 @@ float globalSceneSDF(vec4 p){
     }
     
     
-    //Global Moon Object
-   // float objDist;
-    vec4 moonPos=translate(moonBoost, ORIGIN);
-    moonDist = sphereSDF(absolutep,moonPos, moonRad);
-    distance = min(distance, moonDist);
-    if (distance < EPSILON){
-        hitWhich = 4;
-    return distance;
+    if(MOON){
+        vec4 moonPos=translate(moonBoost, ORIGIN);
+        moonDist = sphereSDF(absolutep,moonPos, moonRad);
+        distance = min(distance, moonDist);
+        if (distance < EPSILON){
+            hitWhich = 4;
+        return distance;
+        }
     }
     
     return distance;
@@ -706,7 +706,7 @@ vec3 sphereOffset(Isometry objectBoost, vec4 pt){
 
 
 
-vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
+vec3 earthColor(Isometry totalFixMatrix, tangVector sampletv){
     if(EARTH){
     N = estimateNormal(sampletv.pos);
     vec3 color = texture(earthCubeTex, sphereOffset(earthBoost, sampletv.pos)).xyz;
@@ -871,7 +871,7 @@ void main(){
     
         else if (hitWhich == 2){ // global object
             
-        vec3 pixelColor=ballColor(totalFixMatrix, sampletv);
+        vec3 pixelColor=earthColor(totalFixMatrix, sampletv);
             
         out_FragColor = vec4( pixelColor,1.0);
             
