@@ -586,7 +586,7 @@ function setupMaterial(fShader) {
             },
             mathCubeTex: { //texture to global object
                 type: "",
-                value: new THREE.CubeTextureLoader().setPath('images/mathCube1024/')
+                value: new THREE.CubeTextureLoader().setPath('images/moon/')
                     .load([ //Cubemap derived Arnaud Cheritat's website pics
                     'posx.png',
                     'negx.png',

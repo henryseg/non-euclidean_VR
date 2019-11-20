@@ -731,13 +731,13 @@ vec3 moonColor(Isometry totalFixMatrix, tangVector sampletv){
     vec3 color = texture(mathCubeTex, sphereOffset(moonBoost, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
-    return 0.5*color + 0.5*color2; 
+    return 0.7*color + 0.2*color2; 
     }
     else{
     N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
-        color = 0.9*color+0.1;
+        color = 0.5*color+0.5;
         return color;
         //generically gray object (color= black, glowing slightly because of the 0.1)
 }
