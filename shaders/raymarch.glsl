@@ -165,7 +165,7 @@ tangVector translate(Isometry A, tangVector v) {
 }
 
 vec4 translate(Isometry A, vec4 v) {
-    // overload of translate for moving only a point
+    // overload of translate for moving only a point or a vector
     return A.matrix * v;
 }
 

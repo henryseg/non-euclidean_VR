@@ -176,17 +176,14 @@ function Position() {
 
         // in Euclidean geometry, just apply a translation
         // Nothing to do on the facing
-        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        let isom = new Isometry().set([matrix]);
+        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
         return this.translateBy(isom);
     };
 
     this.localFlow = function (v) {
         // move the position following the geodesic flow FROM THE POINT WE ARE AT
         // v is the pull back at the origin of the direction we want to follow
-        // TODO. Check the facing
-        let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
-        let isom = new Isometry().set([matrix]);
+        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
         return this.localTranslateBy(isom);
     };
 
