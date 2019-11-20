@@ -2,8 +2,11 @@
 
 *.DS_Store
 
-# Workspace of Webstorm
-
+# Workspace of Webstorm and PyCharm
 .idea/**
 **/.idea/**
+
+# Python virtual environment
+__pycache__/**
+**/__pycache__/**
 
