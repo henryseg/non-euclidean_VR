@@ -13,18 +13,25 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=true;
+
 const bool TILING_SCENE=false;
+const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=true;
+
+const bool GLOBAL_SCENE=true;
+const bool GLOBAL_LIGHTS=false;
+
+const bool FAKE_LIGHT = false;
+const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_DIST_SPHERE = false;
+
 const bool EARTH=true;//turn on / off earth texture
 const bool MOON=true; //turn on / off moon completely.
 const bool SUN=true; // turn on / off the sun completely
 //turn on solar lighting
 
-const bool GLOBAL_LIGHTS=false;
-const bool FAKE_LIGHT = false;
-const bool FAKE_LIGHT_FALLOFF=true;
-const bool FAKE_DIST_SPHERE = false;
+
+
 
 
 //const float globalObjectRadius = 0.4;
