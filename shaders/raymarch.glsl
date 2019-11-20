@@ -46,9 +46,6 @@ const bool SUN=true; // turn on / off the sun completely
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube =  0.5773502692;//projection of cube to klein model
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -442,6 +439,7 @@ uniform float sunRad;
 //---------------------------------------------------------------------
 // Turn off the local scene
 // Local signed distance function : distance from p to an object in the local scene
+
 
 float localSceneSDF(vec4 p){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
