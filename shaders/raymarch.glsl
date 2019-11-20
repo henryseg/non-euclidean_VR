@@ -38,6 +38,7 @@ const bool SUN=true; // turn on / off the sun completely
 //const float centerSphereRadius =1.;
 //const float vertexSphereSize =-0.95;//In this case its a horosphere
 
+
 //--------------------------------------------
 // "TRUE" CONSTANTS
 //----- ---------------------------------------
@@ -204,10 +205,8 @@ mat4 translateByVector(vec4 v){
 //Geometry of the Models
 //--------------------------------------------
 
-
 //project back onto the geometry model
 tangVector geomProject(tangVector tv){
-    
    vec4 projPos=hypProject(tv.pos);
    return tangVector(projPos, tv.dir);
 }
@@ -217,6 +216,10 @@ vec4 geomProject(vec4 p){
    return hypProject(p);
 }
 
+//Project onto the Klein Model
+vec4 modelProject(vec4 p){
+    return p/p.w;
+}
 
 //Project onto the Klein Model
 vec4 modelProject(vec4 p){
@@ -313,6 +316,7 @@ mat4 tangBasis(vec4 p){
     float dist=acosh(p.w);
     vec4 direction = tangDirection(ORIGIN,p).dir;
     return translateByVector(dist*direction);
+    //the first columns of the matrix store the frame! the last column stores the point
 }
 
 
@@ -359,10 +363,11 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
     return  horosphereSDF(abs(p), cornerPoint, size);
 }
 
+
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  80;
+const int MAX_MARCHING_STEPS = 150;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
@@ -414,6 +419,7 @@ uniform mat4 earthBoostMat;
 uniform mat4 moonBoostMat;
 uniform mat4 sunBoostMat;
 
+
 uniform samplerCube earthCubeTex;
 uniform samplerCube moonCubeTex;
 uniform samplerCube sunCubeTex;
@@ -426,6 +432,7 @@ uniform float vertexSphereRad;
 uniform float earthRad;
 uniform float moonRad;
 uniform float sunRad;
+
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
 //--------------------------------------------
@@ -441,13 +448,15 @@ uniform float sunRad;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
+    vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
+    float centerSphereRadius = 1.;
     vec4 center = ORIGIN;
     float sphere = centerSDF(p,  center, centerSphereRad);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(p, modelCubeCorner, vertexSphereRad);
     float final = -min(vertexSphere,sphere); //unionSDF
     return final;
-    
+
    // float final = -sphere;
     //return final;
 }
@@ -604,8 +613,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
 
     // Trace the local scene, then the global scene:
-    
-    
+
+
     if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
@@ -626,7 +635,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             globalDepth += localDist;
         }
     }
-    localDepth=min(globalDepth, MAX_DIST);    
+    localDepth=min(globalDepth, MAX_DIST);
     }
     else{localDepth=MAX_DIST;}
 
@@ -748,7 +757,7 @@ vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLoc
     vec3 color = texture(sphTexture, sphereOffset(sphLocation, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
-    return 0.5*color + 0.5*color2; 
+    return 0.5*color + 0.5*color2;
     }
 
 //Code for coloring a sphere with no texture
@@ -768,14 +777,16 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
      if(FAKE_LIGHT){
          //make the objects have their own color
          //color the object based on its position in the cube
-                vec4 samplePos=modelProject(sampletv.pos);
+
+    vec4 samplePos=modelProject(sampletv.pos);
         //Point in the Klein Model unit cube    
+
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
-        x = 0.9*x/modelHalfCube;    
-        y = 0.9*y/modelHalfCube; 
-        z = 0.9*z/modelHalfCube;   
+        x = 0.9*x/modelHalfCube;
+        y = 0.9*y/modelHalfCube;
+        z = 0.9*z/modelHalfCube;
         vec3 color = vec3(x,y,z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
@@ -801,8 +812,8 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         return color;
         }
 }
-        
-    
+
+
 
 
 
@@ -829,29 +840,25 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 //--------------------------------------------------------------------
 
 void main(){
-    
+
     currentBoost=Isometry(currentBoostMat);
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);
     cellBoost=Isometry(cellBoostMat);
     invCellBoost=Isometry(invCellBoostMat);
+
     earthBoost=Isometry(earthBoostMat);
     moonBoost=Isometry(moonBoostMat);
     sunBoost=Isometry(sunBoostMat);
+
 
     //vec4 rayOrigin = ORIGIN;
 
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-    
-        //camera position must be translated in hyperboloid -----------------------
-    rayDir=rotateFacing(facing, rayDir);
-    
-    
+
     if (isStereo == 1){
-         
-    
         if (isLeft){
             rayDir=rotateFacing(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
@@ -861,13 +868,15 @@ void main(){
             rayDir = translate(rightBoost, rayDir);
         }
     }
+    else {
+        rayDir=rotateFacing(facing, rayDir);
+        rayDir = translate(currentBoost, rayDir);
+    }
 
-    
-  // in other geometries, the facing will not be an isom, so applying facing is probably not good.
-   // rayDir = translate(facing, rayDir);
-    rayDir = translate(currentBoost, rayDir);
+
+
     //generate direction then transform to hyperboloid ------------------------
-    
+
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
@@ -892,10 +901,12 @@ void main(){
             
         vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, earthBoost, earthCubeTex);
             
+
         out_FragColor = vec4( pixelColor,1.0);
-            
+
         return;
     }
+
     
     else if (hitWhich == 4){ // the moon
             
@@ -915,13 +926,13 @@ else if (hitWhich == 6){ // the sun
         return;
     }
     
-    
+
     else { // objects
-        
+
         vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
-        
+
         out_FragColor=vec4(pixelColor,1.0);
-      
+
 }
 
 }

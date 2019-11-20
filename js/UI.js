@@ -9,6 +9,8 @@ var guiInfo;
 
 
 //What we need to init our dat GUI
+<<
+<< << < HEAD
 var initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
         GetHelp: function () {
@@ -18,7 +20,8 @@ var initGui = function () {
         earthRad: 0.2,
         // moonRad: 0.05,
         centerSphereRad: 0.99,
-        vertexSphereRad: -0.95
+        vertexSphereRad: -0.95,
+        ipDist: 0.03200000151991844
     };
 
     var gui = new dat.GUI();
@@ -31,7 +34,7 @@ var initGui = function () {
 
     var vertexSphereRadController = gui.add(guiInfo, 'vertexSphereRad', -1.1, -0.7).name("Vertex Sphere");
 
-
+    var ipDistController = gui.add(guiInfo, 'ipDist', 0.0, 0.5).name("ip Dist");
 
     // ------------------------------
     // UI Controllers
@@ -51,6 +54,8 @@ var initGui = function () {
         g_material.uniforms.vertexSphereRad.value = value;
     });
 
-
+    ipDistController.onChange(function (value) {
+        ipDist = value;
+    });
 
 }
