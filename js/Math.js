@@ -99,19 +99,13 @@ THREE.Vector4.prototype.translateBy = function (isom) {
     A position is given by
     - a `boost` which is an Isometry moving the origin to the point where the observer is
     - a `facing` which determines where the observer is looking at. It is a element of SO(3) encoded as a 4x4 matrix
-    More precisely the observer is looking at dL * A * e_z where
-    - e_z the tangent vector at the origin in the z-direction
-    - A is the matrix defining the facing
-    - dL is the differential of the isometry
 
-    TODO.
-        the set of position is probably a group
-        (a semi-direct projection of Isom(X) by SO(3), where Isom(X) acts on SO(3) by conjugation ?, a direct product ?)
-        acting on the underlying Lie group as follows :
-        (boost, facing) * g = boost * g * facing
-        so that the inverse of a position if (boost^{-1}, facing^{-1})
-        - Clarify this point
-        - Define the multiplication law on the boost ?
+    More abstractly there is a map from Isom(X) x SO(3) -> Frame bundle, sending (L, A) to  d_o L A f where
+    - o is the origin
+    - f is a fixed (reference) frame in the tangent space of X at o
+    Note that the point stabilizer G_o of o in Isom(X) acts on the set of positions as follows
+    (L, A) . U = (LU^{-1},  d_o U A)
+    The G_o -orbits of a position is exactly the fiber of the map Isom(X) x SO(3) -> Frame bundle
 
 */
 
@@ -148,19 +142,19 @@ function Position() {
         // if we are at boost of b, our position is b.0. We want to fly forward, and isom
         // tells me how to do this if I were at 0. So I want to apply b * isom * b^{-1} to b * 0, and I get b * isom * 0.
         // In other words, translate boost by the conjugate of isom by boost
-        // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ? Do nothing ?
-        //  or the local translate should actually be a composition of positions ?
         this.boost.multiply(isom);
         this.reduceBoostError();
         return this;
     };
 
+    /*
     this.rotateFacingBy = function (rotation) {
         // apply the given matrix (on the left) to the current facing and return the new result
         this.facing.premultiply(rotation);
         this.reduceFacingError();
         return this;
     };
+    */
 
     this.localRotateFacingBy = function (rotation) {
         // apply the given matrix (on the right) to the current facing and return the new result
@@ -169,6 +163,9 @@ function Position() {
         return this;
     };
 
+
+
+    /*
     this.flow = function (v) {
         // move the position following the geodesic flow
         // the geodesic starts at the origin, its tangent vector is v
@@ -179,12 +176,23 @@ function Position() {
         let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
         return this.translateBy(isom);
     };
+     */
 
     this.localFlow = function (v) {
-        // move the position following the geodesic flow FROM THE POINT WE ARE AT
-        // v is the pull back at the origin of the direction we want to follow
+        // move the position following the geodesic flow where
+        // v is the pull back at the origin by this.boost of the tangent vector at boost * o
+
+        // Let gamma be the geodesic starting at p = boost * o directed by boost * v
+        // Let gamma_o be the geodesic starting at o directed by v, i.e. gamma_o = boost^{-1} gamma
+        // The parallel transport along gamma_o is an operator T_o which we split as T_o = dS_o B_o where
+        // - S_o is an isometry of X
+        // - B_o an element of SO(3)
+        // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
+
+        // In the Euclidean case, S_o is the regular translation, B_o is the identity.
         let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
-        return this.localTranslateBy(isom);
+        this.boost.multiply(isom);
+        return this
     };
 
     this.getInverse = function (position) {
@@ -351,11 +359,11 @@ function initGeometry() {
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
 
-    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0);//.rotateByFacing(g_position);
-    g_leftPosition = new Position().localFlow(vectorLeft);
+    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
+    g_leftPosition = g_position.clone().localFlow(vectorLeft);
 
-    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0);//.rotateByFacing(g_position);
-    g_rightPosition = new Position().localFlow(vectorRight);
+    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
+    g_rightPosition = g_position.clone().localFlow(vectorRight);
 }
 
 
@@ -469,13 +477,13 @@ function setupMaterial(fShader) {
                 type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
                     .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
-                    'posx.jpg',
-                    'negx.jpg',
-                    'posy.jpg',
-                    'negy.jpg',
-                    'posz.jpg',
-                    'negz.jpg'
-                ])
+                        'posx.jpg',
+                        'negx.jpg',
+                        'posy.jpg',
+                        'negy.jpg',
+                        'posz.jpg',
+                        'negz.jpg'
+                    ])
             },
             modelHalfCube: {
                 type: "f",
@@ -506,7 +514,16 @@ function updateMaterial() {
 
      */
 
-    //g_material.uniform.foo.value = 0;
+    console.log('ipDist', ipDist);
+    let vectorLeft = new THREE.Vector3(-ipDist, 0, 0).rotateByFacing(g_position);
+    g_leftPosition = g_position.clone().localFlow(vectorLeft);
+    g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
+    g_material.uniforms.leftFacing.value = g_leftPosition.facing;
+
+    let vectorRight = new THREE.Vector3(ipDist, 0, 0).rotateByFacing(g_position);
+    g_rightPosition = g_position.clone().localFlow(vectorRight);
+    g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
+    g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
 
 }

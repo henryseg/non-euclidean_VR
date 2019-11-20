@@ -755,13 +755,7 @@ void main(){
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
-        //camera position must be translated in hyperboloid -----------------------
-    rayDir=rotateFacing(facing, rayDir);
-
-
     if (isStereo == 1){
-
-
         if (isLeft){
             rayDir=rotateFacing(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
@@ -771,11 +765,13 @@ void main(){
             rayDir = translate(rightBoost, rayDir);
         }
     }
+    else {
+        rayDir=rotateFacing(facing, rayDir);
+        rayDir = translate(currentBoost, rayDir);
+    }
 
 
-  // in other geometries, the facing will not be an isom, so applying facing is probably not good.
-   // rayDir = translate(facing, rayDir);
-    rayDir = translate(currentBoost, rayDir);
+
     //generate direction then transform to hyperboloid ------------------------
 
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);

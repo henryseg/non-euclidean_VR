@@ -45,14 +45,20 @@ var initGui = function(){
     g_material.uniforms.invGenerators.value = invGensMatrices;
   });
 
+
   ipDistController.onChange(function(value){
+    ipDist = value;
+
+    /*
     let vectorLeft = new THREE.Vector3(-value, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = new Position().localFlow(vectorLeft);
+    g_leftPosition = g_position.clone().localFlow(vectorLeft);
     g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
     g_material.uniforms.leftFacing.value = g_leftPosition.facing;
     let vectorRight = new THREE.Vector3(value, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = new Position().localFlow(vectorRight);
+    g_rightPosition = g_position.clone().localFlow(vectorRight);
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
+    */
   });
-}
+
+};
