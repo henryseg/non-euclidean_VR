@@ -9,8 +9,6 @@ var guiInfo;
 
 
 //What we need to init our dat GUI
-<<
-<< << < HEAD
 var initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
         GetHelp: function () {

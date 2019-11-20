@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=true;
 
@@ -221,10 +221,6 @@ vec4 modelProject(vec4 p){
     return p/p.w;
 }
 
-//Project onto the Klein Model
-vec4 modelProject(vec4 p){
-    return p/p.w;
-}
 
 
 
@@ -407,7 +403,7 @@ uniform mat4 leftFacing;
 uniform mat4 rightFacing;
 uniform mat4 cellBoostMat;
 uniform mat4 invCellBoostMat;
-
+uniform float modelHalfCube;
 //--------------------------------------------
 // Lighting Variables & Global Object Variables
 //--------------------------------------------

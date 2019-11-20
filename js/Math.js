@@ -320,15 +320,9 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 //----------------------------------------------------------------------
 
 // The point representing the origin
-const ORIGIN = new THREE.Vector4(0, 0, 0, 1); <<
-<<
-<< < HEAD
-const cubeHalfWidth = 0.6584789485; ===
-===
-=
-var cubeHalfWidth = 0.6584789485; >>>
->>>
-> objHypVR
+const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
+
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
@@ -368,7 +362,8 @@ function fixOutsideCentralCell(position) {
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
-
+let cubeHalfWidth = 0.6584789485;
+let modelHalfCube = 0.577;
 
 function createGenerators() { /// generators for the tiling by cubes.
 
@@ -386,19 +381,6 @@ function createGenerators() { /// generators for the tiling by cubes.
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
-
-//
-//function createGenerators() { /// generators for the tiling by cubes.
-//
-//    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-//    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-//    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-//    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-//    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-//    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
-//
-//    return [gen0, gen1, gen2, gen3, gen4, gen5];
-//}
 
 function invGenerators(genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
@@ -469,21 +451,16 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
-    PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4); <<
-    <<
-    << < HEAD
+    PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
+
     PointLightObject(new THREE.Vector3(-1., 0, 0), lightColor5);
 
     earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
 
     moonPosition = new Position().flow(new THREE.Vector3(0.6, 0, -1.));
 
-    sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7)); ===
-    ===
-    =
-    globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.)); >>>
-    >>>
-    > objHypVR
+    sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7));
+
 }
 
 //-------------------------------------------------------
@@ -519,6 +496,10 @@ function setupMaterial(fShader) {
             invGenerators: {
                 type: "m4",
                 value: invGensMatrices
+            },
+            modelHalfCube: {
+                type: "f",
+                value: modelHalfCube
             },
             //--- end of invGen stuff
             currentBoostMat: {
@@ -670,7 +651,7 @@ function updateMaterial() {
 
      */
 
-    console.log('ipDist', ipDist);
+
     let vectorLeft = new THREE.Vector3(-ipDist, 0, 0).rotateByFacing(g_position);
     g_leftPosition = g_position.clone().localFlow(vectorLeft);
     g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
