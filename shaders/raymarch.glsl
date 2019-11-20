@@ -441,6 +441,8 @@ float localSceneSDF(vec4 p){
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
+    float earthDist;
+    float moonDist;
     vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
@@ -460,13 +462,26 @@ float globalSceneSDF(vec4 p){
         }
     }
     //Global Sphere Object
-    float objDist;
+   // float objDist;
     vec4 earthPos=translate(earthBoost, ORIGIN);
-    objDist = sphereSDF(absolutep,earthPos, earthRad);
-    distance = min(distance, objDist);
+    earthDist = sphereSDF(absolutep,earthPos, earthRad);
+    distance = min(distance, earthDist);
     if (distance < EPSILON){
         hitWhich = 2;
+    return distance;
     }
+    
+    
+    //Global Moon Object
+   // float objDist;
+    vec4 moonPos=translate(moonBoost, ORIGIN);
+    moonDist = sphereSDF(absolutep,moonPos, moonRad);
+    distance = min(distance, moonDist);
+    if (distance < EPSILON){
+        hitWhich = 4;
+    return distance;
+    }
+    
     return distance;
 }
 
@@ -612,57 +627,6 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 }
 
 
-//void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
-//    mat4 fixMatrix;
-//    float globalDepth = MIN_DIST;
-//    float localDepth = MIN_DIST;
-//    tangVector tv = rayDir;
-//    tangVector localtv = rayDir;
-//    totalFixMatrix = mat4(1.0);
-//
-//
-//    // Trace the local scene, then the global scene:
-//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//        tangVector localEndtv = flow(localtv, localDepth);
-//
-//        if (isOutsideCell(localEndtv, fixMatrix)){
-//            totalFixMatrix = fixMatrix * totalFixMatrix;
-//            localtv = translate(fixMatrix, localEndtv);
-//            localDepth = MIN_DIST;
-//        }
-//        else {
-//            float localDist = min(0.1, localSceneSDF(localEndtv.pos));
-//            if (localDist < EPSILON){
-//                hitWhich = 3;
-//                sampletv = localEndtv;
-//                break;
-//            }
-//            localDepth += localDist;
-//            globalDepth += localDist;
-//        }
-//    }
-//
-//
-//    // Set for localDepth to our new max tracing distance:
-//    localDepth = min(globalDepth, MAX_DIST);
-//    globalDepth = MIN_DIST;
-//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//        tangVector globalEndtv = flow(tv, globalDepth);
-//
-//        float globalDist = globalSceneSDF(globalEndtv.pos);
-//        if (globalDist < EPSILON){
-//            // hitWhich has now been set
-//            totalFixMatrix = mat4(1.0);
-//            sampletv = globalEndtv;
-//            return;
-//        }
-//        globalDepth += globalDist;
-//        if (globalDepth >= localDepth){
-//            break;
-//        }
-//    }
-//}
-
 
 //--------------------------------------------------------------------
 // Lighting Functions
@@ -760,7 +724,23 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 }
 
-
+vec3 moonColor(Isometry totalFixMatrix, tangVector sampletv){
+    if(EARTH){
+    N = estimateNormal(sampletv.pos);
+    vec3 color = texture(earthCubeTex, sphereOffset(moonBoost, sampletv.pos)).xyz;
+    vec3 color2 = phongModel(totalFixMatrix, color);
+    //color = 0.9*color+0.1;
+    return 0.5*color + 0.5*color2; 
+    }
+    else{
+    N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0.,0.,0.);
+        color = phongModel(totalFixMatrix, color);
+        color = 0.9*color+0.1;
+        return color;
+        //generically gray object (color= black, glowing slightly because of the 0.1)
+}
+}
 
 
 
@@ -897,6 +877,16 @@ void main(){
             
         return;
     }
+    
+    else if (hitWhich == 4){ // the moon
+            
+        vec3 pixelColor=moonColor(totalFixMatrix, sampletv);
+            
+        out_FragColor = vec4(pixelColor,1.0);
+            
+        return;
+    }
+    
     
     else { // objects
         

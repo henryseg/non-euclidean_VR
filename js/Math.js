@@ -454,7 +454,7 @@ function initObjects() {
 
     earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
 
-    moonPosition = new Position().flow(new THREE.Vector3(0, 1., -1.));
+    moonPosition = new Position().flow(new THREE.Vector3(0.4, 0, -0.7));
 }
 
 //-------------------------------------------------------
