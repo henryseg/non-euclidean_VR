@@ -18,9 +18,9 @@ THREE.Matrix4.prototype.add = function (m) {
 
 
 /*
-
-    On the JS part
-    - Every point is represented by a THREE.Vector4 object,
+On the JS part
+    -
+    Every point is represented by a THREE.Vector4 object,
       whose coordinates corresponds to the coordinates in the appropriate (projective ?) model
     - Every tangent vector at the origin is represented by a THREE.Vector3 object
       i.e. we identify the tangent space at the origin with R^3.
@@ -455,6 +455,8 @@ function initObjects() {
     earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
 
     moonPosition = new Position().flow(new THREE.Vector3(0.8 * 0.4, 0, -0.7));
+
+    sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7));
 }
 
 //-------------------------------------------------------
@@ -555,9 +557,13 @@ function setupMaterial(fShader) {
                 value: 0.07
             },
 
-            earthRad: {
+            sunBoostMat: {
+                type: "m4",
+                value: sunPosition.boost.matrix
+            },
+            sunRad: {
                 type: "f",
-                value: 0.2
+                value: 1.
             },
 
             centerSphereRad: {
@@ -584,9 +590,21 @@ function setupMaterial(fShader) {
                     'negz.jpg'
                 ])
             },
-            mathCubeTex: { //texture to global object
+            moonCubeTex: { //texture to global object
                 type: "",
                 value: new THREE.CubeTextureLoader().setPath('images/moon/')
+                    .load([ //Cubemap derived Arnaud Cheritat's website pics
+                    'posx.png',
+                    'negx.png',
+                    'posy.png',
+                    'negy.png',
+                    'posz.png',
+                    'negz.png'
+                ])
+            },
+            sunCubeTex: { //texture to global object
+                type: "",
+                value: new THREE.CubeTextureLoader().setPath('images/sun/')
                     .load([ //Cubemap derived Arnaud Cheritat's website pics
                     'posx.png',
                     'negx.png',

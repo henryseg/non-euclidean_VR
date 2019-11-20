@@ -40,6 +40,7 @@ var initGui = function () {
     earthRadController.onChange(function (value) {
         g_material.uniforms.earthRad.value = value;
         g_material.uniforms.moonRad.value = 0.2 * value;
+        g_material.uniforms.sunRad.value = 2 * value;
     });
 
     centerSphereRadController.onChange(function (value) {
