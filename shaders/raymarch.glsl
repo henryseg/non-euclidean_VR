@@ -19,7 +19,7 @@ const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=true;
 
 const bool GLOBAL_SCENE=true;
-const bool GLOBAL_LIGHTS=false;
+const bool GLOBAL_LIGHTS=true;
 
 const bool FAKE_LIGHT = false;
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -45,8 +45,8 @@ const bool SUN=true; // turn on / off the sun completely
 const float PI = 3.1415926538;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube =  0.5773502692;//projection of cube to klein model
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
+const float modelHalfCube =  1.;//projection of cube to klein model
+const vec4 modelCubeCorner = vec4(0.5,0.5,0.5,0.5);//corner of cube in Klein model, useful for horosphere distance function
 
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
@@ -58,7 +58,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 
 float hypAng(vec4 p, vec4 q){
         //negative the lorentz dot product gives the hyperbolic angle between the two points on the hyperboloid model
-    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
+    return p.x*q.x+p.y*q.y+p.z*q.z+p.w*q.w;
 }
 
 vec4 hypProject(vec4 p){//Project a point onto the hyperboloid of one sheet or two sheets depending on original vector.
@@ -146,7 +146,7 @@ float tangDot(tangVector u, tangVector v){
     1.,0.,0.,0.,
     0.,1.,0.,0.,
     0.,0.,1.,0.,
-    0.,0.,0.,-1.
+    0.,0.,0.,1.
     );
 
     return dot(u.dir,  g*v.dir);
@@ -173,8 +173,8 @@ float cosAng(tangVector u, tangVector v){
 // using this to test out an alternative definition of the tangBasis function
 mat4 translateByVector(vec4 v){
     float len=length(v);
-    float c1= sinh(len);
-    float c2=cosh(len)-1.;
+    float c1= sin(len);
+    float c2=1.-cos(len);
     if(len!=0.){
      float dx=v.x/len;
      float dy=v.y/len;
@@ -184,7 +184,7 @@ mat4 translateByVector(vec4 v){
          0,0,0,dx,
          0,0,0,dy,
          0,0,0,dz,
-         dx,dy,dz,0.
+         -dx,-dy,-dz,0.
      );
     
     mat4 result = mat4(1.)+c1* m+c2*m*m;
@@ -269,7 +269,7 @@ Isometry composeIsometry(Isometry A, Isometry B)
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-    return acosh(hypAng(p,q));
+    return acos(hypAng(p,q));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -300,9 +300,9 @@ tangVector tangDirection(tangVector u, tangVector v){
 //flow along the geodesic starting at tv for a time t
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
-    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
+    vec4 resPos=tv.pos*cos(t) + tv.dir*sin(t);
     //tangent is derivative of position
-    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
+    vec4 resDir=-tv.pos*sin(t) + tv.dir*cos(t);
     
     return geomProject(tangVector(resPos,resDir));
 }
