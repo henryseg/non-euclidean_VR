@@ -1,3 +1,6 @@
+import {NRRDLoader} from 'lib/NRRDLoader.js';
+
+
 // console.log(m) prints column by column, which is not what you expect...
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
@@ -469,6 +472,15 @@ function initObjects() {
 
 function setupMaterial(fShader) {
 
+    let texture;
+    new NRRDLoader().load("../texture/test_z.nrrd", function (volume) {
+        texture = new THREE.DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = THREE.RedFormat;
+        texture.type = THREE.FloatType;
+        texture.minFilter = texture.magFilter = THREE.LinearFilter;
+        texture.unpackAlignment = 1;
+    });
+
     g_material = new THREE.ShaderMaterial({
         uniforms: {
 
@@ -555,6 +567,11 @@ function setupMaterial(fShader) {
                         'posz.jpg',
                         'negz.jpg'
                     ])
+            },
+            // lookup table passed below
+            lookupTable: {
+                type: "",
+                value: texture
             }
         },
 
@@ -562,6 +579,9 @@ function setupMaterial(fShader) {
         fragmentShader: fShader,
         transparent: true
     });
+
+
+
 }
 
 
