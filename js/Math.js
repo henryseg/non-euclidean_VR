@@ -584,6 +584,18 @@ function setupMaterial(fShader) {
                     'negz.jpg'
                 ])
             },
+            mathCubeTex: { //texture to global object
+                type: "",
+                value: new THREE.CubeTextureLoader().setPath('images/mathCube1024/')
+                    .load([ //Cubemap derived Arnaud Cheritat's website pics
+                    'posx.png',
+                    'negx.png',
+                    'posy.png',
+                    'negy.png',
+                    'posz.png',
+                    'negz.png'
+                ])
+            },
             rockTex: {
                 type: "t",
                 value: rockTexture

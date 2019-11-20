@@ -403,6 +403,7 @@ uniform mat4 moonBoostMat;
 
 
 uniform samplerCube earthCubeTex;
+uniform samplerCube mathCubeTex;
 uniform sampler2D rockTex;
 //--------------------------------------------
 // Sliders
@@ -727,7 +728,7 @@ vec3 earthColor(Isometry totalFixMatrix, tangVector sampletv){
 vec3 moonColor(Isometry totalFixMatrix, tangVector sampletv){
     if(EARTH){
     N = estimateNormal(sampletv.pos);
-    vec3 color = texture(earthCubeTex, sphereOffset(moonBoost, sampletv.pos)).xyz;
+    vec3 color = texture(mathCubeTex, sphereOffset(moonBoost, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2; 
