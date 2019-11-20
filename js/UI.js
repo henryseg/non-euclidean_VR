@@ -16,7 +16,7 @@ var initGui = function(){
     },
     toggleUI: true,
     globalSphereRad: 0.2,
-    modelHalfCube: 0.5,
+    //modelHalfCube: 0.5,
     ipDist: 0.03200000151991844,
   };
 
@@ -25,7 +25,7 @@ var initGui = function(){
   gui.add(guiInfo, 'GetHelp').name("Help/About");
 
   var globalSphereRadController = gui.add(guiInfo, 'globalSphereRad',0.0,1.5).name("Earth radius");
-  var halfCubeController = gui.add(guiInfo, 'modelHalfCube',0.2,1.5).name("Half cube");
+//  var halfCubeController = gui.add(guiInfo, 'modelHalfCube',0.2,1.5).name("Half cube");
   var ipDistController = gui.add(guiInfo, 'ipDist',0.0,0.5).name("ip Dist");
 
   // ------------------------------
@@ -36,14 +36,14 @@ var initGui = function(){
     g_material.uniforms.globalSphereRad.value = value;
   });
 
-  halfCubeController.onChange(function(value){
-    cubeHalfWidth = value;
-    gens = createGenerators();
-    invGens = invGenerators(gens);
-    invGensMatrices = unpackageMatrix(invGens);
-    g_material.uniforms.modelHalfCube.value = value;
-    g_material.uniforms.invGenerators.value = invGensMatrices;
-  });
+//  halfCubeController.onChange(function(value){
+//    cubeHalfWidth = value;
+//    gens = createGenerators();
+//    invGens = invGenerators(gens);
+//    invGensMatrices = unpackageMatrix(invGens);
+//    g_material.uniforms.modelHalfCube.value = value;
+//    g_material.uniforms.invGenerators.value = invGensMatrices;
+//  });
 
 
   ipDistController.onChange(function(value){

@@ -7,6 +7,15 @@
 //	Object oriented version of the geometry
 //----------------------------------------------------------------------
 
+//matrices don't come with addition in JS?!
+//adding matrices
+THREE.Matrix4.prototype.add = function (m) {
+    this.set.apply(this, [].map.call(this.elements, function (c, i) {
+        return c + m.elements[i]
+    }));
+};
+
+
 /*
 
     On the JS part
@@ -42,19 +51,45 @@ function Isometry() {
         return this;
     };
 
-    this.makeLeftTranslation = function (x, y, z) {
-        // return the left translation by (x,y,z)
-        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(x, y, z);
-        return this;
-    };
+    
+        this.translateByVector = function (v) {
+        let matrix = new THREE.Matrix4().identity();
+        let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 
-    this.makeInvLeftTranslation = function (x, y, z) {
-        // return the inverse of the left translation by (x,y,z)
-        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(-x, -y, -z);
+        if (len != 0) {
+            var c1 = Math.sinh(len);
+            var c2 = Math.cosh(len) - 1;
+            let dx = v.x / len;
+            let dy = v.y / len;
+            let dz = v.z / len;
+            var m = new THREE.Matrix4().set(
+                0, 0, 0, dx,
+                0, 0, 0, dy,
+                0, 0, 0, dz,
+                dx, dy, dz, 0.0);
+            var m2 = m.clone().multiply(m);
+            m.multiplyScalar(c1);
+            m2.multiplyScalar(c2);
+            matrix.add(m);
+            matrix.add(m2);
+        }
+        this.matrix = matrix;
         return this;
-    };
+    }
+    
+//    this.makeLeftTranslation = function (x, y, z) {
+//        // return the left translation by (x,y,z)
+//        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+//        this.matrix.makeTranslation(x, y, z);
+//        return this;
+//    };
+//
+//    this.makeInvLeftTranslation = function (x, y, z) {
+//        // return the inverse of the left translation by (x,y,z)
+//        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+//        this.matrix.makeTranslation(-x, -y, -z);
+//        return this;
+//    };
 
     this.premultiply = function (isom) {
         // return the current isometry multiplied on the left by isom, i.e. isom * this
@@ -178,6 +213,8 @@ function Position() {
     };
      */
 
+
+    
     this.localFlow = function (v) {
         // move the position following the geodesic flow where
         // v is the pull back at the origin by this.boost of the tangent vector at boost * o
@@ -190,9 +227,8 @@ function Position() {
         // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
         // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
-        this.boost.multiply(isom);
-        return this
+        let isom = new Isometry().translateByVector(v);
+        return this.localTranslateBy(isom);
     };
 
     this.getInverse = function (position) {
@@ -283,13 +319,13 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 0.5;
+var cubeHalfWidth =0.6584789485;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
 function geomDist(v) {
-    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    return Math.acosh(v.w);
 }
 
 
@@ -318,17 +354,37 @@ function fixOutsideCentralCell(position) {
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
+
+
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    const gen0 = new Isometry().translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
+    //Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+    const gen1 = new Isometry().translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
+    const gen2 = new Isometry().translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
+    const gen3 = new Isometry().translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
+    const gen4 = new Isometry().translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
+    const gen5 = new Isometry().translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
+
+
+    //these generators do generate the tiling, but don't give a manifold.  need to also twist as we glue opposing faces correctly
+    //Need to add in rotation to the generators.
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
+
+//
+//function createGenerators() { /// generators for the tiling by cubes.
+//
+//    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
+//    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
+//    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
+//    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
+//    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
+//    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+//
+//    return [gen0, gen1, gen2, gen3, gen4, gen5];
+//}
 
 function invGenerators(genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
@@ -484,10 +540,6 @@ function setupMaterial(fShader) {
                         'posz.jpg',
                         'negz.jpg'
                     ])
-            },
-            modelHalfCube: {
-                type: "f",
-                value: 0.5
             }
         },
 
