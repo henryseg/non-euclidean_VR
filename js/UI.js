@@ -15,20 +15,20 @@ var initGui = function () {
             window.open('https://github.com/henryseg/non-euclidean_VR');
         },
         toggleUI: true,
-        earthRad: 0.2,
+        earthRad: 0.08,
         // moonRad: 0.05,
-        centerSphereRad: 0.99,
+        centerSphereRad: 0.89,
         vertexSphereRad: 0.28,
-        ipDist: 0.03200000151991844
+        ipDist: 0.032
     };
 
     var gui = new dat.GUI();
     gui.close();
     // gui.add(guiInfo, 'GetHelp').name("Help/About");
 
-    var earthRadController = gui.add(guiInfo, 'earthRad', 0.0, 1.5).name("Earth radius");
+    var earthRadController = gui.add(guiInfo, 'earthRad', 0.0, 0.6).name("Earth radius");
 
-    var centerSphereRadController = gui.add(guiInfo, 'centerSphereRad', 0.6, 1.3).name("Center Sphere");
+    var centerSphereRadController = gui.add(guiInfo, 'centerSphereRad', 0.6, 1.2).name("Center Sphere");
 
     var vertexSphereRadController = gui.add(guiInfo, 'vertexSphereRad', 0., 0.7).name("Vertex Sphere");
 
@@ -41,7 +41,7 @@ var initGui = function () {
     earthRadController.onChange(function (value) {
         g_material.uniforms.earthRad.value = value;
         g_material.uniforms.moonRad.value = 0.2 * value;
-        g_material.uniforms.sunRad.value = 2 * value;
+        g_material.uniforms.sunRad.value = 4 * value;
     });
 
     centerSphereRadController.onChange(function (value) {

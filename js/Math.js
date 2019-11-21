@@ -639,7 +639,7 @@ function setupMaterial(fShader) {
             },
             earthRad: {
                 type: "f",
-                value: 0.2
+                value: 0.1
             },
 
             moonBoostMat: {
@@ -648,7 +648,7 @@ function setupMaterial(fShader) {
             },
             moonRad: {
                 type: "f",
-                value: 0.07
+                value: 0.02
             },
 
             sunBoostMat: {
@@ -657,7 +657,7 @@ function setupMaterial(fShader) {
             },
             sunRad: {
                 type: "f",
-                value: 1.
+                value: 0.4
             },
 
             centerSphereRad: {
