@@ -19,7 +19,7 @@ const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=true;
 
 const bool GLOBAL_SCENE=true;
-const bool GLOBAL_LIGHTS=false;
+const bool GLOBAL_LIGHTS=true;
 
 const bool FAKE_LIGHT = false;
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -443,7 +443,6 @@ uniform float sunRad;
 
 float localSceneSDF(vec4 p){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-    float centerSphereRadius = 1.;
     vec4 center = ORIGIN;
     float sphere = centerSDF(p,  center, centerSphereRad);
     float vertexSphere = 0.0;
@@ -455,8 +454,50 @@ float localSceneSDF(vec4 p){
     //return final;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
+
+//
+//float globalLightSceneSDF(vec4 p){
+//    float distance=MAX_DIST;
+//    if(GLOBAL_LIGHTS){
+//    for (int i=0; i<numLights; i++){
+//        float objDist;
+//        objDist = sphereSDF(absolutep,lightPositions[i], 0.1);
+//        
+//        distance = min(distance, objDist);
+//        
+//        if (distance < EPSILON){
+//            hitWhich = 1;
+//            globalLightColor = lightIntensities[i];
+//            return distance;
+//        }
+//    }
+//    }
+//    return distance;
+//}
+
+
+
+
+
+
+
+
 float globalSceneSDF(vec4 p){
     float earthDist;
     float moonDist;
@@ -464,16 +505,13 @@ float globalSceneSDF(vec4 p){
     vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
-    if(GLOBAL_LIGHTS){
+ if(GLOBAL_LIGHTS){
     for (int i=0; i<numLights; i++){
         float objDist;
-        objDist = sphereSDF(
-        absolutep,
-        lightPositions[i],
-            0.1
-    //    1.0/(10.0*lightIntensities[i].w)
-        );
+        objDist = sphereSDF(absolutep,lightPositions[i], 0.1);
+        
         distance = min(distance, objDist);
+        
         if (distance < EPSILON){
             hitWhich = 1;
             globalLightColor = lightIntensities[i];
@@ -619,7 +657,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             marchStep = MIN_DIST;
         }
         else {
-            float localDist = min(0.1, localSceneSDF(localtv.pos));
+            float localDist =0.9*localSceneSDF(localtv.pos);
+                //= min(0.5, localSceneSDF(localtv.pos));
             if (localDist < EPSILON){
                 hitWhich = 3;
                 sampletv = localtv;
@@ -699,14 +738,14 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //return color;
 }
 
-
+/*
     if(SUN){
         vec4 sunPos=translate(sunBoost, ORIGIN);
         Isometry totalIsom=composeIsometry(totalFixMatrix,invCellBoost);
         TLP = translate(totalIsom,sunPos);
         color += lightingCalculations(SP, TLP, V, vec3(1.0), vec4(1.,0.9,0.4,3.));
         //first three give color, last gives intensity
-}
+}*/
  return color;
 }
 

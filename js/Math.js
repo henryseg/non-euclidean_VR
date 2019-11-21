@@ -355,15 +355,14 @@ function fixOutsideCentralCell(position) {
 
         return -1;
     }
-
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
-let cubeHalfWidth = 0.6584789485;
-let modelHalfCube = 0.577;
+let cubeHalfWidth = 0.6584789485; //hyperbolic distance from center of fundamental domain to a face (midpoint)
+let modelHalfCube = 0.5773502692; //same distance in the Klein model
 
 function createGenerators() { /// generators for the tiling by cubes.
 
