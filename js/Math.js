@@ -376,22 +376,27 @@ let modelHalfCube = 0.5773502692; //same distance in the Klein model
 //-----------------------------------------------------------------------------------------------------------------------------
 
 
+function modelProject(v) {
+    return new THREE.Vector3(v.x / v.w, v.y / v.w, v.z / v.w);
+}
+
 
 function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
+    let mPos = modelProject(cPos);
     let bestIndex = -1;
 
     if (cPos.z > cubeHalfWidth) {
         bestIndex = 5;
-    } else if (cPos.z < -cubeHalfWidth) {
+    } else if (mPos.z < -modelHalfCube) {
         bestIndex = 4;
-    } else if (cPos.x > cubeHalfWidth) {
+    } else if (mPos.x > modelHalfCube) {
         bestIndex = 1;
-    } else if (cPos.x < -cubeHalfWidth) {
+    } else if (mPos.x < -modelHalfCube) {
         bestIndex = 0;
-    } else if (cPos.y > cubeHalfWidth) {
+    } else if (mPos.y > modelHalfCube) {
         bestIndex = 3;
-    } else if (cPos.y < -cubeHalfWidth) {
+    } else if (mPos.y < -modelHalfCube) {
         bestIndex = 2;
     }
 
@@ -403,7 +408,6 @@ function fixOutsideCentralCell(position) {
     }
 
 }
-
 
 
 //ALTERNATIVE TELEPORT FUNCTION
