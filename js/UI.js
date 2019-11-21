@@ -18,6 +18,7 @@ var initGui = function(){
     globalSphereRad: 0.2,
     modelHalfCube: 0.5,
     ipDist: 0.03200000151991844,
+    stereoScreenOffset: 0.0
   };
 
   var gui = new dat.GUI();
@@ -27,6 +28,7 @@ var initGui = function(){
   var globalSphereRadController = gui.add(guiInfo, 'globalSphereRad',0.0,1.5).name("Earth radius");
   var halfCubeController = gui.add(guiInfo, 'modelHalfCube',0.2,1.5).name("Half cube");
   var ipDistController = gui.add(guiInfo, 'ipDist',0.0,0.5).name("ip Dist");
+  var stereoScreenOffsetController = gui.add(guiInfo, 'stereoScreenOffset',-0.2,0.2).name("Stereo offset");
 
   // ------------------------------
   // UI Controllers
@@ -60,5 +62,12 @@ var initGui = function(){
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
     */
   });
+
+
+  stereoScreenOffsetController.onChange(function(value){
+    g_material.uniforms.stereoScreenOffset.value = value;
+  });
+
+
 
 };

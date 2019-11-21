@@ -488,6 +488,10 @@ function setupMaterial(fShader) {
             modelHalfCube: {
                 type: "f",
                 value: 0.5
+            },
+            stereoScreenOffset: {
+                type: "f",
+                value: 0.0
             }
         },
 
