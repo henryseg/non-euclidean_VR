@@ -276,35 +276,34 @@ function Position() {
 
 
     this.reduceBoostError = function () {
-
-        // Hyperbolic Gram-Schmidt
-        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
-        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
-        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
-        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
-
-        col0.hypNormalize();
-
-        let aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
-        col1.sub(aux10).hypNormalize();
-
-        let aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
-        let aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
-        col2.sub(aux20).sub(aux21).hypNormalize();
-
-        let aux30 = col0.clone().multiplyScalar(col0.hypDot(col3));
-        let aux31 = col1.clone().multiplyScalar(col1.hypDot(col3));
-        let aux32 = col2.clone().multiplyScalar(col2.hypDot(col3));
-        col3.sub(aux30).sub(aux31).sub(aux32).hypNormalize();
-
-        let m = new THREE.Matrix4().set(
-            col0.x, col1.x, col2.x, col3.x,
-            col0.y, col1.y, col2.y, col3.y,
-            col0.z, col1.z, col2.z, col3.z,
-            col0.w, col1.w, col2.w, col3.w);
-
-        this.boost.matrix = m.clone();
-
+        //
+        //        // Hyperbolic Gram-Schmidt
+        //        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
+        //        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
+        //        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
+        //        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
+        //
+        //        col0.hypNormalize();
+        //
+        //        let aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
+        //        col1.sub(aux10).hypNormalize();
+        //
+        //        let aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
+        //        let aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
+        //        col2.sub(aux20).sub(aux21).hypNormalize();
+        //
+        //        let aux30 = col0.clone().multiplyScalar(col0.hypDot(col3));
+        //        let aux31 = col1.clone().multiplyScalar(col1.hypDot(col3));
+        //        let aux32 = col2.clone().multiplyScalar(col2.hypDot(col3));
+        //        col3.sub(aux30).sub(aux31).sub(aux32).hypNormalize();
+        //
+        //        let m = new THREE.Matrix4().set(
+        //            col0.x, col1.x, col2.x, col3.x,
+        //            col0.y, col1.y, col2.y, col3.y,
+        //            col0.z, col1.z, col2.z, col3.z,
+        //            col0.w, col1.w, col2.w, col3.w);
+        //
+        //        this.boost.matrix = m.clone();
         return this;
 
     };
