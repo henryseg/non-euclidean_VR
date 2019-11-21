@@ -396,6 +396,7 @@ uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
+uniform highp sampler3D lookupTable;
 
 
 //--------------------------------------------
@@ -831,7 +832,10 @@ void main(){
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
-    raymarch(rayDir, totalFixMatrix);
+    //raymarch(rayDir, totalFixMatrix);
+    hitWhich = 5;
+    float val = texture(lookupTable, vec3(0.1*gl_FragCoord.xy,30)).r;
+    debugColor = vec3(abs(val), 0., 0.);
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------

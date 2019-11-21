@@ -1,15 +1,16 @@
 /*
  *  three.js NRRD file loader
  */
-
 import {
 	FileLoader,
 	Loader,
 	Matrix4,
 	Vector3
-} from "three.module.js";
-import { Zlib } from "gunzip.module.min.js";
-import { Volume } from "Volume.js";
+} from "./three.module.js";
+import { Zlib } from "./gunzip.module.min.js";
+import { Volume } from "./Volume.js";
+
+
 
 var NRRDLoader = function ( manager ) {
 
@@ -603,4 +604,6 @@ NRRDLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 } );
 
+
 export { NRRDLoader };
+

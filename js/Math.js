@@ -1,6 +1,3 @@
-import {NRRDLoader} from 'lib/NRRDLoader.js';
-
-
 // console.log(m) prints column by column, which is not what you expect...
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
@@ -240,8 +237,8 @@ function Position() {
             mat_aux.multiplyScalar(-EULER_STEP);
             parallel.add(mat_aux);
             this.reduceFacingError();
-            console.log('boost', this.boost.matrix.elements);
-            console.log('facing', this.facing.elements);
+            //console.log('boost', this.boost.matrix.elements);
+            //console.log('facing', this.facing.elements);
 
             // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
             field.set(
@@ -472,14 +469,6 @@ function initObjects() {
 
 function setupMaterial(fShader) {
 
-    let texture;
-    new NRRDLoader().load("../texture/test_z.nrrd", function (volume) {
-        texture = new THREE.DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = THREE.RedFormat;
-        texture.type = THREE.FloatType;
-        texture.minFilter = texture.magFilter = THREE.LinearFilter;
-        texture.unpackAlignment = 1;
-    });
 
     g_material = new THREE.ShaderMaterial({
         uniforms: {
@@ -571,7 +560,7 @@ function setupMaterial(fShader) {
             // lookup table passed below
             lookupTable: {
                 type: "",
-                value: texture
+                value: ""
             }
         },
 
@@ -580,6 +569,20 @@ function setupMaterial(fShader) {
         transparent: true
     });
 
+    import('./lib/nrrd/NRRDLoader.js').then(
+        module => {
+            new module.NRRDLoader().load("../texture/test_z.nrrd", function (volume) {
+                let texture = new THREE.DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+                texture.format = THREE.RedFormat;
+                texture.type = THREE.FloatType;
+                texture.minFilter = texture.magFilter = THREE.LinearFilter;
+                texture.unpackAlignment = 1;
+                //console.log('volume', volume);
+                g_material.uniforms.lookupTable.value = texture;
+                console.log(texture);
+            });
+        }
+    );
 
 
 }
@@ -605,3 +608,4 @@ function updateMaterial() {
 
 
 }
+

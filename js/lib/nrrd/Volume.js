@@ -16,8 +16,8 @@ import {
 	Matrix3,
 	Matrix4,
 	Vector3
-} from "three.module.js";
-import { VolumeSlice } from "VolumeSlice.js";
+} from "./three.module.js";
+import { VolumeSlice } from "./VolumeSlice.js";
 var Volume = function ( xLength, yLength, zLength, type, arrayBuffer ) {
 
 	if ( arguments.length > 0 ) {
