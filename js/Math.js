@@ -454,6 +454,20 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen4 = new Isometry().translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
     const gen5 = new Isometry().translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
 
+    //ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
+
+    gen0.multiply(new Isometry().set([new THREE.Matrix4().makeRotationX(-PI / 2).transpose()]));
+
+    gen1.multiply(new Isometry().set([new THREE.Matrix4().makeRotationX(PI / 2).transpose()]));
+
+    gen2.multiply(new Isometry().set([new THREE.Matrix4().makeRotationY(-PI / 2).transpose()]));
+
+    gen3.multiply(new Isometry().set([new THREE.Matrix4().makeRotationY(PI / 2).transpose()]));
+
+    gen4.multiply(new Isometry().set([new THREE.Matrix4().makeRotationZ(-PI / 2).transpose()]));
+
+    gen5.multiply(new Isometry().set([new THREE.Matrix4().makeRotationZ(PI / 2).transpose()]));
+
 
     //these generators do generate the tiling, but don't give a manifold.  need to also twist as we glue opposing faces correctly
     //Need to add in rotation to the generators.
