@@ -727,8 +727,8 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
     if (isStereo == 1){
         resolution.x = resolution.x * 0.5;
-        if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x - stereoScreenOffset * resolution.x; }
-        else { fragCoord.x = fragCoord.x + stereoScreenOffset * resolution.x;  }
+        if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x + stereoScreenOffset * resolution.x; }
+        else { fragCoord.x = fragCoord.x - stereoScreenOffset * resolution.x;  }
     }
     vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1/tan(radians(fov*0.5));

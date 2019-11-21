@@ -491,7 +491,7 @@ function setupMaterial(fShader) {
             },
             stereoScreenOffset: {
                 type: "f",
-                value: 0.0
+                value: g_stereoScreenOffset
             }
         },
 

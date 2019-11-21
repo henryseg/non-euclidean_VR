@@ -25,6 +25,7 @@ let g_screenResolution;
 let g_vr = 0;
 
 let g_leftPosition, g_rightPosition;
+let g_stereoScreenOffset = 0.03;
 
 //-------------------------------------------------------
 // Scene Variables
