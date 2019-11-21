@@ -26,8 +26,8 @@ const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_DIST_SPHERE = false;
 
 const bool EARTH=true;//turn on / off earth texture
-const bool MOON=true; //turn on / off moon completely.
-const bool SUN=true; // turn on / off the sun completely
+const bool MOON=false; //turn on / off moon completely.
+const bool SUN=false; // turn on / off the sun completely
 //turn on solar lighting
 
 

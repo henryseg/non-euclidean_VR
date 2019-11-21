@@ -662,7 +662,7 @@ function setupMaterial(fShader) {
 
             centerSphereRad: {
                 type: "f",
-                value: 0.99
+                value: 0.89
             },
             vertexSphereRad: {
                 type: "f",
