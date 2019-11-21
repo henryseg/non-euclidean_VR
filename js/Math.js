@@ -1,3 +1,6 @@
+import * as THREE from './module/three.module.js';
+import {globalVar} from './Main.js';
+
 // console.log(m) prints column by column, which is not what you expect...
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
@@ -164,7 +167,6 @@ function Position() {
     };
 
 
-
     /*
     this.flow = function (v) {
         // move the position following the geodesic flow
@@ -283,7 +285,7 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 0.5;
+let cubeHalfWidth = 0.5;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
@@ -297,8 +299,8 @@ function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
     let bestDist = geomDist(cPos);
     let bestIndex = -1;
-    for (let i = 0; i < gens.length; i++) {
-        let pos = cPos.clone().translateBy(gens[i]);
+    for (let i = 0; i < globalVar.gens.length; i++) {
+        let pos = cPos.clone().translateBy(globalVar.gens[i]);
         let dist = geomDist(pos);
         if (dist < bestDist) {
             bestDist = dist;
@@ -306,7 +308,7 @@ function fixOutsideCentralCell(position) {
         }
     }
     if (bestIndex !== -1) {
-        position.translateBy(gens[bestIndex]);
+        position.translateBy(globalVar.gens[bestIndex]);
         return bestIndex;
     } else {
         return -1;
@@ -352,18 +354,18 @@ let invGensMatrices; // need lists of things to give to the shader, lists of typ
 
 
 function initGeometry() {
-    g_position = new Position();
-    g_cellPosition = new Position();
-    g_invCellPosition = new Position();
-    gens = createGenerators();
-    invGens = invGenerators(gens);
-    invGensMatrices = unpackageMatrix(invGens);
+    globalVar.g_position = new Position();
+    globalVar.g_cellPosition = new Position();
+    globalVar.g_invCellPosition = new Position();
+    globalVar.gens = createGenerators();
+    globalVar.invGens = invGenerators(globalVar.gens);
+    invGensMatrices = unpackageMatrix(globalVar.invGens);
 
-    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = g_position.clone().localFlow(vectorLeft);
+    let vectorLeft = new THREE.Vector3(-globalVar.ipDist, 0, 0).rotateByFacing(globalVar.g_position);
+    globalVar.g_leftPosition = globalVar.g_position.clone().localFlow(vectorLeft);
 
-    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = g_position.clone().localFlow(vectorRight);
+    let vectorRight = new THREE.Vector3(globalVar.ipDist, 0, 0).rotateByFacing(globalVar.g_position);
+    globalVar.g_rightPosition = globalVar.g_position.clone().localFlow(vectorRight);
 }
 
 
@@ -371,8 +373,8 @@ function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
     let isom = new Position().localFlow(v).boost;
     let lp = ORIGIN.clone().translateBy(isom);
-    lightPositions.push(lp);
-    lightIntensities.push(colorInt);
+    globalVar.lightPositions.push(lp);
+    globalVar.lightIntensities.push(colorInt);
 }
 
 
@@ -388,7 +390,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
+    globalVar.globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
 }
 
 //-------------------------------------------------------
@@ -398,20 +400,20 @@ function initObjects() {
 
 function setupMaterial(fShader) {
 
-    g_material = new THREE.ShaderMaterial({
+    globalVar.g_material = new THREE.ShaderMaterial({
         uniforms: {
 
             isStereo: {
                 type: "bool",
-                value: g_vr
+                value: globalVar.g_vr
             },
             screenResolution: {
                 type: "v2",
-                value: g_screenResolution
+                value: globalVar.g_screenResolution
             },
             lightIntensities: {
                 type: "v4",
-                value: lightIntensities
+                value: globalVar.lightIntensities
             },
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
@@ -422,52 +424,52 @@ function setupMaterial(fShader) {
             //--- end of invGen stuff
             currentBoostMat: {
                 type: "m4",
-                value: g_position.boost.matrix
+                value: globalVar.g_position.boost.matrix
             },
             leftBoostMat: {
                 type: "m4",
-                value: g_leftPosition.boost.matrix
+                value: globalVar.g_leftPosition.boost.matrix
             },
             rightBoostMat: {
                 type: "m4",
-                value: g_rightPosition.boost.matrix
+                value: globalVar.g_rightPosition.boost.matrix
             },
             //currentBoost is an array
             facing: {
                 type: "m4",
-                value: g_position.facing
+                value: globalVar.g_position.facing
             },
             leftFacing: {
                 type: "m4",
-                value: g_leftPosition.facing
+                value: globalVar.g_leftPosition.facing
             },
             rightFacing: {
                 type: "m4",
-                value: g_rightPosition.facing
+                value: globalVar.g_rightPosition.facing
             },
             cellBoostMat: {
                 type: "m4",
-                value: g_cellPosition.boost.matrix
+                value: globalVar.g_cellPosition.boost.matrix
             },
             invCellBoostMat: {
                 type: "m4",
-                value: g_invCellPosition.boost.matrix
+                value: globalVar.g_invCellPosition.boost.matrix
             },
             cellFacing: {
                 type: "m4",
-                value: g_cellPosition.facing
+                value: globalVar.g_cellPosition.facing
             },
             invCellFacing: {
                 type: "m4",
-                value: g_invCellPosition.facing
+                value: globalVar.g_invCellPosition.facing
             },
             lightPositions: {
                 type: "v4",
-                value: lightPositions
+                value: globalVar.lightPositions
             },
             globalObjectBoostMat: {
                 type: "m4",
-                value: globalObjectPosition.boost.matrix
+                value: globalVar.globalObjectPosition.boost.matrix
             },
             globalSphereRad: {
                 type: "f",
@@ -491,7 +493,7 @@ function setupMaterial(fShader) {
             },
             stereoScreenOffset: {
                 type: "f",
-                value: g_stereoScreenOffset
+                value: globalVar.g_stereoScreenOffset
             }
         },
 
@@ -518,16 +520,26 @@ function updateMaterial() {
 
      */
 
-    console.log('ipDist', ipDist);
-    let vectorLeft = new THREE.Vector3(-ipDist, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = g_position.clone().localFlow(vectorLeft);
-    g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
-    g_material.uniforms.leftFacing.value = g_leftPosition.facing;
+    let vectorLeft = new THREE.Vector3(-globalVar.ipDist, 0, 0).rotateByFacing(globalVar.g_position);
+    globalVar.g_leftPosition = globalVar.g_position.clone().localFlow(vectorLeft);
+    globalVar.g_material.uniforms.leftBoostMat.value = globalVar.g_leftPosition.boost.matrix;
+    globalVar.g_material.uniforms.leftFacing.value = globalVar.g_leftPosition.facing;
 
-    let vectorRight = new THREE.Vector3(ipDist, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = g_position.clone().localFlow(vectorRight);
-    g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
-    g_material.uniforms.rightFacing.value = g_rightPosition.facing;
+    let vectorRight = new THREE.Vector3(globalVar.ipDist, 0, 0).rotateByFacing(globalVar.g_position);
+    globalVar.g_rightPosition = globalVar.g_position.clone().localFlow(vectorRight);
+    globalVar.g_material.uniforms.rightBoostMat.value = globalVar.g_rightPosition.boost.matrix;
+    globalVar.g_material.uniforms.rightFacing.value = globalVar.g_rightPosition.facing;
 
 
 }
+
+export {
+    initGeometry,
+    initObjects,
+    setupMaterial,
+    updateMaterial,
+    fixOutsideCentralCell,
+    createGenerators,
+    invGenerators,
+    unpackageMatrix
+};

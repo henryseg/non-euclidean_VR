@@ -5,6 +5,8 @@
  * @author Data Arts Team / https://github.com/dataarts
  */
 
+//import * as THREE from '../js/module/three.module.js';
+
 THREE.VRController = function( gamepad ){
 
 	var

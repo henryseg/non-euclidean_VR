@@ -1,14 +1,64 @@
+import {
+    Scene,
+    WebGLRenderer,
+    Vector2,
+    OrthographicCamera,
+    FileLoader,
+    BufferGeometry,
+    BufferAttribute,
+    Mesh
+} from './module/three.module.js';
+
+import {
+    initGeometry,
+    initObjects,
+    setupMaterial,
+    updateMaterial
+} from "./Math.js";
+
+import {initGui} from "./UI.js";
+import {initEvents} from './Events.js';
+import {Controls} from './Controls.js';
+
+//import * as THREE from './module/three.module.js';
 //-------------------------------------------------------
 // Constant Variables
 //-------------------------------------------------------
-const c_ipDist = 0.03200000151991844; // inter pupil
-let ipDist = 0.03200000151991844; // inter pupil
 
+let globalVar = {
+    ipDist: 0.03200000151991844,
+    g_keyboard:'fr', // can be 'fr' or 'us' for the moment
+    g_effect:undefined,
+    g_material:undefined,
+    g_controls:undefined,
+    g_position:undefined,
+    g_cellPosition:undefined,
+    g_invCellPosition:undefined,
+    g_phoneOrient:undefined,
+    g_renderer:undefined,
+    g_screenResolution:undefined,
+    g_vr:0,
+    g_leftPosition:undefined,
+    g_rightPosition:undefined,
+    g_stereoScreenOffset : 0.03,
+    gens: undefined,
+    invGens: undefined,
+    lightPositions:[],
+    lightIntensities:[],
+    globalObjectPosition:undefined
+};
+
+//let ipDist = 0.03200000151991844; // inter pupil
+
+/*
 const g_keyboard = 'fr'; // can be 'fr' or 'us' for the moment
+*/
 
 //-------------------------------------------------------
 // Global Variables
 //-------------------------------------------------------
+
+/*
 let g_effect;
 let g_material;
 let g_controls;
@@ -27,6 +77,7 @@ let g_vr = 0;
 let g_leftPosition, g_rightPosition;
 let g_stereoScreenOffset = 0.03;
 
+ */
 //-------------------------------------------------------
 // Scene Variables
 //-------------------------------------------------------
@@ -37,17 +88,23 @@ let stats;
 //-------------------------------------------------------
 // Sets up precalculated values
 //-------------------------------------------------------
+/*
 let gens;
 let invGens;
+
+ */
 
 //-------------------------------------------------------
 // Sets up the global objects
 //-------------------------------------------------------
+/*
 let lightPositions = [];
 let lightIntensities = [];
 
 let globalObjectPosition;
 //var globalObjectBoost;
+
+ */
 
 //-------------------------------------------------------
 // Other global variables
@@ -60,23 +117,24 @@ let mainFrag;
 //-------------------------------------------------------
 function init() {
     //Setup our THREE scene--------------------------------
-    scene = new THREE.Scene();
+    scene = new Scene();
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('webgl2');
-    g_renderer = new THREE.WebGLRenderer({
+    globalVar.g_renderer = new WebGLRenderer({
         canvas: canvas,
         context: context
     });
-    document.body.appendChild(g_renderer.domElement);
-    g_screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
-    g_effect = new THREE.VREffect(g_renderer);
-    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
-    g_controls = new THREE.Controls();
+    document.body.appendChild(globalVar.g_renderer.domElement);
+    globalVar.g_screenResolution = new Vector2(window.innerWidth, window.innerHeight);
+    globalVar.g_effect = new THREE.VREffect(globalVar.g_renderer);
+    camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
+    globalVar.g_controls = new Controls();
     initGeometry();
     initObjects();
-    g_phoneOrient = [null, null, null];
+    globalVar.g_phoneOrient = [null, null, null];
 
     loadShaders();
+    initEvents();
     initGui();
     stats = new Stats();
     stats.showPanel(1);
@@ -86,18 +144,17 @@ function init() {
 }
 
 
-
 function loadShaders() {
     //Since our shader is made up of strings we can construct it from parts
-    let loader = new THREE.FileLoader();
+    let loader = new FileLoader();
     loader.setResponseType('text');
     loader.load('shaders/raymarch.glsl', function (main) {
         mainFrag = main;
         setupMaterial(main);
-        g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+        globalVar.g_effect.setSize(globalVar.g_screenResolution.x, globalVar.g_screenResolution.y);
 
         //Setup a "quad" to render on-------------------------
-        let geom = new THREE.BufferGeometry();
+        let geom = new BufferGeometry();
         let vertices = new Float32Array([
             -1.0, -1.0, 0.0,
             1.0, -1.0, 0.0,
@@ -107,8 +164,8 @@ function loadShaders() {
             1.0, 1.0, 0.0,
             -1.0, 1.0, 0.0
         ]);
-        geom.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        mesh = new THREE.Mesh(geom, g_material);
+        geom.setAttribute('position', new BufferAttribute(vertices, 3));
+        mesh = new Mesh(geom, globalVar.g_material);
         scene.add(mesh);
         animate();
     });
@@ -119,10 +176,10 @@ function loadShaders() {
 //-------------------------------------------------------
 function animate() {
     stats.begin();
-    g_controls.update();
+    globalVar.g_controls.update();
     updateMaterial();
     THREE.VRController.update();
-    g_effect.render(scene, camera, animate);
+    globalVar.g_effect.render(scene, camera, animate);
     stats.end();
 }
 
@@ -130,3 +187,6 @@ function animate() {
 // Where the magic happens
 //-------------------------------------------------------
 init();
+
+
+export{init, globalVar};
