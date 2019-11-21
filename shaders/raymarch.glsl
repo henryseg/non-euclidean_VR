@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=true;
 

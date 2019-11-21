@@ -2,7 +2,7 @@
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
 
-let PI = 3.1415926535;
+const PI = 3.1415926535;
 //----------------------------------------------------------------------
 //	Object oriented version of the geometry
 //----------------------------------------------------------------------
@@ -490,6 +490,8 @@ let invGensMatrices; // need lists of things to give to the shader, lists of typ
 
 
 function initGeometry() {
+    // startTime = Date.now();
+    // console.log(startTime);
     g_position = new Position();
     g_cellPosition = new Position();
     g_invCellPosition = new Position();
@@ -543,8 +545,11 @@ function initObjects() {
 
     earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
 
-    moonPosition = new Position().flow(new THREE.Vector3(0.6, 0, -1.));
-
+    //moonPosition = new Position().flow(objPos);
+    //console.log(moonPosition.boost);
+    //new THREE.Vector3(0.6, 0, -1.));
+    objPos = new THREE.Vector3(0, 0, 0);
+    moonPosition = new Position();
     sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7));
 
 }
@@ -558,6 +563,20 @@ function initObjects() {
 var rockTexture = new THREE.TextureLoader().load("images/concrete.jpg")
 rockTexture.wrapS = THREE.RepeatWrapping;
 rockTexture.wrapT = THREE.RepeatWrapping;
+
+
+
+
+//MOVE THE PLANETS AROUND
+stepSize = 0.001;
+setInterval(function () {
+
+        // objPos.add(new THREE.Vector3(0, 0, stepSize));
+        moonPosition.localFlow(new THREE.Vector3(0, stepSize, 0.));
+        earthPosition.localFlow(new THREE.Vector3(0, 0, stepSize));
+    }, 10 // run 100 times a second.
+);
+
 
 
 function setupMaterial(fShader) {
@@ -720,6 +739,7 @@ function setupMaterial(fShader) {
     });
 }
 
+
 // hi steve 
 function updateMaterial() {
     /*
@@ -748,5 +768,8 @@ function updateMaterial() {
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
+    //update the moon's position
+    g_material.uniforms.moonBoostMat.value = moonPosition.boost.matrix;
+    g_material.uniforms.earthBoostMat.value = earthPosition.boost.matrix;
 
 }
