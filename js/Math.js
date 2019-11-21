@@ -1,9 +1,13 @@
 import * as THREE from './module/three.module.js';
 import {globalVar} from './Main.js';
+import {NRRDLoader} from './module/NRRDLoader.js';
 
 // console.log(m) prints column by column, which is not what you expect...
 // v.applyMatrix4(m) does m*v
 // m.multiply(n) does m*n
+
+// length of the step when integrating the geodesic flow with an Euler method
+const EULER_STEP = 0.001;
 
 
 //----------------------------------------------------------------------
@@ -24,6 +28,15 @@ import {globalVar} from './Main.js';
      To make a copy of an object, use the clone method.
      Not sure yet what is the right philosophy for the setters.
  */
+
+THREE.Matrix4.prototype.add = function (matrix) {
+    // addition of tow 4x4 matrices
+    this.set.apply(this, [].map.call(this.elements, function (c, i) {
+        return c + matrix.elements[i];
+    }));
+    return this;
+};
+
 
 /*
 
@@ -48,16 +61,27 @@ function Isometry() {
     this.makeLeftTranslation = function (x, y, z) {
         // return the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(x, y, z);
+        this.matrix.set(
+            Math.exp(z), 0, 0, x,
+            0, Math.exp(-z), 0, y,
+            0, 0, 1, z,
+            0, 0, 0, 1
+        );
         return this;
     };
 
     this.makeInvLeftTranslation = function (x, y, z) {
         // return the inverse of the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(-x, -y, -z);
+        this.matrix.set(
+            Math.exp(-z), 0, 0, -Math.exp(-z) * x,
+            0, Math.exp(z), 0, -Math.exp(z) * y,
+            0, 0, 1, -z,
+            0, 0, 0, 1
+        );
         return this;
     };
+
 
     this.premultiply = function (isom) {
         // return the current isometry multiplied on the left by isom, i.e. isom * this
@@ -137,7 +161,6 @@ function Position() {
     this.translateBy = function (isom) {
         // translate the position by the given isometry
         this.boost.premultiply(isom);
-        this.reduceError();
         return this;
     };
 
@@ -150,14 +173,12 @@ function Position() {
         return this;
     };
 
-    /*
     this.rotateFacingBy = function (rotation) {
         // apply the given matrix (on the left) to the current facing and return the new result
         this.facing.premultiply(rotation);
         this.reduceFacingError();
         return this;
     };
-    */
 
     this.localRotateFacingBy = function (rotation) {
         // apply the given matrix (on the right) to the current facing and return the new result
@@ -166,36 +187,69 @@ function Position() {
         return this;
     };
 
+    /*    this.flow = function (v) {
+            // move the position following the geodesic flow
+            // the geodesic starts at the origin, its tangent vector is v
+            // parallel transport the facing along the geodesic
 
-    /*
-    this.flow = function (v) {
-        // move the position following the geodesic flow
-        // the geodesic starts at the origin, its tangent vector is v
-        // parallel transport the facing along the geodesic
-
-        // in Euclidean geometry, just apply a translation
-        // Nothing to do on the facing
-        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
-        return this.translateBy(isom);
-    };
-     */
+            // in Euclidean geometry, just apply a translation
+            // Nothing to do on the facing
+            let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
+            let isom = new Isometry().set([matrix]);
+            return this.translateBy(isom);
+        };*/
 
     this.localFlow = function (v) {
-        // move the position following the geodesic flow where
-        // v is the pull back at the origin by this.boost of the tangent vector at boost * o
+        // move the position following the geodesic flow FROM THE POINT WE ARE AT
+        // v is the pull back at the origin of the direction we want to follow
 
-        // Let gamma be the geodesic starting at p = boost * o directed by boost * v
-        // Let gamma_o be the geodesic starting at o directed by v, i.e. gamma_o = boost^{-1} gamma
-        // The parallel transport along gamma_o is an operator T_o which we split as T_o = dS_o B_o where
-        // - S_o is an isometry of X
-        // - B_o an element of SO(3)
-        // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
+        const dist = v.length();
+        const n = dist / EULER_STEP;
+        let u = v.clone().normalize();
+        let field = new THREE.Vector3();
+        let pos_aux = ORIGIN.clone().translateBy(this.boost);
+        let vec_aux = new THREE.Vector4();
+        let mat_aux = new THREE.Matrix4();
+        let parallel = new THREE.Matrix4();
 
-        // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
-        this.boost.multiply(isom);
-        return this
+        for (let i = 0; i < n; i++) {
+            // position of the geodesic at time i*step
+            //pos_aux = ORIGIN.clone().translateBy(this.boost);
+
+            // computing the position of the geodesic at time (i+1)*step
+            vec_aux = new THREE.Vector4(u.x, u.y, u.z, 0);
+            vec_aux.translateBy(this.boost).multiplyScalar(EULER_STEP);
+            pos_aux.add(vec_aux);
+            // update the boost accordingly
+            this.boost.makeLeftTranslation(pos_aux.x, pos_aux.y, pos_aux.z);
+
+            // updating the facing using parallel transport
+            mat_aux.set(
+                0, 0, -u.x, 0,
+                0, 0, u.y, 0,
+                u.x, -u.y, 0, 0,
+                0, 0, 0, 0
+            );
+            mat_aux.multiply(this.facing);
+            mat_aux.multiplyScalar(-EULER_STEP);
+            parallel.add(mat_aux);
+            this.reduceFacingError();
+            //console.log('boost', this.boost.matrix.elements);
+            //console.log('facing', this.facing.elements);
+
+            // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
+            field.set(
+                u.x * u.z,
+                -u.y * u.z,
+                -u.x * u.x + u.y * u.y
+            );
+            u.add(field.multiplyScalar(EULER_STEP)).normalize();
+        }
+
+        this.rotateFacingBy(parallel);
+        return this;
     };
+
 
     this.getInverse = function (position) {
         // set the current position to the position that can bring back the passed position to the origin position
@@ -290,23 +344,27 @@ let cubeHalfWidth = 0.5;
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
-function geomDist(v) {
-    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-}
+
 
 
 function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
-    let bestDist = geomDist(cPos);
     let bestIndex = -1;
-    for (let i = 0; i < globalVar.gens.length; i++) {
-        let pos = cPos.clone().translateBy(globalVar.gens[i]);
-        let dist = geomDist(pos);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-        }
+
+    if (cPos.z > cubeHalfWidth) {
+        bestIndex = 5;
+    } else if (cPos.z < -cubeHalfWidth) {
+        bestIndex = 4;
+    } else if (cPos.x > cubeHalfWidth) {
+        bestIndex = 1;
+    } else if (cPos.x < -cubeHalfWidth) {
+        bestIndex = 0;
+    } else if (cPos.y > cubeHalfWidth) {
+        bestIndex = 3;
+    } else if (cPos.y < -cubeHalfWidth) {
+        bestIndex = 2;
     }
+
     if (bestIndex !== -1) {
         position.translateBy(globalVar.gens[bestIndex]);
         return bestIndex;
@@ -316,18 +374,19 @@ function fixOutsideCentralCell(position) {
 
 }
 
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+    const gen0 = new Isometry().makeLeftTranslation(2. * cubeHalfWidth, 0., 0.);
+    const gen1 = new Isometry().makeLeftTranslation(-2. * cubeHalfWidth, 0., 0.);
+    const gen2 = new Isometry().makeLeftTranslation(0, 2. * cubeHalfWidth, 0.);
+    const gen3 = new Isometry().makeLeftTranslation(0, -2. * cubeHalfWidth, 0.);
+    const gen4 = new Isometry().makeLeftTranslation(0, 0, 2. * cubeHalfWidth,);
+    const gen5 = new Isometry().makeLeftTranslation(0, 0, -2. * cubeHalfWidth,);
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -399,6 +458,7 @@ function initObjects() {
 // We must unpackage the boost data here for sending to the shader.
 
 function setupMaterial(fShader) {
+
 
     globalVar.g_material = new THREE.ShaderMaterial({
         uniforms: {
@@ -500,6 +560,15 @@ function setupMaterial(fShader) {
         vertexShader: document.getElementById('vertexShader').textContent,
         fragmentShader: fShader,
         transparent: true
+    });
+
+    let texture;
+    new NRRDLoader().load("../texture/test_y.nrrd", function (volume) {
+        texture = new THREE.DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = THREE.RedFormat;
+        texture.type = THREE.FloatType;
+        texture.minFilter = texture.magFilter = THREE.LinearFilter;
+        texture.unpackAlignment = 1;
     });
 }
 
