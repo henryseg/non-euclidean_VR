@@ -42,6 +42,11 @@ function Isometry() {
         return this;
     };
 
+
+    this.translateByVector = function (v) {
+        this.matrix.makeTranslation(v.x, v.y, v.z);
+    }
+
     this.makeLeftTranslation = function (x, y, z) {
         // return the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
@@ -114,6 +119,7 @@ function Position() {
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
     this.boost = new Isometry();
     this.facing = new THREE.Matrix4();
+
 
     this.setBoost = function (boost) {
         this.boost = boost.clone();
@@ -264,6 +270,12 @@ function Position() {
     }
 }
 
+
+
+
+
+
+
 /*
 
     Rotating a vector
@@ -350,7 +362,6 @@ function unpackageMatrix(genArr) {
 
 let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 
-
 function initGeometry() {
     g_position = new Position();
     g_cellPosition = new Position();
@@ -388,6 +399,10 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
+
+    globalObjectState = new State().setVelocity(new THREE.Vector3(1, 0, 0));
+    console.log(globalObjectState.velocity);
+
     globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
 }
 
@@ -518,7 +533,7 @@ function updateMaterial() {
 
      */
 
-    console.log('ipDist', ipDist);
+    //console.log('ipDist', ipDist);
     let vectorLeft = new THREE.Vector3(-ipDist, 0, 0).rotateByFacing(g_position);
     g_leftPosition = g_position.clone().localFlow(vectorLeft);
     g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
