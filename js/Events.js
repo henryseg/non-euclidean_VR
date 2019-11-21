@@ -14,6 +14,21 @@ var onResize = function(){
 
 //EVENTS**************************************************************
 //--------------------------------------------------------------------
+// Handle keyboard events
+//--------------------------------------------------------------------
+function onkey(event){
+    event.preventDefault();
+
+    if(event.keyCode == 90) // z
+        g_controls.zeroSensor();
+    else if(event.keyCode == 70) // f
+        g_effect.setFullScreen(true);
+    else if(event.keyCode == 86 || event.keyCode == 13 || event.keyCode == 32)
+        g_effect.toggleVRMode();
+}
+
+window.addEventListener("keydown", onkey, false);
+//--------------------------------------------------------------------
 // Listen for keys for movement/rotation
 //--------------------------------------------------------------------
 function key(event, sign){

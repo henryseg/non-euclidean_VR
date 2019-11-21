@@ -1,7 +1,8 @@
 //-------------------------------------------------------
 // Constant Variables
 //-------------------------------------------------------
-const c_ipDist = 0.03200000151991844; // inter pupil
+const c_ipDist = 0.032; // inter pupil
+let ipDist = 0.032; // inter pupil
 
 const g_keyboard = 'us'; // can be 'fr' or 'us' for the moment
 
@@ -16,7 +17,6 @@ let g_controls;
 let g_position;
 
 let g_cellPosition, g_invCellPosition;
-
 
 let g_phoneOrient;
 

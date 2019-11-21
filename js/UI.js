@@ -18,7 +18,8 @@ var initGui = function () {
         earthRad: 0.2,
         // moonRad: 0.05,
         centerSphereRad: 0.99,
-        vertexSphereRad: -0.95
+        vertexSphereRad: 0.28,
+        ipDist: 0.03200000151991844
     };
 
     var gui = new dat.GUI();
@@ -29,9 +30,9 @@ var initGui = function () {
 
     var centerSphereRadController = gui.add(guiInfo, 'centerSphereRad', 0.6, 1.3).name("Center Sphere");
 
-    var vertexSphereRadController = gui.add(guiInfo, 'vertexSphereRad', -1.1, -0.7).name("Vertex Sphere");
+    var vertexSphereRadController = gui.add(guiInfo, 'vertexSphereRad', 0., 0.7).name("Vertex Sphere");
 
-
+    var ipDistController = gui.add(guiInfo, 'ipDist', 0.0, 0.5).name("ip Dist");
 
     // ------------------------------
     // UI Controllers
@@ -51,6 +52,8 @@ var initGui = function () {
         g_material.uniforms.vertexSphereRad.value = value;
     });
 
-
+    ipDistController.onChange(function (value) {
+        ipDist = value;
+    });
 
 }

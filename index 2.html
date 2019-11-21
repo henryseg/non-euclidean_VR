@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic Page Needs –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Euclidean Raymarching</title>
+    <!-- Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- Style –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            margin: 0px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+    </style>
+    <!-- Favicon –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+
+<body>
+    <img id="vr-icon" src="images/vr-icon.png" height="50px" style="
+        position: fixed;
+        bottom: 30px;
+        right: 50px;
+        display: block;" />
+</body>
+
+<!-- Vertex Shader
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<script type="x-shader/x-vertex" id="vertexShader">
+    #version 300 es
+
+  void main()
+  {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
+
+<!-- Libraries ––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<script src="js/lib/three.min.js"></script>
+<script src="js/lib/dat.gui.min.js"></script>
+<script src="js/lib/math.min.js"></script>
+<script src="js/lib/WebGL.js"></script>
+<script src="js/lib/stats.min.js"></script>
+
+<script src="js/Math.js"></script>
+<script src="js/Events.js"></script>
+<script src="js/Controls.js"></script>
+<script src="vr/VRController.js"></script>
+<script src="vr/VREffect.js"></script>
+<script src="js/UI.js"></script>
+<script src="js/Main.js" id="mainCode"></script>
+
+</html>

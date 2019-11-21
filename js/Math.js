@@ -17,6 +17,7 @@ THREE.Matrix4.prototype.add = function (m) {
 
 
 
+
 /*
 On the JS part
     -
@@ -36,10 +37,6 @@ On the JS part
 
     Representation of an isometry
 
-    TODO:
-     - Add an `applyIsom` method to the class Vector4 ?
-     - Same with the rotationByFacing ?
-
  */
 
 function Isometry() {
@@ -51,10 +48,10 @@ function Isometry() {
     this.matrix = new THREE.Matrix4();
 
     this.set = function (data) {
+        // set the data
         this.matrix = data[0].clone();
         return this;
     };
-
 
     this.translateByVector = function (v) {
         let matrix = new THREE.Matrix4().identity();
@@ -81,6 +78,7 @@ function Isometry() {
         return this;
     }
 
+
     //For geometries whose model space is R3: give the matrix that translates the origin to (x,y,z);
 
     //    this.makeLeftTranslation = function (x, y, z) {
@@ -97,6 +95,7 @@ function Isometry() {
     //        return this;
     //    };
 
+
     this.premultiply = function (isom) {
         // return the current isometry multiplied on the left by isom, i.e. isom * this
         this.matrix.premultiply(isom.matrix);
@@ -109,20 +108,10 @@ function Isometry() {
         return this;
     };
 
-    // this.multiply = function (isom) {
-    //     // return this * isom (which is the "natural order" if you read from left to right)
-    //     return this.rightMultiply(isom);
-    // };
-
     this.getInverse = function (isom) {
         // set the current isometry to the inverse of the passed isometry isom,
         this.matrix.getInverse(isom.matrix);
         return this;
-    };
-
-    this.translate = function (point) {
-        // apply the isometry to the given point
-        return point.clone().applyMatrix4(this.matrix);
     };
 
     this.equals = function (isom) {
@@ -137,23 +126,26 @@ function Isometry() {
 
 /*
 
+    Translating a point by an isometry
+
+ */
+THREE.Vector4.prototype.translateBy = function (isom) {
+    return this.applyMatrix4(isom.matrix);
+};
+
+/*
+
     Representation of the position of the observer
     A position is given by
     - a `boost` which is an Isometry moving the origin to the point where the observer is
     - a `facing` which determines where the observer is looking at. It is a element of SO(3) encoded as a 4x4 matrix
-    More precisely the observer is looking at dL * A * e_z where
-    - e_z the tangent vector at the origin in the z-direction
-    - A is the matrix defining the facing
-    - dL is the differential of the isometry
 
-    TODO.
-        the set of position is probably a group
-        (a semi-direct projection of Isom(X) by SO(3), where Isom(X) acts on SO(3) by conjugation ?)
-        acting on the underlying Lie group as follows :
-        (boost, facing) * g = boost * g * facing
-        so that the inverse of a position if (boost^{-1}, facing^{-1})
-        - Clarify this point
-        - Define the multiplication law on the boost ?
+    More abstractly there is a map from Isom(X) x SO(3) -> Frame bundle, sending (L, A) to  d_o L A f where
+    - o is the origin
+    - f is a fixed (reference) frame in the tangent space of X at o
+    Note that the point stabilizer G_o of o in Isom(X) acts on the set of positions as follows
+    (L, A) . U = (LU^{-1},  d_o U A)
+    The G_o -orbits of a position is exactly the fiber of the map Isom(X) x SO(3) -> Frame bundle
 
 */
 
@@ -182,10 +174,6 @@ function Position() {
     this.translateBy = function (isom) {
         // translate the position by the given isometry
         this.boost.premultiply(isom);
-        this.facing.premultiply(isom.matrix);
-        // at this point the facing is not correct as it contains the translation part from isom
-        // fixed by the line below
-        this.facing.setPosition(new THREE.Vector3(0., 0., 0.));
         this.reduceError();
         return this;
     };
@@ -194,19 +182,19 @@ function Position() {
         // if we are at boost of b, our position is b.0. We want to fly forward, and isom
         // tells me how to do this if I were at 0. So I want to apply b * isom * b^{-1} to b * 0, and I get b * isom * 0.
         // In other words, translate boost by the conjugate of isom by boost
-        // TODO : compute what needs to be done to the facing : simply rotate by boost * isom * boost^{-1} ?
-        //  or the local translate should actually be a composition of positions ?
         this.boost.multiply(isom);
         this.reduceBoostError();
         return this;
     };
 
+    /*
     this.rotateFacingBy = function (rotation) {
         // apply the given matrix (on the left) to the current facing and return the new result
         this.facing.premultiply(rotation);
         this.reduceFacingError();
         return this;
     };
+    */
 
     this.localRotateFacingBy = function (rotation) {
         // apply the given matrix (on the right) to the current facing and return the new result
@@ -214,6 +202,7 @@ function Position() {
         this.reduceFacingError();
         return this;
     };
+
 
 
     this.flow = function (v) {
@@ -230,27 +219,21 @@ function Position() {
     };
 
 
-
-
     this.localFlow = function (v) {
-        // move the position following the geodesic flow FROM THE POINT WE ARE AT
-        // v is the pull back at the origin of the direction we want to follow
-        //how should we compute this?  Should we have a function that gives isometries translating each point back to the origin to get the right vector?
+        // move the position following the geodesic flow where
+        // v is the pull back at the origin by this.boost of the tangent vector at boost * o
 
-        // TODO. Check the facing
+        // Let gamma be the geodesic starting at p = boost * o directed by boost * v
+        // Let gamma_o be the geodesic starting at o directed by v, i.e. gamma_o = boost^{-1} gamma
+        // The parallel transport along gamma_o is an operator T_o which we split as T_o = dS_o B_o where
+        // - S_o is an isometry of X
+        // - B_o an element of SO(3)
+        // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
+        // In the Euclidean case, S_o is the regular translation, B_o is the identity.
 
-        // let matrix = new THREE.Matrix4().makeTranslation(v.x, v.y, v.z);
         let isom = new Isometry().translateByVector(v);
         return this.localTranslateBy(isom);
-    };
-
-    this.rotateByFacing = function (v) {
-        // rotate the given vector by the facing
-        // TODO: find a better way to go from Vector3 to Vector4 and conversely
-        let aux = new THREE.Vector4(v.x, v.y, v.z, 0);
-        let preRes = aux.applyMatrix4(this.facing);
-        return new THREE.Vector3(preRes.x, preRes.y, preRes.z)
     };
 
     this.getInverse = function (position) {
@@ -264,49 +247,84 @@ function Position() {
 
     this.getFwdVector = function () {
         // return the vector moving forward (taking into account the facing)
-        let v = new THREE.Vector3(0, 0, -1);
-        return this.rotateByFacing(v);
+        return new THREE.Vector3(0, 0, -1).rotateByFacing(this);
     };
 
     this.getRightVector = function () {
         // return the vector moving right (taking into account the facing)
-        let v = new THREE.Vector3(1, 0, 0);
-        return this.rotateByFacing(v);
+        return new THREE.Vector3(1, 0, 0).rotateByFacing(this);
     };
 
     this.getUpVector = function () {
         // return the vector moving up (taking into account the facing)
-        let v = new THREE.Vector3(0, 1, 0);
-        return this.rotateByFacing(v);
+        return new THREE.Vector3(0, 1, 0).rotateByFacing(this);
     };
 
+
+
+
     this.reduceBoostError = function () {
-        // Nothing to do in Euclidean geometry
+        //this should be normal Gram-Schmidt for 4x4 matrices
+        //
+        //        // Hyperbolic Gram-Schmidt
+        //        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
+        //        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
+        //        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
+        //        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
+        //
+        //        col0.normalize();
+        //
+        //        let aux10 = col0.clone().multiplyScalar(col0.dot(col1));
+        //        col1.sub(aux10).normalize();
+        //
+        //        let aux20 = col0.clone().multiplyScalar(col0.dot(col2));
+        //        let aux21 = col1.clone().multiplyScalar(col1.dot(col2));
+        //        col2.sub(aux20).sub(aux21).normalize();
+        //
+        //        let aux30 = col0.clone().multiplyScalar(col0.dot(col3));
+        //        let aux31 = col1.clone().multiplyScalar(col1.dot(col3));
+        //        let aux32 = col2.clone().multiplyScalar(col2.dot(col3));
+        //        col3.sub(aux30).sub(aux31).sub(aux32).normalize();
+        //
+        //        let m = new THREE.Matrix4().set(
+        //            col0.x, col1.x, col2.x, col3.x,
+        //            col0.y, col1.y, col2.y, col3.y,
+        //            col0.z, col1.z, col2.z, col3.z,
+        //            col0.w, col1.w, col2.w, col3.w);
+        //
+        //        this.boost.matrix = m.clone();
+        return this;
+
     };
 
     this.reduceFacingError = function () {
         // Gram-Schmidt
-        // TODO...
-        // Right now there is a bug with elements
-        /*let columns = this.facing.elements();
-        let col0 = columns[0].normalize();
-        let aux10 = col0.multiplyScalar(columns[1].dot(col0));
-        let col1 = columns[1].sub(aux10).normalize();
-        let aux20 = col0.multiplyScalar(columns[2].dot(col0));
-        let aux21 = col0.multiplyScalar(columns[2].dot(col1));
-        let col2 = columns[2].sub(aux20).sub(aux21).normalize();
+        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.facing);
+        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.facing);
+        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.facing);
 
-        this.facing = new THREE.Matrix4().set(
+        col0.normalize();
+
+        let aux10 = col0.clone().multiplyScalar(col0.dot(col1));
+        col1.sub(aux10).normalize();
+
+        let aux20 = col0.clone().multiplyScalar(col0.dot(col2));
+        let aux21 = col1.clone().multiplyScalar(col1.dot(col2));
+        col2.sub(aux20).sub(aux21).normalize();
+
+        this.facing.set(
             col0.x, col1.x, col2.x, 0.,
             col0.y, col1.y, col2.y, 0.,
             col0.z, col1.z, col2.z, 0.,
             0., 0., 0., 1.
-        )*/
+        );
+        return this;
     };
 
     this.reduceError = function () {
         this.reduceBoostError();
         this.reduceFacingError();
+        return this;
     };
 
     this.equals = function (position) {
@@ -319,6 +337,18 @@ function Position() {
     }
 }
 
+/*
+
+    Rotating a vector
+
+ */
+
+THREE.Vector3.prototype.rotateByFacing = function (position) {
+    let aux = new THREE.Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
+    this.set(aux.x, aux.y, aux.z);
+    return this;
+};
+
 
 //----------------------------------------------------------------------
 //	Geometry constants
@@ -326,42 +356,86 @@ function Position() {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-const cubeHalfWidth = 0.6584789485;
+let cubeHalfWidth = PI / 4; //hyperbolic distance from center of fundamental domain to a face (midpoint)
+let modelHalfCube = 1.; //same distance in the Klein model
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
-function geomDist(v) {
-    return Math.acos(v.w);
+
+function modelProject(v) {
+    return new THREE.Vector3(v.x / v.w, v.y / v.w, v.z / v.w);
 }
 
 
 function fixOutsideCentralCell(position) {
-    /*
-    let cPos = position.boost.translate(ORIGIN);
-    let bestDist = geomDist(cPos);
+    let cPos = ORIGIN.clone().translateBy(position.boost);
+    let mPos = modelProject(cPos);
     let bestIndex = -1;
-    for (let i = 0; i < gens.length; i++) {
-        let pos = gens[i].translate(cPos);
-        let dist = geomDist(pos);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-        }
+
+    if (cPos.z > cubeHalfWidth) {
+        bestIndex = 5;
+    } else if (mPos.z < -modelHalfCube) {
+        bestIndex = 4;
+    } else if (mPos.x > modelHalfCube) {
+        bestIndex = 1;
+    } else if (mPos.x < -modelHalfCube) {
+        bestIndex = 0;
+    } else if (mPos.y > modelHalfCube) {
+        bestIndex = 3;
+    } else if (mPos.y < -modelHalfCube) {
+        bestIndex = 2;
     }
+
     if (bestIndex !== -1) {
         position.translateBy(gens[bestIndex]);
         return bestIndex;
     } else {
-   */
-    return -1;
-    //}
+        return -1;
+    }
 
 }
+
+
+
+//ALTERNATIVE TELEPORT FUNCTION
+//measures distance from the central cell to determine generator to move by
+//function geomDist(v) {
+//    return Math.acosh(v.w);
+//}
+//
+//
+//function fixOutsideCentralCell(position) {
+//
+//    // let cPos = position.boost.translate(ORIGIN);
+//
+//    let cPos = ORIGIN.clone().translateBy(position.boost);
+//
+//    let bestDist = geomDist(cPos);
+//    let bestIndex = -1;
+//    for (let i = 0; i < gens.length; i++) {
+//        let pos = cPos.clone().translateBy(gens[i]);
+//        let dist = geomDist(pos);
+//        if (dist < bestDist) {
+//            bestDist = dist;
+//            bestIndex = i;
+//        }
+//    }
+//    if (bestIndex !== -1) {
+//        position.translateBy(gens[bestIndex]);
+//        return bestIndex;
+//    } else {
+//
+//        return -1;
+//    }
+//}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
+
+
 
 function createGenerators() { /// generators for the tiling by cubes.
 
@@ -372,6 +446,20 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen3 = new Isometry().translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
     const gen4 = new Isometry().translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
     const gen5 = new Isometry().translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
+
+    //ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
+
+    gen0.multiply(new Isometry().set([new THREE.Matrix4().makeRotationX(-PI / 2).transpose()]));
+
+    gen1.multiply(new Isometry().set([new THREE.Matrix4().makeRotationX(PI / 2).transpose()]));
+
+    gen2.multiply(new Isometry().set([new THREE.Matrix4().makeRotationY(-PI / 2).transpose()]));
+
+    gen3.multiply(new Isometry().set([new THREE.Matrix4().makeRotationY(PI / 2).transpose()]));
+
+    gen4.multiply(new Isometry().set([new THREE.Matrix4().makeRotationZ(-PI / 2).transpose()]));
+
+    gen5.multiply(new Isometry().set([new THREE.Matrix4().makeRotationZ(PI / 2).transpose()]));
 
 
     //these generators do generate the tiling, but don't give a manifold.  need to also twist as we glue opposing faces correctly
@@ -409,11 +497,11 @@ function initGeometry() {
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
 
-    let vectorLeft = g_position.rotateByFacing(new THREE.Vector3(-c_ipDist, 0, 0));
-    g_leftPosition = new Position().flow(vectorLeft);
+    let vectorLeft = new THREE.Vector3(-c_ipDist, 0, 0).rotateByFacing(g_position);
+    g_leftPosition = g_position.clone().localFlow(vectorLeft);
 
-    let vectorRight = g_position.rotateByFacing(new THREE.Vector3(c_ipDist, 0, 0));
-    g_rightPosition = new Position().flow(vectorRight);
+    let vectorRight = new THREE.Vector3(c_ipDist, 0, 0).rotateByFacing(g_position);
+    g_rightPosition = g_position.clone().localFlow(vectorRight);
 }
 
 
@@ -427,8 +515,8 @@ let numLights = 5;
 
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
-    let isom = new Position().flow(v).boost;
-    let lp = isom.translate(ORIGIN);
+    let isom = new Position().localFlow(v).boost;
+    let lp = ORIGIN.clone().translateBy(isom);
     lightPositions.push(lp);
     lightIntensities.push(colorInt);
 }
@@ -450,6 +538,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
+
     PointLightObject(new THREE.Vector3(-1., 0, 0), lightColor5);
 
     earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
@@ -457,10 +546,11 @@ function initObjects() {
     moonPosition = new Position().flow(new THREE.Vector3(0.6, 0, -1.));
 
     sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7));
+
 }
 
 //-------------------------------------------------------
-// Set up shader 
+// Set up shader
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
 
@@ -492,6 +582,10 @@ function setupMaterial(fShader) {
             invGenerators: {
                 type: "m4",
                 value: invGensMatrices
+            },
+            modelHalfCube: {
+                type: "f",
+                value: modelHalfCube
             },
             //--- end of invGen stuff
             currentBoostMat: {
@@ -572,14 +666,14 @@ function setupMaterial(fShader) {
             },
             vertexSphereRad: {
                 type: "f",
-                value: -0.95
+                value: 0.28
             },
             numLights: {
                 type: "i",
                 value: numLights
             },
             earthCubeTex: { //earth texture to global object
-                type: "",
+                type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
                     .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
                     'posx.jpg',
@@ -643,7 +737,16 @@ function updateMaterial() {
 
      */
 
-    //g_material.uniform.foo.value = 0;
+
+    let vectorLeft = new THREE.Vector3(-ipDist, 0, 0).rotateByFacing(g_position);
+    g_leftPosition = g_position.clone().localFlow(vectorLeft);
+    g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
+    g_material.uniforms.leftFacing.value = g_leftPosition.facing;
+
+    let vectorRight = new THREE.Vector3(ipDist, 0, 0).rotateByFacing(g_position);
+    g_rightPosition = g_position.clone().localFlow(vectorRight);
+    g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
+    g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
 
 }
