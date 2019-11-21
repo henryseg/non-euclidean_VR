@@ -15,6 +15,21 @@ THREE.Matrix4.prototype.add = function (m) {
     }));
 };
 
+
+//----------------------------------------------------------------------
+//	Methods for Vectors as Elements of H3
+//------------------------------------------------------------------
+
+THREE.Vector4.prototype.hypNormalize = function () {
+    this / Math.sqrt(-this.x * this.x - this.y * this.y - this.z * this.z + this.w * this.w);
+    return this
+}
+
+THREE.Vector4.prototype.hypDot = function (v) {
+    return -(this.x * v.x + this.y * v.y + this.z * v.z) + this.w * v.w;
+}
+
+
 /*
 On the JS part
     -
@@ -257,9 +272,41 @@ function Position() {
         return new THREE.Vector3(0, 1, 0).rotateByFacing(this);
     };
 
+
+
+
     this.reduceBoostError = function () {
-        // Nothing to do in Euclidean geometry
+
+        // Hyperbolic Gram-Schmidt
+        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
+        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
+        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
+        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
+
+        col0.hypNormalize();
+
+        let aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
+        col1.sub(aux10).hypNormalize();
+
+        let aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
+        let aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
+        col2.sub(aux20).sub(aux21).hypNormalize();
+
+        let aux30 = col0.clone().multiplyScalar(col0.hypDot(col3));
+        let aux31 = col1.clone().multiplyScalar(col1.hypDot(col3));
+        let aux32 = col2.clone().multiplyScalar(col2.hypDot(col3));
+        col3.sub(aux30).sub(aux31).sub(aux32).hypNormalize();
+
+        let m = new THREE.Matrix4().set(
+            col0.x, col1.x, col2.x, col3.x,
+            col0.y, col1.y, col2.y, col3.y,
+            col0.z, col1.z, col2.z, col3.z,
+            col0.w, col1.w, col2.w, col3.w);
+
+        this.boost.matrix = m.clone();
+
         return this;
+
     };
 
     this.reduceFacingError = function () {
@@ -321,48 +368,82 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-
+let cubeHalfWidth = 0.6584789485; //hyperbolic distance from center of fundamental domain to a face (midpoint)
+let modelHalfCube = 0.5773502692; //same distance in the Klein model
 
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
-function geomDist(v) {
-    return Math.acosh(v.w);
-}
+
 
 
 function fixOutsideCentralCell(position) {
-
-    // let cPos = position.boost.translate(ORIGIN);
-
     let cPos = ORIGIN.clone().translateBy(position.boost);
-
-    let bestDist = geomDist(cPos);
     let bestIndex = -1;
-    for (let i = 0; i < gens.length; i++) {
-        let pos = cPos.clone().translateBy(gens[i]);
-        let dist = geomDist(pos);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-        }
+
+    if (cPos.z > cubeHalfWidth) {
+        bestIndex = 5;
+    } else if (cPos.z < -cubeHalfWidth) {
+        bestIndex = 4;
+    } else if (cPos.x > cubeHalfWidth) {
+        bestIndex = 1;
+    } else if (cPos.x < -cubeHalfWidth) {
+        bestIndex = 0;
+    } else if (cPos.y > cubeHalfWidth) {
+        bestIndex = 3;
+    } else if (cPos.y < -cubeHalfWidth) {
+        bestIndex = 2;
     }
+
     if (bestIndex !== -1) {
         position.translateBy(gens[bestIndex]);
         return bestIndex;
     } else {
-
         return -1;
     }
+
 }
+
+
+
+//ALTERNATIVE TELEPORT FUNCTION
+//measures distance from the central cell to determine generator to move by
+//function geomDist(v) {
+//    return Math.acosh(v.w);
+//}
+//
+//
+//function fixOutsideCentralCell(position) {
+//
+//    // let cPos = position.boost.translate(ORIGIN);
+//
+//    let cPos = ORIGIN.clone().translateBy(position.boost);
+//
+//    let bestDist = geomDist(cPos);
+//    let bestIndex = -1;
+//    for (let i = 0; i < gens.length; i++) {
+//        let pos = cPos.clone().translateBy(gens[i]);
+//        let dist = geomDist(pos);
+//        if (dist < bestDist) {
+//            bestDist = dist;
+//            bestIndex = i;
+//        }
+//    }
+//    if (bestIndex !== -1) {
+//        position.translateBy(gens[bestIndex]);
+//        return bestIndex;
+//    } else {
+//
+//        return -1;
+//    }
+//}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
-let cubeHalfWidth = 0.6584789485; //hyperbolic distance from center of fundamental domain to a face (midpoint)
-let modelHalfCube = 0.5773502692; //same distance in the Klein model
+
 
 function createGenerators() { /// generators for the tiling by cubes.
 
