@@ -425,6 +425,8 @@ function initObjects() {
     //    //ang velocity is about y axis (earth's poles)
 
 
+
+
 }
 
 //
@@ -435,6 +437,7 @@ setInterval(function () {
         earthState.localFlow(stepSize);
         moonState.localFlow(stepSize);
         sunState.localFlow(stepSize);
+
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );
@@ -656,8 +659,6 @@ function updateMaterial() {
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
 
-
-
     g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
     g_material.uniforms.earthFacing.value = earthState.facing;
 
@@ -666,5 +667,6 @@ function updateMaterial() {
 
     g_material.uniforms.sunBoostMat.value = sunState.boost.matrix;
     g_material.uniforms.sunFacing.value = sunState.facing;
+
 
 }
