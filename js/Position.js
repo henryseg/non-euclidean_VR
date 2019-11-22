@@ -24,6 +24,11 @@ import {
     Isometry
 } from "./Isometry.js";
 
+// length of the step when integrating the geodesic flow with an Euler method
+const EULER_STEP = 0.001;
+
+const ORIGIN = new Vector4(0, 0, 0, 1);
+
 function Position() {
 
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
@@ -105,9 +110,52 @@ Position.prototype.localFlow = function (v) {
     // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
     // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-    let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
-    this.boost.multiply(isom);
-    return this
+    const dist = v.length();
+    const n = dist / EULER_STEP;
+    let u = v.clone().normalize();
+    let field = new THREE.Vector3();
+    let pos_aux = ORIGIN.clone().translateBy(this.boost);
+    let vec_aux = new THREE.Vector4();
+    let mat_aux = new THREE.Matrix4();
+    let parallel = new THREE.Matrix4();
+
+    for (let i = 0; i < n; i++) {
+        // position of the geodesic at time i*step
+        //pos_aux = ORIGIN.clone().translateBy(this.boost);
+
+        // computing the position of the geodesic at time (i+1)*step
+        vec_aux = new THREE.Vector4(u.x, u.y, u.z, 0);
+        vec_aux.translateBy(this.boost).multiplyScalar(EULER_STEP);
+        pos_aux.add(vec_aux);
+        // update the boost accordingly
+        this.boost.makeLeftTranslation(pos_aux.x, pos_aux.y, pos_aux.z);
+
+        // updating the facing using parallel transport
+        mat_aux.set(
+            0, 0, -u.x, 0,
+            0, 0, u.y, 0,
+            u.x, -u.y, 0, 0,
+            0, 0, 0, 0
+        );
+        mat_aux.multiply(this.facing);
+        mat_aux.multiplyScalar(-EULER_STEP);
+        parallel.add(mat_aux);
+        this.reduceFacingError();
+        //console.log('boost', this.boost.matrix.elements);
+        //console.log('facing', this.facing.elements);
+
+        // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
+        field.set(
+            u.x * u.z,
+            -u.y * u.z,
+            -u.x * u.x + u.y * u.y
+        );
+        u.add(field.multiplyScalar(EULER_STEP)).normalize();
+    }
+
+    this.rotateFacingBy(parallel);
+    return this;
+
 };
 
 Position.prototype.getInverse = function (position) {
@@ -191,4 +239,7 @@ Vector3.prototype.rotateByFacing = function (position) {
     return this;
 };
 
-export{Position}
+export{
+    Position,
+    ORIGIN
+}

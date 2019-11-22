@@ -8,14 +8,13 @@ import {
 import {globals} from './Main.js';
 
 import {Isometry} from "./Isometry.js";
-import {Position} from "./Position.js";
+import {Position, ORIGIN} from "./Position.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 //	Geometry constants
 //----------------------------------------------------------------------------------------------------------------------
 
 // The point representing the origin
-const ORIGIN = new Vector4(0, 0, 0, 1);
 let cubeHalfWidth = 0.5;
 
 //----------------------------------------------------------------------------------------------------------------------
