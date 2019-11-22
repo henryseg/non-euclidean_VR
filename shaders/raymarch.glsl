@@ -398,6 +398,9 @@ uniform vec4 lightIntensities[5];
 uniform mat4 earthBoostMat;
 uniform mat4 moonBoostMat;
 uniform mat4 sunBoostMat;
+uniform mat4 earthFacing;
+uniform mat4 moonFacing;
+uniform mat4 sunFacing;
 
 
 uniform samplerCube earthCubeTex;
@@ -763,29 +766,25 @@ vec3 boxMapping( in sampler2D sam, in tangVector point )
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
-vec3 sphereOffset(Isometry objectBoost, vec4 pt){
+vec3 sphereOffset(Isometry objectBoost, mat4 objectFacing, vec4 pt){
     pt = translate(cellBoost, pt);
     pt = inverse(objectBoost.matrix) * pt;
-    return tangDirection(ORIGIN, pt).dir.xyz;
+    tangVector earthPoint=tangDirection(ORIGIN,pt);
+    earthPoint=rotateFacing(objectFacing, earthPoint);
+    return earthPoint.dir.xyz;
 }
 
 
 
-vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLocation, samplerCube sphTexture){
+vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLocation, mat4 sphFacing, samplerCube sphTexture){
 
     N = estimateNormal(sampletv.pos);
-    vec3 color = texture(sphTexture, sphereOffset(sphLocation, sampletv.pos)).xyz;
+    vec3 color = texture(sphTexture, sphereOffset(sphLocation, sphFacing, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2;
     }
 
-//Code for coloring a sphere with no texture
-//N = estimateNormal(sampletv.pos);
-//        vec3 color=vec3(0.,0.,0.);
-//        color = phongModel(totalFixMatrix, color);
-//        color = 0.9*color+0.1;
-//        return color;
 
 
 
@@ -903,7 +902,9 @@ void main(){
     raymarch(rayDir, totalFixMatrix);
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
-    if (hitWhich == 0){ //Didn't hit anything ------------------------
+
+
+  if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
         out_FragColor = vec4(0.1);
@@ -919,7 +920,7 @@ void main(){
     
         else if (hitWhich == 2){ // the earth
             
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, earthBoost, earthCubeTex);
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, earthBoost, earthFacing, earthCubeTex);
             
 
         out_FragColor = vec4( pixelColor,1.0);
@@ -930,7 +931,7 @@ void main(){
     
     else if (hitWhich == 4){ // the moon
             
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,moonBoost, moonCubeTex);
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,moonBoost, moonFacing, moonCubeTex);
             
         out_FragColor = vec4(pixelColor,1.0);
             
@@ -939,7 +940,7 @@ void main(){
     
 else if (hitWhich == 6){ // the sun
             
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,sunBoost, sunCubeTex);
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,sunBoost, sunFacing, sunCubeTex);
             
         out_FragColor = vec4(pixelColor,1.0);
             

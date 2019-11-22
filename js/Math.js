@@ -543,15 +543,17 @@ function initObjects() {
 
     PointLightObject(new THREE.Vector3(-1., 0, 0), lightColor5);
 
-    earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
+    earthState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, -3, 0));
 
-    //moonPosition = new Position().flow(objPos);
-    //console.log(moonPosition.boost);
-    //new THREE.Vector3(0.6, 0, -1.));
-    objPos = new THREE.Vector3(0, 0, 0);
-    moonPosition = new Position();
-    sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7));
+    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -1)).boost);
 
+    moonState = new State().setVelocity(new THREE.Vector3(0, 1, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(0, -0.3, -1)).boost);
+
+    sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
+
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(2, 0, 0)).boost);
 }
 
 //-------------------------------------------------------
@@ -567,15 +569,21 @@ rockTexture.wrapT = THREE.RepeatWrapping;
 
 
 
-//MOVE THE PLANETS AROUND
+//
+////MOVE THE PLANETS AROUND
 stepSize = 0.001;
 setInterval(function () {
 
-        // objPos.add(new THREE.Vector3(0, 0, stepSize));
-        moonPosition.localFlow(new THREE.Vector3(0, stepSize, 0.));
-        earthPosition.localFlow(new THREE.Vector3(0, 0, stepSize));
+        earthState.localFlow(stepSize);
+        moonState.localFlow(stepSize);
+        sunState.localFlow(stepSize);
+
+        // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );
+
+
+
 
 
 
@@ -652,32 +660,55 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: lightPositions
             },
+
+
             earthBoostMat: {
                 type: "m4",
-                value: earthPosition.boost.matrix
+                value: earthState.boost.matrix
             },
+
+            earthFacing: {
+                type: "m4",
+                value: earthState.facing
+            },
+
             earthRad: {
                 type: "f",
-                value: 0.1
+                value: 0.2
             },
 
             moonBoostMat: {
                 type: "m4",
-                value: moonPosition.boost.matrix
+                value: moonState.boost.matrix
             },
+
+            moonFacing: {
+                type: "m4",
+                value: moonState.facing
+            },
+
             moonRad: {
                 type: "f",
-                value: 0.02
+                value: 0.07
             },
 
             sunBoostMat: {
                 type: "m4",
-                value: sunPosition.boost.matrix
+                value: sunState.boost.matrix
             },
+
+            sunFacing: {
+                type: "m4",
+                value: sunState.facing
+            },
+
+
             sunRad: {
                 type: "f",
-                value: 0.4
+                value: 1.
             },
+
+
 
             centerSphereRad: {
                 type: "f",
@@ -769,7 +800,16 @@ function updateMaterial() {
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
     //update the moon's position
-    g_material.uniforms.moonBoostMat.value = moonPosition.boost.matrix;
-    g_material.uniforms.earthBoostMat.value = earthPosition.boost.matrix;
+
+
+    g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
+    g_material.uniforms.earthFacing.value = earthState.facing;
+
+    g_material.uniforms.moonBoostMat.value = moonState.boost.matrix;
+    g_material.uniforms.moonFacing.value = moonState.facing;
+
+    g_material.uniforms.sunBoostMat.value = sunState.boost.matrix;
+    g_material.uniforms.sunFacing.value = sunState.facing;
+
 
 }
