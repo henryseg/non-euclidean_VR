@@ -8,12 +8,12 @@ import {
     FloatType,
     RedFormat
 } from "./module/three.module.js";
+import {NRRDLoader} from "./module/NRRDLoader.js";
 
 import {globals} from './Main.js';
-
 import {Isometry} from "./Isometry.js";
 import {Position, ORIGIN} from "./Position.js";
-import {NRRDLoader} from "./module/NRRDLoader.js";
+
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -113,7 +113,6 @@ function PointLightObject(v, colorInt) {
     globals.lightIntensities.push(colorInt);
 }
 
-
 //DEFINE THE LIGHT COLORS
 const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1);
 const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1);
@@ -133,7 +132,6 @@ function initObjects() {
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
 
-let test = 'titi';
 
 
 /*
@@ -154,7 +152,7 @@ let depth = 0.;
 function setupMaterial(fShader) {
 
 
-    new NRRDLoader().load("../texture/test_y.nrrd", function (volume) {
+    new NRRDLoader().load("../texture/test1_x.nrrd", function (volume) {
         texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
         texture.format = RedFormat;
         texture.type = FloatType;

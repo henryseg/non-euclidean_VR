@@ -1,4 +1,6 @@
-from .sol import Flow
+from .sol import PulledBackFlow
 
-flow = Flow(verbose=True);
-flow.export_texture_3d('dist1', 0.01, 0.01, 1., 0.001)
+
+def run():
+    flow = PulledBackFlow(verbose=True)
+    flow.export_texture_3d('test1', 0.01, 0.01, 1., 0.01, 10)

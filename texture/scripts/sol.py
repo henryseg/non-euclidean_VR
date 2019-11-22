@@ -1,10 +1,9 @@
 """
 Numeric integration of the geodesic flow
 """
-from typing import Tuple, NoReturn, List
+from typing import Tuple, List
 
-from numpy import ndarray, array, zeros, exp, sqrt, sin, cos, pi, abs
-from numpy.linalg import norm
+from numpy import ndarray, array, exp, sqrt, sin, cos, pi, arctan2
 import SimpleITK as sitk
 
 from .ode import Solver
@@ -47,10 +46,11 @@ class Flow(Solver):
         :return: the normalized position
         """
         x, y, z, dx, dy, dz = p
-        norm = sqrt(exp(-2 * z) * dx ** 2 + exp(2 * z) * dy ** 2 + dz ** 2)
-        return array([x, y, z, dx / norm, dy / norm, dz / norm])
+        length = sqrt(exp(-2 * z) * dx ** 2 + exp(2 * z) * dy ** 2 + dz ** 2)
+        return array([x, y, z, dx / length, dy / length, dz / length])
 
-    def start(self, theta: float, phi: float) -> ndarray:
+    @staticmethod
+    def start(theta: float, phi: float) -> ndarray:
         """
         Define the starting point as the origin with the tangent vector given by angle in spherical coordinates
         :param theta: latitude (or longitude never know which is one)
@@ -58,19 +58,6 @@ class Flow(Solver):
         :return: the initial position
         """
         return array([0, 0, 0, sin(phi) * cos(theta), sin(phi) * sin(theta), cos(phi)])
-
-    def flow(self, theta: float, phi: float, t: float, step: float) -> List[Tuple[float, ndarray]]:
-        """
-        Return the trajectory of the geodesic flow from the origin,
-        where the initial tangent vector is given in spherical coordinate
-        :param theta: latitude (or longitude never know which is one)
-        :param phi: longitude (or latitude)
-        :param t: the time to flow
-        :param step: the length of the steps
-        :return: the trajectory
-        """
-        p0 = self.start(theta, phi)
-        return self.trajectory(0, p0, t, step)
 
     def texture_3d(self, theta_step: float, phi_step: float, time: float, time_step: float, coord: int) -> sitk.Image:
         """
@@ -122,6 +109,13 @@ class Flow(Solver):
 class PulledBackFlow(Solver):
     """
     Studying the pull back to the origin of the tangent vector along a geodesic in Nil
+
+    The coordinates (x,y,z,ux,uy,uy) of a position represents
+    - the coordinates (x,y,z) of the point at time t on the geodesic
+    - the coordinates (ux,uy,uz) of the pull back at the origin of the tangent vector at time t
+
+    The actual tangent vector at (x,y,z) is given by
+    (e^z ux , e^{-z}uy, uz)
     """
 
     def __init__(self, verbose: bool = False) -> None:
@@ -131,6 +125,20 @@ class PulledBackFlow(Solver):
         Solver.__init__(self, 3, verbose=verbose)
         self.set_params(method='RK2')
 
+    @staticmethod
+    def car2sph(x: float, y: float, z: float) -> Tuple[float, float, float]:
+        """
+        Conversion from cartesian coordinates to spherical coordinates
+        """
+        return sqrt(x ** 2 + y ** 2 + z ** 2), arctan2(y, x), arctan2(sqrt(x ** 2 + y ** 2), z)
+
+    @staticmethod
+    def sph2car(r: float, theta: float, phi: float) -> Tuple[float, float, float]:
+        """
+        Conversion from spherical coordinates to cartesian coordinates
+        """
+        return r * sin(phi) * cos(theta), r * sin(phi) * sin(theta), r * cos(phi)
+
     def field(self, t: float, p: ndarray) -> ndarray:
         """
         The vector field of the geodesic flow at the point p = (x,y,z,dx,dy,dz)
@@ -138,13 +146,16 @@ class PulledBackFlow(Solver):
         :param p: the current position
         :return: the vector field
         """
-        x, y, z = p
+        x, y, z, ux, uy, uz = p
 
-        dx = x * z
-        dy = -y * z
-        dz = -x ** 2 + y ** 2
+        dx = exp(z) * ux
+        dy = exp(-z) * uy
+        dz = uz
+        dux = ux * uz
+        duy = -uy * uz
+        duz = -ux ** 2 + uy ** 2
 
-        return array([dx, dy, dz])
+        return array([dx, dy, dz, dux, duy, duz])
 
     def _normalization(self, t, p: ndarray) -> ndarray:
         """
@@ -154,26 +165,74 @@ class PulledBackFlow(Solver):
         :param p: the current position p = (x,y,z,dx,dy,dz)
         :return: the normalized position
         """
-        return p / norm(p)
 
-    def start(self, theta: float, phi: float) -> ndarray:
+        x, y, z, ux, uy, uz = p
+        length = sqrt(ux ** 2 + uy ** 2 + uz ** 2)
+        return array([x, y, z, ux / length, uy / length, uz / length])
+
+    @staticmethod
+    def start(theta: float, phi: float) -> ndarray:
         """
         Define the starting point as the origin with the tangent vector given by angle in spherical coordinates
         :param theta: latitude (or longitude never knwo which is one)
         :param phi: longitude (or latitude)
         :return: the initial position
         """
-        return array([sin(phi) * cos(theta), sin(phi) * sin(theta), cos(phi)])
+        return array([0., 0., 0., sin(phi) * cos(theta), sin(phi) * sin(theta), cos(phi)])
 
-    def flow(self, theta: float, phi: float, t: float, step: float) -> List[Tuple[float, ndarray]]:
+    @timer
+    def export_texture_3d(self, filename: str, theta_step: float, phi_step: float, time: float, time_step: float,
+                          time_skip: int):
         """
-        Return the trajectory of the geodesic flow from the origin,
-        where the initial tangent vector is given in spherical coordinate
-        :param theta: latitude (or longitude never knwo which is one)
-        :param phi: longitude (or latitude)
-        :param t: the time to flow
-        :param step: the length of the steps
-        :return: the trajectory
+        Return 3D images index by theta,phi,time coding the position/speed achieved by the geodesic flow
+        :param filename: name of the file without extension
+        :param theta_step: the step of the grid in the theta direction
+        :param phi_step: the step of the grid in the phi direction
+        :param time: the maximal value of the time parameter
+        :param time_step: the step of the grid in the time direction
+        :param time_skip: in the image file we keep only 1/skip time values (rasterization)
+        :return: the lookup tables as 3D image files
         """
-        p0 = self.start(theta, phi)
-        return self.trajectory(0, p0, t, step)
+        # shape of the images files
+        n_theta = int(2 * pi / theta_step)
+        n_phi = int(pi / phi_step)
+        n_time = int(time / time_step)
+        shape = [n_theta, n_phi, n_time//time_skip]
+
+        # creating ITK Image objects
+        # TODO. Find how to generate image files with a 5D vector at each pixel
+        img_x = sitk.Image(shape, sitk.sitkFloat32)
+        img_y = sitk.Image(shape, sitk.sitkFloat32)
+        img_z = sitk.Image(shape, sitk.sitkFloat32)
+        img_theta = sitk.Image(shape, sitk.sitkFloat32)
+        img_phi = sitk.Image(shape, sitk.sitkFloat32)
+
+        for i in range(n_theta):
+            for j in range(n_phi):
+                theta = 2 * pi * i / n_theta
+                phi = pi * j / n_phi
+                p = self.start(theta, phi)
+                for k in range(n_time):
+                    if k % time_skip == 0:
+                        img_x[i, j, k // time_skip] = p[0]
+                        img_y[i, j, k // time_skip] = p[1]
+                        img_z[i, j, k // time_skip] = p[2]
+                        _, theta, phi = self.car2sph(p[3], p[4], p[5])
+                        img_theta[i, j, k // time_skip] = theta
+                        img_phi[i, j, k // time_skip] = phi
+
+                    t = k * time_step
+                    p = self._step(t, p, time_step)
+
+        writer = sitk.ImageFileWriter()
+
+        writer.SetFileName(filename + '_x.nrrd')
+        writer.Execute(img_x)
+        writer.SetFileName(filename + '_y.nrrd')
+        writer.Execute(img_y)
+        writer.SetFileName(filename + '_z.nrrd')
+        writer.Execute(img_z)
+        writer.SetFileName(filename + '_theta.nrrd')
+        writer.Execute(img_theta)
+        writer.SetFileName(filename + '_phi.nrrd')
+        writer.Execute(img_phi)
