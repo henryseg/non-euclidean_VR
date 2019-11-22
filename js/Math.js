@@ -407,6 +407,7 @@ function initObjects() {
 
 
     globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, 1, 0));
+    globalObjectState.boost.translateByVector(new THREE.Vector3(0,0,-1));
     //velocity is into screen
     //ang velocity is about y axis (earth's poles)
 
@@ -419,7 +420,7 @@ function initObjects() {
 //MOVE THE PLANETS AROUND
 stepSize = 0.001;
 setInterval(function () {
-        globalObjectState.localFlow(stepSize);
+        //globalObjectState.localFlow(stepSize);
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );
@@ -569,5 +570,5 @@ function updateMaterial() {
     g_material.uniforms.globalObjectBoostMat.value = globalObjectState.boost.matrix;
 
     g_material.uniforms.globalObjectFacing.value = globalObjectState.facing;
-    console.log(globalObjectState.facing.elements);
+    //console.log(globalObjectState.facing.elements);
 }
