@@ -552,11 +552,17 @@ function initObjects() {
 
     PointLightObject(new THREE.Vector3(-1., 0, 0), lightColor5);
 
-    earthPosition = new Position().flow(new THREE.Vector3(0, 0, -1.));
+    earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
 
-    moonPosition = new Position().flow(new THREE.Vector3(0.6, 0, -1.));
+    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -2)).boost);
 
-    sunPosition = new Position().flow(new THREE.Vector3(-2.8, 0, -1.7));
+    moonState = new State().setVelocity(new THREE.Vector3(1,-1, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
+
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(-1, 1, -2)).boost);
+
+    sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
+
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -5)).boost);
 
 }
 
