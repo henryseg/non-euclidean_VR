@@ -15,7 +15,7 @@ import {fixOutsideCentralCell} from "./Math.js";
 
 // This file should be geometry independent
 
-let Controls = function (done) {
+let Controls = function () {
     // this.phoneVR = new PhoneVR();
     let speed = 0.2;
     //this.defaultPosition = new Vector3();
@@ -166,9 +166,8 @@ let Controls = function (done) {
             navigator.mozGetVRDevices(gotVRDevices);
 
         function gotVRDisplay(devices){
-            var vrInput;
-            var error;
-            for(var i = 0; i < devices.length; i++){
+            let vrInput;
+            for(let i = 0; i < devices.length; i++){
                 if(devices[i] instanceof VRDisplay){
                     vrInput = devices[i];
                     self._vrInput = vrInput;
@@ -178,9 +177,8 @@ let Controls = function (done) {
         }
 
         function gotVRDevices(devices){
-            var vrInput;
-            var error;
-            for(var i = 0; i < devices.length; i++){
+            let vrInput;
+            for(let i = 0; i < devices.length; i++){
                 if(devices[i] instanceof PositionSensorVRDevice){
                     vrInput = devices[i];
                     self._vrInput = vrInput;
@@ -207,7 +205,7 @@ let Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            let quat = vrState.hmd.rotation.clone().inverse();
+            //let quat = vrState.hmd.rotation.clone().inverse();
             deltaPosition = new Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);
         }
 
@@ -252,7 +250,7 @@ let Controls = function (done) {
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
-            let rotation = vrState.hmd.rotation;
+            //let rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             globals.position.localRotateFacingBy(m);
@@ -305,11 +303,11 @@ let Controls = function (done) {
     // };
 
     this.getVRState = function(){
-        var vrInput = this._vrInput;
-        var oldVRState = this._oldVRState;
-        var orientation = new Quaternion();
-        var pos = new Vector3();
-        var vrState;
+        let vrInput = this._vrInput;
+        let oldVRState = this._oldVRState;
+        let orientation = new Quaternion();
+        let pos = new Vector3();
+        let vrState;
 
         if(vrInput){
             if(vrInput.getState !== undefined){ 
@@ -317,7 +315,7 @@ let Controls = function (done) {
                 pos.fromArray(vrInput.getState().position);
             }
             else{
-                var framedata = new VRFrameData();
+                let framedata = new VRFrameData();
                 vrInput.getFrameData(framedata);
                 if(framedata.pose.orientation !== null  && framedata.pose.position !== null){
                     orientation.fromArray(framedata.pose.orientation);
@@ -326,8 +324,10 @@ let Controls = function (done) {
             }
         }
 
-        else return null;
-        if(orientation === null) return null;
+        else {
+            return null;
+        }
+        //if(orientation === null) return null;
 
         vrState = {
             hmd: {

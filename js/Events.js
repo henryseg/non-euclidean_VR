@@ -22,9 +22,10 @@ window.addEventListener('resize', onResize, false);
 function onkey(event) {
     event.preventDefault();
 
-    if (event.keyCode === 90) // z
-        globals.controls.zeroSensor();
-    else if (event.keyCode === 70) // f
+    //if (event.keyCode === 90) // z
+    //    globals.controls.zeroSensor();
+    //else
+    if (event.keyCode === 70) // f
         globals.effect.setFullScreen(true);
     else if (event.keyCode === 86 || event.keyCode === 13 || event.keyCode === 32)
         globals.effect.toggleVRMode();
