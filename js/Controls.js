@@ -23,152 +23,161 @@ let Controls = function () {
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
 
-    switch (globals.keyboard) {
-        case 'fr':
-            this.manualControls = {
-                81: {
-                    index: 1,
-                    sign: 1,
-                    active: 0
-                }, // q
-                68: {
-                    index: 1,
-                    sign: -1,
-                    active: 0
-                }, // d
-                90: {
-                    index: 0,
-                    sign: 1,
-                    active: 0
-                }, // z
-                83: {
-                    index: 0,
-                    sign: -1,
-                    active: 0
-                }, // s
-                65: {
-                    index: 2,
-                    sign: -1,
-                    active: 0
-                }, // a
-                69: {
-                    index: 2,
-                    sign: 1,
-                    active: 0
-                }, // e
-                38: {
-                    index: 3,
-                    sign: 1,
-                    active: 0
-                }, // up
-                40: {
-                    index: 3,
-                    sign: -1,
-                    active: 0
-                }, // down
-                37: {
-                    index: 4,
-                    sign: -1,
-                    active: 0
-                }, // left
-                39: {
-                    index: 4,
-                    sign: 1,
-                    active: 0
-                }, // right
-                165: {
-                    index: 5,
-                    sign: 1,
-                    active: 0
-                }, // ù
-                61: {
-                    index: 5,
-                    sign: -1,
-                    active: 0
-                }, // =
-            };
-            break;
-        default:
-            this.manualControls = {
-                65: {
-                    index: 1,
-                    sign: 1,
-                    active: 0
-                }, // a
-                68: {
-                    index: 1,
-                    sign: -1,
-                    active: 0
-                }, // d
-                87: {
-                    index: 0,
-                    sign: 1,
-                    active: 0
-                }, // w
-                83: {
-                    index: 0,
-                    sign: -1,
-                    active: 0
-                }, // s
-                81: {
-                    index: 2,
-                    sign: -1,
-                    active: 0
-                }, // q
-                69: {
-                    index: 2,
-                    sign: 1,
-                    active: 0
-                }, // e
-                38: {
-                    index: 3,
-                    sign: 1,
-                    active: 0
-                }, // up
-                40: {
-                    index: 3,
-                    sign: -1,
-                    active: 0
-                }, // down
-                37: {
-                    index: 4,
-                    sign: -1,
-                    active: 0
-                }, // left
-                39: {
-                    index: 4,
-                    sign: 1,
-                    active: 0
-                }, // right
-                222: {
-                    index: 5,
-                    sign: 1,
-                    active: 0
-                }, // single quote
-                191: {
-                    index: 5,
-                    sign: -1,
-                    active: 0
-                }, // fwd slash
-            };
-    }
+    let keyboardFR = {
+        81: {
+            index: 1,
+            sign: 1,
+            active: 0
+        }, // q
+        68: {
+            index: 1,
+            sign: -1,
+            active: 0
+        }, // d
+        90: {
+            index: 0,
+            sign: 1,
+            active: 0
+        }, // z
+        83: {
+            index: 0,
+            sign: -1,
+            active: 0
+        }, // s
+        65: {
+            index: 2,
+            sign: -1,
+            active: 0
+        }, // a
+        69: {
+            index: 2,
+            sign: 1,
+            active: 0
+        }, // e
+        38: {
+            index: 3,
+            sign: 1,
+            active: 0
+        }, // up
+        40: {
+            index: 3,
+            sign: -1,
+            active: 0
+        }, // down
+        37: {
+            index: 4,
+            sign: -1,
+            active: 0
+        }, // left
+        39: {
+            index: 4,
+            sign: 1,
+            active: 0
+        }, // right
+        165: {
+            index: 5,
+            sign: 1,
+            active: 0
+        }, // ù
+        61: {
+            index: 5,
+            sign: -1,
+            active: 0
+        }, // =
+    };
+    let keyboardUS = {
+        65: {
+            index: 1,
+            sign: 1,
+            active: 0
+        }, // a
+        68: {
+            index: 1,
+            sign: -1,
+            active: 0
+        }, // d
+        87: {
+            index: 0,
+            sign: 1,
+            active: 0
+        }, // w
+        83: {
+            index: 0,
+            sign: -1,
+            active: 0
+        }, // s
+        81: {
+            index: 2,
+            sign: -1,
+            active: 0
+        }, // q
+        69: {
+            index: 2,
+            sign: 1,
+            active: 0
+        }, // e
+        38: {
+            index: 3,
+            sign: 1,
+            active: 0
+        }, // up
+        40: {
+            index: 3,
+            sign: -1,
+            active: 0
+        }, // down
+        37: {
+            index: 4,
+            sign: -1,
+            active: 0
+        }, // left
+        39: {
+            index: 4,
+            sign: 1,
+            active: 0
+        }, // right
+        222: {
+            index: 5,
+            sign: 1,
+            active: 0
+        }, // single quote
+        191: {
+            index: 5,
+            sign: -1,
+            active: 0
+        }, // fwd slash
+    };
 
-    this._init = function(){
+    this.setKeyboard = function(keyboard) {
+        switch (keyboard) {
+            case 'fr':
+                this.manualControls = keyboardFR;
+                break;
+            case 'us':
+                this.manualControls = keyboardUS;
+                break;
+            default:
+                this.manualControls = keyboardUS;
+        }
+    };
+
+    this._init = function () {
         let self = this;
+        this.setKeyboard('us');
         this._oldVRState = undefined;
-        if(!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices) 
+        if (!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices)
             return;
-        if(navigator.getVRDisplays)
+        if (navigator.getVRDisplays)
             navigator.getVRDisplays().then(gotVRDisplay);
-        else if(navigator.getVRDevices)
+        else if (navigator.getVRDevices)
             navigator.getVRDevices().then(gotVRDevices);
         else
             navigator.mozGetVRDevices(gotVRDevices);
 
-        function gotVRDisplay(devices){
+        function gotVRDisplay(devices) {
             let vrInput;
-            for(let i = 0; i < devices.length; i++){
-                if(devices[i] instanceof VRDisplay){
+            for (let i = 0; i < devices.length; i++) {
+                if (devices[i] instanceof VRDisplay) {
                     vrInput = devices[i];
                     self._vrInput = vrInput;
                     break;
@@ -176,10 +185,10 @@ let Controls = function () {
             }
         }
 
-        function gotVRDevices(devices){
+        function gotVRDevices(devices) {
             let vrInput;
-            for(let i = 0; i < devices.length; i++){
-                if(devices[i] instanceof PositionSensorVRDevice){
+            for (let i = 0; i < devices.length; i++) {
+                if (devices[i] instanceof PositionSensorVRDevice) {
                     vrInput = devices[i];
                     self._vrInput = vrInput;
                     break;
@@ -188,7 +197,7 @@ let Controls = function () {
         }
     };
 
-    this._init(); 
+    this._init();
 
     this.update = function () {
         let vrState = this.getVRState();
@@ -204,7 +213,7 @@ let Controls = function () {
         let deltaPosition = new Vector3();
 
         //Check if head has translated (tracking)
-        if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
+        if (vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0) {
             //let quat = vrState.hmd.rotation.clone().inverse();
             deltaPosition = new Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);
         }
@@ -249,7 +258,7 @@ let Controls = function () {
         globals.position.localRotateFacingBy(m);
 
         //Check for headset rotation (tracking)
-        if(vrState !== null && vrState.hmd.lastRotation !== undefined){
+        if (vrState !== null && vrState.hmd.lastRotation !== undefined) {
             //let rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
@@ -302,29 +311,26 @@ let Controls = function () {
 
     // };
 
-    this.getVRState = function(){
+    this.getVRState = function () {
         let vrInput = this._vrInput;
         let oldVRState = this._oldVRState;
         let orientation = new Quaternion();
         let pos = new Vector3();
         let vrState;
 
-        if(vrInput){
-            if(vrInput.getState !== undefined){ 
+        if (vrInput) {
+            if (vrInput.getState !== undefined) {
                 orientation.fromArray(vrInput.getState().orientation);
                 pos.fromArray(vrInput.getState().position);
-            }
-            else{
+            } else {
                 let framedata = new VRFrameData();
                 vrInput.getFrameData(framedata);
-                if(framedata.pose.orientation !== null  && framedata.pose.position !== null){
+                if (framedata.pose.orientation !== null && framedata.pose.position !== null) {
                     orientation.fromArray(framedata.pose.orientation);
                     pos.fromArray(framedata.pose.position);
                 }
             }
-        }
-
-        else {
+        } else {
             return null;
         }
         //if(orientation === null) return null;
@@ -335,15 +341,15 @@ let Controls = function () {
                 position: pos
             }
         };
-        
-        if(oldVRState !== undefined){
+
+        if (oldVRState !== undefined) {
             vrState.hmd.lastPosition = oldVRState.hmd.position;
             vrState.hmd.lastRotation = oldVRState.hmd.rotation;
         }
 
         this._oldVRState = vrState;
         return vrState;
-    };     
+    };
 
     //--------------------------------------------------------------------
     // Get phone orientation info
@@ -408,4 +414,4 @@ let Controls = function () {
     }
 };
 
-export{Controls};
+export {Controls};

@@ -30,7 +30,6 @@ import {Controls} from './Controls.js';
 
 let globals = {
     ipDist: 0.03200000151991844,
-    keyboard:'fr', // can be 'fr' or 'us' for the moment
     effect:undefined,
     material:undefined,
     controls:undefined,
