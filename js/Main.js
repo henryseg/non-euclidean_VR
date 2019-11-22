@@ -20,27 +20,30 @@ import {initGui} from "./UI.js";
 import {initEvents} from './Events.js';
 import {Controls} from './Controls.js';
 
-//import * as THREE from './module/three.module.js';
-//-------------------------------------------------------
-// Constant Variables
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Global Variables
+//----------------------------------------------------------------------------------------------------------------------
 
-let globalVar = {
+/*
+    TODO: break the globals in several groups. Indeed the other modules do not need to access all the variables.
+ */
+
+let globals = {
     ipDist: 0.03200000151991844,
-    g_keyboard:'fr', // can be 'fr' or 'us' for the moment
-    g_effect:undefined,
-    g_material:undefined,
-    g_controls:undefined,
-    g_position:undefined,
-    g_cellPosition:undefined,
-    g_invCellPosition:undefined,
-    g_phoneOrient:undefined,
-    g_renderer:undefined,
-    g_screenResolution:undefined,
-    g_vr:0,
-    g_leftPosition:undefined,
-    g_rightPosition:undefined,
-    g_stereoScreenOffset : 0.03,
+    keyboard:'fr', // can be 'fr' or 'us' for the moment
+    effect:undefined,
+    material:undefined,
+    controls:undefined,
+    position:undefined,
+    cellPosition:undefined,
+    invCellPosition:undefined,
+    phoneOrient:undefined,
+    renderer:undefined,
+    screenResolution:undefined,
+    vr:0,
+    leftPosition:undefined,
+    rightPosition:undefined,
+    stereoScreenOffset : 0.03,
     gens: undefined,
     invGens: undefined,
     lightPositions:[],
@@ -48,90 +51,42 @@ let globalVar = {
     globalObjectPosition:undefined
 };
 
-//let ipDist = 0.03200000151991844; // inter pupil
+//----------------------------------------------------------------------------------------------------------------------
+// Scene variables
+//----------------------------------------------------------------------------------------------------------------------
 
-/*
-const g_keyboard = 'fr'; // can be 'fr' or 'us' for the moment
-*/
-
-//-------------------------------------------------------
-// Global Variables
-//-------------------------------------------------------
-
-/*
-let g_effect;
-let g_material;
-let g_controls;
-
-
-let g_position;
-
-let g_cellPosition, g_invCellPosition;
-
-let g_phoneOrient;
-
-let g_renderer;
-let g_screenResolution;
-let g_vr = 0;
-
-let g_leftPosition, g_rightPosition;
-let g_stereoScreenOffset = 0.03;
-
- */
-//-------------------------------------------------------
-// Scene Variables
-//-------------------------------------------------------
 let scene;
 let mesh;
 let camera;
 let stats;
-//-------------------------------------------------------
-// Sets up precalculated values
-//-------------------------------------------------------
-/*
-let gens;
-let invGens;
 
- */
-
-//-------------------------------------------------------
-// Sets up the global objects
-//-------------------------------------------------------
-/*
-let lightPositions = [];
-let lightIntensities = [];
-
-let globalObjectPosition;
-//var globalObjectBoost;
-
- */
-
-//-------------------------------------------------------
-// Other global variables
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Shader variables
+//----------------------------------------------------------------------------------------------------------------------
 
 let mainFrag;
 
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Sets up the scene
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+
 function init() {
     //Setup our THREE scene--------------------------------
     scene = new Scene();
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('webgl2');
-    globalVar.g_renderer = new WebGLRenderer({
+    globals.renderer = new WebGLRenderer({
         canvas: canvas,
         context: context
     });
-    document.body.appendChild(globalVar.g_renderer.domElement);
-    globalVar.g_screenResolution = new Vector2(window.innerWidth, window.innerHeight);
-    globalVar.g_effect = new THREE.VREffect(globalVar.g_renderer);
+    document.body.appendChild(globals.renderer.domElement);
+    globals.screenResolution = new Vector2(window.innerWidth, window.innerHeight);
+    globals.effect = new THREE.VREffect(globals.renderer);
     camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
-    globalVar.g_controls = new Controls();
+    globals.controls = new Controls();
     initGeometry();
     initObjects();
-    globalVar.g_phoneOrient = [null, null, null];
+    globals.phoneOrient = [null, null, null];
 
     loadShaders();
     initEvents();
@@ -151,7 +106,7 @@ function loadShaders() {
     loader.load('shaders/raymarch.glsl', function (main) {
         mainFrag = main;
         setupMaterial(main);
-        globalVar.g_effect.setSize(globalVar.g_screenResolution.x, globalVar.g_screenResolution.y);
+        globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
         //Setup a "quad" to render on-------------------------
         let geom = new BufferGeometry();
@@ -165,28 +120,30 @@ function loadShaders() {
             -1.0, 1.0, 0.0
         ]);
         geom.setAttribute('position', new BufferAttribute(vertices, 3));
-        mesh = new Mesh(geom, globalVar.g_material);
+        mesh = new Mesh(geom, globals.material);
         scene.add(mesh);
         animate();
     });
 }
 
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Where our scene actually renders out to screen
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+
 function animate() {
     stats.begin();
-    globalVar.g_controls.update();
+    globals.controls.update();
     updateMaterial();
     THREE.VRController.update();
-    globalVar.g_effect.render(scene, camera, animate);
+    globals.effect.render(scene, camera, animate);
     stats.end();
 }
 
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Where the magic happens
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+
 init();
 
 
-export{init, globalVar};
+export{init, globals};

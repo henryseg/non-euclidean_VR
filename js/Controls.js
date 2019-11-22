@@ -9,13 +9,13 @@ import {
     Matrix4
 } from './module/three.module.js';
 
-import {globalVar} from './Main.js';
+import {globals} from './Main.js';
 
 import {fixOutsideCentralCell} from "./Math.js";
 
 // This file should be geometry independent
 
-let Controls = function (done) {
+let Controls = function () {
     // this.phoneVR = new PhoneVR();
     let speed = 0.2;
     //this.defaultPosition = new Vector3();
@@ -23,7 +23,7 @@ let Controls = function (done) {
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
 
-    switch (globalVar.g_keyboard) {
+    switch (globals.keyboard) {
         case 'fr':
             this.manualControls = {
                 81: {
@@ -166,9 +166,8 @@ let Controls = function (done) {
             navigator.mozGetVRDevices(gotVRDevices);
 
         function gotVRDisplay(devices){
-            var vrInput;
-            var error;
-            for(var i = 0; i < devices.length; i++){
+            let vrInput;
+            for(let i = 0; i < devices.length; i++){
                 if(devices[i] instanceof VRDisplay){
                     vrInput = devices[i];
                     self._vrInput = vrInput;
@@ -178,9 +177,8 @@ let Controls = function (done) {
         }
 
         function gotVRDevices(devices){
-            var vrInput;
-            var error;
-            for(var i = 0; i < devices.length; i++){
+            let vrInput;
+            for(let i = 0; i < devices.length; i++){
                 if(devices[i] instanceof PositionSensorVRDevice){
                     vrInput = devices[i];
                     self._vrInput = vrInput;
@@ -207,23 +205,23 @@ let Controls = function (done) {
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
-            let quat = vrState.hmd.rotation.clone().inverse();
+            //let quat = vrState.hmd.rotation.clone().inverse();
             deltaPosition = new Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
             //console.log('ici');
-            deltaPosition = globalVar.g_position.getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0]));
-            deltaPosition = deltaPosition.add(globalVar.g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
-            deltaPosition = deltaPosition.add(globalVar.g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
+            deltaPosition = globals.position.getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0]));
+            deltaPosition = deltaPosition.add(globals.position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
+            deltaPosition = deltaPosition.add(globals.position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        globalVar.g_position.localFlow(deltaPosition);
+        globals.position.localFlow(deltaPosition);
 
 
-        let fixIndex = fixOutsideCentralCell(globalVar.g_position); //moves camera back to main cell
+        let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
         if (fixIndex !== -1) {
-            globalVar.g_cellPosition.localTranslateBy(globalVar.invGens[fixIndex]);
-            globalVar.g_invCellPosition.getInverse(globalVar.g_cellPosition);
+            globals.cellPosition.localTranslateBy(globals.invGens[fixIndex]);
+            globals.invCellPosition.getInverse(globals.cellPosition);
         }
 
 
@@ -238,8 +236,8 @@ let Controls = function (done) {
         );
 
         //Handle Phone Input
-        if (globalVar.g_phoneOrient[0] !== null) {
-            let rotation = this.getQuatFromPhoneAngles(new Vector3().fromArray(globalVar.g_phoneOrient));
+        if (globals.phoneOrient[0] !== null) {
+            let rotation = this.getQuatFromPhoneAngles(new Vector3().fromArray(globals.phoneOrient));
             if (this.oldRotation === undefined) this.oldRotation = rotation;
             deltaRotation = new Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
             this.oldRotation = rotation;
@@ -248,14 +246,14 @@ let Controls = function (done) {
         deltaRotation.normalize();
 
         let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        globalVar.g_position.localRotateFacingBy(m);
+        globals.position.localRotateFacingBy(m);
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
-            let rotation = vrState.hmd.rotation;
+            //let rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-            globalVar.g_position.localRotateFacingBy(m);
+            globals.position.localRotateFacingBy(m);
         }
 
     };
@@ -305,11 +303,11 @@ let Controls = function (done) {
     // };
 
     this.getVRState = function(){
-        var vrInput = this._vrInput;
-        var oldVRState = this._oldVRState;
-        var orientation = new Quaternion();
-        var pos = new Vector3();
-        var vrState;
+        let vrInput = this._vrInput;
+        let oldVRState = this._oldVRState;
+        let orientation = new Quaternion();
+        let pos = new Vector3();
+        let vrState;
 
         if(vrInput){
             if(vrInput.getState !== undefined){ 
@@ -317,7 +315,7 @@ let Controls = function (done) {
                 pos.fromArray(vrInput.getState().position);
             }
             else{
-                var framedata = new VRFrameData();
+                let framedata = new VRFrameData();
                 vrInput.getFrameData(framedata);
                 if(framedata.pose.orientation !== null  && framedata.pose.position !== null){
                     orientation.fromArray(framedata.pose.orientation);
@@ -326,8 +324,10 @@ let Controls = function (done) {
             }
         }
 
-        else return null;
-        if(orientation === null) return null;
+        else {
+            return null;
+        }
+        //if(orientation === null) return null;
 
         vrState = {
             hmd: {

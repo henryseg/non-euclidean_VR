@@ -1,15 +1,15 @@
 // This file should be geometry independent
 
-import {globalVar} from "./Main.js";
+import {globals} from "./Main.js";
 
 //--------------------------------------------------------------------
 // Handle window resize
 //--------------------------------------------------------------------
 let onResize = function () {
-    globalVar.g_effect.setSize(window.innerWidth, window.innerHeight);
-    if (globalVar.g_material != null) {
-        globalVar.g_material.uniforms.screenResolution.value.x = window.innerWidth;
-        globalVar.g_material.uniforms.screenResolution.value.y = window.innerHeight;
+    globals.effect.setSize(window.innerWidth, window.innerHeight);
+    if (globals.material != null) {
+        globals.material.uniforms.screenResolution.value.x = window.innerWidth;
+        globals.material.uniforms.screenResolution.value.y = window.innerHeight;
     }
 };
 
@@ -22,26 +22,27 @@ window.addEventListener('resize', onResize, false);
 function onkey(event) {
     event.preventDefault();
 
-    if (event.keyCode === 90) // z
-        globalVar.g_controls.zeroSensor();
-    else if (event.keyCode === 70) // f
-        globalVar.g_effect.setFullScreen(true);
+    //if (event.keyCode === 90) // z
+    //    globals.controls.zeroSensor();
+    //else
+    if (event.keyCode === 70) // f
+        globals.effect.setFullScreen(true);
     else if (event.keyCode === 86 || event.keyCode === 13 || event.keyCode === 32)
-        globalVar.g_effect.toggleVRMode();
+        globals.effect.toggleVRMode();
 }
 
 //--------------------------------------------------------------------
 // Listen for keys for movement/rotation
 //--------------------------------------------------------------------
 function key(event, sign) {
-    let control = globalVar.g_controls.manualControls[event.keyCode];
+    let control = globals.controls.manualControls[event.keyCode];
     if (control === undefined || sign === 1 && control.active || sign === -1 && !control.active) return;
 
     control.active = (sign === 1);
     if (control.index <= 2)
-        globalVar.g_controls.manualRotateRate[control.index] += sign * control.sign;
+        globals.controls.manualRotateRate[control.index] += sign * control.sign;
     else if (control.index <= 5)
-        globalVar.g_controls.manualMoveRate[control.index - 3] += sign * control.sign;
+        globals.controls.manualMoveRate[control.index - 3] += sign * control.sign;
 }
 
 
@@ -49,22 +50,22 @@ function key(event, sign) {
 // Phone screen tap for movement
 //--------------------------------------------------------------------
 function resetToMono() {
-    globalVar.g_vr = 0;
+    globals.vr = 0;
     //set material info
-    globalVar.g_material.uniforms.isStereo.value = 0;
-    globalVar.g_material.uniforms.screenResolution.value.x = window.innerWidth;
-    globalVar.g_material.uniforms.screenResolution.value.y = window.innerHeight;
+    globals.material.uniforms.isStereo.value = 0;
+    globals.material.uniforms.screenResolution.value.x = window.innerWidth;
+    globals.material.uniforms.screenResolution.value.y = window.innerHeight;
 }
 
 function tap(event, sign) {
     if (event.target.id === "vr-icon") {
-        if (globalVar.g_vr === 1) resetToMono();
+        if (globals.vr === 1) resetToMono();
         else {
-            globalVar.g_material.uniforms.isStereo.value = 1;
-            globalVar.g_vr = 1;
+            globals.material.uniforms.isStereo.value = 1;
+            globals.vr = 1;
         }
     }
-    globalVar.g_controls.manualMoveRate[0] += sign;
+    globals.controls.manualMoveRate[0] += sign;
 }
 
 
@@ -73,10 +74,10 @@ function tap(event, sign) {
 //--------------------------------------------------------------------
 function click(event) {
     if (event.target.id === "vr-icon") {
-        if (globalVar.g_vr === 1) resetToMono();
+        if (globals.vr === 1) resetToMono();
         else {
-            globalVar.g_material.uniforms.isStereo.value = 1;
-            globalVar.g_vr = 1;
+            globals.material.uniforms.isStereo.value = 1;
+            globals.vr = 1;
         }
     }
     // window.addEventListener('deviceorientation', getScreenOrientation);
@@ -96,9 +97,9 @@ function click(event) {
 // Get phone's orientation
 //--------------------------------------------------------------------
 function getScreenOrientation(event) {
-    globalVar.g_phoneOrient[0] = event.beta;
-    globalVar.g_phoneOrient[1] = event.gamma;
-    globalVar.g_phoneOrient[2] = event.alpha;
+    globals.phoneOrient[0] = event.beta;
+    globals.phoneOrient[1] = event.gamma;
+    globals.phoneOrient[2] = event.alpha;
 }
 
 function initEvents() {
