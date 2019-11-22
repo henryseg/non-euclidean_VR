@@ -397,6 +397,7 @@ uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 uniform highp sampler3D lookupTable;
+uniform float depth;
 
 
 //--------------------------------------------
@@ -806,32 +807,27 @@ void main(){
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
     if (isStereo == 1){
-
-
         if (isLeft){
-            rayDir=rotateFacing(leftFacing, rayDir);
+            rayDir = rotateFacing(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
         }
         else {
-            rayDir=rotateFacing(rightFacing, rayDir);
+            rayDir = rotateFacing(rightFacing, rayDir);
             rayDir = translate(rightBoost, rayDir);
         }
     }
     else {
-        rayDir=rotateFacing(facing, rayDir);
+        rayDir = rotateFacing(facing, rayDir);
         rayDir = translate(currentBoost, rayDir);
     }
 
-
-    //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
-    raymarch(rayDir, totalFixMatrix);
-    //hitWhich = 5;
-    //vec3 p = vec3(62.*gl_FragCoord.x/screenResolution.x, 31.*gl_FragCoord.y/screenResolution.y, 29.);
-    //vec3 val = texture(lookupTable, vec3(26, 28, 29)).rgb;
-    //debugColor = val;
-
+    //raymarch(rayDir, totalFixMatrix);
+    hitWhich = 5;
+    vec3 p = vec3(62.*gl_FragCoord.x/screenResolution.x, 31.*gl_FragCoord.y/screenResolution.y, 0.005*depth);
+    debugColor = vec3(0.05*(10. + texture(lookupTable, p).r), 0., 0.);
+    //debugColor = vec3(gl_FragCoord.x / screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.);
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
@@ -839,29 +835,26 @@ void main(){
         out_FragColor = vec4(0.1);
         return;
     }
-    else if (hitWhich == 1){ // global lights
+    else if (hitWhich == 1){
+        // global lights
         out_FragColor = vec4(globalLightColor.rgb, 1.0);
         return;
     }
-    else if (hitWhich == 5){ //debug
+    else if (hitWhich == 5){
+        //debug
         out_FragColor = vec4(debugColor, 1.0);
     }
-
-    else if (hitWhich == 2){ // global object
-
+    else if (hitWhich == 2){
+        // global object
         vec3 pixelColor=ballColor(totalFixMatrix, sampletv);
-
         out_FragColor = vec4(pixelColor, 1.0);
-
         return;
     }
-
-    else { // objects
-
+    else {
+        // local objects
         vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
-
         out_FragColor=vec4(pixelColor, 1.0);
-
+        return;
     }
 
 }

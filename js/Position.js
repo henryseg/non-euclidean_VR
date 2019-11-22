@@ -27,6 +27,15 @@ import {
 // length of the step when integrating the geodesic flow with an Euler method
 const EULER_STEP = 0.001;
 
+Matrix4.prototype.add = function (matrix) {
+    // addition of tow 4x4 matrices
+    this.set.apply(this, [].map.call(this.elements, function (c, i) {
+        return c + matrix.elements[i];
+    }));
+    return this;
+};
+
+
 const ORIGIN = new Vector4(0, 0, 0, 1);
 
 function Position() {
@@ -113,18 +122,18 @@ Position.prototype.localFlow = function (v) {
     const dist = v.length();
     const n = dist / EULER_STEP;
     let u = v.clone().normalize();
-    let field = new THREE.Vector3();
+    let field = new Vector3();
     let pos_aux = ORIGIN.clone().translateBy(this.boost);
-    let vec_aux = new THREE.Vector4();
-    let mat_aux = new THREE.Matrix4();
-    let parallel = new THREE.Matrix4();
+    let vec_aux = new Vector4();
+    let mat_aux = new Matrix4();
+    let parallel = new Matrix4();
 
     for (let i = 0; i < n; i++) {
         // position of the geodesic at time i*step
         //pos_aux = ORIGIN.clone().translateBy(this.boost);
 
         // computing the position of the geodesic at time (i+1)*step
-        vec_aux = new THREE.Vector4(u.x, u.y, u.z, 0);
+        vec_aux = new Vector4(u.x, u.y, u.z, 0);
         vec_aux.translateBy(this.boost).multiplyScalar(EULER_STEP);
         pos_aux.add(vec_aux);
         // update the boost accordingly
@@ -234,7 +243,7 @@ Position.prototype.clone = function () {
  */
 
 Vector3.prototype.rotateByFacing = function (position) {
-    let aux = new THREE.Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
+    let aux = new Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
     this.set(aux.x, aux.y, aux.z);
     return this;
 };
