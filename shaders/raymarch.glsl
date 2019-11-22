@@ -801,7 +801,6 @@ void main(){
     globalObjectBoost=Isometry(globalObjectBoostMat);
 
 
-
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
@@ -825,8 +824,15 @@ void main(){
     Isometry totalFixMatrix = identityIsometry;
     //raymarch(rayDir, totalFixMatrix);
     hitWhich = 5;
-    vec3 p = vec3(62.*gl_FragCoord.x/screenResolution.x, 31.*gl_FragCoord.y/screenResolution.y, 0.005*depth);
-    debugColor = vec3(0.05*(10. + texture(lookupTable, p).r), 0., 0.);
+    // the coordinate used to get data from the texture are between 0 and 1
+    vec3 p = vec3(gl_FragCoord.x/screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.005*depth);
+    float z = texture(lookupTable, p).r;
+    if (z > 0.){
+        debugColor = vec3(0., 0.07*z, 0.);
+    }
+    else {
+        debugColor = vec3(0., 0., -0.07*z);
+    }
     //debugColor = vec3(gl_FragCoord.x / screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.);
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
