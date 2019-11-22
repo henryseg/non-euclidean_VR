@@ -12,10 +12,6 @@ function State() {
 
 
 
-State.prototype.setVelocity = function (velocity) {
-    this.velocity = velocity.clone();
-    return this;
-}
 
 
 State.prototype.setBoost = function (boost) {
@@ -23,10 +19,13 @@ State.prototype.setBoost = function (boost) {
     return this;
 };
 
+
+
 State.prototype.setFacing = function (facing) {
     this.facing = facing.clone();
     return this;
 };
+
 
 State.prototype.setVelocity = function (velocity) {
     this.velocity = velocity.clone();

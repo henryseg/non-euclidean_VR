@@ -381,6 +381,8 @@ function initGeometry() {
 }
 
 
+let numLights = 4;
+
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
     let isom = new Position().localFlow(v).boost;
@@ -403,22 +405,36 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
 
+    earthState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+
+    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -1)).boost);
+
+    moonState = new State().setVelocity(new THREE.Vector3(0, 1, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(0, -0.3, -1)).boost);
+
+    sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
+
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(2, 0, 0)).boost);
+
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
 
-    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, 1, 0));
-    //velocity is into screen
-    //ang velocity is about y axis (earth's poles)
+    //    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+    //    //velocity is into screen
+    //    //ang velocity is about y axis (earth's poles)
 
 
 }
 
-
-//MOVE THE PLANETS AROUND
+//
+////MOVE THE PLANETS AROUND
 stepSize = 0.001;
 setInterval(function () {
 
-        globalObjectState.localFlow(stepSize);
+        earthState.localFlow(stepSize);
+        moonState.localFlow(stepSize);
+        sunState.localFlow(stepSize);
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );
@@ -497,18 +513,68 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: lightPositions
             },
-            globalObjectBoostMat: {
-                type: "m4",
-                value: globalObjectState.boost.matrix
+            numLights: {
+                type: "i",
+                value: numLights
             },
-            globalObjectFacing: {
-                type: "m4",
-                value: globalObjectState.facing
+
+            centerSphereRad: {
+                type: "f",
+                value: 0.75
             },
-            globalSphereRad: {
+            vertexSphereRad: {
+                type: "f",
+                value: 0
+            },
+
+            earthBoostMat: {
+                type: "m4",
+                value: earthState.boost.matrix
+            },
+
+            earthFacing: {
+                type: "m4",
+                value: earthState.facing
+            },
+
+            earthRad: {
                 type: "f",
                 value: 0.2
             },
+
+            moonBoostMat: {
+                type: "m4",
+                value: moonState.boost.matrix
+            },
+
+            moonFacing: {
+                type: "m4",
+                value: moonState.facing
+            },
+
+            moonRad: {
+                type: "f",
+                value: 0.07
+            },
+
+            sunBoostMat: {
+                type: "m4",
+                value: sunState.boost.matrix
+            },
+
+            sunFacing: {
+                type: "m4",
+                value: sunState.facing
+            },
+
+
+            sunRad: {
+                type: "f",
+                value: 1.
+            },
+
+
+
             earthCubeTex: { //earth texture to global object
                 type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
@@ -520,6 +586,30 @@ function setupMaterial(fShader) {
                         'posz.jpg',
                         'negz.jpg'
                     ])
+            },
+            moonCubeTex: { //texture to global object
+                type: "",
+                value: new THREE.CubeTextureLoader().setPath('images/moon/')
+                    .load([ //Cubemap derived Arnaud Cheritat's website pics
+                    'posx.png',
+                    'negx.png',
+                    'posy.png',
+                    'negy.png',
+                    'posz.png',
+                    'negz.png'
+                ])
+            },
+            sunCubeTex: { //texture to global object
+                type: "",
+                value: new THREE.CubeTextureLoader().setPath('images/sun/')
+                    .load([ //Cubemap derived Arnaud Cheritat's website pics
+                    'posx.png',
+                    'negx.png',
+                    'posy.png',
+                    'negy.png',
+                    'posz.png',
+                    'negz.png'
+                ])
             },
             modelHalfCube: {
                 type: "f",
@@ -565,8 +655,16 @@ function updateMaterial() {
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
-    g_material.uniforms.globalObjectBoostMat.value = globalObjectState.boost.matrix;
 
-    g_material.uniforms.globalObjectFacing.value = globalObjectState.facing;
-    console.log(globalObjectState.facing.elements);
+
+
+    g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
+    g_material.uniforms.earthFacing.value = earthState.facing;
+
+    g_material.uniforms.moonBoostMat.value = moonState.boost.matrix;
+    g_material.uniforms.moonFacing.value = moonState.facing;
+
+    g_material.uniforms.sunBoostMat.value = sunState.boost.matrix;
+    g_material.uniforms.sunFacing.value = sunState.facing;
+
 }

@@ -12,20 +12,25 @@ Some parameters that can be changed to change the scence
 
 */
 
-//determine what we draw: ball and lights,
+
+//determine what we draw: ball and lights, 
+
+const bool TILING_SCENE=true;
+const bool SOLAR_SYSTEM=true;
+const bool TILING_TEXTURE=false;
+
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
-const bool EARTH=true;
+const bool GLOBAL_LIGHTS=true;
 
-
+const bool FAKE_LIGHT = true;
 const bool FAKE_LIGHT_FALLOFF=true;
-const bool FAKE_LIGHT = false;
 const bool FAKE_DIST_SPHERE = false;
 
+const bool EARTH=true;//turn on / off earth texture
+const bool MOON=true; //turn on / off moon completely.
+const bool SUN=true; // turn on / off the sun completely
+//turn on solar lighting
 
-//const float globalObjectRadius = 0.4;
-// const float centerSphereRadius =0.67;
-const float vertexSphereSize = 0.23;//In this case its a horosphere
 
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -309,6 +314,10 @@ Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
 
+Isometry earthBoost;
+Isometry moonBoost;
+Isometry sunBoost;
+
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
@@ -328,16 +337,34 @@ uniform mat4 invCellBoostMat;
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
+uniform int numLights;
 
 uniform mat4 globalObjectBoostMat;
 uniform mat4 globalObjectFacing;
 
-uniform float globalSphereRad;
+uniform mat4 earthBoostMat;
+uniform mat4 moonBoostMat;
+uniform mat4 sunBoostMat;
+uniform mat4 earthFacing;
+uniform mat4 moonFacing;
+uniform mat4 sunFacing;
+
 uniform samplerCube earthCubeTex;
+uniform samplerCube moonCubeTex;
+uniform samplerCube sunCubeTex;
+uniform sampler2D rockTex;
+
+//--------------------------------------------
+// Sliders
+//--------------------------------------------
+uniform float centerSphereRad;
+uniform float vertexSphereRad;
+uniform float earthRad;
+uniform float moonRad;
+uniform float sunRad;
 
 uniform float modelHalfCube;//projection of cube to klein model
 uniform float stereoScreenOffset;
-
 
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
@@ -359,9 +386,9 @@ float localSceneSDF(vec4 p){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
     float centerSphereRadius = 1.333 * modelHalfCube;
     vec4 center = ORIGIN;
-    float sphere = centerSDF(p,  center, centerSphereRadius);
+    float sphere = centerSDF(p,  center, centerSphereRad);
     float vertexSphere = 0.0;
-    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
+    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereRad);
     float final = -min(vertexSphere,sphere); //unionSDF
     return final;
 
@@ -371,35 +398,118 @@ float localSceneSDF(vec4 p){
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
+
+
+
+
 float globalSceneSDF(vec4 p){
+    float earthDist;
+    float moonDist;
+    float sunDist;
     vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
-    for (int i=0; i<4; i++){
+ if(GLOBAL_LIGHTS){
+    for (int i=0; i<numLights; i++){
         float objDist;
-        objDist = sphereSDF(
-        absolutep,
-        lightPositions[i],
-            0.1
-    //    1.0/(10.0*lightIntensities[i].w)
-        );
+        objDist = sphereSDF(absolutep,lightPositions[i], 0.1);
+        
         distance = min(distance, objDist);
+        
         if (distance < EPSILON){
             hitWhich = 1;
             globalLightColor = lightIntensities[i];
             return distance;
         }
     }
+    }
     //Global Sphere Object
-    float objDist;
-    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, globalSphereRad);
-    distance = min(distance, objDist);
+   // float objDist;
+    vec4 earthPos=translate(earthBoost, ORIGIN);
+    earthDist = sphereSDF(absolutep,earthPos, earthRad);
+    distance = min(distance, earthDist);
     if (distance < EPSILON){
         hitWhich = 2;
+    return distance;
     }
+    
+    
+    if(MOON){
+        vec4 moonPos=translate(moonBoost, ORIGIN);
+        moonDist = sphereSDF(absolutep,moonPos, moonRad);
+        distance = min(distance, moonDist);
+        if (distance < EPSILON){
+            hitWhich = 4;
+        return distance;
+        }
+    }
+    
+    if(SUN){
+        vec4 sunPos=translate(sunBoost, ORIGIN);
+        sunDist = sphereSDF(absolutep,sunPos, sunRad);
+        distance = min(distance, sunDist);
+        if (distance < EPSILON){
+            hitWhich = 6;
+        return distance;
+        }
+    }
+    
     return distance;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//float globalSceneSDF(vec4 p){
+//    vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
+//    float distance = MAX_DIST;
+//    //Light Objects
+//    for (int i=0; i<4; i++){
+//        float objDist;
+//        objDist = sphereSDF(
+//        absolutep,
+//        lightPositions[i],
+//            0.1
+//    //    1.0/(10.0*lightIntensities[i].w)
+//        );
+//        distance = min(distance, objDist);
+//        if (distance < EPSILON){
+//            hitWhich = 1;
+//            globalLightColor = lightIntensities[i];
+//            return distance;
+//        }
+//    }
+//    //Global Sphere Object
+//    float objDist;
+//    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
+//    objDist = sphereSDF(absolutep, globalObjPos, globalSphereRad);
+//    distance = min(distance, objDist);
+//    if (distance < EPSILON){
+//        hitWhich = 2;
+//    }
+//    return distance;
+//}
 
 
 // check if the given point p is in the fundamental domain of the lattice.
@@ -505,7 +615,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             marchStep = MIN_DIST;
         }
         else {
-            float localDist = min(0.1, localSceneSDF(localtv.pos));
+            float localDist = min(1., localSceneSDF(localtv.pos));
             if (localDist < EPSILON){
                 hitWhich = 3;
                 sampletv = localtv;
@@ -624,20 +734,29 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //--------------------------------------------------
     //Lighting Calculations
     //--------------------------------------------------
-    //usually we'd check to ensure there are 4 lights
-    //however this is version is hardcoded so we won't
-    for (int i = 0; i<4; i++){
+
+    if(GLOBAL_LIGHTS){
+    for (int i = 0; i<numLights; i++){
         Isometry totalIsom=composeIsometry(totalFixMatrix,invCellBoost);
         TLP = translate(totalIsom,lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
-    return color;
+    //return color;
 }
 
-
-
+/*
+    if(SUN){
+        vec4 sunPos=translate(sunBoost, ORIGIN);
+        Isometry totalIsom=composeIsometry(totalFixMatrix,invCellBoost);
+        TLP = translate(totalIsom,sunPos);
+        color += lightingCalculations(SP, TLP, V, vec3(1.0), vec4(1.,0.9,0.4,3.));
+        //first three give color, last gives intensity
+}*/
+ return color;
+}
 
 //EARTH TEXTURING COLOR COMMANDS
+
 
 // return the two smallest numbers in a triplet
 vec2 smallest( in vec3 v )
@@ -663,40 +782,46 @@ vec3 boxMapping( in sampler2D sam, in tangVector point )
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
-vec3 sphereOffset(Isometry globalObjectBoost, mat4 globalObjectFacing, vec4 pt){
+vec3 sphereOffset(Isometry objectBoost, mat4 objectFacing, vec4 pt){
     pt = translate(cellBoost, pt);
-    pt = inverse(globalObjectBoost.matrix) * pt;
-    tangVector earthPoint=tangDirection(ORIGIN, pt);
-    earthPoint=rotateFacing(globalObjectFacing,earthPoint );
+    pt = inverse(objectBoost.matrix) * pt;
+    tangVector earthPoint=tangDirection(ORIGIN,pt);
+    earthPoint=rotateFacing(objectFacing, earthPoint);
     return earthPoint.dir.xyz;
 }
 
 
-vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
-    if(EARTH){
+
+vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLocation, mat4 sphFacing, samplerCube sphTexture){
+
     N = estimateNormal(sampletv.pos);
-    vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, globalObjectFacing, sampletv.pos)).xyz;
+    vec3 color = texture(sphTexture, sphereOffset(sphLocation, sphFacing, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2;
     }
-    else{
-    N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0.,0.,0.);
-        color = phongModel(totalFixMatrix, color);
-        color = 0.9*color+0.1;
-        return color;
-        //generically gray object (color= black, glowing slightly because of the 0.1)
-}
-}
+
+//Code for coloring a sphere with no texture
+//N = estimateNormal(sampletv.pos);
+//        vec3 color=vec3(0.,0.,0.);
+//        color = phongModel(totalFixMatrix, color);
+//        color = 0.9*color+0.1;
+//        return color;
+
+
+
+
+
 
 
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
      if(FAKE_LIGHT){
          //make the objects have their own color
          //color the object based on its position in the cube
+
     vec4 samplePos=modelProject(sampletv.pos);
-        //Point in the Klein Model unit cube
+        //Point in the Klein Model unit cube    
+
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
@@ -706,15 +831,25 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         vec3 color = vec3(x,y,z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
-        return 0.9*color+0.1;
-        //adding a small constant makes it glow slightly
+        
+         
+        if(TILING_TEXTURE){
+          color *= pow(boxMapping( rockTex, sampletv ),vec3(0.75));
+        }
+   
+        return color;
+        //add a small constant makes it glow slightly
      }
-    else{
-            //if we are doing TRUE LIGHTING
-            // objects have no natural color, only lit by the lights
+    else{//if we are doing TRUE LIGHTING
+       // objects have no natural color, only lit by the lights
         N = estimateNormal(sampletv.pos);
         vec3 color=vec3(0.,0.,0.);
         color = phongModel(totalFixMatrix, color);
+     
+        if(TILING_TEXTURE){
+        color *= pow(boxMapping( rockTex, sampletv ),vec3(0.75));
+        }
+        
         return color;
         }
 }
@@ -754,6 +889,10 @@ void main(){
     cellBoost=Isometry(cellBoostMat);
     invCellBoost=Isometry(invCellBoostMat);
     globalObjectBoost=Isometry(globalObjectBoostMat);
+
+    earthBoost=Isometry(earthBoostMat);
+    moonBoost=Isometry(moonBoostMat);
+    sunBoost=Isometry(sunBoostMat);
 
 
     //vec4 rayOrigin = ORIGIN;
@@ -800,15 +939,36 @@ void main(){
     else if (hitWhich == 5){ //debug
         out_FragColor = vec4(debugColor, 1.0);
     }
-
-        else if (hitWhich == 2){ // global object
-
-        vec3 pixelColor=ballColor(totalFixMatrix, sampletv);
+    
+        else if (hitWhich == 2){ // the earth
+            
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, earthBoost, earthFacing, earthCubeTex);
+            
 
         out_FragColor = vec4( pixelColor,1.0);
 
         return;
     }
+
+    
+    else if (hitWhich == 4){ // the moon
+            
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,moonBoost, moonFacing, moonCubeTex);
+            
+        out_FragColor = vec4(pixelColor,1.0);
+            
+        return;
+    }
+    
+else if (hitWhich == 6){ // the sun
+            
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,sunBoost, sunFacing, sunCubeTex);
+            
+        out_FragColor = vec4(pixelColor,1.0);
+            
+        return;
+    }
+    
 
     else { // objects
 
