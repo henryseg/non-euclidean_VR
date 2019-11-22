@@ -419,7 +419,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
 
-    earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(2);
+    earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
 
     earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -2)).boost);
 
@@ -448,7 +448,7 @@ function initObjects() {
 stepSize = 0.001;
 setInterval(function () {
 
-        if(edist(earthState,moonState)>.4){
+        if(edist(earthState,moonState)>.27){
             earthState.localFlow(stepSize);
             moonState.localFlow(stepSize);            
         }else{
@@ -620,7 +620,7 @@ function setupMaterial(fShader) {
 
             moonRad: {
                 type: "f",
-                value: 0.2
+                value: 0.07
             },
 
             sunBoostMat: {
