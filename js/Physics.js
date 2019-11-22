@@ -223,7 +223,7 @@ State.prototype.tangDirectionTo = function (state) {
 //returns the position of the point stored by state
 //really, should be doing this to position and using it here
 State.prototype.positionPoint = function () {
-    return ORIGIN.applyMatrix4(this.boost.matrix.clone());
+    return ORIGIN.clone().applyMatrix4(this.boost.matrix.clone());
 }
 
 //returns the distance from THIS to STATE

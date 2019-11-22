@@ -309,18 +309,25 @@ function edist(state1,state2){
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
-function geomDist(v) {
-    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+//return distance of a point p from the origin;
+function geomDistance(p) {
+    return Math.sqrt(p.x*p.x+p.y*p.y+p.z*p.z);
 }
 
+//returns the tangent vector at the origin which points to P in the model of the geometry
+function tangDirection(p) {
+    direction = p.sub(ORIGIN.clone().multiplyScalar(p.w));
+    direction = direction.normalize();
+    return direction;
+}
 
 function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
-    let bestDist = geomDist(cPos);
+    let bestDist = geomDistance(cPos);
     let bestIndex = -1;
     for (let i = 0; i < gens.length; i++) {
         let pos = cPos.clone().translateBy(gens[i]);
-        let dist = geomDist(pos);
+        let dist = geomDistance(pos);
         if (dist < bestDist) {
             bestDist = dist;
             bestIndex = i;
