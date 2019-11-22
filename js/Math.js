@@ -371,8 +371,8 @@ function geomDistance(p) {
 
 //returns the tangent vector at the origin which points to P in the model of the geometry
 function tangDirection(p) {
-    direction = p - ORIGIN.multiplyScalar(p.w);
-    direction = direction.normalize();
+    direction = p.sub(ORIGIN.clone().multiplyScalar(p.w));
+    direction.normalize();
     return direction;
 }
 
@@ -591,6 +591,7 @@ setInterval(function () {
 
         //how do our functions work?
         console.log(sunState.tangDirectionTo(moonState));
+        // console.log(sunState.tangDirectionTo(moonState));
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );

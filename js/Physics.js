@@ -193,7 +193,7 @@ State.prototype.equals = function (position) {
 };
 
 State.prototype.clone = function () {
-    return new Position().set(this.boost, this.facing, this.velocity, this.angular, this.mass);
+    return new State().set(this.boost, this.facing, this.velocity, this.angular, this.mass);
 }
 
 //return the position of THIS relative to STATE; ie after translating by the isometry storing the position of STATE
@@ -215,7 +215,7 @@ State.prototype.positionRelTo = function (state) {
 State.prototype.tangDirectionTo = function (state) {
     //move THIS to origin
     //this is the relative position of STATE with THIS at ORIGIN
-    let relState = state.clone().positionRelTo(this);
+    let relState = this.clone().positionRelTo(state);
     //get the actual point ascociated to this state
     let relPosition = relState.positionPoint();
     //get the tangent vector based at the origin to the point P in the model space
@@ -225,8 +225,8 @@ State.prototype.tangDirectionTo = function (state) {
 
 //returns the position of the point stored by state
 //really, should be doing this to position and using it here
-State.positionPoint = function () {
-    return ORIGIN.applyMatrix4(this.boost.matrix.clone());
+State.prototype.positionPoint = function () {
+    return ORIGIN.clone().applyMatrix4(this.clone().boost.matrix);
 }
 
 //returns the distance from THIS to STATE
@@ -236,4 +236,15 @@ State.prototype.distanceTo = function (state) {
     let position = relativePos.positionPoint();
     //find distance of position from origin
     return geomDistance(position);
+}
+
+//flow a state along the geodesic flow given by w (direction is dir of w, distance is length of w)
+State.prototype.flowBy = function (w) {
+
+    let isom = new Isometry().translateByVector(w);
+
+    this.boost.multiply(isom);
+    return this;
+    //DO EXPLICIT PARALLEL TRANSPORT IN GENERAL (NIL....)
+    //
 }
