@@ -109,7 +109,7 @@ State.prototype.localFlow = function (t) {
     let isom = new Isometry().makeLeftTranslation(vt);
 
     let wHat = this.angular.clone().normalize();
-    let wLen = this.angular.length() * t;
+    let wLen = this.angular.clone().length() * t;
     let rotMat = new THREE.Matrix4().makeRotationAxis(wHat, wLen);
 
 
