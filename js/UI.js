@@ -74,7 +74,6 @@ let initGui = function(){
   });
 
   keyboardController.onChange(function(value){
-    globals.keyboard = value;
     globals.controls.setKeyboard(value);
   })
 
