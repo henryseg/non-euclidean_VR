@@ -953,7 +953,7 @@ void main(){
     
     else if (hitWhich == 4){ // the moon
             
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,moonBoost, moonFacing, moonCubeTex);
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,moonBoost, moonFacing, earthCubeTex);
             
         out_FragColor = vec4(pixelColor,1.0);
             

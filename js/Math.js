@@ -300,6 +300,12 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
 var cubeHalfWidth = 0.5;
 
+function edist(state1,state2){
+    var sp1=state1.boost.matrix.elements;
+    var sp2=state2.boost.matrix.elements;
+    return Math.sqrt((sp2[12]-sp1[12])*(sp2[12]-sp1[12])+(sp2[13]-sp1[13])*(sp2[13]-sp1[13])+(sp2[14]-sp1[14])*(sp2[14]-sp1[14]))
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -405,17 +411,17 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
 
-    earthState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+    earthState = new State().setVelocity(new THREE.Vector3(1, -1, 0)).setAngular(new THREE.Vector3(0, -3, 0));
 
-    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -1)).boost);
+    earthState.setBoost(new Position().localFlow(new THREE.Vector3(-1, 1, -2)).boost);
 
-    moonState = new State().setVelocity(new THREE.Vector3(0, 1, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+    moonState = new State().setVelocity(new THREE.Vector3(-1, -1, 0)).setAngular(new THREE.Vector3(0, -3, 0));
 
-    moonState.setBoost(new Position().localFlow(new THREE.Vector3(0, -0.3, -1)).boost);
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(1, 1, -2)).boost);
 
     sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
 
-    sunState.setBoost(new Position().localFlow(new THREE.Vector3(2, 0, 0)).boost);
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -5)).boost);
 
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
@@ -434,9 +440,20 @@ function initObjects() {
 stepSize = 0.001;
 setInterval(function () {
 
-        earthState.localFlow(stepSize);
-        moonState.localFlow(stepSize);
-        sunState.localFlow(stepSize);
+        if(edist(earthState,moonState)>=.4){
+            earthState.localFlow(stepSize);
+            moonState.localFlow(stepSize);            
+        }else{
+            var evel=earthState.velocity;
+            var mvel=moonState.velocity;
+            earthState.setVelocity(mvel);
+            moonState.setVelocity(evel);
+            earthState.localFlow(stepSize);
+            moonState.localFlow(stepSize); 
+        }
+        //earthState.localFlow(stepSize);
+        //moonState.localFlow(stepSize);
+        //sunState.localFlow(stepSize);
 
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
@@ -557,7 +574,7 @@ function setupMaterial(fShader) {
 
             moonRad: {
                 type: "f",
-                value: 0.07
+                value: 0.2
             },
 
             sunBoostMat: {
@@ -591,8 +608,8 @@ function setupMaterial(fShader) {
                     ])
             },
             moonCubeTex: { //texture to global object
-                type: "",
-                value: new THREE.CubeTextureLoader().setPath('images/moon/')
+                type: "t",
+                value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
                     .load([ //Cubemap derived Arnaud Cheritat's website pics
                     'posx.png',
                     'negx.png',
