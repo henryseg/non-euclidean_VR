@@ -47,17 +47,17 @@ function Isometry() {
         this.matrix.makeTranslation(v.x, v.y, v.z);
     }
 
-    this.makeLeftTranslation = function (x, y, z) {
+    this.makeLeftTranslation = function (v) {
         // return the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(x, y, z);
+        this.matrix.makeTranslation(v.x, v.y, v.z);
         return this;
     };
 
-    this.makeInvLeftTranslation = function (x, y, z) {
+    this.makeInvLeftTranslation = function (v) {
         // return the inverse of the left translation by (x,y,z)
         // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-        this.matrix.makeTranslation(-x, -y, -z);
+        this.matrix.makeTranslation(-v.x, -v.y, -v.z);
         return this;
     };
 
@@ -184,6 +184,9 @@ function Position() {
     };
      */
 
+
+
+
     this.localFlow = function (v) {
         // move the position following the geodesic flow where
         // v is the pull back at the origin by this.boost of the tangent vector at boost * o
@@ -196,7 +199,7 @@ function Position() {
         // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
         // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
+        let isom = new Isometry().makeLeftTranslation(v);
         this.boost.multiply(isom);
         return this
     };
@@ -400,11 +403,26 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
 
-    globalObjectState = new State().setVelocity(new THREE.Vector3(1, 0, 0));
-    console.log(globalObjectState.velocity);
+    //    globalObjectState = new State().setVelocity(
+    //        new THREE.Vector3(0, 0, -1));
 
-    globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
+    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(1, 0, 0));
+
+
 }
+
+
+//MOVE THE PLANETS AROUND
+stepSize = 0.001;
+setInterval(function () {
+
+        globalObjectState.localFlow(stepSize);
+        console.log(globalObjectState.facing.elements);
+
+
+        // console.log(globalObjectState.boost.matrix.elements);
+    }, 10 // run 100 times a second.
+);
 
 //-------------------------------------------------------
 // Set up shader
@@ -482,7 +500,7 @@ function setupMaterial(fShader) {
             },
             globalObjectBoostMat: {
                 type: "m4",
-                value: globalObjectPosition.boost.matrix
+                value: globalObjectState.boost.matrix
             },
             globalSphereRad: {
                 type: "f",
@@ -544,5 +562,6 @@ function updateMaterial() {
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
+    g_material.uniforms.globalObjectBoostMat.value = globalObjectState.boost.matrix;
 
 }

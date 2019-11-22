@@ -329,6 +329,7 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
+uniform mat4 globalObjectFacing;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 

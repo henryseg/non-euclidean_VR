@@ -1,12 +1,20 @@
 function State() {
 
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
-    this.boost = new Isometry();
-    this.facing = new THREE.Matrix4();
-    this.velocity = new THREE.Vector3();
-    this.angular = new THREE.Vector3();
-    this.mass;
+    this.boost = new Isometry(); //at origin
+    this.facing = new THREE.Matrix4(); //identity
+    this.velocity = new THREE.Vector3(); //zero velocity
+    this.angular = new THREE.Vector3(); //no spin
+    this.mass = 1.;
 
+
+};
+
+
+
+State.prototype.setVelocity = function (velocity) {
+    this.velocity = velocity.clone();
+    return this;
 }
 
 
@@ -32,11 +40,11 @@ State.prototype.setAngular = function (angular) {
 
 
 State.prototype.setMass = function (mass) {
-    this.mass = mass.clone();
+    this.mass = mass;
     return this;
 };
 
-State.prototype.set = function (boost, facing, velocity, angular) {
+State.prototype.set = function (boost, facing, velocity, angular, mass) {
     this.setBoost(boost);
     this.setFacing(facing);
     this.setVelocity(velocity);
@@ -46,7 +54,7 @@ State.prototype.set = function (boost, facing, velocity, angular) {
 };
 
 
-this.translateBy = function (isom) {
+State.prototype.translateBy = function (isom) {
     // translate the position by the given isometry
     this.boost.premultiply(isom);
     this.reduceError();
@@ -55,7 +63,7 @@ this.translateBy = function (isom) {
     return this;
 };
 
-this.localTranslateBy = function (isom) {
+State.prototype.localTranslateBy = function (isom) {
     // if we are at boost of b, our position is b.0. We want to fly forward, and isom
     // tells me how to do this if I were at 0. So I want to apply b * isom * b^{-1} to b * 0, and I get b * isom * 0.
     // In other words, translate boost by the conjugate of isom by boost
@@ -75,7 +83,7 @@ this.rotateFacingBy = function (rotation) {
 };
 */
 
-this.localRotateFacingBy = function (rotation) {
+State.prototype.localRotateFacingBy = function (rotation) {
     // apply the given matrix (on the right) to the current facing and return the new result
     this.facing.multiply(rotation);
     this.reduceFacingError();
@@ -85,20 +93,7 @@ this.localRotateFacingBy = function (rotation) {
 
 
 
-/*
-this.flow = function (v) {
-    // move the position following the geodesic flow
-    // the geodesic starts at the origin, its tangent vector is v
-    // parallel transport the facing along the geodesic
-
-    // in Euclidean geometry, just apply a translation
-    // Nothing to do on the facing
-    let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
-    return this.translateBy(isom);
-};
- */
-
-this.localFlow = function (t) {
+State.prototype.localFlow = function (t) {
     // move the position following the geodesic flow along the velocity vectory of the state for a time step t.
 
     // Let gamma be the geodesic starting at p = boost * o directed by boost * v
@@ -109,13 +104,28 @@ this.localFlow = function (t) {
     // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
     // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-    let isom = new Isometry().makeLeftTranslation(t * v.x, t * v.y, t * v.z);
+    let vt = this.velocity.clone().multiplyScalar(t);
+    //console.log(new THREE.Vector3(0, 0, -1).multiplyScalar(t));
+    let isom = new Isometry().makeLeftTranslation(vt);
+
+    let wHat = this.angular.clone().normalize();
+    let wLen = this.angular.length() * t;
+    let rotMat = new THREE.Matrix4().makeRotationAxis(wHat, wLen);
+
+
     this.boost.multiply(isom);
+    this.facing.multiply(rotMat);
+
     //
     return this
 };
 
-this.getInverse = function (position) {
+
+
+
+
+
+State.prototype.getInverse = function (position) {
     // set the current position to the position that can bring back the passed position to the origin position
     this.boost.getInverse(position.boost);
     this.facing.getInverse(position.facing);
@@ -126,27 +136,27 @@ this.getInverse = function (position) {
 
 };
 
-this.getFwdVector = function () {
+State.prototype.getFwdVector = function () {
     // return the vector moving forward (taking into account the facing)
     return new THREE.Vector3(0, 0, -1).rotateByFacing(this);
 };
 
-this.getRightVector = function () {
+State.prototype.getRightVector = function () {
     // return the vector moving right (taking into account the facing)
     return new THREE.Vector3(1, 0, 0).rotateByFacing(this);
 };
 
-this.getUpVector = function () {
+State.prototype.getUpVector = function () {
     // return the vector moving up (taking into account the facing)
     return new THREE.Vector3(0, 1, 0).rotateByFacing(this);
 };
 
-this.reduceBoostError = function () {
+State.prototype.reduceBoostError = function () {
     // Nothing to do in Euclidean geometry
     return this;
 };
 
-this.reduceFacingError = function () {
+State.prototype.reduceFacingError = function () {
     // Gram-Schmidt
     let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.facing);
     let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.facing);
@@ -170,17 +180,17 @@ this.reduceFacingError = function () {
     return this;
 };
 
-this.reduceError = function () {
+State.prototype.reduceError = function () {
     this.reduceBoostError();
     this.reduceFacingError();
     return this;
 };
 
-this.equals = function (position) {
+State.prototype.equals = function (position) {
     // test equality of isometries (for debugging purpose mostly)
     return (this.boost.equals(position.boost) && this.facing.equals(position.facing) && this.velocity.equals(position.velocity) && this.angular.equals(position.angular))
 };
 
-this.clone = function () {
+State.prototype.clone = function () {
     return new Position().set(this.boost, this.facing, this.velocity, this.angular, this.mass);
 }
