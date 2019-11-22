@@ -153,7 +153,7 @@ Position.prototype.localFlow = function (v) {
         u.add(field.multiplyScalar(EULER_STEP)).normalize();
     }
 
-    this.rotateFacingBy(parallel);
+    this.facing.premultiply(parallel);
     return this;
 
 };

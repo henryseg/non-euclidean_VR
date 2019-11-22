@@ -14,36 +14,36 @@ import {Position, ORIGIN} from "./Position.js";
 //	Geometry constants
 //----------------------------------------------------------------------------------------------------------------------
 
-// The point representing the origin
 let cubeHalfWidth = 0.5;
 
 //----------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //----------------------------------------------------------------------------------------------------------------------
 
-function geomDist(v) {
-    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-}
-
 function fixOutsideCentralCell(position) {
     let cPos = ORIGIN.clone().translateBy(position.boost);
-    let bestDist = geomDist(cPos);
     let bestIndex = -1;
-    for (let i = 0; i < globals.gens.length; i++) {
-        let pos = cPos.clone().translateBy(globals.gens[i]);
-        let dist = geomDist(pos);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-        }
+
+    if (cPos.z > cubeHalfWidth) {
+        bestIndex = 5;
+    } else if (cPos.z < -cubeHalfWidth) {
+        bestIndex = 4;
+    } else if (cPos.x > cubeHalfWidth) {
+        bestIndex = 1;
+    } else if (cPos.x < -cubeHalfWidth) {
+        bestIndex = 0;
+    } else if (cPos.y > cubeHalfWidth) {
+        bestIndex = 3;
+    } else if (cPos.y < -cubeHalfWidth) {
+        bestIndex = 2;
     }
+
     if (bestIndex !== -1) {
-        position.translateBy(globals.gens[bestIndex]);
+        position.translateBy(gens[bestIndex]);
         return bestIndex;
     } else {
         return -1;
     }
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------
