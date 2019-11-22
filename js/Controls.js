@@ -9,7 +9,7 @@ import {
     Matrix4
 } from './module/three.module.js';
 
-import {globalVar} from './Main.js';
+import {globals} from './Main.js';
 
 import {fixOutsideCentralCell} from "./Math.js";
 
@@ -23,7 +23,7 @@ let Controls = function (done) {
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
 
-    switch (globalVar.g_keyboard) {
+    switch (globals.keyboard) {
         case 'fr':
             this.manualControls = {
                 81: {
@@ -213,17 +213,17 @@ let Controls = function (done) {
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
             //console.log('ici');
-            deltaPosition = globalVar.g_position.getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0]));
-            deltaPosition = deltaPosition.add(globalVar.g_position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
-            deltaPosition = deltaPosition.add(globalVar.g_position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
+            deltaPosition = globals.position.getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0]));
+            deltaPosition = deltaPosition.add(globals.position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
+            deltaPosition = deltaPosition.add(globals.position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        globalVar.g_position.localFlow(deltaPosition);
+        globals.position.localFlow(deltaPosition);
 
 
-        let fixIndex = fixOutsideCentralCell(globalVar.g_position); //moves camera back to main cell
+        let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
         if (fixIndex !== -1) {
-            globalVar.g_cellPosition.localTranslateBy(globalVar.invGens[fixIndex]);
-            globalVar.g_invCellPosition.getInverse(globalVar.g_cellPosition);
+            globals.cellPosition.localTranslateBy(globals.invGens[fixIndex]);
+            globals.invCellPosition.getInverse(globals.cellPosition);
         }
 
 
@@ -238,8 +238,8 @@ let Controls = function (done) {
         );
 
         //Handle Phone Input
-        if (globalVar.g_phoneOrient[0] !== null) {
-            let rotation = this.getQuatFromPhoneAngles(new Vector3().fromArray(globalVar.g_phoneOrient));
+        if (globals.phoneOrient[0] !== null) {
+            let rotation = this.getQuatFromPhoneAngles(new Vector3().fromArray(globals.phoneOrient));
             if (this.oldRotation === undefined) this.oldRotation = rotation;
             deltaRotation = new Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
             this.oldRotation = rotation;
@@ -248,14 +248,14 @@ let Controls = function (done) {
         deltaRotation.normalize();
 
         let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        globalVar.g_position.localRotateFacingBy(m);
+        globals.position.localRotateFacingBy(m);
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             let rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-            globalVar.g_position.localRotateFacingBy(m);
+            globals.position.localRotateFacingBy(m);
         }
 
     };

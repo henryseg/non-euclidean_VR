@@ -1,4 +1,4 @@
-import {globalVar} from './Main.js';
+import {globals} from './Main.js';
 import {createGenerators, invGenerators, unpackageMatrix} from "./Math.js";
 //-------------------------------------------------------
 // UI Variables
@@ -20,7 +20,7 @@ let initGui = function(){
     globalSphereRad: 0.2,
     modelHalfCube: 0.5,
     ipDist: 0.03200000151991844,
-    stereoScreenOffset: globalVar.g_stereoScreenOffset
+    stereoScreenOffset: globals.stereoScreenOffset
   };
 
   let gui = new dat.GUI();
@@ -37,21 +37,21 @@ let initGui = function(){
   // ------------ ------------------
 
   globalSphereRadController.onChange(function(value){
-    globalVar.g_material.uniforms.globalSphereRad.value = value;
+    globals.material.uniforms.globalSphereRad.value = value;
   });
 
   halfCubeController.onChange(function(value){
-    globalVar.cubeHalfWidth = value;
-    globalVar.gens = createGenerators();
-    globalVar.invGens = invGenerators(globalVar.gens);
-    globalVar.invGensMatrices = unpackageMatrix(globalVar.invGens);
-    globalVar.g_material.uniforms.modelHalfCube.value = value;
-    globalVar.g_material.uniforms.invGenerators.value = globalVar.invGensMatrices;
+    globals.cubeHalfWidth = value;
+    globals.gens = createGenerators();
+    globals.invGens = invGenerators(globals.gens);
+    globals.invGensMatrices = unpackageMatrix(globals.invGens);
+    globals.material.uniforms.modelHalfCube.value = value;
+    globals.material.uniforms.invGenerators.value = globals.invGensMatrices;
   });
 
 
   ipDistController.onChange(function(value){
-    globalVar.ipDist = value;
+    globals.ipDist = value;
 
     /*
     let vectorLeft = new THREE.Vector3(-value, 0, 0).rotateByFacing(g_position);
@@ -67,8 +67,8 @@ let initGui = function(){
 
 
   stereoScreenOffsetController.onChange(function(value){
-    globalVar.g_stereoScreenOffset = value;
-    globalVar.g_material.uniforms.stereoScreenOffset.value = value;
+    globals.stereoScreenOffset = value;
+    globals.material.uniforms.stereoScreenOffset.value = value;
   });
 
 
