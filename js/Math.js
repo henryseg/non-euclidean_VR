@@ -406,7 +406,9 @@ function initObjects() {
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
 
-    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(1, 0, 0));
+    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, 1, 0));
+    //velocity is into screen
+    //ang velocity is about y axis (earth's poles)
 
 
 }
@@ -417,9 +419,6 @@ stepSize = 0.001;
 setInterval(function () {
 
         globalObjectState.localFlow(stepSize);
-        console.log(globalObjectState.facing.elements);
-
-
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );
@@ -502,6 +501,10 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: globalObjectState.boost.matrix
             },
+            globalObjectFacing: {
+                type: "m4",
+                value: globalObjectState.facing
+            },
             globalSphereRad: {
                 type: "f",
                 value: 0.2
@@ -564,4 +567,6 @@ function updateMaterial() {
 
     g_material.uniforms.globalObjectBoostMat.value = globalObjectState.boost.matrix;
 
+    g_material.uniforms.globalObjectFacing.value = globalObjectState.facing;
+    console.log(globalObjectState.facing.elements);
 }

@@ -328,8 +328,10 @@ uniform mat4 invCellBoostMat;
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
+
 uniform mat4 globalObjectBoostMat;
 uniform mat4 globalObjectFacing;
+
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 
@@ -661,17 +663,19 @@ vec3 boxMapping( in sampler2D sam, in tangVector point )
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
-vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
+vec3 sphereOffset(Isometry globalObjectBoost, mat4 globalObjectFacing, vec4 pt){
     pt = translate(cellBoost, pt);
     pt = inverse(globalObjectBoost.matrix) * pt;
-    return tangDirection(ORIGIN, pt).dir.xyz;
+    tangVector earthPoint=tangDirection(ORIGIN, pt);
+    earthPoint=rotateFacing(globalObjectFacing,earthPoint );
+    return earthPoint.dir.xyz;
 }
 
 
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     if(EARTH){
     N = estimateNormal(sampletv.pos);
-    vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+    vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, globalObjectFacing, sampletv.pos)).xyz;
     vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
     return 0.5*color + 0.5*color2;
