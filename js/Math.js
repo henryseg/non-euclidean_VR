@@ -364,6 +364,19 @@ let modelHalfCube = 1.; //same distance in the Klein model
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
 
+//return distance of a point p from the origin;
+function geomDistance(p) {
+    return Math.acos(p.w);
+}
+
+//returns the tangent vector at the origin which points to P in the model of the geometry
+function tangDirection(p) {
+    direction = p - ORIGIN.multiplyScalar(p.w);
+    direction = direction.normalize();
+    return direction;
+}
+
+
 function modelProject(v) {
     return new THREE.Vector3(v.x / v.w, v.y / v.w, v.z / v.w);
 }
@@ -401,9 +414,7 @@ function fixOutsideCentralCell(position) {
 
 //ALTERNATIVE TELEPORT FUNCTION
 //measures distance from the central cell to determine generator to move by
-//function geomDist(v) {
-//    return Math.acosh(v.w);
-//}
+
 //
 //
 //function fixOutsideCentralCell(position) {
@@ -578,6 +589,8 @@ setInterval(function () {
         moonState.localFlow(stepSize);
         sunState.localFlow(stepSize);
 
+        //how do our functions work?
+        console.log(sunState.tangDirectionTo(moonState));
         // console.log(globalObjectState.boost.matrix.elements);
     }, 10 // run 100 times a second.
 );
