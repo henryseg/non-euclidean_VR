@@ -234,3 +234,14 @@ State.prototype.distanceTo = function (state) {
     //find distance of position from origin
     return geomDistance(position);
 }
+
+//flow a state along the geodesic flow given by w (direction is dir of w, distance is length of w)
+State.prototype.flowBy = function (w) {
+
+    let isom = new Isometry().translateByVector(w);
+
+    this.boost.multiply(isom);
+    return this;
+    //DO EXPLICIT PARALLEL TRANSPORT IN GENERAL (NIL....)
+    //
+}    
