@@ -407,8 +407,14 @@ function initObjects() {
     //        new THREE.Vector3(0, 0, -1));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(1, 0, 0));
     globalObjectState.boost.translateByVector(new THREE.Vector3(0,0,-1));
+=======
+    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, 1, 0));
+    //velocity is into screen
+    //ang velocity is about y axis (earth's poles)
+>>>>>>> 486351cacf4dff3b3f664146886a57a5fff244ba
 =======
     globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, 1, 0));
     //velocity is into screen
@@ -424,10 +430,14 @@ stepSize = 0.001;
 setInterval(function () {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         //globalObjectState.localFlow(stepSize);
         //console.log(globalObjectState.facing.elements);
 
 
+=======
+        globalObjectState.localFlow(stepSize);
+>>>>>>> 486351cacf4dff3b3f664146886a57a5fff244ba
 =======
         globalObjectState.localFlow(stepSize);
 >>>>>>> 486351cacf4dff3b3f664146886a57a5fff244ba
