@@ -13,10 +13,12 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=true;
+const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
+const bool LATTICE_SCENE=true;
 const bool EARTH=false;
 
+const bool LOCAL_SCENE=TILING_SCENE||LATTICE_SCENE;
 
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = false;
@@ -353,18 +355,35 @@ uniform float stereoScreenOffset;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
+    float tilingFinal=MAX_DIST;
+    float latticeFinal=MAX_DIST;
+    
+    if(TILING_SCENE){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
     float centerSphereRadius = 1.333 * modelHalfCube;
     vec4 center = ORIGIN;
     float sphere = centerSDF(p,  center, centerSphereRadius);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
-    float final = -min(vertexSphere,sphere); //unionSDF
-    return final;
+    tilingFinal = -min(vertexSphere,sphere); //unionSDF
+    }
+    
+    if(LATTICE_SCENE){
+    float latticeSphereRadius=0.1;
+    vec4 latticeSphereCenter=ORIGIN+vec4(0.,0.,0.3,0.);
+    float latticeSph=sphereSDF(p,latticeSphereCenter,latticeSphereRadius);
+    latticeFinal=latticeSph;
+    }
+    
+    
+    return min(latticeFinal, tilingFinal);
 
    // float final = -sphere;
     //return final;
 }
+
+
+
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
@@ -490,9 +509,9 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
 
     // Trace the local scene, then the global scene:
-
-
-    if(TILING_SCENE){
+    
+    
+    if(LOCAL_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = flow(localtv, marchStep);
 
@@ -514,6 +533,13 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     }
     localDepth=min(globalDepth, MAX_DIST);
     }
+    
+    
+    
+    
+    
+
+    
     else{localDepth=MAX_DIST;}
 
 
