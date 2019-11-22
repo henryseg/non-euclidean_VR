@@ -24,6 +24,9 @@ import {
     Isometry
 } from "./Isometry.js";
 
+
+const ORIGIN = new Vector4(0, 0, 0, 1);
+
 function Position() {
 
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
@@ -191,4 +194,4 @@ Vector3.prototype.rotateByFacing = function (position) {
     return this;
 };
 
-export{Position}
+export{Position, ORIGIN}
