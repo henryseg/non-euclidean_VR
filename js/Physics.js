@@ -191,5 +191,46 @@ State.prototype.equals = function (position) {
 };
 
 State.prototype.clone = function () {
-    return new Position().set(this.boost, this.facing, this.velocity, this.angular, this.mass);
+    return new State().set(this.boost, this.facing, this.velocity, this.angular, this.mass);
+}
+//return the position of THIS relative to STATE; ie after translating by the isometry storing the position of STATE
+State.prototype.positionRelTo = function (state) {
+    let invState = new State().getInverse(state);
+    let translation = invState.boost;
+    let relativeState = this.clone().translateBy(translation);
+    return relativeState;
+}
+
+
+////return the position of STATE relative to THIS; ie after translating by the isometry storing the position of THIS
+//State.prototype.positionFrom = function (state) {
+//
+//    return state.positionRelto(this);
+//}
+
+//returns the tangent vector (based at origin) which is the translate of the based tangent vector (at THIS.Position) pointing to state.position
+State.prototype.tangDirectionTo = function (state) {
+    //move THIS to origin
+    //this is the relative position of STATE with THIS at ORIGIN
+    let relState = state.clone().positionRelTo(this);
+    //get the actual point ascociated to this state
+    let relPosition = relState.positionPoint();
+    //get the tangent vector based at the origin to the point P in the model space
+    let tv = tangDirection(relPosition);
+    return tv;
+}
+
+//returns the position of the point stored by state
+//really, should be doing this to position and using it here
+State.prototype.positionPoint = function () {
+    return ORIGIN.applyMatrix4(this.boost.matrix.clone());
+}
+
+//returns the distance from THIS to STATE
+State.prototype.distanceTo = function (state) {
+    //translate THIS relative to state
+    let relativePos = this.clone().positionRelTo(state);
+    let position = relativePos.positionPoint();
+    //find distance of position from origin
+    return geomDistance(position);
 }

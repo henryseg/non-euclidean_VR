@@ -413,11 +413,11 @@ function initObjects() {
 
     earthState = new State().setVelocity(new THREE.Vector3(1, -1, 0)).setAngular(new THREE.Vector3(0, -3, 0));
 
-    earthState.setBoost(new Position().localFlow(new THREE.Vector3(-1, 1, -2)).boost);
+    earthState.setBoost(new Position().localFlow(new THREE.Vector3(-1, 0, -2)).boost);
 
     moonState = new State().setVelocity(new THREE.Vector3(-1, -1, 0)).setAngular(new THREE.Vector3(0, -3, 0));
 
-    moonState.setBoost(new Position().localFlow(new THREE.Vector3(1, 1, -2)).boost);
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(1, 0, -2)).boost);
 
     sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
 
@@ -440,17 +440,17 @@ function initObjects() {
 stepSize = 0.001;
 setInterval(function () {
 
-        if(edist(earthState,moonState)>=.4){
-            earthState.localFlow(stepSize);
-            moonState.localFlow(stepSize);            
-        }else{
-            var evel=earthState.velocity;
-            var mvel=moonState.velocity;
-            earthState.setVelocity(mvel);
-            moonState.setVelocity(evel);
-            earthState.localFlow(stepSize);
-            moonState.localFlow(stepSize); 
-        }
+        // if(edist(earthState,moonState)>=.4){
+        //     earthState.localFlow(stepSize);
+        //     moonState.localFlow(stepSize);            
+        // }else{
+        //     var evel=earthState.velocity;
+        //     var mvel=moonState.velocity;
+        //     earthState.setVelocity(mvel);
+        //     moonState.setVelocity(evel);
+        //     earthState.localFlow(stepSize);
+        //     moonState.localFlow(stepSize); 
+        // }
         //earthState.localFlow(stepSize);
         //moonState.localFlow(stepSize);
         //sunState.localFlow(stepSize);
