@@ -67,6 +67,7 @@ Isometry composeIsometry(Isometry A, Isometry B)
     return Isometry(A.matrix*B.matrix);
 }
 
+
 Isometry makeLeftTranslation(vec4 p) {
     mat4 matrix =  mat4(
     exp(p.z), 0., 0., 0.,
@@ -87,6 +88,28 @@ Isometry makeInvLeftTranslation(vec4 p) {
     return Isometry(matrix);
 }
 
+/*
+
+Isometry makeLeftTranslation(vec4 p) {
+    mat4 matrix =  mat4(
+    1., 0., 0., 0.,
+    0., 1., 0., 0.,
+    0., 0., 1., 0,
+    p.x, p.y, p.z, 1.
+    );
+    return Isometry(matrix);
+}
+
+Isometry makeInvLeftTranslation(vec4 p) {
+    mat4 matrix =  mat4(
+    1., 0., 0., 0.,
+    0., 1., 0., 0.,
+    0., 0., 1., 0,
+    -p.x, -p.y, -p.z, 1.
+    );
+    return Isometry(matrix);
+}
+*/
 
 vec4 translate(Isometry A, vec4 v) {
     // translate a point of a vector by the given direction
@@ -184,7 +207,7 @@ vec4 car2sph(vec4 v) {
     // convert a vector with (x,y,z,0) cartesian coordinates to a vector with (r,theta,phi, 0) spherical coordinates
     float r = length(v.xyz);
     float theta = atan(v.y, v.x);
-    float phi = atan(sqrt(length(v.xy)), v.z);
+    float phi = atan(length(v.xy), v.z);
     return vec4(r, theta, phi, 0.);
 }
 
@@ -411,13 +434,18 @@ uniform highp sampler3D lookupTableTheta;
 uniform highp sampler3D lookupTablePhi;
 
 
-localTangVector flow(localTangVector tv, float t) {
+localTangVector eucFlow(localTangVector tv, float t) {
     // overload of the flow for localTangVector
     // follow the geodesic flow during a time t
 
     return localTangVector(tv.pos + t * tv.dir, tv.dir);
+}
 
-    /*
+localTangVector tableFlow(localTangVector tv, float t) {
+    // overload of the flow for localTangVector
+    // follow the geodesic flow during a time t
+
+
     // isom to move to the starting point
     Isometry isom = makeLeftTranslation(tv);
 
@@ -438,7 +466,15 @@ localTangVector flow(localTangVector tv, float t) {
     vec4 newLocalDir = sph2car(vec4(1., theta, phi, 0.));
     localTangVector resOrigin =  localTangVector(newPos, newLocalDir);
     return translate(isom, resOrigin);
-    */
+}
+
+localTangVector flow(localTangVector tv, float t) {
+    // overload of the flow for localTangVector
+    // follow the geodesic flow during a time t
+
+    //return eucFlow(tv, t);
+    return tableFlow(tv, t);
+
 }
 
 
@@ -498,8 +534,9 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
 const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 200.0;
-const float MAX_STEP_DIST = 1.0;// Maximal length of a step... depends of the generated texture.
-const float EPSILON = 0.0001;
+const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
+//const float EPSILON = 0.0001;
+const float EPSILON = 0.051;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
 
@@ -795,9 +832,21 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             tv = flow(tv, marchStep);
 
+            /*
+            if (i == 4) {
+                hitWhich = 5;
+                //debugColor = vec3(marchStep, 0., 0.);
+                debugColor = 0.25*abs(tv.pos.xyz);
+                break;
+            }*/
+
+
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
+                //hitWhich = 5;
+                //debugColor = vec3(1.,0.,0.);
+
                 totalFixMatrix = identityIsometry;
                 sampletv = toTangVector(tv);
                 return;
@@ -1041,21 +1090,26 @@ void main(){
     /*
     hitWhich = 5;
     // the coordinate used to get data from the texture are between 0 and 1
-    vec3 p = vec3(gl_FragCoord.x/screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.005*depth);
-    float x = texture(lookupTableX, p).r;
-    float y = texture(lookupTableY, p).r;
-    float z = texture(lookupTableZ, p).r;
-    float theta = texture(lookupTableTheta, p).r;
-    float phi = texture(lookupTablePhi, p).r;
-    debugColor = abs(vec3((theta+PI)/(2.*PI), phi/PI, 0.));
-    //debugColor = 0.5 + 0.5*vec3(0., 0., z);
-    */
+    if(depth == -1.) {
+        debugColor = vec3(0.);
+    }
+    else {
+        vec3 p = vec3(gl_FragCoord.x/screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.005*depth);
+        float x = texture(lookupTableX, p).r;
+        float y = texture(lookupTableY, p).r;
+        float z = texture(lookupTableZ, p).r;
+        float theta = texture(lookupTableTheta, p).r;
+        float phi = texture(lookupTablePhi, p).r;
+        debugColor = abs(vec3((theta+PI)/(2.*PI), phi/PI, 0.));
+        //debugColor = 0.5 + 0.5*vec3(x, y, z);
+    }*/
+
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.1);
+        out_FragColor = vec4(0.3);
         return;
     }
     else if (hitWhich == 1){

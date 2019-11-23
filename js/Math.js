@@ -135,8 +135,8 @@ function initObjects() {
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
 
-
-let depth = 0.;
+// status of the textures: number of textures already loaded
+let textureStatus = 0;
 
 function setupMaterial(fShader) {
 
@@ -268,6 +268,7 @@ function setupMaterial(fShader) {
 
     let file = 'test2';
     //let file = 'euc';
+    //let file = 'testhgp';
 
     // TODO. Factorize this!
     new NRRDLoader().load("../texture/" + file + "_x.nrrd", function (volume) {
@@ -277,6 +278,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableX.value = texture;
+        textureStatus +=  1;
     });
     new NRRDLoader().load("../texture/" + file + "_y.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -285,6 +287,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableY.value = texture;
+        textureStatus +=  1;
     });
     new NRRDLoader().load("../texture/" + file + "_z.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -293,6 +296,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableZ.value = texture;
+        textureStatus +=  1;
     });
     new NRRDLoader().load("../texture/" + file + "_theta.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -301,6 +305,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableTheta.value = texture;
+        textureStatus +=  1;
     });
     new NRRDLoader().load("../texture/" + file + "_phi.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -309,9 +314,10 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTablePhi.value = texture;
+        textureStatus +=  1;
     });
 }
-
+let depth = -1;
 
 function updateMaterial() {
     /*
@@ -339,7 +345,9 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    depth = depth + 1;
+    if(textureStatus === 5) {
+        depth = depth + 1;
+    }
     if (depth % 10 == 0) {
         globals.material.uniforms.depth.value = depth;
     }

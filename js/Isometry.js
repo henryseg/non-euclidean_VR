@@ -22,6 +22,33 @@ Isometry.prototype.set = function (data) {
     return this;
 };
 
+/*
+Isometry.prototype.makeLeftTranslation = function (x, y, z) {
+    // return the left translation by (x,y,z)
+    // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+    this.matrix.set(
+        1, 0, 0, x,
+        0, 1, 0, y,
+        0, 0, 1, z,
+        0, 0, 0, 1
+    );
+    return this;
+};
+
+Isometry.prototype.makeInvLeftTranslation = function (x, y, z) {
+    // return the inverse of the left translation by (x,y,z)
+    // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+    this.matrix.set(
+        1, 0, 0, -x,
+        0, 1, 0, -y,
+        0, 0, 1, -z,
+        0, 0, 0, 1
+    );
+    return this;
+};
+*/
+
+
 Isometry.prototype.makeLeftTranslation = function (x, y, z) {
     // return the left translation by (x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
@@ -45,6 +72,7 @@ Isometry.prototype.makeInvLeftTranslation = function (x, y, z) {
     );
     return this;
 };
+
 
 Isometry.prototype.premultiply = function (isom) {
     // return the current isometry multiplied on the left by isom, i.e. isom * this
