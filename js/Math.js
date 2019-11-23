@@ -527,7 +527,7 @@ function initObjects() {
 
     earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -1)).boost);
 
-    moonState = new State().setVelocity(new THREE.Vector3(10, 4, 1)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
+    moonState = new State().setVelocity(new THREE.Vector3(20, 8, 2)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
 
     moonState.setBoost(new Position().localFlow(new THREE.Vector3(-1, -0.5, -1)).boost);
 
