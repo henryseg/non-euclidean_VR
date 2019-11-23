@@ -15,7 +15,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=false;
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=false;
 
@@ -50,7 +50,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 
 float hypAng(vec4 p, vec4 q){
         //negative the lorentz dot product gives the hyperbolic angle between the two points on the hyperboloid model
-    return -p.x*q.x-p.y*q.y-p.z*q.z+p.w*q.w;
+    return p.x*q.x+p.y*q.y+p.z*q.z+p.w*q.w;
 }
 
 vec4 hypProject(vec4 p){//Project a point onto the hyperboloid of one sheet or two sheets depending on original vector.
@@ -135,15 +135,8 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 
 float tangDot(tangVector u, tangVector v){
-  
-    mat4 g = mat4(
-    1.,0.,0.,0.,
-    0.,1.,0.,0.,
-    0.,0.,1.,0.,
-    0.,0.,0.,-1.
-    );
 
-    return dot(u.dir,  g*v.dir);
+    return dot(u.dir,  v.dir);
 
 }
 
@@ -167,17 +160,17 @@ float cosAng(tangVector u, tangVector v){
 // using this to test out an alternative definition of the tangBasis function
 mat4 translateByVector(vec4 v){
     float len=length(v);
-    float c1= sinh(len);
-    float c2=cosh(len)-1.;
+    float c1= sin(len);
+    float c2=1.-cos(len);
     if(len!=0.){
      float dx=v.x/len;
      float dy=v.y/len;
      float dz=v.z/len;
-    
+    //COLUMS NOT ROWS
      mat4 m=mat4(
-         0,0,0,dx,
-         0,0,0,dy,
-         0,0,0,dz,
+         0,0,0,-dx,
+         0,0,0,-dy,
+         0,0,0,-dz,
          dx,dy,dz,0.
      );
     
@@ -262,7 +255,7 @@ Isometry composeIsometry(Isometry A, Isometry B)
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
     // fake distance
-    return acosh(hypAng(p,q));
+    return acos(hypAng(p,q));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -293,9 +286,9 @@ tangVector tangDirection(tangVector u, tangVector v){
 //flow along the geodesic starting at tv for a time t
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
-    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
+    vec4 resPos=tv.pos*cos(t) + tv.dir*sin(t);
     //tangent is derivative of position
-    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
+    vec4 resDir=-tv.pos*sin(t) + tv.dir*cos(t);
     
     return geomProject(tangVector(resPos,resDir));
 }
@@ -303,7 +296,7 @@ tangVector flow(tangVector tv, float t){
 
 //basis for the tangent space at a point
 mat4 tangBasis(vec4 p){
-    float dist=acosh(p.w);
+    float dist=acos(p.w);
     vec4 direction = tangDirection(ORIGIN,p).dir;
     return translateByVector(dist*direction);
 }
@@ -321,7 +314,7 @@ float lightAtt(float dist){
            //fake linear falloff
     return dist;
     }
- return sinh(dist)*sinh(dist);
+ return sin(dist)*sin(dist);
 }
 
 
@@ -339,9 +332,7 @@ float sphereSDF(vec4 p, vec4 center, float radius){
  // A horosphere can be constructed by offseting from a standard horosphere.
   // Our standard horosphere will have a center in the direction of lightPoint
   // and go through the origin. Negative offsets will shrink it.
-  float horosphereSDF(vec4 samplePoint, vec4 lightPoint, float offset){
-    return log(-hypAng(samplePoint, lightPoint)) - offset;
-  }
+
 
 
 
@@ -351,7 +342,7 @@ float centerSDF(vec4 p, vec4 center, float radius){
 
 
 float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return  horosphereSDF(abs(p), cornerPoint, size);
+    return  sphereSDF(abs(p), cornerPoint, size);
 }
 
 //--------------------------------------------

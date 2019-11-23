@@ -61,8 +61,8 @@ function Isometry() {
         let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 
         if (len != 0) {
-            var c1 = Math.sinh(len);
-            var c2 = Math.cosh(len) - 1;
+            var c1 = Math.sin(len);
+            var c2 = 1 - Math.cos(len);
             let dx = v.x / len;
             let dy = v.y / len;
             let dz = v.z / len;
@@ -70,7 +70,7 @@ function Isometry() {
                 0, 0, 0, dx,
                 0, 0, 0, dy,
                 0, 0, 0, dz,
-                dx, dy, dz, 0.0);
+                -dx, -dy, -dz, 0.0);
             var m2 = m.clone().multiply(m);
             m.multiplyScalar(c1);
             m2.multiplyScalar(c2);
@@ -336,8 +336,8 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-var cubeHalfWidth = 0.6584789485;
-var modelHalfCube = 0.5773502692;
+var cubeHalfWidth = PI / 4;
+var modelHalfCube = 1.;
 
 function edist(state1, state2) {
     var sp1 = state1.boost.matrix.elements;
@@ -350,7 +350,7 @@ function edist(state1, state2) {
 //-----------------------------------------------------------------------------------------------------------------------------
 //return distance of a point p from the origin;
 function geomDist(v) {
-    return Math.acosh(v.w);
+    return Math.acos(v.w);
 }
 
 function modelProject(v) {
@@ -527,13 +527,13 @@ function initObjects() {
 
     earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -1)).boost);
 
-    moonState = new State().setVelocity(new THREE.Vector3(10, 4, 2)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
+    moonState = new State().setVelocity(new THREE.Vector3(10, 4, 1)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
 
     moonState.setBoost(new Position().localFlow(new THREE.Vector3(-1, -0.5, -1)).boost);
 
     sunState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, 10, 0));
 
-    sunState.setBoost(new Position().localFlow(new THREE.Vector3(1.5, 0, -2)).boost);
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(3, 0, -2)).boost);
 
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
