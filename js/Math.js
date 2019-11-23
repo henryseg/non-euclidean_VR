@@ -21,6 +21,8 @@ import {Position, ORIGIN} from "./Position.js";
 
 let cubeHalfWidth = 0.5;
 
+const GoldenRatio = 1.618033988749895;
+
 //----------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //----------------------------------------------------------------------------------------------------------------------
@@ -61,12 +63,15 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Isometry().makeLeftTranslation(2. * cubeHalfWidth, 0., 0.);
-    const gen1 = new Isometry().makeLeftTranslation(-2. * cubeHalfWidth, 0., 0.);
-    const gen2 = new Isometry().makeLeftTranslation(0., 2. * cubeHalfWidth, 0.);
-    const gen3 = new Isometry().makeLeftTranslation(0., -2. * cubeHalfWidth, 0.);
-    const gen4 = new Isometry().makeLeftTranslation(0., 0., 2. * cubeHalfWidth);
-    const gen5 = new Isometry().makeLeftTranslation(0., 0., -2. * cubeHalfWidth);
+
+    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio, 1., 0.);
+    const gen1 = new Isometry().makeLeftTranslation(-GoldenRatio, -1., 0.);
+    const gen2 = new Isometry().makeLeftTranslation(-1., GoldenRatio, 0.);
+    const gen3 = new Isometry().makeLeftTranslation(1., -GoldenRatio, 0.);
+
+    const z0 = 2 * Math.log(GoldenRatio);
+    const gen4 = new Isometry().makeLeftTranslation(0., 0., z0);
+    const gen5 = new Isometry().makeLeftTranslation(0., 0., -z0);
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -278,7 +283,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableX.value = texture;
-        textureStatus +=  1;
+        textureStatus += 1;
     });
     new NRRDLoader().load("../texture/" + file + "_y.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -287,7 +292,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableY.value = texture;
-        textureStatus +=  1;
+        textureStatus += 1;
     });
     new NRRDLoader().load("../texture/" + file + "_z.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -296,7 +301,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableZ.value = texture;
-        textureStatus +=  1;
+        textureStatus += 1;
     });
     new NRRDLoader().load("../texture/" + file + "_theta.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -305,7 +310,7 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTableTheta.value = texture;
-        textureStatus +=  1;
+        textureStatus += 1;
     });
     new NRRDLoader().load("../texture/" + file + "_phi.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
@@ -314,9 +319,10 @@ function setupMaterial(fShader) {
         texture.minFilter = texture.magFilter = LinearFilter;
         texture.unpackAlignment = 1;
         globals.material.uniforms.lookupTablePhi.value = texture;
-        textureStatus +=  1;
+        textureStatus += 1;
     });
 }
+
 let depth = -1;
 
 function updateMaterial() {
@@ -345,7 +351,7 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    if(textureStatus === 5) {
+    if (textureStatus === 5) {
         depth = depth + 1;
     }
     if (depth % 10 == 0) {

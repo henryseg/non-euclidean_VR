@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
@@ -32,6 +32,9 @@ const float vertexSphereSize = 0.23;//In this case its a horosphere
 //----- ---------------------------------------
 
 const float PI = 3.1415926538;
+const float GoldenRatio = 1.618033988749895;
+const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
+const float sqrt3 = 1.7320508075688772;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
 const float modelHalfCube =  0.5;//projection of cube to klein model
@@ -357,7 +360,7 @@ float fakeDistance(vec4 p, vec4 q){
     // Isometry moving back to the origin and conversely
     Isometry isomInv = makeInvLeftTranslation(p);
 
-    vec4 qOrigin = translate(isomInv, q);
+    //vec4 qOrigin = translate(isomInv, q);
     //return  sqrt(exp(-2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
     return length(q-p);
 }
@@ -533,12 +536,11 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
 //--------------------------------------------
 const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 200.0;
+const float MAX_DIST = 50.0;
 const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.051;
 const float fov = 90.0;
-const float sqrt3 = 1.7320508075688772;
 
 
 //--------------------------------------------
@@ -596,15 +598,16 @@ uniform float depth;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
-    vec4 center = ORIGIN;
-    float sphere = centerSDF(p, center, centerSphereRadius);
-    float vertexSphere = 0.0;
-    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
-    float final = -min(vertexSphere, sphere);//unionSDF
-    return final;
-
-    // float final = -sphere;
+    //vec4 center = ORIGIN;
+    //float sphere = centerSDF(p, center, centerSphereRadius);
+    //float vertexSphere = 0.0;
+    //vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
+    //float final = min(vertexSphere, sphere);//unionSDF
     //return final;
+
+    vec4 center = vec4(0., 0., -0.5, 1.);;
+    float sphere = centerSDF(p, center, 0.2);
+    return sphere;
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -643,28 +646,33 @@ float globalSceneSDF(vec4 p){
 
 // check if the given point p is in the fundamental domain of the lattice.
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-    vec4 ModelP= modelProject(p);
-    if (ModelP.z > modelHalfCube){
+    //vec4 ModelP= modelProject(p);
+
+    vec4 v1 = vec4(GoldenRatio, 1., 0., 0.) / (2. * GoldenRatio +1.);
+    vec4 v2 = vec4(-1., GoldenRatio, 0., 0.)/ (2. * GoldenRatio +1.);
+    vec4 v3 = vec4(0., 0., 1./z0, 0.);
+
+    if (dot(p, v3) > 0.5) {
         fixMatrix = Isometry(invGenerators[4]);
         return true;
     }
-    if (ModelP.z < -modelHalfCube){
+    if (dot(p, v3) < -0.5) {
         fixMatrix = Isometry(invGenerators[5]);
         return true;
     }
-    if (ModelP.x > modelHalfCube){
+    if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
-    if (ModelP.x < -modelHalfCube){
+    if (dot(p, v1) < -0.5) {
         fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
-    if (ModelP.y > modelHalfCube){
+    if (dot(p, v2) > 0.5) {
         fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
-    if (ModelP.y < -modelHalfCube){
+    if (dot(p, v2) < -0.5) {
         fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
