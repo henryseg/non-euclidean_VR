@@ -32,7 +32,7 @@ const float vertexSphereSize = 0.23;//In this case its a horosphere
 //----- ---------------------------------------
 
 const float PI = 3.1415926538;
-const float GoldenRatio = 1.618033988749895;
+const float GoldenRatio = 0.5*(1.+sqrt(5.));//1.618033988749895;
 const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
 
@@ -344,6 +344,12 @@ mat4 tangBasis(vec4 p){
     return theBasis;
 }
 
+//mat4 tangBasis(vec4 p){
+//
+//    return makeLeftTranslation(p).matrix;
+//}
+
+
 
 //--------------------------------------------
 // GLOBAL GEOMETRY
@@ -393,8 +399,8 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
-    //return tangVector(tv.pos + t * tv.dir, tv.dir);
-
+    return tangVector(tv.pos + t * tv.dir, tv.dir);
+/*
     // Isometry moving back to the origin and conversely
     Isometry isom = makeLeftTranslation(tv);
     Isometry isomInv = makeInvLeftTranslation(tv);
@@ -427,7 +433,7 @@ tangVector flow(tangVector tv, float t){
     tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
 
     return translate(isom, resOrigin);
-
+*/
 }
 
 uniform highp sampler3D lookupTableX;
@@ -475,7 +481,7 @@ localTangVector flow(localTangVector tv, float t) {
     // overload of the flow for localTangVector
     // follow the geodesic flow during a time t
 
-    //return eucFlow(tv, t);
+   // return eucFlow(tv, t);
     return tableFlow(tv, t);
 
 }
@@ -605,8 +611,8 @@ float localSceneSDF(vec4 p){
     //float final = min(vertexSphere, sphere);//unionSDF
     //return final;
 
-    vec4 center = vec4(0., 0., -0.5, 1.);;
-    float sphere = centerSDF(p, center, 0.2);
+    vec4 center = vec4(0., 0.,0., 1.);;
+    float sphere = centerSDF(p, center, 0.15);
     return sphere;
 }
 
@@ -635,7 +641,8 @@ float globalSceneSDF(vec4 p){
     //Global Sphere Object
     float objDist;
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, globalSphereRad);
+    objDist = sphereSDF(absolutep, vec4(-1.,GoldenRatio,-0.5,1.),globalSphereRad);
+   // objDist = sphereSDF(absolutep, globalObjPos,globalSphereRad);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -648,8 +655,8 @@ float globalSceneSDF(vec4 p){
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
 
-    vec4 v1 = vec4(GoldenRatio, 1., 0., 0.) / (2. * GoldenRatio +1.);
-    vec4 v2 = vec4(-1., GoldenRatio, 0., 0.)/ (2. * GoldenRatio +1.);
+    vec4 v1 = vec4(GoldenRatio, 1., 0., 0.) / ( GoldenRatio +2.);
+    vec4 v2 = vec4(-1., GoldenRatio, 0., 0.)/ ( GoldenRatio +2.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
 
     if (dot(p, v3) > 0.5) {
@@ -660,6 +667,7 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
         fixMatrix = Isometry(invGenerators[5]);
         return true;
     }
+    
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
@@ -810,13 +818,36 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
 
     if (TILING_SCENE){
+        int crossing = 0;
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
-
+            
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
                 marchStep = MIN_DIST;
+                crossing += 1;
+//                
+//                if(crossing == 2) {
+//                    hitWhich =5;
+//                    if(abs(fixMatrix.matrix[3][0]) == 1.){
+//                        debugColor = vec3(1,0,0);
+//                    }
+//                    if(abs(fixMatrix.matrix[3][1]) == 1.){
+//                        debugColor = vec3(0,1,0);
+//                    }
+//                    if(fixMatrix.matrix[3][2] != 0.){
+//                        if (fixMatrix.matrix[3][2] >0.) {
+//                            debugColor = vec3(0.7,0.7,1);
+//                        }
+//                        else {
+//                            debugColor = vec3(0,0,0.5);
+//                        }
+//                        
+//                    }
+//                    break;
+//                }
+                
             }
             else {
                 float localDist = localSceneSDF(localtv.pos);
@@ -824,6 +855,9 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                     hitWhich = 3;
                     sampletv = toTangVector(localtv);
                     break;
+//                     hitWhich = 5;
+//                   debugColor=0.5*translate(totalFixMatrix,localtv).dir.xyz;
+//                    break;
                 }
                 marchStep = min(MAX_STEP_DIST, localDist);
                 globalDepth += localDist;
@@ -855,8 +889,12 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                 //hitWhich = 5;
                 //debugColor = vec3(1.,0.,0.);
 
+//                totalFixMatrix = identityIsometry;
+//                sampletv = toTangVector(tv);
+//                return;
                 totalFixMatrix = identityIsometry;
-                sampletv = toTangVector(tv);
+                hitWhich=5;
+                debugColor=0.5*tv.dir.xyz;
                 return;
             }
             marchStep = min(MAX_STEP_DIST, globalDist);
@@ -1094,6 +1132,7 @@ void main(){
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
     raymarch(toLocalTangVector(rayDir), totalFixMatrix);
+    //raymarch(rayDir, totalFixMatrix);
 
     /*
     hitWhich = 5;

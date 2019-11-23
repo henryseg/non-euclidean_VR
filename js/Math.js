@@ -1,6 +1,7 @@
 import {
     Vector3,
     Vector4,
+    Matrix4,
     ShaderMaterial,
     CubeTextureLoader,
     DataTexture3D,
@@ -8,11 +9,20 @@ import {
     FloatType,
     RedFormat
 } from "./module/three.module.js";
-import {NRRDLoader} from "./module/NRRDLoader.js";
+import {
+    NRRDLoader
+} from "./module/NRRDLoader.js";
 
-import {globals} from './Main.js';
-import {Isometry} from "./Isometry.js";
-import {Position, ORIGIN} from "./Position.js";
+import {
+    globals
+} from './Main.js';
+import {
+    Isometry
+} from "./Isometry.js";
+import {
+    Position,
+    ORIGIN
+} from "./Position.js";
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -21,7 +31,7 @@ import {Position, ORIGIN} from "./Position.js";
 
 let cubeHalfWidth = 0.5;
 
-const GoldenRatio = 1.618033988749895;
+const GoldenRatio = 0.5 * (1 + Math.sqrt(5.)); //1.618033988749895;
 
 //----------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
@@ -70,8 +80,13 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen3 = new Isometry().makeLeftTranslation(1., -GoldenRatio, 0.);
 
     const z0 = 2 * Math.log(GoldenRatio);
+    // console.log(z0);
     const gen4 = new Isometry().makeLeftTranslation(0., 0., z0);
     const gen5 = new Isometry().makeLeftTranslation(0., 0., -z0);
+
+    //    const gen4 = new Isometry().set([new Matrix4().makeTranslation(0, 0, z0)]);
+    //    const gen5 = new Isometry().set([new Matrix4().makeTranslation(0, 0, -z0)]);
+
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -133,6 +148,7 @@ function initObjects() {
     PointLightObject(new Vector3(0, 1., 0), lightColor2);
     PointLightObject(new Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
+
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
 }
 
