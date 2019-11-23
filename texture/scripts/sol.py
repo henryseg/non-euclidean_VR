@@ -197,7 +197,7 @@ class PulledBackFlow(Solver):
         n_theta = int(2 * pi / theta_step)
         n_phi = int(pi / phi_step)
         n_time = int(time / time_step)
-        shape = [n_theta, n_phi, n_time//time_skip]
+        shape = [n_theta, n_phi, n_time // time_skip]
 
         # creating ITK Image objects
         # TODO. Find how to generate image files with a 5D vector at each pixel
@@ -209,7 +209,7 @@ class PulledBackFlow(Solver):
 
         for i in range(n_theta):
             for j in range(n_phi):
-                theta = 2 * pi * i / n_theta
+                theta = -pi + 2 * pi * i / n_theta
                 phi = pi * j / n_phi
                 p = self.start(theta, phi)
                 for k in range(n_time):
@@ -223,6 +223,70 @@ class PulledBackFlow(Solver):
 
                     t = k * time_step
                     p = self._step(t, p, time_step)
+
+        writer = sitk.ImageFileWriter()
+
+        writer.SetFileName(filename + '_x.nrrd')
+        writer.Execute(img_x)
+        writer.SetFileName(filename + '_y.nrrd')
+        writer.Execute(img_y)
+        writer.SetFileName(filename + '_z.nrrd')
+        writer.Execute(img_z)
+        writer.SetFileName(filename + '_theta.nrrd')
+        writer.Execute(img_theta)
+        writer.SetFileName(filename + '_phi.nrrd')
+        writer.Execute(img_phi)
+
+
+class Euclidean:
+
+    def __init__(self, verbose: bool = False) -> None:
+        """
+        Constructor
+        """
+        self.verbose = verbose
+
+    @timer
+    def export_texture_3d(self, filename: str, theta_step: float, phi_step: float, time: float, time_step: float,
+                          time_skip: int):
+        """
+        Return 3D images index by theta,phi,time coding the position/speed achieved by the geodesic flow
+        :param filename: name of the file without extension
+        :param theta_step: the step of the grid in the theta direction
+        :param phi_step: the step of the grid in the phi direction
+        :param time: the maximal value of the time parameter
+        :param time_step: the step of the grid in the time direction
+        :param time_skip: in the image file we keep only 1/skip time values (rasterization)
+        :return: the lookup tables as 3D image files
+        """
+        # shape of the images files
+        n_theta = int(2 * pi / theta_step)
+        n_phi = int(pi / phi_step)
+        n_time = int(time / time_step)
+        shape = [n_theta, n_phi, n_time // time_skip]
+
+        # creating ITK Image objects
+        # TODO. Find how to generate image files with a 5D vector at each pixel
+        img_x = sitk.Image(shape, sitk.sitkFloat32)
+        img_y = sitk.Image(shape, sitk.sitkFloat32)
+        img_z = sitk.Image(shape, sitk.sitkFloat32)
+        img_theta = sitk.Image(shape, sitk.sitkFloat32)
+        img_phi = sitk.Image(shape, sitk.sitkFloat32)
+
+        for i in range(n_theta):
+            for j in range(n_phi):
+                theta = -pi + 2 * pi * i / n_theta
+                phi = pi * j / n_phi
+                x, y, z = sin(phi) * cos(theta), sin(phi) * sin(theta), cos(phi)
+                for k in range(n_time):
+                    t = k * time_step
+                    if k % time_skip == 0:
+                        img_x[i, j, k // time_skip] = t * x
+                        img_y[i, j, k // time_skip] = t * y
+                        img_z[i, j, k // time_skip] = t * z
+                        img_theta[i, j, k // time_skip] = theta
+                        img_phi[i, j, k // time_skip] = phi
+
 
         writer = sitk.ImageFileWriter()
 

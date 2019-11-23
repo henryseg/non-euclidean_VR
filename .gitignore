@@ -1,9 +1,11 @@
 # Apple file system
-
 *.DS_Store
 
-# Workspace of Webstorm
+# Python Virtual Environment
+__pycache__/**
+**/__pycache__/**
 
+# Workspace of Webstorm
 .idea/**
 **/.idea/**
 

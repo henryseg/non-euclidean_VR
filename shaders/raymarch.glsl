@@ -19,7 +19,7 @@ const bool EARTH=false;
 
 
 const bool FAKE_LIGHT_FALLOFF=true;
-const bool FAKE_LIGHT = false;
+const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 
 
@@ -45,6 +45,54 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //--------------------------------------------
 
 const float EULER_STEP = 0.01;
+
+
+//--------------------------------------------
+// STRUCT isometry
+//--------------------------------------------
+
+/*
+  Data type for manipulating isometries of the space
+  A tangVector is given by
+  - matrix : a 4x4 matrix
+*/
+
+struct Isometry {
+    mat4 matrix;// isometry of the space
+};
+
+
+Isometry composeIsometry(Isometry A, Isometry B)
+{
+    return Isometry(A.matrix*B.matrix);
+}
+
+Isometry makeLeftTranslation(vec4 p) {
+    mat4 matrix =  mat4(
+    exp(p.z), 0., 0., 0.,
+    0., exp(-p.z), 0., 0.,
+    0., 0., 1., 0,
+    p.x, p.y, p.z, 1.
+    );
+    return Isometry(matrix);
+}
+
+Isometry makeInvLeftTranslation(vec4 p) {
+    mat4 matrix =  mat4(
+    exp(-p.z), 0., 0., 0.,
+    0., exp(p.z), 0., 0.,
+    0., 0., 1., 0,
+    -exp(-p.z) * p.x, -exp(p.z) * p.y, -p.z, 1.
+    );
+    return Isometry(matrix);
+}
+
+
+vec4 translate(Isometry A, vec4 v) {
+    // translate a point of a vector by the given direction
+    return A.matrix * v;
+}
+
 //--------------------------------------------
 // STRUCT tangVector
 //--------------------------------------------
@@ -64,19 +112,89 @@ struct tangVector {
 };
 
 
-//--------------------------------------------
-// STRUCT isometry
-//--------------------------------------------
-
-/*
-  Data type for manipulating isometries of the space
-  A tangVector is given by
-  - matrix : a 4x4 matrix
-*/
-
-struct Isometry {
-    mat4 matrix;// isometry of the space
+struct localTangVector {
+    vec4 pos;// position on the manifold
+    vec4 dir;// pull back at the origin of the tangent vector
 };
+
+//--------------------------------------------
+// Applying Isometries, Facings
+//--------------------------------------------
+
+Isometry makeLeftTranslation(tangVector v) {
+    // overlaod using tangVector
+    return makeLeftTranslation(v.pos);
+}
+
+Isometry makeLeftTranslation(localTangVector v) {
+    // overlaod using tangVector
+    return makeLeftTranslation(v.pos);
+}
+
+Isometry makeInvLeftTranslation(tangVector v) {
+    // overlaod using tangVector
+    return makeInvLeftTranslation(v.pos);
+}
+
+Isometry makeInvLeftTranslation(localTangVector v) {
+    // overlaod using tangVector
+    return makeInvLeftTranslation(v.pos);
+}
+
+tangVector translate(Isometry A, tangVector v) {
+    // over load to translate a direction
+    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
+}
+
+localTangVector translate(Isometry A, localTangVector v) {
+    // over load to translate a direction
+    return localTangVector(A.matrix * v.pos, v.dir);
+}
+
+tangVector rotateFacing(mat4 A, tangVector v){
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(v.pos, A*v.dir);
+}
+
+localTangVector rotateFacing(mat4 A, localTangVector v){
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return localTangVector(v.pos, A*v.dir);
+}
+
+//--------------------------------------------
+// CONVERSION between two representations of tangent vectors
+//--------------------------------------------
+
+
+tangVector toTangVector(localTangVector v) {
+    // convert a local tangent vector to a tangent vector
+    Isometry isom = makeLeftTranslation(v.pos);
+    vec4 newDir = translate(isom, v.dir);
+    return tangVector(v.pos, newDir);
+}
+
+localTangVector toLocalTangVector(tangVector v) {
+    // convert a tangent vector to a local tangent vector
+    Isometry isom = makeInvLeftTranslation(v.pos);
+    vec4 newDir = translate(isom, v.dir);
+    return localTangVector(v.pos, newDir);
+}
+
+vec4 car2sph(vec4 v) {
+    // convert a vector with (x,y,z,0) cartesian coordinates to a vector with (r,theta,phi, 0) spherical coordinates
+    float r = length(v.xyz);
+    float theta = atan(v.y, v.x);
+    float phi = atan(sqrt(length(v.xy)), v.z);
+    return vec4(r, theta, phi, 0.);
+}
+
+vec4 sph2car(vec4 v) {
+    // convert a vector with (r,theta,phi, 0) spherical coordinates to a vector with (x,y,z,0) cartesian coordinates
+    float r = v.x;
+    float theta = v.y;
+    float phi = v.z;
+    return vec4(r * cos(theta) * sin(phi), r * sin(theta) * sin(phi), r * cos(phi), 0.);
+}
 
 
 //--------------------------------------------
@@ -93,10 +211,22 @@ tangVector add(tangVector v1, tangVector v2) {
     return tangVector(v1.pos, v1.dir + v2.dir);
 }
 
+localTangVector add(localTangVector v1, localTangVector v2) {
+    // add two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return localTangVector(v1.pos, v1.dir + v2.dir);
+}
+
 tangVector sub(tangVector v1, tangVector v2) {
     // subtract two tangent vector at the same point
     // TODO : check if the underlyig point are indeed the same ?
     return tangVector(v1.pos, v1.dir - v2.dir);
+}
+
+localTangVector sub(localTangVector v1, localTangVector v2) {
+    // subtract two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return localTangVector(v1.pos, v1.dir - v2.dir);
 }
 
 tangVector scalarMult(float a, tangVector v) {
@@ -104,14 +234,29 @@ tangVector scalarMult(float a, tangVector v) {
     return tangVector(v.pos, a * v.dir);
 }
 
+localTangVector scalarMult(float a, localTangVector v) {
+    // scalar multiplication of a tangent vector
+    return localTangVector(v.pos, a * v.dir);
+}
+
 tangVector translate(mat4 isom, tangVector v) {
     // apply an isometry to the tangent vector (both the point and the direction)
     return tangVector(isom * v.pos, isom * v.dir);
 }
 
+tangVector translate(mat4 isom, localTangVector v) {
+    // apply an isometry to the local tangent vector
+    return tangVector(isom * v.pos, v.dir);
+}
+
 tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
     // apply the given given matrix only to the direction of the tangent vector
     return tangVector(v.pos, matrix * v.dir);
+}
+
+localTangVector applyMatrixToDir(mat4 matrix, localTangVector v) {
+    // apply the given given matrix only to the direction of the tangent vector
+    return localTangVector(v.pos, matrix * v.dir);
 }
 
 
@@ -125,9 +270,18 @@ float tangDot(tangVector u, tangVector v){
 
 }
 
+float tangDot(localTangVector u, localTangVector v){
+    return dot(u.dir.xyz, v.dir.xyz);
+}
+
 float tangNorm(tangVector v){
     // calculate the length of a tangent vector
-    return sqrt(abs(tangDot(v, v)));
+    return sqrt(tangDot(v, v));
+}
+
+float tangNorm(localTangVector v){
+    // calculate the length of a tangent vector
+    return sqrt(tangDot(v, v));
 }
 
 tangVector tangNormalize(tangVector v){
@@ -135,7 +289,17 @@ tangVector tangNormalize(tangVector v){
     return tangVector(v.pos, v.dir/tangNorm(v));
 }
 
+localTangVector tangNormalize(localTangVector v){
+    // create a unit tangent vector (in the tangle bundle)
+    return localTangVector(v.pos, v.dir/tangNorm(v));
+}
+
 float cosAng(tangVector u, tangVector v){
+    // cosAng between two vector in the tangent bundle
+    return tangDot(u, v);
+}
+
+float cosAng(localTangVector u, localTangVector v){
     // cosAng between two vector in the tangent bundle
     return tangDot(u, v);
 }
@@ -147,67 +311,11 @@ mat4 tangBasis(vec4 p){
     vec4 basis_x = vec4(1., 0., 0., 0.);
     vec4 basis_y = vec4(0., 1., 0., 0.);
     vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis=mat4(0.);
+    mat4 theBasis = mat4(0.);
     theBasis[0]=basis_x;
     theBasis[1]=basis_y;
     theBasis[2]=basis_z;
     return theBasis;
-}
-
-
-//--------------------------------------------
-// Applying Isometries, Facings
-//--------------------------------------------
-
-tangVector translate(Isometry A, tangVector v) {
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
-}
-
-vec4 translate(Isometry A, vec4 v) {
-    // overload of translate for moving only a point
-    return A.matrix * v;
-}
-
-
-tangVector rotateFacing(mat4 A, tangVector v){
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(v.pos, A*v.dir);
-}
-
-Isometry composeIsometry(Isometry A, Isometry B)
-{
-    return Isometry(A.matrix*B.matrix);
-}
-
-Isometry makeLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    exp(p.z), 0., 0., 0.,
-    0., exp(-p.z), 0., 0.,
-    0., 0., 1., 0,
-    p.x, p.y, p.z, 1.
-    );
-    return Isometry(matrix);
-}
-
-Isometry makeLeftTranslation(tangVector v) {
-    // overlaod using tangVector
-    return makeLeftTranslation(v.pos);
-}
-
-Isometry makeInvLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    exp(-p.z), 0., 0., 0.,
-    0., exp(p.z), 0., 0.,
-    0., 0., 1., 0,
-    -exp(-p.z) * p.x, -exp(p.z) * p.y, -p.z, 1.
-    );
-    return Isometry(matrix);
-}
-
-Isometry makeInvLeftTranslation(tangVector v) {
-    // overlaod using tangVector
-    return makeInvLeftTranslation(v.pos);
 }
 
 
@@ -227,7 +335,7 @@ float fakeDistance(vec4 p, vec4 q){
     Isometry isomInv = makeInvLeftTranslation(p);
 
     vec4 qOrigin = translate(isomInv, q);
-    //return 1.2 * sqrt(exp(-2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
+    //return  sqrt(exp(-2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
     return length(q-p);
 }
 
@@ -259,41 +367,78 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
-    return tangVector(tv.pos + t * tv.dir, tv.dir);
+    //return tangVector(tv.pos + t * tv.dir, tv.dir);
+
+    // Isometry moving back to the origin and conversely
+    Isometry isom = makeLeftTranslation(tv);
+    Isometry isomInv = makeInvLeftTranslation(tv);
+
+    tangVector tvOrigin = translate(isomInv, tv);
+
+    // represent at every step the pull back of the tangent vector at the origin
+    vec4 u = tvOrigin.dir;
+    // the position along the geodesic
+    vec4 posAux = ORIGIN;
+    // isometry to move the origin to the given position
+    Isometry isomAux = Isometry(mat4(1.0));
+    vec4 field;
+
+    // integrate numerically the flow
+    int n = int(floor(t/EULER_STEP));
+    for (int i = 0; i < n; i++){
+        posAux = posAux + EULER_STEP * translate(isomAux, u);
+        isomAux = makeLeftTranslation(posAux);
+        if (i != n-1) {
+            field = vec4(
+            -u.x * u.z,
+            u.y * u.z,
+            u.x * u.x - u.y * u.y,
+            0.
+            );
+            u = normalize(u + EULER_STEP*field);
+        }
+    }
+    tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
+
+    return translate(isom, resOrigin);
+
+}
+
+uniform highp sampler3D lookupTableX;
+uniform highp sampler3D lookupTableY;
+uniform highp sampler3D lookupTableZ;
+uniform highp sampler3D lookupTableTheta;
+uniform highp sampler3D lookupTablePhi;
+
+
+localTangVector flow(localTangVector tv, float t) {
+    // overload of the flow for localTangVector
+    // follow the geodesic flow during a time t
+
+    return localTangVector(tv.pos + t * tv.dir, tv.dir);
+
     /*
-      // Isometry moving back to the origin and conversely
-      Isometry isom = makeLeftTranslation(tv);
-      Isometry isomInv = makeInvLeftTranslation(tv);
+    // isom to move to the starting point
+    Isometry isom = makeLeftTranslation(tv);
 
-      tangVector tvOrigin = translate(isomInv, tv);
+    // address of the vexel to look at in the pictures
+    // sph has coordinates (r,theta, phi, 0.)
+    vec4 sph = car2sph(tv.dir);
+    vec3 address = vec3((sph.y + PI) / (2. * PI), sph.z / PI, t);
 
-      // represent at every step the pull back of the tangent vector at the origin
-      vec4 u = tvOrigin.dir;
-      // the position along the geodesic
-      vec4 posAux = ORIGIN;
-      // isometry to move the origin to the given position
-      Isometry isomAux = Isometry(mat4(1.0));
-      vec4 field;
+    // extracting data from the lookupTables
+    float x = texture(lookupTableX, address).r;
+    float y = texture(lookupTableY, address).r;
+    float z = texture(lookupTableZ, address).r;
+    float theta = texture(lookupTableTheta, address).r;
+    float phi = texture(lookupTablePhi, address).r;
 
-      // integrate numerically the flow
-      int n = int(floor(t/EULER_STEP));
-      for (int i = 0; i < n; i++){
-          posAux = posAux + EULER_STEP * translate(isomAux, u);
-          isomAux = makeLeftTranslation(posAux);
-          if (i != n-1) {
-              field = vec4(
-              -u.x * u.z,
-              u.y * u.z,
-              u.x * u.x - u.y * u.y,
-              0.
-              );
-              u = normalize(u + EULER_STEP*field);
-          }
-      }
-      tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
-
-      return translate(isom, resOrigin);
-  */
+    // packaging the result
+    vec4 newPos = vec4(x, y, z, 1.);
+    vec4 newLocalDir = sph2car(vec4(1., theta, phi, 0.));
+    localTangVector resOrigin =  localTangVector(newPos, newLocalDir);
+    return translate(isom, resOrigin);
+    */
 }
 
 
@@ -353,6 +498,7 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
 const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 200.0;
+const float MAX_STEP_DIST = 1.0;// Maximal length of a step... depends of the generated texture.
 const float EPSILON = 0.0001;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
@@ -396,7 +542,6 @@ uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
-uniform highp sampler3D lookupTable;
 uniform float depth;
 
 
@@ -428,7 +573,8 @@ float localSceneSDF(vec4 p){
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
-    vec4 absolutep = translate(cellBoost, p);// correct for the fact that we have been moving
+    // correct for the fact that we have been moving
+    vec4 absolutep = translate(cellBoost, p);
     float distance = MAX_DIST;
     //Light Objects
     for (int i=0; i<4; i++){
@@ -494,6 +640,11 @@ bool isOutsideCell(tangVector v, out Isometry fixMatrix){
     return isOutsideCell(v.pos, fixMatrix);
 }
 
+// overload of the previous method with tangent vector
+bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
+}
+
 
 //--------------------------------------------
 // GEOM DEPENDENT
@@ -549,7 +700,6 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
     // Trace the local scene, then the global scene:
 
-
     if (TILING_SCENE){
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
@@ -589,6 +739,70 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 return;
             }
             marchStep = globalDist;
+            globalDepth += globalDist;
+            if (globalDepth >= localDepth){
+                break;
+            }
+        }
+    }
+}
+
+
+
+void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
+
+    // overlaod of the raymarching with localTangVector
+    Isometry fixMatrix;
+    float marchStep = MIN_DIST;
+    float globalDepth = MIN_DIST;
+    float localDepth = MIN_DIST;
+    localTangVector tv = rayDir;
+    localTangVector localtv = rayDir;
+    totalFixMatrix = identityIsometry;
+
+
+    // Trace the local scene, then the global scene:
+
+
+    if (TILING_SCENE){
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            localtv = flow(localtv, marchStep);
+
+            if (isOutsideCell(localtv, fixMatrix)){
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                localtv = translate(fixMatrix, localtv);
+                marchStep = MIN_DIST;
+            }
+            else {
+                float localDist = localSceneSDF(localtv.pos);
+                if (localDist < EPSILON){
+                    hitWhich = 3;
+                    sampletv = toTangVector(localtv);
+                    break;
+                }
+                marchStep = min(MAX_STEP_DIST, localDist);
+                globalDepth += localDist;
+            }
+        }
+        localDepth = min(globalDepth, MAX_DIST);
+    }
+    else { localDepth=MAX_DIST; }
+
+
+    if (GLOBAL_SCENE){
+        globalDepth = MIN_DIST;
+        marchStep = MIN_DIST;
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            tv = flow(tv, marchStep);
+
+            float globalDist = globalSceneSDF(tv.pos);
+            if (globalDist < EPSILON){
+                // hitWhich has now been set
+                totalFixMatrix = identityIsometry;
+                sampletv = toTangVector(tv);
+                return;
+            }
+            marchStep = min(MAX_STEP_DIST, globalDist);
             globalDepth += globalDist;
             if (globalDepth >= localDepth){
                 break;
@@ -822,18 +1036,21 @@ void main(){
 
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
-    //raymarch(rayDir, totalFixMatrix);
+    raymarch(toLocalTangVector(rayDir), totalFixMatrix);
+
+    /*
     hitWhich = 5;
     // the coordinate used to get data from the texture are between 0 and 1
     vec3 p = vec3(gl_FragCoord.x/screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.005*depth);
-    float z = texture(lookupTable, p).r;
-    if (z > 0.){
-        debugColor = vec3(0., 0.07*z, 0.);
-    }
-    else {
-        debugColor = vec3(0., 0., -0.07*z);
-    }
-    //debugColor = vec3(gl_FragCoord.x / screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.);
+    float x = texture(lookupTableX, p).r;
+    float y = texture(lookupTableY, p).r;
+    float z = texture(lookupTableZ, p).r;
+    float theta = texture(lookupTableTheta, p).r;
+    float phi = texture(lookupTablePhi, p).r;
+    debugColor = abs(vec3((theta+PI)/(2.*PI), phi/PI, 0.));
+    //debugColor = 0.5 + 0.5*vec3(0., 0., z);
+    */
+
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY

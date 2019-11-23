@@ -15,7 +15,6 @@ import {Isometry} from "./Isometry.js";
 import {Position, ORIGIN} from "./Position.js";
 
 
-
 //----------------------------------------------------------------------------------------------------------------------
 //	Geometry constants
 //----------------------------------------------------------------------------------------------------------------------
@@ -27,6 +26,7 @@ let cubeHalfWidth = 0.5;
 //----------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(position) {
+    /*
     let cPos = ORIGIN.clone().translateBy(position.boost);
     let bestIndex = -1;
 
@@ -45,11 +45,14 @@ function fixOutsideCentralCell(position) {
     }
 
     if (bestIndex !== -1) {
-        position.translateBy(gens[bestIndex]);
+        position.translateBy(globals.gens[bestIndex]);
         return bestIndex;
     } else {
         return -1;
     }
+    */
+
+    return -1;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -125,7 +128,7 @@ function initObjects() {
     PointLightObject(new Vector3(0, 1., 0), lightColor2);
     PointLightObject(new Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
-    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1.));
+    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -133,33 +136,9 @@ function initObjects() {
 //----------------------------------------------------------------------------------------------------------------------
 
 
-
-/*
-    It seems that the setupMaterial continues its work, even if the nrrd files is not loaded completely.
-    Texture status is
-    - 0 : if the texture is not loaded
-    - 1 : if the texture is loaded but not passed to the shader
-    - 2 : if the texture is loaded and passed to the shader
-    TODO: write this in a cleaner way
-
- */
-let texture;
-let textureStatus = 0;
-
-
 let depth = 0.;
 
 function setupMaterial(fShader) {
-
-
-    new NRRDLoader().load("../texture/test1_x.nrrd", function (volume) {
-        texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = RedFormat;
-        texture.type = FloatType;
-        texture.minFilter = texture.magFilter = LinearFilter;
-        texture.unpackAlignment = 1;
-        textureStatus = 1;
-    });
 
     globals.material = new ShaderMaterial({
         uniforms: {
@@ -256,12 +235,28 @@ function setupMaterial(fShader) {
                 type: "f",
                 value: globals.stereoScreenOffset
             },
-            lookupTable: {
-                type: "t",
-                value: texture,
+            lookupTableX: {
+                // value of the table will be setup below
+                type: "t"
+            },
+            lookupTableY: {
+                // value of the table will be setup below
+                type: "t"
+            },
+            lookupTableZ: {
+                // value of the table will be setup below
+                type: "t"
+            },
+            lookupTableTheta: {
+                // value of the table will be setup below
+                type: "t"
+            },
+            lookupTablePhi: {
+                // value of the table will be setup below
+                type: "t"
             },
             depth: {
-                type:"f",
+                type: "f",
                 value: depth
             }
         },
@@ -269,6 +264,51 @@ function setupMaterial(fShader) {
         vertexShader: document.getElementById('vertexShader').textContent,
         fragmentShader: fShader,
         transparent: true
+    });
+
+    let file = 'test2';
+    //let file = 'euc';
+
+    // TODO. Factorize this!
+    new NRRDLoader().load("../texture/" + file + "_x.nrrd", function (volume) {
+        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = RedFormat;
+        texture.type = FloatType;
+        texture.minFilter = texture.magFilter = LinearFilter;
+        texture.unpackAlignment = 1;
+        globals.material.uniforms.lookupTableX.value = texture;
+    });
+    new NRRDLoader().load("../texture/" + file + "_y.nrrd", function (volume) {
+        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = RedFormat;
+        texture.type = FloatType;
+        texture.minFilter = texture.magFilter = LinearFilter;
+        texture.unpackAlignment = 1;
+        globals.material.uniforms.lookupTableY.value = texture;
+    });
+    new NRRDLoader().load("../texture/" + file + "_z.nrrd", function (volume) {
+        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = RedFormat;
+        texture.type = FloatType;
+        texture.minFilter = texture.magFilter = LinearFilter;
+        texture.unpackAlignment = 1;
+        globals.material.uniforms.lookupTableZ.value = texture;
+    });
+    new NRRDLoader().load("../texture/" + file + "_theta.nrrd", function (volume) {
+        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = RedFormat;
+        texture.type = FloatType;
+        texture.minFilter = texture.magFilter = LinearFilter;
+        texture.unpackAlignment = 1;
+        globals.material.uniforms.lookupTableTheta.value = texture;
+    });
+    new NRRDLoader().load("../texture/" + file + "_phi.nrrd", function (volume) {
+        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
+        texture.format = RedFormat;
+        texture.type = FloatType;
+        texture.minFilter = texture.magFilter = LinearFilter;
+        texture.unpackAlignment = 1;
+        globals.material.uniforms.lookupTablePhi.value = texture;
     });
 }
 
@@ -299,17 +339,6 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    // once the texture is loaded, pass it to the shader
-    // make sure that it is not passed a second time
-
-    if (textureStatus === 1) {
-         globals.material.uniforms.lookupTable.value = texture;
-         textureStatus = 2;
-    }
-    if (textureStatus !== 3) {
-        console.log(textureStatus, globals.material.uniforms.lookupTable.value);
-        textureStatus = 3;
-    }
     depth = depth + 1;
     if (depth % 10 == 0) {
         globals.material.uniforms.depth.value = depth;
