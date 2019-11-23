@@ -6,7 +6,6 @@ let PI = 3.1415926535;
 //----------------------------------------------------------------------
 //	Object oriented version of the geometry
 //----------------------------------------------------------------------
-
 //matrices don't come with addition in JS?!
 //adding matrices
 THREE.Matrix4.prototype.add = function (m) {
@@ -15,25 +14,10 @@ THREE.Matrix4.prototype.add = function (m) {
     }));
 };
 
-
-//----------------------------------------------------------------------
-//	Methods for Vectors as Elements of H3
-//------------------------------------------------------------------
-
-THREE.Vector4.prototype.hypNormalize = function () {
-    this / Math.sqrt(-this.x * this.x - this.y * this.y - this.z * this.z + this.w * this.w);
-    return this
-}
-
-THREE.Vector4.prototype.hypDot = function (v) {
-    return -(this.x * v.x + this.y * v.y + this.z * v.z) + this.w * v.w;
-}
-
-
 /*
-On the JS part
-    -
-    Every point is represented by a THREE.Vector4 object,
+
+    On the JS part
+    - Every point is represented by a THREE.Vector4 object,
       whose coordinates corresponds to the coordinates in the appropriate (projective ?) model
     - Every tangent vector at the origin is represented by a THREE.Vector3 object
       i.e. we identify the tangent space at the origin with R^3.
@@ -46,10 +30,16 @@ On the JS part
  */
 
 /*
+ * 
+ *
 
     Representation of an isometry
 
  */
+
+
+
+
 
 function Isometry() {
     // In the euclidean geometry an Isometry is just a 4x4 matrix.
@@ -64,6 +54,7 @@ function Isometry() {
         this.matrix = data[0].clone();
         return this;
     };
+
 
     this.translateByVector = function (v) {
         let matrix = new THREE.Matrix4().identity();
@@ -90,23 +81,19 @@ function Isometry() {
         return this;
     }
 
+    this.makeLeftTranslation = function (v) {
+        // return the left translation by (x,y,z)
+        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+        this.translateByVector(v);
+        return this;
+    };
 
-    //For geometries whose model space is R3: give the matrix that translates the origin to (x,y,z);
-
-    //    this.makeLeftTranslation = function (x, y, z) {
-    //        // return the left translation by (x,y,z)
-    //        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-    //        this.matrix.makeTranslation(x, y, z);
-    //        return this;
-    //    };
-    //
-    //    this.makeInvLeftTranslation = function (x, y, z) {
-    //        // return the inverse of the left translation by (x,y,z)
-    //        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-    //        this.matrix.makeTranslation(-x, -y, -z);
-    //        return this;
-    //    };
-
+    this.makeInvLeftTranslation = function (v) {
+        // return the inverse of the left translation by (x,y,z)
+        // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+        this.translateByVector(v.multiplyScalar(-1));
+        return this;
+    };
 
     this.premultiply = function (isom) {
         // return the current isometry multiplied on the left by isom, i.e. isom * this
@@ -167,6 +154,7 @@ function Position() {
     this.boost = new Isometry();
     this.facing = new THREE.Matrix4();
 
+
     this.setBoost = function (boost) {
         this.boost = boost.clone();
         return this;
@@ -217,18 +205,20 @@ function Position() {
 
 
 
+    /*
     this.flow = function (v) {
         // move the position following the geodesic flow
-        // the geodesic starts at the origin, its tangent vector is 
-
+        // the geodesic starts at the origin, its tangent vector is v
         // parallel transport the facing along the geodesic
 
-        // in Hyperbolic geometry, just apply a translation
+        // in Euclidean geometry, just apply a translation
         // Nothing to do on the facing
-
-        let isom = new Isometry().translateByVector(v);
+        let isom = new Isometry().makeLeftTranslation(v.x, v.y, v.z);
         return this.translateBy(isom);
     };
+     */
+
+
 
 
     this.localFlow = function (v) {
@@ -247,6 +237,10 @@ function Position() {
         let isom = new Isometry().translateByVector(v);
         return this.localTranslateBy(isom);
     };
+
+
+
+
 
     this.getInverse = function (position) {
         // set the current position to the position that can bring back the passed position to the origin position
@@ -272,40 +266,9 @@ function Position() {
         return new THREE.Vector3(0, 1, 0).rotateByFacing(this);
     };
 
-
-
-
     this.reduceBoostError = function () {
-        //
-        //        // Hyperbolic Gram-Schmidt
-        //        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
-        //        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
-        //        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
-        //        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
-        //
-        //        col0.hypNormalize();
-        //
-        //        let aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
-        //        col1.sub(aux10).hypNormalize();
-        //
-        //        let aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
-        //        let aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
-        //        col2.sub(aux20).sub(aux21).hypNormalize();
-        //
-        //        let aux30 = col0.clone().multiplyScalar(col0.hypDot(col3));
-        //        let aux31 = col1.clone().multiplyScalar(col1.hypDot(col3));
-        //        let aux32 = col2.clone().multiplyScalar(col2.hypDot(col3));
-        //        col3.sub(aux30).sub(aux31).sub(aux32).hypNormalize();
-        //
-        //        let m = new THREE.Matrix4().set(
-        //            col0.x, col1.x, col2.x, col3.x,
-        //            col0.y, col1.y, col2.y, col3.y,
-        //            col0.z, col1.z, col2.z, col3.z,
-        //            col0.w, col1.w, col2.w, col3.w);
-        //
-        //        this.boost.matrix = m.clone();
+        // Nothing to do in Euclidean geometry
         return this;
-
     };
 
     this.reduceFacingError = function () {
@@ -348,6 +311,12 @@ function Position() {
     }
 }
 
+
+
+
+
+
+
 /*
 
     Rotating a vector
@@ -367,18 +336,41 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
-let cubeHalfWidth = 0.6584789485; //hyperbolic distance from center of fundamental domain to a face (midpoint)
-let modelHalfCube = 0.5773502692; //same distance in the Klein model
+var cubeHalfWidth = 0.6584789485;
+var modelHalfCube = 0.5773502692;
 
+function edist(state1, state2) {
+    var sp1 = state1.boost.matrix.elements;
+    var sp2 = state2.boost.matrix.elements;
+    return Math.sqrt((sp2[12] - sp1[12]) * (sp2[12] - sp1[12]) + (sp2[13] - sp1[13]) * (sp2[13] - sp1[13]) + (sp2[14] - sp1[14]) * (sp2[14] - sp1[14]))
+}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
-
+//return distance of a point p from the origin;
+function geomDist(v) {
+    return Math.acosh(v.w);
+}
 
 function modelProject(v) {
     return new THREE.Vector3(v.x / v.w, v.y / v.w, v.z / v.w);
 }
+
+//
+//function geomDistance(v) {
+//    return Math.acosh(v.w);
+//}
+
+
+//returns the tangent vector at the origin which points to P in the model of the geometry
+function tangDirection(p) {
+    direction = p.sub(ORIGIN.clone().multiplyScalar(p.w));
+    direction = direction.normalize();
+    return direction;
+}
+
+
 
 
 function fixOutsideCentralCell(position) {
@@ -410,24 +402,14 @@ function fixOutsideCentralCell(position) {
 }
 
 
-//ALTERNATIVE TELEPORT FUNCTION
-//measures distance from the central cell to determine generator to move by
-//function geomDist(v) {
-//    return Math.acosh(v.w);
-//}
-//
-//
+
 //function fixOutsideCentralCell(position) {
-//
-//    // let cPos = position.boost.translate(ORIGIN);
-//
 //    let cPos = ORIGIN.clone().translateBy(position.boost);
-//
-//    let bestDist = geomDist(cPos);
+//    let bestDist = geomDistance(cPos);
 //    let bestIndex = -1;
 //    for (let i = 0; i < gens.length; i++) {
 //        let pos = cPos.clone().translateBy(gens[i]);
-//        let dist = geomDist(pos);
+//        let dist = geomDistance(pos);
 //        if (dist < bestDist) {
 //            bestDist = dist;
 //            bestIndex = i;
@@ -437,16 +419,14 @@ function fixOutsideCentralCell(position) {
 //        position.translateBy(gens[bestIndex]);
 //        return bestIndex;
 //    } else {
-//
 //        return -1;
 //    }
+//
 //}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
-
-
 
 function createGenerators() { /// generators for the tiling by cubes.
 
@@ -479,9 +459,13 @@ function createGenerators() { /// generators for the tiling by cubes.
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
+
 function invGenerators(genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
 }
+
+
+
 
 //Unpackage boosts into their components (for hyperbolic space, just pull out the matrix which is the first component)
 function unpackageMatrix(genArr) {
@@ -499,7 +483,6 @@ function unpackageMatrix(genArr) {
 
 let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 
-
 function initGeometry() {
     g_position = new Position();
     g_cellPosition = new Position();
@@ -516,13 +499,7 @@ function initGeometry() {
 }
 
 
-
-//-----------------------------------------------------------------------------------------------------------------------------
-//	Set Up Lighting
-//-----------------------------------------------------------------------------------------------------------------------------
-
-let numLights = 5;
-
+let numLights = 4;
 
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
@@ -533,15 +510,11 @@ function PointLightObject(v, colorInt) {
 }
 
 
-
 //DEFINE THE LIGHT COLORS
 const lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
 const lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
 const lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
 const lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
-
-const lightColor5 = new THREE.Vector4(1, 1, 1, 1);
-
 
 
 function initObjects() {
@@ -550,32 +523,96 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
 
-    PointLightObject(new THREE.Vector3(-1., 0, 0), lightColor5);
-
     earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
 
-    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -2)).boost);
+    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -1)).boost);
 
-    moonState = new State().setVelocity(new THREE.Vector3(1,-1, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
+    moonState = new State().setVelocity(new THREE.Vector3(10, 4, 2)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
 
-    moonState.setBoost(new Position().localFlow(new THREE.Vector3(-1, 1, -2)).boost);
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(-1, -0.5, -1)).boost);
 
-    sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
+    sunState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, 10, 0));
 
-    sunState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -5)).boost);
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(1.5, 0, -2)).boost);
+
+    //    globalObjectState = new State().setVelocity(
+    //        new THREE.Vector3(0, 0, -1));
+
+    //    globalObjectState = new State().setVelocity(new THREE.Vector3(0, 0, -1)).setAngular(new THREE.Vector3(0, -3, 0));
+    //    //velocity is into screen
+    //    //ang velocity is about y axis (earth's poles)
+
+
+
 
 }
+
+//
+////MOVE THE PLANETS AROUND
+stepSize = 0.001;
+setInterval(function () {
+
+        if (edist(earthState, moonState) > .27) {
+            earthState.localFlow(stepSize);
+            moonState.localFlow(stepSize);
+        } else {
+            console.log('impact');
+            w1 = earthState.clone().tangDirectionTo(moonState).multiplyScalar(.2);
+            w2 = moonState.clone().tangDirectionTo(earthState).multiplyScalar(.2);
+            vecw1 = new THREE.Vector3(w1.x, w1.y, w1.z);
+            vecw2 = new THREE.Vector3(w2.x, w2.y, w2.z);
+            midp = earthState.clone().translateBy(new Isometry().translateByVector(vecw1));
+            ms1 = earthState.clone().flowBy(w1.multiplyScalar(.2));
+            ms2 = moonState.clone().flowBy(w2.multiplyScalar(.2));
+            mtang = (midp.clone().tangDirectionTo(earthState)).normalize();
+            ms1par = mtang.clone().multiplyScalar(ms1.velocity.clone().dot(mtang));
+            ms1perp = ms1.velocity.clone().sub(ms1par);
+            ms2par = mtang.clone().multiplyScalar(ms2.velocity.clone().dot(mtang));
+            ms2perp = ms2.velocity.clone().sub(ms2par);
+            check1 = ms1par.clone().multiplyScalar((earthState.mass - moonState.mass) / (earthState.mass + moonState.mass));
+            check2 = ms2par.clone().multiplyScalar(2. * moonState.mass / (earthState.mass + moonState.mass));
+            check3 = ms2par.clone().multiplyScalar((moonState.mass - earthState.mass) / (earthState.mass + moonState.mass));
+            check4 = ms1par.clone().multiplyScalar(2. * earthState.mass / (earthState.mass + moonState.mass));
+            ms1parm = check1.clone().add(check2);
+            ms2parm = check3.clone().add(check4);
+            ms1newvel = ms1perp.clone().add(ms1parm);
+            ms2newvel = ms2perp.clone().add(ms2parm);
+            ms1.velocity.set(ms1newvel.x, ms1newvel.y, ms1newvel.z);
+            ms2.velocity.set(ms2newvel.x, ms2newvel.y, ms2newvel.z);
+            s1back = ms1.clone().flowBy(w1.multiplyScalar(-.2));
+            s2back = ms2.clone().flowBy(w2.multiplyScalar(-.2));
+            earthState.setVelocity(s1back.velocity);
+            moonState.setVelocity(s2back.velocity);
+            earthState.setVelocity(s1back.velocity);
+            moonState.setVelocity(s2back.velocity);
+            earthState.localFlow(stepSize);
+            moonState.localFlow(stepSize);
+        }
+
+
+
+
+
+
+        // var evel=earthState.velocity;
+        // var mvel=moonState.velocity;
+        // earthState.setVelocity(mvel);
+        // moonState.setVelocity(evel);
+        // earthState.localFlow(stepSize);
+        // moonState.localFlow(stepSize); 
+
+        //earthState.localFlow(stepSize);
+        //moonState.localFlow(stepSize);
+        //sunState.localFlow(stepSize);
+
+        // console.log(globalObjectState.boost.matrix.elements);
+    }, 10 // run 100 times a second.
+);
 
 //-------------------------------------------------------
 // Set up shader
 //-------------------------------------------------------
 // We must unpackage the boost data here for sending to the shader.
-
-
-var rockTexture = new THREE.TextureLoader().load("images/concrete.jpg")
-rockTexture.wrapS = THREE.RepeatWrapping;
-rockTexture.wrapT = THREE.RepeatWrapping;
-
 
 function setupMaterial(fShader) {
 
@@ -599,10 +636,6 @@ function setupMaterial(fShader) {
             invGenerators: {
                 type: "m4",
                 value: invGensMatrices
-            },
-            modelHalfCube: {
-                type: "f",
-                value: modelHalfCube
             },
             //--- end of invGen stuff
             currentBoostMat: {
@@ -650,10 +683,30 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: lightPositions
             },
+            numLights: {
+                type: "i",
+                value: numLights
+            },
+
+            centerSphereRad: {
+                type: "f",
+                value: 1.
+            },
+            vertexSphereRad: {
+                type: "f",
+                value: -0.98
+            },
+
             earthBoostMat: {
                 type: "m4",
-                value: earthPosition.boost.matrix
+                value: earthState.boost.matrix
             },
+
+            earthFacing: {
+                type: "m4",
+                value: earthState.facing
+            },
+
             earthRad: {
                 type: "f",
                 value: 0.2
@@ -661,8 +714,14 @@ function setupMaterial(fShader) {
 
             moonBoostMat: {
                 type: "m4",
-                value: moonPosition.boost.matrix
+                value: moonState.boost.matrix
             },
+
+            moonFacing: {
+                type: "m4",
+                value: moonState.facing
+            },
+
             moonRad: {
                 type: "f",
                 value: 0.07
@@ -670,39 +729,40 @@ function setupMaterial(fShader) {
 
             sunBoostMat: {
                 type: "m4",
-                value: sunPosition.boost.matrix
+                value: sunState.boost.matrix
             },
+
+            sunFacing: {
+                type: "m4",
+                value: sunState.facing
+            },
+
+
             sunRad: {
                 type: "f",
                 value: 1.
             },
 
-            centerSphereRad: {
+            modelHalfCube: {
                 type: "f",
-                value: 0.99
+                value: modelHalfCube
             },
-            vertexSphereRad: {
-                type: "f",
-                value: -0.95
-            },
-            numLights: {
-                type: "i",
-                value: numLights
-            },
+
+
             earthCubeTex: { //earth texture to global object
                 type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
                     .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
-                    'posx.jpg',
-                    'negx.jpg',
-                    'posy.jpg',
-                    'negy.jpg',
-                    'posz.jpg',
-                    'negz.jpg'
-                ])
+                        'posx.jpg',
+                        'negx.jpg',
+                        'posy.jpg',
+                        'negy.jpg',
+                        'posz.jpg',
+                        'negz.jpg'
+                    ])
             },
             moonCubeTex: { //texture to global object
-                type: "",
+                type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/moon/')
                     .load([ //Cubemap derived Arnaud Cheritat's website pics
                     'posx.png',
@@ -725,9 +785,9 @@ function setupMaterial(fShader) {
                     'negz.png'
                 ])
             },
-            rockTex: {
-                type: "t",
-                value: rockTexture
+            stereoScreenOffset: {
+                type: "f",
+                value: g_stereoScreenOffset
             }
         },
 
@@ -737,7 +797,7 @@ function setupMaterial(fShader) {
     });
 }
 
-// hi steve 
+
 function updateMaterial() {
     /*
         It seems that to be properly passed to the shader,
@@ -754,7 +814,7 @@ function updateMaterial() {
 
      */
 
-
+    //console.log('ipDist', ipDist);
     let vectorLeft = new THREE.Vector3(-ipDist, 0, 0).rotateByFacing(g_position);
     g_leftPosition = g_position.clone().localFlow(vectorLeft);
     g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
@@ -764,6 +824,16 @@ function updateMaterial() {
     g_rightPosition = g_position.clone().localFlow(vectorRight);
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
+
+
+    g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
+    g_material.uniforms.earthFacing.value = earthState.facing;
+
+    g_material.uniforms.moonBoostMat.value = moonState.boost.matrix;
+    g_material.uniforms.moonFacing.value = moonState.facing;
+
+    g_material.uniforms.sunBoostMat.value = sunState.boost.matrix;
+    g_material.uniforms.sunFacing.value = sunState.facing;
 
 
 }

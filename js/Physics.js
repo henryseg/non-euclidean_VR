@@ -244,4 +244,4 @@ State.prototype.flowBy = function (w) {
     return this;
     //DO EXPLICIT PARALLEL TRANSPORT IN GENERAL (NIL....)
     //
-}    
+}
