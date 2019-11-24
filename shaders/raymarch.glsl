@@ -16,9 +16,10 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights, 
 
 const bool TILING_SCENE=true;
-const bool SOLAR_SYSTEM=true;
+const bool LOCAL_EARTH=false;
 const bool TILING_TEXTURE=false;
 
+const bool SOLAR_SYSTEM=true;
 const bool GLOBAL_SCENE=true;
 const bool GLOBAL_LIGHTS=true;
 
@@ -383,14 +384,39 @@ uniform float stereoScreenOffset;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
+    float tilingDist=MAX_DIST;
+    float earthDist=MAX_DIST;
+    
+
+    if(TILING_SCENE){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
     float centerSphereRadius = 1.333 * modelHalfCube;
     vec4 center = ORIGIN;
-    float sphere = centerSDF(p,  center, centerSphereRad);
+    float sphere=sphereSDF(p,center, centerSphereRadius);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereRad);
-    float final = -min(vertexSphere,sphere); //unionSDF
-    return final;
+    tilingDist = -min(vertexSphere,sphere); 
+        if (tilingDist < EPSILON){
+            hitWhich = 3;
+        return tilingDist;
+        }
+    }
+
+    if(LOCAL_EARTH){
+       // vec4 earthPos=translate(earthBoost, ORIGIN);
+        earthDist = sphereSDF(p,ORIGIN, earthRad);
+        if (earthDist < EPSILON){
+            hitWhich = 7;//draw the local earth sphere
+        return earthDist;
+        }
+    }
+
+    float distance=min(tilingDist, earthDist);
+    return distance;
+    
+//    
+//    float final=min(tilingDist, distance);
+//    return final;
 
    // float final = -sphere;
     //return final;
@@ -617,7 +643,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         else {
             float localDist = min(1., localSceneSDF(localtv.pos));
             if (localDist < EPSILON){
-                hitWhich = 3;
+                //hitWhich = 3;
+                //hitWhich is now set in the local scene SDF
                 sampletv = localtv;
                 break;
             }
@@ -963,6 +990,15 @@ void main(){
 else if (hitWhich == 6){ // the sun
             
         vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,sunBoost, sunFacing, sunCubeTex);
+            
+        out_FragColor = vec4(pixelColor,1.0);
+            
+        return;
+    }
+    
+else if (hitWhich == 7){ // the LOCAL EARTH
+            
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,Isometry(mat4(1.)), mat4(1.), earthCubeTex);
             
         out_FragColor = vec4(pixelColor,1.0);
             
