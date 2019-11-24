@@ -453,8 +453,8 @@ setInterval(function () {
             moonState.localFlow(stepSize);            
         }else{
             console.log('impact');
-            w1=earthState.clone().tangDirectionTo(moonState).multiplyScalar(.2);
-            w2=moonState.clone().tangDirectionTo(earthState).multiplyScalar(.2);
+            w1=earthState.clone().tangDirectionTo(moonState)//.multiplyScalar(.2); //Not sure why this is here?
+            w2=moonState.clone().tangDirectionTo(earthState)//.multiplyScalar(.2);
             vecw1=new THREE.Vector3(w1.x,w1.y,w1.z);
             vecw2=new THREE.Vector3(w2.x,w2.y,w2.z);
             midp=earthState.clone().translateBy(new Isometry().translateByVector(vecw1));
