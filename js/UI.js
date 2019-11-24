@@ -20,7 +20,8 @@ let initGui = function(){
     globalSphereRad: 0.2,
     modelHalfCube: 0.5,
     ipDist: 0.03200000151991844,
-    stereoScreenOffset: globals.stereoScreenOffset
+    stereoScreenOffset: globals.stereoScreenOffset,
+    keyboard:'us'
   };
 
   let gui = new dat.GUI();
@@ -31,6 +32,7 @@ let initGui = function(){
   let halfCubeController = gui.add(guiInfo, 'modelHalfCube',0.2,1.5).name("Half cube");
   let ipDistController = gui.add(guiInfo, 'ipDist',0.0,0.5).name("ip Dist");
   let stereoScreenOffsetController = gui.add(guiInfo, 'stereoScreenOffset',0.02,0.04).name("Stereo offset");
+  let keyboardController = gui.add( guiInfo, 'keyboard', { QWERTY: 'us', AZERTY: 'fr'} ).name("Keyboard");
 
   // ------------------------------
   // UI Controllers
@@ -70,6 +72,10 @@ let initGui = function(){
     globals.stereoScreenOffset = value;
     globals.material.uniforms.stereoScreenOffset.value = value;
   });
+
+  keyboardController.onChange(function(value){
+    globals.controls.setKeyboard(value);
+  })
 
 
 
