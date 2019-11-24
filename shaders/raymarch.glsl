@@ -537,9 +537,22 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
     return sphereSDF(abs(p), cornerPoint, size);
 }
 
-float horizontalPlaneSDF(vec4 p, float h) {
+float horizontalHalfSpaceSDF(vec4 p, float h) {
     //signed distance function to the half space z < h
     return p.z - h;
+}
+
+float horizontalSliceSDF(vec4 p, float h1, float h2) {
+    //signed distance function to the half space h1 < z < h2
+    if(p.z < h1){
+        return  h1 - p.z;
+    }
+    else if (p.z > h2) {
+        return p.z - h2;
+    }
+    else{
+        return - (h1 + (p.z- h1)/(h2-h1));
+    }
 }
 
 //--------------------------------------------
@@ -646,7 +659,7 @@ float globalSceneSDF(vec4 p){
     //Global Sphere Object
     float objDist;
 
-    objDist = horizontalPlaneSDF(absolutep, -0.2);
+    objDist = horizontalSliceSDF(absolutep, -0.2, -0.4);
     /*
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
     //objDist = sphereSDF(absolutep, //vec4(-1.,GoldenRatio,-0.5,1.),globalSphereRad);
