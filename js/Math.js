@@ -518,6 +518,9 @@ function initObjects() {
 
     localEarthState = new State().setVelocity(new THREE.Vector3(1, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
 
+    //    localEarthState2 = new State().setVelocity(new THREE.Vector3(1, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81).setBoost(new Position().translateBy(new Isometry().set([gen1]);
+
+
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
 
@@ -536,6 +539,7 @@ stepSize = 0.001;
 setInterval(function () {
     localEarthState.localFlow(stepSize);
     fixOutsideCentralCellState(localEarthState);
+    // fixOutsidecentralCellState(localEarthState2);
 }, 10);
 
 
@@ -740,6 +744,11 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: localEarthState.boost.matrix
             },
+
+            //                            localEarthBoost2Mat: {
+            //                            type: "m4",
+            //                            value: localEarthState2.boost.matrix
+            //                        },
 
             localEarthFacing: {
                 type: "m4",

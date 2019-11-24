@@ -350,7 +350,10 @@ uniform mat4 sunBoostMat;
 uniform mat4 earthFacing;
 uniform mat4 moonFacing;
 uniform mat4 sunFacing;
+
+
 uniform mat4 localEarthBoostMat;
+//uniform mat4 localEarthBoost2Mat;
 uniform mat4 localEarthFacing;
 
 uniform samplerCube earthCubeTex;
@@ -389,7 +392,8 @@ uniform float stereoScreenOffset;
 float localSceneSDF(vec4 p){
     float tilingDist=MAX_DIST;
     float earthDist=MAX_DIST;
-    
+    Isometry localEarthBoost2;
+    Isometry localEarthBoost3;
 
     if(TILING_SCENE){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
@@ -408,7 +412,17 @@ float localSceneSDF(vec4 p){
     if(LOCAL_EARTH){
        // vec4 earthPos=translate(earthBoost, ORIGIN);
         vec4 earthPos=translate(localEarthBoost, ORIGIN);
+        Isometry 
+            localEarthBoost2=composeIsometry(Isometry(invGenerators[0]),localEarthBoost);
+        localEarthBoost3=composeIsometry(Isometry(invGenerators[1]),localEarthBoost);
+        
+        vec4 earthPos2=translate(localEarthBoost2,ORIGIN);
+        vec4 earthPos3=translate(localEarthBoost3,ORIGIN);
+        
         earthDist = sphereSDF(p,earthPos, earthRad);
+        float earthDist2=sphereSDF(p,earthPos2,earthRad);
+        float earthDist3=sphereSDF(p,earthPos3,earthRad);
+        earthDist=min(earthDist, min(earthDist2,earthDist3));
         if (earthDist < EPSILON){
             hitWhich = 7;//draw the local earth sphere
         return earthDist;
@@ -925,6 +939,7 @@ void main(){
     moonBoost=Isometry(moonBoostMat);
     sunBoost=Isometry(sunBoostMat);
     localEarthBoost=Isometry(localEarthBoostMat);
+    //localEarthBoost2=Isometry(localEarthBoost2Mat);
 
 
     //vec4 rayOrigin = ORIGIN;
