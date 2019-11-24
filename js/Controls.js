@@ -23,138 +23,146 @@ let Controls = function () {
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
 
-    switch (globals.keyboard) {
-        case 'fr':
-            this.manualControls = {
-                81: {
-                    index: 1,
-                    sign: 1,
-                    active: 0
-                }, // q
-                68: {
-                    index: 1,
-                    sign: -1,
-                    active: 0
-                }, // d
-                90: {
-                    index: 0,
-                    sign: 1,
-                    active: 0
-                }, // z
-                83: {
-                    index: 0,
-                    sign: -1,
-                    active: 0
-                }, // s
-                65: {
-                    index: 2,
-                    sign: -1,
-                    active: 0
-                }, // a
-                69: {
-                    index: 2,
-                    sign: 1,
-                    active: 0
-                }, // e
-                38: {
-                    index: 3,
-                    sign: 1,
-                    active: 0
-                }, // up
-                40: {
-                    index: 3,
-                    sign: -1,
-                    active: 0
-                }, // down
-                37: {
-                    index: 4,
-                    sign: -1,
-                    active: 0
-                }, // left
-                39: {
-                    index: 4,
-                    sign: 1,
-                    active: 0
-                }, // right
-                165: {
-                    index: 5,
-                    sign: 1,
-                    active: 0
-                }, // ù
-                61: {
-                    index: 5,
-                    sign: -1,
-                    active: 0
-                }, // =
-            };
-            break;
-        default:
-            this.manualControls = {
-                65: {
-                    index: 1,
-                    sign: 1,
-                    active: 0
-                }, // a
-                68: {
-                    index: 1,
-                    sign: -1,
-                    active: 0
-                }, // d
-                87: {
-                    index: 0,
-                    sign: 1,
-                    active: 0
-                }, // w
-                83: {
-                    index: 0,
-                    sign: -1,
-                    active: 0
-                }, // s
-                81: {
-                    index: 2,
-                    sign: -1,
-                    active: 0
-                }, // q
-                69: {
-                    index: 2,
-                    sign: 1,
-                    active: 0
-                }, // e
-                38: {
-                    index: 3,
-                    sign: 1,
-                    active: 0
-                }, // up
-                40: {
-                    index: 3,
-                    sign: -1,
-                    active: 0
-                }, // down
-                37: {
-                    index: 4,
-                    sign: -1,
-                    active: 0
-                }, // left
-                39: {
-                    index: 4,
-                    sign: 1,
-                    active: 0
-                }, // right
-                222: {
-                    index: 5,
-                    sign: 1,
-                    active: 0
-                }, // single quote
-                191: {
-                    index: 5,
-                    sign: -1,
-                    active: 0
-                }, // fwd slash
-            };
-    }
+    let keyboardFR = {
+        81: {
+            index: 1,
+            sign: 1,
+            active: 0
+        }, // q
+        68: {
+            index: 1,
+            sign: -1,
+            active: 0
+        }, // d
+        90: {
+            index: 0,
+            sign: 1,
+            active: 0
+        }, // z
+        83: {
+            index: 0,
+            sign: -1,
+            active: 0
+        }, // s
+        65: {
+            index: 2,
+            sign: -1,
+            active: 0
+        }, // a
+        69: {
+            index: 2,
+            sign: 1,
+            active: 0
+        }, // e
+        38: {
+            index: 3,
+            sign: 1,
+            active: 0
+        }, // up
+        40: {
+            index: 3,
+            sign: -1,
+            active: 0
+        }, // down
+        37: {
+            index: 4,
+            sign: -1,
+            active: 0
+        }, // left
+        39: {
+            index: 4,
+            sign: 1,
+            active: 0
+        }, // right
+        165: {
+            index: 5,
+            sign: 1,
+            active: 0
+        }, // ù
+        61: {
+            index: 5,
+            sign: -1,
+            active: 0
+        }, // =
+    };
+    let keyboardUS = {
+        65: {
+            index: 1,
+            sign: 1,
+            active: 0
+        }, // a
+        68: {
+            index: 1,
+            sign: -1,
+            active: 0
+        }, // d
+        87: {
+            index: 0,
+            sign: 1,
+            active: 0
+        }, // w
+        83: {
+            index: 0,
+            sign: -1,
+            active: 0
+        }, // s
+        81: {
+            index: 2,
+            sign: -1,
+            active: 0
+        }, // q
+        69: {
+            index: 2,
+            sign: 1,
+            active: 0
+        }, // e
+        38: {
+            index: 3,
+            sign: 1,
+            active: 0
+        }, // up
+        40: {
+            index: 3,
+            sign: -1,
+            active: 0
+        }, // down
+        37: {
+            index: 4,
+            sign: -1,
+            active: 0
+        }, // left
+        39: {
+            index: 4,
+            sign: 1,
+            active: 0
+        }, // right
+        222: {
+            index: 5,
+            sign: 1,
+            active: 0
+        }, // single quote
+        191: {
+            index: 5,
+            sign: -1,
+            active: 0
+        }, // fwd slash
+    };
 
+    this.setKeyboard = function(keyboard) {
+        switch (keyboard) {
+            case 'fr':
+                this.manualControls = keyboardFR;
+                break;
+            case 'us':
+                this.manualControls = keyboardUS;
+                break;
+            default:
+                this.manualControls = keyboardUS;
+        }
+    };
     this._init = function(){
         let self = this;
+        this.setKeyboard('us');
         this._oldVRState = undefined;
         if(!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices) 
             return;
