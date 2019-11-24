@@ -157,7 +157,7 @@ const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
 function initObjects() {
     PointLightObject(new Vector3(1., 1.5, 0), lightColor1);
     PointLightObject(new Vector3(-1, 1.5, 0), lightColor2);
-    PointLightObject(new Vector3(0, 0, 1.), lightColor3);
+    PointLightObject(new Vector3(0, 0.5, 1.), lightColor3);
     PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
 
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
