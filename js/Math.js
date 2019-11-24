@@ -32,40 +32,50 @@ import {
 let cubeHalfWidth = 0.5;
 
 const GoldenRatio = 0.5 * (1 + Math.sqrt(5.)); //1.618033988749895;
-
+const z0 = 2 * Math.log(GoldenRatio);
 //----------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //----------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(position) {
-    /*
-    let cPos = ORIGIN.clone().translateBy(position.boost);
-    let bestIndex = -1;
-
-    if (cPos.z > cubeHalfWidth) {
-        bestIndex = 5;
-    } else if (cPos.z < -cubeHalfWidth) {
-        bestIndex = 4;
-    } else if (cPos.x > cubeHalfWidth) {
-        bestIndex = 1;
-    } else if (cPos.x < -cubeHalfWidth) {
-        bestIndex = 0;
-    } else if (cPos.y > cubeHalfWidth) {
-        bestIndex = 3;
-    } else if (cPos.y < -cubeHalfWidth) {
-        bestIndex = 2;
-    }
-
-    if (bestIndex !== -1) {
-        position.translateBy(globals.gens[bestIndex]);
-        return bestIndex;
-    } else {
-        return -1;
-    }
-    */
-
+    //    let bestIndex = -1;
+    //    let p = ORIGIN.clone().translateBy(position.boost);
+    //    //lattice basis divided by the norm square
+    //    let v1 = new Vector4(GoldenRatio, -1., 0., 0.);
+    //    let v2 = new Vector4(1., GoldenRatio, 0., 0.);
+    //    let v3 = new Vector4(0., 0., 1. / z0, 0.);
+    //
+    //    if (p.dot(v3) > 0.5) {
+    //        bestIndex = 5;
+    //    }
+    //    if (p.dot(v3) < -0.5) {
+    //        bestIndex = 4;
+    //    }
+    //
+    //    if (p.dot(v1) > 0.5) {
+    //        bestIndex = 1;
+    //    }
+    //    if (p.dot(v1) < -0.5) {
+    //        bestIndex = 0;
+    //    }
+    //    if (p.dot(v2) > 0.5) {
+    //        bestIndex = 3;
+    //    }
+    //    if (p.dot(v2) < -0.5) {
+    //        bestIndex = 2;
+    //    }
+    //
+    //    if (bestIndex !== -1) {
+    //        position.translateBy(globals.gens[bestIndex]);
+    //        return bestIndex;
+    //    } else {
+    //        return -1;
+    //    }
     return -1;
 }
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
@@ -73,14 +83,14 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-const denominator=GoldenRatio+2;
-    
-    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio/denominator, -1./denominator, 0.);
-    const gen1 = new Isometry().makeInvLeftTranslation(GoldenRatio/denominator, -1./denominator, 0.);
-    const gen2 = new Isometry().makeLeftTranslation(1./denominator, GoldenRatio/denominator, 0.);
-    const gen3 = new Isometry().makeInvLeftTranslation(1./denominator, GoldenRatio/denominator, 0.);
+    const denominator = GoldenRatio + 2;
 
-    const z0 = 2 * Math.log(GoldenRatio);
+    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio / denominator, -1. / denominator, 0.);
+    const gen1 = new Isometry().makeInvLeftTranslation(GoldenRatio / denominator, -1. / denominator, 0.);
+    const gen2 = new Isometry().makeLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
+    const gen3 = new Isometry().makeInvLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
+
+
     // console.log(z0);
     const gen4 = new Isometry().makeLeftTranslation(0., 0., z0);
     const gen5 = new Isometry().makeLeftTranslation(0., 0., -z0);
