@@ -384,6 +384,49 @@ function fixOutsideCentralCell(position) {
     }
 }
 
+
+function fixOutsideCentralCellState(state) {
+    let bestIndex = -1;
+    let p = state.positionPoint();
+    //lattice basis divided by the norm square
+    let v1 = new THREE.Vector4(1., 0., 0., 0.);
+    let v2 = new THREE.Vector4(0., 1., 0., 0.);
+    let v3 = new THREE.Vector4(0., 0., 1., 0.);
+
+    if (p.dot(v3) > 0.5) {
+        bestIndex = 5;
+    }
+    if (p.dot(v3) < -0.5) {
+        bestIndex = 4;
+    }
+
+    if (p.dot(v1) > 0.5) {
+        bestIndex = 1;
+    }
+    if (p.dot(v1) < -0.5) {
+        bestIndex = 0;
+    }
+    if (p.dot(v2) > 0.5) {
+        bestIndex = 3;
+    }
+    if (p.dot(v2) < -0.5) {
+        bestIndex = 2;
+    }
+
+    if (bestIndex !== -1) {
+        state.translateBy(gens[bestIndex]);
+        return bestIndex;
+    } else {
+        return -1;
+    }
+}
+
+
+
+//SET UP THE LOCAL EARTH POSITION
+//let it flow as it moves, but translate it back to the fundamental cell everytime we cross a border
+
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -472,6 +515,9 @@ function initObjects() {
 
     sunState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -5)).boost);
 
+
+    localEarthState = new State().setVelocity(new THREE.Vector3(1, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
+
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
 
@@ -484,8 +530,18 @@ function initObjects() {
 
 }
 
-//
+
+
+stepSize = 0.001;
+setInterval(function () {
+    localEarthState.localFlow(stepSize);
+    fixOutsideCentralCellState(localEarthState);
+}, 10);
+
+
+
 ////MOVE THE PLANETS AROUND
+//COLLISIONS BETWWEEN GLOBAL OBJECTS
 stepSize = 0.001;
 setInterval(function () {
 
@@ -678,6 +734,16 @@ function setupMaterial(fShader) {
             sunRad: {
                 type: "f",
                 value: 1.
+            },
+
+            localEarthBoostMat: {
+                type: "m4",
+                value: localEarthState.boost.matrix
+            },
+
+            localEarthFacing: {
+                type: "m4",
+                value: localEarthState.facing
             },
 
 

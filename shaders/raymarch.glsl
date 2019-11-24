@@ -16,7 +16,7 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights, 
 
 const bool TILING_SCENE=true;
-const bool LOCAL_EARTH=false;
+const bool LOCAL_EARTH=true;
 const bool TILING_TEXTURE=false;
 
 const bool SOLAR_SYSTEM=true;
@@ -318,6 +318,7 @@ Isometry globalObjectBoost;
 Isometry earthBoost;
 Isometry moonBoost;
 Isometry sunBoost;
+Isometry localEarthBoost;
 
 //-------------------------------------------
 //Translation & Utility Variables
@@ -349,6 +350,8 @@ uniform mat4 sunBoostMat;
 uniform mat4 earthFacing;
 uniform mat4 moonFacing;
 uniform mat4 sunFacing;
+uniform mat4 localEarthBoostMat;
+uniform mat4 localEarthFacing;
 
 uniform samplerCube earthCubeTex;
 uniform samplerCube moonCubeTex;
@@ -404,7 +407,8 @@ float localSceneSDF(vec4 p){
 
     if(LOCAL_EARTH){
        // vec4 earthPos=translate(earthBoost, ORIGIN);
-        earthDist = sphereSDF(p,ORIGIN, earthRad);
+        vec4 earthPos=translate(localEarthBoost, ORIGIN);
+        earthDist = sphereSDF(p,earthPos, earthRad);
         if (earthDist < EPSILON){
             hitWhich = 7;//draw the local earth sphere
         return earthDist;
@@ -920,6 +924,7 @@ void main(){
     earthBoost=Isometry(earthBoostMat);
     moonBoost=Isometry(moonBoostMat);
     sunBoost=Isometry(sunBoostMat);
+    localEarthBoost=Isometry(localEarthBoostMat);
 
 
     //vec4 rayOrigin = ORIGIN;
@@ -998,7 +1003,7 @@ else if (hitWhich == 6){ // the sun
     
 else if (hitWhich == 7){ // the LOCAL EARTH
             
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv,Isometry(mat4(1.)), mat4(1.), earthCubeTex);
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
             
         out_FragColor = vec4(pixelColor,1.0);
             
