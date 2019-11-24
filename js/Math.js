@@ -73,11 +73,12 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-
-    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio, 1., 0.);
-    const gen1 = new Isometry().makeLeftTranslation(-GoldenRatio, -1., 0.);
-    const gen2 = new Isometry().makeLeftTranslation(-1., GoldenRatio, 0.);
-    const gen3 = new Isometry().makeLeftTranslation(1., -GoldenRatio, 0.);
+const denominator=GoldenRatio+2;
+    
+    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio/denominator, -1./denominator, 0.);
+    const gen1 = new Isometry().makeInvLeftTranslation(GoldenRatio/denominator, -1./denominator, 0.);
+    const gen2 = new Isometry().makeLeftTranslation(1./denominator, GoldenRatio/denominator, 0.);
+    const gen3 = new Isometry().makeInvLeftTranslation(1./denominator, GoldenRatio/denominator, 0.);
 
     const z0 = 2 * Math.log(GoldenRatio);
     // console.log(z0);

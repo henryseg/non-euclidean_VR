@@ -16,9 +16,15 @@ import {
     updateMaterial
 } from "./Math.js";
 
-import {initGui} from "./UI.js";
-import {initEvents} from './Events.js';
-import {Controls} from './Controls.js';
+import {
+    initGui
+} from "./UI.js";
+import {
+    initEvents
+} from './Events.js';
+import {
+    Controls
+} from './Controls.js';
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
@@ -30,25 +36,25 @@ import {Controls} from './Controls.js';
 
 let globals = {
     ipDist: 0.03200000151991844,
-    keyboard:'fr', // can be 'fr' or 'us' for the moment
-    effect:undefined,
-    material:undefined,
-    controls:undefined,
-    position:undefined,
-    cellPosition:undefined,
-    invCellPosition:undefined,
-    phoneOrient:undefined,
-    renderer:undefined,
-    screenResolution:undefined,
-    vr:0,
-    leftPosition:undefined,
-    rightPosition:undefined,
-    stereoScreenOffset : 0.03,
+    keyboard: 'us', // can be 'fr' or 'us' for the moment
+    effect: undefined,
+    material: undefined,
+    controls: undefined,
+    position: undefined,
+    cellPosition: undefined,
+    invCellPosition: undefined,
+    phoneOrient: undefined,
+    renderer: undefined,
+    screenResolution: undefined,
+    vr: 0,
+    leftPosition: undefined,
+    rightPosition: undefined,
+    stereoScreenOffset: 0.03,
     gens: undefined,
     invGens: undefined,
-    lightPositions:[],
-    lightIntensities:[],
-    globalObjectPosition:undefined
+    lightPositions: [],
+    lightIntensities: [],
+    globalObjectPosition: undefined
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -146,4 +152,7 @@ function animate() {
 init();
 
 
-export{init, globals};
+export {
+    init,
+    globals
+};

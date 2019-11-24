@@ -612,7 +612,7 @@ float localSceneSDF(vec4 p){
     //return final;
 
     vec4 center = vec4(0., 0.,0., 1.);;
-    float sphere = centerSDF(p, center, 0.15);
+    float sphere = centerSDF(p, center, 0.1);
     return sphere;
 }
 
@@ -641,8 +641,8 @@ float globalSceneSDF(vec4 p){
     //Global Sphere Object
     float objDist;
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, vec4(-1.,GoldenRatio,-0.5,1.),globalSphereRad);
-   // objDist = sphereSDF(absolutep, globalObjPos,globalSphereRad);
+    //objDist = sphereSDF(absolutep, //vec4(-1.,GoldenRatio,-0.5,1.),globalSphereRad);
+   objDist = sphereSDF(absolutep, globalObjPos,globalSphereRad);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -652,21 +652,26 @@ float globalSceneSDF(vec4 p){
 
 
 // check if the given point p is in the fundamental domain of the lattice.
+
+float denominator=GoldenRatio+2.;
+
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
 
-    vec4 v1 = vec4(GoldenRatio, 1., 0., 0.) / ( GoldenRatio +2.);
-    vec4 v2 = vec4(-1., GoldenRatio, 0., 0.)/ ( GoldenRatio +2.);
+    
+    //lattice basis divided by the norm square
+    vec4 v1 = vec4(GoldenRatio, -1., 0.,0.);
+    vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
 
-    if (dot(p, v3) > 0.5) {
-        fixMatrix = Isometry(invGenerators[4]);
-        return true;
-    }
-    if (dot(p, v3) < -0.5) {
-        fixMatrix = Isometry(invGenerators[5]);
-        return true;
-    }
+//    if (dot(p, v3) > 0.5) {
+//        fixMatrix = Isometry(invGenerators[4]);
+//        return true;
+//    }
+//    if (dot(p, v3) < -0.5) {
+//        fixMatrix = Isometry(invGenerators[5]);
+//        return true;
+//    }
     
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
@@ -852,6 +857,15 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             else {
                 float localDist = localSceneSDF(localtv.pos);
                 if (localDist < EPSILON){
+//                    if(crossing > 0) {
+//                        hitWhich = 3;
+//                    sampletv = toTangVector(localtv);
+//                    break;
+//                    }
+//                    else {
+//                        localDist =0.2;
+//                    }
+                    
                     hitWhich = 3;
                     sampletv = toTangVector(localtv);
                     break;
@@ -889,13 +903,13 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                 //hitWhich = 5;
                 //debugColor = vec3(1.,0.,0.);
 
-//                totalFixMatrix = identityIsometry;
-//                sampletv = toTangVector(tv);
-//                return;
                 totalFixMatrix = identityIsometry;
-                hitWhich=5;
-                debugColor=0.5*tv.dir.xyz;
+                sampletv = toTangVector(tv);
                 return;
+//                totalFixMatrix = identityIsometry;
+//                hitWhich=5;
+//                debugColor=0.5*tv.dir.xyz;
+//                return;
             }
             marchStep = min(MAX_STEP_DIST, globalDist);
             globalDepth += globalDist;
