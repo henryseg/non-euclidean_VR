@@ -1001,9 +1001,14 @@ else if (hitWhich == 6){ // the sun
         return;
     }
     
+    
+    
 else if (hitWhich == 7){ // the LOCAL EARTH
-            
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
+        Isometry earthBoostNow=localEarthBoost;
+    //composeIsometry(totalFixMatrix,localEarthBoost);
+        mat4 earthFacingNow=localEarthFacing;
+    //totalFixMatrix.matrix*localEarthFacing
+        vec3 pixelColor=sphereTexture(identityIsometry, sampletv, earthBoostNow, earthFacingNow, earthCubeTex);
             
         out_FragColor = vec4(pixelColor,1.0);
             
