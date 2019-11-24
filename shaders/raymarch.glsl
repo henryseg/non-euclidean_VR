@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
@@ -512,7 +512,7 @@ vec4 modelProject(vec4 p){
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
         //fake linear falloff
-        return dist;
+        return 1.;
     }
     return dist*dist;
 }
@@ -559,12 +559,20 @@ float horizontalSliceSDF(vec4 p, float h1, float h2) {
     */
 }
 
+float sliceSDF(vec4 p){
+    float HS1= 0.;
+    HS1=horizontalHalfSpaceSDF(p,-0.1);
+    float HS2=0.;
+    HS2=-horizontalHalfSpaceSDF(p,-0.3);
+    return max(HS1,HS2);
+}
+
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  80;
+const int MAX_MARCHING_STEPS =  150;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 50.0;
+const float MAX_DIST = 200.0;
 const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.051;
@@ -633,9 +641,16 @@ float localSceneSDF(vec4 p){
     //float final = min(vertexSphere, sphere);//unionSDF
     //return final;
 
-    vec4 center = vec4(0., 0.,0., 1.);;
-    float sphere = centerSDF(p, center, 0.1);
-    return sphere;
+//    vec4 center = vec4(0., 0.,0., 1.);;
+//    float sphere = centerSDF(p, center, 0.1);
+//    return sphere;
+//    
+
+    float slabDist;
+    float sphDist;
+    slabDist = sliceSDF(p);
+    sphDist=sphereSDF(p,vec4(0.,0.,-0.2,1.),0.28);
+    return max(slabDist,-sphDist);
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -660,10 +675,26 @@ float globalSceneSDF(vec4 p){
             return distance;
         }
     }
+    
+    
+    
     //Global Sphere Object
-    float objDist;
 
-    objDist = horizontalSliceSDF(absolutep, -0.4, -0.2);
+ float objDist;
+//    float slabDist;
+//    float sphDist;
+//    slabDist = sliceSDF(absolutep);
+//    sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+//    objDist=max(slabDist,-sphDist);
+    objDist=MAX_DIST;
+    
+    
+        //horizontalSliceSDF(absolutep, -0.2, -0.4);
+
+    //global plane
+   //float objDist;
+    //objDist = horizontalSliceSDF(absolutep, -0.4, -0.2);
+
     /*
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
     //objDist = sphereSDF(absolutep, //vec4(-1.,GoldenRatio,-0.5,1.),globalSphereRad);
