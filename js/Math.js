@@ -148,15 +148,15 @@ function PointLightObject(v, colorInt) {
 }
 
 //DEFINE THE LIGHT COLORS
-const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1);
-const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1);
-const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1);
-const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1);
+const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1); // blue
+const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1); // yellow
+const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1); // red
+const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
 
 
 function initObjects() {
-    PointLightObject(new Vector3(1., 0, 0), lightColor1);
-    PointLightObject(new Vector3(0, 1., 0), lightColor2);
+    PointLightObject(new Vector3(1., 1.5, 0), lightColor1);
+    PointLightObject(new Vector3(-1, 1.5, 0), lightColor2);
     PointLightObject(new Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
 
