@@ -425,7 +425,7 @@ function initObjects() {
 
     moonState = new State().setVelocity(new THREE.Vector3(1,-1, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
 
-    moonState.setBoost(new Position().localFlow(new THREE.Vector3(-1, 1, -2)).boost);
+    moonState.setBoost(new Position().localFlow(new THREE.Vector3(0, .5, -2)).boost);
 
     sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
 
@@ -443,47 +443,99 @@ function initObjects() {
 
 }
 
+var G=6.67430*Math.pow(10,-11);
+var testvec=new THREE.Vector3();
+
+function accel(pos){ //input states
+    var mpos4=moonState.positionPoint();
+    var mpos=testvec.clone().set(mpos4.x,mpos4.y,mpos4.z);
+    var epos4=earthState.positionPoint();
+    var epos=testvec.clone().set(epos4.x,epos4.y,epos4.z);
+    var sep=mpos.sub(epos).add(pos);
+    var r=geomDistance(sep);
+    //console.log(mpos,epos,pos);
+    return mpos.clone().multiplyScalar(G*earthState.mass/(r*r*r))
+}
+
 //
 ////MOVE THE PLANETS AROUND
 stepSize = 0.001;
+test=true;
 setInterval(function () {
 
-        if(edist(earthState,moonState)>.27){
-            earthState.localFlow(stepSize);
-            moonState.localFlow(stepSize);            
-        }else{
-            console.log('impact');
-            w1=earthState.clone().tangDirectionTo(moonState)//.multiplyScalar(.2); //Not sure why this multiply is here?
-            w2=moonState.clone().tangDirectionTo(earthState)//.multiplyScalar(.2);
-            vecw1=new THREE.Vector3(w1.x,w1.y,w1.z);
-            vecw2=new THREE.Vector3(w2.x,w2.y,w2.z);
-            midp=earthState.clone().translateBy(new Isometry().translateByVector(vecw1));
-            ms1=earthState.clone().flowBy(w1.multiplyScalar(.2));
-            ms2=moonState.clone().flowBy(w2.multiplyScalar(.2));
-            mtang=(midp.clone().tangDirectionTo(earthState)).normalize();
-            ms1par=mtang.clone().multiplyScalar(ms1.velocity.clone().dot(mtang));
-            ms1perp=ms1.velocity.clone().sub(ms1par);
-            ms2par=mtang.clone().multiplyScalar(ms2.velocity.clone().dot(mtang));
-            ms2perp=ms2.velocity.clone().sub(ms2par);
-            check1=ms1par.clone().multiplyScalar((earthState.mass-moonState.mass)/(earthState.mass+moonState.mass));
-            check2=ms2par.clone().multiplyScalar(2.*moonState.mass/(earthState.mass+moonState.mass));
-            check3=ms2par.clone().multiplyScalar((moonState.mass-earthState.mass)/(earthState.mass+moonState.mass));
-            check4=ms1par.clone().multiplyScalar(2.*earthState.mass/(earthState.mass+moonState.mass));
-            ms1parm=check1.clone().add(check2);
-            ms2parm=check3.clone().add(check4);
-            ms1newvel=ms1perp.clone().add(ms1parm);
-            ms2newvel=ms2perp.clone().add(ms2parm);
-            ms1.velocity.set(ms1newvel.x,ms1newvel.y,ms1newvel.z);
-            ms2.velocity.set(ms2newvel.x,ms2newvel.y,ms2newvel.z);
-            s1back=ms1.clone().flowBy(w1.multiplyScalar(-.2));
-            s2back=ms2.clone().flowBy(w2.multiplyScalar(-.2));
-            earthState.setVelocity(s1back.velocity);
-            moonState.setVelocity(s2back.velocity);
-            earthState.setVelocity(s1back.velocity);
-            moonState.setVelocity(s2back.velocity);
-            earthState.localFlow(stepSize);
-            moonState.localFlow(stepSize);
-        }
+    if(test){
+        mpos4=moonState.positionPoint();
+        pos=testvec.clone().set(mpos4.x,mpos4.y,mpos4.z);
+        v1=moonState.velocity.clone();
+        a1=accel(testvec.clone());
+        k1v=testvec.clone().set(a1.x,a1.y,a1.z);
+        k1r=testvec.clone().set(v1.x,v1.y,v1.z);
+        
+        v2=moonState.velocity.clone().add(k1v).multiplyScalar(stepSize/2.);
+        a2=accel(testvec.clone().add(k1r).multiplyScalar(stepSize/2.));
+        k2v=testvec.clone().set(a2.x,a2.y,a2.z);
+        k2r=testvec.clone().set(v2.x,v2.y,v2.z);
+
+        v3=moonState.velocity.clone().add(k2v).multiplyScalar(stepSize/2.);
+        a3=accel(testvec.clone().add(k2r).multiplyScalar(stepSize/2.));
+        k3v=testvec.clone().set(a3.x,a3.y,a3.z);
+        k3r=testvec.clone().set(v3.x,v3.y,v3.z);
+
+        v4=moonState.velocity.clone().add(k3v);
+        a4=accel(testvec.clone().add(k3r));
+        k4v=testvec.clone().set(a4.x,a4.y,a4.z);
+        k4r=testvec.clone().set(v4.x,v4.y,v4.z);
+
+        vpart1=(k1v.add(k2v.multiplyScalar(2.)).add(k3v.multiplyScalar(2.)).add(k4v)).multiplyScalar(stepSize/6.);
+        vnew=v1.add(vpart1);
+        rpart1=(k1r.add(k2r.multiplyScalar(2.)).add(k3r.multiplyScalar(2.)).add(k4r)).multiplyScalar(stepSize/6.);
+        rnew=pos.add(rpart1);
+
+        test=false;
+
+        moonState.velocity.set(vnew.x,vnew.y,vnew.z);
+        moonState.boost.matrix.elements[12]=rnew.x;    
+        moonState.boost.matrix.elements[13]=rnew.y;    
+        moonState.boost.matrix.elements[14]=rnew.z;
+    }
+
+
+        // if(edist(earthState,moonState)>.27){
+        //     earthState.localFlow(stepSize);
+        //     moonState.localFlow(stepSize);            
+        // }else{
+        //     console.log('impact');
+        //     w1=earthState.clone().tangDirectionTo(moonState)//.multiplyScalar(.2); //Not sure why this multiply is here?
+        //     w2=moonState.clone().tangDirectionTo(earthState)//.multiplyScalar(.2);
+        //     vecw1=new THREE.Vector3(w1.x,w1.y,w1.z);
+        //     vecw2=new THREE.Vector3(w2.x,w2.y,w2.z);
+        //     midp=earthState.clone().translateBy(new Isometry().translateByVector(vecw1));
+        //     ms1=earthState.clone().flowBy(w1.multiplyScalar(.2));
+        //     ms2=moonState.clone().flowBy(w2.multiplyScalar(.2));
+        //     mtang=(midp.clone().tangDirectionTo(earthState)).normalize();
+        //     ms1par=mtang.clone().multiplyScalar(ms1.velocity.clone().dot(mtang));
+        //     ms1perp=ms1.velocity.clone().sub(ms1par);
+        //     ms2par=mtang.clone().multiplyScalar(ms2.velocity.clone().dot(mtang));
+        //     ms2perp=ms2.velocity.clone().sub(ms2par);
+        //     check1=ms1par.clone().multiplyScalar((earthState.mass-moonState.mass)/(earthState.mass+moonState.mass));
+        //     check2=ms2par.clone().multiplyScalar(2.*moonState.mass/(earthState.mass+moonState.mass));
+        //     check3=ms2par.clone().multiplyScalar((moonState.mass-earthState.mass)/(earthState.mass+moonState.mass));
+        //     check4=ms1par.clone().multiplyScalar(2.*earthState.mass/(earthState.mass+moonState.mass));
+        //     ms1parm=check1.clone().add(check2);
+        //     ms2parm=check3.clone().add(check4);
+        //     ms1newvel=ms1perp.clone().add(ms1parm);
+        //     ms2newvel=ms2perp.clone().add(ms2parm);
+        //     ms1.velocity.set(ms1newvel.x,ms1newvel.y,ms1newvel.z);
+        //     ms2.velocity.set(ms2newvel.x,ms2newvel.y,ms2newvel.z);
+        //     s1back=ms1.clone().flowBy(w1.multiplyScalar(-.2));
+        //     s2back=ms2.clone().flowBy(w2.multiplyScalar(-.2));
+        //     earthState.setVelocity(s1back.velocity);
+        //     moonState.setVelocity(s2back.velocity);
+        //     earthState.setVelocity(s1back.velocity);
+        //     moonState.setVelocity(s2back.velocity);
+        //     earthState.localFlow(stepSize);
+        //     moonState.localFlow(stepSize);
+        // }
 
 
 
