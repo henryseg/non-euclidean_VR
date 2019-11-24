@@ -685,15 +685,15 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     vec4 v1 = vec4(GoldenRatio, -1., 0.,0.);
     vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
-
-//    if (dot(p, v3) > 0.5) {
-//        fixMatrix = Isometry(invGenerators[4]);
-//        return true;
-//    }
-//    if (dot(p, v3) < -0.5) {
-//        fixMatrix = Isometry(invGenerators[5]);
-//        return true;
-//    }
+/*
+    if (dot(p, v3) > 0.5) {
+        fixMatrix = Isometry(invGenerators[4]);
+        return true;
+    }
+    if (dot(p, v3) < -0.5) {
+        fixMatrix = Isometry(invGenerators[5]);
+        return true;
+    }*/
     
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
