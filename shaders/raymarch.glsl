@@ -659,7 +659,7 @@ float globalSceneSDF(vec4 p){
     //Global Sphere Object
     float objDist;
 
-    objDist = horizontalSliceSDF(absolutep, -0.2, -0.4);
+    objDist = horizontalSliceSDF(absolutep, -0.4, -0.2);
     /*
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
     //objDist = sphereSDF(absolutep, //vec4(-1.,GoldenRatio,-0.5,1.),globalSphereRad);
