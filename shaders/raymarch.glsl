@@ -544,6 +544,9 @@ float horizontalHalfSpaceSDF(vec4 p, float h) {
 
 float horizontalSliceSDF(vec4 p, float h1, float h2) {
     //signed distance function to the half space h1 < z < h2
+
+    return max(p.z - h2, h1-p.z);
+    /*
     if(p.z < h1){
         return  h1 - p.z;
     }
@@ -551,8 +554,9 @@ float horizontalSliceSDF(vec4 p, float h1, float h2) {
         return p.z - h2;
     }
     else{
-        return - (h1 + (p.z- h1)/(h2-h1));
+        return max (p.z - h2, h1-p.z);
     }
+    */
 }
 
 //--------------------------------------------
