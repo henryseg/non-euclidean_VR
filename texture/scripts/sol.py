@@ -194,8 +194,10 @@ class PulledBackFlow(Solver):
         :return: the lookup tables as 3D image files
         """
         # shape of the images files
-        n_theta = int(2 * pi / theta_step)
-        n_phi = int(pi / phi_step)
+        # because of the symmetries we only care of the positive quadrant (x> 0, y>0 and z>0)
+        # i.e.  0 < theta < pi/2 and 0 < phi < pi/2
+        n_theta = int(0.5 * pi / theta_step)
+        n_phi = int(0.5 * pi / phi_step)
         n_time = int(time / time_step)
         shape = [n_theta, n_phi, n_time // time_skip]
 
@@ -209,8 +211,8 @@ class PulledBackFlow(Solver):
 
         for i in range(n_theta):
             for j in range(n_phi):
-                theta = -pi + 2 * pi * i / n_theta
-                phi = pi * j / n_phi
+                theta = i * 0.5 * pi / n_theta
+                phi = j * 0.5 * pi / n_phi
                 p = self.start(theta, phi)
                 for k in range(n_time):
                     if k % time_skip == 0:
@@ -286,7 +288,6 @@ class Euclidean:
                         img_z[i, j, k // time_skip] = t * z
                         img_theta[i, j, k // time_skip] = theta
                         img_phi[i, j, k // time_skip] = phi
-
 
         writer = sitk.ImageFileWriter()
 

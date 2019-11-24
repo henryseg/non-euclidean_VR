@@ -298,9 +298,10 @@ function setupMaterial(fShader) {
         transparent: true
     });
 
-    let file = 'test2';
+    //let file = 'test2';
     //let file = 'euc';
     //let file = 'testhgp';
+    let file = 'texsym';
 
     // TODO. Factorize this!
     new NRRDLoader().load("../texture/" + file + "_x.nrrd", function (volume) {

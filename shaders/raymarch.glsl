@@ -95,7 +95,7 @@ const Isometry rotXY = Isometry(mat4(
 0., 0., 0., 1.
 ));
 
-
+const Isometry identity = Isometry(mat4(1.0));
 
 Isometry composeIsometry(Isometry A, Isometry B)
 {
@@ -172,7 +172,7 @@ struct tangVector {
 
 struct localTangVector {
     vec4 pos;// position on the manifold
-    vec4 dir;// pull back at the origin of the tangent vector
+    vec4 dir;// pull back at the origin of the tangent vector by the "pure translation" moving the origin to pos
 };
 
 //--------------------------------------------
@@ -304,6 +304,8 @@ tangVector translate(mat4 isom, tangVector v) {
 
 tangVector translate(mat4 isom, localTangVector v) {
     // apply an isometry to the local tangent vector
+    // WARNING : the isometry has to be a element of a "pure" translation
+    // (otherwise the isometry -- e.g. an element fixing the origin -- should also affect the direction)
     return tangVector(isom * v.pos, v.dir);
 }
 
@@ -383,6 +385,31 @@ mat4 tangBasis(vec4 p){
 
 
 
+vec4 movePosQuadrant(vec4 dir, out Isometry fixIsom) {
+    // Given the direction (dir) of a tangent vector AT THE ORIGIN,
+    // move it back to the positive quadrant (x > 0, y > 0, z > 0) using the global isometries defined above.
+    // keep track of the applied isometries in the following way : fixIsom is updated so that fixIsom * res = dir
+    // note that refX, refY and rotXY have order two, hence they equal their inverses.
+
+    vec4 res = dir;
+    fixIsom = identity;
+
+    if (res.x < -0.) {
+        res = translate(refX, res);
+        fixIsom = composeIsometry(fixIsom, refX);
+    }
+    if (res.y < 0.) {
+        res = translate(refY, res);
+        fixIsom = composeIsometry(fixIsom, refY);
+    }
+    if (res.z < 0.) {
+        res = translate(rotXY, res);
+        fixIsom = composeIsometry(fixIsom, rotXY);
+    }
+
+    return res;
+}
+
 //--------------------------------------------
 // GLOBAL GEOMETRY
 //--------------------------------------------
@@ -432,40 +459,40 @@ tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
     return tangVector(tv.pos + t * tv.dir, tv.dir);
-/*
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-    Isometry isomInv = makeInvLeftTranslation(tv);
+    /*
+        // Isometry moving back to the origin and conversely
+        Isometry isom = makeLeftTranslation(tv);
+        Isometry isomInv = makeInvLeftTranslation(tv);
 
-    tangVector tvOrigin = translate(isomInv, tv);
+        tangVector tvOrigin = translate(isomInv, tv);
 
-    // represent at every step the pull back of the tangent vector at the origin
-    vec4 u = tvOrigin.dir;
-    // the position along the geodesic
-    vec4 posAux = ORIGIN;
-    // isometry to move the origin to the given position
-    Isometry isomAux = Isometry(mat4(1.0));
-    vec4 field;
+        // represent at every step the pull back of the tangent vector at the origin
+        vec4 u = tvOrigin.dir;
+        // the position along the geodesic
+        vec4 posAux = ORIGIN;
+        // isometry to move the origin to the given position
+        Isometry isomAux = Isometry(mat4(1.0));
+        vec4 field;
 
-    // integrate numerically the flow
-    int n = int(floor(t/EULER_STEP));
-    for (int i = 0; i < n; i++){
-        posAux = posAux + EULER_STEP * translate(isomAux, u);
-        isomAux = makeLeftTranslation(posAux);
-        if (i != n-1) {
-            field = vec4(
-            -u.x * u.z,
-            u.y * u.z,
-            u.x * u.x - u.y * u.y,
-            0.
-            );
-            u = normalize(u + EULER_STEP*field);
+        // integrate numerically the flow
+        int n = int(floor(t/EULER_STEP));
+        for (int i = 0; i < n; i++){
+            posAux = posAux + EULER_STEP * translate(isomAux, u);
+            isomAux = makeLeftTranslation(posAux);
+            if (i != n-1) {
+                field = vec4(
+                -u.x * u.z,
+                u.y * u.z,
+                u.x * u.x - u.y * u.y,
+                0.
+                );
+                u = normalize(u + EULER_STEP*field);
+            }
         }
-    }
-    tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
+        tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
 
-    return translate(isom, resOrigin);
-*/
+        return translate(isom, resOrigin);
+    */
 }
 
 uniform highp sampler3D lookupTableX;
@@ -490,10 +517,18 @@ localTangVector tableFlow(localTangVector tv, float t) {
     // isom to move to the starting point
     Isometry isom = makeLeftTranslation(tv);
 
+    // move the tangent vector in the positive quadrant
+    // record the isometry moving the tangent vector back to its initial position
+    Isometry fixQuadrant;
+    vec4 posDir = tv.dir;
+    posDir = movePosQuadrant(posDir, fixQuadrant);
+
     // address of the vexel to look at in the pictures
     // sph has coordinates (r,theta, phi, 0.)
-    vec4 sph = car2sph(tv.dir);
-    vec3 address = vec3((sph.y + PI) / (2. * PI), sph.z / PI, t);
+    vec4 sph = car2sph(posDir);
+    // the texture covers the positive quadrant,
+    // i.e. the angles theta and phi run over [0, pi/2] (because of the symmetries)
+    vec3 address = vec3(2. * sph.y / PI, 2. * sph.z / PI, t);
 
     // extracting data from the lookupTables
     float x = texture(lookupTableX, address).r;
@@ -505,15 +540,30 @@ localTangVector tableFlow(localTangVector tv, float t) {
     // packaging the result
     vec4 newPos = vec4(x, y, z, 1.);
     vec4 newLocalDir = sph2car(vec4(1., theta, phi, 0.));
-    localTangVector resOrigin =  localTangVector(newPos, newLocalDir);
-    return translate(isom, resOrigin);
+
+    // undo the initial symmetries (that moved the tangent vector to the positive quadrant)
+    // note that fixIsom is not an element of the "Sol group R^3"
+    // unlike wiht position, the coordinateds (x,y,z) of the point, do not capture those symmetries
+    // hence we have to apply fixIsom to both the point and the direction
+    newPos = translate(fixQuadrant, newPos);
+    newLocalDir = translate(fixQuadrant, newLocalDir);
+
+    localTangVector res =  localTangVector(newPos, newLocalDir);
+
+
+    // move back the origin to the starting point of the geodesic
+    res = translate(isom, res);
+
+    return res;
+
+
 }
 
 localTangVector flow(localTangVector tv, float t) {
     // overload of the flow for localTangVector
     // follow the geodesic flow during a time t
 
-   // return eucFlow(tv, t);
+    // return eucFlow(tv, t);
     return tableFlow(tv, t);
 
 }
@@ -593,10 +643,10 @@ float horizontalSliceSDF(vec4 p, float h1, float h2) {
 
 float sliceSDF(vec4 p){
     float HS1= 0.;
-    HS1=horizontalHalfSpaceSDF(p,-0.1);
+    HS1=horizontalHalfSpaceSDF(p, -0.1);
     float HS2=0.;
-    HS2=-horizontalHalfSpaceSDF(p,-0.3);
-    return max(HS1,HS2);
+    HS2=-horizontalHalfSpaceSDF(p, -0.3);
+    return max(HS1, HS2);
 }
 
 //--------------------------------------------
@@ -618,7 +668,7 @@ tangVector N;//normal vector
 tangVector sampletv;
 vec4 globalLightColor;
 int hitWhich = 0;
-Isometry identityIsometry=Isometry(mat4(1.0));
+
 
 Isometry currentBoost;
 Isometry leftBoost;
@@ -673,16 +723,16 @@ float localSceneSDF(vec4 p){
     //float final = min(vertexSphere, sphere);//unionSDF
     //return final;
 
-    vec4 center = vec4(0., 0.,0., 1.);;
+    vec4 center = vec4(0., 0., 0., 1.);;
     float sphere = centerSDF(p, center, 0.3);
     return sphere;
-    
-//
-//    float slabDist;
-//    float sphDist;
-//    slabDist = sliceSDF(p);
-//    sphDist=sphereSDF(p,vec4(0.,0.,-0.2,1.),0.28);
-//    return max(slabDist,-sphDist);
+
+    //
+    //    float slabDist;
+    //    float sphDist;
+    //    slabDist = sliceSDF(p);
+    //    sphDist=sphereSDF(p,vec4(0.,0.,-0.2,1.),0.28);
+    //    return max(slabDist,-sphDist);
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -707,31 +757,30 @@ float globalSceneSDF(vec4 p){
             return distance;
         }
     }
-    
-    
-    
+
+
     //Global Sphere Object
 
- float objDist;
-//    float slabDist;
-//    float sphDist;
-//    slabDist = sliceSDF(absolutep);
-//    sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
-//    objDist=max(slabDist,-sphDist);
-   // objDist=MAX_DIST;
-    
-    
-        //horizontalSliceSDF(absolutep, -0.2, -0.4);
+    float objDist;
+    //    float slabDist;
+    //    float sphDist;
+    //    slabDist = sliceSDF(absolutep);
+    //    sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+    //    objDist=max(slabDist,-sphDist);
+    // objDist=MAX_DIST;
+
+
+    //horizontalSliceSDF(absolutep, -0.2, -0.4);
 
     //global plane
-   
-   
 
-  
+
+
+
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, vec4(sqrt(6.26),sqrt(6.28),0.,1.),globalSphereRad);
+    objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
     //objDist = sphereSDF(absolutep, globalObjPos,0.1);
-    
+
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -747,21 +796,21 @@ float denominator=GoldenRatio+2.;
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
 
-    
+
     //lattice basis divided by the norm square
-    vec4 v1 = vec4(GoldenRatio, -1., 0.,0.);
+    vec4 v1 = vec4(GoldenRatio, -1., 0., 0.);
     vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
-/*
-    if (dot(p, v3) > 0.5) {
-        fixMatrix = Isometry(invGenerators[4]);
-        return true;
-    }
-    if (dot(p, v3) < -0.5) {
-        fixMatrix = Isometry(invGenerators[5]);
-        return true;
-    }*/
-    
+    /*
+        if (dot(p, v3) > 0.5) {
+            fixMatrix = Isometry(invGenerators[4]);
+            return true;
+        }
+        if (dot(p, v3) < -0.5) {
+            fixMatrix = Isometry(invGenerators[5]);
+            return true;
+        }*/
+
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
@@ -842,7 +891,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     float localDepth = MIN_DIST;
     tangVector tv = rayDir;
     tangVector localtv = rayDir;
-    totalFixMatrix = identityIsometry;
+    totalFixMatrix = identity;
 
 
     // Trace the local scene, then the global scene:
@@ -881,7 +930,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
-                totalFixMatrix = identityIsometry;
+                totalFixMatrix = identity;
                 sampletv = tv;
                 return;
             }
@@ -905,7 +954,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     float localDepth = MIN_DIST;
     localTangVector tv = rayDir;
     localTangVector localtv = rayDir;
-    totalFixMatrix = identityIsometry;
+    totalFixMatrix = identity;
 
 
     // Trace the local scene, then the global scene:
@@ -915,52 +964,52 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         int crossing = 0;
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
-            
+
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
                 marchStep = MIN_DIST;
                 crossing += 1;
-//                
-//                if(crossing == 2) {
-//                    hitWhich =5;
-//                    if(abs(fixMatrix.matrix[3][0]) == 1.){
-//                        debugColor = vec3(1,0,0);
-//                    }
-//                    if(abs(fixMatrix.matrix[3][1]) == 1.){
-//                        debugColor = vec3(0,1,0);
-//                    }
-//                    if(fixMatrix.matrix[3][2] != 0.){
-//                        if (fixMatrix.matrix[3][2] >0.) {
-//                            debugColor = vec3(0.7,0.7,1);
-//                        }
-//                        else {
-//                            debugColor = vec3(0,0,0.5);
-//                        }
-//                        
-//                    }
-//                    break;
-//                }
-                
+                //
+                //                if(crossing == 2) {
+                //                    hitWhich =5;
+                //                    if(abs(fixMatrix.matrix[3][0]) == 1.){
+                //                        debugColor = vec3(1,0,0);
+                //                    }
+                //                    if(abs(fixMatrix.matrix[3][1]) == 1.){
+                //                        debugColor = vec3(0,1,0);
+                //                    }
+                //                    if(fixMatrix.matrix[3][2] != 0.){
+                //                        if (fixMatrix.matrix[3][2] >0.) {
+                //                            debugColor = vec3(0.7,0.7,1);
+                //                        }
+                //                        else {
+                //                            debugColor = vec3(0,0,0.5);
+                //                        }
+                //
+                //                    }
+                //                    break;
+                //                }
+
             }
             else {
                 float localDist = localSceneSDF(localtv.pos);
                 if (localDist < EPSILON){
-//                    if(crossing > 0) {
-//                        hitWhich = 3;
-//                    sampletv = toTangVector(localtv);
-//                    break;
-//                    }
-//                    else {
-//                        localDist =0.2;
-//                    }
-                    
+                    //                    if(crossing > 0) {
+                    //                        hitWhich = 3;
+                    //                    sampletv = toTangVector(localtv);
+                    //                    break;
+                    //                    }
+                    //                    else {
+                    //                        localDist =0.2;
+                    //                    }
+
                     hitWhich = 3;
                     sampletv = toTangVector(localtv);
                     break;
-//                     hitWhich = 5;
-//                   debugColor=0.5*translate(totalFixMatrix,localtv).dir.xyz;
-//                    break;
+                    //                     hitWhich = 5;
+                    //                   debugColor=0.5*translate(totalFixMatrix,localtv).dir.xyz;
+                    //                    break;
                 }
                 marchStep = min(MAX_STEP_DIST, localDist);
                 globalDepth += localDist;
@@ -992,13 +1041,13 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                 //hitWhich = 5;
                 //debugColor = vec3(1.,0.,0.);
 
-                totalFixMatrix = identityIsometry;
+                totalFixMatrix = identity;
                 sampletv = toTangVector(tv);
                 return;
-//                totalFixMatrix = identityIsometry;
-//                hitWhich=5;
-//                debugColor=0.5*tv.dir.xyz;
-//                return;
+                //                totalFixMatrix = identity;
+                //                hitWhich=5;
+                //                debugColor=0.5*tv.dir.xyz;
+                //                return;
             }
             marchStep = min(MAX_STEP_DIST, globalDist);
             globalDepth += globalDist;
@@ -1233,7 +1282,7 @@ void main(){
     }
 
     //get our raymarched distance back ------------------------
-    Isometry totalFixMatrix = identityIsometry;
+    Isometry totalFixMatrix = identity;
     raymarch(toLocalTangVector(rayDir), totalFixMatrix);
     //raymarch(rayDir, totalFixMatrix);
 
