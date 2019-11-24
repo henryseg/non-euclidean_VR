@@ -64,6 +64,38 @@ struct Isometry {
     mat4 matrix;// isometry of the space
 };
 
+/*
+
+Global symmetries of the space
+Used to reduce the lookup table
+
+*/
+
+// reflection accros the x = 0 plane
+const Isometry refX = Isometry(mat4(
+-1., 0., 0., 0.,
+0., 1., 0., 0.,
+0., 0., 1., 0.,
+0., 0., 0., 1.
+));
+
+// reflection accros the y = 0 plane
+const Isometry refY = Isometry(mat4(
+1., 0., 0., 0.,
+0., -1., 0., 0.,
+0., 0., 1., 0.,
+0., 0., 0., 1.
+));
+
+// pi-rotation around the axis z = 0 ; x = y
+const Isometry rotXY = Isometry(mat4(
+0., 1., 0., 0.,
+1., 0., 0., 0.,
+0., 0., -1., 0.,
+0., 0., 0., 1.
+));
+
+
 
 Isometry composeIsometry(Isometry A, Isometry B)
 {
