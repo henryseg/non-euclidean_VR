@@ -20,7 +20,7 @@ const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=false;
 
 const bool GLOBAL_SCENE=true;
-const bool GLOBAL_LIGHTS=true;
+const bool GLOBAL_LIGHTS=false;
 
 const bool FAKE_LIGHT = true;
 const bool FAKE_LIGHT_FALLOFF=true;
