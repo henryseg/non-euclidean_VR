@@ -16,7 +16,7 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights, 
 
 const bool TILING_SCENE=true;
-const bool LOCAL_EARTH=true;
+const bool LOCAL_EARTH=false;
 const bool TILING_TEXTURE=false;
 
 const bool SOLAR_SYSTEM=true;
@@ -397,7 +397,7 @@ float localSceneSDF(vec4 p){
 
     if(TILING_SCENE){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-    float centerSphereRadius = 1.333 * modelHalfCube;
+    float centerSphereRadius = 1.5 * modelHalfCube;
     vec4 center = ORIGIN;
     float sphere=sphereSDF(p,center, centerSphereRadius);
     float vertexSphere = 0.0;
