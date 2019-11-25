@@ -397,9 +397,9 @@ float localSceneSDF(vec4 p){
 
     if(TILING_SCENE){
     vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-    float centerSphereRadius = 1.5 * modelHalfCube;
+   // float centerSphereRadius = 1.5 * modelHalfCube;
     vec4 center = ORIGIN;
-    float sphere=sphereSDF(p,center, centerSphereRadius);
+    float sphere=sphereSDF(p,center, centerSphereRad);
     float vertexSphere = 0.0;
     vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereRad);
     tilingDist = -min(vertexSphere,sphere); 
