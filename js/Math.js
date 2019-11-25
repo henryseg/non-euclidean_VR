@@ -447,10 +447,10 @@ var G=6.67430*Math.pow(10,-11);
 var testvec=new THREE.Vector3();
 
 function accel(pos){ //input states
-    var mpos4=moonState.positionPoint();
-    var mpos=testvec.clone().set(mpos4.x,mpos4.y,mpos4.z);
-    var epos4=earthState.positionPoint();
-    var epos=testvec.clone().set(epos4.x,epos4.y,epos4.z);
+    var mpos4a=moonState.positionPoint();
+    var mpos=testvec.clone().set(mpos4a.x,mpos4a.y,mpos4a.z);
+    var epos4a=earthState.positionPoint();
+    var epos=testvec.clone().set(epos4a.x,epos4a.y,epos4a.z);
     var sep=mpos.sub(epos).add(pos);
     var r=geomDistance(sep);
     //console.log(mpos,epos,pos);
