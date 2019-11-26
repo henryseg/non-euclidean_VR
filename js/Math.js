@@ -540,7 +540,10 @@ function initObjects() {
 
     sunState.setBoost(new Position().localFlow(new THREE.Vector3(1.5, 0, -2)).boost);
     
-    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-1.,0,-1)).boost);
+    
+    
+    //MUST BE INSIDE ORIGINAL FUNDAMENTAL DOMAIN
+    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.2,0,-0.2)).boost);
     
     localLightPos= new Position().localFlow(new THREE.Vector3(0,0,-0.3));
 
@@ -767,11 +770,11 @@ function setupMaterial(fShader) {
                 value: 0.4
             },
 
-//            localLightPos: {
-//                type: "f",
-//                value: localLightPos.positionPoint()
-//            },
-// 
+            localLightPos: {
+                type: "f",
+                value: ORIGIN.clone().translateBy(localLightPos.boost)
+            },
+ 
             
             
             

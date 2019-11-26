@@ -407,7 +407,7 @@ uniform mat4 invCellBoostMat;
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
-//uniform vec4 localLightPos;
+uniform vec4 localLightPos;
 uniform int numLights;
 
 uniform mat4 globalObjectBoostMat;
@@ -514,8 +514,8 @@ float localSceneSDF(vec4 p){
     
     //Light Objects
  if(LOCAL_LIGHTS){
-     vec4 lightCenter=vec4(0.,0.,0.,1.);
-      lightDist=sphereSDF(p,lightCenter,0.1);
+     vec4 lightCenter=localLightPos;
+      lightDist=sphereSDF(p,lightCenter,0.05);
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
             hitWhich = 1;
@@ -526,11 +526,11 @@ float localSceneSDF(vec4 p){
     
     if(LOCAL_EARTH){
        //vec4 earthCenter=translate(localEarthBoost,ORIGIN);
-       vec4 earthCenter=vec4(0.,0.,0.,1.);
-       earthDist=sphereSDF(p,earthCenter,0.4);
+       vec4 earthCenter=translate(localEarthBoost,ORIGIN);
+       earthDist=sphereSDF(p,earthCenter,0.15);
         distance=min(distance,earthDist);
         if(earthDist < EPSILON){
-            hitWhich = 2;
+            hitWhich = 7;
             return distance;
         }  
     }
@@ -1146,6 +1146,21 @@ else if (hitWhich == 6){ // the sun
         return;
     }
     
+    
+else if (hitWhich == 7){ // the LOCAL earth
+        
+        
+        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
+            
+
+        out_FragColor = vec4( pixelColor,1.0);
+
+        return;
+    }
+    
+    
+
+
 
     else { // objects
 
