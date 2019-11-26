@@ -244,4 +244,160 @@ State.prototype.flowBy = function (w) {
     return this;
     //DO EXPLICIT PARALLEL TRANSPORT IN GENERAL (NIL....)
     //
-}    
+}
+
+
+
+
+
+State.prototype.toCoordinates = function () {
+    let newCoords = new Coordinates();
+
+    let pos = this.positionPoint();
+
+    newCoords.setPosition(new Vector3(pos.x, pos.y, pos.z));
+
+    //think about what is going on here in the future
+    newCoords.setFacing(this.facing);
+
+
+    //true velocity is the vel that was stored at the origin, times the boost's rotational part.
+    let boostedVelocity = new THREE.Vector4(this.velocity.x, this.velocity.y, this.velocity.z, 0.).translateBy(this.boost);
+    let coordVelocity = new THREE.Vector3(boostedVelocity.x, boostedVelocity.y, boostedVelocity.z);
+
+    newCoords.setVelocity(coordVelocity);
+
+    //PROBABLY DO THE SAME SHIT TO ANGULAR VELOCITY
+    let boostedAngular = new THREE.Vector4(this.angular.x, this.angular.y, this.angular.z, 0.).translateBy(this.boost);
+    let coordAngular = new THREE.Vector3(boostedAngular.x, boostedAngular.y, boostedAngular.z);
+
+    newCoords.setAngular(coordAngular);
+
+
+    newCoords.setMass(this.mass);
+
+    return this;
+}
+
+
+
+
+
+
+
+
+
+function Coordinates() {
+
+    this.position = new THREE.Vector3(); //point in rx(spherical coords)
+    this.facing = new THREE.Matrix4(); //orientation of object
+    this.velocity = new THREE.Vector3(); //tangent vector to the hyperboloid at POSITION, stored in coordinates.
+    this.angular = new THREE.Vector3(); //who knows but its here
+    this.mass = 1.;
+};
+
+
+Coordinates.prototype.setPosition = function (position) {
+    this.position = position.clone();
+    return this;
+};
+
+
+
+Coordinates.prototype.setFacing = function (facing) {
+    this.facing = facing.clone();
+    return this;
+};
+
+
+Coordinates.prototype.setVelocity = function (velocity) {
+    this.velocity = velocity.clone();
+    return this;
+};
+
+Coordinates.prototype.setAngular = function (angular) {
+    this.angular = angular.clone();
+    return this;
+};
+
+
+Coordinates.prototype.setMass = function (mass) {
+    this.mass = mass;
+    return this;
+};
+
+Coordinates.prototype.set = function (position, facing, velocity, angular, mass) {
+    this.setPosition(position);
+    this.setFacing(facing);
+    this.setVelocity(velocity);
+    this.setAngular(angular);
+    this.setMass(mass);
+    return this;
+};
+
+
+
+
+Coordinates.prototype.toState = function () {
+    let newState = new State();
+
+    let newBoost = new Isometry().makeLeftTranslation(this.position);
+    //let newBoost = new Isometry().set([new THREE.Matrix4().makeTranslation(this.position)]);
+
+
+    newState.setBoost(newBoost);
+
+
+    //deal with this later
+    newState.setFacing(this.facing);
+
+    newState.setVelocity(this.velocity);
+    newState.setAngular(this.angular);
+
+    newState.setMass(this.mass);
+
+    return newState;
+}
+
+
+Coordinates.prototype.flow = function (t) {
+    let vt = this.velocity.clone().multiplyScalar(t);
+    this.position.add(vt);
+
+    let wHat = this.angular.clone().normalize();
+    let wLen = this.angular.clone().length() * t;
+    let rotMat = new THREE.Matrix4().makeRotationAxis(wHat, wLen);
+    this.facing.multiply(rotMat);
+
+
+    return this;
+
+
+}
+
+Coordinates.prototype.forceFlow = function (t, force) {
+    let vt = this.velocity.clone().multiplyScalar(t);
+    //console.log(vt);
+    this.velocity.add(force.clone().multiplyScalar(t / this.mass));
+    this.position.add(vt);
+
+    //this says the force doesn't give a shit about the facing....is that a thing?
+    let wHat = this.angular.clone().normalize();
+    let wLen = this.angular.clone().length() * t;
+    let rotMat = new THREE.Matrix4().makeRotationAxis(wHat, wLen);
+
+    this.facing.multiply(rotMat);
+
+
+    return this;
+
+}
+
+
+
+function gravForce(source, particle) {
+    let separation = source.clone().sub(particle);
+    let sepDist = separation.clone().length();
+    console.log(separation.clone().multiplyScalar(81 / (sepDist * sepDist * sepDist)));
+    return separation.multiplyScalar(81. / (sepDist * sepDist * sepDist));
+}

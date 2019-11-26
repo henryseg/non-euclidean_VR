@@ -503,9 +503,12 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
 
-    earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
+    earthCoords = new Coordinates().setVelocity(new THREE.Vector3(0, 0, -1)).setPosition(new THREE.Vector3(1, 0, -2)).setMass(81).setAngular(new THREE.Vector3(0, 10, 0));
 
-    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -2)).boost);
+    //
+    //    earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
+    //
+    //    earthState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -2)).boost);
 
     moonState = new State().setVelocity(new THREE.Vector3(10, -10, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(1);
 
@@ -513,11 +516,9 @@ function initObjects() {
 
     sunState = new State().setVelocity(new THREE.Vector3(0.2, 0, -10)).setAngular(new THREE.Vector3(0, 10, 0));
 
-    sunState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -5)).boost);
-
+    sunState.setBoost(new Position().localFlow(new THREE.Vector3(0, 0, -2)).boost);
 
     localEarthState = new State().setVelocity(new THREE.Vector3(1, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
-
     //    localEarthState2 = new State().setVelocity(new THREE.Vector3(1, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81).setBoost(new Position().translateBy(new Isometry().set([gen1]);
 
 
@@ -535,56 +536,65 @@ function initObjects() {
 
 
 
-stepSize = 0.001;
-setInterval(function () {
-    localEarthState.localFlow(stepSize);
-    fixOutsideCentralCellState(localEarthState);
-    // fixOutsidecentralCellState(localEarthState2);
-}, 10);
+//stepSize = 0.001;
+//setInterval(function () {
+//    localEarthState.localFlow(stepSize);
+//    fixOutsideCentralCellState(localEarthState);
+//    // fixOutsidecentralCellState(localEarthState2);
+//}, 10);
 
-
+let gravSource = new THREE.Vector3(0, 0, -2);
 
 ////MOVE THE PLANETS AROUND
 //COLLISIONS BETWWEEN GLOBAL OBJECTS
-stepSize = 0.001;
+stepSize = 0.0001;
 setInterval(function () {
 
-        if (edist(earthState, moonState) > .27) {
-            earthState.localFlow(stepSize);
-            moonState.localFlow(stepSize);
-        } else {
-            console.log('impact');
-            w1 = earthState.clone().tangDirectionTo(moonState) //.multiplyScalar(.2); //Not sure why this is here?
-            w2 = moonState.clone().tangDirectionTo(earthState) //.multiplyScalar(.2);
-            vecw1 = new THREE.Vector3(w1.x, w1.y, w1.z);
-            vecw2 = new THREE.Vector3(w2.x, w2.y, w2.z);
-            midp = earthState.clone().translateBy(new Isometry().translateByVector(vecw1));
-            ms1 = earthState.clone().flowBy(w1.multiplyScalar(.2));
-            ms2 = moonState.clone().flowBy(w2.multiplyScalar(.2));
-            mtang = (midp.clone().tangDirectionTo(earthState)).normalize();
-            ms1par = mtang.clone().multiplyScalar(ms1.velocity.clone().dot(mtang));
-            ms1perp = ms1.velocity.clone().sub(ms1par);
-            ms2par = mtang.clone().multiplyScalar(ms2.velocity.clone().dot(mtang));
-            ms2perp = ms2.velocity.clone().sub(ms2par);
-            check1 = ms1par.clone().multiplyScalar((earthState.mass - moonState.mass) / (earthState.mass + moonState.mass));
-            check2 = ms2par.clone().multiplyScalar(2. * moonState.mass / (earthState.mass + moonState.mass));
-            check3 = ms2par.clone().multiplyScalar((moonState.mass - earthState.mass) / (earthState.mass + moonState.mass));
-            check4 = ms1par.clone().multiplyScalar(2. * earthState.mass / (earthState.mass + moonState.mass));
-            ms1parm = check1.clone().add(check2);
-            ms2parm = check3.clone().add(check4);
-            ms1newvel = ms1perp.clone().add(ms1parm);
-            ms2newvel = ms2perp.clone().add(ms2parm);
-            ms1.velocity.set(ms1newvel.x, ms1newvel.y, ms1newvel.z);
-            ms2.velocity.set(ms2newvel.x, ms2newvel.y, ms2newvel.z);
-            s1back = ms1.clone().flowBy(w1.multiplyScalar(-.2));
-            s2back = ms2.clone().flowBy(w2.multiplyScalar(-.2));
-            earthState.setVelocity(s1back.velocity);
-            moonState.setVelocity(s2back.velocity);
-            earthState.setVelocity(s1back.velocity);
-            moonState.setVelocity(s2back.velocity);
-            earthState.localFlow(stepSize);
-            moonState.localFlow(stepSize);
-        }
+        //testing earth coordinates
+        earthCoords.forceFlow(stepSize, gravForce(gravSource, earthCoords.position));
+
+
+
+
+
+
+
+        //        if (edist(earthState, moonState) > .27) {
+        //            earthState.localFlow(stepSize);
+        //            moonState.localFlow(stepSize);
+        //        } else {
+        //            console.log('impact');
+        //            w1 = earthState.clone().tangDirectionTo(moonState) //.multiplyScalar(.2); //Not sure why this is here?
+        //            w2 = moonState.clone().tangDirectionTo(earthState) //.multiplyScalar(.2);
+        //            vecw1 = new THREE.Vector3(w1.x, w1.y, w1.z);
+        //            vecw2 = new THREE.Vector3(w2.x, w2.y, w2.z);
+        //            midp = earthState.clone().translateBy(new Isometry().translateByVector(vecw1));
+        //            ms1 = earthState.clone().flowBy(w1.multiplyScalar(.2));
+        //            ms2 = moonState.clone().flowBy(w2.multiplyScalar(.2));
+        //            mtang = (midp.clone().tangDirectionTo(earthState)).normalize();
+        //            ms1par = mtang.clone().multiplyScalar(ms1.velocity.clone().dot(mtang));
+        //            ms1perp = ms1.velocity.clone().sub(ms1par);
+        //            ms2par = mtang.clone().multiplyScalar(ms2.velocity.clone().dot(mtang));
+        //            ms2perp = ms2.velocity.clone().sub(ms2par);
+        //            check1 = ms1par.clone().multiplyScalar((earthState.mass - moonState.mass) / (earthState.mass + moonState.mass));
+        //            check2 = ms2par.clone().multiplyScalar(2. * moonState.mass / (earthState.mass + moonState.mass));
+        //            check3 = ms2par.clone().multiplyScalar((moonState.mass - earthState.mass) / (earthState.mass + moonState.mass));
+        //            check4 = ms1par.clone().multiplyScalar(2. * earthState.mass / (earthState.mass + moonState.mass));
+        //            ms1parm = check1.clone().add(check2);
+        //            ms2parm = check3.clone().add(check4);
+        //            ms1newvel = ms1perp.clone().add(ms1parm);
+        //            ms2newvel = ms2perp.clone().add(ms2parm);
+        //            ms1.velocity.set(ms1newvel.x, ms1newvel.y, ms1newvel.z);
+        //            ms2.velocity.set(ms2newvel.x, ms2newvel.y, ms2newvel.z);
+        //            s1back = ms1.clone().flowBy(w1.multiplyScalar(-.2));
+        //            s2back = ms2.clone().flowBy(w2.multiplyScalar(-.2));
+        //            earthState.setVelocity(s1back.velocity);
+        //            moonState.setVelocity(s2back.velocity);
+        //            earthState.setVelocity(s1back.velocity);
+        //            moonState.setVelocity(s2back.velocity);
+        //            earthState.localFlow(stepSize);
+        //            moonState.localFlow(stepSize);
+        //        }
 
 
 
@@ -603,7 +613,7 @@ setInterval(function () {
         //sunState.localFlow(stepSize);
 
         // console.log(globalObjectState.boost.matrix.elements);
-    }, 10 // run 100 times a second.
+    }, 5 // run 100 times a second.
 );
 
 //-------------------------------------------------------
@@ -696,12 +706,14 @@ function setupMaterial(fShader) {
 
             earthBoostMat: {
                 type: "m4",
-                value: earthState.boost.matrix
+                value: earthCoords.toState().boost.matrix
+                //earthState.boost.matrix
             },
 
             earthFacing: {
                 type: "m4",
-                value: earthState.facing
+                value: earthCoords.toState().facing
+                //earthState.facing
             },
 
             earthRad: {
@@ -737,7 +749,7 @@ function setupMaterial(fShader) {
 
             sunRad: {
                 type: "f",
-                value: 1.
+                value: 0.3
             },
 
             localEarthBoostMat: {
@@ -838,8 +850,8 @@ function updateMaterial() {
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
 
-    g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
-    g_material.uniforms.earthFacing.value = earthState.facing;
+    g_material.uniforms.earthBoostMat.value = earthCoords.toState().boost.matrix;
+    g_material.uniforms.earthFacing.value = earthCoords.toState().facing;
 
     g_material.uniforms.moonBoostMat.value = moonState.boost.matrix;
     g_material.uniforms.moonFacing.value = moonState.facing;
