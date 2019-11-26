@@ -18,9 +18,11 @@ Some parameters that can be changed to change the scence
 const bool TILING_SCENE=true;
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=false;
+const bool LOCAL_EARTH=true;
 
 const bool GLOBAL_SCENE=true;
 const bool GLOBAL_LIGHTS=true;
+const bool LOCAL_LIGHTS=true;
 
 const bool FAKE_LIGHT = true;
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -384,6 +386,7 @@ Isometry globalObjectBoost;
 Isometry earthBoost;
 Isometry moonBoost;
 Isometry sunBoost;
+Isometry localEarthBoost;
 
 //-------------------------------------------
 //Translation & Utility Variables
@@ -404,6 +407,7 @@ uniform mat4 invCellBoostMat;
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
+//uniform vec4 localLightPos;
 uniform int numLights;
 
 uniform mat4 globalObjectBoostMat;
@@ -415,6 +419,11 @@ uniform mat4 sunBoostMat;
 uniform mat4 earthFacing;
 uniform mat4 moonFacing;
 uniform mat4 sunFacing;
+
+uniform mat4 localEarthBoostMat;
+uniform mat4 localEarthFacing;
+uniform float localEarthRad;
+
 
 uniform samplerCube earthCubeTex;
 uniform samplerCube moonCubeTex;
@@ -448,20 +457,117 @@ uniform float stereoScreenOffset;
 //---------------------------------------------------------------------
 // Turn off the local scene
 // Local signed distance function : distance from p to an object in the local scene
+//
+//float localSceneSDF(vec4 p){
+//    float tilingDist=MAX_DIST;
+//    float lightDist=MAX_DIST;
+//    float earthDist=MAX_DIST;
+//    float distance=MAX_DIST;
+//    
+//    if(LOCAL_LIGHTS){
+//      vec4 lightCenter=vec4(0.,0.,0.,1.);
+//      lightDist=sphereSDF(p,lightCenter,0.1);
+//          
+//        if (lightDist < EPSILON){
+//            hitWhich = 1;
+//            globalLightColor =lightPositions[1];
+//            return lightDist;
+//        }
+//      
+//    }
+//    
+//    
+//    if(TILING_EARTH){
+//      vec4 earthCenter=translate(localEarthBoost,ORIGIN);
+//      earthDist=sphereSDF(p,earthCenter,localEarthRad);
+//          
+//        if (earthDist < EPSILON){
+//            hitWhich = 2;
+//            return earthDist;
+//        }
+//      
+//    }
+//    
+//    vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
+//    float centerSphereRadius = 1.333 * modelHalfCube;
+//    vec4 center = ORIGIN;
+//    float sphere = centerSDF(p,  center, centerSphereRad);
+//    float vertexSphere = 0.0;
+//    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereRad);
+//    
+//    tilingDist = -min(vertexSphere,sphere);
+//    
+//    distance=min(tilingDist,min(lightDist,earthDist));//unionSDF
+//    return distance;
+//
+//   // float final = -sphere;
+//    //return final;
+//}
+
+
 
 float localSceneSDF(vec4 p){
-    vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-    float centerSphereRadius = 1.333 * modelHalfCube;
-    vec4 center = ORIGIN;
-    float sphere = centerSDF(p,  center, centerSphereRad);
-    float vertexSphere = 0.0;
-    vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereRad);
-    float final = -min(vertexSphere,sphere); //unionSDF
-    return final;
-
-   // float final = -sphere;
-    //return final;
+    float earthDist;
+    float tilingDist;
+    float lightDist;
+    float distance = MAX_DIST;
+    
+    //Light Objects
+ if(LOCAL_LIGHTS){
+     vec4 lightCenter=vec4(0.,0.,0.,1.);
+      lightDist=sphereSDF(p,lightCenter,0.1);
+      distance =min(distance, lightDist);
+        if (lightDist < EPSILON){
+            hitWhich = 1;
+            globalLightColor =lightPositions[1];
+            return distance;
+        }
+ }
+    
+    if(LOCAL_EARTH){
+       //vec4 earthCenter=translate(localEarthBoost,ORIGIN);
+       vec4 earthCenter=vec4(0.,0.,0.,1.);
+       earthDist=sphereSDF(p,earthCenter,0.4);
+        distance=min(distance,earthDist);
+        if(earthDist < EPSILON){
+            hitWhich = 2;
+            return distance;
+        }  
+    }
+ 
+        vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
+            float centerSphereRadius = 1.333 * modelHalfCube;
+            vec4 center = ORIGIN;
+            float sphere = centerSDF(p,  center, centerSphereRad);
+            float vertexSphere = 0.0;
+            vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereRad);
+            tilingDist = -min(vertexSphere,sphere);
+            distance=min(distance, tilingDist);
+        if(tilingDist < EPSILON){
+            hitWhich=3;
+            return distance;
+        }
+    
+    return distance;
 }
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
@@ -674,6 +780,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
     if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+        
         localtv = flow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
@@ -682,9 +789,10 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             marchStep = MIN_DIST;
         }
         else {
-            float localDist = min(1., localSceneSDF(localtv.pos));
+            float localDist = localSceneSDF(localtv.pos);
             if (localDist < EPSILON){
-                hitWhich = 3;
+                //hitWhich has been set
+                //hitWhich = 3;
                 sampletv = localtv;
                 break;
             }
@@ -694,7 +802,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     }
     localDepth=min(globalDepth, MAX_DIST);
     }
-    else{localDepth=MAX_DIST;}
+    else{localDepth=MAX_DIST;
+        }
 
 
     if(GLOBAL_SCENE){
@@ -960,6 +1069,7 @@ void main(){
     earthBoost=Isometry(earthBoostMat);
     moonBoost=Isometry(moonBoostMat);
     sunBoost=Isometry(sunBoostMat);
+    localEarthBoost=Isometry(localEarthBoostMat);
 
 
     //vec4 rayOrigin = ORIGIN;
