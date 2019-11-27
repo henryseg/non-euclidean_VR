@@ -15,17 +15,18 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=true;//is there a local scene at all
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=false;
-const bool LOCAL_EARTH=true;
+const bool LOCAL_EARTH=false;
+const bool TILING=true;
 
 const bool GLOBAL_SCENE=true;
 const bool GLOBAL_LIGHTS=true;
 const bool LOCAL_LIGHTS=true;
 
-const bool FAKE_LIGHT = true;
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT = false;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_DIST_SPHERE = false;
 
 const bool EARTH=true;//turn on / off earth texture
@@ -361,7 +362,7 @@ float vertexSDF(vec4 p, vec4 cornerPoint, float size){
 //--------------------------------------------
 const int MAX_MARCHING_STEPS = 80;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 200.0;
+const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
@@ -519,22 +520,22 @@ float localSceneSDF(vec4 p){
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
             hitWhich = 1;
-            globalLightColor =lightPositions[1];
-            return distance;
+            globalLightColor =vec4(1.,0.9,0.4,1.);
+            return lightDist;
         }
  }
     
     if(LOCAL_EARTH){
        //vec4 earthCenter=translate(localEarthBoost,ORIGIN);
        vec4 earthCenter=translate(localEarthBoost,ORIGIN);
-       earthDist=sphereSDF(p,earthCenter,0.15);
+       earthDist=sphereSDF(p,earthCenter,0.35);
         distance=min(distance,earthDist);
         if(earthDist < EPSILON){
             hitWhich = 7;
-            return distance;
+            return earthDist;
         }  
     }
- 
+ if(TILING){
         vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
             float centerSphereRadius = 1.333 * modelHalfCube;
             vec4 center = ORIGIN;
@@ -545,9 +546,9 @@ float localSceneSDF(vec4 p){
             distance=min(distance, tilingDist);
         if(tilingDist < EPSILON){
             hitWhich=3;
-            return distance;
+            return tilingDist;
         }
-    
+ }
     return distance;
 }
     
@@ -785,14 +786,12 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
         if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-            localtv = translate(fixMatrix, localtv);
+            localtv = geomProject(translate(fixMatrix, localtv));
             marchStep = MIN_DIST;
         }
         else {
             float localDist = localSceneSDF(localtv.pos);
             if (localDist < EPSILON){
-                //hitWhich has been set
-                //hitWhich = 3;
                 sampletv = localtv;
                 break;
             }
@@ -814,7 +813,6 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
         float globalDist = globalSceneSDF(tv.pos);
         if (globalDist < EPSILON){
-            // hitWhich has now been set
             totalFixMatrix = identityIsometry;
             sampletv = tv;
             return;
@@ -919,15 +917,30 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     }
     //return color;
 }
+if(LOCAL_LIGHTS){
+    //pick up light from the light source in your fundamental domain
+    float localLightIntensity=0.2;
+       color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(1.,0.9,0.4,localLightIntensity)); 
+    
+    
+    //move local light around by the generators to pick up lighting from nearby cells
+    for(int i=0; i<6; i++){
+        Isometry localLightIsom=Isometry(invGenerators[i]);
+        TLP=translate(localLightIsom,localLightPos);
+        color+= lightingCalculations(SP,TLP,V,vec3(1.0),vec4(1.,0.9,0.4,localLightIntensity)); 
+    }
+    
 
-/*
+}
+
     if(SUN){
         vec4 sunPos=translate(sunBoost, ORIGIN);
         Isometry totalIsom=composeIsometry(totalFixMatrix,invCellBoost);
         TLP = translate(totalIsom,sunPos);
-        color += lightingCalculations(SP, TLP, V, vec3(1.0), vec4(1.,0.9,0.4,3.));
+        color += lightingCalculations(SP, TLP, V, vec3(1.0), vec4(1.,0.9,0.4,1.));
         //first three give color, last gives intensity
-}*/
+}
+    
  return color;
 }
 
@@ -1148,10 +1161,12 @@ else if (hitWhich == 6){ // the sun
     
     
 else if (hitWhich == 7){ // the LOCAL earth
+        Isometry earthBoostNow=localEarthBoost;
+        mat4 earthFacingNow=localEarthFacing;
         
-        
-        vec3 pixelColor=sphereTexture(totalFixMatrix, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
-            
+    //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
+   // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
+        vec3 pixelColor=sphereTexture(identityIsometry, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
 
         out_FragColor = vec4( pixelColor,1.0);
 

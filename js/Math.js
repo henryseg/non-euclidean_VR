@@ -545,7 +545,7 @@ function initObjects() {
     //MUST BE INSIDE ORIGINAL FUNDAMENTAL DOMAIN
     localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.2,0,-0.2)).boost);
     
-    localLightPos= new Position().localFlow(new THREE.Vector3(0,0,-0.3));
+    localLightPos= new Position().localFlow(new THREE.Vector3(0,0,0.3));
 
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
