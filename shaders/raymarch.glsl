@@ -28,6 +28,7 @@ const bool LOCAL_LIGHTS=true;
 const bool FAKE_LIGHT = false;
 const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_DIST_SPHERE = false;
+const bool COLORED_SURFACE=true;
 
 const bool EARTH=true;//turn on / off earth texture
 const bool MOON=true; //turn on / off moon completely.
@@ -376,6 +377,7 @@ tangVector sampletv;
 vec4 globalLightColor;
 int hitWhich = 0;
 Isometry identityIsometry=Isometry(mat4(1.0));
+vec3 localLightColor=vec3(1.,1.,1.);
 
 Isometry currentBoost;
 Isometry leftBoost;
@@ -520,7 +522,7 @@ float localSceneSDF(vec4 p){
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
             hitWhich = 1;
-            globalLightColor =vec4(1.,0.9,0.4,1.);
+            globalLightColor =vec4(localLightColor,1);
             return lightDist;
         }
  }
@@ -920,14 +922,14 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 if(LOCAL_LIGHTS){
     //pick up light from the light source in your fundamental domain
     float localLightIntensity=0.2;
-       color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(1.,0.9,0.4,localLightIntensity)); 
+       color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
     
     
     //move local light around by the generators to pick up lighting from nearby cells
     for(int i=0; i<6; i++){
         Isometry localLightIsom=Isometry(invGenerators[i]);
         TLP=translate(localLightIsom,localLightPos);
-        color+= lightingCalculations(SP,TLP,V,vec3(1.0),vec4(1.,0.9,0.4,localLightIntensity)); 
+        color+= lightingCalculations(SP,TLP,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
     }
     
 
@@ -1004,7 +1006,7 @@ vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLoc
 
 
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
-     if(FAKE_LIGHT){
+     if(COLORED_SURFACE){
          //make the objects have their own color
          //color the object based on its position in the cube
 
