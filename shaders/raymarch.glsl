@@ -411,6 +411,7 @@ uniform mat4 invCellBoostMat;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform vec4 localLightPos;
+uniform float localLightIntensity;
 uniform int numLights;
 
 uniform mat4 globalObjectBoostMat;
@@ -921,7 +922,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 }
 if(LOCAL_LIGHTS){
     //pick up light from the light source in your fundamental domain
-    float localLightIntensity=0.2;
+  
        color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
     
     

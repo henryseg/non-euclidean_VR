@@ -504,6 +504,7 @@ function initGeometry() {
 
 
 let numLights = 4;
+let localLightIntensity;
 
 function PointLightObject(v, colorInt) {
     //position is a euclidean Vector4
@@ -545,7 +546,7 @@ function initObjects() {
     //MUST BE INSIDE ORIGINAL FUNDAMENTAL DOMAIN
     localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.2,0,-0.2)).boost);
     
-    localLightPos= new Position().localFlow(new THREE.Vector3(0,0,0.3));
+    localLightPos= new Position().localFlow(new THREE.Vector3(0,0.4,0.3));
 
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
@@ -771,10 +772,13 @@ function setupMaterial(fShader) {
             },
 
             localLightPos: {
-                type: "f",
+                type: "v4",
                 value: ORIGIN.clone().translateBy(localLightPos.boost)
             },
- 
+            localLightIntensity: {
+                type: "f",
+                value: 0.2
+            },
             
             
             
@@ -869,6 +873,7 @@ function updateMaterial() {
 
     g_material.uniforms.sunBoostMat.value = sunState.boost.matrix;
     g_material.uniforms.sunFacing.value = sunState.facing;
+    
 
 
 }

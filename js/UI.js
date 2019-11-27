@@ -20,6 +20,7 @@ var initGui = function () {
         earthRad: 0.2,
         centerSphereRad: 1.,
         vertexSphereRad: -0.98,
+        localLightIntensity: 0.2,
         stereoScreenOffset: g_stereoScreenOffset
     };
 
@@ -33,6 +34,8 @@ var initGui = function () {
     var centerSphereRadController = gui.add(guiInfo, 'centerSphereRad', 0.6, 1.3).name("Center Sphere");
 
     var vertexSphereRadController = gui.add(guiInfo, 'vertexSphereRad', -1.1, -0.8).name("Vertex Sphere");
+
+    var localLightController = gui.add(guiInfo, 'localLightIntensity', 0., 1.).name("Local Light");
 
 
     var ipDistController = gui.add(guiInfo, 'ipDist', 0.0, 0.5).name("ip Dist");
@@ -82,4 +85,7 @@ var initGui = function () {
         g_material.uniforms.vertexSphereRad.value = value;
     });
 
+    localLightController.onChange(function (value) {
+        g_material.uniforms.localLightIntensity.value = value;
+    });
 };
