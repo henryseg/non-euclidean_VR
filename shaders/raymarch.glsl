@@ -18,11 +18,11 @@ Some parameters that can be changed to change the scence
 const bool TILING_SCENE=true;//is there a local scene at all
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=false;
-const bool LOCAL_EARTH=false;
+const bool LOCAL_EARTH=true;
 const bool TILING=true;
 
 const bool GLOBAL_SCENE=true;
-const bool GLOBAL_LIGHTS=true;
+const bool GLOBAL_LIGHTS=false;
 const bool LOCAL_LIGHTS=true;
 
 const bool FAKE_LIGHT = false;
@@ -1164,12 +1164,11 @@ else if (hitWhich == 6){ // the sun
     
     
 else if (hitWhich == 7){ // the LOCAL earth
-        Isometry earthBoostNow=localEarthBoost;
-        mat4 earthFacingNow=localEarthFacing;
         
     //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
    // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
-        vec3 pixelColor=sphereTexture(identityIsometry, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
+        vec3 pixelColor=sphereTexture(
+            totalFixMatrix, sampletv, localEarthBoost, localEarthFacing, earthCubeTex);
 
         out_FragColor = vec4( pixelColor,1.0);
 

@@ -544,7 +544,7 @@ function initObjects() {
     
     
     //MUST BE INSIDE ORIGINAL FUNDAMENTAL DOMAIN
-    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.2,0,-0.2)).boost);
+    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.2,0,-0.2)).boost).setAngular(new THREE.Vector3(0,1,0));
     
     localLightPos= new Position().localFlow(new THREE.Vector3(0,0.4,0.3));
 
@@ -556,10 +556,13 @@ function initObjects() {
     //    //ang velocity is about y axis (earth's poles)
 
 
-
-
 }
 
+
+////Spin the Local Earth
+stepSize = 0.001;
+setInterval(function () {
+localEarthState.localFlow(stepSize);},10);
 //
 //////MOVE THE PLANETS AROUND
 //stepSize = 0.001;
@@ -867,6 +870,8 @@ function updateMaterial() {
 
     g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
     g_material.uniforms.earthFacing.value = earthState.facing;
+    
+    g_material.uniforms.localEarthFacing.value=localEarthState.facing;
 
     g_material.uniforms.moonBoostMat.value = moonState.boost.matrix;
     g_material.uniforms.moonFacing.value = moonState.facing;
