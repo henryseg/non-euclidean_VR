@@ -238,6 +238,13 @@ localTangVector toLocalTangVector(tangVector v) {
     return localTangVector(v.pos, newDir);
 }
 
+
+/*
+
+    Conversion functions used by the various textures
+
+*/
+
 vec4 car2sph(vec4 v) {
     // convert a vector with (x,y,z,0) cartesian coordinates to a vector with (r,theta,phi, 0) spherical coordinates
     float r = length(v.xyz);
@@ -254,6 +261,37 @@ vec4 sph2car(vec4 v) {
     return vec4(r * cos(theta) * sin(phi), r * sin(theta) * sin(phi), r * cos(phi), 0.);
 }
 
+/*
+
+    Let P_r be the plane in R^3 of all points (x,y,z) such that x + y + z = r
+    We now describe a few maps to project the positive quadrant of the sphere onto P_1
+    We choose for a basis of P_0 (the underlying linear space of the affine space P_1) the vector
+    - u1 = (-1, 1, 0)
+    - u2  = (-1/2, -1/2, 1)
+    The origin will be a the point Q = (1, 0, 0)
+    The image of the positive quadrant is entirely contained in the rectangle described by the points of the form
+    M = Q + s1 * u1 + s2 * u2
+    where  s1, s2 in [0,1]
+    In practice we will consider the point of the above form with s1, s2 in [- epsilon , 1+ epsilon]
+    This should avoid some discontinuity due to a lack of linearization in the texture at the boundary.
+
+*/
+
+vec4 radProj(vec4 u) {
+    // The function maps R^3 - P_0 onto P_1
+    // More precisely, in M is a point in R^3 - P_0, then the method return the intersection point of (OM) with P_1
+    // The vector u is though at (x,y,z,0)
+    float s = u.x + u.y + u.z;
+    return u / s;
+}
+
+vec2 pToLocal(vec4 u) {
+    // Given a point M = (x,y,z) in P_1 (i.e. such that x + y + z = 1)
+    // return the coordinate of M in the frame (Q, u1, u2), i.e. the scalar s1, s2 such that
+    // M = Q + s1 * u1 + s2 * u2
+    // The vector u is though at (x,y,z,0)
+    return vec2(u.y + 0.5 * u.z, u.z);
+}
 
 //--------------------------------------------
 // LOCAL GEOMETRY
@@ -498,8 +536,14 @@ tangVector flow(tangVector tv, float t){
 uniform highp sampler3D lookupTableX;
 uniform highp sampler3D lookupTableY;
 uniform highp sampler3D lookupTableZ;
-uniform highp sampler3D lookupTableTheta;
-uniform highp sampler3D lookupTablePhi;
+//uniform highp sampler3D lookupTableTheta;
+//uniform highp sampler3D lookupTablePhi;
+uniform highp sampler3D lookupTableUX;
+uniform highp sampler3D lookupTableUY;
+uniform highp sampler3D lookupTableUZ;
+uniform int timeSlices;
+uniform float margin1;
+uniform float margin2;
 
 
 localTangVector eucFlow(localTangVector tv, float t) {
@@ -509,7 +553,8 @@ localTangVector eucFlow(localTangVector tv, float t) {
     return localTangVector(tv.pos + t * tv.dir, tv.dir);
 }
 
-localTangVector tableFlow(localTangVector tv, float t) {
+
+/*localTangVector tableFlow(localTangVector tv, float t) {
     // overload of the flow for localTangVector
     // follow the geodesic flow during a time t
 
@@ -565,6 +610,82 @@ localTangVector flow(localTangVector tv, float t) {
 
     // return eucFlow(tv, t);
     return tableFlow(tv, t);
+
+}*/
+
+localTangVector flow(localTangVector tv, int marchStepIndex) {
+    // overload of the flow for localTangVector
+    // follow the geodesic flow during a time t
+    // the time is characterized by the time index in the texture
+
+    // isom to move to the starting point
+    Isometry isom = makeLeftTranslation(tv);
+
+    // move the tangent vector in the positive quadrant
+    // record the isometry moving the tangent vector back to its initial position
+    Isometry fixQuadrant;
+    vec4 posDir = tv.dir;
+    posDir = movePosQuadrant(posDir, fixQuadrant);
+
+    /*
+
+    Address used with a texture in spherical coordinates
+
+    // address of the vexel to look at in the pictures
+    // sph has coordinates (r,theta, phi, 0.)
+    vec4 sph = car2sph(posDir);
+    // the texture covers the positive quadrant,
+    // i.e. the angles theta and phi run over [0, pi/2] (because of the symmetries)
+    // the "time" coordinate consists in bringing back between 0. and 1. the marchStepIndex
+    // TODO. Since the marching steps are now really discrete,
+    // maybe it would be better to pass one 2D texture per time step?
+    float s = float(marchStepIndex)/ float(timeSlices + 1);
+    vec3 address = vec3(2. * sph.y / PI, 2. * sph.z / PI, s);
+
+
+    // extracting data from the lookupTables
+    float x = texture(lookupTableX, address).r;
+    float y = texture(lookupTableY, address).r;
+    float z = texture(lookupTableZ, address).r;
+    float theta = texture(lookupTableTheta, address).r;
+    float phi = texture(lookupTablePhi, address).r;
+
+    // packaging the result
+    vec4 newPos = vec4(x, y, z, 1.);
+    vec4 newLocalDir = sph2car(vec4(1., theta, phi, 0.));
+    */
+
+    vec2 loc = pToLocal(radProj(posDir));
+    float s = float(marchStepIndex)/ float(timeSlices + 1);
+    vec3 address = vec3 ((margin1 + loc.x) / (1. + 2. * margin1), (margin2 + loc.y) / (1. + 2. * margin2), s);
+
+    float x = texture(lookupTableX, address).r;
+    float y = texture(lookupTableY, address).r;
+    float z = texture(lookupTableZ, address).r;
+    float ux = texture(lookupTableUX, address).r;
+    float uy = texture(lookupTableUY, address).r;
+    float uz = texture(lookupTableUZ, address).r;
+
+
+    // packaging the result
+    vec4 newPos = vec4(x, y, z, 1.);
+    vec4 newLocalDir = vec4(ux, uy, uz, 0.);
+
+    // undo the initial symmetries (that moved the tangent vector to the positive quadrant)
+    // note that fixIsom is not an element of the "Sol group R^3"
+    // unlike wiht position, the coordinateds (x,y,z) of the point, do not capture those symmetries
+    // hence we have to apply fixIsom to both the point and the direction
+    newPos = translate(fixQuadrant, newPos);
+    newLocalDir = translate(fixQuadrant, newLocalDir);
+
+    localTangVector res =  localTangVector(newPos, newLocalDir);
+
+
+    // move back the origin to the starting point of the geodesic
+    res = translate(isom, res);
+
+    return res;
+
 
 }
 
@@ -652,12 +773,12 @@ float sliceSDF(vec4 p){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  600;
+const int MAX_MARCHING_STEPS =  80;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 600.0;
+const float MAX_DIST = 50.0;
 const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
-//const float EPSILON = 0.0001;
-const float EPSILON = 0.051;
+const float EPSILON = 0.0001;
+//const float EPSILON = 0.051;
 const float fov = 90.0;
 
 
@@ -699,7 +820,6 @@ uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
-uniform float depth;
 
 
 //--------------------------------------------
@@ -724,10 +844,9 @@ float localSceneSDF(vec4 p){
     //return final;
 
     vec4 center = vec4(0., 0., 0., 1.);;
-    float sphere = centerSDF(p, center, 0.3);
+    float sphere = centerSDF(p, center, 0.4);
     return sphere;
 
-    //
     //    float slabDist;
     //    float sphDist;
     //    slabDist = sliceSDF(p);
@@ -883,7 +1002,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
-
+/*
 void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     Isometry fixMatrix;
     float marchStep = MIN_DIST;
@@ -912,7 +1031,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                     sampletv = localtv;
                     break;
                 }
-                marchStep = localDist;
+                // return the biggest power of 1/2 which is smaller than localDist
+                marchStep = min(MAX_STEP_DIST, localDist);
                 globalDepth += localDist;
             }
         }
@@ -934,7 +1054,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 sampletv = tv;
                 return;
             }
-            marchStep = globalDist;
+            // return the biggest power of 1/2 which is smaller than globalDist
+            marchStep = min(MAX_STEP_DIST, globalDist);
             globalDepth += globalDist;
             if (globalDepth >= localDepth){
                 break;
@@ -942,14 +1063,41 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         }
     }
 }
+*/
 
+int findMarchStepIndex(float t) {
+    // return the time index in the lookup table of the largest time step  which is
+    // - time_step = 0 is t = 0
+    // - smaller than t, if posible (if t is too small, we return the smallest non-zero index in the table)
+    // recall that the time recorded in the lookup table have the following form
+    // If k is the index of the time slice, then
+    // time = 0, if k = 0
+    // time = 1 / 2 ^ (timeSlices + 1 - k), otherwise, i.e for k in {1, ..., timeSlices + 1}
 
+    if (t == 0.) {
+        return 0;
+    }
+
+    float aux = 1.;
+    int index = timeSlices + 1;
+    for (int i = 0; i < timeSlices; i++) {
+        if (aux < t) {
+            break;
+        }
+        aux = 0.5 * aux;
+        index = index - 1;
+    }
+    return index;
+}
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
     // overlaod of the raymarching with localTangVector
+    // version for lookup table with a marchStepIncex
+
     Isometry fixMatrix;
     float marchStep = MIN_DIST;
+    int marchStepIndex = 0;// index in the lookup table of the marchStep
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     localTangVector tv = rayDir;
@@ -963,7 +1111,8 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     if (TILING_SCENE){
         int crossing = 0;
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            localtv = flow(localtv, marchStep);
+            marchStepIndex = findMarchStepIndex(marchStep);
+            localtv = flow(localtv, marchStepIndex);
 
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
@@ -993,7 +1142,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
             }
             else {
-                float localDist = localSceneSDF(localtv.pos);
+                float localDist = min(0.1, localSceneSDF(localtv.pos));
                 if (localDist < EPSILON){
                     //                    if(crossing > 0) {
                     //                        hitWhich = 3;
@@ -1024,7 +1173,8 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         globalDepth = MIN_DIST;
         marchStep = MIN_DIST;
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            tv = flow(tv, marchStep);
+            marchStepIndex = findMarchStepIndex(marchStep);
+            tv = flow(tv, marchStepIndex);
 
             /*
             if (i == 4) {
