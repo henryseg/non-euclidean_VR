@@ -2,9 +2,9 @@
 out vec4 out_FragColor;
 
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // PARAMETERS
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 /*
 
@@ -27,9 +27,9 @@ const bool FAKE_DIST_SPHERE = false;
 const float centerSphereRadius =0.67;
 const float vertexSphereSize = 0.23;//In this case its a horosphere
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // "TRUE" CONSTANTS
-//----- ---------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 const float PI = 3.1415926538;
 const float GoldenRatio = 0.5*(1.+sqrt(5.));//1.618033988749895;
@@ -37,22 +37,215 @@ const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-const float modelHalfCube =  0.5;//projection of cube to klein model
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);//corner of cube in Klein model, useful for horosphere distance function
-
+//projection of cube to klein model
+const float modelHalfCube =  0.5;
+//corner of cube in Klein model, useful for horosphere distance function
+const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
-//--------------------------------------------
-// AUXILIARY (BASICS)
-//--------------------------------------------
 
-const float EULER_STEP = 0.01;
+//----------------------------------------------------------------------------------------------------------------------
+// Ellitpic integrals and functions
+//----------------------------------------------------------------------------------------------------------------------
 
 
-//--------------------------------------------
+/*
+
+   Each pixel only involves a single geodesic.
+   Hence all the parameters appearing in the elliptic integrals can be pre-computed once for all before marching.
+   We store them in global variables.
+   The names refer to the Remi's handwritten notes (following closely Troyanov's paper).
+   The prefix ``ell`` is used to avoid any ambiguity
+
+*/
+
+// constants, purely related to the elliptic integrals / functions
+float ell_k;
+float ell_kprime;
+float ell_m;
+float ell_K;
+float ell_E;
+
+// constants related to the parametrization of the geodesic, but only depending on the trajectory of the geodesic
+float ell_mu;
+float ell_L;
+
+
+/*
+
+    *** Legendre elliptic integrals ***
+
+    The modulus/parameter  k / k' / m are always implicit.
+    We use the corresponding global variable to avoid redundant computations.
+
+    The sources for the algorithms are:
+
+    [1] Frank W. J. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark
+    NIST handbook of mathematical functions
+    Cambridge University Press (2010)
+
+    [2] Milton Abramowitz, Irene A. Stegun
+    Handbook of Mathematical Functions_ with Formulas, Graphs, and Mathematical Tables
+    National Bureau of Standards (1970)
+
+    [3] Bulirsch, Roland
+    Numerical calculation of elliptic integrals and elliptic functions
+    Numer. Math. (7) 78--90 (1965)
+    DOI: 10.1007/BF01397975
+
+
+    TODO.
+        - Reduce the number of local variables when computing an iteration.
+        e.g. to compute the AGM, no need of a1 and g1, just a single temporary variable
+        - Factor the AGM computations.
+        There are indeed the same for all the elliptic functions, and thus alogn the geodesic.
+        They could be pre-computed and stored in a global variable
+
+*/
+
+// maximal number of steps in the AGM algorithm
+const int AGMSteps = 20;
+// tolerance of the AGM algorithm
+const float AGMTolerance = 0.0000000001;
+
+vec2 ellipke() {
+    // Return the complete integeral of the first and second kind with parameter m
+    // Note that sqrt(1 - m) = kprime
+    // Computed with the AGM method, see 19.8(i) in [1]
+
+    // initialization of all the variables
+    float a0 = 1.;
+    float g0 = ell_kprime;
+    float aux = 0.5 * ell_m;
+
+    float a1;
+    float g1;
+    float error;
+
+    for (int i=0; i < AGMSteps; i++) {
+        a1 = 0.5 * (a0 + g0);
+        g1 = sqrt(a0 * g0);
+        error = 0.5 * (a0 - g0);
+        aux = aux + pow(2., float(i)) * error * error;
+
+        if (error < AGMTolerance) {
+            break;
+        }
+
+        a0 = a1;
+        g0 = g1;
+    }
+    float K = 0.5 * PI / a0;
+    float E = K * (1. - aux);
+    return vec2(K, E);
+}
+
+vec4 ellipj(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m) as well as the amplidute phi = am(u|m)
+    // i.e. the number phi such that sin(phi) = sn(u|m) and cos(phi) = cos(u|m)
+    // The results is output as [sn, cn, dn, phi]
+    // Computed with the AGM method, see Algorithm 5 in [3]
+
+    // initialization of all the variables
+
+    // track of the AGM algorithm
+    vec2 AGMList[AGMSteps];
+    AGMList[0] = vec2(1., ell_kprime);
+    // number of step
+    int l = 0;
+
+    // variable used during the first induction (computing the AGM)
+    float a0;
+    float g0;
+    float error;
+    for (int i = 0; i < AGMSteps - 1; i++) {
+        a0 = AGMList[i].x;
+        g0 = AGMList[i].y;
+        error = 0.5 * (a0 - g0);
+        AGMList[i+1] = vec2(0.5 * (a0 + g0), sqrt(a0 * g0));
+        l = l + 1;
+        if (error < AGMTolerance) {
+            break;
+        }
+    }
+    a0 = AGMList[l].x;
+    g0 = AGMList[l].y;
+    float eps = 1.;
+    if (sin(u * a0) < 0.) {
+        eps = -1.;
+    }
+
+    // variables used during the second induction
+    float c = a0 * cos(u * a0) / sin(u * a0);
+    float d = 1.;
+    float aux_c;
+    float aux_d;
+
+    for (int j = 0; j < l; j++) {
+        aux_c = c * d;
+        aux_d = (c * c / AGMList[l-j].x + AGMList[l - 1 - j].y) / (c * c / AGMList[l-j].x + AGMList[l - 1 - j].x);
+        c = aux_c;
+        d = aux_d;
+    }
+
+    // wrappind the results
+    float sn = eps / sqrt(1. + c * c);
+    float cn = c * sn;
+    return vec4(sn, cn, d, atan(sn, cn));
+}
+
+float ellipz(float phi) {
+    // Return the Jacobi Zeta function, whose argument is an angle, i.e.
+    // Z(phi|m) = E(phi|m) - [E(m)/K(m)] * F(phi|m)
+    // (the amplitude phi can be computed from the Jacobi functions above)
+    // Computed with the AGM algorithm, see §17.6 in [2]
+
+    // TODO. simplify the computation to get totally rid of the arctan (this part is used only to compute E(phi|m)
+
+    // initializing the parameters of the induction
+    float a0 = 1.;
+    float g0 = ell_kprime;
+    float phi0 = phi;
+    float t0 = tan(phi0);
+    float mod0 = 0.;
+    float res = 0.;
+    float a1;
+    float g1;
+    float c1;
+    float phi1;
+    float t1;
+    float mod1;
+    float aux;
+
+    for (int i=0; i < AGMSteps; i++) {
+        c1 = 0.5 * (a0 - g0);
+        aux = g0 / a0;
+        phi1 = (phi0 + mod0 * PI) + atan(aux * t0);
+        mod1 = floor((phi1 + 0.5 * PI)/PI);
+        t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
+        res = res + c1 * sin(phi1);
+        a1 = 0.5 * (a0 + g0);
+        g1 = sqrt(a0 * g0);
+
+        if (c1 / a0 < AGMTolerance) {
+            break;
+        }
+
+        a0 = a1;
+        g0 = g1;
+        phi0 = phi1;
+        t0 = t1;
+        mod0 = mod1;
+    }
+
+    return res;
+
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 // STRUCT isometry
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 /*
   Data type for manipulating isometries of the space
@@ -91,37 +284,14 @@ Isometry makeInvLeftTranslation(vec4 p) {
     return Isometry(matrix);
 }
 
-/*
-
-Isometry makeLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    1., 0., 0., 0.,
-    0., 1., 0., 0.,
-    0., 0., 1., 0,
-    p.x, p.y, p.z, 1.
-    );
-    return Isometry(matrix);
-}
-
-Isometry makeInvLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    1., 0., 0., 0.,
-    0., 1., 0., 0.,
-    0., 0., 1., 0,
-    -p.x, -p.y, -p.z, 1.
-    );
-    return Isometry(matrix);
-}
-*/
-
 vec4 translate(Isometry A, vec4 v) {
     // translate a point of a vector by the given direction
     return A.matrix * v;
 }
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // STRUCT tangVector
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 /*
   Data type for manipulating points in the tangent bundler
@@ -143,9 +313,9 @@ struct localTangVector {
     vec4 dir;// pull back at the origin of the tangent vector
 };
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applying Isometries, Facings
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 Isometry makeLeftTranslation(tangVector v) {
     // overlaod using tangVector
@@ -187,9 +357,9 @@ localTangVector rotateFacing(mat4 A, localTangVector v){
     return localTangVector(v.pos, A*v.dir);
 }
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // CONVERSION between two representations of tangent vectors
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 
 tangVector toTangVector(localTangVector v) {
@@ -223,9 +393,9 @@ vec4 sph2car(vec4 v) {
 }
 
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // LOCAL GEOMETRY
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 /*
   Methods perfoming computations in the tangent space at a given point.
@@ -351,9 +521,46 @@ mat4 tangBasis(vec4 p){
 
 
 
-//--------------------------------------------
+void init_ellip(tangVector u) {
+    // initializes all the parameters needed to march along the geodesic directed by u
+    // we assume that the position of u is the origin
+    // if ab = 0 (hyperbolic sheets), all the parameters are not needed,
+    // however their computations are trivial
+    // (all the elliptic integrals becomes, trivial, the AGM stops where it starts, etc)
+    // instead of adding cases, we simply run the computations
+
+    // some renaming to simplify the formulas
+    // by assumption a^2 + b^2 + c^2 = 1
+    float ab = abs(u.dir.x * u.dir.y);
+
+    // some auxiliary value to avoind redundant computations of roots.
+    float aux1 = sqrt(1. - 2. * ab);
+    float aux2 = 2. * sqrt(ab);
+
+    // frequency
+    ell_mu = sqrt(1. + 2. * ab);
+
+    // parameters of the elliptic functions
+    ell_k = aux1 / ell_mu;
+    ell_kprime = aux2 / ell_mu;
+    ell_m = (1. - 2. * ab) / (1. + 2. * ab);
+
+    // complete elliptic integrals and related quantities
+    vec2 KE = ellipke();
+    ell_K = KE.x;
+    ell_E = KE.y;
+
+    // if ab = 0 (hyperbolic sheets) then k' = 0, in which case, L will not be needed and makes no sense here
+    if (ab != 0.) {
+        ell_L = ell_E / (ell_kprime * ell_K) - 0.5 * ell_kprime;
+    }
+
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
 // GLOBAL GEOMETRY
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 /*
   Methods computing ``global'' objects
@@ -399,41 +606,157 @@ tangVector tangDirection(tangVector u, tangVector v){
 tangVector flow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
-    return tangVector(tv.pos + t * tv.dir, tv.dir);
-/*
     // Isometry moving back to the origin and conversely
     Isometry isom = makeLeftTranslation(tv);
     Isometry isomInv = makeInvLeftTranslation(tv);
 
+    // pull back of the tangent vector at the origin
     tangVector tvOrigin = translate(isomInv, tv);
 
-    // represent at every step the pull back of the tangent vector at the origin
-    vec4 u = tvOrigin.dir;
-    // the position along the geodesic
-    vec4 posAux = ORIGIN;
-    // isometry to move the origin to the given position
-    Isometry isomAux = Isometry(mat4(1.0));
-    vec4 field;
+    // parameters related to the initial condition of the geodesic flow
 
-    // integrate numerically the flow
-    int n = int(floor(t/EULER_STEP));
-    for (int i = 0; i < n; i++){
-        posAux = posAux + EULER_STEP * translate(isomAux, u);
-        isomAux = makeLeftTranslation(posAux);
-        if (i != n-1) {
-            field = vec4(
-            -u.x * u.z,
-            u.y * u.z,
-            u.x * u.x - u.y * u.y,
-            0.
-            );
-            u = normalize(u + EULER_STEP*field);
-        }
+    // renaming the coordinates of the tangent vector to simplify the formulas
+    float a = tvOrigin.dir.x;
+    float b = tvOrigin.dir.y;
+    float c = tvOrigin.dir.z;
+
+    vec4 resOriginPos;
+    vec4 resOriginDir;
+
+    // we need to distinguish three cases, depending on the type of geodesics
+
+    if (a == 0. && b == 0.) {
+        // VERTICAL GEODESIC
+        // Particular case of the hyperbolic sheets below
+        resOriginPos = vec4(0., 0., c * t, 1.);
+        resOriginDir = vec4(0., 0., c, 0.);
     }
-    tangVector resOrigin = translate(isomAux, tangVector(ORIGIN, u));
+    else if (a == 0.) {
+        // GEODESIC IN THE HYPERBOLIC SHEET X = 0
+        float sht = sinh(t);
+        float cht = cosh(t);
+        float tht = sht/cht;
 
+        resOriginPos = vec4(
+        0.,
+        b * sht / (cht + c * sht),
+        log(cht + c * sht),
+        1.
+        );
+        resOriginDir = vec4(
+        0.,
+        b / pow(cht + c * sht, 2.),
+        (c + tht) / (1. + c * tht),
+        0.
+        );
+    }
+    else if (b == 0.) {
+        // GEODESIC IN THE HYPERBOLIC SHEET Y = 0
+        float sht = sinh(t);
+        float cht = cosh(t);
+        float tht = sht/cht;
+
+        resOriginPos = vec4(
+        a * sht / (cht - c * sht),
+        0.,
+        - log(cht - c * sht),
+        1.
+        );
+        resOriginDir = vec4(
+        a / pow(cht - c * sht, 2.),
+        0.,
+        (c - tht) / (1. - c * tht),
+        0.
+        );
+    }
+    else if (c == 0. && abs(a) == abs(b)) {
+        // STRAIGHT LINES ALONG THE DIAGONALS IN THE XY PLANE
+        // Particular case of the generic case below
+        resOriginPos = vec4(a * t, b * t, 0., 1.);
+        resOriginDir = vec4(a, b, 0., 0.);
+    }
+    else {
+
+        // GENERIC CASE
+
+        // phase shift (Phi in the handwritten notes)
+        float aux = sqrt(1. - 2. * abs(a * b));
+        // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
+        vec3 jacobi_s0 = vec3(
+        - c / aux,
+        (abs(a) - abs(b)) / aux,
+        (abs(a) + abs(b)) / ell_mu
+        );
+
+        // sign of a (resp. b)
+        float signa = 1.;
+        if (a < 0.) {
+            signa = -1.;
+        }
+        float signb = 1.;
+        if (b < 0.) {
+            signb = -1.;
+        }
+
+        // some useful intermediate computation
+        float kOkprime = ell_k / ell_kprime;
+        float oneOkprime = 1. / ell_kprime;
+
+        // we are now ready to write down the coordinates of the endpoint
+        // TODO. reduce the amplitude using the periodicity
+
+
+        // amplitude (without the phase shift of s0)
+        float s = ell_mu * t;
+        // jabobi functions applied to the amplitude s
+        vec4 jacobi_s = ellipj(s);
+
+
+        // jacobi function applied to s + s0  (using addition formulas)
+        float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
+        vec3 jacobi_ss0 = vec3(
+        (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
+        (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
+        (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
+        );
+
+        // Z(mu *t + s0) - Z(s0) (using again addition formulas)
+        float zetaj = ellipz(jacobi_s.w) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
+
+
+        // wrapping all the computation
+        resOriginPos = vec4(
+        signa * sqrt(abs(b / a)) * (
+        oneOkprime * zetaj
+        + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+        + ell_L * ell_mu * t
+        ),
+        signb * sqrt(abs(a / b)) * (
+        oneOkprime * zetaj
+        - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+        + ell_L * ell_mu * t
+        ),
+        0.5 * log(abs(b / a)) + asinh((ell_k / ell_kprime) * jacobi_ss0.y),
+        1.
+        );
+        resOriginDir = vec4(
+        signa * abs(b) * pow(kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z, 2.),
+        signb * abs(a) * pow(kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z, 2.),
+        - ell_k * ell_mu * jacobi_ss0.x,
+        0.
+        );
+
+        /*
+        resOriginPos = vec4(0., 0., 0., 1.);
+        resOriginDir = vec4(a, b, c, 0.);
+        */
+
+    }
+
+    tangVector resOrigin = tangVector(resOriginPos, resOriginDir);
     return translate(isom, resOrigin);
-*/
+
+    //return tangVector(tv.pos + t * tv.dir, tv.dir);
 }
 
 uniform highp sampler3D lookupTableX;
@@ -481,15 +804,15 @@ localTangVector flow(localTangVector tv, float t) {
     // overload of the flow for localTangVector
     // follow the geodesic flow during a time t
 
-   // return eucFlow(tv, t);
+    // return eucFlow(tv, t);
     return tableFlow(tv, t);
 
 }
 
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 //Geometry of the Models
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 
 //project point back onto the geometry
@@ -505,9 +828,9 @@ vec4 modelProject(vec4 p){
 }
 
 
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // LIGHT
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 //light intensity as a fn of distance
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
@@ -518,9 +841,9 @@ float lightAtt(float dist){
 }
 
 
-//---------------------------------------------------------------------
-//Raymarch Primitives
-//---------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Raymarch Primitives
+//----------------------------------------------------------------------------------------------------------------------
 
 
 float sphereSDF(vec4 p, vec4 center, float radius){
@@ -561,16 +884,16 @@ float horizontalSliceSDF(vec4 p, float h1, float h2) {
 
 float sliceSDF(vec4 p){
     float HS1= 0.;
-    HS1=horizontalHalfSpaceSDF(p,-0.1);
+    HS1=horizontalHalfSpaceSDF(p, -0.1);
     float HS2=0.;
-    HS2=-horizontalHalfSpaceSDF(p,-0.3);
-    return max(HS1,HS2);
+    HS2=-horizontalHalfSpaceSDF(p, -0.3);
+    return max(HS1, HS2);
 }
 
-//--------------------------------------------
-//Global Constants
-//--------------------------------------------
-const int MAX_MARCHING_STEPS =  600;
+//----------------------------------------------------------------------------------------------------------------------
+// Global Constants
+//----------------------------------------------------------------------------------------------------------------------
+const int MAX_MARCHING_STEPS =  10;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 600.0;
 const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
@@ -579,9 +902,9 @@ const float EPSILON = 0.051;
 const float fov = 90.0;
 
 
-//--------------------------------------------
-//Global Variables
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Global Variables
+//----------------------------------------------------------------------------------------------------------------------
 tangVector N;//normal vector
 tangVector sampletv;
 vec4 globalLightColor;
@@ -595,9 +918,9 @@ Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
 
-//-------------------------------------------
-//Translation & Utility Variables
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Translation & Utility Variables
+//----------------------------------------------------------------------------------------------------------------------
 uniform int isStereo;
 uniform vec2 screenResolution;
 uniform mat4 invGenerators[6];
@@ -609,9 +932,10 @@ uniform mat4 leftFacing;
 uniform mat4 rightFacing;
 uniform mat4 cellBoostMat;
 uniform mat4 invCellBoostMat;
-//--------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
 // Lighting Variables & Global Object Variables
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
@@ -620,16 +944,16 @@ uniform samplerCube earthCubeTex;
 uniform float depth;
 
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Re-packaging isometries, facings in the shader
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 //This actually occurs at the beginning of main() as it needs to be inside of a function
 
 
-//---------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Scene Definitions
-//---------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Turn off the local scene
 // Local signed distance function : distance from p to an object in the local scene
 
@@ -641,16 +965,15 @@ float localSceneSDF(vec4 p){
     //float final = min(vertexSphere, sphere);//unionSDF
     //return final;
 
-    vec4 center = vec4(0., 0.,0., 1.);;
+    vec4 center = vec4(0., 0., 0., 1.);;
     float sphere = centerSDF(p, center, 0.3);
     return sphere;
     
-//
-//    float slabDist;
-//    float sphDist;
-//    slabDist = sliceSDF(p);
-//    sphDist=sphereSDF(p,vec4(0.,0.,-0.2,1.),0.28);
-//    return max(slabDist,-sphDist);
+    //    float slabDist;
+    //    float sphDist;
+    //    slabDist = sliceSDF(p);
+    //    sphDist=sphereSDF(p,vec4(0.,0.,-0.2,1.),0.28);
+    //    return max(slabDist,-sphDist);
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -675,31 +998,30 @@ float globalSceneSDF(vec4 p){
             return distance;
         }
     }
-    
-    
-    
+
+
     //Global Sphere Object
 
- float objDist;
-//    float slabDist;
-//    float sphDist;
-//    slabDist = sliceSDF(absolutep);
-//    sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
-//    objDist=max(slabDist,-sphDist);
-   // objDist=MAX_DIST;
-    
-    
-        //horizontalSliceSDF(absolutep, -0.2, -0.4);
+    float objDist;
+    //    float slabDist;
+    //    float sphDist;
+    //    slabDist = sliceSDF(absolutep);
+    //    sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+    //    objDist=max(slabDist,-sphDist);
+    // objDist=MAX_DIST;
+
+
+    //horizontalSliceSDF(absolutep, -0.2, -0.4);
 
     //global plane
-   
-   
 
-  
+
+
+
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, vec4(sqrt(6.26),sqrt(6.28),0.,1.),globalSphereRad);
+    objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
     //objDist = sphereSDF(absolutep, globalObjPos,0.1);
-    
+
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
@@ -715,21 +1037,21 @@ float denominator=GoldenRatio+2.;
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
 
-    
+
     //lattice basis divided by the norm square
-    vec4 v1 = vec4(GoldenRatio, -1., 0.,0.);
+    vec4 v1 = vec4(GoldenRatio, -1., 0., 0.);
     vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
-/*
-    if (dot(p, v3) > 0.5) {
-        fixMatrix = Isometry(invGenerators[4]);
-        return true;
-    }
-    if (dot(p, v3) < -0.5) {
-        fixMatrix = Isometry(invGenerators[5]);
-        return true;
-    }*/
-    
+    /*
+        if (dot(p, v3) > 0.5) {
+            fixMatrix = Isometry(invGenerators[4]);
+            return true;
+        }
+        if (dot(p, v3) < -0.5) {
+            fixMatrix = Isometry(invGenerators[5]);
+            return true;
+        }*/
+
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
@@ -761,9 +1083,9 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 }
 
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // GEOM DEPENDENT
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -795,9 +1117,9 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 }
 
 
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // DOING THE RAYMARCH
-//--------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 
 // variation on the raymarch algorithm
@@ -883,52 +1205,52 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         int crossing = 0;
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
-            
+
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
                 marchStep = MIN_DIST;
                 crossing += 1;
-//                
-//                if(crossing == 2) {
-//                    hitWhich =5;
-//                    if(abs(fixMatrix.matrix[3][0]) == 1.){
-//                        debugColor = vec3(1,0,0);
-//                    }
-//                    if(abs(fixMatrix.matrix[3][1]) == 1.){
-//                        debugColor = vec3(0,1,0);
-//                    }
-//                    if(fixMatrix.matrix[3][2] != 0.){
-//                        if (fixMatrix.matrix[3][2] >0.) {
-//                            debugColor = vec3(0.7,0.7,1);
-//                        }
-//                        else {
-//                            debugColor = vec3(0,0,0.5);
-//                        }
-//                        
-//                    }
-//                    break;
-//                }
-                
+                //
+                //                if(crossing == 2) {
+                //                    hitWhich =5;
+                //                    if(abs(fixMatrix.matrix[3][0]) == 1.){
+                //                        debugColor = vec3(1,0,0);
+                //                    }
+                //                    if(abs(fixMatrix.matrix[3][1]) == 1.){
+                //                        debugColor = vec3(0,1,0);
+                //                    }
+                //                    if(fixMatrix.matrix[3][2] != 0.){
+                //                        if (fixMatrix.matrix[3][2] >0.) {
+                //                            debugColor = vec3(0.7,0.7,1);
+                //                        }
+                //                        else {
+                //                            debugColor = vec3(0,0,0.5);
+                //                        }
+                //
+                //                    }
+                //                    break;
+                //                }
+
             }
             else {
                 float localDist = localSceneSDF(localtv.pos);
                 if (localDist < EPSILON){
-//                    if(crossing > 0) {
-//                        hitWhich = 3;
-//                    sampletv = toTangVector(localtv);
-//                    break;
-//                    }
-//                    else {
-//                        localDist =0.2;
-//                    }
-                    
+                    //                    if(crossing > 0) {
+                    //                        hitWhich = 3;
+                    //                    sampletv = toTangVector(localtv);
+                    //                    break;
+                    //                    }
+                    //                    else {
+                    //                        localDist =0.2;
+                    //                    }
+
                     hitWhich = 3;
                     sampletv = toTangVector(localtv);
                     break;
-//                     hitWhich = 5;
-//                   debugColor=0.5*translate(totalFixMatrix,localtv).dir.xyz;
-//                    break;
+                    //                     hitWhich = 5;
+                    //                   debugColor=0.5*translate(totalFixMatrix,localtv).dir.xyz;
+                    //                    break;
                 }
                 marchStep = min(MAX_STEP_DIST, localDist);
                 globalDepth += localDist;
@@ -963,10 +1285,10 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                 totalFixMatrix = identityIsometry;
                 sampletv = toTangVector(tv);
                 return;
-//                totalFixMatrix = identityIsometry;
-//                hitWhich=5;
-//                debugColor=0.5*tv.dir.xyz;
-//                return;
+                //                totalFixMatrix = identityIsometry;
+                //                hitWhich=5;
+                //                debugColor=0.5*tv.dir.xyz;
+                //                return;
             }
             marchStep = min(MAX_STEP_DIST, globalDist);
             globalDepth += globalDist;
@@ -1030,9 +1352,9 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 //}
 
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Lighting Functions
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
 vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
@@ -1151,9 +1473,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Tangent Space Functions
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
     if (isStereo == 1){
@@ -1167,9 +1489,9 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
     return v;
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Main
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 void main(){
 
@@ -1202,25 +1524,15 @@ void main(){
 
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
-    raymarch(toLocalTangVector(rayDir), totalFixMatrix);
-    //raymarch(rayDir, totalFixMatrix);
+    // intialize the parameters of the elliptic integrals/functions
+    init_ellip(rayDir);
+    // do the marching
+    raymarch(rayDir, totalFixMatrix);
 
-    /*
-    hitWhich = 5;
+
+    // hitWhich = 5;
     // the coordinate used to get data from the texture are between 0 and 1
-    if(depth == -1.) {
-        debugColor = vec3(0.);
-    }
-    else {
-        vec3 p = vec3(gl_FragCoord.x/screenResolution.x, gl_FragCoord.y/screenResolution.y, 0.005*depth);
-        float x = texture(lookupTableX, p).r;
-        float y = texture(lookupTableY, p).r;
-        float z = texture(lookupTableZ, p).r;
-        float theta = texture(lookupTableTheta, p).r;
-        float phi = texture(lookupTablePhi, p).r;
-        debugColor = abs(vec3((theta+PI)/(2.*PI), phi/PI, 0.));
-        //debugColor = 0.5 + 0.5*vec3(x, y, z);
-    }*/
+    // debugColor = vec3(0.1 * ell_K, 0., 0.);
 
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
