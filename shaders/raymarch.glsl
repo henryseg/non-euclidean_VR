@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
@@ -108,35 +108,56 @@ float ell_L;
 const int AGMSteps = 20;
 // tolerance of the AGM algorithm
 const float AGMTolerance = 0.000001;
+// steps performed to compute the AGM (useful for the Jacobi functions)
+vec2 AGMList[AGMSteps];
+// number of steps actually used for the AGM, the index of the last non-zero entries in AGMList should be AGMLength - 1
+int AGMLength;
+
+void agm() {
+    // Compute the AGM of 1 and sqrt(1-m) to the given accuracy :
+    // maximal number of steps : AGMMaxSteps
+    // tolerance for the error : AGMTolerance
+    // index of the last step : AGMIndex
+
+    // initialization
+    AGMList[0] = vec2(1., ell_kprime);
+    AGMLength = 1;
+
+    // variable used during the induction
+    float a0;
+    float g0;
+    float error;
+
+    // induction
+    for (int i = 1; i < AGMSteps; i++) {
+        a0 = AGMList[i - 1].x;
+        g0 = AGMList[i - 1].y;
+        error = 0.5 * (a0 - g0);
+        AGMList[i] = vec2(0.5 * (a0 + g0), sqrt(a0 * g0));
+        AGMLength = AGMLength + 1;
+        if (error < AGMTolerance) {
+            break;
+        }
+    }
+}
 
 vec2 ellipke() {
     // Return the complete integeral of the first and second kind with parameter m
     // Note that sqrt(1 - m) = kprime
     // Computed with the AGM method, see 19.8(i) in [1]
 
-    // initialization of all the variables
-    float a0 = 1.;
-    float g0 = ell_kprime;
+    // initialization of all the variables;
     float aux = 0.5 * ell_m;
+    float c;
 
-    float a1;
-    float g1;
-    float error;
-
-    for (int i=0; i < AGMSteps; i++) {
-        a1 = 0.5 * (a0 + g0);
-        g1 = sqrt(a0 * g0);
-        error = 0.5 * (a0 - g0);
-        aux = aux + pow(2., float(i)) * error * error;
-
-        if (error < AGMTolerance) {
-            break;
-        }
-
-        a0 = a1;
-        g0 = g1;
+    // induction
+    for (int i = 0; i < AGMLength; i++) {
+        c = 0.5 * (AGMList[i].x - AGMList[i].y);
+        aux = aux + pow(2., float(i)) * c * c;
     }
-    float K = 0.5 * PI / a0;
+
+    // wrapping up the results
+    float K = 0.5 * PI / AGMList[AGMLength - 1].x;
     float E = K * (1. - aux);
     return vec2(K, E);
 }
@@ -147,37 +168,38 @@ vec4 ellipj(float u) {
     // The results is output as [sn, cn, dn, phi]
     // Computed with the AGM method, see Algorithm 5 in [3]
     // Note that the algorithm only makes sense if u is not zero.
-    // We handle the case where u = 0 separately
+    // If u is close to zero, we use the MacLaurin series, see 22.10(i) in [1]
+    // Todo. Add a tolerance for the case u = 0 and use an asymptotic expansion around 0.
+    float tolerance = 0.001;
 
-    if (u == 0.) {
-        return vec4(0, 1, 1, 0);
+    float sn;
+    float cn;
+    float dn;
+
+    if (abs(u) < tolerance) {
+        // powers of k
+        float k2 = ell_m;
+        float k4 = ell_m * ell_m;
+        float k6 = k4 * ell_m;
+        sn = u
+            - (1. + k2) * pow(u, 3.) / 6.
+            + (1. + 14. * k2 + k4) * pow(u, 5.) / 120.
+            - (1. + 135. * k2 + 135. * k4 + k6) * pow(u, 7.) / 5040.;
+        cn = 1.
+            - pow(u, 2.) / 2.
+            + (1. + 4. * k2) * pow(u, 4.) / 24.
+            - (1. + 44. * k2 + 16. * k4) * pow(u, 6.) / 720.;
+        dn = 1.
+            - k2 * pow(u, 2.) / 2.
+            + k2 * (4. + k2) * pow(u, 4.)/ 24.
+            - k2 * (16. + 44. * k2 + k4) * pow(u, 6.) / 720.;
     }
 
     else {
         // initialization of all the variables
 
-        // track of the AGM algorithm
-        vec2 AGMList[AGMSteps];
-        AGMList[0] = vec2(1., ell_kprime);
-        // number of step
-        int l = 0;
-
-        // variable used during the first induction (computing the AGM)
-        float a0;
-        float g0;
-        float error;
-        for (int i = 0; i < AGMSteps - 1; i++) {
-            a0 = AGMList[i].x;
-            g0 = AGMList[i].y;
-            error = 0.5 * (a0 - g0);
-            AGMList[i+1] = vec2(0.5 * (a0 + g0), sqrt(a0 * g0));
-            l = l + 1;
-            if (error < AGMTolerance) {
-                break;
-            }
-        }
-        a0 = AGMList[l].x;
-        g0 = AGMList[l].y;
+        float a0 = AGMList[AGMLength - 1].x;
+        float g0 = AGMList[AGMLength - 1].y;
 
         float eps = 1.;
         if (sin(u * a0) < 0.) {
@@ -189,19 +211,24 @@ vec4 ellipj(float u) {
         float d = 1.;
         float aux_c;
         float aux_d;
+        float num;
+        float den;
 
-        for (int j = 0; j < l; j++) {
+        for (int j = 1; j < AGMLength; j++) {
             aux_c = c * d;
-            aux_d = (c * c / AGMList[l-j].x + AGMList[l - 1 - j].y) / (c * c / AGMList[l-j].x + AGMList[l - 1 - j].x);
+            num = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].y);
+            den = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].x);
+            aux_d =  num / den;
             c = aux_c;
             d = aux_d;
         }
 
         // wrappind the results
-        float sn = eps / sqrt(1. + c * c);
-        float cn = c * sn;
-        return vec4(sn, cn, d, atan(sn, cn));
+        sn = eps / sqrt(1. + c * c);
+        cn = c * sn;
+        dn = d;
     }
+    return vec4(sn, cn, dn, atan(sn, cn));
 }
 
 float ellipz(float phi) {
@@ -213,44 +240,41 @@ float ellipz(float phi) {
     // TODO. simplify the computation to get totally rid of the arctan (this part is used only to compute E(phi|m)
 
     // initializing the parameters of the induction
-    float a0 = 1.;
-    float g0 = ell_kprime;
+    float a0;
+    float g0;
+    float c1;
     float phi0 = phi;
     float t0 = tan(phi0);
     float mod0 = 0.;
     float res = 0.;
-    float a1;
-    float g1;
-    float c1;
     float phi1;
     float t1;
     float mod1;
     float aux;
 
-    for (int i=0; i < AGMSteps; i++) {
+    for (int i = 0; i < AGMLength; i++) {
+        a0 = AGMList[i].x;
+        g0 = AGMList[i].y;
+
         c1 = 0.5 * (a0 - g0);
         aux = g0 / a0;
         phi1 = (phi0 + mod0 * PI) + atan(aux * t0);
         mod1 = floor((phi1 + 0.5 * PI)/PI);
         t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
         res = res + c1 * sin(phi1);
-        a1 = 0.5 * (a0 + g0);
-        g1 = sqrt(a0 * g0);
 
         if (c1 / a0 < AGMTolerance) {
             break;
         }
 
-        a0 = a1;
-        g0 = g1;
         phi0 = phi1;
         t0 = t1;
         mod0 = mod1;
     }
 
     return res;
-
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // STRUCT isometry
@@ -460,6 +484,7 @@ void init_ellip(tangVector u) {
     ell_m = (1. - 2. * ab) / (1. + 2. * ab);
 
     // complete elliptic integrals and related quantities
+    agm();
     vec2 KE = ellipke();
     ell_K = KE.x;
     ell_E = KE.y;
@@ -604,7 +629,6 @@ tangVector flow(tangVector tv, float t){
             (abs(a) - abs(b)) / aux,
             (abs(a) + abs(b)) / ell_mu
             );
-
 
 
             // sign of a (resp. b)
@@ -889,7 +913,7 @@ float globalSceneSDF(vec4 p){
 
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
     //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
-    objDist = sphereSDF(absolutep, globalObjPos,0.1);
+    objDist = sphereSDF(absolutep, globalObjPos, 0.1);
 
     distance = min(distance, objDist);
     if (distance < EPSILON){
@@ -1285,12 +1309,6 @@ void main(){
     init_ellip(rayDir);
     // do the marching
     raymarch(rayDir, totalFixMatrix);
-
-
-    // hitWhich = 5;
-    // the coordinate used to get data from the texture are between 0 and 1
-    // debugColor = vec3(0.1 * ell_K, 0., 0.);
-
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
