@@ -1,17 +1,9 @@
 import {
     Vector3,
     Vector4,
-    Matrix4,
     ShaderMaterial,
-    CubeTextureLoader,
-    DataTexture3D,
-    LinearFilter,
-    FloatType,
-    RedFormat
+    CubeTextureLoader
 } from "./module/three.module.js";
-import {
-    NRRDLoader
-} from "./module/NRRDLoader.js";
 
 import {
     globals
@@ -90,13 +82,8 @@ function createGenerators() { /// generators for the tiling by cubes.
     const gen2 = new Isometry().makeLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
     const gen3 = new Isometry().makeInvLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
 
-
-    // console.log(z0);
     const gen4 = new Isometry().makeLeftTranslation(0., 0., z0);
     const gen5 = new Isometry().makeLeftTranslation(0., 0., -z0);
-
-    //    const gen4 = new Isometry().set([new Matrix4().makeTranslation(0, 0, z0)]);
-    //    const gen5 = new Isometry().set([new Matrix4().makeTranslation(0, 0, -z0)]);
 
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
@@ -157,7 +144,7 @@ const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
 function initObjects() {
     PointLightObject(new Vector3(1., 1.5, 0), lightColor1);
     PointLightObject(new Vector3(-1, 1.5, 0), lightColor2);
-    PointLightObject(new Vector3(0, 0.5, 1.), lightColor3);
+    PointLightObject(new Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
 
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
@@ -266,30 +253,6 @@ function setupMaterial(fShader) {
             stereoScreenOffset: {
                 type: "f",
                 value: globals.stereoScreenOffset
-            },
-            lookupTableX: {
-                // value of the table will be setup below
-                type: "t"
-            },
-            lookupTableY: {
-                // value of the table will be setup below
-                type: "t"
-            },
-            lookupTableZ: {
-                // value of the table will be setup below
-                type: "t"
-            },
-            lookupTableTheta: {
-                // value of the table will be setup below
-                type: "t"
-            },
-            lookupTablePhi: {
-                // value of the table will be setup below
-                type: "t"
-            },
-            depth: {
-                type: "f",
-                value: depth
             }
         },
 
@@ -297,60 +260,8 @@ function setupMaterial(fShader) {
         fragmentShader: fShader,
         transparent: true
     });
-
-    let file = 'test2';
-    //let file = 'euc';
-    //let file = 'testhgp';
-
-    // TODO. Factorize this!
-    new NRRDLoader().load("../texture/" + file + "_x.nrrd", function (volume) {
-        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = RedFormat;
-        texture.type = FloatType;
-        texture.minFilter = texture.magFilter = LinearFilter;
-        texture.unpackAlignment = 1;
-        globals.material.uniforms.lookupTableX.value = texture;
-        textureStatus += 1;
-    });
-    new NRRDLoader().load("../texture/" + file + "_y.nrrd", function (volume) {
-        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = RedFormat;
-        texture.type = FloatType;
-        texture.minFilter = texture.magFilter = LinearFilter;
-        texture.unpackAlignment = 1;
-        globals.material.uniforms.lookupTableY.value = texture;
-        textureStatus += 1;
-    });
-    new NRRDLoader().load("../texture/" + file + "_z.nrrd", function (volume) {
-        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = RedFormat;
-        texture.type = FloatType;
-        texture.minFilter = texture.magFilter = LinearFilter;
-        texture.unpackAlignment = 1;
-        globals.material.uniforms.lookupTableZ.value = texture;
-        textureStatus += 1;
-    });
-    new NRRDLoader().load("../texture/" + file + "_theta.nrrd", function (volume) {
-        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = RedFormat;
-        texture.type = FloatType;
-        texture.minFilter = texture.magFilter = LinearFilter;
-        texture.unpackAlignment = 1;
-        globals.material.uniforms.lookupTableTheta.value = texture;
-        textureStatus += 1;
-    });
-    new NRRDLoader().load("../texture/" + file + "_phi.nrrd", function (volume) {
-        let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
-        texture.format = RedFormat;
-        texture.type = FloatType;
-        texture.minFilter = texture.magFilter = LinearFilter;
-        texture.unpackAlignment = 1;
-        globals.material.uniforms.lookupTablePhi.value = texture;
-        textureStatus += 1;
-    });
 }
 
-let depth = -1;
 
 function updateMaterial() {
     /*
@@ -378,12 +289,6 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    if (textureStatus === 5) {
-        depth = depth + 1;
-    }
-    if (depth % 10 == 0) {
-        globals.material.uniforms.depth.value = depth;
-    }
 
 }
 
