@@ -13,7 +13,7 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=true;
+const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
@@ -43,6 +43,15 @@ const float modelHalfCube =  0.5;
 const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
+
+//----------------------------------------------------------------------------------------------------------------------
+// Global Constants
+//----------------------------------------------------------------------------------------------------------------------
+const int MAX_MARCHING_STEPS =  100;
+const float MIN_DIST = 0.0;
+const float MAX_DIST = 600.0;
+const float EPSILON = 0.0001;
+const float fov = 90.0;
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -162,14 +171,12 @@ vec2 ellipke() {
     return vec2(K, E);
 }
 
-vec4 ellipj(float u) {
-    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m) as well as the amplidute phi = am(u|m)
-    // i.e. the number phi such that sin(phi) = sn(u|m) and cos(phi) = cos(u|m)
-    // The results is output as [sn, cn, dn, phi]
+vec3 ellipj(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
+    // The results is output as [sn, cn, dn]
     // Computed with the AGM method, see Algorithm 5 in [3]
     // Note that the algorithm only makes sense if u is not zero.
     // If u is close to zero, we use the MacLaurin series, see 22.10(i) in [1]
-    // Todo. Add a tolerance for the case u = 0 and use an asymptotic expansion around 0.
     float tolerance = 0.001;
 
     float sn;
@@ -182,17 +189,17 @@ vec4 ellipj(float u) {
         float k4 = ell_m * ell_m;
         float k6 = k4 * ell_m;
         sn = u
-            - (1. + k2) * pow(u, 3.) / 6.
-            + (1. + 14. * k2 + k4) * pow(u, 5.) / 120.
-            - (1. + 135. * k2 + 135. * k4 + k6) * pow(u, 7.) / 5040.;
+        - (1. + k2) * pow(u, 3.) / 6.
+        + (1. + 14. * k2 + k4) * pow(u, 5.) / 120.
+        - (1. + 135. * k2 + 135. * k4 + k6) * pow(u, 7.) / 5040.;
         cn = 1.
-            - pow(u, 2.) / 2.
-            + (1. + 4. * k2) * pow(u, 4.) / 24.
-            - (1. + 44. * k2 + 16. * k4) * pow(u, 6.) / 720.;
+        - pow(u, 2.) / 2.
+        + (1. + 4. * k2) * pow(u, 4.) / 24.
+        - (1. + 44. * k2 + 16. * k4) * pow(u, 6.) / 720.;
         dn = 1.
-            - k2 * pow(u, 2.) / 2.
-            + k2 * (4. + k2) * pow(u, 4.)/ 24.
-            - k2 * (16. + 44. * k2 + k4) * pow(u, 6.) / 720.;
+        - k2 * pow(u, 2.) / 2.
+        + k2 * (4. + k2) * pow(u, 4.)/ 24.
+        - k2 * (16. + 44. * k2 + k4) * pow(u, 6.) / 720.;
     }
 
     else {
@@ -228,51 +235,46 @@ vec4 ellipj(float u) {
         cn = c * sn;
         dn = d;
     }
-    return vec4(sn, cn, dn, atan(sn, cn));
+    return vec3(sn, cn, dn);
 }
 
-float ellipz(float phi) {
-    // Return the Jacobi Zeta function, whose argument is an angle, i.e.
+float ellipz(float tanPhi) {
+    // Return the Jacobi Zeta function, whose argument is an angle phi passed as tan(phi), i.e.
     // Z(phi|m) = E(phi|m) - [E(m)/K(m)] * F(phi|m)
+    // the argument is passed as tan(phi) since this is the way it is computed from the Jacboi function :
+    // tan(phi) = sn(u|m) / cn(u|m)
+    // This is useless to compute the atan and then apply tan!
     // (the amplitude phi can be computed from the Jacobi functions above)
     // Computed with the AGM algorithm, see §17.6 in [2]
 
-    // TODO. simplify the computation to get totally rid of the arctan (this part is used only to compute E(phi|m)
+    float sign = 1.;
+    float t0 = tanPhi;
+    if(t0 < 0.) {
+        t0 = - t0;
+        sign = -1.;
+    }
 
     // initializing the parameters of the induction
     float a0;
     float g0;
-    float c1;
-    float phi0 = phi;
-    float t0 = tan(phi0);
-    float mod0 = 0.;
     float res = 0.;
-    float phi1;
-    float t1;
-    float mod1;
+    float t1; // represent tan(phi_{n+1})
+    float s1; // represent sin(phi_{n+1})
     float aux;
 
     for (int i = 0; i < AGMLength; i++) {
         a0 = AGMList[i].x;
         g0 = AGMList[i].y;
 
-        c1 = 0.5 * (a0 - g0);
         aux = g0 / a0;
-        phi1 = (phi0 + mod0 * PI) + atan(aux * t0);
-        mod1 = floor((phi1 + 0.5 * PI)/PI);
         t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
-        res = res + c1 * sin(phi1);
+        s1 = t0 * (1. + aux) / sqrt((1. + t0 * t0) * (1. + aux * aux * t0 * t0));
+        res = res + 0.5 * (a0 - g0) * s1;
 
-        if (c1 / a0 < AGMTolerance) {
-            break;
-        }
-
-        phi0 = phi1;
         t0 = t1;
-        mod0 = mod1;
     }
 
-    return res;
+    return sign * res;
 }
 
 
@@ -654,7 +656,7 @@ tangVector flow(tangVector tv, float t){
             // (more a safety check as we assumed that mu * t < 4K)
             float s = mod(ell_mu * t, 4. * ell_K);
             // jabobi functions applied to the amplitude s
-            vec4 jacobi_s = ellipj(s);
+            vec3 jacobi_s = ellipj(s);
             //debugColor = abs(jacobi_s).xyz;
 
 
@@ -668,7 +670,7 @@ tangVector flow(tangVector tv, float t){
             //debugColor = abs(jacobi_ss0).xyz;
 
             // Z(mu *t + s0) - Z(s0) (using again addition formulas)
-            float zetaj = ellipz(jacobi_s.w) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
+            float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
 
 
             // wrapping all the computation
@@ -776,23 +778,13 @@ float horizontalSliceSDF(vec4 p, float h1, float h2) {
     */
 }
 
-float sliceSDF(vec4 p){
+float sliceSDF(vec4 p) {
     float HS1= 0.;
     HS1=horizontalHalfSpaceSDF(p, -0.1);
     float HS2=0.;
     HS2=-horizontalHalfSpaceSDF(p, -0.3);
     return max(HS1, HS2);
 }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Global Constants
-//----------------------------------------------------------------------------------------------------------------------
-const int MAX_MARCHING_STEPS =  100;
-const float MIN_DIST = 0.0;
-const float MAX_DIST = 600.0;
-const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
-const float EPSILON = 0.0001;
-const float fov = 90.0;
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1230,7 +1222,7 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         //make the objects have their own color
         //color the object based on its position in the cube
         vec4 samplePos=modelProject(sampletv.pos);
-        //Point in the Klein Model unit cube    
+        //Point in the Klein Model unit cube
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
