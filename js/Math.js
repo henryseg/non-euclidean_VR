@@ -288,44 +288,66 @@ var cubeHalfWidth = 0.5;
 //-----------------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //-----------------------------------------------------------------------------------------------------------------------------
-function geomDist(v) {
-    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-}
+
+
+//Starting Basis
+let b1 = new THREE.Vector3(1, 0, 0);
+let b2 = new THREE.Vector3(0, 1, 0);
+let b3 = new THREE.Vector3(0, 0, 1);
+
+
 
 
 function fixOutsideCentralCell(position) {
-    let cPos = ORIGIN.clone().translateBy(position.boost);
-    let bestDist = geomDist(cPos);
-    let bestIndex = -1;
-    for (let i = 0; i < gens.length; i++) {
-        let pos = cPos.clone().translateBy(gens[i]);
-        let dist = geomDist(pos);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-        }
-    }
-    if (bestIndex !== -1) {
-        position.translateBy(gens[bestIndex]);
-        return bestIndex;
-    } else {
-        return -1;
-    }
-
+    //    let bestIndex = -1;
+    //    let p = ORIGIN.clone().translateBy(position.boost);
+    //    //lattice basis divided by the norm square
+    //    let v1 = new Vector4(GoldenRatio, -1., 0., 0.);
+    //    let v2 = new Vector4(1., GoldenRatio, 0., 0.);
+    //    let v3 = new Vector4(0., 0., 1. / z0, 0.);
+    //
+    //    if (p.dot(b3)/b3.length() > 0.5*b3.length()) {
+    //        bestIndex = 5;
+    //    }
+    //    if (p.dot(b3)/b3.length() < -0.5*b3.length()) {
+    //        bestIndex = 4;
+    //    }
+    //
+    //    if (p.dot(b1)/b1.length() > 0.5*b1.length()) {
+    //        bestIndex = 1;
+    //    }
+    //    if (p.dot(b1)/b1.length() < -0.5*b1.length()) {
+    //        bestIndex = 0;
+    //    }
+    //    if (p.dot(b2)/b2.length() > 0.5*b2.length()) {
+    //        bestIndex = 3;
+    //    }
+    //    if (p.dot(b2)/b2.length() < -0.5*b2.length()) {
+    //        bestIndex = 2;
+    //    }
+    //
+    //    if (bestIndex !== -1) {
+    //        position.translateBy(globals.gens[bestIndex]);
+    //        return bestIndex;
+    //    } else {
+    //        return -1;
+    //    }
+    return -1;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
 
-function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Position().localFlow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Position().localFlow(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen2 = new Position().localFlow(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.)).boost;
-    const gen3 = new Position().localFlow(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.)).boost;
-    const gen4 = new Position().localFlow(new THREE.Vector3(0., 0., 2. * cubeHalfWidth)).boost;
-    const gen5 = new Position().localFlow(new THREE.Vector3(0., 0., -2. * cubeHalfWidth)).boost;
+function createGenerators(u, v, w) { /// generators for the tiling by cubes.
+
+    let gen0 = new Position().localFlow(u).boost;
+    let gen1 = new Position().localFlow(u.multiplyScalar(-1)).boost;
+    let gen2 = new Position().localFlow(v).boost;
+    let gen3 = new Position().localFlow(v.multiplyScalar(-1)).boost;
+    let gen4 = new Position().localFlow(w).boost;
+    let gen5 = new Position().localFlow(w.multiplyScalar(-1)).boost;
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -355,7 +377,7 @@ function initGeometry() {
     g_position = new Position();
     g_cellPosition = new Position();
     g_invCellPosition = new Position();
-    gens = createGenerators();
+    gens = createGenerators(b1, b2, b3);
     invGens = invGenerators(gens);
     invGensMatrices = unpackageMatrix(invGens);
 
@@ -390,6 +412,18 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectPosition = new Position().localFlow(new THREE.Vector3(0, 0, -1.));
 }
+
+
+
+
+//stepSize = 0.01;
+//setInterval(function () {
+//        b1 = b1.add(new THREE.Vector3(stepSize, 0, 0));
+//    }, 1 // run 100 times a second.
+//);
+
+
+
 
 //-------------------------------------------------------
 // Set up shader
@@ -492,7 +526,23 @@ function setupMaterial(fShader) {
             stereoScreenOffset: {
                 type: "f",
                 value: g_stereoScreenOffset
+            },
+
+            b1: {
+                type: "v3",
+                value: b1
+            },
+
+            b2: {
+                type: "v3",
+                value: b2
+            },
+
+            b3: {
+                type: "v3",
+                value: b3
             }
+
         },
 
         vertexShader: document.getElementById('vertexShader').textContent,
@@ -529,5 +579,12 @@ function updateMaterial() {
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
-
+    
+    //update the lattice translation directions each time.
+    g_material.uniforms.b1.value=b1;
+    g_material.uniforms.b2.value=b2;
+    g_material.uniforms.b3.value=b3;
+    
+    //Update the matrices every time
+    g_material.uniforms.invGenerators.value = unpackageMatrix(invGenerators(createGenerators(b1, b2, b3)));
 }

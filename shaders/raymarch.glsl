@@ -337,6 +337,9 @@ uniform samplerCube earthCubeTex;
 uniform float modelHalfCube;//projection of cube to klein model
 uniform float stereoScreenOffset;
 
+uniform vec3 b1;
+uniform vec3 b2;
+uniform vec3 b3;
 
 //--------------------------------------------
 // Re-packaging isometries, facings in the shader
@@ -418,36 +421,94 @@ float globalSceneSDF(vec4 p){
 }
 
 
+//// check if the given point p is in the fundamental domain of the lattice.
+//bool isOutsideCell(vec4 p, out Isometry fixMatrix){
+//    vec4 ModelP= modelProject(p);
+//    if (ModelP.x > modelHalfCube){
+//        fixMatrix = Isometry(invGenerators[0]);
+//        return true;
+//    }
+//    if (ModelP.x < -modelHalfCube){
+//        fixMatrix = Isometry(invGenerators[1]);
+//        return true;
+//    }
+//    if (ModelP.y > modelHalfCube){
+//        fixMatrix = Isometry(invGenerators[2]);
+//        return true;
+//    }
+//    if (ModelP.y < -modelHalfCube){
+//        fixMatrix = Isometry(invGenerators[3]);
+//        return true;
+//    }
+//    if (ModelP.z > modelHalfCube){
+//        fixMatrix = Isometry(invGenerators[4]);
+//        return true;
+//    }
+//    if (ModelP.z < -modelHalfCube){
+//        fixMatrix = Isometry(invGenerators[5]);
+//        return true;
+//    }
+//    return false;
+//}
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // check if the given point p is in the fundamental domain of the lattice.
+
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-    vec4 ModelP= modelProject(p);
-    if (ModelP.x > modelHalfCube){
-        fixMatrix = Isometry(invGenerators[0]);
-        return true;
-    }
-    if (ModelP.x < -modelHalfCube){
-        fixMatrix = Isometry(invGenerators[1]);
-        return true;
-    }
-    if (ModelP.y > modelHalfCube){
-        fixMatrix = Isometry(invGenerators[2]);
-        return true;
-    }
-    if (ModelP.y < -modelHalfCube){
-        fixMatrix = Isometry(invGenerators[3]);
-        return true;
-    }
-    if (ModelP.z > modelHalfCube){
+    //vec4 ModelP= modelProject(p);
+
+    if (dot(p, vec4(b3,0.))/(length(b3)*length(b3)) > 0.5) {
         fixMatrix = Isometry(invGenerators[4]);
         return true;
     }
-    if (ModelP.z < -modelHalfCube){
+    if (dot(p, vec4(b3,0.))/(length(b3)*length(b3)) < -0.5) {
         fixMatrix = Isometry(invGenerators[5]);
+        return true;
+    }
+    
+    if (dot(p, vec4(b1,0.))/(length(b1)*length(b1)) > 0.5) {
+        fixMatrix = Isometry(invGenerators[0]);
+        return true;
+    }
+    if (dot(p, vec4(b1,0.))/(length(b1)*length(b1)) < -0.5) {
+        fixMatrix = Isometry(invGenerators[1]);
+        return true;
+    }
+    if (dot(p, vec4(b2,0.))/(length(b2)*length(b2))> 0.5) {
+        fixMatrix = Isometry(invGenerators[2]);
+        return true;
+    }
+    if (dot(p, vec4(b2,0.))/(length(b2)*length(b2)) < -0.5) {
+        fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
     return false;
 }
-
 
 
 // overload of the previous method with tangent vector
