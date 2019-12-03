@@ -435,7 +435,13 @@ tangVector tangDirection(tangVector u, tangVector v){
 }
 
 tangVector flow(tangVector tv, float t){
-    // follow the geodesic flow during a time t
+    // Follow the geodesic flow during a time t
+    // If the tangent vector at the origin is too close to the XY plane,
+    // we use an asymptotic expansion of the geodesics.
+    // This help to get rid of the noise around the XY plane
+    // The threshold is given by the tolerance parameter
+    float tolerance = 0.1;
+
 
     // move p to the origin
     mat4 isom = nilMatrix(tv.pos);
@@ -451,10 +457,100 @@ tangVector flow(tangVector tv, float t){
 
     tangVector achievedFromOrigin = tangVector(ORIGIN, vec4(0.));
 
-    if (w == 0.){
-        achievedFromOrigin.pos = vec4(t * tvOrigin.dir.xyz, 1);
-        achievedFromOrigin.dir =  tvOrigin.dir;
+    /*
+         TODO. question : the threshold should be  |w| << 1 or |wt| << 1 ?
+    */
+
+
+    if (abs(w * t) < tolerance){
+        // use an asymptotic expansion (computed with SageMath
+
+        // factorize some computations...
+        float cosa = cos(alpha);
+        float sina = sin(alpha);
+        float t1 = t;
+        float t2 = t1 * t;
+        float t3 = t2 * t;
+        float t4 = t3 * t;
+        float t5 = t4 * t;
+        float t6 = t5 * t;
+        float t7 = t6 * t;
+        float t8 = t7 * t;
+        float t9 = t8 * t;
+
+        float w1 = w;
+        float w2 = w1 * w;
+        float w3 = w2 * w;
+        float w4 = w3 * w;
+        float w5 = w4 * w;
+        float w6 = w5 * w;
+        float w7 = w6 * w;
+
+
+
+        achievedFromOrigin.pos = vec4(
+        c * t1 * cosa
+        - (1. / 2.) * c * t2 * w1 * sina
+        - (1. / 6.) * c * t3 * w2 * cosa
+        + (1. / 24.) * c * t4 * w3 * sina
+        + (1. / 120.) * c * t5 * w4 * cosa
+        - (1. / 720.) * c * t6 * w5 * sina
+        - (1. / 5040.) * c * t7 * w6 * cosa
+        + (1. / 40320.) * c * t8 * w7 * sina,
+
+        c * t * sina
+        + (1. / 2.) * c * t2 * w1 * cosa
+        - (1. / 6.) * c * t3 * w2 * sina
+        - (1. / 24.) * c * t4 * w3 * cosa
+        + (1. / 120.) * c * t5 * w4 * sina
+        + (1. / 720.) * c * t6 * w5 * cosa
+        - (1. / 5040.) * c * t7 * w6 * sina
+        - (1. / 40320.) * c * t8 * w7 * cosa,
+
+        (1. / 12.) * (c * c * t3 + 12. * t1) * w1
+        - (1. / 240.) * c * c * t5 * w3
+        + (1. / 10080.) * c * c * t7 * w5
+        - (1. / 725760.) * c * c * t9 * w7,
+
+        1);
+        achievedFromOrigin.dir =  vec4(
+        c * cosa
+        - c * t1 * w1 * sina
+        - (1. / 2.) * c * t2 * w2 * cosa
+        + (1. / 6.) * c * t3 * w3 * sina
+        + (1. / 24.) * c * t4 * w4 * cosa
+        - (1. / 120.) * c * t5 * w5 * sina
+        - (1. / 720.) * c * t6 * t6 * cosa
+        + (1. / 5040.) * c * t7 * w7 * sina,
+
+        c * sina
+        + c * t1 * w1 * cosa
+        - (1. / 2.) * c * t2 * w2 * sina
+        - (1. / 6.) * c * t3 * w3 * cosa
+        + (1. / 24.) * c * t4 * w4 * sina
+        + (1. / 120.) * c * t5 * w5 * cosa
+        - (1. / 720.) * c * t6 * t6 * sina
+        - (1. / 5040.) * c * t7 * w7 * cosa,
+
+        (1. / 4.) * (c * c * t2 + 4.) * w1
+        - (1. / 48.) * c * c * t4 * w3
+        + (1. / 1440.) * c * c * t6 * w5
+        - (1. / 8060.) * c * c * t8 * w7,
+
+        0
+        );
     }
+
+    /*
+        For the record, the previous test without the asymptotic expansion
+
+        if (w == 0.) {
+
+            achievedFromOrigin.pos = vec4(c * cos(alpha) * t, c * sin(alpha) * t, 0. , 1.);
+            achievedFromOrigin.dir = tvOrigin.dir;
+    }
+    */
+
     else {
         achievedFromOrigin.pos = vec4(
         2. * (c / w) * sin(0.5 * w * t) * cos(0.5 * w * t + alpha),
@@ -732,7 +828,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 
     // Set for localDepth to our new max tracing distance:
     localDepth = min(globalDepth, MAX_DIST);
-   // localDepth= MAX_DIST;
+    // localDepth= MAX_DIST;
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
@@ -849,43 +945,38 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
 
 vec3 localColor(mat4 totalFixMatrix, tangVector sampletv){
     N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0.,0.,0.);
-        color = phongModel(totalFixMatrix, color);
-        color = 0.9*color+0.1;
-        return color;
-        //generically gray object (color= black, glowing slightly because of the 0.1)
+    vec3 color=vec3(0., 0., 0.);
+    color = phongModel(totalFixMatrix, color);
+    color = 0.9*color+0.1;
+    return color;
+    //generically gray object (color= black, glowing slightly because of the 0.1)
 }
 
 
 vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
-     if(SURFACE_COLOR){//color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
+    if (SURFACE_COLOR){ //color the object based on its position in the cube
+        vec4 samplePos=modelProject(sampletv.pos);
         //Point in the Klein Model unit cube    
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
-        x = 0.9*x/modelHalfCube;    
-        y = 0.9*y/modelHalfCube; 
-        z = 0.9*z/modelHalfCube;   
-        vec3 color = vec3(x,y,z);
+        x = 0.9*x/modelHalfCube;
+        y = 0.9*y/modelHalfCube;
+        z = 0.9*z/modelHalfCube;
+        vec3 color = vec3(x, y, z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
         return 0.9*color+0.1;
         //adding a small constant makes it glow slightly
-     }
-    else{
-            // objects
+    }
+    else {
+        // objects
         N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0.,0.,0.);
+        vec3 color=vec3(0., 0., 0.);
         color = phongModel(totalFixMatrix, color);
         return color;
-        }
+    }
 }
-        
-    
-
-
-
 
 
 //--------------------------------------------------------------------
@@ -914,14 +1005,14 @@ void main(){
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-    
-        //camera position must be translated in hyperboloid -----------------------
+
+    //camera position must be translated in hyperboloid -----------------------
     rayDir=applyMatrixToDir(facing, rayDir);
-    
-    
+
+
     if (isStereo == 1){
-         
-    
+
+
         if (isLeft){
             rayDir=applyMatrixToDir(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
@@ -932,12 +1023,12 @@ void main(){
         }
     }
 
-    
-  // in other geometries, the facing will not be an isom, so applying facing is probably not good.
-   // rayDir = translate(facing, rayDir);
+
+    // in other geometries, the facing will not be an isom, so applying facing is probably not good.
+    // rayDir = translate(facing, rayDir);
     rayDir = translate(currentBoost, rayDir);
     //generate direction then transform to hyperboloid ------------------------
-    
+
     //    vec4 rayDirVPrime = tangDirection(rayOrigin, rayDirV);
     //get our raymarched distance back ------------------------
     mat4 totalFixMatrix = mat4(1.0);
@@ -957,22 +1048,22 @@ void main(){
     else if (hitWhich == 5){ //debug
         out_FragColor = vec4(debugColor, 1.0);
     }
-    
-        else if (hitWhich == 2){ // global object
-            
+
+    else if (hitWhich == 2){ // global object
+
         vec3 pixelColor=localColor(totalFixMatrix, sampletv);
-            
-        out_FragColor = vec4( pixelColor,1.0);
-            
+
+        out_FragColor = vec4(pixelColor, 1.0);
+
         return;
     }
-    
+
     else { // objects
-        
+
         vec3 pixelColor= globalColor(totalFixMatrix, sampletv);
-        
-        out_FragColor=vec4(pixelColor,1.0);
-      
-}
+
+        out_FragColor=vec4(pixelColor, 1.0);
+
+    }
 
 }
