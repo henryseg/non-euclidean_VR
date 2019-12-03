@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=false;
 const bool LATTICE_SCENE=true;
 const bool EARTH=false;
 
@@ -311,6 +311,7 @@ Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
 
+
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
@@ -421,94 +422,42 @@ float globalSceneSDF(vec4 p){
 }
 
 
-//// check if the given point p is in the fundamental domain of the lattice.
-//bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-//    vec4 ModelP= modelProject(p);
-//    if (ModelP.x > modelHalfCube){
-//        fixMatrix = Isometry(invGenerators[0]);
-//        return true;
-//    }
-//    if (ModelP.x < -modelHalfCube){
-//        fixMatrix = Isometry(invGenerators[1]);
-//        return true;
-//    }
-//    if (ModelP.y > modelHalfCube){
-//        fixMatrix = Isometry(invGenerators[2]);
-//        return true;
-//    }
-//    if (ModelP.y < -modelHalfCube){
-//        fixMatrix = Isometry(invGenerators[3]);
-//        return true;
-//    }
-//    if (ModelP.z > modelHalfCube){
-//        fixMatrix = Isometry(invGenerators[4]);
-//        return true;
-//    }
-//    if (ModelP.z < -modelHalfCube){
-//        fixMatrix = Isometry(invGenerators[5]);
-//        return true;
-//    }
-//    return false;
-//}
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // check if the given point p is in the fundamental domain of the lattice.
 
-bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-    //vec4 ModelP= modelProject(p);
 
-    if (dot(p, vec4(b3,0.))/(length(b3)*length(b3)) > 0.5) {
-        fixMatrix = Isometry(invGenerators[4]);
-        return true;
-    }
-    if (dot(p, vec4(b3,0.))/(length(b3)*length(b3)) < -0.5) {
-        fixMatrix = Isometry(invGenerators[5]);
-        return true;
-    }
+bool isOutsideCell(vec4 p, out Isometry fixMatrix){
+    vec4 B1=vec4(b1,0.);
+    vec4 B2=vec4(b2,0.);
+    vec4 B3=vec4(b3,0.);
     
-    if (dot(p, vec4(b1,0.))/(length(b1)*length(b1)) > 0.5) {
+    if (dot(p,B1)> modelHalfCube*length(b1)*length(b1)){
         fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
-    if (dot(p, vec4(b1,0.))/(length(b1)*length(b1)) < -0.5) {
+    if (dot(p,B1) < -modelHalfCube*length(b1)*length(b1)){
         fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
-    if (dot(p, vec4(b2,0.))/(length(b2)*length(b2))> 0.5) {
+    if (dot(p,B2)> modelHalfCube*length(b2)*length(b2)){
         fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
-    if (dot(p, vec4(b2,0.))/(length(b2)*length(b2)) < -0.5) {
+    if (dot(p,B2) < -modelHalfCube*length(b2)*length(b2)){
         fixMatrix = Isometry(invGenerators[3]);
+        return true;
+    }
+    if (dot(p,B3) > modelHalfCube*length(b3)*length(b3)){
+        fixMatrix = Isometry(invGenerators[4]);
+        return true;
+    }
+    if (dot(p,B3) < -modelHalfCube*length(b3)*length(b3)){
+        fixMatrix = Isometry(invGenerators[5]);
         return true;
     }
     return false;
 }
+
+
 
 
 // overload of the previous method with tangent vector
@@ -836,7 +785,6 @@ void main(){
     cellBoost=Isometry(cellBoostMat);
     invCellBoost=Isometry(invCellBoostMat);
     globalObjectBoost=Isometry(globalObjectBoostMat);
-
 
     //vec4 rayOrigin = ORIGIN;
 

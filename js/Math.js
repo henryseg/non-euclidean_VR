@@ -290,12 +290,6 @@ var cubeHalfWidth = 0.5;
 //-----------------------------------------------------------------------------------------------------------------------------
 
 
-//Starting Basis
-let b1 = new THREE.Vector3(1, 0, 0);
-let b2 = new THREE.Vector3(0, 1, 0);
-let b3 = new THREE.Vector3(0, 0, 1);
-
-
 
 
 function fixOutsideCentralCell(position) {
@@ -338,16 +332,20 @@ function fixOutsideCentralCell(position) {
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //-----------------------------------------------------------------------------------------------------------------------------
+//Starting Basis
+let b1 = new THREE.Vector3(1, 1, 0);
+let b2 = new THREE.Vector3(-1, 1, 0);
+let b3 = new THREE.Vector3(0, 0, 1);
 
 
 function createGenerators(u, v, w) { /// generators for the tiling by cubes.
 
     let gen0 = new Position().localFlow(u).boost;
-    let gen1 = new Position().localFlow(u.multiplyScalar(-1)).boost;
+    let gen1 = new Position().localFlow(u.clone().multiplyScalar(-1)).boost;
     let gen2 = new Position().localFlow(v).boost;
-    let gen3 = new Position().localFlow(v.multiplyScalar(-1)).boost;
+    let gen3 = new Position().localFlow(v.clone().multiplyScalar(-1)).boost;
     let gen4 = new Position().localFlow(w).boost;
-    let gen5 = new Position().localFlow(w.multiplyScalar(-1)).boost;
+    let gen5 = new Position().localFlow(w.clone().multiplyScalar(-1)).boost;
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -374,6 +372,9 @@ let invGensMatrices; // need lists of things to give to the shader, lists of typ
 
 
 function initGeometry() {
+
+
+
     g_position = new Position();
     g_cellPosition = new Position();
     g_invCellPosition = new Position();
@@ -415,13 +416,12 @@ function initObjects() {
 
 
 
-
-//stepSize = 0.01;
-//setInterval(function () {
-//        b1 = b1.add(new THREE.Vector3(stepSize, 0, 0));
-//    }, 1 // run 100 times a second.
-//);
-
+stepSize = 0.01;
+setInterval(function () {
+        b1 = b1.multiplyScalar(1 / 1.001);
+        b2 = b2.multiplyScalar(1.001);
+    }, 1 // run 100 times a second.
+);
 
 
 
@@ -431,7 +431,7 @@ function initObjects() {
 // We must unpackage the boost data here for sending to the shader.
 
 function setupMaterial(fShader) {
-
+    console.log(b1);
     g_material = new THREE.ShaderMaterial({
         uniforms: {
 
@@ -527,22 +527,18 @@ function setupMaterial(fShader) {
                 type: "f",
                 value: g_stereoScreenOffset
             },
-
             b1: {
                 type: "v3",
                 value: b1
             },
-
             b2: {
                 type: "v3",
                 value: b2
             },
-
             b3: {
                 type: "v3",
                 value: b3
             }
-
         },
 
         vertexShader: document.getElementById('vertexShader').textContent,
@@ -579,12 +575,12 @@ function updateMaterial() {
     g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
     g_material.uniforms.rightFacing.value = g_rightPosition.facing;
 
-    
-    //update the lattice translation directions each time.
-    g_material.uniforms.b1.value=b1;
-    g_material.uniforms.b2.value=b2;
-    g_material.uniforms.b3.value=b3;
-    
+
+    // update the lattice translation directions each time.
+    g_material.uniforms.b1.value = b1;
+    g_material.uniforms.b2.value = b2;
+    g_material.uniforms.b3.value = b3;
+
     //Update the matrices every time
     g_material.uniforms.invGenerators.value = unpackageMatrix(invGenerators(createGenerators(b1, b2, b3)));
 }
