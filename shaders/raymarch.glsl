@@ -116,9 +116,13 @@ float ell_L;
 // maximal number of steps in the AGM algorithm
 const int AGMSteps = 20;
 // tolerance of the AGM algorithm
-const float AGMTolerance = 0.000001;
+const float AGMTolerance = 0.; // 0.000001;
 // steps performed to compute the AGM (useful for the Jacobi functions)
-vec2 AGMList[AGMSteps];
+// the coordinates of the stored vec3 have the following meaning
+// - x : arithmetic mean
+// - y : geometric mean
+// - z : error
+vec3 AGMList[AGMSteps];
 // number of steps actually used for the AGM, the index of the last non-zero entries in AGMList should be AGMLength - 1
 int AGMLength;
 
@@ -129,7 +133,7 @@ void agm() {
     // index of the last step : AGMIndex
 
     // initialization
-    AGMList[0] = vec2(1., ell_kprime);
+    AGMList[0] = vec3(1., ell_kprime, ell_k);
     AGMLength = 1;
 
     // variable used during the induction
@@ -141,10 +145,11 @@ void agm() {
     for (int i = 1; i < AGMSteps; i++) {
         a0 = AGMList[i - 1].x;
         g0 = AGMList[i - 1].y;
-        error = 0.5 * (a0 - g0);
-        AGMList[i] = vec2(0.5 * (a0 + g0), sqrt(a0 * g0));
+
+        AGMList[i] = vec3(0.5 * (a0 + g0), sqrt(a0 * g0), 0.5 * (a0 - g0));
         AGMLength = AGMLength + 1;
-        if (error < AGMTolerance) {
+
+        if (AGMList[i].z < AGMTolerance) {
             break;
         }
     }
@@ -156,13 +161,11 @@ vec2 ellipke() {
     // Computed with the AGM method, see 19.8(i) in [1]
 
     // initialization of all the variables;
-    float aux = 0.5 * ell_m;
-    float c;
+    float aux = 0.;
 
     // induction
     for (int i = 0; i < AGMLength; i++) {
-        c = 0.5 * (AGMList[i].x - AGMList[i].y);
-        aux = aux + pow(2., float(i)) * c * c;
+        aux = aux + pow(2., float(i-1)) * AGMList[i].z * AGMList[i].z;
     }
 
     // wrapping up the results
@@ -244,36 +247,46 @@ float ellipz(float tanPhi) {
     // the argument is passed as tan(phi) since this is the way it is computed from the Jacboi function :
     // tan(phi) = sn(u|m) / cn(u|m)
     // This is useless to compute the atan and then apply tan!
-    // (the amplitude phi can be computed from the Jacobi functions above)
     // Computed with the AGM algorithm, see §17.6 in [2]
+    float tolerance = 0.1;
+
 
     float sign = 1.;
     float t0 = tanPhi;
-    if(t0 < 0.) {
+    if (t0 < 0.) {
         t0 = - t0;
         sign = -1.;
     }
 
-    // initializing the parameters of the induction
-    float a0;
-    float g0;
     float res = 0.;
-    float t1; // represent tan(phi_{n+1})
-    float s1; // represent sin(phi_{n+1})
-    float aux;
 
-    for (int i = 0; i < AGMLength; i++) {
-        a0 = AGMList[i].x;
-        g0 = AGMList[i].y;
-
-        aux = g0 / a0;
-        t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
-        s1 = t0 * (1. + aux) / sqrt((1. + t0 * t0) * (1. + aux * aux * t0 * t0));
-        res = res + 0.5 * (a0 - g0) * s1;
-
-        t0 = t1;
+    // if t0 is close to zero we use an asymptotic expansion around zero
+    // (computed with SageMath)
+    if (t0 < tolerance) {
+        float k2 = ell_m;
+        float k4 = k2 * ell_m;
+        float k6 = k4 * ell_m;
+        res =  - (ell_E /ell_K - 1.) * t0;
+        res = res - (1./6.) * (ell_E * k2 / ell_K + k2 - 2. * ell_E / ell_K + 2.) * pow(t0, 3.);
+        res = res - (1./40.) * (3. * ell_E * k4 / ell_K + k4 - 8. * ell_E * k2 / ell_K - 8. * k2 + 8. * ell_E / ell_K - 8.) * pow(t0, 5.);
+        res = res - (1./112.) * (5. * ell_E * k6 / ell_K + k6 - 18. * ell_E * k4 / ell_K - 6. * k4 + 24. * ell_E * k2 / ell_K + 24. * k2 - 16. * ell_E / ell_K + 16.) * pow(t0, 7.);
     }
+    else {
+        // initializing the parameters of the induction
 
+        float t1;// represent tan(phi_{n+1})
+        float s1;// represent sin(phi_{n+1})
+        float aux;
+
+        for (int i = 0; i < AGMLength; i++) {
+            aux = AGMList[i].y / AGMList[i].x;
+            t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
+            s1 = t0 * (1. + aux) / sqrt((1. + t0 * t0) * (1. + aux * aux * t0 * t0));
+            res = res + AGMList[i + 1].z * s1;
+
+            t0 = t1;
+        }
+    }
     return sign * res;
 }
 
@@ -622,77 +635,77 @@ tangVector flow(tangVector tv, float t){
         }
         else {*/
 
-            // parameters related to the initial condition of the geodesic flow
+        // parameters related to the initial condition of the geodesic flow
 
-            // phase shift (Phi in the handwritten notes)
-            float aux = sqrt(1. - 2. * abs(a * b));
-            // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
-            vec3 jacobi_s0 = vec3(
-            - c / aux,
-            (abs(a) - abs(b)) / aux,
-            (abs(a) + abs(b)) / ell_mu
-            );
-
-
-            // sign of a (resp. b)
-            float signa = 1.;
-            if (a < 0.) {
-                signa = -1.;
-            }
-            float signb = 1.;
-            if (b < 0.) {
-                signb = -1.;
-            }
-
-            // some useful intermediate computation
-            float kOkprime = ell_k / ell_kprime;
-            float oneOkprime = 1. / ell_kprime;
-
-            // we are now ready to write down the coordinates of the endpoint
-
-            // amplitude (without the phase shift of s0)
-            // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
-            // (more a safety check as we assumed that mu * t < 4K)
-            float s = mod(ell_mu * t, 4. * ell_K);
-            // jabobi functions applied to the amplitude s
-            vec3 jacobi_s = ellipj(s);
-
-            // jacobi function applied to s + s0  (using addition formulas)
-            float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
-            vec3 jacobi_ss0 = vec3(
-            (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
-            (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
-            (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
-            );
-
-            // Z(mu * t + s0) - Z(s0) (using again addition formulas)
-            float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
+        // phase shift (Phi in the handwritten notes)
+        float aux = sqrt(1. - 2. * abs(a * b));
+        // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
+        vec3 jacobi_s0 = vec3(
+        - c / aux,
+        (abs(a) - abs(b)) / aux,
+        (abs(a) + abs(b)) / ell_mu
+        );
 
 
-            // wrapping all the computation
-            resOriginPos = vec4(
-            signa * sqrt(abs(b / a)) * (
-            oneOkprime * zetaj
-            + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-            + ell_L * ell_mu * t
-            ),
-            signb * sqrt(abs(a / b)) * (
-            oneOkprime * zetaj
-            - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-            + ell_L * ell_mu * t
-            ),
-            0.5 * log(abs(b / a)) + asinh((ell_k / ell_kprime) * jacobi_ss0.y),
-            1.
-            );
-            resOriginDir = vec4(
-            signa * abs(b) * pow(kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z, 2.),
-            signb * abs(a) * pow(kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z, 2.),
-            - ell_k * ell_mu * jacobi_ss0.x,
-            0.
-            );
+        // sign of a (resp. b)
+        float signa = 1.;
+        if (a < 0.) {
+            signa = -1.;
+        }
+        float signb = 1.;
+        if (b < 0.) {
+            signb = -1.;
+        }
+
+        // some useful intermediate computation
+        float kOkprime = ell_k / ell_kprime;
+        float oneOkprime = 1. / ell_kprime;
+
+        // we are now ready to write down the coordinates of the endpoint
+
+        // amplitude (without the phase shift of s0)
+        // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
+        // (more a safety check as we assumed that mu * t < 4K)
+        float s = mod(ell_mu * t, 4. * ell_K);
+        // jabobi functions applied to the amplitude s
+        vec3 jacobi_s = ellipj(s);
+
+        // jacobi function applied to s + s0  (using addition formulas)
+        float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
+        vec3 jacobi_ss0 = vec3(
+        (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
+        (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
+        (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
+        );
+
+        // Z(mu * t + s0) - Z(s0) (using again addition formulas)
+        float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
 
 
-      //  }
+        // wrapping all the computation
+        resOriginPos = vec4(
+        signa * sqrt(abs(b / a)) * (
+        oneOkprime * zetaj
+        + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+        + ell_L * ell_mu * t
+        ),
+        signb * sqrt(abs(a / b)) * (
+        oneOkprime * zetaj
+        - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+        + ell_L * ell_mu * t
+        ),
+        0.5 * log(abs(b / a)) + asinh((ell_k / ell_kprime) * jacobi_ss0.y),
+        1.
+        );
+        resOriginDir = vec4(
+        signa * abs(b) * pow(kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z, 2.),
+        signb * abs(a) * pow(kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z, 2.),
+        - ell_k * ell_mu * jacobi_ss0.x,
+        0.
+        );
+
+
+        //  }
 
 
     }
@@ -763,22 +776,6 @@ float horizontalHalfSpaceSDF(vec4 p, float h) {
     return p.z - h;
 }
 
-float horizontalSliceSDF(vec4 p, float h1, float h2) {
-    //signed distance function to the half space h1 < z < h2
-
-    return max(p.z - h2, h1-p.z);
-    /*
-    if(p.z < h1){
-        return  h1 - p.z;
-    }
-    else if (p.z > h2) {
-        return p.z - h2;
-    }
-    else{
-        return max (p.z - h2, h1-p.z);
-    }
-    */
-}
 
 float sliceSDF(vec4 p) {
     float HS1= 0.;
@@ -885,29 +882,25 @@ float globalSceneSDF(vec4 p){
             return distance;
         }
     }
-
-
     //Global Sphere Object
 
-    float objDist;
-    //    float slabDist;
-    //    float sphDist;
-    //    slabDist = sliceSDF(absolutep);
-    //    sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
-    //    objDist=max(slabDist,-sphDist);
+    float objDist = sliceSDF(absolutep);
+    //float slabDist;
+    //float sphDist;
+    //slabDist = sliceSDF(absolutep);
+    //sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+    //objDist=max(slabDist,-sphDist);
     // objDist=MAX_DIST;
 
 
-    //horizontalSliceSDF(absolutep, -0.2, -0.4);
-
     //global plane
 
-
-
-
+    /*
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
     //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
     objDist = sphereSDF(absolutep, globalObjPos, 0.1);
+*/
+
 
     distance = min(distance, objDist);
     if (distance < EPSILON){
@@ -1310,7 +1303,8 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.3);
+        //out_FragColor = vec4(0.3);
+        out_FragColor = vec4(0.8, 0.8, 0, 1);
         return;
     }
     else if (hitWhich == 1){
