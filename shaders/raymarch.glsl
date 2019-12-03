@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 
@@ -177,7 +177,7 @@ vec3 ellipj(float u) {
     // Computed with the AGM method, see Algorithm 5 in [3]
     // Note that the algorithm only makes sense if u is not zero.
     // If u is close to zero, we use the MacLaurin series, see 22.10(i) in [1]
-    float tolerance = 0.001;
+    float tolerance = 0.1;
 
     float sn;
     float cn;
@@ -613,13 +613,14 @@ tangVector flow(tangVector tv, float t){
         // In this way, there is no elliptic function to compute : only the x,y coordinates are shifted by a translation
         // We only compute elliptic functions for small steps, i.e. if mu * t < 4K
 
-        float steps = floor((ell_mu * t) / (4. * ell_K));
+
+        /*float steps = floor((ell_mu * t) / (4. * ell_K));
 
         if (steps > 0.5) {
             resOriginPos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
             resOriginDir = vec4(a, b, c, 0.);
         }
-        else {
+        else {*/
 
             // parameters related to the initial condition of the geodesic flow
 
@@ -648,8 +649,6 @@ tangVector flow(tangVector tv, float t){
             float oneOkprime = 1. / ell_kprime;
 
             // we are now ready to write down the coordinates of the endpoint
-            // TODO. reduce the amplitude using the periodicity
-
 
             // amplitude (without the phase shift of s0)
             // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
@@ -657,8 +656,6 @@ tangVector flow(tangVector tv, float t){
             float s = mod(ell_mu * t, 4. * ell_K);
             // jabobi functions applied to the amplitude s
             vec3 jacobi_s = ellipj(s);
-            //debugColor = abs(jacobi_s).xyz;
-
 
             // jacobi function applied to s + s0  (using addition formulas)
             float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
@@ -667,9 +664,8 @@ tangVector flow(tangVector tv, float t){
             (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
             (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
             );
-            //debugColor = abs(jacobi_ss0).xyz;
 
-            // Z(mu *t + s0) - Z(s0) (using again addition formulas)
+            // Z(mu * t + s0) - Z(s0) (using again addition formulas)
             float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
 
 
@@ -694,13 +690,19 @@ tangVector flow(tangVector tv, float t){
             - ell_k * ell_mu * jacobi_ss0.x,
             0.
             );
-        }
+
+
+      //  }
 
 
     }
 
+
+
     tangVector resOrigin = tangVector(resOriginPos, resOriginDir);
-    return translate(isom, resOrigin);
+    tangVector res = translate(isom, resOrigin);
+
+    return res;
 
     //return tangVector(tv.pos + t * tv.dir, tv.dir);
 }
@@ -1021,6 +1023,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
 
+
+
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
@@ -1050,9 +1054,9 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             tv = flow(tv, marchStep);
 
             /*
-            if (i == 2) {
+            if(i==20){
                 hitWhich = 5;
-                debugColor = 0.2*abs(tv.pos.xyz);
+                debugColor = 0.5 + 0.5*normalize(tv.pos.xyz);
                 break;
             }*/
 
