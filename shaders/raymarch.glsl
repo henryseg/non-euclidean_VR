@@ -145,13 +145,14 @@ void agm() {
     for (int i = 1; i < AGMSteps; i++) {
         a0 = AGMList[i - 1].x;
         g0 = AGMList[i - 1].y;
+        error = 0.5 * (a0 - g0);
 
-        AGMList[i] = vec3(0.5 * (a0 + g0), sqrt(a0 * g0), 0.5 * (a0 - g0));
-        AGMLength = AGMLength + 1;
-
-        if (AGMList[i].z < AGMTolerance) {
+        if (error < AGMTolerance) {
             break;
         }
+
+        AGMList[i] = vec3(0.5 * (a0 + g0), sqrt(a0 * g0), error);
+        AGMLength = AGMLength + 1;
     }
 }
 
@@ -174,98 +175,136 @@ vec2 ellipke() {
     return vec2(K, E);
 }
 
-vec3 ellipj(float u) {
+
+
+vec3 ellipj1(float u) {
     // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
     // The results is output as [sn, cn, dn]
     // Computed with the AGM method, see Algorithm 5 in [3]
     // Note that the algorithm only makes sense if u is not zero.
-    // If u is close to zero, we use the MacLaurin series, see 22.10(i) in [1]
-    float tolerance = 0.001;
+    // u is asumme to be between 0 and 2 * K
 
-    /*
+    // initialization of all the variables
+    float a0 = AGMList[AGMLength - 1].x;
+    float g0 = AGMList[AGMLength - 1].y;
+
+    float eps = 1.;
+    if (sin(u * a0) < 0.) {
+        eps = -1.;
+    }
+
+    // variables used during the second induction
+
+    float c = a0 * cos(u * a0) / sin(u * a0);
+    float d = 1.;
+    float aux_c;
+    float aux_d;
+    float num;
+    float den;
+
+    for (int j = 1; j < AGMLength; j++) {
+        aux_c = c * d;
+        num = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].y);
+        den = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].x);
+        aux_d =  num / den;
+        c = aux_c;
+        d = aux_d;
+    }
+
+    // wrappind the results
+    float sn = eps / sqrt(1. + c * c);
+    float cn = c * sn;
+    float dn = d;
+
+    return vec3(sn, cn, dn);
+}
+
+
+vec3 ellipj2(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
+    // The results is output as [sn, cn, dn]
+    // Computed with an other AGM method, see 22.20(ii) in [1]
+
+    // initializing the parameters for the induction
+    float phi0 = pow(2., float(AGMLength-1)) * AGMList[AGMLength - 1].x * u;
+    float phi1;
+    float aux;
+
+
+    for (int i = 1; i < AGMLength; i++) {
+        aux = AGMList[AGMLength - i].z / AGMList[AGMLength - i].x;
+        phi1 = 0.5 * (phi0 + asin(aux * sin(phi0)));
+        phi0 = phi1;
+    }
+
+    float sn = sin(phi0);
+    float cn = cos(phi0);
+    float dn = sqrt(1. - ell_m * sn * sn);
+    return vec3(sn, cn, dn);
+
+}
+
+vec3 ellipjAtZero(float u) {
+    // Asymptotic expansion around u = 0 of the Jacobi elliptic functions sn, cn and dn
+    // We use the MacLaurin series, see 22.10(i) in [1]
+
+    float k2 = ell_m;
+    float k4 = ell_m * ell_m;
+    float k6 = k4 * ell_m;
+
     float u1 = u;
-    float sign = 1.;
-    */
+    float u2 = u1 * u;
+    float u3 = u2 * u;
+    float u4 = u3 * u;
+    float u5 = u4 * u;
+    float u6 = u5 * u;
+    float u7 = u6 * u;
+
+    return vec3(
+    u1
+    - (1. + k2) * u3 / 6.
+    + (1. + 14. * k2 + k4) * u5 / 120.
+    - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.,
+
+    1.
+    - u2 / 2.
+    + (1. + 4. * k2) * u4 / 24.
+    - (1. + 44. * k2 + 16. * k4) * u6 / 720.,
+
+    1.
+    - k2 * u2 / 2.
+    + k2 * (4. + k2) * u4 / 24.
+    - k2 * (16. + 44. * k2 + k4) * u6 / 720.
+    );
+}
+
+
+
+vec3 ellipj(float u) {
+    // reducing the computation using the periodicity and symmetries of the Jacobi elliptic functions
+    // dispatching which algorithm is used to compute the result
+    float tolerance = 0.001;
 
 
     float u1 = mod(u, 4. * ell_K);
     float sign = 1.;
-    if(u1 > 2. * ell_K) {
-        u1 = u1 - 4.* ell_K;
-    }
-    if (u1 < 0.) {
-        u1 = -u1;
+    if (u1 > 2. * ell_K) {
+        u1 = 4.* ell_K -u1;
         sign = -1.;
     }
 
-    float sn;
-    float cn;
-    float dn;
-
+    vec3 aux;
 
     if (u1 < tolerance) {
-        // powers of k
-        float k2 = ell_m;
-        float k4 = ell_m * ell_m;
-        float k6 = k4 * ell_m;
-
-        float u2 = u1 * u;
-        float u3 = u2 * u;
-        float u4 = u3 * u;
-        float u5 = u4 * u;
-        float u6 = u5 * u;
-        float u7 = u6 * u;
-
-        sn = u1
-        - (1. + k2) * u3 / 6.
-        + (1. + 14. * k2 + k4) * u5 / 120.
-        - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.;
-        cn = 1.
-        - u2 / 2.
-        + (1. + 4. * k2) * u4 / 24.
-        - (1. + 44. * k2 + 16. * k4) * u6 / 720.;
-        dn = 1.
-        - k2 * u2 / 2.
-        + k2 * (4. + k2) * u4 / 24.
-        - k2 * (16. + 44. * k2 + k4) * u6 / 720.;
+        aux = ellipjAtZero(u1);
     }
-
     else {
-        // initialization of all the variables
-
-        float a0 = AGMList[AGMLength - 1].x;
-        float g0 = AGMList[AGMLength - 1].y;
-
-        float eps = 1.;
-        if (sin(u1 * a0) < 0.) {
-            eps = -1.;
-        }
-
-        // variables used during the second induction
-
-        float c = a0 * cos(u1 * a0) / sin(u1 * a0);
-        float d = 1.;
-        float aux_c;
-        float aux_d;
-        float num;
-        float den;
-
-        for (int j = 1; j < AGMLength; j++) {
-            aux_c = c * d;
-            num = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].y);
-            den = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].x);
-            aux_d =  num / den;
-            c = aux_c;
-            d = aux_d;
-        }
-
-        // wrappind the results
-        sn = eps / sqrt(1. + c * c);
-        cn = c * sn;
-        dn = d;
+        aux = ellipj2(u1);
     }
-    return vec3(sign * sn, cn, dn);
+
+    return vec3(sign * aux.x, aux.y, aux.z);
 }
+
 
 float ellipz(float tanPhi) {
     // Return the Jacobi Zeta function, whose argument is an angle phi passed as tan(phi), i.e.
@@ -799,13 +838,11 @@ tangVector flow(tangVector tv, float t) {
 
     if (abs(t) < 100. * EPSILON) {
         return numflow(tv, t);
+        //return ellflow(tv, t);
     }
     else {
         return ellflow(tv, t);
     }
-    
-    return ellflow(tv, t);
-
 }
 
 
@@ -1411,8 +1448,6 @@ void main(){
         debugColor = vec3(0, -aux, 0);
     }
     */
-
-
 
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
