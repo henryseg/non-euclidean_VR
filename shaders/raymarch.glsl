@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
@@ -116,7 +116,7 @@ float ell_L;
 // maximal number of steps in the AGM algorithm
 const int AGMSteps = 20;
 // tolerance of the AGM algorithm
-const float AGMTolerance = 0.; // 0.000001;
+const float AGMTolerance = 0.000001;
 // steps performed to compute the AGM (useful for the Jacobi functions)
 // the coordinates of the stored vec3 have the following meaning
 // - x : arithmetic mean
@@ -180,29 +180,54 @@ vec3 ellipj(float u) {
     // Computed with the AGM method, see Algorithm 5 in [3]
     // Note that the algorithm only makes sense if u is not zero.
     // If u is close to zero, we use the MacLaurin series, see 22.10(i) in [1]
-    float tolerance = 0.1;
+    float tolerance = 0.001;
+
+    /*
+    float u1 = u;
+    float sign = 1.;
+    */
+
+
+    float u1 = mod(u, 4. * ell_K);
+    float sign = 1.;
+    if(u1 > 2. * ell_K) {
+        u1 = u1 - 4.* ell_K;
+    }
+    if (u1 < 0.) {
+        u1 = -u1;
+        sign = -1.;
+    }
 
     float sn;
     float cn;
     float dn;
 
-    if (abs(u) < tolerance) {
+
+    if (u1 < tolerance) {
         // powers of k
         float k2 = ell_m;
         float k4 = ell_m * ell_m;
         float k6 = k4 * ell_m;
-        sn = u
-        - (1. + k2) * pow(u, 3.) / 6.
-        + (1. + 14. * k2 + k4) * pow(u, 5.) / 120.
-        - (1. + 135. * k2 + 135. * k4 + k6) * pow(u, 7.) / 5040.;
+
+        float u2 = u1 * u;
+        float u3 = u2 * u;
+        float u4 = u3 * u;
+        float u5 = u4 * u;
+        float u6 = u5 * u;
+        float u7 = u6 * u;
+
+        sn = u1
+        - (1. + k2) * u3 / 6.
+        + (1. + 14. * k2 + k4) * u5 / 120.
+        - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.;
         cn = 1.
-        - pow(u, 2.) / 2.
-        + (1. + 4. * k2) * pow(u, 4.) / 24.
-        - (1. + 44. * k2 + 16. * k4) * pow(u, 6.) / 720.;
+        - u2 / 2.
+        + (1. + 4. * k2) * u4 / 24.
+        - (1. + 44. * k2 + 16. * k4) * u6 / 720.;
         dn = 1.
-        - k2 * pow(u, 2.) / 2.
-        + k2 * (4. + k2) * pow(u, 4.)/ 24.
-        - k2 * (16. + 44. * k2 + k4) * pow(u, 6.) / 720.;
+        - k2 * u2 / 2.
+        + k2 * (4. + k2) * u4 / 24.
+        - k2 * (16. + 44. * k2 + k4) * u6 / 720.;
     }
 
     else {
@@ -212,12 +237,13 @@ vec3 ellipj(float u) {
         float g0 = AGMList[AGMLength - 1].y;
 
         float eps = 1.;
-        if (sin(u * a0) < 0.) {
+        if (sin(u1 * a0) < 0.) {
             eps = -1.;
         }
 
         // variables used during the second induction
-        float c = a0 * cos(u * a0) / sin(u * a0);
+
+        float c = a0 * cos(u1 * a0) / sin(u1 * a0);
         float d = 1.;
         float aux_c;
         float aux_d;
@@ -238,7 +264,7 @@ vec3 ellipj(float u) {
         cn = c * sn;
         dn = d;
     }
-    return vec3(sn, cn, dn);
+    return vec3(sign * sn, cn, dn);
 }
 
 float ellipz(float tanPhi) {
@@ -248,7 +274,7 @@ float ellipz(float tanPhi) {
     // tan(phi) = sn(u|m) / cn(u|m)
     // This is useless to compute the atan and then apply tan!
     // Computed with the AGM algorithm, see §17.6 in [2]
-    float tolerance = 0.1;
+    float tolerance = 0.001;
 
 
     float sign = 1.;
@@ -557,7 +583,50 @@ tangVector tangDirection(tangVector u, tangVector v){
     return tangDirection(u.pos, v.pos);
 }
 
-tangVector flow(tangVector tv, float t){
+
+tangVector eucflow(tangVector tv, float t) {
+    return tangVector(tv.pos + t * tv.dir, tv.dir);
+}
+
+tangVector numflow(tangVector tv, float t) {
+    // follow the geodesic flow using a numerical integration
+    // fix the noise for small steps
+    float NUM_STEP = 0.5*EPSILON;
+
+    // Isometry moving back to the origin and conversely
+    Isometry isom = makeLeftTranslation(tv);
+    Isometry isomInv = makeInvLeftTranslation(tv);
+
+
+    // pull back of the tangent vector at the origin
+    tangVector tvOrigin = translate(isomInv, tv);
+
+    // tangent vector used updated during the numerical integration
+    tangVector aux = tvOrigin;
+
+    // integrate numerically the flow
+    int n = int(floor(t/NUM_STEP));
+    for (int i = 0; i < n; i++){
+        vec4 fieldPos = aux.dir;
+        vec4 fieldDir = vec4(
+        2. * aux.dir.x * aux.dir.z,
+        -2. * aux.dir.y * aux.dir.z,
+        -exp(-2. * aux.pos.z) * pow(aux.dir.x, 2.) + exp(2. * aux.pos.z) * pow(aux.dir.y, 2.),
+        0
+        );
+
+        aux.pos = aux.pos + NUM_STEP * fieldPos;
+        aux.dir = aux.dir + NUM_STEP * fieldDir;
+        aux = tangNormalize(aux);
+    }
+
+    tangVector res = translate(isom, aux);
+
+    return res;
+
+}
+
+tangVector ellflow(tangVector tv, float t){
     // follow the geodesic flow during a time t
 
     // Isometry moving back to the origin and conversely
@@ -567,51 +636,53 @@ tangVector flow(tangVector tv, float t){
     // pull back of the tangent vector at the origin
     tangVector tvOrigin = translate(isomInv, tv);
 
+    // result to be populated
+    tangVector resOrigin = tangVector(ORIGIN, vec4(0.));
+
     // renaming the coordinates of the tangent vector to simplify the formulas
     float a = tvOrigin.dir.x;
     float b = tvOrigin.dir.y;
     float c = tvOrigin.dir.z;
 
-    vec4 resOriginPos;
-    vec4 resOriginDir;
-
     // we need to distinguish three cases, depending on the type of geodesics
 
     // tolerance used between the difference cases
-    float tolerance = 0.0000001;
+    //float tolerance = 0.0000001;
 
-    if (abs(a) < tolerance) {
+    //if (abs(a) < tolerance) {
+    if (a == 0.) {
         // GEODESIC IN THE HYPERBOLIC SHEET X = 0
         float sht = sinh(t);
         float cht = cosh(t);
         float tht = sht/cht;
 
-        resOriginPos = vec4(
+        resOrigin.pos = vec4(
         0.,
         b * sht / (cht + c * sht),
         log(cht + c * sht),
         1.
         );
-        resOriginDir = vec4(
+        resOrigin.dir = vec4(
         0.,
         b / pow(cht + c * sht, 2.),
         (c + tht) / (1. + c * tht),
         0.
         );
     }
-    else if (abs(b) < tolerance) {
+    //else if (abs(b) < tolerance) {
+    else if (b == 0.) {
         // GEODESIC IN THE HYPERBOLIC SHEET Y = 0
         float sht = sinh(t);
         float cht = cosh(t);
         float tht = sht/cht;
 
-        resOriginPos = vec4(
+        resOrigin.pos = vec4(
         a * sht / (cht - c * sht),
         0.,
         - log(cht - c * sht),
         1.
         );
-        resOriginDir = vec4(
+        resOrigin.dir = vec4(
         a / pow(cht - c * sht, 2.),
         0.,
         (c - tht) / (1. - c * tht),
@@ -626,98 +697,115 @@ tangVector flow(tangVector tv, float t){
         // In this way, there is no elliptic function to compute : only the x,y coordinates are shifted by a translation
         // We only compute elliptic functions for small steps, i.e. if mu * t < 4K
 
-
-        /*float steps = floor((ell_mu * t) / (4. * ell_K));
+        float steps = floor((ell_mu * t) / (4. * ell_K));
 
         if (steps > 0.5) {
-            resOriginPos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
-            resOriginDir = vec4(a, b, c, 0.);
+            resOrigin.pos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
+            resOrigin.dir = vec4(a, b, c, 0.);
         }
-        else {*/
+        else {
 
-        // parameters related to the initial condition of the geodesic flow
+            // parameters related to the initial condition of the geodesic flow
 
-        // phase shift (Phi in the handwritten notes)
-        float aux = sqrt(1. - 2. * abs(a * b));
-        // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
-        vec3 jacobi_s0 = vec3(
-        - c / aux,
-        (abs(a) - abs(b)) / aux,
-        (abs(a) + abs(b)) / ell_mu
-        );
+            // phase shift (Phi in the handwritten notes)
+            float aux = sqrt(1. - 2. * abs(a * b));
+            // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
+            vec3 jacobi_s0 = vec3(
+            - c / aux,
+            (abs(a) - abs(b)) / aux,
+            (abs(a) + abs(b)) / ell_mu
+            );
 
 
-        // sign of a (resp. b)
-        float signa = 1.;
-        if (a < 0.) {
-            signa = -1.;
+            // sign of a (resp. b)
+            float signa = 1.;
+            if (a < 0.) {
+                signa = -1.;
+            }
+            float signb = 1.;
+            if (b < 0.) {
+                signb = -1.;
+            }
+
+            // some useful intermediate computation
+            float kOkprime = ell_k / ell_kprime;
+            float oneOkprime = 1. / ell_kprime;
+
+            // we are now ready to write down the coordinates of the endpoint
+
+            // amplitude (without the phase shift of s0)
+            // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
+            // (more a safety check as we assumed that mu * t < 4K)
+            float s = mod(ell_mu * t, 4. * ell_K);
+            // jabobi functions applied to the amplitude s
+            vec3 jacobi_s = ellipj(s);
+
+            // jacobi function applied to mu * t + s0 = s + s0  (using addition formulas)
+            float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
+            vec3 jacobi_ss0 = vec3(
+            (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
+            (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
+            (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
+            );
+
+            // Z(mu * t + s0) - Z(s0) (using again addition formulas)
+            float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
+
+
+            // wrapping all the computation
+            resOrigin.pos = vec4(
+
+            signa * sqrt(abs(b / a)) * (
+            oneOkprime * zetaj
+            + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+            + ell_L * ell_mu * t
+            ),
+
+            signb * sqrt(abs(a / b)) * (
+            oneOkprime * zetaj
+            - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+            + ell_L * ell_mu * t
+            ),
+
+            0.5 * log(abs(b / a)) + asinh(kOkprime * jacobi_ss0.y),
+
+            1.
+            );
+
+            resOrigin.dir = vec4(
+
+            signa * abs(b) * pow(kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z, 2.),
+
+            signb * abs(a) * pow(kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z, 2.),
+
+            - ell_k * ell_mu * jacobi_ss0.x,
+
+            0.
+            );
+
+
         }
-        float signb = 1.;
-        if (b < 0.) {
-            signb = -1.;
-        }
-
-        // some useful intermediate computation
-        float kOkprime = ell_k / ell_kprime;
-        float oneOkprime = 1. / ell_kprime;
-
-        // we are now ready to write down the coordinates of the endpoint
-
-        // amplitude (without the phase shift of s0)
-        // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
-        // (more a safety check as we assumed that mu * t < 4K)
-        float s = mod(ell_mu * t, 4. * ell_K);
-        // jabobi functions applied to the amplitude s
-        vec3 jacobi_s = ellipj(s);
-
-        // jacobi function applied to s + s0  (using addition formulas)
-        float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
-        vec3 jacobi_ss0 = vec3(
-        (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
-        (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
-        (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
-        );
-
-        // Z(mu * t + s0) - Z(s0) (using again addition formulas)
-        float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
-
-
-        // wrapping all the computation
-        resOriginPos = vec4(
-        signa * sqrt(abs(b / a)) * (
-        oneOkprime * zetaj
-        + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-        + ell_L * ell_mu * t
-        ),
-        signb * sqrt(abs(a / b)) * (
-        oneOkprime * zetaj
-        - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-        + ell_L * ell_mu * t
-        ),
-        0.5 * log(abs(b / a)) + asinh((ell_k / ell_kprime) * jacobi_ss0.y),
-        1.
-        );
-        resOriginDir = vec4(
-        signa * abs(b) * pow(kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z, 2.),
-        signb * abs(a) * pow(kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z, 2.),
-        - ell_k * ell_mu * jacobi_ss0.x,
-        0.
-        );
-
-
-        //  }
 
 
     }
 
-
-
-    tangVector resOrigin = tangVector(resOriginPos, resOriginDir);
     tangVector res = translate(isom, resOrigin);
 
     return res;
 
-    //return tangVector(tv.pos + t * tv.dir, tv.dir);
+}
+
+tangVector flow(tangVector tv, float t) {
+
+    if (abs(t) < 100. * EPSILON) {
+        return numflow(tv, t);
+    }
+    else {
+        return ellflow(tv, t);
+    }
+    
+    return ellflow(tv, t);
+
 }
 
 
@@ -781,7 +869,7 @@ float sliceSDF(vec4 p) {
     float HS1= 0.;
     HS1=horizontalHalfSpaceSDF(p, -0.1);
     float HS2=0.;
-    HS2=-horizontalHalfSpaceSDF(p, -0.3);
+    HS2=-horizontalHalfSpaceSDF(p, -1.);
     return max(HS1, HS2);
 }
 
@@ -825,7 +913,7 @@ uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
-uniform float depth;
+uniform float time;
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1036,7 +1124,9 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         }
         localDepth = min(globalDepth, MAX_DIST);
     }
-    else { localDepth=MAX_DIST; }
+    else {
+        localDepth=MAX_DIST;
+    }
 
 
     if (GLOBAL_SCENE){
@@ -1047,25 +1137,36 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             tv = flow(tv, marchStep);
 
             /*
-            if(i==20){
+            if (i == 15) {
                 hitWhich = 5;
-                debugColor = 0.5 + 0.5*normalize(tv.pos.xyz);
+                debugColor = 10000. * vec3(0, 0, marchStep);
                 break;
-            }*/
+            }
+            */
 
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
                 totalFixMatrix = identityIsometry;
                 sampletv = tv;
+                //hitWhich = 5;
+                //debugColor = 0.1*vec3(globalDepth, 0, 0);
                 return;
             }
             marchStep = globalDist;
             globalDepth += globalDist;
             if (globalDepth >= localDepth){
+                //hitWhich = 5;
+                //debugColor = vec3(0, globalDepth, 0);
                 break;
             }
         }
+        /*
+        if(hitWhich == 0) {
+            hitWhich = 5;
+            debugColor = 0.1*vec3(0, 0, globalDepth);
+        }
+        */
     }
 }
 
@@ -1223,9 +1324,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
-        x = 0.9*x/modelHalfCube;
-        y = 0.9*y/modelHalfCube;
-        z = 0.9*z/modelHalfCube;
+        x = 0.9 * x / modelHalfCube;
+        y = 0.9 * y / modelHalfCube;
+        z = 0.9 * z / modelHalfCube;
         vec3 color = vec3(x, y, z);
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
@@ -1299,12 +1400,26 @@ void main(){
     // do the marching
     raymarch(rayDir, totalFixMatrix);
 
+    /*
+    hitWhich = 5;
+
+    float aux = ellipj(0.0001 * time * ell_K).x;
+    if (aux > 0.){
+        debugColor = vec3(aux, 0, 0);
+    }
+    else {
+        debugColor = vec3(0, -aux, 0);
+    }
+    */
+
+
+
+
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        //out_FragColor = vec4(0.3);
-        out_FragColor = vec4(0.8, 0.8, 0, 1);
+        out_FragColor = vec4(0.3);
         return;
     }
     else if (hitWhich == 1){

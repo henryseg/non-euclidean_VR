@@ -108,7 +108,7 @@ function unpackageMatrix(genArr) {
 //----------------------------------------------------------------------------------------------------------------------
 
 let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
-
+const time0 = new Date().getTime();
 
 function initGeometry() {
     globals.position = new Position();
@@ -253,6 +253,10 @@ function setupMaterial(fShader) {
             stereoScreenOffset: {
                 type: "f",
                 value: globals.stereoScreenOffset
+            },
+            time: {
+                type:"f",
+                value: (new Date().getTime()) - time0
             }
         },
 
@@ -288,6 +292,8 @@ function updateMaterial() {
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
+
+    globals.material.uniforms.time.value = (new Date().getTime()) - time0;
 
 
 }
