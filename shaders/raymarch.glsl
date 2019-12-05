@@ -24,7 +24,7 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=true;
+const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
@@ -65,9 +65,28 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-const int MAX_MARCHING_STEPS =  120;
+int MAX_MARCHING_STEPS =  120;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 320.0;
+float MAX_DIST = 320.0;
+
+
+void setResolution(int UIVar){
+    if(UIVar==1){
+        MAX_MARCHING_STEPS =  50;
+        MAX_DIST = 100.0;
+    }
+    if(UIVar==2){
+        MAX_MARCHING_STEPS =  200;
+        MAX_DIST = 500.0;
+        
+    }
+    if(UIVar==3){
+        MAX_MARCHING_STEPS =  8000;
+        MAX_DIST = 1500.0;
+        
+    }
+}
+
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.0005;
 const float fov = 90.0;
@@ -1367,13 +1386,14 @@ uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 uniform float time;
-
+uniform float lightRad;
 
 uniform int display;
 // 1=tiling
 // 2= planes
 // 3= dragon skin
 
+uniform int res;
 
 //adding one local light (more to follow)
 vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
@@ -1406,7 +1426,7 @@ float localSceneSDF(vec4 p){
     float lightDist;
     float distance = MAX_DIST;
     
-    lightDist=sphereSDF(p,localLightPos,0.02);
+    lightDist=sphereSDF(p,localLightPos,lightRad);
     distance=min(distance,lightDist);
         if (lightDist < EPSILON){
             //LIGHT=true;
@@ -1432,6 +1452,8 @@ if(display==1){//tiling
     float sphere=0.;
     sphere = ellipsoidSDF(p, center, 0.32);
      tilingDist=-sphere;
+    
+
     //cut out a vertical cylinder to poke holes in the top, bottom
 //    float cyl=0.0;
 //    cyl=cylSDF(p,0.2);
@@ -2028,7 +2050,7 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 //----------------------------------------------------------------------------------------------------------------------
 
 void main(){
-
+    setResolution(res);
     currentBoost=Isometry(currentBoostMat);
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);

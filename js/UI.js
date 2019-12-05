@@ -28,7 +28,9 @@ let initGui = function () {
         //        ipDist: 0.03200000151991844,
         //        stereoScreenOffset: globals.stereoScreenOffset,
         keyboard: 'us',
-        display: 3
+        display: 3,
+        res: 1,
+        lightRad: 0.02
     };
 
     let gui = new dat.GUI();
@@ -49,6 +51,13 @@ let initGui = function () {
         TorusBundle: '2',
         Dragon: '3'
     });
+
+    let resController = gui.add(guiInfo, 'res', {
+        Low: '1',
+        Med: '2',
+        High: '3'
+    });
+    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
 
     // ------------------------------
     // UI Controllers
@@ -95,6 +104,14 @@ let initGui = function () {
 
     displayController.onChange(function (value) {
         globals.display = value;
+    });
+
+    resController.onChange(function (value) {
+        globals.res = value;
+    });
+
+    lightRadController.onChange(function (value) {
+        globals.material.uniforms.lightRad.value = value;
     });
 };
 

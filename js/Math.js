@@ -261,6 +261,14 @@ function setupMaterial(fShader) {
             display: {
                 type: "int",
                 value: globals.display
+            },
+            res: {
+                type: "int",
+                value: globals.res
+            },
+            lightRad: {
+                type: "float",
+                value: globals.lightRad
             }
         },
 
@@ -300,6 +308,8 @@ function updateMaterial() {
     globals.material.uniforms.time.value = (new Date().getTime()) - time0;
 
     globals.material.uniforms.display.value = globals.display;
+    globals.material.uniforms.res.value = globals.res;
+    // globals.material.uniforms.lightRad.value = globals.lightRad;
 
 }
 
