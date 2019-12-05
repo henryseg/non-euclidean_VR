@@ -1,6 +1,17 @@
 #version 300 es
 out vec4 out_FragColor;
 
+/*
+
+Voodoo magic:
+
+A set of parameters that reduces the noise
+EPSILON = 0.001;
+In the local ray marching use
+localDist = min(1., localSceneSDF(localtv.pos));
+
+
+*/
 
 //----------------------------------------------------------------------------------------------------------------------
 // PARAMETERS
@@ -50,7 +61,8 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 const int MAX_MARCHING_STEPS =  100;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 600.0;
-const float EPSILON = 0.0001;
+//const float EPSILON = 0.0001;
+const float EPSILON = 0.001;
 const float fov = 90.0;
 
 
@@ -128,6 +140,7 @@ int AGMLength;
 
 void agm() {
     // Compute the AGM of 1 and sqrt(1-m) to the given accuracy :
+    // Note that sqrt(1 - m) = kprime
     // maximal number of steps : AGMMaxSteps
     // tolerance for the error : AGMTolerance
     // index of the last step : AGMIndex
@@ -157,8 +170,7 @@ void agm() {
 }
 
 vec2 ellipke() {
-    // Return the complete integeral of the first and second kind with parameter m
-    // Note that sqrt(1 - m) = kprime
+    // Return the complete integeral of the first and second kind
     // Computed with the AGM method, see 19.8(i) in [1]
 
     // initialization of all the variables;
@@ -174,8 +186,6 @@ vec2 ellipke() {
     float E = K * (1. - aux);
     return vec2(K, E);
 }
-
-
 
 vec3 ellipj1(float u) {
     // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
@@ -224,6 +234,7 @@ vec3 ellipj2(float u) {
     // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
     // The results is output as [sn, cn, dn]
     // Computed with an other AGM method, see 22.20(ii) in [1]
+    // u is asumme to be between 0 and 2 * K
 
     // initializing the parameters for the induction
     float phi0 = pow(2., float(AGMLength-1)) * AGMList[AGMLength - 1].x * u;
@@ -243,6 +254,49 @@ vec3 ellipj2(float u) {
     return vec3(sn, cn, dn);
 
 }
+
+
+vec3 ellipj3(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
+    // Taken from ShaderToy: https://www.shadertoy.com/view/4tlBRl
+
+    float emc = 1.0-ell_m;
+    float a, b, c;
+    const int N = 4;
+    float em[N], en[N];
+    a = 1.0;
+    float dn = 1.0;
+    for (int i = 0; i < N; i++) {
+        em[i] = a;
+        emc = sqrt(emc);
+        en[i] = emc;
+        c = 0.5*(a+emc);
+        emc = a*emc;
+        a = c;
+    }
+    // Nothing up to here depends on u, so
+    // could be precalculated.
+    u = c*u;
+    float sn = sin(u);
+    float cn = cos(u);
+    if (sn != 0.0) {
+        a = cn/sn; c = a*c;
+        for (int i = N-1; i >= 0; i--) {
+            b = em[i];
+            a = c*a;
+            c = dn*c;
+            dn = (en[i]+a)/(b+a);
+            a = c/b;
+        }
+        a = 1.0/sqrt(c*c + 1.0);
+        if (sn < 0.0) sn = -a;
+        else sn = a;
+        cn = c*sn;
+    }
+
+    return vec3(sn, cn, dn);
+}
+
 
 vec3 ellipjAtZero(float u) {
     // Asymptotic expansion around u = 0 of the Jacobi elliptic functions sn, cn and dn
@@ -299,7 +353,7 @@ vec3 ellipj(float u) {
         aux = ellipjAtZero(u1);
     }
     else {
-        aux = ellipj2(u1);
+        aux = ellipj1(u1);
     }
 
     return vec3(sign * aux.x, aux.y, aux.z);
@@ -630,7 +684,7 @@ tangVector eucflow(tangVector tv, float t) {
 tangVector numflow(tangVector tv, float t) {
     // follow the geodesic flow using a numerical integration
     // fix the noise for small steps
-    float NUM_STEP = 0.5*EPSILON;
+    float NUM_STEP = 0.2 * EPSILON;
 
     // Isometry moving back to the origin and conversely
     Isometry isom = makeLeftTranslation(tv);
@@ -660,6 +714,7 @@ tangVector numflow(tangVector tv, float t) {
     }
 
     tangVector res = translate(isom, aux);
+    res = tangNormalize(res);
 
     return res;
 
@@ -821,14 +876,12 @@ tangVector ellflow(tangVector tv, float t){
 
             0.
             );
-
-
         }
-
-
     }
 
+    resOrigin = tangNormalize(resOrigin);
     tangVector res = translate(isom, resOrigin);
+    res = tangNormalize(res);
 
     return res;
 
@@ -836,7 +889,7 @@ tangVector ellflow(tangVector tv, float t){
 
 tangVector flow(tangVector tv, float t) {
 
-    if (abs(t) < 100. * EPSILON) {
+    if (abs(t) < 50. * EPSILON) {
         return numflow(tv, t);
         //return ellflow(tv, t);
     }
@@ -1149,7 +1202,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 marchStep = MIN_DIST;
             }
             else {
-                float localDist = min(0.1, localSceneSDF(localtv.pos));
+                float localDist = min(1., localSceneSDF(localtv.pos));
                 if (localDist < EPSILON){
                     hitWhich = 3;
                     sampletv = localtv;
