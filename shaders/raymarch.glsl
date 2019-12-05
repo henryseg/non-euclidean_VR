@@ -62,7 +62,7 @@ const int MAX_MARCHING_STEPS =  100;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 600.0;
 //const float EPSILON = 0.0001;
-const float EPSILON = 0.001;
+const float EPSILON = 0.0005;
 const float fov = 90.0;
 
 
@@ -461,7 +461,7 @@ vec4 translate(Isometry A, vec4 v) {
 //----------------------------------------------------------------------------------------------------------------------
 
 /*
-  Data type for manipulating points in the tangent bundler
+  Data type for manipulating points in the tangent bundle
   A tangVector is given by
   - pos : a point in the space
   - dir: a tangent vector at pos
@@ -530,7 +530,7 @@ tangVector scalarMult(float a, tangVector v) {
     return tangVector(v.pos, a * v.dir);
 }
 
-
+/*
 tangVector translate(mat4 isom, tangVector v) {
     // apply an isometry to the tangent vector (both the point and the direction)
     return tangVector(isom * v.pos, isom * v.dir);
@@ -540,7 +540,7 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
     // apply the given given matrix only to the direction of the tangent vector
     return tangVector(v.pos, matrix * v.dir);
 }
-
+*/
 
 
 float tangDot(tangVector u, tangVector v){
@@ -632,6 +632,119 @@ void init_ellip(tangVector u) {
 
 
 //----------------------------------------------------------------------------------------------------------------------
+// STRUCT localTangVector
+//----------------------------------------------------------------------------------------------------------------------
+
+/*
+  Another data type for manipulating points in the tangent bundler
+  A localTangVector is given by
+  - pos : a point in the space
+  - dir: the pull back of the tangent vector by the (unique) element of Sol bringing pos to the origin
+
+  This sould reduce numerical errors.
+
+  Implement various basic methods to manipulate them
+*/
+
+struct localTangVector {
+    vec4 pos;// position on the manifold
+    vec4 dir;// pulled back tangent vector
+};
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Applying Isometries, Facings
+//----------------------------------------------------------------------------------------------------------------------
+
+Isometry makeLeftTranslation(localTangVector v) {
+    // overlaod using tangVector
+    return makeLeftTranslation(v.pos);
+}
+
+
+Isometry makeInvLeftTranslation(localTangVector v) {
+    // overlaod using tangVector
+    return makeInvLeftTranslation(v.pos);
+}
+
+
+localTangVector translate(Isometry A, localTangVector v) {
+    // over load to translate a direction
+    // WARNING. Only works if A is an element of SOL.
+    // Any more general isometry should also acts on the direction component
+    return localTangVector(A.matrix * v.pos, v.dir);
+}
+
+
+localTangVector rotateFacing(mat4 A, localTangVector v){
+    // apply an isometry to the tangent vector (both the point and the direction)
+    return localTangVector(v.pos, A*v.dir);
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// LOCAL GEOMETRY
+//----------------------------------------------------------------------------------------------------------------------
+
+/*
+  Methods perfoming computations in the tangent space at a given point.
+*/
+
+localTangVector add(localTangVector v1, localTangVector v2) {
+    // add two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return localTangVector(v1.pos, v1.dir + v2.dir);
+}
+
+localTangVector sub(localTangVector v1, localTangVector v2) {
+    // subtract two tangent vector at the same point
+    // TODO : check if the underlyig point are indeed the same ?
+    return localTangVector(v1.pos, v1.dir - v2.dir);
+}
+
+localTangVector scalarMult(float a, localTangVector v) {
+    // scalar multiplication of a tangent vector
+    return localTangVector(v.pos, a * v.dir);
+}
+
+float tangDot(localTangVector u, localTangVector v){
+    return dot(u.dir.xyz, v.dir.xyz);
+
+}
+
+float tangNorm(localTangVector v){
+    // calculate the length of a tangent vector
+    return sqrt(tangDot(v, v));
+}
+
+localTangVector tangNormalize(localTangVector v){
+    // create a unit tangent vector (in the tangle bundle)
+    return localTangVector(v.pos, v.dir/tangNorm(v));
+}
+
+float cosAng(localTangVector u, localTangVector v){
+    // cosAng between two vector in the tangent bundle
+    return tangDot(u, v);
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// CONVERSION BETWEEN TANGVECTOR AND LOCALTANGVECTOR
+//----------------------------------------------------------------------------------------------------------------------
+
+localTangVector toLocalTangVector(tangVector v) {
+    Isometry isom = makeInvLeftTranslation(v.pos);
+    localTangVector res = localTangVector(v.pos, translate(isom, v.dir));
+    return tangNormalize(res);
+}
+
+tangVector toTangVector(localTangVector v) {
+    Isometry isom = makeLeftTranslation(v.pos);
+    tangVector res = tangVector(v.pos, translate(isom, v.dir));
+    return tangNormalize(res);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 // GLOBAL GEOMETRY
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -656,6 +769,11 @@ float fakeDistance(tangVector u, tangVector v){
     return fakeDistance(u.pos, v.pos);
 }
 
+float fakeDistance(localTangVector u, localTangVector v){
+    // overload of the previous function in case we work with tangent vectors
+    return fakeDistance(u.pos, v.pos);
+}
+
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
     return fakeDistance(p, q);
@@ -666,12 +784,22 @@ float exactDist(tangVector u, tangVector v){
     return exactDist(u.pos, v.pos);
 }
 
+float exactDist(localTangVector u, localTangVector v){
+    // overload of the previous function in case we work with tangent vectors
+    return exactDist(u.pos, v.pos);
+}
+
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
     return tangNormalize(tangVector(p, q - p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
+    // overload of the previous function in case we work with tangent vectors
+    return tangDirection(u.pos, v.pos);
+}
+
+tangVector tangDirection(localTangVector u, localTangVector v){
     // overload of the previous function in case we work with tangent vectors
     return tangDirection(u.pos, v.pos);
 }
@@ -719,6 +847,7 @@ tangVector numflow(tangVector tv, float t) {
     return res;
 
 }
+
 
 tangVector ellflow(tangVector tv, float t){
     // follow the geodesic flow during a time t
@@ -888,6 +1017,224 @@ tangVector ellflow(tangVector tv, float t){
 }
 
 tangVector flow(tangVector tv, float t) {
+
+    if (abs(t) < 50. * EPSILON) {
+        return numflow(tv, t);
+        //return ellflow(tv, t);
+    }
+    else {
+        return ellflow(tv, t);
+    }
+}
+
+
+
+localTangVector numflow(localTangVector tv, float t) {
+    // follow the geodesic flow using a numerical integration
+    // fix the noise for small steps
+    float NUM_STEP = 0.2 * EPSILON;
+
+    // Isometry moving back to the origin and conversely
+    Isometry isom = makeLeftTranslation(tv);
+
+    // tangent vector used updated during the numerical integration
+    localTangVector aux = localTangVector(ORIGIN, tv.dir);
+
+    // integrate numerically the flow
+    int n = int(floor(t/NUM_STEP));
+    for (int i = 0; i < n; i++){
+        vec4 fieldPos = vec4(
+        exp(aux.pos.z) * aux.dir.x,
+        exp(-aux.pos.z) * aux.dir.y,
+        aux.dir.z,
+        0
+        );
+        vec4 fieldDir = vec4(
+        aux.dir.x * aux.dir.z,
+        -aux.dir.y * aux.dir.z,
+        -pow(aux.dir.x, 2.) + pow(aux.dir.y, 2.),
+        0
+        );
+
+        aux.pos = aux.pos + NUM_STEP * fieldPos;
+        aux.dir = aux.dir + NUM_STEP * fieldDir;
+        aux = tangNormalize(aux);
+    }
+
+    localTangVector res = translate(isom, aux);
+    res = tangNormalize(res);
+
+    return res;
+
+}
+
+
+localTangVector ellflow(localTangVector tv, float t){
+    // follow the geodesic flow during a time t
+
+    // Isometry moving back to the origin and conversely
+    Isometry isom = makeLeftTranslation(tv);
+
+    // result to be populated
+    localTangVector resOrigin = localTangVector(ORIGIN, vec4(0.));
+
+    // renaming the coordinates of the tangent vector to simplify the formulas
+    float a = tv.dir.x;
+    float b = tv.dir.y;
+    float c = tv.dir.z;
+
+    // we need to distinguish three cases, depending on the type of geodesics
+
+    // tolerance used between the difference cases
+    //float tolerance = 0.0000001;
+
+    //if (abs(a) < tolerance) {
+    if (a == 0.) {
+        // GEODESIC IN THE HYPERBOLIC SHEET X = 0
+        float sht = sinh(t);
+        float cht = cosh(t);
+        float tht = sht/cht;
+
+        resOrigin.pos = vec4(
+        0.,
+        b * sht / (cht + c * sht),
+        log(cht + c * sht),
+        1.
+        );
+        resOrigin.dir = vec4(
+        0.,
+        b / (cht + c * sht),
+        (c + tht) / (1. + c * tht),
+        0.
+        );
+    }
+    //else if (abs(b) < tolerance) {
+    else if (b == 0.) {
+        // GEODESIC IN THE HYPERBOLIC SHEET Y = 0
+        float sht = sinh(t);
+        float cht = cosh(t);
+        float tht = sht/cht;
+
+        resOrigin.pos = vec4(
+        a * sht / (cht - c * sht),
+        0.,
+        - log(cht - c * sht),
+        1.
+        );
+        resOrigin.dir = vec4(
+        a / (cht - c * sht),
+        0.,
+        (c - tht) / (1. - c * tht),
+        0.
+        );
+    }
+    else {
+
+        // GENERIC CASE
+        // In order to minimizes the computations we adopt the following trick
+        // For long steps, i.e. if mu * t > 4K, then we only march by an integer multiple of the period 4K.
+        // In this way, there is no elliptic function to compute : only the x,y coordinates are shifted by a translation
+        // We only compute elliptic functions for small steps, i.e. if mu * t < 4K
+
+        float steps = floor((ell_mu * t) / (4. * ell_K));
+
+        if (steps > 0.5) {
+            resOrigin.pos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
+            resOrigin.dir = vec4(a, b, c, 0.);
+        }
+        else {
+
+            // parameters related to the initial condition of the geodesic flow
+
+            // phase shift (Phi in the handwritten notes)
+            float aux = sqrt(1. - 2. * abs(a * b));
+            // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
+            vec3 jacobi_s0 = vec3(
+            - c / aux,
+            (abs(a) - abs(b)) / aux,
+            (abs(a) + abs(b)) / ell_mu
+            );
+
+
+            // sign of a (resp. b)
+            float signa = 1.;
+            if (a < 0.) {
+                signa = -1.;
+            }
+            float signb = 1.;
+            if (b < 0.) {
+                signb = -1.;
+            }
+
+            // some useful intermediate computation
+            float kOkprime = ell_k / ell_kprime;
+            float oneOkprime = 1. / ell_kprime;
+
+            // we are now ready to write down the coordinates of the endpoint
+
+            // amplitude (without the phase shift of s0)
+            // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
+            // (more a safety check as we assumed that mu * t < 4K)
+            float s = mod(ell_mu * t, 4. * ell_K);
+            // jabobi functions applied to the amplitude s
+            vec3 jacobi_s = ellipj(s);
+
+            // jacobi function applied to mu * t + s0 = s + s0  (using addition formulas)
+            float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
+            vec3 jacobi_ss0 = vec3(
+            (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
+            (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
+            (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
+            );
+
+            // Z(mu * t + s0) - Z(s0) (using again addition formulas)
+            float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
+
+
+            // wrapping all the computation
+            resOrigin.pos = vec4(
+
+            signa * sqrt(abs(b / a)) * (
+            oneOkprime * zetaj
+            + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+            + ell_L * ell_mu * t
+            ),
+
+            signb * sqrt(abs(a / b)) * (
+            oneOkprime * zetaj
+            - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+            + ell_L * ell_mu * t
+            ),
+
+            0.5 * log(abs(b / a)) + asinh(kOkprime * jacobi_ss0.y),
+
+            1.
+            );
+
+            resOrigin.dir = vec4(
+
+            a * sqrt(abs(b/a)) * (kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z),
+
+
+            - b * sqrt(abs(a/b)) * (kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z),
+
+            - ell_k * ell_mu * jacobi_ss0.x,
+
+            0.
+            );
+        }
+    }
+
+    resOrigin = tangNormalize(resOrigin);
+    localTangVector res = translate(isom, resOrigin);
+    res = tangNormalize(res);
+
+    return res;
+
+}
+
+
+localTangVector flow(localTangVector tv, float t) {
 
     if (abs(t) < 50. * EPSILON) {
         return numflow(tv, t);
@@ -1136,6 +1483,12 @@ bool isOutsideCell(tangVector v, out Isometry fixMatrix){
 }
 
 
+// overload of the previous method with local tangent vector
+bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
+}
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // GEOM DEPENDENT
 //----------------------------------------------------------------------------------------------------------------------
@@ -1194,8 +1547,6 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
 
-
-
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
@@ -1239,6 +1590,93 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 // hitWhich has now been set
                 totalFixMatrix = identityIsometry;
                 sampletv = tv;
+                //hitWhich = 5;
+                //debugColor = 0.1*vec3(globalDepth, 0, 0);
+                return;
+            }
+            marchStep = globalDist;
+            globalDepth += globalDist;
+            if (globalDepth >= localDepth){
+                //hitWhich = 5;
+                //debugColor = vec3(0, globalDepth, 0);
+                break;
+            }
+        }
+        /*
+        if(hitWhich == 0) {
+            hitWhich = 5;
+            debugColor = 0.1*vec3(0, 0, globalDepth);
+        }
+        */
+    }
+}
+
+
+
+
+// variation on the raymarch algorithm
+// now each step is the march is made from the previously achieved position (useful later for Sol).
+// done with local vectors
+
+void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
+    Isometry fixMatrix;
+    float marchStep = MIN_DIST;
+    float globalDepth = MIN_DIST;
+    float localDepth = MIN_DIST;
+    localTangVector tv = rayDir;
+    localTangVector localtv = rayDir;
+    totalFixMatrix = identityIsometry;
+
+
+    // Trace the local scene, then the global scene:
+
+    if (TILING_SCENE){
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            localtv = flow(localtv, marchStep);
+
+            if (isOutsideCell(localtv, fixMatrix)){
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                localtv = translate(fixMatrix, localtv);
+                marchStep = MIN_DIST;
+            }
+            else {
+                float localDist = min(.5, localSceneSDF(localtv.pos));
+                if (localDist < EPSILON){
+                    hitWhich = 3;
+                    sampletv = toTangVector(localtv);
+                    break;
+                }
+                marchStep = localDist;
+                globalDepth += localDist;
+            }
+        }
+        localDepth = min(globalDepth, MAX_DIST);
+    }
+    else {
+        localDepth=MAX_DIST;
+    }
+
+
+    if (GLOBAL_SCENE){
+        globalDepth = MIN_DIST;
+        marchStep = MIN_DIST;
+
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            tv = flow(tv, marchStep);
+
+            /*
+            if (i == 15) {
+                hitWhich = 5;
+                debugColor = 10000. * vec3(0, 0, marchStep);
+                break;
+            }
+            */
+
+            float globalDist = globalSceneSDF(tv.pos);
+            if (globalDist < EPSILON){
+                // hitWhich has now been set
+                totalFixMatrix = identityIsometry;
+                sampletv = toTangVector(tv);
                 //hitWhich = 5;
                 //debugColor = 0.1*vec3(globalDepth, 0, 0);
                 return;
@@ -1488,7 +1926,8 @@ void main(){
     // intialize the parameters of the elliptic integrals/functions
     init_ellip(rayDir);
     // do the marching
-    raymarch(rayDir, totalFixMatrix);
+    //raymarch(rayDir, totalFixMatrix);
+    raymarch(toLocalTangVector(rayDir), totalFixMatrix);
 
     /*
     hitWhich = 5;
