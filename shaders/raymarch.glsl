@@ -24,14 +24,14 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=false;
+const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
-const bool TILING=false;
-const bool PLANES=false;
-
-bool DRAGON=!(TILING||PLANES);
+//const bool TILING=false;
+//const bool PLANES=false;
+//
+//bool DRAGON=!(TILING||PLANES);
 
 //bool DRAGON_PLANE=not(TILING||PLANES);
 
@@ -1291,8 +1291,14 @@ float lightAtt(float dist){
 
 float sphereSDF(vec4 p, vec4 center, float radius){
     return exactDist(p, center) - radius;
+}
+
+
+float ellipsoidSDF(vec4 p, vec4 center, float radius){
+    return exactDist(vec4(p.x,p.y,p.z/2.,1.), center) - radius;
 
 }
+
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
@@ -1363,14 +1369,22 @@ uniform samplerCube earthCubeTex;
 uniform float time;
 
 
+uniform int display;
+// 1=tiling
+// 2= planes
+// 3= dragon skin
+
 
 //adding one local light (more to follow)
 vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
-
 vec4 localLightColor=vec4(1.,1.,1.,0.2);
 
+//variable which sets the light colors for drawing in hitWhich 1
+vec3 colorOfLight=vec3(1.,1.,1.);
 
-bool LIGHT;
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Re-packaging isometries, facings in the shader
@@ -1395,41 +1409,55 @@ float localSceneSDF(vec4 p){
     lightDist=sphereSDF(p,localLightPos,0.02);
     distance=min(distance,lightDist);
         if (lightDist < EPSILON){
-            LIGHT=true;
-            hitWhich = 3;
+            //LIGHT=true;
+            hitWhich = 1;
+            colorOfLight=vec3(1.,1.,1.);
             return lightDist;
         }
 
-if(DRAGON){
+if(display==3){//dragon
     vec4 center = vec4(0., 0., 0., 1.);;
     float dragonDist = centerSDF(p, center, 0.3);
     distance = min(distance, dragonDist);
     if(dragonDist<EPSILON){
-            LIGHT=false;
+            //LIGHT=false;
             hitWhich=3;
             return dragonDist;
     }
 
 }
 
-if(TILING){
+if(display==1){//tiling
     vec4 center = vec4(0., 0.,0., 1.);
     float sphere=0.;
-    sphere = centerSDF(p, center, 0.35);
-     
-    float cyl=0.0;
-    cyl=cylSDF(p,0.2);
-    tilingDist= -min(sphere, cyl);
+    sphere = ellipsoidSDF(p, center, 0.32);
+     tilingDist=-sphere;
+    //cut out a vertical cylinder to poke holes in the top, bottom
+//    float cyl=0.0;
+//    cyl=cylSDF(p,0.2);
+//    tilingDist= -min(sphere, cyl);
+//    
+    
+    //instead, cut out two balls from the top, bottom
+    //right now not working well because of the sphere distance function
+//    float topSph=0.0;
+//    float bottomSph=0.0;
+//    float spheres=0.;
+//    topSph=sphereSDF(p, vec4(0.,0.,z0,1.),0.7);
+//    bottomSph=sphereSDF(p, vec4(0.,0.,-z0,1.),0.7);
+//    spheres=min(topSph,bottomSph);
+//    tilingDist=-min(sphere,spheres);
+    
     distance=min(distance, tilingDist);
         
         if(tilingDist < EPSILON){
-            LIGHT=false;
+           // LIGHT=false;
             hitWhich=3;
             return tilingDist;
         }
 }
 
-if(PLANES){
+if(display==2){//planes
     vec4 center = vec4(0., 0.,0., 1.);
     float sphere=0.;
     sphere = centerSDF(p, center, 0.5);
@@ -1449,50 +1477,52 @@ return distance;
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
     // correct for the fact that we have been moving
-//    vec4 absolutep = translate(cellBoost, p);
-//    float distance = MAX_DIST;
-//    //Light Objects
-//    for (int i=0; i<4; i++){
-//        float objDist;
-//        objDist = sphereSDF(
-//        absolutep,
-//        lightPositions[i],
-//        0.1
-//        //    1.0/(10.0*lightIntensities[i].w)
-//        );
-//        distance = min(distance, objDist);
-//        if (distance < EPSILON){
-//            hitWhich = 1;
-//            globalLightColor = lightIntensities[i];
-//            return distance;
-//        }
-//    }
-//    //Global Sphere Object
-//
-//    float objDist = sliceSDF(absolutep);
-//    //float slabDist;
-//    //float sphDist;
-//    //slabDist = sliceSDF(absolutep);
-//    //sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
-//    //objDist=max(slabDist,-sphDist);
-//    // objDist=MAX_DIST;
-//
-//
-//    //global plane
-//
-//    /*
+    vec4 absolutep = translate(cellBoost, p);
+    float distance = MAX_DIST;
+    //Light Objects
+    for (int i=0; i<4; i++){
+        float objDist;
+        objDist = sphereSDF(
+        absolutep,
+        lightPositions[i],
+        0.1
+        //    1.0/(10.0*lightIntensities[i].w)
+        );
+        distance = min(distance, objDist);
+        if (distance < EPSILON){
+            hitWhich = 1;
+            globalLightColor = lightIntensities[i];
+            return distance;
+        }
+    }
+    //Global Sphere Object
+
+    float objDist = sliceSDF(absolutep);
+    //float slabDist;
+    //float sphDist;
+    //slabDist = sliceSDF(absolutep);
+    //sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+    //objDist=max(slabDist,-sphDist);
+    // objDist=MAX_DIST;
+
+
+    //global plane
+
+    
 //    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
 //    //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
 //    objDist = sphereSDF(absolutep, globalObjPos, 0.1);
-//*/
+//
 //
 //
 //    distance = min(distance, objDist);
 //    if (distance < EPSILON){
 //        hitWhich = 2;
 //    }
-//    return distance;
-    return MAX_DIST;
+    
+    
+    return distance;
+   // return MAX_DIST;
 }
 
 
@@ -1509,7 +1539,7 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
     
-    if(!DRAGON){
+    if(display!=3){
         if (dot(p, v3) > 0.5) {
             fixMatrix = Isometry(invGenerators[4]);
             return true;
@@ -1842,7 +1872,8 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     
     vec3 surfColor;
     surfColor=0.2*vec3(1.)+0.8*color;
-    if(DRAGON){
+    
+    if(display==3){//for the dragon skin one only
       surfColor=0.7*vec3(1.)+0.3*color; //make it brighter when there's less stuff  
     }
     //    vec3 color = vec3(0.0);
@@ -1908,15 +1939,27 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 }
 
 
+vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv,vec3  colorOfLight){
+    
+        N = estimateNormal(sampletv.pos);
+    vec3 color;
+        color = phongModel(totalFixMatrix, 0.5*colorOfLight);
+        color = 0.7*color+0.3;
+        return color;
+
+}
+
+
+
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
-//    if (EARTH){
-//        N = estimateNormal(sampletv.pos);
-//        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
-//        vec3 color2 = phongModel(totalFixMatrix, color);
-//        //color = 0.9*color+0.1;
-//        return 0.5*color + 0.5*color2;
-//    }
-    //else {
+    if (EARTH){
+        N = estimateNormal(sampletv.pos);
+        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+        vec3 color2 = phongModel(totalFixMatrix, color);
+        //color = 0.9*color+0.1;
+        return 0.5*color + 0.5*color2;
+    }
+    else {
     
         N = estimateNormal(sampletv.pos);
         vec3 color=localLightColor.xyz;
@@ -1926,7 +1969,7 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     
     
         //generically gray object (color= black, glowing slightly because of the 0.1)
-   // }
+    }
 }
 
 
@@ -1936,15 +1979,7 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         //make the objects have their own color
         //color the object based on its position in the cube
         vec4 samplePos=modelProject(sampletv.pos);
-        //Point in the Klein Model unit cube
-        if(LIGHT){
-         vec3 color=localLightColor.xyz;   
-         N = estimateNormal(sampletv.pos);
-        color = phongModel(totalFixMatrix, 0.5*color);
-            return 0.5*color+0.5;
-        }
-        
-        else {
+    
         //IF WE HIT THE TILING
         float x=samplePos.x;
         float y=samplePos.y;
@@ -1958,7 +1993,7 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         color = phongModel(totalFixMatrix, 0.1*color);
         
         return 0.9*color+0.1;
-        }
+        
         //adding a small constant makes it glow slightly
     //}
 //    else {
@@ -2051,7 +2086,8 @@ void main(){
     }
     else if (hitWhich == 1){
         // global lights
-        out_FragColor = vec4(globalLightColor.rgb, 1.0);
+        vec3 pixelColor= lightColor(totalFixMatrix, sampletv,colorOfLight);
+        out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
     else if (hitWhich == 5){

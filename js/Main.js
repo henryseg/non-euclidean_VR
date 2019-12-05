@@ -53,7 +53,8 @@ let globals = {
     invGens: undefined,
     lightPositions: [],
     lightIntensities: [],
-    globalObjectPosition: undefined
+    globalObjectPosition: undefined,
+    display: 3
 };
 
 //----------------------------------------------------------------------------------------------------------------------

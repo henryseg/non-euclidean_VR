@@ -24,7 +24,7 @@ import {
 let cubeHalfWidth = 0.5;
 
 const GoldenRatio = 0.5 * (1 + Math.sqrt(5.)); //1.618033988749895;
-const z0 = 2 * Math.log(GoldenRatio);
+const z0 = 2 * Math.log(GoldenRatio); //0.9624236
 //----------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //----------------------------------------------------------------------------------------------------------------------
@@ -255,8 +255,12 @@ function setupMaterial(fShader) {
                 value: globals.stereoScreenOffset
             },
             time: {
-                type:"f",
+                type: "f",
                 value: (new Date().getTime()) - time0
+            },
+            display: {
+                type: "int",
+                value: globals.display
             }
         },
 
@@ -295,6 +299,7 @@ function updateMaterial() {
 
     globals.material.uniforms.time.value = (new Date().getTime()) - time0;
 
+    globals.material.uniforms.display.value = globals.display;
 
 }
 
