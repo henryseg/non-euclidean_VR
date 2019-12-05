@@ -28,7 +28,7 @@ const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
-const bool TILING=true;
+const bool TILING=false;
 const bool PLANES=false;
 
 bool DRAGON=!(TILING||PLANES);
@@ -1366,7 +1366,10 @@ uniform float time;
 
 //adding one local light (more to follow)
 vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
-vec4 localLightColor=vec4(1.,1.,1.,0.3);
+
+vec4 localLightColor=vec4(1.,1.,1.,0.2);
+
+
 bool LIGHT;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1836,6 +1839,12 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     tangVector V = tangVector(SP, -sampletv.dir);
+    
+    vec3 surfColor;
+    surfColor=0.2*vec3(1.)+0.8*color;
+    if(DRAGON){
+      surfColor=0.7*vec3(1.)+0.3*color; //make it brighter when there's less stuff  
+    }
     //    vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
@@ -1847,19 +1856,19 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     for (int i = 0; i<4; i++){
         Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, lightPositions[i]);
-        color += lightingCalculations(SP, TLP, V, color, lightIntensities[i]);
+        color += lightingCalculations(SP, TLP, V,surfColor, lightIntensities[i]);
     }
     
     
     //LOCAL LIGHT
-     color+= lightingCalculations(SP,localLightPos,V,color,localLightColor); 
+     color+= lightingCalculations(SP,localLightPos,V,surfColor,localLightColor); 
     //light color and intensity hard coded in
     
     
     //move local light around by the generators to pick up lighting from nearby cells
     for(int i=0; i<6; i++){
         TLP=invGenerators[i]*localLightPos;
-        color+= lightingCalculations(SP,TLP,V,color,localLightColor); 
+        color+= lightingCalculations(SP,TLP,V,surfColor,localLightColor); 
     }
     
     return color;
