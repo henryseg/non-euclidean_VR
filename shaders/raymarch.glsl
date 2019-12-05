@@ -81,8 +81,8 @@ void setResolution(int UIVar){
         
     }
     if(UIVar==3){
-        MAX_MARCHING_STEPS =  8000;
-        MAX_DIST = 1500.0;
+        MAX_MARCHING_STEPS =  500;
+        MAX_DIST = 1000.0;
         
     }
 }
