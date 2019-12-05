@@ -28,6 +28,13 @@ const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
+const bool TILING=true;
+const bool PLANES=false;
+
+bool DRAGON=!(TILING||PLANES);
+
+//bool DRAGON_PLANE=not(TILING||PLANES);
+
 
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
@@ -58,9 +65,9 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-const int MAX_MARCHING_STEPS =  100;
+const int MAX_MARCHING_STEPS =  120;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 600.0;
+const float MAX_DIST = 320.0;
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.0005;
 const float fov = 90.0;
@@ -1310,6 +1317,9 @@ float sliceSDF(vec4 p) {
     return max(HS1, HS2);
 }
 
+float cylSDF(vec4 p, float r){
+    return sphereSDF(vec4(p.x,p.y,0.,1.),ORIGIN,r);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
@@ -1367,22 +1377,49 @@ uniform float time;
 // Local signed distance function : distance from p to an object in the local scene
 
 float localSceneSDF(vec4 p){
-    //vec4 center = ORIGIN;
-    //float sphere = centerSDF(p, center, centerSphereRadius);
-    //float vertexSphere = 0.0;
-    //vertexSphere = vertexSDF(abs(p), modelCubeCorner, vertexSphereSize);
-    //float final = min(vertexSphere, sphere);//unionSDF
-    //return final;
+    float tilingDist;
+    float dragonDist;
+    float planesDist;
+    float distance = MAX_DIST;
 
+if(DRAGON){
     vec4 center = vec4(0., 0., 0., 1.);;
-    float sphere = centerSDF(p, center, 0.3);
-    return sphere;
+    float dragonDist = centerSDF(p, center, 0.3);
+    distance = min(distance, dragonDist);
+    return dragonDist;
+}
 
-    //    float slabDist;
-    //    float sphDist;
-    //    slabDist = sliceSDF(p);
-    //    sphDist=sphereSDF(p,vec4(0.,0.,-0.2,1.),0.28);
-    //    return max(slabDist,-sphDist);
+if(TILING){
+    vec4 center = vec4(0., 0.,0., 1.);
+    float sphere=0.;
+    sphere = centerSDF(p, center, 0.35);
+     
+    float cyl=0.0;
+    cyl=cylSDF(p,0.2);
+    tilingDist= -min(sphere, cyl);
+    distance=min(distance, tilingDist);
+        
+        if(tilingDist < EPSILON){
+
+            hitWhich=3;
+            return tilingDist;
+        }
+}
+
+if(PLANES){
+    vec4 center = vec4(0., 0.,0., 1.);
+    float sphere=0.;
+    sphere = centerSDF(p, center, 0.5);
+    
+            planesDist = -sphere;
+            distance=min(distance, planesDist);
+        if(planesDist < EPSILON){
+
+            hitWhich=3;
+            return planesDist;
+        }
+}
+return distance;
 }
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1447,7 +1484,8 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     vec4 v1 = vec4(GoldenRatio, -1., 0., 0.);
     vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
     vec4 v3 = vec4(0., 0., 1./z0, 0.);
-    /*
+    
+    if(!DRAGON){
         if (dot(p, v3) > 0.5) {
             fixMatrix = Isometry(invGenerators[4]);
             return true;
@@ -1455,7 +1493,8 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
         if (dot(p, v3) < -0.5) {
             fixMatrix = Isometry(invGenerators[5]);
             return true;
-        }*/
+        }
+    }
 
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);
