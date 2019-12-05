@@ -1363,6 +1363,12 @@ uniform samplerCube earthCubeTex;
 uniform float time;
 
 
+
+//adding one local light (more to follow)
+vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
+vec4 localLightColor=vec4(1.,1.,1.,0.3);
+bool LIGHT;
+
 //----------------------------------------------------------------------------------------------------------------------
 // Re-packaging isometries, facings in the shader
 //----------------------------------------------------------------------------------------------------------------------
@@ -1380,13 +1386,27 @@ float localSceneSDF(vec4 p){
     float tilingDist;
     float dragonDist;
     float planesDist;
+    float lightDist;
     float distance = MAX_DIST;
+    
+    lightDist=sphereSDF(p,localLightPos,0.02);
+    distance=min(distance,lightDist);
+        if (lightDist < EPSILON){
+            LIGHT=true;
+            hitWhich = 3;
+            return lightDist;
+        }
 
 if(DRAGON){
     vec4 center = vec4(0., 0., 0., 1.);;
     float dragonDist = centerSDF(p, center, 0.3);
     distance = min(distance, dragonDist);
-    return dragonDist;
+    if(dragonDist<EPSILON){
+            LIGHT=false;
+            hitWhich=3;
+            return dragonDist;
+    }
+
 }
 
 if(TILING){
@@ -1400,7 +1420,7 @@ if(TILING){
     distance=min(distance, tilingDist);
         
         if(tilingDist < EPSILON){
-
+            LIGHT=false;
             hitWhich=3;
             return tilingDist;
         }
@@ -1426,49 +1446,50 @@ return distance;
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
     // correct for the fact that we have been moving
-    vec4 absolutep = translate(cellBoost, p);
-    float distance = MAX_DIST;
-    //Light Objects
-    for (int i=0; i<4; i++){
-        float objDist;
-        objDist = sphereSDF(
-        absolutep,
-        lightPositions[i],
-        0.1
-        //    1.0/(10.0*lightIntensities[i].w)
-        );
-        distance = min(distance, objDist);
-        if (distance < EPSILON){
-            hitWhich = 1;
-            globalLightColor = lightIntensities[i];
-            return distance;
-        }
-    }
-    //Global Sphere Object
-
-    float objDist = sliceSDF(absolutep);
-    //float slabDist;
-    //float sphDist;
-    //slabDist = sliceSDF(absolutep);
-    //sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
-    //objDist=max(slabDist,-sphDist);
-    // objDist=MAX_DIST;
-
-
-    //global plane
-
-    /*
-    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
-    objDist = sphereSDF(absolutep, globalObjPos, 0.1);
-*/
-
-
-    distance = min(distance, objDist);
-    if (distance < EPSILON){
-        hitWhich = 2;
-    }
-    return distance;
+//    vec4 absolutep = translate(cellBoost, p);
+//    float distance = MAX_DIST;
+//    //Light Objects
+//    for (int i=0; i<4; i++){
+//        float objDist;
+//        objDist = sphereSDF(
+//        absolutep,
+//        lightPositions[i],
+//        0.1
+//        //    1.0/(10.0*lightIntensities[i].w)
+//        );
+//        distance = min(distance, objDist);
+//        if (distance < EPSILON){
+//            hitWhich = 1;
+//            globalLightColor = lightIntensities[i];
+//            return distance;
+//        }
+//    }
+//    //Global Sphere Object
+//
+//    float objDist = sliceSDF(absolutep);
+//    //float slabDist;
+//    //float sphDist;
+//    //slabDist = sliceSDF(absolutep);
+//    //sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+//    //objDist=max(slabDist,-sphDist);
+//    // objDist=MAX_DIST;
+//
+//
+//    //global plane
+//
+//    /*
+//    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
+//    //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
+//    objDist = sphereSDF(absolutep, globalObjPos, 0.1);
+//*/
+//
+//
+//    distance = min(distance, objDist);
+//    if (distance < EPSILON){
+//        hitWhich = 2;
+//    }
+//    return distance;
+    return MAX_DIST;
 }
 
 
@@ -1592,9 +1613,9 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 marchStep = MIN_DIST;
             }
             else {
-                float localDist = min(1., localSceneSDF(localtv.pos));
+                float localDist = min(5., localSceneSDF(localtv.pos));
                 if (localDist < EPSILON){
-                    hitWhich = 3;
+                   // hitWhich = 3;
                     sampletv = localtv;
                     break;
                 }
@@ -1681,7 +1702,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             else {
                 float localDist = min(.5, localSceneSDF(localtv.pos));
                 if (localDist < EPSILON){
-                    hitWhich = 3;
+                    //hitWhich = 3;
                     sampletv = toTangVector(localtv);
                     break;
                 }
@@ -1821,11 +1842,26 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //--------------------------------------------------
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
+    
+    //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
     for (int i = 0; i<4; i++){
         Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, lightPositions[i]);
-        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
+        color += lightingCalculations(SP, TLP, V, color, lightIntensities[i]);
     }
+    
+    
+    //LOCAL LIGHT
+     color+= lightingCalculations(SP,localLightPos,V,color,localLightColor); 
+    //light color and intensity hard coded in
+    
+    
+    //move local light around by the generators to pick up lighting from nearby cells
+    for(int i=0; i<6; i++){
+        TLP=invGenerators[i]*localLightPos;
+        color+= lightingCalculations(SP,TLP,V,color,localLightColor); 
+    }
+    
     return color;
 }
 
@@ -1864,30 +1900,43 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 
 
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
-    if (EARTH){
+//    if (EARTH){
+//        N = estimateNormal(sampletv.pos);
+//        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+//        vec3 color2 = phongModel(totalFixMatrix, color);
+//        //color = 0.9*color+0.1;
+//        return 0.5*color + 0.5*color2;
+//    }
+    //else {
+    
         N = estimateNormal(sampletv.pos);
-        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
-        vec3 color2 = phongModel(totalFixMatrix, color);
-        //color = 0.9*color+0.1;
-        return 0.5*color + 0.5*color2;
-    }
-    else {
-        N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0., 0., 0.);
-        color = phongModel(totalFixMatrix, color);
-        color = 0.9*color+0.1;
+        vec3 color=localLightColor.xyz;
+        color = phongModel(totalFixMatrix, 0.5*color);
+        color = 0.7*color+0.3;
         return color;
+    
+    
         //generically gray object (color= black, glowing slightly because of the 0.1)
-    }
+   // }
 }
 
 
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
-    if (FAKE_LIGHT){
+//    if (FAKE_LIGHT){//always fake light in Sol so far
+    
         //make the objects have their own color
         //color the object based on its position in the cube
         vec4 samplePos=modelProject(sampletv.pos);
         //Point in the Klein Model unit cube
+        if(LIGHT){
+         vec3 color=localLightColor.xyz;   
+         N = estimateNormal(sampletv.pos);
+        color = phongModel(totalFixMatrix, 0.5*color);
+            return 0.5*color+0.5;
+        }
+        
+        else {
+        //IF WE HIT THE TILING
         float x=samplePos.x;
         float y=samplePos.y;
         float z=samplePos.z;
@@ -1895,19 +1944,22 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
         y = 0.9 * y / modelHalfCube;
         z = 0.9 * z / modelHalfCube;
         vec3 color = vec3(x, y, z);
+        
         N = estimateNormal(sampletv.pos);
         color = phongModel(totalFixMatrix, 0.1*color);
+        
         return 0.9*color+0.1;
+        }
         //adding a small constant makes it glow slightly
-    }
-    else {
-        //if we are doing TRUE LIGHTING
-        // objects have no natural color, only lit by the lights
-        N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0., 0., 0.);
-        color = phongModel(totalFixMatrix, color);
-        return color;
-    }
+    //}
+//    else {
+//        //if we are doing TRUE LIGHTING
+//        // objects have no natural color, only lit by the lights
+//        N = estimateNormal(sampletv.pos);
+//        vec3 color=vec3(0., 0., 0.);
+//        color = phongModel(totalFixMatrix, color);
+//        return color;
+//    }
 }
 
 
@@ -1996,14 +2048,15 @@ void main(){
     else if (hitWhich == 5){
         //debug
         out_FragColor = vec4(debugColor, 1.0);
+        return;
     }
     else if (hitWhich == 2){
         // global object
-        vec3 pixelColor=ballColor(totalFixMatrix, sampletv);
-        out_FragColor = vec4(pixelColor, 1.0);
-        return;
+        vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
+        out_FragColor=vec4(pixelColor, 1.0);
+       return;
     }
-    else {
+    else if(hitWhich==3) {
         // local objects
         vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
         out_FragColor=vec4(pixelColor, 1.0);
