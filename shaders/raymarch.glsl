@@ -1315,9 +1315,11 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 
 float ellipsoidSDF(vec4 p, vec4 center, float radius){
     return exactDist(vec4(p.x,p.y,p.z/2.,1.), center) - radius;
-
 }
 
+float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
+    return exactDist(vec4(p.x/10.,p.y/10.,p.z,1.), center) - radius;
+}
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
@@ -1361,7 +1363,7 @@ Isometry rightBoost;
 Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
-
+  
 //----------------------------------------------------------------------------------------------------------------------
 // Translation & Utility Variables
 //----------------------------------------------------------------------------------------------------------------------
@@ -1437,7 +1439,19 @@ float localSceneSDF(vec4 p){
 
 if(display==3){//dragon
     vec4 center = vec4(0., 0., 0., 1.);;
-    float dragonDist = centerSDF(p, center, 0.3);
+    float dragonDist = fatEllipsoidSDF(p, center, 0.03);
+    distance = min(distance, dragonDist);
+    if(dragonDist<EPSILON){
+            //LIGHT=false;
+            hitWhich=3;
+            return dragonDist;
+    }
+
+}
+    
+    if(display==4){//dragon tiling
+    vec4 center = vec4(0., 0., 0., 1.);;
+    float dragonDist = fatEllipsoidSDF(p, center, 0.03);
     distance = min(distance, dragonDist);
     if(dragonDist<EPSILON){
             //LIGHT=false;
@@ -1482,7 +1496,7 @@ if(display==1){//tiling
 if(display==2){//planes
     vec4 center = vec4(0., 0.,0., 1.);
     float sphere=0.;
-    sphere = centerSDF(p, center, 0.5);
+    sphere = sphereSDF(p, center, 0.5);
     
             planesDist = -sphere;
             distance=min(distance, planesDist);
@@ -1752,6 +1766,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
+                localtv=tangNormalize(localtv);
                 marchStep = MIN_DIST;
             }
             else {
@@ -1895,7 +1910,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     vec3 surfColor;
     surfColor=0.2*vec3(1.)+0.8*color;
     
-    if(display==3){//for the dragon skin one only
+    if(display==3||display==4){//for the dragon skin one only
       surfColor=0.7*vec3(1.)+0.3*color; //make it brighter when there's less stuff  
     }
     //    vec3 color = vec3(0.0);

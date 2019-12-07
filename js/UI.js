@@ -49,7 +49,8 @@ let initGui = function () {
     let displayController = gui.add(guiInfo, 'display', {
         Tiling: '1',
         TorusBundle: '2',
-        Dragon: '3'
+        Dragon: '3',
+        DragonPlanes: '4'
     });
 
     let resController = gui.add(guiInfo, 'res', {
