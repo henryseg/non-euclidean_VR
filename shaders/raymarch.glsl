@@ -21,7 +21,7 @@ const bool TILING_TEXTURE=false;
 const bool LOCAL_EARTH=true;
 const bool TILING=true;
 
-const bool GLOBAL_SCENE=true;
+const bool GLOBAL_SCENE=false;
 const bool GLOBAL_LIGHTS=false;
 const bool LOCAL_LIGHTS=true;
 
@@ -249,8 +249,10 @@ Isometry composeIsometry(Isometry A, Isometry B)
     return Isometry(A.matrix*B.matrix);
 }
 
-
-
+Isometry isometryInverse(Isometry A)
+{
+  return Isometry(inverse(A.matrix));
+}
 
 
 
@@ -365,6 +367,7 @@ const int MAX_MARCHING_STEPS = 80;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
+const int BINARY_SEARCH_STEPS = 5;
 const float fov = 90.0;
 const float sqrt3 = 1.7320508075688772;
 
@@ -376,6 +379,8 @@ tangVector N;//normal vector
 tangVector sampletv;
 vec4 globalLightColor;
 int hitWhich = 0;
+bool hitLocal = false; // did we hit a local object or a global object?
+int stepsTaken = 0;
 Isometry identityIsometry=Isometry(mat4(1.0));
 vec3 localLightColor=vec3(1.,1.,1.);
 
@@ -522,6 +527,7 @@ float localSceneSDF(vec4 p){
       lightDist=sphereSDF(p,lightCenter,0.05);
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
+            hitLocal = true;
             hitWhich = 1;
             globalLightColor =vec4(localLightColor,1);
             return lightDist;
@@ -534,6 +540,7 @@ float localSceneSDF(vec4 p){
        earthDist=sphereSDF(p,earthCenter,0.35);
         distance=min(distance,earthDist);
         if(earthDist < EPSILON){
+            hitLocal = true;
             hitWhich = 7;
             return earthDist;
         }  
@@ -548,6 +555,7 @@ float localSceneSDF(vec4 p){
             tilingDist = -min(vertexSphere,sphere);
             distance=min(distance, tilingDist);
         if(tilingDist < EPSILON){
+            hitLocal = true;
             hitWhich=3;
             return tilingDist;
         }
@@ -594,6 +602,7 @@ float globalSceneSDF(vec4 p){
         distance = min(distance, objDist);
         
         if (distance < EPSILON){
+            hitLocal = false;
             hitWhich = 1;
             globalLightColor = lightIntensities[i];
             return distance;
@@ -606,6 +615,7 @@ float globalSceneSDF(vec4 p){
     earthDist = sphereSDF(absolutep,earthPos, earthRad);
     distance = min(distance, earthDist);
     if (distance < EPSILON){
+        hitLocal = false;
         hitWhich = 2;
     return distance;
     }
@@ -616,6 +626,7 @@ float globalSceneSDF(vec4 p){
         moonDist = sphereSDF(absolutep,moonPos, moonRad);
         distance = min(distance, moonDist);
         if (distance < EPSILON){
+            hitLocal = false;
             hitWhich = 4;
         return distance;
         }
@@ -626,6 +637,7 @@ float globalSceneSDF(vec4 p){
         sunDist = sphereSDF(absolutep,sunPos, sunRad);
         distance = min(distance, sunDist);
         if (distance < EPSILON){
+            hitLocal = false;
             hitWhich = 6;
         return distance;
         }
@@ -740,7 +752,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
     vec4 basis_x = theBasis[0];
     vec4 basis_y = theBasis[1];
     vec4 basis_z = theBasis[2];
-    if (hitWhich != 3){ //global light scene
+    if (hitLocal == false){ //global light scene
         //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
         tangVector tv = tangVector(p,
         basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
@@ -771,41 +783,58 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 
 void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     Isometry fixMatrix;
+    Isometry testFixMatrix;
     float marchStep = MIN_DIST;
+    float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     tangVector tv = rayDir;
     tangVector localtv = rayDir;
+    tangVector testlocaltv = rayDir;
+    tangVector bestlocaltv = rayDir;
     totalFixMatrix = identityIsometry;
 
 
     // Trace the local scene, then the global scene:
 
-
     if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        
-        localtv = flow(localtv, marchStep);
-
-        if (isOutsideCell(localtv, fixMatrix)){
-            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-            localtv = geomProject(translate(fixMatrix, localtv));
-            marchStep = MIN_DIST;
+      float localDist = localSceneSDF(localtv.pos);
+      if (localDist < EPSILON){
+          sampletv = localtv;
+          stepsTaken = i;
+          break;
+      }
+      marchStep = localDist;
+       
+      testlocaltv = flow(localtv, marchStep);
+      if (isOutsideCell(testlocaltv, fixMatrix)){
+        bestlocaltv = testlocaltv;
+        for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+          ////// do binary search to get close to but outside this cell - 
+          ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+          testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
+          testlocaltv = flow(localtv, testMarchStep);
+          if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+            marchStep = testMarchStep;
+            bestlocaltv = testlocaltv;
+            fixMatrix = testFixMatrix;
+          }
         }
-        else {
-            float localDist = localSceneSDF(localtv.pos);
-            if (localDist < EPSILON){
-                sampletv = localtv;
-                break;
-            }
-            marchStep = localDist;
-            globalDepth += localDist;
+        localtv = bestlocaltv;
+        totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+        localtv = geomProject(translate(fixMatrix, localtv));
+        globalDepth += marchStep; 
+        marchStep = MIN_DIST;
+      }
+      else{ 
+          localtv = testlocaltv; 
+          globalDepth += marchStep; 
         }
+      }
+      localDepth=min(globalDepth, MAX_DIST);
     }
-    localDepth=min(globalDepth, MAX_DIST);
-    }
-    else{localDepth=MAX_DIST;
-        }
+    else{localDepth=MAX_DIST;}
 
 
     if(GLOBAL_SCENE){
@@ -825,7 +854,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         if (globalDepth >= localDepth){
             break;
         }
-    }
+      }
     }
 }
 
@@ -975,22 +1004,24 @@ vec3 boxMapping( in sampler2D sam, in tangVector point )
 }
 
 vec3 sphereOffset(Isometry objectBoost, mat4 objectFacing, vec4 pt){
-    pt = translate(cellBoost, pt);
-    pt = inverse(objectBoost.matrix) * pt;
+    if(hitLocal == false){ pt = translate(cellBoost, pt); }
+    // pt = inverse(objectBoost.matrix) * pt;
+    pt = translate(isometryInverse(objectBoost), pt);
     tangVector earthPoint=tangDirection(ORIGIN,pt);
     earthPoint=rotateFacing(objectFacing, earthPoint);
     return earthPoint.dir.xyz;
 }
 
-
-
 vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLocation, mat4 sphFacing, samplerCube sphTexture){
-
-    N = estimateNormal(sampletv.pos);
+    
+    // vec3 color = vec3(0.5,0.5,0.5);
     vec3 color = texture(sphTexture, sphereOffset(sphLocation, sphFacing, sampletv.pos)).xyz;
-    vec3 color2 = phongModel(totalFixMatrix, color);
+    // color = 0.5*color + 0.5*vec3(float(stepsTaken)*0.1, float(stepsTaken-10)*0.1, float(stepsTaken-20)*0.1);
+    // N = estimateNormal(sampletv.pos);
+    // vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
-    return 0.5*color + 0.5*color2;
+    // return 0.5*color + 0.5*color2;
+    return color;
     }
 
 //Code for coloring a sphere with no texture

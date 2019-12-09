@@ -434,13 +434,13 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Isometry().translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
+    let gen0 = new Isometry().translateByVector(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.));
     //Position().flow(new THREE.Vector3(2. * cubeHalfWidth, 0., 0.)).boost;
-    const gen1 = new Isometry().translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
-    const gen2 = new Isometry().translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
-    const gen3 = new Isometry().translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
-    const gen4 = new Isometry().translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
-    const gen5 = new Isometry().translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
+    let gen1 = new Isometry().translateByVector(new THREE.Vector3(-2. * cubeHalfWidth, 0., 0.));
+    let gen2 = new Isometry().translateByVector(new THREE.Vector3(0., 2. * cubeHalfWidth, 0.));
+    let gen3 = new Isometry().translateByVector(new THREE.Vector3(0., -2. * cubeHalfWidth, 0.));
+    let gen4 = new Isometry().translateByVector(new THREE.Vector3(0., 0., 2. * cubeHalfWidth));
+    let gen5 = new Isometry().translateByVector(new THREE.Vector3(0., 0., -2. * cubeHalfWidth));
 
     //ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
 
@@ -544,7 +544,7 @@ function initObjects() {
     
     
     //MUST BE INSIDE ORIGINAL FUNDAMENTAL DOMAIN
-    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.2,0,-0.2)).boost).setAngular(new THREE.Vector3(0,1,0));
+    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.3,0,-0.2)).boost).setAngular(new THREE.Vector3(0,1,0));
     
     localLightPos= new Position().localFlow(new THREE.Vector3(0,0.4,0.3));
 
