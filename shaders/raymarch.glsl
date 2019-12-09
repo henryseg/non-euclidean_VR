@@ -1013,14 +1013,13 @@ vec3 sphereOffset(Isometry objectBoost, mat4 objectFacing, vec4 pt){
 }
 
 vec3 sphereTexture(Isometry totalFixMatrix, tangVector sampletv, Isometry sphLocation, mat4 sphFacing, samplerCube sphTexture){
-    
     // vec3 color = vec3(0.5,0.5,0.5);
     vec3 color = texture(sphTexture, sphereOffset(sphLocation, sphFacing, sampletv.pos)).xyz;
     // color = 0.5*color + 0.5*vec3(float(stepsTaken)*0.1, float(stepsTaken-10)*0.1, float(stepsTaken-20)*0.1);
-    // N = estimateNormal(sampletv.pos);
-    // vec3 color2 = phongModel(totalFixMatrix, color);
+    N = estimateNormal(sampletv.pos);
+    vec3 color2 = phongModel(totalFixMatrix, color);
     //color = 0.9*color+0.1;
-    // return 0.5*color + 0.5*color2;
+    return 0.5*color + 0.5*color2;
     return color;
     }
 
