@@ -1056,7 +1056,8 @@ tangVector flow(tangVector tv, float t) {
 
 
 localTangVector numflow(localTangVector tv, float t) {
-    // follow the geodesic flow using a numerical integration
+    // follow the geodesic flow during time t
+    // using a numerical integration
     // fix the noise for small steps
     float NUM_STEP = 0.2 * EPSILON;
 
@@ -1097,6 +1098,9 @@ localTangVector numflow(localTangVector tv, float t) {
 
 localTangVector hypXflow(localTangVector tv, float t) {
     // flow in (the neighborhood of) the hyperbolic sheets {x = 0}
+    // use an taylor expansion at the order 2 around a = 0
+    // if need one could use a higher order expansion...
+    // one "just" need to do a few ugly computations before!
 
 
     // Isometry moving back to the origin and conversely
@@ -1110,9 +1114,57 @@ localTangVector hypXflow(localTangVector tv, float t) {
     float b = tv.dir.y;
     float c = tv.dir.z;
 
-    float sht = sinh(t);
-    float cht = cosh(t);
-    float tht = sht/cht;
+    // preparing the material to write down the formula in an easy way
+    // and avoid redundant computation
+    // look at the notes for the definitions of all the quantities
+
+    // norm of the yz component of the tagent vector, i.e. sqrt(b^2 + c^2)
+    float n = sqrt(b * b + c * c);
+    // sign of b
+    float sign = 1.;
+    if (b < 0.) {
+        sign = -1.;
+    }
+    // cosh(n(t+t_0)) and sinh(n(t+t_0))
+    float shntt0 = (c * cosh(n * t) + n * sinh(n * t)) / abs(b);
+    float chntt0 = (n * cosh(n * t) + c * sinh(n * t)) / abs(b);
+
+
+    // first term in the asymptotic expansion of the direction
+    vec4 u0 = vec4(
+    0,
+    sign * n / chntt0,
+    n * shntt0 / chntt0,
+    0
+    );
+
+    // second term in the asymptotic expansion of the direction
+    vec4 u1 = vec4(
+    abs(b) * chntt0 / n,
+    0,
+    0,
+    0
+    );
+
+    // third term in the asymptotic expansion of the direction
+    float denz = 4. * n * pow(chntt0, 2.);
+    float deny = pow(n, 2.) * denz;
+
+    vec4 u2 = vec4(
+    0,
+    sign * (
+    pow(b, 2.) * chntt0 * pow(shntt0, 2.)
+    + 2 * pow(c, 2.) * chntt0
+    + n * ((pow(b, 2.) - 2 * pow(c, 2.)) * t - 3. * c) * shntt0
+    )/ deny,
+    -(
+    (2 * pow(b, 2.) * pow(chntt0, 2.) + pow(b, 2.) - 2 * pow(c, 2.)) * chntt0 * shntt0
+    + n * ((pow(b, 2.) - 2 * pow(c, 2.)) * t - 3. * c)
+    ) / denz,
+    0
+    );
+
+    resOrigin.dir = u0 + a * u1 + a * a * u2;
 
     resOrigin.pos = vec4(
     0.,
@@ -1126,6 +1178,7 @@ localTangVector hypXflow(localTangVector tv, float t) {
     (c + tht) / (1. + c * tht),
     0.
     );
+
 
     resOrigin = tangNormalize(resOrigin);
     localTangVector res = translate(isom, resOrigin);
