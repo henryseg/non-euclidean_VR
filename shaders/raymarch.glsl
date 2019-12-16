@@ -1053,7 +1053,7 @@ tangVector flow(tangVector tv, float t) {
     }
 }
 
-
+int hitWhich = 0;
 
 localTangVector numflow(localTangVector tv, float t) {
     // follow the geodesic flow during time t
@@ -1107,7 +1107,7 @@ localTangVector hypXflow(localTangVector tv, float t) {
     Isometry isom = makeLeftTranslation(tv);
 
     // result to be populated
-    localTangVector resOrigin = localTangVector(ORIGIN, vec4(0.));
+    localTangVector resOrigin;
 
     // renaming the coordinates of the tangent vector to simplify the formulas
     float a = tv.dir.x;
@@ -1118,66 +1118,80 @@ localTangVector hypXflow(localTangVector tv, float t) {
     // and avoid redundant computation
     // look at the notes for the definitions of all the quantities
 
-    // norm of the yz component of the tagent vector, i.e. sqrt(b^2 + c^2)
-    float n = sqrt(b * b + c * c);
+
+    float b2 = b * b;
+    float c2 = c * c;
+    // norm of the yz component of the tagent vector, i.e. sqrt(b^2 + c^2) and its powsers
+    float n1 = sqrt(b2 + c2);
+    float n2 = n1 * n1;
+    float n3 = n1 * n2;
+    float n4 = n1 * n3;
     // sign of b
     float sign = 1.;
     if (b < 0.) {
         sign = -1.;
     }
-    // cosh(n(t+t_0)) and sinh(n(t+t_0))
-    float shntt0 = (c * cosh(n * t) + n * sinh(n * t)) / abs(b);
-    float chntt0 = (n * cosh(n * t) + c * sinh(n * t)) / abs(b);
+    // cosh(s), sinh(s), and tanh(s) where s = n(t+t0)
+    float shs = (c * cosh(n1 * t) + n1 * sinh(n1 * t)) / abs(b);
+    float chs = (n1 * cosh(n1 * t) + c * sinh(n1 * t)) / abs(b);
+    float ths = shs / chs;
 
 
-    // first term in the asymptotic expansion of the direction
     vec4 u0 = vec4(
-    0,
-    sign * n / chntt0,
-    n * shntt0 / chntt0,
-    0
-    );
-
-    // second term in the asymptotic expansion of the direction
-    vec4 u1 = vec4(
-    abs(b) * chntt0 / n,
-    0,
-    0,
-    0
-    );
-
-    // third term in the asymptotic expansion of the direction
-    float denz = 4. * n * pow(chntt0, 2.);
-    float deny = pow(n, 2.) * denz;
-
-    vec4 u2 = vec4(
-    0,
-    sign * (
-    pow(b, 2.) * chntt0 * pow(shntt0, 2.)
-    + 2 * pow(c, 2.) * chntt0
-    + n * ((pow(b, 2.) - 2 * pow(c, 2.)) * t - 3. * c) * shntt0
-    )/ deny,
-    -(
-    (2 * pow(b, 2.) * pow(chntt0, 2.) + pow(b, 2.) - 2 * pow(c, 2.)) * chntt0 * shntt0
-    + n * ((pow(b, 2.) - 2 * pow(c, 2.)) * t - 3. * c)
-    ) / denz,
-    0
-    );
-
-    resOrigin.dir = u0 + a * u1 + a * a * u2;
-
-    resOrigin.pos = vec4(
     0.,
-    b * sht / (cht + c * sht),
-    log(cht + c * sht),
-    1.
-    );
-    resOrigin.dir = vec4(
-    0.,
-    b / (cht + c * sht),
-    (c + tht) / (1. + c * tht),
+    sign * n1 / chs,
+    n1 * ths,
     0.
     );
+
+    vec4 u1 = vec4(
+    abs(b) * chs / n1,
+    0.,
+    0.,
+    0.
+    );
+
+    vec4 u2 = vec4(
+    0.,
+    sign * b2 * chs / (4. * n3)
+    + sign * (b2 - 2. * c2)  * (n1 * t * shs / pow(chs, 2.) - 1. / chs) / (4. * n3)
+    - 3. * sign * c * shs / (4. * n2 * pow(chs, 2.)),
+    - b2 * shs * chs / (2. * n3)
+    - (b2 - 2. * c2) * (ths - n1 * t / pow(chs, 2.)) / (4. * n3)
+    + 3. * c / (4. * n2 * pow(chs, 2.)),
+    0.
+    );
+
+    resOrigin.dir = u0  + a * u1 + a * a * u2;
+
+
+    vec4 p0 = vec4(
+    0.,
+    n1 * ths / b - c / b,
+    log(abs(b) * chs / n1),
+    1.
+    );
+
+    vec4 p1 = vec4(
+    b2 * (shs * chs + n1 * t) / (2. * n3) - c / (2. * n2),
+    0.,
+    0.,
+    0.
+    );
+
+    vec4 p2 = vec4(
+    0.,
+    b * n1 * t / (2. * n3)
+    - (b2 - 2. * c2) * ( n1 * t / pow(chs, 2.) + ths) / (4. * b * n3)
+    + 3. * c / (4. * b * n2 * pow(chs, 2.))
+    - c / (2. * b * n2),
+    - b2 * pow(chs, 2.) / (4. * n4)
+    - (b2 - 2. * c2) * (n1 * t * ths - 1.) / (4. * n4)
+    + 3. * c * ths / (4. * n3),
+    0.
+    );
+
+    resOrigin.pos = p0 + a * p1 + a * a * p2;
 
 
     resOrigin = tangNormalize(resOrigin);
@@ -1185,12 +1199,34 @@ localTangVector hypXflow(localTangVector tv, float t) {
     res = tangNormalize(res);
 
     return res;
-
 }
 
 
 localTangVector hypYflow(localTangVector tv, float t) {
     // flow in (the neighborhood of) the hyperbolic sheets {y = 0}
+
+    localTangVector tvAux;
+    tvAux.pos = vec4(tv.pos.y, tv.pos.x, -tv.pos.z, 1.);
+    tvAux.dir = vec4(tv.dir.y, tv.dir.x, -tv.dir.z, 0.);
+
+    localTangVector resAux = hypXflow(tvAux, t);
+    localTangVector res;
+    res.pos = vec4(resAux.pos.y, resAux.pos.x, -resAux.pos.z, 1.);
+    res.dir = vec4(resAux.dir.y, resAux.dir.x, -resAux.dir.z, 0.);
+
+    res = tangNormalize(res);
+
+    return res;
+}
+
+
+/*
+
+localTangVector hypYflow(localTangVector tv, float t) {
+    // flow in (the neighborhood of) the hyperbolic sheets {y = 0}
+    // use an taylor expansion at the order 2 around b = 0
+    // if need one could use a higher order expansion...
+    // one "just" need to do a few ugly computations before!
 
 
     // Isometry moving back to the origin and conversely
@@ -1204,22 +1240,85 @@ localTangVector hypYflow(localTangVector tv, float t) {
     float b = tv.dir.y;
     float c = tv.dir.z;
 
-    float sht = sinh(t);
-    float cht = cosh(t);
-    float tht = sht/cht;
+    // preparing the material to write down the formula in an easy way
+    // and avoid redundant computation
+    // look at the notes for the definitions of all the quantities
 
-    resOrigin.pos = vec4(
-    a * sht / (cht - c * sht),
-    0.,
-    - log(cht - c * sht),
-    1.
+
+    float a2 = a * a;
+    float c2 = c * c;
+    // norm of the xz component of the tagent vector, i.e. sqrt(a^2 + c^2) and its powsers
+    float n1 = sqrt(a2 + c2);
+    float n2 = n1 * n1;
+    float n3 = n1 * n2;
+    float n4 = n1 * n3;
+    // sign of b
+    float sign = 1.;
+    if (a < 0.) {
+        sign = -1.;
+    }
+    // cosh(s), sinh(s), and tanh(s) where s = n(t+t0)
+    float shs = (-c * cosh(n1 * t) + n1 * sinh(n1 * t)) / abs(a);
+    float chs = (n1 * cosh(n1 * t) - c * sinh(n1 * t)) / abs(a);
+    float ths = shs / chs;
+
+
+    vec4 u0 = vec4(
+    sign * n1 / chs,
+    0,
+    - n1 * ths,
+    0
     );
-    resOrigin.dir = vec4(
-    a / (cht - c * sht),
-    0.,
-    (c - tht) / (1. - c * tht),
-    0.
+
+    vec4 u1 = vec4(
+    0,
+    abs(a) * chs / n1,
+    0,
+    0
     );
+
+    vec4 u2 = vec4(
+    sign * a2 * chs / (4. * n3)
+    + sign * (a2 + 2. * c2)  * (n1 * t * shs / pow(chs, 2.) - 1. / chs) / (4. * n3)
+    + 3. * sign * c * shs / (4. * n2 * pow(chs, 2.)),
+    0,
+    a2 * shs * chs / (2. * n3)
+    + (a2 + 2. * c2) * (ths - n1 * t / pow(chs, 2.)) / (4. * n3)
+    + 3. * c / (4. * n2 * pow(chs, 2.)),
+    0
+    );
+
+    resOrigin.dir = u0 + b * u1 + b * b * u2;
+
+
+    vec4 p0 = vec4(
+    n1 * ths / a + c / a,
+    0,
+    - log(abs(a) * chs / n1),
+    1
+    );
+
+    vec4 p1 = vec4(
+    0,
+    a2 * (shs * chs + n1 * t) / (2. * n3) + c / (2. * n2),
+    0,
+    0
+    );
+
+    vec4 p2 = vec4(
+    a * n1 * t / (2. * n3)
+    - (a2 + 2. * c2) * ( n1 * t / pow(chs, 2.) + ths) / (4. * a * n3)
+    - 3. * c / (4. * a * n2 * pow(chs, 2.))
+    + c / (2. * a * n2),
+    0,
+    a2 * pow(chs, 2.) / (4. * n4)
+    + (a2 + 2. * c2) * (n1 * t * ths - 1.) / (4. * n4)
+    + 3. * c * ths / (4. * n3),
+    0
+    );
+
+    resOrigin.pos = p0 + b * p1 + b * b * p2;
+
 
     resOrigin = tangNormalize(resOrigin);
     localTangVector res = translate(isom, resOrigin);
@@ -1229,6 +1328,7 @@ localTangVector hypYflow(localTangVector tv, float t) {
 
 }
 
+*/
 
 localTangVector ellflow(localTangVector tv, float t){
     // follow the geodesic flow during a time t
@@ -1350,15 +1450,19 @@ localTangVector ellflow(localTangVector tv, float t){
 
 localTangVector flow(localTangVector tv, float t) {
 
+    float tolerance = 0.0001;
+
     if (abs(t) < 50. * EPSILON) {
         return numflow(tv, t);
         //return ellflow(tv, t);
     }
     else {
-        if (tv.dir.x==0.) {
+        if (abs(tv.dir.x * t) < tolerance) {
+        //if (tv.dir.x ==0.) {
             return hypXflow(tv, t);
         }
-        else if (tv.dir.y==0.) {
+        else if (abs(tv.dir.y * t) < tolerance) {
+        //else if (tv.dir.y ==0.) {
             return hypYflow(tv, t);
         }
         else {
@@ -1450,7 +1554,6 @@ float cylSDF(vec4 p, float r){
 tangVector N;//normal vector
 tangVector sampletv;
 vec4 globalLightColor;
-int hitWhich = 0;
 Isometry identityIsometry=Isometry(mat4(1.0));
 
 Isometry currentBoost;
