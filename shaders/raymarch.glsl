@@ -850,7 +850,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 //}
 
 
-int BINARY_SEARCH_STEPS=3;
+int BINARY_SEARCH_STEPS=6;
 
 //another variation on raymarch (This one adapted from the dynamHyp code that Steve and Henry wrote, where we make sure that we never teleport TOO far past a wall)
 
