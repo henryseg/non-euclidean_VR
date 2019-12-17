@@ -795,40 +795,128 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 
+//void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
+//    mat4 fixMatrix;
+//    float marchStep = MIN_DIST;
+//    float globalDepth = MIN_DIST;
+//    float localDepth = MIN_DIST;
+//    tangVector tv = rayDir;
+//    tangVector localtv = rayDir;
+//    totalFixMatrix = mat4(1.0);
+//
+//
+//    // Trace the local scene, then the global scene:
+//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//        localtv = flow(localtv, marchStep);
+//
+//        if (isOutsideCell(localtv, fixMatrix)){
+//            totalFixMatrix = fixMatrix * totalFixMatrix;
+//            localtv = translate(fixMatrix, localtv);
+//            marchStep = MIN_DIST;
+//        }
+//        else {
+//            float localDist = min(0.1, localSceneSDF(localtv.pos));
+//            if (localDist < EPSILON){
+//                hitWhich = 3;
+//                sampletv = localtv;
+//                break;
+//            }
+//            marchStep = localDist;
+//            globalDepth += localDist;
+//        }
+//    }
+//
+//    // Set for localDepth to our new max tracing distance:
+//    localDepth = min(globalDepth, MAX_DIST);
+//    // localDepth= MAX_DIST;
+//    globalDepth = MIN_DIST;
+//    marchStep = MIN_DIST;
+//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//        tv = flow(tv, marchStep);
+//
+//        float globalDist = globalSceneSDF(tv.pos);
+//        if (globalDist < EPSILON){
+//            // hitWhich has now been set
+//            totalFixMatrix = mat4(1.0);
+//            sampletv = tv;
+//            return;
+//        }
+//        marchStep = globalDist;
+//        globalDepth += globalDist;
+//        if (globalDepth >= localDepth){
+//            break;
+//        }
+//    }
+//}
+
+
+int BINARY_SEARCH_STEPS=3;
+
+//another variation on raymarch (This one adapted from the dynamHyp code that Steve and Henry wrote, where we make sure that we never teleport TOO far past a wall)
+
+
 void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
     mat4 fixMatrix;
+    mat4 testFixMatrix;
     float marchStep = MIN_DIST;
+    float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
+   
     tangVector tv = rayDir;
     tangVector localtv = rayDir;
-    totalFixMatrix = mat4(1.0);
+    tangVector testlocaltv = rayDir;
+    tangVector bestlocaltv = rayDir;
+    totalFixMatrix = mat4(1.);
 
 
     // Trace the local scene, then the global scene:
+
+   
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        localtv = flow(localtv, marchStep);
-
-        if (isOutsideCell(localtv, fixMatrix)){
-            totalFixMatrix = fixMatrix * totalFixMatrix;
-            localtv = translate(fixMatrix, localtv);
-            marchStep = MIN_DIST;
+        
+      float localDist = localSceneSDF(localtv.pos);
+      if (localDist < EPSILON){
+          sampletv = localtv;
+          //stepsTaken = i;
+          hitWhich=3;
+          break;
+      }
+      marchStep = localDist;
+       
+      testlocaltv = flow(localtv, marchStep);
+      if (isOutsideCell(testlocaltv, fixMatrix)){
+        bestlocaltv = testlocaltv;
+          
+          
+          //commenting out this for loop brings us back to what we were doing before...
+        for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+          ////// do binary search to get close to but outside this cell - 
+          ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+          testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
+          testlocaltv = flow(localtv, testMarchStep);
+          if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+            marchStep = testMarchStep;
+            bestlocaltv = testlocaltv;
+            fixMatrix = testFixMatrix;
+          }
         }
-        else {
-            float localDist = min(0.1, localSceneSDF(localtv.pos));
-            if (localDist < EPSILON){
-                hitWhich = 3;
-                sampletv = localtv;
-                break;
-            }
-            marchStep = localDist;
-            globalDepth += localDist;
+        localtv = bestlocaltv;
+        totalFixMatrix = fixMatrix*totalFixMatrix;
+        localtv = translate(fixMatrix, localtv);
+        globalDepth += marchStep; 
+        marchStep = MIN_DIST;
+      }
+        
+      else{ 
+          localtv = testlocaltv; 
+          globalDepth += marchStep; 
         }
-    }
-
-    // Set for localDepth to our new max tracing distance:
-    localDepth = min(globalDepth, MAX_DIST);
-    // localDepth= MAX_DIST;
+      }
+    
+      localDepth=min(globalDepth, MAX_DIST);
+    
+  
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
@@ -836,8 +924,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 
         float globalDist = globalSceneSDF(tv.pos);
         if (globalDist < EPSILON){
-            // hitWhich has now been set
-            totalFixMatrix = mat4(1.0);
+            totalFixMatrix = mat4(1.);
             sampletv = tv;
             return;
         }
@@ -846,8 +933,12 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         if (globalDepth >= localDepth){
             break;
         }
-    }
+      }
+    
 }
+
+
+
 
 
 //void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
