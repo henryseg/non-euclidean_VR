@@ -174,29 +174,8 @@ function rotate(facing, rotMatrix) { // deal with a rotation of the camera
     facing.multiply(rotMatrix);
 }
 
-//-----------------------------------------------------------------------------------------------------------------------------
-//	Teleporting Back to Central Cell
-//-----------------------------------------------------------------------------------------------------------------------------
 
-function fixOutsideCentralCell(boost) {
-    /* var cPos = new THREE.Vector4(0, 0, 0, 1);
-     applyIsom(cPos, boost);
-     var bestDist = geomDist(cPos);
-     var bestIndex = -1;
-     for (var i = 0; i < gens.length; i++) {
-         var pos = cPos.clone();
-         applyIsom(pos, gens[i]);
-         if (geomDist(pos) < bestDist) {
-             bestDist = geomDist(pos);
-             bestIndex = i;
-         }
-     }
-     if (bestIndex != -1) {
-         preComposeIsom(boost, gens[bestIndex]);
-         return bestIndex;
-     } else*/
-    return -1;
-}
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
@@ -251,6 +230,78 @@ var unpackage = function (genArr, i) {
         out.push(genArr[j][i]);
     }
     return out;
+}
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//	Teleporting Back to Central Cell
+//-----------------------------------------------------------------------------------------------------------------------------
+//
+//function fixOutsideCentralCell(boost) {
+//    /* var cPos = new THREE.Vector4(0, 0, 0, 1);
+//     applyIsom(cPos, boost);
+//     var bestDist = geomDist(cPos);
+//     var bestIndex = -1;
+//     for (var i = 0; i < gens.length; i++) {
+//         var pos = cPos.clone();
+//         applyIsom(pos, gens[i]);
+//         if (geomDist(pos) < bestDist) {
+//             bestDist = geomDist(pos);
+//             bestIndex = i;
+//         }
+//     }
+//     if (bestIndex != -1) {
+//         preComposeIsom(boost, gens[bestIndex]);
+//         return bestIndex;
+//     } else*/
+//    return -1;
+//}
+
+
+
+function fixOutsideCentralCell(boost) {
+    console.log(boost);
+    let p = Origin.clone().applyMatrix4(boost[0]);
+
+    console.log(p);
+    let bestIndex = -1;
+    //lattice basis divided by the norm square
+    let v1 = new THREE.Vector4(1., 0., 0., 0.);
+    let v2 = new THREE.Vector4(0., 1., 0., 0.);
+    let v3 = new THREE.Vector4(0., 0., 1., 0.);
+
+    if (p.dot(v1) > 0.5) {
+        bestIndex = 1;
+    }
+    if (p.dot(v1) < -0.5) {
+        bestIndex = 0;
+    }
+    if (p.dot(v2) > 0.5) {
+        bestIndex = 3;
+    }
+    if (p.dot(v2) < -0.5) {
+        bestIndex = 2;
+    }
+
+    if (p.dot(v3) > 0.5) {
+        bestIndex = 5;
+    }
+    if (p.dot(v3) < -0.5) {
+        bestIndex = 4;
+    }
+
+    if (bestIndex !== -1) {
+        preComposeIsom(boost, gens[bestIndex]);
+        return bestIndex;
+    } else {
+        return -1;
+    }
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
