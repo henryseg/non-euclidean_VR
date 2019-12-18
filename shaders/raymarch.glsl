@@ -17,7 +17,8 @@ const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
 const bool LOCAL_EARTH=true;
-const bool TILING=true;
+const bool TILING=false;
+const bool LOCAL_LIGHTS=true;
 bool hitLocal;
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -650,8 +651,12 @@ const float sqrt3 = 1.7320508075688772;
 //--------------------------------------------
 tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
 tangVector sampletv = tangVector(vec4(1., 1., 1., 1.), vec4(1., 1., 1., 0.));
-vec4 globalLightColor = ORIGIN;
+vec4 globalLightColor = vec4(1.,1.,1.,1.);
 int hitWhich = 0;
+
+vec3 localLightColor=vec3(1.,1.,1.);
+vec4 localLightPos=vec4(-0.2,0.2,-0.1,1.);
+float localLightIntensity=0.3;
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
@@ -693,7 +698,20 @@ uniform mat4 localEarthBoost;
 float localSceneSDF(vec4 p){
     float earthDist;
     float tilingDist;
+    float lightDist;
     float distance = MAX_DIST;
+    
+     if(LOCAL_LIGHTS){
+     vec4 lightCenter=localLightPos;
+      lightDist=sphereSDF(p,lightCenter,0.05);
+      distance =min(distance, lightDist);
+        if (lightDist < EPSILON){
+            hitLocal = true;
+            hitWhich = 1;
+            globalLightColor =vec4(localLightColor,1);
+            return lightDist;
+        }
+ }
     
 
     
@@ -1074,6 +1092,23 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
         TLP = totalFixMatrix*invCellBoost*lightPositions[i];
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     }
+    
+    if(LOCAL_LIGHTS){
+    //pick up light from the light source in your fundamental domain
+  
+       color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
+    
+    
+    //move local light around by the generators to pick up lighting from nearby cells
+    for(int i=0; i<6; i++){
+        mat4 localLightIsom=invGenerators[i];
+        TLP=localLightIsom*localLightPos;
+        color+= lightingCalculations(SP,TLP,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
+    }
+    
+
+}
+    
     return color;
 }
 
@@ -1163,7 +1198,7 @@ vec3 sphereTexture(mat4 totalFixMatrix, tangVector sampletv, samplerCube sphText
     // N = estimateNormal(sampletv.pos);
      vec3 color2 = phongModel(totalFixMatrix, color);
     color = 0.9*color+0.1;
-     return 0.5*color + 0.5*color2;
+     return 0.2*color + 0.8*color2;
     return color;
     }
 
