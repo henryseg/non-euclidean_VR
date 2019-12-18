@@ -1856,129 +1856,182 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 
-void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
-    Isometry fixMatrix;
-    float marchStep = MIN_DIST;
-    float globalDepth = MIN_DIST;
-    float localDepth = MIN_DIST;
-    tangVector tv = rayDir;
-    tangVector localtv = rayDir;
-    totalFixMatrix = identityIsometry;
-
-
-    // Trace the local scene, then the global scene:
-
-    if (TILING_SCENE){
-        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            localtv = flow(localtv, marchStep);
-
-            if (isOutsideCell(localtv, fixMatrix)){
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                localtv = translate(fixMatrix, localtv);
-                marchStep = MIN_DIST;
-            }
-            else {
-                float localDist = min(5., localSceneSDF(localtv.pos));
-                if (localDist < EPSILON){
-                    // hitWhich = 3;
-                    sampletv = localtv;
-                    break;
-                }
-                marchStep = localDist;
-                globalDepth += localDist;
-            }
-        }
-        localDepth = min(globalDepth, MAX_DIST);
-    }
-    else {
-        localDepth=MAX_DIST;
-    }
-
-
-    if (GLOBAL_SCENE){
-        globalDepth = MIN_DIST;
-        marchStep = MIN_DIST;
-
-        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            tv = flow(tv, marchStep);
-
-            /*
-            if (i == 15) {
-                hitWhich = 5;
-                debugColor = 10000. * vec3(0, 0, marchStep);
-                break;
-            }
-            */
-
-            float globalDist = globalSceneSDF(tv.pos);
-            if (globalDist < EPSILON){
-                // hitWhich has now been set
-                totalFixMatrix = identityIsometry;
-                sampletv = tv;
-                //hitWhich = 5;
-                //debugColor = 0.1*vec3(globalDepth, 0, 0);
-                return;
-            }
-            marchStep = globalDist;
-            globalDepth += globalDist;
-            if (globalDepth >= localDepth){
-                //hitWhich = 5;
-                //debugColor = vec3(0, globalDepth, 0);
-                break;
-            }
-        }
-        /*
-        if(hitWhich == 0) {
-            hitWhich = 5;
-            debugColor = 0.1*vec3(0, 0, globalDepth);
-        }
-        */
-    }
-}
+//void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
+//    Isometry fixMatrix;
+//    float marchStep = MIN_DIST;
+//    float globalDepth = MIN_DIST;
+//    float localDepth = MIN_DIST;
+//    tangVector tv = rayDir;
+//    tangVector localtv = rayDir;
+//    totalFixMatrix = identityIsometry;
+//
+//
+//    // Trace the local scene, then the global scene:
+//
+//    if (TILING_SCENE){
+//        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//            localtv = flow(localtv, marchStep);
+//
+//            if (isOutsideCell(localtv, fixMatrix)){
+//                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+//                localtv = translate(fixMatrix, localtv);
+//                marchStep = MIN_DIST;
+//            }
+//            else {
+//                float localDist = min(5., localSceneSDF(localtv.pos));
+//                if (localDist < EPSILON){
+//                    // hitWhich = 3;
+//                    sampletv = localtv;
+//                    break;
+//                }
+//                marchStep = localDist;
+//                globalDepth += localDist;
+//            }
+//        }
+//        localDepth = min(globalDepth, MAX_DIST);
+//    }
+//    else {
+//        localDepth=MAX_DIST;
+//    }
+//
+//
+//    if (GLOBAL_SCENE){
+//        globalDepth = MIN_DIST;
+//        marchStep = MIN_DIST;
+//
+//        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//            tv = flow(tv, marchStep);
+//
+//            /*
+//            if (i == 15) {
+//                hitWhich = 5;
+//                debugColor = 10000. * vec3(0, 0, marchStep);
+//                break;
+//            }
+//            */
+//
+//            float globalDist = globalSceneSDF(tv.pos);
+//            if (globalDist < EPSILON){
+//                // hitWhich has now been set
+//                totalFixMatrix = identityIsometry;
+//                sampletv = tv;
+//                //hitWhich = 5;
+//                //debugColor = 0.1*vec3(globalDepth, 0, 0);
+//                return;
+//            }
+//            marchStep = globalDist;
+//            globalDepth += globalDist;
+//            if (globalDepth >= localDepth){
+//                //hitWhich = 5;
+//                //debugColor = vec3(0, globalDepth, 0);
+//                break;
+//            }
+//        }
+//        /*
+//        if(hitWhich == 0) {
+//            hitWhich = 5;
+//            debugColor = 0.1*vec3(0, 0, globalDepth);
+//        }
+//        */
+//    }
+//}
 
 
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 // done with local vectors
 
+int BINARY_SEARCH_STEPS=4;
+
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
+
     Isometry fixMatrix;
+    Isometry testFixMatrix;
     float marchStep = MIN_DIST;
+    float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     localTangVector tv = rayDir;
     localTangVector localtv = rayDir;
+    localTangVector testlocaltv = rayDir;
+    localTangVector bestlocaltv = rayDir;
     totalFixMatrix = identityIsometry;
-
-
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
+        
+        
+        
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            localtv = flow(localtv, marchStep);
+            float localDist = localSceneSDF(localtv.pos);
+            
+            
+            if (localDist < EPSILON){
+                  sampletv = toTangVector(localtv);
+                  break;
+              }
+              marchStep = localDist;
+            
+            //localtv = flow(localtv, marchStep);
 
-            if (isOutsideCell(localtv, fixMatrix)){
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                localtv = translate(fixMatrix, localtv);
-                localtv=tangNormalize(localtv);
-                marchStep = MIN_DIST;
+//            if (isOutsideCell(localtv, fixMatrix)){
+//                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+//                localtv = translate(fixMatrix, localtv);
+//                localtv=tangNormalize(localtv);
+//                marchStep = MIN_DIST;
+//            }
+            
+        testlocaltv = flow(localtv, marchStep);
+        if (isOutsideCell(testlocaltv, fixMatrix)){
+            bestlocaltv = testlocaltv;
+            
+            for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+              ////// do binary search to get close to but outside this cell - 
+              ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+              testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
+              testlocaltv = flow(localtv, testMarchStep);
+              if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+                marchStep = testMarchStep;
+                bestlocaltv = testlocaltv;
+                fixMatrix = testFixMatrix;
+              }
             }
-            else {
-                float localDist = min(.5, localSceneSDF(localtv.pos));
-                if (localDist < EPSILON){
-                    //hitWhich = 3;
-                    sampletv = toTangVector(localtv);
-                    break;
-                }
-                marchStep = localDist;
-                globalDepth += localDist;
-            }
+            
+            localtv = bestlocaltv;
+            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            localtv = translate(fixMatrix, localtv);
+            localtv=tangNormalize(localtv);
+            //globalDepth += marchStep; 
+            marchStep = MIN_DIST;
+      }
+            
+                  else{ 
+          localtv = testlocaltv; 
+          globalDepth += marchStep; 
         }
-        localDepth = min(globalDepth, MAX_DIST);
+      }
+      localDepth=min(globalDepth, MAX_DIST);
     }
-    else {
-        localDepth=MAX_DIST;
-    }
+    else{localDepth=MAX_DIST;}
+
+
+            
+//            else {
+//                float localDist = min(.5, localSceneSDF(localtv.pos));
+//                if (localDist < EPSILON){
+//                    //hitWhich = 3;
+//                    sampletv = toTangVector(localtv);
+//                    break;
+//                }
+//                marchStep = localDist;
+//                globalDepth += localDist;
+//            }
+//        }
+//        localDepth = min(globalDepth, MAX_DIST);
+//    }
+//    else {
+//        localDepth=MAX_DIST;
+//    }
 
 
     if (GLOBAL_SCENE){
