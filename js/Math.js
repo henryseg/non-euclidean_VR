@@ -266,10 +266,10 @@ var unpackage = function (genArr, i) {
 
 
 function fixOutsideCentralCell(boost) {
-    console.log(boost);
+    //console.log(boost);
     let p = Origin.clone().applyMatrix4(boost[0]);
 
-    console.log(p);
+    //console.log(p);
     let bestIndex = -1;
     //lattice basis divided by the norm square
     let v1 = new THREE.Vector4(1., 0., 0., 0.);
@@ -342,6 +342,7 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
     globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
+    localObjectBoost = translateByVector(new THREE.Vector3(0, 0.1, -0.2));
 }
 
 //-------------------------------------------------------
@@ -429,6 +430,22 @@ var setupMaterial = function (fShader) {
             globalObjectBoost: {
                 type: "m4",
                 value: globalObjectBoost[0]
+            },
+            localEarthBoost: {
+                type: "m4",
+                value: localObjectBoost[0]
+            },
+            earthCubeTex: { //earth texture to global object
+                type: "t",
+                value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
+                    .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
+                        'posx.jpg',
+                        'negx.jpg',
+                        'posy.jpg',
+                        'negy.jpg',
+                        'posz.jpg',
+                        'negz.jpg'
+                    ])
             }
         },
 

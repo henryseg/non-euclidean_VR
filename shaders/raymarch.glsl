@@ -15,9 +15,10 @@ Some parameters that can be changed to change the scence
 const bool FAKE_LIGHT = true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
-const float globalObjectRadius = 0.2;
-
-
+const float globalObjectRadius = 0.;
+const bool LOCAL_EARTH=true;
+const bool TILING=true;
+bool hitLocal;
 //--------------------------------------------
 // "TRUE" CONSTANTS
 //--------------------------------------------
@@ -665,13 +666,14 @@ uniform mat4 leftFacing;
 uniform mat4 rightFacing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;
+uniform samplerCube earthCubeTex;
 //--------------------------------------------
 // Lighting Variables & Global Object Variables
 //--------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoost;
-
+uniform mat4 localEarthBoost;
 
 //---------------------------------------------------------------------
 // Scene Definitions
@@ -680,12 +682,58 @@ uniform mat4 globalObjectBoost;
 // Local signed distance function : distance from p to an object in the local scene
 
 // LOCAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
+//float localSceneSDF(vec4 p){
+//    vec4 center = vec4(0, 0, 0., 1.);
+//    float sphere = centerSDF(p, ORIGIN, 0.68);
+//    float final = -sphere;
+//    return final;
+//}
+
+
 float localSceneSDF(vec4 p){
-    vec4 center = vec4(0, 0, 0., 1.);
-    float sphere = centerSDF(p, ORIGIN, 0.68);
-    float final = -sphere;
-    return final;
+    float earthDist;
+    float tilingDist;
+    float distance = MAX_DIST;
+    
+
+    
+    if(LOCAL_EARTH){
+       vec4 earthCenter=localEarthBoost*ORIGIN;
+       earthDist=sphereSDF(p,earthCenter,0.15);
+        distance=min(distance,earthDist);
+        if(earthDist < EPSILON){
+            hitLocal = true;
+            hitWhich = 7;
+            return earthDist;
+        }  
+    }
+ if(TILING){
+    tilingDist = -sphereSDF(p, ORIGIN, 0.68);
+     distance=min(distance, tilingDist);
+        if(tilingDist < EPSILON){
+            hitLocal = true;
+            hitWhich=3;
+            return tilingDist;
+        }
+ }
+    return distance;
 }
+   
+
+//earth scene
+
+//float localSceneSDF(vec4 p){
+//    float sphere=MAX_DIST;
+//    if(LOCAL_EARTH){
+//    vec4 earthCenter = 
+//    sphere = sphereSDF(p, earthCenter, 0.1);
+//    }
+//    
+//    
+//
+//    return min(sphere,tiling);
+//}
+
 
 // GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
@@ -878,8 +926,6 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
       float localDist = localSceneSDF(localtv.pos);
       if (localDist < EPSILON){
           sampletv = localtv;
-          //stepsTaken = i;
-          hitWhich=3;
           break;
       }
       marchStep = localDist;
@@ -1070,6 +1116,58 @@ vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
 }
 
 
+
+
+
+
+//EARTH TEXTURING COLOR COMMANDS
+
+
+// return the two smallest numbers in a triplet
+vec2 smallest( in vec3 v )
+{
+    float mi = min(v.x,min(v.y,v.z));
+    float ma = max(v.x,max(v.y,v.z));
+    float me = v.x + v.y + v.z - mi - ma;
+    return vec2(mi,me);
+}
+
+// texture a 4D surface by doing 4 2D projections in the most
+// perpendicular possible directions, and then blend them
+// together based on the surface normal
+vec3 boxMapping( in sampler2D sam, in tangVector point )
+{  // from Inigo Quilez
+    vec4 m = point.dir*point.dir; m=m*m; m=m*m;
+
+    vec3 x = texture( sam, smallest(point.pos.yzw) ).xyz;
+    vec3 y = texture( sam, smallest(point.pos.zwx) ).xyz;
+    vec3 z = texture( sam, smallest(point.pos.wxy) ).xyz;
+    vec3 w = texture( sam, smallest(point.pos.xyz) ).xyz;
+
+    return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
+}
+
+vec3 sphereOffset(vec4 pt){
+   
+    pt = inverse(localEarthBoost)*pt;
+    tangVector earthPoint=tangDirection(ORIGIN,pt);
+    //earthPoint=rotateFacing(objectFacing, earthPoint);
+    return earthPoint.dir.xyz;
+}
+
+vec3 sphereTexture(mat4 totalFixMatrix, tangVector sampletv, samplerCube sphTexture){
+    
+    // vec3 color = vec3(0.5,0.5,0.5);
+    vec3 color = texture(sphTexture, sphereOffset( sampletv.pos)).xyz;
+    // color = 0.5*color + 0.5*vec3(float(stepsTaken)*0.1, float(stepsTaken-10)*0.1, float(stepsTaken-20)*0.1);
+    // N = estimateNormal(sampletv.pos);
+     vec3 color2 = phongModel(totalFixMatrix, color);
+    color = 0.9*color+0.1;
+     return 0.5*color + 0.5*color2;
+    return color;
+    }
+
+
 //--------------------------------------------------------------------
 // Tangent Space Functions
 //--------------------------------------------------------------------
@@ -1145,6 +1243,17 @@ void main(){
         vec3 pixelColor=localColor(totalFixMatrix, sampletv);
 
         out_FragColor = vec4(pixelColor, 1.0);
+
+        return;
+    }
+    else if (hitWhich == 7){ // the LOCAL earth
+        
+    //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
+   // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
+        vec3 pixelColor=sphereTexture(
+            totalFixMatrix, sampletv, earthCubeTex);
+
+       out_FragColor = vec4( pixelColor,1.0);
 
         return;
     }
