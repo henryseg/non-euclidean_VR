@@ -18,8 +18,10 @@ const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
 const bool LOCAL_EARTH=true;
 const bool TILING=false;
-const bool LOCAL_LIGHTS=true;
-bool hitLocal;
+
+//local lights only on without the tiling: they help with definition on the earth but wash out the tiling
+const bool LOCAL_LIGHTS=!TILING;
+//bool hitLocal;
 //--------------------------------------------
 // "TRUE" CONSTANTS
 //--------------------------------------------
@@ -706,7 +708,7 @@ float localSceneSDF(vec4 p){
       lightDist=sphereSDF(p,lightCenter,0.05);
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
-            hitLocal = true;
+           // hitLocal = true;
             hitWhich = 1;
             globalLightColor =vec4(localLightColor,1);
             return lightDist;
@@ -720,7 +722,7 @@ float localSceneSDF(vec4 p){
        earthDist=sphereSDF(p,earthCenter,0.15);
         distance=min(distance,earthDist);
         if(earthDist < EPSILON){
-            hitLocal = true;
+           // hitLocal = true;
             hitWhich = 7;
             return earthDist;
         }  
@@ -729,7 +731,7 @@ float localSceneSDF(vec4 p){
     tilingDist = -sphereSDF(p, ORIGIN, 0.68);
      distance=min(distance, tilingDist);
         if(tilingDist < EPSILON){
-            hitLocal = true;
+           // hitLocal = true;
             hitWhich=3;
             return tilingDist;
         }
@@ -916,7 +918,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 //}
 
 
-int BINARY_SEARCH_STEPS=6;
+int BINARY_SEARCH_STEPS=4;
 
 //another variation on raymarch (This one adapted from the dynamHyp code that Steve and Henry wrote, where we make sure that we never teleport TOO far past a wall)
 
@@ -1262,7 +1264,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.4);
+        out_FragColor = vec4(0.05);
         return;
     }
     else if (hitWhich == 1){ // global lights
