@@ -11,6 +11,7 @@ import {
 //-------------------------------------------------------
 
 let guiInfo;
+let capturer;
 
 // Inputs are from the UI parameterizations.
 // gI is the guiInfo object from initGui
@@ -30,7 +31,8 @@ let initGui = function () {
         keyboard: 'us',
         display: 3,
         res: 1,
-        lightRad: 0.02
+        lightRad: 0.02,
+        recording: false
     };
 
     let gui = new dat.GUI();
@@ -59,7 +61,7 @@ let initGui = function () {
         High: '3'
     });
     let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
-
+    let recordingController = gui.add(guiInfo, 'recording').name("Record video");
     // ------------------------------
     // UI Controllers
     // ------------ ------------------
@@ -114,8 +116,22 @@ let initGui = function () {
     lightRadController.onChange(function (value) {
         globals.material.uniforms.lightRad.value = value;
     });
+
+    recordingController.onFinishChange(function (value) {
+     if(value == true){
+       capturer = new CCapture( { format: 'jpg' } );
+       capturer.start();
+     }
+     else{
+       capturer.stop();
+       capturer.save();
+       // onResize(); //Resets us back to window size
+     }
+    }); 
 };
 
 export {
-    initGui
+    initGui,
+    guiInfo,
+    capturer
 }
