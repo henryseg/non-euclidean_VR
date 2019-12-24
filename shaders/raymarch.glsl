@@ -16,8 +16,8 @@ const bool FAKE_LIGHT = true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
-const bool LOCAL_EARTH=true;
-const bool TILING=false;
+const bool LOCAL_EARTH=false;
+const bool TILING=true;
 
 //local lights only on without the tiling: they help with definition on the earth but wash out the tiling
 const bool LOCAL_LIGHTS=!TILING;

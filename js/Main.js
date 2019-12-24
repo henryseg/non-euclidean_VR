@@ -6,6 +6,7 @@ const c_ipDist = 0.03200000151991844; // inter pupil
 //-------------------------------------------------------
 // Global Variables
 //-------------------------------------------------------
+var canvas;
 var g_effect;
 var g_material;
 var g_controls;
@@ -47,7 +48,7 @@ var globalObjectBoost;
 var init = function() {
     //Setup our THREE scene--------------------------------
     scene = new THREE.Scene();
-    var canvas  = document.createElement('canvas');
+    canvas  = document.createElement('canvas');
     var context = canvas.getContext('webgl2');
     g_renderer = new THREE.WebGLRenderer({canvas: canvas, context: context});
     document.body.appendChild(g_renderer.domElement);
@@ -61,6 +62,7 @@ var init = function() {
     g_phoneOrient = [null, null, null];
 
     loadShaders();
+    initGui();
     stats = new Stats(); stats.showPanel(1); stats.showPanel(2); stats.showPanel(0); document.body.appendChild(stats.dom);
 }
 
