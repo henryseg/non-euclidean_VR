@@ -26,6 +26,16 @@ import {
     Controls
 } from './Controls.js';
 
+
+import{
+    VRController
+} from './module/VRController.js';
+
+import{
+    VREffect
+} from './module/VREffect.js';
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
 //----------------------------------------------------------------------------------------------------------------------
@@ -90,7 +100,7 @@ function init() {
     });
     document.body.appendChild(globals.renderer.domElement);
     globals.screenResolution = new Vector2(window.innerWidth, window.innerHeight);
-    globals.effect = new THREE.VREffect(globals.renderer);
+    globals.effect = new VREffect(globals.renderer);
     camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
     globals.controls = new Controls();
     initGeometry();
@@ -143,7 +153,7 @@ function animate() {
     stats.begin();
     globals.controls.update();
     updateMaterial();
-    THREE.VRController.update();
+    VRController.update();
     globals.effect.render(scene, camera, animate);
     stats.end();
 }
@@ -157,5 +167,6 @@ init();
 
 export {
     init,
-    globals
+    globals,
+    canvas
 };
