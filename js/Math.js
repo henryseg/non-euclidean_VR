@@ -31,11 +31,11 @@ const z0 = 2 * Math.log(GoldenRatio); //0.9624236
 
 function fixOutsideCentralCell(position) {
     let bestIndex = -1;
-    let p = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(position.boost.matrix);
+    let p = new Vector4(0, 0, 0, 1).applyMatrix4(position.boost.matrix);
     //lattice basis divided by the norm square
-    let v1 = new THREE.Vector4(GoldenRatio, -1., 0., 0.);
-    let v2 = new THREE.Vector4(1., GoldenRatio, 0., 0.);
-    let v3 = new THREE.Vector4(0., 0., 1. / z0, 0.);
+    let v1 = new Vector4(GoldenRatio, -1., 0., 0.);
+    let v2 = new Vector4(1., GoldenRatio, 0., 0.);
+    let v3 = new Vector4(0., 0., 1. / z0, 0.);
 
 
     if (globals.display != 3) { //this turns off the vertical teleporation when there is no vertical syymetries
