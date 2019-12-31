@@ -45,16 +45,19 @@ var globalObjectBoost;
 //-------------------------------------------------------
 // Sets up the scene
 //-------------------------------------------------------
-var init = function() {
+var init = function () {
     //Setup our THREE scene--------------------------------
     scene = new THREE.Scene();
-    canvas  = document.createElement('canvas');
+    canvas = document.createElement('canvas');
     var context = canvas.getContext('webgl2');
-    g_renderer = new THREE.WebGLRenderer({canvas: canvas, context: context});
+    g_renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        context: context
+    });
     document.body.appendChild(g_renderer.domElement);
     g_screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     g_effect = new THREE.VREffect(g_renderer);
-    camera = new THREE.OrthographicCamera(-1,1,1,-1,1/Math.pow(2,53),1);
+    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
     g_controls = new THREE.Controls();
     g_rotation = new THREE.Quaternion();
     initGeometry();
@@ -63,46 +66,51 @@ var init = function() {
 
     loadShaders();
     initGui();
-    stats = new Stats(); stats.showPanel(1); stats.showPanel(2); stats.showPanel(0); document.body.appendChild(stats.dom);
+    stats = new Stats();
+    stats.showPanel(1);
+    stats.showPanel(2);
+    stats.showPanel(0);
+    document.body.appendChild(stats.dom);
 }
 
 var mainFrag;
 
-var loadShaders = function(){ //Since our shader is made up of strings we can construct it from parts
-  var loader = new THREE.FileLoader();
-  loader.setResponseType('text');
-  loader.load('shaders/raymarch.glsl',function(main){
-    mainFrag = main;
-    setupMaterial(main);
-    g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+var loadShaders = function () { //Since our shader is made up of strings we can construct it from parts
+    var loader = new THREE.FileLoader();
+    loader.setResponseType('text');
+    loader.load('shaders/raymarch.glsl', function (main) {
+        mainFrag = main;
+        setupMaterial(main);
+        g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
 
-    //Setup a "quad" to render on-------------------------
-    var geom = new THREE.BufferGeometry();
-    var vertices = new Float32Array([
+        //Setup a "quad" to render on-------------------------
+        var geom = new THREE.BufferGeometry();
+        var vertices = new Float32Array([
         -1.0, -1.0, 0.0,
          1.0, -1.0, 0.0,
-         1.0,  1.0, 0.0,
+         1.0, 1.0, 0.0,
 
         -1.0, -1.0, 0.0,
-         1.0,  1.0, 0.0,
-        -1.0,  1.0, 0.0
+         1.0, 1.0, 0.0,
+        -1.0, 1.0, 0.0
         ]);
-    geom.addAttribute('position',new THREE.BufferAttribute(vertices,3));
-    mesh = new THREE.Mesh(geom, g_material);
-    scene.add(mesh);
-    animate();
+        geom.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        mesh = new THREE.Mesh(geom, g_material);
+        scene.add(mesh);
+        animate();
     });
 }
 
 //-------------------------------------------------------
 // Where our scene actually renders out to screen
 //-------------------------------------------------------
-var animate = function(){
-  stats.begin();
-  g_controls.update();
-  THREE.VRController.update();
-  g_effect.render(scene, camera, animate);
-  stats.end();
+var animate = function () {
+    stats.begin();
+    g_controls.update();
+    updateMaterial();
+    THREE.VRController.update();
+    g_effect.render(scene, camera, animate);
+    stats.end();
 }
 
 //-------------------------------------------------------

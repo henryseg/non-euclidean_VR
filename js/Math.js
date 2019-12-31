@@ -345,6 +345,25 @@ var initObjects = function () {
     localObjectBoost = translateByVector(new THREE.Vector3(0, 0.1, -0.2));
 }
 
+
+
+
+
+
+
+let earthFacing = new THREE.Matrix4();
+
+//spin the earth
+stepSize = 0.001;
+setInterval(function () {
+
+    let rotMat = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), 0.002);
+
+    earthFacing.multiply(rotMat);
+    //console.log(earthFacing);
+
+}, 10);
+
 //-------------------------------------------------------
 // Set up shader 
 //-------------------------------------------------------
@@ -435,6 +454,10 @@ var setupMaterial = function (fShader) {
                 type: "m4",
                 value: localObjectBoost[0]
             },
+            localEarthFacing: {
+                type: "m4",
+                value: earthFacing
+            },
             earthCubeTex: { //earth texture to global object
                 type: "t",
                 value: new THREE.CubeTextureLoader().setPath('images/cubemap512/')
@@ -453,4 +476,11 @@ var setupMaterial = function (fShader) {
         fragmentShader: fShader,
         transparent: true
     });
+}
+
+
+
+function updateMaterial() {
+    g_material.uniforms.localEarthFacing.value = earthFacing;
+
 }

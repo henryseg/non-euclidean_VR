@@ -16,8 +16,8 @@ const bool FAKE_LIGHT = true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
-const bool LOCAL_EARTH=false;
-const bool TILING=true;
+const bool LOCAL_EARTH=true;
+const bool TILING=false;
 
 //local lights only on without the tiling: they help with definition on the earth but wash out the tiling
 const bool LOCAL_LIGHTS=!TILING;
@@ -234,6 +234,8 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
     return tangVector(v.pos, matrix* v.dir);
 }
 
+
+
 float tangDot(tangVector u, tangVector v){
     // dot product between two vectors in the tangent bundle
     // we assume that the underlying points are the same
@@ -287,6 +289,10 @@ mat4 tangBasis(vec4 p){
     return theBasis;
 }
 
+tangVector rotateFacing(mat4 A, tangVector v){
+        // apply an isometry to the tangent vector (both the point and the direction)
+    return tangVector(v.pos, A*v.dir);
+}
 
 //--------------------------------------------
 // GLOBAL GEOMETRY
@@ -640,9 +646,9 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  100;
+const int MAX_MARCHING_STEPS =  200;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 100.0;
+const float MAX_DIST = 300.0;
 const float EPSILON = 0.0001;
 const float fov = 120.0;
 const float sqrt3 = 1.7320508075688772;
@@ -657,8 +663,8 @@ vec4 globalLightColor = vec4(1.,1.,1.,1.);
 int hitWhich = 0;
 
 vec3 localLightColor=vec3(1.,1.,1.);
-vec4 localLightPos=vec4(-0.2,0.2,-0.1,1.);
-float localLightIntensity=0.3;
+vec4 localLightPos=vec4(0.0,0.0,0.3,1.);
+float localLightIntensity=0.5;
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
@@ -674,6 +680,7 @@ uniform mat4 rightFacing;
 uniform mat4 cellBoost;
 uniform mat4 invCellBoost;
 uniform samplerCube earthCubeTex;
+uniform mat4 localEarthFacing;
 //--------------------------------------------
 // Lighting Variables & Global Object Variables
 //--------------------------------------------
@@ -705,7 +712,7 @@ float localSceneSDF(vec4 p){
     
      if(LOCAL_LIGHTS){
      vec4 lightCenter=localLightPos;
-      lightDist=sphereSDF(p,lightCenter,0.05);
+      lightDist=sphereSDF(p,lightCenter,0.0);
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
            // hitLocal = true;
@@ -766,7 +773,7 @@ float globalSceneSDF(vec4 p){
         objDist = sphereSDF(
         absolutep,
         lightPositions[i],
-        1.0/(10.0*lightIntensities[i].w)
+        0.0//0.05
         );
         distance = min(distance, objDist);
         if (distance < EPSILON){
@@ -1090,9 +1097,11 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     //--------------------------------------------------
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
+    if(!LOCAL_LIGHTS){
     for (int i = 0; i<4; i++){
         TLP = totalFixMatrix*invCellBoost*lightPositions[i];
         color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
+    }
     }
     
     if(LOCAL_LIGHTS){
@@ -1184,18 +1193,18 @@ vec3 boxMapping( in sampler2D sam, in tangVector point )
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
-vec3 sphereOffset(vec4 pt){
+vec3 sphereOffset(mat4 objectFacing, vec4 pt){
    
     pt = inverse(localEarthBoost)*pt;
     tangVector earthPoint=tangDirection(ORIGIN,pt);
-    //earthPoint=rotateFacing(objectFacing, earthPoint);
+    earthPoint=rotateFacing(objectFacing, earthPoint);
     return earthPoint.dir.xyz;
 }
 
 vec3 sphereTexture(mat4 totalFixMatrix, tangVector sampletv, samplerCube sphTexture){
     
     // vec3 color = vec3(0.5,0.5,0.5);
-    vec3 color = texture(sphTexture, sphereOffset( sampletv.pos)).xyz;
+    vec3 color = texture(sphTexture, sphereOffset( localEarthFacing, sampletv.pos)).xyz;
     // color = 0.5*color + 0.5*vec3(float(stepsTaken)*0.1, float(stepsTaken-10)*0.1, float(stepsTaken-20)*0.1);
     // N = estimateNormal(sampletv.pos);
      vec3 color2 = phongModel(totalFixMatrix, color);
