@@ -240,7 +240,7 @@ Position.prototype.clone = function () {
 
     Rotating a vector
 
- */
+*/
 
 Vector3.prototype.rotateByFacing = function (position) {
     let aux = new Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
