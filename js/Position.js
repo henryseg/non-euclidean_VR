@@ -24,9 +24,22 @@ import {
     Isometry
 } from "./Isometry.js";
 
-// length of the step when integrating the geodesic flow with an Euler method
-const EULER_STEP = 0.001;
 
+/**
+ * We represent the points of the universal cover X of SL(2,R) as Vector4 where
+ * - the first coordinate is the angle in the fiber
+ * - the last three coordinates are its projection on H^2 in the hyperboloid model
+ * The origin of the space (corresponding to the identity of X) is (0,1,0,0)
+ *
+ * A position is a pair (boost, facing) where
+ * - boost is an isometry of X (associated to a point of X)
+ * - the facing is an element of SO(3)
+ * We use for identify the tangent space at the origin of X, with the Lie algebra of SL(2,R) in its hyperboloid model
+ *
+ **/
+
+
+/*
 Matrix4.prototype.add = function (matrix) {
     // addition of tow 4x4 matrices
     this.set.apply(this, [].map.call(this.elements, function (c, i) {
@@ -34,12 +47,11 @@ Matrix4.prototype.add = function (matrix) {
     }));
     return this;
 };
+*/
 
-
-const ORIGIN = new Vector4(0, 0, 0, 1);
+const ORIGIN = new Vector4(0, 1, 0, 0);
 
 function Position() {
-
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
     this.boost = new Isometry();
     this.facing = new Matrix4();
@@ -64,7 +76,7 @@ Position.prototype.set = function (boost, facing) {
 Position.prototype.translateBy = function (isom) {
     // translate the position by the given isometry
     this.boost.premultiply(isom);
-    this.reduceError();
+    this.reduceBoostError();
     return this;
 };
 
@@ -120,49 +132,7 @@ Position.prototype.localFlow = function (v) {
 
     // In the Euclidean case, S_o is the regular translation, B_o is the identity.
     const dist = v.length();
-    const n = dist / EULER_STEP;
-    let u = v.clone().normalize();
-    let field = new Vector3();
-    let pos_aux = ORIGIN.clone().translateBy(this.boost);
-    let vec_aux = new Vector4();
-    let mat_aux = new Matrix4();
-    let parallel = new Matrix4();
 
-    for (let i = 0; i < n; i++) {
-        // position of the geodesic at time i*step
-        //pos_aux = ORIGIN.clone().translateBy(this.boost);
-
-        // computing the position of the geodesic at time (i+1)*step
-        vec_aux = new Vector4(u.x, u.y, u.z, 0);
-        vec_aux.translateBy(this.boost).multiplyScalar(EULER_STEP);
-        pos_aux.add(vec_aux);
-        // update the boost accordingly
-        this.boost.makeLeftTranslation(pos_aux.x, pos_aux.y, pos_aux.z);
-
-        // updating the facing using parallel transport
-        mat_aux.set(
-            0, 0, -u.x, 0,
-            0, 0, u.y, 0,
-            u.x, -u.y, 0, 0,
-            0, 0, 0, 0
-        );
-        mat_aux.multiply(this.facing);
-        mat_aux.multiplyScalar(-EULER_STEP);
-        parallel.add(mat_aux);
-        this.reduceFacingError();
-        //console.log('boost', this.boost.matrix.elements);
-        //console.log('facing', this.facing.elements);
-
-        // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
-        field.set(
-            u.x * u.z,
-            -u.y * u.z,
-            -u.x * u.x + u.y * u.y
-        );
-        u.add(field.multiplyScalar(EULER_STEP)).normalize();
-    }
-
-    this.facing.premultiply(parallel);
     return this;
 
 };
@@ -192,7 +162,7 @@ Position.prototype.getUpVector = function () {
 };
 
 Position.prototype.reduceBoostError = function () {
-    // Nothing to do in Euclidean geometry
+    this.boost.reduceError();
     return this;
 };
 
@@ -248,7 +218,7 @@ Vector3.prototype.rotateByFacing = function (position) {
     return this;
 };
 
-export{
+export {
     Position,
     ORIGIN
 }
