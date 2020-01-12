@@ -64,11 +64,12 @@ Vector4.prototype.translateBy = function (isom) {
 
 function H2Elt() {
     // by default return the origin
-    this.coord = new Vector3(1, 0, 0);
+    this.coord = new Vector3(1,0,0);
 }
 
 H2Elt.prototype.set = function (coord) {
-    this.coord = coord;
+    this.coord = coord.clone();
+    return this;
 };
 
 H2Elt.prototype.rotateBy = function (alpha) {
@@ -125,9 +126,7 @@ H2Elt.prototype.equals = function (elt) {
 
 H2Elt.prototype.clone = function () {
     // clone the point
-    let res = new H2Elt();
-    res.set(this.coord);
-    return res;
+    return new H2Elt().set(this.coord);
 };
 
 
@@ -256,18 +255,17 @@ SL2Elt.prototype.clone = function () {
  *
  **/
 
-
-function Isometry() {
-    this.phi = 0; // angle in the fiber (vertical component)
+let Isometry = function() {
+    this.phi = 0.; // angle in the fiber (vertical component)
     this.point = new H2Elt(); // point in H2
-}
+};
 
 Isometry.prototype.set = function (data) {
     // set the data of the isometry
     // the first element in data is the angle in the fiber
     // the second element is the point of H2
     this.phi = data[0];
-    this.point = data[1];
+    this.point = data[1].clone();
     return this;
 };
 
@@ -281,7 +279,7 @@ Isometry.prototype.toSL2 = function () {
 Isometry.prototype.toVector4 = function () {
     // return a 4 dim vector of the form (phi, y1, y2, y3)
     // where (y1,y2,y3) are the coordinates of the underlying point of H2
-    return new Vector4(this.phi, this.point.x, this.point.y, this.point.z);
+    return new Vector4(this.phi, this.point.coord.x, this.point.coord.y, this.point.coord.z);
 };
 
 
@@ -309,7 +307,7 @@ Isometry.prototype.premultiply = function (isom) {
     this.point.translateBy(aux1);
     aux2.premultiply(aux1);
     aux2.translateFiberBy(-this.phi - isom.phi);
-    this.phi = this.phi + isom.phi + Math.atan2(aux2.y, aux2.x);
+    this.phi = this.phi + isom.phi + Math.atan2(aux2.coord.y, aux2.coord.x);
     return this;
 };
 
@@ -320,7 +318,7 @@ Isometry.prototype.multiply = function (isom) {
     this.point = isom.point.clone().translateBy(aux1);
     aux2.premultiply(aux1);
     aux2.translateFiberBy(-this.phi - isom.phi);
-    this.phi = this.phi + isom.phi + Math.atan2(aux2.y, aux2.x);
+    this.phi = this.phi + isom.phi + Math.atan2(aux2.coord.y, aux2.coord.x);
     return this;
 };
 

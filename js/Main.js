@@ -26,11 +26,11 @@ import {
     Controls
 } from './Controls.js';
 
-import{
+import {
     VRController
 } from './module/VRController.js';
 
-import{
+import {
     VREffect
 } from './module/VREffect.js';
 
@@ -66,7 +66,8 @@ let globals = {
     globalObjectPosition: undefined,
     display: 3,
     res: 1,
-    lightRad: 0.05
+    lightRad: 0.05,
+    count:0
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,6 +115,8 @@ function init() {
     stats.showPanel(2);
     stats.showPanel(0);
     document.body.appendChild(stats.dom);
+
+    console.log("end init", globals.position);
 }
 
 
@@ -148,13 +151,18 @@ function loadShaders() {
 // Where our scene actually renders out to screen
 //----------------------------------------------------------------------------------------------------------------------
 
+
 function animate() {
-    stats.begin();
-    globals.controls.update();
-    updateMaterial();
-    VRController.update();
-    globals.effect.render(scene, camera, animate);
-    stats.end();
+    if (globals.count === 0) {
+        globals.count = globals.count + 1;
+        console.log("animate", globals.position);
+        stats.begin();
+        globals.controls.update();
+        updateMaterial();
+        VRController.update();
+        globals.effect.render(scene, camera, animate);
+        stats.end();
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

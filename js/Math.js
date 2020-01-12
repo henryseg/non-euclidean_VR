@@ -9,6 +9,7 @@ import {
     globals
 } from './Main.js';
 import {
+    H2Elt,
     Isometry
 } from "./Isometry.js";
 import {
@@ -117,6 +118,11 @@ const time0 = new Date().getTime();
 
 function initGeometry() {
     globals.position = new Position();
+    console.log("During init", globals.position);
+    //console.log("position", globals.position.boost);
+    //console.log("During init", globals.position.boost.point);
+    //console.log("During init", globals.position.boost.point.coord);
+    //console.log("SL2",globals.position.boost.toVector4());
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();
@@ -125,9 +131,11 @@ function initGeometry() {
 
 
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
+    console.log("vectorLeft", vectorLeft);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
+    console.log("vectorRight", vectorRight);
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
 }
 

@@ -60,6 +60,7 @@ function Position() {
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
     this.boost = new Isometry();
     this.facing = new Matrix4();
+
 }
 
 Position.prototype.setBoost = function (boost) {
@@ -137,7 +138,6 @@ Position.prototype.localFlow = function (v) {
 
     const t = v.length();
     let aux = v.clone().normalize();
-
     // flip (if needed) the tangent vector so that its fiber coordinate is positive.
     let flipped = false;
     if (aux.x < 0) {
@@ -160,6 +160,7 @@ Position.prototype.localFlow = function (v) {
     let point = new H2Elt();    // the point H2 achieved by the geodesic
     let omega = 0;  // the "angular velocity" of rotations involved in the geodesic flow
 
+
     // the geodesic flow distinguishes three cases
     if (a1 < srqt2inv) {
         omega = Math.sqrt(1 - 2 * a1 * a1);
@@ -168,14 +169,14 @@ Position.prototype.localFlow = function (v) {
             2 * omega * a3 * Math.cosh(omega * t) * Math.sinh(omega * t) / Math.pow(omega, 2),
             -2 * a1 * a3 * Math.pow(Math.sinh(omega * t), 2) / Math.pow(omega, 2)
         ));
-        phi = phi + Math.atan2(point.z, point.y);
+        phi = phi + Math.atan2(point.coord.z, point.coord.y);
     } else if (a1 === srqt2inv) {
         point.set(new Vector3(
             Math.pow(t, 2) + 1,
             Math.sqrt(2) * t,
             -Math.pow(t, 2)
         ));
-        phi = phi + Math.atan2(point.z, point.y);
+        phi = phi + Math.atan2(point.coord.z, point.coord.y);
     } else {
         omega = Math.sqrt(2 * a1 * a1 - 1);
         point.set(new Vector3(
@@ -183,7 +184,7 @@ Position.prototype.localFlow = function (v) {
             2 * omega * a3 * Math.cos(omega * t) * Math.sin(omega * t) / Math.pow(omega, 2),
             -2 * a1 * a3 * Math.pow(Math.sin(omega * t), 2) / Math.pow(omega, 2)
         ));
-        phi = phi + Math.atan2(point.z, point.y) + 2 * Math.floor(0.5 - 0.5 * omega * t / Math.PI) * Math.PI;
+        phi = phi + Math.atan2(point.coord.z, point.coord.y) + 2 * Math.floor(0.5 - 0.5 * omega * t / Math.PI) * Math.PI;
     }
 
 
@@ -328,7 +329,7 @@ Position.prototype.clone = function () {
 */
 
 Vector3.prototype.rotateByFacing = function (position) {
-    let aux = new Vector4(0, this.x, this.y, this.z,).applyMatrix4(position.facing);
+    let aux = new Vector4(0, this.x, this.y, this.z).applyMatrix4(position.facing);
     this.set(aux.y, aux.z, aux.w);
     return this;
 };

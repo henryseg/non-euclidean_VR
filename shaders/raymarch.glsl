@@ -86,8 +86,6 @@ int hitWhich = 0;
 //----------------------------------------------------------------------------------------------------------------------
 
 
-
-
 // A point in SL(2,R) is represented by a vec4 corresponding to its coordinates in the hyperboloid model
 vec4 SL2reduceError(vec4 elt) {
     float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
@@ -517,6 +515,11 @@ localTangVector flip(localTangVector v) {
     return res;
 }
 
+
+localTangVector rotateFacing(mat4 A, localTangVector v){
+    // apply an isometry to the direction part of the tangent vector
+    return localTangVector(v.pos, A*v.dir);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // LOCAL GEOMETRY
@@ -1046,7 +1049,7 @@ float globalSceneSDF(vec4 p){
     //float slabDist;
     float sphDist;
     //slabDist = sliceSDF(absolutep);
-    sphDist=sphereSDF(absolutep,globalObjectBoostMat,0.5);
+    sphDist=sphereSDF(absolutep, globalObjectBoostMat, 0.5);
     //objDist=max(slabDist,-sphDist);
     // objDist=MAX_DIST;
     distance = min(distance, sphDist);
@@ -1475,33 +1478,31 @@ vec3 boxMapping(in sampler2D sam, in tangVector point)
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
-/*
+
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);
-    Isometry aux = makeInvLeftTranslation(globalObjectBoost);
+    Isometry aux = makeInvLeftTranslation(globalObjectBoostMat);
     pt = translate(aux, pt);
     return tangDirection(ORIGIN, pt).dir.xyz;
 }
-*/
+
 
 
 vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight){
-
     N = estimateNormal(sampletv.pos);
     vec3 color;
-    color = phongModel(totalFixMatrix, 0.5*colorOfLight);
-    color = 0.7*color+0.3;
+    color = phongModel(totalFixMatrix, 0.5 * colorOfLight);
+    color = 0.7 * color + 0.3;
     return color;
 }
 
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     if (EARTH){
         N = estimateNormal(sampletv.pos);
-        //vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
         vec3 color2 = phongModel(totalFixMatrix, color);
-        vec3 color = 0.9*color2+0.1;
-        return color;
-        //return 0.5*color + 0.5*color2;
+        //color = 0.9*color+0.1;
+        return 0.5 * color + 0.5 * color2;
     }
     else {
 
@@ -1514,6 +1515,7 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 
         //generically gray object (color= black, glowing slightly because of the 0.1)
     }
+
 }
 
 
@@ -1555,15 +1557,16 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 // Tangent Space Functions
 //----------------------------------------------------------------------------------------------------------------------
 
-tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
+localTangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
     if (isStereo == 1){
         resolution.x = resolution.x * 0.5;
         if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
     }
-    vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
-    float z = 0.1/tan(radians(fov*0.5));
-    tangVector tv = tangVector(ORIGIN, vec4(xy, -z, 0.0));
-    tangVector v =  tangNormalize(tv);
+    vec2 xy = 0.2 * ((fragCoord - 0.5*resolution)/resolution.x);
+    float z = 0.1 / tan(radians(fov * 0.5));
+    // code specific to SL2 (change the system of coordinates to make it coherent with the other geometries ?)
+    localTangVector tv = localTangVector(ORIGIN, vec4(0., -z, xy));
+    localTangVector v =  tangNormalize(tv);
     return v;
 }
 
@@ -1583,7 +1586,7 @@ void main(){
 
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    localTangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
     if (isStereo == 1){
         if (isLeft){
@@ -1602,11 +1605,9 @@ void main(){
 
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identity;
-    // intialize the parameters of the elliptic integrals/functions
-    init_ellip(rayDir);
     // do the marching
     //raymarch(rayDir, totalFixMatrix);
-    raymarch(toLocalTangVector(rayDir), totalFixMatrix);
+    raymarch(rayDir, totalFixMatrix);
 
     /*
     hitWhich = 5;
