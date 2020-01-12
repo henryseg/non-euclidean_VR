@@ -22,6 +22,16 @@ Vector3.prototype.scaleBy = function (scalar) {
     return this;
 };
 
+Vector3.prototype.flip = function () {
+    // apply a a "flip" (u1,u2,u3) -> (-u1, u3, u2) to a vector in the lie algebra of SL(2,R) in the hyperboloid model
+    this.set(
+        -this.x,
+        this.z,
+        this.y
+    );
+    return this;
+};
+
 Vector4.prototype.scaleBy = function (scalar) {
     // multiply the current vector by scalar
     this.set(
@@ -32,6 +42,20 @@ Vector4.prototype.scaleBy = function (scalar) {
     );
     return this;
 };
+
+/*
+
+    Translating a point
+
+ */
+
+Vector4.prototype.translateBy = function(isom) {
+    let aux = new Isometry().makeLeftTranslation(this.x, this.y, this.z, this.w);
+    aux.premultiply(isom);
+    return new Vector4(aux.phi, aux.point.x, aux.point.y, aux.point.z);
+};
+
+
 
 /**
  *
@@ -64,7 +88,7 @@ H2Elt.prototype.translateBy = function (elt) {
     return this;
 };
 
-H2Elt.prototype.flip = function() {
+H2Elt.prototype.flip = function () {
     // apply the "flip" (y1,y2,y3) -> (y1, -y3, -y2) to the given point
     this.coord.set(this.coord.x, -this.coord.z, -this.coord.y);
     this.reduceError();
@@ -249,20 +273,26 @@ Isometry.prototype.toSL2 = function () {
     return res;
 };
 
+Isometry.prototype.toVector4 = function() {
+    // return a 4 dim vector of the form (phi, y1, y2, y3)
+    // where (y1,y2,y3) are the coordinates of the underlying point of H2
+    return new Vector4(this.phi, this.point.x, this.point.y, this.point.z);
+};
+
 
 Isometry.prototype.makeLeftTranslation = function (phi, x, y, z) {
     // return the "left translation" by (phi,x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.phi = phi;
-    this.point.set(x,y,z);
+    this.point.set(x, y, z);
     return this;
 };
 
-Isometry.prototype.makeInvLeftTranslation = function (phi, y, z) {
+Isometry.prototype.makeInvLeftTranslation = function (phi, x, y, z) {
     // return the inverse of the "left translation" by (phi,x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.phi = phi;
-    this.point.set(x,y,z);
+    this.point.set(x, y, z);
     this.getInverse();
     return this;
 };
@@ -289,10 +319,10 @@ Isometry.prototype.multiply = function (isom) {
     return this;
 };
 
-Isometry.prototype.getInverse = function() {
+Isometry.prototype.getInverse = function () {
     // set the current isometry to the inverse of the passed isometry isom,
     this.point.rotateBy(Math.PI - 2 * this.phi);
-    this.phi = - this.phi;
+    this.phi = -this.phi;
     return this;
 };
 
@@ -310,4 +340,4 @@ Isometry.prototype.reduceError = function () {
     return this;
 };
 
-export {Isometry};
+export {Isometry, H2Elt};

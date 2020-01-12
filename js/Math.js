@@ -21,15 +21,14 @@ import {
 //	Geometry constants
 //----------------------------------------------------------------------------------------------------------------------
 
-let cubeHalfWidth = 0.5;
 
-const GoldenRatio = 0.5 * (1 + Math.sqrt(5.)); //1.618033988749895;
-const z0 = 2 * Math.log(GoldenRatio); //0.9624236
 //----------------------------------------------------------------------------------------------------------------------
 //	Teleporting back to central cell
 //----------------------------------------------------------------------------------------------------------------------
 
 function fixOutsideCentralCell(position) {
+
+    /*
     let bestIndex = -1;
     let p = new Vector4(0, 0, 0, 1).applyMatrix4(position.boost.matrix);
     //lattice basis divided by the norm square
@@ -66,6 +65,7 @@ function fixOutsideCentralCell(position) {
     } else {
         return -1;
     }
+     */
     return -1;
 }
 
@@ -78,15 +78,17 @@ function fixOutsideCentralCell(position) {
 
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const denominator = GoldenRatio + 2;
+    // TODO. Check the generators
+    //  For the moment the elements are chosen totally at random.
+    //  Not even sure they generate a discrete subgroup!
 
-    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio / denominator, -1. / denominator, 0.);
-    const gen1 = new Isometry().makeInvLeftTranslation(GoldenRatio / denominator, -1. / denominator, 0.);
-    const gen2 = new Isometry().makeLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
-    const gen3 = new Isometry().makeInvLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
-
-    const gen4 = new Isometry().makeLeftTranslation(0., 0., z0);
-    const gen5 = new Isometry().makeLeftTranslation(0., 0., -z0);
+    const aux = 1;
+    const gen0 = new Isometry().makeLeftTranslation(0, Math.sqrt(aux * aux + 1), aux, 0);
+    const gen1 = new Isometry().makeInvLeftTranslation(0, Math.sqrt(aux * aux + 1), aux, 0);
+    const gen2 = new Isometry().makeLeftTranslation(0, Math.sqrt(aux * aux + 1), 0, aux);
+    const gen3 = new Isometry().makeInvLeftTranslation(0, Math.sqrt(aux * aux + 1), 0, aux);
+    const gen4 = new Isometry().makeLeftTranslation(1, 1, 0,0);
+    const gen5 = new Isometry().makeInvLeftTranslation(1, 1, 0,0);
 
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
@@ -100,7 +102,7 @@ function invGenerators(genArr) {
 function unpackageMatrix(genArr) {
     let out = [];
     for (let i = 0; i < genArr.length; i++) {
-        out.push(genArr[i].matrix);
+        out.push(genArr[i].toVector4());
     }
     return out
 }
@@ -121,10 +123,11 @@ function initGeometry() {
     globals.invGens = invGenerators(globals.gens);
     invGensMatrices = unpackageMatrix(globals.invGens);
 
-    let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
+
+    let vectorLeft = globals.position.getRightVector(-globals.ipDist);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
 
-    let vectorRight = new Vector3(globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    let vectorRight = globals.position.getRightVector(globals.ipDist);
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
 }
 
@@ -157,9 +160,6 @@ function initObjects() {
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
 
-// status of the textures: number of textures already loaded
-let textureStatus = 0;
-
 function setupMaterial(fShader) {
 
     globals.material = new ShaderMaterial({
@@ -180,20 +180,20 @@ function setupMaterial(fShader) {
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
-                type: "m4",
+                type: "v4",
                 value: invGensMatrices
             },
             //--- end of invGen stuff
             currentBoostMat: {
-                type: "m4",
+                type: "v4",
                 value: globals.position.boost.matrix
             },
             leftBoostMat: {
-                type: "m4",
+                type: "v4",
                 value: globals.leftPosition.boost.matrix
             },
             rightBoostMat: {
-                type: "m4",
+                type: "v4",
                 value: globals.rightPosition.boost.matrix
             },
             //currentBoost is an array
@@ -210,11 +210,11 @@ function setupMaterial(fShader) {
                 value: globals.rightPosition.facing
             },
             cellBoostMat: {
-                type: "m4",
+                type: "v4",
                 value: globals.cellPosition.boost.matrix
             },
             invCellBoostMat: {
-                type: "m4",
+                type: "v4",
                 value: globals.invCellPosition.boost.matrix
             },
             cellFacing: {
@@ -230,7 +230,7 @@ function setupMaterial(fShader) {
                 value: globals.lightPositions
             },
             globalObjectBoostMat: {
-                type: "m4",
+                type: "v4",
                 value: globals.globalObjectPosition.boost.matrix
             },
             globalSphereRad: {
@@ -298,12 +298,12 @@ function updateMaterial() {
 
      */
 
-    let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    let vectorLeft = globals.position.getRightVector(-globals.ipDist);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
     globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.matrix;
     globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
 
-    let vectorRight = new Vector3(globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    let vectorRight = globals.position.getRightVector(globals.ipDist);
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;

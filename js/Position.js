@@ -21,7 +21,8 @@ import {
 } from "./module/three.module.js";
 
 import {
-    Isometry
+    Isometry,
+    H2Elt
 } from "./Isometry.js";
 
 
@@ -34,7 +35,11 @@ import {
  * A position is a pair (boost, facing) where
  * - boost is an isometry of X (associated to a point of X)
  * - the facing is an element of SO(3)
- * We use for identify the tangent space at the origin of X, with the Lie algebra of SL(2,R) in its hyperboloid model
+ *
+ * We identify the tangent space at the origin of X, with the Lie algebra of SL(2,R) in its hyperboloid model
+ * A tangent vector is represented by a Vector3.
+ * - the first coordinates corresponds to the fiber
+ * - the other two correspond to the directions in H^2
  *
  **/
 
@@ -126,13 +131,123 @@ Position.prototype.localFlow = function (v) {
     // Let gamma be the geodesic starting at p = boost * o directed by boost * v
     // Let gamma_o be the geodesic starting at o directed by v, i.e. gamma_o = boost^{-1} gamma
     // The parallel transport along gamma_o is an operator T_o which we split as T_o = dS_o B_o where
-    // - S_o is an isometry of X
+    // - S_o is an isometry of X moving o to the endpoint of gamma_o
     // - B_o an element of SO(3)
     // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
-    // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-    const dist = v.length();
+    const t = v.length();
+    let aux = v.clone().normalize();
 
+    // flip (if needed) the tangent vector so that its fiber coordinate is positive.
+    let flipped = false;
+    if (aux.x < 0) {
+        aux.flip();
+        flipped = true;
+    }
+
+    // the angle alpha is characterized as follows
+    // if u is a tangent vector of the form (a1, 0, a3) with a1, a3 > 0
+    // then aux is obtained from u by a rotation of angle alpha
+    // In particular, if nu_o is the geodesic starting from o oriented by u
+    // then the geodesic starting from o oriented by aux is obtained from nu_o by a rotation of angle alpha
+    const alpha = Math.atan2(aux.y, aux.x) - Math.PI / 2;
+    const a1 = aux.x;
+    const a3 = Math.sqrt(1 - a1 * a1);
+
+
+    const srqt2inv = 1 / Math.sqrt(2);
+    let phi = 2 * a1 * t;   // the angle in the fiber achieved by the geodesic
+    let point = new H2Elt();    // the point H2 achieved by the geodesic
+    let omega = 0;  // the "angular velocity" of rotations involved in the geodesic flow
+
+    // the geodesic flow distinguishes three cases
+    if (a1 < srqt2inv) {
+        omega = Math.sqrt(1 - 2 * a1 * a1);
+        point.set(
+            (2 * (1 - Math.pow(a1, 2)) * Math.pow(Math.cosh(omega * t), 2) - 1) / Math.pow(omega, 2),
+            2 * omega * a3 * Math.cosh(omega * t) * Math.sinh(omega * t) / Math.pow(omega, 2),
+            -2 * a1 * a3 * Math.pow(Math.sinh(omega * t), 2) / Math.pow(omega, 2)
+        );
+        phi = phi + Math.atan2(point.z, point.y);
+    } else if (a1 === srqt2inv) {
+        point.set(
+            Math.pow(t, 2) + 1,
+            Math.sqrt(2) * t,
+            -Math.pow(t, 2)
+        );
+        phi = phi + Math.atan2(point.z, point.y);
+    } else {
+        omega = Math.sqrt(2 * a1 * a1 - 1);
+        point.set(
+            (2 * (Math.pow(a1, 2) - 1) * Math.pow(Math.cos(omega * t), 2) + 1) / Math.pow(omega, 2),
+            2 * omega * a3 * Math.cos(omega * t) * Math.sin(omega * t) / Math.pow(omega, 2),
+            -2 * a1 * a3 * Math.pow(Math.sin(omega * t), 2) / Math.pow(omega, 2)
+        );
+        phi = phi + Math.atan2(point.z, point.y) + 2 * Math.floor(0.5 - 0.5 * omega * t / Math.PI) * Math.PI;
+    }
+
+
+    // rotate the geodesic by alpha
+    point.rotateBy(alpha);
+    // "un-flip" the geodesic, if needed
+    if (flipped) {
+        phi = -phi;
+        point.flip();
+    }
+
+    let isom = new Isometry().set([phi, point]);
+    this.boost.multiply(isom);
+
+    // the parallel transport does not distinguish cases
+    const P = new Matrix4().set(
+        1, 0, 0, 0,
+        0, a1, 0, -a3,
+        0, 0, 1, 0,
+        0, a3, 0, a1
+    );
+    const Pinv = new Matrix4().getInverse(P);
+    const etD = new Matrix4().set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, Math.cos(t), -Math.sin(t),
+        0, 0, Math.sin(t), Math.cos(t)
+    );
+    let Q = new Matrix4().set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, Math.cos(4 * a1 * t), Math.sin(4 * a1 * t),
+        0, 0, -Math.sin(4 * a1 * t), Math.cos(4 * a1 * t)
+    );
+    Q.multiply(P).multiply(etD).multiply(Pinv);
+
+    const R = new Matrix4().set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, Math.cos(alpha), -Math.sin(alpha),
+        0, 0, Math.sin(alpha), Math.cos(alpha)
+    );
+    const Rinv = new Matrix4().set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, Math.cos(alpha), Math.sin(alpha),
+        0, 0, -Math.sin(alpha), Math.cos(alpha)
+    );
+    Q.premultiply(R);
+    Q.multiply(Rinv);
+
+    if (flipped) {
+        const F = new Matrix4().set(
+            1, 0, 0, 0,
+            0, -1, 0, 0,
+            0, 0, 0, 1,
+            0, 0, 1, 0
+        );
+        Q.premultiply(F);
+        Q.multiply(F);
+
+    }
+
+    this.facing.premultiply(Q);
     return this;
 
 };
@@ -146,19 +261,19 @@ Position.prototype.getInverse = function (position) {
 
 };
 
-Position.prototype.getFwdVector = function () {
-    // return the vector moving forward (taking into account the facing)
-    return new Vector3(0, 0, -1).rotateByFacing(this);
+Position.prototype.getFwdVector = function (t = 1) {
+    // return the vector of length t moving forward (taking into account the facing)
+    return new Vector3(0, t, 0).rotateByFacing(this);
 };
 
-Position.prototype.getRightVector = function () {
-    // return the vector moving right (taking into account the facing)
-    return new Vector3(1, 0, 0).rotateByFacing(this);
+Position.prototype.getRightVector = function (t = 1) {
+    // return the vector of length t moving right (taking into account the facing)
+    return new Vector3(0, 0, t).rotateByFacing(this);
 };
 
-Position.prototype.getUpVector = function () {
-    // return the vector moving up (taking into account the facing)
-    return new Vector3(0, 1, 0).rotateByFacing(this);
+Position.prototype.getUpVector = function (t = 1) {
+    // return the vector of length t moving up (taking into account the facing)
+    return new Vector3(t, 0, 0).rotateByFacing(this);
 };
 
 Position.prototype.reduceBoostError = function () {
@@ -213,10 +328,13 @@ Position.prototype.clone = function () {
 */
 
 Vector3.prototype.rotateByFacing = function (position) {
-    let aux = new Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
-    this.set(aux.x, aux.y, aux.z);
+    let aux = new Vector4(0, this.x, this.y, this.z,).applyMatrix4(position.facing);
+    this.set(aux.y, aux.z, aux.w);
     return this;
 };
+
+
+
 
 export {
     Position,

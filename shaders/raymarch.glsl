@@ -1,17 +1,6 @@
 #version 300 es
 out vec4 out_FragColor;
 
-/*
-
-Voodoo magic:
-
-A set of parameters that reduces the noise
-EPSILON = 0.001;
-In the local ray marching use
-localDist = min(1., localSceneSDF(localtv.pos));
-
-
-*/
 
 //----------------------------------------------------------------------------------------------------------------------
 // PARAMETERS
@@ -50,15 +39,9 @@ const float vertexSphereSize = 0.23;//In this case its a horosphere
 //----------------------------------------------------------------------------------------------------------------------
 
 const float PI = 3.1415926538;
-const float GoldenRatio = 0.5*(1.+sqrt(5.));//1.618033988749895;
-const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
 
-const vec4 ORIGIN = vec4(0, 0, 0, 1);
-//projection of cube to klein model
-const float modelHalfCube =  0.5;
-//corner of cube in Klein model, useful for horosphere distance function
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
+const vec4 ORIGIN = vec4(0, 1, 0, 0);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -87,354 +70,163 @@ void setResolution(int UIVar){
     }
 }
 
-//const float EPSILON = 0.0001;
-const float EPSILON = 0.0005;
+const float EPSILON = 0.0001;
 const float fov = 90.0;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Some global variables
+//----------------------------------------------------------------------------------------------------------------------
+
+int hitWhich = 0;
 
 //----------------------------------------------------------------------------------------------------------------------
-// Ellitpic integrals and functions
+// Auxiliary methods: computations in H2 and SL(2,R)
 //----------------------------------------------------------------------------------------------------------------------
 
 
-/*
+// A point in H2 is reprented by a vec3 corresponding to its coordinate in the hyperboloid model
 
-   Each pixel only involves a single geodesic.
-   Hence all the parameters appearing in the elliptic integrals can be pre-computed once for all before marching.
-   We store them in global variables.
-   The names refer to the Remi's handwritten notes (following closely Troyanov's paper).
-   The prefix ``ell`` is used to avoid any ambiguity
-
-*/
-
-// constants, purely related to the elliptic integrals / functions
-float ell_k;
-float ell_kprime;
-float ell_m;
-float ell_K;
-float ell_E;
-
-// constants related to the parametrization of the geodesic, but only depending on the trajectory of the geodesic
-float ell_mu;
-float ell_L;
-
-
-/*
-
-    *** Legendre elliptic integrals ***
-
-    The modulus/parameter  k / k' / m are always implicit.
-    We use the corresponding global variable to avoid redundant computations.
-
-    The sources for the algorithms are:
-
-    [1] Frank W. J. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark
-    NIST handbook of mathematical functions
-    Cambridge University Press (2010)
-
-    [2] Milton Abramowitz, Irene A. Stegun
-    Handbook of Mathematical Functions_ with Formulas, Graphs, and Mathematical Tables
-    National Bureau of Standards (1970)
-
-    [3] Bulirsch, Roland
-    Numerical calculation of elliptic integrals and elliptic functions
-    Numer. Math. (7) 78--90 (1965)
-    DOI: 10.1007/BF01397975
-
-
-    TODO.
-        - Reduce the number of local variables when computing an iteration.
-        e.g. to compute the AGM, no need of a1 and g1, just a single temporary variable
-        - Factor the AGM computations.
-        There are indeed the same for all the elliptic functions, and thus alogn the geodesic.
-        They could be pre-computed and stored in a global variable
-
-*/
-
-// maximal number of steps in the AGM algorithm
-const int AGMSteps = 20;
-// tolerance of the AGM algorithm
-const float AGMTolerance = 0.000001;
-// steps performed to compute the AGM (useful for the Jacobi functions)
-// the coordinates of the stored vec3 have the following meaning
-// - x : arithmetic mean
-// - y : geometric mean
-// - z : error
-vec3 AGMList[AGMSteps];
-// number of steps actually used for the AGM, the index of the last non-zero entries in AGMList should be AGMLength - 1
-int AGMLength;
-
-void agm() {
-    // Compute the AGM of 1 and sqrt(1-m) to the given accuracy :
-    // Note that sqrt(1 - m) = kprime
-    // maximal number of steps : AGMMaxSteps
-    // tolerance for the error : AGMTolerance
-    // index of the last step : AGMIndex
-
-    // initialization
-    AGMList[0] = vec3(1., ell_kprime, ell_k);
-    AGMLength = 1;
-
-    // variable used during the induction
-    float a0;
-    float g0;
-    float error;
-
-    // induction
-    for (int i = 1; i < AGMSteps; i++) {
-        a0 = AGMList[i - 1].x;
-        g0 = AGMList[i - 1].y;
-        error = 0.5 * (a0 - g0);
-
-        if (error < AGMTolerance) {
-            break;
-        }
-
-        AGMList[i] = vec3(0.5 * (a0 + g0), sqrt(a0 * g0), error);
-        AGMLength = AGMLength + 1;
-    }
-}
-
-vec2 ellipke() {
-    // Return the complete integeral of the first and second kind
-    // Computed with the AGM method, see 19.8(i) in [1]
-
-    // initialization of all the variables;
-    float aux = 0.;
-
-    // induction
-    for (int i = 0; i < AGMLength; i++) {
-        aux = aux + pow(2., float(i-1)) * AGMList[i].z * AGMList[i].z;
-    }
-
-    // wrapping up the results
-    float K = 0.5 * PI / AGMList[AGMLength - 1].x;
-    float E = K * (1. - aux);
-    return vec2(K, E);
-}
-
-vec3 ellipj1(float u) {
-    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
-    // The results is output as [sn, cn, dn]
-    // Computed with the AGM method, see Algorithm 5 in [3]
-    // Note that the algorithm only makes sense if u is not zero.
-    // u is asumme to be between 0 and 2 * K
-
-    // initialization of all the variables
-    float a0 = AGMList[AGMLength - 1].x;
-    float g0 = AGMList[AGMLength - 1].y;
-
-    float eps = 1.;
-    if (sin(u * a0) < 0.) {
-        eps = -1.;
-    }
-
-    // variables used during the second induction
-
-    float c = a0 * cos(u * a0) / sin(u * a0);
-    float d = 1.;
-    float aux_c;
-    float aux_d;
-    float num;
-    float den;
-
-    for (int j = 1; j < AGMLength; j++) {
-        aux_c = c * d;
-        num = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].y);
-        den = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].x);
-        aux_d =  num / den;
-        c = aux_c;
-        d = aux_d;
-    }
-
-    // wrappind the results
-    float sn = eps / sqrt(1. + c * c);
-    float cn = c * sn;
-    float dn = d;
-
-    return vec3(sn, cn, dn);
-}
-
-
-vec3 ellipj2(float u) {
-    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
-    // The results is output as [sn, cn, dn]
-    // Computed with an other AGM method, see 22.20(ii) in [1]
-    // u is asumme to be between 0 and 2 * K
-
-    // initializing the parameters for the induction
-    float phi0 = pow(2., float(AGMLength-1)) * AGMList[AGMLength - 1].x * u;
-    float phi1;
-    float aux;
-
-
-    for (int i = 1; i < AGMLength; i++) {
-        aux = AGMList[AGMLength - i].z / AGMList[AGMLength - i].x;
-        phi1 = 0.5 * (phi0 + asin(aux * sin(phi0)));
-        phi0 = phi1;
-    }
-
-    float sn = sin(phi0);
-    float cn = cos(phi0);
-    float dn = sqrt(1. - ell_m * sn * sn);
-    return vec3(sn, cn, dn);
-
-}
-
-
-vec3 ellipj3(float u) {
-    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
-    // Taken from ShaderToy: https://www.shadertoy.com/view/4tlBRl
-
-    float emc = 1.0-ell_m;
-    float a, b, c;
-    const int N = 4;
-    float em[N], en[N];
-    a = 1.0;
-    float dn = 1.0;
-    for (int i = 0; i < N; i++) {
-        em[i] = a;
-        emc = sqrt(emc);
-        en[i] = emc;
-        c = 0.5*(a+emc);
-        emc = a*emc;
-        a = c;
-    }
-    // Nothing up to here depends on u, so
-    // could be precalculated.
-    u = c*u;
-    float sn = sin(u);
-    float cn = cos(u);
-    if (sn != 0.0) {
-        a = cn/sn; c = a*c;
-        for (int i = N-1; i >= 0; i--) {
-            b = em[i];
-            a = c*a;
-            c = dn*c;
-            dn = (en[i]+a)/(b+a);
-            a = c/b;
-        }
-        a = 1.0/sqrt(c*c + 1.0);
-        if (sn < 0.0) sn = -a;
-        else sn = a;
-        cn = c*sn;
-    }
-
-    return vec3(sn, cn, dn);
-}
-
-
-vec3 ellipjAtZero(float u) {
-    // Asymptotic expansion around u = 0 of the Jacobi elliptic functions sn, cn and dn
-    // We use the MacLaurin series, see 22.10(i) in [1]
-
-    float k2 = ell_m;
-    float k4 = ell_m * ell_m;
-    float k6 = k4 * ell_m;
-
-    float u1 = u;
-    float u2 = u1 * u;
-    float u3 = u2 * u;
-    float u4 = u3 * u;
-    float u5 = u4 * u;
-    float u6 = u5 * u;
-    float u7 = u6 * u;
-
-    return vec3(
-    u1
-    - (1. + k2) * u3 / 6.
-    + (1. + 14. * k2 + k4) * u5 / 120.
-    - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.,
-
-    1.
-    - u2 / 2.
-    + (1. + 4. * k2) * u4 / 24.
-    - (1. + 44. * k2 + 16. * k4) * u6 / 720.,
-
-    1.
-    - k2 * u2 / 2.
-    + k2 * (4. + k2) * u4 / 24.
-    - k2 * (16. + 44. * k2 + k4) * u6 / 720.
+vec3 H2rotateBy(vec3 point, float alpha) {
+    mat3 R = mat3(
+    1, 0, 0,
+    0, cos(alpha), sin(alpha),
+    0 - sin(alpha), cos(alpha)
     );
+    vec3 res = R * point;
+    res = H2reduceError(res);
+    return res;
+}
+
+vec3 H2flip(vec3 point) {
+    vec3 res =  vec3(
+    point.x,
+    -point.z,
+    -point.y
+    );
+    res = H2reduceError(res);
+    return res;
+}
+
+vec3 H2translateBy(vec3 point, vec4 elt) {
+    mat3 aux = SL2toMat3(elt);
+    vec3 res = aux * point;
+    res = H2reduceError(res);
+    return res;
+}
+
+vec4 H2toSL2(vec3 point) {
+    vec4 res =  vec4(
+    sqrt(0.5 + 0.5 * point.x),
+    0,
+    - point.z / sqrt(2. * point.x + 2.),
+    point.y / sqrt(2. * point.x + 2.)
+    );
+    res = H2reduceError(res);
+    return res;
+}
+
+vec3 H2reduceError(vec3 point) {
+    float q = - point.x * point.x + point.y * point.y + point.z * point.z;
+    return point / sqrt(-q);
 }
 
 
+// A point in SL(2,R) is represented by a vec4 corresponding to its coordinates in the hyperboloid model
 
-vec3 ellipj(float u) {
-    // reducing the computation using the periodicity and symmetries of the Jacobi elliptic functions
-    // dispatching which algorithm is used to compute the result
-    float tolerance = 0.001;
-
-
-    float u1 = mod(u, 4. * ell_K);
-    float sign = 1.;
-    if (u1 > 2. * ell_K) {
-        u1 = 4.* ell_K -u1;
-        sign = -1.;
-    }
-
-    vec3 aux;
-
-    if (u1 < tolerance) {
-        aux = ellipjAtZero(u1);
-    }
-    else {
-        aux = ellipj1(u1);
-    }
-
-    return vec3(sign * aux.x, aux.y, aux.z);
+vec4 SL2rotateBy(vec4 elt, float alpha){
+    mat4 R = mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, cos(alpha), sin(alpha),
+    0, 0, - sin(alpha), cos(alpha)
+    );
+    vec4 res = R * elt;
+    res = SL2reduceError(res);
+    return res;
 }
 
-
-float ellipz(float tanPhi) {
-    // Return the Jacobi Zeta function, whose argument is an angle phi passed as tan(phi), i.e.
-    // Z(phi|m) = E(phi|m) - [E(m)/K(m)] * F(phi|m)
-    // the argument is passed as tan(phi) since this is the way it is computed from the Jacboi function :
-    // tan(phi) = sn(u|m) / cn(u|m)
-    // This is useless to compute the atan and then apply tan!
-    // Computed with the AGM algorithm, see §17.6 in [2]
-    float tolerance = 0.001;
-
-
-    float sign = 1.;
-    float t0 = tanPhi;
-    if (t0 < 0.) {
-        t0 = - t0;
-        sign = -1.;
-    }
-
-    float res = 0.;
-
-    // if t0 is close to zero we use an asymptotic expansion around zero
-    // (computed with SageMath)
-    if (t0 < tolerance) {
-        float k2 = ell_m;
-        float k4 = k2 * ell_m;
-        float k6 = k4 * ell_m;
-        res =  - (ell_E /ell_K - 1.) * t0;
-        res = res - (1./6.) * (ell_E * k2 / ell_K + k2 - 2. * ell_E / ell_K + 2.) * pow(t0, 3.);
-        res = res - (1./40.) * (3. * ell_E * k4 / ell_K + k4 - 8. * ell_E * k2 / ell_K - 8. * k2 + 8. * ell_E / ell_K - 8.) * pow(t0, 5.);
-        res = res - (1./112.) * (5. * ell_E * k6 / ell_K + k6 - 18. * ell_E * k4 / ell_K - 6. * k4 + 24. * ell_E * k2 / ell_K + 24. * k2 - 16. * ell_E / ell_K + 16.) * pow(t0, 7.);
-    }
-    else {
-        // initializing the parameters of the induction
-
-        float t1;// represent tan(phi_{n+1})
-        float s1;// represent sin(phi_{n+1})
-        float aux;
-
-        for (int i = 0; i < AGMLength; i++) {
-            aux = AGMList[i].y / AGMList[i].x;
-            t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
-            s1 = t0 * (1. + aux) / sqrt((1. + t0 * t0) * (1. + aux * aux * t0 * t0));
-            res = res + AGMList[i + 1].z * s1;
-
-            t0 = t1;
-        }
-    }
-    return sign * res;
+vec4 SL2translateFiberBy(vec4 elt, float phi) {
+    mat4 T = mat4(
+    cos(phi), sin(phi), 0, 0,
+    -sin(phi), cos(phi), 0, 0,
+    0, 0, cos(phi), -sin(phi),
+    0, 0, sin(phi), cos(phi)
+    );
+    vec4 res = T * elt;
+    res = SL2reduceError(res);
+    return res;
 }
 
+vec4 SL2flip(vec4 elt) {
+    mat4 F = mat4(
+    1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1,
+    0, 0, 1, 0
+    );
+    vec4 res = F * elt;
+    res = SL2reduceError(res);
+    return res;
+}
+
+mat3 SL2toMat3(vec4 elt){
+    mat4 aux1 = mat4(
+    elt.y, elt.z, elt.w, 0,
+    elt.x, elt.w, -elt.z, 0,
+    elt.w, elt.x, elt.y, 0,
+    -elt.z, -elt.y, elt.x, 0
+    );
+    mat4 aux2 = mat4(
+    elt.y, elt.x, elt.w, -elt.z,
+    -elt.z, elt.w, elt.x, elt.y,
+    -elt.w, -elt.z, -elt.y, elt.x,
+    0, 0, 0, 0
+    );
+    mat3 res = mat3(aux1 * aux2);
+    return res;
+}
+
+mat4 SL2toMat4(vec4 elt) {
+    mat4 res = mat4(
+    elt.x, elt.y, elt.z, elt.w,
+    -elt.y, elt.x, -elt.w, elt.z,
+    elt.z, -elt.w, elt.x, -elt.y,
+    elt.w, elt.z, elt.y, elt.x
+    );
+    return res;
+}
+
+vec4 SL2multiply(vec4 elt1, vec4 elt2) {
+    mat4 L1 = SL2toMat4(elt1);
+    vec4 res = L1 * elt2;
+    res = SL2reduceError(res);
+    return res;
+}
+
+vec4 SL2reduceError(vec4 elt) {
+    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
+    return elt / sqrt(-q);
+}
+
+// A point in USL(2,R) -- the universal covver of SL(2,R) -- is represented by a vec4
+// the first coordinate is the fiber angle
+// the last three coordinates are a point in H2 in the hyperboloid model
+
+vec4 USL2rotateBy(vec4 p, float angle) {
+    vec4 res = vec4(
+    p.x,
+    H2rotateBy(p.yzw, alpha)
+    );
+    return res;
+}
+
+vec4 USL2flip(vec4 p){
+    vec4 res = vec4(
+    - p.x,
+    H2flip(p.yzw)
+    );
+    return res;
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // STRUCT isometry
@@ -442,45 +234,60 @@ float ellipz(float tanPhi) {
 
 /*
   Data type for manipulating isometries of the space
-  A tangVector is given by
-  - matrix : a 4x4 matrix
+  An Isometry is given by
+  - an angle `phi`, corresponding to the fiber coordinate
+  - a point in H2 `point` corresponding the the projection of the isometry on H2.
+
+  The point is represented as a vec3 using the hyperboloid model of H2
 */
 
 struct Isometry {
-    mat4 matrix;// isometry of the space
+    float phi;// fiber coordinate
+    vec3 point;// the projection in H2
 };
 
 
-Isometry composeIsometry(Isometry A, Isometry B)
-{
-    return Isometry(A.matrix*B.matrix);
+vec4 IsomToSL2(Isometry isom) {
+    vec4 res = H2toSL2(isom.point);
+    res = SL2translateFiberBy(res, isom.phi);
+    return res;
 }
 
 
+Isometry composeIsometry(Isometry isom1, Isometry isom2) {
+    vec4 aux1 = IsomToSL2(isom1);
+    vec4 aux2 = IsomToSL2(isom2);
+    vec3 resPoint = H2translateBy(isom2.point, isom1);
+    aux2 = SL2multiply(aux1, aux2);
+    aux2 = SL2translateFiberBy(aux2, -isom1.phi - isom2.phi);
+    float resPhi = isom1.phi + isom2.phi + atan(aux2.y, aux2.x);
+    Isometry res = Isometry(resPhi, resPoint);
+    return res;
+}
+
 Isometry makeLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    exp(p.z), 0., 0., 0.,
-    0., exp(-p.z), 0., 0.,
-    0., 0., 1., 0,
-    p.x, p.y, p.z, 1.
-    );
-    return Isometry(matrix);
+    return Isometry(p.x, p.yzw);
 }
 
 Isometry makeInvLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    exp(-p.z), 0., 0., 0.,
-    0., exp(p.z), 0., 0.,
-    0., 0., 1., 0,
-    -exp(-p.z) * p.x, -exp(p.z) * p.y, -p.z, 1.
+    return Isometry(
+    -p.x,
+    H2rotateBy(p.yzw, PI - 2 * p.x)
     );
-    return Isometry(matrix);
 }
 
-vec4 translate(Isometry A, vec4 v) {
-    // translate a point of a vector by the given direction
-    return A.matrix * v;
+
+vec4 translate(Isometry isom, vec4 p) {
+    // translate a point by the given isometry
+    Isometry aux = makeLeftTranslation(p);
+    aux = composeIsometry(isom, aux);
+    vec4 res = vec4(
+    isom.phi,
+    isom.point
+    );
+    return res;
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // STRUCT tangVector
@@ -495,6 +302,7 @@ vec4 translate(Isometry A, vec4 v) {
   Implement various basic methods to manipulate them
 */
 
+
 struct tangVector {
     vec4 pos;// position on the manifold
     vec4 dir;// vector in the tangent space at the point pos
@@ -505,6 +313,8 @@ struct tangVector {
 // Applying Isometries, Facings
 //----------------------------------------------------------------------------------------------------------------------
 
+
+/*
 Isometry makeLeftTranslation(tangVector v) {
     // overlaod using tangVector
     return makeLeftTranslation(v.pos);
@@ -527,7 +337,7 @@ tangVector rotateFacing(mat4 A, tangVector v){
     // apply an isometry to the tangent vector (both the point and the direction)
     return tangVector(v.pos, A*v.dir);
 }
-
+*/
 
 //----------------------------------------------------------------------------------------------------------------------
 // LOCAL GEOMETRY
@@ -536,6 +346,7 @@ tangVector rotateFacing(mat4 A, tangVector v){
 /*
   Methods perfoming computations in the tangent space at a given point.
 */
+
 
 tangVector add(tangVector v1, tangVector v2) {
     // add two tangent vector at the same point
@@ -569,13 +380,20 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 */
 
 
+
 float tangDot(tangVector u, tangVector v){
-    mat3 g = mat3(
-    exp(-2. * u.pos.z), 0., 0.,
-    0., exp(2. * u.pos.z), 0.,
-    0., 0., 1.
+    float y1 = u.pos.y;
+    float y2 = u.pos.z;
+    float y3 = u.pos.w;
+
+    mat4 g = mat4(
+    4. * pow(y1 + 1., 2.), 0., -2. * (y1 + 1.) * y3, 2. * (y1 + 1.) * y2,
+    0., 2. * pow(y1, 2.) - 1., - (2. * y1 + 1.) * y2, - (2. * y1 + 1.) * y3,
+    -2. * (y1 + 1.) * y3, - (2. * y1 + 1.) * y2, 2. * (y1 + 1.) * y1, 0.,
+    2. * (y1 + 1.) * y2, - (2. * y1 + 1.) * y3, 0., 2. * (y1 + 1.) * y1
     );
-    return dot(u.dir.xyz, g * v.dir.xyz);
+    g = g / (4. * pow(y1 + 1., 2.));
+    return dot(u.dir, g * v.dir);
 
 }
 
@@ -601,59 +419,17 @@ float cosAng(tangVector u, tangVector v){
 
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
+    // given a tangent vector (u0, u1, u2, u3) at (phi, y1, y2, y3) it satisfies
+    // - y1 * u1 + y2 * u2 + y3 * u3 = 0 (because of the hyperboloid model of H2)
 
     vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
+    vec4 basis_y = vec4(0., p.z / p.y, 1., 0.);
+    vec4 basis_z = vec4(0., p.w / p.y, 0., 1.);
     mat4 theBasis = mat4(0.);
     theBasis[0]=basis_x;
     theBasis[1]=basis_y;
     theBasis[2]=basis_z;
     return theBasis;
-}
-
-//mat4 tangBasis(vec4 p){
-//
-//    return makeLeftTranslation(p).matrix;
-//}
-
-
-
-void init_ellip(tangVector u) {
-    // initializes all the parameters needed to march along the geodesic directed by u
-    // we assume that the position of u is the origin
-    // if ab = 0 (hyperbolic sheets), all the parameters are not needed,
-    // however their computations are trivial
-    // (all the elliptic integrals becomes, trivial, the AGM stops where it starts, etc)
-    // instead of adding cases, we simply run the computations
-
-    // some renaming to simplify the formulas
-    // by assumption a^2 + b^2 + c^2 = 1
-    float ab = abs(u.dir.x * u.dir.y);
-
-    // some auxiliary value to avoind redundant computations of roots.
-    float aux1 = sqrt(1. - 2. * ab);
-    float aux2 = 2. * sqrt(ab);
-
-    // frequency
-    ell_mu = sqrt(1. + 2. * ab);
-
-    // parameters of the elliptic functions
-    ell_k = aux1 / ell_mu;
-    ell_kprime = aux2 / ell_mu;
-    ell_m = (1. - 2. * ab) / (1. + 2. * ab);
-
-    // complete elliptic integrals and related quantities
-    agm();
-    vec2 KE = ellipke();
-    ell_K = KE.x;
-    ell_E = KE.y;
-
-    // if ab = 0 (hyperbolic sheets) then k' = 0, in which case, L will not be needed and makes no sense here
-    if (ab != 0.) {
-        ell_L = ell_E / (ell_kprime * ell_K) - 0.5 * ell_kprime;
-    }
-
 }
 
 
@@ -664,11 +440,11 @@ void init_ellip(tangVector u) {
 /*
   Another data type for manipulating points in the tangent bundler
   A localTangVector is given by
-  - pos : a point in the space
-  - dir: the pull back of the tangent vector by the (unique) element of Sol bringing pos to the origin
-
-  This sould reduce numerical errors.
-
+  - pos : a point in the space.
+    The first coordinate is the angle in the fiber
+    The last three coordinates are a point in H2 in the hyperboloid model
+  - dir: the pull back of the tangent vector by the (unique) element of \tilde SL(2,R) bringing pos to the origin
+    The tangent vector is seen as a tangent vector at the origin of SL(2,R). The first coordinates is always 0
   Implement various basic methods to manipulate them
 */
 
@@ -694,17 +470,47 @@ Isometry makeInvLeftTranslation(localTangVector v) {
 }
 
 
-localTangVector translate(Isometry A, localTangVector v) {
+localTangVector translate(Isometry isom, localTangVector v) {
     // over load to translate a direction
-    // WARNING. Only works if A is an element of SOL.
+    // WARNING. Only works if isom is an element of tilde SL(2,R) (seen as an isometry)
     // Any more general isometry should also acts on the direction component
-    return localTangVector(A.matrix * v.pos, v.dir);
+    return localTangVector(translate(isom, v.pos), v.dir);
 }
 
+localTangVector rotateBy(localTangVector v, float alpha) {
+    // rotate the tangent vector (position and direction around the fiber by an angle alpha)
+    vec3 point = v.pos.yzw;
+    point = H2rotateBy(point, alpha);
+    vec4 resPos = vec4(v.pos.x, point);
 
-localTangVector rotateFacing(mat4 A, localTangVector v){
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return localTangVector(v.pos, A*v.dir);
+    mat4 R = mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, cos(alpha), sin(alpha),
+    0, 0, -sin(alpha), cos(alpha)
+    );
+    vec4 resDir = R * v.dir;
+    localTangVector res = localTangVector(resPos, resDir);
+
+    return res;
+}
+
+localTangVector flip(localTangVector v) {
+    // apply the "flip" to the tangent vector (position and direction)
+    vec3 point = v.pos.yzw;
+    point = H2flip(point);
+    vec4 resPos = vec4(-v.pos.x, point);
+
+    mat4 F = mat4(
+    1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1,
+    0, 0, 1, 0
+    );
+    vec4 resDir = F * v.dir;
+    localTangVector res = localTangVector(resPos, resDir);
+
+    return res;
 }
 
 
@@ -715,7 +521,7 @@ localTangVector rotateFacing(mat4 A, localTangVector v){
 /*
   Methods perfoming computations in the tangent space at a given point.
 */
-
+/*
 localTangVector add(localTangVector v1, localTangVector v2) {
     // add two tangent vector at the same point
     // TODO : check if the underlyig point are indeed the same ?
@@ -752,23 +558,39 @@ float cosAng(localTangVector u, localTangVector v){
     // cosAng between two vector in the tangent bundle
     return tangDot(u, v);
 }
-
+*/
 
 //----------------------------------------------------------------------------------------------------------------------
 // CONVERSION BETWEEN TANGVECTOR AND LOCALTANGVECTOR
 //----------------------------------------------------------------------------------------------------------------------
 
+/*
 localTangVector toLocalTangVector(tangVector v) {
     Isometry isom = makeInvLeftTranslation(v.pos);
     localTangVector res = localTangVector(v.pos, translate(isom, v.dir));
     return tangNormalize(res);
 }
+*/
 
 tangVector toTangVector(localTangVector v) {
-    Isometry isom = makeLeftTranslation(v.pos);
-    tangVector res = tangVector(v.pos, translate(isom, v.dir));
-    return tangNormalize(res);
+    float phi = v.pos.x;
+    float y1 = v.pos.y;
+    float y2 = v.pos.z;
+    float y3 = v.pos.w;
+
+    float aux1 = y2 * cos(2. * phi) + y3 * sin(2. * phi);
+    float aux2 = y3 * cos(2. * phi) - y2 * sin(2. * phi);
+    mat4 m = mat4(
+    0., 2. * y1+2., 2. * y2, 2. * y3,
+    1., 0., 0., 0.,
+    aux1 / (y1 + 1.), -2. * aux2, -2. * y2 * aux2 / (y1 + 1.) + 2. * sin(2. * phi), -2. * y3 * aux2 / (y1 + 1.) - 2. * cos(2. * phi),
+    aux2 / (y1 + 1.), 2. * aux1, 2. * y2 * aux1 / (y1 + 1.) + 2. * cos(2. * phi), 2. * y3 * aux1 / (y1 + 1.) + 2. * sin(2. * phi)
+    );
+
+    tangVector res = tangVector(v.pos, m * v.dir);
+    return res;
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // GLOBAL GEOMETRY
@@ -783,17 +605,19 @@ float fakeDistance(vec4 p, vec4 q){
     // fake distance
 
     // Isometry moving back to the origin and conversely
-    Isometry isomInv = makeInvLeftTranslation(p);
+    //Isometry isomInv = makeInvLeftTranslation(p);
 
     //vec4 qOrigin = translate(isomInv, q);
     //return  sqrt(exp(-2. * qOrigin.z) * qOrigin.x * qOrigin.x +  exp(2. * qOrigin.z) * qOrigin.y * qOrigin.y + qOrigin.z * qOrigin.z);
     return length(q-p);
 }
 
+/*
 float fakeDistance(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
     return fakeDistance(u.pos, v.pos);
 }
+*/
 
 float fakeDistance(localTangVector u, localTangVector v){
     // overload of the previous function in case we work with tangent vectors
@@ -805,25 +629,30 @@ float exactDist(vec4 p, vec4 q) {
     return fakeDistance(p, q);
 }
 
+/*
 float exactDist(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
     return exactDist(u.pos, v.pos);
 }
+*/
 
 float exactDist(localTangVector u, localTangVector v){
     // overload of the previous function in case we work with tangent vectors
     return exactDist(u.pos, v.pos);
 }
 
+
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
     return tangNormalize(tangVector(p, q - p));
 }
 
+
 tangVector tangDirection(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
     return tangDirection(u.pos, v.pos);
 }
+
 
 tangVector tangDirection(localTangVector u, localTangVector v){
     // overload of the previous function in case we work with tangent vectors
@@ -831,644 +660,115 @@ tangVector tangDirection(localTangVector u, localTangVector v){
 }
 
 
-tangVector eucflow(tangVector tv, float t) {
-    return tangVector(tv.pos + t * tv.dir, tv.dir);
-}
-
-tangVector numflow(tangVector tv, float t) {
-    // follow the geodesic flow using a numerical integration
-    // fix the noise for small steps
-    float NUM_STEP = 0.2 * EPSILON;
-
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-    Isometry isomInv = makeInvLeftTranslation(tv);
-
-
-    // pull back of the tangent vector at the origin
-    tangVector tvOrigin = translate(isomInv, tv);
-
-    // tangent vector used updated during the numerical integration
-    tangVector aux = tvOrigin;
-
-    // integrate numerically the flow
-    int n = int(floor(t/NUM_STEP));
-    for (int i = 0; i < n; i++){
-        vec4 fieldPos = aux.dir;
-        vec4 fieldDir = vec4(
-        2. * aux.dir.x * aux.dir.z,
-        -2. * aux.dir.y * aux.dir.z,
-        -exp(-2. * aux.pos.z) * pow(aux.dir.x, 2.) + exp(2. * aux.pos.z) * pow(aux.dir.y, 2.),
-        0
-        );
-
-        aux.pos = aux.pos + NUM_STEP * fieldPos;
-        aux.dir = aux.dir + NUM_STEP * fieldDir;
-        aux = tangNormalize(aux);
-    }
-
-    tangVector res = translate(isom, aux);
-    res = tangNormalize(res);
-
-    return res;
-
-}
-
-
-tangVector ellflow(tangVector tv, float t){
-    // follow the geodesic flow during a time t
-
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-    Isometry isomInv = makeInvLeftTranslation(tv);
-
-    // pull back of the tangent vector at the origin
-    tangVector tvOrigin = translate(isomInv, tv);
-
-    // result to be populated
-    tangVector resOrigin = tangVector(ORIGIN, vec4(0.));
-
-    // renaming the coordinates of the tangent vector to simplify the formulas
-    float a = tvOrigin.dir.x;
-    float b = tvOrigin.dir.y;
-    float c = tvOrigin.dir.z;
-
-    // we need to distinguish three cases, depending on the type of geodesics
-
-    // tolerance used between the difference cases
-    //float tolerance = 0.0000001;
-
-    //if (abs(a) < tolerance) {
-    if (a == 0.) {
-        // GEODESIC IN THE HYPERBOLIC SHEET X = 0
-        float sht = sinh(t);
-        float cht = cosh(t);
-        float tht = sht/cht;
-
-        resOrigin.pos = vec4(
-        0.,
-        b * sht / (cht + c * sht),
-        log(cht + c * sht),
-        1.
-        );
-        resOrigin.dir = vec4(
-        0.,
-        b / pow(cht + c * sht, 2.),
-        (c + tht) / (1. + c * tht),
-        0.
-        );
-    }
-    //else if (abs(b) < tolerance) {
-    else if (b == 0.) {
-        // GEODESIC IN THE HYPERBOLIC SHEET Y = 0
-        float sht = sinh(t);
-        float cht = cosh(t);
-        float tht = sht/cht;
-
-        resOrigin.pos = vec4(
-        a * sht / (cht - c * sht),
-        0.,
-        - log(cht - c * sht),
-        1.
-        );
-        resOrigin.dir = vec4(
-        a / pow(cht - c * sht, 2.),
-        0.,
-        (c - tht) / (1. - c * tht),
-        0.
-        );
-    }
-    else {
-
-        // GENERIC CASE
-        // In order to minimizes the computations we adopt the following trick
-        // For long steps, i.e. if mu * t > 4K, then we only march by an integer multiple of the period 4K.
-        // In this way, there is no elliptic function to compute : only the x,y coordinates are shifted by a translation
-        // We only compute elliptic functions for small steps, i.e. if mu * t < 4K
-
-        float steps = floor((ell_mu * t) / (4. * ell_K));
-
-        if (steps > 0.5) {
-            resOrigin.pos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
-            resOrigin.dir = vec4(a, b, c, 0.);
-        }
-        else {
-
-            // parameters related to the initial condition of the geodesic flow
-
-            // phase shift (Phi in the handwritten notes)
-            float aux = sqrt(1. - 2. * abs(a * b));
-            // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
-            vec3 jacobi_s0 = vec3(
-            - c / aux,
-            (abs(a) - abs(b)) / aux,
-            (abs(a) + abs(b)) / ell_mu
-            );
-
-
-            // sign of a (resp. b)
-            float signa = 1.;
-            if (a < 0.) {
-                signa = -1.;
-            }
-            float signb = 1.;
-            if (b < 0.) {
-                signb = -1.;
-            }
-
-            // some useful intermediate computation
-            float kOkprime = ell_k / ell_kprime;
-            float oneOkprime = 1. / ell_kprime;
-
-            // we are now ready to write down the coordinates of the endpoint
-
-            // amplitude (without the phase shift of s0)
-            // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
-            // (more a safety check as we assumed that mu * t < 4K)
-            float s = mod(ell_mu * t, 4. * ell_K);
-            // jabobi functions applied to the amplitude s
-            vec3 jacobi_s = ellipj(s);
-
-            // jacobi function applied to mu * t + s0 = s + s0  (using addition formulas)
-            float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
-            vec3 jacobi_ss0 = vec3(
-            (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
-            (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
-            (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
-            );
-
-            // Z(mu * t + s0) - Z(s0) (using again addition formulas)
-            float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
-
-
-            // wrapping all the computation
-            resOrigin.pos = vec4(
-
-            signa * sqrt(abs(b / a)) * (
-            oneOkprime * zetaj
-            + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-            + ell_L * ell_mu * t
-            ),
-
-            signb * sqrt(abs(a / b)) * (
-            oneOkprime * zetaj
-            - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-            + ell_L * ell_mu * t
-            ),
-
-            0.5 * log(abs(b / a)) + asinh(kOkprime * jacobi_ss0.y),
-
-            1.
-            );
-
-            resOrigin.dir = vec4(
-
-            signa * abs(b) * pow(kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z, 2.),
-
-            signb * abs(a) * pow(kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z, 2.),
-
-            - ell_k * ell_mu * jacobi_ss0.x,
-
-            0.
-            );
-        }
-    }
-
-    resOrigin = tangNormalize(resOrigin);
-    tangVector res = translate(isom, resOrigin);
-    res = tangNormalize(res);
-
-    return res;
-
-}
-
-tangVector flow(tangVector tv, float t) {
-
-    if (abs(t) < 50. * EPSILON) {
-        return numflow(tv, t);
-        //return ellflow(tv, t);
-    }
-    else {
-        return ellflow(tv, t);
-    }
-}
-
-int hitWhich = 0;
-
-localTangVector numflow(localTangVector tv, float t) {
-    // follow the geodesic flow during time t
-    // using a numerical integration
-    // fix the noise for small steps
-    float NUM_STEP = 0.2 * EPSILON;
-
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-
-    // tangent vector used updated during the numerical integration
-    localTangVector aux = localTangVector(ORIGIN, tv.dir);
-
-    // integrate numerically the flow
-    int n = int(floor(t/NUM_STEP));
-    for (int i = 0; i < n; i++){
-        vec4 fieldPos = vec4(
-        exp(aux.pos.z) * aux.dir.x,
-        exp(-aux.pos.z) * aux.dir.y,
-        aux.dir.z,
-        0
-        );
-        vec4 fieldDir = vec4(
-        aux.dir.x * aux.dir.z,
-        -aux.dir.y * aux.dir.z,
-        -pow(aux.dir.x, 2.) + pow(aux.dir.y, 2.),
-        0
-        );
-
-        aux.pos = aux.pos + NUM_STEP * fieldPos;
-        aux.dir = aux.dir + NUM_STEP * fieldDir;
-        aux = tangNormalize(aux);
-    }
-
-    localTangVector res = translate(isom, aux);
-    res = tangNormalize(res);
-
-    return res;
-
-}
-
-
-localTangVector hypXflow(localTangVector tv, float t) {
-    // flow in (the neighborhood of) the hyperbolic sheets {x = 0}
-    // use an taylor expansion at the order 2 around a = 0
-    // if need one could use a higher order expansion...
-    // one "just" need to do a few ugly computations before!
-
-
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-
-    // result to be populated
-    localTangVector resOrigin;
-
-    // renaming the coordinates of the tangent vector to simplify the formulas
-    float a = tv.dir.x;
-    float b = tv.dir.y;
-    float c = tv.dir.z;
-
-    // preparing the material to write down the formula in an easy way
-    // and avoid redundant computation
-    // look at the notes for the definitions of all the quantities
-
-
-    float b2 = b * b;
-    float c2 = c * c;
-    // norm of the yz component of the tagent vector, i.e. sqrt(b^2 + c^2) and its powsers
-    float n1 = sqrt(b2 + c2);
-    float n2 = n1 * n1;
-    float n3 = n1 * n2;
-    float n4 = n1 * n3;
-    // sign of b
-    float sign = 1.;
-    if (b < 0.) {
-        sign = -1.;
-    }
-    // cosh(s), sinh(s), and tanh(s) where s = n(t+t0)
-    float shs = (c * cosh(n1 * t) + n1 * sinh(n1 * t)) / abs(b);
-    float chs = (n1 * cosh(n1 * t) + c * sinh(n1 * t)) / abs(b);
-    float ths = shs / chs;
-
-
-    vec4 u0 = vec4(
-    0.,
-    sign * n1 / chs,
-    n1 * ths,
-    0.
+vec4 flowDir(vec4 dir, float t) {
+    // compute the direction part of the geodesic flow
+    // there is no trichotomy here
+    float omegat = 4 * dir.y * t;
+    mat4 S = mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, cos(omegat), -sin(omegat),
+    0, 0, sin(omegat), cos(omegat)
     );
-
-    vec4 u1 = vec4(
-    abs(b) * chs / n1,
-    0.,
-    0.,
-    0.
-    );
-
-    vec4 u2 = vec4(
-    0.,
-    sign * b2 * chs / (4. * n3)
-    + sign * (b2 - 2. * c2)  * (n1 * t * shs / pow(chs, 2.) - 1. / chs) / (4. * n3)
-    - 3. * sign * c * shs / (4. * n2 * pow(chs, 2.)),
-    - b2 * shs * chs / (2. * n3)
-    - (b2 - 2. * c2) * (ths - n1 * t / pow(chs, 2.)) / (4. * n3)
-    + 3. * c / (4. * n2 * pow(chs, 2.)),
-    0.
-    );
-
-    resOrigin.dir = u0  + a * u1 + a * a * u2;
-
-
-    vec4 p0 = vec4(
-    0.,
-    n1 * ths / b - c / b,
-    log(abs(b) * chs / n1),
-    1.
-    );
-
-    vec4 p1 = vec4(
-    b2 * (shs * chs + n1 * t) / (2. * n3) - c / (2. * n2),
-    0.,
-    0.,
-    0.
-    );
-
-    vec4 p2 = vec4(
-    0.,
-    b * n1 * t / (2. * n3)
-    - (b2 - 2. * c2) * ( n1 * t / pow(chs, 2.) + ths) / (4. * b * n3)
-    + 3. * c / (4. * b * n2 * pow(chs, 2.))
-    - c / (2. * b * n2),
-    - b2 * pow(chs, 2.) / (4. * n4)
-    - (b2 - 2. * c2) * (n1 * t * ths - 1.) / (4. * n4)
-    + 3. * c * ths / (4. * n3),
-    0.
-    );
-
-    resOrigin.pos = p0 + a * p1 + a * a * p2;
-
-
-    resOrigin = tangNormalize(resOrigin);
-    localTangVector res = translate(isom, resOrigin);
-    res = tangNormalize(res);
-
+    vec4 res = S * dir;
     return res;
 }
 
-
-localTangVector hypYflow(localTangVector tv, float t) {
-    // flow in (the neighborhood of) the hyperbolic sheets {y = 0}
-
-    localTangVector tvAux;
-    tvAux.pos = vec4(tv.pos.y, tv.pos.x, -tv.pos.z, 1.);
-    tvAux.dir = vec4(tv.dir.y, tv.dir.x, -tv.dir.z, 0.);
-
-    localTangVector resAux = hypXflow(tvAux, t);
-    localTangVector res;
-    res.pos = vec4(resAux.pos.y, resAux.pos.x, -resAux.pos.z, 1.);
-    res.dir = vec4(resAux.dir.y, resAux.dir.x, -resAux.dir.z, 0.);
-
-    res = tangNormalize(res);
-
+vec4 flowFromOriginH2Like(vec4 dir, float t) {
+    // follow the geodesic flow from the origin during time t in the given direction
+    // we assume that the direction  has the following form
+    // dir = (0, a1, 0, a3) with
+    // * 0 <= a1 < 1/sqrt(2)
+    // * 0 <= a3
+    // return the achieved position
+    float a1 = dir.y;
+    float a3 = dir.w;
+    float phi = 2. * a1 * t;
+    float omega = sqrt(1. - 2. * a1 * a1);
+    vec3 point = vec3(
+    (2. * (1. - pow(a1, 2.)) * pow(cosh(omega * t), 2.) - 1.) / pow(omega, 2.),
+    2. * omega * a3 * cosh(omega * t) * sinh(omega * t) / pow(omega, 2.),
+    -2. * a1 * a3 * pow(sinh(omega * t), 2.) / pow(omega, 2.)
+    );
+    phi = phi + atan(point.z, point.y);
+    vec4 res = vec4(phi, point);
     return res;
 }
 
-
-/*
-
-localTangVector hypYflow(localTangVector tv, float t) {
-    // flow in (the neighborhood of) the hyperbolic sheets {y = 0}
-    // use an taylor expansion at the order 2 around b = 0
-    // if need one could use a higher order expansion...
-    // one "just" need to do a few ugly computations before!
-
-
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-
-    // result to be populated
-    localTangVector resOrigin = localTangVector(ORIGIN, vec4(0.));
-
-    // renaming the coordinates of the tangent vector to simplify the formulas
-    float a = tv.dir.x;
-    float b = tv.dir.y;
-    float c = tv.dir.z;
-
-    // preparing the material to write down the formula in an easy way
-    // and avoid redundant computation
-    // look at the notes for the definitions of all the quantities
-
-
-    float a2 = a * a;
-    float c2 = c * c;
-    // norm of the xz component of the tagent vector, i.e. sqrt(a^2 + c^2) and its powsers
-    float n1 = sqrt(a2 + c2);
-    float n2 = n1 * n1;
-    float n3 = n1 * n2;
-    float n4 = n1 * n3;
-    // sign of b
-    float sign = 1.;
-    if (a < 0.) {
-        sign = -1.;
-    }
-    // cosh(s), sinh(s), and tanh(s) where s = n(t+t0)
-    float shs = (-c * cosh(n1 * t) + n1 * sinh(n1 * t)) / abs(a);
-    float chs = (n1 * cosh(n1 * t) - c * sinh(n1 * t)) / abs(a);
-    float ths = shs / chs;
-
-
-    vec4 u0 = vec4(
-    sign * n1 / chs,
-    0,
-    - n1 * ths,
-    0
+vec4 flowFromOriginFiberLike(vec4 dir, float t) {
+    // follow the geodesic flow from the origin during time t in the given direction
+    // we assume that the direction  has the following form
+    // dir = (0, a1, 0, a3) with
+    // * 1/sqrt(2) < a1
+    // * 0 <= a3
+    // return the achieved position
+    float a1 = dir.y;
+    float a3 = dir.w;
+    float phi = 2. * a1 * t;
+    float omega = sqrt(2. * a1 * a1 - 1.);
+    vec3 point = vec3(
+    (2. * (pow(a1, 2.) - 1.) * pow(cos(omega * t), 2.) + 1.) / pow(omega, 2.),
+    2. * omega * a3 * cos(omega * t) * sin(omega * t) / pow(omega, 2.),
+    -2. * a1 * a3 * pow(sin(omega * t), 2.) / pow(omega, 2.)
     );
-
-    vec4 u1 = vec4(
-    0,
-    abs(a) * chs / n1,
-    0,
-    0
-    );
-
-    vec4 u2 = vec4(
-    sign * a2 * chs / (4. * n3)
-    + sign * (a2 + 2. * c2)  * (n1 * t * shs / pow(chs, 2.) - 1. / chs) / (4. * n3)
-    + 3. * sign * c * shs / (4. * n2 * pow(chs, 2.)),
-    0,
-    a2 * shs * chs / (2. * n3)
-    + (a2 + 2. * c2) * (ths - n1 * t / pow(chs, 2.)) / (4. * n3)
-    + 3. * c / (4. * n2 * pow(chs, 2.)),
-    0
-    );
-
-    resOrigin.dir = u0 + b * u1 + b * b * u2;
-
-
-    vec4 p0 = vec4(
-    n1 * ths / a + c / a,
-    0,
-    - log(abs(a) * chs / n1),
-    1
-    );
-
-    vec4 p1 = vec4(
-    0,
-    a2 * (shs * chs + n1 * t) / (2. * n3) + c / (2. * n2),
-    0,
-    0
-    );
-
-    vec4 p2 = vec4(
-    a * n1 * t / (2. * n3)
-    - (a2 + 2. * c2) * ( n1 * t / pow(chs, 2.) + ths) / (4. * a * n3)
-    - 3. * c / (4. * a * n2 * pow(chs, 2.))
-    + c / (2. * a * n2),
-    0,
-    a2 * pow(chs, 2.) / (4. * n4)
-    + (a2 + 2. * c2) * (n1 * t * ths - 1.) / (4. * n4)
-    + 3. * c * ths / (4. * n3),
-    0
-    );
-
-    resOrigin.pos = p0 + b * p1 + b * b * p2;
-
-
-    resOrigin = tangNormalize(resOrigin);
-    localTangVector res = translate(isom, resOrigin);
-    res = tangNormalize(res);
-
+    phi = phi + atan(point.z, point.y) + 2. * floor(0.5 - 0.5 * omega * t / PI) * PI;
+    vec4 res = vec4(phi, point);
     return res;
-
 }
 
-*/
-
-localTangVector ellflow(localTangVector tv, float t){
-    // follow the geodesic flow during a time t
-    // generic case
-
-    // Isometry moving back to the origin and conversely
-    Isometry isom = makeLeftTranslation(tv);
-
-    // result to be populated
-    localTangVector resOrigin = localTangVector(ORIGIN, vec4(0.));
-
-    // renaming the coordinates of the tangent vector to simplify the formulas
-    float a = tv.dir.x;
-    float b = tv.dir.y;
-    float c = tv.dir.z;
-
-
-    // In order to minimizes the computations we adopt the following trick
-    // For long steps, i.e. if mu * t > 4K, then we only march by an integer multiple of the period 4K.
-    // In this way, there is no elliptic function to compute : only the x,y coordinates are shifted by a translation
-    // We only compute elliptic functions for small steps, i.e. if mu * t < 4K
-
-    float steps = floor((ell_mu * t) / (4. * ell_K));
-
-    if (steps > 0.5) {
-        resOrigin.pos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
-        resOrigin.dir = vec4(a, b, c, 0.);
-    }
-    else {
-
-        // parameters related to the initial condition of the geodesic flow
-
-        // phase shift (Phi in the handwritten notes)
-        float aux = sqrt(1. - 2. * abs(a * b));
-        // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
-        vec3 jacobi_s0 = vec3(
-        - c / aux,
-        (abs(a) - abs(b)) / aux,
-        (abs(a) + abs(b)) / ell_mu
-        );
-
-
-        // sign of a (resp. b)
-        float signa = 1.;
-        if (a < 0.) {
-            signa = -1.;
-        }
-        float signb = 1.;
-        if (b < 0.) {
-            signb = -1.;
-        }
-
-        // some useful intermediate computation
-        float kOkprime = ell_k / ell_kprime;
-        float oneOkprime = 1. / ell_kprime;
-
-        // we are now ready to write down the coordinates of the endpoint
-
-        // amplitude (without the phase shift of s0)
-        // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
-        // (more a safety check as we assumed that mu * t < 4K)
-        float s = mod(ell_mu * t, 4. * ell_K);
-        // jabobi functions applied to the amplitude s
-        vec3 jacobi_s = ellipj(s);
-
-        // jacobi function applied to mu * t + s0 = s + s0  (using addition formulas)
-        float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
-        vec3 jacobi_ss0 = vec3(
-        (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
-        (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
-        (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
-        );
-
-        // Z(mu * t + s0) - Z(s0) (using again addition formulas)
-        float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
-
-
-        // wrapping all the computation
-        resOrigin.pos = vec4(
-
-        signa * sqrt(abs(b / a)) * (
-        oneOkprime * zetaj
-        + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-        + ell_L * ell_mu * t
-        ),
-
-        signb * sqrt(abs(a / b)) * (
-        oneOkprime * zetaj
-        - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
-        + ell_L * ell_mu * t
-        ),
-
-        0.5 * log(abs(b / a)) + asinh(kOkprime * jacobi_ss0.y),
-
-        1.
-        );
-
-        resOrigin.dir = vec4(
-
-        a * sqrt(abs(b/a)) * (kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z),
-
-
-        - b * sqrt(abs(a/b)) * (kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z),
-
-        - ell_k * ell_mu * jacobi_ss0.x,
-
-        0.
-        );
-    }
-
-    resOrigin = tangNormalize(resOrigin);
-    localTangVector res = translate(isom, resOrigin);
-    res = tangNormalize(res);
-
+vec4 flowFromOriginIntermediate(vec4 dir, float t) {
+    // follow the geodesic flow from the origin during time t in the given direction
+    // we assume that the direction  has the following form
+    // dir = (0, a1, 0, a3) with
+    // * a1 = 1/sqrt(2) (or rouglhy equals this value)
+    // * 0 <= a3
+    // return the achieved position
+    // TODO: replace the exact formular with an asymptotic expansion of the other cases around a1 = 1/sqrt(2)
+    float a1 = dir.y;
+    float a3 = dir.w;
+    float phi = 2. * a1 * t;
+    vec3 point = vec3(
+    pow(t, 2.) + 1.,
+    sqrt(2.) * t,
+    -pow(t, 2.)
+    );
+    phi = phi + atan(point.z, point.y);
+    vec4 res = vec4(phi, point);
     return res;
-
 }
-
 
 localTangVector flow(localTangVector tv, float t) {
+    vec4 aux = tv.dir;
+    bool flipped = false;
+    if (aux.y < 0.) {
+        aux = vec4(0., -aux.y, aux.w, aux.z);
+        flipped = true;
+    }
+    float alpha = atan(aux.w, aux.z) -0.5 * PI;
+    aux = vec4(0., aux.y, 0, 0, sqrt(1. - aux.y * aux.y));
 
-    float tolerance = 0.0001;
-
-    if (abs(t) < 50. * EPSILON) {
-        return numflow(tv, t);
-        //return ellflow(tv, t);
+    float threshold = 1./sqrt(2.);
+    vec4 posFromOrigin;
+    if (a1 < threshold) {
+        posFromOrigin = flowFromOriginH2Like(aux, t);
+    }
+    else if (a1 == threshold) {
+        posFromOrigin = flowFromOriginIntermediate(aux, t);
     }
     else {
-        if (abs(tv.dir.x * t) < tolerance) {
-        //if (tv.dir.x ==0.) {
-            return hypXflow(tv, t);
-        }
-        else if (abs(tv.dir.y * t) < tolerance) {
-        //else if (tv.dir.y ==0.) {
-            return hypYflow(tv, t);
-        }
-        else {
-            return ellflow(tv, t);
-        }
+        posFromOrigin = flowFromOriginFiberLike(aux, t);
     }
+
+    posFromOrigin = USL2rotateBy(posFromOrigin, alpha);
+    if (flipped) {
+        posFromOrigin = USL2flip(posFromOrigin);
+    }
+
+    Isometry isom = makeLeftTranslation(tv.pos);
+    vec4 resPos = translate(isom, posFromOrigin);
+    vec4 resDir = flowDir(tv.dir, t);
+    localTangVector res = localTangVector(resPos, resDir);
+    return res;
 }
 
 
@@ -1512,7 +812,7 @@ float sphereSDF(vec4 p, vec4 center, float radius){
     return exactDist(p, center) - radius;
 }
 
-
+/*
 float ellipsoidSDF(vec4 p, vec4 center, float radius){
     return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
 }
@@ -1547,6 +847,8 @@ float sliceSDF(vec4 p) {
 float cylSDF(vec4 p, float r){
     return sphereSDF(vec4(p.x, p.y, 0., 1.), ORIGIN, r);
 }
+*/
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
@@ -1554,7 +856,7 @@ float cylSDF(vec4 p, float r){
 tangVector N;//normal vector
 tangVector sampletv;
 vec4 globalLightColor;
-Isometry identityIsometry=Isometry(mat4(1.0));
+Isometry identity=Isometry(0., vec3(1., 0., 0.));
 
 Isometry currentBoost;
 Isometry leftBoost;
@@ -1569,21 +871,21 @@ Isometry globalObjectBoost;
 uniform int isStereo;
 uniform vec2 screenResolution;
 uniform mat4 invGenerators[6];
-uniform mat4 currentBoostMat;
-uniform mat4 leftBoostMat;
-uniform mat4 rightBoostMat;
+uniform vec4 currentBoostMat;
+uniform vec4 leftBoostMat;
+uniform vec4 rightBoostMat;
 uniform mat4 facing;
 uniform mat4 leftFacing;
 uniform mat4 rightFacing;
-uniform mat4 cellBoostMat;
-uniform mat4 invCellBoostMat;
+uniform vec4 cellBoostMat;
+uniform vec4 invCellBoostMat;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Lighting Variables & Global Object Variables
 //----------------------------------------------------------------------------------------------------------------------
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
-uniform mat4 globalObjectBoostMat;
+uniform vec4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 uniform float time;
@@ -1765,39 +1067,40 @@ float denominator=GoldenRatio+2.;
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
 
+    /*
+        //lattice basis divided by the norm square
+        vec4 v1 = vec4(GoldenRatio, -1., 0., 0.);
+        vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
+        vec4 v3 = vec4(0., 0., 1./z0, 0.);
 
-    //lattice basis divided by the norm square
-    vec4 v1 = vec4(GoldenRatio, -1., 0., 0.);
-    vec4 v2 = vec4(1., GoldenRatio, 0., 0.);
-    vec4 v3 = vec4(0., 0., 1./z0, 0.);
+        if (display!=3){
+            if (dot(p, v3) > 0.5) {
+                fixMatrix = Isometry(invGenerators[4]);
+                return true;
+            }
+            if (dot(p, v3) < -0.5) {
+                fixMatrix = Isometry(invGenerators[5]);
+                return true;
+            }
+        }
 
-    if (display!=3){
-        if (dot(p, v3) > 0.5) {
-            fixMatrix = Isometry(invGenerators[4]);
+        if (dot(p, v1) > 0.5) {
+            fixMatrix = Isometry(invGenerators[0]);
             return true;
         }
-        if (dot(p, v3) < -0.5) {
-            fixMatrix = Isometry(invGenerators[5]);
+        if (dot(p, v1) < -0.5) {
+            fixMatrix = Isometry(invGenerators[1]);
             return true;
         }
-    }
-
-    if (dot(p, v1) > 0.5) {
-        fixMatrix = Isometry(invGenerators[0]);
-        return true;
-    }
-    if (dot(p, v1) < -0.5) {
-        fixMatrix = Isometry(invGenerators[1]);
-        return true;
-    }
-    if (dot(p, v2) > 0.5) {
-        fixMatrix = Isometry(invGenerators[2]);
-        return true;
-    }
-    if (dot(p, v2) < -0.5) {
-        fixMatrix = Isometry(invGenerators[3]);
-        return true;
-    }
+        if (dot(p, v2) > 0.5) {
+            fixMatrix = Isometry(invGenerators[2]);
+            return true;
+        }
+        if (dot(p, v2) < -0.5) {
+            fixMatrix = Isometry(invGenerators[3]);
+            return true;
+        }
+        */
     return false;
 }
 
@@ -1955,83 +1258,81 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     localTangVector localtv = rayDir;
     localTangVector testlocaltv = rayDir;
     localTangVector bestlocaltv = rayDir;
-    totalFixMatrix = identityIsometry;
+    totalFixMatrix = identity;
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
-        
-        
-        
+
+
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             float localDist = localSceneSDF(localtv.pos);
-            
-            
+
+
             if (localDist < EPSILON){
-                  sampletv = toTangVector(localtv);
-                  break;
-              }
-              marchStep = localDist;
-            
+                sampletv = toTangVector(localtv);
+                break;
+            }
+            marchStep = localDist;
+
             //localtv = flow(localtv, marchStep);
 
-//            if (isOutsideCell(localtv, fixMatrix)){
-//                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-//                localtv = translate(fixMatrix, localtv);
-//                localtv=tangNormalize(localtv);
-//                marchStep = MIN_DIST;
-//            }
-            
-        testlocaltv = flow(localtv, marchStep);
-        if (isOutsideCell(testlocaltv, fixMatrix)){
-            bestlocaltv = testlocaltv;
-            
-            for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
-              ////// do binary search to get close to but outside this cell - 
-              ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
-              testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
-              testlocaltv = flow(localtv, testMarchStep);
-              if ( isOutsideCell(testlocaltv, testFixMatrix) ){
-                marchStep = testMarchStep;
+            //            if (isOutsideCell(localtv, fixMatrix)){
+            //                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            //                localtv = translate(fixMatrix, localtv);
+            //                localtv=tangNormalize(localtv);
+            //                marchStep = MIN_DIST;
+            //            }
+
+            testlocaltv = flow(localtv, marchStep);
+            if (isOutsideCell(testlocaltv, fixMatrix)){
                 bestlocaltv = testlocaltv;
-                fixMatrix = testFixMatrix;
-              }
+
+                for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+                    ////// do binary search to get close to but outside this cell -
+                    ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+                    testMarchStep = marchStep - pow(0.5, float(j+1))*localDist;
+                    testlocaltv = flow(localtv, testMarchStep);
+                    if (isOutsideCell(testlocaltv, testFixMatrix)){
+                        marchStep = testMarchStep;
+                        bestlocaltv = testlocaltv;
+                        fixMatrix = testFixMatrix;
+                    }
+                }
+
+                localtv = bestlocaltv;
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                localtv = translate(fixMatrix, localtv);
+                localtv=tangNormalize(localtv);
+                //globalDepth += marchStep;
+                marchStep = MIN_DIST;
             }
-            
-            localtv = bestlocaltv;
-            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-            localtv = translate(fixMatrix, localtv);
-            localtv=tangNormalize(localtv);
-            //globalDepth += marchStep; 
-            marchStep = MIN_DIST;
-      }
-            
-                  else{ 
-          localtv = testlocaltv; 
-          globalDepth += marchStep; 
+
+            else {
+                localtv = testlocaltv;
+                globalDepth += marchStep;
+            }
         }
-      }
-      localDepth=min(globalDepth, MAX_DIST);
+        localDepth=min(globalDepth, MAX_DIST);
     }
-    else{localDepth=MAX_DIST;}
+    else { localDepth=MAX_DIST; }
 
 
-            
-//            else {
-//                float localDist = min(.5, localSceneSDF(localtv.pos));
-//                if (localDist < EPSILON){
-//                    //hitWhich = 3;
-//                    sampletv = toTangVector(localtv);
-//                    break;
-//                }
-//                marchStep = localDist;
-//                globalDepth += localDist;
-//            }
-//        }
-//        localDepth = min(globalDepth, MAX_DIST);
-//    }
-//    else {
-//        localDepth=MAX_DIST;
-//    }
+    //            else {
+    //                float localDist = min(.5, localSceneSDF(localtv.pos));
+    //                if (localDist < EPSILON){
+    //                    //hitWhich = 3;
+    //                    sampletv = toTangVector(localtv);
+    //                    break;
+    //                }
+    //                marchStep = localDist;
+    //                globalDepth += localDist;
+    //            }
+    //        }
+    //        localDepth = min(globalDepth, MAX_DIST);
+    //    }
+    //    else {
+    //        localDepth=MAX_DIST;
+    //    }
 
 
     if (GLOBAL_SCENE){
@@ -2052,7 +1353,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
-                totalFixMatrix = identityIsometry;
+                totalFixMatrix = identity;
                 sampletv = toTangVector(tv);
                 //hitWhich = 5;
                 //debugColor = 0.1*vec3(globalDepth, 0, 0);
@@ -2074,58 +1375,6 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         */
     }
 }
-
-
-//void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
-//    mat4 fixMatrix;
-//    float globalDepth = MIN_DIST;
-//    float localDepth = MIN_DIST;
-//    tangVector tv = rayDir;
-//    tangVector localtv = rayDir;
-//    totalFixMatrix = mat4(1.0);
-//
-//
-//    // Trace the local scene, then the global scene:
-//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//        tangVector localEndtv = flow(localtv, localDepth);
-//
-//        if (isOutsideCell(localEndtv, fixMatrix)){
-//            totalFixMatrix = fixMatrix * totalFixMatrix;
-//            localtv = translate(fixMatrix, localEndtv);
-//            localDepth = MIN_DIST;
-//        }
-//        else {
-//            float localDist = min(0.1, localSceneSDF(localEndtv.pos));
-//            if (localDist < EPSILON){
-//                hitWhich = 3;
-//                sampletv = localEndtv;
-//                break;
-//            }
-//            localDepth += localDist;
-//            globalDepth += localDist;
-//        }
-//    }
-//
-//
-//    // Set for localDepth to our new max tracing distance:
-//    localDepth = min(globalDepth, MAX_DIST);
-//    globalDepth = MIN_DIST;
-//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//        tangVector globalEndtv = flow(tv, globalDepth);
-//
-//        float globalDist = globalSceneSDF(globalEndtv.pos);
-//        if (globalDist < EPSILON){
-//            // hitWhich has now been set
-//            totalFixMatrix = mat4(1.0);
-//            sampletv = globalEndtv;
-//            return;
-//        }
-//        globalDepth += globalDist;
-//        if (globalDepth >= localDepth){
-//            break;
-//        }
-//    }
-//}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2216,11 +1465,14 @@ vec3 boxMapping(in sampler2D sam, in tangVector point)
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
 
+/*
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);
-    pt = inverse(globalObjectBoost.matrix) * pt;
+    Isometry aux = makeInvLeftTranslation(globalObjectBoost);
+    pt = translate(aux, pt);
     return tangDirection(ORIGIN, pt).dir.xyz;
 }
+*/
 
 
 vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight){
@@ -2313,12 +1565,12 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 
 void main(){
     setResolution(res);
-    currentBoost=Isometry(currentBoostMat);
-    leftBoost=Isometry(leftBoostMat);
-    rightBoost=Isometry(rightBoostMat);
-    cellBoost=Isometry(cellBoostMat);
-    invCellBoost=Isometry(invCellBoostMat);
-    globalObjectBoost=Isometry(globalObjectBoostMat);
+    currentBoost = makeLeftTranslation(currentBoostMat);
+    leftBoost = makeLeftTranslation(leftBoostMat);
+    rightBoost = makeLeftTranslation(rightBoostMat);
+    cellBoost = makeLeftTranslation(cellBoostMat);
+    invCellBoost = makeLeftTranslation(invCellBoostMat);
+    globalObjectBoost = makeLeftTranslation(globalObjectBoostMat);
 
 
     //stereo translations ----------------------------------------------------
@@ -2341,7 +1593,7 @@ void main(){
     }
 
     //get our raymarched distance back ------------------------
-    Isometry totalFixMatrix = identityIsometry;
+    Isometry totalFixMatrix = identity;
     // intialize the parameters of the elliptic integrals/functions
     init_ellip(rayDir);
     // do the marching
