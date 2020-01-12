@@ -163,26 +163,26 @@ Position.prototype.localFlow = function (v) {
     // the geodesic flow distinguishes three cases
     if (a1 < srqt2inv) {
         omega = Math.sqrt(1 - 2 * a1 * a1);
-        point.set(
+        point.set(new Vector3(
             (2 * (1 - Math.pow(a1, 2)) * Math.pow(Math.cosh(omega * t), 2) - 1) / Math.pow(omega, 2),
             2 * omega * a3 * Math.cosh(omega * t) * Math.sinh(omega * t) / Math.pow(omega, 2),
             -2 * a1 * a3 * Math.pow(Math.sinh(omega * t), 2) / Math.pow(omega, 2)
-        );
+        ));
         phi = phi + Math.atan2(point.z, point.y);
     } else if (a1 === srqt2inv) {
-        point.set(
+        point.set(new Vector3(
             Math.pow(t, 2) + 1,
             Math.sqrt(2) * t,
             -Math.pow(t, 2)
-        );
+        ));
         phi = phi + Math.atan2(point.z, point.y);
     } else {
         omega = Math.sqrt(2 * a1 * a1 - 1);
-        point.set(
+        point.set(new Vector3(
             (2 * (Math.pow(a1, 2) - 1) * Math.pow(Math.cos(omega * t), 2) + 1) / Math.pow(omega, 2),
             2 * omega * a3 * Math.cos(omega * t) * Math.sin(omega * t) / Math.pow(omega, 2),
             -2 * a1 * a3 * Math.pow(Math.sin(omega * t), 2) / Math.pow(omega, 2)
-        );
+        ));
         phi = phi + Math.atan2(point.z, point.y) + 2 * Math.floor(0.5 - 0.5 * omega * t / Math.PI) * Math.PI;
     }
 
@@ -332,8 +332,6 @@ Vector3.prototype.rotateByFacing = function (position) {
     this.set(aux.y, aux.z, aux.w);
     return this;
 };
-
-
 
 
 export {

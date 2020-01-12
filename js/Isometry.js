@@ -49,12 +49,11 @@ Vector4.prototype.scaleBy = function (scalar) {
 
  */
 
-Vector4.prototype.translateBy = function(isom) {
+Vector4.prototype.translateBy = function (isom) {
     let aux = new Isometry().makeLeftTranslation(this.x, this.y, this.z, this.w);
     aux.premultiply(isom);
     return new Vector4(aux.phi, aux.point.x, aux.point.y, aux.point.z);
 };
-
 
 
 /**
@@ -67,6 +66,10 @@ function H2Elt() {
     // by default return the origin
     this.coord = new Vector3(1, 0, 0);
 }
+
+H2Elt.prototype.set = function (coord) {
+    this.coord = coord;
+};
 
 H2Elt.prototype.rotateBy = function (alpha) {
     // Rotate the current point by an angle alpha
@@ -122,7 +125,9 @@ H2Elt.prototype.equals = function (elt) {
 
 H2Elt.prototype.clone = function () {
     // clone the point
-    return new H2Elt().set(this.coord);
+    let res = new H2Elt();
+    res.set(this.coord);
+    return res;
 };
 
 
@@ -203,7 +208,7 @@ SL2Elt.prototype.rotateBy = function (alpha) {
 
 SL2Elt.prototype.translateFiberBy = function (phi) {
     // translate the current element along the fiber by the given angle phi
-    let m = new Matrix4(
+    let m = new Matrix4().set(
         Math.cos(phi), -Math.sin(phi), 0, 0,
         Math.sin(phi), Math.cos(phi), 0, 0,
         0, 0, Math.cos(phi), Math.sin(phi),
@@ -227,7 +232,7 @@ SL2Elt.prototype.flip = function () {
     return this;
 };
 
-H2Elt.prototype.reduceError = function () {
+SL2Elt.prototype.reduceError = function () {
     // correct the error to make sure that the point lies on the hyperboloid
     let q = -Math.pow(this.coord.x, 2) - Math.pow(this.coord.y, 2) + Math.pow(this.coord.z, 2) + Math.pow(this.coord.w, 2);
     this.coord.scaleBy(1 / Math.sqrt(-q));
@@ -273,7 +278,7 @@ Isometry.prototype.toSL2 = function () {
     return res;
 };
 
-Isometry.prototype.toVector4 = function() {
+Isometry.prototype.toVector4 = function () {
     // return a 4 dim vector of the form (phi, y1, y2, y3)
     // where (y1,y2,y3) are the coordinates of the underlying point of H2
     return new Vector4(this.phi, this.point.x, this.point.y, this.point.z);
@@ -284,7 +289,7 @@ Isometry.prototype.makeLeftTranslation = function (phi, x, y, z) {
     // return the "left translation" by (phi,x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.phi = phi;
-    this.point.set(x, y, z);
+    this.point.set(new Vector3(x, y, z));
     return this;
 };
 
@@ -292,7 +297,7 @@ Isometry.prototype.makeInvLeftTranslation = function (phi, x, y, z) {
     // return the inverse of the "left translation" by (phi,x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.phi = phi;
-    this.point.set(x, y, z);
+    this.point.set(new Vector3(x, y, z));
     this.getInverse();
     return this;
 };
