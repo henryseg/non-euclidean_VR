@@ -34,6 +34,8 @@ const bool FAKE_DIST_SPHERE = false;
 const float centerSphereRadius =0.67;
 const float vertexSphereSize = 0.23;//In this case its a horosphere
 
+const float modelHalfCube = 0.5;
+
 //----------------------------------------------------------------------------------------------------------------------
 // "TRUE" CONSTANTS
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,54 +86,13 @@ int hitWhich = 0;
 //----------------------------------------------------------------------------------------------------------------------
 
 
-// A point in H2 is reprented by a vec3 corresponding to its coordinate in the hyperboloid model
-
-vec3 H2rotateBy(vec3 point, float alpha) {
-    mat3 R = mat3(
-    1, 0, 0,
-    0, cos(alpha), sin(alpha),
-    0 - sin(alpha), cos(alpha)
-    );
-    vec3 res = R * point;
-    res = H2reduceError(res);
-    return res;
-}
-
-vec3 H2flip(vec3 point) {
-    vec3 res =  vec3(
-    point.x,
-    -point.z,
-    -point.y
-    );
-    res = H2reduceError(res);
-    return res;
-}
-
-vec3 H2translateBy(vec3 point, vec4 elt) {
-    mat3 aux = SL2toMat3(elt);
-    vec3 res = aux * point;
-    res = H2reduceError(res);
-    return res;
-}
-
-vec4 H2toSL2(vec3 point) {
-    vec4 res =  vec4(
-    sqrt(0.5 + 0.5 * point.x),
-    0,
-    - point.z / sqrt(2. * point.x + 2.),
-    point.y / sqrt(2. * point.x + 2.)
-    );
-    res = H2reduceError(res);
-    return res;
-}
-
-vec3 H2reduceError(vec3 point) {
-    float q = - point.x * point.x + point.y * point.y + point.z * point.z;
-    return point / sqrt(-q);
-}
 
 
 // A point in SL(2,R) is represented by a vec4 corresponding to its coordinates in the hyperboloid model
+vec4 SL2reduceError(vec4 elt) {
+    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
+    return elt / sqrt(-q);
+}
 
 vec4 SL2rotateBy(vec4 elt, float alpha){
     mat4 R = mat4(
@@ -203,16 +164,59 @@ vec4 SL2multiply(vec4 elt1, vec4 elt2) {
     return res;
 }
 
-vec4 SL2reduceError(vec4 elt) {
-    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
-    return elt / sqrt(-q);
+// A point in H2 is reprented by a vec3 corresponding to its coordinate in the hyperboloid model
+
+vec3 H2reduceError(vec3 point) {
+    float q = - point.x * point.x + point.y * point.y + point.z * point.z;
+    return point / sqrt(-q);
 }
+
+
+vec3 H2rotateBy(vec3 point, float alpha) {
+    mat3 R = mat3(
+    1, 0, 0,
+    0, cos(alpha), sin(alpha),
+    0, - sin(alpha), cos(alpha)
+    );
+    vec3 res = R * point;
+    res = H2reduceError(res);
+    return res;
+}
+
+vec3 H2flip(vec3 point) {
+    vec3 res =  vec3(
+    point.x,
+    -point.z,
+    -point.y
+    );
+    res = H2reduceError(res);
+    return res;
+}
+
+vec3 H2translateBy(vec3 point, vec4 elt) {
+    mat3 aux = SL2toMat3(elt);
+    vec3 res = aux * point;
+    res = H2reduceError(res);
+    return res;
+}
+
+vec4 H2toSL2(vec3 point) {
+    vec4 res = vec4(
+    sqrt(0.5 + 0.5 * point.x),
+    0,
+    - point.z / sqrt(2. * point.x + 2.),
+    point.y / sqrt(2. * point.x + 2.)
+    );
+    res = SL2reduceError(res);
+    return res;
+}
+
 
 // A point in USL(2,R) -- the universal covver of SL(2,R) -- is represented by a vec4
 // the first coordinate is the fiber angle
 // the last three coordinates are a point in H2 in the hyperboloid model
 
-vec4 USL2rotateBy(vec4 p, float angle) {
+vec4 USL2rotateBy(vec4 p, float alpha) {
     vec4 res = vec4(
     p.x,
     H2rotateBy(p.yzw, alpha)
@@ -257,7 +261,7 @@ vec4 IsomToSL2(Isometry isom) {
 Isometry composeIsometry(Isometry isom1, Isometry isom2) {
     vec4 aux1 = IsomToSL2(isom1);
     vec4 aux2 = IsomToSL2(isom2);
-    vec3 resPoint = H2translateBy(isom2.point, isom1);
+    vec3 resPoint = H2translateBy(isom2.point, aux1);
     aux2 = SL2multiply(aux1, aux2);
     aux2 = SL2translateFiberBy(aux2, -isom1.phi - isom2.phi);
     float resPhi = isom1.phi + isom2.phi + atan(aux2.y, aux2.x);
@@ -272,7 +276,7 @@ Isometry makeLeftTranslation(vec4 p) {
 Isometry makeInvLeftTranslation(vec4 p) {
     return Isometry(
     -p.x,
-    H2rotateBy(p.yzw, PI - 2 * p.x)
+    H2rotateBy(p.yzw, PI - 2. * p.x)
     );
 }
 
@@ -538,11 +542,13 @@ localTangVector scalarMult(float a, localTangVector v) {
     // scalar multiplication of a tangent vector
     return localTangVector(v.pos, a * v.dir);
 }
+*/
 
 float tangDot(localTangVector u, localTangVector v){
     return dot(u.dir.xyz, v.dir.xyz);
 
 }
+
 
 float tangNorm(localTangVector v){
     // calculate the length of a tangent vector
@@ -554,11 +560,13 @@ localTangVector tangNormalize(localTangVector v){
     return localTangVector(v.pos, v.dir/tangNorm(v));
 }
 
+/*
 float cosAng(localTangVector u, localTangVector v){
     // cosAng between two vector in the tangent bundle
     return tangDot(u, v);
 }
 */
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // CONVERSION BETWEEN TANGVECTOR AND LOCALTANGVECTOR
@@ -663,7 +671,7 @@ tangVector tangDirection(localTangVector u, localTangVector v){
 vec4 flowDir(vec4 dir, float t) {
     // compute the direction part of the geodesic flow
     // there is no trichotomy here
-    float omegat = 4 * dir.y * t;
+    float omegat = 4. * dir.y * t;
     mat4 S = mat4(
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -745,14 +753,14 @@ localTangVector flow(localTangVector tv, float t) {
         flipped = true;
     }
     float alpha = atan(aux.w, aux.z) -0.5 * PI;
-    aux = vec4(0., aux.y, 0, 0, sqrt(1. - aux.y * aux.y));
+    aux = vec4(0., aux.y, 0., sqrt(1. - aux.y * aux.y));
 
     float threshold = 1./sqrt(2.);
     vec4 posFromOrigin;
-    if (a1 < threshold) {
+    if (aux.y < threshold) {
         posFromOrigin = flowFromOriginH2Like(aux, t);
     }
-    else if (a1 == threshold) {
+    else if (aux.y == threshold) {
         posFromOrigin = flowFromOriginIntermediate(aux, t);
     }
     else {
@@ -926,6 +934,7 @@ float localSceneSDF(vec4 p){
     float lightDist;
     float distance = MAX_DIST;
 
+    /*
     lightDist=sphereSDF(p, localLightPos, lightRad);
     distance=min(distance, lightDist);
     if (lightDist < EPSILON){
@@ -934,6 +943,7 @@ float localSceneSDF(vec4 p){
         colorOfLight=vec3(1., 1., 1.);
         return lightDist;
     }
+
 
     if (display==3){ //dragon
         vec4 center = vec4(0., 0., 0., 1.);;
@@ -1004,6 +1014,7 @@ float localSceneSDF(vec4 p){
             return planesDist;
         }
     }
+    */
     return distance;
 }
 
@@ -1031,14 +1042,14 @@ float globalSceneSDF(vec4 p){
     }
     //Global Sphere Object
 
-    float objDist = sliceSDF(absolutep);
+    //float objDist = sliceSDF(absolutep);
     //float slabDist;
-    //float sphDist;
+    float sphDist;
     //slabDist = sliceSDF(absolutep);
-    //sphDist=sphereSDF(absolutep,vec4(0.,0.,-0.2,1.),0.5);
+    sphDist=sphereSDF(absolutep,globalObjectBoostMat,0.5);
     //objDist=max(slabDist,-sphDist);
     // objDist=MAX_DIST;
-
+    distance = min(distance, sphDist);
 
     //global plane
 
@@ -1062,7 +1073,6 @@ float globalSceneSDF(vec4 p){
 
 // check if the given point p is in the fundamental domain of the lattice.
 
-float denominator=GoldenRatio+2.;
 
 bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
@@ -1482,18 +1492,16 @@ vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight
     color = phongModel(totalFixMatrix, 0.5*colorOfLight);
     color = 0.7*color+0.3;
     return color;
-
 }
-
-
 
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     if (EARTH){
         N = estimateNormal(sampletv.pos);
-        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+        //vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
         vec3 color2 = phongModel(totalFixMatrix, color);
-        //color = 0.9*color+0.1;
-        return 0.5*color + 0.5*color2;
+        vec3 color = 0.9*color2+0.1;
+        return color;
+        //return 0.5*color + 0.5*color2;
     }
     else {
 
