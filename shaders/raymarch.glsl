@@ -399,7 +399,7 @@ float tangDot(tangVector u, tangVector v){
     mat4 g = mat4(
     2. * (y2 + 1.) * y2, 0., -y0 * (2. * y2 + 1.), -2. * y1 * (y2 + 1.),
     0., 2. * (y2 + 1.) * y2, -y1 * (2. * y2 + 1.), 2. * y0 * (y2 + 1.),
-    -y0 * (2. * y2 + 1.), -y1 * (2. * y2 + 1.), 2. * y2 * y2 - 1., 0.
+    -y0 * (2. * y2 + 1.), -y1 * (2. * y2 + 1.), 2. * y2 * y2 - 1., 0.,
     -2. * y1 * (y2 + 1.), 2. * y0 * (y2 + 1.), 0., 4. * pow(y2 + 1., 2.)
     );
     g = g / (4. * pow(y2 + 1., 2.));
@@ -757,7 +757,7 @@ vec4 flowFromOriginIntermediate(vec4 dir, float t) {
 
 
     vec3 point = vec3(
-    sqrt(2) * t,
+    sqrt(2.) * t,
     - pow(t, 2.),
     pow(t, 2.) + 1.
     );

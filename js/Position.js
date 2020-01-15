@@ -15,6 +15,7 @@
 */
 
 import {
+    Matrix3,
     Matrix4,
     Vector3,
     Vector4
@@ -24,7 +25,6 @@ import {
     Isometry,
     H2Elt
 } from "./Isometry.js";
-import {Matrix3} from "./module/three.module";
 
 
 /**
