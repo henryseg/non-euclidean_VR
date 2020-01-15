@@ -43,7 +43,7 @@ const float modelHalfCube = 0.5;
 const float PI = 3.1415926538;
 const float sqrt3 = 1.7320508075688772;
 
-const vec4 ORIGIN = vec4(0, 1, 0, 0);
+const vec4 ORIGIN = vec4(0, 0, 1, 0);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -88,16 +88,16 @@ int hitWhich = 0;
 
 // A point in SL(2,R) is represented by a vec4 corresponding to its coordinates in the hyperboloid model
 vec4 SL2reduceError(vec4 elt) {
-    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
+    float q = elt.x * elt.x + elt.y * elt.y - elt.z * elt.z - elt.w * elt.w;
     return elt / sqrt(-q);
 }
 
 vec4 SL2rotateBy(vec4 elt, float alpha){
     mat4 R = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, cos(alpha), sin(alpha),
-    0, 0, - sin(alpha), cos(alpha)
+    cos(alpha), sin(alpha), 0, 0,
+    - sin(alpha), cos(alpha), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
     );
     vec4 res = R * elt;
     res = SL2reduceError(res);
@@ -108,8 +108,8 @@ vec4 SL2translateFiberBy(vec4 elt, float phi) {
     mat4 T = mat4(
     cos(phi), sin(phi), 0, 0,
     -sin(phi), cos(phi), 0, 0,
-    0, 0, cos(phi), -sin(phi),
-    0, 0, sin(phi), cos(phi)
+    0, 0, cos(phi), sin(phi),
+    0, 0, -sin(phi), cos(phi)
     );
     vec4 res = T * elt;
     res = SL2reduceError(res);
@@ -118,10 +118,10 @@ vec4 SL2translateFiberBy(vec4 elt, float phi) {
 
 vec4 SL2flip(vec4 elt) {
     mat4 F = mat4(
+    0, 1, 0, 0,
     1, 0, 0, 0,
-    0, -1, 0, 0,
-    0, 0, 0, 1,
-    0, 0, 1, 0
+    0, 0, -1, 0,
+    0, 0, 0, 1
     );
     vec4 res = F * elt;
     res = SL2reduceError(res);
@@ -130,15 +130,15 @@ vec4 SL2flip(vec4 elt) {
 
 mat3 SL2toMat3(vec4 elt){
     mat4 aux1 = mat4(
-    elt.y, elt.z, elt.w, 0,
-    elt.x, elt.w, -elt.z, 0,
-    elt.w, elt.x, elt.y, 0,
-    -elt.z, -elt.y, elt.x, 0
+    elt.w, elt.z, elt.y, 0,
+    -elt.z, elt.w, -elt.x, 0,
+    elt.y, -elt.x, elt.w, 0,
+    elt.x, elt.y, elt.z, 0
     );
     mat4 aux2 = mat4(
-    elt.y, elt.x, elt.w, -elt.z,
-    -elt.z, elt.w, elt.x, elt.y,
-    -elt.w, -elt.z, -elt.y, elt.x,
+    elt.w, elt.z, elt.y, -elt.x,
+    -elt.z, elt.w, -elt.x, -elt.y,
+    elt.y, -elt.x, elt.w, elt.z,
     0, 0, 0, 0
     );
     mat3 res = mat3(aux1 * aux2);
@@ -147,10 +147,10 @@ mat3 SL2toMat3(vec4 elt){
 
 mat4 SL2toMat4(vec4 elt) {
     mat4 res = mat4(
-    elt.x, elt.y, elt.z, elt.w,
-    -elt.y, elt.x, -elt.w, elt.z,
-    elt.z, -elt.w, elt.x, -elt.y,
-    elt.w, elt.z, elt.y, elt.x
+    elt.w, elt.z, elt.y, elt.x,
+    -elt.z, elt.w, -elt.x, elt.y,
+    elt.y, -elt.x, elt.w, -elt.z,
+    elt.x, elt.y, elt.z, elt.w
     );
     return res;
 }
@@ -162,19 +162,27 @@ vec4 SL2multiply(vec4 elt1, vec4 elt2) {
     return res;
 }
 
+
+// the vectors in the lie algebra of SL(2,R) avec vectors of the form (x,y,z,w) with w = 0.
+
+vec4 TSL2flip(vec4 v) {
+    // apply the flip to an element in the lie algebra of SL(2,R)
+    return vec4(v.y, v.x, -v.z, 0.);
+}
+
 // A point in H2 is reprented by a vec3 corresponding to its coordinate in the hyperboloid model
 
 vec3 H2reduceError(vec3 point) {
-    float q = - point.x * point.x + point.y * point.y + point.z * point.z;
+    float q = point.x * point.x + point.y * point.y - point.z * point.z;
     return point / sqrt(-q);
 }
 
 
 vec3 H2rotateBy(vec3 point, float alpha) {
     mat3 R = mat3(
-    1, 0, 0,
-    0, cos(alpha), sin(alpha),
-    0, - sin(alpha), cos(alpha)
+    cos(alpha), sin(alpha), 0,
+    - sin(alpha), cos(alpha), 0,
+    0, 0, 1
     );
     vec3 res = R * point;
     res = H2reduceError(res);
@@ -183,9 +191,9 @@ vec3 H2rotateBy(vec3 point, float alpha) {
 
 vec3 H2flip(vec3 point) {
     vec3 res =  vec3(
-    point.x,
-    -point.z,
-    -point.y
+    -point.y,
+    -point.x,
+    point.z
     );
     res = H2reduceError(res);
     return res;
@@ -200,10 +208,10 @@ vec3 H2translateBy(vec3 point, vec4 elt) {
 
 vec4 H2toSL2(vec3 point) {
     vec4 res = vec4(
-    sqrt(0.5 + 0.5 * point.x),
+    - point.y / sqrt(2. * point.z + 2.),
+    point.x / sqrt(2. * point.z + 2.),
     0,
-    - point.z / sqrt(2. * point.x + 2.),
-    point.y / sqrt(2. * point.x + 2.)
+    sqrt(0.5 + 0.5 * point.z)
     );
     res = SL2reduceError(res);
     return res;
@@ -216,16 +224,16 @@ vec4 H2toSL2(vec3 point) {
 
 vec4 USL2rotateBy(vec4 p, float alpha) {
     vec4 res = vec4(
-    p.x,
-    H2rotateBy(p.yzw, alpha)
+    H2rotateBy(p.xyz, alpha),
+    p.w
     );
     return res;
 }
 
 vec4 USL2flip(vec4 p){
     vec4 res = vec4(
-    - p.x,
-    H2flip(p.yzw)
+    H2flip(p.xyz),
+    -p.w
     );
     return res;
 }
@@ -262,19 +270,19 @@ Isometry composeIsometry(Isometry isom1, Isometry isom2) {
     vec3 resPoint = H2translateBy(isom2.point, aux1);
     aux2 = SL2multiply(aux1, aux2);
     aux2 = SL2translateFiberBy(aux2, -isom1.phi - isom2.phi);
-    float resPhi = isom1.phi + isom2.phi + atan(aux2.y, aux2.x);
+    float resPhi = isom1.phi + isom2.phi + atan(aux2.z, aux2.w);
     Isometry res = Isometry(resPhi, resPoint);
     return res;
 }
 
 Isometry makeLeftTranslation(vec4 p) {
-    return Isometry(p.x, p.yzw);
+    return Isometry(p.w, p.xyz);
 }
 
 Isometry makeInvLeftTranslation(vec4 p) {
     return Isometry(
-    -p.x,
-    H2rotateBy(p.yzw, PI - 2. * p.x)
+    -p.w,
+    H2rotateBy(p.xyz, PI - 2. * p.w)
     );
 }
 
@@ -284,8 +292,8 @@ vec4 translate(Isometry isom, vec4 p) {
     Isometry aux = makeLeftTranslation(p);
     aux = composeIsometry(isom, aux);
     vec4 res = vec4(
-    isom.phi,
-    isom.point
+    aux.point,
+    aux.phi
     );
     return res;
 }
@@ -384,17 +392,17 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 
 
 float tangDot(tangVector u, tangVector v){
+    float y0 = u.pos.x;
     float y1 = u.pos.y;
     float y2 = u.pos.z;
-    float y3 = u.pos.w;
 
     mat4 g = mat4(
-    4. * pow(y1 + 1., 2.), 0., -2. * (y1 + 1.) * y3, 2. * (y1 + 1.) * y2,
-    0., 2. * pow(y1, 2.) - 1., - (2. * y1 + 1.) * y2, - (2. * y1 + 1.) * y3,
-    -2. * (y1 + 1.) * y3, - (2. * y1 + 1.) * y2, 2. * (y1 + 1.) * y1, 0.,
-    2. * (y1 + 1.) * y2, - (2. * y1 + 1.) * y3, 0., 2. * (y1 + 1.) * y1
+    2. * (y2 + 1.) * y2, 0., -y0 * (2. * y2 + 1.), -2. * y1 * (y2 + 1.),
+    0., 2. * (y2 + 1.) * y2, -y1 * (2. * y2 + 1.), 2. * y0 * (y2 + 1.),
+    -y0 * (2. * y2 + 1.), -y1 * (2. * y2 + 1.), 2. * y2 * y2 - 1., 0.
+    -2. * y1 * (y2 + 1.), 2. * y0 * (y2 + 1.), 0., 4. * pow(y2 + 1., 2.)
     );
-    g = g / (4. * pow(y1 + 1., 2.));
+    g = g / (4. * pow(y2 + 1., 2.));
     return dot(u.dir, g * v.dir);
 
 }
@@ -421,12 +429,12 @@ float cosAng(tangVector u, tangVector v){
 
 mat4 tangBasis(vec4 p){
     // return a basis of vectors at the point p
-    // given a tangent vector (u0, u1, u2, u3) at (phi, y1, y2, y3) it satisfies
-    // - y1 * u1 + y2 * u2 + y3 * u3 = 0 (because of the hyperboloid model of H2)
+    // given a tangent vector (u0, u1, u2, u3) at (y0, y1, y2, phi) it satisfies
+    //  y0 * u0 + y1 * u1 - y2 * u2 = 0 (because of the hyperboloid model of H2)
 
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., p.z / p.y, 1., 0.);
-    vec4 basis_z = vec4(0., p.w / p.y, 0., 1.);
+    vec4 basis_x = vec4(1., 0., p.x/p.z, 0.);
+    vec4 basis_y = vec4(0., 1., p.y/p.z, 0.);
+    vec4 basis_z = vec4(0., 0., 0., 1.);
     mat4 theBasis = mat4(0.);
     theBasis[0]=basis_x;
     theBasis[1]=basis_y;
@@ -481,15 +489,15 @@ localTangVector translate(Isometry isom, localTangVector v) {
 
 localTangVector rotateBy(localTangVector v, float alpha) {
     // rotate the tangent vector (position and direction around the fiber by an angle alpha)
-    vec3 point = v.pos.yzw;
+    vec3 point = v.pos.xyz;
     point = H2rotateBy(point, alpha);
-    vec4 resPos = vec4(v.pos.x, point);
+    vec4 resPos = vec4(point, v.pos.w);
 
     mat4 R = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, cos(alpha), sin(alpha),
-    0, 0, -sin(alpha), cos(alpha)
+    cos(alpha), sin(alpha), 0, 0,
+    -sin(alpha), cos(alpha), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
     );
     vec4 resDir = R * v.dir;
     localTangVector res = localTangVector(resPos, resDir);
@@ -499,15 +507,15 @@ localTangVector rotateBy(localTangVector v, float alpha) {
 
 localTangVector flip(localTangVector v) {
     // apply the "flip" to the tangent vector (position and direction)
-    vec3 point = v.pos.yzw;
+    vec3 point = v.pos.xyz;
     point = H2flip(point);
-    vec4 resPos = vec4(-v.pos.x, point);
+    vec4 resPos = vec4(point, -v.pos.w);
 
     mat4 F = mat4(
+    0, 1, 0, 0,
     1, 0, 0, 0,
-    0, -1, 0, 0,
-    0, 0, 0, 1,
-    0, 0, 1, 0
+    0, 0, -1, 0,
+    0, 0, 0, 1
     );
     vec4 resDir = F * v.dir;
     localTangVector res = localTangVector(resPos, resDir);
@@ -518,7 +526,7 @@ localTangVector flip(localTangVector v) {
 
 localTangVector rotateFacing(mat4 A, localTangVector v){
     // apply an isometry to the direction part of the tangent vector
-    return localTangVector(v.pos, A*v.dir);
+    return localTangVector(v.pos, A * v.dir);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -583,19 +591,22 @@ localTangVector toLocalTangVector(tangVector v) {
 }
 */
 
-tangVector toTangVector(localTangVector v) {
-    float phi = v.pos.x;
-    float y1 = v.pos.y;
-    float y2 = v.pos.z;
-    float y3 = v.pos.w;
 
-    float aux1 = y2 * cos(2. * phi) + y3 * sin(2. * phi);
-    float aux2 = y3 * cos(2. * phi) - y2 * sin(2. * phi);
+
+
+tangVector toTangVector(localTangVector v) {
+    float y0 = v.pos.x;
+    float y1 = v.pos.t;
+    float y2 = v.pos.z;
+    float phi = v.pos.w;
+
+    float aux1 = y0 * cos(2. * phi) + y1 * sin(2. * phi);
+    float aux2 = y1 * cos(2. * phi) - y0 * sin(2. * phi);
     mat4 m = mat4(
-    0., 2. * y1+2., 2. * y2, 2. * y3,
-    1., 0., 0., 0.,
-    aux1 / (y1 + 1.), -2. * aux2, -2. * y2 * aux2 / (y1 + 1.) + 2. * sin(2. * phi), -2. * y3 * aux2 / (y1 + 1.) - 2. * cos(2. * phi),
-    aux2 / (y1 + 1.), 2. * aux1, 2. * y2 * aux1 / (y1 + 1.) + 2. * cos(2. * phi), 2. * y3 * aux1 / (y1 + 1.) + 2. * sin(2. * phi)
+    -2. * y0 * aux2 / (y2 + 1.) + 2. * sin(2. * phi), -2. * y1 * aux2 / (y2 + 1.) - 2. * cos(2. * phi), -2. * aux2, aux1 / (y2 + 1.),
+    2. * y0 * aux1 / (y2 + 1.) + 2. * cos(2. * phi), 2. * y1 * aux1 / (y2 + 1.) + 2. * sin(2. * phi), 2. * aux1, aux2 / (y2 + 1.),
+    0., 0., 0., 1.,
+    2. * y0, 2. * y1, 2. * y2 + 2., 0.
     );
 
     tangVector res = tangVector(v.pos, m * v.dir);
@@ -671,37 +682,41 @@ tangVector tangDirection(localTangVector u, localTangVector v){
 }
 
 
+
 vec4 flowDir(vec4 dir, float t) {
     // compute the direction part of the geodesic flow
     // there is no trichotomy here
-    float omegat = 4. * dir.y * t;
+    float omegat = 4. * dir.z * t;
     mat4 S = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, cos(omegat), -sin(omegat),
-    0, 0, sin(omegat), cos(omegat)
+    cos(omegat), -sin(omegat), 0, 0,
+    sin(omegat), cos(omegat), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
     );
     vec4 res = S * dir;
     return res;
 }
 
+
 vec4 flowFromOriginH2Like(vec4 dir, float t) {
     // follow the geodesic flow from the origin during time t in the given direction
     // we assume that the direction  has the following form
-    // dir = (0, a1, 0, a3) with
-    // * 0 <= a1 < 1/sqrt(2)
-    // * 0 <= a3
+    // dir = (0, a1, a2, 0) with
+    // * 0 <= a2 < a1
     // return the achieved position
     float a1 = dir.y;
-    float a3 = dir.w;
-    float phi = 2. * a1 * t;
-    float omega = sqrt(1. - 2. * a1 * a1);
+    float a2 = dir.z;
+    float phi = 2. * a2 * t;
+    float omega = sqrt(a1 * a1 - a2 * a2);
+    float ct = cosh(omega * t);
+    float st = sinh(omega * t);
+
     vec3 point = vec3(
-    (2. * (1. - pow(a1, 2.)) * pow(cosh(omega * t), 2.) - 1.) / pow(omega, 2.),
-    2. * omega * a3 * cosh(omega * t) * sinh(omega * t) / pow(omega, 2.),
-    -2. * a1 * a3 * pow(sinh(omega * t), 2.) / pow(omega, 2.)
+    2. * a1 * ct * st / omega,
+    - 2. * a1 * a2 * pow(st / omega, 2.),
+    1. + 2. * pow(a1 * ct / omega, 2.)
     );
-    phi = phi + atan(point.z, point.y);
+    phi = phi + atan(point.y, point.x);
     vec4 res = vec4(phi, point);
     return res;
 }
@@ -709,20 +724,22 @@ vec4 flowFromOriginH2Like(vec4 dir, float t) {
 vec4 flowFromOriginFiberLike(vec4 dir, float t) {
     // follow the geodesic flow from the origin during time t in the given direction
     // we assume that the direction  has the following form
-    // dir = (0, a1, 0, a3) with
-    // * 1/sqrt(2) < a1
-    // * 0 <= a3
+    // dir = (0, a1, a2, 0) with
+    // * 0 <= a1 < a2
     // return the achieved position
     float a1 = dir.y;
-    float a3 = dir.w;
-    float phi = 2. * a1 * t;
-    float omega = sqrt(2. * a1 * a1 - 1.);
+    float a2 = dir.z;
+    float phi = 2. * a2 * t;
+    float omega = sqrt(a2 * a2 - a1 * a1);
+    float ct = cos(omega * t);
+    float st = sin(omega * t);
+
     vec3 point = vec3(
-    (2. * (pow(a1, 2.) - 1.) * pow(cos(omega * t), 2.) + 1.) / pow(omega, 2.),
-    2. * omega * a3 * cos(omega * t) * sin(omega * t) / pow(omega, 2.),
-    -2. * a1 * a3 * pow(sin(omega * t), 2.) / pow(omega, 2.)
+    2. * a1 * ct * st / omega,
+    - 2. * a1 * a2 * pow(st / omega, 2.),
+    1. + 2. * pow(a1 * ct / omega, 2.)
     );
-    phi = phi + atan(point.z, point.y) + 2. * floor(0.5 - 0.5 * omega * t / PI) * PI;
+    phi = phi + atan(point.y, point.x) + 2. * floor(0.5 - 0.5 * omega * t / PI) * PI;
     vec4 res = vec4(phi, point);
     return res;
 }
@@ -730,20 +747,21 @@ vec4 flowFromOriginFiberLike(vec4 dir, float t) {
 vec4 flowFromOriginIntermediate(vec4 dir, float t) {
     // follow the geodesic flow from the origin during time t in the given direction
     // we assume that the direction  has the following form
-    // dir = (0, a1, 0, a3) with
-    // * a1 = 1/sqrt(2) (or rouglhy equals this value)
-    // * 0 <= a3
+    // dir = (0, a1, a2, 0) with
+    // * 0 <= a1 = a2
     // return the achieved position
     // TODO: replace the exact formular with an asymptotic expansion of the other cases around a1 = 1/sqrt(2)
     float a1 = dir.y;
-    float a3 = dir.w;
-    float phi = 2. * a1 * t;
+    float a2 = dir.z;
+    float phi = 2. * a2 * t;
+
+
     vec3 point = vec3(
-    pow(t, 2.) + 1.,
-    sqrt(2.) * t,
-    -pow(t, 2.)
+    sqrt(2) * t,
+    - pow(t, 2.),
+    pow(t, 2.) + 1.
     );
-    phi = phi + atan(point.z, point.y);
+    phi = phi + atan(point.y, point.x);
     vec4 res = vec4(phi, point);
     return res;
 }
@@ -751,19 +769,18 @@ vec4 flowFromOriginIntermediate(vec4 dir, float t) {
 localTangVector flow(localTangVector tv, float t) {
     vec4 aux = tv.dir;
     bool flipped = false;
-    if (aux.y < 0.) {
-        aux = vec4(0., -aux.y, aux.w, aux.z);
+    if (aux.z < 0.) {
+        aux = TSL2flip(aux);
         flipped = true;
     }
-    float alpha = atan(aux.w, aux.z) -0.5 * PI;
-    aux = vec4(0., aux.y, 0., sqrt(1. - aux.y * aux.y));
+    float alpha = atan(aux.y, aux.x) -0.5 * PI;
+    aux = vec4(0., sqrt(1. - aux.z * aux.z), aux.z, 0.);
 
-    float threshold = 1./sqrt(2.);
     vec4 posFromOrigin;
-    if (aux.y < threshold) {
+    if (aux.z < aux.y) {
         posFromOrigin = flowFromOriginH2Like(aux, t);
     }
-    else if (aux.y == threshold) {
+    else if (aux.z == aux.y) {
         posFromOrigin = flowFromOriginIntermediate(aux, t);
     }
     else {
@@ -1565,7 +1582,7 @@ localTangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //cre
     vec2 xy = 0.2 * ((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1 / tan(radians(fov * 0.5));
     // code specific to SL2 (change the system of coordinates to make it coherent with the other geometries ?)
-    localTangVector tv = localTangVector(ORIGIN, vec4(0., -z, xy));
+    localTangVector tv = localTangVector(ORIGIN, vec4(xy, -z, 0.));
     localTangVector v =  tangNormalize(tv);
     return v;
 }

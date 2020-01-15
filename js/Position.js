@@ -24,43 +24,33 @@ import {
     Isometry,
     H2Elt
 } from "./Isometry.js";
+import {Matrix3} from "./module/three.module";
 
 
 /**
  * We represent the points of the universal cover X of SL(2,R) as Vector4 where
- * - the first coordinate is the angle in the fiber
- * - the last three coordinates are its projection on H^2 in the hyperboloid model
- * The origin of the space (corresponding to the identity of X) is (0,1,0,0)
+ * - the first three coordinates are its projection on H^2 in the hyperboloid model
+ * - the last coordinate is the angle in the fiber
+ * The origin of the space (corresponding to the identity of X) is (0,0,1,0)
  *
  * A position is a pair (boost, facing) where
  * - boost is an isometry of X (associated to a point of X)
- * - the facing is an element of SO(3)
+ * - the facing is an element of SO(3) (seen as 4x4 matrix)
  *
  * We identify the tangent space at the origin of X, with the Lie algebra of SL(2,R) in its hyperboloid model
  * A tangent vector is represented by a Vector3.
- * - the first coordinates corresponds to the fiber
+ * - the last coordinates corresponds to the fiber
  * - the other two correspond to the directions in H^2
  *
  **/
 
 
-/*
-Matrix4.prototype.add = function (matrix) {
-    // addition of tow 4x4 matrices
-    this.set.apply(this, [].map.call(this.elements, function (c, i) {
-        return c + matrix.elements[i];
-    }));
-    return this;
-};
-*/
-
-const ORIGIN = new Vector4(0, 1, 0, 0);
+const ORIGIN = new Vector4(0, 0, 1, 0);
 
 function Position() {
     // By default the return position is the origin (with the "default" facing - negative z-direction ?)
     this.boost = new Isometry();
     this.facing = new Matrix4();
-
 }
 
 Position.prototype.setBoost = function (boost) {
@@ -140,51 +130,52 @@ Position.prototype.localFlow = function (v) {
     let aux = v.clone().normalize();
     // flip (if needed) the tangent vector so that its fiber coordinate is positive.
     let flipped = false;
-    if (aux.x < 0) {
+    if (aux.z < 0) {
         aux.flip();
         flipped = true;
     }
 
     // the angle alpha is characterized as follows
-    // if u is a tangent vector of the form (a1, 0, a3) with a1, a3 > 0
+    // if u is a tangent vector of the form (0, a1, a2) with a1, a2 >= 0
     // then aux is obtained from u by a rotation of angle alpha
     // In particular, if nu_o is the geodesic starting from o oriented by u
     // then the geodesic starting from o oriented by aux is obtained from nu_o by a rotation of angle alpha
     const alpha = Math.atan2(aux.y, aux.x) - Math.PI / 2;
-    const a1 = aux.x;
-    const a3 = Math.sqrt(1 - a1 * a1);
+    const a2 = aux.z;
+    const a1 = Math.sqrt(1 - a2 * a2);
 
 
-    const srqt2inv = 1 / Math.sqrt(2);
     let phi = 2 * a1 * t;   // the angle in the fiber achieved by the geodesic
     let point = new H2Elt();    // the point H2 achieved by the geodesic
     let omega = 0;  // the "angular velocity" of rotations involved in the geodesic flow
 
 
     // the geodesic flow distinguishes three cases
-    if (a1 < srqt2inv) {
-        omega = Math.sqrt(1 - 2 * a1 * a1);
+    if (a2 < a1) {
+        omega = Math.sqrt(a1 * a1 - a2 * a2);
+
         point.set(new Vector3(
-            (2 * (1 - Math.pow(a1, 2)) * Math.pow(Math.cosh(omega * t), 2) - 1) / Math.pow(omega, 2),
-            2 * omega * a3 * Math.cosh(omega * t) * Math.sinh(omega * t) / Math.pow(omega, 2),
-            -2 * a1 * a3 * Math.pow(Math.sinh(omega * t), 2) / Math.pow(omega, 2)
+            2 * a1 * Math.cosh(omega * t) * Math.sinh(omega * t) / omega,
+            -2 * a1 * a2 * Math.pow(Math.sinh(omega * t) / omega, 2),
+            1 + 2 * Math.pow(a1 * Math.sinh(omega * t) / omega, 2)
         ));
-        phi = phi + Math.atan2(point.coord.z, point.coord.y);
-    } else if (a1 === srqt2inv) {
+        phi = phi + Math.atan2(point.coord.y, point.coord.x);
+
+    } else if (a2 === a1) {
         point.set(new Vector3(
-            Math.pow(t, 2) + 1,
             Math.sqrt(2) * t,
-            -Math.pow(t, 2)
+            -Math.pow(t, 2),
+            Math.pow(t, 2) + 1
         ));
-        phi = phi + Math.atan2(point.coord.z, point.coord.y);
+        phi = phi + Math.atan2(point.coord.y, point.coord.x);
     } else {
-        omega = Math.sqrt(2 * a1 * a1 - 1);
+        omega = Math.sqrt(a2 * a2 - a1 * a1);
         point.set(new Vector3(
-            (2 * (Math.pow(a1, 2) - 1) * Math.pow(Math.cos(omega * t), 2) + 1) / Math.pow(omega, 2),
-            2 * omega * a3 * Math.cos(omega * t) * Math.sin(omega * t) / Math.pow(omega, 2),
-            -2 * a1 * a3 * Math.pow(Math.sin(omega * t), 2) / Math.pow(omega, 2)
+            2 * a1 * Math.cos(omega * t) * Math.sin(omega * t) / omega,
+            -2 * a1 * a2 * Math.pow(Math.sin(omega * t) / omega, 2),
+            1 + 2 * Math.pow(a1 * Math.sin(omega * t) / omega, 2)
         ));
-        phi = phi + Math.atan2(point.coord.z, point.coord.y) + 2 * Math.floor(0.5 - 0.5 * omega * t / Math.PI) * Math.PI;
+        phi = phi + Math.atan2(point.coord.y, point.coord.x) + 2 * Math.floor(0.5 - 0.5 * omega * t / Math.PI) * Math.PI;
     }
 
 
@@ -202,50 +193,49 @@ Position.prototype.localFlow = function (v) {
     // the parallel transport does not distinguish cases
     const P = new Matrix4().set(
         1, 0, 0, 0,
-        0, a1, 0, -a3,
-        0, 0, 1, 0,
-        0, a3, 0, a1
+        0, a2, a1, 0,
+        0, -a1, a2, 0,
+        0, 0, 0, 1
     );
     const Pinv = new Matrix4().getInverse(P);
     const etD = new Matrix4().set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, Math.cos(t), -Math.sin(t),
-        0, 0, Math.sin(t), Math.cos(t)
+        Math.cos(t), -Math.sin(t), 0, 0,
+        Math.sin(t), Math.cos(t), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
     );
     let Q = new Matrix4().set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, Math.cos(4 * a1 * t), Math.sin(4 * a1 * t),
-        0, 0, -Math.sin(4 * a1 * t), Math.cos(4 * a1 * t)
+        Math.cos(4 * a2 * t), Math.sin(4 * a2 * t), 0, 0,
+        -Math.sin(4 * a2 * t), Math.cos(4 * a2 * t), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
     );
     Q.multiply(P).multiply(etD).multiply(Pinv);
 
     const R = new Matrix4().set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, Math.cos(alpha), -Math.sin(alpha),
-        0, 0, Math.sin(alpha), Math.cos(alpha)
+        Math.cos(alpha), -Math.sin(alpha), 0, 0,
+        Math.sin(alpha), Math.cos(alpha), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
     );
     const Rinv = new Matrix4().set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, Math.cos(alpha), Math.sin(alpha),
-        0, 0, -Math.sin(alpha), Math.cos(alpha)
+        Math.cos(alpha), Math.sin(alpha), 0, 0,
+        -Math.sin(alpha), Math.cos(alpha), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
     );
     Q.premultiply(R);
     Q.multiply(Rinv);
 
     if (flipped) {
         const F = new Matrix4().set(
+            0, 1, 0, 0,
             1, 0, 0, 0,
-            0, -1, 0, 0,
-            0, 0, 0, 1,
-            0, 0, 1, 0
+            0, 0, -1, 0,
+            0, 0, 0, 1
         );
         Q.premultiply(F);
         Q.multiply(F);
-
     }
 
     this.facing.premultiply(Q);
@@ -264,17 +254,17 @@ Position.prototype.getInverse = function (position) {
 
 Position.prototype.getFwdVector = function (t = 1) {
     // return the vector of length t moving forward (taking into account the facing)
-    return new Vector3(0, t, 0).rotateByFacing(this);
+    return new Vector3(0, 0, t).rotateByFacing(this);
 };
 
 Position.prototype.getRightVector = function (t = 1) {
     // return the vector of length t moving right (taking into account the facing)
-    return new Vector3(0, 0, t).rotateByFacing(this);
+    return new Vector3(t, 0, 0).rotateByFacing(this);
 };
 
 Position.prototype.getUpVector = function (t = 1) {
     // return the vector of length t moving up (taking into account the facing)
-    return new Vector3(t, 0, 0).rotateByFacing(this);
+    return new Vector3(0, t, 0).rotateByFacing(this);
 };
 
 Position.prototype.reduceBoostError = function () {
@@ -329,8 +319,8 @@ Position.prototype.clone = function () {
 */
 
 Vector3.prototype.rotateByFacing = function (position) {
-    let aux = new Vector4(0, this.x, this.y, this.z).applyMatrix4(position.facing);
-    this.set(aux.y, aux.z, aux.w);
+    let aux = new Matrix3().setFromMatrix4(position.facing);
+    this.applyMatrix3(aux);
     return this;
 };
 
