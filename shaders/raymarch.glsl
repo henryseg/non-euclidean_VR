@@ -16,11 +16,14 @@ const bool FAKE_LIGHT = true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
-const bool LOCAL_EARTH=true;
-const bool TILING=false;
+const bool LOCAL_EARTH=false;
+const bool TILING=true;
 
 //local lights only on without the tiling: they help with definition on the earth but wash out the tiling
-const bool LOCAL_LIGHTS=!TILING;
+const bool LOCAL_LIGHTS=true;
+const bool RENDER_LOCAL_LIGHTS=false;
+float localLightIntensity=0.25;
+//!TILING;
 //bool hitLocal;
 //--------------------------------------------
 // "TRUE" CONSTANTS
@@ -352,10 +355,35 @@ float fakeDistance(vec4 p, vec4 q){
     return pow(0.2*pow(rhosq, 2.) + 0.8*pow(hsq, 2.), 0.25);
 }
 
+
 float fakeDistance(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
     return fakeDistance(u.pos, v.pos);
 }
+
+
+
+
+
+float ellipsoidDistance(vec4 p, vec4 q){
+    // measure the distance between two points in the geometry
+    // fake distance
+
+    mat4 isomInv = nilMatrixInv(p);
+    vec4 qOrigin = isomInv*q;
+    // we now need the distance between the origin and p
+    float rhosq = pow(qOrigin.x, 2.)+pow(qOrigin.y, 2.);
+    float hsq = fakeHeightSq(qOrigin.z);
+
+    return pow(1.*pow(rhosq, 10.) + 1.*pow(hsq, 2.), 0.25);
+}
+
+float ellipsoidDistance(tangVector u, tangVector v){
+    // overload of the previous function in case we work with tangent vectors
+    return ellipsoidDistance(u.pos, v.pos);
+}
+
+
 
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
@@ -637,6 +665,9 @@ float sphereSDF(vec4 p, vec4 center, float radius){
     }
 }
 
+float ellipsoidSDF(vec4 p, vec4 center, float radius){
+    return ellipsoidDistance(p,center)-radius;
+}
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
@@ -650,7 +681,7 @@ const int MAX_MARCHING_STEPS =  200;
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 300.0;
 const float EPSILON = 0.0001;
-const float fov = 120.0;
+const float fov = 130.0;
 const float sqrt3 = 1.7320508075688772;
 
 
@@ -663,8 +694,8 @@ vec4 globalLightColor = vec4(1.,1.,1.,1.);
 int hitWhich = 0;
 
 vec3 localLightColor=vec3(1.,1.,1.);
-vec4 localLightPos=vec4(0.0,0.0,0.3,1.);
-float localLightIntensity=0.5;
+vec4 localLightPos=vec4(0.0,0.4,-0.2,1.);
+
 //-------------------------------------------
 //Translation & Utility Variables
 //--------------------------------------------
@@ -710,9 +741,9 @@ float localSceneSDF(vec4 p){
     float lightDist;
     float distance = MAX_DIST;
     
-     if(LOCAL_LIGHTS){
+     if(RENDER_LOCAL_LIGHTS){
      vec4 lightCenter=localLightPos;
-      lightDist=sphereSDF(p,lightCenter,0.0);
+      lightDist=sphereSDF(p,lightCenter,0.05);
       distance =min(distance, lightDist);
         if (lightDist < EPSILON){
            // hitLocal = true;
@@ -735,6 +766,7 @@ float localSceneSDF(vec4 p){
         }  
     }
  if(TILING){
+    // tilingDist=ellipsoidSDF(p,vec4(0.,0.,0.3,1.),0.007);
     tilingDist = -sphereSDF(p, ORIGIN, 0.68);
      distance=min(distance, tilingDist);
         if(tilingDist < EPSILON){
@@ -1070,6 +1102,11 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
 // Lighting Functions
 //--------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
+
+//made some modifications to lighting calcuatiojns
+//put a coefficient of 2 in front of specular to make things shiny-er
+//changed the power from original of 10 on specular
+//in PHONG MODEL changed amount of color from 0.1 to more
 vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
     tangVector L = tangDirection(SP, TLP);
@@ -1079,7 +1116,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
-    vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
+    vec3 specular = 2.*lightIntensity.rgb * pow(rDotV, 20.0);
     //Attenuation - Inverse Square
     float distToLight = fakeDistance(SP, TLP);
     float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
@@ -1111,11 +1148,13 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     
     
     //move local light around by the generators to pick up lighting from nearby cells
-    for(int i=0; i<6; i++){
-        mat4 localLightIsom=invGenerators[i];
-        TLP=localLightIsom*localLightPos;
-        color+= lightingCalculations(SP,TLP,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
-    }
+        
+        
+//    for(int i=0; i<6; i++){
+//        mat4 localLightIsom=invGenerators[i];
+//        TLP=localLightIsom*localLightPos;
+//        color+= lightingCalculations(SP,TLP,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
+//    }
     
 
 }
@@ -1145,10 +1184,10 @@ vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
         float z=samplePos.z;
         x = 0.9*x/modelHalfCube;
         y = 0.9*y/modelHalfCube;
-        z = 0.9*z/modelHalfCube;
+        z = -0.9*z/modelHalfCube;
         vec3 color = vec3(x, y, z);
         N = estimateNormal(sampletv.pos);
-        color = phongModel(totalFixMatrix, 0.1*color);
+        color = phongModel(totalFixMatrix, 0.175*color);
         return 0.9*color+0.1;
         //adding a small constant makes it glow slightly
     }
