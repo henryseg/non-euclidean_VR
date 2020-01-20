@@ -16,8 +16,9 @@ const bool FAKE_LIGHT = true;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
-const bool LOCAL_EARTH=false;
+const bool LOCAL_EARTH=true;
 const bool TILING=true;
+const bool GLOBAL_EARTH=false;
 
 //local lights only on without the tiling: they help with definition on the earth but wash out the tiling
 const bool LOCAL_LIGHTS=true;
@@ -719,7 +720,7 @@ uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform mat4 globalObjectBoost;
 uniform mat4 localEarthBoost;
-
+uniform mat4 globalEarthBoost;
 //---------------------------------------------------------------------
 // Scene Definitions
 //---------------------------------------------------------------------
@@ -797,23 +798,26 @@ float localSceneSDF(vec4 p){
 // GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
 float globalSceneSDF(vec4 p){
+    float earthDist;
     vec4 absolutep = cellBoost * p;// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
-    for (int i=0; i<4; i++){
-        float objDist;
-        objDist = sphereSDF(
-        absolutep,
-        lightPositions[i],
-        0.0//0.05
-        );
-        distance = min(distance, objDist);
-        if (distance < EPSILON){
-            hitWhich = 1;
-            globalLightColor = lightIntensities[i];
-            return distance;
-        }
-    }
+//    for (int i=0; i<4; i++){
+//        float objDist;
+//        objDist = sphereSDF(
+//        absolutep,
+//        lightPositions[i],
+//        0.0//0.05
+//        );
+//        distance = min(distance, objDist);
+//        if (distance < EPSILON){
+//            hitWhich = 1;
+//            globalLightColor = lightIntensities[i];
+//            return distance;
+//        }
+//    }
+    
+    
     //Global Sphere Object
     float objDist;
     objDist = sphereSDF(absolutep, globalObjectBoost[3], globalObjectRadius);
@@ -821,6 +825,18 @@ float globalSceneSDF(vec4 p){
     if (distance < EPSILON){
         hitWhich = 2;
     }
+    
+    if(GLOBAL_EARTH){
+       vec4 earthCenter=globalEarthBoost*ORIGIN;
+       earthDist=sphereSDF(absolutep,earthCenter,0.15);
+        distance=min(distance,earthDist);
+        if(earthDist < EPSILON){
+           // hitLocal = true;
+            hitWhich = 8;
+            return earthDist;
+        }  
+    }
+    
     return distance;
 }
 
@@ -1240,6 +1256,26 @@ vec3 sphereOffset(mat4 objectFacing, vec4 pt){
     return earthPoint.dir.xyz;
 }
 
+vec3 globalSphereOffset(mat4 objectFacing, vec4 pt){
+   
+    pt = cellBoost*inverse(globalEarthBoost)*pt;
+    tangVector earthPoint=tangDirection(ORIGIN,pt);
+    earthPoint=rotateFacing(objectFacing, earthPoint);
+    return earthPoint.dir.xyz;
+}
+
+vec3 globalSphereTexture(mat4 totalFixMatrix, tangVector sampletv, samplerCube sphTexture){
+    
+    // vec3 color = vec3(0.5,0.5,0.5);
+    vec3 color = texture(sphTexture, globalSphereOffset( localEarthFacing, sampletv.pos)).xyz;
+    // color = 0.5*color + 0.5*vec3(float(stepsTaken)*0.1, float(stepsTaken-10)*0.1, float(stepsTaken-20)*0.1);
+    // N = estimateNormal(sampletv.pos);
+     vec3 color2 = phongModel(totalFixMatrix, color);
+    color = 0.9*color+0.1;
+     return 0.2*color + 0.8*color2;
+    return color;
+    }
+
 vec3 sphereTexture(mat4 totalFixMatrix, tangVector sampletv, samplerCube sphTexture){
     
     // vec3 color = vec3(0.5,0.5,0.5);
@@ -1336,6 +1372,18 @@ void main(){
     //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
    // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
         vec3 pixelColor=sphereTexture(
+            totalFixMatrix, sampletv, earthCubeTex);
+
+       out_FragColor = vec4( pixelColor,1.0);
+
+        return;
+    }
+    
+        else if (hitWhich == 8){ // the GLOBAL earth
+        
+    //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
+   // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
+        vec3 pixelColor=globalSphereTexture(
             totalFixMatrix, sampletv, earthCubeTex);
 
        out_FragColor = vec4( pixelColor,1.0);

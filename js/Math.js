@@ -339,9 +339,9 @@ var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 var initObjects = function () {
     PointLightObject(new THREE.Vector3(1., 0, 0), lightColor1);
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
-    PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
+    PointLightObject(new THREE.Vector3(0, 0, 0.1), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -1.0));
+    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -0.3));
     localObjectBoost = translateByVector(new THREE.Vector3(0, 0.1, -0.2));
 }
 
@@ -453,6 +453,10 @@ var setupMaterial = function (fShader) {
             localEarthBoost: {
                 type: "m4",
                 value: localObjectBoost[0]
+            },
+            globalEarthBoost: {
+                type: "m4",
+                value: globalObjectBoost[0]
             },
             localEarthFacing: {
                 type: "m4",
