@@ -89,7 +89,7 @@ void setResolution(int UIVar){
 
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.0005;
-const float fov = 90.0;
+const float fov = 120.0;
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1646,8 +1646,9 @@ float localSceneSDF(vec4 p){
     }
 
     if (display==4){ //dragon tiling
-        vec4 center = vec4(0., 0., 0., 1.);;
-        float dragonDist = fatEllipsoidSDF(p, center, 0.03);
+        vec4 center = vec4(0., 0., 0., 1.);
+        float dragonDist = ellipsoidSDF(p, center, 0.2);
+        //float dragonDist = fatEllipsoidSDF(p, center, 0.03);
         distance = min(distance, dragonDist);
         if (dragonDist<EPSILON){
             //LIGHT=false;
@@ -1660,7 +1661,7 @@ float localSceneSDF(vec4 p){
     if (display==1){ //tiling
         vec4 center = vec4(0., 0., 0., 1.);
         float sphere=0.;
-        sphere = ellipsoidSDF(p, center, 0.32);
+        sphere = ellipsoidSDF(p, center, 0.35);
         tilingDist=-sphere;
 
 
@@ -1941,7 +1942,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 // done with local vectors
 
-int BINARY_SEARCH_STEPS=4;
+int BINARY_SEARCH_STEPS=6;
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
@@ -2268,9 +2269,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     float x=samplePos.x;
     float y=samplePos.y;
     float z=samplePos.z;
-    x = 0.9 * x / modelHalfCube;
-    y = 0.9 * y / modelHalfCube;
-    z = 0.9 * z / modelHalfCube;
+    x = .9 * x / modelHalfCube;
+    y = .9 * y / modelHalfCube;
+    z = .9 * z / modelHalfCube;
     vec3 color = vec3(x, y, z);
 
     N = estimateNormal(sampletv.pos);
