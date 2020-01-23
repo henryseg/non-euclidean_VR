@@ -29,7 +29,7 @@ let initGui = function () {
         //        ipDist: 0.03200000151991844,
         //        stereoScreenOffset: globals.stereoScreenOffset,
         keyboard: 'us',
-        display: 3,
+        display: 1,
         res: 1,
         lightRad: 0.02,
         recording: false
@@ -50,9 +50,10 @@ let initGui = function () {
 
     let displayController = gui.add(guiInfo, 'display', {
         Tiling: '1',
-        TorusBundle: '2',
+        DualTiling: '2',
         Dragon: '3',
-        DragonPlanes: '4'
+        DragonPlanes: '4',
+        OrigTiling: '5',
     });
 
     let resController = gui.add(guiInfo, 'res', {
@@ -118,16 +119,17 @@ let initGui = function () {
     });
 
     recordingController.onFinishChange(function (value) {
-     if(value == true){
-       capturer = new CCapture( { format: 'jpg' } );
-       capturer.start();
-     }
-     else{
-       capturer.stop();
-       capturer.save();
-       // onResize(); //Resets us back to window size
-     }
-    }); 
+        if (value == true) {
+            capturer = new CCapture({
+                format: 'jpg'
+            });
+            capturer.start();
+        } else {
+            capturer.stop();
+            capturer.save();
+            // onResize(); //Resets us back to window size
+        }
+    });
 };
 
 export {

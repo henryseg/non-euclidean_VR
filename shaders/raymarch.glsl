@@ -39,6 +39,7 @@ const bool EARTH=false;
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
+const bool SHOWLIGHTS=false;
 
 
 //const float globalObjectRadius = 0.4;
@@ -90,7 +91,7 @@ void setResolution(int UIVar){
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.0005;
 const float fov = 90.0;
-
+int BINARY_SEARCH_STEPS=4;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Ellitpic integrals and functions
@@ -1512,23 +1513,73 @@ float sphereSDF(vec4 p, vec4 center, float radius){
     return exactDist(p, center) - radius;
 }
 
+float centerSDF(vec4 p, vec4 center, float radius){
+    return sphereSDF(p, center, radius);
+}
+
+float vertexSDF(vec4 p, vec4 cornerPoint, float size){
+    return sphereSDF(abs(p), cornerPoint, size);
+}
+
+
+
+
 
 float ellipsoidSDF(vec4 p, vec4 center, float radius){
     return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
 }
 
+
+//For drawing the plane
 float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
     return exactDist(vec4(p.x/10., p.y/10., p.z, 1.), center) - radius;
 }
 
-float centerSDF(vec4 p, vec4 center, float radius){
-    return sphereSDF(p, center, radius);
+
+
+//THESE are just from the center
+
+//rotate the coordinate system by an angle theta.
+vec4 rotCoords(vec4 p, float t){
+return vec4(p.x*cos(t)-p.y*sin(t), p.x*sin(t)+p.y*cos(t),p.z,p.w);
+}
+
+//ellipsoid with major axis along line making angle t with the x axis in the xy plane
+//BUT: CUT THE CYLINDER TO BE MORE OF AN ELLIPSOID: TALLER IN THE Z DIRECTION because the fundamental domain is taller in that direction
+
+
+float rotCyl(vec4 p, float t, float radius){
+    //new rotated coordinates
+    vec4 q=rotCoords(p,t);
+    //rescaled coordinates
+    return  pow(pow(q.y,2.)+pow(q.z,2.)/3.,0.5)- radius;
+}
+
+//make the cylinder flatter and more of a rectangle in these directions too
+float rotSqCyl(vec4 p, float t, float radius){
+    //new rotated coordinates
+    vec4 q=rotCoords(p,t);
+    //rescaled coordinates
+    return  pow(pow(q.y,6.)+pow(q.z,6.)/8.,0.17)- radius;
+}
+
+//for cylinder in the Z-direction
+//this is a circular cylinder because the top of the fundamental domain is a rotated square...
+float cylZ(vec4 p, float radius){
+    return pow(pow(p.x,2.)+pow(p.y,2.),0.5) - radius;
+}
+//this cylinder IS BAD BECAUSE IT IS DEFORMED UNDER SOL ISOMETRIES
+//A BETTER CYLINDER IS BELOW
+float solCylZ(vec4 p, float radius){
+    //surface which is the sol translate of a circle in the xy plane
+    float solCylDist=pow(p.x,2.)*exp(-2.*p.z)+pow(p.y,2.)*exp(2.*p.z);
+    return pow(solCylDist,0.5)-radius;
 }
 
 
-float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return sphereSDF(abs(p), cornerPoint, size);
-}
+
+
+
 
 float horizontalHalfSpaceSDF(vec4 p, float h) {
     //signed distance function to the half space z < h
@@ -1591,14 +1642,16 @@ uniform float lightRad;
 
 uniform int display;
 // 1=tiling
-// 2= planes
+// 2=dual tiling
 // 3= dragon skin
+// 4= parallel planes
+//5=original tiling
 
 uniform int res;
 
 //adding one local light (more to follow)
 vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
-vec4 localLightColor=vec4(1., 1., 1., 0.2);
+vec4 localLightColor=vec4(1., 1., 1., 0.4);
 
 //variable which sets the light colors for drawing in hitWhich 1
 vec3 colorOfLight=vec3(1., 1., 1.);
@@ -1620,10 +1673,12 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 float localSceneSDF(vec4 p){
     float tilingDist;
     float dragonDist;
-    float planesDist;
+    float dualTilingDist;
+    float oldTilingDist;
     float lightDist;
     float distance = MAX_DIST;
 
+    if(SHOWLIGHTS){
     lightDist=sphereSDF(p, localLightPos, lightRad);
     distance=min(distance, lightDist);
     if (lightDist < EPSILON){
@@ -1632,38 +1687,91 @@ float localSceneSDF(vec4 p){
         colorOfLight=vec3(1., 1., 1.);
         return lightDist;
     }
+    }
+    
+    if(display==1){//tiling
+        
+        //CUT OUT CYLINDERS PARALLEL TO THE AXES?
+        //angles that the generators make with the x-axis in the xy plane
+        float t1,t2,cyl1,cyl2,cyl3;
+        
+        t2=atan(1./GoldenRatio);
+        t1=t2-PI/2.;
+        cyl1=rotSqCyl(p,t1,0.22);
+        cyl2=rotSqCyl(p,t2,0.22);
+        cyl3=solCylZ(p,0.18);
+        //take the union of these ellipsoids to form the tiling
+        tilingDist=min(cyl1,cyl2);
+        tilingDist=min(tilingDist, cyl3);
+        //take the complement of this from the cube
+        tilingDist=-tilingDist;
+        
+        distance = min(distance, tilingDist);
+        
+        if (tilingDist<EPSILON){
+            hitWhich=3;
+            return tilingDist;
+        }
+    }
+    
+    
+        if(display==2){//dual tiling
+        
+        //CUT OUT CYLINDERS PARALLEL TO THE AXES?
+        //angles that the generators make with the x-axis in the xy plane
+        float t1,t2,cyl1,cyl2,cyl3;
+        
+        t2=atan(1./GoldenRatio);
+        t1=t2-PI/2.;
+        cyl1=rotCyl(p,t1,0.05);
+        cyl2=rotCyl(p,t2,0.05);
+        cyl3=solCylZ(p,0.05);
+        //take the union of these ellipsoids to form the tiling
+        tilingDist=min(cyl1,cyl2);
+        tilingDist=min(tilingDist, cyl3);
+        //take the complement of this from the cube
+        //tilingDist=-tilingDist;
+        
+        distance = min(distance, tilingDist);
+        
+        if (tilingDist<EPSILON){
+            hitWhich=3;
+            return tilingDist;
+        }
+    }
+    
 
     if (display==3){ //dragon
         vec4 center = vec4(0., 0., 0., 1.);;
         float dragonDist = fatEllipsoidSDF(p, center, 0.03);
         distance = min(distance, dragonDist);
         if (dragonDist<EPSILON){
-            //LIGHT=false;
             hitWhich=3;
             return dragonDist;
         }
 
     }
 
-    if (display==4){ //dragon tiling
+    if (display==4){ //dragon planes
         vec4 center = vec4(0., 0., 0., 1.);;
         float dragonDist = fatEllipsoidSDF(p, center, 0.03);
         distance = min(distance, dragonDist);
         if (dragonDist<EPSILON){
-            //LIGHT=false;
             hitWhich=3;
             return dragonDist;
         }
 
     }
-
-    if (display==1){ //tiling
+    
+    
+    
+    if (display==5){ //tiling
         vec4 center = vec4(0., 0., 0., 1.);
         float sphere=0.;
         sphere = ellipsoidSDF(p, center, 0.32);
         tilingDist=-sphere;
-
-
+ 
+        //OTHER OPTIONS
         //cut out a vertical cylinder to poke holes in the top, bottom
         //    float cyl=0.0;
         //    cyl=cylSDF(p,0.2);
@@ -1689,19 +1797,7 @@ float localSceneSDF(vec4 p){
         }
     }
 
-    if (display==2){ //planes
-        vec4 center = vec4(0., 0., 0., 1.);
-        float sphere=0.;
-        sphere = sphereSDF(p, center, 0.5);
 
-        planesDist = -sphere;
-        distance=min(distance, planesDist);
-        if (planesDist < EPSILON){
-
-            hitWhich=3;
-            return planesDist;
-        }
-    }
     return distance;
 }
 
@@ -1941,7 +2037,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 // done with local vectors
 
-int BINARY_SEARCH_STEPS=4;
+
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
@@ -2181,10 +2277,10 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
 
     //move local light around by the generators to pick up lighting from nearby cells
-    for (int i=0; i<6; i++){
-        TLP=invGenerators[i]*localLightPos;
-        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
-    }
+//    for (int i=0; i<6; i++){
+//        TLP=invGenerators[i]*localLightPos;
+//        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
+//    }
 
     return color;
 }
@@ -2258,8 +2354,6 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 
 
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
-    //    if (FAKE_LIGHT){//always fake light in Sol so far
-
     //make the objects have their own color
     //color the object based on its position in the cube
     vec4 samplePos=modelProject(sampletv.pos);
@@ -2272,23 +2366,37 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     y = 0.9 * y / modelHalfCube;
     z = 0.9 * z / modelHalfCube;
     vec3 color = vec3(x, y, z);
+    
+    //override
+   color = vec3(0.2,0.5,1.);
 
     N = estimateNormal(sampletv.pos);
     color = phongModel(totalFixMatrix, 0.1*color);
 
     return 0.9*color+0.1;
-
-    //adding a small constant makes it glow slightly
-    //}
-    //    else {
-    //        //if we are doing TRUE LIGHTING
-    //        // objects have no natural color, only lit by the lights
-    //        N = estimateNormal(sampletv.pos);
-    //        vec3 color=vec3(0., 0., 0.);
-    //        color = phongModel(totalFixMatrix, color);
-    //        return color;
-    //    }
 }
+
+
+
+vec3 rescaleXYZ(tangVector tV){
+    vec4 P=modelProject(tV.pos);
+    float denom=GoldenRatio+2.;
+    vec3 newP=vec3(1./denom*(GoldenRatio*P.x-P.y),1./denom*(P.x+GoldenRatio*P.y),P.z);   
+    return newP;
+}
+
+//RESCALED TILING COLOR: GRAB COLOR FROM FIRST RESCALING FUNDAMENTAL DOMAIN TO UNIT CUBE.  BUT GRAB SHADING FROM ORIGINAL TANGENT VECTOR
+vec3 rescaledTilingColor(Isometry totalFixMatrix, tangVector sampletv){
+    //vec3 rescale=rescaleXYZ(sampletv);
+    vec3 color = vec3(0.2,0.5,1.);
+    
+    // take the normal vector from the original position
+    N = estimateNormal(sampletv.pos);
+    color = phongModel(totalFixMatrix, 0.1*color);
+
+    return 0.9*color+0.1;
+}
+
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2391,5 +2499,13 @@ void main(){
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
+    
+        else if (hitWhich==4) {
+        // local objects
+        vec3 pixelColor= rescaledTilingColor(totalFixMatrix, sampletv);
+        out_FragColor=vec4(pixelColor, 1.0);
+        return;
+    }
+
 
 }
