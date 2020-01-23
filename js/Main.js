@@ -121,26 +121,29 @@ function loadShaders() {
     //Since our shader is made up of strings we can construct it from parts
     let loader = new FileLoader();
     loader.setResponseType('text');
-    loader.load('shaders/raymarch.glsl', function (main) {
-        mainFrag = main;
-        setupMaterial(main);
-        globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+    loader.load('shaders/raymarch1.glsl', function (main1) {
+        loader.load('shaders/raymarch2.glsl', function (main2) {
+            let main = main1.concat(main2);
+            mainFrag = main;
+            setupMaterial(main);
+            globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-        //Setup a "quad" to render on-------------------------
-        let geom = new BufferGeometry();
-        let vertices = new Float32Array([
-            -1.0, -1.0, 0.0,
-            1.0, -1.0, 0.0,
-            1.0, 1.0, 0.0,
+            //Setup a "quad" to render on-------------------------
+            let geom = new BufferGeometry();
+            let vertices = new Float32Array([
+                -1.0, -1.0, 0.0,
+                1.0, -1.0, 0.0,
+                1.0, 1.0, 0.0,
 
-            -1.0, -1.0, 0.0,
-            1.0, 1.0, 0.0,
-            -1.0, 1.0, 0.0
-        ]);
-        geom.setAttribute('position', new BufferAttribute(vertices, 3));
-        mesh = new Mesh(geom, globals.material);
-        scene.add(mesh);
-        animate();
+                -1.0, -1.0, 0.0,
+                1.0, 1.0, 0.0,
+                -1.0, 1.0, 0.0
+            ]);
+            geom.setAttribute('position', new BufferAttribute(vertices, 3));
+            mesh = new Mesh(geom, globals.material);
+            scene.add(mesh);
+            animate();
+        });
     });
 }
 
