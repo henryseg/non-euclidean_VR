@@ -38,7 +38,7 @@ function fixOutsideCentralCell(position) {
     let v3 = new Vector4(0., 0., 1. / z0, 0.);
 
 
-    if (globals.display !== 3) { //this turns off the vertical teleporation when there is no vertical syymetries
+    if (globals.display != 3) { //this turns off the vertical teleporation when there is no vertical syymetries
         if (p.dot(v3) > 0.5) {
             bestIndex = 5;
         }
@@ -272,6 +272,10 @@ function setupMaterial(fShader) {
             lightRad: {
                 type: "float",
                 value: globals.lightRad
+            },
+            fov: {
+                type: "float",
+                value: globals.fov
             }
         },
 
@@ -312,6 +316,7 @@ function updateMaterial() {
 
     globals.material.uniforms.display.value = globals.display;
     globals.material.uniforms.res.value = globals.res;
+    //globals.material.uniforms.fov.value = globals.fov;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
 }

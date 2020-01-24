@@ -90,7 +90,11 @@ void setResolution(int UIVar){
 
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.0005;
-const float fov = 90.0;
+
+//THIS IS NOW A UNIFORM
+//const float fov = 90.0;
+
+
 int BINARY_SEARCH_STEPS=4;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1560,13 +1564,13 @@ float rotSqCyl(vec4 p, float t, float radius){
     //new rotated coordinates
     vec4 q=rotCoords(p,t);
     //rescaled coordinates
-    return  pow(pow(q.y,6.)+pow(q.z,6.)/8.,0.17)- radius;
+    return  pow(pow(q.y,6.)+pow(q.z/2.,6.),0.17)- radius;
 }
 
 //for cylinder in the Z-direction
 //this is a circular cylinder because the top of the fundamental domain is a rotated square...
 float cylZ(vec4 p, float radius){
-    return pow(pow(p.x,2.)+pow(p.y,2.),0.5) - radius;
+    return pow(pow(p.x,2.)+pow(p.y,2.2),0.5) - radius;
 }
 //this cylinder IS BAD BECAUSE IT IS DEFORMED UNDER SOL ISOMETRIES
 //A BETTER CYLINDER IS BELOW
@@ -1574,6 +1578,26 @@ float solCylZ(vec4 p, float radius){
     //surface which is the sol translate of a circle in the xy plane
     float solCylDist=pow(p.x,2.)*exp(-2.*p.z)+pow(p.y,2.)*exp(2.*p.z);
     return pow(solCylDist,0.5)-radius;
+}
+
+
+//EVEN BETTER VERTICAL SOL CYLINDER
+//make it squareish, like the horizontal cylinders, but first have to line it up with the usual coordinate system
+
+//map sending unit square to the fundamental domain for the sol torus
+vec4 rescaleSquare(vec4 P){
+    vec4 newP=vec4(GoldenRatio*P.x+P.y,GoldenRatio*P.y-P.x,P.z,1.);
+    //float denom=GoldenRatio+2.;
+   // vec4 newP=vec4(1./denom*(GoldenRatio*P.x-P.y),1./denom*(P.x+GoldenRatio*P.y),P.z,1.);   
+    return newP;
+}
+
+
+float solSqCylZ(vec4 p, float radius){
+    vec4 scaledP=rescaleSquare(p);
+    //surface which is the sol translate of a circle in the xy plane
+    float solCylDist=pow(scaledP.x,4.)*exp(-2.*scaledP.z)+pow(scaledP.y,4.)*exp(2.*scaledP.z);
+    return pow(solCylDist,0.25)-radius;
 }
 
 
@@ -1639,7 +1663,7 @@ uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 uniform float time;
 uniform float lightRad;
-
+uniform float fov;
 uniform int display;
 // 1=tiling
 // 2=dual tiling
@@ -1650,7 +1674,7 @@ uniform int display;
 uniform int res;
 
 //adding one local light (more to follow)
-vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
+vec4 localLightPos=vec4(0., 0., 0., 1.);
 vec4 localLightColor=vec4(1., 1., 1., 0.4);
 
 //variable which sets the light colors for drawing in hitWhich 1
@@ -1697,9 +1721,9 @@ float localSceneSDF(vec4 p){
         
         t2=atan(1./GoldenRatio);
         t1=t2-PI/2.;
-        cyl1=rotSqCyl(p,t1,0.22);
-        cyl2=rotSqCyl(p,t2,0.22);
-        cyl3=solCylZ(p,0.18);
+        cyl1=rotSqCyl(p,t1,0.16);
+        cyl2=rotSqCyl(p,t2,0.16);
+        cyl3=solCylZ(p,0.185);
         //take the union of these ellipsoids to form the tiling
         tilingDist=min(cyl1,cyl2);
         tilingDist=min(tilingDist, cyl3);
@@ -1769,8 +1793,9 @@ float localSceneSDF(vec4 p){
         vec4 center = vec4(0., 0., 0., 1.);
         float sphere=0.;
         sphere = ellipsoidSDF(p, center, 0.32);
+        //float cyl3=solCylZ(p,0.25);
+        //tilingDist=-min(sphere,cyl3);
         tilingDist=-sphere;
- 
         //OTHER OPTIONS
         //cut out a vertical cylinder to poke holes in the top, bottom
         //    float cyl=0.0;
@@ -1792,7 +1817,7 @@ float localSceneSDF(vec4 p){
 
         if (tilingDist < EPSILON){
             // LIGHT=false;
-            hitWhich=3;
+            hitWhich=6;
             return tilingDist;
         }
     }
@@ -2277,10 +2302,10 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
 
     //move local light around by the generators to pick up lighting from nearby cells
-//    for (int i=0; i<6; i++){
-//        TLP=invGenerators[i]*localLightPos;
-//        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
-//    }
+    for (int i=0; i<6; i++){
+        TLP=invGenerators[i]*localLightPos;
+        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
+    }
 
     return color;
 }
@@ -2352,32 +2377,6 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     }
 }
 
-
-vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
-    //make the objects have their own color
-    //color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
-
-    //IF WE HIT THE TILING
-    float x=samplePos.x;
-    float y=samplePos.y;
-    float z=samplePos.z;
-    x = 0.9 * x / modelHalfCube;
-    y = 0.9 * y / modelHalfCube;
-    z = 0.9 * z / modelHalfCube;
-    vec3 color = vec3(x, y, z);
-    
-    //override
-   color = vec3(0.2,0.5,1.);
-
-    N = estimateNormal(sampletv.pos);
-    color = phongModel(totalFixMatrix, 0.1*color);
-
-    return 0.9*color+0.1;
-}
-
-
-
 vec3 rescaleXYZ(tangVector tV){
     vec4 P=modelProject(tV.pos);
     float denom=GoldenRatio+2.;
@@ -2385,12 +2384,32 @@ vec3 rescaleXYZ(tangVector tV){
     return newP;
 }
 
-//RESCALED TILING COLOR: GRAB COLOR FROM FIRST RESCALING FUNDAMENTAL DOMAIN TO UNIT CUBE.  BUT GRAB SHADING FROM ORIGINAL TANGENT VECTOR
-vec3 rescaledTilingColor(Isometry totalFixMatrix, tangVector sampletv){
-    //vec3 rescale=rescaleXYZ(sampletv);
-    vec3 color = vec3(0.2,0.5,1.);
+//rescale the z-coordinate for coloring
+float zScale(float x){
+    return 2.*sin(PI *x);
+    //return x*pow(abs(1.-x)*abs(1.+x),0.5);
+}
+
+vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
+    //make the objects have their own color
+    //color the object based on its position in the cube
+    vec4 samplePos=modelProject(sampletv.pos);
+    //rescale the z-coordinate to range from -1 to 1
+    float z=2.*samplePos.z/z0;
     
-    // take the normal vector from the original position
+    //IF WE HIT THE TILING
+//    float x=samplePos.x;
+//    float y=samplePos.y;
+//    float z=samplePos.z;
+//    x = 0.9 * x / modelHalfCube;
+//    y = 0.9 * y / modelHalfCube;
+//    z = 0.9 * z / modelHalfCube;
+//    vec3 color = rescaleXYZ(sampletv);
+//    
+    //color by zcoordiante only
+    vec3 color = vec3(1.-zScale(z),0.5,zScale(z));
+    
+
     N = estimateNormal(sampletv.pos);
     color = phongModel(totalFixMatrix, 0.1*color);
 
@@ -2398,6 +2417,25 @@ vec3 rescaledTilingColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
+vec3 tilingRainbowColor(Isometry totalFixMatrix, tangVector sampletv){
+    //make the objects have their own color
+    //color the object based on its position in the cube
+    vec4 samplePos=modelProject(sampletv.pos);
+    
+    //IF WE HIT THE TILING
+    float x=samplePos.x;
+    float y=samplePos.y;
+    float z=samplePos.z;
+    x = 0.9 * x / modelHalfCube;
+    y = 0.9 * y / modelHalfCube;
+    z = 0.9 * z / modelHalfCube;
+    vec3 color = vec3(x,y,z);
+
+    N = estimateNormal(sampletv.pos);
+    color = phongModel(totalFixMatrix, 0.1*color);
+
+    return 0.9*color+0.1;
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // Tangent Space Functions
@@ -2500,12 +2538,11 @@ void main(){
         return;
     }
     
-        else if (hitWhich==4) {
+        else if (hitWhich==6) {
         // local objects
-        vec3 pixelColor= rescaledTilingColor(totalFixMatrix, sampletv);
+        vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
-
 
 }

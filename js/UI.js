@@ -32,6 +32,7 @@ let initGui = function () {
         display: 1,
         res: 1,
         lightRad: 0.02,
+        fov: 90.,
         recording: false
     };
 
@@ -62,6 +63,7 @@ let initGui = function () {
         High: '3'
     });
     let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
+    let fovController = gui.add(guiInfo, 'fov', 70., 130.).name("FOV");
     let recordingController = gui.add(guiInfo, 'recording').name("Record video");
     // ------------------------------
     // UI Controllers
@@ -116,6 +118,10 @@ let initGui = function () {
 
     lightRadController.onChange(function (value) {
         globals.material.uniforms.lightRad.value = value;
+    });
+
+    fovController.onChange(function (value) {
+        globals.material.uniforms.fov.value = value;
     });
 
     recordingController.onFinishChange(function (value) {

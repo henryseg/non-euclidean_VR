@@ -27,11 +27,11 @@ import {
 } from './Controls.js';
 
 
-import{
+import {
     VRController
 } from './module/VRController.js';
 
-import{
+import {
     VREffect
 } from './module/VREffect.js';
 
@@ -64,9 +64,10 @@ let globals = {
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
-    display: 3,
+    display: 1,
     res: 1,
-    lightRad: 0.05
+    lightRad: 0.05,
+    fov: 90.
 };
 
 //----------------------------------------------------------------------------------------------------------------------
