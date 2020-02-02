@@ -121,19 +121,22 @@ function loadShaders() {
     //Since our shader is made up of strings we can construct it from parts
     let loader = new FileLoader();
     loader.setResponseType('text');
-    loader.load('shaders/constsAndUniforms.glsl', function (main1) {
-        loader.load('shaders/raymarch1.glsl', function (main2) {
-            loader.load('shaders/raymarch2.glsl', function (main3) {
-                loader.load('shaders/colorAndTexture.glsl', function (main4) {
-                    loader.load('shaders/main.glsl', function (main5) {
-                        let main = main1.concat(main2).concat(main3).concat(main4).concat(main5);
-                        mainFrag = main;
-                        setupMaterial(main);
-                        globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+    loader.load('shaders/uniforms.glsl', function (unifs) {
+        loader.load('shaders/ellipticInt.glsl', function (ellInt) {
+            loader.load('shaders/isom.glsl', function (isom) {
+                loader.load('shaders/tangVect.glsl', function (tvect) {
+                    loader.load('shaders/geodesicFlow.glsl', function (geoflow) {
+                        loader.load('shaders/raymarch2.glsl', function (main3) {
+                            loader.load('shaders/colors.glsl', function (colors) {
+                                loader.load('shaders/main.glsl', function (main1) {
+                                    let main = unifs.concat(ellInt).concat(isom).concat(tvect).concat(geoflow).concat(main3).concat(colors).concat(main1);
+                                    mainFrag = main;
+                                    setupMaterial(main);
+                                    globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                        //Setup a "quad" to render on-------------------------
-                        let geom = new BufferGeometry();
-                        let vertices = new Float32Array([
+                                    //Setup a "quad" to render on-------------------------
+                                    let geom = new BufferGeometry();
+                                    let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -142,10 +145,13 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                        geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                        mesh = new Mesh(geom, globals.material);
-                        scene.add(mesh);
-                        animate();
+                                    geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                    mesh = new Mesh(geom, globals.material);
+                                    scene.add(mesh);
+                                    animate();
+                                });
+                            });
+                        });
                     });
                 });
             });

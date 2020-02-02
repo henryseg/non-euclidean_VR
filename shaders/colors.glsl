@@ -1,4 +1,51 @@
 //----------------------------------------------------------------------------------------------------------------------
+// LIGHT
+//----------------------------------------------------------------------------------------------------------------------
+//light intensity as a fn of distance
+float lightAtt(float dist){
+    if (FAKE_LIGHT_FALLOFF){
+        //fake linear falloff
+        return dist;
+    }
+    return dist*dist;
+}
+
+
+
+
+
+//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
+tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
+    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
+    float newEp = EPSILON * 10.0;
+    mat4 theBasis= tangBasis(p);
+    vec4 basis_x = theBasis[0];
+    vec4 basis_y = theBasis[1];
+    vec4 basis_z = theBasis[2];
+    if (hitWhich != 3){ //global light scene
+        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
+        tangVector tv = tangVector(p,
+        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
+        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+
+    }
+    else { //local scene
+        tangVector tv = tangVector(p,
+        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
+        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
+        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+    }
+}
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
 // Lighting Functions
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
