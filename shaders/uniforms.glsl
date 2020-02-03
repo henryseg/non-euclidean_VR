@@ -141,7 +141,7 @@ vec4 localLightColor=vec4(1., 1., 1., 0.2);
 vec3 colorOfLight=vec3(1., 1., 1.);
 
 
-
+int hitWhich=0;
 
 
 

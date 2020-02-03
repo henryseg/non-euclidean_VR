@@ -118,54 +118,17 @@ Position.prototype.localFlow = function (v) {
     // - B_o an element of SO(3)
     // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
-    // In the Euclidean case, S_o is the regular translation, B_o is the identity.
-    const dist = v.length();
-    const n = dist / EULER_STEP;
-    let u = v.clone().normalize();
-    let field = new Vector3();
-    let pos_aux = ORIGIN.clone().translateBy(this.boost);
-    let vec_aux = new Vector4();
-    let mat_aux = new Matrix4();
-    let parallel = new Matrix4();
 
-    for (let i = 0; i < n; i++) {
-        // position of the geodesic at time i*step
-        //pos_aux = ORIGIN.clone().translateBy(this.boost);
 
-        // computing the position of the geodesic at time (i+1)*step
-        vec_aux = new Vector4(u.x, u.y, u.z, 0);
-        vec_aux.translateBy(this.boost).multiplyScalar(EULER_STEP);
-        pos_aux.add(vec_aux);
-        // update the boost accordingly
-        this.boost.makeLeftTranslation(pos_aux.x, pos_aux.y, pos_aux.z);
+    //mat4 parallel=new Matrix4();
 
-        // updating the facing using parallel transport
-        mat_aux.set(
-            0, 0, -u.x, 0,
-            0, 0, u.y, 0,
-            u.x, -u.y, 0, 0,
-            0, 0, 0, 0
-        );
-        mat_aux.multiply(this.facing);
-        mat_aux.multiplyScalar(-EULER_STEP);
-        parallel.add(mat_aux);
-        this.reduceFacingError();
-        //console.log('boost', this.boost.matrix.elements);
-        //console.log('facing', this.facing.elements);
-
-        // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
-        field.set(
-            u.x * u.z,
-            -u.y * u.z,
-            -u.x * u.x + u.y * u.y
-        );
-        u.add(field.multiplyScalar(EULER_STEP)).normalize();
-    }
-
-    this.facing.premultiply(parallel);
+    this.boost.premultiply(new Isometry().makeLeftTranslation(v.x, v.y, v.z));
+    //no change to facing b/c euclidean 
+    // this.facing.premultiply(parallel);
     return this;
+}
 
-};
+
 
 Position.prototype.getInverse = function (position) {
     // set the current position to the position that can bring back the passed position to the origin position
@@ -248,7 +211,7 @@ Vector3.prototype.rotateByFacing = function (position) {
     return this;
 };
 
-export{
+export {
     Position,
     ORIGIN
 }

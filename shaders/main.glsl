@@ -52,7 +52,7 @@ void main(){
     //get our raymarched distance back ------------------------
     Isometry totalFixMatrix = identityIsometry;
     // intialize the parameters of the elliptic integrals/functions
-    init_ellip(rayDir);
+    //init_ellip(rayDir);
     // do the marching
     //raymarch(rayDir, totalFixMatrix);
     raymarch(toLocalTangVector(rayDir), totalFixMatrix);

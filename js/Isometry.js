@@ -53,8 +53,8 @@ Isometry.prototype.makeLeftTranslation = function (x, y, z) {
     // return the left translation by (x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.matrix.set(
-        Math.exp(z), 0, 0, x,
-        0, Math.exp(-z), 0, y,
+        1, 0, 0, x,
+        0, 1, 0, y,
         0, 0, 1, z,
         0, 0, 0, 1
     );
@@ -65,8 +65,8 @@ Isometry.prototype.makeInvLeftTranslation = function (x, y, z) {
     // return the inverse of the left translation by (x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.matrix.set(
-        Math.exp(-z), 0, 0, -Math.exp(-z) * x,
-        0, Math.exp(z), 0, -Math.exp(z) * y,
+        1, 0, 0, -x,
+        0, 1, 0, -y,
         0, 0, 1, -z,
         0, 0, 0, 1
     );
@@ -114,4 +114,6 @@ Vector4.prototype.translateBy = function (isom) {
 };
 
 
-export {Isometry};
+export {
+    Isometry
+};
