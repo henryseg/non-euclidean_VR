@@ -126,17 +126,16 @@ function loadShaders() {
             loader.load('shaders/localGeo.glsl', function (locGeo) {
                 loader.load('shaders/globalGeo.glsl', function (globGeo) {
                     loader.load('shaders/scene.glsl', function (sceneSDF) {
-                        loader.load('shaders/raymarch.glsl', function (raymarch) {
-                            loader.load('shaders/colors.glsl', function (colors) {
-                                loader.load('shaders/main.glsl', function (main1) {
-                                    let main = unifs.concat(structs).concat(locGeo).concat(globGeo).concat(sceneSDF).concat(raymarch).concat(colors).concat(main1);
-                                    mainFrag = main;
-                                    setupMaterial(main);
-                                    globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+                        loader.load('shaders/colors.glsl', function (colors) {
+                            loader.load('shaders/raymarch.glsl', function (raymarch) {
+                                let main = unifs.concat(structs).concat(locGeo).concat(globGeo).concat(sceneSDF).concat(colors).concat(raymarch);
+                                mainFrag = main;
+                                setupMaterial(main);
+                                globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                                    //Setup a "quad" to render on-------------------------
-                                    let geom = new BufferGeometry();
-                                    let vertices = new Float32Array([
+                                //Setup a "quad" to render on-------------------------
+                                let geom = new BufferGeometry();
+                                let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -145,11 +144,10 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                                    geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                    mesh = new Mesh(geom, globals.material);
-                                    scene.add(mesh);
-                                    animate();
-                                });
+                                geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                mesh = new Mesh(geom, globals.material);
+                                scene.add(mesh);
+                                animate();
                             });
                         });
                     });
