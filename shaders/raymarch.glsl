@@ -18,7 +18,7 @@ Some parameters that can be changed to change the scence
 const bool TILING_SCENE=true;//is there a local scene at all
 const bool SOLAR_SYSTEM=true;
 const bool TILING_TEXTURE=false;
-const bool LOCAL_EARTH=true;
+const bool LOCAL_EARTH=false;
 const bool TILING=true;
 
 const bool GLOBAL_SCENE=false;
@@ -383,6 +383,7 @@ bool hitLocal = false; // did we hit a local object or a global object?
 int stepsTaken = 0;
 Isometry identityIsometry=Isometry(mat4(1.0));
 vec3 localLightColor=vec3(1.,1.,1.);
+//float modelHalfCube;
 
 Isometry currentBoost;
 Isometry leftBoost;
@@ -418,6 +419,7 @@ uniform vec4 lightIntensities[4];
 uniform vec4 localLightPos;
 uniform float localLightIntensity;
 uniform int numLights;
+uniform float cubeHalfWidth;
 
 uniform mat4 globalObjectBoostMat;
 uniform mat4 globalObjectFacing;
@@ -521,7 +523,7 @@ float localSceneSDF(vec4 p){
     float lightDist;
     float distance = MAX_DIST;
     
-    //Light Objects
+   // Light Objects
  if(LOCAL_LIGHTS){
      vec4 lightCenter=localLightPos;
       lightDist=sphereSDF(p,lightCenter,0.05);
@@ -1105,6 +1107,7 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 
 void main(){
 
+    
     currentBoost=Isometry(currentBoostMat);
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);

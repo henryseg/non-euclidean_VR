@@ -21,6 +21,7 @@ var initGui = function () {
         centerSphereRad: 1.,
         vertexSphereRad: -0.98,
         localLightIntensity: 0.2,
+        cubeHalfWidth: 0.6584789485,
         stereoScreenOffset: g_stereoScreenOffset
     };
 
@@ -36,6 +37,8 @@ var initGui = function () {
     var vertexSphereRadController = gui.add(guiInfo, 'vertexSphereRad', -1.1, -0.8).name("Vertex Sphere");
 
     var localLightController = gui.add(guiInfo, 'localLightIntensity', 0., 1.).name("Local Light");
+
+    var cubeHalfWidthController = gui.add(guiInfo, 'cubeHalfWidth', 0., 1.).name("CubeHalfWidth");
 
 
     var ipDistController = gui.add(guiInfo, 'ipDist', 0.0, 0.5).name("ip Dist");
@@ -88,4 +91,22 @@ var initGui = function () {
     localLightController.onChange(function (value) {
         g_material.uniforms.localLightIntensity.value = value;
     });
+
+
+    cubeHalfWidthController.onChange(function (value) {
+        //g_material.uniforms.cubeHalfWidth.value = value;
+        cubeHalfWidth = value;
+        gens = createGenerators();
+        invGens = invGenerators(gens);
+        invGensMatrices = unpackageMatrix(invGens);
+        g_material.uniforms.cubeHalfWidth = value;
+        g_material.uniforms.invGenerators.value = invGensMatrices;
+    });
+
+
+
+
+    //    cubeHalfWidthController.onChange(function (value) {
+    //        g_material.uniforms.cubeHalfWidth.value = value;
+    //    });
 };

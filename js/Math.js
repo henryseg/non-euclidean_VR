@@ -239,11 +239,11 @@ function Position() {
     };
 
 
-//returns the position of the point stored by state
-//really, should be doing this to position and using it here
-this.positionPoint = function () {
-    return ORIGIN.clone().applyMatrix4(this.boost.matrix.clone());
-}
+    //returns the position of the point stored by state
+    //really, should be doing this to position and using it here
+    this.positionPoint = function () {
+        return ORIGIN.clone().applyMatrix4(this.boost.matrix.clone());
+    }
 
 
     this.getInverse = function (position) {
@@ -341,7 +341,7 @@ THREE.Vector3.prototype.rotateByFacing = function (position) {
 // The point representing the origin
 const ORIGIN = new THREE.Vector4(0, 0, 0, 1);
 var cubeHalfWidth = 0.6584789485;
-var modelHalfCube = 0.5773502692;
+var modelHalfCube = Math.tanh(cubeHalfWidth);
 
 function edist(state1, state2) {
     var sp1 = state1.boost.matrix.elements;
@@ -527,7 +527,7 @@ function initObjects() {
     PointLightObject(new THREE.Vector3(0, 1., 0), lightColor2);
     PointLightObject(new THREE.Vector3(0, 0, 1.), lightColor3);
     PointLightObject(new THREE.Vector3(-1., -1., -1.), lightColor4);
-    
+
 
     earthState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, -3, 0)).setMass(81);
 
@@ -540,13 +540,13 @@ function initObjects() {
     sunState = new State().setVelocity(new THREE.Vector3(0, 0, 0)).setAngular(new THREE.Vector3(0, 10, 0));
 
     sunState.setBoost(new Position().localFlow(new THREE.Vector3(1.5, 0, -2)).boost);
-    
-    
-    
+
+
+
     //MUST BE INSIDE ORIGINAL FUNDAMENTAL DOMAIN
-    localEarthState=new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.3,0,-0.2)).boost).setAngular(new THREE.Vector3(0,1,0));
-    
-    localLightPos= new Position().localFlow(new THREE.Vector3(0,0.4,0.3));
+    localEarthState = new State().setBoost(new Position().localFlow(new THREE.Vector3(-0.3, 0, -0.2)).boost).setAngular(new THREE.Vector3(0, 1, 0));
+
+    localLightPos = new Position().localFlow(new THREE.Vector3(0, 0.4, 0.3));
 
     //    globalObjectState = new State().setVelocity(
     //        new THREE.Vector3(0, 0, -1));
@@ -562,7 +562,8 @@ function initObjects() {
 ////Spin the Local Earth
 stepSize = 0.001;
 setInterval(function () {
-localEarthState.localFlow(stepSize);},10);
+    localEarthState.localFlow(stepSize);
+}, 10);
 //
 //////MOVE THE PLANETS AROUND
 //stepSize = 0.001;
@@ -782,12 +783,15 @@ function setupMaterial(fShader) {
                 type: "f",
                 value: 0.2
             },
-            
-            
-            
+
+            cubeHalfWidth: {
+                type: "f",
+                value: 0.6584789485
+            },
+
             modelHalfCube: {
                 type: "f",
-                value: modelHalfCube
+                value: Math.tanh(cubeHalfWidth)
             },
 
 
@@ -870,15 +874,15 @@ function updateMaterial() {
 
     g_material.uniforms.earthBoostMat.value = earthState.boost.matrix;
     g_material.uniforms.earthFacing.value = earthState.facing;
-    
-    g_material.uniforms.localEarthFacing.value=localEarthState.facing;
+
+    g_material.uniforms.localEarthFacing.value = localEarthState.facing;
 
     g_material.uniforms.moonBoostMat.value = moonState.boost.matrix;
     g_material.uniforms.moonFacing.value = moonState.facing;
 
     g_material.uniforms.sunBoostMat.value = sunState.boost.matrix;
     g_material.uniforms.sunFacing.value = sunState.facing;
-    
+
 
 
 }
