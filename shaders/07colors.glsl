@@ -49,19 +49,19 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 // Lighting Functions
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
+vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightColor, float lightIntensity){
     //Calculations - Phong Reflection Model
     tangVector L = tangDirection(SP, TLP);
     tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
     float nDotL = max(cosAng(N, L), 0.0);
-    vec3 diffuse = lightIntensity.rgb * nDotL;
+    vec3 diffuse = lightColor.rgb * nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
-    vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
+    vec3 specular = lightColor.rgb * pow(rDotV, 10.0);
     //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
-    float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
+    float att = 0.6*lightIntensity /(0.01 + lightAtt(distToLight));
     //Compute final color
     return att*((diffuse*baseColor) + specular);
 }
@@ -74,9 +74,6 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     vec3 surfColor;
     surfColor=0.2*vec3(1.)+0.8*color;
 
-    if (display==3||display==4){ //for the dragon skin one only
-        surfColor=0.7*vec3(1.)+0.3*color;//make it brighter when there's less stuff
-    }
     //    vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
@@ -84,23 +81,24 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
 
-    //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
+    //GLOBAL LIGHTS
     for (int i = 0; i<4; i++){
         Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, lightPositions[i]);
-        color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
+        color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i],2.);
     }
 
 
     //LOCAL LIGHT
-    color+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    color+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.1+10.*lightRad*lightRad);
     //light color and intensity hard coded in
 
 
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
         TLP=invGenerators[i]*localLightPos;
-        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
+        //local lights intensity is a function of its radius: so it gets brighter when it grows:
+        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.1+10.*lightRad*lightRad);
     }
 
     return color;
@@ -144,7 +142,7 @@ vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight
 
     N = estimateNormal(sampletv.pos);
     vec3 color;
-    color = phongModel(totalFixMatrix, 0.5*colorOfLight);
+    color = phongModel(totalFixMatrix, 0.8*colorOfLight);
     color = 0.7*color+0.3;
     return color;
 
@@ -163,9 +161,9 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     else {
 
         N = estimateNormal(sampletv.pos);
-        vec3 color=localLightColor.xyz;
-        color = phongModel(totalFixMatrix, 0.5*color);
-        color = 0.7*color+0.3;
+        vec3 color=vec3(0.5,0.2,0.1);
+        color = phongModel(totalFixMatrix, 0.9*color);
+        color = 0.9*color+0.1;
         return color;
 
 
@@ -185,15 +183,21 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     float x=samplePos.x;
     float y=samplePos.y;
     float z=samplePos.z;
-    x = .9 * x;
-    y = .9 * y;
-    z = .9 * z;
+    x = .9 * x/2.;
+    y = .9 * y/2.;
+    z = .9 * z/2.;
     vec3 color = vec3(x, y, z);
+    
+    //make the tiling uniform white
+    //color=localLightColor.xyz;
 
-    N = estimateNormal(sampletv.pos);
-    color = phongModel(totalFixMatrix, 0.1*color);
+    //it seems like a negative sign has to go in here on the tangent vector
+    //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal
+    //need to actually check this when I clean up this part
+    N = estimateNormal(-sampletv.pos);
+    color = phongModel(totalFixMatrix, 0.2*color);
 
-    return 0.9*color+0.1;
+    return 0.9*color+0.2;
 
     //adding a small constant makes it glow slightly
     //}

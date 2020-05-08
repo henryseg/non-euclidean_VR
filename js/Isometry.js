@@ -54,7 +54,7 @@ Isometry.prototype.makeInvLeftTranslation = function (v) {
 
 //this function takes v in the tangent space and returns the isometry which translates by |v| in the direction of v
 //for Euclidean geometry this is the same as the above; but in general is not.
-//the above function only makes sense for spaces whose model is R3.
+// do we want to keep both of these?
 Isometry.prototype.translateByVector = function (v) {
 
     this.matrix.set(

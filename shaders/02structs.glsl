@@ -180,7 +180,7 @@ localTangVector rotateFacing(mat4 A, localTangVector v){
 
 
 //----------------------------------------------------------------------------------------------------------------------
-// Global Variables
+// Global Variables in these STRUCTURES
 //----------------------------------------------------------------------------------------------------------------------
 tangVector N;//normal vector
 tangVector sampletv;

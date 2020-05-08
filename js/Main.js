@@ -45,7 +45,7 @@ import {
  */
 
 let globals = {
-    ipDist: 0.03200000151991844,
+    ipDist: 0.032,
     effect: undefined,
     material: undefined,
     controls: undefined,

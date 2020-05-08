@@ -24,28 +24,24 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=false;
+const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
-
-
-//const float globalObjectRadius = 0.4;
-const float centerSphereRadius =0.67;
-const float vertexSphereSize = 0.23;//In this case its a horosphere
 
 //----------------------------------------------------------------------------------------------------------------------
 // "TRUE" CONSTANTS
 //----------------------------------------------------------------------------------------------------------------------
 
 const float PI = 3.1415926538;
-const float GoldenRatio = 0.5*(1.+sqrt(5.));//1.618033988749895;
-const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
+//const float GoldenRatio = 0.5*(1.+sqrt(5.));//1.618033988749895;
+//const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
+
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
 
@@ -58,23 +54,6 @@ int MAX_MARCHING_STEPS =  120;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
-
-//void setResolution(float UIVar){
-//    if (UIVar==1){
-//        MAX_MARCHING_STEPS =  50;
-//        MAX_DIST = 100.0;
-//    }
-//    if (UIVar==2){
-//        MAX_MARCHING_STEPS =  100;
-//        MAX_DIST = 300.0;
-//
-//    }
-//    if (UIVar==3){
-//        MAX_MARCHING_STEPS =  250;
-//        MAX_DIST = 600.0;
-//
-//    }
-//}
 
 
 void setResolution(float UIVar){
@@ -138,8 +117,12 @@ uniform vec4 V2;
 uniform vec4 V3;
 
 //adding one local light (more to follow)
-vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
-vec4 localLightColor=vec4(1., 1., 1., 0.2);
+vec4 localLightPos=vec4(0.1, 0.2, -0.2, 1.);
+
+//lightRad controls the intensity of the light
+//it is allowed to run from 0 to 0.5 currently, we will double that for brightness
+vec4 localLightColor=vec4(1.,1.,1.,0.5);
+
 
 //variable which sets the light colors for drawing in hitWhich 1
 vec3 colorOfLight=vec3(1., 1., 1.);

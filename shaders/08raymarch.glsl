@@ -185,7 +185,7 @@ void main(){
         return;
     }
     else if (hitWhich == 1){
-        // global lights
+        // lights
         vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
         out_FragColor=vec4(pixelColor, 1.0);
         return;
