@@ -11,7 +11,7 @@ import {
 
 import {globals} from './Main.js';
 
-import {fixOutsideCentralCell} from "./Math.js";
+import {fixOutsideCentralCell} from "./Lattice.js";
 
 // This file should be geometry independent
 

@@ -179,6 +179,20 @@ localTangVector rotateFacing(mat4 A, localTangVector v){
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Global Variables
+//----------------------------------------------------------------------------------------------------------------------
+tangVector N;//normal vector
+tangVector sampletv;
+vec4 globalLightColor;
+Isometry identityIsometry=Isometry(mat4(1.0));
+
+Isometry currentBoost;
+Isometry leftBoost;
+Isometry rightBoost;
+Isometry cellBoost;
+Isometry invCellBoost;
+Isometry globalObjectBoost;
 
 
 

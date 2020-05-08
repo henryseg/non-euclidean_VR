@@ -14,7 +14,7 @@ import {
     initObjects,
     setupMaterial,
     updateMaterial
-} from "./Math.js";
+} from "./Materials.js";
 
 import {
     initGui
@@ -64,7 +64,7 @@ let globals = {
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
-    display: 3,
+    display: 1,
     res: 1,
     lightRad: 0.05
 };
@@ -117,25 +117,34 @@ function init() {
 }
 
 
+
+//----------------------------------------------------------------------------------------------------------------------
+// Building the Shader out of the GLSL files
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
 function loadShaders() {
     //Since our shader is made up of strings we can construct it from parts
     let loader = new FileLoader();
     loader.setResponseType('text');
-    loader.load('shaders/uniforms.glsl', function (unifs) {
-        loader.load('shaders/structs.glsl', function (structs) {
-            loader.load('shaders/localGeo.glsl', function (locGeo) {
-                loader.load('shaders/globalGeo.glsl', function (globGeo) {
-                    loader.load('shaders/scene.glsl', function (sceneSDF) {
-                        loader.load('shaders/colors.glsl', function (colors) {
-                            loader.load('shaders/raymarch.glsl', function (raymarch) {
-                                let main = unifs.concat(structs).concat(locGeo).concat(globGeo).concat(sceneSDF).concat(colors).concat(raymarch);
-                                mainFrag = main;
-                                setupMaterial(main);
-                                globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+    loader.load('shaders/01uniforms.glsl', function (unifs) {
+        loader.load('shaders/02structs.glsl', function (structs) {
+            loader.load('shaders/03localGeo.glsl', function (locGeo) {
+                loader.load('shaders/04globalGeo.glsl', function (globGeo) {
+                    loader.load('shaders/05basicSDFs.glsl', function (basicSDF) {
+                        loader.load('shaders/06scene.glsl', function (sceneSDF) {
+                            loader.load('shaders/07colors.glsl', function (colors) {
+                                loader.load('shaders/08raymarch.glsl', function (raymarch) {
+                                    let main = unifs.concat(structs).concat(locGeo).concat(globGeo).concat(basicSDF).concat(sceneSDF).concat(colors).concat(raymarch);
+                                    //The rest of the shader-building is below
+                                    mainFrag = main;
+                                    setupMaterial(main);
+                                    globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                                //Setup a "quad" to render on-------------------------
-                                let geom = new BufferGeometry();
-                                let vertices = new Float32Array([
+                                    //Setup a "quad" to render on-------------------------
+                                    let geom = new BufferGeometry();
+                                    let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -144,10 +153,11 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                                geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                mesh = new Mesh(geom, globals.material);
-                                scene.add(mesh);
-                                animate();
+                                    geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                    mesh = new Mesh(geom, globals.material);
+                                    scene.add(mesh);
+                                    animate();
+                                });
                             });
                         });
                     });

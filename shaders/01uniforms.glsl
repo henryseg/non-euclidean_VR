@@ -28,13 +28,6 @@ const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
-//const bool TILING=false;
-//const bool PLANES=false;
-//
-//bool DRAGON=!(TILING||PLANES);
-
-//bool DRAGON_PLANE=not(TILING||PLANES);
-
 
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
@@ -129,9 +122,13 @@ uniform float lightRad;
 uniform int display;
 // 1=tiling
 // 2= planes
-// 3= dragon skin
 
 uniform int res;
+
+//tiling generator vectors
+uniform vec4 V1;
+uniform vec4 V2;
+uniform vec4 V3;
 
 //adding one local light (more to follow)
 vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
