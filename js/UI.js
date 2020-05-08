@@ -19,17 +19,13 @@ let guiInfo;
 //What we need to init our dat GUI
 let initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
-        GetHelp: function () {
-            window.open('https://github.com/henryseg/non-euclidean_VR');
-        },
+        // GetHelp: function () {
+        //   window.open('https://github.com/henryseg/non-euclidean_VR');
+        //},
         toggleUI: true,
-        //        globalSphereRad: 0.2,
-        //        modelHalfCube: 0.5,
-        //        ipDist: 0.03200000151991844,
-        //        stereoScreenOffset: globals.stereoScreenOffset,
         keyboard: 'us',
         display: 1,
-        res: 1,
+        res: 0,
         lightRad: 0.02
     };
 
@@ -51,11 +47,12 @@ let initGui = function () {
         Plane: '2'
     });
 
-    let resController = gui.add(guiInfo, 'res', {
-        Low: '1',
-        Med: '2',
-        High: '3'
-    });
+    //    let resController = gui.add(guiInfo, 'res', {
+    //        Low: '1',
+    //        Med: '2',
+    //        High: '3'
+    //    });
+    let resController = gui.add(guiInfo, 'res', 0.0, 1.).name("Resolution");
     let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
 
     // ------------------------------

@@ -185,9 +185,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     float x=samplePos.x;
     float y=samplePos.y;
     float z=samplePos.z;
-    x = .9 * x / modelHalfCube;
-    y = .9 * y / modelHalfCube;
-    z = .9 * z / modelHalfCube;
+    x = .9 * x;
+    y = .9 * y;
+    z = .9 * z;
     vec3 color = vec3(x, y, z);
 
     N = estimateNormal(sampletv.pos);

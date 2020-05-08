@@ -170,10 +170,6 @@ function setupMaterial(fShader) {
                         'negz.jpg'
                     ])
             },
-            modelHalfCube: {
-                type: "f",
-                value: 0.5
-            },
 
             //Sending the Lattice Generators over to GLSL
             V1: {
@@ -203,7 +199,7 @@ function setupMaterial(fShader) {
                 value: globals.display
             },
             res: {
-                type: "int",
+                type: "f",
                 value: globals.res
             },
             lightRad: {

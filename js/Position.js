@@ -122,7 +122,7 @@ Position.prototype.localFlow = function (v) {
 
     //mat4 parallel=new Matrix4();
 
-    this.boost.premultiply(new Isometry().makeLeftTranslation(v.x, v.y, v.z));
+    this.boost.premultiply(new Isometry().makeLeftTranslation(v));
     //no change to facing b/c euclidean 
     // this.facing.premultiply(parallel);
     return this;

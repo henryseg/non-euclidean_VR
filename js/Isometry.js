@@ -22,56 +22,50 @@ Isometry.prototype.set = function (data) {
     return this;
 };
 
-/*
-Isometry.prototype.makeLeftTranslation = function (x, y, z) {
+
+
+Isometry.prototype.makeLeftTranslation = function (v) {
     // return the left translation by (x,y,z)
-    // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+    // this is the isometry which translates the origin to (v.x,v.y,v.z) in R3-
+    // this is NOT the transformation coming from "exponentiating the tangent vector" v 
     this.matrix.set(
-        1, 0, 0, x,
-        0, 1, 0, y,
-        0, 0, 1, z,
+        1, 0, 0, v.x,
+        0, 1, 0, v.y,
+        0, 0, 1, v.z,
         0, 0, 0, 1
     );
     return this;
 };
 
-Isometry.prototype.makeInvLeftTranslation = function (x, y, z) {
+
+Isometry.prototype.makeInvLeftTranslation = function (v) {
     // return the inverse of the left translation by (x,y,z)
     // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
     this.matrix.set(
-        1, 0, 0, -x,
-        0, 1, 0, -y,
-        0, 0, 1, -z,
+        1, 0, 0, -v.x,
+        0, 1, 0, -v.y,
+        0, 0, 1, -v.z,
         0, 0, 0, 1
     );
     return this;
 };
-*/
 
 
-Isometry.prototype.makeLeftTranslation = function (x, y, z) {
-    // return the left translation by (x,y,z)
-    // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
+
+//this function takes v in the tangent space and returns the isometry which translates by |v| in the direction of v
+//for Euclidean geometry this is the same as the above; but in general is not.
+//the above function only makes sense for spaces whose model is R3.
+Isometry.prototype.translateByVector = function (v) {
+
     this.matrix.set(
-        1, 0, 0, x,
-        0, 1, 0, y,
-        0, 0, 1, z,
+        1, 0, 0, v.x,
+        0, 1, 0, v.y,
+        0, 0, 1, v.z,
         0, 0, 0, 1
     );
     return this;
-};
+}
 
-Isometry.prototype.makeInvLeftTranslation = function (x, y, z) {
-    // return the inverse of the left translation by (x,y,z)
-    // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-    this.matrix.set(
-        1, 0, 0, -x,
-        0, 1, 0, -y,
-        0, 0, 1, -z,
-        0, 0, 0, 1
-    );
-    return this;
-};
 
 
 Isometry.prototype.premultiply = function (isom) {

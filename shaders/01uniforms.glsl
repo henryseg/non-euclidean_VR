@@ -48,10 +48,6 @@ const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
 
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
-//projection of cube to klein model
-const float modelHalfCube =  0.5;
-//corner of cube in Klein model, useful for horosphere distance function
-const vec4 modelCubeCorner = vec4(modelHalfCube, modelHalfCube, modelHalfCube, 1.0);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -63,22 +59,33 @@ const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
 
-void setResolution(int UIVar){
-    if (UIVar==1){
-        MAX_MARCHING_STEPS =  50;
-        MAX_DIST = 100.0;
-    }
-    if (UIVar==2){
-        MAX_MARCHING_STEPS =  200;
-        MAX_DIST = 500.0;
+//void setResolution(float UIVar){
+//    if (UIVar==1){
+//        MAX_MARCHING_STEPS =  50;
+//        MAX_DIST = 100.0;
+//    }
+//    if (UIVar==2){
+//        MAX_MARCHING_STEPS =  100;
+//        MAX_DIST = 300.0;
+//
+//    }
+//    if (UIVar==3){
+//        MAX_MARCHING_STEPS =  250;
+//        MAX_DIST = 600.0;
+//
+//    }
+//}
 
-    }
-    if (UIVar==3){
-        MAX_MARCHING_STEPS =  500;
-        MAX_DIST = 1000.0;
 
-    }
+void setResolution(float UIVar){
+    //UIVar goes between 0 for low res and 1 for high res
+        MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
+        MAX_DIST = 100.+400.*UIVar;
+   
 }
+
+
+
 
 //const float EPSILON = 0.0001;
 const float EPSILON = 0.0005;
@@ -123,7 +130,7 @@ uniform int display;
 // 1=tiling
 // 2= planes
 
-uniform int res;
+uniform float res;
 
 //tiling generator vectors
 uniform vec4 V1;
