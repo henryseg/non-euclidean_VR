@@ -113,6 +113,8 @@ uniform int display;
 
 uniform float res;
 
+uniform float mirror;
+
 //tiling generator vectors
 uniform vec4 V1;
 uniform vec4 V2;

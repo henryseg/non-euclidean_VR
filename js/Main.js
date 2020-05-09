@@ -66,6 +66,7 @@ let globals = {
     globalObjectPosition: undefined,
     display: 1,
     res: 0.,
+    mirror: 0.1,
     lightRad: 0.05
 };
 

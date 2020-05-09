@@ -15,6 +15,12 @@ float lightAtt(float dist){
 
 
 
+
+
+
+
+
+
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Given a point in the scene where you stop raymarching as you have hit a surface, find the normal at that point
 tangVector estimateNormal(vec4 p) { 
@@ -166,25 +172,26 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 
     //make the objects have their own color
     //color the object based on its position in the cube
-//    vec4 samplePos=modelProject(sampletv.pos);
+    vec4 samplePos=modelProject(sampletv.pos);
 //
 //    //IF WE HIT THE TILING
-//    float x=samplePos.x;
-//    float y=samplePos.y;
-//    float z=samplePos.z;
-//    x = .9 * x/2.;
-//    y = .9 * y/2.;
-//    z = .9 * z/2.;
-//    vec3 color = vec3(x, y, z);
+    float x=samplePos.x;
+    float y=samplePos.y;
+    float z=samplePos.z;
+    x = .9 * x/3.;
+    y = .9 * y/3.;
+    z = .9 * z/3.;
+    vec3 color = vec3(x, y, z);
 //    
     //fix a color for the tiling
-    vec3 color=vec3(0.2,0.3,0.5);
+    //vec3 color=vec3(0.2,0.3,0.5);
 
     //it seems like a negative sign has to go in here on the tangent vector
     //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal
     //need to actually check this when I clean up this part
-    N = turnAround(estimateNormal(sampletv.pos));
-    color = phongModel(totalFixMatrix, 0.2*color);
+    //N = turnAround(estimateNormal(sampletv.pos));
+    N = estimateNormal(sampletv.pos);
+    color = phongModel(totalFixMatrix, 0.3*color);
 
     return color;
 
@@ -265,8 +272,8 @@ vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight
 
     N = estimateNormal(sampletv.pos);
     vec3 color;
-    color = phongModel(totalFixMatrix, 0.8*colorOfLight);
-    color = 0.7*color+0.3;
+    color = phongModel(totalFixMatrix, colorOfLight);
+    color = 0.7*color+0.4;
     return color;
 
 }

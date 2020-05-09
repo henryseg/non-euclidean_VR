@@ -26,6 +26,7 @@ let initGui = function () {
         keyboard: 'us',
         display: 1,
         res: 0,
+        mirror: 0.1,
         lightRad: 0.02
     };
 
@@ -53,6 +54,7 @@ let initGui = function () {
     //        High: '3'
     //    });
     let resController = gui.add(guiInfo, 'res', 0.0, 1.).name("Resolution");
+    let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 1.).name("Mirror");
     let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
 
     // ------------------------------
@@ -105,6 +107,11 @@ let initGui = function () {
     resController.onChange(function (value) {
         globals.res = value;
     });
+
+    mirrorController.onChange(function (value) {
+        globals.mirror = value;
+    });
+
 
     lightRadController.onChange(function (value) {
         globals.material.uniforms.lightRad.value = value;

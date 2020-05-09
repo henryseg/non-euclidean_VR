@@ -202,6 +202,10 @@ function setupMaterial(fShader) {
                 type: "f",
                 value: globals.res
             },
+            mirror: {
+                type: "f",
+                value: globals.mirror
+            },
             lightRad: {
                 type: "float",
                 value: globals.lightRad
@@ -245,6 +249,7 @@ function updateMaterial() {
 
     globals.material.uniforms.display.value = globals.display;
     globals.material.uniforms.res.value = globals.res;
+    globals.material.uniforms.mirror.value = globals.mirror;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
 }
