@@ -71,6 +71,8 @@ const float EPSILON = 0.0005;
 const float fov = 120.0;
 
 
+//distance to viewer when a raymarch step ends
+float distToViewer;
 
 
 
@@ -117,7 +119,7 @@ uniform vec4 V2;
 uniform vec4 V3;
 
 //adding one local light (more to follow)
-vec4 localLightPos=vec4(0.1, 0.2, -0.2, 1.);
+vec4 localLightPos=vec4(0.2, 0.2, -0.2, 1.);
 
 //lightRad controls the intensity of the light
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness

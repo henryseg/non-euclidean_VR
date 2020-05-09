@@ -8,12 +8,18 @@ vec4 geomProject(vec4 p){
     return p;
 }
 
-
-//Project onto the Klein Model
+//Project onto the affine model
 vec4 modelProject(vec4 p){
     return p;
-
 }
+
+//surface area of a sphere  of radius R
+float surfArea(float rad){
+    return rad*rad;
+}
+
+
+
 
 
 //----------------------------------------------------------------------------------------------------------------------

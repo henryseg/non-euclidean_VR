@@ -39,14 +39,14 @@ function fixOutsideCentralCell(position) {
     let v2 = V2;
     let v3 = V3;
 
-    if (globals.display != 2) { //this turns off the vertical teleporation when there is no vertical syymetries
+   // if (globals.display != 2) { //this turns off the vertical teleporation when there is no vertical syymetries
         if (p.dot(v3) > 0.5) {
             bestIndex = 5;
         }
         if (p.dot(v3) < -0.5) {
             bestIndex = 4;
         }
-    }
+  //  }
 
     if (p.dot(v1) > 0.5) {
         bestIndex = 1;

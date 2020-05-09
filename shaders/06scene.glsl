@@ -31,9 +31,12 @@ float tilingSceneSDF(vec4 p){
 }
 
 //Local Objects Choice 2
-float planeSceneSDF(vec4 p){
-        vec4 center = vec4(0., 0., 0., 1.);
-        return fatEllipsoidSDF(p, center, 0.05);
+float latticeSceneSDF(vec4 p){
+        //vec4 center = vec4(0., 0., 0., 1.);
+    vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
+    return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
+    //return sphereSDF(p,center,0.2);
+       // return fatEllipsoidSDF(p, center, 0.06);
 }
 
 
@@ -44,7 +47,7 @@ float locSceneObjects(vec4 p){
         return tilingSceneSDF(p);
     }
     if(display==2){
-        return planeSceneSDF(p);
+        return latticeSceneSDF(p);
     }
 }
 
@@ -63,6 +66,7 @@ float localSceneSDF(vec4 p){
         //LIGHT=true;
         
         hitWhich = 1;
+        
         colorOfLight=vec3(0.3,0.3,0.3);
         return lightDist;
     }
@@ -100,7 +104,7 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
     vec4 v3 = V3;
 
     //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
-    if (display!=2){
+    //if (display!=2){
         if (dot(p, v3) > 0.5) {
             fixMatrix = Isometry(invGenerators[4]);
             return true;
@@ -109,7 +113,7 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
             fixMatrix = Isometry(invGenerators[5]);
             return true;
         }
-    }
+   // }
 
     if (dot(p, v1) > 0.5) {
         fixMatrix = Isometry(invGenerators[0]);

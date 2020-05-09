@@ -29,7 +29,8 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             
             
             if (localDist < EPSILON){
-                  sampletv = toTangVector(localtv);
+                sampletv = toTangVector(localtv);
+                distToViewer=globalDepth;
                   break;
               }
               marchStep = localDist;
@@ -89,6 +90,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                 // hitWhich has now been set
                 totalFixMatrix = identityIsometry;
                 sampletv = toTangVector(tv);
+                distToViewer=globalDepth;
                 //hitWhich = 5;
                 //debugColor = 0.1*vec3(globalDepth, 0, 0);
                 return;
@@ -181,7 +183,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.3);
+        out_FragColor = vec4(0.2);
         return;
     }
     else if (hitWhich == 1){
@@ -203,6 +205,7 @@ void main(){
     }
     else if (hitWhich==3) {
         // local objects
+        //vec3 pixelColor=vec3(20.*distToViewer/MAX_DIST,0.,0.);
         vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
         out_FragColor=vec4(pixelColor, 1.0);
         return;

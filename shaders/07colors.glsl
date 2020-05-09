@@ -5,9 +5,10 @@
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
         //fake linear falloff
-        return dist;
+        return 1.+0.5*dist+0.1*dist*dist;
     }
-    return dist*dist;
+    //actual distance function
+    return 0.1+surfArea(dist);
 }
 
 
@@ -15,13 +16,15 @@ float lightAtt(float dist){
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
-    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
+//Given a point in the scene where you stop raymarching as you have hit a surface, find the normal at that point
+tangVector estimateNormal(vec4 p) { 
     float newEp = EPSILON * 10.0;
+    //basis for the tangent space at that point.
     mat4 theBasis= tangBasis(p);
     vec4 basis_x = theBasis[0];
     vec4 basis_y = theBasis[1];
     vec4 basis_z = theBasis[2];
+    
     if (hitWhich != 3){ //global light scene
         //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
         tangVector tv = tangVector(p,
@@ -45,13 +48,31 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // Lighting Functions
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
 vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightColor, float lightIntensity){
     //Calculations - Phong Reflection Model
+    
+    //this is the direction from point on surface to the light source
     tangVector L = tangDirection(SP, TLP);
+    //this  is the reflection of this direction with respect to the surface normal
     tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
     float nDotL = max(cosAng(N, L), 0.0);
@@ -61,36 +82,45 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     vec3 specular = lightColor.rgb * pow(rDotV, 10.0);
     //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
-    float att = 0.6*lightIntensity /(0.01 + lightAtt(distToLight));
-    //Compute final color
-    return att*((diffuse*baseColor) + specular);
+    float att = lightIntensity /lightAtt(distToLight);
+    //Combine the above terms to compute the final color
+    return (baseColor*(diffuse + .15) + vec3(.8, .6, .3)*specular*2.) * att;
+   //return att*((diffuse*baseColor) + specular);
 }
 
+
+
+
+
+
 vec3 phongModel(Isometry totalFixMatrix, vec3 color){
+    //sample point on the surfaxe
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
+    //tangent vector at sample point pointing back at viewer
     tangVector V = tangVector(SP, -sampletv.dir);
 
-    vec3 surfColor;
-    surfColor=0.2*vec3(1.)+0.8*color;
+    //intrinsic color of the surface
+    //vec3 surfColor=color;
+    //set here to be the input color, whitened a bit
+    vec3 surfColor=0.2*vec3(1.)+0.8*color;
 
-    //    vec3 color = vec3(0.0);
     //--------------------------------------------------
     //Lighting Calculations
     //--------------------------------------------------
-    //usually we'd check to ensure there are 4 lights
-    //however this is version is hardcoded so we won't
 
     //GLOBAL LIGHTS
     for (int i = 0; i<4; i++){
+        //for each global light, translate its position via fixMatrix and cellBost
         Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, lightPositions[i]);
-        color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i],2.);
+        //run the lighting calculation for this  light position
+        //add the resulting color to the original.
+        color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i],2.);//the two here is the light intensity hard coded right now
     }
 
-
     //LOCAL LIGHT
-    color+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.1+10.*lightRad*lightRad);
+    surfColor+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
     //light color and intensity hard coded in
 
 
@@ -98,11 +128,114 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     for (int i=0; i<6; i++){
         TLP=invGenerators[i]*localLightPos;
         //local lights intensity is a function of its radius: so it gets brighter when it grows:
-        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.1+10.*lightRad*lightRad);
+        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
     }
+    
+    
+    
+    //now that we've done the lighting calculation; can do the other things that might be usefu; like adding fog
+    //this creates fog whose thickness depends on the distance marched (as a fraction of MAX_DIST)
+    //the FACTOR OF 20 HERE IS JUST EXPERIMENTAL RIGHT NOW: looks like we are never reaching max dist before iteration time runs out in Euclidean geometry
+    float fogF = smoothstep(0., MAX_DIST, 20.*distToViewer);
+    //    // Applying the background fog. Just black, in this case, but you could
+    // the vec3(0.1) is the backgroud dark gray that is drawn when we hit nothing: so making  the fog limit to this makes objects fade out
+    color = mix(color, vec3(0.1,0.1,0.1), fogF); 
 
     return color;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
+    //    if (FAKE_LIGHT){//always fake light in Sol so far
+
+    //make the objects have their own color
+    //color the object based on its position in the cube
+    vec4 samplePos=modelProject(sampletv.pos);
+
+    //IF WE HIT THE TILING
+    float x=samplePos.x;
+    float y=samplePos.y;
+    float z=samplePos.z;
+    x = .9 * x/2.;
+    y = .9 * y/2.;
+    z = .9 * z/2.;
+    vec3 color = vec3(x, y, z);
+    
+    //make the tiling uniform white
+    color=vec3(0.2,0.3,0.5);
+
+    //it seems like a negative sign has to go in here on the tangent vector
+    //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal
+    //need to actually check this when I clean up this part
+    N = estimateNormal(-sampletv.pos);
+    color = phongModel(totalFixMatrix, 0.2*color);
+
+    return color;
+
+    //adding a small constant makes it glow slightly
+    //}
+    //    else {
+    //        //if we are doing TRUE LIGHTING
+    //        // objects have no natural color, only lit by the lights
+    //        N = estimateNormal(sampletv.pos);
+    //        vec3 color=vec3(0., 0., 0.);
+    //        color = phongModel(totalFixMatrix, color);
+    //        return color;
+    //    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //EARTH TEXTURING COLOR COMMANDS
@@ -172,41 +305,3 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
-vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
-    //    if (FAKE_LIGHT){//always fake light in Sol so far
-
-    //make the objects have their own color
-    //color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
-
-    //IF WE HIT THE TILING
-    float x=samplePos.x;
-    float y=samplePos.y;
-    float z=samplePos.z;
-    x = .9 * x/2.;
-    y = .9 * y/2.;
-    z = .9 * z/2.;
-    vec3 color = vec3(x, y, z);
-    
-    //make the tiling uniform white
-    //color=localLightColor.xyz;
-
-    //it seems like a negative sign has to go in here on the tangent vector
-    //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal
-    //need to actually check this when I clean up this part
-    N = estimateNormal(-sampletv.pos);
-    color = phongModel(totalFixMatrix, 0.2*color);
-
-    return 0.9*color+0.2;
-
-    //adding a small constant makes it glow slightly
-    //}
-    //    else {
-    //        //if we are doing TRUE LIGHTING
-    //        // objects have no natural color, only lit by the lights
-    //        N = estimateNormal(sampletv.pos);
-    //        vec3 color=vec3(0., 0., 0.);
-    //        color = phongModel(totalFixMatrix, color);
-    //        return color;
-    //    }
-}
