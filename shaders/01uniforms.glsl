@@ -125,7 +125,7 @@ vec4 localLightPos=vec4(0.25, 0.25, -0.25, 1.);
 
 //lightRad controls the intensity of the light
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness
-vec4 localLightColor=vec4(1.,1.,1.,0.5);
+vec4 localLightColor=vec4(.5,.5,.5,0.5);
 
 
 //variable which sets the light colors for drawing in hitWhich 1

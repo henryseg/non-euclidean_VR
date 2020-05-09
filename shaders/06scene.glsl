@@ -31,7 +31,7 @@ float tilingSceneSDF(vec4 p){
 }
 
 //Local Objects Choice 2
-float latticeSceneSDF(vec4 p){
+float cylSceneSDF(vec4 p){
        
    // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
    //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
@@ -48,6 +48,16 @@ float latticeSceneSDF(vec4 p){
 }
 
 
+//Local Objects Choice 3
+float latticeSceneSDF(vec4 p){
+       
+   // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
+   //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
+    vec4 center = vec4(0., 0., 0., 1.);
+    return sphereSDF(p,center,0.2);
+// return fatEllipsoidSDF(p, center, 0.06);
+}
+
 
 //Function which picks which Local Objects to draw based on a uniform
 float locSceneObjects(vec4 p){
@@ -55,6 +65,9 @@ float locSceneObjects(vec4 p){
         return tilingSceneSDF(p);
     }
     if(display==2){
+        return cylSceneSDF(p);
+    }
+        if(display==3){
         return latticeSceneSDF(p);
     }
 }

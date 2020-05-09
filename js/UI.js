@@ -45,7 +45,8 @@ let initGui = function () {
 
     let displayController = gui.add(guiInfo, 'display', {
         Tiling: '1',
-        Lattice: '2'
+        Cylinders: '2',
+        Lattice: '3'
     });
 
     //    let resController = gui.add(guiInfo, 'res', {
