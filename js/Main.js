@@ -67,7 +67,7 @@ let globals = {
     display: 3,
     res: 1,
     lightRad: 0.05,
-    count:0
+    // count:0
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -153,16 +153,16 @@ function loadShaders() {
 
 
 function animate() {
-    if (globals.count === 0) {
-        globals.count = globals.count + 1;
-        console.log("animate", globals.position);
-        stats.begin();
-        globals.controls.update();
-        updateMaterial();
-        VRController.update();
-        globals.effect.render(scene, camera, animate);
-        stats.end();
-    }
+    //if (globals.count === 0) {
+    //  globals.count = globals.count + 1;
+    console.log("animate", globals.position);
+    stats.begin();
+    globals.controls.update();
+    updateMaterial();
+    VRController.update();
+    globals.effect.render(scene, camera, animate);
+    stats.end();
+    // }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

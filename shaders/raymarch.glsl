@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -1622,11 +1622,14 @@ void main(){
     }
 
     //get our raymarched distance back ------------------------
+ 
+    
     Isometry totalFixMatrix = identity;
     // do the marching
     //raymarch(rayDir, totalFixMatrix);
     raymarch(rayDir, totalFixMatrix);
 
+  
     /*
     hitWhich = 5;
 
@@ -1644,7 +1647,7 @@ void main(){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.3);
+        out_FragColor = vec4(0.2);
         return;
     }
     else if (hitWhich == 1){
