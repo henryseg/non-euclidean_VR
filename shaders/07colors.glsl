@@ -79,7 +79,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     vec3 diffuse = lightColor.rgb * nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
-    vec3 specular = lightColor.rgb * pow(rDotV, 10.0);
+    vec3 specular = lightColor.rgb * pow(rDotV,20.0);
     //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
     float att = lightIntensity /lightAtt(distToLight);
@@ -136,7 +136,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //now that we've done the lighting calculation; can do the other things that might be usefu; like adding fog
     //this creates fog whose thickness depends on the distance marched (as a fraction of MAX_DIST)
     //the FACTOR OF 20 HERE IS JUST EXPERIMENTAL RIGHT NOW: looks like we are never reaching max dist before iteration time runs out in Euclidean geometry
-    float fogF = smoothstep(0., MAX_DIST, 20.*distToViewer);
+    float fogF = smoothstep(0., MAX_DIST/20., distToViewer);
     //    // Applying the background fog. Just black, in this case, but you could
     // the vec3(0.1) is the backgroud dark gray that is drawn when we hit nothing: so making  the fog limit to this makes objects fade out
     color = mix(color, vec3(0.1,0.1,0.1), fogF); 
@@ -166,38 +166,28 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 
     //make the objects have their own color
     //color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
-
-    //IF WE HIT THE TILING
-    float x=samplePos.x;
-    float y=samplePos.y;
-    float z=samplePos.z;
-    x = .9 * x/2.;
-    y = .9 * y/2.;
-    z = .9 * z/2.;
-    vec3 color = vec3(x, y, z);
-    
-    //make the tiling uniform white
-    color=vec3(0.2,0.3,0.5);
+//    vec4 samplePos=modelProject(sampletv.pos);
+//
+//    //IF WE HIT THE TILING
+//    float x=samplePos.x;
+//    float y=samplePos.y;
+//    float z=samplePos.z;
+//    x = .9 * x/2.;
+//    y = .9 * y/2.;
+//    z = .9 * z/2.;
+//    vec3 color = vec3(x, y, z);
+//    
+    //fix a color for the tiling
+    vec3 color=vec3(0.2,0.3,0.5);
 
     //it seems like a negative sign has to go in here on the tangent vector
     //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal
     //need to actually check this when I clean up this part
-    N = estimateNormal(-sampletv.pos);
+    N = turnAround(estimateNormal(sampletv.pos));
     color = phongModel(totalFixMatrix, 0.2*color);
 
     return color;
 
-    //adding a small constant makes it glow slightly
-    //}
-    //    else {
-    //        //if we are doing TRUE LIGHTING
-    //        // objects have no natural color, only lit by the lights
-    //        N = estimateNormal(sampletv.pos);
-    //        vec3 color=vec3(0., 0., 0.);
-    //        color = phongModel(totalFixMatrix, color);
-    //        return color;
-    //    }
 }
 
 

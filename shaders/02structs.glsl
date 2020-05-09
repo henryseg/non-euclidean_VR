@@ -162,8 +162,13 @@ localTangVector rotateFacing(mat4 A, localTangVector v){
     return localTangVector(v.pos, A*v.dir);
 }
 
+localTangVector turnAround(localTangVector v){
+    return localTangVector(v.pos, -v.dir);
+}
 
-
+tangVector turnAround(tangVector v){
+    return tangVector(v.pos, -v.dir);
+}
 
 
 

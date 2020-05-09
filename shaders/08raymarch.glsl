@@ -3,7 +3,7 @@
 //new version for Euclidean Geometry
 
 
-int BINARY_SEARCH_STEPS=6;
+int BINARY_SEARCH_STEPS=20;
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 

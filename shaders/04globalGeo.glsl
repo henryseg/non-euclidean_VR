@@ -13,22 +13,20 @@ vec4 modelProject(vec4 p){
     return p;
 }
 
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Distance Functions
+//----------------------------------------------------------------------------------------------------------------------
+
 //surface area of a sphere  of radius R
 float surfArea(float rad){
     return rad*rad;
 }
 
 
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// GLOBAL GEOMETRY
-//----------------------------------------------------------------------------------------------------------------------
-
-/*
-  Methods computing ``global'' objects
-*/
 
 float fakeDistance(vec4 p, vec4 q){
     // measure the distance between two points in the geometry
@@ -67,6 +65,30 @@ float exactDist(localTangVector u, localTangVector v){
     return exactDist(u.pos, v.pos);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Direction Functions
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
     return tangNormalize(tangVector(p, q - p));
@@ -81,6 +103,17 @@ tangVector tangDirection(localTangVector u, localTangVector v){
     // overload of the previous function in case we work with tangent vectors
     return tangDirection(u.pos, v.pos);
 }
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Geodesic Flow
+//----------------------------------------------------------------------------------------------------------------------
+
 
 
 tangVector eucFlow(tangVector tv, float t) {

@@ -29,7 +29,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
-const bool FAKE_LIGHT_FALLOFF=false;
+const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 
