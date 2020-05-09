@@ -25,7 +25,7 @@ let initGui = function () {
         toggleUI: true,
         keyboard: 'us',
         display: 1,
-        res: 0,
+        res: 0.25,
         mirror: 0.1,
         lightRad: 0.02
     };
@@ -53,7 +53,7 @@ let initGui = function () {
     //        Med: '2',
     //        High: '3'
     //    });
-    let resController = gui.add(guiInfo, 'res', 0.0, 1.).name("Resolution");
+    let resController = gui.add(guiInfo, 'res', 0., 1.).name("Resolution");
     let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 1.).name("Mirror");
     let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
 

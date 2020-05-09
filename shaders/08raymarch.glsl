@@ -332,6 +332,16 @@ void main(){
         return;
     }
     
+    
+    
+    
+    
+    
+    //---------DOING ONE REFLECTION ----------------------
+    
+    
+    
+    
     else{
     
     //do the raymarch again! starting from this position (sampletv)
@@ -355,8 +365,46 @@ void main(){
     vec4 reflectedColor;
     reflectedColor=marchedColor(hitWhich,totalFixMatrix,sampletv);
     
+        
+     //if the reflectivity of the surface is below 50% say, just output the color
+    if(mirror<0.5){
     //now combine the first pass color and the  reflected color to output
     out_FragColor=0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
+        return;
+    }
+        
+        
+        
+        
+        
+        
+        
+        //---------DOING TWO REFLECTIONS
+        
+        
+        
+        else if(mirror>0.5){// we do a second reflection! So the reflections have reflections
+            
+     //do the raymarch again! starting from this position (sampletv)
+    //first, reflect this direction wtih respect to the surface normal
+    nVec=estimateNormal(sampletv.pos);
+    newDir = sub(scalarMult(-2.0 * cosAng(sampletv, nVec), nVec), sampletv);
+    
+    //move the new ray off a little bit
+    newDir.pos=newDir.pos+0.01*newDir.dir;
+    //then, raymarch in this new direction
+    raymarch(toLocalTangVector(newDir), totalFixMatrix);
+    
+    //now, get the reflected color
+    vec4 reflectedColor2;
+    reflectedColor2=marchedColor(hitWhich,totalFixMatrix,sampletv);
+    
+    //now combine the first pass color and the  reflected color to output
+    out_FragColor=((1.-mirror)*resultingColor+mirror*((1.-mirror)*reflectedColor+mirror*reflectedColor2));
+
+            
+            
+        }
     
     }
     
