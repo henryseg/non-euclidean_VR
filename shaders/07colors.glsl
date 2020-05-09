@@ -142,7 +142,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //now that we've done the lighting calculation; can do the other things that might be usefu; like adding fog
     //this creates fog whose thickness depends on the distance marched (as a fraction of MAX_DIST)
     //the FACTOR OF 20 HERE IS JUST EXPERIMENTAL RIGHT NOW: looks like we are never reaching max dist before iteration time runs out in Euclidean geometry
-    float fogF = smoothstep(0., MAX_DIST/20., distToViewer);
+    float fogF = smoothstep(0., MAX_DIST/10., distToViewer+0.2*distToViewer*distToViewer);
     //    // Applying the background fog. Just black, in this case, but you could
     // the vec3(0.1) is the backgroud dark gray that is drawn when we hit nothing: so making  the fog limit to this makes objects fade out
     color = mix(color, vec3(0.1,0.1,0.1), fogF); 

@@ -367,7 +367,7 @@ void main(){
     
         
      //if the reflectivity of the surface is below 50% say, just output the color
-    if(mirror<0.5){
+    if(mirror<0.75){
     //now combine the first pass color and the  reflected color to output
     out_FragColor=0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
         return;
@@ -379,11 +379,9 @@ void main(){
         
         
         
-        //---------DOING TWO REFLECTIONS
+        //---------DOING TWO REFLECTIONS 
         
-        
-        
-        else if(mirror>0.5){// we do a second reflection! So the reflections have reflections
+        else if(mirror>0.75){// we do a second reflection! So the reflections have reflections
             
      //do the raymarch again! starting from this position (sampletv)
     //first, reflect this direction wtih respect to the surface normal
@@ -400,10 +398,8 @@ void main(){
     reflectedColor2=marchedColor(hitWhich,totalFixMatrix,sampletv);
     
     //now combine the first pass color and the  reflected color to output
-    out_FragColor=((1.-mirror)*resultingColor+mirror*((1.-mirror)*reflectedColor+mirror*reflectedColor2));
-
-            
-            
+    out_FragColor=((1.1-mirror)*resultingColor+mirror*((1.-mirror)*reflectedColor+mirror*reflectedColor2));
+   
         }
     
     }

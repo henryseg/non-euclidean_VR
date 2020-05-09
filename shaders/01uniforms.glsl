@@ -121,7 +121,7 @@ uniform vec4 V2;
 uniform vec4 V3;
 
 //adding one local light (more to follow)
-vec4 localLightPos=vec4(0.2, 0.2, -0.2, 1.);
+vec4 localLightPos=vec4(0.25, 0.25, -0.25, 1.);
 
 //lightRad controls the intensity of the light
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness

@@ -34,9 +34,16 @@ float tilingSceneSDF(vec4 p){
 float latticeSceneSDF(vec4 p){
        
    // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
-    //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
+   //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
+    
  vec4 center = vec4(0., 0., 0., 1.);
-   return sphereSDF(p,center,0.2);
+    float cylZ=cylSDF(p,0.1);
+    float cylY =cylSDF(vec4(p.x,p.z,p.y,1.),0.1);
+    float cylX =cylSDF(vec4(p.y,p.z,p.x,1.),0.1);
+   return min(min(cylZ,cylY),cylX);
+    
+    
+    //return sphereSDF(p,ORIGIN,0.02);
        // return fatEllipsoidSDF(p, center, 0.06);
 }
 
@@ -68,7 +75,7 @@ float localSceneSDF(vec4 p){
         
         hitWhich = 1;
         
-        colorOfLight=vec3(0.3,0.3,0.3);
+        colorOfLight=vec3(1.,1.,1.);
         return lightDist;
     }
 
@@ -204,7 +211,7 @@ float globalSceneSDF(vec4 p){
         objDist = sphereSDF(
         absolutep,
         lightPositions[i],
-        0.2//radius of the light
+        0.05//radius of the light
         );
         distance = min(distance, objDist);
         if (distance < EPSILON){
