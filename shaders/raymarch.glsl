@@ -898,7 +898,7 @@ Isometry globalObjectBoost;
 //----------------------------------------------------------------------------------------------------------------------
 uniform int isStereo;
 uniform vec2 screenResolution;
-uniform mat4 invGenerators[6];
+uniform vec4 invGenerators[6]; //
 uniform vec4 currentBoostMat;
 uniform vec4 leftBoostMat;
 uniform vec4 rightBoostMat;
@@ -1461,7 +1461,8 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
-        TLP=invGenerators[i]*localLightPos;
+        //TLP=invGenerators[i]*localLightPos;
+        TLP = translate( makeLeftTranslation(invGenerators[i]), localLightPos );
         color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
     }
 

@@ -129,6 +129,8 @@ function initGeometry() {
     globals.invGens = invGenerators(globals.gens);
     invGensMatrices = unpackageMatrix(globals.invGens);
 
+    //console.log("invGensMatrices", invGensMatrices);
+
 
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
     console.log("vectorLeft", vectorLeft);
@@ -170,6 +172,22 @@ function initObjects() {
 
 function setupMaterial(fShader) {
 
+    console.log("globals.vr", globals.vr);
+    console.log("globals.lightIntensities", globals.lightIntensities);
+    console.log("invGensMatrices", invGensMatrices);
+    console.log("globals.position.boost.toVector4()", globals.position.boost.toVector4());
+    console.log("globals.leftPosition.boost.toVector4()", globals.leftPosition.boost.toVector4());
+    console.log("globals.rightPosition.boost.toVector4()", globals.rightPosition.boost.toVector4());
+    console.log("globals.position.facing", globals.position.facing);
+    console.log("globals.leftPosition.facing", globals.leftPosition.facing);
+    console.log("globals.rightPosition.facing", globals.rightPosition.facing);
+    console.log("globals.cellPosition.boost.toVector4()", globals.cellPosition.boost.toVector4());
+    console.log("globals.invCellPosition.boost.toVector4()", globals.invCellPosition.boost.toVector4());
+    console.log("globals.cellPosition.facing", globals.cellPosition.facing);
+    console.log("globals.invCellPosition.facing", globals.invCellPosition.facing);
+    console.log("globals.lightPositions", globals.lightPositions);
+    console.log("globals.globalObjectPosition.boost.toVector4()", globals.globalObjectPosition.boost.toVector4());
+
     globals.material = new ShaderMaterial({
         uniforms: {
 
@@ -194,15 +212,15 @@ function setupMaterial(fShader) {
             //--- end of invGen stuff
             currentBoostMat: {
                 type: "v4",
-                value: globals.position.boost.matrix
+                value: globals.position.boost.toVector4()
             },
             leftBoostMat: {
                 type: "v4",
-                value: globals.leftPosition.boost.matrix
+                value: globals.leftPosition.boost.toVector4()
             },
             rightBoostMat: {
                 type: "v4",
-                value: globals.rightPosition.boost.matrix
+                value: globals.rightPosition.boost.toVector4()
             },
             //currentBoost is an array
             facing: {
@@ -219,11 +237,11 @@ function setupMaterial(fShader) {
             },
             cellBoostMat: {
                 type: "v4",
-                value: globals.cellPosition.boost.matrix
+                value: globals.cellPosition.boost.toVector4()
             },
             invCellBoostMat: {
                 type: "v4",
-                value: globals.invCellPosition.boost.matrix
+                value: globals.invCellPosition.boost.toVector4()
             },
             cellFacing: {
                 type: "m4",
@@ -239,7 +257,7 @@ function setupMaterial(fShader) {
             },
             globalObjectBoostMat: {
                 type: "v4",
-                value: globals.globalObjectPosition.boost.matrix
+                value: globals.globalObjectPosition.boost.toVector4()
             },
             globalSphereRad: {
                 type: "f",
@@ -308,12 +326,12 @@ function updateMaterial() {
 
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
-    globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.matrix;
+    globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.toVector4();
     globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
-    globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
+    globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.toVector4();
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
     globals.material.uniforms.time.value = (new Date().getTime()) - time0;
