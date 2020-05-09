@@ -172,21 +172,21 @@ function initObjects() {
 
 function setupMaterial(fShader) {
 
-    console.log("globals.vr", globals.vr);
-    console.log("globals.lightIntensities", globals.lightIntensities);
-    console.log("invGensMatrices", invGensMatrices);
-    console.log("globals.position.boost.toVector4()", globals.position.boost.toVector4());
-    console.log("globals.leftPosition.boost.toVector4()", globals.leftPosition.boost.toVector4());
-    console.log("globals.rightPosition.boost.toVector4()", globals.rightPosition.boost.toVector4());
-    console.log("globals.position.facing", globals.position.facing);
-    console.log("globals.leftPosition.facing", globals.leftPosition.facing);
-    console.log("globals.rightPosition.facing", globals.rightPosition.facing);
-    console.log("globals.cellPosition.boost.toVector4()", globals.cellPosition.boost.toVector4());
-    console.log("globals.invCellPosition.boost.toVector4()", globals.invCellPosition.boost.toVector4());
-    console.log("globals.cellPosition.facing", globals.cellPosition.facing);
-    console.log("globals.invCellPosition.facing", globals.invCellPosition.facing);
-    console.log("globals.lightPositions", globals.lightPositions);
-    console.log("globals.globalObjectPosition.boost.toVector4()", globals.globalObjectPosition.boost.toVector4());
+    // console.log("globals.vr", globals.vr);
+    // console.log("globals.lightIntensities", globals.lightIntensities);
+    // console.log("invGensMatrices", invGensMatrices);
+    // console.log("globals.position.boost.toVector4()", globals.position.boost.toVector4());
+    // console.log("globals.leftPosition.boost.toVector4()", globals.leftPosition.boost.toVector4());
+    // console.log("globals.rightPosition.boost.toVector4()", globals.rightPosition.boost.toVector4());
+    // console.log("globals.position.facing", globals.position.facing);
+    // console.log("globals.leftPosition.facing", globals.leftPosition.facing);
+    // console.log("globals.rightPosition.facing", globals.rightPosition.facing);
+    // console.log("globals.cellPosition.boost.toVector4()", globals.cellPosition.boost.toVector4());
+    // console.log("globals.invCellPosition.boost.toVector4()", globals.invCellPosition.boost.toVector4());
+    // console.log("globals.cellPosition.facing", globals.cellPosition.facing);
+    // console.log("globals.invCellPosition.facing", globals.invCellPosition.facing);
+    // console.log("globals.lightPositions", globals.lightPositions);
+    // console.log("globals.globalObjectPosition.boost.toVector4()", globals.globalObjectPosition.boost.toVector4());
 
     globals.material = new ShaderMaterial({
         uniforms: {
