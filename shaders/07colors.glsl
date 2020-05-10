@@ -110,6 +110,8 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //vec3 surfColor=color;
     //set here to be the input color, whitened a bit
     vec3 surfColor=0.2*vec3(1.)+0.8*color;
+    
+    
 
     //--------------------------------------------------
     //Lighting Calculations
@@ -125,14 +127,21 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i],2.);//the two here is the light intensity hard coded right now
     }
 
+    
     //LOCAL LIGHT
-    surfColor+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
+    
+    
+    //right now the local light has been switched to be moving with us using newLightPos instead of the constant localLightPos
+    
+    vec4 newLightPos=currentBoostMat*ORIGIN+vec4(0.05,0.05,0.05,0.);
+    
+    surfColor+= lightingCalculations(SP, newLightPos, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
     //light color and intensity hard coded in
 
 
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
-        TLP=invGenerators[i]*localLightPos;
+        TLP=invGenerators[i]*newLightPos;
         //local lights intensity is a function of its radius: so it gets brighter when it grows:
         color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
     }
@@ -149,6 +158,72 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
     return color;
 }
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// SHADOW FUNCTION
+//----------------------------------------------------------------------------------------------------------------------
+
+//only have the local light source which you are carrying around cast shadows.
+
+
+
+
+//// Cheap shadows are hard. In fact, I'd almost say, shadowing repeat objects - in a setting like this - with limited 
+//// iterations is impossible... However, I'd be very grateful if someone could prove me wrong. :)
+//float softShadow(vec4 ro, vec4 lp, float k){
+////
+//    // More would be nicer. More is always nicer, but not really affordable... Not on my slow test machine, anyway.
+//    const int maxIterationsShad = 20; 
+//    
+//    //ray direction here
+//    vec4 rd = lp - ro; // Unnormalized direction ray.
+//
+//    float shade = 1.;
+//    float dist = .002;    
+//    float end = max(length(rd), .01);
+//    float stepDist = end/float(maxIterationsShad);
+//    
+//    //normalizing the direction  ray
+//    rd /= end;
+//
+//    // Max shadow iterations - More iterations make nicer shadows, but slow things down. Obviously, the lowest 
+//    // number to give a decent shadow is the best one to choose. 
+//    for (int i = 0; i<maxIterationsShad; i++){
+//        
+//        
+////only going to have shadows cast by the tiling scene for now
+//        float h = localSceneSDF(ro + rd*dist);
+//        //shade = min(shade, k*h/dist);
+//        shade = min(shade, smoothstep(0., 1., k*h/dist)); // Subtle difference. Thanks to IQ for this tidbit.
+//        // So many options here, and none are perfect: dist += min(h, .2), dist += clamp(h, .01, .2), 
+//        // clamp(h, .02, stepDist*2.), etc.
+//        dist += clamp(h, .02, .25);
+//        
+//        // Early exits from accumulative distance function calls tend to be a good thing.
+//        if (h<0. || dist>end) break; 
+//        //if (h<.001 || dist > end) break; // If you're prepared to put up with more artifacts.
+//    }
+//
+//    // I've added 0.5 to the final shade value, which lightens the shadow a bit. It's a preference thing. 
+//    // Really dark shadows look too brutal to me.
+//    return min(max(shade, 0.) + .5, 1.); 
+//}
+//
+//
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -172,9 +247,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 
     //make the objects have their own color
     //color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
-//
-//    //IF WE HIT THE TILING
+   vec4 samplePos=modelProject(sampletv.pos);
+////
+////    //IF WE HIT THE TILING
     float x=samplePos.x;
     float y=samplePos.y;
     float z=samplePos.z;
@@ -192,7 +267,22 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     //N = turnAround(estimateNormal(sampletv.pos));
     N = estimateNormal(sampletv.pos);
     color = phongModel(totalFixMatrix, 0.3*color);
-
+    
+    
+    
+    
+//        //TRY SHADOWS
+//    //calculate the position of the new lightsource (will need to collect this and make it a uniform...)
+//        vec4 newLightPos=currentBoostMat*ORIGIN+vec4(0.05,0.05,0.05,0.);
+//    
+//    //calculate the shadow given sample point on surface, normal directoin, and light soure.
+//    float sh = softShadow(sampletv.pos + 0.0015*N.dir, newLightPos, 30.);
+//    
+//    //add in the effect of the shadow
+//    //color=sh*color;
+//    
+//    
+    
     return color;
 
 }
@@ -269,15 +359,14 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 
 
 vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight){
-
-    N = estimateNormal(sampletv.pos);
+//return vec3(1.);//pure white as test
+    N = estimateNormal(-sampletv.pos);
     vec3 color;
     color = phongModel(totalFixMatrix, colorOfLight);
-    color = 0.7*color+0.4;
+    color = color+vec3(0.5);
     return color;
 
 }
-
 
 
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){

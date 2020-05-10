@@ -29,7 +29,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 
@@ -51,6 +51,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
 int MAX_MARCHING_STEPS =  120;
+int MAX_REFL_STEPS;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
@@ -59,6 +60,7 @@ float MAX_DIST = 320.0;
 void setResolution(float UIVar){
     //UIVar goes between 0 for low res and 1 for high res
         MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
+        MAX_REFL_STEPS= int(10.+60.*UIVar);
         MAX_DIST = 100.+400.*UIVar;
    
 }
@@ -125,7 +127,7 @@ vec4 localLightPos=vec4(0.25, 0.25, -0.25, 1.);
 
 //lightRad controls the intensity of the light
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness
-vec4 localLightColor=vec4(.5,.5,.5,0.5);
+vec4 localLightColor=vec4(.8,.8,.8,0.5);
 
 
 //variable which sets the light colors for drawing in hitWhich 1

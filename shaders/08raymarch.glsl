@@ -8,6 +8,8 @@
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 
 
+//make it  so there's a bubble around your head
+float START_MARCH=0.3;
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     Isometry fixMatrix;
@@ -19,9 +21,11 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     totalFixMatrix = identityIsometry;
 
 
-    // Trace the local scene, then the global scene:
-
-
+    //before you start the march, step out by START_MARCH to make the bubble around your head
+    localtv=eucFlow(localtv,START_MARCH);
+    
+    
+// Trace the local scene, then the global scene:
     if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
         localtv = eucFlow(localtv, marchStep);
@@ -73,6 +77,70 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     }
 }
 
+
+void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
+    Isometry fixMatrix;
+    float marchStep = MIN_DIST;
+    float globalDepth = MIN_DIST;
+    float localDepth = MIN_DIST;
+    localTangVector tv = rayDir;
+    localTangVector localtv = rayDir;
+    totalFixMatrix = identityIsometry;
+
+
+    // Trace the local scene, then the global scene:
+
+
+    if(TILING_SCENE){
+    for (int i = 0; i < MAX_REFL_STEPS; i++){
+        localtv = eucFlow(localtv, marchStep);
+
+        if (isOutsideCell(localtv, fixMatrix)){
+            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            localtv = translate(fixMatrix, localtv);
+            marchStep = MIN_DIST;
+        }
+        else {
+            float localDist = localSceneSDF(localtv.pos);
+                        marchStep = localDist;
+            globalDepth += localDist;
+            if (localDist < EPSILON){
+                hitWhich = 3;
+                distToViewer=globalDepth;
+                sampletv = toTangVector(localtv);
+                break;
+            }
+
+        }
+    }
+    localDepth=min(globalDepth, MAX_DIST);
+    }
+    else{localDepth=MAX_DIST;}
+
+
+    if(GLOBAL_SCENE){
+    globalDepth = MIN_DIST;
+    marchStep = MIN_DIST;
+    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+        tv = eucFlow(tv, marchStep);
+
+        float globalDist = globalSceneSDF(tv.pos);
+          marchStep = globalDist;
+        globalDepth += globalDist;
+        if (globalDist < EPSILON){
+            // hitWhich has now been set
+            totalFixMatrix = identityIsometry;
+            distToViewer=globalDepth;
+            sampletv = toTangVector(tv);
+            return;
+        }
+      
+        if (globalDepth >= localDepth){
+            break;
+        }
+    }
+    }
+}
 
 
 
@@ -323,16 +391,38 @@ void main(){
     
     
     
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //TRY REFLECTIONS!! ------------------------
     
     //have a uniform float mirror that says how shiny the surface is:
      
-    if(mirror==0.){//don't do a second round
+    if(mirror==0.||hitWhich==1){//don't do a second round
+        
         out_FragColor=resultingColor;
+        
+        //attempt at  "Gamma correction" from shadertoy
+        out_FragColor=vec4(sqrt(clamp(resultingColor, 0., 1.)));
         return;
     }
     
-    
+    //
     
     
     
@@ -359,7 +449,7 @@ void main(){
     //move the new ray off a little bit
     newDir.pos=newDir.pos+0.01*newDir.dir;
     //then, raymarch in this new direction
-    raymarch(toLocalTangVector(newDir), totalFixMatrix);
+    reflectmarch(toLocalTangVector(newDir), totalFixMatrix);
     
     //now, get the reflected color
     vec4 reflectedColor;
@@ -369,8 +459,15 @@ void main(){
      //if the reflectivity of the surface is below 50% say, just output the color
     if(mirror<0.75){
     //now combine the first pass color and the  reflected color to output
-    out_FragColor=0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
+    
+        
+       resultingColor= 0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
+        
+                out_FragColor=resultingColor;
+            //vec4(sqrt(clamp(resultingColor, 0., 1.)));
         return;
+        
+
     }
         
         
@@ -391,7 +488,7 @@ void main(){
     //move the new ray off a little bit
     newDir.pos=newDir.pos+0.01*newDir.dir;
     //then, raymarch in this new direction
-    raymarch(toLocalTangVector(newDir), totalFixMatrix);
+    reflectmarch(toLocalTangVector(newDir), totalFixMatrix);
     
     //now, get the reflected color
     vec4 reflectedColor2;
@@ -400,6 +497,9 @@ void main(){
     //now combine the first pass color and the  reflected color to output
     out_FragColor=((1.1-mirror)*resultingColor+mirror*((1.-mirror)*reflectedColor+mirror*reflectedColor2));
    
+            
+            
+            
         }
     
     }

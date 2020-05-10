@@ -16,7 +16,15 @@
 
 //Local Light Positions----------------------------------------
 float localSceneLights(vec4 p){
-    return sphereSDF(p, localLightPos, lightRad);
+    vec4 newLightPos=vec4(0.);
+    
+    
+    //this is also changed in "Colors" where we do lighting calculations in the Phong model.
+    newLightPos=currentBoostMat*ORIGIN+vec4(0.05,0.05,0.05,0.);
+        
+        //sphere center used to be localLightPOs
+    return sphereSDF(p, newLightPos, 0.03); //below makes lights change radius in proportion to brightness
+                     //lightRad);
 }
 
 
@@ -60,7 +68,7 @@ float latticeSceneSDF(vec4 p){
 
 
 //Function which picks which Local Objects to draw based on a uniform
-float locSceneObjects(vec4 p){
+float localSceneObjects(vec4 p){
     if(display==1){
         return tilingSceneSDF(p);
     }
@@ -83,20 +91,20 @@ float localSceneSDF(vec4 p){
     lightDist=localSceneLights(p);
     distance=min(distance, lightDist);
     
-    if (lightDist < EPSILON){
-        //LIGHT=true;
-        
+    if (distance < EPSILON){
         hitWhich = 1;
-        
         colorOfLight=vec3(1.,1.,1.);
-        return lightDist;
+        
+        
+        return distance;
     }
 
     
-    sceneDist=locSceneObjects(p);
+    sceneDist=localSceneObjects(p);
     distance = min(distance, sceneDist);
     
         if (sceneDist<EPSILON){
+            
             hitWhich=3;
             return sceneDist;
         }
