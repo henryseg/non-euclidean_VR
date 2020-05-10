@@ -122,8 +122,9 @@ uniform vec4 V1;
 uniform vec4 V2;
 uniform vec4 V3;
 
-//adding one local light (more to follow)
-vec4 localLightPos=vec4(0.25, 0.25, -0.25, 1.);
+uniform vec4 currentPosVec;
+
+
 
 //lightRad controls the intensity of the light
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness
@@ -137,5 +138,27 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 int hitWhich=0;
 
 
+//position you are at
+vec4 currentPos=ORIGIN;
+//position of the local light source
+vec4 localLightPos=ORIGIN;
 
 
+
+
+
+
+
+
+//Designed by IQ to make quick smooth minima
+//found at http://www.viniciusgraciano.com/blog/smin/
+
+// Polynomial smooth minimum by iq
+float smin(float a, float b, float k) {
+  float h = clamp(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
+  return mix(a, b, h) - k*h*(1.0-h);
+}
+
+float smax(float a, float b, float k) {
+  return -smin(-a,-b,k);
+}

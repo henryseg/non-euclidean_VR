@@ -74,6 +74,21 @@ function initObjects() {
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
 }
 
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Computing other quantities the shader will want
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
@@ -192,7 +207,7 @@ function setupMaterial(fShader) {
             },
             time: {
                 type: "f",
-                value: (new Date().getTime()) - time0
+                value: ((new Date().getTime()) - time0) / 1000.
             },
             display: {
                 type: "int",
@@ -245,7 +260,7 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    globals.material.uniforms.time.value = (new Date().getTime()) - time0;
+    globals.material.uniforms.time.value = ((new Date().getTime()) - time0) / 1000.;
 
     globals.material.uniforms.display.value = globals.display;
     globals.material.uniforms.res.value = globals.res;

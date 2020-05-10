@@ -10,22 +10,32 @@
 
 
 
+
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // Local Scene
 //----------------------------------------------------------------------------------------------------------------------
 
 //Local Light Positions----------------------------------------
 float localSceneLights(vec4 p){
-    vec4 newLightPos=vec4(0.);
     
-    
-    //this is also changed in "Colors" where we do lighting calculations in the Phong model.
-    newLightPos=currentBoostMat*ORIGIN+vec4(0.05,0.05,0.05,0.);
-        
-        //sphere center used to be localLightPOs
-    return sphereSDF(p, newLightPos, 0.03); //below makes lights change radius in proportion to brightness
+    return sphereSDF(p, localLightPos, 0.02); //below makes lights change radius in proportion to brightness
                      //lightRad);
 }
+
+
+
+
+// Bubble around viewer -------------------------------------------
+//right now this is being done in the raymarch itself: if you do it here it makes a bubble around ALL COPIES of the viewer.
+//float viewerBubble(vec4 p){
+//    return -sphereSDF(p,currentPos,0.1);
+//}
+
+
+
 
 
 //For an example of changing SDFs in a Menu, there are two choices for local scene here, and a function which selects between them based on input through the UI carried to glsl via a uniform.
@@ -88,6 +98,7 @@ float localSceneSDF(vec4 p){
     float sceneDist;
     float distance = MAX_DIST;
 
+//you are the lightsource, so this will draw a ball around you.  BUT- in the raymarcher we have a  "bubble" around oruselves that  we skip before marching, so we don't see this one, only its other images.
     lightDist=localSceneLights(p);
     distance=min(distance, lightDist);
     
@@ -99,7 +110,8 @@ float localSceneSDF(vec4 p){
         return distance;
     }
 
-    
+    //distance to scene is minimum of the objects and the bubble around the viewer
+    //sceneDist=max(viewerBubble(p),localSceneObjects(p));
     sceneDist=localSceneObjects(p);
     distance = min(distance, sceneDist);
     

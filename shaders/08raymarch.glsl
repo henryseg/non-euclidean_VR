@@ -9,7 +9,7 @@
 
 
 //make it  so there's a bubble around your head
-float START_MARCH=0.3;
+float START_MARCH=0.2;
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     Isometry fixMatrix;
@@ -337,11 +337,16 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 void main(){
     setResolution(res);
     currentBoost=Isometry(currentBoostMat);
+    currentPos=currentBoostMat*ORIGIN;
+
+    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);
     cellBoost=Isometry(cellBoostMat);
     invCellBoost=Isometry(invCellBoostMat);
     globalObjectBoost=Isometry(globalObjectBoostMat);
+    
 
 
     //stereo translations ----------------------------------------------------
