@@ -1,17 +1,14 @@
-#version 300 es
-out vec4 out_FragColor;
-
-/*
-
-Voodoo magic:
-
-A set of parameters that reduces the noise
-EPSILON = 0.001;
-In the local ray marching use
-localDist = min(1., localSceneSDF(localtv.pos));
 
 
-*/
+//Voodoo magic:
+//
+//A set of parameters that reduces the noise
+//EPSILON = 0.001;
+//In the local ray marching use
+//localDist = min(1., localSceneSDF(localtv.pos));
+//
+//
+//
 
 //----------------------------------------------------------------------------------------------------------------------
 // PARAMETERS
@@ -150,15 +147,53 @@ vec4 localLightPos=ORIGIN;
 
 
 
+
+//----------------------------------------------------------------------------------------------------------------------
+// Initializing Variables Built from Uniforms
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+void setVariables(){
+    
+    currentBoost=Isometry(currentBoostMat);
+    currentPos=currentBoostMat*ORIGIN;
+
+    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    
+    leftBoost=Isometry(leftBoostMat);
+    rightBoost=Isometry(rightBoostMat);
+    cellBoost=Isometry(cellBoostMat);
+    invCellBoost=Isometry(invCellBoostMat);
+    globalObjectBoost=Isometry(globalObjectBoostMat);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Designed by IQ to make quick smooth minima
 //found at http://www.viniciusgraciano.com/blog/smin/
 
 // Polynomial smooth minimum by iq
-float smin(float a, float b, float k) {
-  float h = clamp(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
-  return mix(a, b, h) - k*h*(1.0-h);
-}
-
-float smax(float a, float b, float k) {
-  return -smin(-a,-b,k);
-}
+//float smin(float a, float b, float k) {
+//  float h = clamp(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
+//  return mix(a, b, h) - k*h*(1.0-h);
+//}
+//
+//float smax(float a, float b, float k) {
+//  return -smin(-a,-b,k);
+//}

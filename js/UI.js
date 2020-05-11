@@ -5,7 +5,7 @@ import {
     createGenerators,
     invGenerators,
     unpackageMatrix
-} from "./Lattice.js";
+} from "./Scene.js";
 //-------------------------------------------------------
 // UI Variables
 //-------------------------------------------------------

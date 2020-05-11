@@ -1,3 +1,52 @@
+//----------------------------------------------------------------------------------------------------------------------
+// Tangent Space Functions
+//----------------------------------------------------------------------------------------------------------------------
+
+tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
+    if (isStereo == 1){
+        resolution.x = resolution.x * 0.5;
+        if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
+    }
+    vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
+    float z = 0.1/tan(radians(fov*0.5));
+    tangVector tv = tangVector(ORIGIN, vec4(xy, -z, 0.0));
+    tangVector v =  tangNormalize(tv);
+    return v;
+}
+
+
+
+
+
+    //stereo translations ----------------------------------------------------
+tangVector setRayDir(){
+    bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
+    tangVector rD = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+
+    if (isStereo == 1){
+        if (isLeft){
+            rD = rotateFacing(leftFacing, rD);
+            rD = translate(leftBoost, rD);
+        }
+        else {
+            rD = rotateFacing(rightFacing, rD);
+            rD = translate(rightBoost, rD);
+        }
+    }
+    else {
+        rD = rotateFacing(facing, rD);
+        rD = translate(currentBoost, rD);
+    }
+    return rD;
+}
+    
+    
+
+
+
+
+
+
 
 //--------------------------------------------
 // DOING THE RAYMARCH
@@ -149,42 +198,6 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
 
 
-//do the raymarch, then depending on what you hit figure out the color:
-vec4 marchedColor(int hitWhich, Isometry totalFixMatrix, tangVector sampletv){
-
-    
-     //Based on hitWhich decide whether we hit a global object, local object, or nothing
-    if (hitWhich == 0){ //Didn't hit anything ------------------------
-        //COLOR THE FRAME DARK GRAY
-        //0.2 is medium gray, 0 is black
-        return vec4(0.2);
-    }
-    else if (hitWhich == 1){
-        // lights
-        vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
-        return vec4(pixelColor, 1.0);
-    }
-    else if (hitWhich == 5){
-        //debug
-        return vec4(debugColor, 1.0);
-    }
-    else if (hitWhich == 2){
-        // global object
-        vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
-        return vec4(pixelColor, 1.0);
-
-    }
-    else if (hitWhich ==3) {
-        // local objects
-        //vec3 pixelColor=vec3(20.*distToViewer/MAX_DIST,0.,0.);
-        vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
-        return vec4(pixelColor, 1.0);
-
-    }
-
-    
-}
-
 
 
 
@@ -314,224 +327,4 @@ vec4 marchedColor(int hitWhich, Isometry totalFixMatrix, tangVector sampletv){
 //
 //
 
-//----------------------------------------------------------------------------------------------------------------------
-// Tangent Space Functions
-//----------------------------------------------------------------------------------------------------------------------
 
-tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
-    if (isStereo == 1){
-        resolution.x = resolution.x * 0.5;
-        if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
-    }
-    vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
-    float z = 0.1/tan(radians(fov*0.5));
-    tangVector tv = tangVector(ORIGIN, vec4(xy, -z, 0.0));
-    tangVector v =  tangNormalize(tv);
-    return v;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-//----------------------------------------------------------------------------------------------------------------------
-
-void main(){
-    setResolution(res);
-    currentBoost=Isometry(currentBoostMat);
-    currentPos=currentBoostMat*ORIGIN;
-
-    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
-    
-    leftBoost=Isometry(leftBoostMat);
-    rightBoost=Isometry(rightBoostMat);
-    cellBoost=Isometry(cellBoostMat);
-    invCellBoost=Isometry(invCellBoostMat);
-    globalObjectBoost=Isometry(globalObjectBoostMat);
-    
-
-
-    //stereo translations ----------------------------------------------------
-    bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
-
-    if (isStereo == 1){
-        if (isLeft){
-            rayDir = rotateFacing(leftFacing, rayDir);
-            rayDir = translate(leftBoost, rayDir);
-        }
-        else {
-            rayDir = rotateFacing(rightFacing, rayDir);
-            rayDir = translate(rightBoost, rayDir);
-        }
-    }
-    else {
-        rayDir = rotateFacing(facing, rayDir);
-        rayDir = translate(currentBoost, rayDir);
-    }
-
-    
-    
-    
-    
-    
-    
-    
-
-    
-    //get our raymarched distance back ------------------------
-    Isometry totalFixMatrix = identityIsometry;
-  
-    
-    //do the  raymarch    
-    raymarch(toLocalTangVector(rayDir), totalFixMatrix);
-    
-    //figuring out the color of the point we marched to
-    vec4 resultingColor;
-    resultingColor=marchedColor(hitWhich,totalFixMatrix,sampletv);
-    
-    //output this color
-    //out_FragColor=resultingColor;
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //TRY REFLECTIONS!! ------------------------
-    
-    //have a uniform float mirror that says how shiny the surface is:
-     
-    if(mirror==0.||hitWhich==1){//don't do a second round
-        
-        out_FragColor=resultingColor;
-        
-        //attempt at  "Gamma correction" from shadertoy
-        out_FragColor=vec4(sqrt(clamp(resultingColor, 0., 1.)));
-        return;
-    }
-    
-    //
-    
-    
-    
-    
-    //---------DOING ONE REFLECTION ----------------------
-    
-    
-    
-    
-    else{
-    
-    //do the raymarch again! starting from this position (sampletv)
-    //first, reflect this direction wtih respect to the surface normal
-    tangVector nVec=estimateNormal(sampletv.pos);
-    tangVector newDir = sub(scalarMult(-2.0 * cosAng(sampletv, nVec), nVec), sampletv);
-    
-    
-    
-    //randomly adjust the direction by a TINY ammount to simulate slight  roughness in the surface
-//    float n = sin(dot(newDir.pos, vec4(27, 113, 57,0.)));
-//    vec4 rnd = fract(vec4(2097152, 262144, 32768,0.)*n)*.16 - .08;
-//    newDir.dir=newDir.dir+0.05*rnd;
-    
-    //move the new ray off a little bit
-    newDir.pos=newDir.pos+0.01*newDir.dir;
-    //then, raymarch in this new direction
-    reflectmarch(toLocalTangVector(newDir), totalFixMatrix);
-    
-    //now, get the reflected color
-    vec4 reflectedColor;
-    reflectedColor=marchedColor(hitWhich,totalFixMatrix,sampletv);
-    
-        
-     //if the reflectivity of the surface is below 50% say, just output the color
-    if(mirror<0.75){
-    //now combine the first pass color and the  reflected color to output
-    
-        
-       resultingColor= 0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
-        
-                out_FragColor=resultingColor;
-            //vec4(sqrt(clamp(resultingColor, 0., 1.)));
-        return;
-        
-
-    }
-        
-        
-        
-        
-        
-        
-        
-        //---------DOING TWO REFLECTIONS 
-        
-        else if(mirror>0.75){// we do a second reflection! So the reflections have reflections
-            
-     //do the raymarch again! starting from this position (sampletv)
-    //first, reflect this direction wtih respect to the surface normal
-    nVec=estimateNormal(sampletv.pos);
-    newDir = sub(scalarMult(-2.0 * cosAng(sampletv, nVec), nVec), sampletv);
-    
-    //move the new ray off a little bit
-    newDir.pos=newDir.pos+0.01*newDir.dir;
-    //then, raymarch in this new direction
-    reflectmarch(toLocalTangVector(newDir), totalFixMatrix);
-    
-    //now, get the reflected color
-    vec4 reflectedColor2;
-    reflectedColor2=marchedColor(hitWhich,totalFixMatrix,sampletv);
-    
-    //now combine the first pass color and the  reflected color to output
-    out_FragColor=((1.1-mirror)*resultingColor+mirror*((1.-mirror)*reflectedColor+mirror*reflectedColor2));
-   
-            
-            
-            
-        }
-    
-    }
-    
-    
-    
-    
-    
-//    //Run Reflections a Third Time!! ------------------------
-//    
-//    //do the raymarch again! starting from this position (sampletv)
-//    //first, reflect this direction wtih respect to the surface normal
-//    nVec=estimateNormal(sampletv.pos);
-//    newDir = sub(scalarMult(-2.0 * cosAng(sampletv, nVec), nVec), sampletv);
-//    
-//    //move the new ray off a little bit
-//    newDir.pos=newDir.pos+0.01*newDir.dir;
-//    //then, raymarch in this new direction
-//    raymarch(toLocalTangVector(newDir), totalFixMatrix);
-//    
-//    //now, get the reflected color
-//    vec4 reflectedColor2;
-//    reflectedColor2=marchedColor(hitWhich,totalFixMatrix,sampletv);
-//    
-//    //now combine the first pass color and the  reflected color to output
-//    out_FragColor=resultingColor+0.25*reflectedColor+0.1*reflectedColor2;
-
-
-
-}

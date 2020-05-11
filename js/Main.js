@@ -14,7 +14,7 @@ import {
     initObjects,
     setupMaterial,
     updateMaterial
-} from "./Materials.js";
+} from "./toShader.js";
 
 import {
     initGui
@@ -61,6 +61,7 @@ let globals = {
     stereoScreenOffset: 0.03,
     gens: undefined,
     invGens: undefined,
+    invGenmatrices: undefined,
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
@@ -129,23 +130,26 @@ function loadShaders() {
     //Since our shader is made up of strings we can construct it from parts
     let loader = new FileLoader();
     loader.setResponseType('text');
-    loader.load('shaders/01uniforms.glsl', function (unifs) {
-        loader.load('shaders/02structs.glsl', function (structs) {
+    loader.load('shaders/01structs.glsl', function (structs) {
+        loader.load('shaders/02setup.glsl', function (setup) {
             loader.load('shaders/03localGeo.glsl', function (locGeo) {
                 loader.load('shaders/04globalGeo.glsl', function (globGeo) {
-                    loader.load('shaders/05basicSDFs.glsl', function (basicSDF) {
-                        loader.load('shaders/06scene.glsl', function (sceneSDF) {
-                            loader.load('shaders/07colors.glsl', function (colors) {
+                    loader.load('shaders/05basicSDFs.glsl', function (basic) {
+                        loader.load('shaders/06compoundSDFs.glsl', function (compound) {
+                            loader.load('shaders/07scene.glsl', function (theScene) {
                                 loader.load('shaders/08raymarch.glsl', function (raymarch) {
-                                    let main = unifs.concat(structs).concat(locGeo).concat(globGeo).concat(basicSDF).concat(sceneSDF).concat(colors).concat(raymarch);
-                                    //The rest of the shader-building is below
-                                    mainFrag = main;
-                                    setupMaterial(main);
-                                    globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+                                    loader.load('shaders/09lighting.glsl', function (light) {
+                                        loader.load('shaders/10materials.glsl', function (material) {
+                                            loader.load('shaders/11main.glsl', function (run) {
+                                                let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(theScene).concat(raymarch).concat(light).concat(material).concat(run);
+                                                //The rest of the shader-building is below
+                                                mainFrag = main;
+                                                setupMaterial(main);
+                                                globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                                    //Setup a "quad" to render on-------------------------
-                                    let geom = new BufferGeometry();
-                                    let vertices = new Float32Array([
+                                                //Setup a "quad" to render on-------------------------
+                                                let geom = new BufferGeometry();
+                                                let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -154,10 +158,13 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                                    geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                    mesh = new Mesh(geom, globals.material);
-                                    scene.add(mesh);
-                                    animate();
+                                                geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                                mesh = new Mesh(geom, globals.material);
+                                                scene.add(mesh);
+                                                animate();
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         });

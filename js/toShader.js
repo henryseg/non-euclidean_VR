@@ -19,20 +19,38 @@ import {
     createGenerators,
     invGenerators,
     unpackageMatrix,
-    V1,
-    V2,
-    V3
-} from './Lattice.js';
+    genVectors,
+    PointLightObject,
+    lightColors
+} from './Scene.js';
+
+
 
 
 
 
 //----------------------------------------------------------------------------------------------------------------------
-//	Initialise things
+// Computing other quantities the shader will want
 //----------------------------------------------------------------------------------------------------------------------
+
 
 let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 const time0 = new Date().getTime();
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Initializing Things
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 function initGeometry() {
     globals.position = new Position();
@@ -40,7 +58,7 @@ function initGeometry() {
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();
     globals.invGens = invGenerators(globals.gens);
-    invGensMatrices = unpackageMatrix(globals.invGens);
+    globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
@@ -50,37 +68,18 @@ function initGeometry() {
 }
 
 
-function PointLightObject(v, colorInt) {
-    //position is a euclidean Vector4
-    let isom = new Position().localFlow(v).boost;
-    let lp = ORIGIN.clone().translateBy(isom);
-    globals.lightPositions.push(lp);
-    globals.lightIntensities.push(colorInt);
-}
 
-//DEFINE THE LIGHT COLORS
-const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1); // blue
-const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1); // yellow
-const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1); // red
-const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
 
 
 function initObjects() {
-    PointLightObject(new Vector3(1., 1.5, 0), lightColor1);
-    PointLightObject(new Vector3(-1, 1.5, 0), lightColor2);
-    PointLightObject(new Vector3(0, 0, 1.), lightColor3);
-    PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
+    PointLightObject(new Vector3(1., 1.5, 0), lightColors[0]);
+    PointLightObject(new Vector3(-1, 1.5, 0), lightColors[1]);
+    PointLightObject(new Vector3(0, 0, 1.), lightColors[2]);
+    PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
 
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
 }
 
-
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// Computing other quantities the shader will want
-//----------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -117,7 +116,7 @@ function setupMaterial(fShader) {
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
                 type: "m4",
-                value: invGensMatrices
+                value: globals.invGensMatrices
             },
             //--- end of invGen stuff
             currentBoostMat: {
@@ -189,16 +188,16 @@ function setupMaterial(fShader) {
             //Sending the Lattice Generators over to GLSL
             V1: {
                 type: "v4",
-                value: V1
+                value: genVectors[0]
             },
 
             V2: {
                 type: "v4",
-                value: V2
+                value: genVectors[1]
             },
             V3: {
                 type: "v4",
-                value: V3
+                value: genVectors[2]
             },
 
             stereoScreenOffset: {
@@ -273,5 +272,5 @@ export {
     initGeometry,
     initObjects,
     setupMaterial,
-    updateMaterial,
+    updateMaterial
 };
