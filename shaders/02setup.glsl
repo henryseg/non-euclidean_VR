@@ -26,7 +26,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 
-const bool FAKE_LIGHT_FALLOFF=false;
+const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
 const bool FAKE_DIST_SPHERE = false;
 
@@ -104,7 +104,7 @@ uniform mat4 globalObjectBoostMat;
 uniform float globalSphereRad;
 uniform samplerCube earthCubeTex;
 uniform float time;
-uniform float lightRad;
+uniform float brightness;
 
 uniform int display;
 // 1=tiling
@@ -159,7 +159,10 @@ void setVariables(){
     currentBoost=Isometry(currentBoostMat);
     currentPos=currentBoostMat*ORIGIN;
 
-    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    
+    localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
+    //if instead you want it to follow you around
+    //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);

@@ -21,7 +21,7 @@
 //Local Light Positions----------------------------------------
 float localSceneLights(vec4 p){
     
-    return sphereSDF(p, localLightPos, 0.02); //below makes lights change radius in proportion to brightness
+    return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
                      //lightRad);
 }
 

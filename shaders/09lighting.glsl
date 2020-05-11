@@ -5,58 +5,11 @@
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
         //fake linear falloff
-        return 1.+0.5*dist+0.1*dist*dist;
+        return 0.1+0.5*dist*dist*dist;
     }
     //actual distance function
     return 0.1+surfArea(dist);
 }
-
-
-
-
-
-
-
-
-
-
-
-//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Given a point in the scene where you stop raymarching as you have hit a surface, find the normal at that point
-tangVector estimateNormal(vec4 p) { 
-    float newEp = EPSILON * 10.0;
-    //basis for the tangent space at that point.
-    mat4 theBasis= tangBasis(p);
-    vec4 basis_x = theBasis[0];
-    vec4 basis_y = theBasis[1];
-    vec4 basis_z = theBasis[2];
-    
-    if (hitWhich != 3){ //global light scene
-        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
-        tangVector tv = tangVector(p,
-        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
-        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-
-    }
-    else { //local scene
-        tangVector tv = tangVector(p,
-        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
-        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-    }
-}
-
-
-
-
-
-
-
 
 
 
@@ -242,7 +195,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
         //+vec4(0.05,0.05,0.05,0.);
     sh=softShadow(SP,localLightPos,2.);
-    color+= sh*lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
+    color+= sh*lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.05+5.*brightness*brightness);
     
     
     //going to do shadows for the  local light:
@@ -256,7 +209,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     for (int i=0; i<6; i++){
         TLP=invGenerators[i]*localLightPos;
         //local lights intensity is a function of its radius: so it gets brighter when it grows:
-        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.5+10.*lightRad*lightRad);
+        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.05+5.*brightness*brightness);
     }
     
     
@@ -267,7 +220,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     float fogF = smoothstep(0., MAX_DIST/10., distToViewer+0.2*distToViewer*distToViewer);
     //    // Applying the background fog. Just black, in this case, but you could
     // the vec3(0.1) is the backgroud dark gray that is drawn when we hit nothing: so making  the fog limit to this makes objects fade out
-    color = mix(color, vec3(0.1,0.1,0.1), fogF); 
+    color = mix(color, vec3(0.02,0.02,0.02), fogF); 
 
     return color;
 }

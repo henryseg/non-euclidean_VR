@@ -220,9 +220,9 @@ function setupMaterial(fShader) {
                 type: "f",
                 value: globals.mirror
             },
-            lightRad: {
+            brightness: {
                 type: "float",
-                value: globals.lightRad
+                value: globals.brightness
             }
         },
 

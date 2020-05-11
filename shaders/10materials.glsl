@@ -190,7 +190,7 @@ vec4 marchedColor(int hitWhich, Isometry totalFixMatrix, tangVector sampletv){
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        return vec4(0.2);
+        return vec4(0.1);
     }
     else if (hitWhich == 1){
         // lights

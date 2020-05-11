@@ -35,7 +35,7 @@ void main(){
         
         out_FragColor=resultingColor;
         
-        //attempt at  "Gamma correction" from shadertoy
+        //attempt at  "Gamma correction" from shadertoy should take sqrt of the entries in  that case but left it out for now...
         out_FragColor=vec4(sqrt(clamp(resultingColor, 0., 1.)));
         return;
     }
@@ -81,8 +81,11 @@ void main(){
         
        resultingColor= 0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
         
-                out_FragColor=resultingColor;
-            //vec4(sqrt(clamp(resultingColor, 0., 1.)));
+              //  out_FragColor=resultingColor;
+        
+        
+        //this is some sort of "Gamma correction" from shadertoy 
+            out_FragColor=vec4(pow(clamp(resultingColor, 0., 1.),vec4(0.6)));
         return;
         
 

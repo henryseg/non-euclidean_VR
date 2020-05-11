@@ -27,7 +27,7 @@ let initGui = function () {
         display: 1,
         res: 0.25,
         mirror: 0.1,
-        lightRad: 0.02
+        brightness: 0.15
     };
 
     let gui = new dat.GUI();
@@ -56,7 +56,7 @@ let initGui = function () {
     //    });
     let resController = gui.add(guiInfo, 'res', 0., 1.).name("Resolution");
     let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 1.).name("Mirror");
-    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
+    let brightnessController = gui.add(guiInfo, 'brightness', 0.0, 0.5).name("Brightness");
 
     // ------------------------------
     // UI Controllers
@@ -114,8 +114,8 @@ let initGui = function () {
     });
 
 
-    lightRadController.onChange(function (value) {
-        globals.material.uniforms.lightRad.value = value;
+    brightnessController.onChange(function (value) {
+        globals.material.uniforms.brightness.value = value;
     });
 };
 

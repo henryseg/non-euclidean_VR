@@ -328,3 +328,42 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
 //
 
 
+
+
+
+
+
+
+//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Given a point in the scene where you stop raymarching as you have hit a surface, find the normal at that point
+tangVector estimateNormal(vec4 p) { 
+    float newEp = EPSILON * 10.0;
+    //basis for the tangent space at that point.
+    mat4 theBasis= tangBasis(p);
+    vec4 basis_x = theBasis[0];
+    vec4 basis_y = theBasis[1];
+    vec4 basis_z = theBasis[2];
+    
+    if (hitWhich != 3){ //global light scene
+        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
+        tangVector tv = tangVector(p,
+        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
+        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+
+    }
+    else { //local scene
+        tangVector tv = tangVector(p,
+        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
+        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
+        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+    }
+}
+
+
+
+
