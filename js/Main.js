@@ -141,16 +141,17 @@ function loadShaders() {
                                     loader.load('shaders/09raymarch.glsl', function (raymarch) {
                                         loader.load('shaders/10lighting.glsl', function (light) {
                                             loader.load('shaders/11materials.glsl', function (material) {
-                                                loader.load('shaders/12main.glsl', function (run) {
-                                                    let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(locScene).concat(globScene).concat(raymarch).concat(light).concat(material).concat(run);
-                                                    //The rest of the shader-building is below
-                                                    mainFrag = main;
-                                                    setupMaterial(main);
-                                                    globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+                                                loader.load('shaders/12shader.glsl', function (shade) {
+                                                    loader.load('shaders/13main.glsl', function (run) {
+                                                        let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(locScene).concat(globScene).concat(raymarch).concat(light).concat(material).concat(shade).concat(run);
+                                                        //The rest of the shader-building is below
+                                                        mainFrag = main;
+                                                        setupMaterial(main);
+                                                        globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                                                    //Setup a "quad" to render on-------------------------
-                                                    let geom = new BufferGeometry();
-                                                    let vertices = new Float32Array([
+                                                        //Setup a "quad" to render on-------------------------
+                                                        let geom = new BufferGeometry();
+                                                        let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -159,10 +160,11 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                                                    geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                                    mesh = new Mesh(geom, globals.material);
-                                                    scene.add(mesh);
-                                                    animate();
+                                                        geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                                        mesh = new Mesh(geom, globals.material);
+                                                        scene.add(mesh);
+                                                        animate();
+                                                    });
                                                 });
                                             });
                                         });

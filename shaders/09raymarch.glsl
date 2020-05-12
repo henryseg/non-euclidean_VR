@@ -1,17 +1,64 @@
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
-// Tangent Space Functions
+// Teleporting Back to Central Cell when raymarching the local scene
 //----------------------------------------------------------------------------------------------------------------------
 
-tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
-    if (isStereo == 1){
-        resolution.x = resolution.x * 0.5;
-        if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
+
+// check if the given point p is in the fundamental domain of the lattice.
+// if it is not, then use one of the generlators to translate it back
+
+bool isOutsideCell(vec4 p, out Isometry fixMatrix){
+    //vec4 ModelP= modelProject(p);
+    
+    //lattice basis divided by the norm square
+ //right now norm square is 1 so haven't put that in yet.
+    vec4 v1 = V1;
+    vec4 v2 = V2;
+    vec4 v3 = V3;
+
+    //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
+    //if (display!=2){
+        if (dot(p, v3) > 0.5) {
+            fixMatrix = Isometry(invGenerators[4]);
+            return true;
+        }
+        if (dot(p, v3) < -0.5) {
+            fixMatrix = Isometry(invGenerators[5]);
+            return true;
+        }
+   // }
+
+    if (dot(p, v1) > 0.5) {
+        fixMatrix = Isometry(invGenerators[0]);
+        return true;
     }
-    vec2 xy = 0.2*((fragCoord - 0.5*resolution)/resolution.x);
-    float z = 0.1/tan(radians(fov*0.5));
-    tangVector tv = tangVector(ORIGIN, vec4(xy, -z, 0.0));
-    tangVector v =  tangNormalize(tv);
-    return v;
+    if (dot(p, v1) < -0.5) {
+        fixMatrix = Isometry(invGenerators[1]);
+        return true;
+    }
+    if (dot(p, v2) > 0.5) {
+        fixMatrix = Isometry(invGenerators[2]);
+        return true;
+    }
+    if (dot(p, v2) < -0.5) {
+        fixMatrix = Isometry(invGenerators[3]);
+        return true;
+    }
+    return false;
+}
+
+
+// overload of the previous method with tangent vector
+bool isOutsideCell(tangVector v, out Isometry fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
+}
+
+
+// overload of the previous method with local tangent vector
+bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
 }
 
 
@@ -20,29 +67,30 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 
 
 
-    //stereo translations ----------------------------------------------------
-tangVector setRayDir(){
-    bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    tangVector rD = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
-    if (isStereo == 1){
-        if (isLeft){
-            rD = rotateFacing(leftFacing, rD);
-            rD = translate(leftBoost, rD);
-        }
-        else {
-            rD = rotateFacing(rightFacing, rD);
-            rD = translate(rightBoost, rD);
-        }
-    }
-    else {
-        rD = rotateFacing(facing, rD);
-        rD = translate(currentBoost, rD);
-    }
-    return rD;
-}
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //--------------------------------------------
@@ -204,97 +252,6 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
 
 
 
-
-
-
-
-
-//
-//
-//void oldmarch(tangVector rayDir, out Isometry totalFixMatrix){
-//    Isometry fixMatrix;
-//    float marchStep = MIN_DIST;
-//    float globalDepth = MIN_DIST;
-//    float localDepth = MIN_DIST;
-//    tangVector tv = rayDir;
-//    tangVector localtv = rayDir;
-//    totalFixMatrix = identityIsometry;
-//
-//
-//    // Trace the local scene, then the global scene:
-//
-//
-//    if(TILING_SCENE){
-//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//        localtv = geoFlow(localtv, marchStep);
-//
-//        if (isOutsideCell(localtv, fixMatrix)){
-//            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-//            localtv = translate(fixMatrix, localtv);
-//            marchStep = MIN_DIST;
-//        }
-//        else {
-//            float localDist = localSceneSDF(localtv.pos);
-//                        marchStep = localDist;
-//            globalDepth += 0.9*localDist;
-//            if (localDist < EPSILON){
-//                hitWhich = 3;
-//                distToViewer=globalDepth;
-//                sampletv = localtv;
-//                break;
-//            }
-//
-//        }
-//    }
-//    localDepth=min(globalDepth, MAX_DIST);
-//    }
-//    else{localDepth=MAX_DIST;}
-//
-//
-//    if(GLOBAL_SCENE){
-//    globalDepth = MIN_DIST;
-//    marchStep = MIN_DIST;
-//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//        tv = geoFlow(tv, marchStep);
-//
-//        float globalDist = globalSceneSDF(tv.pos);
-//          marchStep = globalDist;
-//        globalDepth += globalDist;
-//        if (globalDist < EPSILON){
-//            // hitWhich has now been set
-//            totalFixMatrix = identityIsometry;
-//            distToViewer=globalDepth;
-//            sampletv = tv;
-//            return;
-//        }
-//      
-//        if (globalDepth >= localDepth){
-//            break;
-//        }
-//    }
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //
 //
@@ -417,48 +374,6 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
 
 
 
-
-
-
-
-
-
-
-
-//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Given a point in the scene where you stop raymarching as you have hit a surface, find the normal at that point
-tangVector surfaceNormal(vec4 p) { 
-    float newEp = EPSILON * 10.0;
-    //basis for the tangent space at that point.
-    mat4 theBasis= tangBasis(p);
-    vec4 basis_x = theBasis[0];
-    vec4 basis_y = theBasis[1];
-    vec4 basis_z = theBasis[2];
-    
-    if (isLocal==0){ //global scene
-        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
-        tangVector tv = tangVector(p,
-        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
-        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-
-    }
-    else { //local scene
-        tangVector tv = tangVector(p,
-        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
-        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-    }
-}
-
-//overload of the above to work being given a tangent vector
-tangVector surfaceNormal(tangVector u){
-    return surfaceNormal(u.pos);
-}
 
 
 

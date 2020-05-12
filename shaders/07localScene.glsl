@@ -27,10 +27,13 @@ float localSceneLights(vec4 p){
 
 //Local Objects Choice 1
 float tilingSceneSDF(vec4 p){
-    vec4 center = vec4(0., 0., 0., 1.);
-        float sphere=0.;
-        sphere = sphereSDF(p, center, 0.68);
-        return -sphere;
+    //vec4 center = vec4(0., 0., 0., 1.);
+//          float sphere = sphereSDF(p, center, 0.68);
+//        return -sphere;
+//    
+    float centerHole=sphereSDF(p,ORIGIN,0.6);
+    float cornerHole=sphereSDF(abs(p),vec4(0.5,0.5,0.5,1),0.33);
+    return -min(centerHole, cornerHole);
 }
 
 //Local Objects Choice 2
@@ -56,8 +59,9 @@ float latticeSceneSDF(vec4 p){
        
    // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
    //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
-    vec4 center = vec4(0., 0., 0., 1.);
-    return sphereSDF(p,center,0.2);
+    
+    return sphereSDF(p,ORIGIN,0.2);
+  
 // return fatEllipsoidSDF(p, center, 0.06);
 }
 
@@ -129,74 +133,6 @@ float localSceneSDF(vec4 p){
     return localSceneSDF(p, EPSILON);
 }
 
-
-
-
-
-
-
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// Teleporting Back to Central Cell when raymarching the local scene
-//----------------------------------------------------------------------------------------------------------------------
-
-
-// check if the given point p is in the fundamental domain of the lattice.
-// if it is not, then use one of the generlators to translate it back
-
-bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-    //vec4 ModelP= modelProject(p);
-    
-    //lattice basis divided by the norm square
- //right now norm square is 1 so haven't put that in yet.
-    vec4 v1 = V1;
-    vec4 v2 = V2;
-    vec4 v3 = V3;
-
-    //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
-    //if (display!=2){
-        if (dot(p, v3) > 0.5) {
-            fixMatrix = Isometry(invGenerators[4]);
-            return true;
-        }
-        if (dot(p, v3) < -0.5) {
-            fixMatrix = Isometry(invGenerators[5]);
-            return true;
-        }
-   // }
-
-    if (dot(p, v1) > 0.5) {
-        fixMatrix = Isometry(invGenerators[0]);
-        return true;
-    }
-    if (dot(p, v1) < -0.5) {
-        fixMatrix = Isometry(invGenerators[1]);
-        return true;
-    }
-    if (dot(p, v2) > 0.5) {
-        fixMatrix = Isometry(invGenerators[2]);
-        return true;
-    }
-    if (dot(p, v2) < -0.5) {
-        fixMatrix = Isometry(invGenerators[3]);
-        return true;
-    }
-    return false;
-}
-
-
-// overload of the previous method with tangent vector
-bool isOutsideCell(tangVector v, out Isometry fixMatrix){
-    return isOutsideCell(v.pos, fixMatrix);
-}
-
-
-// overload of the previous method with local tangent vector
-bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
-    return isOutsideCell(v.pos, fixMatrix);
-}
 
 
 

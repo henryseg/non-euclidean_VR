@@ -27,7 +27,7 @@ vec4 modelProject(vec4 p){
 
 //surface area of a sphere  of radius R
 float surfArea(float rad){
-    return 4.*PI*rad*rad;
+    return rad*rad;
 }
 
 //in geometries where computing distance function is difficult, a cheap approximation to distance

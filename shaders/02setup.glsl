@@ -21,7 +21,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //do lights fall off with area of geodesic sphere, or artifically?
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = true;
 
 
@@ -211,10 +211,9 @@ void setVariables(){
     currentPos=currentBoostMat*ORIGIN;
 
     
-    localLightPos=ORIGIN;
-        //+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
+    //localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
     //if instead you want it to follow you around
-    //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);

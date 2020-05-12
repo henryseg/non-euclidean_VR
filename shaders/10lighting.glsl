@@ -14,23 +14,69 @@ float lightAtt(float dist){
 
 
 
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getting  a Surface Normal
+//----------------------------------------------------------------------------------------------------------------------
+
+//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Given a point in the scene where you stop raymarching as you have hit a surface, find the normal at that point
+tangVector surfaceNormal(vec4 p) { 
+    float newEp = EPSILON * 10.0;
+    //basis for the tangent space at that point.
+    mat4 theBasis= tangBasis(p);
+    vec4 basis_x = theBasis[0];
+    vec4 basis_y = theBasis[1];
+    vec4 basis_z = theBasis[2];
+    
+    if (isLocal==0){ //global scene
+        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
+        tangVector tv = tangVector(p,
+        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
+        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+
+    }
+    else { //local scene
+        tangVector tv = tangVector(p,
+        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
+        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
+        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+    }
+}
+
+//overload of the above to work being given a tangent vector
+tangVector surfaceNormal(tangVector u){
+    return surfaceNormal(u.pos);
+}
+
+
+
+
+
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // Specularity and Diffusivity of Surfaces
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-vec3 phongShading(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightColor, float lightIntensity){
+vec3 phongShading(vec4 SP, vec4 TLP, tangVector viewVector, vec3 baseColor, vec4 lightColor, float lightIntensity){
     //Calculations - Phong Reflection Model
     
     //this is the direction from point on surface to the light source
-    tangVector L = tangDirection(SP, TLP);
+    tangVector lightRay = tangDirection(SP, TLP);
     //this  is the reflection of this direction with respect to the surface normal
-    tangVector R = reflectOff(L,N);
-        //sub(scalarMult(2.0 * cosAng(L, N), N), L);
+    tangVector reflectedRay = reflectOff(lightRay,N);
     //Calculate Diffuse Component
-    float nDotL = max(cosAng(N, L), 0.0);
+    float nDotL = max(cosAng(N, lightRay), 0.0);
     vec3 diffuse = lightColor.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(cosAng(R, V), 0.0);
+    float rDotV = max(cosAng(reflectedRay, viewVector), 0.0);
     vec3 specular = lightColor.rgb * pow(rDotV,20.0);
     //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
@@ -159,7 +205,7 @@ vec3 lightingCalculations(Isometry totalFixMatrix, vec3 color){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     //tangent vector at sample point pointing back at viewer
-    tangVector V = tangVector(SP, -sampletv.dir);
+    tangVector V = turnAround(sampletv);
 
     //intrinsic color of the surface
     //vec3 surfColor=color;
