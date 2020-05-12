@@ -13,6 +13,7 @@ tangVector add(tangVector v1, tangVector v2) {
 }
 
 
+//this does V1-V2
 tangVector sub(tangVector v1, tangVector v2) {
     // subtract two tangent vector at the same point
     // TODO : check if the underlyig point are indeed the same ?
@@ -67,6 +68,10 @@ float cosAng(tangVector u, tangVector v){
     return tangDot(tangNormalize(u), tangNormalize(v));
 }
 
+//reflect the unit tangent vector u off the surface with unit normal nVec
+tangVector reflectOff(tangVector u,tangVector nVec){
+    return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
+}
 
 // return a basis of vectors at the point p
 mat4 tangBasis(vec4 p){

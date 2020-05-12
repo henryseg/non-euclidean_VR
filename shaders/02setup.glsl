@@ -48,8 +48,10 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 int MAX_MARCHING_STEPS =  120;
 int MAX_REFL_STEPS=50;
+
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
+float MAX_REFL_DIST=100.;
 //distance to viewer when a raymarch step ends
 float distToViewer;
 
@@ -63,8 +65,10 @@ const float fov = 90.0;
 void setResolution(float UIVar){
     //UIVar goes between 0 for low res and 1 for high res
         MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
-        MAX_REFL_STEPS= int(10.+60.*UIVar);
         MAX_DIST = 100.+400.*UIVar;
+    
+        MAX_REFL_STEPS= int(10.+60.*UIVar);
+        MAX_REFL_DIST=50.+50.*UIVar;
    
 }
 
@@ -174,16 +178,30 @@ uniform float mirror;
 
 //initialize the counter which tells which material was hit in the raymarch
 int hitWhich=0;
+//the counter which tells you if what you hit was local or global
+int isLocal=0;
+
 
 //position you are at
 vec4 currentPos=ORIGIN;
 //position of the local light source
 vec4 localLightPos=ORIGIN;
 
+// variable that tracks the resulting color of a point after being hit by raymarch
+vec4 resultingColor;
+// tracking the color after a reflected march
+vec4 reflectedColor;
 
 
 
+//make it  so there's a bubble around your head
+//this constant tells you how far to march out along rayDir.tv before starting the trace
+//used in  raymarch
+float START_MARCH=0.2;
 
+//this constant tells you what portion of the reported distance you are willing to march
+//used in raymarch
+float marchProportion=0.95;
 
 
 //this runs in main to set all the variables computed from the uniforms / constants above
@@ -193,9 +211,10 @@ void setVariables(){
     currentPos=currentBoostMat*ORIGIN;
 
     
-    //localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
+    localLightPos=ORIGIN;
+        //+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
     //if instead you want it to follow you around
-    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);

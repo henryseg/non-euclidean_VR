@@ -207,7 +207,7 @@ Isometry rightBoost;
 Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
-
+Isometry totalFixMatrix;
 
 
 

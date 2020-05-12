@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------------------------------------------------
-// LIGHT
+// Light Attenuation with  Distance
 //----------------------------------------------------------------------------------------------------------------------
 //light intensity as a fn of distance
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
-        //fake linear falloff
+        //fake falloff
         return 0.1+0.5*dist*dist*dist;
     }
     //actual distance function
@@ -14,25 +14,18 @@ float lightAtt(float dist){
 
 
 
-
-
-
-
-
-
-
-
 //----------------------------------------------------------------------------------------------------------------------
-// Lighting Functions
+// Specularity and Diffusivity of Surfaces
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightColor, float lightIntensity){
+vec3 phongShading(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightColor, float lightIntensity){
     //Calculations - Phong Reflection Model
     
     //this is the direction from point on surface to the light source
     tangVector L = tangDirection(SP, TLP);
     //this  is the reflection of this direction with respect to the surface normal
-    tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
+    tangVector R = reflectOff(L,N);
+        //sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
     float nDotL = max(cosAng(N, L), 0.0);
     vec3 diffuse = lightColor.rgb * nDotL;
@@ -50,7 +43,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
 
 
 //----------------------------------------------------------------------------------------------------------------------
-// SHADOW FUNCTION
+// Shadows
 //----------------------------------------------------------------------------------------------------------------------
 
 //only have the local light source which you are carrying around cast shadows.
@@ -123,6 +116,16 @@ float softShadow(vec4 ro, vec4 lp, float k){
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fog
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 
 
@@ -151,7 +154,7 @@ float softShadow(vec4 ro, vec4 lp, float k){
 
 
 
-vec3 phongModel(Isometry totalFixMatrix, vec3 color){
+vec3 lightingCalculations(Isometry totalFixMatrix, vec3 color){
     //sample point on the surfaxe
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
@@ -184,7 +187,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //    sh=softShadow(SP,TLP,6.);
         
         //add this color to the pixel
-        color += sh*lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i],2.);//the two here is the light intensity hard coded right now
+        color += sh*phongShading(SP, TLP, V, surfColor, lightIntensities[i],2.);//the two here is the light intensity hard coded right now
         
         
     }
@@ -195,7 +198,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
         //+vec4(0.05,0.05,0.05,0.);
     sh=softShadow(SP,localLightPos,2.);
-    color+= sh*lightingCalculations(SP, localLightPos, V, surfColor, localLightColor,0.05+5.*brightness*brightness);
+    color+= sh*phongShading(SP, localLightPos, V, surfColor, localLightColor,0.05+5.*brightness*brightness);
     
     
     //going to do shadows for the  local light:
@@ -209,7 +212,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     for (int i=0; i<6; i++){
         TLP=invGenerators[i]*localLightPos;
         //local lights intensity is a function of its radius: so it gets brighter when it grows:
-        color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor,0.05+5.*brightness*brightness);
+        color+= phongShading(SP, TLP, V, surfColor, localLightColor,0.05+5.*brightness*brightness);
     }
     
     

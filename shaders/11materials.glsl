@@ -1,22 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     //    if (FAKE_LIGHT){//always fake light in Sol so far
 
@@ -39,9 +22,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     //it seems like a negative sign has to go in here on the tangent vector
     //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal
     //need to actually check this when I clean up this part
-    //N = turnAround(estimateNormal(sampletv.pos));
-    N = estimateNormal(sampletv.pos);
-    color = phongModel(totalFixMatrix, 0.3*color);
+    //N = turnAround(surfaceNormal(sampletv));
+    N = surfaceNormal(sampletv);
+    color = lightingCalculations(totalFixMatrix, 0.3*color);
     
     
     
@@ -135,9 +118,9 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 
 vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight){
 //return vec3(1.);//pure white as test
-    N = estimateNormal(-sampletv.pos);
+    N = surfaceNormal(sampletv);
     vec3 color;
-    color = phongModel(totalFixMatrix, colorOfLight);
+    color = lightingCalculations(totalFixMatrix, colorOfLight);
     color = color+vec3(0.5);
     return color;
 
@@ -146,17 +129,17 @@ vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight
 
 vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
     if (EARTH){
-        N = estimateNormal(sampletv.pos);
+        N = surfaceNormal(sampletv);
         vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
-        vec3 color2 = phongModel(totalFixMatrix, color);
+        vec3 color2 = lightingCalculations(totalFixMatrix, color);
         //color = 0.9*color+0.1;
         return 0.5*color + 0.5*color2;
     }
     else {
 
-        N = estimateNormal(sampletv.pos);
+        N = surfaceNormal(sampletv);
         vec3 color=vec3(0.5,0.2,0.1);
-        color = phongModel(totalFixMatrix, 0.9*color);
+        color = lightingCalculations(totalFixMatrix, 0.9*color);
         color = 0.9*color+0.1;
         return color;
 
@@ -216,4 +199,31 @@ vec4 marchedColor(int hitWhich, Isometry totalFixMatrix, tangVector sampletv){
     }
 
     
+}
+
+
+// Deciding when a material is mirrored or not
+bool isMirrored(int hitWhich){
+       
+     //Based on hitWhich decide whether we hit a global object, local object, or nothing
+    if (hitWhich == 0){ //Didn't hit anything ------------------------
+        return false;
+    }
+    else if (hitWhich == 1){
+        // lights
+        return false;
+    }
+    else if (hitWhich == 5){
+        //debug
+        return false;
+    }
+    else if (hitWhich == 2){
+        // global object
+        return true;
+
+    }
+    else if (hitWhich ==3) {
+        // local objects
+        return true;
+    }
 }

@@ -90,7 +90,7 @@ float localSceneObjects(vec4 p){
 
 
 
-float localSceneSDF(vec4 p){
+float localSceneSDF(vec4 p,float threshhold){
     float lightDist;
     float sceneDist;
     float distance = MAX_DIST;
@@ -99,9 +99,10 @@ float localSceneSDF(vec4 p){
     lightDist=localSceneLights(p);
     distance=min(distance, lightDist);
     
-    if (distance < EPSILON){
+    if (distance < threshhold){
+        isLocal=1;
         hitWhich = 1;
-        colorOfLight=vec3(1.,1.,1.);
+        colorOfLight=vec3(.5,.5,1.);
         
         
         return distance;
@@ -112,8 +113,8 @@ float localSceneSDF(vec4 p){
     sceneDist=localSceneObjects(p);
     distance = min(distance, sceneDist);
     
-        if (sceneDist<EPSILON){
-            
+        if (sceneDist<threshhold){
+            isLocal=1;
             hitWhich=3;
             return sceneDist;
         }
@@ -123,6 +124,10 @@ float localSceneSDF(vec4 p){
 }
 
 
+//an overloading of the above for the default threshhold EPSILON
+float localSceneSDF(vec4 p){
+    return localSceneSDF(p, EPSILON);
+}
 
 
 
