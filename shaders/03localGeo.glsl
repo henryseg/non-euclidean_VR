@@ -1,6 +1,3 @@
-
-
-
 //----------------------------------------------------------------------------------------------------------------------
 // LOCAL GEOMETRY
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,7 +37,7 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 }
 */
 
-
+//the metric on the tangent space at a point
 float tangDot(tangVector u, tangVector v){
     mat3 g = mat3(
     1., 0., 0.,
@@ -51,29 +48,30 @@ float tangDot(tangVector u, tangVector v){
 
 }
 
-
+//the norm of a tangent vector using the Riemannian metric
 float tangNorm(tangVector v){
     // calculate the length of a tangent vector
     return sqrt(tangDot(v, v));
 }
 
-
+//return unit tangent vector in same direction
 tangVector tangNormalize(tangVector v){
     // create a unit tangent vector (in the tangle bundle)
     return tangVector(v.pos, v.dir/tangNorm(v));
 }
 
-
+//give the cosine of the angle between two tangent vectors at a point
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
-    return tangDot(u, v);
+    //could probably speed things up if we didn't normalize but instead required unit length inputs?
+    return tangDot(tangNormalize(u), tangNormalize(v));
 }
 
 
-
+// return a basis of vectors at the point p
 mat4 tangBasis(vec4 p){
-    // return a basis of vectors at the point p
 
+    
     vec4 basis_x = vec4(1., 0., 0., 0.);
     vec4 basis_y = vec4(0., 1., 0., 0.);
     vec4 basis_z = vec4(0., 0., 1., 0.);
@@ -84,10 +82,6 @@ mat4 tangBasis(vec4 p){
     return theBasis;
 }
 
-//mat4 tangBasis(vec4 p){
-//
-//    return makeLeftTranslation(p).matrix;
-//}
 
 
 
@@ -96,10 +90,10 @@ mat4 tangBasis(vec4 p){
 //----------------------------------------------------------------------------------------------------------------------
 // LOCAL GEOMETRY
 //----------------------------------------------------------------------------------------------------------------------
+//the same methods as above, overloaded for working with local tangent vectors when that is preferrable.
 
-/*
-  Methods perfoming computations in the tangent space at a given point.
-*/
+//Methods perfoming computations in the tangent space at a given point.
+
 
 localTangVector add(localTangVector v1, localTangVector v2) {
     // add two tangent vector at the same point
@@ -135,7 +129,7 @@ localTangVector tangNormalize(localTangVector v){
 
 float cosAng(localTangVector u, localTangVector v){
     // cosAng between two vector in the tangent bundle
-    return tangDot(u, v);
+    return tangDot(tangNormalize(u), tangNormalize(v));
 }
 
 

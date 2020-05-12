@@ -14,21 +14,16 @@
 // PARAMETERS
 //----------------------------------------------------------------------------------------------------------------------
 
-/*
-
-Some parameters that can be changed to change the scence
-
-*/
-
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
+//do we render a textured earth in the global scene
 const bool EARTH=false;
 
-
+//do lights fall off with area of geodesic sphere, or artifically?
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
-const bool FAKE_DIST_SPHERE = false;
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // "TRUE" CONSTANTS
@@ -39,21 +34,32 @@ const float PI = 3.1415926538;
 //const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
 
-
+//the origin of the model for this geometry
 const vec4 ORIGIN = vec4(0, 0, 0, 1);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
+
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
-// Global Constants
+// Global Constants for the Raymarch
 //----------------------------------------------------------------------------------------------------------------------
 int MAX_MARCHING_STEPS =  120;
-int MAX_REFL_STEPS;
+int MAX_REFL_STEPS=50;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
+//distance to viewer when a raymarch step ends
+float distToViewer;
 
+//tolerance for how close you raymarch to the surface
+const float EPSILON = 0.0005;
+//field of view projected on the screen
+//90 is normal, 120 is wide angle
+const float fov = 90.0;
 
-
+//this function resets the constants above in terms of the uniforms; its called in main
 void setResolution(float UIVar){
     //UIVar goes between 0 for low res and 1 for high res
         MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
@@ -65,80 +71,94 @@ void setResolution(float UIVar){
 
 
 
-//const float EPSILON = 0.0001;
-const float EPSILON = 0.0005;
-const float fov = 120.0;
-
-
-//distance to viewer when a raymarch step ends
-float distToViewer;
-
-
-
-
-
-
-
 
 //----------------------------------------------------------------------------------------------------------------------
-// Translation & Utility Variables
+// Display Variables
 //----------------------------------------------------------------------------------------------------------------------
+
 uniform int isStereo;
 uniform vec2 screenResolution;
-uniform mat4 invGenerators[6];
+uniform float time;
+//resolution: how far we raymarch
+uniform float res;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Position & Facing Variables
+//----------------------------------------------------------------------------------------------------------------------
+
 uniform mat4 currentBoostMat;
 uniform mat4 leftBoostMat;
 uniform mat4 rightBoostMat;
+//current position as a point in the model space
+//uniform vec4 currentPosVec;
+
 uniform mat4 facing;
 uniform mat4 leftFacing;
 uniform mat4 rightFacing;
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Local Scene
+//----------------------------------------------------------------------------------------------------------------------
+
+// keeping track of your location in the tiling
 uniform mat4 cellBoostMat;
 uniform mat4 invCellBoostMat;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Lighting Variables & Global Object Variables
-//----------------------------------------------------------------------------------------------------------------------
-uniform vec4 lightPositions[4];
-uniform vec4 lightIntensities[4];
-uniform mat4 globalObjectBoostMat;
-uniform float globalSphereRad;
-uniform samplerCube earthCubeTex;
-uniform float time;
-uniform float brightness;
-
-uniform int display;
-// 1=tiling
-// 2= planes
-
-uniform float res;
-
-uniform float mirror;
-
-//tiling generator vectors
+//vector directions (length & angle in tangent space) for tiling generators
 uniform vec4 V1;
 uniform vec4 V2;
 uniform vec4 V3;
 
-uniform vec4 currentPosVec;
+//matrix generators of the tiling (as isometries)
+uniform mat4 invGenerators[6];
 
 
 
-//lightRad controls the intensity of the light
+//toggle between which global scene to display
+uniform int display;
+// 1=tiling by deleted spheres
+// 2= tiling by tubes
+// 3=lattice of spheres
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Global Scene
+//----------------------------------------------------------------------------------------------------------------------
+
+uniform mat4 globalObjectBoostMat;
+uniform float globalSphereRad;
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Lighting
+//----------------------------------------------------------------------------------------------------------------------
+uniform vec4 lightPositions[4];
+uniform vec4 lightIntensities[4];
+uniform float brightness;
+
+//THESE SHOULD BE REMOVED FROM THE CODE
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness
 vec4 localLightColor=vec4(.8,.8,.8,0.5);
-
 
 //variable which sets the light colors for drawing in hitWhich 1
 vec3 colorOfLight=vec3(1., 1., 1.);
 
 
-int hitWhich=0;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Material Properties
+//----------------------------------------------------------------------------------------------------------------------
 
-//position you are at
-vec4 currentPos=ORIGIN;
-//position of the local light source
-vec4 localLightPos=ORIGIN;
+//load texture for the earth
+uniform samplerCube earthCubeTex;
+
+//how reflective are mirrored surfaces?
+uniform float mirror;
 
 
 
@@ -152,17 +172,30 @@ vec4 localLightPos=ORIGIN;
 // Initializing Variables Built from Uniforms
 //----------------------------------------------------------------------------------------------------------------------
 
+//initialize the counter which tells which material was hit in the raymarch
+int hitWhich=0;
+
+//position you are at
+vec4 currentPos=ORIGIN;
+//position of the local light source
+vec4 localLightPos=ORIGIN;
 
 
+
+
+
+
+
+//this runs in main to set all the variables computed from the uniforms / constants above
 void setVariables(){
     
     currentBoost=Isometry(currentBoostMat);
     currentPos=currentBoostMat*ORIGIN;
 
     
-    localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
+    //localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
     //if instead you want it to follow you around
-    //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);
@@ -183,20 +216,3 @@ void setVariables(){
 
 
 
-
-
-
-
-
-//Designed by IQ to make quick smooth minima
-//found at http://www.viniciusgraciano.com/blog/smin/
-
-// Polynomial smooth minimum by iq
-//float smin(float a, float b, float k) {
-//  float h = clamp(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
-//  return mix(a, b, h) - k*h*(1.0-h);
-//}
-//
-//float smax(float a, float b, float k) {
-//  return -smin(-a,-b,k);
-//}

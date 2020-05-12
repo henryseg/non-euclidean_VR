@@ -32,9 +32,9 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     y = .9 * y/3.;
     z = .9 * z/3.;
     vec3 color = vec3(x, y, z);
-//    
+////    
     //fix a color for the tiling
-    //vec3 color=vec3(0.2,0.3,0.5);
+   // vec3 color=vec3(0.1,0.1,0.3);
 
     //it seems like a negative sign has to go in here on the tangent vector
     //to make the shading right, as we are deleting the sphere to make the tiling and need an outward normal

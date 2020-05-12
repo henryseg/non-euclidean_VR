@@ -1,21 +1,8 @@
 
-//----------------------------------------------------------------------------------------------------------------------
-// Scene Definitions
-//----------------------------------------------------------------------------------------------------------------------
-// Both a local and a global scene are defined here.
-// Each scene has two types of members: lights and objects
-// The local scene also has a function to "teleport the light back"
-
-
-
-
-
-
-
 
 
 //----------------------------------------------------------------------------------------------------------------------
-// Local Scene
+// Local Lighting
 //----------------------------------------------------------------------------------------------------------------------
 
 //Local Light Positions----------------------------------------
@@ -28,17 +15,15 @@ float localSceneLights(vec4 p){
 
 
 
-// Bubble around viewer -------------------------------------------
-//right now this is being done in the raymarch itself: if you do it here it makes a bubble around ALL COPIES of the viewer.
-//float viewerBubble(vec4 p){
-//    return -sphereSDF(p,currentPos,0.1);
-//}
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Local Scene Objects
+//----------------------------------------------------------------------------------------------------------------------
 
 
-//For an example of changing SDFs in a Menu, there are two choices for local scene here, and a function which selects between them based on input through the UI carried to glsl via a uniform.
+//There are three choices of local tiling SDFs here; it is possible to switch between them via the uniform "display"
 
 //Local Objects Choice 1
 float tilingSceneSDF(vec4 p){
@@ -91,7 +76,19 @@ float localSceneObjects(vec4 p){
 }
 
 
-// LOCAL OBJECTS SCENE SDF ++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Local Scene SDF
+//----------------------------------------------------------------------------------------------------------------------
+
+
 
 float localSceneSDF(vec4 p){
     float lightDist;
@@ -130,7 +127,16 @@ float localSceneSDF(vec4 p){
 
 
 
-// TELEPORT BACK TO CENTRAL CELL ++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Teleporting Back to Central Cell when raymarching the local scene
+//----------------------------------------------------------------------------------------------------------------------
+
 
 // check if the given point p is in the fundamental domain of the lattice.
 // if it is not, then use one of the generlators to translate it back
@@ -190,84 +196,5 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 
 
 
-
-
-
-
-
-
-
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// Global Scene
-//----------------------------------------------------------------------------------------------------------------------
-//Again the global scene comes in two parts, the lights and the objects.
-//These are then assembled into a single globalSDF
-
-
-
-//Global Light Positions----------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-//Global Objects----------------------------------------
- float globalSceneObjects(vec4 p){
-     vec4 center = vec4(0., 0.2, 0.3, 1.);
-        return sphereSDF(p, center, 0.1);
- }
-
-
-
-
-//Global Scene SDF----------------------------------------
-// measures distance from cellBoost * p to an object in the global scene
-
-float globalSceneSDF(vec4 p){
-    // correct for the fact that we have been moving
-    vec4 absolutep = translate(cellBoost, p);
-    float distance = MAX_DIST;
-    float globalSceneDist;
-    
-    //Light Objects
-    for (int i=0; i<4; i++){
-        float objDist;
-        objDist = sphereSDF(
-        absolutep,
-        lightPositions[i],
-        0.05//radius of the light
-        );
-        distance = min(distance, objDist);
-        if (distance < EPSILON){
-            hitWhich = 1;
-            colorOfLight = lightIntensities[i].xyz;//color of the light
-            return distance;
-        }
-    }
-    
-    
-    //Global Sphere Object
-    globalSceneDist=globalSceneObjects(absolutep);
-    distance = min(distance, globalSceneDist);
-    
-        if (globalSceneDist<EPSILON){
-            hitWhich=2;
-            return globalSceneDist;
-        }
-
-
-    return distance;
-
-    // return MAX_DIST;
-}
 
 

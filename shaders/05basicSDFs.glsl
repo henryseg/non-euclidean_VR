@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Raymarch Primitives
+// Spheres, Ellipsoids, Cylinders
 //----------------------------------------------------------------------------------------------------------------------
 
 
@@ -9,21 +9,22 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 
 
 float ellipsoidSDF(vec4 p, vec4 center, float radius){
+    //distance functions for these ellipsoids; modeled as affine squished spheres.
     return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
 }
 
 float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
+    //distance function applying affine transformation to a sphere.
     return exactDist(vec4(p.x/10., p.y/10., p.z, 1.), center) - radius;
 }
 
-float centerSDF(vec4 p, vec4 center, float radius){
-    return sphereSDF(p, center, radius);
-}
 
 
-float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return sphereSDF(abs(p), cornerPoint, size);
-}
+
+//----------------------------------------------------------------------------------------------------------------------
+// Half Spaces, Slices
+//----------------------------------------------------------------------------------------------------------------------
+
 
 float horizontalHalfSpaceSDF(vec4 p, float h) {
     //signed distance function to the half space z < h
@@ -39,9 +40,27 @@ float sliceSDF(vec4 p) {
     return max(HS1, HS2);
 }
 
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Cylinders
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
 float cylSDF(vec4 p, float r){
+    //cylinder about z-axis of radius r.
     return sphereSDF(vec4(p.x, p.y, 0., 1.), ORIGIN, r);
 }
+
+
+
+
+
+
+
+
+
 
 
 

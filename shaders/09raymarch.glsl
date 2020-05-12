@@ -71,13 +71,13 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
 
     //before you start the march, step out by START_MARCH to make the bubble around your head
-    localtv=eucFlow(localtv,START_MARCH);
+    localtv=geoFlow(localtv,START_MARCH);
     
     
 // Trace the local scene, then the global scene:
     if(TILING_SCENE){
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        localtv = eucFlow(localtv, marchStep);
+        localtv = geoFlow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
@@ -106,7 +106,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     globalDepth = MIN_DIST;
     marchStep = MIN_DIST;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        tv = eucFlow(tv, marchStep);
+        tv = geoFlow(tv, marchStep);
 
         float globalDist = globalSceneSDF(tv.pos);
           marchStep = globalDist;
@@ -142,7 +142,7 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
 
     if(TILING_SCENE){
     for (int i = 0; i < MAX_REFL_STEPS; i++){
-        localtv = eucFlow(localtv, marchStep);
+        localtv = geoFlow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
             totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
@@ -152,7 +152,7 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
         else {
             float localDist = localSceneSDF(localtv.pos);
                         marchStep = localDist;
-            globalDepth += localDist;
+            globalDepth += 0.9*localDist;
             if (localDist < EPSILON){
                 hitWhich = 3;
                 distToViewer=globalDepth;
@@ -166,29 +166,29 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
     }
     else{localDepth=MAX_DIST;}
 
-
-    if(GLOBAL_SCENE){
-    globalDepth = MIN_DIST;
-    marchStep = MIN_DIST;
-    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-        tv = eucFlow(tv, marchStep);
-
-        float globalDist = globalSceneSDF(tv.pos);
-          marchStep = globalDist;
-        globalDepth += globalDist;
-        if (globalDist < EPSILON){
-            // hitWhich has now been set
-            totalFixMatrix = identityIsometry;
-            distToViewer=globalDepth;
-            sampletv = toTangVector(tv);
-            return;
-        }
-      
-        if (globalDepth >= localDepth){
-            break;
-        }
-    }
-    }
+//
+//    if(GLOBAL_SCENE){
+//    globalDepth = MIN_DIST;
+//    marchStep = MIN_DIST;
+//    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+//        tv = geoFlow(tv, marchStep);
+//
+//        float globalDist = globalSceneSDF(tv.pos);
+//          marchStep = globalDist;
+//        globalDepth += globalDist;
+//        if (globalDist < EPSILON){
+//            // hitWhich has now been set
+//            totalFixMatrix = identityIsometry;
+//            distToViewer=globalDepth;
+//            sampletv = toTangVector(tv);
+//            return;
+//        }
+//      
+//        if (globalDepth >= localDepth){
+//            break;
+//        }
+//    }
+//    }
 }
 
 
@@ -262,7 +262,7 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
 ////                marchStep = MIN_DIST;
 ////            }
 //            
-//        testlocaltv = eucFlow(localtv, marchStep);
+//        testlocaltv = geoFlow(localtv, marchStep);
 //        if (isOutsideCell(testlocaltv, fixMatrix)){
 //            bestlocaltv = testlocaltv;
 //            
@@ -270,7 +270,7 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
 //              ////// do binary search to get close to but outside this cell - 
 //              ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
 //              testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
-//              testlocaltv = eucFlow(localtv, testMarchStep);
+//              testlocaltv = geoFlow(localtv, testMarchStep);
 //              if ( isOutsideCell(testlocaltv, testFixMatrix) ){
 //                marchStep = testMarchStep;
 //                bestlocaltv = testlocaltv;
@@ -301,7 +301,7 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
 //        marchStep = MIN_DIST;
 //
 //        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//            tv = eucFlow(tv, marchStep);
+//            tv = geoFlow(tv, marchStep);
 //
 //            float globalDist = globalSceneSDF(tv.pos);
 //            if (globalDist < EPSILON){

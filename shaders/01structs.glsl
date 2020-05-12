@@ -1,7 +1,9 @@
+
+
 #version 300 es
 out vec4 out_FragColor;
 
-/*
+//Code at the start of the shader
 
 
 
@@ -11,7 +13,7 @@ out vec4 out_FragColor;
 
 /*
   Data type for manipulating isometries of the space
-  A tangVector is given by
+  An Isometry is given by
   - matrix : a 4x4 matrix
 */
 
@@ -24,6 +26,7 @@ Isometry composeIsometry(Isometry A, Isometry B)
 {
     return Isometry(A.matrix*B.matrix);
 }
+
 
 
 Isometry makeLeftTranslation(vec4 p) {
@@ -116,7 +119,9 @@ tangVector rotateFacing(mat4 A, tangVector v){
     return tangVector(v.pos, A*v.dir);
 }
 
-
+tangVector turnAround(tangVector v){
+    return tangVector(v.pos, -v.dir);
+}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,9 +178,6 @@ localTangVector turnAround(localTangVector v){
     return localTangVector(v.pos, -v.dir);
 }
 
-tangVector turnAround(tangVector v){
-    return tangVector(v.pos, -v.dir);
-}
 
 
 
