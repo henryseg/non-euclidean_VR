@@ -10,9 +10,44 @@ float localSceneLights(vec4 p){
     
     return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
                      //lightRad);
+    
+    
+    
+    
+    
 }
 
 
+//
+////Local Light Positions----------------------------------------
+//float localSceneLights2(vec4 p, float threshhold){
+//    //right now there are four lights, so we run through all of them
+//   
+//    float distance=sphereSDF(p, localLightPos, 0.05);
+//    
+//       for (int i=0; i<6; i++){
+//        float lightDist;
+//        lightDist = sphereSDF(p,invGenerators[i]*localLightPos,0.05//radius of the light
+//        );
+//        distance = min(distance, lightDist);
+//       }
+//        if (distance < threshhold){
+//            isLocal=1;
+//            hitWhich = 1;
+//            colorOfLight=vec3(.5,.5,1.);
+//            return distance;
+//        }
+//    
+//    
+//    return distance;
+//    
+//}
+//
+////for the default threshhold value
+//float localSceneLights2(vec4 p){
+//    return  localSceneLights2(p, EPSILON);
+//}
+//
 
 
 
@@ -30,9 +65,9 @@ float tilingSceneSDF(vec4 p){
     //vec4 center = vec4(0., 0., 0., 1.);
 //          float sphere = sphereSDF(p, center, 0.68);
 //        return -sphere;
-//    
-    float centerHole=sphereSDF(p,ORIGIN,0.6);
-    float cornerHole=sphereSDF(abs(p),vec4(0.5,0.5,0.5,1),0.33);
+//    0.6,0.33  give a good size of holes
+    float centerHole=sphereSDF(p,ORIGIN,0.66);
+    float cornerHole=sphereSDF(abs(p),vec4(0.5,0.5,0.5,1),0.23);
     return -min(centerHole, cornerHole);
 }
 
@@ -100,6 +135,7 @@ float localSceneSDF(vec4 p,float threshhold){
     float distance = MAX_DIST;
 
 //you are the lightsource, so this will draw a ball around you.  BUT- in the raymarcher we have a  "bubble" around oruselves that  we skip before marching, so we don't see this one, only its other images.
+    //lightDist=localSceneLights2(p);
     lightDist=localSceneLights(p);
     distance=min(distance, lightDist);
     

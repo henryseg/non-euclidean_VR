@@ -74,7 +74,7 @@ function initGeometry() {
 function initObjects() {
     PointLightObject(new Vector3(1., 1.5, 0), lightColors[0]);
     PointLightObject(new Vector3(-1, 1.5, 0), lightColors[1]);
-    PointLightObject(new Vector3(0, 0, 1.), lightColors[2]);
+    PointLightObject(new Vector3(0, 0.2, 0.3), lightColors[2]);
     PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
 
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
@@ -234,20 +234,20 @@ function setupMaterial(fShader) {
 
 
 function updateMaterial() {
-    
-//        It seems that to be properly passed to the shader,
-//        a uniform `foo` cannot be updated on the js side by a statement of the form
-//        > foo = new_value_of_foo
-//        One has to use a statement that alter the object `foo` e.g.
-//        > foo. attribute = new_value of the attribute
-//        (Maybe some subtleties in the pointer management ?)
-//
-//        This can be an issue when passing float to the shader
-//        (Remark: is foo += 1 totally equivalent to foo = foo + 1 in this context?)
-//        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
-//        > g_material.uniforms.foo.value = new_value_of_foo
 
-   
+    //        It seems that to be properly passed to the shader,
+    //        a uniform `foo` cannot be updated on the js side by a statement of the form
+    //        > foo = new_value_of_foo
+    //        One has to use a statement that alter the object `foo` e.g.
+    //        > foo. attribute = new_value of the attribute
+    //        (Maybe some subtleties in the pointer management ?)
+    //
+    //        This can be an issue when passing float to the shader
+    //        (Remark: is foo += 1 totally equivalent to foo = foo + 1 in this context?)
+    //        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
+    //        > g_material.uniforms.foo.value = new_value_of_foo
+
+
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);

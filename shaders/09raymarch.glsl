@@ -70,10 +70,36 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Measuring the  distance to the nearest wall of the fundamental domain
+//----------------------------------------------------------------------------------------------------------------------
 
 
+//fundamental domain  right  now is the cube of slide length   1 centered at the origin.
+//that means, the distance to each wall is  
+//in improved implementation; use the SDFs  for half spaces!
+  float distToEdge(vec4 p){
+      
+      float d1=min(
+          p.x+0.5,
+          0.5-p.x
+      );
+      
+            float d2=min(
+          p.y+0.5,
+          0.5-p.y
+      );
+      
+            float d3=min(
+          p.z+0.5,
+          0.5-p.z
+      );
+      
+      return min(d1,min(d2,d3));
+      
+  }
 
-
+      
 
 
 
@@ -148,8 +174,13 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 sampletv = localtv;//give the point reached
                 break;
             }
-            //if its not less than epsilon, add to the  distance and march ahead by that amunt
-            marchStep = marchProportion*localDist;//make this distance your next march step
+            //if its not less than epsilon, keep marching
+            
+            //find the distance to  a wall of the fundamental chamber
+            float wallDist=distToEdge(localtv.pos);
+            //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
+            marchStep = min(wallDist+0.1,marchProportion*localDist);//make this distance your next march step
+            //marchStep=marchProportion*localDist;
             localDepth += marchStep;//add this to the total distance traced so far
 
         }
@@ -206,18 +237,23 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
     Isometry fixMatrix;
     totalFixMatrix = identityIsometry;
     
-    float marchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
     distToViewer=MAX_REFL_DIST;
+    float marchStep;
+    
     
     tangVector localtv = rayDir;
-    float newEp = EPSILON * 10.0;
+    tangVector globaltv = rayDir;
+    float newEp = EPSILON * 5.0;
     
+   
 // Trace the local scene, then the global scene:
     if(TILING_SCENE){
+        marchStep = newEp;//make first step tiny, but still push off the surface
         
     for (int i = 0; i < MAX_REFL_STEPS; i++){
+        
         localtv = geoFlow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
@@ -245,11 +281,99 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
     }
         
     }
+    
+     else{localDepth=MAX_REFL_DIST;}//if you didn't march the tiling scene at all, then set this distance to max to make sure we see whatever is in the global scene when we trace it next.
+
+
+    if(GLOBAL_SCENE){
+    marchStep = newEp;
+        
+    for (int i = 0; i < MAX_REFL_STEPS; i++){
+        globaltv = geoFlow(globaltv, marchStep);
+
+        float globalDist = globalSceneSDF(globaltv.pos);
+         
+        if (globalDist < newEp||globalDist>MAX_REFL_DIST){
+            // hitWhich has now been set
+            totalFixMatrix = identityIsometry;//we are not in the local scene, so have no fix matrix
+            distToViewer=globalDepth;//set the total distance marched
+            sampletv = globaltv;//give the point reached
+            return; 
+        }
+        //if not, add this to  your total distance traveled and march ahead by this amount 
+         marchStep = 0.9*globalDist;//make this distance your next march step
+        globalDepth += 0.9*globalDist;//add this to the total distance traced so far
+      
+        if (globalDepth >= localDepth){
+            //if you have marched farther than you did in the local scene, the global object is behind something already, so stop.
+            break;
+        }
+    }
+    }
 }
 
 
 
 
+
+
+
+
+//--------------------------------------------
+// RAYMARCHING A SHADOW
+//--------------------------------------------
+
+float shadowMarch(in tangVector toLight, float distToLight )
+    {
+    Isometry fixMatrix;
+    //totalFixMatrix = identityIsometry;
+    
+    float  localDist;
+    float localDepth=0.;
+    
+    float marchStep;
+    float newEp = EPSILON * 5.0;
+    
+    //start the march on the surface pointed at the light
+    tangVector localtv=geoFlow(toLight,0.1);
+    
+    for (int i = 0; i < MAX_REFL_STEPS; i++){
+
+     localtv = geoFlow(localtv, marchStep);   
+        
+     if (isOutsideCell(localtv, fixMatrix)){
+            //if you are outside of the central cell after the march done above
+            //then translate yourself back into the central cell and set the next marching distance to a minimum
+            //totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            localtv = translate(fixMatrix, localtv);
+            marchStep = newEp;
+        } 
+        
+        else {//if you are still inside the central cell
+            
+            //set the local distance to a portion of the sceneSDF
+            float localDist = localSceneSDF(localtv.pos,newEp);
+            //if you've hit something 
+            if (localDist < newEp){//if you hit something
+                return 0.5;
+            }
+            
+            //if you've made it to the light
+            if(localDepth>distToLight){
+                return 1.;
+            }
+            
+            //if neither of these, march  onwards
+            marchStep = 0.9*localDist;//make this distance your next march step
+            localDepth += marchStep;//add this to the total distance traced so far
+            
+        } 
+    }
+    
+    //if you somehow run out of steps before reaching an object or a lightsource
+    return 1.0;
+
+}
 
 
 //

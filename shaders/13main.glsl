@@ -114,12 +114,35 @@ void main(){
     reflectedColor=marchedColor(hitWhich,totalFixMatrix,sampletv);
     
     //and then combine the first pass color and the  reflected color to output
-    resultingColor= 0.2*resultingColor+0.8*((1.-mirror)*resultingColor+mirror* reflectedColor);
+    resultingColor= ((1.-mirror)*resultingColor+mirror*reflectedColor);
+    //should stop here!    
+        
+      //Could keep going and add more and more relfection passes
+     //---------DOING ANOTHER ONE ----------------------  
+        
+//        nVec=surfaceNormal(sampletv);
+//        newDir = reflectOff(sampletv, nVec);   
+//        newDir=geoFlow(newDir,0.01);   
+//        reflectmarch(newDir, totalFixMatrix);
+//        reflectedColor=marchedColor(hitWhich,totalFixMatrix,sampletv);
+//        
+//        resultingColor= 0.2*resultingColor+0.8*((1.-mirror)*resultingColor+0.5*mirror* reflectedColor);
+//        
+        
+        //now finally give the color to the pixel
+        
         
     //this is some sort of "Gamma correction" from shadertoy 
     out_FragColor=vec4(pow(clamp(resultingColor, 0., 1.),vec4(0.6)));
     return;
     }
         
-    //Could keep going and add more and more relfection passes
+    
+    
+    
+    
+    
+    
+    
+    
     }
