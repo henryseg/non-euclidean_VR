@@ -323,49 +323,54 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
 // RAYMARCHING A SHADOW
 //--------------------------------------------
 
-float shadowMarch(in tangVector toLight, float distToLight )
+//first attempt at raymarching shadows
+float shadowMarch(tangVector toLight, float distToLight)
     {
     Isometry fixMatrix;
-    //totalFixMatrix = identityIsometry;
     
-    float  localDist;
+    float localDist=0.;
     float localDepth=0.;
     
-    float marchStep;
-    float newEp = EPSILON * 5.0;
+    float marchStep=EPSILON;
+    float newEp = 5.*EPSILON;
     
     //start the march on the surface pointed at the light
+    //but marched out a little bit so it doesn't immediately report "zero" as the distance to local scene
     tangVector localtv=geoFlow(toLight,0.1);
     
-    for (int i = 0; i < MAX_REFL_STEPS; i++){
+    for (int i = 0; i < MAX_SHADOW_STEPS; i++){
 
      localtv = geoFlow(localtv, marchStep);   
-        
+//        
      if (isOutsideCell(localtv, fixMatrix)){
             //if you are outside of the central cell after the march done above
             //then translate yourself back into the central cell and set the next marching distance to a minimum
-            //totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
             localtv = translate(fixMatrix, localtv);
             marchStep = newEp;
         } 
         
-        else {//if you are still inside the central cell
+   else {//if you are still inside the central cell
             
             //set the local distance to a portion of the sceneSDF
             float localDist = localSceneSDF(localtv.pos,newEp);
-            //if you've hit something 
-            if (localDist < newEp){//if you hit something
-                return 0.5;
-            }
-            
+       
             //if you've made it to the light
-            if(localDepth>distToLight){
+       //subtract some bit from this - as otherwise since the light is a part of the local scene,
+       //you always end up reaching the local scene! and thus the this algorithm thinks you're in shadow.
+       //so for now, we fix this by only letting you get  "mostly" to the light (say, the radius of the light)
+            if(localDepth>distToLight-0.5){
                 return 1.;
             }
-            
+       
+       
+            //if you've hit something 
+            if (localDist <newEp){//if you hit something
+                return 0.;
+            }
+
             //if neither of these, march  onwards
-            marchStep = 0.9*localDist;//make this distance your next march step
-            localDepth += marchStep;//add this to the total distance traced so far
+                marchStep = 0.9*localDist;//make this distance your next march step
+                localDepth += marchStep;//add this to the total distance traced so far
             
         } 
     }
@@ -376,7 +381,118 @@ float shadowMarch(in tangVector toLight, float distToLight )
 }
 
 
+
+
+//improving the shadows using some ideas of iq on shadertoy
+float softShadowMarch(in tangVector toLight, float distToLight, float k)
+    {
+    Isometry fixMatrix;
+    
+    float shade=1.;
+    float  localDist;
+    float localDepth=0.;
+    
+    float marchStep;
+    float newEp = EPSILON * 5.0;
+    
+    //start the march on the surface pointed at the light
+    tangVector localtv=geoFlow(toLight,0.1);
+    
+    for (int i = 0; i < MAX_SHADOW_STEPS; i++){
+
+     localtv = geoFlow(localtv, marchStep);   
+        
+     if (isOutsideCell(localtv, fixMatrix)){
+            //if you are outside of the central cell after the march done above
+            //then translate yourself back into the central cell and set the next marching distance to a minimum
+            localtv = translate(fixMatrix, localtv);
+            marchStep = newEp;
+        } 
+        
+        else {//if you are still inside the central cell
+            
+                        //if neither of these, march  onwards
+            marchStep = 0.9*localDist;//make this distance your next march step
+            localDepth += marchStep;//add this to the total distance traced so far
+            
+            
+            //set the local distance to a portion of the sceneSDF
+            float localDist = localSceneSDF(localtv.pos,newEp);
+             shade = min(shade, k*localDist/localDepth); 
+            //if you've hit something 
+            if (localDist < newEp|| localDepth>distToLight-0.5){//if you hit something
+                break;
+            }
+
+
+            
+        } 
+    }
+    
+    //at the end, return this value for the shadow deepness
+    return clamp(shade,0.,1.); 
+
+}
+
+
+
+
+
 //
+
+// Cheap shadows are hard. In fact, I'd almost say, shadowing repeat objects - in a setting like this - with limited 
+// iterations is impossible... However, I'd be very grateful if someone could prove me wrong. :)
+float softShadow(vec4 ro, vec4 lp, float k){
+//
+    // More would be nicer. More is always nicer, but not really affordable... Not on my slow test machine, anyway.
+    const int maxIterationsShad = 40; 
+    
+    //ray direction here
+    vec4 rd = lp - ro; // Unnormalized direction ray.
+
+    float shade = 1.;
+    float dist = .002;    
+    float end = max(length(rd), .01);
+    float stepDist = end/float(maxIterationsShad);
+    
+    //normalizing the direction  ray
+    rd /= end;
+
+    // Max shadow iterations - More iterations make nicer shadows, but slow things down. Obviously, the lowest 
+    // number to give a decent shadow is the best one to choose. 
+    for (int i = 0; i<maxIterationsShad; i++){
+        
+        
+//only going to have shadows cast by the tiling scene for now
+        float h = localSceneSDF(ro + rd*dist);
+        //shade = min(shade, k*h/dist);
+        shade = min(shade, smoothstep(0., 1., k*h/dist)); // Subtle difference. Thanks to IQ for this tidbit.
+        // So many options here, and none are perfect: dist += min(h, .2), dist += clamp(h, .01, .2), 
+        // clamp(h, .02, stepDist*2.), etc.
+        dist += clamp(h, .02, .25);
+        
+        // Early exits from accumulative distance function calls tend to be a good thing.
+        if (h<0.01 || dist>end) break; 
+        //if (h<.001 || dist > end) break; // If you're prepared to put up with more artifacts.
+    }
+
+    // I've added 0.5 to the final shade value, which lightens the shadow a bit. It's a preference thing. 
+    // Really dark shadows look too brutal to me.
+    return min(max(shade, 0.)+0.1, 1.); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //
 //

@@ -21,7 +21,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //do lights fall off with area of geodesic sphere, or artifically?
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = true;
 
 
@@ -48,6 +48,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 int MAX_MARCHING_STEPS =  120;
 int MAX_REFL_STEPS=50;
+int MAX_SHADOW_STEPS=20;
 
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
@@ -69,6 +70,7 @@ void setResolution(float UIVar){
     
         MAX_REFL_STEPS= int(10.+60.*UIVar);
         MAX_REFL_DIST=50.+50.*UIVar;
+        //MAX_SHADOW_STEPS=int(20.+30.*UIVar);
    
 }
 
@@ -147,7 +149,7 @@ uniform float brightness;
 
 //THESE SHOULD BE REMOVED FROM THE CODE
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness
-vec4 localLightColor=vec4(.8,.8,.8,0.5);
+vec3 localLightColor=vec3(.8,.8,.8);
 
 //variable which sets the light colors for drawing in hitWhich 1
 vec3 colorOfLight=vec3(1., 1., 1.);
@@ -211,9 +213,9 @@ void setVariables(){
     currentPos=currentBoostMat*ORIGIN;
 
     
-    //localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
+    localLightPos=ORIGIN+vec4(0.15*sin(2.*time/3.),0.15*cos(3.*time/5.),0.15*sin(time),0.);
     //if instead you want it to follow you around
-    localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
+    //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);
