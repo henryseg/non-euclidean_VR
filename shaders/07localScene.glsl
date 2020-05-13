@@ -142,7 +142,7 @@ float localSceneSDF(vec4 p,float threshhold){
     if (distance < threshhold){
         isLocal=1;
         hitWhich = 1;
-        colorOfLight=vec3(.5,.5,1.);
+        colorOfLight=vec3(.8,.8,1.6);
         
         
         return distance;

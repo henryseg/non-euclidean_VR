@@ -305,8 +305,11 @@ vec3  getTheColor(tangVector rayDir, Isometry  totalFixMatrix){
     //now, do the same thing for the GLOBAL LIGHTS! Yikes this is a lot of raymarching...
         for (int i=0; i<4; i++){
         
-        Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
-        lightPosition=translate(totalIsom,lightPositions[i]);
+        //Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
+        //for the reflections we DO NOT NEED invCellBoost:
+        //the "observer"  here is actually a point on the surface! so is static as we move!
+        //it is  ON for when we are actually coloring the surface though.
+        lightPosition=translate(totalFixMatrix,lightPositions[i]);
             
         toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
         distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
@@ -322,7 +325,7 @@ vec3  getTheColor(tangVector rayDir, Isometry  totalFixMatrix){
     
     //normalize the reflect color
     //WANT TO INCLUDE THE GLOBAL LIGHT REFLECTIONS HERE BUT THERES STILL A SLIGHT ERROR!
-    reflColor=reflLocalColor;
+    reflColor=(reflLocalColor+2.*reflGlobalColor)/3.;
     
     //add in fog in the reflection (so far away reflected items are blurry)
     reflColor=fog(reflColor,vec3(0.02,0.02,0.02),distToViewer);

@@ -274,8 +274,20 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
                 sampletv = localtv;//give the point reached
                 return;
             }
-            marchStep = 0.9*localDist;//make this distance your next march step
-            localDepth += 0.9*localDist;//add this to the total distance traced so far
+            
+            
+                        //if its not less than epsilon, keep marching
+            
+            //find the distance to  a wall of the fundamental chamber
+            float wallDist=distToEdge(localtv.pos);
+            //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
+            marchStep = min(wallDist+0.2,0.9*localDist);//make this distance your next march step
+            //marchStep=marchProportion*localDist;
+            localDepth += marchStep;//add this to the total distance traced so far
+            
+            
+            
+           // marchStep = 0.9*localDist;//make this distance your next march step
 
         }
     }

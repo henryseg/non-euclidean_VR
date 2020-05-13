@@ -104,6 +104,7 @@ vec3 phongShading(tangVector toLight, tangVector toViewer, tangVector  surfNorma
 
 
 //right now super basic fog: just a smooth step function of distance blacking out at max distance.
+//the factor of 20 is just empirical here to make things look good - apparently we never get near max dist in euclidean geo
 vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
     float fogDensity=smoothstep(0., MAX_DIST/20., distToViewer);
     return mix(color, fogColor, fogDensity); 
