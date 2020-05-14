@@ -150,7 +150,7 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 //this is the right code for local lighting of LOCAL objects
 //need to do something different with the value of totalFixMatrix for global objects....the specularity on a global object changes when I CHANGE BOX
 //it also changes the reflection  of global light...
-vec3 localLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity,vec3 surfColor, bool computeShadows){
+vec3 localLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity,vec3 surfColor, bool renderShadow){
     
     //start with no color for the surface, build it up slowly below
     vec3 localColor=vec3(0.);
@@ -176,7 +176,7 @@ vec3 localLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity,vec
     
     //now for this same light source, we compute the shadow
     //this  original sourxe almost never produces shadows (if the sdf is concave,symmetric about center)
-    if(computeShadows==true){
+    if(renderShadow){
     shadow=shadowMarch(toLight,distToLight);
     }
     localColor=shadow*phong;
@@ -203,17 +203,17 @@ vec3 localLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity,vec
         //compute the contribution to phong shading
         phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
         //compute the shadows
-        if(computeShadows==true){
+       if(renderShadow){
         shadow=shadowMarch(toLight,distToLight);
         }
         localColor+=shadow*phong;
-    //        if(distToViewer<5.||distToLight>5.){
-    //        shadow=shadowMarch(toLight,distToLight);
-    //        emitLocalColor+=shadow*phong;
-    //        }
-    //        else{
-    //            emitLocalColor+=phong;
-    //        }  
+//            if(computeShadows==true&&distToViewer<3.||distToLight<5.){
+//            shadow=shadowMarch(toLight,distToLight);
+//            localColor+=shadow*phong;
+//            }
+//            else{
+//               localColor+=phong;
+//            }  
    }
     
     //now, have 7 contributions to the local color
@@ -266,7 +266,7 @@ vec3 reflLocalLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity
 //this is NOT WORKING as a separate function right now.
 //this same code is copied into the shader, and it runs fine.
 //will figure this out later
-vec3 globalLighting(vec3 surfColor,bool computeShadows){
+vec3 globalLighting(vec3 surfColor,bool renderShadow){
     
         //start with no color for the surface, build it up slowly below
     vec3 globalColor=vec3(0.);
@@ -292,9 +292,9 @@ vec3 globalLighting(vec3 surfColor,bool computeShadows){
         //then we use this to compute both the phong shading and the shadowfx
         phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,4.+4.*brightness*brightness);
             
-        
+        if (renderShadow){
         shadow=shadowMarch(toLight,distToLight);
-        
+        }
         globalColor+=shadow*phong;
             //as before, we could try and stop shadows early if it saves enough cycles
         //        if(distToViewer<5.||distToLight>5.){
