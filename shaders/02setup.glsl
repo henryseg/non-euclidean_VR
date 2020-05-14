@@ -68,7 +68,7 @@ void setResolution(float UIVar){
         MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
         MAX_DIST = 100.+400.*UIVar;
     
-        MAX_REFL_STEPS= int(10.+60.*UIVar);
+        MAX_REFL_STEPS= int(30.+60.*UIVar);
         MAX_REFL_DIST=50.+50.*UIVar;
         //MAX_SHADOW_STEPS=int(20.+30.*UIVar);
    
@@ -147,6 +147,8 @@ uniform float globalSphereRad;
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform float brightness;
+uniform bool renderShadow;
+
 
 //THESE SHOULD BE REMOVED FROM THE CODE
 //it is allowed to run from 0 to 0.5 currently, we will double that for brightness

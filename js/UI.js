@@ -24,11 +24,13 @@ let initGui = function () {
         //},
         toggleUI: true,
         keyboard: 'us',
+        renderShadow: true,
         yourRad: 0.,
         display: 1,
         res: 0.25,
         mirror: 0.1,
         brightness: 0.15
+
     };
 
     let gui = new dat.GUI();
@@ -50,14 +52,15 @@ let initGui = function () {
         Lattice: '3'
     });
 
-    //    let resController = gui.add(guiInfo, 'res', {
-    //        Low: '1',
-    //        Med: '2',
-    //        High: '3'
-    //    });
+
+    let renderShadowController = gui.add(guiInfo, 'renderShadow', {
+        Yes: 'true',
+        No: 'false'
+    }).name('Shadows');
+
     let yourRadController = gui.add(guiInfo, 'yourRad', 0., 0.25).name("Your Radius");
     let resController = gui.add(guiInfo, 'res', 0., 1.).name("Resolution");
-    let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 1.).name("Mirror");
+    let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 0.5).name("Mirror");
     let brightnessController = gui.add(guiInfo, 'brightness', 0.0, 0.5).name("Brightness");
 
     // ------------------------------
@@ -105,6 +108,10 @@ let initGui = function () {
 
     displayController.onChange(function (value) {
         globals.display = value;
+    });
+
+    renderShadowController.onChange(function (value) {
+        globals.renderShadow = value;
     });
 
     yourRadController.onChange(function (value) {

@@ -290,7 +290,7 @@ vec3 globalLighting(vec3 surfColor,bool computeShadows){
         toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
         distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
         //then we use this to compute both the phong shading and the shadowfx
-        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,5.);
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,4.+4.*brightness*brightness);
             
         
         shadow=shadowMarch(toLight,distToLight);

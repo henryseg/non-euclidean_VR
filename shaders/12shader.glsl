@@ -430,7 +430,7 @@ vec3  buildTheColor(tangVector rayDir, Isometry  totalFixMatrix){
     
     
     //figure out the local lighting contribution
-    emitLocalColor=localLighting(localLightPos, localLightColor, 5.,surfColor, true);//shadows  on
+    emitLocalColor=localLighting(localLightPos, localLightColor, 5.+6.*brightness*brightness,surfColor, renderShadow);//shadows  controlled by uniform
     
     //figure out the global lighting contribution
     //THIS IS NOT WORKING RIGHT NOW
@@ -472,9 +472,9 @@ vec3  buildTheColor(tangVector rayDir, Isometry  totalFixMatrix){
         toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
         distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
 
-        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,5.);
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,5.+6.*brightness*brightness);
             
-        shadow=shadowMarch(toLight,distToLight);
+        if(renderShadow==true){shadow=shadowMarch(toLight,distToLight);}
         globalColor+=shadow*phong;
 
    }
@@ -543,7 +543,7 @@ vec3  buildTheColor(tangVector rayDir, Isometry  totalFixMatrix){
     surfNormal=surfaceNormal(sampletv);//normal vector to surface
     
     //figure out the local lighting contribution
-    reflLocalColor=reflLocalLighting(localLightPos, localLightColor, 4.+4.*brightness*brightness,surfColor);
+    reflLocalColor=reflLocalLighting(localLightPos, localLightColor, 5.+6.*brightness*brightness,surfColor);
     
     //figure out the global lighting contribution
     //SAME PROBLEM: THIS CODE DOES NOT RUN CORRECTLY WHEN COPIED INTO ITS OWN FUNCTION, BUT RUNS COPIED DIRECTLY INTO HERE:
@@ -581,7 +581,7 @@ vec3  buildTheColor(tangVector rayDir, Isometry  totalFixMatrix){
         toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
         distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
         //then we use this to compute both the phong shading and the shadow
-        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,lightIntensities[i].w);
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,5.+6.*brightness*brightness);
         globalColor+=phong;
    }
     

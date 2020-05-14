@@ -402,58 +402,58 @@ float shadowMarch(tangVector toLight, float distToLight)
 
 
 
-
-//improving the shadows using some ideas of iq on shadertoy
-float softShadowMarch(in tangVector toLight, float distToLight, float k)
-    {
-    Isometry fixMatrix;
-    
-    float shade=1.;
-    float  localDist;
-    float localDepth=0.;
-    
-    float marchStep;
-    float newEp = EPSILON * 5.0;
-    
-    //start the march on the surface pointed at the light
-    tangVector localtv=geoFlow(toLight,0.1);
-    
-    for (int i = 0; i < MAX_SHADOW_STEPS; i++){
-
-     localtv = geoFlow(localtv, marchStep);   
-        
-     if (isOutsideCell(localtv, fixMatrix)){
-            //if you are outside of the central cell after the march done above
-            //then translate yourself back into the central cell and set the next marching distance to a minimum
-            localtv = translate(fixMatrix, localtv);
-            marchStep = newEp;
-        } 
-        
-        else {//if you are still inside the central cell
-            
-                        //if neither of these, march  onwards
-            marchStep = 0.9*localDist;//make this distance your next march step
-            localDepth += marchStep;//add this to the total distance traced so far
-            
-            
-            //set the local distance to a portion of the sceneSDF
-            float localDist = localSceneSDF(localtv.pos,newEp);
-             shade = min(shade, smoothstep(0.,1.,k*localDist/localDepth)); 
-            //if you've hit something 
-            if (localDist < newEp|| localDepth>distToLight-0.5){//if you hit something
-                break;
-            }
-
-
-            
-        } 
-    }
-    
-    //at the end, return this value for the shadow deepness
-    return clamp(shade,0.,1.); 
-
-}
-
+//
+////improving the shadows using some ideas of iq on shadertoy
+//float softShadowMarch(in tangVector toLight, float distToLight, float k)
+//    {
+//    Isometry fixMatrix;
+//    
+//    float shade=1.;
+//    float  localDist;
+//    float localDepth=0.;
+//    
+//    float marchStep;
+//    float newEp = EPSILON * 5.0;
+//    
+//    //start the march on the surface pointed at the light
+//    tangVector localtv=geoFlow(toLight,0.1);
+//    
+//    for (int i = 0; i < MAX_SHADOW_STEPS; i++){
+//
+//     localtv = geoFlow(localtv, marchStep);   
+//        
+//     if (isOutsideCell(localtv, fixMatrix)){
+//            //if you are outside of the central cell after the march done above
+//            //then translate yourself back into the central cell and set the next marching distance to a minimum
+//            localtv = translate(fixMatrix, localtv);
+//            marchStep = newEp;
+//        } 
+//        
+//        else {//if you are still inside the central cell
+//            
+//                        //if neither of these, march  onwards
+//            marchStep = 0.9*localDist;//make this distance your next march step
+//            localDepth += marchStep;//add this to the total distance traced so far
+//            
+//            
+//            //set the local distance to a portion of the sceneSDF
+//            float localDist = localSceneSDF(localtv.pos,newEp);
+//             shade = min(shade, smoothstep(0.,1.,k*localDist/localDepth)); 
+//            //if you've hit something 
+//            if (localDist < newEp|| localDepth>distToLight-0.5){//if you hit something
+//                break;
+//            }
+//
+//
+//            
+//        } 
+//    }
+//    
+//    //at the end, return this value for the shadow deepness
+//    return clamp(shade,0.,1.); 
+//
+//}
+//
 
 
 
