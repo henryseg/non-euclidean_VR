@@ -165,7 +165,7 @@ Position.prototype.localFlow = function (v) {
         point.set(new Vector3(
             Math.sqrt(2) * t,
             -Math.pow(t, 2),
-            Math.pow(t, 2) + 1
+            1 + Math.pow(t, 2)
         ));
         phi = phi + Math.atan2(point.coord.y, point.coord.x);
     } else {

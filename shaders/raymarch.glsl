@@ -219,8 +219,8 @@ vec4 H2toSL2(vec3 point) {
 
 
 // A point in USL(2,R) -- the universal covver of SL(2,R) -- is represented by a vec4
-// the first coordinate is the fiber angle
-// the last three coordinates are a point in H2 in the hyperboloid model
+// the first three coordinates are a point in H2 in the hyperboloid model
+// the last coordinate is the fiber angle
 
 vec4 USL2rotateBy(vec4 p, float alpha) {
     vec4 res = vec4(
@@ -451,8 +451,8 @@ mat4 tangBasis(vec4 p){
   Another data type for manipulating points in the tangent bundler
   A localTangVector is given by
   - pos : a point in the space.
-    The first coordinate is the angle in the fiber
-    The last three coordinates are a point in H2 in the hyperboloid model
+    The first three coordinates are a point in H2 in the hyperboloid model
+    The last coordinate is the angle in the fiber
   - dir: the pull back of the tangent vector by the (unique) element of \tilde SL(2,R) bringing pos to the origin
     The tangent vector is seen as a tangent vector at the origin of SL(2,R). The first coordinates is always 0
   Implement various basic methods to manipulate them
@@ -704,6 +704,7 @@ vec4 flowFromOriginH2Like(vec4 dir, float t) {
     // dir = (0, a1, a2, 0) with
     // * 0 <= a2 < a1
     // return the achieved position
+
     float a1 = dir.y;
     float a2 = dir.z;
     float phi = 2. * a2 * t;
@@ -714,10 +715,10 @@ vec4 flowFromOriginH2Like(vec4 dir, float t) {
     vec3 point = vec3(
     2. * a1 * ct * st / omega,
     - 2. * a1 * a2 * pow(st / omega, 2.),
-    1. + 2. * pow(a1 * ct / omega, 2.)
+    1. + 2. * pow(a1 * st / omega, 2.)
     );
     phi = phi + atan(point.y, point.x);
-    vec4 res = vec4(phi, point);
+    vec4 res = vec4(point, phi);
     return res;
 }
 
@@ -727,6 +728,7 @@ vec4 flowFromOriginFiberLike(vec4 dir, float t) {
     // dir = (0, a1, a2, 0) with
     // * 0 <= a1 < a2
     // return the achieved position
+
     float a1 = dir.y;
     float a2 = dir.z;
     float phi = 2. * a2 * t;
@@ -737,10 +739,10 @@ vec4 flowFromOriginFiberLike(vec4 dir, float t) {
     vec3 point = vec3(
     2. * a1 * ct * st / omega,
     - 2. * a1 * a2 * pow(st / omega, 2.),
-    1. + 2. * pow(a1 * ct / omega, 2.)
+    1. + 2. * pow(a1 * st / omega, 2.)
     );
     phi = phi + atan(point.y, point.x) + 2. * floor(0.5 - 0.5 * omega * t / PI) * PI;
-    vec4 res = vec4(phi, point);
+    vec4 res = vec4(point, phi);
     return res;
 }
 
@@ -751,6 +753,7 @@ vec4 flowFromOriginIntermediate(vec4 dir, float t) {
     // * 0 <= a1 = a2
     // return the achieved position
     // TODO: replace the exact formular with an asymptotic expansion of the other cases around a1 = 1/sqrt(2)
+
     float a1 = dir.y;
     float a2 = dir.z;
     float phi = 2. * a2 * t;
@@ -762,7 +765,7 @@ vec4 flowFromOriginIntermediate(vec4 dir, float t) {
     pow(t, 2.) + 1.
     );
     phi = phi + atan(point.y, point.x);
-    vec4 res = vec4(phi, point);
+    vec4 res = vec4(point, phi);
     return res;
 }
 
@@ -788,9 +791,12 @@ localTangVector flow(localTangVector tv, float t) {
     }
 
     posFromOrigin = USL2rotateBy(posFromOrigin, alpha);
+
+
     if (flipped) {
         posFromOrigin = USL2flip(posFromOrigin);
     }
+
 
     Isometry isom = makeLeftTranslation(tv.pos);
     vec4 resPos = translate(isom, posFromOrigin);
@@ -898,7 +904,7 @@ Isometry globalObjectBoost;
 //----------------------------------------------------------------------------------------------------------------------
 uniform int isStereo;
 uniform vec2 screenResolution;
-uniform vec4 invGenerators[6]; //
+uniform vec4 invGenerators[6];//
 uniform vec4 currentBoostMat;
 uniform vec4 leftBoostMat;
 uniform vec4 rightBoostMat;
@@ -1292,8 +1298,6 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
-
-
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             float localDist = localSceneSDF(localtv.pos);
 
@@ -1344,7 +1348,9 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         }
         localDepth=min(globalDepth, MAX_DIST);
     }
-    else { localDepth=MAX_DIST; }
+    else {
+        localDepth=MAX_DIST;
+    }
 
 
     //            else {
@@ -1369,13 +1375,16 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         globalDepth = MIN_DIST;
         marchStep = MIN_DIST;
 
+        //debugColor = abs(tv.dir.xyz);
+        //debugColor = abs(tv.pos.xyz);
+
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             tv = flow(tv, marchStep);
 
             /*
-            if (i == 15) {
+            if (i == 1) {
                 hitWhich = 5;
-                debugColor = 10000. * vec3(0, 0, marchStep);
+                debugColor = abs(tv.pos.xyz);
                 break;
             }
             */
@@ -1385,6 +1394,9 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
                 // hitWhich has now been set
                 totalFixMatrix = identity;
                 sampletv = toTangVector(tv);
+
+                hitWhich = 5;
+                debugColor = vec3(1., 0, 0.);
                 //hitWhich = 5;
                 //debugColor = 0.1*vec3(globalDepth, 0, 0);
                 return;
@@ -1394,15 +1406,13 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             if (globalDepth >= localDepth){
                 //hitWhich = 5;
                 //debugColor = vec3(0, globalDepth, 0);
+                hitWhich = 5;
+                debugColor = (length(vec4(0, 0, 1, 0) - tv.pos)) * vec3(0., 0.5, 0.);
+                //debugColor = (length(tv.pos-globalObjectBoostMat)) * vec3(0., 0.5, 0.);
+                //debugColor = vec3(0, 0.005*globalDepth, 0.);
                 break;
             }
         }
-        /*
-        if(hitWhich == 0) {
-            hitWhich = 5;
-            debugColor = 0.1*vec3(0, 0, globalDepth);
-        }
-        */
     }
 }
 
@@ -1462,7 +1472,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
         //TLP=invGenerators[i]*localLightPos;
-        TLP = translate( makeLeftTranslation(invGenerators[i]), localLightPos );
+        TLP = translate(makeLeftTranslation(invGenerators[i]), localLightPos);
         color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
     }
 
@@ -1583,7 +1593,15 @@ localTangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //cre
     vec2 xy = 0.2 * ((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1 / tan(radians(fov * 0.5));
     // code specific to SL2 (change the system of coordinates to make it coherent with the other geometries ?)
-    localTangVector tv = localTangVector(ORIGIN, vec4(xy, -z, 0.));
+    // see the notes for the justification
+    mat4 localbasis = mat4(
+    0, 1, 0, 0,
+    -1, 0, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 0
+    );
+    vec4 dir = localbasis * vec4(xy, -z, 0.);
+    localTangVector tv = localTangVector(ORIGIN, dir);
     localTangVector v =  tangNormalize(tv);
     return v;
 }
@@ -1622,25 +1640,13 @@ void main(){
     }
 
     //get our raymarched distance back ------------------------
- 
-    
+
+
     Isometry totalFixMatrix = identity;
     // do the marching
-    //raymarch(rayDir, totalFixMatrix);
     raymarch(rayDir, totalFixMatrix);
-
-  
-    /*
-    hitWhich = 5;
-
-    float aux = ellipj(0.0001 * time * ell_K).x;
-    if (aux > 0.){
-        debugColor = vec3(aux, 0, 0);
-    }
-    else {
-        debugColor = vec3(0, -aux, 0);
-    }
-    */
+    //hitWhich = 5;
+    //debugColor = abs(rayDir.pos.yzw);
 
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing

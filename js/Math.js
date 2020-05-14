@@ -118,26 +118,18 @@ const time0 = new Date().getTime();
 
 function initGeometry() {
     globals.position = new Position();
-    console.log("During init", globals.position);
-    //console.log("position", globals.position.boost);
-    //console.log("During init", globals.position.boost.point);
-    //console.log("During init", globals.position.boost.point.coord);
-    //console.log("SL2",globals.position.boost.toVector4());
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();
     globals.invGens = invGenerators(globals.gens);
     invGensMatrices = unpackageMatrix(globals.invGens);
 
-    //console.log("invGensMatrices", invGensMatrices);
 
 
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
-    console.log("vectorLeft", vectorLeft);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
-    console.log("vectorRight", vectorRight);
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
 }
 
@@ -164,6 +156,7 @@ function initObjects() {
     PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
 
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
+    console.log("globalObjectPosition",globals.globalObjectPosition.boost.toVector4());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
