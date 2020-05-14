@@ -213,9 +213,10 @@ Isometry totalFixMatrix;
 
 
 
-
-
-
+//other ones we need
+vec4 surfacePosition;
+tangVector toViewer;
+tangVector surfNormal;
 
 
 

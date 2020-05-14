@@ -276,18 +276,26 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
             }
             
             
-                        //if its not less than epsilon, keep marching
+            //if its not less than epsilon, keep marching
+            
+            
+            //do we want to stop at the fundamental domain edge right away? or just keep marching and let fixOutsideCentralCell take care of it
+            //I think there are issues with non-spherically symmetric distance functions in the first way, but its faster, and probably fine for reflections
+            //in any case, the second option is commented out below:
+            
+            
+            marchStep = 0.9*localDist;//make this distance your next march step
+           localDepth += marchStep;//add this to the total distance traced so far
             
             //find the distance to  a wall of the fundamental chamber
-            float wallDist=distToEdge(localtv.pos);
-            //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
-            marchStep = min(wallDist+0.2,0.9*localDist);//make this distance your next march step
-            //marchStep=marchProportion*localDist;
-            localDepth += marchStep;//add this to the total distance traced so far
+//            float wallDist=distToEdge(localtv.pos);
+//            //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
+//            marchStep = min(wallDist+0.2,0.9*localDist);//make this distance your next march step
+//            //marchStep=marchProportion*localDist;
+//            localDepth += marchStep;//add this to the total distance traced so far
             
             
             
-           // marchStep = 0.9*localDist;//make this distance your next march step
 
         }
     }
@@ -430,7 +438,7 @@ float softShadowMarch(in tangVector toLight, float distToLight, float k)
             
             //set the local distance to a portion of the sceneSDF
             float localDist = localSceneSDF(localtv.pos,newEp);
-             shade = min(shade, k*localDist/localDepth); 
+             shade = min(shade, smoothstep(0.,1.,k*localDist/localDepth)); 
             //if you've hit something 
             if (localDist < newEp|| localDepth>distToLight-0.5){//if you hit something
                 break;
@@ -450,58 +458,6 @@ float softShadowMarch(in tangVector toLight, float distToLight, float k)
 
 
 
-//
-
-// Cheap shadows are hard. In fact, I'd almost say, shadowing repeat objects - in a setting like this - with limited 
-// iterations is impossible... However, I'd be very grateful if someone could prove me wrong. :)
-float softShadow(vec4 ro, vec4 lp, float k){
-//
-    // More would be nicer. More is always nicer, but not really affordable... Not on my slow test machine, anyway.
-    const int maxIterationsShad = 40; 
-    
-    //ray direction here
-    vec4 rd = lp - ro; // Unnormalized direction ray.
-
-    float shade = 1.;
-    float dist = .002;    
-    float end = max(length(rd), .01);
-    float stepDist = end/float(maxIterationsShad);
-    
-    //normalizing the direction  ray
-    rd /= end;
-
-    // Max shadow iterations - More iterations make nicer shadows, but slow things down. Obviously, the lowest 
-    // number to give a decent shadow is the best one to choose. 
-    for (int i = 0; i<maxIterationsShad; i++){
-        
-        
-//only going to have shadows cast by the tiling scene for now
-        float h = localSceneSDF(ro + rd*dist);
-        //shade = min(shade, k*h/dist);
-        shade = min(shade, smoothstep(0., 1., k*h/dist)); // Subtle difference. Thanks to IQ for this tidbit.
-        // So many options here, and none are perfect: dist += min(h, .2), dist += clamp(h, .01, .2), 
-        // clamp(h, .02, stepDist*2.), etc.
-        dist += clamp(h, .02, .25);
-        
-        // Early exits from accumulative distance function calls tend to be a good thing.
-        if (h<0.01 || dist>end) break; 
-        //if (h<.001 || dist > end) break; // If you're prepared to put up with more artifacts.
-    }
-
-    // I've added 0.5 to the final shade value, which lightens the shadow a bit. It's a preference thing. 
-    // Really dark shadows look too brutal to me.
-    return min(max(shade, 0.)+0.1, 1.); 
-}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -511,7 +467,7 @@ float softShadow(vec4 ro, vec4 lp, float k){
 //
 //
 //
-////new version for Euclidean Geometry
+////OLD RAYMARCHER WITH A BINARY-SEARCH WAY  OF FINDING THE FUNDAMENTAL DOMAIN.
 //
 //
 //int BINARY_SEARCH_STEPS=20;

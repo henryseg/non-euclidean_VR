@@ -24,6 +24,7 @@ let initGui = function () {
         //},
         toggleUI: true,
         keyboard: 'us',
+        yourRad: 0.,
         display: 1,
         res: 0.25,
         mirror: 0.1,
@@ -54,6 +55,7 @@ let initGui = function () {
     //        Med: '2',
     //        High: '3'
     //    });
+    let yourRadController = gui.add(guiInfo, 'yourRad', 0., 0.25).name("Your Radius");
     let resController = gui.add(guiInfo, 'res', 0., 1.).name("Resolution");
     let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 1.).name("Mirror");
     let brightnessController = gui.add(guiInfo, 'brightness', 0.0, 0.5).name("Brightness");
@@ -104,6 +106,11 @@ let initGui = function () {
     displayController.onChange(function (value) {
         globals.display = value;
     });
+
+    yourRadController.onChange(function (value) {
+        globals.yourRad = value;
+    });
+
 
     resController.onChange(function (value) {
         globals.res = value;

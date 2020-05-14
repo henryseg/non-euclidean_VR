@@ -72,9 +72,9 @@ function initGeometry() {
 
 
 function initObjects() {
-    PointLightObject(new Vector3(1., 1.5, 0), lightColors[0]);
-    PointLightObject(new Vector3(-1, 1.5, 0), lightColors[1]);
-    PointLightObject(new Vector3(0, 0.2, 0.3), lightColors[2]);
+    PointLightObject(new Vector3(1., 1., 0), lightColors[0]);
+    PointLightObject(new Vector3(-1, 0, 0), lightColors[1]);
+    PointLightObject(new Vector3(0, 0, 1), lightColors[2]);
     PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
 
     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
@@ -212,6 +212,12 @@ function setupMaterial(fShader) {
                 type: "int",
                 value: globals.display
             },
+
+            yourRad: {
+                type: "f",
+                value: globals.yourRad
+            },
+
             res: {
                 type: "f",
                 value: globals.res
@@ -262,6 +268,7 @@ function updateMaterial() {
     globals.material.uniforms.time.value = ((new Date().getTime()) - time0) / 1000.;
 
     globals.material.uniforms.display.value = globals.display;
+    globals.material.uniforms.yourRad.value = globals.yourRad;
     globals.material.uniforms.res.value = globals.res;
     globals.material.uniforms.mirror.value = globals.mirror;
     // globals.material.uniforms.lightRad.value = globals.lightRad;

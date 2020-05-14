@@ -77,7 +77,7 @@ vec3 phongShading(tangVector toLight, tangVector toViewer, tangVector  surfNorma
     vec3 diffuse = lightColor.rgb * nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(reflectedRay, toViewer), 0.0);
-    vec3 specular = lightColor.rgb * pow(rDotV,20.0);
+    vec3 specular = lightColor.rgb * pow(rDotV,15.0);
     //Attenuation - of the light intensity due to distance from source
     float att = lightIntensity /lightAtt(distToLight);
     //Combine the above terms to compute the final color
@@ -119,6 +119,120 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// 
+//----------------------------------------------------------------------------------------------------------------------
+
+// LIGHTING FUNCTIONS
+//above this are the commands for building the physics of lighting
+//below this is code implementing these for specific situations (local lights, global lights, reflected lights, etc)
+//no new lighting methods are below, only packaging.
+
+//----------------------------------------------------------------------------------------------------------------------
+// 
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Packaging this up: LOCAL LIGHTING ROUTINES
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+//this function takes in the necessary information for a local light, and  does the lighting computation for it, and its translates in the neighboring six cells (adjacent through faces)
+//this  is meant to be run inside of some larger shading function, where we already have access to the following values:
+//vec4 surfacePosition, tangVector toViewer, tangVector surfNormal
+//boolean tells us if we want to have the shadow  computation turned on or not
+
+//this is the right code for local lighting of LOCAL objects
+//need to do something different with the value of totalFixMatrix for global objects....the specularity on a global object changes when I CHANGE BOX
+//it also changes the reflection  of global light...
+vec3 localLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity,vec3 surfColor, bool computeShadows){
+    
+    //start with no color for the surface, build it up slowly below
+    vec3 localColor=vec3(0.);
+    vec3 phong=vec3(0.);
+    float shadow=1.;//1 means no shadows
+    
+    tangVector toLight;
+    float distToLight;
+    
+    //----------------FOR THE MAIN LIGHT---------------
+    
+
+    
+    //we start being given the light location, and have outside access to our location, and the point of interest on the surface
+    //now compute these  two useful  quantites out of this data
+    toLight=tangDirection(surfacePosition, lightPosition);//tangent vector on surface pointing to light
+    distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+    
+    
+    //this is all the info we need to get Phong for this light source
+    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+    
+    
+    //now for this same light source, we compute the shadow
+    //this  original sourxe almost never produces shadows (if the sdf is concave,symmetric about center)
+    if(computeShadows==true){
+    shadow=shadowMarch(toLight,distToLight);
+    }
+    localColor=shadow*phong;
+    // alternative: we may wish to  try to turn off shadows when you are far away to save steps:
+        //    if(distToViewer<5.||distToLight>5.){
+        //        shadow=shadowMarch(toLight,distToLight);
+        //        emitLocalColor=shadow*phong;
+        //    }
+        //    else{
+        //        emitLocalColor=phong;
+        //     }
+    
+
+    //----------------SAME CODE FOR THE NEIGHBOR LIGHTS---------------
+    
+    
+    //because its a local light, we need to account for light from its neighbors as well:
+    //this is not a good fix for local lighting - as there may be more than six neighbor cubes (ie near the vertices)
+    for (int i=0; i<6; i++){
+        lightPosition=invGenerators[i]*localLightPos;
+        
+        toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
+        distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+        //compute the contribution to phong shading
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+        //compute the shadows
+        if(computeShadows==true){
+        shadow=shadowMarch(toLight,distToLight);
+        }
+        localColor+=shadow*phong;
+    //        if(distToViewer<5.||distToLight>5.){
+    //        shadow=shadowMarch(toLight,distToLight);
+    //        emitLocalColor+=shadow*phong;
+    //        }
+    //        else{
+    //            emitLocalColor+=phong;
+    //        }  
+   }
+    
+    //now, have 7 contributions to the local color
+    //renormalize the emitted color by dividing by the nubmer of total light sources which have contributed.
+    localColor=localColor/7.;
+    
+    //return this value
+    return localColor;
+    
+}
+
+
+//for local lights, whether or not we want to use them as a reflection or as a normal light, the code can be the same
+//it might be better in practice to have seperate code for the reflection, as we can make things way cheaper if we find shortcuts
+//so, I've given the name to a reflected version below
+//shadows are turned off that would be way too much raymarching!
+vec3 reflLocalLighting(vec4 lightPosition, vec3 lightColor, float lightIntensity,vec3 surfColor){
+    return localLighting(lightPosition,lightColor,lightIntensity, surfColor,false);
+}
 
 
 
@@ -134,6 +248,116 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 
 
 
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Packaging this up: GLOBAL LIGHTING ROUTINES
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+//this function takes in the list of global lights, and computes their total lighting contribution to the pixel
+//this  is meant to be run inside of some larger shading function, where we already have access to the following values:
+//vec4 surfacePosition, tangVector toViewer, tangVector surfNormal
+//RIGHT NOW: the global light positions etc are currently passed as uniforms, so they are already available and thats why
+//they do not appear as arguments in this function
+
+//FOR SOME REASON:
+//this is NOT WORKING as a separate function right now.
+//this same code is copied into the shader, and it runs fine.
+//will figure this out later
+vec3 globalLighting(vec3 surfColor,bool computeShadows){
+    
+        //start with no color for the surface, build it up slowly below
+    vec3 globalColor=vec3(0.);
+    vec3 phong=vec3(0.);
+    float shadow=1.;//1 means no shadows
+    
+    tangVector toLight;
+    float distToLight;
+    vec4 lightPosition;
+    
+    //idea is the same as above: given each lights  position we compute the direction toLight and distToLight, and use this for phong shading and shadow raymarching.
+        for (int i=0; i<4; i++){
+        
+        //first  complication: we have been moving, and so to account for this we need to move the global light from its stored position
+        //to its position relative us, using totalIsom
+        Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
+        lightPosition=translate(totalIsom,lightPositions[i]);
+        
+        //again, we compute the geometry of where the light is rel the surface point    
+       
+        toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
+        distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+        //then we use this to compute both the phong shading and the shadowfx
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,5.);
+            
+        
+        shadow=shadowMarch(toLight,distToLight);
+        
+        globalColor+=shadow*phong;
+            //as before, we could try and stop shadows early if it saves enough cycles
+        //        if(distToViewer<5.||distToLight>5.){
+        //            shadow=shadowMarch(toLight,distToLight);
+        //            emitGlobalColor+=shadow*phong;
+        //        }
+        //        else{
+        //            emitGlobalColor+=phong;
+        //        }
+
+   }
+    
+    //we now have added together the intensity due to four light sources, so must normalize
+    globalColor=globalColor/4.;
+    
+    //return this color
+    return globalColor;
+    
+}
+    
+
+//for global lighting, the conversion to reflection is not identical
+//there is a change in how  we are keeping track of our relative position
+//invCellBoost keeps track of our location, and we include it above as we are computing the lighting with respect to us
+//but in reflection, we are raymarching with the piece of the surface as our "eye", which is fixed: so we don't include this adjustment
+//also  no shadows...
+vec3 reflGlobalLighting(vec3 surfColor){
+    
+    //start with no color for the surface, build it up slowly below
+    vec3 globalColor=vec3(0.);
+    vec3 phong;
+    
+    tangVector toLight;
+    float distToLight;
+    
+    //idea is the same as above: given each lights  position we compute the direction toLight and distToLight, and use this for phong shading and shadow raymarching.
+        for (int i=0; i<4; i++){
+        
+        //first  complication: we have been moving, and so to account for this we need to move the global light from its stored position
+        //to its position relative us, using totalIsom
+        Isometry totalIsom=totalFixMatrix;
+        vec4 lightPosition=translate(totalIsom,lightPositions[i]);
+        
+        //again, we compute the geometry of where the light is rel the surface point    
+        toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
+        distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+        //then we use this to compute both the phong shading and the shadow
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightIntensities[i].xyz,lightIntensities[i].w);
+        globalColor+=phong;
+   }
+    
+    //we now have added together the intensity due to four light sources, so must normalize
+    globalColor=globalColor/4.;
+    
+    //return this color
+    return globalColor;
+    
+}
+
+
+
+
+//OLD
 //----------------------------------------------------------------------------------------------------------------------
 // DOING ALL THE LIGHTING  CALCULATIONS
 //----------------------------------------------------------------------------------------------------------------------

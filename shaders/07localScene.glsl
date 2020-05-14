@@ -54,7 +54,7 @@ float localSceneLights(vec4 p){
 
 
 //----------------------------------------------------------------------------------------------------------------------
-// Local Scene Objects
+// Local Scene Tiling
 //----------------------------------------------------------------------------------------------------------------------
 
 
@@ -120,6 +120,31 @@ float localSceneObjects(vec4 p){
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Local Scene Objects
+//----------------------------------------------------------------------------------------------------------------------
+
+float locSphere(vec4 p){
+    //want to draw a single sphere: but the problem is, that when  you  move  around it passes through a wall of the fundamental  domain and gets all noisey for a second.
+    //solution: draw six images of the thing surrounding your central cube; most of the time they'll be overrlapping but when it crosses a fundamental domain wall this will  fix the issue.
+    
+    vec4 objPos;
+    float sphDist;
+    
+    float dist=sphereSDF(p,currentPos,yourRad);
+    
+    for (int i=0; i<6; i++) {
+        objPos=invGenerators[i]*currentPos;
+        sphDist=sphereSDF(p,objPos, yourRad);
+        dist=min(sphDist,dist);
+    }
+    
+    return dist;
+    
+}
+
+
+
 
 
 
@@ -130,8 +155,9 @@ float localSceneObjects(vec4 p){
 
 
 float localSceneSDF(vec4 p,float threshhold){
-    float lightDist;
-    float sceneDist;
+    float lightDist;//lightsource
+    float sceneDist;//tiling
+    float objDist;//little ball
     float distance = MAX_DIST;
 
 //you are the lightsource, so this will draw a ball around you.  BUT- in the raymarcher we have a  "bubble" around oruselves that  we skip before marching, so we don't see this one, only its other images.
@@ -144,7 +170,6 @@ float localSceneSDF(vec4 p,float threshhold){
         hitWhich = 1;
         colorOfLight=vec3(.8,.8,1.6);
         
-        
         return distance;
     }
 
@@ -156,8 +181,23 @@ float localSceneSDF(vec4 p,float threshhold){
         if (sceneDist<threshhold){
             isLocal=1;
             hitWhich=3;
+            
             return sceneDist;
         }
+
+    
+    if(yourRad!=0.){
+    //now do the same thing for the object
+    objDist=locSphere(p);
+    distance = min(distance, objDist);
+    
+        if (objDist<threshhold){
+            isLocal=1;
+            hitWhich=4;
+            
+            return objDist;
+        }
+    }
 
 
     return distance;

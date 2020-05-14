@@ -51,7 +51,7 @@ float globalSceneLights(vec4 p){
 //A single global sphere----------------------------------------
  float globalSceneObjects(vec4 p){
      vec4 center = vec4(0., 0.2, 0.3, 1.);
-        return sphereSDF(p, center, 0.1);
+        return sphereSDF(p, center, 0.2);
     
  }
 

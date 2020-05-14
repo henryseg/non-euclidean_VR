@@ -1,4 +1,63 @@
-//
+
+
+
+//given the value of hitWhich, decide the initial color assigned to the surface you hit, before any lighting calculations
+//in the future, this function will also contain more data, like its rerflectivity etc
+
+vec3 materialColor(int hitWhich){
+    
+    if (hitWhich == 0){ //Didn't hit anything ------------------------
+        //COLOR THE FRAME DARK GRAY
+        //0.2 is medium gray, 0 is black
+    return vec3(0.1);
+    }
+    else if (hitWhich == 1){//lightsource
+        // in this case, either in the local or global scene sdf, when the threshhold was triggered, they automatically set colorOfLight correctly
+        //so, we can just return that value here
+        return colorOfLight;
+    }
+    else if (hitWhich == 2){//localObject
+        return vec3(0.,0.,0.);//black sphere
+    }
+    else if (hitWhich ==3) {//local object
+    //first option; some fixed color preturbed by your position in the colo cube a bit.
+    //origColor=vec3(0.1,0.2,0.3)+(sampletv.pos.xyz+vec3(0.5,0.5,0.5))/8.;
+    return vec3(0.1,0.2,0.35);//just some random constant blue color
+    }
+    else if (hitWhich ==3) {//tiling
+    return vec3(0.,0.,0.);//black sphere
+    }
+    
+}
+
+
+float materialReflectivity(int hitWhich){
+    
+    if (hitWhich == 0){ //Didn't hit anything ------------------------
+        //COLOR THE FRAME DARK GRAY
+        //0.2 is medium gray, 0 is black
+    return 0.;
+    }
+    else if (hitWhich == 1){//lightsource (loc or  global)
+        return 0.2;
+    }
+    else if (hitWhich == 2){//global Object
+        return 0.3;//black sphere
+    }
+    else if (hitWhich ==3) {//tiling
+    return mirror;//controlled by slider
+    }
+    else if (hitWhich ==4) {//local sphere object
+    return 0.4;//shiny
+    }
+    
+}
+
+
+
+
+
+
 //
 //
 //
