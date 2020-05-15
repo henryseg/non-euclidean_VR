@@ -61,18 +61,8 @@ let VREffect = function (renderer, done) {
         };
 
         // default some stuff for mobile VR
-        self.leftEyeTranslation = {
-            x: -0.03200000151991844,
-            y: 0,
-            z: 0,
-            w: 0
-        };
-        self.rightEyeTranslation = {
-            x: 0.03200000151991844,
-            y: 0,
-            z: 0,
-            w: 0
-        };
+        self.leftEyeTranslation = {x: -0.03200000151991844, y: 0, z: 0, w: 0};
+        self.rightEyeTranslation = {x: 0.03200000151991844, y: 0, z: 0, w: 0};
         // g_stereoBoosts[0] = translateByVector(g_geometry, self.leftEyeTranslation);
         // g_stereoBoosts[1] = translateByVector(g_geometry, self.rightEyeTranslation);
         //self.getEyeRotation(self.leftEyeTranslation.x);
@@ -240,16 +230,10 @@ let VREffect = function (renderer, done) {
             if (!document.mozFullScreenElement && !document.webkitFullScreenElement) self.setFullScreen(false);
         }
 
-        if (canvas.mozRequestFullScreen) canvas.mozRequestFullScreen({
-            vrDisplay: vrHMD
-        });
-        else canvas.webkitRequestFullscreen({
-            vrDisplay: vrHMD
-        });
+        if (canvas.mozRequestFullScreen) canvas.mozRequestFullScreen({vrDisplay: vrHMD});
+        else canvas.webkitRequestFullscreen({vrDisplay: vrHMD});
     };
 };
 
 
-export {
-    VREffect
-};
+export {VREffect};
