@@ -72,7 +72,7 @@ void main(){
     
     
     //gamma correction from shadertoy
-    out_FragColor= vec4(pow(clamp(pixelColor, 0., 1.),vec4(0.7)));
+    out_FragColor= vec4(pow(clamp(pixelColor, 0., 1.),vec4(0.8)));
     
 
     

@@ -3,29 +3,29 @@
 
 //EARTH TEXTURING COLOR COMMANDS
 
-// return the two smallest numbers in a triplet
-vec2 smallest(in vec3 v)
-{
-    float mi = min(v.x, min(v.y, v.z));
-    float ma = max(v.x, max(v.y, v.z));
-    float me = v.x + v.y + v.z - mi - ma;
-    return vec2(mi, me);
-}
-
-// texture a 4D surface by doing 4 2D projections in the most
-// perpendicular possible directions, and then blend them
-// together based on the surface normal
-vec3 boxMapping(in sampler2D sam, in tangVector point)
-{ // from Inigo Quilez
-    vec4 m = point.dir*point.dir; m=m*m; m=m*m;
-
-    vec3 x = texture(sam, smallest(point.pos.yzw)).xyz;
-    vec3 y = texture(sam, smallest(point.pos.zwx)).xyz;
-    vec3 z = texture(sam, smallest(point.pos.wxy)).xyz;
-    vec3 w = texture(sam, smallest(point.pos.xyz)).xyz;
-
-    return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
-}
+//// return the two smallest numbers in a triplet
+//vec2 smallest(in vec3 v)
+//{
+//    float mi = min(v.x, min(v.y, v.z));
+//    float ma = max(v.x, max(v.y, v.z));
+//    float me = v.x + v.y + v.z - mi - ma;
+//    return vec2(mi, me);
+//}
+//
+//// texture a 4D surface by doing 4 2D projections in the most
+//// perpendicular possible directions, and then blend them
+//// together based on the surface normal
+//vec3 boxMapping(in sampler2D sam, in tangVector point)
+//{ // from Inigo Quilez
+//    vec4 m = point.dir*point.dir; m=m*m; m=m*m;
+//
+//    vec3 x = texture(sam, smallest(point.pos.yzw)).xyz;
+//    vec3 y = texture(sam, smallest(point.pos.zwx)).xyz;
+//    vec3 z = texture(sam, smallest(point.pos.wxy)).xyz;
+//    vec3 w = texture(sam, smallest(point.pos.xyz)).xyz;
+//
+//    return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
+//}
 
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);
@@ -73,8 +73,8 @@ vec3 materialColor(int hitWhich){
         return colorOfLight;
     }
     else if (hitWhich == 2){//localObject
-        //return vec3(0.,0.,0.);//black sphere
-        return earthColor(totalFixMatrix,sampletv);
+        return vec3(0.,0.,0.);//black sphere
+       // return earthColor(totalFixMatrix,sampletv);
         //earth textured sphere
     }
     else if (hitWhich ==3) {//local object
@@ -100,8 +100,8 @@ float materialReflectivity(int hitWhich){
         return 0.2;
     }
     else if (hitWhich == 2){//global Object
-        //return 0.3;//black sphere
-        return 0.;//earth
+        return 0.3;//black sphere
+        //return 0.;//earth
     }
     else if (hitWhich ==3) {//tiling
     return mirror;//controlled by slider
