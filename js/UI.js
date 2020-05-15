@@ -23,7 +23,7 @@ let initGui = function () {
         toggleUI: true,
         keyboard: 'us',
         renderShadow: true,
-        yourRad: 0.,
+        yourRad: 0.001,
         display: 1,
         res: 0.25,
         mirror: 0.1,

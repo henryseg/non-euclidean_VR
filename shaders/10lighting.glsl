@@ -335,7 +335,8 @@ vec3 reflGlobalLighting(vec3 surfColor){
         
         //first  complication: we have been moving, and so to account for this we need to move the global light from its stored position
         //to its position relative us, using totalIsom
-        Isometry totalIsom=totalFixMatrix;
+        Isometry totalIsom=composeIsometry(totalFixMatrix,cellBoost);
+        //totalIsom=totalFixMatrix;
         vec4 lightPosition=translate(totalIsom,lightPositions[i]);
         
         //again, we compute the geometry of where the light is rel the surface point    

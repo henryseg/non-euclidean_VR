@@ -28,9 +28,10 @@
 //}
 
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
-    pt = translate(cellBoost, pt);
-    pt = inverse(globalObjectBoost.matrix) * pt;
-    return tangDirection(ORIGIN, pt).dir.xyz;
+    pt = translate(cellBoost, pt);//move back to orig cell
+    pt = inverse(globalObjectBoost.matrix) * pt;//move back to origin
+    return tangDirection(ORIGIN, pt).dir.xyz;//get the direction you are pointing from the origin.
+    //this is a point on the unit sphere, and can be used to look up a  spherical  texture
 }
 
 
@@ -73,8 +74,8 @@ vec3 materialColor(int hitWhich){
         return colorOfLight;
     }
     else if (hitWhich == 2){//localObject
-        return vec3(0.,0.,0.);//black sphere
-       // return earthColor(totalFixMatrix,sampletv);
+        //return vec3(0.,0.,0.);//black sphere
+        return earthColor(totalFixMatrix,sampletv);
         //earth textured sphere
     }
     else if (hitWhich ==3) {//local object
@@ -100,8 +101,8 @@ float materialReflectivity(int hitWhich){
         return 0.2;
     }
     else if (hitWhich == 2){//global Object
-        return 0.3;//black sphere
-        //return 0.;//earth
+        //return 0.3;//black sphere
+        return 0.;//earth, not reflective
     }
     else if (hitWhich ==3) {//tiling
     return mirror;//controlled by slider

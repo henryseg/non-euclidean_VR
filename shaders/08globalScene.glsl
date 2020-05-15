@@ -49,8 +49,9 @@ float globalSceneLights(vec4 p){
 
 
 //A single global sphere----------------------------------------
+//to be able to texture this thing correctly as the earth, we need to position it using global object boost
  float globalSceneObjects(vec4 p){
-     vec4 center = vec4(0., 0.2, 0.3, 1.);
+     vec4 center = translate(globalObjectBoost,ORIGIN);
         return sphereSDF(p, center, 0.2);
     
  }
@@ -81,6 +82,10 @@ float globalSceneSDF(vec4 p, float threshhold){
     distance=min(distance, lightDist);
     
 
+    
+    
+    //TURNED OFF GLOBAL OBJECT FOR NOW
+    
     //now move on to the global objects
     sceneDist=globalSceneObjects(absolutep);
     distance = min(distance, sceneDist);

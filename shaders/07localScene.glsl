@@ -186,7 +186,7 @@ float localSceneSDF(vec4 p,float threshhold){
         }
 
     
-    if(yourRad!=0.){
+    if(yourRad>0.001){
     //now do the same thing for the object
     objDist=locSphere(p);
     distance = min(distance, objDist);
