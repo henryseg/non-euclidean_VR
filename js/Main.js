@@ -77,6 +77,7 @@ let globals = {
 // Scene variables
 //----------------------------------------------------------------------------------------------------------------------
 
+let canvas;
 let scene;
 let mesh;
 let camera;
@@ -95,7 +96,7 @@ let mainFrag;
 function init() {
     //Setup our THREE scene--------------------------------
     scene = new Scene();
-    let canvas = document.createElement('canvas');
+    canvas = document.createElement('canvas');
     let context = canvas.getContext('webgl2');
     globals.renderer = new WebGLRenderer({
         canvas: canvas,
@@ -203,5 +204,6 @@ init();
 
 export {
     init,
-    globals
+    globals,
+    canvas
 };

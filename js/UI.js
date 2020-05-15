@@ -145,7 +145,6 @@ let initGui = function () {
         }
     });
 };
-};
 
 export {
     initGui,
