@@ -11,6 +11,7 @@ import {
 //-------------------------------------------------------
 
 let guiInfo;
+let capturer;
 
 // Inputs are from the UI parameterizations.
 // gI is the guiInfo object from initGui
@@ -19,9 +20,6 @@ let guiInfo;
 //What we need to init our dat GUI
 let initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
-        // GetHelp: function () {
-        //   window.open('https://github.com/henryseg/non-euclidean_VR');
-        //},
         toggleUI: true,
         keyboard: 'us',
         renderShadow: true,
@@ -29,7 +27,8 @@ let initGui = function () {
         display: 1,
         res: 0.25,
         mirror: 0.1,
-        brightness: 0.15
+        brightness: 0.15,
+        recording: false
 
     };
 
@@ -62,6 +61,7 @@ let initGui = function () {
     let resController = gui.add(guiInfo, 'res', 0., 1.).name("Resolution");
     let mirrorController = gui.add(guiInfo, 'mirror', 0.0, 0.5).name("Mirror");
     let brightnessController = gui.add(guiInfo, 'brightness', 0.0, 0.5).name("Brightness");
+    let recordingController = gui.add(guiInfo, 'recording').name("Record video");
 
     // ------------------------------
     // UI Controllers
@@ -131,8 +131,24 @@ let initGui = function () {
     brightnessController.onChange(function (value) {
         globals.material.uniforms.brightness.value = value;
     });
+
+    recordingController.onFinishChange(function (value) {
+        if (value == true) {
+            capturer = new CCapture({
+                format: 'jpg'
+            });
+            capturer.start();
+        } else {
+            capturer.stop();
+            capturer.save();
+            // onResize(); //Resets us back to window size
+        }
+    });
+};
 };
 
 export {
-    initGui
+    initGui,
+    guiInfo,
+    capturer
 }
