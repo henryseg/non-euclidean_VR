@@ -7,47 +7,47 @@
 
 //Local Light Positions----------------------------------------
 float localSceneLights(vec4 p){
+    //this just draws one copy of the local light.
+    //no problem if the light stays in a fundamental domain the whole time.
+    //if light is moving between domains; is more useful to draw thee six neighbors as well, much  like is done for the local sphere object centered on you, below.
     
     return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
                      //lightRad);
     
+}
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Local Scene Objects
+//----------------------------------------------------------------------------------------------------------------------
+
+float locSphere(vec4 p){
+    //want to draw a single sphere: but the problem is, that when  you  move  around it passes through a wall of the fundamental  domain and gets all noisey for a second.
+    //solution: draw six images of the thing surrounding your central cube; most of the time they'll be overrlapping but when it crosses a fundamental domain wall this will  fix the issue.
     
+    vec4 objPos;
+    float sphDist;
     
+    float dist=sphereSDF(p,currentPos,yourRad);
     
+    for (int i=0; i<6; i++) {
+        objPos=invGenerators[i]*currentPos;
+        sphDist=sphereSDF(p,objPos, yourRad);
+        dist=min(sphDist,dist);
+    }
+    
+    return dist;
     
 }
 
 
-//
-////Local Light Positions----------------------------------------
-//float localSceneLights2(vec4 p, float threshhold){
-//    //right now there are four lights, so we run through all of them
-//   
-//    float distance=sphereSDF(p, localLightPos, 0.05);
-//    
-//       for (int i=0; i<6; i++){
-//        float lightDist;
-//        lightDist = sphereSDF(p,invGenerators[i]*localLightPos,0.05//radius of the light
-//        );
-//        distance = min(distance, lightDist);
-//       }
-//        if (distance < threshhold){
-//            isLocal=1;
-//            hitWhich = 1;
-//            colorOfLight=vec3(.5,.5,1.);
-//            return distance;
-//        }
-//    
-//    
-//    return distance;
-//    
-//}
-//
-////for the default threshhold value
-//float localSceneLights2(vec4 p){
-//    return  localSceneLights2(p, EPSILON);
-//}
-//
+
+
+
+
+
+
 
 
 
@@ -120,29 +120,6 @@ float localSceneObjects(vec4 p){
 
 
 
-//----------------------------------------------------------------------------------------------------------------------
-// Local Scene Objects
-//----------------------------------------------------------------------------------------------------------------------
-
-float locSphere(vec4 p){
-    //want to draw a single sphere: but the problem is, that when  you  move  around it passes through a wall of the fundamental  domain and gets all noisey for a second.
-    //solution: draw six images of the thing surrounding your central cube; most of the time they'll be overrlapping but when it crosses a fundamental domain wall this will  fix the issue.
-    
-    vec4 objPos;
-    float sphDist;
-    
-    float dist=sphereSDF(p,currentPos,yourRad);
-    
-    for (int i=0; i<6; i++) {
-        objPos=invGenerators[i]*currentPos;
-        sphDist=sphereSDF(p,objPos, yourRad);
-        dist=min(sphDist,dist);
-    }
-    
-    return dist;
-    
-}
-
 
 
 
@@ -166,7 +143,7 @@ float localSceneSDF(vec4 p,float threshhold){
     distance=min(distance, lightDist);
     
     if (distance < threshhold){
-        isLocal=1;
+        hitLocal=true;
         hitWhich = 1;
         colorOfLight=vec3(.8,.8,1.6);
         
@@ -179,7 +156,7 @@ float localSceneSDF(vec4 p,float threshhold){
     distance = min(distance, sceneDist);
     
         if (sceneDist<threshhold){
-            isLocal=1;
+            hitLocal=true;
             hitWhich=3;
             
             return sceneDist;
@@ -192,7 +169,7 @@ float localSceneSDF(vec4 p,float threshhold){
     distance = min(distance, objDist);
     
         if (objDist<threshhold){
-            isLocal=1;
+            hitLocal=true;
             hitWhich=4;
             
             return objDist;

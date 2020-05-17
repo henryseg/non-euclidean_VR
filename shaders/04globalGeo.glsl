@@ -21,14 +21,31 @@ vec4 modelProject(vec4 p){
 
 
 
+
+
 //----------------------------------------------------------------------------------------------------------------------
-// Distance Functions
+// Spherixal Area Elements
 //----------------------------------------------------------------------------------------------------------------------
 
 //surface area of a sphere  of radius R
 float surfArea(float rad){
     return rad*rad;
 }
+
+
+float areaElement(float rad, tangVector angle){
+    //gives the 1/coefficient of the area element on the unit 2-sphere, after being flowed out into the space via geodesic flow
+    //for isotropic geometries, this is simply the surface area of the geodesic sphere, as there's no angular dependence.
+    //for non-isotropic geometries, ther's an angular dependence.
+    
+    return surfArea(rad);
+}
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Distance Functions
+//----------------------------------------------------------------------------------------------------------------------
 
 //in geometries where computing distance function is difficult, a cheap approximation to distance
 float fakeDistance(vec4 p, vec4 q){

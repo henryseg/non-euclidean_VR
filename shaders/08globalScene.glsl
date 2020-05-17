@@ -26,7 +26,7 @@ float globalSceneLights(vec4 p, float threshhold){
            
         distance = min(distance, lightDist);
         if (distance < threshhold){
-            isLocal=0;
+            hitLocal=false;
             hitWhich = 1;
             colorOfLight = lightIntensities[i].xyz;//color of the light
             return distance;
@@ -65,7 +65,11 @@ float globalSceneLights(vec4 p){
 
 
 
-//Global Scene SDF----------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+// Global Scene SDF
+//----------------------------------------------------------------------------------------------------------------------
+
 // measures distance from cellBoost * p to an object in the global scene
 
 float globalSceneSDF(vec4 p, float threshhold){
@@ -83,15 +87,12 @@ float globalSceneSDF(vec4 p, float threshhold){
     
 
     
-    
-    //TURNED OFF GLOBAL OBJECT FOR NOW
-    
     //now move on to the global objects
     sceneDist=globalSceneObjects(absolutep);
     distance = min(distance, sceneDist);
     
      if (sceneDist<threshhold){
-            isLocal=0;
+            hitLocal=false;
             hitWhich=2;
          //set to mean global object
             return sceneDist;

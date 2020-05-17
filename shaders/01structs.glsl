@@ -193,33 +193,3 @@ localTangVector turnAround(localTangVector v){
 
 
 
-//----------------------------------------------------------------------------------------------------------------------
-// Global Variables in these STRUCTURES
-//----------------------------------------------------------------------------------------------------------------------
-tangVector N;//normal vector
-tangVector sampletv;
-vec4 globalLightColor;
-Isometry identityIsometry=Isometry(mat4(1.0));
-
-Isometry currentBoost;
-Isometry leftBoost;
-Isometry rightBoost;
-Isometry cellBoost;
-Isometry invCellBoost;
-Isometry globalObjectBoost;
-Isometry totalFixMatrix;
-
-
-
-
-
-//other ones we need
-vec4 surfacePosition;
-tangVector toViewer;
-tangVector surfNormal;
-
-
-
-
-
-

@@ -142,11 +142,11 @@ function loadShaders() {
                             loader.load('shaders/07localScene.glsl', function (locScene) {
                                 loader.load('shaders/08globalScene.glsl', function (globScene) {
                                     loader.load('shaders/09raymarch.glsl', function (raymarch) {
-                                        loader.load('shaders/10lighting.glsl', function (light) {
-                                            loader.load('shaders/11materials.glsl', function (material) {
+                                        loader.load('shaders/10materials.glsl', function (material) {
+                                            loader.load('shaders/11lighting.glsl', function (light) {
                                                 loader.load('shaders/12shader.glsl', function (shade) {
                                                     loader.load('shaders/13main.glsl', function (run) {
-                                                        let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(locScene).concat(globScene).concat(raymarch).concat(light).concat(material).concat(shade).concat(run);
+                                                        let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(locScene).concat(globScene).concat(raymarch).concat(material).concat(light).concat(shade).concat(run);
                                                         //The rest of the shader-building is below
                                                         mainFrag = main;
                                                         setupMaterial(main);

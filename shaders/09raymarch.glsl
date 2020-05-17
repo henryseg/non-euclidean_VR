@@ -100,7 +100,7 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
   }
 
       
-
+//NOTE: in  the future  might want to replace this (and thus modify the raymarches  below) with  some other means other than raymarching  to the domain walls. 
 
 
 
@@ -402,179 +402,65 @@ float shadowMarch(tangVector toLight, float distToLight)
 
 
 
-//
-////improving the shadows using some ideas of iq on shadertoy
-//float softShadowMarch(in tangVector toLight, float distToLight, float k)
-//    {
-//    Isometry fixMatrix;
-//    
-//    float shade=1.;
-//    float  localDist;
-//    float localDepth=0.;
-//    
-//    float marchStep;
-//    float newEp = EPSILON * 5.0;
-//    
-//    //start the march on the surface pointed at the light
-//    tangVector localtv=geoFlow(toLight,0.1);
-//    
-//    for (int i = 0; i < MAX_SHADOW_STEPS; i++){
-//
-//     localtv = geoFlow(localtv, marchStep);   
-//        
-//     if (isOutsideCell(localtv, fixMatrix)){
-//            //if you are outside of the central cell after the march done above
-//            //then translate yourself back into the central cell and set the next marching distance to a minimum
-//            localtv = translate(fixMatrix, localtv);
-//            marchStep = newEp;
-//        } 
-//        
-//        else {//if you are still inside the central cell
-//            
-//                        //if neither of these, march  onwards
-//            marchStep = 0.9*localDist;//make this distance your next march step
-//            localDepth += marchStep;//add this to the total distance traced so far
-//            
-//            
-//            //set the local distance to a portion of the sceneSDF
-//            float localDist = localSceneSDF(localtv.pos,newEp);
-//             shade = min(shade, smoothstep(0.,1.,k*localDist/localDepth)); 
-//            //if you've hit something 
-//            if (localDist < newEp|| localDepth>distToLight-0.5){//if you hit something
-//                break;
-//            }
-//
-//
-//            
-//        } 
-//    }
-//    
-//    //at the end, return this value for the shadow deepness
-//    return clamp(shade,0.,1.); 
-//
-//}
-//
+
+//improving the shadows using some ideas of iq on shadertoy
+float softShadowMarch(in tangVector toLight, float distToLight)
+    {
+    
+    float k =10.; //parameter to determine softness of the shadows.
+    
+    Isometry fixMatrix;
+    
+    float shade=1.;
+    float  localDist;
+    float localDepth=0.;
+    
+    float marchStep;
+    float newEp = EPSILON * 5.0;
+    
+    //start the march on the surface pointed at the light
+    tangVector localtv=geoFlow(toLight,0.1);
+    
+    for (int i = 0; i < MAX_SHADOW_STEPS; i++){
+
+     localtv = geoFlow(localtv, marchStep);   
+        
+     if (isOutsideCell(localtv, fixMatrix)){
+            //if you are outside of the central cell after the march done above
+            //then translate yourself back into the central cell and set the next marching distance to a minimum
+            localtv = translate(fixMatrix, localtv);
+            marchStep = newEp;
+        } 
+        
+        else {//if you are still inside the central cell
+            
+                        //if neither of these, march  onwards
+            marchStep = 0.9*localDist;//make this distance your next march step
+            localDepth += marchStep;//add this to the total distance traced so far
+            
+            
+            //set the local distance to a portion of the sceneSDF
+            float localDist = localSceneSDF(localtv.pos,newEp);
+             shade = min(shade, smoothstep(0.,1.,k*localDist/localDepth)); 
+            //if you've hit something 
+            if (localDist < newEp|| localDepth>distToLight-0.5){//if you hit something
+                break;
+            }
+
+
+            
+        } 
+    }
+    
+    //at the end, return this value for the shadow deepness
+    return clamp(shade,0.,1.); 
+
+}
 
 
 
 
 
-
-
-//
-//
-//
-//
-//
-//
-////OLD RAYMARCHER WITH A BINARY-SEARCH WAY  OF FINDING THE FUNDAMENTAL DOMAIN.
-//
-//
-//int BINARY_SEARCH_STEPS=20;
-//
-//void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
-//
-//    Isometry fixMatrix;
-//    Isometry testFixMatrix;
-//    float marchStep = MIN_DIST;
-//    float testMarchStep = MIN_DIST;
-//    float globalDepth = MIN_DIST;
-//    float localDepth = MIN_DIST;
-//    localTangVector tv = rayDir;
-//    localTangVector localtv = rayDir;
-//    localTangVector testlocaltv = rayDir;
-//    localTangVector bestlocaltv = rayDir;
-//    totalFixMatrix = identityIsometry;
-//    // Trace the local scene, then the global scene:
-//
-//    if (TILING_SCENE){
-//        
-//        
-//        
-//        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//            float localDist = localSceneSDF(localtv.pos);
-//            
-//            
-//            if (localDist < EPSILON){
-//                sampletv = toTangVector(localtv);
-//                distToViewer=globalDepth;
-//                  break;
-//              }
-//              marchStep = localDist;
-//            
-//            //localtv = flow(localtv, marchStep);
-//
-////            if (isOutsideCell(localtv, fixMatrix)){
-////                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-////                localtv = translate(fixMatrix, localtv);
-////                localtv=tangNormalize(localtv);
-////                marchStep = MIN_DIST;
-////            }
-//            
-//        testlocaltv = geoFlow(localtv, marchStep);
-//        if (isOutsideCell(testlocaltv, fixMatrix)){
-//            bestlocaltv = testlocaltv;
-//            
-//            for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
-//              ////// do binary search to get close to but outside this cell - 
-//              ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
-//              testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
-//              testlocaltv = geoFlow(localtv, testMarchStep);
-//              if ( isOutsideCell(testlocaltv, testFixMatrix) ){
-//                marchStep = testMarchStep;
-//                bestlocaltv = testlocaltv;
-//                fixMatrix = testFixMatrix;
-//              }
-//            }
-//            
-//            localtv = bestlocaltv;
-//            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-//            localtv = translate(fixMatrix, localtv);
-//            localtv=tangNormalize(localtv);
-//            //globalDepth += marchStep; 
-//            marchStep = MIN_DIST;
-//      }
-//            
-//                  else{ 
-//          localtv = testlocaltv; 
-//          globalDepth += marchStep; 
-//        }
-//      }
-//      localDepth=min(globalDepth, MAX_DIST);
-//    }
-//    else{localDepth=MAX_DIST;}
-//
-//
-//    if (GLOBAL_SCENE){
-//        globalDepth = MIN_DIST;
-//        marchStep = MIN_DIST;
-//
-//        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-//            tv = geoFlow(tv, marchStep);
-//
-//            float globalDist = globalSceneSDF(tv.pos);
-//            if (globalDist < EPSILON){
-//                // hitWhich has now been set
-//                totalFixMatrix = identityIsometry;
-//                sampletv = toTangVector(tv);
-//                distToViewer=globalDepth;
-//                //hitWhich = 5;
-//                //debugColor = 0.1*vec3(globalDepth, 0, 0);
-//                return;
-//            }
-//            marchStep = globalDist;
-//            globalDepth += globalDist;
-//            if (globalDepth >= localDepth){
-//                //hitWhich = 5;
-//                //debugColor = vec3(0, globalDepth, 0);
-//                break;
-//            }
-//        }
-//
-//    }
-//}
-//
-//
 
 
 
