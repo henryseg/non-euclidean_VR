@@ -19,7 +19,7 @@ import {
     createGenerators,
     invGenerators,
     unpackageMatrix,
-    genVectors,
+    pGenVectors,
     PointLightObject,
     lightColors
 } from './Scene.js';
@@ -186,18 +186,18 @@ function setupMaterial(fShader) {
             },
 
             //Sending the Lattice Generators over to GLSL
-            V1: {
+            pV1: {
                 type: "v4",
-                value: genVectors[0]
+                value: pGenVectors[0]
             },
 
-            V2: {
+            pV2: {
                 type: "v4",
-                value: genVectors[1]
+                value: pGenVectors[1]
             },
-            V3: {
+            pV3: {
                 type: "v4",
-                value: genVectors[2]
+                value: pGenVectors[2]
             },
 
             stereoScreenOffset: {

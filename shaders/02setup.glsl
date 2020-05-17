@@ -181,10 +181,17 @@ uniform mat4 rightFacing;
 uniform mat4 cellBoostMat;
 uniform mat4 invCellBoostMat;
 
-//vector directions (length & angle in tangent space) for tiling generators
-uniform vec4 V1;
-uniform vec4 V2;
-uniform vec4 V3;
+//vector directions for the tiling generators in the projective model
+
+uniform vec4 pV1;
+uniform vec4 pV2;
+uniform vec4 pV3;
+
+//floats defining the lengths of these
+//these are set in setVars()
+float lV1;
+float lV2;
+float lV3;
 
 //matrix generators of the tiling (as isometries)
 uniform mat4 invGenerators[6];
@@ -285,6 +292,9 @@ void setVariables(){
     currentBoost=Isometry(currentBoostMat);
     currentPos=currentBoostMat*ORIGIN;
 
+    lV1=length(pV1);
+    lV2=length(pV2);
+    lV3=length(pV3);
     
     localLightPos=ORIGIN+vec4(0.25*sin(2.*time/6.),0.25*cos(3.*time/10.),0.25*sin(time/2.),0.);
     //if instead you want it to follow you around

@@ -9,43 +9,46 @@
 // check if the given point p is in the fundamental domain of the lattice.
 // if it is not, then use one of the generlators to translate it back
 
-bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-    //vec4 ModelP= modelProject(p);
+bool isOutsideCell(vec4 q, out Isometry fixMatrix){
     
-    //lattice basis divided by the norm square
- //right now norm square is 1 so haven't put that in yet.
-    vec4 v1 = V1;
-    vec4 v2 = V2;
-    vec4 v3 = V3;
+    vec4 p= projPoint(q);
+    
+    //unit vectors in the generator directions
+    //pointing in direction of midpoint of fundamental domain face, distance to face in projective model is lVi
+    vec4 v1 = pV1/lV1;
+    vec4 v2 = pV2/lV2;
+    vec4 v3 = pV3/lV3;
 
     //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
     //if (display!=2){
-        if (dot(p, v3) > 0.5) {
-            fixMatrix = Isometry(invGenerators[4]);
-            return true;
-        }
-        if (dot(p, v3) < -0.5) {
-            fixMatrix = Isometry(invGenerators[5]);
-            return true;
-        }
+
    // }
 
-    if (dot(p, v1) > 0.5) {
+    if (dot(p, v1) > lV1) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
-    if (dot(p, v1) < -0.5) {
+    if (dot(p, v1) < -lV1) {
         fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
-    if (dot(p, v2) > 0.5) {
+    if (dot(p, v2) > lV2) {
         fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
-    if (dot(p, v2) < -0.5) {
+    if (dot(p, v2) < -lV2) {
         fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
+    
+    if (dot(p, v3) > lV3) {
+            fixMatrix = Isometry(invGenerators[4]);
+            return true;
+        }
+    if (dot(p, v3) < -lV3) {
+            fixMatrix = Isometry(invGenerators[5]);
+            return true;
+        }
     return false;
 }
 
@@ -78,21 +81,32 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 //fundamental domain  right  now is the cube of slide length   1 centered at the origin.
 //that means, the distance to each wall is  
 //in improved implementation; use the SDFs  for half spaces!
-  float distToEdge(vec4 p){
+  float distToEdge(vec4 q){
+      
+    vec4 p= projPoint(q);
+    
+    //unit vectors in the generator directions
+    //pointing in direction of midpoint of fundamental domain face, distance to face in projective model is lVi
+    vec4 v1 = pV1/lV1;
+    vec4 v2 = pV2/lV2;
+    vec4 v3 = pV3/lV3;
+      
+      
+      
       
       float d1=min(
-          p.x+0.5,
-          0.5-p.x
+          p.x+lV1,
+          lV1-p.x
       );
       
             float d2=min(
-          p.y+0.5,
-          0.5-p.y
+          p.y+lV2,
+          lV2-p.y
       );
       
             float d3=min(
-          p.z+0.5,
-          0.5-p.z
+          p.z+lV3,
+          lV3-p.z
       );
       
       return min(d1,min(d2,d3));
