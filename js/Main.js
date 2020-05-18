@@ -59,6 +59,7 @@ let globals = {
     leftPosition: undefined,
     rightPosition: undefined,
     stereoScreenOffset: 0.03,
+    projGens: undefined,
     gens: undefined,
     invGens: undefined,
     invGenmatrices: undefined,

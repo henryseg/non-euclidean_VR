@@ -188,17 +188,14 @@ uniform vec3 pV1;
 uniform vec3 pV2;
 uniform vec3 pV3;
 
-uniform vec3 uV1;
-uniform vec3 uV2;
-uniform vec3 uV3;
-
-uniform float lV1;
-uniform float lV2;
-uniform float lV3;
-
 uniform vec3 nV1;
 uniform vec3 nV2;
 uniform vec3 nV3;
+
+//normal vector to faces in the affine model fundamental domain
+uniform vec3 nV[3];
+//face pairing in affine model fundamental domain
+uniform vec3 pV[3];
 
 //matrix generators of the tiling (as isometries)
 uniform mat4 invGenerators[6];

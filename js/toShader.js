@@ -16,13 +16,11 @@ import {
     ORIGIN
 } from "./Position.js";
 import {
+    setGenVec,
+    createProjGenerators,
     createGenerators,
     invGenerators,
-    unpackageMatrix,
-    pVs,
-    nVs,
-    lVs,
-    uVs
+    unpackageMatrix
 } from './Math.js';
 
 import {
@@ -60,12 +58,15 @@ const time0 = new Date().getTime();
 
 function initGeometry() {
 
-    console.log(nVs[2]);
-
     globals.position = new Position();
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
-    globals.gens = createGenerators();
+
+    let T = 0.;
+    globals.projGens = createProjGenerators(T);
+    globals.gens = createGenerators(T);
+
+
     globals.invGens = invGenerators(globals.gens);
     globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
@@ -194,67 +195,16 @@ function setupMaterial(fShader) {
                     ])
             },
 
-            //Sending the Lattice Generators over to GLSL
-            uV1: {
-                type: "v3",
-                value: uVs[0]
-            },
-
-            uV2: {
-                type: "v3",
-                value: uVs[1]
-            },
-            uV3: {
-                type: "v3",
-                value: uVs[2]
-            },
-            //lengths of the generators repped by unit vectors above
-            lV1: {
-                type: "float",
-                value: lVs[0]
-            },
-
-            lV2: {
-                type: "float",
-                value: lVs[1]
-            },
-            lV3: {
-                type: "float",
-                value: lVs[2]
-            },
-
             //Sending the normals to faces of fundamental domain
-            nV1: {
+
+            pV: {
                 type: "v3",
-                value: nVs[0]
+                value: globals.projGens[0]
             },
-
-            nV2: {
+            nV: {
                 type: "v3",
-                value: nVs[1]
+                value: globals.projGens[1]
             },
-            nV3: {
-                type: "v3",
-                value: nVs[2]
-            },
-
-
-            pV1: {
-                type: "v3",
-                value: pVs[0]
-            },
-
-            pV2: {
-                type: "v3",
-                value: pVs[1]
-            },
-            pV3: {
-                type: "v3",
-                value: pVs[2]
-            },
-
-
-
 
 
             stereoScreenOffset: {
@@ -317,6 +267,17 @@ function updateMaterial() {
     //        > g_material.uniforms.foo.value = new_value_of_foo
 
 
+    //recompute the matrices for the tiling
+    let T = Math.sin(runTime);
+    globals.projGens = createProjGenerators(T);
+    globals.gens = createGenerators(T);
+    globals.invGens = invGenerators(globals.gens);
+    globals.invGensMatrices = unpackageMatrix(globals.invGens);
+
+    //reset the corresponding uniforms
+    globals.material.uniforms.invGenerators.value = globals.invGensMatrices;
+    globals.material.uniforms.pV.value = globals.projGens[0];
+    globals.material.uniforms.nV.value = globals.projGens[1];
 
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);

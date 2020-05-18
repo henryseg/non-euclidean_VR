@@ -20,28 +20,28 @@ bool isOutsideCell(vec4 q, out Isometry fixMatrix){
     // the pV are the vectors representing translation in the affine model (they are the side pairings, pointed at the middle of opposing faces)
     //if the lattice is orthogonal, pV and nV are colinear! but this is NOT THE CASE for a non-orthogonal lattice
 
-    if (dot(p, nV1) > dot(pV1,nV1)) {
+    if (dot(p, nV[0]) > dot(pV[0],nV[0])) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
-    if (dot(p, nV1) < -dot(pV1,nV1)) {
+    if (dot(p, nV[0]) < -dot(pV[0],nV[0])) {
         fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
-    if (dot(p, nV2) > dot(pV2,nV2)) {
+    if (dot(p, nV[1]) > dot(pV[1],nV[1])) {
         fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
-    if (dot(p, nV2) < -dot(pV2,nV2)) {
+    if (dot(p, nV[1]) < -dot(pV[1],nV[1])) {
         fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
     
-    if (dot(p, nV3) > dot(pV3,nV3)) {
+    if (dot(p, nV[2]) > dot(pV[2],nV[2])) {
             fixMatrix = Isometry(invGenerators[4]);
             return true;
         }
-    if (dot(p, nV3) < -dot(pV3,nV3)) {
+    if (dot(p, nV[2]) < -dot(pV[2],nV[2])) {
             fixMatrix = Isometry(invGenerators[5]);
             return true;
         }
@@ -92,18 +92,18 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
     vec3 p= projPoint(q);
       
       float d1=min(
-          dot(pV1,nV1)+dot(p,nV1),
-          dot(pV1,nV1)-dot(p,nV1)
+          dot(pV[0],nV[0])+dot(p,nV[0]),
+          dot(pV[0],nV[0])-dot(p,nV[0])
       );
       
             float d2=min(
-              dot(pV2,nV2)+dot(p,nV2),
-          dot(pV2,nV2)-dot(p,nV2)
+              dot(pV[1],nV[1])+dot(p,nV[1]),
+          dot(pV[1],nV[1])-dot(p,nV[1])
       );
       
             float d3=min(
-              dot(pV3,nV3)+dot(p,nV3),
-          dot(pV3,nV3)-dot(p,nV3)
+              dot(pV[2],nV[2])+dot(p,nV[2]),
+          dot(pV[2],nV[2])-dot(p,nV[2])
       );
       
       return min(d1,min(d2,d3));
