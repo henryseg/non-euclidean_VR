@@ -52,8 +52,8 @@ function projPoint(pt) {
 
 
 //The three vectors specifying the directions / lengths of the generators of the lattice.
-const G1 = new Vector4(1, 0, 0., 0.);
-const G2 = new Vector4(0, 1, 0., 0.);
+const G1 = new Vector4(0.75, 0.75, 0., 0.);
+const G2 = new Vector4(0.75, -0.75, 0., 0.);
 const G3 = new Vector4(0., 0., 1, 0.);
 
 let Generators = [G1, G2, G3];
@@ -85,9 +85,9 @@ const lV3 = pV3.length();
 let pVs = [pV1, pV2, pV3];
 
 //the unit vectors in these directions
-const uV1 = pV1.normalize();
-const uV2 = pV2.normalize();
-const uV3 = pV3.normalize();
+const uV1 = pV1.clone().normalize();
+const uV2 = pV2.clone().normalize();
+const uV3 = pV3.clone().normalize();
 
 
 //this is the actual data the shader needs each compute cycle
@@ -97,9 +97,9 @@ let uVs = [uV1, uV2, uV3];
 
 //also need a list of the unit normal vectors to each face of the fundamental domain.
 //Assume a positively oriented list of basis vectors, so that the normal done in order always points "inward"
-const nV1 = pV2.cross(pV3).normalize();
-const nV2 = pV3.cross(pV1).normalize();
-const nV3 = pV1.cross(pV2).normalize();
+const nV1 = pV2.clone().cross(pV3).normalize();
+const nV2 = pV3.clone().cross(pV1).normalize();
+const nV3 = pV1.clone().cross(pV2).normalize();
 
 let nVs = [nV1, nV2, nV3];
 
@@ -244,32 +244,32 @@ function fixOutsideCentralCell(position) {
     let p = projPoint(q);
 
 
-        if (p.dot(uV1) > lV1) {
-            bestIndex = 1;
-        }
-        if (p.dot(uV1) < -lV1) {
-            bestIndex = 0;
-        }
-        if (p.dot(uV2) > lV2) {
-            bestIndex = 3;
-        }
-        if (p.dot(uV2) < -lV2) {
-            bestIndex = 2;
-        }
+    if (p.dot(pV1) > pV1.dot(pV1)) {
+        bestIndex = 1;
+    }
+    if (p.dot(pV1) < -pV1.dot(pV1)) {
+        bestIndex = 0;
+    }
+    if (p.dot(pV2) > pV2.dot(pV2)) {
+        bestIndex = 3;
+    }
+    if (p.dot(pV2) < -pV2.dot(pV2)) {
+        bestIndex = 2;
+    }
 
-        if (p.dot(uV3) > lV3) {
-            bestIndex = 5;
-        }
-        if (p.dot(uV3) < -lV3) {
-            bestIndex = 4;
-        }
+    if (p.dot(pV3) > pV3.dot(pV3)) {
+        bestIndex = 5;
+    }
+    if (p.dot(pV3) < -pV3.dot(pV3)) {
+        bestIndex = 4;
+    }
 
-        if (bestIndex !== -1) {
-            position.translateBy(globals.gens[bestIndex]);
-            return bestIndex;
-        } else {
-            return -1;
-        }
+    if (bestIndex !== -1) {
+        position.translateBy(globals.gens[bestIndex]);
+        return bestIndex;
+    } else {
+        return -1;
+    }
     return -1;
 }
 

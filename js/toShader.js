@@ -59,6 +59,9 @@ const time0 = new Date().getTime();
 
 
 function initGeometry() {
+
+    console.log(uVs[0]);
+
     globals.position = new Position();
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
