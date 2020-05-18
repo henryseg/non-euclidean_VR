@@ -14,13 +14,8 @@ vec4 geomProject(vec4 p){
 //at times it is useful to use the Klein model or KleinxR for H3, H2xR and similarly 
 //the Gnonomic projection or GnomonicxR for S3, S2xR geometry calculations.
 //this function projects onto that projective model.
-vec4 projPoint(vec4 p){
-    return p;
-}
-
-//the direction in the affine model
-vec4 projDirection(vec4 p){
-    return vec4(p.x,p.y,p.z,0.);
+vec3 projPoint(vec4 p){
+    return vec3(p.x,p.y,p.z);
 }
 
 

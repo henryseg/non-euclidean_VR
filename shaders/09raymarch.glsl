@@ -6,51 +6,137 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 
-// check if the given point p is in the fundamental domain of the lattice.
-// if it is not, then use one of the generlators to translate it back
 
 bool isOutsideCell(vec4 q, out Isometry fixMatrix){
     
-    vec4 p= projPoint(q);
-    
-    //unit vectors in the generator directions
-    //pointing in direction of midpoint of fundamental domain face, distance to face in projective model is lVi
-    vec4 v1 = pV1/lV1;
-    vec4 v2 = pV2/lV2;
-    vec4 v3 = pV3/lV3;
+    //the vectors uV are unit vectors in the direction of the faces of the fundamental domain in the projective model
+    //the distances lV are the distance from the origin to the face in that direction
 
-    //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
-    //if (display!=2){
-
-   // }
-
-    if (dot(p, v1) > lV1) {
+    if (q.x >0.5) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
-    if (dot(p, v1) < -lV1) {
+    if (q.x<-0.5) {
         fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
-    if (dot(p, v2) > lV2) {
+    if (q.y>0.5) {
         fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
-    if (dot(p, v2) < -lV2) {
+    if (q.y<-0.5) {
         fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
     
-    if (dot(p, v3) > lV3) {
+    if (q.z>0.5) {
             fixMatrix = Isometry(invGenerators[4]);
             return true;
         }
-    if (dot(p, v3) < -lV3) {
+    if (q.z<-0.5) {
             fixMatrix = Isometry(invGenerators[5]);
             return true;
         }
     return false;
 }
+
+
+
+
+
+// check if the given point p is in the fundamental domain of the lattice.
+// if it is not, then use one of the generlators to translate it back
+
+
+
+//bool isOutsideCell(vec4 q, out Isometry fixMatrix){
+//    
+//    vec3 p= projPoint(q);
+//    
+//    //the vectors uV are unit vectors in the direction of the faces of the fundamental domain in the projective model
+//    //the distances lV are the distance from the origin to the face in that direction
+//
+//    if (dot(p, pV1) > dot(pV1,pV1)) {
+//        fixMatrix = Isometry(invGenerators[0]);
+//        return true;
+//    }
+//    if (dot(p, pV1) < -dot(pV1,pV1)) {
+//        fixMatrix = Isometry(invGenerators[1]);
+//        return true;
+//    }
+//    if (dot(p, pV2) > dot(pV2,pV2)) {
+//        fixMatrix = Isometry(invGenerators[2]);
+//        return true;
+//    }
+//    if (dot(p, pV2) < -dot(pV2,pV2)) {
+//        fixMatrix = Isometry(invGenerators[3]);
+//        return true;
+//    }
+//    
+//    if (dot(p, pV3) > dot(pV3,pV3)) {
+//            fixMatrix = Isometry(invGenerators[4]);
+//            return true;
+//        }
+//    if (dot(p, pV3) < -dot(pV3,pV3)) {
+//            fixMatrix = Isometry(invGenerators[5]);
+//            return true;
+//        }
+//    return false;
+//}
+
+
+
+//
+//
+//bool isOutsideCell(vec4 q, out Isometry fixMatrix){
+//    
+//    vec3 p= projPoint(q);
+//    
+//    //the vectors uV are unit vectors in the direction of the faces of the fundamental domain in the projective model
+//    //the distances lV are the distance from the origin to the face in that direction
+//
+//    if (dot(p, nV1) > abs(dot(uV1,nV1))) {
+//        fixMatrix = Isometry(invGenerators[0]);
+//        return true;
+//    }
+//    if (dot(p, nV1) < -abs(dot(uV1,nV1))) {
+//        fixMatrix = Isometry(invGenerators[1]);
+//        return true;
+//    }
+//    if (dot(p, nV2) > abs(dot(uV2,nV2))) {
+//        fixMatrix = Isometry(invGenerators[2]);
+//        return true;
+//    }
+//    if (dot(p, nV2) < -abs(dot(uV2,nV2))) {
+//        fixMatrix = Isometry(invGenerators[3]);
+//        return true;
+//    }
+//    
+//    if (dot(p, nV3) > abs(dot(uV3,nV3))) {
+//            fixMatrix = Isometry(invGenerators[4]);
+//            return true;
+//        }
+//    if (dot(p, nV3) < -abs(dot(uV3,nV3))) {
+//            fixMatrix = Isometry(invGenerators[5]);
+//            return true;
+//        }
+//    return false;
+//}
+//
+
+//if non-orthogonal vectors uVi, then need a different function
+//this is defined using the nVi normal vectors, in addition to the uV1.
+
+
+
+
+
+
+
+
+
+
+
 
 
 // overload of the previous method with tangent vector
@@ -72,55 +158,46 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 
 
 
-
-//----------------------------------------------------------------------------------------------------------------------
-// Measuring the  distance to the nearest wall of the fundamental domain
-//----------------------------------------------------------------------------------------------------------------------
-
-
-//fundamental domain  right  now is the cube of slide length   1 centered at the origin.
-//that means, the distance to each wall is  
-//in improved implementation; use the SDFs  for half spaces!
-  float distToEdge(vec4 q){
-      
-    vec4 p= projPoint(q);
-    
-    //unit vectors in the generator directions
-    //pointing in direction of midpoint of fundamental domain face, distance to face in projective model is lVi
-    vec4 v1 = pV1/lV1;
-    vec4 v2 = pV2/lV2;
-    vec4 v3 = pV3/lV3;
-      
-      
-      
-      
-      float d1=min(
-          p.x+lV1,
-          lV1-p.x
-      );
-      
-            float d2=min(
-          p.y+lV2,
-          lV2-p.y
-      );
-      
-            float d3=min(
-          p.z+lV3,
-          lV3-p.z
-      );
-      
-      return min(d1,min(d2,d3));
-      
-  }
-
-      
-//NOTE: in  the future  might want to replace this (and thus modify the raymarches  below) with  some other means other than raymarching  to the domain walls. 
-
-
-
-
-
-
+//
+////----------------------------------------------------------------------------------------------------------------------
+//// Measuring the  distance to the nearest wall of the fundamental domain
+////----------------------------------------------------------------------------------------------------------------------
+//
+////
+//////fundamental domain  right  now is the cube of slide length   1 centered at the origin.
+//////that means, the distance to each wall is  
+//////in improved implementation; use the SDFs  for half spaces!
+// float distToEdge(vec4 q){
+////      
+//    vec3 p= projPoint(q);
+//      
+//      float d1=min(
+//          lV1+dot(p,uV1),
+//          lV1-dot(p,uV1)
+//      );
+//      
+//            float d2=min(
+//              lV2+dot(p,uV2),
+//          lV2-dot(p,uV2)
+//      );
+//      
+//            float d3=min(
+//              lV2+dot(p,uV2),
+//          lV2-dot(p,uV2)
+//      );
+//      
+//      return min(d1,min(d2,d3));
+//      
+//  }
+//
+//      
+////NOTE: in  the future  might want to replace this (and thus modify the raymarches  below) with  some other means other than raymarching  to the domain walls. 
+//
+//
+//
+//
+//
+//
 
 
 
@@ -191,10 +268,10 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             //if its not less than epsilon, keep marching
             
             //find the distance to  a wall of the fundamental chamber
-            float wallDist=distToEdge(localtv.pos);
+           // float wallDist=distToEdge(localtv.pos);
             //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
-            marchStep = min(wallDist+0.1,marchProportion*localDist);//make this distance your next march step
-            //marchStep=marchProportion*localDist;
+            //marchStep = min(wallDist+0.01,marchProportion*localDist);//make this distance your next march step
+            marchStep=marchProportion*localDist;
             localDepth += marchStep;//add this to the total distance traced so far
 
         }

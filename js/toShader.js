@@ -19,7 +19,13 @@ import {
     createGenerators,
     invGenerators,
     unpackageMatrix,
-    pGenVectors,
+    pVs,
+    nVs,
+    lVs,
+    uVs
+} from './Math.js';
+
+import {
     PointLightObject,
     lightColors
 } from './Scene.js';
@@ -186,19 +192,67 @@ function setupMaterial(fShader) {
             },
 
             //Sending the Lattice Generators over to GLSL
+            uV1: {
+                type: "v3",
+                value: uVs[0]
+            },
+
+            uV2: {
+                type: "v3",
+                value: uVs[1]
+            },
+            uV3: {
+                type: "v3",
+                value: uVs[2]
+            },
+            //lengths of the generators repped by unit vectors above
+            lV1: {
+                type: "float",
+                value: lVs[0]
+            },
+
+            lV2: {
+                type: "float",
+                value: lVs[1]
+            },
+            lV3: {
+                type: "float",
+                value: lVs[2]
+            },
+
+            //Sending the normals to faces of fundamental domain
+            nV1: {
+                type: "v3",
+                value: nVs[0]
+            },
+
+            nV2: {
+                type: "v3",
+                value: nVs[1]
+            },
+            nV3: {
+                type: "v3",
+                value: nVs[2]
+            },
+
+
             pV1: {
-                type: "v4",
-                value: pGenVectors[0]
+                type: "v3",
+                value: pVs[0]
             },
 
             pV2: {
-                type: "v4",
-                value: pGenVectors[1]
+                type: "v3",
+                value: pVs[1]
             },
             pV3: {
-                type: "v4",
-                value: pGenVectors[2]
+                type: "v3",
+                value: pVs[2]
             },
+
+
+
+
 
             stereoScreenOffset: {
                 type: "f",
@@ -245,6 +299,8 @@ function setupMaterial(fShader) {
 
 function updateMaterial() {
 
+    let runTime = ((new Date().getTime()) - time0) / 1000.;
+
     //        It seems that to be properly passed to the shader,
     //        a uniform `foo` cannot be updated on the js side by a statement of the form
     //        > foo = new_value_of_foo
@@ -259,6 +315,7 @@ function updateMaterial() {
 
 
 
+
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
     globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.matrix;
@@ -269,7 +326,7 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    globals.material.uniforms.time.value = ((new Date().getTime()) - time0) / 1000.;
+    globals.material.uniforms.time.value = runTime;
 
     globals.material.uniforms.display.value = globals.display;
     globals.material.uniforms.yourRad.value = globals.yourRad;
