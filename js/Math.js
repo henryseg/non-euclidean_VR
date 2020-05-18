@@ -52,8 +52,8 @@ function projPoint(pt) {
 
 
 //The three vectors specifying the directions / lengths of the generators of the lattice.
-const G1 = new Vector4(0.75, 0.75, 0., 0.);
-const G2 = new Vector4(0.75, -0.75, 0., 0.);
+const G1 = new Vector4(1, 0.25, 0., 0.);
+const G2 = new Vector4(0, 1, 0., 0.);
 const G3 = new Vector4(0., 0., 1, 0.);
 
 let Generators = [G1, G2, G3];
@@ -244,23 +244,23 @@ function fixOutsideCentralCell(position) {
     let p = projPoint(q);
 
 
-    if (p.dot(pV1) > pV1.dot(pV1)) {
+    if (p.dot(nV1) > pV1.dot(nV1)) {
         bestIndex = 1;
     }
-    if (p.dot(pV1) < -pV1.dot(pV1)) {
+    if (p.dot(nV1) < -pV1.dot(nV1)) {
         bestIndex = 0;
     }
-    if (p.dot(pV2) > pV2.dot(pV2)) {
+    if (p.dot(nV2) > pV2.dot(nV2)) {
         bestIndex = 3;
     }
-    if (p.dot(pV2) < -pV2.dot(pV2)) {
+    if (p.dot(nV2) < -pV2.dot(nV2)) {
         bestIndex = 2;
     }
 
-    if (p.dot(pV3) > pV3.dot(pV3)) {
+    if (p.dot(nV3) > pV3.dot(nV3)) {
         bestIndex = 5;
     }
-    if (p.dot(pV3) < -pV3.dot(pV3)) {
+    if (p.dot(nV3) < -pV3.dot(nV3)) {
         bestIndex = 4;
     }
 
@@ -274,49 +274,6 @@ function fixOutsideCentralCell(position) {
 }
 
 
-
-
-
-
-//function fixOutsideCentralCell(position) {
-//    let bestIndex = -1;
-//    //the vector in the geometry corresponding to our position
-//    let q = ORIGIN.clone().applyMatrix4(position.boost.matrix);
-//
-//    //now project this into the projective model (a vector in R3)
-//    let p = projPoint(q);
-//
-//    //now, take the normal vectors to the faces, and compare the dot prod of the point p with the remaining basis vector
-//
-//
-//    if (p.dot(nV1) > Math.abs(pV1.dot(nV1))) {
-//        bestIndex = 1;
-//    }
-//    if (p.dot(nV1) < -Math.abs(pV1.dot(nV1))) {
-//        bestIndex = 0;
-//    }
-//    if (p.dot(nV2) > Math.abs(pV2.dot(nV2))) {
-//        bestIndex = 3;
-//    }
-//    if (p.dot(nV2) < -Math.abs(pV2.dot(nV2))) {
-//        bestIndex = 2;
-//    }
-//
-//    if (p.dot(nV3) > Math.abs(pV3.dot(nV3))) {
-//        bestIndex = 5;
-//    }
-//    if (p.dot(nV3) < -Math.abs(pV3.dot(nV3))) {
-//        bestIndex = 4;
-//    }
-//
-//    if (bestIndex !== -1) {
-//        position.translateBy(globals.gens[bestIndex]);
-//        return bestIndex;
-//    } else {
-//        return -1;
-//    }
-//    return -1;
-//}
 
 
 

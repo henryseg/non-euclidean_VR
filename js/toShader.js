@@ -60,7 +60,7 @@ const time0 = new Date().getTime();
 
 function initGeometry() {
 
-    console.log(uVs[0]);
+    console.log(nVs[2]);
 
     globals.position = new Position();
     globals.cellPosition = new Position();
