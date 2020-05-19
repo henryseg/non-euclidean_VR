@@ -273,8 +273,12 @@ function updateMaterial() {
     //
     //    //recompute the matrices for the tiling
     let T = Math.sin(runTime / 3.);
-    globals.projGens = createProjGenerators(T);
-    globals.gens = createGenerators(T);
+
+    //no changing lattices
+    globals.projGens = createProjGenerators(0.);
+    globals.gens = createGenerators(0.);
+
+
     globals.invGens = invGenerators(globals.gens);
     globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
