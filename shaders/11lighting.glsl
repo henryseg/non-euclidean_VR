@@ -167,6 +167,7 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 //vec4 surfacePosition, tangVector toViewer, tangVector surfNormal
 
 
+
 //a separate function is to be written to figure out the correct fixPosition depending on the case we are in (local lighting of local object, or of global object, or reflected object, etc)
 vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool marchShadows, vec3 surfColor,Isometry fixPosition){
     
@@ -175,17 +176,20 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     vec3 phong=vec3(0.);
     float shadow=1.;//1 means no shadows
     
+    vec4 translatedLightPosition;
     tangVector toLight;
     float distToLight;
     
     //----------------FOR THE MAIN LIGHT---------------
+    //translate the light relative the object: if its a local object, don't do anything.
+    //if its a global object; this fixPosition is something nontrivial
+    translatedLightPosition=translate(fixPosition,lightPosition);
     
-
     
     //we start being given the light location, and have outside access to our location, and the point of interest on the surface
     //now compute these  two useful  quantites out of this data
-    toLight=tangDirection(surfacePosition, lightPosition);//tangent vector on surface pointing to light
-    distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+    toLight=tangDirection(surfacePosition, translatedLightPosition);//tangent vector on surface pointing to light
+    distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source
     
     
     //this is all the info we need to get Phong for this light source
@@ -214,10 +218,10 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     //because its a local light, we need to account for light from its neighbors as well:
     //this is not a good fix for local lighting - as there may be more than six neighbor cubes (ie near the vertices)
     for (int i=0; i<6; i++){
-        lightPosition=invGenerators[i]*localLightPos;
+        translatedLightPosition=translate(fixPosition,invGenerators[i]*lightPosition);
         
-        toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
-        distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+        toLight=tangDirection(surfacePosition,translatedLightPosition);//tangent vector on surface pointing to light
+        distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source
         //compute the contribution to phong shading
         phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
         //compute the shadows
@@ -235,18 +239,23 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
    }
     
     
+    
+    
+    
+    
+    
     //THE LAST LIGHT
     //the light which is antiopdal to my light
-    lightPosition=invGenerators[1]*invGenerators[1]*localLightPos;
-    toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
-        distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
-        //compute the contribution to phong shading
-        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
-        //compute the shadows
-       if(marchShadows){
+    translatedLightPosition=translate(fixPosition,invGenerators[1]*invGenerators[1]*lightPosition);
+    toLight=tangDirection(surfacePosition,translatedLightPosition);//tangent vector on surface pointing to light
+    distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source
+    //compute the contribution to phong shading
+    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+    //compute the shadows
+    if(marchShadows){
         shadow=shadowMarch(toLight,distToLight);
-        }
-        localColor+=shadow*phong;
+    }
+    localColor+=shadow*phong;
     
     
     //now, have 8 contributions to the local color
@@ -255,6 +264,7 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     
     //return this value
     return localColor;
+    
     
 }
 

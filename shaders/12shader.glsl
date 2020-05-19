@@ -113,16 +113,7 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     //------ Local Lighting ----------
    // fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
     
-    if(hitLocal){//direct local light on local object
-            //testColor=vec3(1.,0.,0.);
-            fixPosition=identityIsometry;//GOOD
-        }
-        else{//direct local light on global object
-           // testColor=vec3(0.,1.,0.);
-            fixPosition=invCellBoost;//GOOD?
-        }
-    
-    
+fixPosition=fixPositionTest(hitLocal);
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------
