@@ -230,7 +230,7 @@ Isometry fixPositionTest(bool hitLocal){//look at values of hitLocal,
         }
         else{//direct local light on global object
            testColor=vec3(0.,1.,0.);
-            return currentBoost;//GOOD?
+            return invCellBoost;//GOOD?
         }
     }
     
