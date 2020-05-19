@@ -125,8 +125,9 @@ vec3 phongShading(tangVector toLight, tangVector toViewer, tangVector  surfNorma
 //right now super basic fog: just a smooth step function of distance blacking out at max distance.
 //the factor of 20 is just empirical here to make things look good - apparently we never get near max dist in euclidean geo
 vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
-    float fogDensity=smoothstep(0., MAX_DIST/40., distToViewer);
-    return mix(color, fogColor, fogDensity); 
+    //float fogDensity=smoothstep(0., MAX_DIST, distToViewer);
+    //return mix(color, fogColor, fogDensity);
+    return color;
 }
 
 
@@ -233,9 +234,24 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
 //            }  
    }
     
-    //now, have 7 contributions to the local color
+    
+    //THE LAST LIGHT
+    //the light which is antiopdal to my light
+    lightPosition=invGenerators[1]*invGenerators[1]*localLightPos;
+    toLight=tangDirection(surfacePosition,lightPosition);//tangent vector on surface pointing to light
+        distToLight=exactDist(surfacePosition, lightPosition);//distance from sample point to light source
+        //compute the contribution to phong shading
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+        //compute the shadows
+       if(marchShadows){
+        shadow=shadowMarch(toLight,distToLight);
+        }
+        localColor+=shadow*phong;
+    
+    
+    //now, have 8 contributions to the local color
     //renormalize the emitted color by dividing by the nubmer of total light sources which have contributed.
-    localColor=localColor/7.;
+    localColor=localColor/8.;
     
     //return this value
     return localColor;

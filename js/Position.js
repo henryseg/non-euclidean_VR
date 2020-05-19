@@ -157,36 +157,35 @@ Position.prototype.getUpVector = function () {
 
 Position.prototype.reduceBoostError = function () {
 
-    //I DID SOMETHING WRONG HERE :(
-    //    //    // Hyperbolic Gram-Schmidt
-    //    let col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
-    //    let col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
-    //    let col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
-    //    let col3 = new Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
+    //this should be normal Gram-Schmidt for 4x4 matrices
     //
-    //    col0 = hypNormalize(col0);
+    //        // Hyperbolic Gram-Schmidt
+    //        let col0 = new THREE.Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
+    //        let col1 = new THREE.Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
+    //        let col2 = new THREE.Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
+    //        let col3 = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
     //
-    //    let aux10 = col0.clone().multiplyScalar(hypDot(col0, col1));
-    //    col1 = hypNormalize(col1.sub(aux10));
+    //        col0.normalize();
     //
-    //    let aux20 = col0.clone().multiplyScalar(hypDot(col0, col2));
-    //    let aux21 = col1.clone().multiplyScalar(hypDot(col1, col2));
-    //    col2 = hypNormalize(col2.sub(aux20).sub(aux21));
+    //        let aux10 = col0.clone().multiplyScalar(col0.dot(col1));
+    //        col1.sub(aux10).normalize();
     //
-    //    let aux30 = col0.clone().multiplyScalar(hypDot(col0, col3));
-    //    let aux31 = col1.clone().multiplyScalar(hypDot(col1, col3));
-    //    let aux32 = col2.clone().multiplyScalar(hypDot(col2, col3));
-    //    col3 = hypNormalize(col3.sub(aux30).sub(aux31).sub(aux32));
+    //        let aux20 = col0.clone().multiplyScalar(col0.dot(col2));
+    //        let aux21 = col1.clone().multiplyScalar(col1.dot(col2));
+    //        col2.sub(aux20).sub(aux21).normalize();
     //
-    //    this.boost.matrix.set(
-    //        col0.x, col1.x, col2.x, col3.x,
-    //        col0.y, col1.y, col2.y, col3.y,
-    //        col0.z, col1.z, col2.z, col3.z,
-    //        col0.w, col1.w, col1.w, col3.w
-    //    );
-
-
-    // Nothing to do in Euclidean geometry
+    //        let aux30 = col0.clone().multiplyScalar(col0.dot(col3));
+    //        let aux31 = col1.clone().multiplyScalar(col1.dot(col3));
+    //        let aux32 = col2.clone().multiplyScalar(col2.dot(col3));
+    //        col3.sub(aux30).sub(aux31).sub(aux32).normalize();
+    //
+    //        let m = new THREE.Matrix4().set(
+    //            col0.x, col1.x, col2.x, col3.x,
+    //            col0.y, col1.y, col2.y, col3.y,
+    //            col0.z, col1.z, col2.z, col3.z,
+    //            col0.w, col1.w, col2.w, col3.w);
+    //
+    //        this.boost.matrix = m.clone();
     return this;
 };
 
@@ -242,20 +241,20 @@ Vector3.prototype.rotateByFacing = function (position) {
     return this;
 };
 
-function hypDot(u, v) {
-    return u.x * v.x + u.y * v.y + u.z * v.z - u.w * v.w;
-};
-
-function hypNorm(v) {
-    let L = Math.abs(hypDot(v, v));
-    return L;
-}
-
-function hypNormalize(v) {
-    let len = hypNorm(v);
-    let w = v.divideScalar(len);
-    return w;
-};
+//function hypDot(u, v) {
+//    return u.x * v.x + u.y * v.y + u.z * v.z - u.w * v.w;
+//};
+//
+//function hypNorm(v) {
+//    let L = Math.abs(hypDot(v, v));
+//    return L;
+//}
+//
+//function hypNormalize(v) {
+//    let len = hypNorm(v);
+//    let w = v.divideScalar(len);
+//    return w;
+//};
 
 export {
     Position,

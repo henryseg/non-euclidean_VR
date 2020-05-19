@@ -25,7 +25,7 @@ Isometry.prototype.set = function (data) {
 
 
 
-
+//CHANGED THIS
 //this function takes v in the tangent space and returns the isometry which translates by |v| in the direction of v
 //for Euclidean geometry this is the same as the above; but in general is not.
 // do we want to keep both of these?
@@ -35,8 +35,8 @@ Isometry.prototype.translateByVector = function (v) {
     let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 
     if (len != 0) {
-        var c1 = Math.sinh(len);
-        var c2 = Math.cosh(len) - 1;
+        var c1 = Math.sin(len);
+        var c2 = 1 - Math.cos(len);
         let dx = v.x / len;
         let dy = v.y / len;
         let dz = v.z / len;
@@ -44,7 +44,7 @@ Isometry.prototype.translateByVector = function (v) {
             0, 0, 0, dx,
             0, 0, 0, dy,
             0, 0, 0, dz,
-            dx, dy, dz, 0.0);
+            -dx, -dy, -dz, 0.0);
         var m2 = m.clone().multiply(m);
         m.multiplyScalar(c1);
         m2.multiplyScalar(c2);

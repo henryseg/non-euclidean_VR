@@ -41,15 +41,8 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 //CHANGED THIS
 //the metric on the tangent space at a point
 float tangDot(tangVector u, tangVector v){
-  
-    mat4 g = mat4(
-    1.,0.,0.,0.,
-    0.,1.,0.,0.,
-    0.,0.,1.,0.,
-    0.,0.,0.,-1.
-    );
 
-    return dot(u.dir,  g*v.dir);
+    return dot(u.dir,  v.dir);
 
 }
 

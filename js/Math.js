@@ -1,6 +1,7 @@
 import {
     Vector3,
     Vector4,
+    Matrix4
 } from "./module/three.module.js";
 
 import {
@@ -27,7 +28,7 @@ import {
 //----------------------------------------------------------------------------------------------------------------------
 
 
-
+//CHANGED THIS
 function projPoint(pt) {
     //euclidean space is affine; is its own model
     return new Vector3(pt.x / pt.w, pt.y / pt.w, pt.z / pt.w);
@@ -44,10 +45,10 @@ function projPoint(pt) {
 //----------------------------------------------------------------------------------------------------------------------
 //	Geometry Constants & Lattice Vectors in Tangent Space
 //----------------------------------------------------------------------------------------------------------------------
-
+let PI = 3.14159265;
 //CHANGED THIS
-let halfWidth = 0.6584789485;
-let projHalfWidth = Math.tanh(halfWidth);
+let halfWidth = PI / 4.;
+let projHalfWidth = 1.;
 
 
 //CHANGED THIS
@@ -104,7 +105,7 @@ function createProjGenerators(t) {
 
 
 
-
+//CHANGED THIS
 function createGenerators(t) { /// generators for the tiling by cubes.
 
     let GenVec = setGenVec(t);
@@ -115,6 +116,18 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     const gen3 = new Isometry().makeInvLeftTranslation(GenVec[1]);
     const gen4 = new Isometry().makeLeftTranslation(GenVec[2]);
     const gen5 = new Isometry().makeInvLeftTranslation(GenVec[2]);
+
+    gen0.multiply(new Isometry().set([new Matrix4().makeRotationX(-PI / 2).transpose()]));
+
+    gen1.multiply(new Isometry().set([new Matrix4().makeRotationX(PI / 2).transpose()]));
+
+    gen2.multiply(new Isometry().set([new Matrix4().makeRotationY(-PI / 2).transpose()]));
+
+    gen3.multiply(new Isometry().set([new Matrix4().makeRotationY(PI / 2).transpose()]));
+
+    gen4.multiply(new Isometry().set([new Matrix4().makeRotationZ(-PI / 2).transpose()]));
+
+    gen5.multiply(new Isometry().set([new Matrix4().makeRotationZ(PI / 2).transpose()]));
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }

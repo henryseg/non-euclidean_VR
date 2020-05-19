@@ -1,6 +1,8 @@
 // This file should be geometry independent
 
-import {globals} from "./Main.js";
+import {
+    globals
+} from "./Main.js";
 
 //--------------------------------------------------------------------
 // Handle window resize
@@ -120,4 +122,6 @@ function initEvents() {
     document.addEventListener('click', click);
 }
 
-export{initEvents};
+export {
+    initEvents
+};

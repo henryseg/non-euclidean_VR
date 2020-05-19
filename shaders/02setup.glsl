@@ -21,7 +21,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //do lights fall off with area of geodesic sphere, or artifically?
-const bool FAKE_LIGHT_FALLOFF=false;
+const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = true;
 
 
@@ -58,8 +58,8 @@ int MAX_REFL_STEPS=50;
 int MAX_SHADOW_STEPS=20;
 
 const float MIN_DIST = 0.0;
-float MAX_DIST = 320.0;
-float MAX_REFL_DIST=100.;
+float MAX_DIST = 15.;
+float MAX_REFL_DIST=10.;
 
 //make it  so there's a bubble around your head
 //this constant tells you how far to march out along rayDir.tv before starting the trace
@@ -75,16 +75,16 @@ float marchProportion=0.95;
 const float EPSILON = 0.0005;
 //field of view projected on the screen
 //90 is normal, 120 is wide angle
-const float fov = 90.0;
+const float fov = 110.0;
 
 //this function resets the constants above in terms of the uniforms; its called in main
 void setResolution(float UIVar){
     //UIVar goes between 0 for low res and 1 for high res
-        MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
-        MAX_DIST = 100.+400.*UIVar;
+        MAX_MARCHING_STEPS =  int(100.+100.*UIVar);
+        //MAX_DIST = 40.*UIVar;
     
-        MAX_REFL_STEPS= int(30.+60.*UIVar);
-        MAX_REFL_DIST=50.+50.*UIVar;
+        MAX_REFL_STEPS= int(20.+30.*UIVar);
+        //MAX_REFL_DIST=10.*UIVar;
         //MAX_SHADOW_STEPS=int(20.+30.*UIVar);
    
 }

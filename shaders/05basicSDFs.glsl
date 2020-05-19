@@ -9,18 +9,6 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 
 
 
-//CHANGED THIS
-//----------------------------------------------------------------------------------------------------------------------
-//Horospheres
-//----------------------------------------------------------------------------------------------------------------------
-
- // A horosphere can be constructed by offseting from a standard horosphere.
-  // Our standard horosphere will have a center in the direction of lightPoint
-  // and go through the origin. Negative offsets will shrink it.
-  float horosphereSDF(vec4 samplePoint, vec4 lightPoint, float offset){
-    return log(hypDot(samplePoint, lightPoint)) - offset;
-  }
-
 
 
 

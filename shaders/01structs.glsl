@@ -51,17 +51,17 @@ Isometry composeIsometry(Isometry A, Isometry B)
 //CHANGED THIS
 Isometry translateByVector(vec4 v){
     float len=length(v);
-    float c1= sinh(len);
-    float c2=cosh(len)-1.;
+    float c1= sin(len);
+    float c2=1.-cos(len);
     if(len!=0.){
      float dx=v.x/len;
      float dy=v.y/len;
      float dz=v.z/len;
     
      mat4 m=mat4(
-         0,0,0,dx,
-         0,0,0,dy,
-         0,0,0,dz,
+         0,0,0,-dx,
+         0,0,0,-dy,
+         0,0,0,-dz,
          dx,dy,dz,0.
      );
     
