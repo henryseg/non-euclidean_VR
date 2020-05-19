@@ -68,8 +68,8 @@ void main(){
     //in raymarch
     tangVector rayDir=setRayDir();
     
-    pixelColor=vec4(getPixelColor(rayDir),1.);
-    
+    //pixelColor=vec4(getPixelColor(rayDir),1.);
+    pixelColor=vec4(cheapPixelColor(rayDir),1.);
     
     //gamma correction from shadertoy
     out_FragColor= vec4(pow(clamp(pixelColor, 0., 1.),vec4(0.8)));

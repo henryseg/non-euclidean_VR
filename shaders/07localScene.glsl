@@ -62,14 +62,15 @@ float locSphere(vec4 p){
 
 //Local Objects Choice 1
 float tilingSceneSDF(vec4 p){
-    //vec4 center = vec4(0., 0., 0., 1.);
-//          float sphere = sphereSDF(p, center, 0.68);
-//        return -sphere;
-//    0.6,0.33  give a good size of holes
-    float centerHole=sphereSDF(p,ORIGIN,0.86);
-    //float cornerHole=sphereSDF(abs(p),vec4(0.5,0.5,0.5,1),0.23);
-    //return -min(centerHole, cornerHole);
-    return -centerHole;
+//center sphere shaped hole
+    float centerHole=sphereSDF(p,ORIGIN,1.02);
+    
+//corner of ideal cube in Klein model; usedful in setting up horosphere:
+    float cPt=0.57735026921;
+    vec4 corner=vec4(cPt,cPt,cPt,1);
+    float cornerHole=horosphereSDF(abs(p),corner,-0.98);
+    return -min(centerHole, cornerHole);
+    //return -centerHole;
 }
 
 //Local Objects Choice 2
@@ -96,9 +97,9 @@ float latticeSceneSDF(vec4 p){
    // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
    //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
     
-   // return sphereSDF(p,ORIGIN,0.2);
+    return sphereSDF(p,ORIGIN,0.5);
   
-return ellipsoidSDF(p, ORIGIN, 0.2,0.2,0.2);
+
 }
 
 

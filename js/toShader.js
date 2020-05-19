@@ -284,8 +284,8 @@ function updateMaterial() {
     globals.material.uniforms.nV.value = globals.projGens[1];
 
     //setting the light position right now manually because I cant get my function to work :(
-
-    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.25 * T, 0.25 * Math.cos(2. * T), 0., 0.)));
+    //should do this in a separate function in SCENE
+    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.6 * T, 0.6 * Math.cos(2. * T), 0., 0.)));
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
