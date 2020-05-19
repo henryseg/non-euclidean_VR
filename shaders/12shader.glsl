@@ -111,7 +111,8 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     //usually would have march shadows in here but removing it for now!
     
     //------ Local Lighting ----------
-    fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
+    //fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
+    fixPosition=fixPositionTest(hitLocal);
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------

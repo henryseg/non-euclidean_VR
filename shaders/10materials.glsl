@@ -146,75 +146,108 @@ vec3  testColor;//useful in testing if this is working or not
 //and even worse: local object being reflected in global object and vice versa, lighted by local and / or global lights.
 //these different cases require we move the lgiht source around rel the scene. this is what  fixPosition  does.
 
-Isometry fixPositionLocalLight(bool reflectedLight, bool hitLocal, bool reflectLocal){//look at values of hitLocal, reflectedLight and reflectLocal
-    if(!reflectedLight){//not reflected, so first pass light
-        
+//Isometry fixPositionLocalLight(bool reflectedLight, bool hitLocal, bool reflectLocal){//look at values of hitLocal, reflectedLight and reflectLocal
+//    if(!reflectedLight){//not reflected, so first pass light
+//        
+//        if(hitLocal){//direct local light on local object
+//            //testColor=vec3(1.,0.,0.);
+//            return identityIsometry;//GOOD
+//        }
+//        else{//direct local light on global object
+//           // testColor=vec3(0.,1.,0.);
+//            return invCellBoost;//GOOD?
+//        }
+//    }
+//    
+//    else{//if the light is reflected off an object before hitting something
+//        //testColor=vec3(0.,0.,1.);
+//        if(hitLocal && reflectLocal){//looking at local object, reflected image is also local object
+//            return identityIsometry;//GOOD
+//        }
+//        else if(hitLocal && !reflectLocal){//looking at local object, reflected image is a global object
+//            return invCellBoost;//BAD
+//            //maybe global object is in the wrong position during this reflection?
+//        }
+//        else if (!hitLocal && reflectLocal){//looking at a global object, reflected image is a local object
+//            return identityIsometry;//GOOD
+//        }
+//        else if(!hitLocal && !reflectLocal){//looking at a global object, reflected image is another global object
+//            return invCellBoost;//GOOD
+//        }
+//    }
+//}
+//
+//
+//
+//
+//Isometry fixPositionGlobalLight(bool reflectedLight, bool hitLocal, bool reflectLocal){//look at values of hitLocal, reflectedLight and reflectLocal
+//    if(!reflectedLight){
+//       // testColor=vec3(1.,0.,0.);
+//        //not reflected, so first pass light
+//        if(hitLocal){//direct global light on local object
+//            
+//            return identityIsometry;//
+//        }
+//        else{//direct global light on global object
+//           // testColor=vec3(0.,1.,0.);
+//            return identityIsometry;//
+//        }
+//    }
+//    
+//    else{//if the light is reflected off an object before hitting something
+//       // testColor=vec3(0.,0.,1.);
+//        if(hitLocal&&reflectLocal){//looking at local object, reflected image is also local object
+//            return identityIsometry;//
+//        }
+//        else if(hitLocal&& !reflectLocal){//looking at local object, reflected image is a global object
+//            return identityIsometry;//
+//        }
+//        else if (!hitLocal&& reflectLocal){//looking at a global object, reflected image is a local object
+//            return identityIsometry;//
+//        }
+//        else if(!hitLocal && !reflectLocal){//looking at a global object, reflected image is another global object
+//            return identityIsometry;
+//        }
+//    }
+//}
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+Isometry fixPositionTest(bool hitLocal){//look at values of hitLocal,
+    
         if(hitLocal){//direct local light on local object
-            //testColor=vec3(1.,0.,0.);
+            testColor=vec3(1.,0.,0.);
             return identityIsometry;//GOOD
         }
         else{//direct local light on global object
-           // testColor=vec3(0.,1.,0.);
-            return invCellBoost;//GOOD?
+           testColor=vec3(0.,1.,0.);
+            return currentBoost;//GOOD?
         }
     }
     
-    else{//if the light is reflected off an object before hitting something
-        //testColor=vec3(0.,0.,1.);
-        if(hitLocal && reflectLocal){//looking at local object, reflected image is also local object
-            return identityIsometry;//GOOD
-        }
-        else if(hitLocal && !reflectLocal){//looking at local object, reflected image is a global object
-            return invCellBoost;//BAD
-            //maybe global object is in the wrong position during this reflection?
-        }
-        else if (!hitLocal && reflectLocal){//looking at a global object, reflected image is a local object
-            return identityIsometry;//GOOD
-        }
-        else if(!hitLocal && !reflectLocal){//looking at a global object, reflected image is another global object
-            return invCellBoost;//GOOD
-        }
-    }
-}
 
 
-
-
-Isometry fixPositionGlobalLight(bool reflectedLight, bool hitLocal, bool reflectLocal){//look at values of hitLocal, reflectedLight and reflectLocal
-    if(!reflectedLight){
-       // testColor=vec3(1.,0.,0.);
-        //not reflected, so first pass light
-        if(hitLocal){//direct global light on local object
-            
-            return identityIsometry;//
+Isometry fixPositionTestGlobal(bool hitLocal){//look at values of hitLocal,
+    
+        if(hitLocal){//direct local light on local object
+            testColor=vec3(1.,0.,0.);
+            return composeIsometry(totalFixMatrix,invCellBoost);//GOOD
         }
-        else{//direct global light on global object
-           // testColor=vec3(0.,1.,0.);
-            return identityIsometry;//
+        else{//direct local light on global object
+           testColor=vec3(0.,1.,0.);
+            return composeIsometry(totalFixMatrix,invCellBoost);//GOOD?
         }
     }
     
-    else{//if the light is reflected off an object before hitting something
-       // testColor=vec3(0.,0.,1.);
-        if(hitLocal&&reflectLocal){//looking at local object, reflected image is also local object
-            return identityIsometry;//
-        }
-        else if(hitLocal&& !reflectLocal){//looking at local object, reflected image is a global object
-            return identityIsometry;//
-        }
-        else if (!hitLocal&& reflectLocal){//looking at a global object, reflected image is a local object
-            return identityIsometry;//
-        }
-        else if(!hitLocal && !reflectLocal){//looking at a global object, reflected image is another global object
-            return identityIsometry;
-        }
-    }
-}
-
-
-
-
-
 
 
 

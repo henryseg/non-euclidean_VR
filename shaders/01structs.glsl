@@ -92,7 +92,10 @@ vec4 translate(Isometry A, vec4 v) {
 }
 
 
-
+Isometry getInverse(Isometry A){
+mat4 B=inverse(A.matrix);
+    return Isometry(B);
+}
 
 
 
