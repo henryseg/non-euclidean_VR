@@ -74,7 +74,10 @@ vec4 translate(Isometry A, vec4 v) {
 }
 
 
-
+Isometry getInverse(Isometry A){
+    mat4 B=inverse(A.matrix);
+    return Isometry(B);
+}
 
 
 
@@ -125,6 +128,7 @@ Isometry makeInvLeftTranslation(tangVector v) {
     // overlaod using tangVector
     return makeInvLeftTranslation(v.pos);
 }
+
 
 
 tangVector translate(Isometry A, tangVector v) {

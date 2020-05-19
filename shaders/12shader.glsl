@@ -110,11 +110,13 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     marchShadows=firstPass&&renderShadow;//only draw shadows when its first pass & instructed by uniform
     
     //------ Local Lighting ----------
-    fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
+    //fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
+    fixPosition=fixPositionTest(hitLocal);
+    //localColor=testColor;
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------
-    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
+    fixPosition=fixPositionTestGlobal(hitLocal);
     globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
     
     

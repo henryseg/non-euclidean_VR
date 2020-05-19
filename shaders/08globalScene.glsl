@@ -74,7 +74,9 @@ float globalSceneLights(vec4 p){
 
 float globalSceneSDF(vec4 p, float threshhold){
     // correct for the fact that we have been moving
-    vec4 absolutep = translate(cellBoost, p);
+    vec4 absolutep =translate(cellBoost, p);
+    
+    
     
     float lightDist;
     float sceneDist;
