@@ -87,7 +87,7 @@ function initObjects() {
     PointLightObject(new Vector3(0, 0, 1), lightColors[2]);
     PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
 
-    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1.5));
+    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1.2));
 }
 
 
