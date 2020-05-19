@@ -48,24 +48,42 @@ Isometry composeIsometry(Isometry A, Isometry B)
 
 
 
-Isometry makeLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    1, 0., 0., 0.,
-    0., 1, 0., 0.,
-    0., 0., 1., 0,
-    p.x, p.y, p.z, 1.
-    );
-    return Isometry(matrix);
+//CHANGED THIS
+Isometry translateByVector(vec4 v){
+    float len=length(v);
+    float c1= sinh(len);
+    float c2=cosh(len)-1.;
+    if(len!=0.){
+     float dx=v.x/len;
+     float dy=v.y/len;
+     float dz=v.z/len;
+    
+     mat4 m=mat4(
+         0,0,0,dx,
+         0,0,0,dy,
+         0,0,0,dz,
+         dx,dy,dz,0.
+     );
+    
+    Isometry result = Isometry(mat4(1.)+c1* m+c2*m*m);
+    return result;
+    }
+    else{
+    return Isometry(mat4(1.));
+    }
 }
 
+//CHANGED THIS
+Isometry makeLeftTranslation(vec4 p) {
+
+    return translateByVector(p);
+}
+
+
+//CHANGED THIS
 Isometry makeInvLeftTranslation(vec4 p) {
-    mat4 matrix =  mat4(
-    1, 0., 0., 0.,
-    0., 1, 0., 0.,
-    0., 0., 1., 0,
-    - p.x, - p.y, -p.z, 1.
-    );
-    return Isometry(matrix);
+
+    return translateByVector(-p);
 }
 
 vec4 translate(Isometry A, vec4 v) {
@@ -115,16 +133,18 @@ struct tangVector {
 // Applying Isometries, Facings
 //----------------------------------------------------------------------------------------------------------------------
 
-Isometry makeLeftTranslation(tangVector v) {
-    // overlaod using tangVector
-    return makeLeftTranslation(v.pos);
-}
 
-
-Isometry makeInvLeftTranslation(tangVector v) {
-    // overlaod using tangVector
-    return makeInvLeftTranslation(v.pos);
-}
+//these commands don't really make sense with makeLeftTranslation defined as before...
+//Isometry makeLeftTranslation(tangVector v) {
+//    // overlaod using tangVector
+//    return makeLeftTranslation(v.pos);
+//}
+//
+//
+//Isometry makeInvLeftTranslation(tangVector v) {
+//    // overlaod using tangVector
+//    return makeInvLeftTranslation(v.pos);
+//}
 
 
 tangVector translate(Isometry A, tangVector v) {

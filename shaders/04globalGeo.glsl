@@ -2,21 +2,51 @@
 //Geometry of the Models
 //----------------------------------------------------------------------------------------------------------------------
 
+//CHANGED THIS
+//negative of the dot product on the tangent space
+ float hypDot(vec4 u,vec4 v){
+     
+    mat4 g = mat4(
+    1.,0.,0.,0.,
+    0.,1.,0.,0.,
+    0.,0.,1.,0.,
+    0.,0.,0.,-1.
+    );
 
+    return dot(u,g*v);  
+ }
+
+
+vec4 hypNormalize(vec4 v){
+    return v/sqrt(abs(hypDot(v,v)));
+}
 //project point back onto the geometry
 //this is for H3, S3, H2xR, S2xR, PSL where the model of the geometry is not an affine plane in R4, but some curved subset
 //numerical errors may push you off and you need to re-normalize by projecting
-vec4 geomProject(vec4 p){
-    return p;
+vec4 geomProject(vec4 v){
+    return hypNormalize(v);
 }
 
 
-//at times it is useful to use the Klein model or KleinxR for H3, H2xR and similarly 
-//the Gnonomic projection or GnomonicxR for S3, S2xR geometry calculations.
+//CHANGED THIS
+tangVector geomProject(tangVector tv){
+    tv.pos=hypNormalize(tv.pos);
+    tv.dir=hypNormalize(tv.dir);
+    return tangVector(tv.pos,tv.dir);
+    
+}
+
+tangVector reduceError(tangVector tv){
+    return geomProject(tv);
+}
+
+
+//CHANGED THIS
 //this function projects onto that projective model.
 vec3 projPoint(vec4 p){
-    return vec3(p.x,p.y,p.z);
+    return vec3(p.x/p.w, p.y/p.w, p.z/p.w);
 }
+
 
 
 
@@ -26,9 +56,10 @@ vec3 projPoint(vec4 p){
 // Spherixal Area Elements
 //----------------------------------------------------------------------------------------------------------------------
 
+//CHANGED THIS
 //surface area of a sphere  of radius R
 float surfArea(float rad){
-    return rad*rad;
+    return 2.*PI*(cosh(2.*rad)-1.);
 }
 
 
@@ -46,10 +77,11 @@ float areaElement(float rad, tangVector angle){
 // Distance Functions
 //----------------------------------------------------------------------------------------------------------------------
 
+//CHANGED THIS
 //in geometries where computing distance function is difficult, a cheap approximation to distance
 float fakeDistance(vec4 p, vec4 q){
     // in Euclidean just use true distance cuz its cheap as can be.
-    return length(q-p);
+    return acosh(abs(hypDot(p,q)));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -67,10 +99,10 @@ float fakeDistance(localTangVector u, localTangVector v){
 
 
 
-
+//CHANGED THIS
 float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-    return length(q-p);
+    return acosh(abs(hypDot(p,q)));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -106,10 +138,10 @@ float exactDist(localTangVector u, localTangVector v){
 //----------------------------------------------------------------------------------------------------------------------
 
 
-
+//CHANGED THIS
 tangVector tangDirection(vec4 p, vec4 q){
     // return the unit tangent to geodesic connecting p to q.
-    return tangNormalize(tangVector(p, q - p));
+   return tangNormalize(tangVector(p, q - abs(hypDot(p,q))*p));
 }
 
 tangVector tangDirection(tangVector u, tangVector v){
@@ -132,15 +164,42 @@ tangVector tangDirection(localTangVector u, localTangVector v){
 // Geodesic Flow
 //----------------------------------------------------------------------------------------------------------------------
 
-
-
-tangVector geoFlow(tangVector tv, float t) {
-    //geodesic flow on the tangent bundle
-    return tangVector(tv.pos + t * tv.dir, tv.dir);
+//CHANGED THIS
+//flow along the geodesic starting at tv for a time t
+tangVector geoFlow(tangVector tv, float t){
+    // follow the geodesic flow during a time t
+    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
+    //tangent is derivative of position
+    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
+    
+    return reduceError(tangVector(resPos,resDir));
 }
 
 
-localTangVector geoFlow(localTangVector tv, float t) {
-    //overload of previous function for dealing with local tangent vectors
-    return localTangVector(tv.pos + t * tv.dir, tv.dir);
+//
+//localTangVector geoFlow(localTangVector tv, float t) {
+//    //overload of previous function for dealing with local tangent vectors
+//    
+//}
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// TANG BASIS
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+//CHANGED THIS
+//MOVED THIS DOWN TO GLOBAL GEOMETRY TO USE TANGDIRECTION
+//basis for the tangent space at a point
+mat4 tangBasis(vec4 p){
+    float dist=acosh(p.w);
+    vec4 direction = tangDirection(ORIGIN,p).dir;
+    return translateByVector(dist*direction).matrix;
 }

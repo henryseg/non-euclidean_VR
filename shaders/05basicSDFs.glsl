@@ -9,6 +9,19 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 
 
 
+//CHANGED THIS
+//----------------------------------------------------------------------------------------------------------------------
+//Horospheres
+//----------------------------------------------------------------------------------------------------------------------
+
+ // A horosphere can be constructed by offseting from a standard horosphere.
+  // Our standard horosphere will have a center in the direction of lightPoint
+  // and go through the origin. Negative offsets will shrink it.
+  float horosphereSDF(vec4 samplePoint, vec4 lightPoint, float offset){
+    return log(hypDot(samplePoint, lightPoint)) - offset;
+  }
+
+
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -16,19 +29,22 @@ float sphereSDF(vec4 p, vec4 center, float radius){
 //----------------------------------------------------------------------------------------------------------------------
 
 
-float horizontalHalfSpaceSDF(vec4 p, float h) {
-    //signed distance function to the half space z < h
-    return p.z - h;
-}
+//NEED TO COME IN AND FIX
 
-
-float sliceSDF(vec4 p) {
-    float HS1= 0.;
-    HS1=horizontalHalfSpaceSDF(p, -0.1);
-    float HS2=0.;
-    HS2=-horizontalHalfSpaceSDF(p, -1.);
-    return max(HS1, HS2);
-}
+//
+//float horizontalHalfSpaceSDF(vec4 p, float h) {
+//    //signed distance function to the half space z < h
+//    return p.z - h;
+//}
+//
+//
+//float sliceSDF(vec4 p) {
+//    float HS1= 0.;
+//    HS1=horizontalHalfSpaceSDF(p, -0.1);
+//    float HS2=0.;
+//    HS2=-horizontalHalfSpaceSDF(p, -1.);
+//    return max(HS1, HS2);
+//}
 
 
 

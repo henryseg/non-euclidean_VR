@@ -66,9 +66,10 @@ float tilingSceneSDF(vec4 p){
 //          float sphere = sphereSDF(p, center, 0.68);
 //        return -sphere;
 //    0.6,0.33  give a good size of holes
-    float centerHole=sphereSDF(p,ORIGIN,0.66);
-    float cornerHole=sphereSDF(abs(p),vec4(0.5,0.5,0.5,1),0.23);
-    return -min(centerHole, cornerHole);
+    float centerHole=sphereSDF(p,ORIGIN,0.86);
+    //float cornerHole=sphereSDF(abs(p),vec4(0.5,0.5,0.5,1),0.23);
+    //return -min(centerHole, cornerHole);
+    return -centerHole;
 }
 
 //Local Objects Choice 2

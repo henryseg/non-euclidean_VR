@@ -38,14 +38,18 @@ tangVector applyMatrixToDir(mat4 matrix, tangVector v) {
 }
 */
 
+//CHANGED THIS
 //the metric on the tangent space at a point
 float tangDot(tangVector u, tangVector v){
-    mat3 g = mat3(
-    1., 0., 0.,
-    0., 1., 0.,
-    0., 0., 1.
+  
+    mat4 g = mat4(
+    1.,0.,0.,0.,
+    0.,1.,0.,0.,
+    0.,0.,1.,0.,
+    0.,0.,0.,-1.
     );
-    return dot(u.dir.xyz, g * v.dir.xyz);
+
+    return dot(u.dir,  g*v.dir);
 
 }
 
@@ -73,21 +77,23 @@ tangVector reflectOff(tangVector u,tangVector nVec){
     return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
 }
 
-// return a basis of vectors at the point p
-mat4 tangBasis(vec4 p){
 
-    
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis = mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
-    return theBasis;
-}
-
-
+//MOVED TO END OF GLOBAL GEOEMTRY TO USE TANGDIR FUNCTION
+//// return a basis of vectors at the point p
+//mat4 tangBasis(vec4 p){
+//
+//    
+//    vec4 basis_x = vec4(1., 0., 0., 0.);
+//    vec4 basis_y = vec4(0., 1., 0., 0.);
+//    vec4 basis_z = vec4(0., 0., 1., 0.);
+//    mat4 theBasis = mat4(0.);
+//    theBasis[0]=basis_x;
+//    theBasis[1]=basis_y;
+//    theBasis[2]=basis_z;
+//    return theBasis;
+//}
+//
+//
 
 
 

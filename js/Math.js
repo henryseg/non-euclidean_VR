@@ -30,7 +30,7 @@ import {
 
 function projPoint(pt) {
     //euclidean space is affine; is its own model
-    return new Vector3(pt.x, pt.y, pt.z);
+    return new Vector3(pt.x / pt.w, pt.y / pt.w, pt.z / pt.w);
 }
 
 
@@ -45,13 +45,17 @@ function projPoint(pt) {
 //	Geometry Constants & Lattice Vectors in Tangent Space
 //----------------------------------------------------------------------------------------------------------------------
 
+//CHANGED THIS
+let halfWidth = 0.6584789485;
+let projHalfWidth = Math.tanh(halfWidth);
 
 
+//CHANGED THIS
 function setGenVec(t) {
 
-    let G1 = new Vector4(1, t, 0., 0.);
-    let G2 = new Vector4(0, 1, 0., 0.);
-    let G3 = new Vector4(0., 0., 1, 0.);
+    let G1 = new Vector4(2. * halfWidth, 0, 0., 0.);
+    let G2 = new Vector4(0, 2. * halfWidth, 0., 0.);
+    let G3 = new Vector4(0., 0., 2. * halfWidth, 0.);
     return [G1, G2, G3]
 }
 

@@ -24,32 +24,6 @@ Isometry.prototype.set = function (data) {
 
 
 
-Isometry.prototype.makeLeftTranslation = function (v) {
-    // return the left translation by (x,y,z)
-    // this is the isometry which translates the origin to (v.x,v.y,v.z) in R3-
-    // this is NOT the transformation coming from "exponentiating the tangent vector" v 
-    this.matrix.set(
-        1, 0, 0, v.x,
-        0, 1, 0, v.y,
-        0, 0, 1, v.z,
-        0, 0, 0, 1
-    );
-    return this;
-};
-
-
-Isometry.prototype.makeInvLeftTranslation = function (v) {
-    // return the inverse of the left translation by (x,y,z)
-    // maybe not very useful for the Euclidean geometry, but definitely needed for Nil or Sol
-    this.matrix.set(
-        1, 0, 0, -v.x,
-        0, 1, 0, -v.y,
-        0, 0, 1, -v.z,
-        0, 0, 0, 1
-    );
-    return this;
-};
-
 
 
 //this function takes v in the tangent space and returns the isometry which translates by |v| in the direction of v
@@ -57,14 +31,45 @@ Isometry.prototype.makeInvLeftTranslation = function (v) {
 // do we want to keep both of these?
 Isometry.prototype.translateByVector = function (v) {
 
-    this.matrix.set(
-        1, 0, 0, v.x,
-        0, 1, 0, v.y,
-        0, 0, 1, v.z,
-        0, 0, 0, 1
-    );
+    let matrix = new Matrix4().identity();
+    let len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+
+    if (len != 0) {
+        var c1 = Math.sinh(len);
+        var c2 = Math.cosh(len) - 1;
+        let dx = v.x / len;
+        let dy = v.y / len;
+        let dz = v.z / len;
+        var m = new Matrix4().set(
+            0, 0, 0, dx,
+            0, 0, 0, dy,
+            0, 0, 0, dz,
+            dx, dy, dz, 0.0);
+        var m2 = m.clone().multiply(m);
+        m.multiplyScalar(c1);
+        m2.multiplyScalar(c2);
+        matrix.add(m);
+        matrix.add(m2);
+    }
+    this.matrix = matrix;
+
     return this;
 }
+
+
+//CHANGED THIS
+Isometry.prototype.makeLeftTranslation = function (v) {
+
+    this.translateByVector(v);
+    return this;
+};
+
+//CHANGED THIS
+Isometry.prototype.makeInvLeftTranslation = function (v) {
+
+    this.translateByVector(v.multiplyScalar(-1));
+    return this;
+};
 
 
 

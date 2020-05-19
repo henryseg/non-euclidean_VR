@@ -273,8 +273,8 @@ function updateMaterial() {
     //
     //    //recompute the matrices for the tiling
     let T = Math.sin(runTime / 3.);
-    globals.projGens = createProjGenerators(T);
-    globals.gens = createGenerators(T);
+    globals.projGens = createProjGenerators(0.); //no time dependende on the lattixe
+    globals.gens = createGenerators(0.); //no time dependende on the lattixe
     globals.invGens = invGenerators(globals.gens);
     globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
@@ -283,8 +283,9 @@ function updateMaterial() {
     globals.material.uniforms.pV.value = globals.projGens[0];
     globals.material.uniforms.nV.value = globals.projGens[1];
 
-    //setting the light position rihgt now manually because I cant get my function to work :(
-    globals.material.uniforms.localLightPosition.value = new Vector4(0.25 * T, 0.25 * Math.cos(2. * T), 0., 1);
+    //setting the light position right now manually because I cant get my function to work :(
+
+    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.25 * T, 0.25 * Math.cos(2. * T), 0., 0.)));
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
