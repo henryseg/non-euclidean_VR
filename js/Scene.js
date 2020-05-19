@@ -53,10 +53,6 @@ const lightColors = [lightColor1, lightColor2, lightColor3, lightColor4];
 
 
 
-
-
-
-
 export {
     PointLightObject,
     lightColors

@@ -122,11 +122,25 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: globals.lightIntensities
             },
+            localLightPosition: {
+                type: "v4",
+                value: globals.localLightPosition
+            },
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
                 type: "m4",
                 value: globals.invGensMatrices
+            },
+
+            //Sending the normals to faces of fundamental domain
+            pV: {
+                type: "v3",
+                value: globals.projGens[0]
+            },
+            nV: {
+                type: "v3",
+                value: globals.projGens[1]
             },
             //--- end of invGen stuff
             currentBoostMat: {
@@ -195,16 +209,6 @@ function setupMaterial(fShader) {
                     ])
             },
 
-            //Sending the normals to faces of fundamental domain
-
-            pV: {
-                type: "v3",
-                value: globals.projGens[0]
-            },
-            nV: {
-                type: "v3",
-                value: globals.projGens[1]
-            },
 
 
             stereoScreenOffset: {
@@ -266,9 +270,9 @@ function updateMaterial() {
     //        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
     //        > g_material.uniforms.foo.value = new_value_of_foo
 
-
-    //recompute the matrices for the tiling
-    let T = Math.sin(runTime);
+    //
+    //    //recompute the matrices for the tiling
+    let T = Math.sin(runTime / 3.);
     globals.projGens = createProjGenerators(T);
     globals.gens = createGenerators(T);
     globals.invGens = invGenerators(globals.gens);
@@ -279,6 +283,8 @@ function updateMaterial() {
     globals.material.uniforms.pV.value = globals.projGens[0];
     globals.material.uniforms.nV.value = globals.projGens[1];
 
+    //setting the light position rihgt now manually because I cant get my function to work :(
+    globals.material.uniforms.localLightPosition.value = new Vector4(0.25 * T, 0.25 * Math.cos(2. * T), 0., 1);
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);

@@ -181,16 +181,6 @@ uniform mat4 rightFacing;
 uniform mat4 cellBoostMat;
 uniform mat4 invCellBoostMat;
 
-//vector directions for the tiling generators in the projective model
-
-
-uniform vec3 pV1;
-uniform vec3 pV2;
-uniform vec3 pV3;
-
-uniform vec3 nV1;
-uniform vec3 nV2;
-uniform vec3 nV3;
 
 //normal vector to faces in the affine model fundamental domain
 uniform vec3 nV[3];
@@ -199,7 +189,6 @@ uniform vec3 pV[3];
 
 //matrix generators of the tiling (as isometries)
 uniform mat4 invGenerators[6];
-
 
 //toggle between which global scene to display
 uniform int display;
@@ -224,6 +213,9 @@ uniform float globalSphereRad;
 //----------------------------------------------------------------------------------------------------------------------
 // Lighting
 //----------------------------------------------------------------------------------------------------------------------
+
+uniform vec4 localLightPosition;
+
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
 uniform float brightness;
@@ -296,7 +288,10 @@ void setVariables(){
     currentBoost=Isometry(currentBoostMat);
     currentPos=currentBoostMat*ORIGIN;
     
-    localLightPos=ORIGIN+vec4(0.25*sin(2.*time/6.),0.25*cos(3.*time/10.),0.25*sin(time/2.),0.);
+    //set our light with the new uniform
+    localLightPos=localLightPosition;
+    
+    //localLightPos=ORIGIN+vec4(0.25*sin(2.*time/6.),0.25*cos(3.*time/10.),0.25*sin(time/2.),0.);
     //if instead you want it to follow you around
     //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     

@@ -8,7 +8,9 @@ import {
     BufferAttribute,
     Mesh
 } from './module/three.module.js';
-
+import {
+    ORIGIN
+} from "./Position.js";
 import {
     initGeometry,
     initObjects,
@@ -66,6 +68,7 @@ let globals = {
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
+    localLightPosition: ORIGIN,
     display: 1,
     yourRad: 0.0001,
     res: 0.25,

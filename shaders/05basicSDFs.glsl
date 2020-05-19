@@ -54,9 +54,9 @@ float cylSDF(vec4 p, float r){
 //----------------------------------------------------------------------------------------------------------------------
 
 
-float ellipsoidSDF(vec4 p, vec4 center, float radius){
+float ellipsoidSDF(vec4 p, vec4 center, float l1,float l2, float l3){
     //distance functions for these ellipsoids; modeled as affine squished spheres.
-    return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
+    return exactDist(vec4(p.x/(l1), p.y/(l2), p.z/(l3), 1.), center) - 1.;
 }
 
 

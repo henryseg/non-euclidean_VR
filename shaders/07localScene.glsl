@@ -95,9 +95,9 @@ float latticeSceneSDF(vec4 p){
    // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
    //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
     
-    return sphereSDF(p,ORIGIN,0.2);
+   // return sphereSDF(p,ORIGIN,0.2);
   
-// return fatEllipsoidSDF(p, center, 0.06);
+return ellipsoidSDF(p, ORIGIN, 0.2,0.2,0.2);
 }
 
 
