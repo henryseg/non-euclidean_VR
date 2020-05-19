@@ -6,48 +6,56 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 
+
 // check if the given point p is in the fundamental domain of the lattice.
 // if it is not, then use one of the generlators to translate it back
 
-bool isOutsideCell(vec4 p, out Isometry fixMatrix){
-    //vec4 ModelP= modelProject(p);
+
+
+bool isOutsideCell(vec4 q, out Isometry fixMatrix){
     
-    //lattice basis divided by the norm square
- //right now norm square is 1 so haven't put that in yet.
-    vec4 v1 = V1;
-    vec4 v2 = V2;
-    vec4 v3 = V3;
+    vec3 p= projPoint(q);
+    
+    //the nV are the normal vectors to the three faces of the parallelpiped fundamental domain
+    // the pV are the vectors representing translation in the affine model (they are the side pairings, pointed at the middle of opposing faces)
+    //if the lattice is orthogonal, pV and nV are colinear! but this is NOT THE CASE for a non-orthogonal lattice
 
-    //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
-    //if (display!=2){
-        if (dot(p, v3) > 0.5) {
-            fixMatrix = Isometry(invGenerators[4]);
-            return true;
-        }
-        if (dot(p, v3) < -0.5) {
-            fixMatrix = Isometry(invGenerators[5]);
-            return true;
-        }
-   // }
-
-    if (dot(p, v1) > 0.5) {
+    if (dot(p, nV[0]) > dot(pV[0],nV[0])) {
         fixMatrix = Isometry(invGenerators[0]);
         return true;
     }
-    if (dot(p, v1) < -0.5) {
+    if (dot(p, nV[0]) < -dot(pV[0],nV[0])) {
         fixMatrix = Isometry(invGenerators[1]);
         return true;
     }
-    if (dot(p, v2) > 0.5) {
+    if (dot(p, nV[1]) > dot(pV[1],nV[1])) {
         fixMatrix = Isometry(invGenerators[2]);
         return true;
     }
-    if (dot(p, v2) < -0.5) {
+    if (dot(p, nV[1]) < -dot(pV[1],nV[1])) {
         fixMatrix = Isometry(invGenerators[3]);
         return true;
     }
+    
+    if (dot(p, nV[2]) > dot(pV[2],nV[2])) {
+            fixMatrix = Isometry(invGenerators[4]);
+            return true;
+        }
+    if (dot(p, nV[2]) < -dot(pV[2],nV[2])) {
+            fixMatrix = Isometry(invGenerators[5]);
+            return true;
+        }
     return false;
 }
+
+
+
+
+
+
+
+
+
 
 
 // overload of the previous method with tangent vector
@@ -69,30 +77,33 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 
 
 
+//
+////----------------------------------------------------------------------------------------------------------------------
+//// Measuring the  distance to the nearest wall of the fundamental domain
+////----------------------------------------------------------------------------------------------------------------------
+//
+//
+////fundamental domain is a parallelpiped (EUCLIDEAN GEOMETRY)
+////goal: measure distance from point to the walls
+////this is an improved implementation; use the SDFs for half spaces in general when the walls of the fundamentla domain are totally geodesic!
 
-//----------------------------------------------------------------------------------------------------------------------
-// Measuring the  distance to the nearest wall of the fundamental domain
-//----------------------------------------------------------------------------------------------------------------------
-
-
-//fundamental domain  right  now is the cube of slide length   1 centered at the origin.
-//that means, the distance to each wall is  
-//in improved implementation; use the SDFs  for half spaces!
-  float distToEdge(vec4 p){
+ float distToEdge(vec4 q){
+//      
+    vec3 p= projPoint(q);
       
       float d1=min(
-          p.x+0.5,
-          0.5-p.x
+          dot(pV[0],nV[0])+dot(p,nV[0]),
+          dot(pV[0],nV[0])-dot(p,nV[0])
       );
       
             float d2=min(
-          p.y+0.5,
-          0.5-p.y
+              dot(pV[1],nV[1])+dot(p,nV[1]),
+          dot(pV[1],nV[1])-dot(p,nV[1])
       );
       
             float d3=min(
-          p.z+0.5,
-          0.5-p.z
+              dot(pV[2],nV[2])+dot(p,nV[2]),
+          dot(pV[2],nV[2])-dot(p,nV[2])
       );
       
       return min(d1,min(d2,d3));
@@ -106,12 +117,14 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 
 
 
+//
+////----------------------------------------------------------------------------------------------------------------------
+//// Alternative: doing this in the Affine Model
+////----------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
+//if there's some way to do this using the affine model; probably much better in the future!
+//we can leverage that faces of the fundamental domain have a nice shape
+//but - we cant measure distandes :( 
 
 
 
@@ -179,7 +192,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             //find the distance to  a wall of the fundamental chamber
             float wallDist=distToEdge(localtv.pos);
             //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
-            marchStep = min(wallDist+0.1,marchProportion*localDist);//make this distance your next march step
+            marchStep = min(wallDist+0.01,marchProportion*localDist);//make this distance your next march step
             //marchStep=marchProportion*localDist;
             localDepth += marchStep;//add this to the total distance traced so far
 
@@ -285,14 +298,14 @@ void reflectmarch(tangVector rayDir, out Isometry totalFixMatrix){
             
             
             marchStep = 0.9*localDist;//make this distance your next march step
-           localDepth += marchStep;//add this to the total distance traced so far
+           //localDepth += marchStep;//add this to the total distance traced so far
             
             //find the distance to  a wall of the fundamental chamber
-//            float wallDist=distToEdge(localtv.pos);
+           //float wallDist=distToEdge(localtv.pos);
 //            //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
-//            marchStep = min(wallDist+0.2,0.9*localDist);//make this distance your next march step
+           // marchStep = min(wallDist+0.2,0.9*localDist);//make this distance your next march step
 //            //marchStep=marchProportion*localDist;
-//            localDepth += marchStep;//add this to the total distance traced so far
+           localDepth += marchStep;//add this to the total distance traced so far
             
             
             

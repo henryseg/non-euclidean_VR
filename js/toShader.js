@@ -16,10 +16,14 @@ import {
     ORIGIN
 } from "./Position.js";
 import {
+    setGenVec,
+    createProjGenerators,
     createGenerators,
     invGenerators,
-    unpackageMatrix,
-    genVectors,
+    unpackageMatrix
+} from './Math.js';
+
+import {
     PointLightObject,
     lightColors
 } from './Scene.js';
@@ -53,10 +57,16 @@ const time0 = new Date().getTime();
 
 
 function initGeometry() {
+
     globals.position = new Position();
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
-    globals.gens = createGenerators();
+
+    let T = 0.;
+    globals.projGens = createProjGenerators(T);
+    globals.gens = createGenerators(T);
+
+
     globals.invGens = invGenerators(globals.gens);
     globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
@@ -112,11 +122,25 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: globals.lightIntensities
             },
+            localLightPosition: {
+                type: "v4",
+                value: globals.localLightPosition
+            },
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
                 type: "m4",
                 value: globals.invGensMatrices
+            },
+
+            //Sending the normals to faces of fundamental domain
+            pV: {
+                type: "v3",
+                value: globals.projGens[0]
+            },
+            nV: {
+                type: "v3",
+                value: globals.projGens[1]
             },
             //--- end of invGen stuff
             currentBoostMat: {
@@ -185,20 +209,7 @@ function setupMaterial(fShader) {
                     ])
             },
 
-            //Sending the Lattice Generators over to GLSL
-            V1: {
-                type: "v4",
-                value: genVectors[0]
-            },
 
-            V2: {
-                type: "v4",
-                value: genVectors[1]
-            },
-            V3: {
-                type: "v4",
-                value: genVectors[2]
-            },
 
             stereoScreenOffset: {
                 type: "f",
@@ -245,6 +256,8 @@ function setupMaterial(fShader) {
 
 function updateMaterial() {
 
+    let runTime = ((new Date().getTime()) - time0) / 1000.;
+
     //        It seems that to be properly passed to the shader,
     //        a uniform `foo` cannot be updated on the js side by a statement of the form
     //        > foo = new_value_of_foo
@@ -257,7 +270,21 @@ function updateMaterial() {
     //        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
     //        > g_material.uniforms.foo.value = new_value_of_foo
 
+    //
+    //    //recompute the matrices for the tiling
+    let T = Math.sin(runTime / 3.);
+    globals.projGens = createProjGenerators(T);
+    globals.gens = createGenerators(T);
+    globals.invGens = invGenerators(globals.gens);
+    globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
+    //reset the corresponding uniforms
+    globals.material.uniforms.invGenerators.value = globals.invGensMatrices;
+    globals.material.uniforms.pV.value = globals.projGens[0];
+    globals.material.uniforms.nV.value = globals.projGens[1];
+
+    //setting the light position rihgt now manually because I cant get my function to work :(
+    globals.material.uniforms.localLightPosition.value = new Vector4(0.25 * T, 0.25 * Math.cos(2. * T), 0., 1);
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
@@ -269,7 +296,7 @@ function updateMaterial() {
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
-    globals.material.uniforms.time.value = ((new Date().getTime()) - time0) / 1000.;
+    globals.material.uniforms.time.value = runTime;
 
     globals.material.uniforms.display.value = globals.display;
     globals.material.uniforms.yourRad.value = globals.yourRad;

@@ -8,7 +8,9 @@ import {
     BufferAttribute,
     Mesh
 } from './module/three.module.js';
-
+import {
+    ORIGIN
+} from "./Position.js";
 import {
     initGeometry,
     initObjects,
@@ -59,12 +61,14 @@ let globals = {
     leftPosition: undefined,
     rightPosition: undefined,
     stereoScreenOffset: 0.03,
+    projGens: undefined,
     gens: undefined,
     invGens: undefined,
     invGenmatrices: undefined,
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
+    localLightPosition: ORIGIN,
     display: 1,
     yourRad: 0.0001,
     res: 0.25,

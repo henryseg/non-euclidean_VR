@@ -5,7 +5,7 @@ import {
     createGenerators,
     invGenerators,
     unpackageMatrix
-} from "./Scene.js";
+} from "./Math.js";
 //-------------------------------------------------------
 // UI Variables
 //-------------------------------------------------------

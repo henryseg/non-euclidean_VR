@@ -154,7 +154,36 @@ Position.prototype.getUpVector = function () {
     return new Vector3(0, 1, 0).rotateByFacing(this);
 };
 
+
 Position.prototype.reduceBoostError = function () {
+    //    // Hyperbolic Gram-Schmidt
+    //    let col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
+    //    let col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
+    //    let col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
+    //    let col3 = new Vector4(0, 0, 0, 1).applyMatrix4(this.boost.matrix);
+    //
+    //    col0 = hypNormalize(col0);
+    //
+    //    let aux10 = col0.clone().multiplyScalar(hypDot(col0, col1));
+    //    col1 = hypNormalize(col1.sub(aux10));
+    //
+    //    let aux20 = col0.clone().multiplyScalar(hypDot(col0, col2));
+    //    let aux21 = col1.clone().multiplyScalar(hypDot(col1, col2));
+    //    col2 = hypNormalize(col2.sub(aux20).sub(aux21));
+    //
+    //    let aux30 = col0.clone().multiplyScalar(hypDot(col0, col3));
+    //    let aux31 = col1.clone().multiplyScalar(hypDot(col1, col3));
+    //    let aux32 = col2.clone().multiplyScalar(hypDot(col2, col3));
+    //    col3 = hypNormalize(col3.sub(aux30).sub(aux31).sub(aux32));
+    //
+    //    this.boost.matrix.set(
+    //        col0.x, col1.x, col2.x, col3.x,
+    //        col0.y, col1.y, col2.y, col3.y,
+    //        col0.z, col1.z, col2.z, col3.z,
+    //        col0.w, col1.w, col1.w, col3.w
+    //    );
+
+
     // Nothing to do in Euclidean geometry
     return this;
 };
@@ -209,6 +238,21 @@ Vector3.prototype.rotateByFacing = function (position) {
     let aux = new Vector4(this.x, this.y, this.z, 0).applyMatrix4(position.facing);
     this.set(aux.x, aux.y, aux.z);
     return this;
+};
+
+function hypDot(u, v) {
+    return u.x * v.x + u.y * v.y + u.z * v.z - u.w * v.w;
+};
+
+function hypNorm(v) {
+    let L = Math.abs(hypDot(v, v));
+    return L;
+}
+
+function hypNormalize(v) {
+    let len = hypNorm(v);
+    let w = v.divideScalar(len);
+    return w;
 };
 
 export {

@@ -15,7 +15,7 @@ import {
 
 import {
     fixOutsideCentralCell
-} from "./Scene.js";
+} from "./Math.js";
 
 // This file should be geometry independent
 
