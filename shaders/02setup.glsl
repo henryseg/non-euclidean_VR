@@ -21,7 +21,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //do lights fall off with area of geodesic sphere, or artifically?
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = true;
 
 
@@ -198,7 +198,7 @@ uniform int display;
 
 
 uniform float yourRad;//radius of the local object sphere representing "you"
-
+uniform int quality;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Scene

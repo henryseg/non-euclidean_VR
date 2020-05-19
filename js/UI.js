@@ -22,6 +22,7 @@ let initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
         toggleUI: true,
         keyboard: 'us',
+        quality: 1,
         renderShadow: true,
         yourRad: 0.001,
         display: 1,
@@ -51,11 +52,17 @@ let initGui = function () {
         Lattice: '3'
     });
 
+    let qualityController = gui.add(guiInfo, 'quality', {
+        Best: '1',
+        //Reflections: '2',
+        Fast: '2',
+    });
 
-    let renderShadowController = gui.add(guiInfo, 'renderShadow', {
-        Yes: 'true',
-        No: 'false'
-    }).name('Shadows');
+
+//    let renderShadowController = gui.add(guiInfo, 'renderShadow', {
+//        Yes: 'true',
+//        No: 'false'
+//    }).name('Shadows');
 
     let yourRadController = gui.add(guiInfo, 'yourRad', 0., 0.25).name("Your Radius");
     let resController = gui.add(guiInfo, 'res', 0., 1.).name("Resolution");
@@ -110,9 +117,13 @@ let initGui = function () {
         globals.display = value;
     });
 
-    renderShadowController.onChange(function (value) {
-        globals.renderShadow = value;
+    qualityController.onChange(function (value) {
+        globals.quality = value;
     });
+
+//    renderShadowController.onChange(function (value) {
+//        globals.renderShadow = value;
+//    });
 
     yourRadController.onChange(function (value) {
         globals.yourRad = value;

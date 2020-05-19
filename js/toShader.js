@@ -241,10 +241,14 @@ function setupMaterial(fShader) {
                 type: "float",
                 value: globals.brightness
             },
-            renderShadow: {
-                type: "bool",
-                value: globals.renderShadow
-            }
+            //            renderShadow: {
+            //                type: "bool",
+            //                value: globals.renderShadow
+            //            },
+            quality: {
+                type: "float",
+                value: globals.quality
+            },
         },
 
         vertexShader: document.getElementById('vertexShader').textContent,
@@ -303,7 +307,8 @@ function updateMaterial() {
     globals.material.uniforms.yourRad.value = globals.yourRad;
     globals.material.uniforms.res.value = globals.res;
     globals.material.uniforms.mirror.value = globals.mirror;
-    globals.material.uniforms.renderShadow.value = globals.renderShadow;
+    globals.material.uniforms.quality.value = globals.quality;
+    //globals.material.uniforms.renderShadow.value = globals.renderShadow;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
 }

@@ -156,7 +156,9 @@ Position.prototype.getUpVector = function () {
 
 
 Position.prototype.reduceBoostError = function () {
-    //    // Hyperbolic Gram-Schmidt
+
+    //I DID SOMETHING WRONG HERE :(
+    //    //    // Hyperbolic Gram-Schmidt
     //    let col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.boost.matrix);
     //    let col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.boost.matrix);
     //    let col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.boost.matrix);
