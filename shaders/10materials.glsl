@@ -181,7 +181,7 @@ vec3  testColor;//useful in testing if this is working or not
 
 
 Isometry fixPositionTest(bool hitLocal){//look at values of hitLocal,
-    
+    if(firstPass){//non-reflected light
         if(hitLocal){//direct local light on local object
             testColor=vec3(1.,0.,0.);
             return identityIsometry;//GOOD
@@ -192,17 +192,42 @@ Isometry fixPositionTest(bool hitLocal){//look at values of hitLocal,
         }
     }
     
+    else{//reflected light
+        if(hitLocal){//reflected local light on local object
+            testColor=vec3(1.,0.,0.);
+            return identityIsometry;//GOOD
+        }
+        else{//reflected local light on global object
+           testColor=vec3(0.,1.,0.);
+            return invCellBoost;//don't know whats good here
+        }
+    }
+}
+    
 
 
 Isometry fixPositionTestGlobal(bool hitLocal){//look at values of hitLocal,
-    
-        if(hitLocal){//direct local light on local object
+    if(firstPass){//non-reflected light
+        
+        if(hitLocal){//direct global light on local object
             testColor=vec3(1.,0.,0.);
             return composeIsometry(totalFixMatrix,invCellBoost);//GOOD
         }
-        else{//direct local light on global object
+        else{//direct global light on global object
            testColor=vec3(0.,1.,0.);
             return composeIsometry(totalFixMatrix,invCellBoost);//GOOD?
+        }
+    }
+        
+        else{//reflected light
+                    if(hitLocal){//reflected global light on local object
+            testColor=vec3(1.,0.,0.);
+            return composeIsometry(totalFixMatrix,invCellBoost);//dont know whats good here
+        }
+        else{//reflected gloabal light on global object
+           testColor=vec3(0.,1.,0.);
+            return composeIsometry(cellBoost,totalFixMatrix);//dont know whats good here
+        }
         }
     }
     
