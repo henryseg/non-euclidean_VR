@@ -91,8 +91,8 @@ vec3 materialColor(int hitWhich){
     }
     else if (hitWhich ==3) {//local object
     //first option; some fixed color preturbed by your position in the colo cube a bit.
-    //origColor=vec3(0.1,0.2,0.3)+(sampletv.pos.xyz+vec3(0.5,0.5,0.5))/8.;
-    return vec3(0.1,0.2,0.35);//just some random constant blue color
+    return vec3(0.1,0.2,0.35)+(sampletv.pos.xyz+vec3(0.5,0.5,0.5))/10.;
+    //return vec3(0.1,0.2,0.35);//just some random constant blue color
     }
     else if (hitWhich ==3) {//tiling
     return vec3(0.,0.,0.);//black sphere
