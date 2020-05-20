@@ -65,7 +65,7 @@ vec3 earthColor(Isometry totalFixMatrix, tangVector sampletv){
 // DECIDING BASE COLOR OF HIT OBJECTS, AND MATERIAL PROPERTIES
 //----------------------------------------------------------------------------------------------------------------------
 
-
+vec3  testColor;
 
 
 
@@ -75,6 +75,7 @@ vec3 earthColor(Isometry totalFixMatrix, tangVector sampletv){
 vec3 materialColor(int hitWhich){
     
     if (hitWhich == 0){ //Didn't hit anything ------------------------
+        testColor=vec3(1.,0.,0);
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
     return vec3(0.1);
@@ -140,7 +141,7 @@ float materialReflectivity(int hitWhich){
 // CHOOSING ISOMETRY TO ADJUST LIGHTING, BASED ON LOCAL / GLOBAL NATURE OF OBJECTS
 //----------------------------------------------------------------------------------------------------------------------
 
-vec3  testColor;//useful in testing if this is working or not
+//useful in testing if this is working or not
 
 //there are a lot of possible cases here: reflection or no reflection, local light or global light, illuminating local or global object
 //and even worse: local object being reflected in global object and vice versa, lighted by local and / or global lights.

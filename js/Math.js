@@ -29,8 +29,8 @@ import {
 
 
 function projPoint(pt) {
-    //euclidean space is affine; is its own model
-    return new Vector3(pt.x / pt.w, pt.y / pt.w, pt.z / pt.w);
+    //hyperboloid is first 3 coordinates, last coordiante is R
+    return new Vector3(pt.x / pt.z, pt.y / pt.z, pt.w);
 }
 
 
@@ -116,6 +116,7 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     const gen4 = new Isometry().makeLeftTranslation(GenVec[2]);
     const gen5 = new Isometry().makeInvLeftTranslation(GenVec[2]);
 
+    console.log(gen5);
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
@@ -128,6 +129,17 @@ function unpackageMatrix(genArr) {
     let out = [];
     for (let i = 0; i < genArr.length; i++) {
         out.push(genArr[i].matrix);
+    }
+    return out
+}
+
+
+//CHANGED THIS
+//pull off the real components
+function unpackageReals(genArr) {
+    let out = [];
+    for (let i = 0; i < genArr.length; i++) {
+        out.push(genArr[i].real);
     }
     return out
 }
@@ -218,5 +230,6 @@ export {
     fixOutsideCentralCell,
     createGenerators,
     invGenerators,
-    unpackageMatrix
+    unpackageMatrix,
+    unpackageReals
 };

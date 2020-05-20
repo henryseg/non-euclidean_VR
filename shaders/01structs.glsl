@@ -36,42 +36,53 @@ out vec4 out_FragColor;
   - matrix : a 4x4 matrix
 */
 
+
+//CHANGED THIS
 struct Isometry {
-    mat4 matrix;// isometry of the space
+    mat4 matrix;
+    vec4 real;// isometry of the space
 };
 
 
+//CHANGED THIS
 Isometry composeIsometry(Isometry A, Isometry B)
 {
-    return Isometry(A.matrix*B.matrix);
+    return Isometry(A.matrix*B.matrix,A.real+B.real);
 }
 
 
 
 //CHANGED THIS
 Isometry translateByVector(vec4 v){
-    float len=length(v);
+    vec4 realPart=vec4(0,0,0,v.z);
+    float len=sqrt(v.x*v.x+v.y*v.y);
     float c1= sinh(len);
     float c2=cosh(len)-1.;
     if(len!=0.){
      float dx=v.x/len;
      float dy=v.y/len;
-     float dz=v.z/len;
     
      mat4 m=mat4(
-         0,0,0,dx,
-         0,0,0,dy,
-         0,0,0,dz,
-         dx,dy,dz,0.
+        0, 0, dx, 0,
+        0, 0, dy, 0,
+        dx, dy, 0, 0,
+        0, 0, 0, 0
      );
-    
-    Isometry result = Isometry(mat4(1.)+c1* m+c2*m*m);
+    mat4 matrixPart=mat4(1.)+c1* m+c2*m*m;
+    Isometry result =Isometry(matrixPart,realPart);
     return result;
     }
     else{
-    return Isometry(mat4(1.));
+    return Isometry(mat4(1.),realPart);
     }
 }
+
+
+
+
+
+
+
 
 //CHANGED THIS
 Isometry makeLeftTranslation(vec4 p) {
@@ -86,15 +97,18 @@ Isometry makeInvLeftTranslation(vec4 p) {
     return translateByVector(-p);
 }
 
+//CHANGED THIS
 vec4 translate(Isometry A, vec4 v) {
     // translate a point of a vector by the given direction
-    return A.matrix * v;
+    return A.matrix * v+A.real;
 }
 
 
+//CHANGED THIS
 Isometry getInverse(Isometry A){
 mat4 B=inverse(A.matrix);
-    return Isometry(B);
+vec4 w=-A.real;
+    return Isometry(B,w);
 }
 
 
@@ -149,10 +163,10 @@ struct tangVector {
 //    return makeInvLeftTranslation(v.pos);
 //}
 
-
+//CHANGED THIS
 tangVector translate(Isometry A, tangVector v) {
     // over load to translate a direction
-    return tangVector(A.matrix * v.pos, A.matrix * v.dir);
+    return tangVector(A.matrix * v.pos+A.real, A.matrix * v.dir);
 }
 
 
@@ -190,37 +204,37 @@ struct localTangVector {
 //----------------------------------------------------------------------------------------------------------------------
 // Applying Isometries, Facings
 //----------------------------------------------------------------------------------------------------------------------
-
-Isometry makeLeftTranslation(localTangVector v) {
-    // overlaod using tangVector
-    return makeLeftTranslation(v.pos);
-}
-
-
-Isometry makeInvLeftTranslation(localTangVector v) {
-    // overlaod using tangVector
-    return makeInvLeftTranslation(v.pos);
-}
-
-
-localTangVector translate(Isometry A, localTangVector v) {
-    // over load to translate a direction
-    // WARNING. Only works if A is an element of SOL.
-    // Any more general isometry should also acts on the direction component
-    return localTangVector(A.matrix * v.pos, v.dir);
-}
-
-
-localTangVector rotateFacing(mat4 A, localTangVector v){
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return localTangVector(v.pos, A*v.dir);
-}
-
-localTangVector turnAround(localTangVector v){
-    return localTangVector(v.pos, -v.dir);
-}
-
-
+//
+//Isometry makeLeftTranslation(localTangVector v) {
+//    // overlaod using tangVector
+//    return makeLeftTranslation(v.pos);
+//}
+//
+//
+//Isometry makeInvLeftTranslation(localTangVector v) {
+//    // overlaod using tangVector
+//    return makeInvLeftTranslation(v.pos);
+//}
+//
+//
+//localTangVector translate(Isometry A, localTangVector v) {
+//    // over load to translate a direction
+//    // WARNING. Only works if A is an element of SOL.
+//    // Any more general isometry should also acts on the direction component
+//    return localTangVector(A.matrix * v.pos+A.real, v.dir);
+//}
+//
+//
+//localTangVector rotateFacing(mat4 A, localTangVector v){
+//    // apply an isometry to the tangent vector (both the point and the direction)
+//    return localTangVector(v.pos, A*v.dir);
+//}
+//
+//localTangVector turnAround(localTangVector v){
+//    return localTangVector(v.pos, -v.dir);
+//}
+//
+//
 
 
 

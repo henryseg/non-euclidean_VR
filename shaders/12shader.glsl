@@ -164,7 +164,7 @@ vec3 getPixelColor(tangVector rayDir){
 
     
     firstPass=true;
-    firstPassColor=marchedColor(rayDir,firstPass,surfRefl);
+    firstPassColor= marchedColor(rayDir,firstPass,surfRefl);
 //    //marched color runs the raymarch for rayDir, then computes the contributions of the base color, local and global lightings
 //    //in addition to returning this color, it (via raymarch), sets the global variables sampletv and distToViewer
 //    // via the SDFs, this sets hitWhich, hitLocal

@@ -45,13 +45,28 @@ float tangDot(tangVector u, tangVector v){
     mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
-    0.,0.,1.,0.,
-    0.,0.,0.,-1.
+    0.,0.,-1.,0.,
+    0.,0.,0.,1.
     );
 
     return dot(u.dir,  g*v.dir);
 
 }
+
+float tangDot(vec4 u, vec4 v){
+  
+    mat4 g = mat4(
+    1.,0.,0.,0.,
+    0.,1.,0.,0.,
+    0.,0.,-1.,0.,
+    0.,0.,0.,1.
+    );
+
+    return dot(u,  g*v);
+
+}
+
+
 
 //the norm of a tangent vector using the Riemannian metric
 float tangNorm(tangVector v){
@@ -59,11 +74,21 @@ float tangNorm(tangVector v){
     return sqrt(tangDot(v, v));
 }
 
+float tangNorm(vec4 v){
+    return sqrt(tangDot(v,v));
+}
+
 //return unit tangent vector in same direction
 tangVector tangNormalize(tangVector v){
     // create a unit tangent vector (in the tangle bundle)
     return tangVector(v.pos, v.dir/tangNorm(v));
 }
+
+vec4 vecNormalize(vec4 v){
+    return v/tangNorm(v);
+}
+
+
 
 //give the cosine of the angle between two tangent vectors at a point
 float cosAng(tangVector u, tangVector v){
@@ -96,7 +121,13 @@ tangVector reflectOff(tangVector u,tangVector nVec){
 //
 
 
+tangVector eucPart(tangVector tv){
+    return tangVector(vec4(0.,0.,0.,tv.pos.w), vec4(0.,0.,0.,tv.dir.w));
+}
 
+tangVector hypPart(tangVector tv){
+    return tangVector(vec4(tv.pos.xyz,0), vec4(tv.dir.xyz,0));
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // 

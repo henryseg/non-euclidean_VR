@@ -70,7 +70,8 @@ void main(){
      pixelColor=vec4(cheapPixelColor(rayDir),1.);
     }
     else{
-        pixelColor=vec4(doubleBouncePixelColor(rayDir),1.);
+    vec4(cheapPixelColor(rayDir),1.);
+      //  pixelColor=vec4(doubleBouncePixelColor(rayDir),1.);
        // pixelColor=vec4(getPixelColor(rayDir),1.);
     }
     

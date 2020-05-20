@@ -21,28 +21,28 @@ bool isOutsideCell(vec4 q, out Isometry fixMatrix){
     //if the lattice is orthogonal, pV and nV are colinear! but this is NOT THE CASE for a non-orthogonal lattice
 
     if (dot(p, nV[0]) > dot(pV[0],nV[0])) {
-        fixMatrix = Isometry(invGenerators[0]);
+        fixMatrix = invGenerators[0];
         return true;
     }
     if (dot(p, nV[0]) < -dot(pV[0],nV[0])) {
-        fixMatrix = Isometry(invGenerators[1]);
+        fixMatrix = invGenerators[1];
         return true;
     }
     if (dot(p, nV[1]) > dot(pV[1],nV[1])) {
-        fixMatrix = Isometry(invGenerators[2]);
+        fixMatrix = invGenerators[2];
         return true;
     }
     if (dot(p, nV[1]) < -dot(pV[1],nV[1])) {
-        fixMatrix = Isometry(invGenerators[3]);
+        fixMatrix = invGenerators[3];
         return true;
     }
     
     if (dot(p, nV[2]) > dot(pV[2],nV[2])) {
-            fixMatrix = Isometry(invGenerators[4]);
+            fixMatrix = invGenerators[4];
             return true;
         }
     if (dot(p, nV[2]) < -dot(pV[2],nV[2])) {
-            fixMatrix = Isometry(invGenerators[5]);
+            fixMatrix = invGenerators[5];
             return true;
         }
     return false;

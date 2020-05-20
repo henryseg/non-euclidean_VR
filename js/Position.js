@@ -36,7 +36,7 @@ Matrix4.prototype.add = function (matrix) {
 };
 
 
-const ORIGIN = new Vector4(0, 0, 0, 1);
+const ORIGIN = new Vector4(0, 0, 1, 0);
 
 function Position() {
 
@@ -122,7 +122,7 @@ Position.prototype.localFlow = function (v) {
 
     //mat4 parallel=new Matrix4();
 
-    this.boost.premultiply(new Isometry().makeLeftTranslation(v));
+    this.boost.premultiply(new Isometry().translateByVector(v));
     //no change to facing b/c euclidean 
     // this.facing.premultiply(parallel);
     return this;
@@ -242,20 +242,11 @@ Vector3.prototype.rotateByFacing = function (position) {
     return this;
 };
 
-function hypDot(u, v) {
-    return u.x * v.x + u.y * v.y + u.z * v.z - u.w * v.w;
-};
+//function hypDot(u, v) {
+//    return u.x * v.x + u.y * v.y - u.z * v.z;
+//};
 
-function hypNorm(v) {
-    let L = Math.abs(hypDot(v, v));
-    return L;
-}
 
-function hypNormalize(v) {
-    let len = hypNorm(v);
-    let w = v.divideScalar(len);
-    return w;
-};
 
 export {
     Position,

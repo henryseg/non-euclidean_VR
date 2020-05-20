@@ -3,18 +3,26 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 //CHANGED THIS
-//negative of the dot product on the tangent space
+//dot product of JUST THE HYPERBOLIC PART
  float hypDot(vec4 u,vec4 v){
      
     mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
-    0.,0.,1.,0.,
-    0.,0.,0.,-1.
+    0.,0.,-1.,0.,
+    0.,0.,0.,0.
     );
 
     return dot(u,g*v);  
  }
+
+float hypNorm(vec4 v){
+    return sqrt(abs(hypDot(v,v)));
+}
+
+float hypNorm(tangVector tv){
+    return sqrt(abs(hypDot(tv.dir,tv.dir)));
+}
 
 
 vec4 hypNormalize(vec4 v){
@@ -30,9 +38,9 @@ vec4 geomProject(vec4 v){
 
 //CHANGED THIS
 tangVector geomProject(tangVector tv){
-    tv.pos=hypNormalize(tv.pos);
-    tv.dir=hypNormalize(tv.dir);
-    return tangVector(tv.pos,tv.dir);
+//    tv.pos=hypNormalize(tv.pos);
+//    tv.dir=hypNormalize(tv.dir);
+    return tv;
     
 }
 
@@ -44,7 +52,7 @@ tangVector reduceError(tangVector tv){
 //CHANGED THIS
 //this function projects onto that projective model.
 vec3 projPoint(vec4 p){
-    return vec3(p.x/p.w, p.y/p.w, p.z/p.w);
+    return vec3(p.x/p.z, p.y/p.z, p.w);
 }
 
 
@@ -77,11 +85,27 @@ float areaElement(float rad, tangVector angle){
 // Distance Functions
 //----------------------------------------------------------------------------------------------------------------------
 
+//AUX FUNCTIONS
+
+//distance between two points projections into hyperboloid:
+float hypDist(vec4 u, vec4 v){
+     float bUV = hypDot(u,v);
+    return acosh(bUV);
+}
+
+//norm of a point in the Euclidean direction
+float eucDist(vec4 u,vec4 v){
+    return abs(u.w-v.w);
+}
+
+
+
+
 //CHANGED THIS
 //in geometries where computing distance function is difficult, a cheap approximation to distance
-float fakeDistance(vec4 p, vec4 q){
+float fakeDistance(vec4 u, vec4 v){
     // in Euclidean just use true distance cuz its cheap as can be.
-    return acosh(abs(hypDot(p,q)));
+    return sqrt(eucDist(u,v)*eucDist(u,v)+hypDist(u,v)*hypDist(u,v));
 }
 
 float fakeDistance(tangVector u, tangVector v){
@@ -100,9 +124,9 @@ float fakeDistance(localTangVector u, localTangVector v){
 
 
 //CHANGED THIS
-float exactDist(vec4 p, vec4 q) {
+float exactDist(vec4 u, vec4 v) {
     // move p to the origin
-    return acosh(abs(hypDot(p,q)));
+    return sqrt(eucDist(u,v)*eucDist(u,v)+hypDist(u,v)*hypDist(u,v));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -166,21 +190,22 @@ tangVector tangDirection(localTangVector u, localTangVector v){
 
 //CHANGED THIS
 //flow along the geodesic starting at tv for a time t
-tangVector geoFlow(tangVector tv, float t){
-    // follow the geodesic flow during a time t
-    vec4 resPos=tv.pos*cosh(t) + tv.dir*sinh(t);
-    //tangent is derivative of position
-    vec4 resDir=tv.pos*sinh(t) + tv.dir*cosh(t);
+tangVector geoFlow(tangVector tv, float dist){
+    vec4 u=tv.pos;
+    vec4 vPrime=tv.dir;
+
+    float hypComp = hypNorm(vPrime);
+    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
+    float hypDist = dist * hypComp; 
+    float eucDist = dist * vPrime.w;
     
+    vec4 resPos=vec4( u.xyz*cosh(hypDist) + vPrimeHypPart*sinh(hypDist), u.w + eucDist);
+    
+    vec4 resDir=vec4(hypComp* (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
+  
+
     return reduceError(tangVector(resPos,resDir));
 }
-
-
-//
-//localTangVector geoFlow(localTangVector tv, float t) {
-//    //overload of previous function for dealing with local tangent vectors
-//    
-//}
 
 
 
@@ -199,7 +224,15 @@ tangVector geoFlow(tangVector tv, float t){
 //MOVED THIS DOWN TO GLOBAL GEOMETRY TO USE TANGDIRECTION
 //basis for the tangent space at a point
 mat4 tangBasis(vec4 p){
-    float dist=acosh(p.w);
-    vec4 direction = tangDirection(ORIGIN,p).dir;
-    return translateByVector(dist*direction).matrix;
+    vec4 basis_x = vecNormalize(vec4(p.z,0.0,p.x,0.0));  
+      vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
+      vec4 basis_z = vec4(0.0,0.0,0,1);  
+    //make this orthonormal
+      basis_y = vecNormalize(basis_y - abs(tangDot(basis_y, basis_x))*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
+      mat4 theBasis=mat4(0.);
+      theBasis[0]=basis_x;
+      theBasis[1]=basis_y;
+      theBasis[2]=basis_z;
+    return theBasis;
 }
+

@@ -20,7 +20,8 @@ import {
     createProjGenerators,
     createGenerators,
     invGenerators,
-    unpackageMatrix
+    unpackageMatrix,
+    unpackageReals
 } from './Math.js';
 
 import {
@@ -38,7 +39,7 @@ import {
 //----------------------------------------------------------------------------------------------------------------------
 
 
-let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
+//let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 const time0 = new Date().getTime();
 
 
@@ -58,6 +59,8 @@ const time0 = new Date().getTime();
 
 function initGeometry() {
 
+    console.log(new Isometry().translateByVector(1, 1, 1, 1));
+
     globals.position = new Position();
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
@@ -68,7 +71,8 @@ function initGeometry() {
 
 
     globals.invGens = invGenerators(globals.gens);
-    globals.invGensMatrices = unpackageMatrix(globals.invGens);
+    globals.invGenMatrices = unpackageMatrix(globals.invGens);
+    globals.invGenReals = unpackageReals(globals.invGens); //CHANGED THIS
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
@@ -128,9 +132,14 @@ function setupMaterial(fShader) {
             },
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
-            invGenerators: {
+            invGeneratorsMatrices: {
                 type: "m4",
-                value: globals.invGensMatrices
+                value: globals.invGenMatrices
+            },
+
+            invGeneratorsReals: { //CHANGED THIS
+                type: "v4",
+                value: globals.invGenReals
             },
 
             //Sending the normals to faces of fundamental domain
@@ -147,13 +156,25 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: globals.position.boost.matrix
             },
+            currentBoostReal: { //CHANGED THIS
+                type: "v4",
+                value: globals.position.boost.real
+            },
             leftBoostMat: {
                 type: "m4",
                 value: globals.leftPosition.boost.matrix
             },
+            leftBoostReal: {
+                type: "v4",
+                value: globals.leftPosition.boost.real
+            },
             rightBoostMat: {
                 type: "m4",
                 value: globals.rightPosition.boost.matrix
+            },
+            rightBoostReal: { //CHANGED THIS
+                type: "v4",
+                value: globals.rightPosition.boost.real
             },
             //currentBoost is an array
             facing: {
@@ -172,9 +193,17 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: globals.cellPosition.boost.matrix
             },
+            cellBoostReal: { //changed this
+                type: "v4",
+                value: globals.cellPosition.boost.real
+            },
             invCellBoostMat: {
                 type: "m4",
                 value: globals.invCellPosition.boost.matrix
+            },
+            invCellBoostReal: { //changed this
+                type: "v4",
+                value: globals.invCellPosition.boost.real
             },
             cellFacing: {
                 type: "m4",
@@ -191,6 +220,10 @@ function setupMaterial(fShader) {
             globalObjectBoostMat: {
                 type: "m4",
                 value: globals.globalObjectPosition.boost.matrix
+            },
+            globalObjectBoostReal: { //CHANGED THIS
+                type: "v4",
+                value: globals.globalObjectPosition.boost.real
             },
             globalSphereRad: {
                 type: "f",
@@ -275,17 +308,19 @@ function updateMaterial() {
     //        > g_material.uniforms.foo.value = new_value_of_foo
 
     //
-    //    //recompute the matrices for the tiling
+    // use in animation   
     let T = Math.sin(runTime / 3.);
-    globals.projGens = createProjGenerators(0.); //no time dependende on the lattixe
-    globals.gens = createGenerators(0.); //no time dependende on the lattixe
-    globals.invGens = invGenerators(globals.gens);
-    globals.invGensMatrices = unpackageMatrix(globals.invGens);
 
-    //reset the corresponding uniforms
-    globals.material.uniforms.invGenerators.value = globals.invGensMatrices;
-    globals.material.uniforms.pV.value = globals.projGens[0];
-    globals.material.uniforms.nV.value = globals.projGens[1];
+    //recompute the matrices for the tiling
+    //    globals.projGens = createProjGenerators(0.); //no time dependende on the lattixe
+    //    globals.gens = createGenerators(0.); //no time dependende on the lattixe
+    //    globals.invGens = invGenerators(globals.gens);
+    //    globals.invGenMatrices = unpackageMatrix(globals.invGens);
+    //    globals.invGenReals = unpackageReals(globals.invGens);
+    //
+    //    //reset the corresponding uniforms
+    //    globals.material.uniforms.pV.value = globals.projGens[0];
+    //    globals.material.uniforms.nV.value = globals.projGens[1];
 
     //setting the light position right now manually because I cant get my function to work :(
     //should do this in a separate function in SCENE
@@ -294,11 +329,13 @@ function updateMaterial() {
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
     globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.matrix;
+    globals.material.uniforms.leftBoostReal.value = globals.leftPosition.boost.real;
     globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
 
     let vectorRight = new Vector3(globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.rightPosition = globals.position.clone().localFlow(vectorRight);
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
+    globals.material.uniforms.rightBoostReal.value = globals.rightPosition.boost.real;
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
     globals.material.uniforms.time.value = runTime;

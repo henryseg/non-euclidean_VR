@@ -218,7 +218,7 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     //because its a local light, we need to account for light from its neighbors as well:
     //this is not a good fix for local lighting - as there may be more than six neighbor cubes (ie near the vertices)
     for (int i=0; i<6; i++){
-        translatedLightPosition=translate(fixPosition,invGenerators[i]*lightPosition);
+        translatedLightPosition=translate(composeIsometry(fixPosition,invGenerators[i]),lightPosition);
         
         toLight=tangDirection(surfacePosition,translatedLightPosition);//tangent vector on surface pointing to light
         distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source

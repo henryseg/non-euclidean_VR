@@ -41,8 +41,8 @@ const float PI = 3.1415926538;
 //const float z0 = 0.9624236501192069;// 2 * ln( golden ratio)
 const float sqrt3 = 1.7320508075688772;
 
-//the origin of the model for this geometry
-const vec4 ORIGIN = vec4(0, 0, 0, 1);
+//the origin of H2xR
+const vec4 ORIGIN = vec4(0, 0, 1, 0.);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -120,7 +120,7 @@ tangVector surfNormal;//the unit normal to the surface at surfacePosition
 //----------------------------------------------------------------------------------------------------------------------
 
 
-Isometry identityIsometry=Isometry(mat4(1.0));
+Isometry identityIsometry=Isometry(mat4(1.0),vec4(0.));
 
 Isometry currentBoost;
 Isometry leftBoost;
@@ -129,6 +129,7 @@ Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
 Isometry totalFixMatrix;
+Isometry invGenerators[6];
 
 //position you are at
 vec4 currentPos=ORIGIN;
@@ -161,8 +162,11 @@ uniform float res;//resolution: how far we raymarch
 //----------------------------------------------------------------------------------------------------------------------
 
 uniform mat4 currentBoostMat;
+uniform vec4 currentBoostReal;//changed this
 uniform mat4 leftBoostMat;
+uniform vec4 leftBoostReal;//changed this
 uniform mat4 rightBoostMat;
+uniform vec4 rightBoostReal;//changed this
 //current position as a point in the model space
 //uniform vec4 currentPosVec;
 
@@ -179,7 +183,9 @@ uniform mat4 rightFacing;
 
 // keeping track of your location in the tiling
 uniform mat4 cellBoostMat;
+uniform vec4 cellBoostReal;//changed this
 uniform mat4 invCellBoostMat;
+uniform vec4 invCellBoostReal;//changed this
 
 
 //normal vector to faces in the affine model fundamental domain
@@ -188,7 +194,8 @@ uniform vec3 nV[3];
 uniform vec3 pV[3];
 
 //matrix generators of the tiling (as isometries)
-uniform mat4 invGenerators[6];
+uniform mat4 invGeneratorsMatrices[6];
+uniform vec4 invGeneratorsReals[6];//changed this
 
 //toggle between which global scene to display
 uniform int display;
@@ -205,6 +212,7 @@ uniform int quality;
 //----------------------------------------------------------------------------------------------------------------------
 
 uniform mat4 globalObjectBoostMat;
+uniform vec4 globalObjectBoostReal;//changed this
 uniform float globalSphereRad;
 
 
@@ -285,8 +293,27 @@ vec4 reflectedColor;
 //this runs in main to set all the variables computed from the uniforms / constants above
 void setVariables(){
     
-    currentBoost=Isometry(currentBoostMat);
-    currentPos=currentBoostMat*ORIGIN;
+    //if this isn't going to work...need to make a list of these things some other way.
+   Isometry iG0=Isometry(invGeneratorsMatrices[0],invGeneratorsReals[0]);
+    Isometry iG1=Isometry(invGeneratorsMatrices[1],invGeneratorsReals[1]);
+   Isometry iG2=Isometry(invGeneratorsMatrices[2],invGeneratorsReals[2]);
+    Isometry iG3=Isometry(invGeneratorsMatrices[3],invGeneratorsReals[3]);
+    Isometry iG4=Isometry(invGeneratorsMatrices[4],invGeneratorsReals[4]);
+   Isometry iG5=Isometry(invGeneratorsMatrices[5],invGeneratorsReals[5]);
+    
+    invGenerators=Isometry[6](iG0,iG1,iG2,iG3,iG4,iG5);
+    
+//    
+//    invGenerators=Isometry[6](Isometry(invGeneratorsMatrices[0],invGeneratorsReals[0]),
+//        Isometry(invGeneratorsMatrices[1],invGeneratorsReals[1]),
+//        Isometry(invGeneratorsMatrices[2],invGeneratorsReals[2]),
+//        Isometry(invGeneratorsMatrices[3],invGeneratorsReals[3]),  
+//        Isometry(invGeneratorsMatrices[4],invGeneratorsReals[4]), 
+//        Isometry(invGeneratorsMatrices[5],invGeneratorsReals[5]));
+        
+    currentBoost=Isometry(currentBoostMat,currentBoostReal);
+
+    currentPos=translate(currentBoost,ORIGIN);
     
     //set our light with the new uniform
     localLightPos=localLightPosition;
@@ -297,11 +324,11 @@ void setVariables(){
     
     localLightBrightness=6.+5.*brightness*brightness;
     
-    leftBoost=Isometry(leftBoostMat);
-    rightBoost=Isometry(rightBoostMat);
-    cellBoost=Isometry(cellBoostMat);
-    invCellBoost=Isometry(invCellBoostMat);
-    globalObjectBoost=Isometry(globalObjectBoostMat);
+    leftBoost=Isometry(leftBoostMat,leftBoostReal);
+    rightBoost=Isometry(rightBoostMat,rightBoostReal);
+    cellBoost=Isometry(cellBoostMat,currentBoostReal);
+    invCellBoost=Isometry(invCellBoostMat,invCellBoostReal);
+    globalObjectBoost=Isometry(globalObjectBoostMat,globalObjectBoostReal);
     }
 
 

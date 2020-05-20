@@ -64,7 +64,8 @@ let globals = {
     projGens: undefined,
     gens: undefined,
     invGens: undefined,
-    invGenmatrices: undefined,
+    invGenMatrices: undefined,
+    invGenReals: undefined,
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
@@ -75,7 +76,7 @@ let globals = {
     mirror: 0.1,
     brightness: 0.12,
     //renderShadow: true,
-    quality:1
+    quality: 1
 };
 
 //----------------------------------------------------------------------------------------------------------------------
