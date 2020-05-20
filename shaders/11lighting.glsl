@@ -8,7 +8,7 @@ float lightAtt(float dist){
         return 0.1+0.5*dist;
     }
     //actual distance function
-    return 2.*exp(-10.*dist*dist)+surfArea(dist);//the gaussian makes the light not too bright right at it - so its not just a white blob!
+    return 3.*exp(-10.*dist*dist)+surfArea(dist);//the gaussian makes the light not too bright right at it - so its not just a white blob!
 }
 
 
