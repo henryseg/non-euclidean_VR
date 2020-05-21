@@ -52,7 +52,7 @@ float globalSceneLights(vec4 p){
 //to be able to texture this thing correctly as the earth, we need to position it using global object boost
  float globalSceneObjects(vec4 p){
      vec4 center = translate(globalObjectBoost,ORIGIN);
-        return sphereSDF(p, center, 0.3);
+        return sphereSDF(p, center, 0.5);
     
  }
 

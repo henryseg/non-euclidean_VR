@@ -90,16 +90,24 @@ vec4 vecNormalize(vec4 v){
 
 
 
+//SOMETHING IS VERY MESSED UP HERE
+// THE COSANG NEEDS TO BE NEGATED
+//then everythign works!
+
+
 //give the cosine of the angle between two tangent vectors at a point
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
     //could probably speed things up if we didn't normalize but instead required unit length inputs?
-    return tangDot(tangNormalize(u), tangNormalize(v));
+    return -tangDot(tangNormalize(u), tangNormalize(v));
 }
 
+
+//NO IDEA WHY THIS WOULD BE CHANGED TO A PLUS?! IS THE TANGENT DOT BAKCWARDS?
+//USED TO BE -2 BUT NOW 2 IS WORKING...
 //reflect the unit tangent vector u off the surface with unit normal nVec
 tangVector reflectOff(tangVector u,tangVector nVec){
-    return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
+    return add(scalarMult(-2.0 * cosAng(u, nVec), nVec), u);
 }
 
 

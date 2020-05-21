@@ -227,7 +227,7 @@ function setupMaterial(fShader) {
             },
             globalSphereRad: {
                 type: "f",
-                value: 0.2
+                value: 0.8
             },
             earthCubeTex: { //earth texture to global object
                 type: "t",
@@ -324,7 +324,7 @@ function updateMaterial() {
 
     //setting the light position right now manually because I cant get my function to work :(
     //should do this in a separate function in SCENE
-    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.6 * T, 0.6 * Math.cos(2. * T), 0., 0.)));
+    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.2 * T, 0.2 * Math.cos(2. * T), 0., 0.2 * Math.sin(3. * T / 2.))));
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);

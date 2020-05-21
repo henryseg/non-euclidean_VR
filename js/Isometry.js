@@ -17,13 +17,13 @@ function Isometry() {
     this.real = new Vector4();
 }
 
-//Isometry.prototype.set = function (data) {
-//    // set the data
-//    this.matrix = data[0].clone();
-//    //why does it complain can't read property of undefined?
-//    this.real = data[1].clone();
-//    return this;
-//};
+Isometry.prototype.set = function (data) {
+    // set the data
+    this.matrix = data[0].clone();
+    //why does it complain can't read property of undefined?
+    this.real = data[1].clone();
+    return this;
+};
 
 
 

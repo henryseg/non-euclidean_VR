@@ -5,7 +5,7 @@
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
         //fake falloff
-        return 0.5+dist;
+        return 0.5+dist*dist*dist;
     }
     //actual distance function
     return 3.*exp(-10.*dist*dist)+surfArea(dist);//the gaussian makes the light not too bright right at it - so its not just a white blob!

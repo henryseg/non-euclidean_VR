@@ -12,7 +12,7 @@
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
     //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 6.*(2.+brightness*brightness),marchShadows, surfColor,fixPosition);
+    return localLight(localLightPos, localLightColor, 5.,marchShadows, surfColor,fixPosition);
 }
 
 
@@ -235,10 +235,18 @@ vec3 testPixelColor(tangVector rayDir){
 
     
     raymarch(rayDir,totalFixMatrix);//do the  raymarch  
-    baseColor=materialColor(hitWhich);
     
-    return baseColor;
-  
+    baseColor=materialColor(hitWhich);
+    surfacePosition=sampletv.pos;//position on the surface of the sample point, set by raymarch
+    toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer / origin of raymarch
+    surfNormal=surfaceNormal(sampletv);//normal vector to surface
+    
+        //------ Local Lighting ----------
+    fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
+    localColor=allLocalLights(baseColor, false,fixPosition);
+
+    
+  return localColor;
 }
     
     

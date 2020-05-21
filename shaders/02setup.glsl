@@ -318,11 +318,11 @@ void setVariables(){
     //if instead you want it to follow you around
     //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
-    localLightBrightness=6.+5.*brightness*brightness;
+    localLightBrightness=2.+5.*brightness*brightness;
     
     leftBoost=Isometry(leftBoostMat,leftBoostReal);
     rightBoost=Isometry(rightBoostMat,rightBoostReal);
-    cellBoost=Isometry(cellBoostMat,currentBoostReal);
+    cellBoost=Isometry(cellBoostMat,cellBoostReal);
     invCellBoost=Isometry(invCellBoostMat,invCellBoostReal);
     globalObjectBoost=Isometry(globalObjectBoostMat,globalObjectBoostReal);
     }

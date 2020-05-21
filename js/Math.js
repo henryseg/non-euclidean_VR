@@ -127,23 +127,19 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     //having some trouble with the 'SET' CONSTRUCTOR
 
     //ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
-    //
-    //    gen0.multiply(new Isometry().set([new Matrix4().makeRotationX(-PI / 2).transpose()]));
-    //
-    //    gen1.multiply(new Isometry().set([new Matrix4().makeRotationX(PI / 2).transpose()]));
-    //
-    //    gen2.multiply(new Isometry().set([new Matrix4().makeRotationY(-PI / 2).transpose()]));
-    //
-    //    gen3.multiply(new Isometry().set([new Matrix4().makeRotationY(PI / 2).transpose()]));
+//    
+//        gen0.multiply(new Isometry().set([new Matrix4().makeRotationX(-PI / 2).transpose(),new Vector4(0,0,0,0)]));
+//    
+//        gen1.multiply(new Isometry().set([new Matrix4().makeRotationX(PI / 2).transpose(),new Vector4(0,0,0,0)]));
+//    
+//        gen2.multiply(new Isometry().set([new Matrix4().makeRotationY(-PI / 2).transpose(),new Vector4(0,0,0,0)]));
+//    
+//        gen3.multiply(new Isometry().set([new Matrix4().makeRotationY(PI / 2).transpose(),new Vector4(0,0,0,0)]));
 
-    // gen4.multiply(new Isometry().set([new Matrix4().makeRotationZ(-PI / 2).transpose()]));
-
-    // gen5.multiply(new Isometry().set([new Matrix4().makeRotationZ(PI / 2).transpose()]));
-
-
-
-
-
+//     gen4.multiply(new Isometry().set([new Matrix4().makeRotationZ(-PI / 2).transpose(), new Vector4(0, 0, 0, 0)]));
+//
+//     gen5.multiply(new Isometry().set([new Matrix4().makeRotationZ(PI / 2).transpose(), new Vector4(0, 0, 0, 0)]));
+//
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
