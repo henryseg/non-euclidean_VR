@@ -9,8 +9,8 @@
  float hypDot(vec4 u,vec4 v){
      
     mat4 g = mat4(
-    -1.,0.,0.,0.,
-    0.,-1.,0.,0.,
+    1.,0.,0.,0.,
+    0.,1.,0.,0.,
     0.,0.,1.,0.,
     0.,0.,0.,0.
     );
@@ -71,7 +71,7 @@ vec3 projPoint(vec4 p){
 //CHANGED THIS
 //surface area of a sphere  of radius R
 float surfArea(float rad){
-    return 2.*PI*(cosh(rad));
+    return 2.*PI*(cos(rad));
 }
 
 
@@ -94,7 +94,7 @@ float areaElement(float rad, tangVector angle){
 //distance between two points projections into hyperboloid:
 float hypDist(vec4 u, vec4 v){
      float bUV = hypDot(u,v);
-    return acosh(abs(bUV));
+    return acos(abs(bUV));
 }
 
 //norm of a point in the Euclidean direction
@@ -210,10 +210,10 @@ tangVector geoFlow(tangVector tv, float dist){
     //normalize the hyperbolic part
     vHyp=vHyp/lHyp;
  
-    vec4 resPos=vec4(p.xyz*cosh(dist*lHyp)+vHyp*sinh(dist*lHyp),p.w+dist*v.w);
-    vec4 resDir=vec4(p.xyz*sinh(dist*lHyp)*lHyp+vHyp*cosh(dist*lHyp)*lHyp,v.w);
+    vec4 resPos=vec4(p.xyz*cos(dist*lHyp)+vHyp*sin(dist*lHyp),p.w+dist*v.w);
+    vec4 resDir=vec4(-p.xyz*sin(dist*lHyp)*lHyp+vHyp*cos(dist*lHyp)*lHyp,v.w);
     
-    return reduceError(tangVector(resPos,resDir));
+    return tangVector(resPos,resDir);
     
 //    
 //    

@@ -68,7 +68,7 @@ void main(){
     //in raymarch
     tangVector rayDir=setRayDir();
     
-    pixelColor=vec4(getPixelColor(rayDir),1.);
+    pixelColor=vec4(testPixelColor(rayDir),1.);
 
 //    
 //    if(quality==2){
