@@ -39,12 +39,14 @@ vec3 boxMapping(in sampler2D sam, in tangVector point)
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);//move back to orig cell
     pt = inverse(globalObjectBoost.matrix) * pt;//move back to origin
-    return tangDirection(ORIGIN, pt).dir.xyz;//get the direction you are pointing from the origin.
+    //CHANGED TO XYW BECAUSE PRODUCT GEOMETRY
+    return tangDirection(ORIGIN, pt).dir.xyw;//get the direction you are pointing from the origin.
     //this is a point on the unit sphere, and can be used to look up a  spherical  texture
 }
 
 vec3 earthColor(Isometry totalFixMatrix, tangVector sampletv){
         
+    //this one stays xyz because it is about the texture not a point in space
         vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
  
     return color;
@@ -92,7 +94,8 @@ vec3 materialColor(int hitWhich){
     }
     else if (hitWhich ==3) {//local object
     //first option; some fixed color preturbed by your position in the colo cube a bit.
-    return vec3(0.1,0.2,0.35)+(sampletv.pos.xyz+vec3(0.5,0.2,0.5))/10.;
+        //.xyw here because of product factor
+    return vec3(0.1,0.2,0.35)+(sampletv.pos.xyw+vec3(0.5,0.2,0.5))/10.;
     //return vec3(0.1,0.2,0.35);//just some random constant blue color
     }
     else if (hitWhich ==3) {//tiling

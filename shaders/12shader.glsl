@@ -235,8 +235,10 @@ vec3 testPixelColor(tangVector rayDir){
 
     
     raymarch(rayDir,totalFixMatrix);//do the  raymarch  
+    baseColor=materialColor(hitWhich);
     
-     return rayMarchTestColor;
+    return baseColor;
+  
 }
     
     

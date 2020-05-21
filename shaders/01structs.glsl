@@ -170,10 +170,10 @@ tangVector translate(Isometry A, tangVector v) {
 }
 
 
-tangVector rotateFacing(mat4 A, tangVector v){
-    // apply an isometry to the tangent vector (both the point and the direction)
-    return tangVector(v.pos, A*v.dir);
-}
+
+
+
+
 
 tangVector turnAround(tangVector v){
     return tangVector(v.pos, -v.dir);

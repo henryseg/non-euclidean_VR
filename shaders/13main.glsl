@@ -11,7 +11,7 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
     float z = 0.1/tan(radians(fov*0.5));
     
     //CHANGED THIS: DUE TO ORIGIN IN PRODUCT GEOMETRIES
-    tangVector tv = tangVector(ORIGIN, vec4(xy, 0.0,-z));
+    tangVector tv = tangVector(ORIGIN, vec4(xy,0,z));
     tangVector v =  tangNormalize(tv);
     return v;
 }
@@ -23,32 +23,33 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 
     //stereo translations ----------------------------------------------------
 tangVector setRayDir(){
+    
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     tangVector rD = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    
+   
 
-    if (isStereo == 1){
-        if (isLeft){
-            rD = rotateFacing(leftFacing, rD);
-            rD = translate(leftBoost, rD);
-        }
-        else {
-            rD = rotateFacing(rightFacing, rD);
-            rD = translate(rightBoost, rD);
-        }
-    }
-    else {
+//    if (isStereo == 1){
+//        if (isLeft){
+//            rD = rotateFacing(leftFacing, rD);
+//            rD = translate(leftBoost, rD);
+//        }
+//        else {
+//            rD = rotateFacing(rightFacing, rD);
+//            rD = translate(rightBoost, rD);
+//        }
+//    }
+//    else {
+    
+     //applying rotatefacing is annoying here
+    
         rD = rotateFacing(facing, rD);
         rD = translate(currentBoost, rD);
-    }
+   // }
     return rD;
 }
     
     
-
-
-
-
-
 
 
 
@@ -67,7 +68,7 @@ void main(){
     //in raymarch
     tangVector rayDir=setRayDir();
     
-    pixelColor=vec4(testPixelColor(rayDir),1.);
+    pixelColor=vec4(cheapPixelColor(rayDir),1.);
 //    
 //    if(quality==2){
 //    pixelColor=vec4(cheapPixelColor(rayDir),1.);

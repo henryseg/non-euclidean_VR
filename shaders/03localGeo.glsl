@@ -153,13 +153,42 @@ mat4 tangBasis(vec4 p){
       vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
       vec4 basis_z = vec4(0.0,0.0,0,1);  
     //make this orthonormal
-      basis_y = vecNormalize(basis_y - abs(tangDot(basis_y, basis_x))*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
+      basis_y = vecNormalize(basis_y - tangDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
       mat4 theBasis=mat4(0.);
       theBasis[0]=basis_x;
       theBasis[1]=basis_y;
       theBasis[2]=basis_z;
     return theBasis;
 }
+
+
+
+
+
+//HAD TO MOVE THIS SO WE CAN DO IT PROPERLY
+//WHAT A MESS! NEED TO CLEAN THIS UP CONCEPTUALLY
+//HAVE TO ROTATE HYPERBOLIC AND EUCLIDEAN PARTS TOGETHER
+//THEN RE-NORMALIZE
+tangVector rotateFacing(mat4 A, tangVector tv){
+    // leave position fixed, rotate facing vector
+    vec3 vHyp=tv.dir.xyz;
+    float vEuc=tv.dir.w;
+    
+    vec4 newV=A*vec4(tv.dir.xyw,0.);
+    vec4 permuteV=vec4(newV.xy,0.,newV.z);
+    
+    return tangNormalize(tangVector(tv.pos, permuteV));
+}
+
+
+//
+//
+//    rayDir3 = (facing * vec4(rayDir3,0.0)).xyz;//multiply facing by 3-vector giving direction 
+//    vec4 rayDirV = tangNormalize( vec4(rayDir3.xy, 0.0, rayDir3.z) );
+//    rayOrigin = currentBoostMat * rayOrigin + currentBoostR;
+//    rayDirV = currentBoostMat * rayDirV;
+//
+
 
 
 

@@ -221,8 +221,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         globaltv = geoFlow(globaltv, marchStep);
 
         float globalDist = globalSceneSDF(globaltv.pos);
-        rayMarchTestColor=vec3(globalDist,0.,0.2);
-        return;
+//        rayMarchTestColor=vec3(globalDist,0.,0.2);
+//        return;
          
         if (globalDist < EPSILON||globalDist>MAX_DIST){
             // hitWhich has now been set
