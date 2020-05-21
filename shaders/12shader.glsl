@@ -213,7 +213,40 @@ vec3 getPixelColor(tangVector rayDir){
 
 
 
+vec3 testPixelColor(tangVector rayDir){
+    
+    
+    
+    bool firstPass;//keeps track of what pass we are on
+    
+    Isometry fixPosition;
+    
+    vec3 baseColor;//color of the surface where it is struck
+    
+    vec3 localColor;//the total lighting  computation from local lights
+    vec3 globalColor;//the total lighting  computation from global lights
+    vec3 totalColor;// the  total lighting computation from all sources
+    
+   
+    //tangVector toViewer;
+    //vec4 surfacePosition;
+    
+    //------ DOING THE RAYMARCH ----------
+
+    
+    raymarch(rayDir,totalFixMatrix);//do the  raymarch  
+    
+     return rayMarchTestColor;
+}
+    
+    
+    
+    
+
+
 vec3 cheapPixelColor(tangVector rayDir){
+    
+    
     
     bool firstPass;//keeps track of what pass we are on
     
@@ -229,8 +262,9 @@ vec3 cheapPixelColor(tangVector rayDir){
     //vec4 surfacePosition;
     
     //------ DOING THE RAYMARCH ----------
+
+    raymarch(rayDir,totalFixMatrix);//do the  raymarch  
     
-    raymarch(rayDir,totalFixMatrix);//do the  raymarch    
    
     //------ Basic Surface Properties ----------
     //we need these quantities to run the local / global lighting functions

@@ -73,7 +73,7 @@ Isometry translateByVector(vec4 v){
     return result;
     }
     else{
-    return Isometry(mat4(1.),realPart);
+    return Isometry(mat4(1.),vec4(0.));
     }
 }
 

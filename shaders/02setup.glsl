@@ -16,7 +16,7 @@
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=false;
 //do we render a textured earth in the global scene
 const bool EARTH=false;
 
@@ -306,14 +306,7 @@ void setVariables(){
     
     invGenerators=Isometry[6](iG0,iG1,iG2,iG3,iG4,iG5);
     
-//    
-//    invGenerators=Isometry[6](Isometry(invGeneratorsMatrices[0],invGeneratorsReals[0]),
-//        Isometry(invGeneratorsMatrices[1],invGeneratorsReals[1]),
-//        Isometry(invGeneratorsMatrices[2],invGeneratorsReals[2]),
-//        Isometry(invGeneratorsMatrices[3],invGeneratorsReals[3]),  
-//        Isometry(invGeneratorsMatrices[4],invGeneratorsReals[4]), 
-//        Isometry(invGeneratorsMatrices[5],invGeneratorsReals[5]));
-        
+
     currentBoost=Isometry(currentBoostMat,currentBoostReal);
 
     currentPos=translate(currentBoost,ORIGIN);

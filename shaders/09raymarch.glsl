@@ -141,9 +141,10 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 //this is helpful in sol - but might lead to more errors accumulating when done in hyperbolic for example?
 
 
-
+vec3 rayMarchTestColor;
 
 void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
+    
     Isometry fixMatrix;
     float marchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
@@ -154,12 +155,14 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     tangVector globaltv = rayDir;
     
     totalFixMatrix = identityIsometry;
-
-
+    
+    
+ 
+    
     //before you start the march, step out by START_MARCH to make the bubble around your head
     localtv=geoFlow(localtv,START_MARCH);
     globaltv=geoFlow(globaltv,START_MARCH);
-    
+
     
 // Trace the local scene, then the global scene:
     if(TILING_SCENE){
@@ -171,6 +174,7 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         localtv = geoFlow(localtv, marchStep);
 
         if (isOutsideCell(localtv, fixMatrix)){
+            
             //if you are outside of the central cell after the march done above
             //then translate yourself back into the central cell and set the next marching distance to a minimum
             totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
@@ -185,25 +189,30 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             if (localDist < EPSILON||localDist>MAX_DIST){//if you hit something, or left the range completely
                 distToViewer=localDepth;//set the total distance marched
                 sampletv = localtv;//give the point reached
+     
                 break;
             }
             //if its not less than epsilon, keep marching
             
             //find the distance to  a wall of the fundamental chamber
-            float wallDist=distToEdge(localtv.pos);
+            //float wallDist=distToEdge(localtv.pos);
             //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
-            marchStep = min(wallDist+0.01,marchProportion*localDist);//make this distance your next march step
-            //marchStep=marchProportion*localDist;
+           // marchStep = min(wallDist+0.01,marchProportion*localDist);//make this distance your next march step
+            marchStep=marchProportion*localDist;
             localDepth += marchStep;//add this to the total distance traced so far
 
         }
     }
+        
+       
         //set the local depth (how far you marched total in the local scene)
         //for use in marching the global scene below
     localDepth=min(localDepth, MAX_DIST);
+
     }
     else{localDepth=MAX_DIST;}//if you didn't march the tiling scene at all, then set this distance to max to make sure we see whatever is in the global scene when we trace it next.
 
+    
 
     if(GLOBAL_SCENE){
     marchStep = MIN_DIST;
@@ -212,6 +221,8 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         globaltv = geoFlow(globaltv, marchStep);
 
         float globalDist = globalSceneSDF(globaltv.pos);
+        rayMarchTestColor=vec3(globalDist,0.,0.2);
+        return;
          
         if (globalDist < EPSILON||globalDist>MAX_DIST){
             // hitWhich has now been set

@@ -4,20 +4,22 @@
 
 //CHANGED THIS
 //dot product of JUST THE HYPERBOLIC PART
+//made NEGATIVE OF THE TANGENT DOT PRODUCT
+//so that it evaluates positive on points
  float hypDot(vec4 u,vec4 v){
      
     mat4 g = mat4(
-    1.,0.,0.,0.,
-    0.,1.,0.,0.,
-    0.,0.,-1.,0.,
+    -1.,0.,0.,0.,
+    0.,-1.,0.,0.,
+    0.,0.,1.,0.,
     0.,0.,0.,0.
     );
 
     return dot(u,g*v);  
  }
 
-float hypNorm(vec4 v){
-    return sqrt(abs(hypDot(v,v)));
+float hypNorm(vec4 p){
+    return sqrt(hypDot(p,p));
 }
 
 float hypNorm(tangVector tv){
@@ -90,7 +92,7 @@ float areaElement(float rad, tangVector angle){
 //distance between two points projections into hyperboloid:
 float hypDist(vec4 u, vec4 v){
      float bUV = hypDot(u,v);
-    return acosh(bUV);
+    return acosh(abs(bUV));
 }
 
 //norm of a point in the Euclidean direction
@@ -164,9 +166,13 @@ float exactDist(localTangVector u, localTangVector v){
 
 //CHANGED THIS
 tangVector tangDirection(vec4 p, vec4 q){
+    vec3 hypPart = p.xyz - abs(hypDot(p,q))*q.xyz;
+    float RPart = p.w - q.w;
     // return the unit tangent to geodesic connecting p to q.
-   return tangNormalize(tangVector(p, q - abs(hypDot(p,q))*p));
+   return tangNormalize(tangVector(p,vec4(hypPart,RPart)));
 }
+
+
 
 tangVector tangDirection(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
@@ -191,20 +197,36 @@ tangVector tangDirection(localTangVector u, localTangVector v){
 //CHANGED THIS
 //flow along the geodesic starting at tv for a time t
 tangVector geoFlow(tangVector tv, float dist){
-    vec4 u=tv.pos;
-    vec4 vPrime=tv.dir;
-
-    float hypComp = hypNorm(vPrime);
-    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
-    float hypDist = dist * hypComp; 
-    float eucDist = dist * vPrime.w;
+    vec4 p=tv.pos;
+    vec4 v=tv.dir;
     
-    vec4 resPos=vec4( u.xyz*cosh(hypDist) + vPrimeHypPart*sinh(hypDist), u.w + eucDist);
     
-    vec4 resDir=vec4(hypComp* (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
-  
+    float vEuc=v.w;
+    
+    vec3 vHyp=v.xyz;
+    float lHyp=hypNorm(vec4(vHyp,0.));//length of hyperbolic component
+    //normalize the hyperbolic part
+    vHyp=vHyp/lHyp;
+ 
+    vec4 resPos=vec4(p.xyz*cosh(dist*lHyp)+vHyp*sinh(dist*lHyp),p.w+dist*v.w);
+    vec4 resDir=vec4(p.xyz*sinh(dist*lHyp)*lHyp+vHyp*cosh(dist*lHyp)*lHyp,v.w);
+    
+    return tangVector(resPos,resDir);
+    
+//    
+//    
+//    //calculate the hyperbolic component
+//    float hypComp = hypNorm(vPrime);
+//    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
+//    float hypDist = dist * hypComp; 
+//    float eucDist = dist * vPrime.w;
+//    
+//    vec4 resPos=vec4( u.xyz*cosh(hypDist) + vPrimeHypPart*sinh(hypDist), u.w + eucDist);
+//    
+//    vec4 resDir=vec4(hypComp* (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
+//  
 
-    return reduceError(tangVector(resPos,resDir));
+    //return reduceError(tangVector(resPos,resDir));
 }
 
 

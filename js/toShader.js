@@ -89,9 +89,9 @@ function initObjects() {
     PointLightObject(new Vector3(1., 1., 0), lightColors[0]);
     PointLightObject(new Vector3(-1, 0, 0), lightColors[1]);
     PointLightObject(new Vector3(0, 0.8, 1), lightColors[2]);
-    PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
+    PointLightObject(new Vector3(0., 0.2, -0.3), lightColors[3]);
 
-    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1.5));
+    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1.2));
 }
 
 
@@ -348,7 +348,7 @@ function updateMaterial() {
     //globals.material.uniforms.renderShadow.value = globals.renderShadow;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
-   
+
 }
 
 export {
