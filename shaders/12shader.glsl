@@ -12,7 +12,7 @@
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
     //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 5.,marchShadows, surfColor,fixPosition);
+    return localLight(localLightPos, localLightColor, 10.,marchShadows, surfColor,fixPosition);
 }
 
 
@@ -116,7 +116,7 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------
-    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
+    fixPosition=fixPositionTestGlobal(hitLocal);
     globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
     
     

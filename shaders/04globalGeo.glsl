@@ -19,7 +19,7 @@
  }
 
 float hypNorm(vec4 p){
-    return sqrt(hypDot(p,p));
+    return sqrt(abs(hypDot(p,p)));
 }
 
 float hypNorm(tangVector tv){
@@ -28,7 +28,8 @@ float hypNorm(tangVector tv){
 
 
 vec4 hypNormalize(vec4 v){
-    return v/sqrt(abs(hypDot(v,v)));
+    float t=v.w;
+    return vec4(v.xyz,0.)/sqrt(abs(hypDot(v,v)))+vec4(0.,0.,0.,t);
 }
 //project point back onto the geometry
 //this is for H3, S3, H2xR, S2xR, PSL where the model of the geometry is not an affine plane in R4, but some curved subset
@@ -40,9 +41,10 @@ vec4 geomProject(vec4 v){
 
 //CHANGED THIS
 tangVector geomProject(tangVector tv){
-//    tv.pos=hypNormalize(tv.pos);
-//    tv.dir=hypNormalize(tv.dir);
-    return tv;
+    
+   // tv.pos=hypNormalize(tv.pos);
+
+    return tangNormalize(tv);
     
 }
 
@@ -211,7 +213,7 @@ tangVector geoFlow(tangVector tv, float dist){
     vec4 resPos=vec4(p.xyz*cosh(dist*lHyp)+vHyp*sinh(dist*lHyp),p.w+dist*v.w);
     vec4 resDir=vec4(p.xyz*sinh(dist*lHyp)*lHyp+vHyp*cosh(dist*lHyp)*lHyp,v.w);
     
-    return tangVector(resPos,resDir);
+    return reduceError(tangVector(resPos,resDir));
     
 //    
 //    
