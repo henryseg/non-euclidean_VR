@@ -237,16 +237,12 @@ vec3 testPixelColor(tangVector rayDir){
     raymarch(rayDir,totalFixMatrix);//do the  raymarch  
     
     baseColor=materialColor(hitWhich);
-    surfacePosition=sampletv.pos;//position on the surface of the sample point, set by raymarch
-    toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer / origin of raymarch
-    surfNormal=surfaceNormal(sampletv);//normal vector to surface
+ 
+    //add fog for distance to the mixed color
+    totalColor=fog(baseColor, vec3(0.02,0.02,0.02), distToViewer);
+   
     
-        //------ Local Lighting ----------
-    fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
-    localColor=allLocalLights(baseColor, false,fixPosition);
-
-    
-  return localColor;
+  return totalColor;
 }
     
     
