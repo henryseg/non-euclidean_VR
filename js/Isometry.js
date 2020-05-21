@@ -79,7 +79,8 @@ Isometry.prototype.makeInvLeftTranslation = function (v) {
 Isometry.prototype.premultiply = function (isom) {
     // return the current isometry multiplied on the left by isom, i.e. isom * this
     this.matrix.premultiply(isom.matrix);
-    this.real = this.real.add(isom.real);
+    this.real.add(isom.real);
+    //console.log(this.real);//looks to be working
     return this;
 };
 

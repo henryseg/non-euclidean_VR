@@ -30,7 +30,11 @@ import {
 
 function projPoint(pt) {
     //hyperboloid is first 3 coordinates, last coordiante is R
-    return new Vector3(pt.x / pt.z, pt.y / pt.z, pt.w);
+    //console.log(pt);//pt.w is not changed even when we move...
+    let q = new Vector3(pt.x / pt.z, pt.y / pt.z, pt.w);
+
+    return q;
+
 }
 
 
@@ -89,7 +93,8 @@ function createProjGenerators(t) {
     const nV3 = pV1.clone().cross(pV2).normalize();
 
     let nVs = [nV1, nV2, nV3];
-
+    //console.log(nV1);
+   // console.log(pV3);
     //return the side pairings in the affine model, and the unit normals to the faces of the fundamental domain in that model
     return [pVs, nVs];
 
@@ -116,12 +121,13 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     const gen4 = new Isometry().makeLeftTranslation(GenVec[2]);
     const gen5 = new Isometry().makeInvLeftTranslation(GenVec[2]);
 
-    console.log(gen5);
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
 function invGenerators(genArr) {
+
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
+
 }
 
 //Unpackage boosts into their components (for hyperbolic space, just pull out the matrix which is the first component)
@@ -177,11 +183,11 @@ function unpackageReals(genArr) {
 function fixOutsideCentralCell(position) {
     let bestIndex = -1;
     //the vector in the geometry corresponding to our position
-    let q = ORIGIN.clone().applyMatrix4(position.boost.matrix);
+    let q = ORIGIN.clone().translateBy(position.boost);
 
     //now project this into the projective model
     let p = projPoint(q);
-
+    //console.log(p);
     //give names to the globals we need
     let pV = globals.projGens[0];
     let nV = globals.projGens[1];
@@ -209,6 +215,9 @@ function fixOutsideCentralCell(position) {
 
     if (bestIndex !== -1) {
         position.translateBy(globals.gens[bestIndex]);
+
+        //it seems we aer never triggering the last ones; never outside cell in the real direction
+        console.log(globals.gens[bestIndex]);
         return bestIndex;
     } else {
         return -1;

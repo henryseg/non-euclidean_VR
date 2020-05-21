@@ -59,7 +59,7 @@ const time0 = new Date().getTime();
 
 function initGeometry() {
 
-    console.log(new Isometry().translateByVector(1, 1, 1, 1));
+
 
     globals.position = new Position();
     globals.cellPosition = new Position();
@@ -348,6 +348,7 @@ function updateMaterial() {
     //globals.material.uniforms.renderShadow.value = globals.renderShadow;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
+   
 }
 
 export {

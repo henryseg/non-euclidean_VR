@@ -119,12 +119,12 @@ Position.prototype.localFlow = function (v) {
     // The position after parallel transport along gamma, is (boost * S_o, B_o * facing)
 
 
-
-    //mat4 parallel=new Matrix4();
-
     this.boost.premultiply(new Isometry().translateByVector(v));
     //no change to facing b/c euclidean 
+    //mat4 parallel=new Matrix4();
     // this.facing.premultiply(parallel);
+    
+    //console.log(this.boost.real);//this seems to be working: its storing the position correctly
     return this;
 }
 

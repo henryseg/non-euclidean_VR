@@ -223,7 +223,7 @@ QUnit.test("Flowing a position", function (assert) {
     );
     let position = new Position().set(boost, facing);
 
-    let v = new THREE.Vector3(1,0,0);
+    let v = new THREE.Vector3(1, 0, 0);
 
     let expectedBoost = new Isometry().set([new THREE.Matrix4().set(
         1, 0, 0, 3,
@@ -257,7 +257,7 @@ QUnit.test("Locally flowing a position", function (assert) {
     let facing = new THREE.Matrix4();
     let position = new Position().set(boost, facing);
 
-    let v = new THREE.Vector3(1,0,0);
+    let v = new THREE.Vector3(1, 0, 0);
 
     let expectedBoost = new Isometry().set([new THREE.Matrix4().set(
         1, 0, 0, 3,
@@ -291,10 +291,10 @@ QUnit.test("Rotation of a vector by the facing", function (assert) {
     );
     let position = new Position().set(boost, facing);
 
-    let v = new THREE.Vector3(1,0,0);
+    let v = new THREE.Vector3(1, 0, 0);
 
     let computed = position.rotateByFacing(v);
-    let expected = new THREE.Vector3(0,1,0);
+    let expected = new THREE.Vector3(0, 1, 0);
 
     assert.ok(computed.equals(expected));
 });
@@ -354,15 +354,15 @@ QUnit.test("Forward/right/up vector", function (assert) {
     let position = new Position().set(boost, facing);
 
     let computed = position.getFwdVector();
-    let expected = new THREE.Vector3(0,0,-1);
+    let expected = new THREE.Vector3(0, 0, -1);
     assert.ok(computed.equals(expected));
 
     computed = position.getRightVector();
-    expected = new THREE.Vector3(1,0,0);
+    expected = new THREE.Vector3(1, 0, 0);
     assert.ok(computed.equals(expected));
 
     computed = position.getUpVector();
-    expected = new THREE.Vector3(0,1,0);
+    expected = new THREE.Vector3(0, 1, 0);
     assert.ok(computed.equals(expected));
 
     boost = new Isometry().set([new THREE.Matrix4().set(
@@ -381,14 +381,14 @@ QUnit.test("Forward/right/up vector", function (assert) {
     position = new Position().set(boost, facing);
 
     computed = position.getFwdVector();
-    expected = new THREE.Vector3(0,0,-1);
+    expected = new THREE.Vector3(0, 0, -1);
     assert.ok(computed.equals(expected));
 
     computed = position.getRightVector();
-    expected = new THREE.Vector3(0,1,0);
+    expected = new THREE.Vector3(0, 1, 0);
     assert.ok(computed.equals(expected));
 
     computed = position.getUpVector();
-    expected = new THREE.Vector3(-1,0,0);
+    expected = new THREE.Vector3(-1, 0, 0);
     assert.ok(computed.equals(expected));
 });

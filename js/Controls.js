@@ -229,7 +229,6 @@ let Controls = function () {
         }
         globals.position.localFlow(deltaPosition);
 
-
         let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
         if (fixIndex !== -1) {
             globals.cellPosition.localTranslateBy(globals.invGens[fixIndex]);

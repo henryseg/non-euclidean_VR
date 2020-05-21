@@ -42,7 +42,7 @@ const float PI = 3.1415926538;
 const float sqrt3 = 1.7320508075688772;
 
 //the origin of H2xR
-const vec4 ORIGIN = vec4(0, 0, 1, 0.);
+const vec4 ORIGIN = vec4(0., 0., 1, 0.);
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
@@ -163,8 +163,10 @@ uniform float res;//resolution: how far we raymarch
 
 uniform mat4 currentBoostMat;
 uniform vec4 currentBoostReal;//changed this
+
 uniform mat4 leftBoostMat;
 uniform vec4 leftBoostReal;//changed this
+
 uniform mat4 rightBoostMat;
 uniform vec4 rightBoostReal;//changed this
 //current position as a point in the model space
@@ -184,6 +186,7 @@ uniform mat4 rightFacing;
 // keeping track of your location in the tiling
 uniform mat4 cellBoostMat;
 uniform vec4 cellBoostReal;//changed this
+
 uniform mat4 invCellBoostMat;
 uniform vec4 invCellBoostReal;//changed this
 
