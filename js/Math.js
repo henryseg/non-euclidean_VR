@@ -1,6 +1,7 @@
 import {
     Vector3,
     Vector4,
+    Matrix4
 } from "./module/three.module.js";
 
 import {
@@ -49,6 +50,7 @@ function projPoint(pt) {
 //	Geometry Constants & Lattice Vectors in Tangent Space
 //----------------------------------------------------------------------------------------------------------------------
 
+const PI = 3.14159;
 //CHANGED THIS
 let halfWidth = 0.6584789485;
 let projHalfWidth = Math.tanh(halfWidth);
@@ -120,6 +122,23 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     const gen3 = new Isometry().makeInvLeftTranslation(GenVec[1]);
     const gen4 = new Isometry().makeLeftTranslation(GenVec[2]);
     const gen5 = new Isometry().makeInvLeftTranslation(GenVec[2]);
+
+
+    //having some trouble with the 'SET' CONSTRUCTOR
+
+    //ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
+    //
+    //    gen0.multiply(new Isometry().set([new Matrix4().makeRotationX(-PI / 2).transpose()]));
+    //
+    //    gen1.multiply(new Isometry().set([new Matrix4().makeRotationX(PI / 2).transpose()]));
+    //
+    //    gen2.multiply(new Isometry().set([new Matrix4().makeRotationY(-PI / 2).transpose()]));
+    //
+    //    gen3.multiply(new Isometry().set([new Matrix4().makeRotationY(PI / 2).transpose()]));
+
+    // gen4.multiply(new Isometry().set([new Matrix4().makeRotationZ(-PI / 2).transpose()]));
+
+    // gen5.multiply(new Isometry().set([new Matrix4().makeRotationZ(PI / 2).transpose()]));
 
 
 
