@@ -16,7 +16,7 @@
 
 //determine what we draw: ball and lights, 
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 //do we render a textured earth in the global scene
 const bool EARTH=false;
 
