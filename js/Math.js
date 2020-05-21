@@ -94,7 +94,7 @@ function createProjGenerators(t) {
 
     let nVs = [nV1, nV2, nV3];
     //console.log(nV1);
-   // console.log(pV3);
+    // console.log(pV3);
     //return the side pairings in the affine model, and the unit normals to the faces of the fundamental domain in that model
     return [pVs, nVs];
 
@@ -120,6 +120,11 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     const gen3 = new Isometry().makeInvLeftTranslation(GenVec[1]);
     const gen4 = new Isometry().makeLeftTranslation(GenVec[2]);
     const gen5 = new Isometry().makeInvLeftTranslation(GenVec[2]);
+
+
+
+
+
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }

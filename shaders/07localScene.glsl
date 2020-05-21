@@ -67,8 +67,12 @@ float tilingSceneSDF(vec4 p){
     
 //corner of ideal cube in Klein model; usedful in setting up horosphere:
     float cPt=0.57735026921;
-    vec4 corner=vec4(cPt,cPt,1.,cPt);
-    float cornerHole=sphereSDF(abs(p),corner,0.2);
+    //don't need it in the klein model, need it in the space now!
+    //lazy so just normalizing it
+    vec4 v=hypNormalize(vec4(cPt,cPt,1,0));
+    //then adding on the last vertical direction
+    vec4 corner=v+vec4(0.,0.,0.,cPt);
+    float cornerHole=sphereSDF(abs(p),corner,0.43);
     return -min(centerHole, cornerHole);
     //return -centerHole;
 }

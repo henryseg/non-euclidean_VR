@@ -38,7 +38,8 @@ vec3 boxMapping(in sampler2D sam, in tangVector point)
 
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);//move back to orig cell
-    pt = inverse(globalObjectBoost.matrix) * pt;//move back to origin
+    //changed this - it was done using a matrix not using translate
+    pt = translate(getInverse(globalObjectBoost),  pt);//move back to origin
     //CHANGED TO XYW BECAUSE PRODUCT GEOMETRY
     return tangDirection(ORIGIN, pt).dir.xyw;//get the direction you are pointing from the origin.
     //this is a point on the unit sphere, and can be used to look up a  spherical  texture

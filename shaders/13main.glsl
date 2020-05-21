@@ -11,7 +11,8 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
     float z = 0.1/tan(radians(fov*0.5));
     
     //CHANGED THIS: DUE TO ORIGIN IN PRODUCT GEOMETRIES
-    tangVector tv = tangVector(ORIGIN, vec4(xy,0,z));
+    //have to think about the minus sign: it gets the movement to not be "backwards" and we did it last time, but did not say why.
+    tangVector tv = tangVector(ORIGIN, vec4(xy,0,-z));
     tangVector v =  tangNormalize(tv);
     return v;
 }
@@ -29,23 +30,22 @@ tangVector setRayDir(){
     
    
 
-//    if (isStereo == 1){
-//        if (isLeft){
-//            rD = rotateFacing(leftFacing, rD);
-//            rD = translate(leftBoost, rD);
-//        }
-//        else {
-//            rD = rotateFacing(rightFacing, rD);
-//            rD = translate(rightBoost, rD);
-//        }
-//    }
-//    else {
+    if (isStereo == 1){
+        if (isLeft){
+            rD = rotateFacing(leftFacing, rD);
+            rD = translate(leftBoost, rD);
+        }
+        else {
+            rD = rotateFacing(rightFacing, rD);
+            rD = translate(rightBoost, rD);
+        }
+    }
+    else {
     
-     //applying rotatefacing is annoying here
     
         rD = rotateFacing(facing, rD);
         rD = translate(currentBoost, rD);
-   // }
+    }
     return rD;
 }
     
@@ -68,15 +68,17 @@ void main(){
     //in raymarch
     tangVector rayDir=setRayDir();
     
-    pixelColor=vec4(cheapPixelColor(rayDir),1.);
+    pixelColor=vec4(testPixelColor(rayDir),1.);
+
 //    
 //    if(quality==2){
 //    pixelColor=vec4(cheapPixelColor(rayDir),1.);
 //    }
 //    else{
-//    vec4(cheapPixelColor(rayDir),1.);
+//        
+//    
 //      //  pixelColor=vec4(doubleBouncePixelColor(rayDir),1.);
-//       // pixelColor=vec4(getPixelColor(rayDir),1.);
+//    // pixelColor=vec4(getPixelColor(rayDir),1.);
 //    }
     
     //gamma correction from shadertoy

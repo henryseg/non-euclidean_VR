@@ -12,7 +12,7 @@
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
     //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 50.*(2.+cosh(8.*brightness)),marchShadows, surfColor,fixPosition);
+    return localLight(localLightPos, localLightColor, 6.*(2.+brightness*brightness),marchShadows, surfColor,fixPosition);
 }
 
 
@@ -280,17 +280,17 @@ vec3 cheapPixelColor(tangVector rayDir){
     fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
     localColor=allLocalLights(baseColor, false,fixPosition);
 
-    totalColor=localColor;
-//    //------ Global Lighting ----------
-//    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
-//    globalColor=allGlobalLights(baseColor,false, fixPosition);
-//    
+    //totalColor=localColor;
+    //------ Global Lighting ----------
+    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
+    globalColor=allGlobalLights(baseColor,false, fixPosition);
     
-    //------ TOTAL FIRST PASS LIGHTING ----------
+    
+   // ------ TOTAL FIRST PASS LIGHTING ----------
 
     //mix these two lighting contributions into the first-pass color
     //the proportion is global/local
-    //totalColor=mixLights(0.75,localColor,globalColor);
+    totalColor=mixLights(0.75,localColor,globalColor);
     
     //add fog for distance to the mixed color
     totalColor=fog(totalColor, vec3(0.02,0.02,0.02), distToViewer);
