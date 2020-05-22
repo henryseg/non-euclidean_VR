@@ -3,48 +3,36 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 //CHANGED THIS
-//dot product of JUST THE HYPERBOLIC PART
-//made NEGATIVE OF THE TANGENT DOT PRODUCT
-//so that it evaluates positive on points
  float hypDot(vec4 u,vec4 v){
-     
-    mat4 g = mat4(
-    -1.,0.,0.,0.,
-    0.,-1.,0.,0.,
-    0.,0.,1.,0.,
-    0.,0.,0.,0.
-    );
-
-    return dot(u,g*v);  
+return tangDot(hypPart(u),hypPart(v));
  }
 
 float hypNorm(vec4 p){
-    return sqrt(abs(hypDot(p,p)));
-}
-
-float hypNorm(tangVector tv){
-    return sqrt(abs(hypDot(tv.dir,tv.dir)));
+    vec4 q=hypPart(p);
+    return tangNorm(q);
 }
 
 
-vec4 hypNormalize(vec4 v){
-    float t=v.w;
-    return vec4(v.xyz,0.)/sqrt(abs(hypDot(v,v)))+vec4(0.,0.,0.,t);
-}
-//project point back onto the geometry
+//project POINT back onto the geometry
 //this is for H3, S3, H2xR, S2xR, PSL where the model of the geometry is not an affine plane in R4, but some curved subset
 //numerical errors may push you off and you need to re-normalize by projecting
-vec4 geomProject(vec4 v){
-    return hypNormalize(v);
+vec4 geomProject(vec4 p){
+    float t=p.w;
+    return hypPart(p)/hypNorm(p)+vec4(0.,0.,0.,t);
+}
+
+
+//project a tangent vector back onto the tangent space
+vec4 tangProject(vec4 v){
+  return vecNormalize(v);//just replace it with the unit vector in the same direction?  or should we do somethign else here? 
 }
 
 
 //CHANGED THIS
 tangVector geomProject(tangVector tv){
-    
-   // tv.pos=hypNormalize(tv.pos);
-
-    return tangNormalize(tv);
+  tv.pos=geomProject(tv.pos);
+  tv.dir=tangProject(tv.dir);
+    return tv;
     
 }
 
@@ -92,14 +80,14 @@ float areaElement(float rad, tangVector angle){
 //AUX FUNCTIONS
 
 //distance between two points projections into hyperboloid:
-float hypDist(vec4 u, vec4 v){
-     float bUV = hypDot(u,v);
-    return acosh(abs(bUV));
+float hypDist(vec4 p, vec4 q){
+     float d= hypDot(p,q);
+    return acosh(abs(d));
 }
 
 //norm of a point in the Euclidean direction
-float eucDist(vec4 u,vec4 v){
-    return abs(u.w-v.w);
+float eucDist(vec4 p,vec4 q){
+    return abs(p.w-q.w);
 }
 
 
@@ -128,9 +116,9 @@ float fakeDistance(localTangVector u, localTangVector v){
 
 
 //CHANGED THIS
-float exactDist(vec4 u, vec4 v) {
+float exactDist(vec4 p, vec4 q) {
     // move p to the origin
-    return sqrt(eucDist(u,v)*eucDist(u,v)+hypDist(u,v)*hypDist(u,v));
+    return sqrt(eucDist(p,q)*eucDist(p,q)+hypDist(p,q)*hypDist(p,q));
 }
 
 float exactDist(tangVector u, tangVector v){
@@ -168,10 +156,12 @@ float exactDist(localTangVector u, localTangVector v){
 
 //CHANGED THIS
 tangVector tangDirection(vec4 p, vec4 q){
-    vec3 hypPart = p.xyz - abs(hypDot(p,q))*q.xyz;
-    float RPart = p.w - q.w;
+    //hypDot is negative on the space, positive on tang space...
+    vec3 hypPart = q.xyz - abs(hypDot(p,q))*p.xyz;
+    float RPart = q.w-p.w;
+    vec4 diff=vec4(hypPart,RPart);
     // return the unit tangent to geodesic connecting p to q.
-   return tangNormalize(tangVector(p,vec4(hypPart,RPart)));
+   return tangNormalize(tangVector(p,diff));
 }
 
 
@@ -202,33 +192,23 @@ tangVector geoFlow(tangVector tv, float dist){
     vec4 p=tv.pos;
     vec4 v=tv.dir;
     
+    float lHyp=hypNorm(v);//length of hyperbolic component
+    vec4 vHyp=hypPart(v)/lHyp;//unit hyperbolic component
     
-    float vEuc=v.w;
+    //do the hyperbolic flow
+    vec4 hypFlowP=hypPart(p)*cosh(dist*lHyp)+vHyp*sinh(dist*lHyp);
+    vec4 hypFlowV=hypPart(p)*sinh(dist*lHyp)*lHyp+vHyp*cosh(dist*lHyp)*lHyp;
     
-    vec3 vHyp=v.xyz;
-    float lHyp=hypNorm(vec4(vHyp,0.));//length of hyperbolic component
-    //normalize the hyperbolic part
-    vHyp=vHyp/lHyp;
- 
-    vec4 resPos=vec4(p.xyz*cosh(dist*lHyp)+vHyp*sinh(dist*lHyp),p.w+dist*v.w);
-    vec4 resDir=vec4(p.xyz*sinh(dist*lHyp)*lHyp+vHyp*cosh(dist*lHyp)*lHyp,v.w);
+    vec4 vEuc=vec4(0.,0.,0.,v.w);
+    //do the Euclidean flow
+    vec4 eucFlowP=eucPart(p)+dist*vEuc;
+    vec4 eucFlowV=vEuc;   
+
+    vec4 resPos=hypFlowP+eucFlowP;
+    vec4 resDir=hypFlowV+eucFlowV;
     
     return reduceError(tangVector(resPos,resDir));
-    
-//    
-//    
-//    //calculate the hyperbolic component
-//    float hypComp = hypNorm(vPrime);
-//    vec3 vPrimeHypPart = vPrime.xyz / hypComp;
-//    float hypDist = dist * hypComp; 
-//    float eucDist = dist * vPrime.w;
-//    
-//    vec4 resPos=vec4( u.xyz*cosh(hypDist) + vPrimeHypPart*sinh(hypDist), u.w + eucDist);
-//    
-//    vec4 resDir=vec4(hypComp* (u.xyz*sinh(hypDist) + vPrimeHypPart*cosh(hypDist)), vPrime.w);
-//  
 
-    //return reduceError(tangVector(resPos,resDir));
 }
 
 

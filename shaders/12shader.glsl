@@ -39,7 +39,7 @@ vec3 allGlobalLights(vec3 surfColor,bool marchShadows,Isometry fixPosition){
      for (int i=0; i<4; i++){
          //have four global lights in our scene
          
-         globalColor+=globalLight(lightPositions[i], lightIntensities[i].xyz, 4.,marchShadows, surfColor,fixPosition);
+         globalColor+=globalLight(lightPositions[i], lightIntensities[i].xyz, 10.,marchShadows, surfColor,fixPosition);
      }
     
     //normalize the output color by dividing by the number of light sources
