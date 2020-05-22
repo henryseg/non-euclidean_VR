@@ -96,8 +96,8 @@ vec3 materialColor(int hitWhich){
     else if (hitWhich ==3) {//local object
     //first option; some fixed color preturbed by your position in the colo cube a bit.
         //.xyw here because of product factor
-    //return vec3(0.1,0.2,0.35)+(sampletv.pos.xyw+vec3(0.5,0.2,0.5))/20.;
-    return vec3(0.1,0.2,0.35);//just some random constant blue color
+    return vec3(0.35,0.1,0.15)+(sampletv.pos.xyw+vec3(0.2,0.5,0.2))/10.;
+    //return vec3(0.1,0.2,0.35);//just some random constant blue color
     }
     else if (hitWhich ==3) {//tiling
     return vec3(0.,0.,0.);//black sphere
@@ -144,7 +144,6 @@ float materialReflectivity(int hitWhich){
 //----------------------------------------------------------------------------------------------------------------------
 // CHOOSING ISOMETRY TO ADJUST LIGHTING, BASED ON LOCAL / GLOBAL NATURE OF OBJECTS
 //----------------------------------------------------------------------------------------------------------------------
-
 
 
 

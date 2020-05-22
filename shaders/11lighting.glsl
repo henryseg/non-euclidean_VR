@@ -8,7 +8,7 @@ float lightAtt(float dist){
         return 0.1+0.5*dist;
     }
     //actual distance function
-    return 3.*exp(-10.*dist*dist)+surfArea(dist);//the gaussian makes the light not too bright right at it - so its not just a white blob!
+    return 2.*exp(-15.*dist*dist)+surfArea(dist);//the gaussian makes the light not too bright right at it - so its not just a white blob!
 }
 
 
@@ -28,7 +28,8 @@ float lightAtt(float dist, tangVector angle){
     }
     
     //actual distance function
-    return 0.1+areaElement(dist,angle);//make a function like surfArea in globalGeometry to compute this
+    return exp(-15.*dist*dist)+surfArea(dist);
+        //areaElement(dist,angle);//make a function like surfArea in globalGeometry to compute this
 }
 
 
@@ -84,7 +85,7 @@ tangVector surfaceNormal(tangVector u){
 // Specularity and Diffusivity of Surfaces
 //----------------------------------------------------------------------------------------------------------------------
 //toLight and toViewer are tangent vectors at sample point, pointed at the light source and viewer respectively
-vec3 phongShading(tangVector toLight, tangVector toViewer, tangVector  surfNormal, float distToLight, vec3 baseColor, vec3 lightColor, float lightIntensity){
+vec3 phongShading(tangVector toLight, tangVector toViewer, tangVector  surfNormal, float distToLight, vec3 baseColor, vec3 lightColor, float lightIntensity,tangVector atLight){
     //Calculations - Phong Reflection Model
 
     //this is tangent vector to the incomming light ray
@@ -98,7 +99,7 @@ vec3 phongShading(tangVector toLight, tangVector toViewer, tangVector  surfNorma
     float rDotV = max(cosAng(reflectedRay, toViewer), 0.0);
     vec3 specular = lightColor.rgb * pow(rDotV,15.0);
     //Attenuation - of the light intensity due to distance from source
-    float att = lightIntensity /lightAtt(distToLight);
+    float att = lightIntensity /(lightAtt(distToLight));
     //Combine the above terms to compute the final color
     return (baseColor*(diffuse + .15) + vec3(.6, .5, .5)*specular*2.) * att;
    //return att*((diffuse*baseColor) + specular);
@@ -178,6 +179,7 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     
     vec4 translatedLightPosition;
     tangVector toLight;
+    tangVector fromLight;
     float distToLight;
     
     //----------------FOR THE MAIN LIGHT---------------
@@ -189,11 +191,13 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     //we start being given the light location, and have outside access to our location, and the point of interest on the surface
     //now compute these  two useful  quantites out of this data
     toLight=tangDirection(surfacePosition, translatedLightPosition);//tangent vector on surface pointing to light
+    fromLight=toLight;//we are only going to use the w component which is not changed!
+        //tangNormalize(tangDirection(translatedLightPosition,surfacePosition));//tang vect at light pointing at surface
     distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source
     
     
     //this is all the info we need to get Phong for this light source
-    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity,fromLight);
     
     
     //now for this same light source, we compute the shadow
@@ -221,9 +225,10 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
         translatedLightPosition=translate(composeIsometry(fixPosition,invGenerators[i]),lightPosition);
         
         toLight=tangDirection(surfacePosition,translatedLightPosition);//tangent vector on surface pointing to light
+        fromLight=tangDirection(translatedLightPosition,surfacePosition);//tang vect at light pointing at surface
         distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source
         //compute the contribution to phong shading
-        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+        phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity,fromLight);
         //compute the shadows
        if(marchShadows){
         shadow=shadowMarch(toLight,distToLight);
@@ -273,6 +278,7 @@ vec3 globalLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool 
     float shadow=1.;//1 means no shadows
     
     tangVector toLight;
+    tangVector fromLight;
     float distToLight;
     vec4 fixedLightPos;
     //Isometry totalIsom;
@@ -284,12 +290,13 @@ vec3 globalLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool 
     //we start being given the light location, and have outside access to our location, and the point of interest on the surface
     //now compute these  two useful  quantites out of this data
     toLight=tangDirection(surfacePosition, fixedLightPos);//tangent vector on surface pointing to light
+    fromLight=tangDirection(fixedLightPos,surfacePosition);//tang vect at light pointing at surface
     distToLight=exactDist(surfacePosition, fixedLightPos);//distance from sample point to light source
     
     
     
     //this is all the info we need to get Phong for this light source
-    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
+    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity,fromLight);
     
     //now for this same light source, we compute the shadow
     //this  original sourxe almost never produces shadows (if the sdf is concave,symmetric about center)

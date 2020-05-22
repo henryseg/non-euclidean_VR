@@ -63,12 +63,15 @@ float surfArea(float rad){
 }
 
 
+
+
 float areaElement(float rad, tangVector angle){
     //gives the 1/coefficient of the area element on the unit 2-sphere, after being flowed out into the space via geodesic flow
     //for isotropic geometries, this is simply the surface area of the geodesic sphere, as there's no angular dependence.
     //for non-isotropic geometries, ther's an angular dependence.
-    
-    return surfArea(rad);
+    float cosphi=angle.dir.w;
+    return rad*sinh(rad*sqrt(1.-cosphi*cosphi))/(0.1+sqrt(1.-cosphi*cosphi));
+    //the 0.2 is to fix numerical errrors of dividing by zero in places...
 }
 
 

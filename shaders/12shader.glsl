@@ -12,7 +12,7 @@
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
     //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 40.*(2.+cosh(2.*brightness)),marchShadows, surfColor,fixPosition);
+    return localLight(localLightPos, localLightColor, 45.*(2.+cosh(2.*brightness)),marchShadows, surfColor,fixPosition);
 }
 
 
@@ -165,6 +165,7 @@ vec3 getPixelColor(tangVector rayDir){
     
     firstPass=true;
     firstPassColor=marchedColor(rayDir,firstPass,surfRefl);
+
 //    //marched color runs the raymarch for rayDir, then computes the contributions of the base color, local and global lightings
 //    //in addition to returning this color, it (via raymarch), sets the global variables sampletv and distToViewer
 //    // via the SDFs, this sets hitWhich, hitLocal
@@ -282,6 +283,8 @@ vec3 doubleBouncePixelColor(tangVector rayDir){
     
     firstPass=true;
     firstPassColor=marchedColor(rayDir,firstPass,surfRefl);
+
+
 //    //marched color runs the raymarch for rayDir, then computes the contributions of the base color, local and global lightings
 //    //in addition to returning this color, it (via raymarch), sets the global variables sampletv and distToViewer
 //    // via the SDFs, this sets hitWhich, hitLocal
