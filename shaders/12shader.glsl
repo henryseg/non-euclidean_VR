@@ -12,7 +12,7 @@
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
     //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 45.*(2.+cosh(2.*brightness)),marchShadows, surfColor,fixPosition);
+    return localLight(localLightPos, localLightColor, 1.*(2.+cosh(2.*brightness)),marchShadows, surfColor,fixPosition);
 }
 
 

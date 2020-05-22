@@ -57,15 +57,15 @@ Isometry translateByVector(vec4 v){
     vec4 realPart=vec4(0,0,0,v.z);
     mat4 matrixPart=mat4(1.);
     float len=sqrt(v.x*v.x+v.y*v.y);
-    float c1= sinh(len);
-    float c2=cosh(len)-1.;
+    float c1= sin(len);
+    float c2=1.-cos(len);
     if(len!=0.){
      float dx=v.x/len;
      float dy=v.y/len;
     
      mat4 m=mat4(
-        0, 0, dx, 0,
-        0, 0, dy, 0,
+        0, 0, -dx, 0,
+        0, 0, -dy, 0,
         dx, dy, 0, 0,
         0, 0, 0, 0
      );

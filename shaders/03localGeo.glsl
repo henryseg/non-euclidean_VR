@@ -45,7 +45,7 @@ float tangDot(tangVector u, tangVector v){
     mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
-    0.,0.,-1.,0.,
+    0.,0.,1.,0.,
     0.,0.,0.,1.
     );
 
@@ -58,7 +58,7 @@ float tangDot(vec4 u, vec4 v){
     mat4 g = mat4(
     1.,0.,0.,0.,
     0.,1.,0.,0.,
-    0.,0.,-1.,0.,
+    0.,0.,1.,0.,
     0.,0.,0.,1.
     );
 
@@ -135,7 +135,7 @@ tangVector eucPart(tangVector tv){
     return tangVector(tv.pos, vec4(0.,0.,0.,tv.dir.w));
 }
 
-tangVector hypPart(tangVector tv){
+tangVector sphPart(tangVector tv){
     return tangVector(tv.pos, vec4(tv.dir.xyz,0));
 }
 
@@ -146,7 +146,7 @@ vec4 eucPart(vec4 v){
     return vec4(0.,0.,0.,v.w);
 }
 
-vec4 hypPart(vec4 v){
+vec4 sphPart(vec4 v){
     return vec4(v.xyz,0.);
 }
 
@@ -166,8 +166,8 @@ vec4 hypPart(vec4 v){
 //CHANGED THIS
 //basis for the tangent space at a point
 mat4 tangBasis(vec4 p){
-    vec4 basis_x = vecNormalize(vec4(p.z,0.0,p.x,0.0));  
-      vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
+    vec4 basis_x = vecNormalize(vec4(p.z,0.0,-p.x,0.0));  
+      vec4 basis_y = vec4(0.0,p.z,-p.y,0.0);  
       vec4 basis_z = vec4(0.0,0.0,0,1);  
     //make this orthonormal
       basis_y = vecNormalize(basis_y - tangDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
@@ -193,7 +193,7 @@ tangVector rotateFacing(mat4 A, tangVector tv){
     //then rotate facing
     //then send it back on its way.
 
-float d=acosh(tv.pos.z);//distance needed to travel up hyperboloid.
+float d=acos(tv.pos.z);//distance needed to travel up hyperboloid.
 vec4 transVector=vec4(d*normalize(vec2(tv.pos.x,tv.pos.y)),0.,tv.pos.w);
 Isometry B=translateByVector(transVector);
 //this isometry takes the origin to (x,y,z,w);
