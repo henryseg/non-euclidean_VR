@@ -71,11 +71,12 @@ float tangDot(vec4 u, vec4 v){
 //the norm of a tangent vector using the Riemannian metric
 float tangNorm(tangVector v){
     // calculate the length of a tangent vector
-    return sqrt(tangDot(v, v));
+    return sqrt(abs(tangDot(v, v)));
 }
 
 float tangNorm(vec4 v){
-    return sqrt(tangDot(v,v));
+    
+    return sqrt(abs(tangDot(v,v)));
 }
 
 //return unit tangent vector in same direction
@@ -99,12 +100,11 @@ vec4 vecNormalize(vec4 v){
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
     //could probably speed things up if we didn't normalize but instead required unit length inputs?
-    return -tangDot(tangNormalize(u), tangNormalize(v));
+    return tangDot(tangNormalize(u),tangNormalize(v));
 }
 
 
-//NO IDEA WHY THIS WOULD BE CHANGED TO A PLUS?! IS THE TANGENT DOT BAKCWARDS?
-//USED TO BE -2 BUT NOW 2 IS WORKING...
+
 //reflect the unit tangent vector u off the surface with unit normal nVec
 tangVector reflectOff(tangVector u,tangVector nVec){
     return add(scalarMult(-2.0 * cosAng(u, nVec), nVec), u);
@@ -129,17 +129,26 @@ tangVector reflectOff(tangVector u,tangVector nVec){
 //
 
 
+
+
 tangVector eucPart(tangVector tv){
-    return tangVector(vec4(0.,0.,0.,tv.pos.w), vec4(0.,0.,0.,tv.dir.w));
+    return tangVector(tv.pos, vec4(0.,0.,0.,tv.dir.w));
 }
 
 tangVector hypPart(tangVector tv){
-    return tangVector(vec4(tv.pos.xyz,0), vec4(tv.dir.xyz,0));
+    return tangVector(tv.pos, vec4(tv.dir.xyz,0));
 }
 
 
+//overload for vectors (points in the space)
 
+vec4 eucPart(vec4 v){
+    return vec4(0.,0.,0.,v.w);
+}
 
+vec4 hypPart(vec4 v){
+    return vec4(v.xyz,0.);
+}
 
 
 
@@ -157,8 +166,8 @@ tangVector hypPart(tangVector tv){
 //CHANGED THIS
 //basis for the tangent space at a point
 mat4 tangBasis(vec4 p){
-    vec4 basis_x = vecNormalize(vec4(p.z,0.0,-p.x,0.0));  
-      vec4 basis_y = vec4(0.0,p.z,-p.y,0.0);  
+    vec4 basis_x = vecNormalize(vec4(p.z,0.0,p.x,0.0));  
+      vec4 basis_y = vec4(0.0,p.z,p.y,0.0);  
       vec4 basis_z = vec4(0.0,0.0,0,1);  
     //make this orthonormal
       basis_y = vecNormalize(basis_y - tangDot(basis_y, basis_x)*basis_x); // need to Gram Schmidt but only one basis vector: the final direction is obvious!
@@ -178,14 +187,29 @@ mat4 tangBasis(vec4 p){
 //HAVE TO ROTATE HYPERBOLIC AND EUCLIDEAN PARTS TOGETHER
 //THEN RE-NORMALIZE
 tangVector rotateFacing(mat4 A, tangVector tv){
-    // leave position fixed, rotate facing vector
-    vec3 vHyp=tv.dir.xyz;
-    float vEuc=tv.dir.w;
     
-    vec4 newV=A*vec4(tv.dir.xyw,0.);
-    vec4 permuteV=vec4(newV.xy,0.,newV.z);
-    
-    return tangNormalize(tangVector(tv.pos, permuteV));
+//first; move facing to ORIGIN (there's not a perscribed way to do this :( :( :( )
+// point is $(x,y,z,w)$ use a translate by vector inverse of length cosh(z) in direction (x,y,0) to pull this point to origin
+    //then rotate facing
+    //then send it back on its way.
+
+float d=acosh(tv.pos.z);//distance needed to travel up hyperboloid.
+vec4 transVector=vec4(d*normalize(vec2(tv.pos.x,tv.pos.y)),0.,tv.pos.w);
+Isometry B=translateByVector(transVector);
+//this isometry takes the origin to (x,y,z,w);
+Isometry C=getInverse(B);//this takes (x,y,z,w) to the origin.
+
+vec4 origDir=translate(C,tv.dir); //vector moved to the origin
+
+//now, rotatee the facing by A
+//permute the coordinates so the xyw bits are first
+vec4 newV=A*vec4(origDir.xyw,0.);
+vec4 permuteV=vec4(newV.xy,0.,newV.z);
+//now translate it back home
+vec4 backV=translate(B,permuteV);
+
+//return the resulting tangent vector
+return tangNormalize(tangVector(tv.pos,backV));
 }
 
 

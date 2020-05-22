@@ -55,26 +55,24 @@ Isometry composeIsometry(Isometry A, Isometry B)
 //CHANGED THIS
 Isometry translateByVector(vec4 v){
     vec4 realPart=vec4(0,0,0,v.z);
+    mat4 matrixPart=mat4(1.);
     float len=sqrt(v.x*v.x+v.y*v.y);
-    float c1= sin(len);
-    float c2=1.-cos(len);
+    float c1= sinh(len);
+    float c2=cosh(len)-1.;
     if(len!=0.){
      float dx=v.x/len;
      float dy=v.y/len;
     
      mat4 m=mat4(
-        0, 0, -dx, 0,
-        0, 0, -dy, 0,
+        0, 0, dx, 0,
+        0, 0, dy, 0,
         dx, dy, 0, 0,
         0, 0, 0, 0
      );
-    mat4 matrixPart=mat4(1.)+c1* m+c2*m*m;
+    matrixPart=matrixPart+c1* m+c2*m*m;
+    }
     Isometry result =Isometry(matrixPart,realPart);
     return result;
-    }
-    else{
-    return Isometry(mat4(1.),vec4(0.));
-    }
 }
 
 
@@ -100,7 +98,7 @@ Isometry makeInvLeftTranslation(vec4 p) {
 //CHANGED THIS
 vec4 translate(Isometry A, vec4 v) {
     // translate a point of a vector by the given direction
-    return A.matrix * v+A.real;
+    return (A.matrix * v)+A.real;
 }
 
 
@@ -166,7 +164,7 @@ struct tangVector {
 //CHANGED THIS
 tangVector translate(Isometry A, tangVector v) {
     // over load to translate a direction
-    return tangVector(A.matrix * v.pos+A.real, A.matrix * v.dir);
+    return tangVector((A.matrix * v.pos)+A.real, A.matrix * v.dir);
 }
 
 

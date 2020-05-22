@@ -38,15 +38,15 @@ Isometry.prototype.translateByVector = function (v) {
     let len = Math.sqrt(v.x * v.x + v.y * v.y);
     let real = new Vector4(0, 0, 0, v.z); //set the fiber translation
     if (len != 0) {
-        var c1 = Math.sin(len);
-        var c2 = 1. - Math.cos(len);
+        var c1 = Math.sinh(len);
+        var c2 = Math.cosh(len) - 1;
         let dx = v.x / len;
         let dy = v.y / len;
 
         var m = new Matrix4().set(
             0, 0, dx, 0,
             0, 0, dy, 0,
-            -dx, -dy, 0, 0,
+            dx, dy, 0, 0,
             0, 0, 0, 0.);
         var m2 = m.clone().multiply(m);
         m.multiplyScalar(c1);
