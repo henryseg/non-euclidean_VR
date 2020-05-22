@@ -100,7 +100,7 @@ vec4 vecNormalize(vec4 v){
 float cosAng(tangVector u, tangVector v){
     // cosAng between two vector in the tangent bundle
     //could probably speed things up if we didn't normalize but instead required unit length inputs?
-    return -tangDot(tangNormalize(u),tangNormalize(v));
+    return tangDot(tangNormalize(u),tangNormalize(v));
 }
 
 
