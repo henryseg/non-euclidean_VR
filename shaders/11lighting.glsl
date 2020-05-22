@@ -5,7 +5,7 @@
 float lightAtt(float dist){
     if (FAKE_LIGHT_FALLOFF){
         //fake falloff
-        return 0.5+cosh(dist);
+        return 0.1+0.5*dist;
     }
     //actual distance function
     return 3.*exp(-10.*dist*dist)+surfArea(dist);//the gaussian makes the light not too bright right at it - so its not just a white blob!
@@ -24,7 +24,7 @@ float lightAtt(float dist, tangVector angle){
     //angle is the unit tangent vector pointing from the light source towards the illuminated object
         if (FAKE_LIGHT_FALLOFF){
         //fake falloff
-        return 0.5+0.5*dist*dist*dist;
+        return 0.1+0.5*dist;
     }
     
     //actual distance function
@@ -60,7 +60,7 @@ tangVector surfaceNormal(vec4 p) {
     }
     else { //global scene
          tangVector tv = tangVector(p,
-       basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
         basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
         basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
         );

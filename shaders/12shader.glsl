@@ -12,7 +12,7 @@
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
     //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 10.,marchShadows, surfColor,fixPosition);
+    return localLight(localLightPos, localLightColor, 40.*(2.+cosh(2.*brightness)),marchShadows, surfColor,fixPosition);
 }
 
 
@@ -39,7 +39,7 @@ vec3 allGlobalLights(vec3 surfColor,bool marchShadows,Isometry fixPosition){
      for (int i=0; i<4; i++){
          //have four global lights in our scene
          
-         globalColor+=globalLight(lightPositions[i], lightIntensities[i].xyz, 10.,marchShadows, surfColor,fixPosition);
+         globalColor+=globalLight(lightPositions[i], lightIntensities[i].xyz, 4.,marchShadows, surfColor,fixPosition);
      }
     
     //normalize the output color by dividing by the number of light sources
@@ -116,7 +116,7 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------
-    fixPosition=fixPositionTestGlobal(hitLocal);
+    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
     globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
     
     
@@ -164,7 +164,7 @@ vec3 getPixelColor(tangVector rayDir){
 
     
     firstPass=true;
-    firstPassColor= marchedColor(rayDir,firstPass,surfRefl);
+    firstPassColor=marchedColor(rayDir,firstPass,surfRefl);
 //    //marched color runs the raymarch for rayDir, then computes the contributions of the base color, local and global lightings
 //    //in addition to returning this color, it (via raymarch), sets the global variables sampletv and distToViewer
 //    // via the SDFs, this sets hitWhich, hitLocal
@@ -213,50 +213,7 @@ vec3 getPixelColor(tangVector rayDir){
 
 
 
-vec3 testPixelColor(tangVector rayDir){
-    
-    
-    
-    bool firstPass;//keeps track of what pass we are on
-    
-    Isometry fixPosition;
-    
-    vec3 baseColor;//color of the surface where it is struck
-    
-    vec3 localColor;//the total lighting  computation from local lights
-    vec3 globalColor;//the total lighting  computation from global lights
-    vec3 totalColor;// the  total lighting computation from all sources
-    
-   
-    //tangVector toViewer;
-    //vec4 surfacePosition;
-    
-    //------ DOING THE RAYMARCH ----------
-
-    
-    raymarch(rayDir,totalFixMatrix);//do the  raymarch  
-    
-    baseColor=materialColor(hitWhich);
-    surfacePosition=sampletv.pos;//position on the surface of the sample point, set by raymarch
-    toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer / origin of raymarch
-    surfNormal=surfaceNormal(sampletv);//normal vector to surface
-    
-        //------ Local Lighting ----------
-    fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
-    localColor=allLocalLights(baseColor, false,fixPosition);
-
-    
-  return localColor;
-}
-    
-    
-    
-    
-
-
 vec3 cheapPixelColor(tangVector rayDir){
-    
-    
     
     bool firstPass;//keeps track of what pass we are on
     
@@ -272,9 +229,8 @@ vec3 cheapPixelColor(tangVector rayDir){
     //vec4 surfacePosition;
     
     //------ DOING THE RAYMARCH ----------
-
-    raymarch(rayDir,totalFixMatrix);//do the  raymarch  
     
+    raymarch(rayDir,totalFixMatrix);//do the  raymarch    
    
     //------ Basic Surface Properties ----------
     //we need these quantities to run the local / global lighting functions
@@ -288,17 +244,17 @@ vec3 cheapPixelColor(tangVector rayDir){
     fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
     localColor=allLocalLights(baseColor, false,fixPosition);
 
-    //totalColor=localColor;
-    //------ Global Lighting ----------
-    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
-    globalColor=allGlobalLights(baseColor,false, fixPosition);
+    totalColor=localColor;
+//    //------ Global Lighting ----------
+//    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
+//    globalColor=allGlobalLights(baseColor,false, fixPosition);
+//    
     
-    
-   // ------ TOTAL FIRST PASS LIGHTING ----------
+    //------ TOTAL FIRST PASS LIGHTING ----------
 
     //mix these two lighting contributions into the first-pass color
     //the proportion is global/local
-    totalColor=mixLights(0.75,localColor,globalColor);
+    //totalColor=mixLights(0.75,localColor,globalColor);
     
     //add fog for distance to the mixed color
     totalColor=fog(totalColor, vec3(0.02,0.02,0.02), distToViewer);
