@@ -1,5 +1,4 @@
 import {
-    Vector3,
     Vector4,
     ShaderMaterial,
     CubeTextureLoader
@@ -7,20 +6,18 @@ import {
 
 import {
     globals
-} from './Main.js';
+} from "./Main.js";
+
 import {
-    H2Elt,
-    Isometry
-} from "./Isometry.js";
-import {
-    Position,
+    Point,
+    Vector,
+    Isometry,
     ORIGIN
+} from "./Geometry.js";
+
+import {
+    Position
 } from "./Position.js";
-
-
-//----------------------------------------------------------------------------------------------------------------------
-//	Geometry constants
-//----------------------------------------------------------------------------------------------------------------------
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -71,12 +68,24 @@ function fixOutsideCentralCell(position) {
 }
 
 
-
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Tiling Generators Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
+/*
+
+Moves the generators in the 'Geometry.js' file (or another geometry dependent file)?
+Maybe create a class "lattice" to would store
+- the generators
+- the test function 'is inside fundamental dmain ?'
+
+ */
+
+/**
+ * Create the generators of a lattice and their inverses
+ * The (2i+1)-entry of the output is the inverse of the (2i)-entry.
+ * @returns {Isometry[]} - the list of generators
+ */
 function createGenerators() { /// generators for the tiling by cubes.
 
     // TODO. Check the generators
@@ -84,102 +93,106 @@ function createGenerators() { /// generators for the tiling by cubes.
     //  Not even sure they generate a discrete subgroup!
 
     const aux = 1;
-    const gen0 = new Isometry().makeLeftTranslation(0, Math.sqrt(aux * aux + 1), aux, 0);
-    const gen1 = new Isometry().makeInvLeftTranslation(0, Math.sqrt(aux * aux + 1), aux, 0);
-    const gen2 = new Isometry().makeLeftTranslation(0, Math.sqrt(aux * aux + 1), 0, aux);
-    const gen3 = new Isometry().makeInvLeftTranslation(0, Math.sqrt(aux * aux + 1), 0, aux);
-    const gen4 = new Isometry().makeLeftTranslation(1, 1, 0,0);
-    const gen5 = new Isometry().makeInvLeftTranslation(1, 1, 0,0);
-
+    const gen0 = new Isometry().makeTranslation(aux, 0, Math.sqrt(aux * aux + 1), 0,);
+    const gen1 = new Isometry().makeInvTranslation(aux, 0, Math.sqrt(aux * aux + 1), 0);
+    const gen2 = new Isometry().makeTranslation(0, aux, Math.sqrt(aux * aux + 1), 0);
+    const gen3 = new Isometry().makeInvTranslation(0, aux, Math.sqrt(aux * aux + 1), 0);
+    const gen4 = new Isometry().makeTranslation(0, 0, 0, 1);
+    const gen5 = new Isometry().makeInvTranslation(0, 0, 0, 1);
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
+/**
+ * Return the inverses of the generators
+ *
+ * @param {Array.<Isometry>} genArr - the isom
+ * @returns {Array.<Isometry>} - the inverses
+ */
 function invGenerators(genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
 }
 
-//Unpackage boosts into their components (for hyperbolic space, just pull out the matrix which is the first component)
-function unpackageMatrix(genArr) {
-    let out = [];
-    for (let i = 0; i < genArr.length; i++) {
-        out.push(genArr[i].toVector4());
-    }
-    return out
+/**
+ * Serialize an array of isometries
+ *
+ * @param {Array.<Isometry>} isomArr - the isometries to serialize
+ * @returns {Array.<Vector4>} - the serialized isometries
+ */
+function serializeIsoms(isomArr) {
+    return isomArr.map(function(isom) {
+        return isom.serialize();
+    });
 }
-
 
 //----------------------------------------------------------------------------------------------------------------------
 //	Initialise things
 //----------------------------------------------------------------------------------------------------------------------
 
-let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
 const time0 = new Date().getTime();
 
+/**
+ * Initialize the globals variables related to the scene (position, cell position, lattie, etc).
+ */
 function initGeometry() {
     globals.position = new Position();
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();
     globals.invGens = invGenerators(globals.gens);
-    invGensMatrices = unpackageMatrix(globals.invGens);
-
-
 
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
-    globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
+    globals.leftPosition = globals.position.clone().flow(vectorLeft);
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
-    globals.rightPosition = globals.position.clone().localFlow(vectorRight);
+    globals.rightPosition = globals.position.clone().flow(vectorRight);
 }
 
-
+/**
+ * Add a light to scene
+ * @param {Vector} v - the position of the light is obtained by flowing v form the origin
+ * @param {Vector4} colorInt - color and light intensity
+ *
+ * @todo Rethink the position of the light?
+ */
 function PointLightObject(v, colorInt) {
-    //position is a euclidean Vector4
-    let isom = new Position().localFlow(v).boost;
-    let lp = ORIGIN.clone().translateBy(isom);
+    let isom = new Position().flow(v).boost;
+    let lp = new Point().translateBy(isom);
     globals.lightPositions.push(lp);
     globals.lightIntensities.push(colorInt);
 }
 
-//DEFINE THE LIGHT COLORS
+/** @const {Vector4} lightColor1 - Color 1 (blue) */
 const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1); // blue
+/** @const {Vector4} lightColor2 - Color 2 (yellow) */
 const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1); // yellow
+/** @const {Vector4} lightColor3 - Color 3 (red)  */
 const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1); // red
+/** @const {Vector4} lightColor4 - Color 4 (purple) */
 const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
 
 
+/**
+ * Initialize the objects of the scence
+ */
 function initObjects() {
-    PointLightObject(new Vector3(1., 1.5, 0), lightColor1);
-    PointLightObject(new Vector3(-1, 1.5, 0), lightColor2);
-    PointLightObject(new Vector3(0, 0, 1.), lightColor3);
-    PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
+    PointLightObject(new Vector(1., 1.5, 0), lightColor1);
+    PointLightObject(new Vector(-1, 1.5, 0), lightColor2);
+    PointLightObject(new Vector(0, 0, 1.), lightColor3);
+    PointLightObject(new Vector(-1., -1., -1.), lightColor4);
 
-    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
-    console.log("globalObjectPosition",globals.globalObjectPosition.boost.toVector4());
+    globals.globalObjectPosition = new Position().flow(new Vector(0, 0, -1));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
 
+/**
+ * Pass all the data to the shader
+ * @param fShader
+ */
 function setupMaterial(fShader) {
-
-    // console.log("globals.vr", globals.vr);
-    // console.log("globals.lightIntensities", globals.lightIntensities);
-    // console.log("invGensMatrices", invGensMatrices);
-    // console.log("globals.position.boost.toVector4()", globals.position.boost.toVector4());
-    // console.log("globals.leftPosition.boost.toVector4()", globals.leftPosition.boost.toVector4());
-    // console.log("globals.rightPosition.boost.toVector4()", globals.rightPosition.boost.toVector4());
-    // console.log("globals.position.facing", globals.position.facing);
-    // console.log("globals.leftPosition.facing", globals.leftPosition.facing);
-    // console.log("globals.rightPosition.facing", globals.rightPosition.facing);
-    // console.log("globals.cellPosition.boost.toVector4()", globals.cellPosition.boost.toVector4());
-    // console.log("globals.invCellPosition.boost.toVector4()", globals.invCellPosition.boost.toVector4());
-    // console.log("globals.cellPosition.facing", globals.cellPosition.facing);
-    // console.log("globals.invCellPosition.facing", globals.invCellPosition.facing);
-    // console.log("globals.lightPositions", globals.lightPositions);
-    // console.log("globals.globalObjectPosition.boost.toVector4()", globals.globalObjectPosition.boost.toVector4());
 
     globals.material = new ShaderMaterial({
         uniforms: {
@@ -200,20 +213,20 @@ function setupMaterial(fShader) {
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
                 type: "v4",
-                value: invGensMatrices
+                value: serializeIsoms(globals.invGens)
             },
             //--- end of invGen stuff
             currentBoostMat: {
                 type: "v4",
-                value: globals.position.boost.toVector4()
+                value: globals.position.boost.serialize()
             },
             leftBoostMat: {
                 type: "v4",
-                value: globals.leftPosition.boost.toVector4()
+                value: globals.leftPosition.boost.serialize()
             },
             rightBoostMat: {
                 type: "v4",
-                value: globals.rightPosition.boost.toVector4()
+                value: globals.rightPosition.boost.serialize()
             },
             //currentBoost is an array
             facing: {
@@ -230,11 +243,11 @@ function setupMaterial(fShader) {
             },
             cellBoostMat: {
                 type: "v4",
-                value: globals.cellPosition.boost.toVector4()
+                value: globals.cellPosition.boost.serialize()
             },
             invCellBoostMat: {
                 type: "v4",
-                value: globals.invCellPosition.boost.toVector4()
+                value: globals.invCellPosition.boost.serialize()
             },
             cellFacing: {
                 type: "m4",
@@ -250,7 +263,7 @@ function setupMaterial(fShader) {
             },
             globalObjectBoostMat: {
                 type: "v4",
-                value: globals.globalObjectPosition.boost.toVector4()
+                value: globals.globalObjectPosition.boost.serialize()
             },
             globalSphereRad: {
                 type: "f",
@@ -300,31 +313,30 @@ function setupMaterial(fShader) {
     });
 }
 
-
+/**
+ * Update the data passed to the shader.
+ *
+ * It seems that to be properly passed to the shader,
+ * a uniform `foo` cannot be updated on the js side by a statement of the form
+ * > foo = new_value_of_foo
+ * One has to use a statement that alter the object `foo` e.g.
+ * > foo. attribute = new_value of the attribute
+ * (Maybe some subtleties in the pointer management ?)
+ *
+ * This can be an issue when passing float to the shader
+ * (Remark: is foo += 1 totally equivalent to foo = foo + 1 in this context?)
+ * This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
+ * > g_material.uniforms.foo.value = new_value_of_foo
+ */
 function updateMaterial() {
-    /*
-        It seems that to be properly passed to the shader,
-        a uniform `foo` cannot be updated on the js side by a statement of the form
-        > foo = new_value_of_foo
-        One has to use a statement that alter the object `foo` e.g.
-        > foo. attribute = new_value of the attribute
-        (Maybe some subtleties in the pointer management ?)
-
-        This can be an issue when passing float to the shader
-        (Remark: is foo += 1 totally equivalent to foo = foo + 1 in this context?)
-        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
-        > g_material.uniforms.foo.value = new_value_of_foo
-
-     */
-
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
-    globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
-    globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.toVector4();
+    globals.leftPosition = globals.position.clone().flow(vectorLeft);
+    globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.serialize();
     globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
-    globals.rightPosition = globals.position.clone().localFlow(vectorRight);
-    globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.toVector4();
+    globals.rightPosition = globals.position.clone().flow(vectorRight);
+    globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.serialize();
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
     globals.material.uniforms.time.value = (new Date().getTime()) - time0;
@@ -342,6 +354,5 @@ export {
     updateMaterial,
     fixOutsideCentralCell,
     createGenerators,
-    invGenerators,
-    unpackageMatrix
+    invGenerators
 };

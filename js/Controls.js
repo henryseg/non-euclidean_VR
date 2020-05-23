@@ -7,9 +7,12 @@ import {
     Vector3,
     Quaternion,
     Matrix4
-} from './module/three.module.js';
+} from "./module/three.module.js";
+import {
+    Vector
+} from "./Geometry.js";
 
-import {globals} from './Main.js';
+import {globals} from "./Main.js";
 
 import {fixOutsideCentralCell} from "./Math.js";
 
@@ -209,22 +212,21 @@ let Controls = function () {
         // Translation
         //--------------------------------------------------------------------
         let deltaTime = (newTime - oldTime) * 0.001;
-        let deltaPosition = new Vector3();
+        let deltaPosition = new Vector(0,0,0);
 
         //Check if head has translated (tracking)
         if(vrState !== null && vrState.hmd.lastPosition !== undefined && vrState.hmd.position[0] !== 0){
             //let quat = vrState.hmd.rotation.clone().inverse();
-            deltaPosition = new Vector3().subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);
+            deltaPosition.subVectors(vrState.hmd.position, vrState.hmd.lastPosition)//.applyQuaternion(quat);
         }
 
         if (this.manualMoveRate[0] !== 0 || this.manualMoveRate[1] !== 0 || this.manualMoveRate[2] !== 0) {
-            //console.log('ici');
-            deltaPosition = globals.position.getFwdVector().multiplyScalar(speed * deltaTime * (this.manualMoveRate[0]));
+            deltaPosition = deltaPosition.add(globals.position.getFwdVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[0]));
             deltaPosition = deltaPosition.add(globals.position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(globals.position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
         }
-        globals.position.localFlow(deltaPosition);
 
+        globals.position.flow(deltaPosition);
 
         let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
         if (fixIndex !== -1) {
@@ -254,14 +256,14 @@ let Controls = function () {
         deltaRotation.normalize();
 
         let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        globals.position.localRotateFacingBy(m);
+        globals.position.rotateFacingBy(m);
 
         //Check for headset rotation (tracking)
         if(vrState !== null && vrState.hmd.lastRotation !== undefined){
             //let rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
             m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-            globals.position.localRotateFacingBy(m);
+            globals.position.rotateFacingBy(m);
         }
 
     };

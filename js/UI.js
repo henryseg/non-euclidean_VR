@@ -1,11 +1,7 @@
 import {
     globals
 } from './Main.js';
-import {
-    createGenerators,
-    invGenerators,
-    unpackageMatrix
-} from "./Math.js";
+
 //-------------------------------------------------------
 // UI Variables
 //-------------------------------------------------------
