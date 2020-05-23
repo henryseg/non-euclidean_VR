@@ -96,7 +96,7 @@ vec3 materialColor(int hitWhich){
     else if (hitWhich ==3) {//local object
     //first option; some fixed color preturbed by your position in the colo cube a bit.
         //.xyw here because of product factor
-    return vec3(0.35,0.1,0.15)+(sampletv.pos.xyw+vec3(0.2,0.5,0.2))/10.;
+    return vec3(0.15,0.08,0.3)+(sampletv.pos.xyw+vec3(0.2,0.2,0.2))/8.;
     //return vec3(0.1,0.2,0.35);//just some random constant blue color
     }
     else if (hitWhich ==3) {//tiling

@@ -135,12 +135,11 @@ function createGenerators(t) { /// generators for the tiling by cubes.
     //        gen2.multiply(new Isometry().set([new Matrix4().makeRotationY(-PI / 2).transpose(),new Vector4(0,0,0,0)]));
     //    
     //        gen3.multiply(new Isometry().set([new Matrix4().makeRotationY(PI / 2).transpose(),new Vector4(0,0,0,0)]));
-
-    //     gen4.multiply(new Isometry().set([new Matrix4().makeRotationZ(-PI / 2).transpose(), new Vector4(0, 0, 0, 0)]));
     //
-    //     gen5.multiply(new Isometry().set([new Matrix4().makeRotationZ(PI / 2).transpose(), new Vector4(0, 0, 0, 0)]));
+    //    gen4.multiply(new Isometry().set([new Matrix4().makeRotationZ(-PI / 2).transpose(), new Vector4(0, 0, 0, 0)]));
     //
-
+    //    gen5.multiply(new Isometry().set([new Matrix4().makeRotationZ(PI / 2).transpose(), new Vector4(0, 0, 0, 0)]));
+    //
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 

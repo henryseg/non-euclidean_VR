@@ -64,9 +64,9 @@ float ellipsoidSDF(vec4 p, vec4 center, float l1,float l2, float l3){
 
 
 
-float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
+float EllipsoidSDF(vec4 p, vec4 center, float radius){
     //distance function applying affine transformation to a sphere.
-    return exactDist(vec4(p.x/10., p.y/10., p.z, 1.), center) - radius;
+    return exactDist(vec4(p.x, p.y, p.z, p.w/1.2), center) - radius;
 }
 
 

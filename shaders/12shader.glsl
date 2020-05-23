@@ -116,19 +116,19 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------
-    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
-    globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
-    
+//    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
+//    globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
+//    
     
     //------ TOTAL FIRST PASS LIGHTING ----------
 
     //mix these two lighting contributions into the first-pass color
     //the proportion is global/local
-    totalColor=mixLights(0.75,localColor,globalColor);
+    //totalColor=mixLights(0.75,localColor,globalColor);
     
     //add fog for distance to the mixed color
-    totalColor=fog(totalColor, vec3(0.02,0.02,0.02), distToViewer);
-    
+   // totalColor=fog(totalColor, vec3(0.02,0.02,0.02), distToViewer);
+    totalColor=fog(localColor, vec3(0.02,0.02,0.02), distToViewer);
     return totalColor;
 }
 
