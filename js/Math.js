@@ -120,7 +120,7 @@ function invGenerators(genArr) {
  * @returns {Array.<Vector4>} - the serialized isometries
  */
 function serializeIsoms(isomArr) {
-    return isomArr.map(function(isom) {
+    return isomArr.map(function (isom) {
         return isom.serialize();
     });
 }
@@ -181,7 +181,7 @@ function initObjects() {
     PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
     PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
-
+    console.log('lights', globals.lightPositions);
     globals.globalObjectPosition = new Position().flow(new Vector().set(0, 0, -1));
 }
 

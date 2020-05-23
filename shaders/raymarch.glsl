@@ -168,6 +168,7 @@ vec4 XreduceError(vec4 point) {
     return vec4(point.xyz / sqrt(-q), point.w);
 }
 
+/*
 // Apply to the H^2 component a rotation of angle alpha centered at the origin
 // TODO. Check if it is really needed (maybe we only need the tangVector form of it)
 vec4 XrotateBy(vec4 point, float angle) {
@@ -191,6 +192,7 @@ vec4 Xflip(vec4 point, float angle) {
     );
     return flip * point;
 }
+*/
 
 // Covering map from X to SL(2,R)
 vec4 XtoSL2(vec4 point) {
@@ -548,7 +550,7 @@ tangVector add(tangVector v1, tangVector v2) {
     // Make sure that the two vectors have at least one representation (local or global) in common.
     prepareDir(v1, v2);
     // Add the directions (if the representations agree)
-    if (v1.local && v2.global) {
+    if (v1.local && v2.local) {
         local = true;
         local_dir = v1.local_dir + v2.local_dir;
     }
@@ -573,7 +575,7 @@ tangVector sub(tangVector v1, tangVector v2) {
     // Make sure that the two vectors have at least one representation (local or global) in common.
     prepareDir(v1, v2);
     // Add the directions (if the representations agree)
-    if (v1.local && v2.global) {
+    if (v1.local && v2.local) {
         local = true;
         local_dir = v1.local_dir - v2.local_dir;
     }
@@ -593,11 +595,16 @@ tangVector scalarMult(float a, tangVector v) {
 
 // dot product of the two vectors
 float tangDot(tangVector v1, tangVector v2){
+    setLocalDir(v1);
+    setLocalDir(v2);
+    return dot(v1.local_dir, v2.local_dir);
+
+    /*
     // Make sure that the two vectors have at least one representation (local or global) in common.
     prepareDir(v1, v2);
     if (v1.local && v2.local) {
         // the tensor metric at the origin is given by the identity matrix
-        return dot(v1.local_dir, v1.local_dir);
+        return dot(v1.local_dir, v2.local_dir);
     }
     if (v1.global && v2.global) {
         // build the tensor metric at the point v1.pos = v2.pos
@@ -616,6 +623,7 @@ float tangDot(tangVector v1, tangVector v2){
     // this point of the code should never be reached
     // because we prepared the vectors at the beginning.
     return -1.;
+    */
 }
 
 // calculate the length of a tangent vector
@@ -648,7 +656,7 @@ tangVector tangNormalize(tangVector v){
 }
 
 // normalize the given vector
-// normalize is a protected name
+// called unit because normalize is a protected name
 void unit(inout tangVector v) {
     // length of the vector
     float length = tangNorm(v);
@@ -725,40 +733,19 @@ tangVector tangDirection(tangVector u, tangVector v){
 }
 
 
-// flow the given vector during time t
-void flow(float t, inout tangVector v) {
-    // set up the local direction if needed
-    setLocalDir(v);
-    resetGlobalDir(v);
-
-
-
-    // prepation : set the vector into an easier form to flow
-
-    // isometry sending the origin the the position of v
-    Isometry isom = makeLeftTranslation(v);
-    // pull back the tangent vector a the origin (very easy in the local representation)
-    v.pos = ORIGIN;
-    // flip if needed to get a positive fiber direction
-    bool flipped = false;
-    if (v.local_dir.w < 0.) {
-        flipped = true;
-        flip(v);
-    }
-
-    // rotation
-    // the angle alpha is characterized as follows
-    // if u is a tangent vector of the form (a, 0, 0, c) with a, c >= 0
-    // then v is obtained from u by a rotation of angle alpha
-    float alpha = atan(v.local_dir.y, v.local_dir.x);
+// flow the given vector during time t using exact formulas
+// this method is to be called  by `flow`
+// we make the following assumtions
+// - the initial position of v is the origin
+// - the local direction of v is set up
+// - the initial direction has the form (a, 0, 0, c), with a,c > 0
+void _exactFlow(float t, inout tangVector v) {
+    float a = v.local_dir.x;
     float c = v.local_dir.w;
-    float a = sqrt(1. - c * c);
-
-    v.local_dir = vec4(a, 0., 0., c);
-
 
     float phi = c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
     float omega = 0.;// the "pulsatance" involved in the geodesic flow.
+    float theta = 0.;// the rotation angle in H^2.
 
     // update the position of the tangent vector
     // we distinguish three cases, depending whether c is smaller, equal or greater than a.
@@ -783,17 +770,40 @@ void flow(float t, inout tangVector v) {
 
         mat3 m = T * shift * Tinv;
         v.pos.xyz = m * v.pos.xyz;
-        v.pos.w = phi + atan(v.pos.y, v.pos.x);
+
+        // hack for fixing crazy atan around (0,0)
+        // rely on the asymptotic expansion of the geodesic flow for small times
+        // shrho represents sinh(rho) for the polar coordinates of H^2
+        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
+        if (shrho < 0.001) {
+            theta = - 0.5 * (c / a) * shrho;
+        }
+        else {
+            theta = atan(v.pos.y, v.pos.x);
+        }
+        v.pos.w = phi + theta;
+
+        //debugColor = atan(v.pos.y, v.pos.x) * vec3(0.9, 0.9, 0.2);
+
     }
-    else if (c == a) {
+    else if (c==a) {
         // parabolic trajectory
         // todo. replace this by an asymptotic expension of the other two cases when  | a - c | << 1.
         v.pos.xyz = vec3(
-            t / sqrt2,
-            - 0.25 * t * t,
-            1. + 0.25 * t * t
+        t / sqrt2,
+        - 0.25 * t * t,
+        1. + 0.25 * t * t
         );
-        v.pos.w = phi + atan(v.pos.y, v.pos.x);
+        // hack for fixing crazy atan around (0,0)
+        // rely on the asymptotic expansion of the geodesic flow for small times
+        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
+        if (t < 0.001) {
+            theta = - t / (2. * sqrt2);
+        }
+        else {
+            theta = atan(v.pos.y, v.pos.x);
+        }
+        v.pos.w = phi + theta;
     }
     else {
         // remaining case c > a
@@ -810,15 +820,28 @@ void flow(float t, inout tangVector v) {
         0., a / omega, c / omega
         );
         mat3 rot = mat3(
-            cos(omega * t), -sin(omega * t), 0.,
-            sin(omega * t), cos(omega * t), 0.,
-            0., 0., 1.
+        cos(omega * t), -sin(omega * t), 0.,
+        sin(omega * t), cos(omega * t), 0.,
+        0., 0., 1.
         );
 
         mat3 m = T * rot * Tinv;
         v.pos.xyz = m * v.pos.xyz;
-        v.pos.w = phi + atan(v.pos.y, v.pos.x) + 2. * floor(0.5 - 0.25 * omega * t / PI) * PI;
+        // hack for fixing crazy atan around (0,0)
+        // rely on the asymptotic expansion of the geodesic flow for small times
+        // shrho represents sinh(rho) for the polar coordinates of H^2
+        // the formula is still problematic if a is very small
+        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
+        if (shrho < 0.001) {
+            theta = - 0.5 * (c / a) * shrho;
+        }
+        else {
+            theta = atan(v.pos.y, v.pos.x);
+        }
+        v.pos.w = phi + theta + 2. * floor(0.5 - 0.25 * omega * t / PI) * PI;
     }
+
+    //debugColor = -v.pos.w * vec3(0.9, 0.9, 0.2);
 
     // update the direction of the tangent vector
     // recall that tangent vectors at the origin have the form (ux,uy,0,uw)
@@ -829,13 +852,48 @@ void flow(float t, inout tangVector v) {
     0., 0., 1.
     );
     v.local_dir.xyw = S * v.local_dir.xyw;
+}
+
+
+// flow the given vector during time t
+void flow(float t, inout tangVector v) {
+
+    // set up the local direction if needed
+    setLocalDir(v);
+    resetGlobalDir(v);
+
+
+    // prepation : set the vector into an easier form to flow
+
+    // isometry sending the origin the the position of v
+    Isometry isom = makeLeftTranslation(v);
+    // pull back the tangent vector a the origin (very easy in the local representation)
+    v.pos = ORIGIN;
+    // flip if needed to get a positive fiber direction
+    bool flipped = false;
+    if (v.local_dir.w < 0.) {
+        flipped = true;
+        flip(v);
+    }
+    // rotation
+    // the angle alpha is characterized as follows
+    // if u is a tangent vector of the form (a, 0, 0, c) with a, c >= 0
+    // then v is obtained from u by a rotation of angle alpha
+    float alpha = atan(v.local_dir.y, v.local_dir.x);
+    float c = v.local_dir.w;
+    float a = sqrt(1. - c * c);
+    v.local_dir = vec4(a, 0., 0., c);
+
+    // flow the vector
+    _exactFlow(t, v);
 
     // reverse the preparation done at the beginning
     rotateBy(alpha, v);
-    if(flipped) {
+    if (flipped) {
         flip(v);
     }
     translate(isom, v);
+
     //reduce the errors
     unit(v);
 }
@@ -1086,15 +1144,10 @@ float globalSceneSDF(vec4 p){
     // correct for the fact that we have been moving
     vec4 absolutep = translate(cellBoost, p);
     float distance = MAX_DIST;
+    float objDist;
     //Light Objects
     for (int i=0; i<4; i++){
-        float objDist;
-        objDist = sphereSDF(
-        absolutep,
-        lightPositions[i],
-        0.1
-        //    1.0/(10.0*lightIntensities[i].w)
-        );
+        objDist = sphereSDF(absolutep, lightPositions[i], 0.1);
         distance = min(distance, objDist);
         if (distance < EPSILON){
             hitWhich = 1;
@@ -1103,33 +1156,16 @@ float globalSceneSDF(vec4 p){
         }
     }
     //Global Sphere Object
+    vec4 globalObjPos = translate(globalObjectBoost, ORIGIN);
+    objDist = sphereSDF(absolutep, globalObjPos, 0.3);
 
-    //float objDist = sliceSDF(absolutep);
-    //float slabDist;
-    float sphDist;
-    //slabDist = sliceSDF(absolutep);
-    sphDist=sphereSDF(absolutep, globalObjectBoostMat, 0.5);
-    //objDist=max(slabDist,-sphDist);
-    // objDist=MAX_DIST;
-    distance = min(distance, sphDist);
-
-    //global plane
-
-
-    //    vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    //    //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
-    //    objDist = sphereSDF(absolutep, globalObjPos, 0.1);
-    //
-    //
-    //
-    //    distance = min(distance, objDist);
-    //    if (distance < EPSILON){
-    //        hitWhich = 2;
-    //    }
-
+    distance = min(distance, objDist);
+    if (distance < EPSILON){
+        hitWhich = 2;
+        return distance;
+    }
 
     return distance;
-    // return MAX_DIST;
 }
 
 
@@ -1324,12 +1360,14 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         marchStep = MIN_DIST;
 
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+
             flow(marchStep, tv);
 
             /*
-            if (i == 2) {
+            if (i == 1) {
                 hitWhich = 5;
-                debugColor = abs(tv.local_dir.xyz);
+                //debugColor = vec3(0.3, 0.3, 0.6);
+                debugColor = -tv.pos.w * vec3(0.9, 0.9, 0.2);
                 break;
             }
             */
@@ -1367,7 +1405,7 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
     //Attenuation - Of the Light Intensity
     float distToLight = fakeDistance(SP, TLP);
-    float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
+    float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
     //Compute final color
     return att*((diffuse*baseColor) + specular);
 }
@@ -1379,10 +1417,10 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     tangVector V = newTangVector(SP, -sampletv.global_dir);
 
     vec3 surfColor;
-    surfColor=0.2*vec3(1.)+0.8*color;
+    surfColor = 0.2 * vec3(1.) + 0.8 * color;
 
-    if (display==3||display==4){ //for the dragon skin one only
-        surfColor=0.7*vec3(1.)+0.3*color;//make it brighter when there's less stuff
+    if (display == 3 || display == 4){ //for the dragon skin one only
+        surfColor = 0.7 * vec3(1.) + 0.3 * color;//make it brighter when there's less stuff
     }
     //    vec3 color = vec3(0.0);
     //--------------------------------------------------
@@ -1393,16 +1431,14 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
     for (int i = 0; i<4; i++){
-        Isometry totalIsom=composeIsometry(totalFixMatrix, invCellBoost);
+        Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     }
 
-
     //LOCAL LIGHT
     color+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
     //light color and intensity hard coded in
-
 
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
@@ -1449,8 +1485,6 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(aux, pt);
     return tangDirection(ORIGIN, pt).global_dir.xyz;
 }
-
-
 
 vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight){
     N = estimateNormal(sampletv.pos);
@@ -1557,35 +1591,38 @@ void main(){
     globalObjectBoost = unserialize(globalObjectBoostMat);
 
 
-        //stereo translations ----------------------------------------------------
-        bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-        tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    //stereo translations ----------------------------------------------------
+    bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
+    tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
-        if (isStereo == 1){
-            if (isLeft){
-                rotateByFacing(leftFacing, rayDir);
-                translate(leftBoost, rayDir);
-            }
-            else {
-                rotateByFacing(rightFacing, rayDir);
-                translate(rightBoost, rayDir);
-            }
+    if (isStereo == 1){
+        if (isLeft){
+            rotateByFacing(leftFacing, rayDir);
+            translate(leftBoost, rayDir);
         }
         else {
-            rotateByFacing(facing, rayDir);
-            translate(currentBoost, rayDir);
+            rotateByFacing(rightFacing, rayDir);
+            translate(rightBoost, rayDir);
         }
+    }
+    else {
+        rotateByFacing(facing, rayDir);
+        translate(currentBoost, rayDir);
+    }
 
-        //get our raymarched distance back ------------------------
+    //get our raymarched distance back ------------------------
 
 
     Isometry totalFixMatrix = identity;
     // do the marching
     raymarch(rayDir, totalFixMatrix);
-    //flow(15.*PI,rayDir);
-    //hitWhich = 5;
-    //debugColor = abs(rayDir.local_dir.xyz);
 
+    /*
+    hitWhich = 5;
+    tangVector v1 = newTangVector(ORIGIN, vec4(1, 0, 0, 0));
+    tangVector v2 = newTangVector(ORIGIN, vec4(0, 1, 0, 0));
+    debugColor = tangDot(v1,v2) * vec3(1,0,0);
+    */
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     // TODO. Replace by a switch instruction ?
@@ -1605,7 +1642,7 @@ void main(){
     else if (hitWhich == 2){
         // global object
         vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
-        //out_FragColor=vec4(1.0,0.,0., 1.0);
+        //out_FragColor=vec4(1.0, 0., 0., 1.0);
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }

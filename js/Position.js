@@ -171,7 +171,6 @@ class Position {
 
         // the geodesic flow distinguishes three cases
         if (c < a) {
-            console.log('hyp traj');
             // hyperbolic trajectory
             omega = Math.sqrt(a * a - c * c);
             let T = new Matrix3().set(
@@ -200,7 +199,6 @@ class Position {
             );
 
         } else if (c === a) {
-            console.log('para traj');
             // parabolic trajectory
             h2_point.set(
                 t / Math.sqrt(2.),
@@ -214,7 +212,6 @@ class Position {
                 phi + Math.atan2(h2_point.y, h2_point.x)
             );
         } else {
-            console.log('ell traj');
             // remaining case: c > a
             // elliptic trajectory
             omega = Math.sqrt(c * c - a * a);
@@ -341,7 +338,7 @@ class Position {
      * @returns {Vector} - the forward vector
      */
     getFwdVector(t = 1) {
-        return new Vector(0, 0, t).rotateByFacing(this);
+        return new Vector().set(0, 0, t).rotateByFacing(this);
     };
 
     /**
@@ -350,7 +347,7 @@ class Position {
      * @returns {Vector} - the right vector
      */
     getRightVector(t = 1) {
-        return new Vector(t, 0, 0).rotateByFacing(this);
+        return new Vector().set(t, 0, 0).rotateByFacing(this);
     };
 
     /**
@@ -359,7 +356,7 @@ class Position {
      * @returns {Vector} - the upward vector
      */
     getUpVector(t = 1) {
-        return new Vector(0, t, 0).rotateByFacing(this);
+        return new Vector().set(0, t, 0).rotateByFacing(this);
     };
 
     /**
