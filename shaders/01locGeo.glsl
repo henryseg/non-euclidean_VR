@@ -111,3 +111,16 @@ tangVector rotateFacing(mat4 A, tangVector v){
         // apply an isometry to the tangent vector (both the point and the direction)
     return tangVector(v.pos, A*v.dir);
 }
+
+
+
+tangVector turnAround(tangVector tv){
+    return tangVector(tv.pos,-tv.dir);
+}
+
+
+
+//reflect the unit tangent vector u off the surface with unit normal nVec
+tangVector reflectOff(tangVector u,tangVector nVec){
+    return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
+}

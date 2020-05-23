@@ -1,3 +1,55 @@
+
+
+
+vec3 localColor(mat4 totalFixMatrix, tangVector sampletv){
+    N = estimateNormal(sampletv.pos);
+    vec3 color=vec3(0., 0., 0.);
+    color = phongModel(totalFixMatrix, color);
+    color = 0.9*color+0.1;
+    return color;
+    //generically gray object (color= black, glowing slightly because of the 0.1)
+}
+
+
+vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
+    if (SURFACE_COLOR){ //color the object based on its position in the cube
+        vec4 samplePos=modelProject(sampletv.pos);
+        //Point in the Klein Model unit cube    
+        float x=samplePos.x;
+        float y=samplePos.y;
+        float z=samplePos.z;
+        x = 0.9*x/modelHalfCube;
+        y = 0.9*y/modelHalfCube;
+        z = -0.9*z/modelHalfCube;
+        vec3 color = vec3(x, y, z);
+        N = estimateNormal(sampletv.pos);
+        color = phongModel(totalFixMatrix, 0.175*color);
+        return 0.9*color+0.1;
+        //adding a small constant makes it glow slightly
+    }
+    else {
+        // objects
+        N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0., 0., 0.);
+        color = phongModel(totalFixMatrix, color);
+        return color;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //EARTH TEXTURING COLOR COMMANDS
 
 

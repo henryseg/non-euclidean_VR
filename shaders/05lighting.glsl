@@ -1,3 +1,53 @@
+
+
+
+//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
+tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
+    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
+    float newEp = EPSILON * 10.0;
+    mat4 theBasis= tangBasis(p);
+    vec4 basis_x = theBasis[0];
+    vec4 basis_y = theBasis[1];
+    vec4 basis_z = theBasis[2];
+    if (hitWhich != 3){ //global light scene
+        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
+        tangVector tv = tangVector(p,
+        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
+        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+
+    }
+    else { //local scene
+        tangVector tv = tangVector(p,
+        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
+        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
+        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
+        );
+        return tangNormalize(tv);
+    }
+}
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fog
+//----------------------------------------------------------------------------------------------------------------------
+
+
+//right now super basic fog: just a smooth step function of distance blacking out at max distance.
+//the factor of 20 is just empirical here to make things look good - apparently we never get near max dist in euclidean geo
+vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
+    float fogDensity=smoothstep(0., MAX_DIST/20., distToViewer);
+    return mix(color, fogColor, fogDensity); 
+}
+
+
+
+
+
+
 //--------------------------------------------------------------------
 // Lighting Functions
 //--------------------------------------------------------------------
@@ -65,40 +115,9 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
 
 
 
-vec3 localColor(mat4 totalFixMatrix, tangVector sampletv){
-    N = estimateNormal(sampletv.pos);
-    vec3 color=vec3(0., 0., 0.);
-    color = phongModel(totalFixMatrix, color);
-    color = 0.9*color+0.1;
-    return color;
-    //generically gray object (color= black, glowing slightly because of the 0.1)
-}
 
 
-vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
-    if (SURFACE_COLOR){ //color the object based on its position in the cube
-        vec4 samplePos=modelProject(sampletv.pos);
-        //Point in the Klein Model unit cube    
-        float x=samplePos.x;
-        float y=samplePos.y;
-        float z=samplePos.z;
-        x = 0.9*x/modelHalfCube;
-        y = 0.9*y/modelHalfCube;
-        z = -0.9*z/modelHalfCube;
-        vec3 color = vec3(x, y, z);
-        N = estimateNormal(sampletv.pos);
-        color = phongModel(totalFixMatrix, 0.175*color);
-        return 0.9*color+0.1;
-        //adding a small constant makes it glow slightly
-    }
-    else {
-        // objects
-        N = estimateNormal(sampletv.pos);
-        vec3 color=vec3(0., 0., 0.);
-        color = phongModel(totalFixMatrix, color);
-        return color;
-    }
-}
+
 
 
 

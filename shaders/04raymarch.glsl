@@ -37,36 +37,6 @@ bool isOutsideCell(tangVector v, out mat4 fixMatrix){
 // GEOM DEPENDENT
 //--------------------------------------------
 
-
-//NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
-    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
-    float newEp = EPSILON * 10.0;
-    mat4 theBasis= tangBasis(p);
-    vec4 basis_x = theBasis[0];
-    vec4 basis_y = theBasis[1];
-    vec4 basis_z = theBasis[2];
-    if (hitWhich != 3){ //global light scene
-        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
-        tangVector tv = tangVector(p,
-        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
-        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-
-    }
-    else { //local scene
-        tangVector tv = tangVector(p,
-        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
-        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-    }
-}
-
-
 //--------------------------------------------
 // NOT GEOM DEPENDENT
 //--------------------------------------------
@@ -130,6 +100,8 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 //}
 
 
+float distToViewer;
+
 int BINARY_SEARCH_STEPS=10;
 
 //another variation on raymarch (This one adapted from the dynamHyp code that Steve and Henry wrote, where we make sure that we never teleport TOO far past a wall)
@@ -158,6 +130,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
       float localDist = localSceneSDF(localtv.pos);
       if (localDist < EPSILON){
           sampletv = localtv;
+          distToViewer=localDepth;
           break;
       }
       marchStep = localDist;
@@ -182,17 +155,17 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         localtv = bestlocaltv;
         totalFixMatrix = fixMatrix*totalFixMatrix;
         localtv = translate(fixMatrix, localtv);
-        globalDepth += marchStep; 
+        localDepth += marchStep; 
         marchStep = MIN_DIST;
       }
         
       else{ 
           localtv = testlocaltv; 
-          globalDepth += marchStep; 
+          localDepth += marchStep; 
         }
       }
     
-      localDepth=min(globalDepth, MAX_DIST);
+      localDepth=min(localDepth, MAX_DIST);
     
   
     globalDepth = MIN_DIST;
@@ -204,6 +177,7 @@ void raymarch(tangVector rayDir, out mat4 totalFixMatrix){
         if (globalDist < EPSILON){
             totalFixMatrix = mat4(1.);
             sampletv = tv;
+            distToViewer=globalDepth;
             return;
         }
         marchStep = globalDist;
