@@ -39,6 +39,30 @@ vec3 globalColor(mat4 totalFixMatrix, tangVector sampletv){
 
 
 
+vec3 tilingColor(mat4 totalFixMatrix, tangVector sampletv){
+    if (SURFACE_COLOR){ //color the object based on its position in the cube
+        vec4 samplePos=modelProject(sampletv.pos);
+        //Point in the Klein Model unit cube    
+        float x=samplePos.x;
+        float y=samplePos.y;
+        float z=samplePos.z;
+        x = 0.2*x/modelHalfCube;
+        y = 0.2*y/modelHalfCube;
+        z = -0.2*z/modelHalfCube;
+        vec3 color = vec3(00.,0.,1.)+vec3(x, y, z);
+        N = estimateNormal(sampletv.pos);
+        color = phongModel(totalFixMatrix, 0.175*color);
+        return color;
+        //adding a small constant makes it glow slightly
+    }
+    else {
+        // objects
+        N = estimateNormal(sampletv.pos);
+        vec3 color=vec3(0., 0., 0.);
+        color = phongModel(totalFixMatrix, color);
+        return color;
+    }
+}
 
 
 
