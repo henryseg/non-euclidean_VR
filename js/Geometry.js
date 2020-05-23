@@ -183,9 +183,13 @@ class Point extends Vector4 {
     /**
      * Create a new point whose coordinates corresponds to the origin
      */
-    constructor() {
-        super();
-        this.set(0, 0, 1, 0)
+    constructor(x, y, z, w) {
+        // if x,y,z,w are not set up, replace by the coordinates of the origin
+        let xaux = x || 0;
+        let yaux = y || 0;
+        let zaux = z || 1;
+        let waux = w || 0;
+        super(xaux, yaux, zaux, waux);
     }
 
     /**
@@ -254,7 +258,7 @@ class Point extends Vector4 {
     /**
      * Translate the point by the given isometry
      * @param {Isometry} isom - the isometry to apply
-     * @returns {Point} - the translaed point
+     * @returns {Point} - the translated point
      */
     translateBy(isom) {
         let aux = this.makeTranslation();
@@ -281,6 +285,7 @@ class Point extends Vector4 {
  * @todo Since the constructor of Point return the origin by default, this constant is maybe not needed
  */
 const ORIGIN = new Point();
+console.log('ORIGIN',ORIGIN);
 
 /**
  * Tangent vector at the origin of X
@@ -296,12 +301,6 @@ const ORIGIN = new Point();
  */
 class Vector extends Vector3 {
 
-    /**
-     * Constructor
-     */
-    constructor() {
-        super();
-    }
 
     /**
      * Apply to the H^2 component a rotation of angle alpha centered at the origin

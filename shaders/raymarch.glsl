@@ -1323,9 +1323,6 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         globalDepth = MIN_DIST;
         marchStep = MIN_DIST;
 
-        //debugColor = abs(tv.dir.xyz);
-        //debugColor = abs(tv.pos.xyz);
-
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             flow(marchStep, tv);
 
@@ -1342,20 +1339,11 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
                 // hitWhich has now been set
                 totalFixMatrix = identity;
                 sampletv = clone(tv);
-
-                hitWhich = 5;
-                debugColor = vec3(1., 0, 0.);
                 return;
             }
             marchStep = globalDist;
             globalDepth += globalDist;
             if (globalDepth >= localDepth){
-                //hitWhich = 5;
-                //debugColor = vec3(0, globalDepth, 0);
-                hitWhich = 5;
-                debugColor = (length(vec4(0, 0, 1, 0) - tv.pos)) * vec3(0., 0.5, 0.);
-                //debugColor = (length(tv.pos-globalObjectBoostMat)) * vec3(0., 0.5, 0.);
-                //debugColor = vec3(0, 0.005*globalDepth, 0.);
                 break;
             }
         }
@@ -1600,6 +1588,7 @@ void main(){
 
 
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
+    // TODO. Replace by a switch instruction ?
     if (hitWhich == 0){ //Didn't hit anything ------------------------
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
@@ -1609,17 +1598,14 @@ void main(){
     else if (hitWhich == 1){
         // global lights
         vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
+        //out_FragColor=vec4(1.0,0.,0., 1.0);
         out_FragColor=vec4(pixelColor, 1.0);
-        return;
-    }
-    else if (hitWhich == 5){
-        //debug
-        out_FragColor = vec4(debugColor, 1.0);
         return;
     }
     else if (hitWhich == 2){
         // global object
         vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
+        //out_FragColor=vec4(1.0,0.,0., 1.0);
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
@@ -1629,5 +1615,9 @@ void main(){
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
-
+    else if (hitWhich == 5){
+        //debug
+        out_FragColor = vec4(debugColor, 1.0);
+        return;
+    }
 }

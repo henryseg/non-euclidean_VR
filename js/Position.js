@@ -143,6 +143,7 @@ class Position {
      * @returns {Position} - the current position
      */
     flow(v) {
+
         const t = v.length();
         let aux = v.clone().normalize();
 
@@ -170,6 +171,7 @@ class Position {
 
         // the geodesic flow distinguishes three cases
         if (c < a) {
+            console.log('hyp traj');
             // hyperbolic trajectory
             omega = Math.sqrt(a * a - c * c);
             let T = new Matrix3().set(
@@ -198,6 +200,7 @@ class Position {
             );
 
         } else if (c === a) {
+            console.log('para traj');
             // parabolic trajectory
             h2_point.set(
                 t / Math.sqrt(2.),
@@ -211,6 +214,7 @@ class Position {
                 phi + Math.atan2(h2_point.y, h2_point.x)
             );
         } else {
+            console.log('ell traj');
             // remaining case: c > a
             // elliptic trajectory
             omega = Math.sqrt(c * c - a * a);
@@ -249,9 +253,15 @@ class Position {
             point.flip();
         }
 
+        //console.log("point after flip", point);
+
         let isom = point.makeTranslation();
 
+        //console.log("isom target", isom.target);
+
         this.boost.multiply(isom);
+
+        //console.log('flow reached point', this.boost.target);
 
         // the parallel transport does not distinguish cases
         const P = new Matrix4().set(
@@ -307,7 +317,10 @@ class Position {
         }
 
         this.facing.premultiply(Q);
+        //console.log('flow position', this);
         return this;
+
+
     }
 
     /**

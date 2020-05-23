@@ -173,15 +173,16 @@ const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
 
 
 /**
- * Initialize the objects of the scence
+ * Initialize the objects of the scene
  */
 function initObjects() {
-    PointLightObject(new Vector(1., 1.5, 0), lightColor1);
-    PointLightObject(new Vector(-1, 1.5, 0), lightColor2);
-    PointLightObject(new Vector(0, 0, 1.), lightColor3);
-    PointLightObject(new Vector(-1., -1., -1.), lightColor4);
 
-    globals.globalObjectPosition = new Position().flow(new Vector(0, 0, -1));
+    PointLightObject(new Vector().set(1., 1.5, 0), lightColor1);
+    PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
+    PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
+    PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
+
+    globals.globalObjectPosition = new Position().flow(new Vector().set(0, 0, -1));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -329,13 +330,17 @@ function setupMaterial(fShader) {
  * > g_material.uniforms.foo.value = new_value_of_foo
  */
 function updateMaterial() {
+    globals.material.uniforms.currentBoostMat.value = globals.position.boost.serialize();
+    globals.material.uniforms.cellBoostMat.value = globals.cellPosition.boost.serialize();
+    globals.material.uniforms.invCellBoostMat.value = globals.invCellPosition.boost.serialize();
+
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
-    globals.leftPosition = globals.position.clone().flow(vectorLeft);
+    //globals.leftPosition = globals.position.clone().flow(vectorLeft);
     globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.serialize();
     globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
-    globals.rightPosition = globals.position.clone().flow(vectorRight);
+    //globals.rightPosition = globals.position.clone().flow(vectorRight);
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.serialize();
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 
