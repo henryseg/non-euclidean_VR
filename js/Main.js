@@ -75,17 +75,61 @@ var init = function () {
 
 var mainFrag;
 
-var loadShaders = function () { //Since our shader is made up of strings we can construct it from parts
-    var loader = new THREE.FileLoader();
-    loader.setResponseType('text');
-    loader.load('shaders/raymarch.glsl', function (main) {
-        mainFrag = main;
-        setupMaterial(main);
-        g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+//var loadShaders = function () { //Since our shader is made up of strings we can construct it from parts
+//    var loader = new THREE.FileLoader();
+//    loader.setResponseType('text');
+//    loader.load('shaders/raymarch.glsl', function (main) {
+//        mainFrag = main;
+//        setupMaterial(main);
+//        g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+//
+//        //Setup a "quad" to render on-------------------------
+//        var geom = new THREE.BufferGeometry();
+//        var vertices = new Float32Array([
+//        -1.0, -1.0, 0.0,
+//         1.0, -1.0, 0.0,
+//         1.0, 1.0, 0.0,
+//
+//        -1.0, -1.0, 0.0,
+//         1.0, 1.0, 0.0,
+//        -1.0, 1.0, 0.0
+//        ]);
+//        geom.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+//        mesh = new THREE.Mesh(geom, g_material);
+//        scene.add(mesh);
+//        animate();
+//    });
+//}
 
-        //Setup a "quad" to render on-------------------------
-        var geom = new THREE.BufferGeometry();
-        var vertices = new Float32Array([
+
+//----------------------------------------------------------------------------------------------------------------------
+// Building the Shader out of the GLSL files
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+function loadShaders() {
+    //Since our shader is made up of strings we can construct it from parts
+    let loader = new THREE.FileLoader();
+    loader.setResponseType('text');
+    loader.load('shaders/00aux.glsl', function (aux) {
+        loader.load('shaders/01locGeo.glsl', function (locGeo) {
+            loader.load('shaders/02globGeo.glsl', function (globGeo) {
+                loader.load('shaders/03consts.glsl', function (setup) {
+                    loader.load('shaders/03sdf.glsl', function (sdf) {
+                        loader.load('shaders/04raymarch.glsl', function (ray) {
+                            loader.load('shaders/05lighting.glsl', function (light) {
+                                loader.load('shaders/06materials.glsl', function (material) {
+                                    loader.load('shaders/07main.glsl', function (run) {
+                                        let main = aux.concat(locGeo).concat(globGeo).concat(setup).concat(sdf).concat(ray).concat(light).concat(material).concat(run);
+                                        //The rest of the shader-building is below
+                                        mainFrag = main;
+                                        setupMaterial(main);
+                                        g_effect.setSize(g_screenResolution.x, g_screenResolution.y);
+
+                                        //Setup a "quad" to render on-------------------------
+                                        var geom = new THREE.BufferGeometry();
+                                        var vertices = new Float32Array([
         -1.0, -1.0, 0.0,
          1.0, -1.0, 0.0,
          1.0, 1.0, 0.0,
@@ -94,12 +138,28 @@ var loadShaders = function () { //Since our shader is made up of strings we can 
          1.0, 1.0, 0.0,
         -1.0, 1.0, 0.0
         ]);
-        geom.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        mesh = new THREE.Mesh(geom, g_material);
-        scene.add(mesh);
-        animate();
+                                        geom.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+                                        mesh = new THREE.Mesh(geom, g_material);
+                                        scene.add(mesh);
+                                        animate();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 }
+
+
+
+
+
+
+
+
 
 //-------------------------------------------------------
 // Where our scene actually renders out to screen
