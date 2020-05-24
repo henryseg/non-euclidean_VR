@@ -16,6 +16,34 @@ import {globals} from "./Main.js";
 
 import {fixOutsideCentralCell} from "./Math.js";
 
+
+// some debugging function
+// get the angle and axis of a rotation given by a quaternion
+// recall that if a unit quaternion has the form
+// q = cos(alpha/2) + sin(alpha/2) u
+// the it represents a rotation of angle alpha around the axis u
+// We assume below that alpha is in [0, 2pi] so that sin(alpha/2) is non-negative.
+
+Quaternion.prototype.extractAngle = function() {
+    let aux = this.clone();
+    aux.normalize();
+    return 2 * Math.acos(aux.w);
+}
+
+Quaternion.prototype.extractAxis = function() {
+    let aux = this.clone();
+    aux.normalize();
+    let sinAngleOver2 = Math.sqrt(1 - aux.w * aux.w);
+    return new Vector3(
+        aux.x / sinAngleOver2,
+        aux.y / sinAngleOver2,
+        aux.z / sinAngleOver2
+    );
+}
+
+//console.log("test",new Quaternion().setFromAxisAngle( new Vector3( 0, 1, 0 ), Math.PI ));
+
+
 // This file should be geometry independent
 
 let Controls = function () {
@@ -232,7 +260,7 @@ let Controls = function () {
         // do not flow if this is not needed !
         if (deltaPositionNonZero) {
             globals.position.flow(deltaPosition);
-            console.log('flow pos', globals.position.boost.target);
+            console.log('Flow (position)', globals.position.boost.target);
 
             let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
             if (fixIndex !== -1) {
@@ -267,18 +295,17 @@ let Controls = function () {
         }
 
         if(deltaRotationNonZero) {
-            console.log('rotate');
             deltaRotation.normalize();
-
             let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             globals.position.rotateFacingBy(m);
+            console.log("Rotation (angle, axis)", deltaRotation.extractAngle(), deltaRotation.extractAxis());
         }
-        
+
         //Check for headset rotation (tracking)
         if (vrState !== null && vrState.hmd.lastRotation !== undefined) {
             //let rotation = vrState.hmd.rotation;
             deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
-            m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
             globals.position.rotateFacingBy(m);
         }
 

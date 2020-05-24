@@ -132,7 +132,7 @@ function serializeIsoms(isomArr) {
 const time0 = new Date().getTime();
 
 /**
- * Initialize the globals variables related to the scene (position, cell position, lattie, etc).
+ * Initialize the globals variables related to the scene (position, cell position, lattice, etc).
  */
 function initGeometry() {
     globals.position = new Position();
@@ -146,6 +146,8 @@ function initGeometry() {
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
     globals.rightPosition = globals.position.clone().flow(vectorRight);
+
+    console.log("initial facing", globals.position.facing.toLog());
 }
 
 /**
@@ -181,7 +183,6 @@ function initObjects() {
     PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
     PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
-    console.log('lights', globals.lightPositions);
     globals.globalObjectPosition = new Position().flow(new Vector().set(0, 0, -1));
 }
 
@@ -351,6 +352,7 @@ function updateMaterial() {
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
 }
+
 
 export {
     initGeometry,

@@ -290,10 +290,10 @@ console.log('ORIGIN',ORIGIN);
 /**
  * Tangent vector at the origin of X
  *
- * The vector is represented by its coordinates in the orthonormal basis (e_x, e_y, e_w) where
+ * The vector is represented by its coordinates in the orthonormal basis (e_x, e_y, e_phi) where
  * - e_x is the direction of the x coordinate of H^2
  * - e_y is the direction of the y coordinate in H^2
- * - e_w is the direction of the fiber
+ * - e_phi is the direction of the fiber
  * Note that there is no e_z component, as this one is always zero in the tangent space at the origin of H^2
  *
  * @class
@@ -454,7 +454,7 @@ class Isometry {
     /**
      * Set the current isometry to the inverse of the given isometry.
      * @param {Isometry} isom - the isometry to inverse
-     * @returns {Isometry}  - the inverse isometry
+     * @returns {Isometry} - the current isometry
      */
     getInverse(isom) {
         // rotate the H^2 component of the isometry
@@ -508,6 +508,16 @@ class Isometry {
      */
     clone() {
         return new Isometry(this.target.clone())
+    }
+
+    /**
+     * Copy the given isometry in the current one
+     * @param {Isometry} isom - the isometry to copy
+     * @returns {Isometry} - the current isometry
+     */
+    copy(isom) {
+        this.target.copy(isom.target);
+        return this;
     }
 
 }

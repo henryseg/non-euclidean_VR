@@ -291,6 +291,14 @@ vec4 translate(Isometry isom, vec4 p) {
   - global: a flag to say if the global direction has been computed
   - local: a flag to say if the local direction has been computed
 
+  Local direction are vec3 written in the orthonormal basis (e_x, e_y, e_phi) where
+  . e_x is the direction of the x coordinate of H^2
+  . e_y is the direction of the y coordinate in H^2
+  . e_phi is the direction of the fiber
+
+  Global direction are vec4. We see X = H^2 x R as a subspace of R^4.
+  The coordinates of the global direction refers to this model
+
   Implement various basic methods to manipulate them
 
 */
@@ -299,7 +307,7 @@ vec4 translate(Isometry isom, vec4 p) {
 struct tangVector {
     vec4 pos;// position on the manifold
     vec4 global_dir;// vector in the tangent space at the point pos
-    vec4 local_dir;// pull back of the tangent vector at the origin
+    vec3 local_dir;// pull back of the tangent vector at the origin written in the appropriate basis
     bool global;// true if the global dir has been computed, false otherwise
     bool local;// true if the local dir has been computed, false otherwise
 };
@@ -307,11 +315,11 @@ struct tangVector {
 
 // Constructor from global data
 tangVector initFromGlobal(vec4 pos, vec4 dir) {
-    return tangVector(pos, dir, vec4(0.), true, false);
+    return tangVector(pos, dir, vec3(0.), true, false);
 }
 
 // Constructor from local data
-tangVector initFromLocal(vec4 pos, vec4 dir) {
+tangVector initFromLocal(vec4 pos, vec3 dir) {
     return tangVector(pos, vec4(0.), dir, false, true);
 }
 
@@ -385,7 +393,8 @@ void setLocalDir(inout tangVector v) {
         // inverse of the differential map of the translation from the origin to pos
         mat4 m = diffInvTranslation(v.pos);
         // update the local direction
-        v.local_dir = m * v.global_dir;
+        vec4 aux = m * v.global_dir;
+        v.local_dir = aux.xyw;
         // update the flag
         v.local = true;
     }
@@ -397,7 +406,8 @@ void setGlobalDir(inout tangVector v) {
         // differential map of the translation from the origin to pos
         mat4 m = diffTranslation(v.pos);
         // update the global direction
-        v.global_dir = m * v.local_dir;
+        vec4 aux = vec4(v.local_dir.xy, 0., v.local_dir.z);
+        v.global_dir = m * aux;
         // update the flag
         v.global = true;
     }
@@ -486,7 +496,9 @@ void rotateBy(float angle, inout tangVector v) {
 
     v.pos = rot * v.pos;
     if (v.local) {
-        v.local_dir = rot * v.local_dir;
+        vec4 aux = vec4(v.local_dir.xy, 0., v.local_dir.z);
+        aux = rot * aux;
+        v.local_dir = aux.xyw;
     }
     if (v.global) {
         v.global_dir = rot * v.global_dir;
@@ -507,7 +519,9 @@ void flip(inout tangVector v) {
 
     v.pos = flip * v.pos;
     if (v.local) {
-        v.local_dir = flip * v.local_dir;
+        vec4 aux = vec4(v.local_dir.xy, 0., v.local_dir.z);
+        aux = flip * aux;
+        v.local_dir = aux.xyw;
     }
     if (v.global) {
         v.global_dir = flip * v.global_dir;
@@ -524,7 +538,10 @@ void rotateByFacing(mat4 A, inout tangVector v){
         setLocalDir(v);
         resetGlobalDir(v);
     }
-    v.local_dir = A * v.local_dir;
+    // notice that the facing is an element of SO(3) which refers to the basis (e_x, e_y, e_phi).
+    vec4 aux = vec4(v.local_dir, 0.);
+    aux = A * aux;
+    v.local_dir = aux.xyz;
 }
 
 
@@ -544,7 +561,7 @@ tangVector add(tangVector v1, tangVector v2) {
     bool global = false;
     bool local = false;
     vec4 global_dir = vec4(0.);
-    vec4 local_dir = vec4(0.);
+    vec3 local_dir = vec3(0.);
 
 
     // Make sure that the two vectors have at least one representation (local or global) in common.
@@ -569,7 +586,7 @@ tangVector sub(tangVector v1, tangVector v2) {
     bool global = false;
     bool local = false;
     vec4 global_dir = vec4(0.);
-    vec4 local_dir = vec4(0.);
+    vec3 local_dir = vec3(0.);
 
 
     // Make sure that the two vectors have at least one representation (local or global) in common.
@@ -641,7 +658,7 @@ tangVector tangNormalize(tangVector v){
     bool global = false;
     bool local = false;
     vec4 global_dir = vec4(0.);
-    vec4 local_dir = vec4(0.);
+    vec3 local_dir = vec3(0.);
 
     // length of the vector
     float length = tangNorm(v);
@@ -741,10 +758,10 @@ tangVector tangDirection(tangVector u, tangVector v){
 // we make the following assumtions
 // - the initial position of v is the origin
 // - the local direction of v is set up
-// - the initial direction has the form (a, 0, 0, c), with a,c > 0
+// - the initial direction has the local form (a, 0, c), with a,c > 0
 void _exactFlow(float t, inout tangVector v) {
     float a = v.local_dir.x;
-    float c = v.local_dir.w;
+    float c = v.local_dir.z;
 
     float phi = c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
     float omega = 0.;// the "pulsatance" involved in the geodesic flow.
@@ -847,14 +864,14 @@ void _exactFlow(float t, inout tangVector v) {
     //debugColor = -v.pos.w * vec3(0.9, 0.9, 0.2);
 
     // update the direction of the tangent vector
-    // recall that tangent vectors at the origin have the form (ux,uy,0,uw)
-    // so we work with 3x3 matrics applied to local_dir.xyw
+    // recall that tangent vectors at the origin have the form (ux,uy,uphi)
+    // so we work with 3x3 matrics applied to local_dir
     mat3 S = mat3(
     cos(2. * c * t), -sin(2. * c * t), 0.,
     sin(2. * c * t), cos(2. * c * t), 0.,
     0., 0., 1.
     );
-    v.local_dir.xyw = S * v.local_dir.xyw;
+    v.local_dir = S * v.local_dir;
 }
 
 
@@ -866,6 +883,7 @@ void flow(float t, inout tangVector v) {
     resetGlobalDir(v);
 
 
+
     // prepation : set the vector into an easier form to flow
 
     // isometry sending the origin the the position of v
@@ -874,18 +892,22 @@ void flow(float t, inout tangVector v) {
     v.pos = ORIGIN;
     // flip if needed to get a positive fiber direction
     bool flipped = false;
-    if (v.local_dir.w < 0.) {
+    if (v.local_dir.z < 0.) {
         flipped = true;
         flip(v);
     }
+
+
     // rotation
     // the angle alpha is characterized as follows
-    // if u is a tangent vector of the form (a, 0, 0, c) with a, c >= 0
+    // if u is a tangent vector with the local form (a, 0, c) with a, c >= 0
     // then v is obtained from u by a rotation of angle alpha
     float alpha = atan(v.local_dir.y, v.local_dir.x);
-    float c = v.local_dir.w;
+    float c = v.local_dir.z;
     float a = sqrt(1. - c * c);
-    v.local_dir = vec4(a, 0., 0., c);
+    v.local_dir = vec3(a, 0., c);
+
+    //debugColor = abs(v.local_dir);
 
     // flow the vector
     _exactFlow(t, v);
@@ -1363,17 +1385,16 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         marchStep = MIN_DIST;
 
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-
             flow(marchStep, tv);
 
             /*
-            if (i == 1) {
+            if (i == 0) {
                 hitWhich = 5;
+                //debugColor = abs(tv.local_dir.xyz);
                 //debugColor = vec3(0.3, 0.3, 0.6);
-                debugColor = -tv.pos.w * vec3(0.9, 0.9, 0.2);
                 break;
-            }
-            */
+            }*/
+
 
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){

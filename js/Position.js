@@ -29,6 +29,40 @@ import {
 } from "./Geometry.js";
 
 
+// Function for debugging
+
+// Return a human-readable version of the matrix
+Matrix4.prototype.toLog = function () {
+    let res = '\r\n';
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            if (j !== 0) {
+                res = res + ",\t";
+            }
+            res = res + this.elements[i + 4 * j];
+        }
+        res = res + "\r\n";
+    }
+    return res;
+}
+
+
+// Return a human-readable version of the matrix
+Matrix3.prototype.toLog = function () {
+    let res = '\r\n';
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (j !== 0) {
+                res = res + ",\t";
+            }
+            res = res + this.elements[i + 3 * j];
+        }
+        res = res + "\r\n";
+    }
+    return res;
+}
+
+
 /**
  * Position
  *
@@ -64,7 +98,7 @@ class Position {
      * @returns {Position} - the current position
      */
     setBoost(boost) {
-        this.boost = boost.clone();
+        this.boost.copy(boost);
         return this;
     }
 
@@ -74,7 +108,7 @@ class Position {
      * @returns {Position} - the current position
      */
     setFacing(facing) {
-        this.facing = facing.clone();
+        this.facing.copy(facing);
         return this;
     }
 
@@ -424,6 +458,7 @@ class Position {
     };
 
 }
+
 
 export {
     Position
