@@ -595,11 +595,15 @@ tangVector scalarMult(float a, tangVector v) {
 
 // dot product of the two vectors
 float tangDot(tangVector v1, tangVector v2){
+    /*
+    Cheap versiion : pulling back both vectors at the origin
     setLocalDir(v1);
     setLocalDir(v2);
     return dot(v1.local_dir, v2.local_dir);
+    */
 
-    /*
+    // More advanced method (hopfully faster when both vectors have a global representation)
+
     // Make sure that the two vectors have at least one representation (local or global) in common.
     prepareDir(v1, v2);
     if (v1.local && v2.local) {
@@ -623,7 +627,6 @@ float tangDot(tangVector v1, tangVector v2){
     // this point of the code should never be reached
     // because we prepared the vectors at the beginning.
     return -1.;
-    */
 }
 
 // calculate the length of a tangent vector

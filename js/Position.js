@@ -338,7 +338,7 @@ class Position {
      * @returns {Vector} - the forward vector
      */
     getFwdVector(t = 1) {
-        return new Vector().set(0, 0, t).rotateByFacing(this);
+        return new Vector().set(0, 0, -t).rotateByFacing(this);
     };
 
     /**
