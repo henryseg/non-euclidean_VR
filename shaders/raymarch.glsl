@@ -769,7 +769,37 @@ void _exactFlow(float t, inout tangVector v) {
 
     // update the position of the tangent vector
     // we distinguish three cases, depending whether c is smaller, equal or greater than a.
-    if (c < a){
+    if (abs(c-a)*t < 0.05) {
+        // parabolic trajectory
+        // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
+        float a2 = a * a;
+        float omega2 = a * a - c * c;
+        float omega4 = omega2 * omega2;
+        float omega6 = omega4 * omega2;
+        float t2 = t * t;
+        float t3 = t2 * t;
+        float t4 = t3 * t;
+        float t5 = t4 * t;
+        float t6 = t5 * t;
+        float t7 = t6 * t;
+        float t8 = t7 * t;
+        v.pos.xyz = vec3(
+            a * t + a * t3 * omega2 / 6. + a * t5 * omega4 / 120. + a * t7 * omega6 /5040.,
+            - a * c * t2 / 2. - a * c * omega2 * t4 / 24. - a * c * omega4 * t6 / 720. - a * c * omega6 * t8 / 40320.,
+            1. + a2 * t2 / 2. + a2 * omega2 * t4 / 24. + a2 * omega4 * t6 / 720. + a2 * omega6 * t4 / 40320.
+        );
+        // hack for fixing crazy atan around (0,0)
+        // rely on the asymptotic expansion of the geodesic flow for small times
+        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
+        if (shrho < 0.001) {
+            theta = - 0.5 * (c / a) * shrho;
+        }
+        else {
+            theta = atan(v.pos.y, v.pos.x);
+        }
+        v.pos.w = phi + theta;
+    }
+    else if (c < a){
         // hyperbolic trajectory
         omega = sqrt(a * a - c * c);
         mat3 T = mat3(
@@ -803,27 +833,6 @@ void _exactFlow(float t, inout tangVector v) {
         }
         v.pos.w = phi + theta;
 
-        //debugColor = atan(v.pos.y, v.pos.x) * vec3(0.9, 0.9, 0.2);
-
-    }
-    else if (c==a) {
-        // parabolic trajectory
-        // todo. replace this by an asymptotic expension of the other two cases when  | a - c | << 1.
-        v.pos.xyz = vec3(
-        t / sqrt2,
-        - 0.25 * t * t,
-        1. + 0.25 * t * t
-        );
-        // hack for fixing crazy atan around (0,0)
-        // rely on the asymptotic expansion of the geodesic flow for small times
-        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
-        if (t < 0.001) {
-            theta = - t / (2. * sqrt2);
-        }
-        else {
-            theta = atan(v.pos.y, v.pos.x);
-        }
-        v.pos.w = phi + theta;
     }
     else {
         // remaining case c > a
@@ -881,7 +890,6 @@ void flow(float t, inout tangVector v) {
     // set up the local direction if needed
     setLocalDir(v);
     resetGlobalDir(v);
-
 
 
     // prepation : set the vector into an easier form to flow
