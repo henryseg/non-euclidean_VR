@@ -1658,15 +1658,14 @@ void main(){
     }
     else if (hitWhich == 1){
         // global lights
-        vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
-        //out_FragColor=vec4(1.0,0.,0., 1.0);
-        out_FragColor=vec4(pixelColor, 1.0);
+        //vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
+        //out_FragColor=vec4(pixelColor, 1.0);
+        out_FragColor = vec4(globalLightColor.rgb, 1.0);
         return;
     }
     else if (hitWhich == 2){
         // global object
         vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
-        //out_FragColor=vec4(1.0, 0., 0., 1.0);
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
