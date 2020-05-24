@@ -41,6 +41,7 @@ let initGui = function () {
         QWERTY: 'us',
         AZERTY: 'fr'
     }).name("Keyboard");
+    globals.controls.setKeyboard(guiInfo.keyboard);
 
     let displayController = gui.add(guiInfo, 'display', {
         Tiling: '1',

@@ -165,7 +165,7 @@ let Controls = function () {
     };
     this._init = function () {
         let self = this;
-        this.setKeyboard('us');
+        //this.setKeyboard();
         this._oldVRState = undefined;
         if (!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices)
             return;
@@ -212,7 +212,7 @@ let Controls = function () {
         // Translation
         //--------------------------------------------------------------------
         let deltaTime = (newTime - oldTime) * 0.001;
-        let deltaPosition = new Vector(0, 0, 0);
+        let deltaPosition = new Vector().set(0, 0, 0);
         let deltaPositionNonZero = false;
 
         //Check if head has translated (tracking)
@@ -227,6 +227,7 @@ let Controls = function () {
             deltaPosition = deltaPosition.add(globals.position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(globals.position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
             deltaPositionNonZero = true;
+            console.log('moved');
         }
 
         // do not flow if this is not needed !

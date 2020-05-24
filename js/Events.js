@@ -35,14 +35,19 @@ function onkey(event) {
 // Listen for keys for movement/rotation
 //--------------------------------------------------------------------
 function key(event, sign) {
+    console.log('event key code', event.keyCode);
     let control = globals.controls.manualControls[event.keyCode];
+    console.log('event key controls', control);
     if (control === undefined || sign === 1 && control.active || sign === -1 && !control.active) return;
 
     control.active = (sign === 1);
-    if (control.index <= 2)
+    if (control.index <= 2) {
         globals.controls.manualRotateRate[control.index] += sign * control.sign;
-    else if (control.index <= 5)
+        console.log('key event', control.index);
+    }
+    else if (control.index <= 5) {
         globals.controls.manualMoveRate[control.index - 3] += sign * control.sign;
+    }
 }
 
 
