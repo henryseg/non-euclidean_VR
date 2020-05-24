@@ -204,7 +204,34 @@ class Position {
         let h2_point = new Vector3(0, 0, 1);
 
         // the geodesic flow distinguishes three cases
-        if (c < a) {
+        if (Math.abs(c - a) * t < 0.05) {
+            // parabolic trajectory
+            // we use an asymptotic expansion of the solution around the critical case (c = a)
+            // to reduce the numerical errors
+            let a2 = a * a;
+            let omega2 = a * a - c * c;
+            let omega4 = omega2 * omega2;
+            let omega6 = omega4 * omega2;
+            let t2 = t * t;
+            let t3 = t2 * t;
+            let t4 = t3 * t;
+            let t5 = t4 * t;
+            let t6 = t5 * t;
+            let t7 = t6 * t;
+            let t8 = t7 * t;
+
+            h2_point.set(
+                a * t + a * t3 * omega2 / 6. + a * t5 * omega4 / 120. + a * t7 * omega6 / 5040.,
+                -a * c * t2 / 2. - a * c * omega2 * t4 / 24. - a * c * omega4 * t6 / 720. - a * c * omega6 * t8 / 40320.,
+                1. + a2 * t2 / 2. + a2 * omega2 * t4 / 24. + a2 * omega4 * t6 / 720. + a2 * omega6 * t4 / 40320.
+            );
+            point.set(
+                h2_point.x,
+                h2_point.y,
+                h2_point.z,
+                phi + Math.atan2(h2_point.y, h2_point.x)
+            );
+        } else if (c < a) {
             // hyperbolic trajectory
             omega = Math.sqrt(a * a - c * c);
             let T = new Matrix3().set(
@@ -232,19 +259,6 @@ class Position {
                 phi + Math.atan2(h2_point.y, h2_point.x)
             );
 
-        } else if (c === a) {
-            // parabolic trajectory
-            h2_point.set(
-                t / Math.sqrt(2.),
-                -Math.pow(t, 2) / 4.,
-                1 + Math.pow(t, 2) / 4.
-            );
-            point.set(
-                h2_point.x,
-                h2_point.y,
-                h2_point.z,
-                phi + Math.atan2(h2_point.y, h2_point.x)
-            );
         } else {
             // remaining case: c > a
             // elliptic trajectory
