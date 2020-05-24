@@ -227,7 +227,6 @@ let Controls = function () {
             deltaPosition = deltaPosition.add(globals.position.getRightVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[1]));
             deltaPosition = deltaPosition.add(globals.position.getUpVector().multiplyScalar(speed * deltaTime * this.manualMoveRate[2]));
             deltaPositionNonZero = true;
-            console.log('moved');
         }
 
         // do not flow if this is not needed !
@@ -242,16 +241,22 @@ let Controls = function () {
             }
         }
 
-
         //--------------------------------------------------------------------
         // Rotation
         //--------------------------------------------------------------------
-        let deltaRotation = new Quaternion(
-            this.manualRotateRate[0] * speed * deltaTime,
-            this.manualRotateRate[1] * speed * deltaTime,
-            this.manualRotateRate[2] * speed * deltaTime,
-            1.0
-        );
+
+        let deltaRotation = new Quaternion();
+        let deltaRotationNonZero = false;
+
+        if (this.manualRotateRate[0] !== 0 || this.manualRotateRate[1] !== 0 || this.manualRotateRate[2] !== 0) {
+            deltaRotation.set(
+                this.manualRotateRate[0] * speed * deltaTime,
+                this.manualRotateRate[1] * speed * deltaTime,
+                this.manualRotateRate[2] * speed * deltaTime,
+                1.0
+            );
+            deltaRotationNonZero = true;
+        }
 
         //Handle Phone Input
         if (globals.phoneOrient[0] !== null) {
@@ -261,11 +266,14 @@ let Controls = function () {
             this.oldRotation = rotation;
         }
 
-        deltaRotation.normalize();
+        if(deltaRotationNonZero) {
+            console.log('rotate');
+            deltaRotation.normalize();
 
-        let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-        globals.position.rotateFacingBy(m);
-
+            let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
+            globals.position.rotateFacingBy(m);
+        }
+        
         //Check for headset rotation (tracking)
         if (vrState !== null && vrState.hmd.lastRotation !== undefined) {
             //let rotation = vrState.hmd.rotation;
@@ -275,50 +283,6 @@ let Controls = function () {
         }
 
     };
-    //     // let deltaRotation = new Quaternion(
-    //     //     this.manualRotateRate[0] * speed * deltaTime,
-    //     //     this.manualRotateRate[1] * speed * deltaTime,
-    //     //     this.manualRotateRate[2] * speed * deltaTime,
-    //     //     1.0
-    //     // );
-    //     // deltaRotation.normalize();
-    //     // let m = new Matrix4().makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-
-    //     //Handle Phone Input
-    //     // if (g_phoneOrient[0] !== null) {
-    //     //     let rotation = this.getQuatFromPhoneAngles(new Vector3().fromArray(g_phoneOrient));
-    //     //     if (this.oldRotation === undefined) this.oldRotation = rotation;
-    //     //     deltaRotation = new Quaternion().multiplyQuaternions(this.oldRotation.inverse(), rotation);
-    //     //     this.oldRotation = rotation;
-    //     // }
-
-    //     //g_position.localRotateFacingBy(m);       
-
-    //     let deltaRotation= new Quaternion();
-    //     let m=new Matrix4();
-
-    //     //Check for headset rotation (tracking)
-    //     if(vrState !== null && vrState.hmd.lastRotation !== undefined){
-    //         rotation = vrState.hmd.rotation;
-    //         deltaRotation.multiplyQuaternions(vrState.hmd.lastRotation.inverse(), vrState.hmd.rotation);
-    //         m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-    //         //g_position.localRotateFacingBy(m);
-    //     }
-    //     //Check for keyboard
-    //     if (this.manualRotateRate[0] !== 0 || this.manualRotateRate[1] !== 0 || this.manualRotateRate[2] !== 0) {
-    //         deltaRotation.set(
-    //             this.manualRotateRate[0] * speed * deltaTime,
-    //             this.manualRotateRate[1] * speed * deltaTime,
-    //             this.manualRotateRate[2] * speed * deltaTime,
-    //             1.0
-    //         );
-    //         deltaRotation.normalize();
-    //         m.makeRotationFromQuaternion(deltaRotation); //removed an inverse here
-    //     }         
-    //     //console.log(deltaRotation);
-    //     g_position.localRotateFacingBy(m);
-
-    // };
 
     this.getVRState = function () {
         let vrInput = this._vrInput;
