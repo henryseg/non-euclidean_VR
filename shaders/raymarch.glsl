@@ -69,7 +69,8 @@ void setResolution(int UIVar){
 }
 
 const float EPSILON = 0.0001;
-const float fov = 90.0;
+//const float fov = 90.0;
+const float fov = 120.0;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Some global variables
@@ -91,7 +92,13 @@ The elements satisfy the relation - x^2 - y^2 + z^2 + w^2 = -1
 
 // Correct the error to make sure that the point lies on the "hyperboloid"
 vec4 SLreduceError(vec4 elt) {
-    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
+    mat4 J = mat4(
+    -1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 0
+    );
+    float q = dot(elt, J * elt);
     return elt / sqrt(-q);
 }
 
@@ -124,7 +131,7 @@ vec4 SLfromMatrix2(mat2 m) {
     float b = m[1][0];
     float c = m[0][1];
     float d = m[1][1];
-    return 0.5 * vec4(a + d, b - c, b + c, a -d);
+    return 0.5 * vec4(a + d, b - c, b + c, a - d);
 }
 
 // Projection from SL(2,R) to SO(2,1)
@@ -148,12 +155,22 @@ mat3 SLtoMatrix3(vec4 elt){
 vec3 SLtoH2(vec4 elt) {
     mat3 m = SLtoMatrix3(elt);
     vec3 res = vec3(0., 0., 1.);
+    // reduce the potential error
+    // the point should be on a hyperboloid
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(res, J* res);
+    res = res / sqrt(-q);
     return m * res;
 }
 
 // Return the inverse of the given element
 vec4 SLgetInverse(vec4 elt) {
-    return vec4(elt.x, -elt.yzw);
+    vec4 res = vec4(elt.x, -elt.yzw);
+    return SLreduceError(res);
 }
 
 // Return the 4x4 Matrix, corresponding to the current element, seen as an isometry of SL(2,R)
@@ -185,66 +202,6 @@ vec4 SLtranslateFiberBy(vec4 elt, float angle) {
     return SLreduceError(t * elt);
 }
 
-/*
-
-A point in the universal cover X of SL(2,R) is a vector (x,y,z,w) where
-- (x,y,z) is its projection onto H^2
-- w is the angle in the fiber component
-
-The points of H^2 are meant in the hyperboloid model, i.e. x^2 + y^2 - z^2 = -1 and z > 0.
-The origin is (0,0,1,0)
-
-*/
-
-// Correct the point so that the H^2 component stays on the hyperboloid.
-vec4 XreduceError(vec4 point) {
-    float q = point.x * point.x + point.y * point.y - point.z * point.z;
-    return vec4(point.xyz / sqrt(-q), point.w);
-}
-
-/*
-// Apply to the H^2 component a rotation of angle alpha centered at the origin
-// TODO. Check if it is really needed (maybe we only need the tangVector form of it)
-vec4 XrotateBy(vec4 point, float angle) {
-    mat4 rot = mat4(
-    cos(angle), sin(angle), 0., 0.,
-    -sin(angle), cos(angle), 0., 0.,
-    0., 0., 1., 0.,
-    0., 0., 0., 1.
-    );
-    return rot * point;
-}
-
-// Apply the flip (x,y,z,w) -> (y,x,z,-w) to the current point
-// TODO. Check if it is really needed (maybe we only need the Vector form of it)
-vec4 Xflip(vec4 point, float angle) {
-    mat4 flip = mat4(
-    0., 1., 0., 0.,
-    1., 0., 0., 0.,
-    0., 0., 1., 0.,
-    0., 0., 0., -1.
-    );
-    return flip * point;
-}
-*/
-
-// Covering map from X to SL(2,R)
-vec4 XtoSL2(vec4 point) {
-    vec4 res = vec4(
-    sqrt(0.5 * point.z + 0.5),
-    0.,
-    point.x / sqrt(2. * point.z + 2.),
-    point.y / sqrt(2. * point.z + 2.)
-    );
-    res = SLtranslateFiberBy(res, point.w);
-    return res;
-}
-
-// Projection from X to SO(2,1)
-mat3 XtoMatrix3(vec4 point) {
-    vec4 aux = XtoSL2(point);
-    return SLtoMatrix3(aux);
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 // STRUCT Point
@@ -272,13 +229,26 @@ struct Point {
 // - the fiber component is zero
 const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);
 
+// reduce the erors on the SL(2,R) component of the point
+void reduceError(inout Point p) {
+    p.proj = SLreduceError(p.proj);
+}
+
 // change of model
 // the input is a vector (x,y,z,w) representing a point p where
 // - (x,y,z) is the projection of p in H^2 (hyperboloid model)
 // - w is the fiber coordinate
 Point fromVec4(vec4 p) {
-    vec4 proj = XtoSL2(p);
-    return Point(proj, p.w);
+    vec4 proj = vec4(
+    sqrt(0.5 * p.z + 0.5),
+    0.,
+    p.x / sqrt(2. * p.z + 2.),
+    p.y / sqrt(2. * p.z + 2.)
+    );
+    proj = SLtranslateFiberBy(proj, p.w);
+    Point res =  Point(proj, p.w);
+    reduceError(res);
+    return res;
 }
 
 // change of model
@@ -287,8 +257,7 @@ Point fromVec4(vec4 p) {
 // - w is the fiber coordinate
 vec4 toVec4(Point p) {
     vec4 res;
-    mat3 m = SLtoMatrix3(p.proj);
-    res.xyz = m * vec3(0, 0, 1);
+    res.xyz = SLtoH2(p.proj);
     res.w = p.fiber;
     return res;
 }
@@ -297,6 +266,7 @@ vec4 toVec4(Point p) {
 Point unserializePoint(vec4 data) {
     return fromVec4(data);
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // STRUCT Isometry
@@ -314,6 +284,11 @@ struct Isometry {
     Point target;// the image of the origin by this isometry.
 };
 
+// reduce error form the target
+void reduceError(Isometry isom) {
+    reduceError(isom.target);
+}
+
 // Method to unserialized isometries passed to the shader
 Isometry unserializeIsom(vec4 data) {
     Point p = fromVec4(data);
@@ -326,6 +301,7 @@ Isometry composeIsometry(Isometry isom1, Isometry isom2) {
     vec4 aux = SLtranslateFiberBy(proj, -isom1.target.fiber - isom2.target.fiber);
     float fiber = isom1.target.fiber + isom2.target.fiber + 2. * atan(aux.y, aux.x);
     Point target = Point(proj, fiber);
+    reduceError(target);
     return Isometry(target);
 }
 
@@ -333,6 +309,7 @@ Isometry composeIsometry(Isometry isom1, Isometry isom2) {
 Isometry getInverse(Isometry isom) {
     vec4 proj = SLgetInverse(isom.target.proj);
     Point target = Point(proj, -isom.target.fiber);
+    reduceError(target);
     return Isometry(target);
 }
 
@@ -363,6 +340,7 @@ void rotateBy(float angle, inout Point p) {
     0, 0, -sin(angle), cos(angle)
     );
     p.proj = rot * p.proj;
+    reduceError(p);
 }
 
 // Flip the point (see Jupyter Notebook)
@@ -376,6 +354,7 @@ void flip(inout Point p) {
     );
     p.proj = flip * p.proj;
     p.fiber = - p.fiber;
+    reduceError(p);
 }
 
 
@@ -607,7 +586,7 @@ Here the basis at p is the image by dL of the standard basis at the origin.
 
 
 Point smallShift(Point p, vec3 dp) {
-    vec4 aux = toVec4(p);
+    vec4 aux0 = toVec4(p);
 
     mat4 dL = diffTranslation(p);
     mat3x4 localBasis = mat3x4(
@@ -616,8 +595,10 @@ Point smallShift(Point p, vec3 dp) {
     0, 0, 0, 1
     );
 
-    vec4 res = aux + dL * localBasis * dp;
-    return fromVec4(res);
+    vec4 aux1 = aux0 + dL * localBasis * dp;
+    Point res = fromVec4(aux1);
+    reduceError(res);
+    return res;
 }
 
 Vector createVector(Point p, vec3 dp) {
@@ -712,9 +693,11 @@ void _exactFlow(float t, inout Vector v) {
     // little hack to see the junction between elliptic/hyperbolic behavior
     if (abs(c-a) < 0.002) {
         hitWhich = 5;
-    }*/
+    }
+    */
 
-    if (abs(c-a)*t < 0.05) {
+    //if (abs(c-a)*t < 0.05) {
+    if (abs(c-a) ==0.) {
         // "parabolic" trajectory
         // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
         float a2 = a * a;
@@ -747,9 +730,6 @@ void _exactFlow(float t, inout Vector v) {
         // the spin fixes the origin, no need to take into accound for the projection onto H^2.
         mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
         vec3 h2point = m * vec3(0, 0, 1);
-        // for the moment a computation without fixing `atan`
-        //v.pos.fiber = phi + atan(h2point.y, h2point.x);
-
 
         float tanTheta = - a * c * t / 2. - a * c * omega2 * t3 / 24. - a * c * omega4 * t5 / 720. - a * c * omega6 * t7 / 40320.;
         tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
@@ -770,13 +750,8 @@ void _exactFlow(float t, inout Vector v) {
         // the spin fixes the origin, no need to take into accound for the projection onto H^2.
         mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
         vec3 h2point = m * vec3(0, 0, 1);
-        // for the moment a computation without fixing `atan`
 
-
-        //v.pos.fiber = phi + atan(h2point.y, h2point.x);
-
-
-
+        // hack to fix atan numerical errors
         float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  - omegaSq * h2point.y);
         float tanTheta = - c / omega * sqrt(tanOmegaTOver2Sq);
 
@@ -801,10 +776,8 @@ void _exactFlow(float t, inout Vector v) {
         vec3 h2point = m * vec3(0, 0, 1);
         // for the moment a computation without fixing `atan`
         float aux = floor(0.5 * omega * t / PI + 0.5);
-        //v.pos.fiber = phi + atan(h2point.y, h2point.x) - aux * PI;
 
-
-
+        // hack to fix atan numerical errors
         float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  + omegaSq * h2point.y);
         float tanTheta =0.;
         float remainder = t - aux * (2. * PI / omega);
@@ -818,8 +791,6 @@ void _exactFlow(float t, inout Vector v) {
         v.pos.fiber = phi + atan(tanTheta) - aux * PI;
 
     }
-
-    //debugColor = -v.pos.w * vec3(0.9, 0.9, 0.2);
 
     // update the direction of the tangent vector
     // recall that tangent vectors at the origin have the form (ux,uy,uphi)
@@ -870,7 +841,9 @@ void flow(float t, inout Vector v) {
     translate(isom, v);
 
     //reduce the errors
+    reduceError(v.pos);
     unit(v);
+
 }
 
 
@@ -1224,6 +1197,49 @@ Vector estimateNormal(Point p) {
 
 int BINARY_SEARCH_STEPS=4;
 
+/*
+void raymarch(Vector rayDir, out Isometry totalFixMatrix){
+
+    Isometry fixMatrix;
+    Isometry testFixMatrix;
+    float marchStep = MIN_DIST;
+    float testMarchStep = MIN_DIST;
+    float globalDepth = MIN_DIST;
+    float localDepth = MIN_DIST;
+    Vector tv;
+    Vector localtv = clone(rayDir);
+    Vector testlocaltv = clone(rayDir);
+    Vector bestlocaltv = clone(rayDir);
+    totalFixMatrix = identity;
+    // Trace the local scene, then the global scene:
+
+    globalDepth = MIN_DIST;
+    marchStep = MIN_DIST;
+    localDepth=MAX_DIST;
+
+    for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+        tv = clone(rayDir);
+        flow(globalDepth, tv);
+
+
+        float globalDist = globalSceneSDF(tv.pos);
+        if (globalDist < EPSILON){
+            // hitWhich has now been set
+            totalFixMatrix = identity;
+            sampletv = clone(tv);
+            return;
+        }
+        //marchStep = globalDist;
+        globalDepth += globalDist;
+        if (globalDepth >= localDepth){
+            break;
+        }
+    }
+
+}
+*/
+
+
 void raymarch(Vector rayDir, out Isometry totalFixMatrix){
 
     Isometry fixMatrix;
@@ -1323,14 +1339,13 @@ void raymarch(Vector rayDir, out Isometry totalFixMatrix){
             flow(marchStep, tv);
 
 
-            /*
-            if (i == 1) {
-                hitWhich = 5;
-                vec4 aux = toVec4(tv.pos);
-                debugColor = vec3(abs(tv.dir.xy),0);
-                break;
-            }
-            */
+            //            if (i == 1) {
+            //                hitWhich = 5;
+            //                vec4 aux = toVec4(tv.pos);
+            //                debugColor = vec3(abs(tv.dir.xy),0);
+            //                break;
+            //            }
+
 
 
             float globalDist = globalSceneSDF(tv.pos);

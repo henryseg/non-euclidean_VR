@@ -1,5 +1,6 @@
 import {
     Vector4,
+    Matrix4,
     ShaderMaterial,
     CubeTextureLoader
 } from "./module/three.module.js";
@@ -183,7 +184,9 @@ function initObjects() {
     PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
     PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
-    globals.globalObjectPosition = new Position().flow(new Vector().set(0, 0, -1));
+    let aux = 0;
+    let p = new Point().set(0, aux, Math.sqrt(1 + aux * aux), -1);
+    globals.globalObjectPosition = new Position().set(p.makeTranslation(), new Matrix4());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
