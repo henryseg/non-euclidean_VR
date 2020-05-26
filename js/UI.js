@@ -23,7 +23,7 @@ let initGui = function () {
         //        modelHalfCube: 0.5,
         //        ipDist: 0.03200000151991844,
         //        stereoScreenOffset: globals.stereoScreenOffset,
-        keyboard: 'fr',
+        keyboard: 'us',
         display: 3,
         res: 1,
         lightRad: 0.02
