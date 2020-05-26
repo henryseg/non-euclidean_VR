@@ -41,8 +41,6 @@ const float PI = 3.1415926538;
 const float sqrt3 = 1.7320508075688772;
 const float sqrt2 = 1.4142135623730951;
 
-const vec4 ORIGIN = vec4(0, 0, 1, 0);
-
 vec3 debugColor = vec3(0.5, 0, 0.8);
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,21 +95,52 @@ vec4 SLreduceError(vec4 elt) {
     return elt / sqrt(-q);
 }
 
+// change of model
+// return the 2x2 matrix corresponding to elt
+// Todo. Check if this is really needed
+mat2 SLtoMatrix2(vec4 elt) {
+    mat2 ex = mat2(
+    1, 0,
+    0, 1
+    );
+    mat2 ey = mat2(
+    0, -1,
+    1, 0
+    );
+    mat2 ez = mat2(
+    0, 1,
+    1, 0
+    );
+    mat2 ew = mat2(
+    1, 0,
+    0, -1
+    );
+    return elt.x * ex + elt.y * ey + elt.z * ez + elt.w * ew;
+}
+// change of model
+// take a 2x2 matrix and return the corresponding element
+vec4 SLfromMatrix2(mat2 m) {
+    float a = m[0][0];
+    float b = m[1][0];
+    float c = m[0][1];
+    float d = m[1][1];
+    return 0.5 * vec4(a + d, b - c, b + c, a -d);
+}
+
 // Projection from SL(2,R) to SO(2,1)
 mat3 SLtoMatrix3(vec4 elt){
-    mat4 aux1 = mat4(
-    elt.x, elt.y, elt.z, 0.,
-    -elt.y, elt.x, elt.w, 0.,
-    elt.z, elt.w, elt.x, 0.,
-    -elt.w, elt.z, elt.y, 0.
+    mat4x3 aux1 = mat4x3(
+    elt.x, elt.y, elt.z,
+    -elt.y, elt.x, elt.w,
+    elt.z, elt.w, elt.x,
+    -elt.w, elt.z, elt.y
     );
-    mat4 aux2 = mat4(
+    mat3x4 aux2 = mat3x4(
     elt.x, elt.y, elt.z, elt.w,
     -elt.y, elt.x, elt.w, -elt.z,
-    elt.z, elt.w, elt.x, elt.y,
-    0., 0., 0., 0.
+    elt.z, elt.w, elt.x, elt.y
     );
-    mat3 res = mat3(aux1 * aux2);
+    mat3 res = aux1 * aux2;
     return res;
 }
 
@@ -120,6 +149,11 @@ vec3 SLtoH2(vec4 elt) {
     mat3 m = SLtoMatrix3(elt);
     vec3 res = vec3(0., 0., 1.);
     return m * res;
+}
+
+// Return the inverse of the given element
+vec4 SLgetInverse(vec4 elt) {
+    return vec4(elt.x, -elt.yzw);
 }
 
 // Return the 4x4 Matrix, corresponding to the current element, seen as an isometry of SL(2,R)
@@ -182,7 +216,7 @@ vec4 XrotateBy(vec4 point, float angle) {
 }
 
 // Apply the flip (x,y,z,w) -> (y,x,z,-w) to the current point
-// TODO. Check if it is really needed (maybe we only need the tangVector form of it)
+// TODO. Check if it is really needed (maybe we only need the Vector form of it)
 vec4 Xflip(vec4 point, float angle) {
     mat4 flip = mat4(
     0., 1., 0., 0.,
@@ -206,133 +240,174 @@ vec4 XtoSL2(vec4 point) {
     return res;
 }
 
+// Projection from X to SO(2,1)
+mat3 XtoMatrix3(vec4 point) {
+    vec4 aux = XtoSL2(point);
+    return SLtoMatrix3(aux);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
-// STRUCT isometry
+// STRUCT Point
+//----------------------------------------------------------------------------------------------------------------------
+
+/*
+
+    Data type for points in the space X
+    A point x in X is represented by a pair (proj,fiber) where
+    - proj is the projection of x to SL(2,R) seen as a vec4 (in the basis E)
+    - fiber is the fiber coordinates (!)
+
+    The goal of this choice is to perform as many computations in SL(2,R) rather than in X.
+    Hopefully this will reduce numerical erros related to the atan function
+
+*/
+
+struct Point {
+    vec4 proj;// the projection of the point to SL(2,R)
+    float fiber;// the fiber component
+};
+
+// origin of the space
+// - the projection corresponds to the identity in SL(2,R)
+// - the fiber component is zero
+const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);
+
+// change of model
+// the input is a vector (x,y,z,w) representing a point p where
+// - (x,y,z) is the projection of p in H^2 (hyperboloid model)
+// - w is the fiber coordinate
+Point fromVec4(vec4 p) {
+    vec4 proj = XtoSL2(p);
+    return Point(proj, p.w);
+}
+
+// change of model
+// the output is a vector (x,y,z,w) representing a point p where
+// - (x,y,z) is the projection of p in H^2 (hyperboloid model)
+// - w is the fiber coordinate
+vec4 toVec4(Point p) {
+    vec4 res;
+    mat3 m = SLtoMatrix3(p.proj);
+    res.xyz = m * vec3(0, 0, 1);
+    res.w = p.fiber;
+    return res;
+}
+
+// unserialize the data received from the shader to create a point
+Point unserializePoint(vec4 data) {
+    return fromVec4(data);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// STRUCT Isometry
 //----------------------------------------------------------------------------------------------------------------------
 
 /*
 
   Data type for manipulating isometries of the space
   In this geometry we only consider as isometries the element of X acting on itself on the left.
-  An isometry is represented by the image of the origin, coded as a vec4
+  If x is a point of X, the isometry L_x sending the origin to x is represented by the point x
+
 */
 
 struct Isometry {
-    vec4 target;// the image of the origin
+    Point target;// the image of the origin by this isometry.
 };
 
 // Method to unserialized isometries passed to the shader
-Isometry unserialize(vec4 data) {
-    return Isometry(data);
+Isometry unserializeIsom(vec4 data) {
+    Point p = fromVec4(data);
+    return Isometry(p);
 }
 
 // Product of two isometries (more precisely isom1 * isom2)
 Isometry composeIsometry(Isometry isom1, Isometry isom2) {
-    vec4 aux1 = XtoSL2(isom1.target);
-    vec4 aux2 = XtoSL2(isom2.target);
-
-    vec4 aux = SLmultiply(aux1, aux2);
-    aux = SLtranslateFiberBy(aux, -isom1.target.w - isom2.target.w);
-    vec3 h2Point = SLtoH2(aux);
-
-    return Isometry(vec4(
-    h2Point,
-    isom1.target.w + isom2.target.w + 2. * atan(aux.y, aux.x)
-    ));
+    vec4 proj = SLmultiply(isom1.target.proj, isom2.target.proj);
+    vec4 aux = SLtranslateFiberBy(proj, -isom1.target.fiber - isom2.target.fiber);
+    float fiber = isom1.target.fiber + isom2.target.fiber + 2. * atan(aux.y, aux.x);
+    Point target = Point(proj, fiber);
+    return Isometry(target);
 }
 
 // Return the inverse of the given isometry
 Isometry getInverse(Isometry isom) {
-    float angle = PI - isom.target.w;
-
-    mat3 rot = mat3(
-    cos(angle), sin(angle), 0.,
-    -sin(angle), cos(angle), 0.,
-    0., 0., 1.
-    );
-
-    vec4 targetInv = vec4(
-    rot * isom.target.yxz,
-    -isom.target.w
-    );
-    targetInv = XreduceError(targetInv);
-    return Isometry(targetInv);
+    vec4 proj = SLgetInverse(isom.target.proj);
+    Point target = Point(proj, -isom.target.fiber);
+    return Isometry(target);
 }
 
 // Return the isometry sending the origin to p
-Isometry makeLeftTranslation(vec4 p) {
-    return Isometry(p);
+Isometry makeLeftTranslation(Point target) {
+    return Isometry(target);
 }
+
 // Return the isometry sending p to the origin
-Isometry makeInvLeftTranslation(vec4 p) {
+Isometry makeInvLeftTranslation(Point p) {
     return getInverse(makeLeftTranslation(p));
 }
 
 // Translate a point by the given isometry
-vec4 translate(Isometry isom, vec4 p) {
+Point translate(Isometry isom, Point p) {
     Isometry aux = makeLeftTranslation(p);
     aux = composeIsometry(isom, aux);
     return aux.target;
 }
 
+// Perfom a rotation (meant in the H^2 component) by the given angle
+// It does not affact the fiber component
+void rotateBy(float angle, inout Point p) {
+    mat4 rot = mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, cos(angle), sin(angle),
+    0, 0, -sin(angle), cos(angle)
+    );
+    p.proj = rot * p.proj;
+}
+
+// Flip the point (see Jupyter Notebook)
+// It reverses the fiber
+void flip(inout Point p) {
+    mat4 flip = mat4(
+    1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1,
+    0, 0, 1, 0
+    );
+    p.proj = flip * p.proj;
+    p.fiber = - p.fiber;
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
-// STRUCT tangVector
+// STRUCT Vector
 //----------------------------------------------------------------------------------------------------------------------
 
 
 /*
   Data type for manipulating points in the tangent bundle
-  A tangVector is given by
+  A Vector is given by
   - pos : a point in the space
-  - global_dir: a tangent vector at pos
-  - local_dir: the pull back of the tangent vector at the origin
-  - global: a flag to say if the global direction has been computed
-  - local: a flag to say if the local direction has been computed
+  - dir: a tangent vector at pos
 
   Local direction are vec3 written in the orthonormal basis (e_x, e_y, e_phi) where
   . e_x is the direction of the x coordinate of H^2
   . e_y is the direction of the y coordinate in H^2
   . e_phi is the direction of the fiber
 
-  Global direction are vec4. We see X = H^2 x R as a subspace of R^4.
-  The coordinates of the global direction refers to this model
-
   Implement various basic methods to manipulate them
 
 */
 
 
-struct tangVector {
-    vec4 pos;// position on the manifold
-    vec4 global_dir;// vector in the tangent space at the point pos
-    vec3 local_dir;// pull back of the tangent vector at the origin written in the appropriate basis
-    bool global;// true if the global dir has been computed, false otherwise
-    bool local;// true if the local dir has been computed, false otherwise
+struct Vector {
+    Point pos;// position on the manifold
+    vec3 dir;// pull back of the tangent vector at the origin written in the appropriate basis
 };
 
-
-// Constructor from global data
-tangVector initFromGlobal(vec4 pos, vec4 dir) {
-    return tangVector(pos, dir, vec3(0.), true, false);
-}
-
-// Constructor from local data
-tangVector initFromLocal(vec4 pos, vec3 dir) {
-    return tangVector(pos, vec4(0.), dir, false, true);
-}
-
-// Not all geometries have peferred subgroup of isometries that can be used to pull back tangent vectors
-// Hence the default constructor use the global direction
-// This consructor should be used for every geometry independant part of the code
-tangVector newTangVector(vec4 pos, vec4 dir) {
-    return initFromGlobal(pos, dir);
-}
-
 // return a copy of the vector
-tangVector clone(tangVector v) {
-    return tangVector(v.pos, v.global_dir, v.local_dir, v.global, v.local);
+Vector clone(Vector v) {
+    return Vector(v.pos, v.dir);
 }
 
 
@@ -348,11 +423,12 @@ The tangent vector is passed as a reference, hence it is altered by the function
 */
 
 // Return the differential of the isometry sending the origin to target
-mat4 diffTranslation(vec4 target) {
-    float x = target.x;
-    float y = target.y;
-    float z = target.z;
-    float w = target.w;
+mat4 diffTranslation(Point target) {
+    vec4 aux = toVec4(target);
+    float x = aux.x;
+    float y = aux.y;
+    float z = aux.z;
+    float w = aux.w;
     float aux1 = x * cos(w) + y * sin(w);
     float aux2 = y * cos(w) - x * sin(w);
 
@@ -368,11 +444,12 @@ mat4 diffTranslation(vec4 target) {
 }
 
 // Return the inverse of the differential of the isometry sending the origin to target
-mat4 diffInvTranslation(vec4 target) {
-    float x = target.x;
-    float y = target.y;
-    float z = target.z;
-    float w = target.w;
+mat4 diffInvTranslation(Point target) {
+    vec4 aux = toVec4(target);
+    float x = aux.x;
+    float y = aux.y;
+    float z = aux.z;
+    float w = aux.w;
     float aux1 = x * cos(w) + y * sin(w);
     float aux2 = y * cos(w) - x * sin(w);
 
@@ -387,161 +464,59 @@ mat4 diffInvTranslation(vec4 target) {
     return m;
 }
 
-// set up (if needed) the local direction from the global one
-void setLocalDir(inout tangVector v) {
-    if (!v.local) {
-        // inverse of the differential map of the translation from the origin to pos
-        mat4 m = diffInvTranslation(v.pos);
-        // update the local direction
-        vec4 aux = m * v.global_dir;
-        v.local_dir = aux.xyw;
-        // update the flag
-        v.local = true;
-    }
-}
-
-// set up (if needed) the global direction from the local one
-void setGlobalDir(inout tangVector v) {
-    if (!v.global) {
-        // differential map of the translation from the origin to pos
-        mat4 m = diffTranslation(v.pos);
-        // update the global direction
-        vec4 aux = vec4(v.local_dir.xy, 0., v.local_dir.z);
-        v.global_dir = m * aux;
-        // update the flag
-        v.global = true;
-    }
-}
-
-
-// reset the flag of the local direction
-// the next time the local direction is needed it will have to be recomputed
-void resetLocalDir(inout tangVector v) {
-    v.local = false;
-}
-
-// reset the flag of the global direction
-// the next time the global direction is needed it will have to be recomputed
-void resetGlobalDir(inout tangVector v) {
-    v.global = false;
-}
-
-// make sure that the two given vectors have at least one representation (local or global) in common
-// if there is no common representation, we update the vectors to have a common representation
-// the type of representation is given by the value of rep:
-// - O : local representation
-// - 1 : global representation
-void prepareDir(inout tangVector v1, inout tangVector v2, int rep){
-    bool local = v1.local && v2.local;
-    bool global = v1.global && v2.global;
-    switch (rep){
-        case 0:
-        setLocalDir(v1);
-        setLocalDir(v2);
-        break;
-        case 1:
-        setGlobalDir(v1);
-        setGlobalDir(v2);
-        break;
-    }
-}
-
-// overload of the previous method
-// the set pref to 0 by default
-void prepareDir(inout tangVector v1, inout tangVector v2){
-    prepareDir(v1, v2, 0);
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 // Applying Isometries, Facings
 //----------------------------------------------------------------------------------------------------------------------
 
 
-// overlaod using tangVector
-Isometry makeLeftTranslation(tangVector v) {
+// overlaod using Vector
+Isometry makeLeftTranslation(Vector v) {
     return makeLeftTranslation(v.pos);
 }
 
-// overlaod using tangVector
-Isometry makeInvLeftTranslation(tangVector v) {
+// overlaod using Vector
+Isometry makeInvLeftTranslation(Vector v) {
     return makeInvLeftTranslation(v.pos);
 }
 
 // overload to translate a direction
-void translate(Isometry isom, inout tangVector v) {
-    // if the vector is given by a global direction, we switch to a local direction
-    // we are lazy and do not update the global direction yet,
-    // it will be done later if needed.
-    if (v.global) {
-        setLocalDir(v);
-        resetGlobalDir(v);
-    }
-    // translate the position
+void translate(Isometry isom, inout Vector v) {
     v.pos = translate(isom, v.pos);
 }
 
 
 // rotate the tangent vector (position and direction around the fiber by an angle alpha)
-void rotateBy(float angle, inout tangVector v) {
-    // Rotation acts only on the H^2 part
-    // Because of our choice of representation this action is encoded by a linear map on R^4.
-    // The good news is that it suffices to apply the same matrix to all the properties
-    // (position, local direction, global direction)
-    mat4 rot = mat4(
-    cos(angle), sin(angle), 0., 0.,
-    -sin(angle), cos(angle), 0., 0.,
-    0., 0., 1., 0.,
-    0., 0., 0., 1.
-    );
+void rotateBy(float angle, inout Vector v) {
+    // rotation of the position part
+    rotateBy(angle, v.pos);
 
-    v.pos = rot * v.pos;
-    if (v.local) {
-        vec4 aux = vec4(v.local_dir.xy, 0., v.local_dir.z);
-        aux = rot * aux;
-        v.local_dir = aux.xyw;
-    }
-    if (v.global) {
-        v.global_dir = rot * v.global_dir;
-    }
+    mat3 rotD = mat3(
+    cos(angle), sin(angle), 0,
+    -sin(angle), cos(angle), 0,
+    0, 0, 1
+    );
+    v.dir = rotD * v.dir;
 }
 
 // flip the tangent vector (see Jupyter Notebook)
-void flip(inout tangVector v) {
-    // As for the rotation, the flip is encoded by a linear map on R^4.
-    // The good news is that it suffices to apply the same matrix to all the properties
-    // (position, local direction, global direction)
-    mat4 flip = mat4(
-    0., 1., 0., 0.,
-    1., 0., 0., 0.,
-    0., 0., 1., 0.,
-    0., 0., 0., -1.
-    );
+void flip(inout Vector v) {
+    flip(v.pos);
 
-    v.pos = flip * v.pos;
-    if (v.local) {
-        vec4 aux = vec4(v.local_dir.xy, 0., v.local_dir.z);
-        aux = flip * aux;
-        v.local_dir = aux.xyw;
-    }
-    if (v.global) {
-        v.global_dir = flip * v.global_dir;
-    }
+    mat3 flip = mat3(
+    0, 1, 0,
+    1, 0, 0,
+    0, 0, -1
+    );
+    v.dir = flip * v.dir;
 }
 
-
 // apply a local rotation of the direction
-void rotateByFacing(mat4 A, inout tangVector v){
-    // if the vector is given by a global direction, we switch to a local direction
-    // we are lazy and do not update the global direction yet,
-    // it will be done later if needed.
-    if (v.global) {
-        setLocalDir(v);
-        resetGlobalDir(v);
-    }
+void rotateByFacing(mat4 A, inout Vector v){
     // notice that the facing is an element of SO(3) which refers to the basis (e_x, e_y, e_phi).
-    vec4 aux = vec4(v.local_dir, 0.);
+    vec4 aux = vec4(v.dir, 0.);
     aux = A * aux;
-    v.local_dir = aux.xyz;
+    v.dir = aux.xyz;
 }
 
 
@@ -555,159 +530,98 @@ void rotateByFacing(mat4 A, inout tangVector v){
 
 
 // Add two tangent vector at the same point (return v1 + v2)
-tangVector add(tangVector v1, tangVector v2) {
-    // TODO : check if the underlyig point are indeed the same ?
-    // properties of the result that we are going to update
-    bool global = false;
-    bool local = false;
-    vec4 global_dir = vec4(0.);
-    vec3 local_dir = vec3(0.);
-
-
-    // Make sure that the two vectors have at least one representation (local or global) in common.
-    prepareDir(v1, v2);
-    // Add the directions (if the representations agree)
-    if (v1.local && v2.local) {
-        local = true;
-        local_dir = v1.local_dir + v2.local_dir;
-    }
-    if (v1.global && v2.global) {
-        global = true;
-        global_dir = v1.global_dir + v2.global_dir;
-    }
+Vector add(Vector v1, Vector v2) {
     // return the added vectors
-    return tangVector(v1.pos, global_dir, local_dir, global, local);
+    return Vector(v1.pos, v1.dir + v2.dir);
 }
 
 // subtract two tangent vector at the same point (return v1 - v2)
-tangVector sub(tangVector v1, tangVector v2) {
-    // TODO : check if the underlyig point are indeed the same ?
-    // properties of the result that we are going to update
-    bool global = false;
-    bool local = false;
-    vec4 global_dir = vec4(0.);
-    vec3 local_dir = vec3(0.);
-
-
-    // Make sure that the two vectors have at least one representation (local or global) in common.
-    prepareDir(v1, v2);
-    // Add the directions (if the representations agree)
-    if (v1.local && v2.local) {
-        local = true;
-        local_dir = v1.local_dir - v2.local_dir;
-    }
-    if (v1.global && v2.global) {
-        global = true;
-        global_dir = v1.global_dir - v2.global_dir;
-    }
+Vector sub(Vector v1, Vector v2) {
     // return the added vectors
-    return tangVector(v1.pos, global_dir, local_dir, global, local);
+    return Vector(v1.pos, v1.dir - v2.dir);
 }
 
 // scalar multiplication of a tangent vector (return a * v)
-tangVector scalarMult(float a, tangVector v) {
-    return tangVector(v.pos, a * v.global_dir, a * v.local_dir, v.global, v.local);
+Vector scalarMult(float a, Vector v) {
+    return Vector(v.pos, a * v.dir);
 }
 
 
 // dot product of the two vectors
-float tangDot(tangVector v1, tangVector v2){
-    /*
-    Cheap versiion : pulling back both vectors at the origin
-    setLocalDir(v1);
-    setLocalDir(v2);
-    return dot(v1.local_dir, v2.local_dir);
-    */
-
-    // More advanced method (hopfully faster when both vectors have a global representation)
-
-    // Make sure that the two vectors have at least one representation (local or global) in common.
-    prepareDir(v1, v2);
-    if (v1.local && v2.local) {
-        // the tensor metric at the origin is given by the identity matrix
-        return dot(v1.local_dir, v2.local_dir);
-    }
-    if (v1.global && v2.global) {
-        // build the tensor metric at the point v1.pos = v2.pos
-        float x = v1.pos.x;
-        float y = v1.pos.y;
-        float z = v1.pos.z;
-        mat4 g = mat4(
-        1. + pow(y / (z + 1.), 2.), - x * y / pow(z + 1., 2.), -x / (z + 1.), -y / (z + 1.),
-        - x * y / pow(z + 1., 2.), 1. + pow(x / (z + 1.), 2.), -y / (z + 1.), x / (z + 1.),
-        -x / (z + 1.), -y / (z + 1.), (z - 1.) / (z + 1.), 0.,
-        -y / (z + 1.), x / (z + 1.), 0., 1.
-        );
-        // compute the norm of the vector
-        return dot(v1.global_dir, g * v2.global_dir);
-    }
-    // this point of the code should never be reached
-    // because we prepared the vectors at the beginning.
-    return -1.;
+float tangDot(Vector v1, Vector v2){
+    return dot(v1.dir, v2.dir);
 }
 
 // calculate the length of a tangent vector
-float tangNorm(tangVector v){
+float tangNorm(Vector v){
     return sqrt(tangDot(v, v));
 }
 
 // create a unit tangent vector (in the tangle bundle)
 // when possible use the normalization method below
-tangVector tangNormalize(tangVector v){
-    // properties of the result that we are going to update
-    bool global = false;
-    bool local = false;
-    vec4 global_dir = vec4(0.);
-    vec3 local_dir = vec3(0.);
-
+Vector tangNormalize(Vector v){
     // length of the vector
     float length = tangNorm(v);
-
-    // scale the direction for each representation
-    if (v.local) {
-        local = true;
-        local_dir = v.local_dir / length;
-    }
-    if (v.global) {
-        global = true;
-        global_dir = v.global_dir / length;
-    }
-    return tangVector(v.pos, global_dir, local_dir, global, local);
+    return Vector(v.pos, v.dir / length);
 }
 
 // normalize the given vector
 // called unit because normalize is a protected name
-void unit(inout tangVector v) {
+void unit(inout Vector v) {
     // length of the vector
     float length = tangNorm(v);
-    // scale the direction for each representation
-    if (v.local) {
-        v.local_dir = v.local_dir / length;
-    }
-    if (v.global) {
-        v.global_dir = v.global_dir / length;
-    }
+    v.dir = v.dir / length;
 }
 
 
 // cosAng between two vector in the tangent bundle
-float cosAng(tangVector v1, tangVector v2){
+float cosAng(Vector v1, Vector v2){
     return tangDot(v1, v2);
 }
 
+Vector turnAround(Vector v){
+    return Vector(v.pos, -v.dir);
+}
 
-// return the global direction of a basis of the tangent space at the point p
-// given a tangent vector (ux, uy, uz, uw) at (x, y, z, w) it satisfies
-//  x * ux + y * uy - z * uz = 0 (because of the hyperboloid model of H^2)
-mat4 tangBasis(vec4 p){
-    vec4 basis_x = vec4(1., 0., p.x/p.z, 0.);
-    vec4 basis_y = vec4(0., 1., p.y/p.z, 0.);
-    vec4 basis_z = vec4(0., 0., 0., 1.);
-    mat4 theBasis = mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
-    return theBasis;
+
+//reflect the unit tangent vector u off the surface with unit normal nVec
+Vector reflectOff(Vector v, Vector normal){
+    return add(scalarMult(-2.0 * tangDot(v, normal), normal), v);
+}
+
+
+/*
+
+For the next four method,
+we implictely assume that we have a prefered basis f = (f_x, f_y, f_z)
+at of the tangent space at the point p
+
+The first function compute (an approximation of) the point
+obtained from p by following for a time eps the pass directed a vector given in the coordinates of f
+
+The last method takes the coordinates of a tangent vector in this basis and return the corresponding tangent vector
+
+Here the basis at p is the image by dL of the standard basis at the origin.
+
+*/
+
+
+Point smallShift(Point p, vec3 dp) {
+    vec4 aux = toVec4(p);
+
+    mat4 dL = diffTranslation(p);
+    mat3x4 localBasis = mat3x4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 0, 1
+    );
+
+    vec4 res = aux + dL * localBasis * dp;
+    return fromVec4(res);
+}
+
+Vector createVector(Point p, vec3 dp) {
+    return Vector(p, dp);
 }
 
 
@@ -720,35 +634,43 @@ mat4 tangBasis(vec4 p){
 */
 
 // fake distance between two points
-float fakeDistance(vec4 p1, vec4 p2){
-    return length(p2-p1);
+float fakeDistance(Point p1, Point p2){
+    vec4 aux1 = toVec4(p1);
+    vec4 aux2 = toVec4(p2);
+    return length(aux2 - aux1);
 }
 
 // overload of the previous function in case we work with tangent vectors
-float fakeDistance(tangVector v1, tangVector v2){
+float fakeDistance(Vector v1, Vector v2){
     return fakeDistance(v1.pos, v2.pos);
 }
 
 // distance between two points
-float exactDist(vec4 p1, vec4 p2) {
-    return fakeDistance(p1, p2);
+float exactDist(Point p1, Point p2){
+    vec4 aux1 = toVec4(p1);
+    vec4 aux2 = toVec4(p2);
+    return length(aux2 - aux1);
 }
 
 // overload of the previous function in case we work with tangent vectors
-float exactDist(tangVector v1, tangVector v2){
+float exactDist(Vector v1, Vector v2){
     return exactDist(v1.pos, v2.pos);
 }
 
 
 // return the tangent vector at p point to q
-tangVector tangDirection(vec4 p, vec4 q){
-    tangVector res = newTangVector(p, q-p);
+Vector tangDirection(Point p, Point q){
+    vec4 auxp = toVec4(p);
+    vec4 auxq = toVec4(q);
+    mat4 dLinv = diffInvTranslation(p);
+    vec4 global_dir = auxq - auxp;
+    Vector res = Vector(p, (dLinv * global_dir).xyw);
     unit(res);
     return res;
 }
 
 // overload of the previous function in case we work with tangent vectors
-tangVector tangDirection(tangVector u, tangVector v){
+Vector tangDirection(Vector u, Vector v){
     return tangDirection(u.pos, v.pos);
 }
 
@@ -759,23 +681,47 @@ tangVector tangDirection(tangVector u, tangVector v){
 // - the initial position of v is the origin
 // - the local direction of v is set up
 // - the initial direction has the local form (a, 0, c), with a,c > 0
-void _exactFlow(float t, inout tangVector v) {
-    float a = v.local_dir.x;
-    float c = v.local_dir.z;
+void _exactFlow(float t, inout Vector v) {
+    float a = v.dir.x;
+    float c = v.dir.z;
 
     float phi = c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
+    float omegaSq = 0.;
     float omega = 0.;// the "pulsatance" involved in the geodesic flow.
     float theta = 0.;// the rotation angle in H^2.
 
-    // update the position of the tangent vector
+
+    // the solution has an easy description as a product of 2 x 2 matrices.
+    // it is a product of isom * spin where
+    // - isom is a one-parameter subgroup of SL(2,R) (elliptic, parabolic, or hyperbolic)
+    // - spin is a one-parameter subgroup of SL(2,R) fixing the origin of H^2.
+    // we use this form, and then convert it into a vec4
+
+    // the spin part is always the same.
+    mat2 spin = mat2(
+    cos(c * t), -sin(c * t),
+    sin(c * t), cos(c * t)
+    );
+    // to get the fiber angle we will go through the projection of the point in H^2
+    // (see Jupyter Notebook)
+
     // we distinguish three cases, depending whether c is smaller, equal or greater than a.
+    // it corresponds to the three cases for isom (elliptic, parabolic, or hyperbolic).
+
+    /*
+    // little hack to see the junction between elliptic/hyperbolic behavior
+    if (abs(c-a) < 0.002) {
+        hitWhich = 5;
+    }*/
+
     if (abs(c-a)*t < 0.05) {
-        // parabolic trajectory
+        // "parabolic" trajectory
         // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
         float a2 = a * a;
         float omega2 = a * a - c * c;
         float omega4 = omega2 * omega2;
         float omega6 = omega4 * omega2;
+        float omega8 = omega6 * omega2;
         float t2 = t * t;
         float t3 = t2 * t;
         float t4 = t3 * t;
@@ -783,91 +729,94 @@ void _exactFlow(float t, inout tangVector v) {
         float t6 = t5 * t;
         float t7 = t6 * t;
         float t8 = t7 * t;
-        v.pos.xyz = vec3(
-            a * t + a * t3 * omega2 / 6. + a * t5 * omega4 / 120. + a * t7 * omega6 /5040.,
-            - a * c * t2 / 2. - a * c * omega2 * t4 / 24. - a * c * omega4 * t6 / 720. - a * c * omega6 * t8 / 40320.,
-            1. + a2 * t2 / 2. + a2 * omega2 * t4 / 24. + a2 * omega4 * t6 / 720. + a2 * omega6 * t4 / 40320.
-        );
-        // hack for fixing crazy atan around (0,0)
-        // rely on the asymptotic expansion of the geodesic flow for small times
-        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
-        if (shrho < 0.001) {
-            theta = - 0.5 * (c / a) * shrho;
-        }
-        else {
-            theta = atan(v.pos.y, v.pos.x);
-        }
-        v.pos.w = phi + theta;
+
+        mat2 even = mat2(1);
+        mat2 odd = mat2(0, a + c, a - c, 0);
+        mat2 isom = even;
+        isom = isom + t * (1. / 2.) * odd;
+        isom = isom + (1./2.) * t2 * (1. / 4.) * omega2 * even;
+        isom = isom + (1./6.) * t3 * (1. / 8.) * omega2 * odd;
+        isom = isom + (1./24.) * t4 * (1. / 16.) * omega4 * even;
+        isom = isom + (1./120.) * t5 * (1. / 32.) * omega4 * odd;
+        isom = isom + (1./720.) * t6 * (1. / 64.) * omega6 * even;
+        isom = isom + (1./5040.) * t7 * (1. / 128.) * omega6 * odd;
+        isom = isom + (1./40320.) * t8 * (1. / 256.) * omega8 * even;
+
+        v.pos.proj = SLfromMatrix2(isom * spin);
+
+        // the spin fixes the origin, no need to take into accound for the projection onto H^2.
+        mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
+        vec3 h2point = m * vec3(0, 0, 1);
+        // for the moment a computation without fixing `atan`
+        //v.pos.fiber = phi + atan(h2point.y, h2point.x);
+
+
+        float tanTheta = - a * c * t / 2. - a * c * omega2 * t3 / 24. - a * c * omega4 * t5 / 720. - a * c * omega6 * t7 / 40320.;
+        tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
+        v.pos.fiber = phi + atan(tanTheta);
+
     }
     else if (c < a){
         // hyperbolic trajectory
-        omega = sqrt(a * a - c * c);
-        mat3 T = mat3(
-        1., 0., 0.,
-        0., a / omega, -c / omega,
-        0., -c / omega, a / omega
-        );
-        mat3 Tinv = mat3(
-        1., 0., 0.,
-        0., a / omega, c / omega,
-        0., c / omega, a / omega
-        );
-        mat3 shift = mat3(
-        cosh(omega * t), 0., sinh(omega * t),
-        0., 1., 0.,
-        sinh(omega * t), 0., cosh(omega *t)
-        );
+        omegaSq = a * a - c * c;
+        omega = sqrt(omegaSq);
 
-        mat3 m = T * shift * Tinv;
-        v.pos.xyz = m * v.pos.xyz;
+        mat2 isom = mat2(
+        cosh(0.5 * omega * t), omega * sinh(0.5 * omega * t) / (a-c),
+        omega * sinh(0.5 * omega * t) / (a+c), cosh(0.5 * omega * t)
+        );
+        v.pos.proj = SLfromMatrix2(isom * spin);
 
-        // hack for fixing crazy atan around (0,0)
-        // rely on the asymptotic expansion of the geodesic flow for small times
-        // shrho represents sinh(rho) for the polar coordinates of H^2
-        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
-        if (shrho < 0.001) {
-            theta = - 0.5 * (c / a) * shrho;
-        }
-        else {
-            theta = atan(v.pos.y, v.pos.x);
-        }
-        v.pos.w = phi + theta;
+        // the spin fixes the origin, no need to take into accound for the projection onto H^2.
+        mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
+        vec3 h2point = m * vec3(0, 0, 1);
+        // for the moment a computation without fixing `atan`
+
+
+        //v.pos.fiber = phi + atan(h2point.y, h2point.x);
+
+
+
+        float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  - omegaSq * h2point.y);
+        float tanTheta = - c / omega * sqrt(tanOmegaTOver2Sq);
+
+        v.pos.fiber = phi + atan(tanTheta);
 
     }
     else {
         // remaining case c > a
         // elliptic trajectory
-        omega = sqrt(c * c - a * a);
-        mat3 T = mat3(
-        1., 0., 0.,
-        0., c / omega, -a / omega,
-        0., -a / omega, c / omega
-        );
-        mat3 Tinv = mat3(
-        1., 0., 0.,
-        0., c / omega, a / omega,
-        0., a / omega, c / omega
-        );
-        mat3 rot = mat3(
-        cos(omega * t), -sin(omega * t), 0.,
-        sin(omega * t), cos(omega * t), 0.,
-        0., 0., 1.
-        );
 
-        mat3 m = T * rot * Tinv;
-        v.pos.xyz = m * v.pos.xyz;
-        // hack for fixing crazy atan around (0,0)
-        // rely on the asymptotic expansion of the geodesic flow for small times
-        // shrho represents sinh(rho) for the polar coordinates of H^2
-        // the formula is still problematic if a is very small
-        float shrho  = sqrt(v.pos.x * v.pos.x + v.pos.y * v.pos.y);
-        if (shrho < 0.001) {
-            theta = - 0.5 * (c / a) * shrho;
+        omegaSq = c * c - a * a;
+        omega = sqrt(omegaSq);
+
+        mat2 isom = mat2(
+        cos(0.5 * omega * t), -omega * sin(0.5 * omega * t) / (a-c),
+        -omega * sin(0.5 * omega * t) / (a+c), cos(0.5 * omega * t)
+        );
+        v.pos.proj = SLfromMatrix2(isom * spin);
+
+        // the spin fixes the origin, no need to take into accound for the projection onto H^2.
+        mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
+        vec3 h2point = m * vec3(0, 0, 1);
+        // for the moment a computation without fixing `atan`
+        float aux = floor(0.5 * omega * t / PI + 0.5);
+        //v.pos.fiber = phi + atan(h2point.y, h2point.x) - aux * PI;
+
+
+
+        float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  + omegaSq * h2point.y);
+        float tanTheta =0.;
+        float remainder = t - aux * (2. * PI / omega);
+        if (remainder > 0.) {
+            tanTheta = - c / omega * sqrt(tanOmegaTOver2Sq);
         }
         else {
-            theta = atan(v.pos.y, v.pos.x);
+            tanTheta = c / omega * sqrt(tanOmegaTOver2Sq);
         }
-        v.pos.w = phi + theta + 2. * floor(0.5 - 0.25 * omega * t / PI) * PI;
+
+        v.pos.fiber = phi + atan(tanTheta) - aux * PI;
+
     }
 
     //debugColor = -v.pos.w * vec3(0.9, 0.9, 0.2);
@@ -880,18 +829,12 @@ void _exactFlow(float t, inout tangVector v) {
     sin(2. * c * t), cos(2. * c * t), 0.,
     0., 0., 1.
     );
-    v.local_dir = S * v.local_dir;
+    v.dir = S * v.dir;
 }
 
 
 // flow the given vector during time t
-void flow(float t, inout tangVector v) {
-
-    // set up the local direction if needed
-    setLocalDir(v);
-    resetGlobalDir(v);
-
-
+void flow(float t, inout Vector v) {
     // prepation : set the vector into an easier form to flow
 
     // isometry sending the origin the the position of v
@@ -900,20 +843,19 @@ void flow(float t, inout tangVector v) {
     v.pos = ORIGIN;
     // flip if needed to get a positive fiber direction
     bool flipped = false;
-    if (v.local_dir.z < 0.) {
+    if (v.dir.z < 0.) {
         flipped = true;
         flip(v);
     }
-
 
     // rotation
     // the angle alpha is characterized as follows
     // if u is a tangent vector with the local form (a, 0, c) with a, c >= 0
     // then v is obtained from u by a rotation of angle alpha
-    float alpha = atan(v.local_dir.y, v.local_dir.x);
-    float c = v.local_dir.z;
+    float alpha = atan(v.dir.y, v.dir.x);
+    float c = v.dir.z;
     float a = sqrt(1. - c * c);
-    v.local_dir = vec3(a, 0., c);
+    v.dir = vec3(a, 0., c);
 
     //debugColor = abs(v.local_dir);
 
@@ -933,26 +875,6 @@ void flow(float t, inout tangVector v) {
 
 
 //----------------------------------------------------------------------------------------------------------------------
-//Geometry of the Models
-//----------------------------------------------------------------------------------------------------------------------
-
-/*
-TODO. Check if needed in general ? Geometry dependent ?
-
-*/
-
-//project point back onto the geometry
-vec4 geomProject(vec4 p){
-    return p;
-}
-
-//Project onto the Klein Model
-vec4 modelProject(vec4 p){
-    return p;
-
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 // LIGHT
 //----------------------------------------------------------------------------------------------------------------------
 //light intensity as a fn of distance
@@ -970,7 +892,7 @@ float lightAtt(float dist){
 //----------------------------------------------------------------------------------------------------------------------
 
 
-float sphereSDF(vec4 p, vec4 center, float radius){
+float sphereSDF(Point p, Point center, float radius){
     return exactDist(p, center) - radius;
 }
 
@@ -1015,10 +937,10 @@ float cylSDF(vec4 p, float r){
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
 //----------------------------------------------------------------------------------------------------------------------
-tangVector N;//normal vector
-tangVector sampletv;
+Vector N;//normal vector
+Vector sampletv;
 vec4 globalLightColor;
-Isometry identity=Isometry(vec4(0., 0., 1., 0.));
+Isometry identity=Isometry(ORIGIN);
 Isometry currentBoost;
 Isometry leftBoost;
 Isometry rightBoost;
@@ -1060,7 +982,7 @@ uniform int display;
 uniform int res;
 
 //adding one local light (more to follow)
-vec4 localLightPos=vec4(0.1, 0.1, -0.2, 1.);
+//Point localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 1.));
 vec4 localLightColor=vec4(1., 1., 1., 0.2);
 
 //variable which sets the light colors for drawing in hitWhich 1
@@ -1080,7 +1002,7 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 // Turn off the local scene
 // Local signed distance function : distance from p to an object in the local scene
 
-float localSceneSDF(vec4 p){
+float localSceneSDF(Point p){
     float tilingDist;
     float dragonDist;
     float planesDist;
@@ -1173,14 +1095,14 @@ float localSceneSDF(vec4 p){
 
 //GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
-float globalSceneSDF(vec4 p){
+float globalSceneSDF(Point p){
     // correct for the fact that we have been moving
-    vec4 absolutep = translate(cellBoost, p);
+    Point absolutep = translate(cellBoost, p);
     float distance = MAX_DIST;
     float objDist;
     //Light Objects
     for (int i=0; i<4; i++){
-        objDist = sphereSDF(absolutep, lightPositions[i], 0.1);
+        objDist = sphereSDF(absolutep, unserializePoint(lightPositions[i]), 0.1);
         distance = min(distance, objDist);
         if (distance < EPSILON){
             hitWhich = 1;
@@ -1189,7 +1111,7 @@ float globalSceneSDF(vec4 p){
         }
     }
     //Global Sphere Object
-    vec4 globalObjPos = translate(globalObjectBoost, ORIGIN);
+    Point globalObjPos = translate(globalObjectBoost, ORIGIN);
     objDist = sphereSDF(absolutep, globalObjPos, 0.3);
 
     distance = min(distance, objDist);
@@ -1205,7 +1127,7 @@ float globalSceneSDF(vec4 p){
 // check if the given point p is in the fundamental domain of the lattice.
 
 
-bool isOutsideCell(vec4 p, out Isometry fixMatrix){
+bool isOutsideCell(Point p, out Isometry fixMatrix){
     //vec4 ModelP= modelProject(p);
 
     /*
@@ -1247,7 +1169,7 @@ bool isOutsideCell(vec4 p, out Isometry fixMatrix){
 
 
 // overload of the previous method with tangent vector
-bool isOutsideCell(tangVector v, out Isometry fixMatrix){
+bool isOutsideCell(Vector v, out Isometry fixMatrix){
     return isOutsideCell(v.pos, fixMatrix);
 }
 
@@ -1258,31 +1180,36 @@ bool isOutsideCell(tangVector v, out Isometry fixMatrix){
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
-    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
+// the coordinates refer to a prefered basis, which is geometry dependent
+Vector estimateNormal(Point p) {
     float newEp = EPSILON * 10.0;
-    mat4 theBasis= tangBasis(p);
-    vec4 basis_x = theBasis[0];
-    vec4 basis_y = theBasis[1];
-    vec4 basis_z = theBasis[2];
-    if (hitWhich != 3){ //global light scene
-        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
-        tangVector tv = newTangVector(p,
-        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
-        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
 
+    Point shiftPX = smallShift(p, vec3(newEp, 0, 0));
+    Point shiftPY = smallShift(p, vec3(0, newEp, 0));
+    Point shiftPZ = smallShift(p, vec3(0, 0, newEp));
+    Point shiftMX = smallShift(p, vec3(-newEp, 0, 0));
+    Point shiftMY = smallShift(p, vec3(0, -newEp, 0));
+    Point shiftMZ = smallShift(p, vec3(0, 0, -newEp));
+
+    Vector n;
+
+    if (hitWhich != 3){
+        //global light scene
+        n = createVector(p, vec3(
+        globalSceneSDF(shiftPX) - globalSceneSDF(shiftMX),
+        globalSceneSDF(shiftPY) - globalSceneSDF(shiftMY),
+        globalSceneSDF(shiftPZ) - globalSceneSDF(shiftMZ)
+        ));
     }
     else { //local scene
-        tangVector tv = newTangVector(p,
-        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
-        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
+        n = createVector(p, vec3(
+        localSceneSDF(shiftPX) - localSceneSDF(shiftMX),
+        localSceneSDF(shiftPY) - localSceneSDF(shiftMY),
+        localSceneSDF(shiftPZ) - localSceneSDF(shiftMZ)
+        ));
     }
+    unit(n);
+    return n;
 }
 
 
@@ -1297,7 +1224,7 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 
 int BINARY_SEARCH_STEPS=4;
 
-void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
+void raymarch(Vector rayDir, out Isometry totalFixMatrix){
 
     Isometry fixMatrix;
     Isometry testFixMatrix;
@@ -1305,10 +1232,10 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
     float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
-    tangVector tv = clone(rayDir);
-    tangVector localtv = clone(rayDir);
-    tangVector testlocaltv = clone(rayDir);
-    tangVector bestlocaltv = clone(rayDir);
+    Vector tv = clone(rayDir);
+    Vector localtv = clone(rayDir);
+    Vector testlocaltv = clone(rayDir);
+    Vector bestlocaltv = clone(rayDir);
     totalFixMatrix = identity;
     // Trace the local scene, then the global scene:
 
@@ -1395,13 +1322,15 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             flow(marchStep, tv);
 
+
             /*
-            if (i == 0) {
+            if (i == 1) {
                 hitWhich = 5;
-                //debugColor = abs(tv.local_dir.xyz);
-                //debugColor = vec3(0.3, 0.3, 0.6);
+                vec4 aux = toVec4(tv.pos);
+                debugColor = vec3(abs(tv.dir.xy),0);
                 break;
-            }*/
+            }
+            */
 
 
             float globalDist = globalSceneSDF(tv.pos);
@@ -1422,13 +1351,32 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
 
 
 //----------------------------------------------------------------------------------------------------------------------
+//Geometry of the Models
+//----------------------------------------------------------------------------------------------------------------------
+
+/*
+TODO. Check if needed in general ? Geometry dependent ?
+*/
+
+//project point back onto the geometry
+Point geomProject(Point p){
+    return p;
+}
+
+//Project onto the Klein Model
+Point modelProject(Point p){
+    return p;
+
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 // Lighting Functions
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
-vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
+vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
-    tangVector L = tangDirection(SP, TLP);
-    tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
+    Vector L = tangDirection(SP, TLP);
+    Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
     float nDotL = max(cosAng(N, L), 0.0);
     vec3 diffuse = lightIntensity.rgb * nDotL;
@@ -1439,14 +1387,16 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     float distToLight = fakeDistance(SP, TLP);
     float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
     //Compute final color
+
     return att*((diffuse*baseColor) + specular);
 }
 
 vec3 phongModel(Isometry totalFixMatrix, vec3 color){
-    vec4 SP = sampletv.pos;
-    vec4 TLP;//translated light position
-    // TODO: ask Steve about that : include a reflexion method to the `tangVector` structure ?
-    tangVector V = newTangVector(SP, -sampletv.global_dir);
+    Point SP = sampletv.pos;
+    Point TLP;//translated light position
+    Vector V = turnAround(sampletv);
+
+
 
     vec3 surfColor;
     surfColor = 0.2 * vec3(1.) + 0.8 * color;
@@ -1462,12 +1412,15 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //however this is version is hardcoded so we won't
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
+
+
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
-        TLP = translate(totalIsom, lightPositions[i]);
+        TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     }
 
+    /*
     //LOCAL LIGHT
     color+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
     //light color and intensity hard coded in
@@ -1475,9 +1428,9 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
         //TLP=invGenerators[i]*localLightPos;
-        TLP = translate(makeLeftTranslation(invGenerators[i]), localLightPos);
+        TLP = translate(unserializeIsom(invGenerators[i]), localLightPos);
         color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
-    }
+    }*/
 
     return color;
 }
@@ -1494,13 +1447,14 @@ vec2 smallest(vec3 v)
     return vec2(mi, me);
 }
 
+/*
 // texture a 4D surface by doing 4 2D projections in the most
 // perpendicular possible directions, and then blend them
 // together based on the surface normal
 // TODO. Check with Steve how to make this part geometry independent.
-vec3 boxMapping(sampler2D sam, tangVector point)
+vec3 boxMapping(sampler2D sam, Vector point)
 { // from Inigo Quilez
-    vec4 m = point.global_dir*point.global_dir; m=m*m; m=m*m;
+    vec4 m = point.dir * point.dir; m=m*m; m=m*m;
 
     vec3 x = texture(sam, smallest(point.pos.yzw)).xyz;
     vec3 y = texture(sam, smallest(point.pos.zwx)).xyz;
@@ -1516,9 +1470,9 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     Isometry aux = makeInvLeftTranslation(globalObjectBoostMat);
     pt = translate(aux, pt);
     return tangDirection(ORIGIN, pt).global_dir.xyz;
-}
+}*/
 
-vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight){
+vec3 lightColor(Isometry totalFixMatrix, Vector sampletv, vec3  colorOfLight){
     N = estimateNormal(sampletv.pos);
     vec3 color;
     color = phongModel(totalFixMatrix, 0.5 * colorOfLight);
@@ -1526,7 +1480,8 @@ vec3 lightColor(Isometry totalFixMatrix, tangVector sampletv, vec3  colorOfLight
     return color;
 }
 
-vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
+vec3 ballColor(Isometry totalFixMatrix, Vector sampletv){
+    /*
     if (EARTH){
         N = estimateNormal(sampletv.pos);
         vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
@@ -1534,7 +1489,8 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
         //color = 0.9*color+0.1;
         return 0.5 * color + 0.5 * color2;
     }
-    else {
+    else */
+    {
 
         N = estimateNormal(sampletv.pos);
         vec3 color=localLightColor.xyz;
@@ -1549,17 +1505,18 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
-vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
+vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
     //    if (FAKE_LIGHT){//always fake light in Sol so far
 
     //make the objects have their own color
     //color the object based on its position in the cube
-    vec4 samplePos=modelProject(sampletv.pos);
+    Point samplePos=modelProject(sampletv.pos);
 
     //IF WE HIT THE TILING
-    float x=samplePos.x;
-    float y=samplePos.y;
-    float z=samplePos.z;
+    vec4 aux = toVec4(samplePos);
+    float x=aux.x;
+    float y=aux.y;
+    float z=aux.z;
     x = 0.9 * x / modelHalfCube;
     y = 0.9 * y / modelHalfCube;
     z = 0.9 * z / modelHalfCube;
@@ -1587,7 +1544,7 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
 // Tangent Space Functions
 //----------------------------------------------------------------------------------------------------------------------
 
-tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
+Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
     if (isStereo == 1){
         resolution.x = resolution.x * 0.5;
         if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
@@ -1596,15 +1553,11 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
     float z = 0.1 / tan(radians(fov * 0.5));
     // code specific to SL2 (change the system of coordinates to make it coherent with the other geometries ?)
     // see the notes for the justification
-    // TODO this part is not geometry independent.
-    mat4 localbasis = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 1,
-    0, 0, 0, 0
-    );
-    vec4 dir = localbasis * vec4(xy, -z, 0.);
-    tangVector tv = newTangVector(ORIGIN, dir);
+    // TODO this part is not geometry independent,
+    // unless we assume that the tangent space has a prefered basis at everypoint
+    // or at least at the origin here
+    vec3 dir = vec3(xy, -z);
+    Vector tv = createVector(ORIGIN, dir);
     unit(tv);
     return tv;
 }
@@ -1615,17 +1568,17 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 
 void main(){
     setResolution(res);
-    currentBoost = unserialize(currentBoostMat);
-    leftBoost = unserialize(leftBoostMat);
-    rightBoost = unserialize(rightBoostMat);
-    cellBoost = unserialize(cellBoostMat);
-    invCellBoost = unserialize(invCellBoostMat);
-    globalObjectBoost = unserialize(globalObjectBoostMat);
+    currentBoost = unserializeIsom(currentBoostMat);
+    leftBoost = unserializeIsom(leftBoostMat);
+    rightBoost = unserializeIsom(rightBoostMat);
+    cellBoost = unserializeIsom(cellBoostMat);
+    invCellBoost = unserializeIsom(invCellBoostMat);
+    globalObjectBoost = unserializeIsom(globalObjectBoostMat);
 
 
     //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    tangVector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
+    Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
     if (isStereo == 1){
         if (isLeft){
@@ -1646,46 +1599,57 @@ void main(){
 
 
     Isometry totalFixMatrix = identity;
-    // do the marching
+    //do the marching
     raymarch(rayDir, totalFixMatrix);
 
     /*
-    hitWhich = 5;
-    tangVector v1 = newTangVector(ORIGIN, vec4(1, 0, 0, 0));
-    tangVector v2 = newTangVector(ORIGIN, vec4(0, 1, 0, 0));
-    debugColor = tangDot(v1,v2) * vec3(1,0,0);
-    */
+    Vector v = clone(rayDir);
+    float T = 10.;
+    int k = 10;
+    float step = T / float(k);
 
+    for (int i =0; i< k; i++) {
+        flow(step, v);
+    }
+    vec4 aux = toVec4(v.pos);
+    if (hitWhich !=5) {
+        hitWhich =5;
+        //debugColor = vec3(abs(aux.xy),0);
+        debugColor = -vec3(aux.w/30., 0, 0);
+    }*/
+
+
+
+    vec3 pixelColor;
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
-    // TODO. Replace by a switch instruction ?
-    if (hitWhich == 0){ //Didn't hit anything ------------------------
+    switch (hitWhich){
+        case 0://Didn't hit anything
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
         out_FragColor = vec4(0.2);
-        return;
-    }
-    else if (hitWhich == 1){
-        // global lights
-        //vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
+        break;
+
+        case 1:// global lights
+        //pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
         //out_FragColor=vec4(pixelColor, 1.0);
         out_FragColor = vec4(globalLightColor.rgb, 1.0);
-        return;
-    }
-    else if (hitWhich == 2){
-        // global object
-        vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
+        break;
+
+        case 2:// global object
+        pixelColor= ballColor(totalFixMatrix, sampletv);
+        //debugColor = abs(N.dir);
+        //pixelColor = debugColor;
         out_FragColor=vec4(pixelColor, 1.0);
-        return;
-    }
-    else if (hitWhich==3) {
-        // local objects
-        vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
+        break;
+
+        case 3:// local objects
+        pixelColor= tilingColor(totalFixMatrix, sampletv);
         out_FragColor=vec4(pixelColor, 1.0);
-        return;
-    }
-    else if (hitWhich == 5){
+        break;
+
+        case 5:
         //debug
         out_FragColor = vec4(debugColor, 1.0);
-        return;
+        break;
     }
 }
