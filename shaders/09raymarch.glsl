@@ -488,7 +488,7 @@ float shadowMarch(tangVector toLight, float distToLight)
 float softShadowMarch(in tangVector toLight, float distToLight)
     {
     
-    float k =10.; //parameter to determine softness of the shadows.
+    float k =100.; //parameter to determine softness of the shadows.
     
     Isometry fixMatrix;
     
