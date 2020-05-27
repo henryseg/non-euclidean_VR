@@ -433,7 +433,7 @@ float shadowMarch(tangVector toLight, float distToLight)
     float localDepth=0.;
     
     float marchStep=EPSILON;
-    float newEp = 5.*EPSILON;
+    float newEp = 2.*EPSILON;
     
     //start the march on the surface pointed at the light
     //but marched out a little bit so it doesn't immediately report "zero" as the distance to local scene
