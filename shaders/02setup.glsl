@@ -183,12 +183,12 @@ uniform mat4 invCellBoostMat;
 
 
 //normal vector to faces in the affine model fundamental domain
-uniform vec3 nV[3];
+uniform vec3 nV[6];
 //face pairing in affine model fundamental domain
-uniform vec3 pV[3];
+uniform vec3 pV[6];
 
 //matrix generators of the tiling (as isometries)
-uniform mat4 invGenerators[6];
+uniform mat4 invGenerators[12];
 
 //toggle between which global scene to display
 uniform int display;

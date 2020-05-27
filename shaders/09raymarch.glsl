@@ -12,6 +12,7 @@
 
 
 
+
 bool isOutsideCell(vec4 q, out Isometry fixMatrix){
     
     vec3 p= projPoint(q);
@@ -45,9 +46,76 @@ bool isOutsideCell(vec4 q, out Isometry fixMatrix){
             fixMatrix = Isometry(invGenerators[5]);
             return true;
         }
+    
+        if (dot(p, nV[3]) > dot(pV[3],nV[3])) {
+            fixMatrix = Isometry(invGenerators[6]);
+            return true;
+        }
+    if (dot(p, nV[3]) < -dot(pV[3],nV[3])) {
+            fixMatrix = Isometry(invGenerators[7]);
+            return true;
+        }
+    
+        if (dot(p, nV[4]) > dot(pV[4],nV[4])) {
+            fixMatrix = Isometry(invGenerators[8]);
+            return true;
+        }
+    if (dot(p, nV[4]) < -dot(pV[4],nV[4])) {
+            fixMatrix = Isometry(invGenerators[9]);
+            return true;
+        }
+    
+        if (dot(p, nV[5]) > dot(pV[5],nV[5])) {
+            fixMatrix = Isometry(invGenerators[10]);
+            return true;
+        }
+    if (dot(p, nV[5]) < -dot(pV[5],nV[5])) {
+            fixMatrix = Isometry(invGenerators[11]);
+            return true;
+        }
     return false;
 }
 
+
+
+
+
+//bool isOutsideCell(vec4 q, out Isometry fixMatrix){
+//    
+//    vec3 p= projPoint(q);
+//    
+//    //the nV are the normal vectors to the three faces of the parallelpiped fundamental domain
+//    // the pV are the vectors representing translation in the affine model (they are the side pairings, pointed at the middle of opposing faces)
+//    //if the lattice is orthogonal, pV and nV are colinear! but this is NOT THE CASE for a non-orthogonal lattice
+//
+//    if (dot(p, nV[0]) > dot(pV[0],nV[0])) {
+//        fixMatrix = Isometry(invGenerators[0]);
+//        return true;
+//    }
+//    if (dot(p, nV[0]) < -dot(pV[0],nV[0])) {
+//        fixMatrix = Isometry(invGenerators[1]);
+//        return true;
+//    }
+//    if (dot(p, nV[1]) > dot(pV[1],nV[1])) {
+//        fixMatrix = Isometry(invGenerators[2]);
+//        return true;
+//    }
+//    if (dot(p, nV[1]) < -dot(pV[1],nV[1])) {
+//        fixMatrix = Isometry(invGenerators[3]);
+//        return true;
+//    }
+//    
+//    if (dot(p, nV[2]) > dot(pV[2],nV[2])) {
+//            fixMatrix = Isometry(invGenerators[4]);
+//            return true;
+//        }
+//    if (dot(p, nV[2]) < -dot(pV[2],nV[2])) {
+//            fixMatrix = Isometry(invGenerators[5]);
+//            return true;
+//        }
+//    return false;
+//}
+//
 
 
 

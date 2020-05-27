@@ -63,13 +63,13 @@ float locSphere(vec4 p){
 //Local Objects Choice 1
 float tilingSceneSDF(vec4 p){
 //center sphere shaped hole
-    float centerHole=sphereSDF(p,ORIGIN,0.89);
+    float centerHole=sphereSDF(p,ORIGIN,0.35);
     //return -centerHole;
 //corner of ideal cube in S3:
-    vec4 corner=vec4(0.5,0.5,0.5,0.5);
-    float cornerHole=sphereSDF(abs(p),corner,0.28);
-    return -min(centerHole, cornerHole);
-    
+    //vec4 corner=vec4(0.5,0.5,0.5,0.5);
+   // float cornerHole=sphereSDF(abs(p),corner,0.28);
+   // return -min(centerHole, cornerHole);
+    return -centerHole;
 }
 
 //Local Objects Choice 2
