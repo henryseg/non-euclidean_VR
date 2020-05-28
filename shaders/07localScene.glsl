@@ -10,8 +10,13 @@ float localSceneLights(vec4 p){
     //this just draws one copy of the local light.
     //no problem if the light stays in a fundamental domain the whole time.
     //if light is moving between domains; is more useful to draw thee six neighbors as well, much  like is done for the local sphere object centered on you, below.
-    
-    return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
+    float L1;
+    float L2;
+    float L3;
+    L1=sphereSDF(p, localLightPosition, 0.02);
+    L2=sphereSDF(p, localLight2, 0.02);
+    L3=sphereSDF(p, localLight3, 0.02);
+    return min(L1,min(L2,L3)); //below makes lights change radius in proportion to brightness
                      //lightRad);
     
 }
@@ -31,7 +36,7 @@ float locSphere(vec4 p){
     
     float dist=sphereSDF(p,currentPos,yourRad);
     
-    for (int i=0; i<6; i++) {
+    for (int i=0; i<12; i++) {
         objPos=invGenerators[i]*currentPos;
         sphDist=sphereSDF(p,objPos, yourRad);
         dist=min(sphDist,dist);
@@ -140,13 +145,37 @@ float localSceneSDF(vec4 p,float threshhold){
 
 //you are the lightsource, so this will draw a ball around you.  BUT- in the raymarcher we have a  "bubble" around oruselves that  we skip before marching, so we don't see this one, only its other images.
     //lightDist=localSceneLights2(p);
-    lightDist=localSceneLights(p);
+    lightDist=sphereSDF(p, localLightPosition, 0.02);
     distance=min(distance, lightDist);
     
     if (distance < threshhold){
         hitLocal=true;
         hitWhich = 1;
-        colorOfLight=vec3(.8,.8,1.6);
+        colorOfLight=vec3(68./ 256., 197./ 256., 203. / 256.);
+        
+        return distance;
+    }
+    
+    
+    lightDist=sphereSDF(p, localLight2, 0.02);
+    distance=min(distance, lightDist);
+    
+    if (distance < threshhold){
+        hitLocal=true;
+        hitWhich = 1;
+        colorOfLight=vec3(252. / 256., 227. / 256., 21. / 256.);
+        
+        return distance;
+    }
+    
+    
+    lightDist=sphereSDF(p, localLight3, 0.02);
+    distance=min(distance, lightDist);
+    
+    if (distance < threshhold){
+        hitLocal=true;
+        hitWhich = 1;
+        colorOfLight=vec3(245. / 256., 61. / 256., 82. / 256.);
         
         return distance;
     }

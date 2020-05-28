@@ -8,7 +8,7 @@ float lightAtt(float dist){
         return 0.1+0.5*dist;
     }
     //actual distance function
-    return 0.1+surfArea(dist);
+    return 2.*exp(-15.*dist*dist)+surfArea(dist);
 }
 
 
@@ -217,7 +217,7 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     
     //because its a local light, we need to account for light from its neighbors as well:
     //this is not a good fix for local lighting - as there may be more than six neighbor cubes (ie near the vertices)
-    for (int i=0; i<6; i++){
+    for (int i=0; i<12; i++){
         translatedLightPosition=translate(fixPosition,invGenerators[i]*lightPosition);
         
         toLight=tangDirection(surfacePosition,translatedLightPosition);//tangent vector on surface pointing to light
@@ -244,23 +244,11 @@ vec3 localLight(vec4 lightPosition, vec3 lightColor, float lightIntensity,bool m
     
     
     
-    //THE LAST LIGHT
-    //the light which is antiopdal to my light
-    translatedLightPosition=translate(fixPosition,invGenerators[1]*invGenerators[1]*lightPosition);
-    toLight=tangDirection(surfacePosition,translatedLightPosition);//tangent vector on surface pointing to light
-    distToLight=exactDist(surfacePosition, translatedLightPosition);//distance from sample point to light source
-    //compute the contribution to phong shading
-    phong=phongShading(toLight,toViewer,surfNormal,distToLight,surfColor,lightColor,lightIntensity);
-    //compute the shadows
-    if(marchShadows){
-        shadow=shadowMarch(toLight,distToLight);
-    }
-    localColor+=shadow*phong;
-    
+
     
     //now, have 8 contributions to the local color
     //renormalize the emitted color by dividing by the nubmer of total light sources which have contributed.
-    localColor=localColor/8.;
+    localColor=localColor/13.;
     
     //return this value
     return localColor;

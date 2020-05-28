@@ -10,16 +10,23 @@
 //that is, with however many local lights, their positions, etc that we have specified.
 
 vec3 allLocalLights(vec3 surfColor,bool marchShadows, Isometry fixPosition){
-    //only have one global light in the scene right now,
     
-    return localLight(localLightPos, localLightColor, 6.*(1.+brightness),marchShadows, surfColor,fixPosition);
+    vec3 light1=localLight(localLightPosition, vec3(68./ 256., 197./ 256., 203. / 256.), 5.*(1.+brightness),marchShadows, surfColor,fixPosition);
+    
+    vec3 light2=localLight(localLight2, vec3(252. / 256., 227. / 256., 21. / 256.), 5.*(1.+brightness),marchShadows, surfColor,fixPosition);
+    
+    vec3 light3=localLight(localLight3, vec3(245. / 256., 61. / 256., 82. / 256.), 5.*(1.+brightness),marchShadows, surfColor,fixPosition);
+    
+    //add up the different global lights in the  scene
+    return (light1+light2+light3)/3.;
+    
 }
 
 
 
 
-
-
+//252. / 256., 227. / 256., 21. / 256.
+//245. / 256., 61. / 256., 82. / 256.
 
 //----------------------------------------------------------------------------------------------------------------------
 // All Global Lights
@@ -113,24 +120,27 @@ vec3 marchedColor(tangVector rayDir,bool firstPass, out float surfRefl){
     //------ Local Lighting ----------
    // fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
     
-fixPosition=fixPositionTest(hitLocal);
+    fixPosition=fixPositionTest(hitLocal);
     localColor=allLocalLights(baseColor, marchShadows,fixPosition);
 
     //------ Global Lighting ----------
-    fixPosition=composeIsometry(totalFixMatrix,invCellBoost);//CHOOSE THIS WITH PROPER FUNCTION
-    globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
+    //fixPosition=fixPositionTestGlobal(hitLocal);//CHOOSE THIS WITH PROPER FUNCTION
+    //globalColor=allGlobalLights(baseColor,marchShadows, fixPosition);
     
     
     //------ TOTAL FIRST PASS LIGHTING ----------
 
     //mix these two lighting contributions into the first-pass color
     //the proportion is global/local
-    totalColor=mixLights(0.75,localColor,globalColor);
+    
+    //TURN OFF GLOBAL LIGHTS
+    totalColor=localColor;
+    //totalColor=mixLights(0.75,localColor,globalColor);
     
     //add fog for distance to the mixed color
-    totalColor=fog(totalColor, vec3(0.02,0.02,0.02), distToViewer);
+    localColor=fog(localColor, vec3(0.02,0.02,0.02), distToViewer);
     
-    return totalColor;
+    return localColor;
 }
 
 

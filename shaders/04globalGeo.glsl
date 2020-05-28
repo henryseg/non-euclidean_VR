@@ -47,7 +47,7 @@ vec3 projPoint(vec4 p){
 //CHANGED THIS
 //surface area of a sphere  of radius R
 float surfArea(float rad){
-    return 2.*PI*(1.-cos(2.*rad));
+    return 2.*sin(rad)*sin(rad);
 }
 
 

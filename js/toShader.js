@@ -126,6 +126,14 @@ function setupMaterial(fShader) {
                 type: "v4",
                 value: globals.localLightPosition
             },
+            localLight2: {
+                type: "v4",
+                value: globals.localLight2
+            },
+            localLight3: {
+                type: "v4",
+                value: globals.localLight3
+            },
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
@@ -289,7 +297,11 @@ function updateMaterial() {
 
     //setting the light position right now manually because I cant get my function to work :(
     //should do this in a separate function in SCENE
-    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.6 * T, 0.6 * Math.cos(2. * T), 0., 0.)));
+    globals.material.uniforms.localLightPosition.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.2 * T, 0.2 * Math.cos(2. * T), 0.2 * Math.sin(3. * T / 5.), 0.)));
+
+    globals.material.uniforms.localLight2.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.1 * Math.sin(2 * T / 3), 0.2 * Math.cos(3. * T / 4), 0.1 * Math.cos(3 * T), 0.)));
+
+    globals.material.uniforms.localLight3.value = ORIGIN.clone().translateBy(new Isometry().translateByVector(new Vector4(0.1 * Math.cos(3 * T / 4), 0.2 * Math.cos(2. * T), 0.3 * Math.sin(2 * T / 5), 0.)));
 
     let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
     globals.leftPosition = globals.position.clone().localFlow(vectorLeft);

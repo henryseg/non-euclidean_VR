@@ -21,7 +21,7 @@ const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //do lights fall off with area of geodesic sphere, or artifically?
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = true;
 
 
@@ -215,6 +215,8 @@ uniform float globalSphereRad;
 //----------------------------------------------------------------------------------------------------------------------
 
 uniform vec4 localLightPosition;
+uniform vec4 localLight2;
+uniform vec4 localLight3;
 
 uniform vec4 lightPositions[4];
 uniform vec4 lightIntensities[4];
@@ -224,6 +226,7 @@ uniform bool renderShadow;
 vec3 colorOfLight;//variable which sets the light colors for drawing in hitWhich 1
 
 vec4 localLightPos;//not passed as a uniform right now; set below in setVariables
+
 float localLightBrightness;//gives the brightness of the local light source, computed in setVariables
 
 
@@ -289,13 +292,13 @@ void setVariables(){
     currentPos=currentBoostMat*ORIGIN;
     
     //set our light with the new uniform
-    localLightPos=localLightPosition;
+    //localLightPos=localLightPosition;
     
     //localLightPos=ORIGIN+vec4(0.25*sin(2.*time/6.),0.25*cos(3.*time/10.),0.25*sin(time/2.),0.);
     //if instead you want it to follow you around
     //localLightPos=currentPos+vec4(0.05*sin(time/2.),0.05*cos(time/3.),0.05*sin(time),0.);
     
-    localLightBrightness=6.+5.*brightness*brightness;
+    localLightBrightness=4.+5.*brightness*brightness;
     
     leftBoost=Isometry(leftBoostMat);
     rightBoost=Isometry(rightBoostMat);

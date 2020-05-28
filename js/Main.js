@@ -69,13 +69,15 @@ let globals = {
     lightIntensities: [],
     globalObjectPosition: undefined,
     localLightPosition: ORIGIN,
+    localLight2: ORIGIN,
+    localLight3: ORIGIN,
     display: 1,
     yourRad: 0.0001,
     res: 0.25,
     mirror: 0.1,
     brightness: 0.12,
     //renderShadow: true,
-    quality:1
+    quality: 1
 };
 
 //----------------------------------------------------------------------------------------------------------------------
