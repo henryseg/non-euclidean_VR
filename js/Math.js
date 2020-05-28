@@ -147,23 +147,23 @@ function createGenerators(t) { /// generators for the tiling by cubes.
 
     gen1.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[0].normalize(), -PI / 5).transpose()]));
 
-    gen2.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[1].normalize(), -PI / 5).transpose()]));
+    gen2.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[1].normalize(), PI / 5).transpose()]));
 
     gen3.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[1].normalize(), -PI / 5).transpose()]));
 
-    gen4.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[2].normalize(), -PI / 5).transpose()]));
+    gen4.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[2].normalize(), PI / 5).transpose()]));
 
     gen5.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[2].normalize(), -PI / 5).transpose()]));
 
-    gen6.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[3].normalize(), -PI / 5).transpose()]));
+    gen6.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[3].normalize(), PI / 5).transpose()]));
 
     gen7.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[3].normalize(), -PI / 5).transpose()]));
 
-    gen8.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[4].normalize(), -PI / 5).transpose()]));
+    gen8.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[4].normalize(), PI / 5).transpose()]));
 
     gen9.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[4].normalize(), -PI / 5).transpose()]));
 
-    gen10.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[5].normalize(), -PI / 5).transpose()]));
+    gen10.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[5].normalize(), PI / 5).transpose()]));
 
     gen11.multiply(new Isometry().set([new Matrix4().makeRotationAxis(GenVec[5].normalize(), -PI / 5).transpose()]));
 
