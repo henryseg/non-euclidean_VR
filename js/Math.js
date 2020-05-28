@@ -89,17 +89,12 @@ Maybe create a class "lattice" to would store
  */
 function createGenerators() { /// generators for the tiling by cubes.
 
-    // TODO. Check the generators
-    //  For the moment the elements are chosen totally at random.
-    //  Not even sure they generate a discrete subgroup!
-
-    const aux = 1;
-    const gen0 = new Isometry().makeTranslation(aux, 0, Math.sqrt(aux * aux + 1), 0,);
-    const gen1 = new Isometry().makeInvTranslation(aux, 0, Math.sqrt(aux * aux + 1), 0);
-    const gen2 = new Isometry().makeTranslation(0, aux, Math.sqrt(aux * aux + 1), 0);
-    const gen3 = new Isometry().makeInvTranslation(0, aux, Math.sqrt(aux * aux + 1), 0);
-    const gen4 = new Isometry().makeTranslation(0, 0, 0, 1);
-    const gen5 = new Isometry().makeInvTranslation(0, 0, 0, 1);
+    const gen0 = new Isometry().makeTranslation(0, 0, 1, -Math.PI);
+    const gen1 = gen0.clone();
+    const gen2 = new Isometry().makeTranslation(1, 0.5, 1.5, 2 * Math.atan(0.5));
+    const gen3 = new Isometry().makeTranslation(-1, 0.5, 1.5, -2 * Math.atan(0.5));
+    const gen4 = new Isometry().makeTranslation(0, 0, 1, 4 * Math.PI);
+    const gen5 = new Isometry().makeTranslation(0, 0, 1, -4 * Math.PI);
 
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
@@ -184,8 +179,7 @@ function initObjects() {
     PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
     PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
-    let aux = 0;
-    let p = new Point().set(0, aux, Math.sqrt(1 + aux * aux), -1);
+    let p = new Point().set(0, 0,1, -1);
     globals.globalObjectPosition = new Position().set(p.makeTranslation(), new Matrix4());
 }
 
