@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -155,6 +155,7 @@ mat3 SLtoMatrix3(vec4 elt){
 vec3 SLtoH2(vec4 elt) {
     mat3 m = SLtoMatrix3(elt);
     vec3 res = vec3(0., 0., 1.);
+    res = m * res;
     // reduce the potential error
     // the point should be on a hyperboloid
     mat3 J = mat3(
@@ -162,9 +163,9 @@ vec3 SLtoH2(vec4 elt) {
     0, 1, 0,
     0, 0, -1
     );
-    float q = dot(res, J* res);
+    float q = dot(res, J * res);
     res = res / sqrt(-q);
-    return m * res;
+    return res;
 }
 
 // Return the inverse of the given element
@@ -1024,7 +1025,7 @@ float localSceneSDF(Point p){
     }
 
     // Sphere
-    float aux = 0.5;
+    float aux = 0.;
     Point center = fromVec4(vec4(0., aux, sqrt(1. + aux * aux), 0.));
     sphDist = sphereSDF(p, center, 0.1);
     distance = min(distance, sphDist);
@@ -1064,7 +1065,7 @@ float globalSceneSDF(Point p){
 
     //Global Sphere Object
     Point globalObjPos = translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, 0.1);
+    objDist = sphereSDF(absolutep, globalObjPos, 0.2);
 
     // Global Cylinde Object
     //objDist = cylSDF(absolutep, 0.3);
@@ -1133,7 +1134,6 @@ bool isOutsideCell(Point p, out Isometry fixMatrix){
         fixMatrix = gen3;
         return true;
     }
-    /*
     if (dot(klein, n4) > 2. * PI) {
         fixMatrix = gen4;
         //debugColor = vec3(1,0,0);
@@ -1143,7 +1143,7 @@ bool isOutsideCell(Point p, out Isometry fixMatrix){
         fixMatrix = gen5;
         //debugColor = vec3(0,1,0);
         return true;
-    }*/
+    }
     return false;
 }
 
