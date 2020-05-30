@@ -3,7 +3,6 @@ import {
     WebGLRenderer,
     Vector2,
     OrthographicCamera,
-    FileLoader,
     BufferGeometry,
     BufferAttribute,
     Mesh
@@ -11,7 +10,6 @@ import {
 
 import {
     initGeometry,
-    initObjects,
     setupMaterial,
     updateMaterial
 } from "./toShader.js";
@@ -19,9 +17,11 @@ import {
 import {
     initGui
 } from "./UI.js";
+
 import {
     initEvents
 } from './Events.js';
+
 import {
     Controls
 } from './Controls.js';
@@ -33,6 +33,11 @@ import {
 import {
     VREffect
 } from './module/VREffect.js';
+
+import {
+    sceneBuilder
+} from './Scene.js';
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
@@ -62,9 +67,9 @@ let globals = {
     gens: undefined,
     invGens: undefined,
     invGenmatrices: undefined,
-    lightPositions: [],
-    lightIntensities: [],
-    globalObjectPosition: undefined,
+    // lightPositions: [],
+    // lightIntensities: [],
+    // globalObjectPosition: undefined,
     display: 1,
     res: 0.25,
     mirror: 0.1,
@@ -105,10 +110,10 @@ function init() {
     camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
     globals.controls = new Controls();
     initGeometry();
-    initObjects();
+    //initObjects();
     globals.phoneOrient = [null, null, null];
 
-    loadShaders();
+    loadShaders()
     initEvents();
     initGui();
     stats = new Stats();
@@ -119,60 +124,32 @@ function init() {
 }
 
 
-
 //----------------------------------------------------------------------------------------------------------------------
 // Building the Shader out of the GLSL files
 //----------------------------------------------------------------------------------------------------------------------
 
 
+async function loadShaders() {
+    let main = await sceneBuilder.build()
+    mainFrag = main;
+    setupMaterial(main);
+    globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-function loadShaders() {
-    //Since our shader is made up of strings we can construct it from parts
-    let loader = new FileLoader();
-    loader.setResponseType('text');
-    loader.load('shaders/01structs.glsl', function (structs) {
-        loader.load('shaders/02setup.glsl', function (setup) {
-            loader.load('shaders/03localGeo.glsl', function (locGeo) {
-                loader.load('shaders/04globalGeo.glsl', function (globGeo) {
-                    loader.load('shaders/05basicSDFs.glsl', function (basic) {
-                        loader.load('shaders/06compoundSDFs.glsl', function (compound) {
-                            loader.load('shaders/07scene.glsl', function (theScene) {
-                                loader.load('shaders/08raymarch.glsl', function (raymarch) {
-                                    loader.load('shaders/09lighting.glsl', function (light) {
-                                        loader.load('shaders/10materials.glsl', function (material) {
-                                            loader.load('shaders/11main.glsl', function (run) {
-                                                let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(theScene).concat(raymarch).concat(light).concat(material).concat(run);
-                                                //The rest of the shader-building is below
-                                                mainFrag = main;
-                                                setupMaterial(main);
-                                                globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+    //Setup a "quad" to render on-------------------------
+    let geom = new BufferGeometry();
+    let vertices = new Float32Array([
+        -1.0, -1.0, 0.0,
+        1.0, -1.0, 0.0,
+        1.0, 1.0, 0.0,
 
-                                                //Setup a "quad" to render on-------------------------
-                                                let geom = new BufferGeometry();
-                                                let vertices = new Float32Array([
-                -1.0, -1.0, 0.0,
-                1.0, -1.0, 0.0,
-                1.0, 1.0, 0.0,
-
-                -1.0, -1.0, 0.0,
-                1.0, 1.0, 0.0,
-                -1.0, 1.0, 0.0
-            ]);
-                                                geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                                mesh = new Mesh(geom, globals.material);
-                                                scene.add(mesh);
-                                                animate();
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
+        -1.0, -1.0, 0.0,
+        1.0, 1.0, 0.0,
+        -1.0, 1.0, 0.0
+    ]);
+    geom.setAttribute('position', new BufferAttribute(vertices, 3));
+    mesh = new Mesh(geom, globals.material);
+    scene.add(mesh);
+    animate();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

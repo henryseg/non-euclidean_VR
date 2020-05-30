@@ -20,8 +20,8 @@ import {
     invGenerators,
     unpackageMatrix,
     genVectors,
-    PointLightObject,
-    lightColors
+    //PointLightObject,
+    //lightColors
 } from './Scene.js';
 
 
@@ -70,15 +70,15 @@ function initGeometry() {
 
 
 
-
-function initObjects() {
-    PointLightObject(new Vector3(1., 1.5, 0), lightColors[0]);
-    PointLightObject(new Vector3(-1, 1.5, 0), lightColors[1]);
-    PointLightObject(new Vector3(0, 0, 1.), lightColors[2]);
-    PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
-
-    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
-}
+//
+// function initObjects() {
+//     PointLightObject(new Vector3(1., 1.5, 0), lightColors[0]);
+//     PointLightObject(new Vector3(-1, 1.5, 0), lightColors[1]);
+//     PointLightObject(new Vector3(0, 0, 1.), lightColors[2]);
+//     PointLightObject(new Vector3(-1., -1., -1.), lightColors[3]);
+//
+//     globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
+// }
 
 
 
@@ -108,10 +108,10 @@ function setupMaterial(fShader) {
                 type: "v2",
                 value: globals.screenResolution
             },
-            lightIntensities: {
-                type: "v4",
-                value: globals.lightIntensities
-            },
+            // lightIntensities: {
+            //     type: "v4",
+            //     value: globals.lightIntensities
+            // },
             //--- geometry dependent stuff here ---//
             //--- lists of stuff that goes into each invGenerator
             invGenerators: {
@@ -160,18 +160,18 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: globals.invCellPosition.facing
             },
-            lightPositions: {
-                type: "v4",
-                value: globals.lightPositions
-            },
-            globalObjectBoostMat: {
-                type: "m4",
-                value: globals.globalObjectPosition.boost.matrix
-            },
-            globalSphereRad: {
-                type: "f",
-                value: 0.2
-            },
+            // lightPositions: {
+            //     type: "v4",
+            //     value: globals.lightPositions
+            // },
+            // globalObjectBoostMat: {
+            //     type: "m4",
+            //     value: globals.globalObjectPosition.boost.matrix
+            // },
+            // globalSphereRad: {
+            //     type: "f",
+            //     value: 0.2
+            // },
             earthCubeTex: { //earth texture to global object
                 type: "t",
                 value: new CubeTextureLoader().setPath('images/cubemap512/')
@@ -270,7 +270,7 @@ function updateMaterial() {
 
 export {
     initGeometry,
-    initObjects,
+    //initObjects,
     setupMaterial,
     updateMaterial
 };

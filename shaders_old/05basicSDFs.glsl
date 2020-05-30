@@ -7,17 +7,14 @@ float sphereSDF(vec4 p, vec4 center, float radius){
     return exactDist(p, center) - radius;
 }
 
-float ellipsoidSDF(vec4 p, vec4 center, vec3 axes, float radius) {
-    return exactDist(vec4(p.x/axes.x, p.y/axes.y, p.z/axes.z, 1.), center) - radius;
+
+float ellipsoidSDF(vec4 p, vec4 center, float radius){
+    return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
 }
 
-//float ellipsoidSDF(vec4 p, vec4 center, float radius){
-//    return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
-//}
-//
-//float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
-//    return exactDist(vec4(p.x/10., p.y/10., p.z, 1.), center) - radius;
-//}
+float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
+    return exactDist(vec4(p.x/10., p.y/10., p.z, 1.), center) - radius;
+}
 
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);

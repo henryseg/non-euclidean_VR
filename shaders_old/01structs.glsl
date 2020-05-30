@@ -204,7 +204,7 @@ Isometry leftBoost;
 Isometry rightBoost;
 Isometry cellBoost;
 Isometry invCellBoost;
-//Isometry globalObjectBoost;
+Isometry globalObjectBoost;
 
 
 

@@ -86,10 +86,10 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         }
         else {
             float localDist = 0.75*localSceneSDF(localtv.pos);
-            marchStep = localDist;
+                        marchStep = localDist;
             globalDepth += localDist;
             if (localDist < EPSILON){
-                // hitWhich has now been set
+                hitWhich = 3;
                 distToViewer=globalDepth;
                 sampletv = toTangVector(localtv);
                 break;
@@ -109,7 +109,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
         tv = eucFlow(tv, marchStep);
 
         float globalDist = globalSceneSDF(tv.pos);
-        marchStep = globalDist;
+          marchStep = globalDist;
         globalDepth += globalDist;
         if (globalDist < EPSILON){
             // hitWhich has now been set
@@ -151,10 +151,10 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
         }
         else {
             float localDist = localSceneSDF(localtv.pos);
-            marchStep = localDist;
+                        marchStep = localDist;
             globalDepth += localDist;
             if (localDist < EPSILON){
-                // hitWhich has now been set
+                hitWhich = 3;
                 distToViewer=globalDepth;
                 sampletv = toTangVector(localtv);
                 break;
@@ -174,7 +174,7 @@ void reflectmarch(localTangVector rayDir, out Isometry totalFixMatrix){
         tv = eucFlow(tv, marchStep);
 
         float globalDist = globalSceneSDF(tv.pos);
-        marchStep = globalDist;
+          marchStep = globalDist;
         globalDepth += globalDist;
         if (globalDist < EPSILON){
             // hitWhich has now been set

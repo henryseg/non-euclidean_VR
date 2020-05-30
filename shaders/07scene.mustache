@@ -1,0 +1,207 @@
+//----------------------------------------------------------------------------------------------------------------------
+// Scene Definitions
+//----------------------------------------------------------------------------------------------------------------------
+// Both a local and a global scene are defined here.
+// Each scene has two types of members: lights and objects
+// The local scene also has a function to "teleport the light back"
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Local Scene
+//----------------------------------------------------------------------------------------------------------------------
+
+// local scene SDF
+
+float localSceneSDF(vec4 p){
+    float itemDist;
+    float distance = MAX_DIST;
+
+    // You are the light source, so this will draw a ball around you.
+    // BUT- in the ray-marcher we have a  "bubble" around ourselves that we skip before marching,
+    // so we don't see this one, only its other images.
+
+    //distance to scene is minimum of the objects and the bubble around the viewer
+    //sceneDist=max(viewerBubble(p),localSceneObjects(p));
+
+    {{#items}}
+        {{#isLocal}}
+
+            {{#islLight}}
+                // Light
+                vec4 lightPosition{{id}} = {{positionGLSL}};
+                vec4 lightColor{{id}} = {{colorGLSL}};
+                itemDist = sphereSDF(p, lightPosition{{id}}, {{size}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    colorOfLight = lightColor{{id}}.xyz;
+                    return distance;
+                }
+            {{/islLight}}
+
+            {{#isSphere}}
+                // Object : sphere
+                itemDist = sphereSDF(p, {{centerGLSL}}, {{radius}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    return distance;
+                }
+            {{/isSphere}}
+
+            {{#isEllipsoid}}
+                // Object : ellipsoid
+                itemDist = ellipsoidSDF(p, {{centerGLSL}},  {{axesGLSL}}, {{radius}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    return distance;
+                }
+            {{/isEllipsoid}}
+
+            {{#isSphereComplement}}
+                // Object : complement of a sphere
+                itemDist = -sphereSDF(p, {{centerGLSL}}, {{radius}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    return distance;
+                }
+            {{/isSphereComplement}}
+
+        {{/isLocal}}
+    {{/items}}
+
+
+    return distance;
+}
+
+
+// TELEPORT BACK TO CENTRAL CELL ++++++++++++++++++++++++++++++++++++++++++++++++
+
+// check if the given point p is in the fundamental domain of the lattice.
+// if it is not, then use one of the generlators to translate it back
+
+bool isOutsideCell(vec4 p, out Isometry fixMatrix){
+    //vec4 ModelP= modelProject(p);
+
+    //lattice basis divided by the norm square
+    //right now norm square is 1 so haven't put that in yet.
+    vec4 v1 = V1;
+    vec4 v2 = V2;
+    vec4 v3 = V3;
+
+    //right now this turns off the vertical translation generators for rendering the "plane" scene.  Need a better way of doing this in general, to be able to turn off some at will.
+    //if (display!=2){
+    if (dot(p, v3) > 0.5) {
+        fixMatrix = Isometry(invGenerators[4]);
+        return true;
+    }
+    if (dot(p, v3) < -0.5) {
+        fixMatrix = Isometry(invGenerators[5]);
+        return true;
+    }
+    // }
+
+    if (dot(p, v1) > 0.5) {
+        fixMatrix = Isometry(invGenerators[0]);
+        return true;
+    }
+    if (dot(p, v1) < -0.5) {
+        fixMatrix = Isometry(invGenerators[1]);
+        return true;
+    }
+    if (dot(p, v2) > 0.5) {
+        fixMatrix = Isometry(invGenerators[2]);
+        return true;
+    }
+    if (dot(p, v2) < -0.5) {
+        fixMatrix = Isometry(invGenerators[3]);
+        return true;
+    }
+    return false;
+}
+
+
+// overload of the previous method with tangent vector
+bool isOutsideCell(tangVector v, out Isometry fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
+}
+
+
+// overload of the previous method with local tangent vector
+bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
+    return isOutsideCell(v.pos, fixMatrix);
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Global Scene
+//----------------------------------------------------------------------------------------------------------------------
+
+
+// Global Scene SDF
+// measures distance from cellBoost * pos to an object in the global scene
+
+float globalSceneSDF(vec4 pos){
+    // correct for the fact that we have been moving
+    vec4 p = translate(cellBoost, pos);
+    float distance = MAX_DIST;
+    float itemDist;
+
+    {{#items}}
+        {{#isGlobal}}
+
+            {{#isLight}}
+                // Light
+                vec4 lightPosition{{id}} = {{positionGLSL}};
+                vec4 lightColor{{id}} = {{colorGLSL}};
+                itemDist = sphereSDF(p, lightPosition{{id}}, {{size}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    colorOfLight = lightColor{{id}}.xyz;
+                    return distance;
+                }
+            {{/isLight}}
+
+
+            {{#isSphere}}
+                // Object
+                itemDist = sphereSDF(p, {{centerGLSL}}, {{radius}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    return distance;
+                }
+            {{/isSphere}}
+
+            {{#isEllipsoid}}
+                // Object
+                itemDist = ellipsoidSDF(p, {{centerGLSL}},  {{axesGLSL}}, {{radius}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    return distance;
+                }
+            {{/isEllipsoid}}
+
+            {{#isSphereComplement}}
+                // Object
+                itemDist = -sphereSDF(p, {{centerGLSL}}, {{radius}});
+                distance = min(distance, itemDist);
+                if (distance < EPSILON){
+                    hitWhich = {{id}};
+                    return distance;
+                }
+            {{/isSphereComplement}}
+
+        {{/isGlobal}}
+    {{/items}}
+
+    return distance;
+
+    // return MAX_DIST;
+}
+
+

@@ -15,6 +15,57 @@ import {
     Position,
     ORIGIN
 } from "./Position.js";
+import {
+    SceneBuilder
+} from './SceneBuilder.js';
+
+
+const bgColor = new Vector4(0.1, 0.1, 0.1, 0.1);
+
+
+let sceneBuilder = new SceneBuilder(bgColor);
+
+//DEFINE THE LIGHTS
+
+const posLight1 = new Vector4(1., 1.5, 0, 1);
+const posLight2 = new Vector4(-1, 1.5, 0, 1);
+const posLight3 = new Vector4(0, 0, 1., 1);
+const posLight4 = new Vector4(-1., -1., -1., 1);
+
+const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1); // blue
+const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1); // yellow
+const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1); // red
+const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
+
+sceneBuilder.addLight(posLight1, lightColor1, 0.1, true);
+sceneBuilder.addLight(posLight2, lightColor2, 0.1, true);
+sceneBuilder.addLight(posLight3, lightColor3, 0.1, true);
+sceneBuilder.addLight(posLight4, lightColor4, 0.1, true);
+
+
+const localLightColor = new Vector4(.8, .8, .8, 0.5);
+const localLightPos = new Vector4(0.5, 0.5, 0.5, 1);
+sceneBuilder.addLight(localLightPos, localLightColor, 0.1, false);
+
+//DEFINE THE GLOBAL OBJECTS
+
+const sphCenter1 = new Vector4(0, 0, -0.8, 1);
+const sphColor1 = new Vector4(1, 0, 1, 1);
+const axes1 = new Vector3(1, 0.5, 1);
+sceneBuilder.addEllipsoid(sphCenter1, axes1, 0.5, sphColor1, true);
+
+const sphCenter2 = new Vector4(1, 1, -0.5, 1);
+const sphColor2 = new Vector4(0, 1, 1, 1);
+sceneBuilder.addSphere(sphCenter2, 0.2, sphColor2, true);
+
+//DEFINE THE LOCAL OBJECTS
+
+const localSphCenter = new Vector4(0, 0, 0, 1);
+const localSphColor = new Vector4(1, 1, 1, 1);
+//sceneBuilder.addSphere(localSphCenter, 0.2, localSphColor, false);
+
+sceneBuilder.addSphereComplement(localSphCenter, 0.68, localSphColor, false);
+
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -70,10 +121,7 @@ function fixOutsideCentralCell(position) {
     } else {
         return -1;
     }
-    return -1;
 }
-
-
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -107,36 +155,9 @@ function unpackageMatrix(genArr) {
 }
 
 
-
-
 //----------------------------------------------------------------------------------------------------------------------
 //	Fix up some lights
 //----------------------------------------------------------------------------------------------------------------------
-
-
-
-function PointLightObject(v, colorInt) {
-    //position is a euclidean Vector4
-    let isom = new Position().localFlow(v).boost;
-    let lp = ORIGIN.clone().translateBy(isom);
-    globals.lightPositions.push(lp);
-    globals.lightIntensities.push(colorInt);
-}
-
-//DEFINE THE LIGHT COLORS
-const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1); // blue
-const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1); // yellow
-const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1); // red
-const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
-
-
-
-const lightColors = [lightColor1, lightColor2, lightColor3, lightColor4];
-
-
-
-
-
 
 
 export {
@@ -145,6 +166,5 @@ export {
     createGenerators,
     invGenerators,
     unpackageMatrix,
-    PointLightObject,
-    lightColors
+    sceneBuilder
 };
