@@ -22,7 +22,6 @@ import {
 
 const bgColor = new Vector4(0.1, 0.1, 0.1, 0.1);
 
-
 let sceneBuilder = new SceneBuilder(bgColor);
 
 //DEFINE THE LIGHTS

@@ -142,15 +142,6 @@ class SceneLight extends SceneItem {
  */
 class SceneObject extends SceneItem {
 
-
-    /**
-     * Return the code creating the position as an OpenGL vector
-     * @returns {string}
-     */
-    positionGLSL() {
-        return this.position.toGLSL();
-    }
-
     isLight() {
         return false;
     }
