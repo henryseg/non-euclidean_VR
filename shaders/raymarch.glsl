@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -96,7 +96,7 @@ vec4 SLreduceError(vec4 elt) {
     -1, 0, 0, 0,
     0, -1, 0, 0,
     0, 0, 1, 0,
-    0, 0, 0, 0
+    0, 0, 0, 1
     );
     float q = dot(elt, J * elt);
     return elt / sqrt(-q);
@@ -131,7 +131,8 @@ vec4 SLfromMatrix2(mat2 m) {
     float b = m[1][0];
     float c = m[0][1];
     float d = m[1][1];
-    return 0.5 * vec4(a + d, b - c, b + c, a - d);
+    vec4 res = 0.5 * vec4(a + d, b - c, b + c, a - d);
+    return SLreduceError(res);
 }
 
 // Projection from SL(2,R) to SO(2,1)
@@ -230,6 +231,10 @@ struct Point {
 // - the fiber component is zero
 const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);
 
+Point clone(Point p) {
+    return Point(p.proj, p.fiber);
+}
+
 // reduce the erors on the SL(2,R) component of the point
 void reduceError(inout Point p) {
     p.proj = SLreduceError(p.proj);
@@ -296,7 +301,7 @@ struct Isometry {
 };
 
 // reduce error form the target
-void reduceError(Isometry isom) {
+void reduceError(inout Isometry isom) {
     reduceError(isom.target);
 }
 
@@ -397,7 +402,7 @@ struct Vector {
 
 // return a copy of the vector
 Vector clone(Vector v) {
-    return Vector(v.pos, v.dir);
+    return Vector(clone(v.pos), v.dir);
 }
 
 
@@ -905,15 +910,22 @@ float cylSDF(Point p, float r){
     return acosh(-q) - r;
 }
 
+
+// fake ellipsoid centered at the origin
+float ellipsoidSDF(Point p, float radius){
+    vec4 aux = toVec4(p);
+    vec3 oh = vec3(0, 0, 1);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux.xyz, J * oh);
+    float dist = sqrt(pow(acosh(-q), 2.) + pow(aux.w / 3.5, 2.));
+    return dist - radius;
+}
+
 /*
-float ellipsoidSDF(vec4 p, vec4 center, float radius){
-    return exactDist(vec4(p.x, p.y, p.z/2., 1.), center) - radius;
-}
-
-float fatEllipsoidSDF(vec4 p, vec4 center, float radius){
-    return exactDist(vec4(p.x/10., p.y/10., p.z, 1.), center) - radius;
-}
-
 float centerSDF(vec4 p, vec4 center, float radius){
     return sphereSDF(p, center, radius);
 }
@@ -1011,6 +1023,7 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 
 float localSceneSDF(Point p){
     float sphDist;
+    float tilignDist;
     float cylDist;
     float lightDist;
     float distance = MAX_DIST;
@@ -1025,21 +1038,23 @@ float localSceneSDF(Point p){
     }
 
     // Sphere
-    float aux = 0.;
-    Point center = fromVec4(vec4(0., aux, sqrt(1. + aux * aux), 0.));
+    /*float aux = 0.;
+    Point center = fromVec4(vec4(0., aux, sqrt(1. + aux * aux), 0));
     sphDist = sphereSDF(p, center, 0.1);
     distance = min(distance, sphDist);
-    if (sphDist<EPSILON){
-        hitWhich=3;
+    if (sphDist < EPSILON){
+        hitWhich = 3;
         return sphDist;
+    }*/
+
+    // Tiling
+    tilignDist = -ellipsoidSDF(p, 1.);
+    distance = min(distance, tilignDist);
+    if (tilignDist < EPSILON){
+        hitWhich=3;
+        return tilignDist;
     }
 
-    // Cylinder
-    //    cylDist = cylSDF(p, 0.3);
-    //    if (cylDist<EPSILON){
-    //        hitWhich=3;
-    //        return sphDist;
-    //    }
 
     return distance;
 }
@@ -1057,17 +1072,27 @@ float globalSceneSDF(Point p){
         distance = min(distance, objDist);
         if (distance < EPSILON){
             hitWhich = 1;
+            colorOfLight = lightIntensities[i].xyz;
             globalLightColor = lightIntensities[i];
             return distance;
         }
     }
 
-
+    /*
     //Global Sphere Object
-    Point globalObjPos = translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, globalObjPos, 0.2);
+    //Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
+    Point globalObjPos1 = Point(vec4(1, 0, 0, 0), 0.);
+    float obj1Dist = sphereSDF(absolutep, globalObjPos1, 0.1);
+    Point globalObjPos2 = Point(vec4(0.5 * sqrt3, -0.5, 0, 0), - PI / 3.);
+    float obj2Dist = sphereSDF(absolutep, globalObjPos2, 0.1);
 
-    // Global Cylinde Object
+    objDist = min(obj1Dist, obj2Dist);
+    */
+
+    // Global ellipsoid object
+    objDist = ellipsoidSDF(absolutep, .1);
+
+    // Global Cylinder Object
     //objDist = cylSDF(absolutep, 0.3);
 
     distance = min(distance, objDist);
@@ -1080,8 +1105,9 @@ float globalSceneSDF(Point p){
 }
 
 
-// check if the given point p is in the fundamental domain of the lattice.
-bool isOutsideCell(Point p, out Isometry fixMatrix){
+// Check if the given point p is in the fundamental domain of the lattice.
+// Lattice = SL(2,Z)
+bool isOutsideCellModular(Point p, out Isometry fixMatrix){
     // point in the Klein model
     // (where the fundamental domain is convex polyhedron).
     vec4 klein = toKlein(p);
@@ -1095,7 +1121,7 @@ bool isOutsideCell(Point p, out Isometry fixMatrix){
 
     // lift of the rotation of angle pi around the origin
     Isometry gen0 = Isometry(Point(
-    vec4(1, 0, 0, 0),
+    vec4(0, -1, 0, 0),
     - PI
     ));
     // lift the the parabolic z -> z - 1 (in the upper half plane model)
@@ -1147,6 +1173,118 @@ bool isOutsideCell(Point p, out Isometry fixMatrix){
     return false;
 }
 
+
+// Check if the given point p is in the fundamental domain of the lattice.
+// Lattice : quadrangle
+bool isOutsideCellSquare(Point p, out Isometry fixMatrix){
+    // point in the Klein model
+    // (where the fundamental domain is convex polyhedron).
+    vec4 klein = toKlein(p);
+
+    // Normal defining the fundamental domain of the lattice
+    vec4 np = vec4(1, 1, 0, 0);
+    vec4 nm = vec4(-1, 1, 0, 0);
+    vec4 nfiber = vec4(0, 0, 0, 1);
+
+    // lift of the first rotation
+    Isometry gen1 = Isometry(Point(
+    vec4(sqrt3 / 2., sqrt3 / 2., sqrt2 / 2., 0),
+    PI / 2.
+    ));
+
+    Isometry gen1inv = Isometry(Point(
+    vec4(sqrt3 / 2., -sqrt3 / 2., -sqrt2 / 2., 0),
+    -PI / 2.
+    ));
+
+    // lift of the second rotation
+    Isometry gen2 = Isometry(Point(
+    vec4(sqrt3 / 2., sqrt3 / 2., - sqrt2 / 2., 0),
+    PI / 2.
+    ));
+
+    Isometry gen2inv = Isometry(Point(
+    vec4(sqrt3 / 2., -sqrt3 / 2., sqrt2 / 2., 0),
+    -PI / 2.
+    ));
+
+    // translation by 2pi along the fiber
+    Isometry gen3 = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    2. * PI
+    ));
+
+    // translation by -2pi along the fiber
+    Isometry gen3inv = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    - 2. * PI
+    ));
+
+
+    // testing if the point is in the fundamental domain, and the matrix to fix it
+
+    float threshold = sqrt2 / sqrt3;
+
+    if (dot(klein, nm) > threshold) {
+        fixMatrix = gen1;
+        return true;
+    }
+    if (dot(klein, np) > threshold) {
+        fixMatrix = gen1inv;
+        return true;
+    }
+    if (dot(klein, nm) < -threshold) {
+        fixMatrix = gen2;
+        return true;
+    }
+    if (dot(klein, np) < -threshold) {
+        fixMatrix = gen2inv;
+        return true;
+    }
+    if (dot(klein, nfiber) > PI) {
+        fixMatrix = gen3inv;
+        return true;
+    }
+    if (dot(klein, nfiber) < -PI) {
+        fixMatrix = gen3;
+        return true;
+    }
+
+    return false;
+}
+
+// Check if the given point p is in the fundamental domain of the discrete subgroup.
+// Subgroup: translation along the fiber by a fixed angle
+bool isOutsideCellFiber(Point p, out Isometry fixMatrix){
+    // no need here to consider the Klein model
+    // everything takes place in the fiber coordinate
+
+    // translation by pi/2 along the fiber
+    Isometry gen = Isometry(Point(
+    vec4(0.5 * sqrt3, 0.5, 0, 0),
+    PI / 3.
+    ));
+
+    // translation by pi/2 along the fiber
+    Isometry genInv = Isometry(Point(
+    vec4(0.5 * sqrt3, -0.5, 0, 0),
+    - PI / 3.
+    ));
+
+    if (p.fiber > PI / 6.) {
+        fixMatrix = genInv;
+        return true;
+    }
+    if (p.fiber < - PI / 6.) {
+        fixMatrix = gen;
+        return true;
+    }
+    return false;
+}
+
+bool isOutsideCell(Point p, out Isometry fixMatrix){
+    return isOutsideCellSquare(p, fixMatrix);
+}
 
 // overload of the previous method with tangent vector
 bool isOutsideCell(Vector v, out Isometry fixMatrix){
@@ -1221,58 +1359,70 @@ void raymarch(Vector rayDir, out Isometry totalFixMatrix){
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
+
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             float localDist = localSceneSDF(localtv.pos);
-
-
             if (localDist < EPSILON){
                 sampletv = clone(localtv);
                 break;
             }
-            marchStep = min(localDist, 1.);
-            flow(marchStep, localtv);
+            marchStep = localDist;
 
-
-            if (isOutsideCell(localtv, fixMatrix)){
+            testlocaltv = clone(localtv);
+            flow(marchStep, testlocaltv);
+            if (isOutsideCell(testlocaltv, fixMatrix)){
+                bestlocaltv = clone(testlocaltv);
+                //commenting out this for loop brings us back to what we were doing before...
+                for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+                    ////// do binary search to get close to but outside this cell -
+                    ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+                    testMarchStep = marchStep - pow(0.5, float(j+1))*localDist;
+                    testlocaltv = clone(localtv);
+                    flow(marchStep, testlocaltv);
+                    if (isOutsideCell(testlocaltv, testFixMatrix)){
+                        marchStep = testMarchStep;
+                        bestlocaltv = clone(testlocaltv);
+                        fixMatrix = testFixMatrix;
+                    }
+                }
+                localtv = clone(bestlocaltv);
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 translate(fixMatrix, localtv);
-                unit(localtv);
+                globalDepth += marchStep;
                 marchStep = MIN_DIST;
             }
 
-
-            //                        testlocaltv = clone(localtv);
-            //                        flow(marchStep, testlocaltv);
-            //                        if (isOutsideCell(testlocaltv, fixMatrix)){
-            //                            bestlocaltv = testlocaltv;
-            //
-            //                            for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
-            //                                ////// do binary search to get close to but outside this cell -
-            //                                ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
-            //                                testMarchStep = marchStep - pow(0.5, float(j+1))*localDist;
-            //                                testlocaltv = clone(localtv);
-            //                                flow(testMarchStep, testlocaltv);
-            //                                if (isOutsideCell(testlocaltv, testFixMatrix)){
-            //                                    marchStep = testMarchStep;
-            //                                    bestlocaltv = testlocaltv;
-            //                                    fixMatrix = testFixMatrix;
-            //                                }
-            //                            }
-            //
-            //                            localtv = bestlocaltv;
-            //                            totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-            //                            translate(fixMatrix, localtv);
-            //                            unit(localtv);
-            //                            //globalDepth += marchStep;
-            //                            marchStep = MIN_DIST;
-            //                        }
-
             else {
-                //localtv = testlocaltv;
+                localtv = clone(testlocaltv);
                 globalDepth += marchStep;
             }
         }
+
         localDepth=min(globalDepth, MAX_DIST);
+
+        /*
+        // OLD VERSION : BAD APPROXIMATION OF THE GAMMA-INVARIANT SDF
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            flow(marchStep, localtv);
+            if (isOutsideCell(localtv, fixMatrix)){
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                translate(fixMatrix, localtv);
+                marchStep = MIN_DIST;
+            }
+            else {
+                float localDist = min(1., localSceneSDF(localtv.pos));
+                if (localDist < EPSILON){
+                    hitWhich = 3;
+                    sampletv = clone(localtv);
+                    break;
+                }
+                marchStep = localDist;
+                globalDepth += localDist;
+            }
+        }
+
+        localDepth=min(globalDepth, MAX_DIST);
+        */
     }
     else {
         localDepth=MAX_DIST;
@@ -1610,13 +1760,13 @@ void main(){
         case 0://Didn't hit anything
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.2);
+        out_FragColor = vec4(0.4);
         break;
 
         case 1:// global lights
-        //pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
+        pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
         //out_FragColor=vec4(pixelColor, 1.0);
-        out_FragColor = vec4(globalLightColor.rgb, 1.0);
+        out_FragColor = vec4(colorOfLight, 1.0);
         break;
 
         case 2:// global object
