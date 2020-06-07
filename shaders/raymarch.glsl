@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -92,6 +92,8 @@ The elements satisfy the relation - x^2 - y^2 + z^2 + w^2 = -1
 
 // Correct the error to make sure that the point lies on the "hyperboloid"
 vec4 SLreduceError(vec4 elt) {
+    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
+    /*
     mat4 J = mat4(
     -1, 0, 0, 0,
     0, -1, 0, 0,
@@ -99,6 +101,7 @@ vec4 SLreduceError(vec4 elt) {
     0, 0, 0, 1
     );
     float q = dot(elt, J * elt);
+    */
     return elt / sqrt(-q);
 }
 
@@ -122,7 +125,10 @@ mat2 SLtoMatrix2(vec4 elt) {
     1, 0,
     0, -1
     );
-    return elt.x * ex + elt.y * ey + elt.z * ez + elt.w * ew;
+    mat2 res = elt.x * ex + elt.y * ey + elt.z * ez + elt.w * ew;
+    // reducing the eventual error
+    res = res / sqrt(determinant(res));
+    return res;
 }
 // change of model
 // take a 2x2 matrix and return the corresponding element
@@ -195,13 +201,35 @@ vec4 SLmultiply(vec4 elt1, vec4 elt2) {
 // Translate the element by the given angle along the fiber
 vec4 SLtranslateFiberBy(vec4 elt, float angle) {
     float aux = 0.5 * angle;
-    mat4 t = mat4(
+    mat4 T = mat4(
     cos(aux), sin(aux), 0., 0.,
     -sin(aux), cos(aux), 0., 0.,
     0., 0., cos(aux), -sin(aux),
     0., 0., sin(aux), cos(aux)
     );
-    return SLreduceError(t * elt);
+    return SLreduceError(T * elt);
+}
+
+// Rotate the element by an angle alpha (see Jupyter Notebook)
+vec4 SLrotateBy(vec4 elt, float angle) {
+    mat4 R = mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, cos(angle), sin(angle),
+    0, 0, -sin(angle), cos(angle)
+    );
+    return SLreduceError(R * elt);
+}
+
+// Flip the elemnt (see Jupyter Notebook)
+vec4 SLflip(vec4 elt) {
+    mat4 F = mat4(
+    1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1,
+    0, 0, 1, 0
+    );
+    return SLreduceError(F * elt);
 }
 
 
@@ -231,15 +259,6 @@ struct Point {
 // - the fiber component is zero
 const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);
 
-Point clone(Point p) {
-    return Point(p.proj, p.fiber);
-}
-
-// reduce the erors on the SL(2,R) component of the point
-void reduceError(inout Point p) {
-    p.proj = SLreduceError(p.proj);
-}
-
 // change of model
 // the input is a vector (x,y,z,w) representing a point p where
 // - (x,y,z) is the projection of p in H^2 (hyperboloid model)
@@ -251,10 +270,9 @@ Point fromVec4(vec4 p) {
     p.x / sqrt(2. * p.z + 2.),
     p.y / sqrt(2. * p.z + 2.)
     );
+    // SLtranslateFiberBy already reduces the error, no need to do it again after
     proj = SLtranslateFiberBy(proj, p.w);
-    Point res =  Point(proj, p.w);
-    reduceError(res);
-    return res;
+    return Point(proj, p.w);
 }
 
 // change of model
@@ -263,6 +281,7 @@ Point fromVec4(vec4 p) {
 // - w is the fiber coordinate
 vec4 toVec4(Point p) {
     vec4 res;
+    // SLtoH2 already reduces the error, no need to do it again after
     res.xyz = SLtoH2(p.proj);
     res.w = p.fiber;
     return res;
@@ -270,9 +289,10 @@ vec4 toVec4(Point p) {
 
 // change of model
 // the output is a vector (x,y,1,w) representing a point p where
-//// - (x,y) is the projection of p in H^2 in the **Klein** model
-//// - w is the fiber coordinate
+// - (x,y) is the projection of p in H^2 in the **Klein** model
+// - w is the fiber coordinate
 vec4 toKlein(Point p){
+    // toVec4 already reduces the error, no need to do it again after
     vec4 res = toVec4(p);
     res.xyz = res.xyz / res.z;
     return res;
@@ -300,11 +320,6 @@ struct Isometry {
     Point target;// the image of the origin by this isometry.
 };
 
-// reduce error form the target
-void reduceError(inout Isometry isom) {
-    reduceError(isom.target);
-}
-
 // Method to unserialized isometries passed to the shader
 Isometry unserializeIsom(vec4 data) {
     Point p = fromVec4(data);
@@ -313,19 +328,25 @@ Isometry unserializeIsom(vec4 data) {
 
 // Product of two isometries (more precisely isom1 * isom2)
 Isometry composeIsometry(Isometry isom1, Isometry isom2) {
-    vec4 proj = SLmultiply(isom1.target.proj, isom2.target.proj);
-    vec4 aux = SLtranslateFiberBy(proj, -isom1.target.fiber - isom2.target.fiber);
-    float fiber = isom1.target.fiber + isom2.target.fiber + 2. * atan(aux.y, aux.x);
+    Point target1 = isom1.target;
+    Point target2 = isom2.target;
+    float shift = target1.fiber + target2.fiber;
+    // SLmultiply already reduces the error, no need to do it again after
+    vec4 proj = SLmultiply(target1.proj, target2.proj);
+    // vec4 proj = SLreduceError(target1.proj + target2.proj);
+    // SLtranslateFiberBy already reduces the error, no need to do it again after
+    vec4 aux = SLtranslateFiberBy(proj, - shift);
+    float fiber = shift + 2. * atan(aux.y, aux.x);
+    //float fiber = target1.fiber + target2.fiber + 2. * atan(proj.y, proj.x);
     Point target = Point(proj, fiber);
-    reduceError(target);
     return Isometry(target);
 }
 
 // Return the inverse of the given isometry
 Isometry getInverse(Isometry isom) {
+    // SLgetInverse already reduces the error, no need to do it again after
     vec4 proj = SLgetInverse(isom.target.proj);
     Point target = Point(proj, -isom.target.fiber);
-    reduceError(target);
     return Isometry(target);
 }
 
@@ -341,36 +362,27 @@ Isometry makeInvLeftTranslation(Point p) {
 
 // Translate a point by the given isometry
 Point translate(Isometry isom, Point p) {
-    Isometry aux = makeLeftTranslation(p);
-    aux = composeIsometry(isom, aux);
-    return aux.target;
+    Isometry res = makeLeftTranslation(p);
+    res = composeIsometry(isom, res);
+    return res.target;
 }
 
 // Perfom a rotation (meant in the H^2 component) by the given angle
 // It does not affact the fiber component
-void rotateBy(float angle, inout Point p) {
-    mat4 rot = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, cos(angle), sin(angle),
-    0, 0, -sin(angle), cos(angle)
+Point rotateBy(Point p, float angle) {
+    return Point(
+    SLrotateBy(p.proj, angle),
+    p.fiber
     );
-    p.proj = rot * p.proj;
-    reduceError(p);
 }
 
 // Flip the point (see Jupyter Notebook)
 // It reverses the fiber
-void flip(inout Point p) {
-    mat4 flip = mat4(
-    1, 0, 0, 0,
-    0, -1, 0, 0,
-    0, 0, 0, 1,
-    0, 0, 1, 0
+Point flip(Point p) {
+    return Point(
+    SLflip(p.proj),
+    - p.fiber
     );
-    p.proj = flip * p.proj;
-    p.fiber = - p.fiber;
-    reduceError(p);
 }
 
 
@@ -399,12 +411,6 @@ struct Vector {
     Point pos;// position on the manifold
     vec3 dir;// pull back of the tangent vector at the origin written in the appropriate basis
 };
-
-// return a copy of the vector
-Vector clone(Vector v) {
-    return Vector(clone(v.pos), v.dir);
-}
-
 
 //----------------------------------------------------------------------------------------------------------------------
 // Conversion between global and local representations of tangent vectors
@@ -476,42 +482,52 @@ Isometry makeInvLeftTranslation(Vector v) {
 }
 
 // overload to translate a direction
-void translate(Isometry isom, inout Vector v) {
-    v.pos = translate(isom, v.pos);
+Vector translate(Isometry isom, Vector v) {
+    return Vector(
+    translate(isom, v.pos),
+    v.dir
+    );
 }
 
 
 // rotate the tangent vector (position and direction around the fiber by an angle alpha)
-void rotateBy(float angle, inout Vector v) {
-    // rotation of the position part
-    rotateBy(angle, v.pos);
-
+Vector rotateBy(Vector v, float angle) {
     mat3 rotD = mat3(
     cos(angle), sin(angle), 0,
     -sin(angle), cos(angle), 0,
     0, 0, 1
     );
-    v.dir = rotD * v.dir;
+
+    return Vector(
+    rotateBy(v.pos, angle),
+    rotD * v.dir
+    );
 }
 
 // flip the tangent vector (see Jupyter Notebook)
-void flip(inout Vector v) {
-    flip(v.pos);
-
-    mat3 flip = mat3(
+Vector flip(Vector v) {
+    mat3 flipD = mat3(
     0, 1, 0,
     1, 0, 0,
     0, 0, -1
     );
-    v.dir = flip * v.dir;
+
+    return Vector(
+    flip(v.pos),
+    flipD * v.dir
+    );
 }
 
 // apply a local rotation of the direction
-void rotateByFacing(mat4 A, inout Vector v){
+Vector rotateByFacing(mat4 A, inout Vector v){
     // notice that the facing is an element of SO(3) which refers to the basis (e_x, e_y, e_phi).
     vec4 aux = vec4(v.dir, 0.);
     aux = A * aux;
-    v.dir = aux.xyz;
+
+    return Vector(
+    v.pos,
+    aux.xyz
+    );
 }
 
 
@@ -560,14 +576,6 @@ Vector tangNormalize(Vector v){
     return Vector(v.pos, v.dir / length);
 }
 
-// normalize the given vector
-// called unit because normalize is a protected name
-void unit(inout Vector v) {
-    // length of the vector
-    float length = tangNorm(v);
-    v.dir = v.dir / length;
-}
-
 
 // cosAng between two vector in the tangent bundle
 float cosAng(Vector v1, Vector v2){
@@ -612,9 +620,7 @@ Point smallShift(Point p, vec3 dp) {
     );
 
     vec4 aux1 = aux0 + dL * localBasis * dp;
-    Point res = fromVec4(aux1);
-    reduceError(res);
-    return res;
+    return fromVec4(aux1);
 }
 
 Vector createVector(Point p, vec3 dp) {
@@ -632,7 +638,6 @@ Vector createVector(Point p, vec3 dp) {
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
-
     Isometry isom = makeInvLeftTranslation(p1);
     vec4 aux = toVec4(translate(isom, p2));
     vec3 oh = vec3(0, 0, 1);
@@ -642,11 +647,14 @@ float fakeDistance(Point p1, Point p2){
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
+    //return sqrt(pow(acosh(-q), 2.) + pow(p1.fiber - p2.fiber, 2.));
     return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
 
-    //vec4 aux1 = toVec4(p1);
-    //vec4 aux2 = toVec4(p2);
-    //return length(aux2 - aux1);
+    /*
+    vec4 aux1 = toVec4(p1);
+    vec4 aux2 = toVec4(p2);
+    return length(aux2 - aux1);
+    */
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -672,7 +680,7 @@ Vector tangDirection(Point p, Point q){
     mat4 dLinv = diffInvTranslation(p);
     vec4 global_dir = auxq - auxp;
     Vector res = Vector(p, (dLinv * global_dir).xyw);
-    unit(res);
+    res = tangNormalize(res);
     return res;
 }
 
@@ -688,7 +696,10 @@ Vector tangDirection(Vector u, Vector v){
 // - the initial position of v is the origin
 // - the local direction of v is set up
 // - the initial direction has the local form (a, 0, c), with a,c > 0
-void _exactFlow(float t, inout Vector v) {
+// TODO. Fix the possible error in h2point ?
+Vector _exactFlow(Vector v, float t) {
+    Vector res;
+
     float a = v.dir.x;
     float c = v.dir.z;
 
@@ -751,15 +762,15 @@ void _exactFlow(float t, inout Vector v) {
         isom = isom + (1./5040.) * t7 * (1. / 128.) * omega6 * odd;
         isom = isom + (1./40320.) * t8 * (1. / 256.) * omega8 * even;
 
-        v.pos.proj = SLfromMatrix2(isom * spin);
+        res.pos.proj = SLfromMatrix2(isom * spin);
 
         // the spin fixes the origin, no need to take into accound for the projection onto H^2.
-        mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
-        vec3 h2point = m * vec3(0, 0, 1);
+        //mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
+        //vec3 h2point = m * vec3(0, 0, 1);
 
         float tanTheta = - a * c * t / 2. - a * c * omega2 * t3 / 24. - a * c * omega4 * t5 / 720. - a * c * omega6 * t7 / 40320.;
         tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
-        v.pos.fiber = phi + atan(tanTheta);
+        res.pos.fiber = phi + atan(tanTheta);
 
     }
     else if (c < a){
@@ -771,7 +782,7 @@ void _exactFlow(float t, inout Vector v) {
         cosh(0.5 * omega * t), omega * sinh(0.5 * omega * t) / (a-c),
         omega * sinh(0.5 * omega * t) / (a+c), cosh(0.5 * omega * t)
         );
-        v.pos.proj = SLfromMatrix2(isom * spin);
+        res.pos.proj = SLfromMatrix2(isom * spin);
 
         // the spin fixes the origin, no need to take into accound for the projection onto H^2.
         mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
@@ -781,7 +792,7 @@ void _exactFlow(float t, inout Vector v) {
         float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  - omegaSq * h2point.y);
         float tanTheta = - c / omega * sqrt(tanOmegaTOver2Sq);
 
-        v.pos.fiber = phi + atan(tanTheta);
+        res.pos.fiber = phi + atan(tanTheta);
 
     }
     else {
@@ -795,7 +806,7 @@ void _exactFlow(float t, inout Vector v) {
         cos(0.5 * omega * t), -omega * sin(0.5 * omega * t) / (a-c),
         -omega * sin(0.5 * omega * t) / (a+c), cos(0.5 * omega * t)
         );
-        v.pos.proj = SLfromMatrix2(isom * spin);
+        res.pos.proj = SLfromMatrix2(isom * spin);
 
         // the spin fixes the origin, no need to take into accound for the projection onto H^2.
         mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
@@ -814,7 +825,7 @@ void _exactFlow(float t, inout Vector v) {
             tanTheta = c / omega * sqrt(tanOmegaTOver2Sq);
         }
 
-        v.pos.fiber = phi + atan(tanTheta) - aux * PI;
+        res.pos.fiber = phi + atan(tanTheta) - aux * PI;
 
     }
 
@@ -826,50 +837,52 @@ void _exactFlow(float t, inout Vector v) {
     sin(2. * c * t), cos(2. * c * t), 0.,
     0., 0., 1.
     );
-    v.dir = S * v.dir;
+    res.dir = S * v.dir;
+    return res;
 }
 
 
 // flow the given vector during time t
-void flow(float t, inout Vector v) {
+Vector flow(Vector v, float t) {
+    // -------------------------------------------------------
     // prepation : set the vector into an easier form to flow
+    // -------------------------------------------------------
 
     // isometry sending the origin the the position of v
     Isometry isom = makeLeftTranslation(v);
     // pull back the tangent vector a the origin (very easy in the local representation)
-    v.pos = ORIGIN;
+    Vector vAtOrigin = Vector(ORIGIN, v.dir);
     // flip if needed to get a positive fiber direction
     bool flipped = false;
-    if (v.dir.z < 0.) {
+    if (vAtOrigin.dir.z < 0.) {
         flipped = true;
-        flip(v);
+        vAtOrigin = flip(vAtOrigin);
     }
-
     // rotation
     // the angle alpha is characterized as follows
     // if u is a tangent vector with the local form (a, 0, c) with a, c >= 0
     // then v is obtained from u by a rotation of angle alpha
-    float alpha = atan(v.dir.y, v.dir.x);
-    float c = v.dir.z;
+    float alpha = atan(vAtOrigin.dir.y, vAtOrigin.dir.x);
+    float c = vAtOrigin.dir.z;
     float a = sqrt(1. - c * c);
-    v.dir = vec3(a, 0., c);
+    vAtOrigin.dir = vec3(a, 0., c);
 
-    //debugColor = abs(v.local_dir);
-
+    // -------------------------------------------------------
     // flow the vector
-    _exactFlow(t, v);
+    // -------------------------------------------------------
+    Vector resAtOrigin = _exactFlow(vAtOrigin, t);
 
+    // -------------------------------------------------------
     // reverse the preparation done at the beginning
-    rotateBy(alpha, v);
+    // -------------------------------------------------------
+    resAtOrigin = rotateBy(resAtOrigin, alpha);
     if (flipped) {
-        flip(v);
+        resAtOrigin = flip(resAtOrigin);
     }
-    translate(isom, v);
 
-    //reduce the errors
-    reduceError(v.pos);
-    unit(v);
-
+    Vector res = translate(isom, resAtOrigin);
+    res = tangNormalize(res);
+    return res;
 }
 
 
@@ -895,7 +908,6 @@ float sphereSDF(Point p, Point center, float radius){
     return exactDist(p, center) - radius;
 }
 
-
 float cylSDF(Point p, float r){
     vec4 aux = toVec4(p);
     mat3 J = mat3(
@@ -903,10 +915,9 @@ float cylSDF(Point p, float r){
     0, 1, 0,
     0, 0, -1
     );
-
     float s = 0.;
     vec3 center = vec3(0., s, sqrt(1. + s * s));
-    float q = dot(aux.xyz, J* center);
+    float q = dot(aux.xyz, J * center);
     return acosh(-q) - r;
 }
 
@@ -921,7 +932,7 @@ float ellipsoidSDF(Point p, float radius){
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    float dist = sqrt(pow(acosh(-q), 2.) + pow(aux.w / 3.5, 2.));
+    float dist = sqrt(pow(acosh(-q), 2.) + pow(aux.w / 4., 2.));
     return dist - radius;
 }
 
@@ -998,7 +1009,7 @@ uniform int display;
 // 2= planes
 // 3= dragon skin
 
-uniform int res;
+uniform int resol;
 
 //adding one local light (more to follow)
 Point localLightPos;
@@ -1038,22 +1049,26 @@ float localSceneSDF(Point p){
     }
 
     // Sphere
-    /*float aux = 0.;
+    /*
+    float aux = 0.;
     Point center = fromVec4(vec4(0., aux, sqrt(1. + aux * aux), 0));
     sphDist = sphereSDF(p, center, 0.1);
     distance = min(distance, sphDist);
     if (sphDist < EPSILON){
         hitWhich = 3;
         return sphDist;
-    }*/
+    }
+    */
 
     // Tiling
+
     tilignDist = -ellipsoidSDF(p, 1.);
     distance = min(distance, tilignDist);
     if (tilignDist < EPSILON){
         hitWhich=3;
         return tilignDist;
     }
+
 
 
     return distance;
@@ -1078,22 +1093,53 @@ float globalSceneSDF(Point p){
         }
     }
 
-    /*
+
     //Global Sphere Object
     //Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
-    Point globalObjPos1 = Point(vec4(1, 0, 0, 0), 0.);
-    float obj1Dist = sphereSDF(absolutep, globalObjPos1, 0.1);
-    Point globalObjPos2 = Point(vec4(0.5 * sqrt3, -0.5, 0, 0), - PI / 3.);
-    float obj2Dist = sphereSDF(absolutep, globalObjPos2, 0.1);
 
-    objDist = min(obj1Dist, obj2Dist);
+    Point globalObjPos1 = Point(vec4(-1, 0, 0, 0), -2.*PI);
+    float aux = 0.5;
+    Point globalObjPos2 = fromVec4(vec4(aux, -aux, sqrt(1. + 2. * aux * aux), -.5));
+    Point globalObjPos3 = fromVec4(vec4(-aux, aux, sqrt(1. + 2. * aux * aux), -1.));
+
+    /*
+    float auxSurfaceP = sqrt(sqrt2 + 1.);
+
+    Isometry genA1 = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), auxSurfaceP, -auxSurfaceP),
+    PI / 2.
+    ));
+
+    Isometry genA1inv = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), -auxSurfaceP, auxSurfaceP),
+    -PI / 2.
+    ));
+
+    Point globalObjPos1 = clone(ORIGIN);
+    Point globalObjPos2 = translate(genA1, ORIGIN);
+    Point globalObjPos3 = translate(genA1inv, ORIGIN);
+
     */
 
+    float obj1Dist = sphereSDF(absolutep, globalObjPos1, 0.1);
+    float obj2Dist = sphereSDF(absolutep, globalObjPos2, 0.1);
+    float obj3Dist = sphereSDF(absolutep, globalObjPos3, 0.1);
+
+
     // Global ellipsoid object
-    objDist = ellipsoidSDF(absolutep, .1);
+    //float ellDist = objDist = ellipsoidSDF(absolutep, .2);
 
     // Global Cylinder Object
-    //objDist = cylSDF(absolutep, 0.3);
+    //float cylDist1 =  cylSDF(absolutep, 0.1);
+    //float cylDist2 =  cylSDF(absolutep, 0.2);
+
+    //objDist = min(obj1Dist, obj2Dist);
+    objDist = 100000.;
+    objDist = min(objDist, obj3Dist);
+    objDist = min(objDist, obj2Dist);
+    //objDist = min(objDist, obj1Dist);
+
+    //objDist = obj1Dist;
 
     distance = min(distance, objDist);
     if (distance < EPSILON){
@@ -1282,6 +1328,133 @@ bool isOutsideCellFiber(Point p, out Isometry fixMatrix){
     return false;
 }
 
+
+/****************************************************
+
+LATTICE CORRESPONDING TO A GENUS 2 SURFACE
+
+*****************************************************/
+
+
+// Check if the given point p is in the fundamental domain of the lattice.
+// Lattice : surface of genus 2
+bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
+    // point in the Klein model
+    // (where the fundamental domain is convex polyhedron).
+    vec4 klein = toKlein(p);
+
+    // Normal defining the fundamental domain of the lattice
+    vec4 nh = vec4(1, 0, 0, 0);
+    vec4 nv = vec4(0, 1, 0, 0);
+    vec4 nd1 = vec4(0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+    vec4 nd2 = vec4(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+    vec4 nfiber = vec4(0, 0, 0, 1);
+
+
+    float auxSurfaceP = sqrt(sqrt2 + 1.);
+    float auxSurfaceM = sqrt(sqrt2 - 1.);
+
+    // lifts of the 4 translations (and their inverses)
+    Isometry genA1 = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), auxSurfaceP, -auxSurfaceP),
+    PI / 2.
+    ));
+
+    Isometry genA1inv = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), -auxSurfaceP, auxSurfaceP),
+    -PI / 2.
+    ));
+
+    Isometry genA2 = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), -auxSurfaceP, auxSurfaceP),
+    PI / 2.
+    ));
+
+    Isometry genA2inv = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), auxSurfaceP, -auxSurfaceP),
+    -PI / 2.
+    ));
+
+    Isometry genB1 = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), sqrt2 * auxSurfaceP, 0),
+    PI / 2.
+    ));
+
+    Isometry genB1inv = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), -sqrt2 * auxSurfaceP, 0),
+    -PI / 2.
+    ));
+
+    Isometry genB2 = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), -sqrt2 * auxSurfaceP, 0),
+    PI / 2.
+    ));
+
+    Isometry genB2inv = Isometry(Point(
+    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), sqrt2 * auxSurfaceP, 0),
+    -PI / 2.
+    ));
+
+    // translation by 2pi along the fiber
+    Isometry genC = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    2. * PI
+    ));
+
+    // translation by -2pi along the fiber
+    Isometry genCinv = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    - 2. * PI
+    ));
+
+    // testing if the point is in the fundamental domain, and the matrix to fix it
+    float threshold = sqrt2 * auxSurfaceM;
+
+
+    //    if (dot(klein, nh) > threshold) {
+    //        fixMatrix = genA1inv;
+    //        return true;
+    //    }
+    //    if (dot(klein, nd1) > threshold) {
+    //        fixMatrix = genB1inv;
+    //        return true;
+    //    }
+    if (dot(klein, nv) > threshold) {
+        fixMatrix = genA1;
+        return true;
+    }
+    //    if (dot(klein, nd2) > threshold) {
+    //        fixMatrix = genB1;
+    //        return true;
+    //    }
+    //    if (dot(klein, nh) < -threshold) {
+    //        fixMatrix = genA2inv;
+    //        return true;
+    //    }
+    //    if (dot(klein, nd1) < -threshold) {
+    //        fixMatrix = genB2inv;
+    //        return true;
+    //    }
+    //    if (dot(klein, nv) < -threshold) {
+    //        fixMatrix = genA2;
+    //        return true;
+    //    }
+    //    if (dot(klein, nd2) < -threshold) {
+    //        fixMatrix = genB2;
+    //        return true;
+    //    }
+    //    if (dot(klein, nfiber) > PI) {
+    //        fixMatrix = genCinv;
+    //        return true;
+    //    }
+    //    if (dot(klein, nfiber) < -PI) {
+    //        fixMatrix = genC;
+    //        return true;
+    //    }
+
+    return false;
+}
+
 bool isOutsideCell(Point p, out Isometry fixMatrix){
     return isOutsideCellSquare(p, fixMatrix);
 }
@@ -1327,7 +1500,7 @@ Vector estimateNormal(Point p) {
         localSceneSDF(shiftPZ) - localSceneSDF(shiftMZ)
         ));
     }
-    unit(n);
+    n = tangNormalize(n);
     return n;
 }
 
@@ -1341,6 +1514,7 @@ Vector estimateNormal(Point p) {
 // each step is the march is made from the previously achieved position (useful later for Sol).
 // done with general vectors
 
+
 int BINARY_SEARCH_STEPS=4;
 
 void raymarch(Vector rayDir, out Isometry totalFixMatrix){
@@ -1351,69 +1525,26 @@ void raymarch(Vector rayDir, out Isometry totalFixMatrix){
     float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
     float localDepth = MIN_DIST;
-    Vector tv = clone(rayDir);
-    Vector localtv = clone(rayDir);
-    Vector testlocaltv = clone(rayDir);
-    Vector bestlocaltv = clone(rayDir);
+    Vector tv = rayDir;
+    Vector localtv = rayDir;
+    Vector testlocaltv = rayDir;
+    Vector bestlocaltv = rayDir;
     totalFixMatrix = identity;
+
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
-
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            float localDist = localSceneSDF(localtv.pos);
-            if (localDist < EPSILON){
-                sampletv = clone(localtv);
-                break;
-            }
-            marchStep = localDist;
-
-            testlocaltv = clone(localtv);
-            flow(marchStep, testlocaltv);
-            if (isOutsideCell(testlocaltv, fixMatrix)){
-                bestlocaltv = clone(testlocaltv);
-                //commenting out this for loop brings us back to what we were doing before...
-                for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
-                    ////// do binary search to get close to but outside this cell -
-                    ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
-                    testMarchStep = marchStep - pow(0.5, float(j+1))*localDist;
-                    testlocaltv = clone(localtv);
-                    flow(marchStep, testlocaltv);
-                    if (isOutsideCell(testlocaltv, testFixMatrix)){
-                        marchStep = testMarchStep;
-                        bestlocaltv = clone(testlocaltv);
-                        fixMatrix = testFixMatrix;
-                    }
-                }
-                localtv = clone(bestlocaltv);
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                translate(fixMatrix, localtv);
-                globalDepth += marchStep;
-                marchStep = MIN_DIST;
-            }
-
-            else {
-                localtv = clone(testlocaltv);
-                globalDepth += marchStep;
-            }
-        }
-
-        localDepth=min(globalDepth, MAX_DIST);
-
-        /*
-        // OLD VERSION : BAD APPROXIMATION OF THE GAMMA-INVARIANT SDF
-        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            flow(marchStep, localtv);
+            localtv = flow(localtv, marchStep);
             if (isOutsideCell(localtv, fixMatrix)){
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                translate(fixMatrix, localtv);
+                localtv = translate(fixMatrix, localtv);
                 marchStep = MIN_DIST;
             }
             else {
                 float localDist = min(1., localSceneSDF(localtv.pos));
                 if (localDist < EPSILON){
-                    hitWhich = 3;
-                    sampletv = clone(localtv);
+                    sampletv = localtv;
                     break;
                 }
                 marchStep = localDist;
@@ -1422,56 +1553,89 @@ void raymarch(Vector rayDir, out Isometry totalFixMatrix){
         }
 
         localDepth=min(globalDepth, MAX_DIST);
+
+        /*
+        // TODO. VERSION TO BE CHECKED...
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            float localDist = localSceneSDF(localtv.pos);
+
+
+            if (localDist < EPSILON){
+                sampletv = toTangVector(localtv);
+                break;
+            }
+            marchStep = localDist;
+
+            //localtv = flow(localtv, marchStep);
+
+            //            if (isOutsideCell(localtv, fixMatrix)){
+            //                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            //                localtv = translate(fixMatrix, localtv);
+            //                localtv=tangNormalize(localtv);
+            //                marchStep = MIN_DIST;
+            //            }
+
+            testlocaltv = flow(localtv, marchStep);
+            if (isOutsideCell(testlocaltv, fixMatrix)){
+                bestlocaltv = testlocaltv;
+
+                for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+                    ////// do binary search to get close to but outside this cell -
+                    ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+                    testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
+                    testlocaltv = flow(localtv, testMarchStep);
+                    if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+                        marchStep = testMarchStep;
+                        bestlocaltv = testlocaltv;
+                        fixMatrix = testFixMatrix;
+                    }
+                }
+
+                localtv = bestlocaltv;
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                localtv = translate(fixMatrix, localtv);
+                localtv=tangNormalize(localtv);
+                //globalDepth += marchStep;
+                marchStep = MIN_DIST;
+            }
+
+            else{
+                localtv = testlocaltv;
+                globalDepth += marchStep;
+            }
+        }
+        localDepth=min(globalDepth, MAX_DIST);
         */
+
     }
     else {
         localDepth=MAX_DIST;
     }
-
-
-    //            else {
-    //                float localDist = min(.5, localSceneSDF(localtv.pos));
-    //                if (localDist < EPSILON){
-    //                    //hitWhich = 3;
-    //                    sampletv = toTangVector(localtv);
-    //                    break;
-    //                }
-    //                marchStep = localDist;
-    //                globalDepth += localDist;
-    //            }
-    //        }
-    //        localDepth = min(globalDepth, MAX_DIST);
-    //    }
-    //    else {
-    //        localDepth=MAX_DIST;
-    //    }
-
 
     if (GLOBAL_SCENE){
         globalDepth = MIN_DIST;
         marchStep = MIN_DIST;
 
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
-            flow(marchStep, tv);
+            tv = flow(tv, marchStep);
 
-
-            //            if (i == 1) {
-            //                hitWhich = 5;
-            //                vec4 aux = toVec4(tv.pos);
-            //                debugColor = vec3(abs(tv.dir.xy),0);
-            //                break;
-            //            }
-
-
+            /*
+            if (i == 1) {
+                float aux = globalSceneSDF(tv.pos);
+                hitWhich = 5;
+                //debugColor = 1000. * aux * vec3(1, 0, 0);
+                debugColor = abs(tv.dir);
+                break;
+            }
+            */
 
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
                 totalFixMatrix = identity;
-                sampletv = clone(tv);
+                sampletv = tv;
                 return;
             }
-            //marchStep = min(globalDist,1.);
             marchStep = globalDist;
             globalDepth += globalDist;
             if (globalDepth >= localDepth){
@@ -1690,7 +1854,7 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
     // or at least at the origin here
     vec3 dir = vec3(xy, -z);
     Vector tv = createVector(ORIGIN, dir);
-    unit(tv);
+    tv = tangNormalize(tv);
     return tv;
 }
 
@@ -1699,7 +1863,7 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
 //----------------------------------------------------------------------------------------------------------------------
 
 void main(){
-    setResolution(res);
+    setResolution(resol);
     currentBoost = unserializeIsom(currentBoostMat);
     leftBoost = unserializeIsom(leftBoostMat);
     rightBoost = unserializeIsom(rightBoostMat);
@@ -1716,17 +1880,17 @@ void main(){
 
     if (isStereo == 1){
         if (isLeft){
-            rotateByFacing(leftFacing, rayDir);
-            translate(leftBoost, rayDir);
+            rayDir = rotateByFacing(leftFacing, rayDir);
+            rayDir = translate(leftBoost, rayDir);
         }
         else {
-            rotateByFacing(rightFacing, rayDir);
-            translate(rightBoost, rayDir);
+            rayDir = rotateByFacing(rightFacing, rayDir);
+            rayDir = translate(rightBoost, rayDir);
         }
     }
     else {
-        rotateByFacing(facing, rayDir);
-        translate(currentBoost, rayDir);
+        rayDir = rotateByFacing(facing, rayDir);
+        rayDir = translate(currentBoost, rayDir);
     }
 
     //get our raymarched distance back ------------------------
@@ -1735,24 +1899,6 @@ void main(){
     Isometry totalFixMatrix = identity;
     //do the marching
     raymarch(rayDir, totalFixMatrix);
-
-    /*
-    Vector v = clone(rayDir);
-    float T = 10.;
-    int k = 10;
-    float step = T / float(k);
-
-    for (int i =0; i< k; i++) {
-        flow(step, v);
-    }
-    vec4 aux = toVec4(v.pos);
-    if (hitWhich !=5) {
-        hitWhich =5;
-        //debugColor = vec3(abs(aux.xy),0);
-        debugColor = -vec3(aux.w/30., 0, 0);
-    }*/
-
-
 
     vec3 pixelColor;
     //Based on hitWhich decide whether we hit a global object, local object, or nothing

@@ -296,7 +296,7 @@ function setupMaterial(fShader) {
                 type: "int",
                 value: globals.display
             },
-            res: {
+            resol: {
                 type: "int",
                 value: globals.res
             },
@@ -345,7 +345,7 @@ function updateMaterial() {
     globals.material.uniforms.time.value = (new Date().getTime()) - time0;
 
     globals.material.uniforms.display.value = globals.display;
-    globals.material.uniforms.res.value = globals.res;
+    globals.material.uniforms.resol.value = globals.res;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
 
 }
