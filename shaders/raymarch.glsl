@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -1087,13 +1087,22 @@ float localSceneSDF(Point p){
 
 
     // Tiling
-
+    /*
     tilingDist = -ellipsoidSDF(p, 1.7, 3.5);
     //tilingDist = -sphereSDF(p, ORIGIN, 3.);
     distance = min(distance, tilingDist);
     if (tilingDist < EPSILON){
         hitWhich=3;
         return tilingDist;
+    }
+    */
+
+    // Cylinders
+    cylDist = cylSDF(p, 0.4);
+    distance = min(distance, cylDist);
+    if (cylDist < EPSILON){
+        hitWhich=3;
+        return cylDist;
     }
 
 
@@ -1122,91 +1131,8 @@ float globalSceneSDF(Point p){
 
 
     //Global Sphere Object
-    //Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
-
-    //Point globalObjPos1 = Point(vec4(-1, 0, 0, 0), -2.*PI);
-    //    float aux = 0.5;
-    //    Point globalObjPos2 = fromVec4(vec4(aux, -aux, sqrt(1. + 2. * aux * aux), -.5));
-    //    Point globalObjPos3 = fromVec4(vec4(-aux, aux, sqrt(1. + 2. * aux * aux), -1.));
-    //    Point globalObjPos4 = fromVec4(vec4(-aux, -aux, sqrt(1. + 2. * aux * aux), -1.));
-    //    Point globalObjPos5 = fromVec4(vec4(aux, aux, sqrt(1. + 2. * aux * aux), -1.));
-
-
-    float auxSurfaceP = sqrt(sqrt2 + 1.);
-
-    Isometry genA1 = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., auxSurfaceP, -auxSurfaceP),
-    PI / 2.
-    ));
-
-    Isometry genA1inv = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -auxSurfaceP, auxSurfaceP),
-    -PI / 2.
-    ));
-
-    Isometry genA2 = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -auxSurfaceP, auxSurfaceP),
-    PI / 2.
-    ));
-
-    Isometry genA2inv = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., auxSurfaceP, -auxSurfaceP),
-    -PI / 2.
-    ));
-
-    Isometry genB1 = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., sqrt2 * auxSurfaceP, 0),
-    PI / 2.
-    ));
-
-    Isometry genB1inv = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -sqrt2 * auxSurfaceP, 0),
-    -PI / 2.
-    ));
-
-    Isometry genB2 = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -sqrt2 * auxSurfaceP, 0),
-    PI / 2.
-    ));
-
-    Isometry genB2inv = Isometry(Point(
-    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., sqrt2 * auxSurfaceP, 0),
-    -PI / 2.
-    ));
-
-    //Point globalObjPos2 = translate(genB1, globalObjPos1);
-    //Point globalObjPos3 = translate(genB1inv, globalObjPos1);
-
-
-    Point globalObjPos1 = fromVec4(vec4(0,0,1, -PI/2.));
-    float aux = 11.;
-    //Point globalObjPos2 = fromVec4(vec4(0, aux, sqrt(1. + aux * aux), -PI/2.));
-    Point globalObjPos2 = translate(genA1, ORIGIN);
-
-
-    float obj1Dist = sphereSDF(absolutep, globalObjPos1, 0.1);
-    float obj2Dist = sphereSDF(absolutep, globalObjPos2, 0.1);
-    //float obj3Dist = sphereSDF(absolutep, globalObjPos3, 0.1);
-    //    float obj4Dist = sphereSDF(absolutep, globalObjPos4, 0.1);
-    //    float obj5Dist = sphereSDF(absolutep, globalObjPos5, 0.1);
-
-
-    // Global ellipsoid object
-    //float ellDist = objDist = ellipsoidSDF(absolutep, .2);
-
-    // Global Cylinder Object
-    //float cylDist1 =  cylSDF(absolutep, 0.1);
-    //float cylDist2 =  cylSDF(absolutep, 0.2);
-
-    //objDist = min(obj1Dist, obj2Dist);
-    objDist = 100000.;
-    //    objDist = min(objDist, obj5Dist);
-    //    objDist = min(objDist, obj4Dist);
-    //objDist = min(objDist, obj3Dist);
-    objDist = min(objDist, obj2Dist);
-    objDist = min(objDist, obj1Dist);
-
-    //objDist = obj1Dist;
+    Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
+    objDist = sphereSDF(absolutep, globalObjPos1, 0.3);
 
     distance = min(distance, objDist);
     if (distance < EPSILON){
@@ -1478,49 +1404,52 @@ bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
     float threshold = sqrt2 * auxSurfaceM;
 
 
-        if (dot(klein, nh) > threshold) {
-            fixMatrix = genA1inv;
-            return true;
-        }
-        if (dot(klein, nd1) > threshold) {
-            fixMatrix = genB1inv;
-            return true;
-        }
+    if (dot(klein, nh) > threshold) {
+        fixMatrix = genA1inv;
+        return true;
+    }
+    if (dot(klein, nd1) > threshold) {
+        fixMatrix = genB1inv;
+        return true;
+    }
     if (dot(klein, nv) > threshold) {
         fixMatrix = genA1;
         return true;
     }
-        if (dot(klein, nd2) > threshold) {
-            fixMatrix = genB1;
-            return true;
-        }
-        if (dot(klein, nh) < -threshold) {
-            fixMatrix = genA2inv;
-            return true;
-        }
-        if (dot(klein, nd1) < -threshold) {
-            fixMatrix = genB2inv;
-            return true;
-        }
-        if (dot(klein, nv) < -threshold) {
-            fixMatrix = genA2;
-            return true;
-        }
-        if (dot(klein, nd2) < -threshold) {
-            fixMatrix = genB2;
-            return true;
-        }
-        if (dot(klein, nfiber) > PI) {
-            fixMatrix = genCinv;
-            return true;
-        }
-        if (dot(klein, nfiber) < -PI) {
-            fixMatrix = genC;
-            return true;
-        }
+    if (dot(klein, nd2) > threshold) {
+        fixMatrix = genB1;
+        return true;
+    }
+    if (dot(klein, nh) < -threshold) {
+        fixMatrix = genA2inv;
+        return true;
+    }
+    if (dot(klein, nd1) < -threshold) {
+        fixMatrix = genB2inv;
+        return true;
+    }
+    if (dot(klein, nv) < -threshold) {
+        fixMatrix = genA2;
+        return true;
+    }
+    if (dot(klein, nd2) < -threshold) {
+        fixMatrix = genB2;
+        return true;
+    }
+    if (dot(klein, nfiber) > PI) {
+        fixMatrix = genCinv;
+        return true;
+    }
+    if (dot(klein, nfiber) < -PI) {
+        fixMatrix = genC;
+        return true;
+    }
 
     return false;
 }
+
+
+
 
 bool isOutsideCell(Point p, out Isometry fixMatrix){
     return isOutsideCellSurface(p, fixMatrix);
@@ -1591,7 +1520,7 @@ Vector estimateNormal(Point p) {
 
 int BINARY_SEARCH_STEPS=4;
 
-void raymarch(Vector rayDir, out Isometry totalFixMatrix){
+void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
 
     Isometry fixMatrix;
     Isometry testFixMatrix;
@@ -1717,6 +1646,141 @@ void raymarch(Vector rayDir, out Isometry totalFixMatrix){
             }
         }
     }
+}
+
+
+void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
+
+    Isometry fixMatrix;
+    Isometry testFixMatrix;
+    float marchStep = MIN_DIST;
+    float testMarchStep = MIN_DIST;
+    float globalDepth = MIN_DIST;
+    float localDepth = MIN_DIST;
+    Vector tv = rayDir;
+    Vector localtv = rayDir;
+    Vector testlocaltv = rayDir;
+    Vector bestlocaltv = rayDir;
+    totalFixMatrix = identity;
+
+    // Trace the local scene, then the global scene:
+
+    if (TILING_SCENE){
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            localtv = flow(localtv, marchStep);
+            if (isOutsideCell(localtv, fixMatrix)){
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                localtv = translate(fixMatrix, localtv);
+                marchStep = MIN_DIST;
+            }
+            else {
+                float localDist = min(1., localSceneSDF(localtv.pos));
+                if (localDist < EPSILON){
+                    sampletv = localtv;
+                    break;
+                }
+                marchStep = localDist;
+                globalDepth += localDist;
+            }
+        }
+
+        localDepth=min(globalDepth, MAX_DIST);
+
+        /*
+        // TODO. VERSION TO BE CHECKED...
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            float localDist = localSceneSDF(localtv.pos);
+
+
+            if (localDist < EPSILON){
+                sampletv = toTangVector(localtv);
+                break;
+            }
+            marchStep = localDist;
+
+            //localtv = flow(localtv, marchStep);
+
+            //            if (isOutsideCell(localtv, fixMatrix)){
+            //                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            //                localtv = translate(fixMatrix, localtv);
+            //                localtv=tangNormalize(localtv);
+            //                marchStep = MIN_DIST;
+            //            }
+
+            testlocaltv = flow(localtv, marchStep);
+            if (isOutsideCell(testlocaltv, fixMatrix)){
+                bestlocaltv = testlocaltv;
+
+                for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
+                    ////// do binary search to get close to but outside this cell -
+                    ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
+                    testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
+                    testlocaltv = flow(localtv, testMarchStep);
+                    if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+                        marchStep = testMarchStep;
+                        bestlocaltv = testlocaltv;
+                        fixMatrix = testFixMatrix;
+                    }
+                }
+
+                localtv = bestlocaltv;
+                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+                localtv = translate(fixMatrix, localtv);
+                localtv=tangNormalize(localtv);
+                //globalDepth += marchStep;
+                marchStep = MIN_DIST;
+            }
+
+            else{
+                localtv = testlocaltv;
+                globalDepth += marchStep;
+            }
+        }
+        localDepth=min(globalDepth, MAX_DIST);
+        */
+
+    }
+    else {
+        localDepth=MAX_DIST;
+    }
+
+    if (GLOBAL_SCENE){
+        globalDepth = MIN_DIST;
+        marchStep = MIN_DIST;
+
+        for (int i = 0; i < MAX_MARCHING_STEPS; i++){
+            tv = flow(rayDir, globalDepth);
+
+            /*
+            if (i == 1) {
+                float aux = globalSceneSDF(tv.pos);
+                hitWhich = 5;
+                //debugColor = 1000. * aux * vec3(1, 0, 0);
+                debugColor = abs(tv.dir);
+                break;
+            }
+            */
+
+            float globalDist = globalSceneSDF(tv.pos);
+            if (globalDist < EPSILON){
+                // hitWhich has now been set
+                totalFixMatrix = identity;
+                sampletv = tv;
+                return;
+            }
+            //marchStep = globalDist;
+            globalDepth += globalDist;
+            if (globalDepth >= localDepth){
+                break;
+            }
+        }
+    }
+}
+
+
+void raymarch(Vector rayDir, out Isometry totalFixMatrix){
+    raymarchIterate(rayDir, totalFixMatrix);
+    //raymarchDirect(rayDir, totalFixMatrix);
 }
 
 
