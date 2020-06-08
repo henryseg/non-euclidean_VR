@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -320,6 +320,8 @@ struct Isometry {
     Point target;// the image of the origin by this isometry.
 };
 
+Isometry identity=Isometry(ORIGIN);
+
 // Method to unserialized isometries passed to the shader
 Isometry unserializeIsom(vec4 data) {
     Point p = fromVec4(data);
@@ -610,6 +612,24 @@ Here the basis at p is the image by dL of the standard basis at the origin.
 
 
 Point smallShift(Point p, vec3 dp) {
+    // direction dp pushed at the origin in SL(2,R)
+    vec4 SLdirAtOrigin = 0.5 * vec4(0, dp.z, dp.x, dp.y);
+    // direction dp pushed at p.proj in SL(2,R)
+    vec4 SLdirAtP =  SLtoMatrix4(p.proj) * SLdirAtOrigin;
+
+    // fiber component of the direction pushed at p
+    float den = p.proj.x * p.proj.x + p.proj.y + p.proj.y;
+    float coeffX = (p.proj.x * p.proj.w - p.proj.y * p.proj.z) / den;
+    float coeffY = -(p.proj.x * p.proj.z + p.proj.y * p.proj.w) / den;
+    float dfiberAtP = coeffX * dp.x + coeffY * dp.y + dp.z;
+
+
+    vec4 newProj = SLreduceError(p.proj + SLdirAtP);
+    float newFiber = p.fiber + dfiberAtP;
+
+    return Point(newProj, newFiber);
+
+    /*
     vec4 aux0 = toVec4(p);
 
     mat4 dL = diffTranslation(p);
@@ -620,7 +640,17 @@ Point smallShift(Point p, vec3 dp) {
     );
 
     vec4 aux1 = aux0 + dL * localBasis * dp;
+    // reduce the potential error
+    // the hyperbolic part of the point should be on a hyperboloid
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux1.xyz, J * aux1.xyz);
+    aux1.xyz = aux1.xyz / sqrt(-q);
     return fromVec4(aux1);
+    */
 }
 
 Vector createVector(Point p, vec3 dp) {
@@ -638,6 +668,31 @@ Vector createVector(Point p, vec3 dp) {
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
+    /*
+    Isometry isom = makeInvLeftTranslation(p1);
+    vec4 aux = toVec4(translate(isom, p2));
+    vec3 oh = vec3(0, 0, 1);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux.xyz, J * oh);
+    //return sqrt(pow(acosh(-q), 2.) + pow(p1.fiber - p2.fiber, 2.));
+    return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+    */
+    vec4 aux1 = toVec4(p1);
+    vec4 aux2 = toVec4(p2);
+    return length(aux2 - aux1);
+}
+
+// overload of the previous function in case we work with tangent vectors
+float fakeDistance(Vector v1, Vector v2){
+    return fakeDistance(v1.pos, v2.pos);
+}
+
+// distance between two points
+float exactDist(Point p1, Point p2){
     Isometry isom = makeInvLeftTranslation(p1);
     vec4 aux = toVec4(translate(isom, p2));
     vec3 oh = vec3(0, 0, 1);
@@ -650,21 +705,6 @@ float fakeDistance(Point p1, Point p2){
     //return sqrt(pow(acosh(-q), 2.) + pow(p1.fiber - p2.fiber, 2.));
     return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
 
-    /*
-    vec4 aux1 = toVec4(p1);
-    vec4 aux2 = toVec4(p2);
-    return length(aux2 - aux1);
-    */
-}
-
-// overload of the previous function in case we work with tangent vectors
-float fakeDistance(Vector v1, Vector v2){
-    return fakeDistance(v1.pos, v2.pos);
-}
-
-// distance between two points
-float exactDist(Point p1, Point p2){
-    return fakeDistance(p1, p2);
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -726,50 +766,58 @@ Vector _exactFlow(Vector v, float t) {
     // we distinguish three cases, depending whether c is smaller, equal or greater than a.
     // it corresponds to the three cases for isom (elliptic, parabolic, or hyperbolic).
 
-    /*
+
     // little hack to see the junction between elliptic/hyperbolic behavior
+    /*
     if (abs(c-a) < 0.002) {
         hitWhich = 5;
+        debugColor = vec3(1,1,0);
     }
     */
 
     //if (abs(c-a)*t < 0.05) {
+    //    // "parabolic" trajectory
+    //    // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
+    //    float a2 = a * a;
+    //    float omega2 = a * a - c * c;
+    //    float omega4 = omega2 * omega2;
+    //    float omega6 = omega4 * omega2;
+    //    float omega8 = omega6 * omega2;
+    //    float t2 = t * t;
+    //    float t3 = t2 * t;
+    //    float t4 = t3 * t;
+    //    float t5 = t4 * t;
+    //    float t6 = t5 * t;
+    //    float t7 = t6 * t;
+    //    float t8 = t7 * t;
+    //
+    //    mat2 even = mat2(1);
+    //    mat2 odd = mat2(0, a + c, a - c, 0);
+    //    mat2 isom = even;
+    //    isom = isom + t * (1. / 2.) * odd;
+    //    isom = isom + (1./2.) * t2 * (1. / 4.) * omega2 * even;
+    //    isom = isom + (1./6.) * t3 * (1. / 8.) * omega2 * odd;
+    //    isom = isom + (1./24.) * t4 * (1. / 16.) * omega4 * even;
+    //    isom = isom + (1./120.) * t5 * (1. / 32.) * omega4 * odd;
+    //    isom = isom + (1./720.) * t6 * (1. / 64.) * omega6 * even;
+    //    isom = isom + (1./5040.) * t7 * (1. / 128.) * omega6 * odd;
+    //    isom = isom + (1./40320.) * t8 * (1. / 256.) * omega8 * even;
+    //
+    //    res.pos.proj = SLfromMatrix2(isom * spin);
+    //
+    //    float tanTheta = - a * c * t / 2. - a * c * omega2 * t3 / 24. - a * c * omega4 * t5 / 720. - a * c * omega6 * t7 / 40320.;
+    //    tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
+    //    res.pos.fiber = phi + atan(tanTheta);
+    // }
     if (abs(c-a) ==0.) {
-        // "parabolic" trajectory
-        // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
-        float a2 = a * a;
-        float omega2 = a * a - c * c;
-        float omega4 = omega2 * omega2;
-        float omega6 = omega4 * omega2;
-        float omega8 = omega6 * omega2;
-        float t2 = t * t;
-        float t3 = t2 * t;
-        float t4 = t3 * t;
-        float t5 = t4 * t;
-        float t6 = t5 * t;
-        float t7 = t6 * t;
-        float t8 = t7 * t;
 
-        mat2 even = mat2(1);
-        mat2 odd = mat2(0, a + c, a - c, 0);
-        mat2 isom = even;
-        isom = isom + t * (1. / 2.) * odd;
-        isom = isom + (1./2.) * t2 * (1. / 4.) * omega2 * even;
-        isom = isom + (1./6.) * t3 * (1. / 8.) * omega2 * odd;
-        isom = isom + (1./24.) * t4 * (1. / 16.) * omega4 * even;
-        isom = isom + (1./120.) * t5 * (1. / 32.) * omega4 * odd;
-        isom = isom + (1./720.) * t6 * (1. / 64.) * omega6 * even;
-        isom = isom + (1./5040.) * t7 * (1. / 128.) * omega6 * odd;
-        isom = isom + (1./40320.) * t8 * (1. / 256.) * omega8 * even;
-
+        mat2 isom = mat2(
+        1, t/sqrt2,
+        0, 1
+        );
         res.pos.proj = SLfromMatrix2(isom * spin);
 
-        // the spin fixes the origin, no need to take into accound for the projection onto H^2.
-        //mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
-        //vec3 h2point = m * vec3(0, 0, 1);
-
-        float tanTheta = - a * c * t / 2. - a * c * omega2 * t3 / 24. - a * c * omega4 * t5 / 720. - a * c * omega6 * t7 / 40320.;
-        tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
+        float tanTheta = - t / (2. * sqrt2);
         res.pos.fiber = phi + atan(tanTheta);
 
     }
@@ -784,14 +832,7 @@ Vector _exactFlow(Vector v, float t) {
         );
         res.pos.proj = SLfromMatrix2(isom * spin);
 
-        // the spin fixes the origin, no need to take into accound for the projection onto H^2.
-        mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
-        vec3 h2point = m * vec3(0, 0, 1);
-
-        // hack to fix atan numerical errors
-        float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  - omegaSq * h2point.y);
-        float tanTheta = - c / omega * sqrt(tanOmegaTOver2Sq);
-
+        float tanTheta = - c / omega * tanh(0.5 * omega * t);
         res.pos.fiber = phi + atan(tanTheta);
 
     }
@@ -808,23 +849,8 @@ Vector _exactFlow(Vector v, float t) {
         );
         res.pos.proj = SLfromMatrix2(isom * spin);
 
-        // the spin fixes the origin, no need to take into accound for the projection onto H^2.
-        mat3 m = SLtoMatrix3(SLfromMatrix2(isom));
-        vec3 h2point = m * vec3(0, 0, 1);
-        // for the moment a computation without fixing `atan`
         float aux = floor(0.5 * omega * t / PI + 0.5);
-
-        // hack to fix atan numerical errors
-        float tanOmegaTOver2Sq = - omegaSq * h2point.y / (2. * a * c  + omegaSq * h2point.y);
-        float tanTheta =0.;
-        float remainder = t - aux * (2. * PI / omega);
-        if (remainder > 0.) {
-            tanTheta = - c / omega * sqrt(tanOmegaTOver2Sq);
-        }
-        else {
-            tanTheta = c / omega * sqrt(tanOmegaTOver2Sq);
-        }
-
+        float tanTheta = - c / omega * tan(0.5 * omega * t);
         res.pos.fiber = phi + atan(tanTheta) - aux * PI;
 
     }
@@ -923,7 +949,7 @@ float cylSDF(Point p, float r){
 
 
 // fake ellipsoid centered at the origin
-float ellipsoidSDF(Point p, float radius){
+float ellipsoidSDF(Point p, float radius, float wRescale){
     vec4 aux = toVec4(p);
     vec3 oh = vec3(0, 0, 1);
     mat3 J = mat3(
@@ -932,7 +958,7 @@ float ellipsoidSDF(Point p, float radius){
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    float dist = sqrt(pow(acosh(-q), 2.) + pow(aux.w / 4., 2.));
+    float dist = sqrt(pow(acosh(-q), 2.) + pow(aux.w / wRescale, 2.));
     return dist - radius;
 }
 
@@ -970,7 +996,6 @@ float sliceSDF(vec4 p) {
 Vector N;//normal vector
 Vector sampletv;
 vec4 globalLightColor;
-Isometry identity=Isometry(ORIGIN);
 Isometry currentBoost;
 Isometry leftBoost;
 Isometry rightBoost;
@@ -1034,7 +1059,7 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 
 float localSceneSDF(Point p){
     float sphDist;
-    float tilignDist;
+    float tilingDist;
     float cylDist;
     float lightDist;
     float distance = MAX_DIST;
@@ -1060,13 +1085,15 @@ float localSceneSDF(Point p){
     }
     */
 
+
     // Tiling
 
-    tilignDist = -ellipsoidSDF(p, 1.);
-    distance = min(distance, tilignDist);
-    if (tilignDist < EPSILON){
+    tilingDist = -ellipsoidSDF(p, 1.7, 3.5);
+    //tilingDist = -sphereSDF(p, ORIGIN, 3.);
+    distance = min(distance, tilingDist);
+    if (tilingDist < EPSILON){
         hitWhich=3;
-        return tilignDist;
+        return tilingDist;
     }
 
 
@@ -1097,33 +1124,71 @@ float globalSceneSDF(Point p){
     //Global Sphere Object
     //Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
 
-    Point globalObjPos1 = Point(vec4(-1, 0, 0, 0), -2.*PI);
-    float aux = 0.5;
-    Point globalObjPos2 = fromVec4(vec4(aux, -aux, sqrt(1. + 2. * aux * aux), -.5));
-    Point globalObjPos3 = fromVec4(vec4(-aux, aux, sqrt(1. + 2. * aux * aux), -1.));
+    //Point globalObjPos1 = Point(vec4(-1, 0, 0, 0), -2.*PI);
+    //    float aux = 0.5;
+    //    Point globalObjPos2 = fromVec4(vec4(aux, -aux, sqrt(1. + 2. * aux * aux), -.5));
+    //    Point globalObjPos3 = fromVec4(vec4(-aux, aux, sqrt(1. + 2. * aux * aux), -1.));
+    //    Point globalObjPos4 = fromVec4(vec4(-aux, -aux, sqrt(1. + 2. * aux * aux), -1.));
+    //    Point globalObjPos5 = fromVec4(vec4(aux, aux, sqrt(1. + 2. * aux * aux), -1.));
 
-    /*
+
     float auxSurfaceP = sqrt(sqrt2 + 1.);
 
     Isometry genA1 = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), auxSurfaceP, -auxSurfaceP),
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., auxSurfaceP, -auxSurfaceP),
     PI / 2.
     ));
 
     Isometry genA1inv = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), -auxSurfaceP, auxSurfaceP),
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -auxSurfaceP, auxSurfaceP),
     -PI / 2.
     ));
 
-    Point globalObjPos1 = clone(ORIGIN);
-    Point globalObjPos2 = translate(genA1, ORIGIN);
-    Point globalObjPos3 = translate(genA1inv, ORIGIN);
+    Isometry genA2 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -auxSurfaceP, auxSurfaceP),
+    PI / 2.
+    ));
 
-    */
+    Isometry genA2inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., auxSurfaceP, -auxSurfaceP),
+    -PI / 2.
+    ));
+
+    Isometry genB1 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., sqrt2 * auxSurfaceP, 0),
+    PI / 2.
+    ));
+
+    Isometry genB1inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -sqrt2 * auxSurfaceP, 0),
+    -PI / 2.
+    ));
+
+    Isometry genB2 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -sqrt2 * auxSurfaceP, 0),
+    PI / 2.
+    ));
+
+    Isometry genB2inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., sqrt2 * auxSurfaceP, 0),
+    -PI / 2.
+    ));
+
+    //Point globalObjPos2 = translate(genB1, globalObjPos1);
+    //Point globalObjPos3 = translate(genB1inv, globalObjPos1);
+
+
+    Point globalObjPos1 = fromVec4(vec4(0,0,1, -PI/2.));
+    float aux = 11.;
+    //Point globalObjPos2 = fromVec4(vec4(0, aux, sqrt(1. + aux * aux), -PI/2.));
+    Point globalObjPos2 = translate(genA1, ORIGIN);
+
 
     float obj1Dist = sphereSDF(absolutep, globalObjPos1, 0.1);
     float obj2Dist = sphereSDF(absolutep, globalObjPos2, 0.1);
-    float obj3Dist = sphereSDF(absolutep, globalObjPos3, 0.1);
+    //float obj3Dist = sphereSDF(absolutep, globalObjPos3, 0.1);
+    //    float obj4Dist = sphereSDF(absolutep, globalObjPos4, 0.1);
+    //    float obj5Dist = sphereSDF(absolutep, globalObjPos5, 0.1);
 
 
     // Global ellipsoid object
@@ -1135,9 +1200,11 @@ float globalSceneSDF(Point p){
 
     //objDist = min(obj1Dist, obj2Dist);
     objDist = 100000.;
-    objDist = min(objDist, obj3Dist);
+    //    objDist = min(objDist, obj5Dist);
+    //    objDist = min(objDist, obj4Dist);
+    //objDist = min(objDist, obj3Dist);
     objDist = min(objDist, obj2Dist);
-    //objDist = min(objDist, obj1Dist);
+    objDist = min(objDist, obj1Dist);
 
     //objDist = obj1Dist;
 
@@ -1356,42 +1423,42 @@ bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
 
     // lifts of the 4 translations (and their inverses)
     Isometry genA1 = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), auxSurfaceP, -auxSurfaceP),
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., auxSurfaceP, -auxSurfaceP),
     PI / 2.
     ));
 
     Isometry genA1inv = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), -auxSurfaceP, auxSurfaceP),
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -auxSurfaceP, auxSurfaceP),
     -PI / 2.
     ));
 
     Isometry genA2 = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), -auxSurfaceP, auxSurfaceP),
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -auxSurfaceP, auxSurfaceP),
     PI / 2.
     ));
 
     Isometry genA2inv = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), auxSurfaceP, -auxSurfaceP),
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., auxSurfaceP, -auxSurfaceP),
     -PI / 2.
     ));
 
     Isometry genB1 = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), sqrt2 * auxSurfaceP, 0),
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., sqrt2 * auxSurfaceP, 0),
     PI / 2.
     ));
 
     Isometry genB1inv = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), -sqrt2 * auxSurfaceP, 0),
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -sqrt2 * auxSurfaceP, 0),
     -PI / 2.
     ));
 
     Isometry genB2 = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), 0.5 * (sqrt2 + 1.), -sqrt2 * auxSurfaceP, 0),
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -sqrt2 * auxSurfaceP, 0),
     PI / 2.
     ));
 
     Isometry genB2inv = Isometry(Point(
-    vec4(0.5 * (sqrt2 + 1.), -0.5 * (sqrt2 + 1.), sqrt2 * auxSurfaceP, 0),
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., sqrt2 * auxSurfaceP, 0),
     -PI / 2.
     ));
 
@@ -1411,52 +1478,52 @@ bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
     float threshold = sqrt2 * auxSurfaceM;
 
 
-    //    if (dot(klein, nh) > threshold) {
-    //        fixMatrix = genA1inv;
-    //        return true;
-    //    }
-    //    if (dot(klein, nd1) > threshold) {
-    //        fixMatrix = genB1inv;
-    //        return true;
-    //    }
+        if (dot(klein, nh) > threshold) {
+            fixMatrix = genA1inv;
+            return true;
+        }
+        if (dot(klein, nd1) > threshold) {
+            fixMatrix = genB1inv;
+            return true;
+        }
     if (dot(klein, nv) > threshold) {
         fixMatrix = genA1;
         return true;
     }
-    //    if (dot(klein, nd2) > threshold) {
-    //        fixMatrix = genB1;
-    //        return true;
-    //    }
-    //    if (dot(klein, nh) < -threshold) {
-    //        fixMatrix = genA2inv;
-    //        return true;
-    //    }
-    //    if (dot(klein, nd1) < -threshold) {
-    //        fixMatrix = genB2inv;
-    //        return true;
-    //    }
-    //    if (dot(klein, nv) < -threshold) {
-    //        fixMatrix = genA2;
-    //        return true;
-    //    }
-    //    if (dot(klein, nd2) < -threshold) {
-    //        fixMatrix = genB2;
-    //        return true;
-    //    }
-    //    if (dot(klein, nfiber) > PI) {
-    //        fixMatrix = genCinv;
-    //        return true;
-    //    }
-    //    if (dot(klein, nfiber) < -PI) {
-    //        fixMatrix = genC;
-    //        return true;
-    //    }
+        if (dot(klein, nd2) > threshold) {
+            fixMatrix = genB1;
+            return true;
+        }
+        if (dot(klein, nh) < -threshold) {
+            fixMatrix = genA2inv;
+            return true;
+        }
+        if (dot(klein, nd1) < -threshold) {
+            fixMatrix = genB2inv;
+            return true;
+        }
+        if (dot(klein, nv) < -threshold) {
+            fixMatrix = genA2;
+            return true;
+        }
+        if (dot(klein, nd2) < -threshold) {
+            fixMatrix = genB2;
+            return true;
+        }
+        if (dot(klein, nfiber) > PI) {
+            fixMatrix = genCinv;
+            return true;
+        }
+        if (dot(klein, nfiber) < -PI) {
+            fixMatrix = genC;
+            return true;
+        }
 
     return false;
 }
 
 bool isOutsideCell(Point p, out Isometry fixMatrix){
-    return isOutsideCellSquare(p, fixMatrix);
+    return isOutsideCellSurface(p, fixMatrix);
 }
 
 // overload of the previous method with tangent vector
@@ -1474,7 +1541,8 @@ bool isOutsideCell(Vector v, out Isometry fixMatrix){
 // the coordinates refer to a prefered basis, which is geometry dependent
 // Remi : NOW GEOMETRY INDEPENDENT...
 Vector estimateNormal(Point p) {
-    float newEp = EPSILON * 10.0;
+    //float newEp = EPSILON * 10.0;
+    float newEp = 0.01;
 
     Point shiftPX = smallShift(p, vec3(newEp, 0, 0));
     Point shiftPY = smallShift(p, vec3(0, newEp, 0));
@@ -1486,12 +1554,18 @@ Vector estimateNormal(Point p) {
     Vector n;
 
     if (hitWhich != 3){
+        // little hack, otherwise the shader collaspe when there are too many objets in the scene.
+        float ref = globalSceneSDF(p);
+        float vgx = globalSceneSDF(shiftPX) - ref;
+        float vgy = globalSceneSDF(shiftPY) - ref;
+        float vgz = globalSceneSDF(shiftPZ) - ref;
         //global light scene
-        n = createVector(p, vec3(
-        globalSceneSDF(shiftPX) - globalSceneSDF(shiftMX),
-        globalSceneSDF(shiftPY) - globalSceneSDF(shiftMY),
-        globalSceneSDF(shiftPZ) - globalSceneSDF(shiftMZ)
-        ));
+        /*
+        float vgx = globalSceneSDF(shiftPX) - globalSceneSDF(shiftMX);
+        float vgy = globalSceneSDF(shiftPY) - globalSceneSDF(shiftMY);
+        float vgz = globalSceneSDF(shiftPZ) - globalSceneSDF(shiftMZ);
+        */
+        n = createVector(p, vec3(vgx, vgy, vgz));
     }
     else { //local scene
         n = createVector(p, vec3(
@@ -1718,15 +1792,18 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
 
     //LOCAL LIGHT
-    color+= lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    //color += lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    color += 2. *lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
     //light color and intensity hard coded in
 
+    /*
     //move local light around by the generators to pick up lighting from nearby cells
     for (int i=0; i<6; i++){
         //TLP=invGenerators[i]*localLightPos;
         TLP = translate(unserializeIsom(invGenerators[i]), localLightPos);
         color+= lightingCalculations(SP, TLP, V, surfColor, localLightColor);
     }
+    */
 
     return color;
 }
@@ -1790,7 +1867,7 @@ vec3 ballColor(Isometry totalFixMatrix, Vector sampletv){
 
         N = estimateNormal(sampletv.pos);
         vec3 color=localLightColor.xyz;
-        color = phongModel(totalFixMatrix, 0.5*color);
+        color = phongModel(totalFixMatrix, 0.5 * color);
         color = 0.7*color+0.3;
         return color;
 
