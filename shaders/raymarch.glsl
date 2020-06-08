@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -743,7 +743,7 @@ Vector _exactFlow(Vector v, float t) {
     float a = v.dir.x;
     float c = v.dir.z;
 
-    float phi = c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
+    float phi = 2. * c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
     float omegaSq = 0.;
     float omega = 0.;// the "pulsatance" involved in the geodesic flow.
     float theta = 0.;// the rotation angle in H^2.
@@ -818,7 +818,7 @@ Vector _exactFlow(Vector v, float t) {
         res.pos.proj = SLfromMatrix2(isom * spin);
 
         float tanTheta = - t / (2. * sqrt2);
-        res.pos.fiber = phi + atan(tanTheta);
+        res.pos.fiber = phi + 2. * atan(tanTheta);
 
     }
     else if (c < a){
@@ -833,7 +833,7 @@ Vector _exactFlow(Vector v, float t) {
         res.pos.proj = SLfromMatrix2(isom * spin);
 
         float tanTheta = - c / omega * tanh(0.5 * omega * t);
-        res.pos.fiber = phi + atan(tanTheta);
+        res.pos.fiber = phi + 2. * atan(tanTheta);
 
     }
     else {
@@ -851,7 +851,7 @@ Vector _exactFlow(Vector v, float t) {
 
         float aux = floor(0.5 * omega * t / PI + 0.5);
         float tanTheta = - c / omega * tan(0.5 * omega * t);
-        res.pos.fiber = phi + atan(tanTheta) - aux * PI;
+        res.pos.fiber = phi + 2. * atan(tanTheta) - 2. * aux * PI;
 
     }
 
@@ -1087,24 +1087,25 @@ float localSceneSDF(Point p){
 
 
     // Tiling
-    /*
-    tilingDist = -ellipsoidSDF(p, 1.7, 3.5);
+
+    tilingDist = -ellipsoidSDF(p, 1.8, 2.5);
     //tilingDist = -sphereSDF(p, ORIGIN, 3.);
     distance = min(distance, tilingDist);
     if (tilingDist < EPSILON){
         hitWhich=3;
         return tilingDist;
     }
-    */
+
 
     // Cylinders
+    /*
     cylDist = cylSDF(p, 0.4);
     distance = min(distance, cylDist);
     if (cylDist < EPSILON){
         hitWhich=3;
         return cylDist;
     }
-
+    */
 
 
     return distance;
@@ -1779,8 +1780,8 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
 
 
 void raymarch(Vector rayDir, out Isometry totalFixMatrix){
-    raymarchIterate(rayDir, totalFixMatrix);
-    //raymarchDirect(rayDir, totalFixMatrix);
+    //raymarchIterate(rayDir, totalFixMatrix);
+    raymarchDirect(rayDir, totalFixMatrix);
 }
 
 
