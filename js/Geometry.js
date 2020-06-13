@@ -180,8 +180,6 @@ class SL2 extends Vector4 {
  * @class
  * @public
  */
-
-
 class Point {
 
     /**
@@ -316,13 +314,6 @@ class Point {
 
 }
 
-
-/**
- * @constant {Point} ORIGIN - Origin of the space
- * @todo Since the constructor of Point return the origin by default, this constant is maybe not needed
- */
-const ORIGIN = new Point();
-console.log('ORIGIN', ORIGIN);
 
 /**
  * Tangent vector at the origin of X
@@ -507,9 +498,8 @@ class Isometry {
 }
 
 export {
+    SL2,
     Point,
     Vector,
-    Isometry,
-    SL2,
-    ORIGIN
+    Isometry
 }

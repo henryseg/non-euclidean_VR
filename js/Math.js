@@ -10,11 +10,9 @@ import {
 } from "./Main.js";
 
 import {
-    SL2,
     Point,
     Vector,
-    Isometry,
-    ORIGIN
+    Isometry
 } from "./Geometry.js";
 
 import {
