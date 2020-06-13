@@ -693,6 +693,18 @@ float fakeDistance(Vector v1, Vector v2){
 
 // distance between two points
 float exactDist(Point p1, Point p2){
+    /*
+    vec4 aux1 = toVec4(p1);
+    vec4 aux2 = toVec4(p2);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux1.xyz, J * aux2.xyz);
+    return sqrt(pow(acosh(-q), 2.) + pow(aux1.w-aux2.w, 2.));
+    */
+
     Isometry isom = makeInvLeftTranslation(p1);
     vec4 aux = toVec4(translate(isom, p2));
     vec3 oh = vec3(0, 0, 1);
@@ -702,7 +714,6 @@ float exactDist(Point p1, Point p2){
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    //return sqrt(pow(acosh(-q), 2.) + pow(p1.fiber - p2.fiber, 2.));
     return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
 
 }
@@ -775,6 +786,7 @@ Vector _exactFlow(Vector v, float t) {
     }
     */
 
+
     //if (abs(c-a)*t < 0.05) {
     //    // "parabolic" trajectory
     //    // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
@@ -809,8 +821,8 @@ Vector _exactFlow(Vector v, float t) {
     //    tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
     //    res.pos.fiber = phi + atan(tanTheta);
     // }
-    if (abs(c-a) ==0.) {
-
+    if (abs(c-a) == 0.) {
+        // parabolic trajectory
         mat2 isom = mat2(
         1, t/sqrt2,
         0, 1
@@ -1008,7 +1020,7 @@ Isometry globalObjectBoost;
 //----------------------------------------------------------------------------------------------------------------------
 uniform int isStereo;
 uniform vec2 screenResolution;
-uniform vec4 invGenerators[6];//
+uniform vec4 invGenerators[10];//
 uniform vec4 currentBoostMat;
 uniform vec4 leftBoostMat;
 uniform vec4 rightBoostMat;

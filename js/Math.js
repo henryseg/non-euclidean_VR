@@ -10,6 +10,7 @@ import {
 } from "./Main.js";
 
 import {
+    SL2,
     Point,
     Vector,
     Isometry,
@@ -25,37 +26,56 @@ import {
 //	Teleporting back to central cell
 //----------------------------------------------------------------------------------------------------------------------
 
+
+/**
+ * @todo Change this to a method of the class Position
+ */
 function fixOutsideCentralCell(position) {
 
-    /*
     let bestIndex = -1;
-    let p = new Vector4(0, 0, 0, 1).applyMatrix4(position.boost.matrix);
-    //lattice basis divided by the norm square
-    let v1 = new Vector4(GoldenRatio, -1., 0., 0.);
-    let v2 = new Vector4(1., GoldenRatio, 0., 0.);
-    let v3 = new Vector4(0., 0., 1. / z0, 0.);
+    let p = new Point().translateBy(position.boost);
+    let klein = p.toKlein();
 
 
-    if (globals.display != 3) { //this turns off the vertical teleporation when there is no vertical syymetries
-        if (p.dot(v3) > 0.5) {
-            bestIndex = 5;
-        }
-        if (p.dot(v3) < -0.5) {
-            bestIndex = 4;
-        }
-    }
+    const sqrt2 = Math.sqrt(2);
+    const auxSurfaceM = Math.sqrt(sqrt2 - 1.);
+    const threshold = sqrt2 * auxSurfaceM;
 
-    if (p.dot(v1) > 0.5) {
+    let nh = new Vector4().set(1, 0, 0, 0);
+    let nv = new Vector4().set(0, 1, 0, 0);
+    let nd1 = new Vector4().set(0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+    let nd2 = new Vector4().set(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+    let nfiber = new Vector4().set(0, 0, 0, 1);
+
+    if (klein.dot(nh) > threshold) {
         bestIndex = 1;
     }
-    if (p.dot(v1) < -0.5) {
+    if (klein.dot(nd1) > threshold) {
+        bestIndex = 5;
+    }
+    if (klein.dot(nv) > threshold) {
         bestIndex = 0;
     }
-    if (p.dot(v2) > 0.5) {
+    if (klein.dot(nd2) > threshold) {
+        bestIndex = 4;
+    }
+    if (klein.dot(nh) < -threshold) {
         bestIndex = 3;
     }
-    if (p.dot(v2) < -0.5) {
+    if (klein.dot(nd1) < -threshold) {
+        bestIndex = 7;
+    }
+    if (klein.dot(nv) < -threshold) {
         bestIndex = 2;
+    }
+    if (klein.dot(nd2) < -threshold) {
+        bestIndex = 6;
+    }
+    if (klein.dot(nfiber) > Math.PI) {
+        bestIndex = 9;
+    }
+    if (klein.dot(nfiber) < -Math.PI) {
+        bestIndex = 8;
     }
 
     if (bestIndex !== -1) {
@@ -64,8 +84,6 @@ function fixOutsideCentralCell(position) {
     } else {
         return -1;
     }
-     */
-    return -1;
 }
 
 
@@ -78,25 +96,71 @@ function fixOutsideCentralCell(position) {
 Moves the generators in the 'Geometry.js' file (or another geometry dependent file)?
 Maybe create a class "lattice" to would store
 - the generators
-- the test function 'is inside fundamental dmain ?'
+- the test function 'is inside fundamental domain ?'
 
  */
 
 /**
  * Create the generators of a lattice and their inverses
  * The (2i+1)-entry of the output is the inverse of the (2i)-entry.
- * @returns {Isometry[]} - the list of generators
+ * @returns {Array.<Isometry>} - the list of generators
  */
 function createGenerators() { /// generators for the tiling by cubes.
 
-    const gen0 = new Isometry().makeTranslation(0, 0, 1, -Math.PI);
-    const gen1 = gen0.clone();
-    const gen2 = new Isometry().makeTranslation(1, 0.5, 1.5, 2 * Math.atan(0.5));
-    const gen3 = new Isometry().makeTranslation(-1, 0.5, 1.5, -2 * Math.atan(0.5));
-    const gen4 = new Isometry().makeTranslation(0, 0, 1, 4 * Math.PI);
-    const gen5 = new Isometry().makeTranslation(0, 0, 1, -4 * Math.PI);
+    const sqrt2 = Math.sqrt(2);
+    const auxSurfaceP = Math.sqrt(sqrt2 + 1.);
 
-    return [gen0, gen1, gen2, gen3, gen4, gen5];
+    const pointA1 = new Point();
+    pointA1.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., auxSurfaceP, -auxSurfaceP);
+    pointA1.fiber = 0.5 * Math.PI;
+    let genA1 = new Isometry().set([pointA1]);
+
+    const pointA1inv = new Point();
+    pointA1inv.proj.set(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -auxSurfaceP, auxSurfaceP);
+    pointA1inv.fiber = -0.5 * Math.PI;
+    let genA1inv = new Isometry().set([pointA1inv]);
+
+    const pointA2 = new Point();
+    pointA2.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -auxSurfaceP, auxSurfaceP);
+    pointA2.fiber = 0.5 * Math.PI;
+    let genA2 = new Isometry().set([pointA2]);
+
+    const pointA2inv = new Point();
+    pointA2inv.proj.set(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., auxSurfaceP, -auxSurfaceP);
+    pointA2inv.fiber = -0.5 * Math.PI;
+    let genA2inv = new Isometry().set([pointA2inv]);
+
+    const pointB1 = new Point();
+    pointB1.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., sqrt2 * auxSurfaceP, 0);
+    pointB1.fiber = 0.5 * Math.PI;
+    let genB1 = new Isometry().set([pointB1]);
+
+    const pointB1inv = new Point();
+    pointB1inv.proj.set(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -sqrt2 * auxSurfaceP, 0);
+    pointB1inv.fiber = -0.5 * Math.PI;
+    let genB1inv = new Isometry().set([pointB1inv]);
+
+    const pointB2 = new Point();
+    pointB2.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -sqrt2 * auxSurfaceP, 0);
+    pointB2.fiber = 0.5 * Math.PI;
+    let genB2 = new Isometry().set([pointB2]);
+
+    const pointB2inv = new Point();
+    pointB2inv.proj.set(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., sqrt2 * auxSurfaceP, 0);
+    pointB2inv.fiber = -0.5 * Math.PI;
+    let genB2inv = new Isometry().set([pointB2inv]);
+
+    const pointC = new Point();
+    pointC.proj.set(-1, 0, 0, 0);
+    pointC.fiber = 2 * Math.PI;
+    let genC = new Isometry().set([pointC]);
+
+    const pointCinv = new Point();
+    pointCinv.proj.set(-1, 0, 0, 0);
+    pointCinv.fiber = -2 * Math.PI;
+    let genCinv = new Isometry().set([pointCinv]);
+
+    return [genA1, genA1inv, genA2, genA2inv, genB1, genB1inv, genB2, genB2inv, genC, genCinv];
 }
 
 /**
@@ -106,7 +170,19 @@ function createGenerators() { /// generators for the tiling by cubes.
  * @returns {Array.<Isometry>} - the inverses
  */
 function invGenerators(genArr) {
-    return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
+
+    return [
+        genArr[1],
+        genArr[0],
+        genArr[3],
+        genArr[2],
+        genArr[5],
+        genArr[4],
+        genArr[7],
+        genArr[6],
+        genArr[9],
+        genArr[8]
+    ];
 }
 
 /**
@@ -118,6 +194,18 @@ function invGenerators(genArr) {
 function serializeIsoms(isomArr) {
     return isomArr.map(function (isom) {
         return isom.serialize();
+    });
+}
+
+/**
+ * Serialize an array of Points
+ *
+ * @param {Array.<Point>} pointArr - the isometries to serialize
+ * @returns {Array.<Vector4>} - the serialized isometries
+ */
+function serializePoints(pointArr) {
+    return pointArr.map(function (point) {
+        return point.serialize();
     });
 }
 
@@ -143,7 +231,10 @@ function initGeometry() {
     let vectorRight = globals.position.getRightVector(globals.ipDist);
     globals.rightPosition = globals.position.clone().flow(vectorRight);
 
-    console.log("initial facing", globals.position.facing.toLog());
+    //console.log("initial facing", globals.position.boost);
+    //console.log("initial facing", globals.position.facing.toLog());
+
+
 }
 
 /**
@@ -179,7 +270,7 @@ function initObjects() {
     PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
     PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
-    let p = new Point().set(0, 0,1, -1);
+    let p = new Point();
     globals.globalObjectPosition = new Position().set(p.makeTranslation(), new Matrix4());
 }
 
@@ -258,7 +349,7 @@ function setupMaterial(fShader) {
             },
             lightPositions: {
                 type: "v4",
-                value: globals.lightPositions
+                value: serializePoints(globals.lightPositions)
             },
             globalObjectBoostMat: {
                 type: "v4",
@@ -347,7 +438,6 @@ function updateMaterial() {
     globals.material.uniforms.display.value = globals.display;
     globals.material.uniforms.resol.value = globals.res;
     // globals.material.uniforms.lightRad.value = globals.lightRad;
-
 }
 
 

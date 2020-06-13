@@ -260,10 +260,11 @@ let Controls = function () {
         // do not flow if this is not needed !
         if (deltaPositionNonZero) {
             globals.position.flow(deltaPosition);
-            console.log('Flow (position)', globals.position.boost.target);
+            console.log('Flow (position)', globals.position.toLog());
 
             let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
             if (fixIndex !== -1) {
+                console.log("teleported!", fixIndex);
                 globals.cellPosition.localTranslateBy(globals.invGens[fixIndex]);
                 globals.invCellPosition.getInverse(globals.cellPosition);
             }

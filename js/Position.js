@@ -12,17 +12,18 @@
  * The G_o -orbits of a position is exactly the fiber of the map Isom(X) x SO(3) -> Frame bundle
  *
  * @module Position
+ * @todo Remove unnecessary reduceErrors (on the boost side)
  */
 
 
 import {
     Matrix3,
     Matrix4,
-    Vector3,
     Vector4
 } from "./module/three.module.js";
 
 import {
+    SL2,
     Point,
     Vector,
     Isometry
@@ -177,7 +178,6 @@ class Position {
      * @returns {Position} - the current position
      */
     flow(v) {
-
         const t = v.length();
         let aux = v.clone().normalize();
 
@@ -198,95 +198,55 @@ class Position {
         const a = Math.sqrt(1 - c * c);
 
 
-        let phi = c * t; // the angle in the fiber achieved by the geodesic (before final adjustment)
+        let phi = 2 * c * t; // the angle in the fiber achieved by the geodesic (before final adjustment)
         let omega = 0;  // the "pulsatance" involved in the geodesic flow.
+
         let point = new Point();
-        let h2_point = new Vector3(0, 0, 1);
+        let spin = new SL2().set(Math.cos(c * t), Math.sin(c * t), 0, 0);
 
-        // the geodesic flow distinguishes three cases
-        if (Math.abs(c - a) * t < 0.05) {
+        if (Math.abs(c - a) === 0) {
             // parabolic trajectory
-            // we use an asymptotic expansion of the solution around the critical case (c = a)
-            // to reduce the numerical errors
-            let a2 = a * a;
-            let omega2 = a * a - c * c;
-            let omega4 = omega2 * omega2;
-            let omega6 = omega4 * omega2;
-            let t2 = t * t;
-            let t3 = t2 * t;
-            let t4 = t3 * t;
-            let t5 = t4 * t;
-            let t6 = t5 * t;
-            let t7 = t6 * t;
-            let t8 = t7 * t;
+            point.proj.set(
+                1,
+                -0.25 * Math.sqrt(2) * t,
+                0.25 * Math.sqrt(2) * t,
+                0
+            );
+            point.proj.multiply(spin);
 
-            h2_point.set(
-                a * t + a * t3 * omega2 / 6. + a * t5 * omega4 / 120. + a * t7 * omega6 / 5040.,
-                -a * c * t2 / 2. - a * c * omega2 * t4 / 24. - a * c * omega4 * t6 / 720. - a * c * omega6 * t8 / 40320.,
-                1. + a2 * t2 / 2. + a2 * omega2 * t4 / 24. + a2 * omega4 * t6 / 720. + a2 * omega6 * t4 / 40320.
-            );
-            point.set(
-                h2_point.x,
-                h2_point.y,
-                h2_point.z,
-                phi + Math.atan2(h2_point.y, h2_point.x)
-            );
+            let tanTheta = -0.25 * Math.sqrt(2) * t;
+            point.fiber = phi + 2 * Math.atan(tanTheta);
+
         } else if (c < a) {
             // hyperbolic trajectory
             omega = Math.sqrt(a * a - c * c);
-            let T = new Matrix3().set(
-                1, 0, 0,
-                0, a / omega, -c / omega,
-                0, -c / omega, a / omega
+            point.proj.set(
+                Math.cosh(0.5 * omega * t),
+                -c / omega * Math.sinh(0.5 * omega * t),
+                a / omega * Math.sinh(0.5 * omega * t),
+                0
             );
-            let Tinv = new Matrix3().set(
-                1, 0, 0,
-                0, a / omega, c / omega,
-                0, c / omega, a / omega
-            );
-            let shift = new Matrix3().set(
-                Math.cosh(omega * t), 0, Math.sinh(omega * t),
-                0, 1, 0,
-                Math.sinh(omega * t), 0, Math.cosh(omega * t)
-            );
-            let m = new Matrix3().multiply(T).multiply(shift).multiply(Tinv);
-            h2_point.applyMatrix3(m);
+            point.proj.multiply(spin);
 
-            point.set(
-                h2_point.x,
-                h2_point.y,
-                h2_point.z,
-                phi + Math.atan2(h2_point.y, h2_point.x)
-            );
+            let tanTheta = -c / omega * Math.tanh(0.5 * omega * t);
+            point.fiber = phi + 2 * Math.atan(tanTheta);
 
-        } else {
-            // remaining case: c > a
+        } else if (c > a) {
+            // remaining case c > a
             // elliptic trajectory
             omega = Math.sqrt(c * c - a * a);
-            let T = new Matrix3().set(
-                1, 0, 0,
-                0, c / omega, -a / omega,
-                0, -a / omega, c / omega
+            point.proj.set(
+                Math.cos(0.5 * omega * t),
+                -c / omega * Math.sin(0.5 * omega * t),
+                a / omega * Math.sin(0.5 * omega * t),
+                0
             );
-            let Tinv = new Matrix3().set(
-                1, 0, 0,
-                0, c / omega, a / omega,
-                0, a / omega, c / omega
-            );
-            let rot = new Matrix3().set(
-                Math.cos(omega * t), Math.sin(omega * t), 0,
-                -Math.sin(omega * t), Math.cos(omega * t), 0,
-                0, 0, 1
-            )
-            let m = new Matrix3().multiply(T).multiply(rot).multiply(Tinv);
-            h2_point.applyMatrix3(m);
+            point.proj.multiply(spin);
 
-            point.set(
-                h2_point.x,
-                h2_point.y,
-                h2_point.z,
-                phi + Math.atan2(point.y, point.x) + 2 * Math.floor(0.5 - 0.25 * omega * t / Math.PI) * Math.PI
-            );
+            let tanTheta = -c / omega * Math.tan(0.5 * omega * t);
+            let n = Math.floor(0.5 * omega * t / Math.PI + 0.5);
+            point.fiber = phi + 2 * Math.atan(tanTheta) - 2 * n * Math.PI;
+
         }
 
         // rotate the geodesic by alpha
@@ -443,6 +403,13 @@ class Position {
         );
         return this;
     };
+
+    /**
+     * Return a human readable string for the boost component
+     */
+    toLog() {
+        return this.boost.target.toVector4();
+    }
 
     /**
      * Correct the errors in the boost and the facing

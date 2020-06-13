@@ -100,7 +100,6 @@ class SL2 extends Vector4 {
 
     /**
      * Apply the "rotation" of angle alpha centered at the origin
-     * @todo Check if this method is really needed
      * @param {number} angle - the angle of the rotation
      * @returns {SL2} - the current element
      */
@@ -118,7 +117,6 @@ class SL2 extends Vector4 {
 
     /**
      * Apply the "flip"
-     * @todo Check if this method is really needed
      * @returns {SL2} - the current element
      */
     flip() {
@@ -152,6 +150,16 @@ class SL2 extends Vector4 {
     }
 
     /**
+     * Set the current element to the inverse of the given element.
+     * @param {SL2} elt - the isometry to inverse
+     * @returns {SL2} - the current isometry
+     */
+    getInverse(elt) {
+        this.set(elt.x, -elt.y, -elt.z, -elt.w);
+        return this;
+    }
+
+    /**
      * Correct the error to make sure that the point lies on the "hyperboloid"
      * @returns {SL2}
      */
@@ -160,36 +168,29 @@ class SL2 extends Vector4 {
         this.multiplyScalar(1 / Math.sqrt(-q));
         return this;
     }
-
-
 }
 
 /**
  * Points in the universal cover X of SL(2,R)
  *
- * Extends the class Vector4 of Three.js
- * We represents these points as a 4-dim vector (x,y,z,w) where
- * - (x,y,z) are the coordinates of its projection onto H2
- * - w is the angle in the fiber
- *
- * The points of H^2 are meant in the hyperboloid model, i.e. x^2 + y^2 - z^2 = -1 and z > 0.
- * The origin is (0,0,1,0)
- *
+ * A point is given by
+ * - its projection in SL(2,R)
+ * - its fiber
+ **
  * @class
  * @public
  */
-class Point extends Vector4 {
+
+
+class Point {
 
     /**
      * Create a new point whose coordinates corresponds to the origin
      */
-    constructor(x, y, z, w) {
-        // if x,y,z,w are not set up, replace by the coordinates of the origin
-        let xaux = x || 0;
-        let yaux = y || 0;
-        let zaux = z || 1;
-        let waux = w || 0;
-        super(xaux, yaux, zaux, waux);
+    constructor() {
+        this.proj = new SL2();
+        this.proj.set(1, 0, 0, 0);
+        this.fiber = 0.;
     }
 
     /**
@@ -198,32 +199,18 @@ class Point extends Vector4 {
      * @returns {Point} - the current point
      */
     rotateBy(angle) {
-        let m = new Matrix4().set(
-            Math.cos(angle), -Math.sin(angle), 0, 0,
-            Math.sin(angle), Math.cos(angle), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1,
-            )
-        ;
-        this.applyMatrix4(m);
-        this.reduceError();
+        this.proj.rotateBy(angle);
         return this;
     }
 
     /**
-     * Apply the flip (x,y,z,w) -> (y,x,z,-w) to the current point
+     * Apply the flip to the current point
      * @see Jupyter Notebook
      * @returns {Point} - the current point
      */
     flip() {
-        let m = new Matrix4().set(
-            0, 1, 0, 0,
-            1, 0, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, -1
-        );
-        this.applyMatrix4(m);
-        this.reduceError();
+        this.proj.flip();
+        this.fiber = -this.fiber;
         return this;
     }
 
@@ -232,18 +219,37 @@ class Point extends Vector4 {
      * @returns {SL2} - the image of the point in SL(2,R)
      */
     toSL2() {
-        // image of the section from H^2 to SL(2,R)
-        let res = new SL2().set(
-            Math.sqrt(0.5 * this.z + 0.5),
-            0,
-            this.x / Math.sqrt(2. * this.z + 2.),
-            this.y / Math.sqrt(2. * this.z + 2.),
-        );
-        // translate the section along the fiber
-        res.translateFiberBy(this.w);
-        // return the result
-        return res;
+        return this.proj.clone();
     }
+
+    /**
+     * Return the current point as an element (x,y,z,w) of H^2 x R, where
+     * - (x,y,z) are th coordinates of a point of H^2 with the hyperboloid model
+     * - w is the fiber component
+     * @returns {Vector4}
+     */
+    toVector4() {
+        let aux = this.proj.toH2();
+        return new Vector4(aux.x, aux.y, aux.z, this.fiber);
+
+    }
+
+    /**
+     * Return the current point as an element (x,y,1,w) of H^2 x R, where
+     * - (x,y,1) are th coordinates of a point of H^2 with the Klein model
+     * - w is the fiber component
+     * @returns {Vector4}
+     */
+    toKlein() {
+        let aux = this.toVector4();
+        return new Vector4(
+            aux.x / aux.z,
+            aux.y / aux.z,
+            1,
+            aux.w
+        );
+    }
+
 
     /**
      * Return the isometry that moves the origin to the current point
@@ -272,20 +278,51 @@ class Point extends Vector4 {
      * @returns {Point}
      */
     reduceError() {
-        let q = Math.pow(this.x, 2) + Math.pow(this.y, 2) - Math.pow(this.z, 2);
-        this.x = this.x / Math.sqrt(-q);
-        this.y = this.y / Math.sqrt(-q);
-        this.z = this.z / Math.sqrt(-q);
+        this.proj.reduceError();
         return this;
     }
+
+
+    /**
+     * Return an encoding of the point that can be passed to the shader
+     * @returns {Vector4} - the "encoded" isometry
+     */
+    serialize() {
+        return this.toVector4();
+    }
+
+    /**
+     * Return a copy of the current point
+     * @returns {Point}
+     */
+    clone() {
+        let res = new Point()
+        res.proj = this.proj.clone();
+        res.fiber = this.fiber;
+        return res;
+    }
+
+
+    /**
+     * Copy the given point in the current one
+     * @param {Point} point - the point to copy
+     * @returns {Point} - the current point
+     */
+    copy(point) {
+        this.proj.copy(point.proj);
+        this.fiber = point.fiber;
+        return this;
+    }
+
 }
+
 
 /**
  * @constant {Point} ORIGIN - Origin of the space
  * @todo Since the constructor of Point return the origin by default, this constant is maybe not needed
  */
 const ORIGIN = new Point();
-console.log('ORIGIN',ORIGIN);
+console.log('ORIGIN', ORIGIN);
 
 /**
  * Tangent vector at the origin of X
@@ -372,32 +409,6 @@ class Isometry {
      */
     set(data) {
         this.target = data[0].clone();
-    }
-
-    /**
-     * Set the current object to the isometry moving the origin to the point (x,y,z,w)
-     * @param {number} x - the first coordinates of the point to achieve
-     * @param {number} y - the second coordinates of the point to achieve
-     * @param {number} z - the third coordinates of the point to achieve
-     * @param {number} w - the last coordinates of the point to achieve
-     * @returns {Isometry} - the current isometry
-     */
-    makeTranslation(x, y, z, w) {
-        this.target.set(x, y, z, w);
-        return this;
-    }
-
-    /**
-     * Set the current object to the isometry moving the point (x,y,z,w) to the origin
-     * @param {number} x - the first coordinates of the point
-     * @param {number} y - the second coordinates of the point
-     * @param {number} z - the third coordinates of the point
-     * @param {number} w - the last coordinates of the point
-     * @returns {Isometry} - the current isometry
-     */
-    makeInvTranslation(x, y, z, w) {
-        let isom = new Isometry().makeTranslation(x, y, z, w);
-        this.getInverse(isom);
         return this;
     }
 
@@ -407,22 +418,14 @@ class Isometry {
      * @returns {Isometry} - the current isometry
      */
     premultiply(isom) {
-        let aux1SL = isom.target.toSL2();
-        let aux2SL = this.target.toSL2();
+        // multiplication of the element in SL(2,R)
+        this.target.proj.premultiply(isom.target.proj);
 
-        aux2SL.premultiply(aux1SL);
-        aux2SL.translateFiberBy(-this.target.w - isom.target.w);
-        let point = aux2SL.toH2();
+        // computing the new fiber component
+        let aux = this.target.proj.clone();
+        aux.translateFiberBy(-this.target.fiber - isom.target.fiber);
+        this.target.fiber = this.target.fiber + isom.target.fiber + 2 * Math.atan2(aux.y, aux.x);
 
-        // update the data
-        this.target.set(
-            point.x,
-            point.y,
-            point.z,
-            this.target.w + isom.target.w + 2 * Math.atan2(aux2SL.y, aux2SL.x)
-        );
-
-        this.target.reduceError();
         return this;
     }
 
@@ -432,22 +435,14 @@ class Isometry {
      * @returns {Isometry} - the current isometry
      */
     multiply(isom) {
-        let aux1SL = this.target.toSL2();
-        let aux2SL = isom.target.toSL2();
+        // multiplication of the element in SL(2,R)
+        this.target.proj.multiply(isom.target.proj);
 
-        aux2SL.premultiply(aux1SL);
-        aux2SL.translateFiberBy(-this.target.w - isom.target.w);
-        let h2_point = aux2SL.toH2();
+        // computing the new fiber component
+        let aux = this.target.proj.clone();
+        aux.translateFiberBy(-this.target.fiber - isom.target.fiber);
+        this.target.fiber = this.target.fiber + isom.target.fiber + 2 * Math.atan2(aux.y, aux.x);
 
-        // update the data
-        this.target.set(
-            h2_point.x,
-            h2_point.y,
-            h2_point.z,
-            this.target.w + isom.target.w + 2 * Math.atan2(aux2SL.y, aux2SL.x)
-        );
-
-        this.target.reduceError();
         return this;
     };
 
@@ -457,28 +452,8 @@ class Isometry {
      * @returns {Isometry} - the current isometry
      */
     getInverse(isom) {
-        // rotate the H^2 component of the isometry
-        let r4 = new Matrix4().makeRotationAxis(
-            new Vector3(0, 0, 1),
-            Math.PI - isom.w
-        );
-        let r3 = new Matrix3().setFromMatrix4(r4);
-        let h2_point = new Vector3().set(
-            isom.target.x,
-            isom.target.y,
-            isom.target.z
-        );
-        h2_point.applyMatrix3(r3);
-
-        // update the H^2 component and flip the fiber component
-        this.target.set(
-            h2_point.x,
-            h2_point.y,
-            h2_point.z,
-            -isom.w
-        );
-
-        this.target.reduceError();
+        this.target.proj.getInverse(isom.target.proj);
+        this.target.fiber = -isom.target.fiber;
         return this;
     }
 
@@ -491,7 +466,7 @@ class Isometry {
      * @returns {Vector4} - the isometry as a Vector4
      */
     toVector4() {
-        return this.target.clone();
+        return this.target.toVector4();
     }
 
     /**
@@ -499,7 +474,16 @@ class Isometry {
      * @returns {Vector4} - the "encoded" isometry
      */
     serialize() {
-        return this.toVector4()
+        return this.toVector4();
+    }
+
+    /**
+     * Correct the point so that the H^2 component stays on the hyperboloid.
+     * @returns {Isometry}
+     */
+    reduceError() {
+        this.target.proj.reduceError();
+        return this;
     }
 
     /**
@@ -526,5 +510,6 @@ export {
     Point,
     Vector,
     Isometry,
+    SL2,
     ORIGIN
 }
