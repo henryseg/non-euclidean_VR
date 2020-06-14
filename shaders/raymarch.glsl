@@ -668,7 +668,7 @@ Vector createVector(Point p, vec3 dp) {
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
-    /*
+
     Isometry isom = makeInvLeftTranslation(p1);
     vec4 aux = toVec4(translate(isom, p2));
     vec3 oh = vec3(0, 0, 1);
@@ -678,12 +678,13 @@ float fakeDistance(Point p1, Point p2){
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    //return sqrt(pow(acosh(-q), 2.) + pow(p1.fiber - p2.fiber, 2.));
     return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
-    */
+
+    /*
     vec4 aux1 = toVec4(p1);
     vec4 aux2 = toVec4(p2);
     return length(aux2 - aux1);
+    */
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -1847,7 +1848,11 @@ vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 li
     float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
     //Compute final color
 
+    // DEBUGGING
     return att*((diffuse*baseColor) + specular);
+    //return R.dir;
+    //return vec3(distToLight);
+    //return abs(vec3(min(distToLight, 0.5)));
 }
 
 vec3 phongModel(Isometry totalFixMatrix, vec3 color){
@@ -1870,19 +1875,16 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
 
-
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
-        //TLP = translate(totalFixMatrix, unserializePoint(lightPositions[i]));
-        //TLP = unserializePoint(lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     }
-    
+
 
     //LOCAL LIGHT
     //color += lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
-    color += 10. * lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    color += 2. * lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
     //light color and intensity hard coded in
 
     /*

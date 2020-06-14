@@ -77,16 +77,13 @@ function fixOutsideCentralCell(position) {
         bestIndex = 8;
     }
 
-    /*
+
     if (bestIndex !== -1) {
         position.translateBy(globals.gens[bestIndex]);
         return bestIndex;
     } else {
         return -1;
     }
-    */
-
-     return -1;
 }
 
 
@@ -226,12 +223,12 @@ function initGeometry() {
 
     globals.position = new Position();
     // DEBUGGING
-    globals.position.boost.target = new Point().fromVector4(new Vector4(
-        64.59408189989722,
-        1653.9094370314726,
-        1655.1706320854817,
-        -1.6737163223953442
-    ));
+    // globals.position.boost.target = new Point().fromVector4(new Vector4(
+    //     64.59408189989722,
+    //     1653.9094370314726,
+    //     1655.1706320854817,
+    //     -1.6737163223953442
+    // ));
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();
