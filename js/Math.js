@@ -278,7 +278,7 @@ function setupMaterial(fShader) {
                 // value of the table will be setup below
                 type: "t"
             },
-            /*
+
             lookupTableTheta: {
                 // value of the table will be setup below
                 type: "t"
@@ -287,7 +287,7 @@ function setupMaterial(fShader) {
                 // value of the table will be setup below
                 type: "t"
             },
-             */
+
             lookupTableUX: {
                 // value of the table will be setup below
                 type: "t"
@@ -327,8 +327,8 @@ function setupMaterial(fShader) {
     //let file = 'euc';
     //let file = 'testhgp';
     //let file = 'texsym';
-    //let file = 'test';
-    let file = 'another';
+    let file = 'test';
+    //let file = 'another';
 
     // TODO. Factorize this!
     new NRRDLoader().load("../texture/" + file + "_x.nrrd", function (volume) {
@@ -358,7 +358,6 @@ function setupMaterial(fShader) {
         globals.material.uniforms.lookupTableZ.value = texture;
         textureStatus += 1;
     });
-    /*
     new NRRDLoader().load("../texture/" + file + "_theta.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
         texture.format = RedFormat;
@@ -379,7 +378,7 @@ function setupMaterial(fShader) {
         globals.material.uniforms.lookupTablePhi.value = texture;
         textureStatus += 1;
     });
-     */
+    /*
     new NRRDLoader().load("../texture/" + file + "_ux.nrrd", function (volume) {
         let texture = new DataTexture3D(volume.data, volume.xLength, volume.yLength, volume.zLength);
         texture.format = RedFormat;
@@ -407,6 +406,8 @@ function setupMaterial(fShader) {
         globals.material.uniforms.lookupTableUZ.value = texture;
         textureStatus += 1;
     });
+    */
+
 }
 
 

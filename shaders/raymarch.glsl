@@ -13,7 +13,7 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights, 
-const bool GLOBAL_SCENE=true;
+const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
@@ -536,11 +536,11 @@ tangVector flow(tangVector tv, float t){
 uniform highp sampler3D lookupTableX;
 uniform highp sampler3D lookupTableY;
 uniform highp sampler3D lookupTableZ;
-//uniform highp sampler3D lookupTableTheta;
-//uniform highp sampler3D lookupTablePhi;
-uniform highp sampler3D lookupTableUX;
-uniform highp sampler3D lookupTableUY;
-uniform highp sampler3D lookupTableUZ;
+uniform highp sampler3D lookupTableTheta;
+uniform highp sampler3D lookupTablePhi;
+//uniform highp sampler3D lookupTableUX;
+//uniform highp sampler3D lookupTableUY;
+//uniform highp sampler3D lookupTableUZ;
 uniform int timeSlices;
 uniform float margin1;
 uniform float margin2;
@@ -621,15 +621,16 @@ localTangVector flow(localTangVector tv, int marchStepIndex) {
     // isom to move to the starting point
     Isometry isom = makeLeftTranslation(tv);
 
+
     // move the tangent vector in the positive quadrant
     // record the isometry moving the tangent vector back to its initial position
     Isometry fixQuadrant;
     vec4 posDir = tv.dir;
     posDir = movePosQuadrant(posDir, fixQuadrant);
 
-    /*
 
-    Address used with a texture in spherical coordinates
+
+    //Address used with a texture in spherical coordinates
 
     // address of the vexel to look at in the pictures
     // sph has coordinates (r,theta, phi, 0.)
@@ -653,8 +654,9 @@ localTangVector flow(localTangVector tv, int marchStepIndex) {
     // packaging the result
     vec4 newPos = vec4(x, y, z, 1.);
     vec4 newLocalDir = sph2car(vec4(1., theta, phi, 0.));
-    */
 
+
+    /*
     vec2 loc = pToLocal(radProj(posDir));
     float s = float(marchStepIndex)/ float(timeSlices + 1);
     vec3 address = vec3 ((margin1 + loc.x) / (1. + 2. * margin1), (margin2 + loc.y) / (1. + 2. * margin2), s);
@@ -670,6 +672,7 @@ localTangVector flow(localTangVector tv, int marchStepIndex) {
     // packaging the result
     vec4 newPos = vec4(x, y, z, 1.);
     vec4 newLocalDir = vec4(ux, uy, uz, 0.);
+    */
 
     // undo the initial symmetries (that moved the tangent vector to the positive quadrant)
     // note that fixIsom is not an element of the "Sol group R^3"
@@ -773,9 +776,9 @@ float sliceSDF(vec4 p){
 //--------------------------------------------
 //Global Constants
 //--------------------------------------------
-const int MAX_MARCHING_STEPS =  80;
+const int MAX_MARCHING_STEPS =  300;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 50.0;
+const float MAX_DIST = 100.0;
 const float MAX_STEP_DIST = 0.9;// Maximal length of a step... depends of the generated texture.
 const float EPSILON = 0.0001;
 //const float EPSILON = 0.051;
@@ -897,8 +900,8 @@ float globalSceneSDF(vec4 p){
 
 
     vec4 globalObjPos=translate(globalObjectBoost, ORIGIN);
-    objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
-    //objDist = sphereSDF(absolutep, globalObjPos,0.1);
+    //objDist = sphereSDF(absolutep, vec4(sqrt(6.26), sqrt(6.28), 0., 1.), globalSphereRad);
+    objDist = sphereSDF(absolutep, globalObjPos,0.3);
 
     distance = min(distance, objDist);
     if (distance < EPSILON){
