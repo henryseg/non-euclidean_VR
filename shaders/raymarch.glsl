@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -46,7 +46,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-int MAX_MARCHING_STEPS =  120;
+int MAX_MARCHING_STEPS =  60;//120;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
@@ -1870,6 +1870,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
 
+
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
@@ -1877,10 +1878,11 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
         //TLP = unserializePoint(lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     }
+    
 
     //LOCAL LIGHT
     //color += lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
-    color += 2. * lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    color += 10. * lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
     //light color and intensity hard coded in
 
     /*

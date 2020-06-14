@@ -213,6 +213,17 @@ class Point {
     }
 
     /**
+     * Translate the point in the fiber by the given angle
+     * @param {number} phi - the angle to translate
+     * @returns {Point}
+     */
+    translateFiberBy(phi) {
+        this.proj.translateFiberBy(phi);
+        this.fiber = this.fiber + phi;
+    }
+
+
+    /**
      * Covering map from X to SL(2,R)
      * @returns {SL2} - the image of the point in SL(2,R)
      */
@@ -246,6 +257,25 @@ class Point {
             1,
             aux.w
         );
+    }
+
+    /**
+     * Set the current point to the point described by (x,y,z,w) in H^2 x R, where
+     * - (x,y,z) are th coordinates of a point of H^2 with the hyperboloid model
+     * - w is the fiber component
+     * @param {Vector4} vec - the point in H^2 x R
+     * @returns {Point}
+     */
+    fromVector4(vec) {
+        this.proj.set(
+            Math.sqrt(0.5 * vec.z + 0.5),
+            0.,
+            vec.x / Math.sqrt(2. * vec.z + 2.),
+            vec.y / Math.sqrt(2. * vec.z + 2.)
+        )
+        this.fiber = 0;
+        this.translateFiberBy(vec.w);
+        return this;
     }
 
 
