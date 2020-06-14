@@ -45,6 +45,7 @@ function fixOutsideCentralCell(position) {
     let nd2 = new Vector4().set(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
     let nfiber = new Vector4().set(0, 0, 0, 1);
 
+
     if (klein.dot(nh) > threshold) {
         bestIndex = 1;
     }
@@ -422,12 +423,12 @@ function updateMaterial() {
     globals.material.uniforms.invCellBoostMat.value = globals.invCellPosition.boost.serialize();
 
     let vectorLeft = globals.position.getRightVector(-globals.ipDist);
-    //globals.leftPosition = globals.position.clone().flow(vectorLeft);
+    globals.leftPosition = globals.position.clone().flow(vectorLeft);
     globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.serialize();
     globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
 
     let vectorRight = globals.position.getRightVector(globals.ipDist);
-    //globals.rightPosition = globals.position.clone().flow(vectorRight);
+    globals.rightPosition = globals.position.clone().flow(vectorRight);
     globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.serialize();
     globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
 

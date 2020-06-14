@@ -264,9 +264,9 @@ let Controls = function () {
 
             let fixIndex = fixOutsideCentralCell(globals.position); //moves camera back to main cell
             if (fixIndex !== -1) {
-                console.log("teleported!", fixIndex);
                 globals.cellPosition.localTranslateBy(globals.invGens[fixIndex]);
-                globals.invCellPosition.getInverse(globals.cellPosition);
+                globals.invCellPosition.translateBy(globals.gens[fixIndex]);
+                //globals.invCellPosition.getInverse(globals.cellPosition);
             }
         }
 

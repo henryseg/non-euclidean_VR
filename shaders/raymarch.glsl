@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -726,6 +726,17 @@ float exactDist(Vector v1, Vector v2){
 
 // return the tangent vector at p point to q
 Vector tangDirection(Point p, Point q){
+    // isometry moving back p to the origin
+    Isometry isom = makeInvLeftTranslation(p);
+    // translation of q at the origin
+    Point qAtOrigin = translate(isom, q);
+    vec4 aux = toVec4(qAtOrigin);
+    Vector res = Vector(p, aux.xyw);
+    res = tangNormalize(res);
+    return res;
+
+
+    /*
     vec4 auxp = toVec4(p);
     vec4 auxq = toVec4(q);
     mat4 dLinv = diffInvTranslation(p);
@@ -733,6 +744,7 @@ Vector tangDirection(Point p, Point q){
     Vector res = Vector(p, (dLinv * global_dir).xyw);
     res = tangNormalize(res);
     return res;
+    */
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -1497,16 +1509,16 @@ Vector estimateNormal(Point p) {
 
     if (hitWhich != 3){
         // little hack, otherwise the shader collaspe when there are too many objets in the scene.
+        /*
         float ref = globalSceneSDF(p);
         float vgx = globalSceneSDF(shiftPX) - ref;
         float vgy = globalSceneSDF(shiftPY) - ref;
         float vgz = globalSceneSDF(shiftPZ) - ref;
+        */
         //global light scene
-        /*
         float vgx = globalSceneSDF(shiftPX) - globalSceneSDF(shiftMX);
         float vgy = globalSceneSDF(shiftPY) - globalSceneSDF(shiftMY);
         float vgz = globalSceneSDF(shiftPZ) - globalSceneSDF(shiftMZ);
-        */
         n = createVector(p, vec3(vgx, vgy, vgz));
     }
     else { //local scene
@@ -1843,8 +1855,6 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     Point TLP;//translated light position
     Vector V = turnAround(sampletv);
 
-
-
     vec3 surfColor;
     surfColor = 0.2 * vec3(1.) + 0.8 * color;
 
@@ -1860,17 +1870,17 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
 
-
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
         TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
+        //TLP = translate(totalFixMatrix, unserializePoint(lightPositions[i]));
+        //TLP = unserializePoint(lightPositions[i]);
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     }
 
-
     //LOCAL LIGHT
     //color += lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
-    color += 2. *lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    color += 2. * lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
     //light color and intensity hard coded in
 
     /*
@@ -1962,6 +1972,10 @@ vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
     //color the object based on its position in the cube
     Point samplePos=modelProject(sampletv.pos);
 
+    vec4 aux4 = abs(toVec4(samplePos));
+    vec3 color = 1.1 * aux4.xyw / length(aux4.xyw);
+
+    /*
     //IF WE HIT THE TILING
     vec4 aux = toVec4(samplePos);
     float x=aux.x;
@@ -1971,6 +1985,7 @@ vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
     y = 0.9 * y / modelHalfCube;
     z = 0.9 * z / modelHalfCube;
     vec3 color = vec3(x, y, z);
+    */
 
     N = estimateNormal(sampletv.pos);
     color = phongModel(totalFixMatrix, 0.1*color);
