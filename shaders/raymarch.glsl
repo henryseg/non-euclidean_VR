@@ -618,7 +618,7 @@ Point smallShift(Point p, vec3 dp) {
     vec4 SLdirAtP =  SLtoMatrix4(p.proj) * SLdirAtOrigin;
 
     // fiber component of the direction pushed at p
-    float den = p.proj.x * p.proj.x + p.proj.y + p.proj.y;
+    float den = p.proj.x * p.proj.x + p.proj.y * p.proj.y;
     float coeffX = (p.proj.x * p.proj.w - p.proj.y * p.proj.z) / den;
     float coeffY = -(p.proj.x * p.proj.z + p.proj.y * p.proj.w) / den;
     float dfiberAtP = coeffX * dp.x + coeffY * dp.y + dp.z;
