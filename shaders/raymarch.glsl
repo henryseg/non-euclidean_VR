@@ -13,7 +13,7 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
+const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
@@ -46,7 +46,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-int MAX_MARCHING_STEPS =  60;//120;
+int MAX_MARCHING_STEPS =  60;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
@@ -257,7 +257,7 @@ struct Point {
 // origin of the space
 // - the projection corresponds to the identity in SL(2,R)
 // - the fiber component is zero
-const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);
+const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.1);
 
 // change of model
 // the input is a vector (x,y,z,w) representing a point p where
@@ -727,6 +727,8 @@ float exactDist(Vector v1, Vector v2){
 
 // return the tangent vector at p point to q
 Vector tangDirection(Point p, Point q){
+
+
     // isometry moving back p to the origin
     Isometry isom = makeInvLeftTranslation(p);
     // translation of q at the origin
@@ -742,6 +744,7 @@ Vector tangDirection(Point p, Point q){
     vec4 auxq = toVec4(q);
     mat4 dLinv = diffInvTranslation(p);
     vec4 global_dir = auxq - auxp;
+    global_dir = global_dir / length(global_dir);
     Vector res = Vector(p, (dLinv * global_dir).xyw);
     res = tangNormalize(res);
     return res;
@@ -1111,6 +1114,7 @@ float localSceneSDF(Point p){
     */
 
 
+
     // Tiling
 
     tilingDist = -ellipsoidSDF(p, 1.8, 2.5);
@@ -1156,6 +1160,7 @@ float globalSceneSDF(Point p){
     }
 
 
+    /*
     //Global Sphere Object
     Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
     objDist = sphereSDF(absolutep, globalObjPos1, 0.3);
@@ -1165,6 +1170,7 @@ float globalSceneSDF(Point p){
         hitWhich = 2;
         return distance;
     }
+    */
 
     return distance;
 }
@@ -1544,7 +1550,7 @@ Vector estimateNormal(Point p) {
 // done with general vectors
 
 
-int BINARY_SEARCH_STEPS=4;
+int BINARY_SEARCH_STEPS=10;
 
 void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
 
@@ -1692,6 +1698,8 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
+        /*
+        // VERSION WITHOUT CREEPING
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
             if (isOutsideCell(localtv, fixMatrix)){
@@ -1711,59 +1719,50 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
         }
 
         localDepth=min(globalDepth, MAX_DIST);
+        */
 
-        /*
+
         // TODO. VERSION TO BE CHECKED...
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             float localDist = localSceneSDF(localtv.pos);
-
-
             if (localDist < EPSILON){
-                sampletv = toTangVector(localtv);
+                sampletv = localtv;
+                //distToViewer=localDepth;
                 break;
             }
             marchStep = localDist;
-
-            //localtv = flow(localtv, marchStep);
-
-            //            if (isOutsideCell(localtv, fixMatrix)){
-            //                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-            //                localtv = translate(fixMatrix, localtv);
-            //                localtv=tangNormalize(localtv);
-            //                marchStep = MIN_DIST;
-            //            }
 
             testlocaltv = flow(localtv, marchStep);
             if (isOutsideCell(testlocaltv, fixMatrix)){
                 bestlocaltv = testlocaltv;
 
+                //commenting out this for loop brings us back to what we were doing before...
                 for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
-                    ////// do binary search to get close to but outside this cell -
-                    ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
-                    testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
+                    // do binary search to get close to but outside this cell -
+                    // dont jump too far forwards, since localSDF can't see stuff in the next cube
+                    testMarchStep = marchStep - pow(0.5, float(j+1))*localDist;
                     testlocaltv = flow(localtv, testMarchStep);
-                    if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+                    if (isOutsideCell(testlocaltv, testFixMatrix)){
                         marchStep = testMarchStep;
                         bestlocaltv = testlocaltv;
                         fixMatrix = testFixMatrix;
                     }
                 }
-
                 localtv = bestlocaltv;
                 totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
                 localtv = translate(fixMatrix, localtv);
-                localtv=tangNormalize(localtv);
-                //globalDepth += marchStep;
+                localDepth += marchStep;
                 marchStep = MIN_DIST;
             }
 
-            else{
+            else {
                 localtv = testlocaltv;
-                globalDepth += marchStep;
+                localDepth += marchStep;
             }
         }
-        localDepth=min(globalDepth, MAX_DIST);
-        */
+
+        localDepth=min(localDepth, MAX_DIST);
+
 
     }
     else {
@@ -1834,25 +1833,37 @@ Point modelProject(Point p){
 //----------------------------------------------------------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
 vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 lightIntensity){
-    //Calculations - Phong Reflection Model
-    Vector L = tangDirection(SP, TLP);
-    Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
-    //Calculate Diffuse Component
-    float nDotL = max(cosAng(N, L), 0.0);
-    vec3 diffuse = lightIntensity.rgb * nDotL;
-    //Calculate Specular Component
-    float rDotV = max(cosAng(R, V), 0.0);
-    vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
-    //Attenuation - Of the Light Intensity
+    // Distance to the light
+    // Small hack:
+    // if the light is too far (and the related computations could create numerical erroe such as nan),
+    // then we simply ignore it
     float distToLight = fakeDistance(SP, TLP);
-    float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
-    //Compute final color
 
-    // DEBUGGING
-    return att*((diffuse*baseColor) + specular);
-    //return R.dir;
-    //return vec3(distToLight);
-    //return abs(vec3(min(distToLight, 0.5)));
+    if (distToLight < 1000.) {
+        //Calculations - Phong Reflection Model
+        Vector L = tangDirection(SP, TLP);
+        Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
+        //Calculate Diffuse Component
+        float nDotL = max(cosAng(N, L), 0.0);
+        vec3 diffuse = lightIntensity.rgb * nDotL;
+        //Calculate Specular Component
+        float rDotV = max(cosAng(R, V), 0.0);
+        vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
+        //Attenuation - Of the Light Intensity
+
+        float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
+        //Compute final color
+
+        // DEBUGGING
+        return att*((diffuse*baseColor) + specular);
+        //return L.dir;
+        //return vec3(distToLight);
+    }
+    else {
+        return vec3(0);
+    }
+
+
 }
 
 vec3 phongModel(Isometry totalFixMatrix, vec3 color){
@@ -1874,6 +1885,15 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
     //however this is version is hardcoded so we won't
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
+
+    // DEBUGGING
+    /*
+    int i = 0;
+    Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
+    TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
+    color = lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
+    */
+
 
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
@@ -1976,10 +1996,12 @@ vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
     //color the object based on its position in the cube
     Point samplePos=modelProject(sampletv.pos);
 
-    vec4 aux4 = abs(toVec4(samplePos));
-    vec3 color = 1.1 * aux4.xyw / length(aux4.xyw);
-
     /*
+    vec4 aux4 = abs(toVec4(samplePos));
+    vec3 color = abs(tanh(aux4.xyw));
+    //vec3 color = 1.1 * aux4.xyw / length(aux4.xyw);
+    */
+
     //IF WE HIT THE TILING
     vec4 aux = toVec4(samplePos);
     float x=aux.x;
@@ -1989,7 +2011,7 @@ vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
     y = 0.9 * y / modelHalfCube;
     z = 0.9 * z / modelHalfCube;
     vec3 color = vec3(x, y, z);
-    */
+
 
     N = estimateNormal(sampletv.pos);
     color = phongModel(totalFixMatrix, 0.1*color);

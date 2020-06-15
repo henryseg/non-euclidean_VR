@@ -77,7 +77,6 @@ function fixOutsideCentralCell(position) {
         bestIndex = 8;
     }
 
-
     if (bestIndex !== -1) {
         position.translateBy(globals.gens[bestIndex]);
         return bestIndex;
@@ -275,8 +274,8 @@ const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
  */
 function initObjects() {
 
-    PointLightObject(new Vector().set(1., 1.5, 0), lightColor1);
-    PointLightObject(new Vector().set(-1, 1.5, 0), lightColor2);
+    PointLightObject(new Vector().set(1.2, 1.3, 0), lightColor1);
+    PointLightObject(new Vector().set(-1.2, 1.3, 0), lightColor2);
     PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
     let p = new Point();
