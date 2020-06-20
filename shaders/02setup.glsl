@@ -80,8 +80,8 @@ const float fov = 90.0;
 //this function resets the constants above in terms of the uniforms; its called in main
 void setResolution(float UIVar){
     //UIVar goes between 0 for low res and 1 for high res
-        MAX_MARCHING_STEPS =  int(50.+200.*UIVar);
-        MAX_DIST = 100.+400.*UIVar;
+        MAX_MARCHING_STEPS =  int(50.+400.*UIVar);
+        MAX_DIST = 100.+600.*UIVar;
     
         MAX_REFL_STEPS= int(30.+60.*UIVar);
         MAX_REFL_DIST=50.+50.*UIVar;

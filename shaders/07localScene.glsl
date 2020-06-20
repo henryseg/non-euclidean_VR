@@ -6,15 +6,37 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 //Local Light Positions----------------------------------------
+//float localSceneLights(vec4 p){
+//    //this just draws one copy of the local light.
+//    //no problem if the light stays in a fundamental domain the whole time.
+//    //if light is moving between domains; is more useful to draw thee six neighbors as well, much  like is done for the local sphere object centered on you, below.
+//    
+//    return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
+//                     //lightRad);
+//    
+//}
+
+
 float localSceneLights(vec4 p){
-    //this just draws one copy of the local light.
-    //no problem if the light stays in a fundamental domain the whole time.
-    //if light is moving between domains; is more useful to draw thee six neighbors as well, much  like is done for the local sphere object centered on you, below.
+    //want to draw a single sphere: but the problem is, that when  you  move  around it passes through a wall of the fundamental  domain and gets all noisey for a second.
+    //solution: draw six images of the thing surrounding your central cube; most of the time they'll be overrlapping but when it crosses a fundamental domain wall this will  fix the issue.
     
-    return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
-                     //lightRad);
+    vec4 objPos;
+    float sphDist;
+    
+    float dist=sphereSDF(p,localLightPos,0.05);
+    
+    for (int i=0; i<6; i++) {
+        objPos=invGenerators[i]*localLightPos;
+        sphDist=sphereSDF(p,objPos, 0.05);
+        dist=min(sphDist,dist);
+    }
+    
+    return dist;
     
 }
+
+
 
 
 
@@ -97,7 +119,7 @@ float latticeSceneSDF(vec4 p){
     
    // return sphereSDF(p,ORIGIN,0.2);
   
-return ellipsoidSDF(p, ORIGIN, 0.2,0.2,0.2);
+return sphereSDF(p, ORIGIN, 0.2);
 }
 
 
@@ -163,18 +185,18 @@ float localSceneSDF(vec4 p,float threshhold){
         }
 
     
-    if(yourRad>0.001){
-    //now do the same thing for the object
-    objDist=locSphere(p);
-    distance = min(distance, objDist);
-    
-        if (objDist<threshhold){
-            hitLocal=true;
-            hitWhich=4;
-            
-            return objDist;
-        }
-    }
+//    if(yourRad>0.001){
+//    //now do the same thing for the object
+//    objDist=locSphere(p);
+//    distance = min(distance, objDist);
+//    
+//        if (objDist<threshhold){
+//            hitLocal=true;
+//            hitWhich=4;
+//            
+//            return objDist;
+//        }
+//    }
 
 
     return distance;
