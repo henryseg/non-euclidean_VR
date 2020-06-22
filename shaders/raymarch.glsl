@@ -666,9 +666,25 @@ Vector createVector(Point p, vec3 dp) {
   Methods computing ``global'' objects
 */
 
+
+float _fakeDistToOrigin(Point p) {
+    vec4 aux = toVec4(p);
+    vec3 oh = vec3(0, 0, 1);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux.xyz, J * oh);
+    return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+}
+
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
+    Isometry isom = makeInvLeftTranslation(p1);
+    return _fakeDistToOrigin(translate(isom, p2));
 
+    /*
     Isometry isom = makeInvLeftTranslation(p1);
     vec4 aux = toVec4(translate(isom, p2));
     vec3 oh = vec3(0, 0, 1);
@@ -679,6 +695,7 @@ float fakeDistance(Point p1, Point p2){
     );
     float q = dot(aux.xyz, J * oh);
     return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+    */
 
     /*
     vec4 aux1 = toVec4(p1);
@@ -692,20 +709,223 @@ float fakeDistance(Vector v1, Vector v2){
     return fakeDistance(v1.pos, v2.pos);
 }
 
+
+//-----------------------------------------------------------------------
+// Binary search / Newton method for computing the exact distance
+//-----------------------------------------------------------------------
+
+
+// TODO. Use asymptotic expansion around the parabolic type geodesics?
+
+// Consider a minimizing geodesic gamma starting at the origin
+// with tangent vector of the form (a,0,c)
+// The function takes as an input rho -- given as sinh(rho/2)^2 -- theta and phi
+// where rho and phi are thought of as fixed parameters
+// and returns a decreasing function of theta which vanishes
+// when the point with polar coordinates (rho, theta, phi) is on the geodesic
+// Warning : this function is not defined for every theta
+float fiberHeight(float shRhoOver2SQ, float theta, float phi) {
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+    float tanTheta = tan(theta);
+    float tanThetaSQ = pow(tanTheta, 2.);
+    float z;
+    float res;
+    if (abs(theta) < 0.5 * PI) {
+        if (abs(tanTheta) < shRhoOver2){
+            z = sqrt(shRhoOver2SQ - tanThetaSQ) / chRhoOver2;
+            res = (theta - 0.5 * phi)  - 2. *  tanTheta * atanh(z) / z;
+        }
+        else if (abs(tanTheta) == shRhoOver2) {
+            res = (theta - 0.5 * phi) - 2. * tanTheta;
+        }
+        else if (abs(tanTheta) > shRhoOver2){
+            z = sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2;
+            res = (theta - 0.5 * phi) - 2. * tanTheta * atan(z) / z;
+        }
+    }
+    else if (abs(theta) == 0.5 * PI) {
+        res = - 0.5 * phi - sign(theta) * PI * (chRhoOver2 - 0.5);
+    }
+    else {
+        z = sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2;
+        res = (theta - 0.5 * phi) - 2. * tanTheta * (atan(z)-PI) / z;
+    }
+    return res;
+}
+
+// Consider a minimizing geodesic gamma starting at the origin with tangent vector of the form (a,0,c)
+// Assume that after time t its polar coordinates are (rho, theta, phi).
+// The function takes as an input rho -- given as sinh(rho/2)^2 -- theta and phi
+// and returns (a,c,t) in a vec3
+vec3 computeParams(float shRhoOver2SQ, float theta, float phi){
+
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+
+    float tanTheta = tan(theta);
+    float tanThetaSQ = pow(tanTheta, 2.);
+
+    float omega;
+    float omega2;
+    float a;
+    float c;
+    float t;
+
+    if (abs(tanTheta) < shRhoOver2) {
+        // hyperbolic type geodesic
+        // omega = sqrt(a^2 - c^2)
+        omega2 = (shRhoOver2SQ - tanThetaSQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
+        omega = sqrt(omega2);
+        a = sqrt(0.5 * (1. + omega2));
+        c = sign(phi) * sqrt(0.5 * (1. - omega2));
+        t = 2. * atanh(sqrt(shRhoOver2SQ - tanThetaSQ) / chRhoOver2) / omega;
+
+    }
+    else if (abs(tanTheta) == shRhoOver2) {
+        // parabolic type geodesic
+        a = 1. / sqrt2;
+        c = sign(phi) * 1. / sqrt2;
+        t = 2. * sqrt2 * shRhoOver2;
+    }
+    else {
+        // elliptic type geodesic
+        // omega = sqrt(c^2 - a^2)
+        omega2 = (tanThetaSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
+        omega = sqrt(omega2);
+        a = sqrt(0.5 * (1. - omega2));
+        c = sign(phi) * sqrt(0.5 * (1. + omega2));
+        t = 2. * atan(sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2) / omega;
+        // geodesic that made more than a half turn
+        if (abs(phi) > PI * (chRhoOver2 - 0.5)) {
+            t = t + sign(phi) * 2. * PI / omega;
+        }
+    }
+    return vec3(a, c, t);
+}
+
+int DICHOTOMY_MAX_STEPS = 10;
+float DICHOTOMY_THRESHOLD = 0.01;
+
+// given rho and phi, find the parameter theta between thetaMin and thetaMax
+// which vanishes the function fiberHeight.
+// (One assumes that the problem has a solution on this interval)
+float _dichoSearch(float shRhoOver2SQ, float phi, float thetaMin, float thetaMax){
+    float auxM = thetaMin;
+    float auxP = thetaMax;
+    float theta;
+    float height;
+    for (int i=0; i < DICHOTOMY_MAX_STEPS; i++) {
+        if (abs(auxM - auxP) < DICHOTOMY_THRESHOLD) {
+            break;
+        }
+        theta = 0.5 * auxM + 0.5 * auxP;
+        height = fiberHeight(shRhoOver2SQ, theta, phi);
+        if (height > 0.) {
+            auxM = theta;
+        }
+        else {
+            auxP = theta;
+        }
+    }
+    // return a lower estimate of the angle theta
+    // (we don't want to over march during the ray marching algorithm).
+    float res;
+    if (abs(auxM) < abs(auxP)) {
+        res = auxM;
+    }
+    else {
+        res = auxP;
+    }
+    debugColor = vec3(res, -res,0)/PI;
+    return res;
+}
+
+// Take a point p and return the data (a,c,t) as a vec3
+// such that the geodesic starting at the origin directed by (a,0,c)
+// reach the point p after time t.
+// The algorithm is a dichotomy.
+// This part is mean as as a preliminary step for a Newtown algorithm.
+
+vec3 _dichoDist(Point p) {
+    // we assume that phi is positive (always possible up to flipping)
+    // note that the flip does not change rho
+    float phi = abs(p.fiber);
+    float shRhoOver2SQ = pow(p.proj.z, 2.) + pow(p.proj.w, 2.);
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+
+
+    /*
+    float thetaMin;
+    float thetaMax;
+    float thetaDicho;
+    // we can detect in advance what kind of geodesic we are following
+    // this allow to narrow a little the initial domain.
+    // Note sure this is totally relevant, as it involved a lot of computation,
+    // while one or two dichotomy step would bring us back to this level.
+    if (0.5 * abs(phi) < 2. * shRhoOver2 - atan(shRhoOver2)){
+        // hyperbolic type geodesic
+        thetaMin = -atan(shRhoOver2);
+        thetaMax = 0.;
+        thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+    }
+    else if (0.5 * abs(phi) == abs(2. * shRhoOver2 - atan(shRhoOver2))) {
+        // parabolic type geodesic
+        thetaDicho = - atan(shRhoOver2);
+    }
+    else {
+        if (0.5 * abs(phi) < PI * (chRhoOver2 - 0.5)){
+            // geodesic with less than half a turn
+            thetaMin = -0.5 * PI;
+            thetaMax = -atan(shRhoOver2);
+            thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+        }
+        else {
+            // geodesic with at least half a turn
+            thetaMin = atan(shRhoOver2) - PI;
+            thetaMax = -0.5 * PI;
+            thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+        }
+    }*/
+
+
+    float thetaMin = atan(shRhoOver2) - PI;
+    float thetaMax = 0.;
+    float thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+
+
+    //return vec3(thetaDicho);
+
+    vec3 res = computeParams(shRhoOver2SQ, thetaDicho, phi);
+    // if needed we flip back the result
+    if (p.fiber < 0.) {
+        res.y = -res.y;
+    }
+    return res;
+
+}
+
+
+float _exactDistToOrign(Point p) {
+    float res = _fakeDistToOrigin(p);
+    // if the fake distance is too small, return start a more advanced computation
+    /*
+    if (res < .1) {
+        //_dichoDist(p);
+        //_dichoSearch(1., 1., -0.5*PI, 0.);
+        vec3 params = _dichoDist(p);
+        res = params.z;
+    }*/
+    return res;
+}
+
+
 // distance between two points
 float exactDist(Point p1, Point p2){
+    Isometry isom = makeInvLeftTranslation(p1);
+    return _exactDistToOrign(translate(isom, p2));
     /*
-    vec4 aux1 = toVec4(p1);
-    vec4 aux2 = toVec4(p2);
-    mat3 J = mat3(
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, -1
-    );
-    float q = dot(aux1.xyz, J * aux2.xyz);
-    return sqrt(pow(acosh(-q), 2.) + pow(aux1.w-aux2.w, 2.));
-    */
-
     Isometry isom = makeInvLeftTranslation(p1);
     vec4 aux = toVec4(translate(isom, p2));
     vec3 oh = vec3(0, 0, 1);
@@ -716,7 +936,7 @@ float exactDist(Point p1, Point p2){
     );
     float q = dot(aux.xyz, J * oh);
     return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
-
+    */
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -1112,7 +1332,6 @@ float localSceneSDF(Point p){
         return sphDist;
     }
     */
-
 
 
     // Tiling
@@ -2095,6 +2314,7 @@ void main(){
     //do the marching
     raymarch(rayDir, totalFixMatrix);
 
+
     vec3 pixelColor;
     //Based on hitWhich decide whether we hit a global object, local object, or nothing
     switch (hitWhich){
@@ -2127,4 +2347,21 @@ void main(){
         out_FragColor = vec4(debugColor, 1.0);
         break;
     }
+
+
+    /*
+    // DEBUGGING !!
+    float normHSQ = rayDir.dir.x * rayDir.dir.x + rayDir.dir.y * rayDir.dir.y;
+    //float h = 0.2 * fiberHeight(5. * normHSQ, atan(rayDir.dir.y, rayDir.dir.x), 0.);
+    //out_FragColor = vec4(h, -h, 0, 1);
+
+    float shRhoOver2SQ = 5. * normHSQ;
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float thetaMin = atan(shRhoOver2) - PI;
+    float thetaMax = -thetaMin;
+    float thetaDicho = _dichoSearch(shRhoOver2SQ, -5., thetaMin, thetaMax);
+
+    //debugColor = vec3(thetaDicho, -thetaDicho, 0) / PI;
+    out_FragColor = vec4(debugColor, 1);
+    */
 }
