@@ -12,16 +12,16 @@ Some parameters that can be changed to change the scence
 
 */
 
-const bool FAKE_LIGHT = true;
+const bool FAKE_LIGHT = false;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
 const bool LOCAL_EARTH=true;
-const bool TILING=true;
+const bool TILING=false;
 const bool GLOBAL_EARTH=false;
 
 //local lights only on without the tiling: they help with definition on the earth but wash out the tiling
-const bool LOCAL_LIGHTS=true;
+const bool LOCAL_LIGHTS=false;
 const bool RENDER_LOCAL_LIGHTS=false;
 float localLightIntensity=0.25;
 //!TILING;

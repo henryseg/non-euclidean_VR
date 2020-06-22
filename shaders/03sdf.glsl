@@ -70,11 +70,11 @@ float localSceneSDF(vec4 p){
     
     if(LOCAL_EARTH){
        vec4 earthCenter=localEarthBoost*ORIGIN;
-       earthDist=sphereSDF(p,earthCenter,0.15);
+       earthDist=sphereSDF(p,earthCenter,0.2);
         distance=min(distance,earthDist);
         if(earthDist < EPSILON){
            // hitLocal = true;
-            hitWhich = 7;
+            hitWhich = 3;
             return earthDist;
         }  
     }

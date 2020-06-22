@@ -39,8 +39,9 @@ tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to
 //right now super basic fog: just a smooth step function of distance blacking out at max distance.
 //the factor of 20 is just empirical here to make things look good - apparently we never get near max dist in euclidean geo
 vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
-    float fogDensity=smoothstep(0., MAX_DIST/40., distToViewer);
-    return mix(color, fogColor, fogDensity); 
+    //float fogDensity=smoothstep(0., MAX_DIST/40., distToViewer);
+    //return mix(color, fogColor, fogDensity); 
+    return color;
 }
 
 
@@ -62,19 +63,24 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     tangVector L = tangDirection(SP, TLP);
     tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
-    float nDotL = max(cosAng(N, L), 0.0);
-    vec3 diffuse = lightIntensity.rgb * nDotL;
+    float nDotL = 1.-max(-cosAng(N, L), 0.0);
+    vec3 diffuse = vec3(1.,1.,1.)*lightIntensity.rgb * nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
-    vec3 specular = 2.*lightIntensity.rgb * pow(rDotV, 20.0);
+    vec3 specular = (0.5*lightIntensity.rgb+vec3(0.5,0.5,0.5)) * pow(rDotV, 5.0);
     //Attenuation - Inverse Square
-    float distToLight = fakeDistance(SP, TLP);
-    float att = 0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
+    //float distToLight = fakeDistance(SP, TLP);
+    float att = 0.5;
+        //0.8/(0.1+distToLight);
+        //0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
     //Compute final color
-    return att*((diffuse*baseColor) + specular);
+    vec3 amb=0.1*vec3(0.2,1.,1.)*baseColor;
+    vec3 diff=0.5*diffuse*baseColor;
+    vec3 spec=1.5*specular;
+    return diff+spec;
 }
 
-vec3 phongModel(mat4 totalFixMatrix, vec3 color){
+vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
     tangVector V = tangVector(SP, -sampletv.dir);
@@ -84,19 +90,38 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
     //--------------------------------------------------
     //usually we'd check to ensure there are 4 lights
     //however this is version is hardcoded so we won't
-    if(!LOCAL_LIGHTS){
-    for (int i = 0; i<4; i++){
-        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
-        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
-    }
-    }
-    
-    if(LOCAL_LIGHTS){
-    //pick up light from the light source in your fundamental domain
-  
-       color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
+//    if(!LOCAL_LIGHTS){
+//    for (int i = 0; i<4; i++){
+//        TLP = totalFixMatrix*invCellBoost*lightPositions[i];
+//        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
+//    }
+        
+    vec3 color=0.1*baseColor;
     
     
+//    var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
+//var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
+//var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
+//var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
+        
+        TLP = totalFixMatrix*invCellBoost*vec4(10.,0.,10.,1.);
+        color = lightingCalculations(SP, TLP, V, baseColor, vec4(68. / 256., 197. / 256., 203. / 256.,1.));
+    
+        TLP = totalFixMatrix*invCellBoost*vec4(0.,10.,10.,1.);
+        color += lightingCalculations(SP, TLP, V, baseColor, vec4(252. / 256., 227. / 256., 21. / 256.,1.));
+    
+        TLP = totalFixMatrix*invCellBoost*vec4(-10.,-10.,5.,1.);
+        color += lightingCalculations(SP, TLP, V, baseColor, vec4(256. / 256., 142. / 256., 226. / 256.,1.));
+    
+
+//    }
+    
+//    if(LOCAL_LIGHTS){
+//    //pick up light from the light source in your fundamental domain
+//  
+//       color+= lightingCalculations(SP,localLightPos,V,vec3(1.0),vec4(localLightColor,localLightIntensity)); 
+//    
+//    
     //move local light around by the generators to pick up lighting from nearby cells
         
         
@@ -107,9 +132,9 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 color){
 //    }
     
 
-}
+//}
     
-    return color;
+    return color/2.;
 }
 
 

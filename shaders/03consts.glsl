@@ -3,9 +3,9 @@
 //--------------------------------------------
 const int MAX_MARCHING_STEPS =  200;
 const float MIN_DIST = 0.0;
-const float MAX_DIST = 300.0;
+const float MAX_DIST = 10.0;
 const float EPSILON = 0.0001;
-const float fov = 130.0;
+const float fov = 110.0;
 const float sqrt3 = 1.7320508075688772;
 
 
