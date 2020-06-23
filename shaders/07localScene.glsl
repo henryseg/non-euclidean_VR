@@ -11,7 +11,7 @@ float localSceneLights(vec4 p){
     //no problem if the light stays in a fundamental domain the whole time.
     //if light is moving between domains; is more useful to draw thee six neighbors as well, much  like is done for the local sphere object centered on you, below.
     
-    return sphereSDF(p, localLightPos, 0.05); //below makes lights change radius in proportion to brightness
+    return sphereSDF(p, localLightPos, 0.1); //below makes lights change radius in proportion to brightness
                      //lightRad);
     
 }
