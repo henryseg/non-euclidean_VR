@@ -91,6 +91,26 @@ float exactDist(vec4 p, vec4 q) {
     mat4 isomInv = nilMatrixInv(p);
     vec4 qOrigin = isomInv * q;
 
+    float z = qOrigin.z;
+    float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
+
+    if (z == 0.0) {
+        return sqrt(rhosq);
+    }
+    else {
+        float phi = zero_height(rhosq, abs(z));
+        float sign = 0.0;
+        if (z > 0.0) {
+            sign = 1.0;
+        }
+        else {
+            sign = -1.0;
+        }
+        float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
+        return abs(phi/w);
+    }
+
+    /*
     // solve the problem !
     float x3 = qOrigin.z;
     float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
@@ -110,11 +130,32 @@ float exactDist(vec4 p, vec4 q) {
         float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
         return abs(phi/w);
     }
+    */
 }
 
 float exactDist(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
     return exactDist(u.pos, v.pos);
+}
+
+// assume that a geodesic starting from the origin reach the point q
+// after describing an angle phi (in the xy plane)
+// return the unit tangent vector of this geodesic
+// the point q is given in cylinder coordiantes (rho, theta, z)
+// we assume that z != 0
+vec4 _dirFromPhi(float rhosq, float theta, float z, float phi) {
+    float sign = 0.0;
+    if (z > 0.0) {
+        sign = 1.0;
+    }
+    else {
+        sign = -1.0;
+    }
+    float w = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
+    float c = sqrt(1.0  - pow(w, 2.0));
+    float alpha = - 0.5 * phi + theta;
+    vec4 res =  vec4(c * cos(alpha), c * sin(alpha), w, 0.0);
+    return res;
 }
 
 tangVector tangDirection(vec4 p, vec4 q){
@@ -133,6 +174,29 @@ tangVector tangDirection(vec4 p, vec4 q){
 
         vec4 qOrigin = isomInv*q;
 
+        // solve the problem !
+        float z = qOrigin.z;
+
+        vec4 resOrigin;
+        if (z == 0.0) {
+            // probably not needed (case contained in the next one)
+            resOrigin =  vec4(qOrigin.z, qOrigin.y, qOrigin.z, 0.0);
+        }
+        else {
+
+
+            float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
+            float theta = atan(qOrigin.y, qOrigin.x);
+            float phi = zero_height(rhosq, abs(z));
+
+            resOrigin = _dirFromPhi(rhosq, theta, z, phi);
+        }
+
+
+        // move back to p
+        return tangVector(p, isom * resOrigin);
+
+        /*
         // solve the problem !
         float x3 = qOrigin.z;
 
@@ -165,6 +229,7 @@ tangVector tangDirection(vec4 p, vec4 q){
 
         // move back to p
         return tangVector(p, isom * resOrigin);
+        */
     }
 }
 
@@ -172,6 +237,44 @@ tangVector tangDirection(tangVector u, tangVector v){
     // overload of the previous function in case we work with tangent vectors
     return tangDirection(u.pos, v.pos);
 }
+
+// return the unit tangent to second and thrid geodesic (by order of length) connecting p to q.
+// if such vectors exists returns true and populate `directions`
+// otherwise returns false
+bool tangDirectionBis(vec4 p, vec4 q, out tangVector[2] directions) {
+    // move p to the origin
+    mat4 isom = nilMatrix(p);
+    mat4 isomInv = nilMatrixInv(p);
+
+    vec4 qOrigin = isomInv * q;
+
+    // solve the problem !
+    float z = qOrigin.z;
+
+    vec4 resOrigin = vec4(0.);
+    if (z == 0.0) {
+        return false;
+    }
+    else {
+        float rhosq = pow(qOrigin.x, 2.) + pow(qOrigin.y, 2.);
+        float theta = atan(qOrigin.y, qOrigin.x);
+        vec2 phis;
+        bool check = zerobis_height(rhosq, abs(z), phis);
+        if (check) {
+            float phi0 = phis.x;
+            float phi1 = phis.y;
+            vec4 resOrigin0 = _dirFromPhi(rhosq, theta, z, phi0);
+            vec4 resOrigin1 = _dirFromPhi(rhosq, theta, z, phi1);
+
+            // move back to p
+            directions[0] = tangVector(p, isom * resOrigin0);
+            directions[1] = tangVector(p, isom * resOrigin1);
+        }
+        return check;
+    }
+}
+
+
 
 tangVector flow(tangVector tv, float t){
     // Follow the geodesic flow during a time t
@@ -310,8 +413,6 @@ tangVector flow(tangVector tv, float t){
     tangVector res = translate(isom, achievedFromOrigin);
     return res;
 }
-
-
 
 
 //--------------------------------------------
