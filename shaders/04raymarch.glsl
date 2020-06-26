@@ -16,6 +16,7 @@ bool isOutsideCell(vec4 p, out mat4 fixMatrix){
 //        fixMatrix = invGenerators[3];
 //        return true;
 //    }
+
     if (p.z > modelHalfCube){
         fixMatrix = invGenerators[4];
         return true;
@@ -25,6 +26,7 @@ bool isOutsideCell(vec4 p, out mat4 fixMatrix){
         return true;
     }
     return false;
+
 }
 
 bool isOutsideCell(tangVector v, out mat4 fixMatrix){

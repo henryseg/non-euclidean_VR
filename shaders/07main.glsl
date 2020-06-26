@@ -15,18 +15,6 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //
 //
@@ -67,32 +55,6 @@ tangVector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates 
 //
 //
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //--------------------------------------------------------------------
@@ -157,208 +119,186 @@ void main(){
 
         return;
     }
-    
-     else if (hitWhich == 8){ // the GLOBAL earth
-        
-    //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
-   // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
-        vec3 pixelColor=globalSphereTexture(
-            totalFixMatrix, sampletv, earthCubeTex);
 
-       out_FragColor = vec4( pixelColor,1.0);
+    else if (hitWhich == 8){ // the GLOBAL earth
+
+        //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
+        // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
+        vec3 pixelColor=globalSphereTexture(
+        totalFixMatrix, sampletv, earthCubeTex);
+
+        out_FragColor = vec4(pixelColor, 1.0);
 
         return;
     }
-    
-    
-    
-    
-    
+
+
     //SHINY SURFACES
-    
-    
-    
-    
-    
-    
-    
-    
+
+
     else if (hitWhich == 7){ // the LOCAL earth
 
-        
-    //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
-   // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
+
+        //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
+        // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
         vec3 pixelColor=sphereTexture(
-            totalFixMatrix, sampletv, earthCubeTex);
-        
+        totalFixMatrix, sampletv, earthCubeTex);
+
 
         //now: do another pass!
         //save data from the first pass
-    
-    float origDistToViewer=distToViewer;//this is set by raymarch, along with sampletv
-    tangVector toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer
-    tangVector surfNormal=estimateNormal(sampletv.pos);//normal vector to surface
-        
+
+        float origDistToViewer=distToViewer;//this is set by raymarch, along with sampletv
+        tangVector toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer
+        tangVector surfNormal=estimateNormal(sampletv.pos);//normal vector to surface
+
         //this means...we do the raymarch again! starting from this position (sampletv)
-    //first, reflect this direction wtih respect to the surface normal
-    tangVector newDir = reflectOff(sampletv, surfNormal);
-    //move the new ray off a little bit
-    newDir=flow(newDir,0.01);
-    //then, raymarch in this new direction
+        //first, reflect this direction wtih respect to the surface normal
+        tangVector newDir = reflectOff(sampletv, surfNormal);
+        //move the new ray off a little bit
+        newDir=flow(newDir, 0.01);
+        //then, raymarch in this new direction
 
-    //the raymarcher reflectmarch is built to allow some corner-cutting for speed
-    //but, you can also run raymarch here directly
-    raymarch(newDir, totalFixMatrix);
-    //this has reset values like distToViewer (why we had to save the old one above), and sampletv to reflect the new positions
-        
-    vec3 reflColor;
-        
-        
-        
-        
+        //the raymarcher reflectmarch is built to allow some corner-cutting for speed
+        //but, you can also run raymarch here directly
+        raymarch(newDir, totalFixMatrix);
+        //this has reset values like distToViewer (why we had to save the old one above), and sampletv to reflect the new positions
+
+        vec3 reflColor;
+
+
+
+
         if (hitWhich == 0){ //Didn't hit anything ------------------------
-        //COLOR THE FRAME DARK GRAY
-        //0.2 is medium gray, 0 is black
-reflColor=vec3(0.05);
-    }
-    else if (hitWhich == 1){ // global lights
-    reflColor=globalLightColor.rgb;
-    }
+            //COLOR THE FRAME DARK GRAY
+            //0.2 is medium gray, 0 is black
+            reflColor=vec3(0.05);
+        }
+        else if (hitWhich == 1){ // global lights
+            reflColor=globalLightColor.rgb;
+        }
 
-    else if (hitWhich == 2){ // global object
-        mat4 totalFixMatrix=mat4(1.);
-        reflColor=localColor(totalFixMatrix, sampletv);
+        else if (hitWhich == 2){ // global object
+            mat4 totalFixMatrix=mat4(1.);
+            reflColor=localColor(totalFixMatrix, sampletv);
 
-    }
-    else if (hitWhich == 7){ // the LOCAL earth
-     reflColor=sphereTexture(
+        }
+        else if (hitWhich == 7){ // the LOCAL earth
+            reflColor=sphereTexture(
             totalFixMatrix, sampletv, earthCubeTex);
 
-    }
-    
+        }
+
         else if (hitWhich == 8){ // the GLOBAL earth
-         reflColor=globalSphereTexture(
+            reflColor=globalSphereTexture(
             totalFixMatrix, sampletv, earthCubeTex);
-    }
+        }
 
-    
-    else { // the TILING
-    reflColor=tilingColor(totalFixMatrix, sampletv);
-    } 
-        
-        
-        
-    vec3 totalColor=0.85*pixelColor+0.15*reflColor;
-    
-    //add in fog
-    totalColor=fog(totalColor,vec3(0.02,0.02,0.02),origDistToViewer);
 
-    out_FragColor=vec4(totalColor, 1.0);
+        else { // the TILING
+            reflColor=tilingColor(totalFixMatrix, sampletv);
+        }
+
+
+
+        vec3 totalColor=0.85*pixelColor+0.15*reflColor;
+
+        //add in fog
+        totalColor=fog(totalColor, vec3(0.02, 0.02, 0.02), origDistToViewer);
+
+        out_FragColor=vec4(totalColor, 1.0);
 
 
 
 
         return;
     }
-    
-       
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     else { // the TILING
 
-        
-    //this is the lighting from the FIRST PASS
-    vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
-        
-        
-    out_FragColor=pow(vec4(pixelColor,1.),vec4(0.8));    
-        
-        
-    //COMMENT ALL OF THE BELOW TO GET RID OF REFLECTIONS
-        
-//       //now: do another pass!
-//        //save data from the first pass
-//    vec4 surfacePosition=sampletv.pos;//position on the surface of the sample point, set by raymarch
-//    float origDistToViewer=distToViewer;//this is set by raymarch, along with sampletv
-//    tangVector toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer
-//    tangVector surfNormal=estimateNormal(sampletv.pos);//normal vector to surface
-//        
-//        //this means...we do the raymarch again! starting from this position (sampletv)
-//    //first, reflect this direction wtih respect to the surface normal
-//    tangVector newDir = reflectOff(sampletv, surfNormal);
-//    //move the new ray off a little bit
-//    newDir=flow(newDir,0.01);
-//    //then, raymarch in this new direction
-//
-//    //the raymarcher reflectmarch is built to allow some corner-cutting for speed
-//    //but, you can also run raymarch here directly
-//    reflectmarch(newDir, totalFixMatrix);
-//    //this has reset values like distToViewer (why we had to save the old one above), and sampletv to reflect the new positions
-//    
-//        
-//        
-//        
-//        vec3 reflColor;
-//        
-//        
-//        
-//        
-//        if (hitWhich == 0){ //Didn't hit anything ------------------------
-//        //COLOR THE FRAME DARK GRAY
-//        //0.2 is medium gray, 0 is black
-//reflColor=vec3(0.05);
-//    }
-//    else if (hitWhich == 1){ // global lights
-//    reflColor=globalLightColor.rgb;
-//    }
-//
-//    else if (hitWhich == 2){ // global object
-//        mat4 totalFixMatrix=mat4(1.);
-//        reflColor=localColor(totalFixMatrix, sampletv);
-//
-//    }
-//    else if (hitWhich == 7){ // the LOCAL earth
-//     reflColor=sphereTexture(
-//            totalFixMatrix, sampletv, earthCubeTex);
-//
-//    }
-//    
-//        else if (hitWhich == 8){ // the GLOBAL earth
-//         reflColor=globalSphereTexture(
-//            totalFixMatrix, sampletv, earthCubeTex);
-//    }
-//
-//    
-//    else { // the TILING
-//    reflColor=tilingColor(totalFixMatrix, sampletv);
-//    } 
-//        
-//        
-//        
-//    vec3 totalColor=  0.8*pixelColor+0.2*reflColor;
-//    
-//        
-//
-//    //add in fog
-//    totalColor=fog(totalColor,vec3(0.02,0.02,0.02),origDistToViewer);
-//
-//        
-//        //uncomment the a bove and switch back to pixelColor to get the reflections
-//
-//        
-//    out_FragColor=pow(vec4(totalColor,1.),vec4(0.8));
-//        //vec4(pixelColor, 1.0);
+
+        //this is the lighting from the FIRST PASS
+        vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
+
+
+        out_FragColor=pow(vec4(pixelColor, 1.), vec4(0.8));
+        //out_FragColor=vec4(debugColor, 1.0);
+
+        //COMMENT ALL OF THE BELOW TO GET RID OF REFLECTIONS
+
+        //       //now: do another pass!
+        //        //save data from the first pass
+        //    vec4 surfacePosition=sampletv.pos;//position on the surface of the sample point, set by raymarch
+        //    float origDistToViewer=distToViewer;//this is set by raymarch, along with sampletv
+        //    tangVector toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer
+        //    tangVector surfNormal=estimateNormal(sampletv.pos);//normal vector to surface
+        //
+        //        //this means...we do the raymarch again! starting from this position (sampletv)
+        //    //first, reflect this direction wtih respect to the surface normal
+        //    tangVector newDir = reflectOff(sampletv, surfNormal);
+        //    //move the new ray off a little bit
+        //    newDir=flow(newDir,0.01);
+        //    //then, raymarch in this new direction
+        //
+        //    //the raymarcher reflectmarch is built to allow some corner-cutting for speed
+        //    //but, you can also run raymarch here directly
+        //    reflectmarch(newDir, totalFixMatrix);
+        //    //this has reset values like distToViewer (why we had to save the old one above), and sampletv to reflect the new positions
+        //
+        //
+        //
+        //
+        //        vec3 reflColor;
+        //
+        //
+        //
+        //
+        //        if (hitWhich == 0){ //Didn't hit anything ------------------------
+        //        //COLOR THE FRAME DARK GRAY
+        //        //0.2 is medium gray, 0 is black
+        //reflColor=vec3(0.05);
+        //    }
+        //    else if (hitWhich == 1){ // global lights
+        //    reflColor=globalLightColor.rgb;
+        //    }
+        //
+        //    else if (hitWhich == 2){ // global object
+        //        mat4 totalFixMatrix=mat4(1.);
+        //        reflColor=localColor(totalFixMatrix, sampletv);
+        //
+        //    }
+        //    else if (hitWhich == 7){ // the LOCAL earth
+        //     reflColor=sphereTexture(
+        //            totalFixMatrix, sampletv, earthCubeTex);
+        //
+        //    }
+        //
+        //        else if (hitWhich == 8){ // the GLOBAL earth
+        //         reflColor=globalSphereTexture(
+        //            totalFixMatrix, sampletv, earthCubeTex);
+        //    }
+        //
+        //
+        //    else { // the TILING
+        //    reflColor=tilingColor(totalFixMatrix, sampletv);
+        //    }
+        //
+        //
+        //
+        //    vec3 totalColor=  0.8*pixelColor+0.2*reflColor;
+        //
+        //
+        //
+        //    //add in fog
+        //    totalColor=fog(totalColor,vec3(0.02,0.02,0.02),origDistToViewer);
+        //
+        //
+        //        //uncomment the a bove and switch back to pixelColor to get the reflections
+        //
+        //
+        //    out_FragColor=pow(vec4(totalColor,1.),vec4(0.8));
+        //        //vec4(pixelColor, 1.0);
 
     }
 

@@ -73,7 +73,6 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
 }
 
 
-
 // overload of the previous function
 //SP - Sample Point | DTLP - Direction to the Translated Light Position | V - View Vector
 
@@ -105,7 +104,9 @@ vec3 lightingCalculations(vec4 SP, tangVector DTLP, tangVector V, vec3 baseColor
 vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     vec4 SP = sampletv.pos;
     vec4 TLP;//translated light position
-    tangVector DTLP;// direction to the translated light position
+    tangVector DTLP;// direction to the translated light position (shortest path)
+    tangVector[2] DTLPbis;// direction to the translated light position (second and third shortest path)
+
     tangVector V = tangVector(SP, -sampletv.dir);
     //    vec3 color = vec3(0.0);
     //--------------------------------------------------
@@ -122,22 +123,59 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     vec3 color=0.1*baseColor;
 
 
-    //    var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
+    //var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
     //var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
     //var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
     //var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
 
+    vec4 lightColor1 = vec4(68. / 256., 197. / 256., 203. / 256., 1.);
+    vec4 lightColor2 = vec4(252. / 256., 227. / 256., 21. / 256., 1.);
+    vec4 lightColor3 = vec4(245. / 256., 61. / 256., 82. / 256., 1.);
+    vec4 lightColor4 = vec4(256. / 256., 142. / 256., 226. / 256., 1.);
+
     TLP = totalFixMatrix*invCellBoost*vec4(10., 0., 10., 1.);
     DTLP = tangDirection(SP, TLP);
-    color = lightingCalculations(SP, DTLP, V, baseColor, vec4(68. / 256., 197. / 256., 203. / 256., 1.));
+    color = lightingCalculations(SP, DTLP, V, baseColor, lightColor1);
+
+    bool otherDir = false;
+
+    if (tangDirectionBis(SP, TLP, DTLPbis) && otherDir) {
+        debugColor = lightColor1.xyz;
+        color = lightingCalculations(SP, DTLPbis[0], V, baseColor, lightColor1);
+        //color = lightingCalculations(SP, DTLPbis[1], V, baseColor, lightColor1);
+    }
 
     TLP = totalFixMatrix*invCellBoost*vec4(0., 10., 10., 1.);
     DTLP = tangDirection(SP, TLP);
-    color += lightingCalculations(SP, DTLP, V, baseColor, vec4(252. / 256., 227. / 256., 21. / 256., 1.));
+    color += lightingCalculations(SP, DTLP, V, baseColor, lightColor2);
 
+    if (tangDirectionBis(SP, TLP, DTLPbis) && otherDir) {
+        debugColor = lightColor2.xyz;
+        color = lightingCalculations(SP, DTLPbis[0], V, baseColor, lightColor2);
+        //color = lightingCalculations(SP, DTLPbis[1], V, baseColor, lightColor2);
+    }
+
+    /*
     TLP = totalFixMatrix*invCellBoost*vec4(-10., -10., 5., 1.);
     DTLP = tangDirection(SP, TLP);
-    color += lightingCalculations(SP, DTLP, V, baseColor, vec4(256. / 256., 142. / 256., 226. / 256., 1.));
+    color += lightingCalculations(SP, DTLP, V, baseColor, lightColor3);
+
+    if (tangDirectionBis(SP, TLP, DTLPbis) && otherDir) {
+        debugColor = lightColor3.xyz;
+        color = lightingCalculations(SP, DTLPbis[0], V, baseColor, lightColor3);
+        //color = lightingCalculations(SP, DTLPbis[1], V, baseColor, lightColor3);
+    }*/
+
+
+    TLP = totalFixMatrix*invCellBoost*vec4(0., 0., 10, 1.);
+    DTLP = tangDirection(SP, TLP);
+    color += lightingCalculations(SP, DTLP, V, baseColor, lightColor4);
+
+    if (tangDirectionBis(SP, TLP, DTLPbis) && otherDir) {
+        //debugColor = lightColor4.xyz;
+        color = lightingCalculations(SP, DTLPbis[0], V, baseColor, lightColor4);
+        //color = lightingCalculations(SP, DTLPbis[1], V, baseColor, lightColor4);
+    }
 
 
     //    }
