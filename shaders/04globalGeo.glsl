@@ -156,16 +156,30 @@ float exactDist(localTangVector u, localTangVector v){
 // Direction Functions
 //----------------------------------------------------------------------------------------------------------------------
 
+//
+////CHANGED THIS
+//tangVector tangDirection(vec4 p, vec4 q){
+//    //hypDot is negative on the space, positive on tang space...
+//    vec3 hypPart = q.xyz - abs(hypDot(p,q))*p.xyz;
+//    float RPart = q.w-p.w;
+//    vec4 diff=vec4(hypPart,RPart);
+//    // return the unit tangent to geodesic connecting p to q.
+//   return tangNormalize(tangVector(p,diff));
+//}
 
-//CHANGED THIS
+
+////CHANGED THIS
+////this returns the shortest geodesic
 tangVector tangDirection(vec4 p, vec4 q){
     //hypDot is negative on the space, positive on tang space...
-    vec3 hypPart = q.xyz - abs(hypDot(p,q))*p.xyz;
+    vec3 hypPartDir = normalize(q.xyz - (-1.* hypDot(p,q))*p.xyz);
+    vec3 hypPart =hypDist(p,q)*hypPartDir;
     float RPart = q.w-p.w;
     vec4 diff=vec4(hypPart,RPart);
     // return the unit tangent to geodesic connecting p to q.
    return tangNormalize(tangVector(p,diff));
 }
+
 
 
 
