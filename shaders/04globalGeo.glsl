@@ -85,7 +85,7 @@ float areaElement(float rad, tangVector angle){
 //distance between two points projections into hyperboloid:
 float sphDist(vec4 p, vec4 q){
      float d= sphDot(p,q);
-    return acos(abs(d));
+    return acos(d);
 }
 
 //norm of a point in the Euclidean direction
@@ -158,14 +158,30 @@ float exactDist(localTangVector u, localTangVector v){
 
 
 //CHANGED THIS
+//tangVector tangDirection(vec4 p, vec4 q){
+//    //hypDot is negative on the space, positive on tang space...
+//    vec3 sphPart = q.xyz - sphDot(p,q)*p.xyz;
+//    float RPart = q.w-p.w;
+//    vec4 diff=vec4(sphPart,RPart);
+//    // return the unit tangent to geodesic connecting p to q.
+//   return tangNormalize(tangVector(p,diff));
+//}
+
+
+
+////CHANGED THIS
+////this returns the shortest geodesic
 tangVector tangDirection(vec4 p, vec4 q){
     //hypDot is negative on the space, positive on tang space...
-    vec3 sphPart = q.xyz - sphDot(p,q)*p.xyz;
+    vec3 sphPartDir = normalize(q.xyz - sphDot(p,q)*p.xyz);
+    vec3 sphPart =sphDist(p,q)*sphPartDir;
     float RPart = q.w-p.w;
     vec4 diff=vec4(sphPart,RPart);
     // return the unit tangent to geodesic connecting p to q.
    return tangNormalize(tangVector(p,diff));
 }
+
+
 
 
 
