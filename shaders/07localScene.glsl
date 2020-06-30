@@ -63,14 +63,14 @@ float locSphere(vec4 p){
 //Local Objects Choice 1
 float tilingSceneSDF(vec4 p){
 //center sphere shaped hole
-    float centerHole=sphereSDF(p,ORIGIN,0.9);
+    float centerHole=sphereSDF(p,ORIGIN,1.);
     
 //corner of ideal cube in Klein model; usedful in setting up horosphere:
-    float cPt=0.57735026921;
+    float cPt=0.643594;
     //don't need it in the klein model, need it in the space now!
     //lazy so just normalizing it
-    vec4 corner=geomProject(vec4(cPt,cPt,1,cPt));
-    float cornerHole=sphereSDF(abs(p),corner,0.43);
+    vec4 corner=geomProject(vec4(cPt,cPt,1,0.764285));
+    float cornerHole=sphereSDF(abs(p),corner,0.75);
     return -min(centerHole, cornerHole);
     //return -centerHole;
 }
