@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------
 
 
-float sphereSDF(vec4 p, vec4 center, float radius){
+float sphereSDF(Point p, Point center, float radius){
     // more precise computation
     float fakeDist = fakeDistance(p, center);
 
@@ -20,17 +20,13 @@ float sphereSDF(vec4 p, vec4 center, float radius){
     }
 }
 
-float ellipsoidSDF(vec4 p, vec4 center, float radius){
-    return ellipsoidDistance(p,center)-radius;
+float ellipsoidSDF(Point p, Point center, float radius){
+    return ellipsoidDistance(p, center)-radius;
 }
 
-float centerSDF(vec4 p, vec4 center, float radius){
+float centerSDF(Point p, Point center, float radius){
     return sphereSDF(p, center, radius);
 }
-
-
-
-
 
 
 //---------------------------------------------------------------------
@@ -48,49 +44,48 @@ float centerSDF(vec4 p, vec4 center, float radius){
 //}
 
 
-float localSceneSDF(vec4 p){
+float localSceneSDF(Point p){
     float earthDist;
     float tilingDist;
     float lightDist;
     float distance = MAX_DIST;
-    
-     if(RENDER_LOCAL_LIGHTS){
-     vec4 lightCenter=localLightPos;
-      lightDist=sphereSDF(p,lightCenter,0.05);
-      distance =min(distance, lightDist);
+
+    if (RENDER_LOCAL_LIGHTS){
+        Point lightCenter=localLightPos;
+        lightDist=sphereSDF(p, lightCenter, 0.05);
+        distance = min(distance, lightDist);
         if (lightDist < EPSILON){
-           // hitLocal = true;
+            // hitLocal = true;
             hitWhich = 1;
-            globalLightColor =vec4(localLightColor,1);
+            globalLightColor =vec4(localLightColor, 1);
             return lightDist;
         }
- }
-    
+    }
 
-    
-    if(LOCAL_EARTH){
-       vec4 earthCenter=localEarthBoost*ORIGIN;
-       earthDist=sphereSDF(p,earthCenter,0.2);
-        distance=min(distance,earthDist);
-        if(earthDist < EPSILON){
-           // hitLocal = true;
+    if (LOCAL_EARTH){
+        Isometry shift = unserializeIsom(localEarthBoost);
+        Point earthCenter = translate(shift, ORIGIN);
+        earthDist=sphereSDF(p, earthCenter, 0.2);
+        distance=min(distance, earthDist);
+        if (earthDist < EPSILON){
+            // hitLocal = true;
             hitWhich = 3;
             return earthDist;
-        }  
+        }
     }
- if(TILING){
-    // tilingDist=ellipsoidSDF(p,vec4(0.,0.,0.3,1.),0.007);
-    tilingDist = -sphereSDF(p, ORIGIN, 0.68);
-     distance=min(distance, tilingDist);
-        if(tilingDist < EPSILON){
-           // hitLocal = true;
+    if (TILING){
+        // tilingDist=ellipsoidSDF(p,vec4(0.,0.,0.3,1.),0.007);
+        tilingDist = -sphereSDF(p, ORIGIN, 0.68);
+        distance=min(distance, tilingDist);
+        if (tilingDist < EPSILON){
+            // hitLocal = true;
             hitWhich=3;
             return tilingDist;
         }
- }
+    }
     return distance;
 }
-   
+
 
 //earth scene
 
@@ -109,45 +104,47 @@ float localSceneSDF(vec4 p){
 
 // GLOBAL OBJECTS SCENE ++++++++++++++++++++++++++++++++++++++++++++++++
 // Global signed distance function : distance from cellBoost * p to an object in the global scene
-float globalSceneSDF(vec4 p){
+float globalSceneSDF(Point p){
     float earthDist;
-    vec4 absolutep = cellBoost * p;// correct for the fact that we have been moving
+    Isometry shift = unserializeIsom(cellBoost);
+    vec4 absolutep = translate(shift, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
-//    for (int i=0; i<4; i++){
-//        float objDist;
-//        objDist = sphereSDF(
-//        absolutep,
-//        lightPositions[i],
-//        0.0//0.05
-//        );
-//        distance = min(distance, objDist);
-//        if (distance < EPSILON){
-//            hitWhich = 1;
-//            globalLightColor = lightIntensities[i];
-//            return distance;
-//        }
-//    }
-    
-    
+    //    for (int i=0; i<4; i++){
+    //        float objDist;
+    //        objDist = sphereSDF(
+    //        absolutep,
+    //        lightPositions[i],
+    //        0.0//0.05
+    //        );
+    //        distance = min(distance, objDist);
+    //        if (distance < EPSILON){
+    //            hitWhich = 1;
+    //            globalLightColor = lightIntensities[i];
+    //            return distance;
+    //        }
+    //    }
+
+
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absolutep, globalObjectBoost[3], globalObjectRadius);
+    objDist = sphereSDF(absolutep, Point(globalObjectBoost[3]), globalObjectRadius);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
     }
-    
-    if(GLOBAL_EARTH){
-       vec4 earthCenter=globalEarthBoost*ORIGIN;
-       earthDist=sphereSDF(absolutep,earthCenter,0.15);
-        distance=min(distance,earthDist);
-        if(earthDist < EPSILON){
-           // hitLocal = true;
+
+    if (GLOBAL_EARTH){
+        Isometry shift = unserializeIsom(globalEarthBoost);
+        Point earthCenter = translate(shift, ORIGIN);
+        earthDist = sphereSDF(absolutep, earthCenter, 0.15);
+        distance = min(distance, earthDist);
+        if (earthDist < EPSILON){
+            // hitLocal = true;
             hitWhich = 8;
             return earthDist;
-        }  
+        }
     }
-    
+
     return distance;
 }

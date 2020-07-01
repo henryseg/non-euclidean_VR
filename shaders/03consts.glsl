@@ -12,13 +12,14 @@ const float sqrt3 = 1.7320508075688772;
 //--------------------------------------------
 //Global Variables
 //--------------------------------------------
-tangVector N = tangVector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
-tangVector sampletv = tangVector(vec4(1., 1., 1., 1.), vec4(1., 1., 1., 0.));
+Vector N, sampletv;
+//Vector N = Vector(ORIGIN, vec4(0., 0., 0., 1.));//normal vector
+//Vector sampletv = Vector(Point(vec4(1., 1., 1., 1.)), vec4(1., 1., 1., 0.));
 vec4 globalLightColor = vec4(1.,1.,1.,1.);
 int hitWhich = 0;
 
 vec3 localLightColor=vec3(1.,1.,1.);
-vec4 localLightPos=vec4(0.0,0.4,-0.2,1.);
+vec4 localLightPos=Point(vec4(0.0,0.4,-0.2,1.));
 
 //-------------------------------------------
 //Translation & Utility Variables

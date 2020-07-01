@@ -1,30 +1,62 @@
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
-tangVector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
-    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
+Vector estimateNormal(Point p) {
     float newEp = EPSILON * 10.0;
-    mat4 theBasis= tangBasis(p);
-    vec4 basis_x = theBasis[0];
-    vec4 basis_y = theBasis[1];
-    vec4 basis_z = theBasis[2];
-    if (hitWhich != 3){ //global light scene
-        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
-        tangVector tv = tangVector(p,
-        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
-        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
+
+    Point shiftPX = smallShift(p, vec3(newEp, 0, 0));
+    Point shiftPY = smallShift(p, vec3(0, newEp, 0));
+    Point shiftPZ = smallShift(p, vec3(0, 0, newEp));
+    Point shiftMX = smallShift(p, vec3(-newEp, 0, 0));
+    Point shiftMY = smallShift(p, vec3(0, -newEp, 0));
+    Point shiftMZ = smallShift(p, vec3(0, 0, -newEp));
+
+    Vector n;
+    float vx, vy, vz;
+
+    if (hitWhich != 3){
+        // global light scene
+        vx = globalSceneSDF(shiftPX) - globalSceneSDF(shiftMX);
+        vy = globalSceneSDF(shiftPY) - globalSceneSDF(shiftMY);
+        vz = globalSceneSDF(shiftPZ) - globalSceneSDF(shiftMZ);
+    }
+    else {
+        //local scene
+        vx = localSceneSDF(shiftPX) - localSceneSDF(shiftMX);
+        vy = localSceneSDF(shiftPY) - localSceneSDF(shiftMY);
+        vz = localSceneSDF(shiftPZ) - localSceneSDF(shiftMZ);
 
     }
-    else { //local scene
-        tangVector tv = tangVector(p,
-        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
-        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
-        );
-        return tangNormalize(tv);
-    }
+    n = createVector(p, vec3(vx, vy, vz));
+    n = tangNormalize(n);
+    return n;
 }
+
+
+//Vector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
+//    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
+//    float newEp = EPSILON * 10.0;
+//    mat4 theBasis= tangBasis(p);
+//    vec4 basis_x = theBasis[0];
+//    vec4 basis_y = theBasis[1];
+//    vec4 basis_z = theBasis[2];
+//    if (hitWhich != 3){ //global light scene
+//        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
+//        Vector tv = Vector(p,
+//        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
+//        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
+//        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
+//        );
+//        return tangNormalize(tv);
+//
+//    }
+//    else { //local scene
+//        Vector tv = Vector(p,
+//        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
+//        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
+//        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
+//        );
+//        return tangNormalize(tv);
+//    }
+//}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -50,10 +82,10 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 //put a coefficient of 2 in front of specular to make things shiny-er
 //changed the power from original of 10 on specular
 //in PHONG MODEL changed amount of color from 0.1 to more
-vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
+vec3 lightingCalculations(vec4 SP, vec4 TLP, Vector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
-    tangVector L = tangDirection(SP, TLP);
-    tangVector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
+    Vector L = tangDirection(SP, TLP);
+    Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
     //Calculate Diffuse Component
     float nDotL = 1.-max(-cosAng(N, L), 0.0);
     vec3 diffuse = vec3(1., 1., 1.)*lightIntensity.rgb * nDotL;
@@ -80,35 +112,44 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
 //put a coefficient of 2 in front of specular to make things shiny-er
 //changed the power from original of 10 on specular
 //in PHONG MODEL changed amount of color from 0.1 to more
-vec3 lightingCalculations(vec4 SP, tangVector DTLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
+vec3 lightingCalculations(Point SP, Vector DTLP, float distToLight, Vector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
-    tangVector R = sub(scalarMult(2.0 * cosAng(DTLP, N), N), DTLP);
+    Vector R = reflectOff(DTLP, N);
+    //Vector R = sub(scalarMult(2.0 * cosAng(DTLP, N), N), DTLP);
+
     //Calculate Diffuse Component
-    float nDotL = 1.-max(-cosAng(N, DTLP), 0.0);
-    vec3 diffuse = vec3(1., 1., 1.)*lightIntensity.rgb * nDotL;
+    float nDotL = 1. - max(-cosAng(N, DTLP), 0.0);
+    vec3 diffuse = vec3(1., 1., 1.) * lightIntensity.rgb * nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
-    vec3 specular = (0.5*lightIntensity.rgb+vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
+    vec3 specular = (0.5 * lightIntensity.rgb + vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
+
     //Attenuation - Inverse Square
     //float distToLight = fakeDistance(SP, TLP);
     float att = 0.5;
-    //0.8/(0.1+distToLight);
-    //0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
+    //0.8 / (0.1 + distToLight);
+    //0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
     //Compute final color
-    vec3 amb=0.1*vec3(0.2, 1., 1.)*baseColor;
-    vec3 diff=0.5*diffuse*baseColor;
-    vec3 spec=1.5*specular;
-    return diff+spec;
+    vec3 amb = 0.1 * vec3(0.2, 1., 1.) * baseColor;
+    vec3 diff = 0.5 * diffuse * baseColor;
+    vec3 spec = 1.5 * specular;
+    return diff + spec;
 }
 
-vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
-    vec4 SP = sampletv.pos;
-    vec4 TLP;//translated light position
-    tangVector DTLP;// direction to the translated light position (shortest path)
-    tangVector[2] DTLPbis;// direction to the translated light position (second and third shortest path)
 
-    tangVector V = tangVector(SP, -sampletv.dir);
+
+vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
+    Point SP = sampletv.pos;
+    Point TLP;// translated light position
+    Vector DTLP;// direction to the translated light position
+    float distToLight;// distance to the light
+    Vector[2] DTLPbis;// direction to the translated light position (second and third shortest path)
+    Isometry shiftLight;
+
+    Vector V = turnAround(sampletv);
+    // Vector V = Vector(SP, -sampletv.dir);
     //    vec3 color = vec3(0.0);
+
     //--------------------------------------------------
     //Lighting Calculations
     //--------------------------------------------------
@@ -120,7 +161,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     //        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     //    }
 
-    vec3 color=0.1*baseColor;
+    vec3 color=0.1 * baseColor;
 
 
     //var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
@@ -133,7 +174,9 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     vec4 lightColor3 = vec4(245. / 256., 61. / 256., 82. / 256., 1.);
     vec4 lightColor4 = vec4(256. / 256., 142. / 256., 226. / 256., 1.);
 
-    TLP = totalFixMatrix*invCellBoost*vec4(10., 0., 10., 1.);
+    shiftLight = composeIsometry(totalFixIsom, unserializeIsom(invCellBoost), true);
+
+    TLP = translate(shiftLight, Point(vec4(10., 0., 10., 1.)));
     DTLP = tangDirection(SP, TLP);
     color = lightingCalculations(SP, DTLP, V, baseColor, lightColor1);
 
@@ -145,7 +188,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
         //color = lightingCalculations(SP, DTLPbis[1], V, baseColor, lightColor1);
     }
 
-    TLP = totalFixMatrix*invCellBoost*vec4(0., 10., 10., 1.);
+    TLP = translate(shiftLight, Point(vec4(0., 10., 10., 1.)));
     DTLP = tangDirection(SP, TLP);
     color += lightingCalculations(SP, DTLP, V, baseColor, lightColor2);
 
@@ -156,7 +199,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     }
 
     /*
-    TLP = totalFixMatrix*invCellBoost*vec4(-10., -10., 5., 1.);
+    TLP = translate(shiftLight, Point(vec4(-10., -10., 5., 1.)));
     DTLP = tangDirection(SP, TLP);
     color += lightingCalculations(SP, DTLP, V, baseColor, lightColor3);
 
@@ -167,7 +210,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
     }*/
 
 
-    TLP = totalFixMatrix*invCellBoost*vec4(0., 0., 10, 1.);
+    TLP = translate(shiftLight, Point(vec4(0., 0., 10, 1.)));
     DTLP = tangDirection(SP, TLP);
     color += lightingCalculations(SP, DTLP, V, baseColor, lightColor4);
 
@@ -198,7 +241,7 @@ vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){
 
     //}
 
-    return color/2.;
+    return color / 2.;
 }
 
 

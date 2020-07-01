@@ -267,7 +267,7 @@ float _aux_dheight_newton(float rhosq, float z0, float phi0) {
 // - the starting point of the Newton method is obtained via a binary search
 // if the second zero does not exists, return false
 // otherwise returns true and populate `phis`with the second and first zeros
-bool zerobis_height(float rhosq, float z0, out vec2 phis) {
+bool zerobis_height(float rhosq, float z0, out float[2] phis) {
     // find the minimum of _height on [2pi, 4pi]
     float phi0 = _aux_dheight_newton_init(rhosq, z0);
     float phi1 = _aux_dheight_newton(rhosq, z0, phi0);
@@ -280,7 +280,8 @@ bool zerobis_height(float rhosq, float z0, out vec2 phis) {
     float res2 = _height_newton(rhosq, z0, phi2);
     float phi3 = _height_newton_init(rhosq, z0, phi1, 4. * PI, true);
     float res3 = _height_newton(rhosq, z0, phi3);
-    phis = vec2(res2, res3);
+    phis[0] = res2;
+    phis[1] = res3;
     debugColor =  (vec3(0, phi3, 0) - vec3(2.*PI, 2.*PI, 0.))/2.*PI;
     return true;
 }
