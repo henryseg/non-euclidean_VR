@@ -36,6 +36,10 @@ vec3 boxMapping(in sampler2D sam, in tangVector point)
 
 //--------Texturing the Earth -------------------
 
+
+//rig this up for LOCAL OBJECTS
+//get rid of global object boost in earth color
+
 vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     pt = translate(cellBoost, pt);//move back to orig cell
     pt = inverse(globalObjectBoost.matrix) * pt;//move back to origin
@@ -45,7 +49,7 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
 
 vec3 earthColor(Isometry totalFixMatrix, tangVector sampletv){
         
-        vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
+        vec3 color = texture(earthCubeTex, sphereOffset(Isometry(mat4(1.)), sampletv.pos)).xyz;
  
     return color;
     }
@@ -113,7 +117,7 @@ float materialReflectivity(int hitWhich){
     }
     else if (hitWhich == 2){//global Object
         //return 0.3;//black sphere
-        return 0.;//earth, not reflective
+        return 0.2;//earth, not reflective
     }
     else if (hitWhich ==3) {//tiling
     return mirror;//controlled by slider

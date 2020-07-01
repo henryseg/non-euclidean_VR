@@ -258,10 +258,10 @@ void raymarch(tangVector rayDir, out Isometry totalFixMatrix){
             //if its not less than epsilon, keep marching
             
             //find the distance to  a wall of the fundamental chamber
-            float wallDist=distToEdge(localtv.pos);
+           // float wallDist=distToEdge(localtv.pos);
             //we want to let ourselves march either (1) just SLIGHTLY over the wall so we get teleported back, or (2) a little less than the SDF output, for safety.            
-            marchStep = min(wallDist+0.01,marchProportion*localDist);//make this distance your next march step
-            //marchStep=marchProportion*localDist;
+           // marchStep = min(wallDist+0.01,marchProportion*localDist);//make this distance your next march step
+            marchStep=marchProportion*localDist;
             localDepth += marchStep;//add this to the total distance traced so far
 
         }
@@ -453,13 +453,12 @@ float shadowMarch(tangVector toLight, float distToLight)
    else {//if you are still inside the central cell
             
             //set the local distance to a portion of the sceneSDF
-            float localDist = localSceneSDF(localtv.pos,newEp);
+            float localDist = localLightSceneSDF(localtv.pos);
        
             //if you've made it to the light
        //subtract some bit from this - as otherwise since the light is a part of the local scene,
-       //you always end up reaching the local scene! and thus the this algorithm thinks you're in shadow.
-       //so for now, we fix this by only letting you get  "mostly" to the light (say, the radius of the light)
-            if(localDepth>distToLight-0.5){
+       //not sure what the right number is here - trying tot get back in the same fundamental domain as the light
+            if(localDepth>distToLight-0.6){
                 return 1.;
             }
        

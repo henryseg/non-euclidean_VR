@@ -53,9 +53,9 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants for the Raymarch
 //----------------------------------------------------------------------------------------------------------------------
-int MAX_MARCHING_STEPS =  120;
+int MAX_MARCHING_STEPS =  150;
 int MAX_REFL_STEPS=50;
-int MAX_SHADOW_STEPS=20;
+int MAX_SHADOW_STEPS=100;
 
 const float MIN_DIST = 0.0;
 float MAX_DIST = 15.;

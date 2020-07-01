@@ -101,7 +101,7 @@ float latticeSceneSDF(vec4 p){
    // vec3 q=vec3(abs(p.x),abs(p.y),abs(p.z));
    //return max(q.x, max(q.y, q.z)) - 0.15 + dot(q, q)*0.5;
     
-    return sphereSDF(p,ORIGIN,0.5);
+    return sphereSDF(p,ORIGIN,0.2);
   
 
 }
@@ -187,7 +187,9 @@ float localSceneSDF(vec4 p,float threshhold){
     
         if (sceneDist<threshhold){
             hitLocal=true;
-            hitWhich=3;
+        if(display!=3){
+            hitWhich=3;}
+else{hitWhich=2;}
             
             return sceneDist;
         }
@@ -219,6 +221,24 @@ float localSceneSDF(vec4 p){
 
 
 
+float localLightSceneSDF(vec4 p){
+  float distance;
+    float lightDist;
+    
+   lightDist=sphereSDF(p, localLightPosition, 0.02);
+    distance=min(distance, lightDist);
+    
 
+    lightDist=sphereSDF(p, localLight2, 0.02);
+    distance=min(distance, lightDist);
+    
+    
+    
+    lightDist=sphereSDF(p, localLight3, 0.02);
+    distance=min(distance, lightDist);
+    
+   return distance;
+
+}
 
 
