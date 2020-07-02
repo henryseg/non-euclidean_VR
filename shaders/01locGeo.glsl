@@ -63,7 +63,7 @@ const Isometry flip = Isometry(mat4(
 // return the rotation around the z-axis by an angle alpha
 Isometry rotation(float angle){
     mat4 mat = mat4(
-    cos(angle), sin(agnle), 0, 0,
+    cos(angle), sin(angle), 0, 0,
     -sin(angle), cos(angle), 0, 0,
     0, 0, 1, 0,
     0, 0, 0, 1

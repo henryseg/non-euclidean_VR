@@ -6,25 +6,25 @@
   Methods computing ``global'' objects
 */
 
-/*
-mat4 nilMatrix(vec4 p) {
-    // return the Heisenberg isometry sending the origin to p
-    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
-    return mat4(
-    1., 0., -p.y/2., 0.,
-    0., 1., p.x/2., 0.,
-    0., 0., 1., 0.,
-    p.x, p.y, p.z, 1.);
-}
 
-mat4 nilMatrixInv(vec4 p) {
-    // return the Heisenberg isometry sending the p to origin
-    return mat4(
-    1., 0., p.y/2., 0.,
-    0., 1., -p.x/2., 0.,
-    0., 0., 1., 0.,
-    -p.x, -p.y, -p.z, 1.);
-}*/
+//mat4 nilMatrix(vec4 p) {
+//    // return the Heisenberg isometry sending the origin to p
+//    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
+//    return mat4(
+//    1., 0., -p.y/2., 0.,
+//    0., 1., p.x/2., 0.,
+//    0., 0., 1., 0.,
+//    p.x, p.y, p.z, 1.);
+//}
+
+//mat4 nilMatrixInv(vec4 p) {
+//    // return the Heisenberg isometry sending the p to origin
+//    return mat4(
+//    1., 0., p.y/2., 0.,
+//    0., 1., -p.x/2., 0.,
+//    0., 0., 1., 0.,
+//    -p.x, -p.y, -p.z, 1.);
+//}
 
 float fakeHeightSq(Point p) {
     // square of the fake height.
@@ -42,7 +42,6 @@ float fakeHeightSq(Point p) {
     }
 }
 
-
 float fakeDistance(Point p, Point q){
     // measure the distance between two points in the geometry
     // fake distance
@@ -51,19 +50,16 @@ float fakeDistance(Point p, Point q){
     Isometry shift = makeInvLeftTranslation(p);
     Point qOrigin = translate(shift, q);
     // we now need the distance between the origin and p
-    float rhosq = pow(qOrigin.coords.x, 2.)+pow(qOrigin.coords.y, 2.);
+    float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
     float hsq = fakeHeightSq(qOrigin);
 
     return pow(0.2 * pow(rhosq, 2.) + 0.8 * pow(hsq, 2.), 0.25);
 }
 
-
-float fakeDistance(tangVector u, tangVector v){
+float fakeDistance(Vector u, Vector v){
     // overload of the previous function in case we work with tangent vectors
     return fakeDistance(u.pos, v.pos);
 }
-
-
 
 float ellipsoidDistance(Point p, Point q){
     // measure the distance between two points in the geometry
@@ -78,7 +74,7 @@ float ellipsoidDistance(Point p, Point q){
     return pow(1. * pow(rhosq, 10.) + 1. * pow(hsq, 2.), 0.25);
 }
 
-float ellipsoidDistance(tangVector u, tangVector v){
+float ellipsoidDistance(Vector u, Vector v){
     // overload of the previous function in case we work with tangent vectors
     return ellipsoidDistance(u.pos, v.pos);
 }
@@ -108,7 +104,7 @@ void _lengthFromPhi(float rhosq, float z, float phi, out float len) {
 // the point q is given in cylinder coordiantes (rho, theta, z)
 // we assume that rho != 0 and z != 0
 // todo. check the formulas when z < 0
-void _dirLengthFromPhi(float rhosq, float theta, float z, float phi, out tangVector tv, out float len) {
+void _dirLengthFromPhi(float rhosq, float theta, float z, float phi, out Vector tv, out float len) {
     float sign = 0.0;
     if (z > 0.0) {
         sign = 1.0;
@@ -119,7 +115,7 @@ void _dirLengthFromPhi(float rhosq, float theta, float z, float phi, out tangVec
     float c = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
     float a = sqrt(1.0  - pow(c, 2.0));
     float alpha = - 0.5 * phi + theta;
-    tv = tangVector(
+    tv = Vector(
     ORIGIN,
     vec4(a * cos(alpha), a * sin(alpha), c, 0.0)
     );
