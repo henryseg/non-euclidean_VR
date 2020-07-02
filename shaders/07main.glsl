@@ -70,19 +70,19 @@ void main(){
     Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
     //camera position must be translated in hyperboloid -----------------------
-    rayDir = applyMatrixToDir(facing, rayDir);
+    rayDir = rotateFacing(facing, rayDir);
 
 
     if (isStereo == 1){
 
 
         if (isLeft){
-            rayDir = applyMatrixToDir(leftFacing, rayDir);
+            rayDir = rotateFacing(leftFacing, rayDir);
             Isometry leftshift = unserializeIsom(leftBoost);
             rayDir = translate(leftshift, rayDir);
         }
         else {
-            rayDir = applyMatrixToDir(rightFacing, rayDir);
+            rayDir = rotateFacing(rightFacing, rayDir);
             Isometry rightshift = unserializeIsom(rightBoost);
             rayDir = translate(rightshift, rayDir);
         }
@@ -181,8 +181,8 @@ void main(){
         }
 
         else if (hitWhich == 2){ // global object
-            mat4 totalFixMatrix=mat4(1.);
-            reflColor=localColor(totalFixMatrix, sampletv);
+            totalFixIsom = identity;
+            reflColor=localColor(totalFixIsom, sampletv);
 
         }
         else if (hitWhich == 7){ // the LOCAL earth

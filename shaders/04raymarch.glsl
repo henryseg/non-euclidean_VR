@@ -1,28 +1,28 @@
 bool isOutsideCell(Point p, out Isometry fixIsom){
     // check if the given point p is in the fundamental domain of the lattice.
     //    if (p.coords.x > modelHalfCube){
-    //        fixIsom = unserializeIsom(invGenerators[0], true);
+    //        fixIsom = unserializeIsom(invGenerators[0]);
     //        return true;
     //    }
     //    if (p.coords.x < -modelHalfCube){
-    //        fixIsom = unserializeIsom(invGenerators[1], true);
+    //        fixIsom = unserializeIsom(invGenerators[1]);
     //        return true;
     //    }
     //    if (p.coords.y > modelHalfCube){
-    //        fixIsom = unserializeIsom(invGenerators[2], true);
+    //        fixIsom = unserializeIsom(invGenerators[2]);
     //        return true;
     //    }
     //    if (p.coords.y < -modelHalfCube){
-    //        fixIsom = unserializeIsom(invGenerators[3], true);
+    //        fixIsom = unserializeIsom(invGenerators[3]);
     //        return true;
     //    }
 
     if (p.coords.z > modelHalfCube){
-        fixIsom = unserializeIsom(invGenerators[4], true);
+        fixIsom = unserializeIsom(invGenerators[4]);
         return true;
     }
     if (p.coords.z < -modelHalfCube){
-        fixIsom = unserializeIsom(invGenerators[5], true);
+        fixIsom = unserializeIsom(invGenerators[5]);
         return true;
     }
     return false;

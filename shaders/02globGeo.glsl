@@ -69,7 +69,7 @@ float ellipsoidDistance(Point p, Point q){
     Point qOrigin = translate(shift, q);
     // we now need the distance between the origin and p
     float rhosq = pow(qOrigin.coords.x, 2.)+pow(qOrigin.coords.y, 2.);
-    float hsq = fakeHeightSq(abs(qOrigin.coords.z));
+    float hsq = fakeHeightSq(qOrigin);
 
     return pow(1. * pow(rhosq, 10.) + 1. * pow(hsq, 2.), 0.25);
 }
@@ -178,7 +178,7 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
             ORIGIN,
             vec4(qOrigin.coords.x, qOrigin.coords.y, 0, 0)
             );
-            len = length(resOrigin);
+            len = length(qOrigin.coords);
             resOrigin = tangNormalize(resOrigin);
         }
         else {
@@ -202,7 +202,7 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
             else {
                 float theta = atan(qOrigin.coords.y, qOrigin.coords.x);
                 float phi = zero_height(rhosq, abs(z));
-                _dirFromPhi(rhosq, theta, z, phi, resOrigin, len);
+                _dirLengthFromPhi(rhosq, theta, z, phi, resOrigin, len);
             }
         }
     }
@@ -443,7 +443,7 @@ Vector flow(Vector tv, float t){
 
 //Project onto the Klein Model
 vec4 modelProject(Point p){
-    return p.pos;
+    return p.coords;
 }
 
 

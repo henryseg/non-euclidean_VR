@@ -34,7 +34,7 @@ float localLightIntensity=0.25;
 
 const float PI = 3.1415926538;
 
-const vec4 ORIGIN = vec4(0, 0, 0, 1);
+//const vec4 ORIGIN = vec4(0, 0, 0, 1);
 const float modelHalfCube = 0.5;
 
 vec3 debugColor = vec3(0.5, 0, 0.8);

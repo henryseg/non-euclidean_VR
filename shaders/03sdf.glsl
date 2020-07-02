@@ -107,7 +107,7 @@ float localSceneSDF(Point p){
 float globalSceneSDF(Point p){
     float earthDist;
     Isometry shift = unserializeIsom(cellBoost);
-    vec4 absolutep = translate(shift, p);// correct for the fact that we have been moving
+    Point absolutep = translate(shift, p);// correct for the fact that we have been moving
     float distance = MAX_DIST;
     //Light Objects
     //    for (int i=0; i<4; i++){

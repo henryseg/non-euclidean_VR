@@ -18,8 +18,8 @@ Vector N, sampletv;
 vec4 globalLightColor = vec4(1.,1.,1.,1.);
 int hitWhich = 0;
 
-vec3 localLightColor=vec3(1.,1.,1.);
-vec4 localLightPos=Point(vec4(0.0,0.4,-0.2,1.));
+vec3 localLightColor = vec3(1.,1.,1.);
+Point localLightPos = Point(vec4(0.0,0.4,-0.2,1.));
 
 //-------------------------------------------
 //Translation & Utility Variables

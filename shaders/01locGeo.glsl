@@ -28,7 +28,7 @@ vec3 toCylSq(Point p) {
 
 // return the cylinder coordinates (rho, theta, z) of the point
 vec3 toCyl(Point p) {
-    vec3 aux = toCyl(p);
+    vec3 aux = toCylSq(p);
     return vec3(sqrt(aux.x), aux.yz);
 }
 

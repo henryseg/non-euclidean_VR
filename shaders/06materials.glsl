@@ -73,10 +73,10 @@ vec3 boxMapping(in sampler2D sam, in Vector point)
     m = m * m;
     m = m * m;
 
-    vec3 x = texture(sam, smallest(point.pos.yzw)).xyz;
-    vec3 y = texture(sam, smallest(point.pos.zwx)).xyz;
-    vec3 z = texture(sam, smallest(point.pos.wxy)).xyz;
-    vec3 w = texture(sam, smallest(point.pos.xyz)).xyz;
+    vec3 x = texture(sam, smallest(point.pos.coords.yzw)).xyz;
+    vec3 y = texture(sam, smallest(point.pos.coords.zwx)).xyz;
+    vec3 z = texture(sam, smallest(point.pos.coords.wxy)).xyz;
+    vec3 w = texture(sam, smallest(point.pos.coords.xyz)).xyz;
 
     return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
 }
@@ -92,7 +92,7 @@ vec3 sphereOffset(mat4 objectFacing, Point pt){
     return earthPoint.dir.xyz;
 }
 
-vec3 globalSphereOffset(mat4 objectFacing, vec4 pt){
+vec3 globalSphereOffset(mat4 objectFacing, Point pt){
 
     Isometry shift = unserializeIsom(cellBoost);
     shift = composeIsometry(shift, getInverse(unserializeIsom(globalEarthBoost)));
