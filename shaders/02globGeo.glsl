@@ -6,26 +6,6 @@
   Methods computing ``global'' objects
 */
 
-
-//mat4 nilMatrix(vec4 p) {
-//    // return the Heisenberg isometry sending the origin to p
-//    // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
-//    return mat4(
-//    1., 0., -p.y/2., 0.,
-//    0., 1., p.x/2., 0.,
-//    0., 0., 1., 0.,
-//    p.x, p.y, p.z, 1.);
-//}
-
-//mat4 nilMatrixInv(vec4 p) {
-//    // return the Heisenberg isometry sending the p to origin
-//    return mat4(
-//    1., 0., p.y/2., 0.,
-//    0., 1., -p.x/2., 0.,
-//    0., 0., 1., 0.,
-//    -p.x, -p.y, -p.z, 1.);
-//}
-
 float fakeHeightSq(Point p) {
     // square of the fake height.
     // fake height : bound on the height of the ball centered at the origin passing through p
@@ -45,7 +25,6 @@ float fakeHeightSq(Point p) {
 float fakeDistance(Point p, Point q){
     // measure the distance between two points in the geometry
     // fake distance
-    // todo: check the formula if z < 0. Is a flip needed ?
 
     Isometry shift = makeInvLeftTranslation(p);
     Point qOrigin = translate(shift, q);
@@ -68,7 +47,7 @@ float ellipsoidDistance(Point p, Point q){
     Isometry shift = makeInvLeftTranslation(p);
     Point qOrigin = translate(shift, q);
     // we now need the distance between the origin and p
-    float rhosq = pow(qOrigin.coords.x, 2.)+pow(qOrigin.coords.y, 2.);
+    float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
     float hsq = fakeHeightSq(qOrigin);
 
     return pow(1. * pow(rhosq, 10.) + 1. * pow(hsq, 2.), 0.25);
@@ -106,11 +85,11 @@ void _lengthFromPhi(float rhosq, float z, float phi, out float len) {
 // todo. check the formulas when z < 0
 void _dirLengthFromPhi(float rhosq, float theta, float z, float phi, out Vector tv, out float len) {
     float sign = 0.0;
-    if (z > 0.0) {
-        sign = 1.0;
+    if (z > 0.) {
+        sign = 1.;
     }
     else {
-        sign = -1.0;
+        sign = -1.;
     }
     float c = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
     float a = sqrt(1.0  - pow(c, 2.0));
@@ -161,8 +140,10 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
 
     if (FAKE_LIGHT) {
         // if FAKE_LIGHT is ON, just return the Euclidean vector pointing to q
-        len = length(q.coords - p.coords);
-        resOrigin = Vector(ORIGIN, (q.coords-p.coords) / len);
+        len = fakeDistance(p,q);
+        Isometry shift = makeInvLeftTranslation(p);
+        resOrigin = Vector(ORIGIN, shift.mat * (q.coords-p.coords));
+        resOrigin = tangNormalize(resOrigin);
     }
     else {
         // move p to the origin and q accordingly
@@ -185,7 +166,6 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
             float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
             if (rhosq == 0.) {
                 // qOrigin on the z-axis
-                // not the shortest geodesic for the moment
                 float sign = 0.;
                 if (z > 0.) {
                     sign = 1.;
@@ -193,11 +173,25 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
                 else {
                     sign = -1.;
                 }
-                resOrigin = Vector(
-                ORIGIN,
-                vec4(0, 0, sign, 0)
-                );
-                len = abs(z);
+
+                if (abs(z) < 2. * PI){
+                    resOrigin = Vector(
+                    ORIGIN,
+                    vec4(0, 0, sign, 0)
+                    );
+                    len = abs(z);
+                }
+                else {
+                    // return only one of the directions going to the light
+                    float k = floor(0.5 * abs(z) / PI);
+                    resOrigin = Vector(
+                    ORIGIN,
+                    vec4(sqrt((abs(z) - 2. * k * PI) / (abs(z) - k * PI)), 0, sign * sqrt(k * PI/ (abs(z) - k * PI)), 0)
+                    );
+                    len = 2. * PI * sqrt((abs(z) / PI - k) * k);
+
+                }
+
             }
             else {
                 float theta = atan(qOrigin.coords.y, qOrigin.coords.x);
@@ -331,7 +325,7 @@ bool tangDirectionBis(Point p, Point q, out Vector[2] dirs, out float[2] lens) {
 
 
 
-Vector flow(Vector tv, float t){
+Vector flow(Vector v, float t){
     // Follow the geodesic flow during a time t
     // If the tangent vector at the origin is too close to the XY plane,
     // we use an asymptotic expansion of the geodesics.
@@ -341,27 +335,25 @@ Vector flow(Vector tv, float t){
 
 
     // move p to the origin
-    Isometry shift = makeLeftTranslation(tv.pos);
+    Isometry shift = makeLeftTranslation(v.pos);
 
     // vector at the origin
-    Vector tvOrigin = Vector(ORIGIN, tv.dir);
+    Vector vOrigin = Vector(ORIGIN, v.dir);
 
     // solve the problem !
-    float c = tvOrigin.dir.z;
+    float c = vOrigin.dir.z;
     float a = sqrt(1. - c * c);
     // float alpha = fixedatan(tvOrigin.dir.y, tvOrigin.dir.x);
-    float theta = atan(tvOrigin.dir.y, tvOrigin.dir.x);
-
+    float alpha = atan(vOrigin.dir.y, vOrigin.dir.x);
 
     Vector achievedFromOrigin;
-
 
     if (abs(c * t) < tolerance){
         // use an asymptotic expansion (computed with SageMath)
 
         // factorize some computations...
-        float cosa = cos(theta);
-        float sina = sin(theta);
+        float cosa = cos(alpha);
+        float sina = sin(alpha);
         float t1 = t;
         float t2 = t1 * t;
         float t3 = t2 * t;
@@ -372,39 +364,39 @@ Vector flow(Vector tv, float t){
         float t8 = t7 * t;
         float t9 = t8 * t;
 
-        float w1 = c;
-        float w2 = w1 * c;
-        float w3 = w2 * c;
-        float w4 = w3 * c;
-        float w5 = w4 * c;
-        float w6 = w5 * c;
-        float w7 = w6 * c;
+        float c1 = c;
+        float c2 = c1 * c;
+        float c3 = c2 * c;
+        float c4 = c3 * c;
+        float c5 = c4 * c;
+        float c6 = c5 * c;
+        float c7 = c6 * c;
 
 
 
         achievedFromOrigin.pos = Point(vec4(
         a * t1 * cosa
-        - (1. / 2.) * a * t2 * w1 * sina
-        - (1. / 6.) * a * t3 * w2 * cosa
-        + (1. / 24.) * a * t4 * w3 * sina
-        + (1. / 120.) * a * t5 * w4 * cosa
-        - (1. / 720.) * a * t6 * w5 * sina
-        - (1. / 5040.) * a * t7 * w6 * cosa
-        + (1. / 40320.) * a * t8 * w7 * sina,
+        - (1. / 2.) * a * t2 * c1 * sina
+        - (1. / 6.) * a * t3 * c2 * cosa
+        + (1. / 24.) * a * t4 * c3 * sina
+        + (1. / 120.) * a * t5 * c4 * cosa
+        - (1. / 720.) * a * t6 * c5 * sina
+        - (1. / 5040.) * a * t7 * c6 * cosa
+        + (1. / 40320.) * a * t8 * c7 * sina,
 
         a * t * sina
-        + (1. / 2.) * a * t2 * w1 * cosa
-        - (1. / 6.) * a * t3 * w2 * sina
-        - (1. / 24.) * a * t4 * w3 * cosa
-        + (1. / 120.) * a * t5 * w4 * sina
-        + (1. / 720.) * a * t6 * w5 * cosa
-        - (1. / 5040.) * a * t7 * w6 * sina
-        - (1. / 40320.) * a * t8 * w7 * cosa,
+        + (1. / 2.) * a * t2 * c1 * cosa
+        - (1. / 6.) * a * t3 * c2 * sina
+        - (1. / 24.) * a * t4 * c3 * cosa
+        + (1. / 120.) * a * t5 * c4 * sina
+        + (1. / 720.) * a * t6 * c5 * cosa
+        - (1. / 5040.) * a * t7 * c6 * sina
+        - (1. / 40320.) * a * t8 * c7 * cosa,
 
-        (1. / 12.) * (a * a * t3 + 12. * t1) * w1
-        - (1. / 240.) * a * a * t5 * w3
-        + (1. / 10080.) * a * a * t7 * w5
-        - (1. / 725760.) * a * a * t9 * w7,
+        (1. / 12.) * (a * a * t3 + 12. * t1) * c1
+        - (1. / 240.) * a * a * t5 * c3
+        + (1. / 10080.) * a * a * t7 * c5
+        - (1. / 725760.) * a * a * t9 * c7,
 
         1));
     }
@@ -421,15 +413,15 @@ Vector flow(Vector tv, float t){
 
     else {
         achievedFromOrigin.pos = Point(vec4(
-        2. * (a / c) * sin(0.5 * c * t) * cos(0.5 * c * t + theta),
-        2. * (a / c) * sin(0.5 * c * t) * sin(0.5 * c * t + theta),
+        2. * (a / c) * sin(0.5 * c * t) * cos(0.5 * c * t + alpha),
+        2. * (a / c) * sin(0.5 * c * t) * sin(0.5 * c * t + alpha),
         c * t + 0.5 * pow(a / c, 2.) * (c * t - sin(c * t)),
         1.
         ));
     }
 
     // there is case distinction for the direction (pulled back at the origin)
-    achievedFromOrigin.dir = vec4(a * cos(c * t + theta), a * sin(c * t + theta), c, 0.);
+    achievedFromOrigin.dir = vec4(a * cos(c * t + alpha), a * sin(c * t + alpha), c, 0.);
 
     // move back to p
     return translate(shift, achievedFromOrigin);

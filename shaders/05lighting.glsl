@@ -162,18 +162,17 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
     //        color += lightingCalculations(SP, TLP, V, vec3(1.0), lightIntensities[i]);
     //    }
 
-    vec3 color=0.1 * baseColor;
-
-
-    //var lightColor1 = new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1);
-    //var lightColor2 = new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1);
-    //var lightColor3 = new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1);
-    //var lightColor4 = new THREE.Vector4(256 / 256, 142 / 256, 226 / 256, 1);
+    vec3 color = 0.1 * baseColor;
 
     vec4 lightColor1 = vec4(68. / 256., 197. / 256., 203. / 256., 1.);
     vec4 lightColor2 = vec4(252. / 256., 227. / 256., 21. / 256., 1.);
     vec4 lightColor3 = vec4(245. / 256., 61. / 256., 82. / 256., 1.);
     vec4 lightColor4 = vec4(256. / 256., 142. / 256., 226. / 256., 1.);
+
+    bool otherDir1 = false;
+    bool otherDir2 = false;
+    bool otherDir = otherDir1 || otherDir2;
+
 
     shiftLight = composeIsometry(totalFixIsom, unserializeIsom(invCellBoost));
 
@@ -181,9 +180,6 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
     tangDirection(SP, TLP, DTLP, distToLight);
     color = lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor1);
 
-    bool otherDir1 = false;
-    bool otherDir2 = false;
-    bool otherDir = otherDir1 || otherDir2;
 
     if (tangDirectionBis(SP, TLP, DTLPbis, distToLightBis) && otherDir) {
         debugColor = lightColor1.xyz;
@@ -196,7 +192,6 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
 
 
     }
-
     TLP = translate(shiftLight, Point(vec4(0., 10., 10., 1.)));
     tangDirection(SP, TLP, DTLP, distToLight);
     color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor2);

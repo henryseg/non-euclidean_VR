@@ -75,8 +75,8 @@ Isometry rotation(float angle){
 Isometry makeLeftTranslation(Point p) {
     // this is in COLUMN MAJOR ORDER so the things that LOOK LIKE ROWS are actually FUCKING COLUMNS!
     mat4 mat = mat4(
-    1., 0., -p.coords.y/2., 0.,
-    0., 1., p.coords.x/2., 0.,
+    1., 0., -p.coords.y / 2., 0.,
+    0., 1., p.coords.x / 2., 0.,
     0., 0., 1., 0.,
     p.coords.x, p.coords.y, p.coords.z, 1.);
     return Isometry(mat, true);
@@ -85,8 +85,8 @@ Isometry makeLeftTranslation(Point p) {
 // Return the isometry sending p to the origin
 Isometry makeInvLeftTranslation(Point p) {
     mat4 mat = mat4(
-    1., 0., p.coords.y/2., 0.,
-    0., 1., -p.coords.x/2., 0.,
+    1., 0., p.coords.y / 2., 0.,
+    0., 1., -p.coords.x / 2., 0.,
     0., 0., 1., 0.,
     -p.coords.x, -p.coords.y, -p.coords.z, 1.);
     return Isometry(mat, true);
@@ -160,9 +160,10 @@ Vector translate(Isometry isom, Vector v) {
     }
     else {
         Isometry shift = makeLeftTranslation(v.pos);
-        Isometry shiftInv = makeInvLeftTranslation(v.pos);
-        mat4 matDir = shift.mat * isom.mat * shiftInv.mat;
-        return Vector(translate(isom, v.pos), matDir * v.dir);
+        Point target = translate(isom, v.pos);
+        Isometry shiftInv = makeInvLeftTranslation(target);
+        mat4 matDir = shiftInv.mat * isom.mat * shift.mat;
+        return Vector(target, matDir * v.dir);
     }
 }
 
@@ -173,9 +174,9 @@ Vector applyMatrixToDir(mat4 matrix, Vector v) {
 }
 */
 
-Vector rotateFacing(mat4 A, Vector v){
+Vector rotateFacing(mat4 mat, Vector v){
     // apply an isometry to the tangent vector (both the point and the direction)
-    return Vector(v.pos, A*v.dir);
+    return Vector(v.pos, mat * v.dir);
 }
 
 float tangDot(Vector u, Vector v){
@@ -188,7 +189,7 @@ float tangDot(Vector u, Vector v){
 
 float tangNorm(Vector v){
     // calculate the length of a tangent vector
-    return sqrt(abs(tangDot(v, v)));
+    return sqrt(tangDot(v, v));
 }
 
 Vector tangNormalize(Vector v){
@@ -198,43 +199,44 @@ Vector tangNormalize(Vector v){
 
 float cosAng(Vector u, Vector v){
     // cosAng between two vector in the tangent bundle
+    // assuming that they are unit vectors
     return tangDot(u, v);
 }
 
 // return the opposite of the given tangent vector
-Vector turnAround(Vector tv){
-    return Vector(tv.pos, -tv.dir);
+Vector turnAround(Vector v){
+    return Vector(v.pos, -v.dir);
 }
 
 
-//reflect the unit tangent vector u off the surface with unit normal nVec
-Vector reflectOff(Vector u, Vector nVec){
-    return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
+//reflect the unit tangent vector u off the surface with unit normal n
+Vector reflectOff(Vector u, Vector n){
+    return add(scalarMult(-2.0 * tangDot(u, n), n), u);
 }
 
 
-mat4 tangBasis(vec4 p){
-    // return a basis of vectors at the point p
-
-    /*
-    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
-    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
-    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
-    //make this orthonormal
-    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
-    mat4 theBasis=mat4(0.);
-    */
-
-    vec4 basis_x = vec4(1., 0., 0., 0.);
-    vec4 basis_y = vec4(0., 1., 0., 0.);
-    vec4 basis_z = vec4(0., 0., 1., 0.);
-    mat4 theBasis=mat4(0.);
-    theBasis[0]=basis_x;
-    theBasis[1]=basis_y;
-    theBasis[2]=basis_z;
-    return theBasis;
-}
+//mat4 tangBasis(vec4 p){
+//    // return a basis of vectors at the point p
+//
+//    /*
+//    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
+//    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
+//    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
+//    //make this orthonormal
+//    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
+//    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
+//    mat4 theBasis=mat4(0.);
+//    */
+//
+//    vec4 basis_x = vec4(1., 0., 0., 0.);
+//    vec4 basis_y = vec4(0., 1., 0., 0.);
+//    vec4 basis_z = vec4(0., 0., 1., 0.);
+//    mat4 theBasis=mat4(0.);
+//    theBasis[0]=basis_x;
+//    theBasis[1]=basis_y;
+//    theBasis[2]=basis_z;
+//    return theBasis;
+//}
 
 
 /*
@@ -258,6 +260,18 @@ Point smallShift(Point p, vec3 dp) {
 Vector createVector(Point p, vec3 dp) {
     return Vector(p, vec4(dp, 0));
 }
+
+
+//// test : take the canonical frame at every point
+//Point smallShift(Point p, vec3 dp) {
+//    return Point(p.coords + vec4(dp, 0));
+//}
+//
+//Vector createVector(Point p, vec3 dp) {
+//    Isometry shift = makeInvLeftTranslation(p);
+//    vec4 dir = shift.mat * vec4(dp, 0);
+//    return Vector(p, dir);
+//}
 
 
 
