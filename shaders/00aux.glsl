@@ -107,7 +107,7 @@ float _height(float rhosq, float z0, float phi) {
     return aux - z0;
 }
 
-// derivative with respect to phi of _height
+// derivative of _height with respect to phi
 float _dheight(float rhosq, float z0, float phi) {
     float res;
     // when phi is close to zero we replace the exact formular by an asymptotic expansion
@@ -132,7 +132,6 @@ float _dheight(float rhosq, float z0, float phi) {
 // return a value of phi between phimin and phimax such that _height
 // (seen as a function of phi) is positive
 // this value will serve as starting point for the newtown method
-// (the function _height is convex)
 // the output is found using a binary search
 // we assume that _height is defined and monotone on the whole interval (phimin, phimax)
 // the boolean `increasing` says if it is increasing or decreasing
@@ -162,10 +161,32 @@ float _height_newton_init(float rhosq, float z0, float phimin, float phimax, boo
 // starting from phi0
 float _height_newton(float rhosq, float z0, float phi0) {
     float phi = phi0;
+    float aux;
+    float val;
+    for (int i=0; i < MAX_NEWTON_ITERATION; i++){
+        // value of _height at phi
+        val = _height(rhosq, z0, phi);
+        // backup of the previous value of phi
+        aux = phi;
+        // new value of phi
+        phi = phi - val/_dheight(rhosq, z0, phi);
+        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+            break;
+        }
+    }
+    return phi;
+}
+
+/*
+// runs the newton algorithm to find the zero of _height
+// starting from phi0
+// OLD VERSION : bad stopping condition, when _height is 'flat' around its zero.
+float _height_newton(float rhosq, float z0, float phi0) {
+    float phi = phi0;
     float val = _height(rhosq, z0, phi);
 
     for (int i=0; i < MAX_NEWTON_ITERATION; i++){
-        if (abs(val)< NEWTON_TOLERANCE) {
+        if (abs(val) < NEWTON_TOLERANCE) {
             break;
         }
         else {
@@ -175,7 +196,7 @@ float _height_newton(float rhosq, float z0, float phi0) {
     }
     return phi;
 }
-
+*/
 
 // return the first zero of _height (seen as a function of phi)
 // - use the Newton method
@@ -189,13 +210,12 @@ float zero_height(float rhosq, float z0) {
 // AUXILIARY COMPUTATION TO
 // - COMPUTE THE DIRECTION OF THE OTHER GEODESIC FROM THE ORIGIN TO A GIVEN POINT
 
-// The first task is to check whether or not there are more than one geodesics from the orgin
-// to the point
+// The first task is to check whether or not there are more than one geodesics from the orgin to the point
 // To that end, we need to check whether _height has a zero between 2pi and 4pi
 // More precisely we compute the minimum of _height on the interval [2pi, 4pi]
 
 // "numerator" of _dheight
-// _aux_dheight vanishes at phi if and only if so does _dheight
+// _dheight vanishes at phi if and only if so does _aux_dheight
 // however _aux_dheight need not have the same sign as _dheight
 float _aux_dheight(float rhosq, float z0, float phi) {
     float res;
@@ -209,11 +229,11 @@ float _aux_dheight(float rhosq, float z0, float phi) {
         + (1./ 430080.) * (rhosq + 364.) * phi7;
     }
     else {
-        res = 0.25 * rhosq *(sin(0.5 * phi) - 0.5 * phi * cos(0.5 * phi)) + pow(sin(0.5 * phi), 3.);
+        res = 0.25 * rhosq * (sin(0.5 * phi) - 0.5 * phi * cos(0.5 * phi)) + pow(sin(0.5 * phi), 3.);
     }
     return res;
 }
-// derivative with respect to phi of _aux_dheight
+// derivative of _aux_dheight with respect to phi
 float _daux_dheight(float rhosq, float z0, float phi) {
     float res;
     res = (1. / 16.) * (phi * rhosq + 12. * sin(phi)) * sin(0.5 * phi);
@@ -243,8 +263,28 @@ float _aux_dheight_newton_init(float rhosq, float z0) {
     return aux;
 }
 
+
 // runs the newton algorithm to find the zero of _aux_dheight
 // starting from phi0
+float _aux_dheight_newton(float rhosq, float z0, float phi0) {
+    float phi = phi0;
+    float aux;
+    float val;
+    for (int i=0; i < MAX_NEWTON_ITERATION; i++){
+        val = _aux_dheight(rhosq, z0, phi);
+        aux = phi;
+        phi = phi - val/_daux_dheight(rhosq, z0, phi);
+        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+            break;
+        }
+    }
+    return phi;
+}
+
+/*
+// runs the newton algorithm to find the zero of _aux_dheight
+// starting from phi0
+// OLD VERSION : bad stopping condition
 float _aux_dheight_newton(float rhosq, float z0, float phi0) {
     float phi = phi0;
     float val = _aux_dheight(rhosq, z0, phi);
@@ -260,6 +300,7 @@ float _aux_dheight_newton(float rhosq, float z0, float phi0) {
     }
     return phi;
 }
+*/
 
 
 // return the second and third zero (if they exit) of _height (seen as a function of phi)

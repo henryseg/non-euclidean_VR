@@ -63,17 +63,9 @@ float ellipsoidDistance(Vector u, Vector v){
 // after describing an angle phi (in the xy plane)
 // return the length of this geodesic
 // the point q is given in cylinder coordiantes (rho, theta, z)
-// we assume that rho != 0 and z != 0
-// todo. check the formulas when z < 0
+// we assume that rho > 0 and z > 0
 void _lengthFromPhi(float rhosq, float z, float phi, out float len) {
-    float sign = 0.;
-    if (z > 0.) {
-        sign = 1.;
-    }
-    else {
-        sign = -1.;
-    }
-    float c = sign * 2. * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.));
+    float c = 2. * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.));
     len = phi / c;
 }
 
@@ -81,17 +73,9 @@ void _lengthFromPhi(float rhosq, float z, float phi, out float len) {
 // after describing an angle phi (in the xy plane)
 // return the unit tangent vector of this geodesic and its length
 // the point q is given in cylinder coordiantes (rho, theta, z)
-// we assume that rho != 0 and z != 0
-// todo. check the formulas when z < 0
+// we assume that rho > 0 and z > 0
 void _dirLengthFromPhi(float rhosq, float theta, float z, float phi, out Vector tv, out float len) {
-    float sign = 0.0;
-    if (z > 0.) {
-        sign = 1.;
-    }
-    else {
-        sign = -1.;
-    }
-    float c = sign * 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
+    float c = 2.0 * sin(0.5 * phi) / sqrt(rhosq + 4.0 * pow(sin(0.5 * phi), 2.0));
     float a = sqrt(1.0  - pow(c, 2.0));
     float alpha = - 0.5 * phi + theta;
     tv = Vector(
@@ -101,11 +85,19 @@ void _dirLengthFromPhi(float rhosq, float theta, float z, float phi, out Vector 
     len = phi / c;
 }
 
+
+// Compute the exact distance between p and q
+// Remark : the flip (which fixes the origin) can be written in cylindar coordinates
 float exactDist(Point p, Point q) {
     // move p to the origin and q accordingly
     Isometry shift = makeInvLeftTranslation(p);
     Point qOrigin = translate(shift, q);
 
+    // if needed we flip the point qOrigin so that its z-coordinates is positive.
+    // this does not change its distance to the origin
+    if (qOrigin.coords.z < 0){
+        qOrigin = translate(flip, qOrigin);
+    }
     float z = qOrigin.coords.z;
     float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
 
@@ -115,14 +107,14 @@ float exactDist(Point p, Point q) {
     }
     else if (rhosq == 0.){
         // qOrigin on the z-axis
-        float k = floor(0.5 * abs(z) / PI);
-        return 2. * PI * sqrt((abs(z) / PI - k) * k);
+        float k = floor(0.5 * z / PI);
+        return 2. * PI * sqrt((z / PI - k) * k);
     }
     else {
         // generic position for qOrigin
-        float phi = zero_height(rhosq, abs(z));
+        float phi = zero_height(rhosq, z);
         float length;
-        _lengthFromPhi(rhosq, abs(z), phi, length);
+        _lengthFromPhi(rhosq, z, phi, length);
         return length;
     }
 }
@@ -131,6 +123,14 @@ float exactDist(Vector u, Vector v){
     // overload of the previous function in case we work with tangent vectors
     return exactDist(u.pos, v.pos);
 }
+
+// TODO. Merge the 'tangDirection' function (rename it just 'direction' ?)
+// The signature shoud be
+// int tangDirection(Point p, Point q, int k, out Vector[N] dirs, out float[N] len)
+// where N is an integer that is defined once for all
+// The output n is min of k, N and the number of direction from p to q
+// The function also populates dirs[0:n] and len[0:n] with the corresponding directions and lengths
+// Question :
 
 
 void tangDirection(Point p, Point q, out Vector tv, out float len){
@@ -153,10 +153,14 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
         // move p to the origin and q accordingly
         Isometry shift = makeInvLeftTranslation(p);
         Point qOrigin = translate(shift, q);
+        bool flipped = false;
+        // if needed we flip the point qOrigin so that its z-coordinates is positive.
+        if (qOrigin.coords.z < 0) {
+            flipped = true;
+            qOrigin = translate(flip, qOrigin);
+        }
 
-        // solve the problem !
         float z = qOrigin.coords.z;
-
         if (z == 0.0) {
             // qOrigin on the xy-plane
             resOrigin =  Vector(
@@ -170,38 +174,33 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
             float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
             if (rhosq == 0.) {
                 // qOrigin on the z-axis
-                float sign = 0.;
-                if (z > 0.) {
-                    sign = 1.;
-                }
-                else {
-                    sign = -1.;
-                }
-
-                if (abs(z) < 2. * PI){
+                if (z < 2. * PI){
                     resOrigin = Vector(
                     ORIGIN,
-                    vec4(0, 0, sign, 0)
+                    vec4(0, 0, 1, 0)
                     );
-                    len = abs(z);
+                    len = z;
                 }
                 else {
                     // return only one of the directions going to the light
-                    float k = floor(0.5 * abs(z) / PI);
+                    float k = floor(0.5 * z / PI);
                     resOrigin = Vector(
                     ORIGIN,
-                    vec4(sqrt((abs(z) - 2. * k * PI) / (abs(z) - k * PI)), 0, sign * sqrt(k * PI/ (abs(z) - k * PI)), 0)
+                    vec4(sqrt((z - 2. * k * PI) / (z - k * PI)), 0, sqrt(k * PI/ (z - k * PI)), 0)
                     );
-                    len = 2. * PI * sqrt((abs(z) / PI - k) * k);
-
+                    len = 2. * PI * sqrt((z / PI - k) * k);
                 }
 
             }
             else {
                 float theta = atan(qOrigin.coords.y, qOrigin.coords.x);
-                float phi = zero_height(rhosq, abs(z));
+                float phi = zero_height(rhosq, z);
                 _dirLengthFromPhi(rhosq, theta, z, phi, resOrigin, len);
             }
+        }
+
+        if (flipped) {
+            resOrigin = translate(flip, resOrigin);
         }
     }
     // move back to p
@@ -290,41 +289,65 @@ void tangDirection(Vector u, Vector v, out Vector tv, out float len){
     tangDirection(u.pos, v.pos, tv, len);
 }
 
-// return the unit tangent to second and thrid geodesic (by order of length) connecting p to q.
+// return the unit tangent to second and third geodesic (by order of length) connecting p to q.
 // if such vectors exists returns true and populate `directions`
 // otherwise returns false
 bool tangDirectionBis(Point p, Point q, out Vector[2] dirs, out float[2] lens) {
-    Vector resOrigin;
+    Vector resOrigin0;
+    Vector resOrigin1;
+    bool check;
 
     // move p to the origin and q accordingly
     Isometry shift = makeInvLeftTranslation(p);
     Point qOrigin = translate(shift, q);
+    bool flipped = false;
+    // if needed we flip the point qOrigin so that its z-coordinates is positive.
+    if (qOrigin.coords.z < 0) {
+        flipped = true;
+        qOrigin = translate(flip, qOrigin);
+    }
 
-    // solve the problem !
     float z = qOrigin.coords.z;
-
     if (z == 0.) {
-        return false;
+        check = false;
     }
     else {
         float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
-        float theta = atan(qOrigin.coords.y, qOrigin.coords.x);
-        float[2] phis;
-        bool check = zerobis_height(rhosq, abs(z), phis);
-        if (check) {
-            Vector resOrigin0, resOrigin1;
-            float len0, len1;
-            _dirLengthFromPhi(rhosq, theta, z, phis[0], resOrigin0, len0);
-            _dirLengthFromPhi(rhosq, theta, z, phis[1], resOrigin1, len1);
-
-            // move back to p
-            dirs[0] = Vector(p, resOrigin0.dir);
-            dirs[1] = Vector(p, resOrigin1.dir);
-            lens[0] = len0;
-            lens[1] = len1;
+        if (rhosq == 0.) {
+            if (z < 2 * PI) {
+                check = false;
+            }
+            else {
+                resOrigin0 = Vector(p, vec4(0, 0, 1, 0));
+                resOrigin1 = Vector(p, vec4(0, 0, 1, 0));
+                lens[0] = z;
+                lens[1] = z;
+                check =  true;
+            }
         }
-        return check;
+        else {
+            float theta = atan(qOrigin.coords.y, qOrigin.coords.x);
+            float[2] phis;
+            check = zerobis_height(rhosq, z, phis);
+            if (check) {
+                Vector resOrigin0, resOrigin1;
+                float len0, len1;
+                _dirLengthFromPhi(rhosq, theta, z, phis[0], resOrigin0, len0);
+                _dirLengthFromPhi(rhosq, theta, z, phis[1], resOrigin1, len1);
+                lens[0] = len0;
+                lens[1] = len1;
+            }
+        }
     }
+
+    if (check && flipped) {
+        resOrigin0 = translate(flip, resOrigin0);
+        resOrigin1 = translate(flip, resOrigin1);
+    }
+    // move back to p
+    dirs[0] = Vector(p, resOrigin0.dir);
+    dirs[1] = Vector(p, resOrigin1.dir);
+    return check;
 }
 
 
