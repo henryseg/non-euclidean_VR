@@ -78,6 +78,7 @@ const float fov = 120.0;
 
 int hitWhich = 0;
 
+
 //----------------------------------------------------------------------------------------------------------------------
 // Auxiliary methods: computations in SL(2,R) and X
 //----------------------------------------------------------------------------------------------------------------------
@@ -628,29 +629,6 @@ Point smallShift(Point p, vec3 dp) {
     float newFiber = p.fiber + dfiberAtP;
 
     return Point(newProj, newFiber);
-
-    /*
-    vec4 aux0 = toVec4(p);
-
-    mat4 dL = diffTranslation(p);
-    mat3x4 localBasis = mat3x4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 1
-    );
-
-    vec4 aux1 = aux0 + dL * localBasis * dp;
-    // reduce the potential error
-    // the hyperbolic part of the point should be on a hyperboloid
-    mat3 J = mat3(
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, -1
-    );
-    float q = dot(aux1.xyz, J * aux1.xyz);
-    aux1.xyz = aux1.xyz / sqrt(-q);
-    return fromVec4(aux1);
-    */
 }
 
 Vector createVector(Point p, vec3 dp) {
@@ -706,8 +684,8 @@ float exactDist(Point p1, Point p2){
     return sqrt(pow(acosh(-q), 2.) + pow(aux1.w-aux2.w, 2.));
     */
 
-    Isometry isom = makeInvLeftTranslation(p1);
-    vec4 aux = toVec4(translate(isom, p2));
+    Isometry shift = makeInvLeftTranslation(p1);
+    vec4 aux = toVec4(translate(shift, p2));
     vec3 oh = vec3(0, 0, 1);
     mat3 J = mat3(
     1, 0, 0,
@@ -727,12 +705,10 @@ float exactDist(Vector v1, Vector v2){
 
 // return the tangent vector at p point to q
 Vector tangDirection(Point p, Point q){
-
-
     // isometry moving back p to the origin
-    Isometry isom = makeInvLeftTranslation(p);
+    Isometry shift = makeInvLeftTranslation(p);
     // translation of q at the origin
-    Point qAtOrigin = translate(isom, q);
+    Point qAtOrigin = translate(shift, q);
     vec4 aux = toVec4(qAtOrigin);
     Vector res = Vector(p, aux.xyw);
     res = tangNormalize(res);
@@ -1681,10 +1657,10 @@ void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
 }
 
 
-void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
+void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
 
-    Isometry fixMatrix;
-    Isometry testFixMatrix;
+    Isometry fixIsom;
+    Isometry testFixIsom;
     float marchStep = MIN_DIST;
     float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
@@ -1693,7 +1669,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
     Vector localtv = rayDir;
     Vector testlocaltv = rayDir;
     Vector bestlocaltv = rayDir;
-    totalFixMatrix = identity;
+    totalFixIsom = identity;
 
     // Trace the local scene, then the global scene:
 
@@ -1702,8 +1678,8 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
         // VERSION WITHOUT CREEPING
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
-            if (isOutsideCell(localtv, fixMatrix)){
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
+            if (isOutsideCell(localtv, fixIsom)){
+                totalFixIsom = composeIsometry(fixIsom, totalFixIsom);
                 localtv = translate(fixMatrix, localtv);
                 marchStep = MIN_DIST;
             }
@@ -1721,8 +1697,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
         localDepth=min(globalDepth, MAX_DIST);
         */
 
-
-        // TODO. VERSION TO BE CHECKED...
+        // VERSION WITH CREEPING
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             float localDist = localSceneSDF(localtv.pos);
             if (localDist < EPSILON){
@@ -1733,7 +1708,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
             marchStep = localDist;
 
             testlocaltv = flow(localtv, marchStep);
-            if (isOutsideCell(testlocaltv, fixMatrix)){
+            if (isOutsideCell(testlocaltv, fixIsom)){
                 bestlocaltv = testlocaltv;
 
                 //commenting out this for loop brings us back to what we were doing before...
@@ -1742,15 +1717,15 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
                     // dont jump too far forwards, since localSDF can't see stuff in the next cube
                     testMarchStep = marchStep - pow(0.5, float(j+1))*localDist;
                     testlocaltv = flow(localtv, testMarchStep);
-                    if (isOutsideCell(testlocaltv, testFixMatrix)){
+                    if (isOutsideCell(testlocaltv, testFixIsom)){
                         marchStep = testMarchStep;
                         bestlocaltv = testlocaltv;
-                        fixMatrix = testFixMatrix;
+                        fixIsom = testFixIsom;
                     }
                 }
                 localtv = bestlocaltv;
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                localtv = translate(fixMatrix, localtv);
+                totalFixIsom = composeIsometry(fixIsom, totalFixIsom);
+                localtv = translate(fixIsom, localtv);
                 localDepth += marchStep;
                 marchStep = MIN_DIST;
             }
@@ -1789,7 +1764,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
-                totalFixMatrix = identity;
+                totalFixIsom = identity;
                 sampletv = tv;
                 return;
             }
@@ -1803,9 +1778,9 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixMatrix){
 }
 
 
-void raymarch(Vector rayDir, out Isometry totalFixMatrix){
-    //raymarchIterate(rayDir, totalFixMatrix);
-    raymarchDirect(rayDir, totalFixMatrix);
+void raymarch(Vector rayDir, out Isometry totalFixIsom){
+    //raymarchIterate(rayDir, totalFixIsom);
+    raymarchDirect(rayDir, totalFixIsom);
 }
 
 
@@ -1866,7 +1841,7 @@ vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 li
 
 }
 
-vec3 phongModel(Isometry totalFixMatrix, vec3 color){
+vec3 phongModel(Isometry totalFixIsom, vec3 color){
     Point SP = sampletv.pos;
     Point TLP;//translated light position
     Vector V = turnAround(sampletv);
@@ -1896,7 +1871,7 @@ vec3 phongModel(Isometry totalFixMatrix, vec3 color){
 
 
     for (int i = 0; i<4; i++){
-        Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
+        Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
         TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
         color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     }
@@ -1956,15 +1931,15 @@ vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
     return tangDirection(ORIGIN, pt).global_dir.xyz;
 }*/
 
-vec3 lightColor(Isometry totalFixMatrix, Vector sampletv, vec3  colorOfLight){
+vec3 lightColor(Isometry totalFixIsom, Vector sampletv, vec3  colorOfLight){
     N = estimateNormal(sampletv.pos);
     vec3 color;
-    color = phongModel(totalFixMatrix, 0.5 * colorOfLight);
+    color = phongModel(totalFixIsom, 0.5 * colorOfLight);
     color = 0.7 * color + 0.3;
     return color;
 }
 
-vec3 ballColor(Isometry totalFixMatrix, Vector sampletv){
+vec3 ballColor(Isometry totalFixIsom, Vector sampletv){
     /*
     if (EARTH){
         N = estimateNormal(sampletv.pos);
@@ -1978,7 +1953,7 @@ vec3 ballColor(Isometry totalFixMatrix, Vector sampletv){
 
         N = estimateNormal(sampletv.pos);
         vec3 color=localLightColor.xyz;
-        color = phongModel(totalFixMatrix, 0.5 * color);
+        color = phongModel(totalFixIsom, 0.5 * color);
         color = 0.7*color+0.3;
         return color;
 
@@ -1989,7 +1964,7 @@ vec3 ballColor(Isometry totalFixMatrix, Vector sampletv){
 }
 
 
-vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
+vec3 tilingColor(Isometry totalFixIsom, Vector sampletv){
     //    if (FAKE_LIGHT){//always fake light in Sol so far
 
     //make the objects have their own color
@@ -2014,7 +1989,7 @@ vec3 tilingColor(Isometry totalFixMatrix, Vector sampletv){
 
 
     N = estimateNormal(sampletv.pos);
-    color = phongModel(totalFixMatrix, 0.1*color);
+    color = phongModel(totalFixIsom, 0.1*color);
 
     return 0.9*color+0.1;
 
@@ -2042,11 +2017,7 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
     }
     vec2 xy = 0.2 * ((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1 / tan(radians(fov * 0.5));
-    // code specific to SL2 (change the system of coordinates to make it coherent with the other geometries ?)
-    // see the notes for the justification
-    // TODO this part is not geometry independent,
-    // unless we assume that the tangent space has a prefered basis at everypoint
-    // or at least at the origin here
+    // coordinates in the prefered frame at the origin
     vec3 dir = vec3(xy, -z);
     Vector tv = createVector(ORIGIN, dir);
     tv = tangNormalize(tv);
