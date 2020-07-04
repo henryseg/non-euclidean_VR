@@ -211,7 +211,7 @@ Vector turnAround(Vector v){
 
 //reflect the unit tangent vector u off the surface with unit normal n
 Vector reflectOff(Vector u, Vector n){
-    return add(scalarMult(-2.0 * tangDot(u, n), n), u);
+    return sub(scalarMult(2.0 * cosAng(u, n), n), u);
 }
 
 

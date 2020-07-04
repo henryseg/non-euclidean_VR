@@ -105,11 +105,9 @@ void main(){
         //COLOR THE FRAME DARK GRAY
         //0.2 is medium gray, 0 is black
         out_FragColor = vec4(0.05);
-        return;
     }
     else if (hitWhich == 1){ // global lights
         out_FragColor = vec4(globalLightColor.rgb, 1.0);
-        return;
     }
     else if (hitWhich == 5){ //debug
         out_FragColor = vec4(debugColor, 1.0);
@@ -120,8 +118,6 @@ void main(){
         vec3 pixelColor = localColor(totalFixIsom, sampletv);
 
         out_FragColor = vec4(pixelColor, 1.0);
-
-        return;
     }
 
     else if (hitWhich == 8){ // the GLOBAL earth
@@ -131,8 +127,6 @@ void main(){
         vec3 pixelColor=globalSphereTexture(totalFixIsom, sampletv, earthCubeTex);
 
         out_FragColor = vec4(pixelColor, 1.0);
-
-        return;
     }
 
 
@@ -213,7 +207,6 @@ void main(){
 
 
 
-        return;
     }
 
 
@@ -303,5 +296,7 @@ void main(){
         //        //vec4(pixelColor, 1.0);
 
     }
+
+    //out_FragColor=vec4(debugColor,1);
 
 }

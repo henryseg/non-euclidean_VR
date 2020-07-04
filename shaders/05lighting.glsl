@@ -27,6 +27,12 @@ Vector estimateNormal(Point p) {
     }
     n = createVector(p, vec3(vx, vy, vz));
     n = tangNormalize(n);
+    vec4 dir = n.dir;
+    // shift = makeLeftTranslation(p);
+    //dir = shift.mat * dir;
+    //debugColor = 0.5 + 0.5 *dir.xyz;
+    //debugColor = vec3(0, 0, dir.z);
+    //debugColor = dir.xyz;
     return n;
 }
 
@@ -115,6 +121,7 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 vec3 lightingCalculations(Point SP, Vector DTLP, float distToLight, Vector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
     Vector R = reflectOff(DTLP, N);
+    //debugColor = R.dir.xyz;
     //Vector R = sub(scalarMult(2.0 * cosAng(DTLP, N), N), DTLP);
 
     //Calculate Diffuse Component
@@ -164,12 +171,13 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
 
     vec3 color = 0.1 * baseColor;
 
-    vec4 lightColor1 = vec4(68. / 256., 197. / 256., 203. / 256., 1.);
-    vec4 lightColor2 = vec4(252. / 256., 227. / 256., 21. / 256., 1.);
-    vec4 lightColor3 = vec4(245. / 256., 61. / 256., 82. / 256., 1.);
-    vec4 lightColor4 = vec4(256. / 256., 142. / 256., 226. / 256., 1.);
+    vec4 lightColor1 = vec4(68. / 256., 197. / 256., 203. / 256., 1.);// light blue
+    vec4 lightColor2 = vec4(252. / 256., 227. / 256., 21. / 256., 1.);// yellow
+    vec4 lightColor3 = vec4(245. / 256., 61. / 256., 82. / 256., 1.);//red
+    //vec4 lightColor4 = vec4(256. / 256., 142. / 256., 226. / 256., 1.);//pink
+    vec4 lightColor4 = vec4(1, 1, 1, 1);//whit
 
-    bool otherDir1 = false;
+    bool otherDir1 = true;
     bool otherDir2 = false;
     bool otherDir = otherDir1 || otherDir2;
 
@@ -179,58 +187,53 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
     TLP = translate(shiftLight, Point(vec4(10., 0., 10., 1.)));
     tangDirection(SP, TLP, DTLP, distToLight);
     color = lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor1);
-
-
-    if (tangDirectionBis(SP, TLP, DTLPbis, distToLightBis) && otherDir) {
-        debugColor = lightColor1.xyz;
-        if(otherDir1) {
+    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
+        //debugColor = lightColor1.xyz;
+        if (otherDir1) {
             color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor1);
         }
-        if(otherDir2){
+        if (otherDir2){
             color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor1);
         }
-
-
     }
+
+
     TLP = translate(shiftLight, Point(vec4(0., 10., 10., 1.)));
     tangDirection(SP, TLP, DTLP, distToLight);
     color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor2);
-
-
-
-    if (tangDirectionBis(SP, TLP, DTLPbis, distToLightBis) && otherDir) {
-        if(otherDir1) {
+    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
+        if (otherDir1) {
             color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor2);
         }
-        if(otherDir2){
+        if (otherDir2){
             color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor2);
         }
     }
 
 
-    TLP = translate(shiftLight, Point(vec4(-10., -10., 5., 1.)));
+    TLP = translate(shiftLight, Point(vec4(-10., 0, 5., 1.)));
     tangDirection(SP, TLP, DTLP, distToLight);
     color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor3);
-
-    if (tangDirectionBis(SP, TLP, DTLPbis, distToLightBis) && otherDir) {
-        if(otherDir1) {
+    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
+        if (otherDir1) {
             color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor3);
         }
-        if(otherDir2){
+        if (otherDir2){
             color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor3);
         }
     }
 
 
-    TLP = translate(shiftLight, Point(vec4(0., 0., 10, 1.)));
+    TLP = translate(shiftLight, Point(vec4(1, 1., 10, 1.)));
     tangDirection(SP, TLP, DTLP, distToLight);
+    //debugColor = vec3(0, 0, DTLP.dir.z);
+    //debugColor = V.dir.xyz;
     color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor4);
-
-    if (tangDirectionBis(SP, TLP, DTLPbis, distToLightBis) && otherDir) {
-        if(otherDir1) {
+    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
+        if (otherDir1) {
             color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor4);
         }
-        if(otherDir2){
+        if (otherDir2){
             color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor4);
         }
     }

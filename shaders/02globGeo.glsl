@@ -140,10 +140,14 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
 
     if (FAKE_LIGHT) {
         // if FAKE_LIGHT is ON, just return the Euclidean vector pointing to q
-        len = fakeDistance(p,q);
+        len = fakeDistance(p, q);
         Isometry shift = makeInvLeftTranslation(p);
-        resOrigin = Vector(ORIGIN, shift.mat * (q.coords-p.coords));
+        vec4 dirOrigin = q.coords-p.coords;
+        resOrigin = Vector(ORIGIN, shift.mat * dirOrigin);
         resOrigin = tangNormalize(resOrigin);
+        //debugColor = 0.5 + 0.5 * (dirOrigin / length(dirOrigin)).xyz;
+        //debugColor = 0.5 + 0.5 * resOrigin.dir.xyz;
+        //debugColor = vec3(0,0,resOrigin.dir.z);
     }
     else {
         // move p to the origin and q accordingly

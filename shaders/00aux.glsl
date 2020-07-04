@@ -273,7 +273,7 @@ bool zerobis_height(float rhosq, float z0, out float[2] phis) {
     float phi1 = _aux_dheight_newton(rhosq, z0, phi0);
     float height_min = _height(rhosq, z0, phi1);
     if (height_min > 0.) {
-        debugColor = vec3(1, 1, 0);
+        //debugColor = vec3(1, 1, 0);
         return false;
     }
     float phi2 = _height_newton_init(rhosq, z0, 2. * PI, phi1, false);
@@ -282,7 +282,7 @@ bool zerobis_height(float rhosq, float z0, out float[2] phis) {
     float res3 = _height_newton(rhosq, z0, phi3);
     phis[0] = res2;
     phis[1] = res3;
-    debugColor =  (vec3(0, phi3, 0) - vec3(2.*PI, 2.*PI, 0.))/2.*PI;
+    //debugColor =  (vec3(0, phi3, 0) - vec3(2.*PI, 2.*PI, 0.))/2.*PI;
     return true;
 }
 
