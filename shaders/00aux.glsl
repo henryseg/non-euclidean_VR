@@ -12,9 +12,9 @@ Some parameters that can be changed to change the scence
 
 */
 
-const bool FAKE_LIGHT = false;
-const bool SECOND_DIR_LIGHT = true;
-const bool THIRD_DIR_LIGHT = true;
+const bool FAKE_LIGHT = true;
+const bool SECOND_DIR_LIGHT = false;
+const bool THIRD_DIR_LIGHT = false;
 const bool SURFACE_COLOR = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
