@@ -13,6 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 const bool FAKE_LIGHT = false;
+const bool SECOND_DIR_LIGHT = true;
+const bool THIRD_DIR_LIGHT = true;
 const bool SURFACE_COLOR = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
@@ -313,6 +315,8 @@ bool zerobis_height(float rhosq, float z0, out float[2] phis) {
     float phi0 = _aux_dheight_newton_init(rhosq, z0);
     float phi1 = _aux_dheight_newton(rhosq, z0, phi0);
     float height_min = _height(rhosq, z0, phi1);
+    //debugColor = 10.*vec3(height_min, -height_min, 0);
+    //debugColor = vec3(phi1 - 2.*PI, 0, 0)/(2.*PI);
     if (height_min > 0.) {
         //debugColor = vec3(1, 1, 0);
         return false;
@@ -321,6 +325,7 @@ bool zerobis_height(float rhosq, float z0, out float[2] phis) {
     float res2 = _height_newton(rhosq, z0, phi2);
     float phi3 = _height_newton_init(rhosq, z0, phi1, 4. * PI, true);
     float res3 = _height_newton(rhosq, z0, phi3);
+    //debugColor = vec3(res3 - 2.*PI, 0, 0)/(2.*PI);
     phis[0] = res2;
     phis[1] = res3;
     //debugColor =  (vec3(0, phi3, 0) - vec3(2.*PI, 2.*PI, 0.))/2.*PI;

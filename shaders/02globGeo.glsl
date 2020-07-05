@@ -95,7 +95,7 @@ float exactDist(Point p, Point q) {
 
     // if needed we flip the point qOrigin so that its z-coordinates is positive.
     // this does not change its distance to the origin
-    if (qOrigin.coords.z < 0){
+    if (qOrigin.coords.z < 0.){
         qOrigin = translate(flip, qOrigin);
     }
     float z = qOrigin.coords.z;
@@ -155,7 +155,7 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
         Point qOrigin = translate(shift, q);
         bool flipped = false;
         // if needed we flip the point qOrigin so that its z-coordinates is positive.
-        if (qOrigin.coords.z < 0) {
+        if (qOrigin.coords.z < 0.) {
             flipped = true;
             qOrigin = translate(flip, qOrigin);
         }
@@ -302,7 +302,7 @@ bool tangDirectionBis(Point p, Point q, out Vector[2] dirs, out float[2] lens) {
     Point qOrigin = translate(shift, q);
     bool flipped = false;
     // if needed we flip the point qOrigin so that its z-coordinates is positive.
-    if (qOrigin.coords.z < 0) {
+    if (qOrigin.coords.z < 0.) {
         flipped = true;
         qOrigin = translate(flip, qOrigin);
     }
@@ -314,7 +314,7 @@ bool tangDirectionBis(Point p, Point q, out Vector[2] dirs, out float[2] lens) {
     else {
         float rhosq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
         if (rhosq == 0.) {
-            if (z < 2 * PI) {
+            if (z < 2. * PI) {
                 check = false;
             }
             else {
@@ -330,20 +330,23 @@ bool tangDirectionBis(Point p, Point q, out Vector[2] dirs, out float[2] lens) {
             float[2] phis;
             check = zerobis_height(rhosq, z, phis);
             if (check) {
-                Vector resOrigin0, resOrigin1;
                 float len0, len1;
                 _dirLengthFromPhi(rhosq, theta, z, phis[0], resOrigin0, len0);
                 _dirLengthFromPhi(rhosq, theta, z, phis[1], resOrigin1, len1);
                 lens[0] = len0;
                 lens[1] = len1;
+
             }
+
         }
     }
-
     if (check && flipped) {
         resOrigin0 = translate(flip, resOrigin0);
         resOrigin1 = translate(flip, resOrigin1);
     }
+    //debugColor = resOrigin0.dir.xyz;
+
+
     // move back to p
     dirs[0] = Vector(p, resOrigin0.dir);
     dirs[1] = Vector(p, resOrigin1.dir);
