@@ -590,9 +590,9 @@ Vector turnAround(Vector v){
 }
 
 
-//reflect the unit tangent vector u off the surface with unit normal nVec
-Vector reflectOff(Vector v, Vector normal){
-    return add(scalarMult(-2.0 * tangDot(v, normal), normal), v);
+//reflect the unit tangent vector u off the surface with unit normal n
+Vector reflectOff(Vector v, Vector n){
+    return sub(scalarMult(2.0 * tangDot(v, n), n), v);
 }
 
 
@@ -695,53 +695,146 @@ float fakeDistance(Vector v1, Vector v2){
 
 // TODO. Use asymptotic expansion around the parabolic type geodesics?
 
-// Consider a minimizing geodesic gamma starting at the origin
-// with tangent vector of the form (a,0,c)
-// The function takes as an input rho -- given as sinh(rho/2)^2 -- theta and phi
-// where rho and phi are thought of as fixed parameters
-// and returns a decreasing function of theta which vanishes
-// when the point with polar coordinates (rho, theta, phi) is on the geodesic
-// Warning : this function is not defined for every theta
-float fiberHeight(float shRhoOver2SQ, float theta, float phi) {
+
+// consider a geodesic gamma from the origin describing an angle phi
+// when reaching the point at distance rho of the axis (O,w)
+// return the value of 0.5(w - w0), where w is the height of gamma at that point
+// the distance rho is pased as rho^2
+float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
-    float tanTheta = tan(theta);
-    float tanThetaSQ = pow(tanTheta, 2.);
-    float z;
+    float tanPhi = tan(phi);
+    float tanPhiSQ = pow(tanPhi, 2.);
+    float aux;
     float res;
-    if (abs(theta) < 0.5 * PI) {
-        if (abs(tanTheta) < shRhoOver2){
-            z = sqrt(shRhoOver2SQ - tanThetaSQ) / chRhoOver2;
-            res = (theta - 0.5 * phi)  - 2. *  tanTheta * atanh(z) / z;
+    if (abs(phi) < 0.5 * PI) {
+        if (abs(tanPhi) < shRhoOver2){
+            aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
+            res = (phi - 0.5 * w0)  - 2. *  tanPhi * atanh(aux) / aux;
         }
-        else if (abs(tanTheta) == shRhoOver2) {
-            res = (theta - 0.5 * phi) - 2. * tanTheta;
+        else if (abs(tanPhi) == shRhoOver2) {
+            res = (phi - 0.5 * w0) - 2. * tanPhi;
         }
-        else if (abs(tanTheta) > shRhoOver2){
-            z = sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2;
-            res = (theta - 0.5 * phi) - 2. * tanTheta * atan(z) / z;
+        else if (abs(tanPhi) > shRhoOver2){
+            aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+            res = (phi - 0.5 * w0) - 2. * tanPhi * atan(aux) / aux;
         }
     }
-    else if (abs(theta) == 0.5 * PI) {
-        res = - 0.5 * phi - sign(theta) * PI * (chRhoOver2 - 0.5);
+    else if (abs(phi) == 0.5 * PI) {
+        res = - 0.5 * w0 - sign(phi) * PI * (chRhoOver2 - 0.5);
     }
     else {
-        z = sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2;
-        res = (theta - 0.5 * phi) - 2. * tanTheta * (atan(z)-PI) / z;
+        aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+        res = (phi - 0.5 * w0) - 2. * tanPhi * (atan(aux)-PI) / aux;
     }
     return res;
 }
 
-// Consider a minimizing geodesic gamma starting at the origin with tangent vector of the form (a,0,c)
-// Assume that after time t its polar coordinates are (rho, theta, phi).
-// The function takes as an input rho -- given as sinh(rho/2)^2 -- theta and phi
-// and returns (a,c,t) in a vec3
-vec3 computeParams(float shRhoOver2SQ, float theta, float phi){
+// IN PROGRESS BEGIN !!
+
+// assume that a geodesic starting from the origin reach the point q
+// after describing an angle theta (in the hyperbolic plane)
+// return the length of this geodesic
+// we assume that rho > 0 and z > 0
+void _lengthFromPhi(float shRhoOver2SQ, float w, float phi, out float len) {
 
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
 
-    float tanTheta = tan(theta);
+    float tanPhi = tan(phi);
+    float tanPhiSQ = pow(tanPhi, 2.);
+
+    float omega;
+    float omega2;
+
+    if (abs(tanPhi) < shRhoOver2) {
+        // hyperbolic type geodesic
+        // omega = sqrt(a^2 - c^2)
+        omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+        omega = sqrt(omega2);
+        len = 2. * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2) / omega;
+
+    }
+    else if (abs(tanPhi) == shRhoOver2) {
+        // parabolic type geodesic
+        len = 2. * sqrt2 * shRhoOver2;
+    }
+    else {
+        // elliptic type geodesic
+        // omega = sqrt(c^2 - a^2)
+        omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+        omega = sqrt(omega2);
+        len = 2. * atan(sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) / omega;
+        // geodesic that made more than a half turn
+        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
+            len = len + sign(w) * 2. * PI / omega;
+        }
+    }
+}
+
+// assume that a geodesic starting from the origin reach the point q
+// after describing an angle phi (in the hyperbolic plane)
+// return the unit tangent vector of this geodesic and its length
+// we assume that rho > 0
+void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out Vector tv, out float len) {
+
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+
+    float tanPhi = tan(phi);
+    float tanPhiSQ = pow(tanPhi, 2.);
+
+    float omega;
+    float omega2;
+    float a;
+    float c;
+
+    if (abs(tanPhi) < shRhoOver2) {
+        // hyperbolic type geodesic
+        // omega = sqrt(a^2 - c^2)
+        omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+        omega = sqrt(omega2);
+        a = sqrt(0.5 * (1. + omega2));
+        c = sign(w) * sqrt(0.5 * (1. - omega2));
+        len = 2. * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2) / omega;
+
+    }
+    else if (abs(tanPhi) == shRhoOver2) {
+        // parabolic type geodesic
+        a = 1. / sqrt2;
+        c = sign(w) * 1. / sqrt2;
+        len = 2. * sqrt2 * shRhoOver2;
+    }
+    else {
+        // elliptic type geodesic
+        // omega = sqrt(c^2 - a^2)
+        omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+        omega = sqrt(omega2);
+        a = sqrt(0.5 * (1. - omega2));
+        c = sign(w) * sqrt(0.5 * (1. + omega2));
+        len = 2. * atan(sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) / omega;
+        // geodesic that made more than a half turn
+        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
+            len = len + sign(w) * 2. * PI / omega;
+        }
+    }
+    float alpha = theta + c * len - 0.5 * w;
+    tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
+}
+
+
+// IN PROGRESS STOP !!
+
+// Consider a minimizing geodesic gamma starting at the origin with tangent vector of the form (a,0,c)
+// Assume that after time t its polar coordinates are (rho, theta, phi).
+// The function takes as an input rho -- given as sinh(rho/2)^2 -- phi and w
+// and returns (a,c,t) in a vec3
+vec3 computeParams(float shRhoOver2SQ, float phi, float w){
+
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+
+    float tanTheta = tan(phi);
     float tanThetaSQ = pow(tanTheta, 2.);
 
     float omega;
@@ -756,14 +849,14 @@ vec3 computeParams(float shRhoOver2SQ, float theta, float phi){
         omega2 = (shRhoOver2SQ - tanThetaSQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
         omega = sqrt(omega2);
         a = sqrt(0.5 * (1. + omega2));
-        c = sign(phi) * sqrt(0.5 * (1. - omega2));
+        c = sign(w) * sqrt(0.5 * (1. - omega2));
         t = 2. * atanh(sqrt(shRhoOver2SQ - tanThetaSQ) / chRhoOver2) / omega;
 
     }
     else if (abs(tanTheta) == shRhoOver2) {
         // parabolic type geodesic
         a = 1. / sqrt2;
-        c = sign(phi) * 1. / sqrt2;
+        c = sign(w) * 1. / sqrt2;
         t = 2. * sqrt2 * shRhoOver2;
     }
     else {
@@ -772,11 +865,11 @@ vec3 computeParams(float shRhoOver2SQ, float theta, float phi){
         omega2 = (tanThetaSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
         omega = sqrt(omega2);
         a = sqrt(0.5 * (1. - omega2));
-        c = sign(phi) * sqrt(0.5 * (1. + omega2));
+        c = sign(w) * sqrt(0.5 * (1. + omega2));
         t = 2. * atan(sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2) / omega;
         // geodesic that made more than a half turn
-        if (abs(phi) > PI * (chRhoOver2 - 0.5)) {
-            t = t + sign(phi) * 2. * PI / omega;
+        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
+            t = t + sign(w) * 2. * PI / omega;
         }
     }
     return vec3(a, c, t);
@@ -785,38 +878,28 @@ vec3 computeParams(float shRhoOver2SQ, float theta, float phi){
 int DICHOTOMY_MAX_STEPS = 10;
 float DICHOTOMY_THRESHOLD = 0.01;
 
-// given rho and phi, find the parameter theta between thetaMin and thetaMax
-// which vanishes the function fiberHeight.
+// given rho and w, find the parameter phi between phiMin and phiMax
+// which (almos) vanishes the function fiberHeight.
 // (One assumes that the problem has a solution on this interval)
-float _dichoSearch(float shRhoOver2SQ, float phi, float thetaMin, float thetaMax){
-    float auxM = thetaMin;
-    float auxP = thetaMax;
-    float theta;
+float _dichoSearch(float shRhoOver2SQ, float w, float phiMin, float phiMax){
+    float auxM = phiMin;
+    float auxP = phiMax;
+    float phi;
     float height;
     for (int i=0; i < DICHOTOMY_MAX_STEPS; i++) {
         if (abs(auxM - auxP) < DICHOTOMY_THRESHOLD) {
             break;
         }
-        theta = 0.5 * auxM + 0.5 * auxP;
-        height = fiberHeight(shRhoOver2SQ, theta, phi);
+        phi = 0.5 * auxM + 0.5 * auxP;
+        height = fiberHeight(shRhoOver2SQ, w, phi);
         if (height > 0.) {
-            auxM = theta;
+            auxM = phi;
         }
         else {
-            auxP = theta;
+            auxP = phi;
         }
     }
-    // return a lower estimate of the angle theta
-    // (we don't want to over march during the ray marching algorithm).
-    float res;
-    if (abs(auxM) < abs(auxP)) {
-        res = auxM;
-    }
-    else {
-        res = auxP;
-    }
-    debugColor = vec3(res, -res,0)/PI;
-    return res;
+    return phi;
 }
 
 // Take a point p and return the data (a,c,t) as a vec3
@@ -886,16 +969,12 @@ vec3 _dichoDist(Point p) {
 
 
 float _exactDistToOrign(Point p) {
+    //vec3 params = _dichoDist(p);
+    //return params.z;
+
     float res = _fakeDistToOrigin(p);
-    // if the fake distance is too small, return start a more advanced computation
-    /*
-    if (res < .1) {
-        //_dichoDist(p);
-        //_dichoSearch(1., 1., -0.5*PI, 0.);
-        vec3 params = _dichoDist(p);
-        res = params.z;
-    }*/
     return res;
+
 }
 
 
@@ -947,7 +1026,6 @@ Vector tangDirection(Vector u, Vector v){
 // - the initial position of v is the origin
 // - the local direction of v is set up
 // - the initial direction has the local form (a, 0, c), with a,c > 0
-// TODO. Fix the possible error in h2point ?
 Vector _exactFlow(Vector v, float t) {
     Vector res;
 
