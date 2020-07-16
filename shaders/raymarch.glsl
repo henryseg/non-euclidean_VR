@@ -654,7 +654,7 @@ float _fakeDistToOrigin(Point p) {
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+    return 0.5 * sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
 }
 
 // fake distance between two points
@@ -969,11 +969,11 @@ vec3 _dichoDist(Point p) {
 
 
 float _exactDistToOrign(Point p) {
-    //vec3 params = _dichoDist(p);
-    //return params.z;
+    vec3 params = _dichoDist(p);
+    return params.z;
 
-    float res = _fakeDistToOrigin(p);
-    return res;
+    //float res = _fakeDistToOrigin(p);
+    //return res;
 
 }
 
@@ -1221,7 +1221,8 @@ float lightAtt(float dist){
 
 
 float sphereSDF(Point p, Point center, float radius){
-    return exactDist(p, center) - radius;
+    return fakeDistance(p, center) - radius;
+    //return exactDist(p, center) - radius;
 }
 
 float cylSDF(Point p, float r){
@@ -1248,7 +1249,7 @@ float ellipsoidSDF(Point p, float radius, float wRescale){
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    float dist = sqrt(pow(acosh(-q), 2.) + pow(aux.w / wRescale, 2.));
+    float dist = 0.5 * sqrt(pow(acosh(-q), 2.) + pow(aux.w / wRescale, 2.));
     return dist - radius;
 }
 
@@ -1378,7 +1379,7 @@ float localSceneSDF(Point p){
 
     // Tiling
 
-    tilingDist = -ellipsoidSDF(p, 1.8, 2.5);
+    tilingDist = -ellipsoidSDF(p, 0.9, 2.5);
     //tilingDist = -sphereSDF(p, ORIGIN, 3.);
     distance = min(distance, tilingDist);
     if (tilingDist < EPSILON){
