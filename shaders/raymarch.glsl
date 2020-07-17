@@ -2320,6 +2320,10 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
 // Main
 //----------------------------------------------------------------------------------------------------------------------
 
+Vector doNothing(Vector v){
+    return v;
+}
+
 void main(){
     setResolution(resol);
     currentBoost = unserializeIsom(currentBoostMat);
@@ -2340,13 +2344,13 @@ void main(){
 
     if (isStereo == 1){
         if (isLeft){
-            //debugColor = vec3(1, 1, 0);
-                      rayDir = rotateByFacing(leftFacing, rayDir);
-            //            rayDir = translate(leftBoost, rayDir);
+            rayDir = doNothing(rayDir);
+            //rayDir = rotateByFacing(leftFacing, rayDir);
+            //rayDir = translate(leftBoost, rayDir);
         }
         else {
-            //            rayDir = rotateByFacing(rightFacing, rayDir);
-            //            rayDir = translate(rightBoost, rayDir);
+            //rayDir = rotateByFacing(rightFacing, rayDir);
+            //rayDir = translate(rightBoost, rayDir);
         }
     }
     else {
@@ -2354,7 +2358,6 @@ void main(){
         //rayDir = rotateByFacing(facing, rayDir);
         //rayDir = translate(currentBoost, rayDir);
     }
-
 
     hitWhich = 5;
     //rayDir = rotateByFacing(facing, rayDir);
@@ -2368,17 +2371,12 @@ void main(){
 
 
 
-    //Point p1 = fromVec4(vec4(0, 0, 1, 1));
-    //Point p2 = fromVec4(vec4(0, 0, 1, -1));
-    //Isometry shift = identity;
-    //debugColor = length(shift.target.proj - identity.target.proj) * vec3(1, 1, 1);
-    //debugColor = abs(shift.target.fiber - identity.target.fiber) * vec3(1, 1, 1);
-    //Point aux = translate(shift, p1);
-
+    out_FragColor = vec4(debugColor, 1.0);
     //get our raymarched distance back ------------------------
 
 
 
+    /*
     Isometry totalFixIsom = identity;
 
     //do the marching
@@ -2417,6 +2415,7 @@ void main(){
         out_FragColor = vec4(debugColor, 1.0);
         break;
     }
+    */
 
 
 }
