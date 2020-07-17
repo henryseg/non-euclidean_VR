@@ -2337,21 +2337,11 @@ void main(){
     Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
 
-    hitWhich = 5;
-
-
-    //Vector test = rayDir;
-    //debugColor = vec3(fakeDistance(rayDir.pos, unserializePoint(vec4(0, 0, 1, 1))), 0, 0);
-    //debugColor = vec3(_fakeDistToOrigin(rayDir.pos), 0, 0);
-
-
-    Point p1 = fromVec4(vec4(0, 0, 1, 1));
-    Point p2 = fromVec4(vec4(0, 0, 1, -1));
 
     if (isStereo == 1){
         if (isLeft){
             //debugColor = vec3(1, 1, 0);
-            //          rayDir = rotateByFacing(leftFacing, rayDir);
+                      rayDir = rotateByFacing(leftFacing, rayDir);
             //            rayDir = translate(leftBoost, rayDir);
         }
         else {
@@ -2361,10 +2351,12 @@ void main(){
     }
     else {
         //debugColor = vec3(0, 1, 1);
-        rayDir = rotateByFacing(facing, rayDir);
+        //rayDir = rotateByFacing(facing, rayDir);
         //rayDir = translate(currentBoost, rayDir);
     }
 
+
+    hitWhich = 5;
     //rayDir = rotateByFacing(facing, rayDir);
     Isometry shift = makeInvLeftTranslation(rayDir.pos);
     mat4 test = SLtoMatrix4(shift.target.proj);
@@ -2374,6 +2366,10 @@ void main(){
     //debugColor = 0.9*res[1].xyz;
     debugColor = length(test[1] - vec4(0, 1, 0, 0)) * vec3(1, 1, 1);
 
+
+
+    //Point p1 = fromVec4(vec4(0, 0, 1, 1));
+    //Point p2 = fromVec4(vec4(0, 0, 1, -1));
     //Isometry shift = identity;
     //debugColor = length(shift.target.proj - identity.target.proj) * vec3(1, 1, 1);
     //debugColor = abs(shift.target.fiber - identity.target.fiber) * vec3(1, 1, 1);
