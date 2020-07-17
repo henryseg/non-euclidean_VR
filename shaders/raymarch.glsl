@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -93,8 +93,7 @@ The elements satisfy the relation - x^2 - y^2 + z^2 + w^2 = -1
 
 // Correct the error to make sure that the point lies on the "hyperboloid"
 vec4 SLreduceError(vec4 elt) {
-    float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
-    /*
+    //float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
     mat4 J = mat4(
     -1, 0, 0, 0,
     0, -1, 0, 0,
@@ -102,7 +101,6 @@ vec4 SLreduceError(vec4 elt) {
     0, 0, 0, 1
     );
     float q = dot(elt, J * elt);
-    */
     return elt / sqrt(-q);
 }
 
@@ -258,7 +256,7 @@ struct Point {
 // origin of the space
 // - the projection corresponds to the identity in SL(2,R)
 // - the fiber component is zero
-const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.1);
+const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);
 
 // change of model
 // the input is a vector (x,y,z,w) representing a point p where
@@ -336,11 +334,9 @@ Isometry composeIsometry(Isometry isom1, Isometry isom2) {
     float shift = target1.fiber + target2.fiber;
     // SLmultiply already reduces the error, no need to do it again after
     vec4 proj = SLmultiply(target1.proj, target2.proj);
-    // vec4 proj = SLreduceError(target1.proj + target2.proj);
     // SLtranslateFiberBy already reduces the error, no need to do it again after
     vec4 aux = SLtranslateFiberBy(proj, - shift);
     float fiber = shift + 2. * atan(aux.y, aux.x);
-    //float fiber = target1.fiber + target2.fiber + 2. * atan(proj.y, proj.x);
     Point target = Point(proj, fiber);
     return Isometry(target);
 }
@@ -365,9 +361,9 @@ Isometry makeInvLeftTranslation(Point p) {
 
 // Translate a point by the given isometry
 Point translate(Isometry isom, Point p) {
-    Isometry res = makeLeftTranslation(p);
-    res = composeIsometry(isom, res);
-    return res.target;
+    Isometry aux = makeLeftTranslation(p);
+    aux = composeIsometry(isom, aux);
+    return aux.target;
 }
 
 // Perfom a rotation (meant in the H^2 component) by the given angle
@@ -501,10 +497,7 @@ Vector rotateBy(Vector v, float angle) {
     0, 0, 1
     );
 
-    return Vector(
-    rotateBy(v.pos, angle),
-    rotD * v.dir
-    );
+    return Vector(rotateBy(v.pos, angle), rotD * v.dir);
 }
 
 // flip the tangent vector (see Jupyter Notebook)
@@ -515,22 +508,16 @@ Vector flip(Vector v) {
     0, 0, -1
     );
 
-    return Vector(
-    flip(v.pos),
-    flipD * v.dir
-    );
+    return Vector(flip(v.pos), flipD * v.dir);
 }
 
 // apply a local rotation of the direction
-Vector rotateByFacing(mat4 A, inout Vector v){
-    // notice that the facing is an element of SO(3) which refers to the basis (e_x, e_y, e_phi).
+Vector rotateByFacing(mat4 mat, Vector v){
+    // notice that the facing is an element of SO(3) which refers to the basis (e_x, e_y, e_w).
     vec4 aux = vec4(v.dir, 0.);
-    aux = A * aux;
+    aux = mat * aux;
 
-    return Vector(
-    v.pos,
-    aux.xyz
-    );
+    return Vector(v.pos, aux.xyz);
 }
 
 
@@ -647,6 +634,7 @@ Vector createVector(Point p, vec3 dp) {
 
 float _fakeDistToOrigin(Point p) {
     vec4 aux = toVec4(p);
+    //debugColor = p.fiber * vec3(0, 0, 1);
     vec3 oh = vec3(0, 0, 1);
     mat3 J = mat3(
     1, 0, 0,
@@ -659,8 +647,15 @@ float _fakeDistToOrigin(Point p) {
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
-    Isometry isom = makeInvLeftTranslation(p1);
-    return _fakeDistToOrigin(translate(isom, p2));
+    Isometry shift = makeInvLeftTranslation(p1);
+    //Isometry shift = identity;
+    //debugColor = length(shift.target.proj - identity.target.proj) * vec3(1, 1, 1);
+    //debugColor = abs(shift.target.fiber - identity.target.fiber) * vec3(1, 1, 1);
+
+    Point aux = translate(shift, p2);
+    //debugColor = length(p2.proj - aux.proj) * vec3(1, 1, 1);
+    //debugColor = abs(p2.fiber - aux.fiber) * vec3(1, 1, 1);
+    return _fakeDistToOrigin(aux);
 
     /*
     Isometry isom = makeInvLeftTranslation(p1);
@@ -679,6 +674,11 @@ float fakeDistance(Point p1, Point p2){
     vec4 aux1 = toVec4(p1);
     vec4 aux2 = toVec4(p2);
     return length(aux2 - aux1);
+    */
+
+    /*
+    Isometry shift = makeInvLeftTranslation(p1);
+    return length(toVec4(translate(shift, p2)));
     */
 }
 
@@ -1032,10 +1032,10 @@ Vector _exactFlow(Vector v, float t) {
     float a = v.dir.x;
     float c = v.dir.z;
 
-    float phi = 2. * c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
-    float omegaSq = 0.;
-    float omega = 0.;// the "pulsatance" involved in the geodesic flow.
-    float theta = 0.;// the rotation angle in H^2.
+    float w = 2. * c * t;// the angle in the fiber achieved by the geodesic (before final adjustment)
+    float kappaSq = 0.;
+    float kappa = 0.;// the "pulsatance" involved in the geodesic flow.
+    float phi = 0.;// the rotation angle in H^2.
 
 
     // the solution has an easy description as a product of 2 x 2 matrices.
@@ -1064,41 +1064,42 @@ Vector _exactFlow(Vector v, float t) {
     }
     */
 
+    /*
+    if (abs(c-a)*t < 0.05) {
+        // "parabolic" trajectory
+        // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
+        float a2 = a * a;
+        float kappa2 = a * a - c * c;
+        float kappa4 = kappa2 * kappa2;
+        float kappa6 = kappa4 * kappa2;
+        float kappa8 = kappa6 * kappa2;
+        float t2 = t * t;
+        float t3 = t2 * t;
+        float t4 = t3 * t;
+        float t5 = t4 * t;
+        float t6 = t5 * t;
+        float t7 = t6 * t;
+        float t8 = t7 * t;
 
-    //if (abs(c-a)*t < 0.05) {
-    //    // "parabolic" trajectory
-    //    // we use an asymptotic expansion of the solution around the critical case (c = a) to reduce the noise.
-    //    float a2 = a * a;
-    //    float omega2 = a * a - c * c;
-    //    float omega4 = omega2 * omega2;
-    //    float omega6 = omega4 * omega2;
-    //    float omega8 = omega6 * omega2;
-    //    float t2 = t * t;
-    //    float t3 = t2 * t;
-    //    float t4 = t3 * t;
-    //    float t5 = t4 * t;
-    //    float t6 = t5 * t;
-    //    float t7 = t6 * t;
-    //    float t8 = t7 * t;
-    //
-    //    mat2 even = mat2(1);
-    //    mat2 odd = mat2(0, a + c, a - c, 0);
-    //    mat2 isom = even;
-    //    isom = isom + t * (1. / 2.) * odd;
-    //    isom = isom + (1./2.) * t2 * (1. / 4.) * omega2 * even;
-    //    isom = isom + (1./6.) * t3 * (1. / 8.) * omega2 * odd;
-    //    isom = isom + (1./24.) * t4 * (1. / 16.) * omega4 * even;
-    //    isom = isom + (1./120.) * t5 * (1. / 32.) * omega4 * odd;
-    //    isom = isom + (1./720.) * t6 * (1. / 64.) * omega6 * even;
-    //    isom = isom + (1./5040.) * t7 * (1. / 128.) * omega6 * odd;
-    //    isom = isom + (1./40320.) * t8 * (1. / 256.) * omega8 * even;
-    //
-    //    res.pos.proj = SLfromMatrix2(isom * spin);
-    //
-    //    float tanTheta = - a * c * t / 2. - a * c * omega2 * t3 / 24. - a * c * omega4 * t5 / 720. - a * c * omega6 * t7 / 40320.;
-    //    tanTheta = tanTheta /(a + a * t2 * omega2 / 6. + a * t4 * omega4 / 120. + a * t6 * omega6 /5040.);
-    //    res.pos.fiber = phi + atan(tanTheta);
-    // }
+        mat2 even = mat2(1);
+        mat2 odd = mat2(0, a + c, a - c, 0);
+        mat2 isom = even;
+        isom = isom + t * (1. / 2.) * odd;
+        isom = isom + (1./2.) * t2 * (1. / 4.) * kappa2 * even;
+        isom = isom + (1./6.) * t3 * (1. / 8.) * kappa2 * odd;
+        isom = isom + (1./24.) * t4 * (1. / 16.) * kappa4 * even;
+        isom = isom + (1./120.) * t5 * (1. / 32.) * kappa4 * odd;
+        isom = isom + (1./720.) * t6 * (1. / 64.) * kappa6 * even;
+        isom = isom + (1./5040.) * t7 * (1. / 128.) * kappa6 * odd;
+        isom = isom + (1./40320.) * t8 * (1. / 256.) * kappa8 * even;
+
+        res.pos.proj = SLfromMatrix2(isom * spin);
+
+        float tanPhi = - a * c * t / 2. - a * c * kappa2 * t3 / 24. - a * c * kappa4 * t5 / 720. - a * c * kappa6 * t7 / 40320.;
+        tanPhi = tanPhi /(a + a * t2 * kappa2 / 6. + a * t4 * kappa4 / 120. + a * t6 * kappa6 /5040.);
+        res.pos.fiber = w + atan(tanPhi);
+     }
+     */
     if (abs(c-a) == 0.) {
         // parabolic trajectory
         mat2 isom = mat2(
@@ -1107,46 +1108,46 @@ Vector _exactFlow(Vector v, float t) {
         );
         res.pos.proj = SLfromMatrix2(isom * spin);
 
-        float tanTheta = - t / (2. * sqrt2);
-        res.pos.fiber = phi + 2. * atan(tanTheta);
+        float tanPhi = - t / (2. * sqrt2);
+        res.pos.fiber = w + 2. * atan(tanPhi);
 
     }
     else if (c < a){
         // hyperbolic trajectory
-        omegaSq = a * a - c * c;
-        omega = sqrt(omegaSq);
+        kappaSq = a * a - c * c;
+        kappa = sqrt(kappaSq);
 
         mat2 isom = mat2(
-        cosh(0.5 * omega * t), omega * sinh(0.5 * omega * t) / (a-c),
-        omega * sinh(0.5 * omega * t) / (a+c), cosh(0.5 * omega * t)
+        cosh(0.5 * kappa * t), kappa * sinh(0.5 * kappa * t) / (a-c),
+        kappa * sinh(0.5 * kappa * t) / (a+c), cosh(0.5 * kappa * t)
         );
         res.pos.proj = SLfromMatrix2(isom * spin);
 
-        float tanTheta = - c / omega * tanh(0.5 * omega * t);
-        res.pos.fiber = phi + 2. * atan(tanTheta);
+        float tanPhi = - c / kappa * tanh(0.5 * kappa * t);
+        res.pos.fiber = w + 2. * atan(tanPhi);
 
     }
     else {
         // remaining case c > a
         // elliptic trajectory
 
-        omegaSq = c * c - a * a;
-        omega = sqrt(omegaSq);
+        kappaSq = c * c - a * a;
+        kappa = sqrt(kappaSq);
 
         mat2 isom = mat2(
-        cos(0.5 * omega * t), -omega * sin(0.5 * omega * t) / (a-c),
-        -omega * sin(0.5 * omega * t) / (a+c), cos(0.5 * omega * t)
+        cos(0.5 * kappa * t), -kappa * sin(0.5 * kappa * t) / (a-c),
+        -kappa * sin(0.5 * kappa * t) / (a+c), cos(0.5 * kappa * t)
         );
         res.pos.proj = SLfromMatrix2(isom * spin);
 
-        float aux = floor(0.5 * omega * t / PI + 0.5);
-        float tanTheta = - c / omega * tan(0.5 * omega * t);
-        res.pos.fiber = phi + 2. * atan(tanTheta) - 2. * aux * PI;
+        float aux = floor(0.5 * kappa * t / PI + 0.5);
+        float tanPhi = - c / kappa * tan(0.5 * kappa * t);
+        res.pos.fiber = w + 2. * atan(tanPhi) - 2. * aux * PI;
 
     }
 
     // update the direction of the tangent vector
-    // recall that tangent vectors at the origin have the form (ux,uy,uphi)
+    // recall that tangent vectors at the origin have the form (ux,uy,uw)
     // so we work with 3x3 matrics applied to local_dir
     mat3 S = mat3(
     cos(2. * c * t), -sin(2. * c * t), 0.,
@@ -1410,6 +1411,8 @@ float globalSceneSDF(Point p){
     float distance = MAX_DIST;
     float objDist;
     //Light Objects
+
+    /*
     for (int i=0; i<4; i++){
         objDist = sphereSDF(absolutep, unserializePoint(lightPositions[i]), 0.1);
         distance = min(distance, objDist);
@@ -1419,12 +1422,12 @@ float globalSceneSDF(Point p){
             globalLightColor = lightIntensities[i];
             return distance;
         }
-    }
+    }*/
 
 
-    /*
     //Global Sphere Object
-    Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
+    //Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
+    Point globalObjPos1 = fromVec4(vec4(0, 0, 1, 1));
     objDist = sphereSDF(absolutep, globalObjPos1, 0.3);
 
     distance = min(distance, objDist);
@@ -1432,7 +1435,7 @@ float globalSceneSDF(Point p){
         hitWhich = 2;
         return distance;
     }
-    */
+
 
     return distance;
 }
@@ -1440,7 +1443,7 @@ float globalSceneSDF(Point p){
 
 // Check if the given point p is in the fundamental domain of the lattice.
 // Lattice = SL(2,Z)
-bool isOutsideCellModular(Point p, out Isometry fixMatrix){
+bool isOutsideCellModular(Point p, out Isometry fixIsom){
     // point in the Klein model
     // (where the fundamental domain is convex polyhedron).
     vec4 klein = toKlein(p);
@@ -1482,24 +1485,24 @@ bool isOutsideCellModular(Point p, out Isometry fixMatrix){
     // testing if the point is in the fundamental domain, and the matrix to fix it
 
     if (dot(klein, n0) > 0.) {
-        fixMatrix = gen0;
+        fixIsom = gen0;
         return true;
     }
     if (dot(klein, n2) > 1.) {
-        fixMatrix = gen2;
+        fixIsom = gen2;
         return true;
     }
     if (dot(klein, n3) > 1.) {
-        fixMatrix = gen3;
+        fixIsom = gen3;
         return true;
     }
     if (dot(klein, n4) > 2. * PI) {
-        fixMatrix = gen4;
+        fixIsom = gen4;
         //debugColor = vec3(1,0,0);
         return true;
     }
     if (dot(klein, n4) < -2. * PI) {
-        fixMatrix = gen5;
+        fixIsom = gen5;
         //debugColor = vec3(0,1,0);
         return true;
     }
@@ -1509,7 +1512,7 @@ bool isOutsideCellModular(Point p, out Isometry fixMatrix){
 
 // Check if the given point p is in the fundamental domain of the lattice.
 // Lattice : quadrangle
-bool isOutsideCellSquare(Point p, out Isometry fixMatrix){
+bool isOutsideCellSquare(Point p, out Isometry fixIsom){
     // point in the Klein model
     // (where the fundamental domain is convex polyhedron).
     vec4 klein = toKlein(p);
@@ -1559,27 +1562,27 @@ bool isOutsideCellSquare(Point p, out Isometry fixMatrix){
     float threshold = sqrt2 / sqrt3;
 
     if (dot(klein, nm) > threshold) {
-        fixMatrix = gen1;
+        fixIsom = gen1;
         return true;
     }
     if (dot(klein, np) > threshold) {
-        fixMatrix = gen1inv;
+        fixIsom = gen1inv;
         return true;
     }
     if (dot(klein, nm) < -threshold) {
-        fixMatrix = gen2;
+        fixIsom = gen2;
         return true;
     }
     if (dot(klein, np) < -threshold) {
-        fixMatrix = gen2inv;
+        fixIsom = gen2inv;
         return true;
     }
     if (dot(klein, nfiber) > PI) {
-        fixMatrix = gen3inv;
+        fixIsom = gen3inv;
         return true;
     }
     if (dot(klein, nfiber) < -PI) {
-        fixMatrix = gen3;
+        fixIsom = gen3;
         return true;
     }
 
@@ -1588,7 +1591,7 @@ bool isOutsideCellSquare(Point p, out Isometry fixMatrix){
 
 // Check if the given point p is in the fundamental domain of the discrete subgroup.
 // Subgroup: translation along the fiber by a fixed angle
-bool isOutsideCellFiber(Point p, out Isometry fixMatrix){
+bool isOutsideCellFiber(Point p, out Isometry fixIsom){
     // no need here to consider the Klein model
     // everything takes place in the fiber coordinate
 
@@ -1605,11 +1608,11 @@ bool isOutsideCellFiber(Point p, out Isometry fixMatrix){
     ));
 
     if (p.fiber > PI / 6.) {
-        fixMatrix = genInv;
+        fixIsom = genInv;
         return true;
     }
     if (p.fiber < - PI / 6.) {
-        fixMatrix = gen;
+        fixIsom = gen;
         return true;
     }
     return false;
@@ -1625,7 +1628,7 @@ LATTICE CORRESPONDING TO A GENUS 2 SURFACE
 
 // Check if the given point p is in the fundamental domain of the lattice.
 // Lattice : surface of genus 2
-bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
+bool isOutsideCellSurface(Point p, out Isometry fixIsom){
     // point in the Klein model
     // (where the fundamental domain is convex polyhedron).
     vec4 klein = toKlein(p);
@@ -1699,43 +1702,43 @@ bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
 
 
     if (dot(klein, nh) > threshold) {
-        fixMatrix = genA1inv;
+        fixIsom = genA1inv;
         return true;
     }
     if (dot(klein, nd1) > threshold) {
-        fixMatrix = genB1inv;
+        fixIsom = genB1inv;
         return true;
     }
     if (dot(klein, nv) > threshold) {
-        fixMatrix = genA1;
+        fixIsom = genA1;
         return true;
     }
     if (dot(klein, nd2) > threshold) {
-        fixMatrix = genB1;
+        fixIsom = genB1;
         return true;
     }
     if (dot(klein, nh) < -threshold) {
-        fixMatrix = genA2inv;
+        fixIsom = genA2inv;
         return true;
     }
     if (dot(klein, nd1) < -threshold) {
-        fixMatrix = genB2inv;
+        fixIsom = genB2inv;
         return true;
     }
     if (dot(klein, nv) < -threshold) {
-        fixMatrix = genA2;
+        fixIsom = genA2;
         return true;
     }
     if (dot(klein, nd2) < -threshold) {
-        fixMatrix = genB2;
+        fixIsom = genB2;
         return true;
     }
     if (dot(klein, nfiber) > PI) {
-        fixMatrix = genCinv;
+        fixIsom = genCinv;
         return true;
     }
     if (dot(klein, nfiber) < -PI) {
-        fixMatrix = genC;
+        fixIsom = genC;
         return true;
     }
 
@@ -1745,13 +1748,13 @@ bool isOutsideCellSurface(Point p, out Isometry fixMatrix){
 
 
 
-bool isOutsideCell(Point p, out Isometry fixMatrix){
-    return isOutsideCellSurface(p, fixMatrix);
+bool isOutsideCell(Point p, out Isometry fixIsom){
+    return isOutsideCellSurface(p, fixIsom);
 }
 
 // overload of the previous method with tangent vector
-bool isOutsideCell(Vector v, out Isometry fixMatrix){
-    return isOutsideCell(v.pos, fixMatrix);
+bool isOutsideCell(Vector v, out Isometry fixIsom){
+    return isOutsideCell(v.pos, fixIsom);
 }
 
 
@@ -1814,10 +1817,10 @@ Vector estimateNormal(Point p) {
 
 int BINARY_SEARCH_STEPS=10;
 
-void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
+void raymarchIterate(Vector rayDir, out Isometry totalFixIsom){
 
-    Isometry fixMatrix;
-    Isometry testFixMatrix;
+    Isometry fixIsom;
+    Isometry testfixIsom;
     float marchStep = MIN_DIST;
     float testMarchStep = MIN_DIST;
     float globalDepth = MIN_DIST;
@@ -1826,16 +1829,16 @@ void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
     Vector localtv = rayDir;
     Vector testlocaltv = rayDir;
     Vector bestlocaltv = rayDir;
-    totalFixMatrix = identity;
+    totalFixIsom = identity;
 
     // Trace the local scene, then the global scene:
 
     if (TILING_SCENE){
         for (int i = 0; i < MAX_MARCHING_STEPS; i++){
             localtv = flow(localtv, marchStep);
-            if (isOutsideCell(localtv, fixMatrix)){
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                localtv = translate(fixMatrix, localtv);
+            if (isOutsideCell(localtv, fixIsom)){
+                totalFixIsom = composeIsometry(fixIsom, totalFixIsom);
+                localtv = translate(fixIsom, localtv);
                 marchStep = MIN_DIST;
             }
             else {
@@ -1865,15 +1868,15 @@ void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
 
             //localtv = flow(localtv, marchStep);
 
-            //            if (isOutsideCell(localtv, fixMatrix)){
-            //                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-            //                localtv = translate(fixMatrix, localtv);
+            //            if (isOutsideCell(localtv, fixIsom)){
+            //                totalFixIsom = composeIsometry(fixIsom, totalFixIsom);
+            //                localtv = translate(fixIsom, localtv);
             //                localtv=tangNormalize(localtv);
             //                marchStep = MIN_DIST;
             //            }
 
             testlocaltv = flow(localtv, marchStep);
-            if (isOutsideCell(testlocaltv, fixMatrix)){
+            if (isOutsideCell(testlocaltv, fixIsom)){
                 bestlocaltv = testlocaltv;
 
                 for (int j = 0; j < BINARY_SEARCH_STEPS; j++){
@@ -1881,16 +1884,16 @@ void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
                     ////// dont jump too far forwards, since localSDF can't see stuff in the next cube
                     testMarchStep = marchStep - pow(0.5,float(j+1))*localDist;
                     testlocaltv = flow(localtv, testMarchStep);
-                    if ( isOutsideCell(testlocaltv, testFixMatrix) ){
+                    if ( isOutsideCell(testlocaltv, testfixIsom) ){
                         marchStep = testMarchStep;
                         bestlocaltv = testlocaltv;
-                        fixMatrix = testFixMatrix;
+                        fixIsom = testfixIsom;
                     }
                 }
 
                 localtv = bestlocaltv;
-                totalFixMatrix = composeIsometry(fixMatrix, totalFixMatrix);
-                localtv = translate(fixMatrix, localtv);
+                totalFixIsom = composeIsometry(fixIsom, totalFixIsom);
+                localtv = translate(fixIsom, localtv);
                 localtv=tangNormalize(localtv);
                 //globalDepth += marchStep;
                 marchStep = MIN_DIST;
@@ -1929,7 +1932,7 @@ void raymarchIterate(Vector rayDir, out Isometry totalFixMatrix){
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
-                totalFixMatrix = identity;
+                totalFixIsom = identity;
                 sampletv = tv;
                 return;
             }
@@ -1966,7 +1969,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
             localtv = flow(localtv, marchStep);
             if (isOutsideCell(localtv, fixIsom)){
                 totalFixIsom = composeIsometry(fixIsom, totalFixIsom);
-                localtv = translate(fixMatrix, localtv);
+                localtv = translate(fixIsom, localtv);
                 marchStep = MIN_DIST;
             }
             else {
@@ -2038,18 +2041,21 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
             tv = flow(rayDir, globalDepth);
 
             /*
-            if (i == 1) {
-                float aux = globalSceneSDF(tv.pos);
+            if (i == 2) {
+                //float aux = globalSceneSDF(tv.pos);
                 hitWhich = 5;
                 //debugColor = 1000. * aux * vec3(1, 0, 0);
-                debugColor = abs(tv.dir);
+                debugColor = vec3(tv.pos.fiber, -tv.pos.fiber,0);
                 break;
             }
             */
 
+
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
+                hitWhich = 5;
+                debugColor = vec3(tv.pos.fiber, -tv.pos.fiber, 0);
                 totalFixIsom = identity;
                 sampletv = tv;
                 return;
@@ -2150,7 +2156,7 @@ vec3 phongModel(Isometry totalFixIsom, vec3 color){
     // DEBUGGING
     /*
     int i = 0;
-    Isometry totalIsom = composeIsometry(totalFixMatrix, invCellBoost);
+    Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
     TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
     color = lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
     */
@@ -2230,7 +2236,7 @@ vec3 ballColor(Isometry totalFixIsom, Vector sampletv){
     if (EARTH){
         N = estimateNormal(sampletv.pos);
         vec3 color = texture(earthCubeTex, sphereOffset(globalObjectBoost, sampletv.pos)).xyz;
-        vec3 color2 = phongModel(totalFixMatrix, color);
+        vec3 color2 = phongModel(totalFixIsom, color);
         //color = 0.9*color+0.1;
         return 0.5 * color + 0.5 * color2;
     }
@@ -2286,7 +2292,7 @@ vec3 tilingColor(Isometry totalFixIsom, Vector sampletv){
     //        // objects have no natural color, only lit by the lights
     //        N = estimateNormal(sampletv.pos);
     //        vec3 color=vec3(0., 0., 0.);
-    //        color = phongModel(totalFixMatrix, color);
+    //        color = phongModel(totalFixIsom, color);
     //        return color;
     //    }
 }
@@ -2330,27 +2336,57 @@ void main(){
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
+
+    hitWhich = 5;
+
+
+    //Vector test = rayDir;
+    //debugColor = vec3(fakeDistance(rayDir.pos, unserializePoint(vec4(0, 0, 1, 1))), 0, 0);
+    //debugColor = vec3(_fakeDistToOrigin(rayDir.pos), 0, 0);
+
+
+    Point p1 = fromVec4(vec4(0, 0, 1, 1));
+    Point p2 = fromVec4(vec4(0, 0, 1, -1));
+
     if (isStereo == 1){
         if (isLeft){
-            rayDir = rotateByFacing(leftFacing, rayDir);
-            rayDir = translate(leftBoost, rayDir);
+            //debugColor = vec3(1, 1, 0);
+            //          rayDir = rotateByFacing(leftFacing, rayDir);
+            //            rayDir = translate(leftBoost, rayDir);
         }
         else {
-            rayDir = rotateByFacing(rightFacing, rayDir);
-            rayDir = translate(rightBoost, rayDir);
+            //            rayDir = rotateByFacing(rightFacing, rayDir);
+            //            rayDir = translate(rightBoost, rayDir);
         }
     }
     else {
+        //debugColor = vec3(0, 1, 1);
         rayDir = rotateByFacing(facing, rayDir);
-        rayDir = translate(currentBoost, rayDir);
+        //rayDir = translate(currentBoost, rayDir);
     }
+
+    //rayDir = rotateByFacing(facing, rayDir);
+    Isometry shift = makeInvLeftTranslation(rayDir.pos);
+    mat4 test = SLtoMatrix4(shift.target.proj);
+
+    //debugColor = length(shift.target.proj - ORIGIN.proj) * vec3(1);
+    //debugColor = abs(shift.target.fiber - ORIGIN.fiber) * vec3(1);
+    //debugColor = 0.9*res[1].xyz;
+    debugColor = length(test[1] - vec4(0, 1, 0, 0)) * vec3(1, 1, 1);
+
+    //Isometry shift = identity;
+    //debugColor = length(shift.target.proj - identity.target.proj) * vec3(1, 1, 1);
+    //debugColor = abs(shift.target.fiber - identity.target.fiber) * vec3(1, 1, 1);
+    //Point aux = translate(shift, p1);
 
     //get our raymarched distance back ------------------------
 
 
-    Isometry totalFixMatrix = identity;
+
+    Isometry totalFixIsom = identity;
+
     //do the marching
-    raymarch(rayDir, totalFixMatrix);
+    //raymarch(rayDir, totalFixIsom);
 
 
     vec3 pixelColor;
@@ -2363,20 +2399,20 @@ void main(){
         break;
 
         case 1:// global lights
-        pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
+        pixelColor= lightColor(totalFixIsom, sampletv, colorOfLight);
         //out_FragColor=vec4(pixelColor, 1.0);
         out_FragColor = vec4(colorOfLight, 1.0);
         break;
 
         case 2:// global object
-        pixelColor= ballColor(totalFixMatrix, sampletv);
+        pixelColor= ballColor(totalFixIsom, sampletv);
         //debugColor = abs(N.dir);
         //pixelColor = debugColor;
         out_FragColor=vec4(pixelColor, 1.0);
         break;
 
         case 3:// local objects
-        pixelColor= tilingColor(totalFixMatrix, sampletv);
+        pixelColor= tilingColor(totalFixIsom, sampletv);
         out_FragColor=vec4(pixelColor, 1.0);
         break;
 
@@ -2387,19 +2423,4 @@ void main(){
     }
 
 
-    /*
-    // DEBUGGING !!
-    float normHSQ = rayDir.dir.x * rayDir.dir.x + rayDir.dir.y * rayDir.dir.y;
-    //float h = 0.2 * fiberHeight(5. * normHSQ, atan(rayDir.dir.y, rayDir.dir.x), 0.);
-    //out_FragColor = vec4(h, -h, 0, 1);
-
-    float shRhoOver2SQ = 5. * normHSQ;
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float thetaMin = atan(shRhoOver2) - PI;
-    float thetaMax = -thetaMin;
-    float thetaDicho = _dichoSearch(shRhoOver2SQ, -5., thetaMin, thetaMax);
-
-    //debugColor = vec3(thetaDicho, -thetaDicho, 0) / PI;
-    out_FragColor = vec4(debugColor, 1);
-    */
 }

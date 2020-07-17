@@ -46,6 +46,7 @@ function fixOutsideCentralCell(position) {
     let nfiber = new Vector4().set(0, 0, 0, 1);
 
 
+    /*
     if (klein.dot(nh) > threshold) {
         bestIndex = 1;
     }
@@ -76,6 +77,7 @@ function fixOutsideCentralCell(position) {
     if (klein.dot(nfiber) < -Math.PI) {
         bestIndex = 8;
     }
+    */
 
     if (bestIndex !== -1) {
         position.translateBy(globals.gens[bestIndex]);
@@ -276,9 +278,9 @@ function initObjects() {
 
     PointLightObject(new Vector().set(1.2, 1.3, 0), lightColor1);
     PointLightObject(new Vector().set(-1.2, 1.3, 0), lightColor2);
-    PointLightObject(new Vector().set(0, 0, 1.), lightColor3);
+    PointLightObject(new Vector().set(0, 0, -1.), lightColor3);
     PointLightObject(new Vector().set(-1., -1., -1.), lightColor4);
-    let p = new Point();
+    let p = new Point().fromVector4(new Vector4(0, 0, 1, 1));
     globals.globalObjectPosition = new Position().set(p.makeTranslation(), new Matrix4());
 }
 
@@ -291,7 +293,7 @@ function initObjects() {
  * @param fShader
  */
 function setupMaterial(fShader) {
-
+    console.log(globals.position.facing.toLog());
     globals.material = new ShaderMaterial({
         uniforms: {
 
