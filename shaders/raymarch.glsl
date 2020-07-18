@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -101,6 +101,7 @@ vec4 SLreduceError(vec4 elt) {
     0, 0, 0, 1
     );
     float q = dot(elt, J * elt);
+    //return elt;
     return elt / sqrt(-q);
 }
 
@@ -641,20 +642,31 @@ float _fakeDistToOrigin(Point p) {
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    return 0.5 * sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+    return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
 }
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
-    Isometry shift = makeInvLeftTranslation(p1);
-    Point aux = translate(shift, p2);
-    return _fakeDistToOrigin(aux);
+
+    //Isometry shift = makeInvLeftTranslation(p1);
+    //return _fakeDistToOrigin(translate(shift, p2));
 
     /*
     vec4 aux1 = toVec4(p1);
     vec4 aux2 = toVec4(p2);
     return length(aux2 - aux1);
     */
+
+    vec4 aux1 = toVec4(p1);
+    vec4 aux2 = toVec4(p2);
+
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux1.xyz, J * aux2.xyz);
+    return sqrt(pow(acosh(-q), 2.) + pow(aux1.w - aux2.w, 2.));
 
 }
 
@@ -1401,9 +1413,9 @@ float globalSceneSDF(Point p){
     }
 
 
+
     //Global Sphere Object
     Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
-    //Point globalObjPos1 = fromVec4(vec4(0, 0, 1, 1));
     objDist = sphereSDF(absolutep, globalObjPos1, 0.3);
 
     distance = min(distance, objDist);
@@ -2031,7 +2043,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
             if (globalDist < EPSILON){
                 // hitWhich has now been set
                 //hitWhich = 5;
-                //debugColor = vec3(tv.pos.fiber, -tv.pos.fiber, 0);
+                //debugColor = abs(tv.dir);
                 totalFixIsom = identity;
                 sampletv = tv;
                 return;
