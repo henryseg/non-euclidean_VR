@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -634,6 +634,7 @@ Vector createVector(Point p, vec3 dp) {
 
 float _fakeDistToOrigin(Point p) {
     vec4 aux = toVec4(p);
+    //debugColor = p.fiber * vec3(0, 0, 1);
     vec3 oh = vec3(0, 0, 1);
     mat3 J = mat3(
     1, 0, 0,
@@ -647,8 +648,27 @@ float _fakeDistToOrigin(Point p) {
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
     Isometry shift = makeInvLeftTranslation(p1);
+    //Isometry shift = identity;
+    //debugColor = length(shift.target.proj - identity.target.proj) * vec3(1, 1, 1);
+    //debugColor = abs(shift.target.fiber - identity.target.fiber) * vec3(1, 1, 1);
+
     Point aux = translate(shift, p2);
+    //debugColor = length(p2.proj - aux.proj) * vec3(1, 1, 1);
+    //debugColor = abs(p2.fiber - aux.fiber) * vec3(1, 1, 1);
     return _fakeDistToOrigin(aux);
+
+    /*
+    Isometry isom = makeInvLeftTranslation(p1);
+    vec4 aux = toVec4(translate(isom, p2));
+    vec3 oh = vec3(0, 0, 1);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux.xyz, J * oh);
+    return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+    */
 
     /*
     vec4 aux1 = toVec4(p1);
@@ -656,6 +676,10 @@ float fakeDistance(Point p1, Point p2){
     return length(aux2 - aux1);
     */
 
+    /*
+    Isometry shift = makeInvLeftTranslation(p1);
+    return length(toVec4(translate(shift, p2)));
+    */
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -1388,7 +1412,7 @@ float globalSceneSDF(Point p){
     float objDist;
     //Light Objects
 
-
+    /*
     for (int i=0; i<4; i++){
         objDist = sphereSDF(absolutep, unserializePoint(lightPositions[i]), 0.1);
         distance = min(distance, objDist);
@@ -1398,12 +1422,12 @@ float globalSceneSDF(Point p){
             globalLightColor = lightIntensities[i];
             return distance;
         }
-    }
+    }*/
 
 
     //Global Sphere Object
-    Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
-    //Point globalObjPos1 = fromVec4(vec4(0, 0, 1, 1));
+    //Point globalObjPos1 = translate(globalObjectBoost, ORIGIN);
+    Point globalObjPos1 = fromVec4(vec4(0, 0, 1, 1));
     objDist = sphereSDF(absolutep, globalObjPos1, 0.3);
 
     distance = min(distance, objDist);
@@ -2030,8 +2054,8 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
-                //hitWhich = 5;
-                //debugColor = vec3(tv.pos.fiber, -tv.pos.fiber, 0);
+                hitWhich = 5;
+                debugColor = vec3(tv.pos.fiber, -tv.pos.fiber, 0);
                 totalFixIsom = identity;
                 sampletv = tv;
                 return;
@@ -2296,6 +2320,9 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
 // Main
 //----------------------------------------------------------------------------------------------------------------------
 
+Vector doNothing(Vector v){
+    return v;
+}
 
 void main(){
     setResolution(resol);
@@ -2317,6 +2344,7 @@ void main(){
 
     if (isStereo == 1){
         if (isLeft){
+            //rayDir = doNothing(rayDir);
             rayDir = rotateByFacing(leftFacing, rayDir);
             rayDir = translate(leftBoost, rayDir);
         }
@@ -2330,6 +2358,24 @@ void main(){
         rayDir = rotateByFacing(facing, rayDir);
         rayDir = translate(currentBoost, rayDir);
     }
+
+
+    hitWhich = 5;
+    //rayDir = rotateByFacing(facing, rayDir);
+    Isometry shift = makeInvLeftTranslation(rayDir.pos);
+    mat4 test = SLtoMatrix4(shift.target.proj);
+
+    //debugColor = length(shift.target.proj - ORIGIN.proj) * vec3(1);
+    //debugColor = abs(shift.target.fiber - ORIGIN.fiber) * vec3(1);
+    //debugColor = 0.9*res[1].xyz;
+    debugColor = length(test[1] - vec4(0, 1, 0, 0)) * vec3(1, 1, 1);
+
+
+
+    out_FragColor = vec4(debugColor, 1.0);
+    //get our raymarched distance back ------------------------
+
+/*
 
 
     Isometry totalFixIsom = identity;
@@ -2370,4 +2416,7 @@ void main(){
         out_FragColor = vec4(debugColor, 1.0);
         break;
     }
+*/
+
+
 }
