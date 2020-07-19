@@ -30,7 +30,6 @@ const bool FAKE_DIST_SPHERE = false;
 
 //const float globalObjectRadius = 0.4;
 const float centerSphereRadius =0.67;
-const float vertexSphereSize = 0.23;//In this case its a horosphere
 const float modelHalfCube = 0.5;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-int MAX_MARCHING_STEPS =  200;
+int MAX_MARCHING_STEPS =  100;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
@@ -80,7 +79,7 @@ int hitWhich = 0;
 
 
 //----------------------------------------------------------------------------------------------------------------------
-// Auxiliary methods: computations in SL(2,R) and X
+// Auxiliary methods: computations in SL(2,R)
 //----------------------------------------------------------------------------------------------------------------------
 
 /*
@@ -101,7 +100,6 @@ vec4 SLreduceError(vec4 elt) {
     0, 0, 0, 1
     );
     float q = dot(elt, J * elt);
-    //return elt;
     return elt / sqrt(-q);
 }
 
@@ -155,6 +153,7 @@ mat3 SLtoMatrix3(vec4 elt){
     elt.z, elt.w, elt.x, elt.y
     );
     mat3 res = aux1 * aux2;
+    // TODO ? reduce errors to make sure the matrix belongs to SO(2,1) ?
     return res;
 }
 
@@ -245,7 +244,7 @@ vec4 SLflip(vec4 elt) {
     - fiber is the fiber coordinates (!)
 
     The goal of this choice is to perform as many computations in SL(2,R) rather than in X.
-    Hopefully this will reduce numerical erros related to the atan function
+    Hopefully this will reduce numerical errors (no need to go back and forth between SL2 and X).
 
 */
 
@@ -297,6 +296,25 @@ vec4 toKlein(Point p){
     res.xyz = res.xyz / res.z;
     return res;
 }
+
+// Perfom a rotation (meant in the H^2 component) by the given angle
+// It does not affact the fiber component
+Point rotateBy(Point p, float angle) {
+    return Point(
+    SLrotateBy(p.proj, angle),
+    p.fiber
+    );
+}
+
+// Flip the point (see Jupyter Notebook)
+// It reverses the fiber
+Point flip(Point p) {
+    return Point(
+    SLflip(p.proj),
+    - p.fiber
+    );
+}
+
 
 // unserialize the data received from the shader to create a point
 Point unserializePoint(vec4 data) {
@@ -365,24 +383,6 @@ Point translate(Isometry isom, Point p) {
     Isometry aux = makeLeftTranslation(p);
     aux = composeIsometry(isom, aux);
     return aux.target;
-}
-
-// Perfom a rotation (meant in the H^2 component) by the given angle
-// It does not affact the fiber component
-Point rotateBy(Point p, float angle) {
-    return Point(
-    SLrotateBy(p.proj, angle),
-    p.fiber
-    );
-}
-
-// Flip the point (see Jupyter Notebook)
-// It reverses the fiber
-Point flip(Point p) {
-    return Point(
-    SLflip(p.proj),
-    - p.fiber
-    );
 }
 
 
@@ -662,25 +662,9 @@ float fakeDistance(Point p1, Point p2){
     Isometry shift = makeInvLeftTranslation(p1);
     return _fakeDistToOrigin(translate(shift, p2));
 
-    /*
-    vec4 aux1 = toVec4(p1);
-    vec4 aux2 = toVec4(p2);
-    return length(aux2 - aux1);
-    */
-
-    /*
-    vec4 aux1 = toVec4(p1);
-    vec4 aux2 = toVec4(p2);
-    mat3 J = mat3(
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, -1
-    );
-    float q = dot(aux1.xyz, J * aux2.xyz);
-    float fix = max(1., -q);
-    return sqrt(pow(acosh(fix), 2.) + pow(aux1.w - aux2.w, 2.));
-    */
-
+    // vec4 aux1 = toVec4(p1);
+    // vec4 aux2 = toVec4(p2);
+    // return length(aux2 - aux1);
 }
 
 // overload of the previous function in case we work with tangent vectors
@@ -700,7 +684,7 @@ float fakeDistance(Vector v1, Vector v2){
 // consider a geodesic gamma from the origin describing an angle phi
 // when reaching the point at distance rho of the axis (O,w)
 // return the value of 0.5(w - w0), where w is the height of gamma at that point
-// the distance rho is pased as rho^2
+// the distance rho is pased as sh(rho/2)^2
 float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
@@ -876,8 +860,8 @@ vec3 computeParams(float shRhoOver2SQ, float phi, float w){
     return vec3(a, c, t);
 }
 
-int DICHOTOMY_MAX_STEPS = 10;
-float DICHOTOMY_THRESHOLD = 0.01;
+const int DICHOTOMY_MAX_STEPS = 10;
+const float DICHOTOMY_THRESHOLD = 0.01;
 
 // given rho and w, find the parameter phi between phiMin and phiMax
 // which (almos) vanishes the function fiberHeight.
