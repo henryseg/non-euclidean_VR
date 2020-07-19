@@ -46,7 +46,7 @@ function fixOutsideCentralCell(position) {
     let nfiber = new Vector4().set(0, 0, 0, 1);
 
 
-    /*
+
     if (klein.dot(nh) > threshold) {
         bestIndex = 1;
     }
@@ -77,7 +77,7 @@ function fixOutsideCentralCell(position) {
     if (klein.dot(nfiber) < -Math.PI) {
         bestIndex = 8;
     }
-    */
+
 
     if (bestIndex !== -1) {
         position.translateBy(globals.gens[bestIndex]);
@@ -224,12 +224,12 @@ function initGeometry() {
 
     globals.position = new Position();
     // DEBUGGING
-    // globals.position.boost.target = new Point().fromVector4(new Vector4(
-    //     64.59408189989722,
-    //     1653.9094370314726,
-    //     1655.1706320854817,
-    //     -1.6737163223953442
-    // ));
+    globals.position.boost.target = new Point().fromVector4(new Vector4(
+        0,
+        0,
+        1.0000000000000002,
+        0.013400000000000002
+    ));
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();

@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -46,7 +46,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-int MAX_MARCHING_STEPS =  60;
+int MAX_MARCHING_STEPS =  200;
 const float MIN_DIST = 0.0;
 float MAX_DIST = 320.0;
 
@@ -642,14 +642,25 @@ float _fakeDistToOrigin(Point p) {
     0, 0, -1
     );
     float q = dot(aux.xyz, J * oh);
-    return sqrt(pow(acosh(-q), 2.) + pow(aux.w, 2.));
+
+    // WARNING: DO NOT REPLACE THE LINES BELOW BY A MIN OR MAX
+    // This hack is intended to make sure that q < -1, so that acosh does not crash
+    // However when q is very large (long geodesics close to the horizontal component) a standard line such as
+    // fix = max(1., -q);
+    // causes numerical errrors.
+    // This seems to work... no idea why !
+    // NB. Teleportation on the Javascript side does not fix the issue
+
+    float fix;
+    if (-q < 1.) fix = 1.; else fix = -q;
+    return sqrt(pow(acosh(fix), 2.) + pow(aux.w, 2.));
 }
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
 
-    //Isometry shift = makeInvLeftTranslation(p1);
-    //return _fakeDistToOrigin(translate(shift, p2));
+    Isometry shift = makeInvLeftTranslation(p1);
+    return _fakeDistToOrigin(translate(shift, p2));
 
     /*
     vec4 aux1 = toVec4(p1);
@@ -657,16 +668,18 @@ float fakeDistance(Point p1, Point p2){
     return length(aux2 - aux1);
     */
 
+    /*
     vec4 aux1 = toVec4(p1);
     vec4 aux2 = toVec4(p2);
-
     mat3 J = mat3(
     1, 0, 0,
     0, 1, 0,
     0, 0, -1
     );
     float q = dot(aux1.xyz, J * aux2.xyz);
-    return sqrt(pow(acosh(-q), 2.) + pow(aux1.w - aux2.w, 2.));
+    float fix = max(1., -q);
+    return sqrt(pow(acosh(fix), 2.) + pow(aux1.w - aux2.w, 2.));
+    */
 
 }
 
@@ -1048,9 +1061,10 @@ Vector _exactFlow(Vector v, float t) {
     /*
     if (abs(c-a) < 0.002) {
         hitWhich = 5;
-        debugColor = vec3(1,1,0);
+        debugColor = vec3(1, 1, 0);
     }
     */
+
 
     /*
     if (abs(c-a)*t < 0.05) {
@@ -1398,9 +1412,8 @@ float globalSceneSDF(Point p){
     Point absolutep = translate(cellBoost, p);
     float distance = MAX_DIST;
     float objDist;
+
     //Light Objects
-
-
     for (int i=0; i<4; i++){
         objDist = sphereSDF(absolutep, unserializePoint(lightPositions[i]), 0.1);
         distance = min(distance, objDist);
@@ -1411,7 +1424,6 @@ float globalSceneSDF(Point p){
             return distance;
         }
     }
-
 
 
     //Global Sphere Object
@@ -2051,6 +2063,8 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
             //marchStep = globalDist;
             globalDepth += globalDist;
             if (globalDepth >= localDepth){
+                //hitWhich = 5;
+                //debugColor = vec3(1, 1, 0);
                 break;
             }
         }
