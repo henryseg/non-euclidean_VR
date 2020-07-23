@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -643,16 +643,13 @@ float _fakeDistToOrigin(Point p) {
     );
     float q = dot(aux.xyz, J * oh);
 
-    // WARNING: DO NOT REPLACE THE LINES BELOW BY A MIN OR MAX
+    // WARNING: DO NOT THE 'IF ... THEN .. ELSE' STATEMENT BELOW
     // This hack is intended to make sure that q < -1, so that acosh does not crash
-    // However when q is very large (long geodesics close to the horizontal component) a standard line such as
-    // fix = max(1., -q);
-    // causes numerical errrors.
-    // This seems to work... no idea why !
+    // However when q is very large (long geodesics close to the horizontal component) the max causes numerical errors
+    // This seems to work...
     // NB. Teleportation on the Javascript side does not fix the issue
-
     float fix;
-    if (-q < 1.) fix = 1.; else fix = -q;
+    if (-q < 2.) fix = max(1., -q); else fix = -q;
     return sqrt(pow(acosh(fix), 2.) + pow(aux.w, 2.));
 }
 
@@ -685,6 +682,7 @@ float fakeDistance(Vector v1, Vector v2){
 // when reaching the point at distance rho of the axis (O,w)
 // return the value of 0.5(w - w0), where w is the height of gamma at that point
 // the distance rho is pased as sh(rho/2)^2
+// We assume that rho > 0 and w0 >=0
 float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
@@ -692,28 +690,104 @@ float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
     float tanPhiSQ = pow(tanPhi, 2.);
     float aux;
     float res;
-    if (abs(phi) < 0.5 * PI) {
-        if (abs(tanPhi) < shRhoOver2){
-            aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
-            res = (phi - 0.5 * w0)  - 2. *  tanPhi * atanh(aux) / aux;
-        }
-        else if (abs(tanPhi) == shRhoOver2) {
-            res = (phi - 0.5 * w0) - 2. * tanPhi;
-        }
-        else if (abs(tanPhi) > shRhoOver2){
+
+    if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
+        // hyperbolic like geodesics
+        aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
+        res = -0.5 * w0 + phi - 2. * tanPhi * atanh(aux) / aux;
+    }
+    else if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
+        // parabolic like geodesics
+        res = -0.5 * w0 + phi - 2. * tanPhi;
+    }
+    else if (abs(tanPhi) > shRhoOver2){
+        // elliptic like geodesics
+        float test = mod(phi + 0.5 * PI, PI);
+        if (test != 0.) {
+            float eps = sign(tanPhi);
+            float m = floor(0.5 - phi / PI);
             aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
-            res = (phi - 0.5 * w0) - 2. * tanPhi * atan(aux) / aux;
+            res = - 0.5 * w0 + phi  - 2. * tanPhi * (atan(aux) - eps * m * PI) / aux;
+        }
+        else {
+            float m = round(-0.5 - phi/PI);
+            res = - 0.5 * w0 - 0.5 * PI + PI * chRhoOver2 + m * PI * (2. * chRhoOver2 - 1.);
         }
     }
-    else if (abs(phi) == 0.5 * PI) {
-        res = - 0.5 * w0 - sign(phi) * PI * (chRhoOver2 - 0.5);
+
+    return res;
+}
+
+// derivative with repsect to phi of the function fiberHeight
+float dfiberHeight(float shRhoOver2SQ, float w0, float phi) {
+    float shRhoOver2 = sqrt(shRhoOver2SQ);
+    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+    float tanPhi = tan(phi);
+    float tanPhiSQ = pow(tanPhi, 2.);
+    float aux;
+    float res;
+
+
+    if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
+        // hyperbolic like geodesics
+        aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
+        res = -2. * (atanh(aux)/aux - 1.) * (1. / pow(aux, 2.) - 1.) * shRhoOver2SQ -1.;
     }
-    else {
-        aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
-        res = (phi - 0.5 * w0) - 2. * tanPhi * (atan(aux)-PI) / aux;
+    else if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
+        // parabolic like geodesics
+        res = -(2./3.) * shRhoOver2SQ - 1.;
+    }
+    else if (abs(tanPhi) > shRhoOver2){
+        // elliptic like geodesics
+        float test = mod(phi + 0.5 * PI, PI);
+        if (test != 0.) {
+            float eps = sign(tanPhi);
+            float m = floor(0.5 - phi / PI);
+            aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+            res = -2. * (eps * m * PI / aux - atan(aux) / aux + 1.) * (1. / pow(aux, 2.) + 1.) * shRhoOver2SQ - 1.;
+        }
+        else {
+            float m = round(-0.5 - phi/PI);
+            res = -2. * shRhoOver2SQ - 1.;
+        }
     }
     return res;
 }
+
+
+// consider a geodesic gamma from the origin describing an angle phi
+// when reaching the point at distance rho of the axis (O,w)
+// return the value of 0.5(w - w0), where w is the height of gamma at that point
+// the distance rho is pased as sh(rho/2)^2
+//float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
+//    float shRhoOver2 = sqrt(shRhoOver2SQ);
+//    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+//    float tanPhi = tan(phi);
+//    float tanPhiSQ = pow(tanPhi, 2.);
+//    float aux;
+//    float res;
+//    if (abs(phi) < 0.5 * PI) {
+//        if (abs(tanPhi) < shRhoOver2){
+//            aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
+//            res = (phi - 0.5 * w0)  - 2. *  tanPhi * atanh(aux) / aux;
+//        }
+//        else if (abs(tanPhi) == shRhoOver2) {
+//            res = (phi - 0.5 * w0) - 2. * tanPhi;
+//        }
+//        else if (abs(tanPhi) > shRhoOver2){
+//            aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+//            res = (phi - 0.5 * w0) - 2. * tanPhi * atan(aux) / aux;
+//        }
+//    }
+//    else if (abs(phi) == 0.5 * PI) {
+//        res = - 0.5 * w0 - sign(phi) * PI * (chRhoOver2 - 0.5);
+//    }
+//    else {
+//        aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+//        res = (phi - 0.5 * w0) - 2. * tanPhi * (atan(aux)-PI) / aux;
+//    }
+//    return res;
+//}
 
 // IN PROGRESS BEGIN !!
 
@@ -807,161 +881,255 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
     tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
 }
 
+const int MAX_NEWTON_INIT_ITERATION = 10;
+const int MAX_NEWTON_ITERATION = 10;
+const float NEWTON_INIT_TOLERANCE = 0.001;
+const float NEWTON_TOLERANCE = 0.0001;
 
-// IN PROGRESS STOP !!
-
-// Consider a minimizing geodesic gamma starting at the origin with tangent vector of the form (a,0,c)
-// Assume that after time t its polar coordinates are (rho, theta, phi).
-// The function takes as an input rho -- given as sinh(rho/2)^2 -- phi and w
-// and returns (a,c,t) in a vec3
-vec3 computeParams(float shRhoOver2SQ, float phi, float w){
-
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
-
-    float tanTheta = tan(phi);
-    float tanThetaSQ = pow(tanTheta, 2.);
-
-    float omega;
-    float omega2;
-    float a;
-    float c;
-    float t;
-
-    if (abs(tanTheta) < shRhoOver2) {
-        // hyperbolic type geodesic
-        // omega = sqrt(a^2 - c^2)
-        omega2 = (shRhoOver2SQ - tanThetaSQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
-        omega = sqrt(omega2);
-        a = sqrt(0.5 * (1. + omega2));
-        c = sign(w) * sqrt(0.5 * (1. - omega2));
-        t = 2. * atanh(sqrt(shRhoOver2SQ - tanThetaSQ) / chRhoOver2) / omega;
-
-    }
-    else if (abs(tanTheta) == shRhoOver2) {
-        // parabolic type geodesic
-        a = 1. / sqrt2;
-        c = sign(w) * 1. / sqrt2;
-        t = 2. * sqrt2 * shRhoOver2;
-    }
-    else {
-        // elliptic type geodesic
-        // omega = sqrt(c^2 - a^2)
-        omega2 = (tanThetaSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
-        omega = sqrt(omega2);
-        a = sqrt(0.5 * (1. - omega2));
-        c = sign(w) * sqrt(0.5 * (1. + omega2));
-        t = 2. * atan(sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2) / omega;
-        // geodesic that made more than a half turn
-        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
-            t = t + sign(w) * 2. * PI / omega;
-        }
-    }
-    return vec3(a, c, t);
-}
-
-const int DICHOTOMY_MAX_STEPS = 10;
-const float DICHOTOMY_THRESHOLD = 0.01;
-
-// given rho and w, find the parameter phi between phiMin and phiMax
-// which (almos) vanishes the function fiberHeight.
-// (One assumes that the problem has a solution on this interval)
-float _dichoSearch(float shRhoOver2SQ, float w, float phiMin, float phiMax){
-    float auxM = phiMin;
-    float auxP = phiMax;
-    float phi;
-    float height;
-    for (int i=0; i < DICHOTOMY_MAX_STEPS; i++) {
-        if (abs(auxM - auxP) < DICHOTOMY_THRESHOLD) {
+// return a value of phi between phimin and phimax such that `fiberHeight`
+// (seen as a function of phi) is positive
+// this value will serve as starting point for the newtown method
+// the output is found using a binary search
+// we assume that _height is defined and monotone on the whole interval (phimin, phimax)
+// the boolean `increasing` says if it is increasing or decreasing
+float _height_newton_init(float shRhoOver2SQ, float w0, float phimin, float phimax, bool increasing) {
+    float auxmin = phimin;
+    float auxmax = phimax;
+    float aux, val;
+    for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){
+        aux = 0.5 * auxmin + 0.5 * auxmax;
+        val = fiberHeight(shRhoOver2SQ, w0, aux);
+        if (val >= 0.) {
             break;
         }
-        phi = 0.5 * auxM + 0.5 * auxP;
-        height = fiberHeight(shRhoOver2SQ, w, phi);
-        if (height > 0.) {
-            auxM = phi;
-        }
         else {
-            auxP = phi;
+            if (increasing) {
+                auxmin = aux;
+            }
+            else {
+                auxmax = aux;
+            }
+        }
+    }
+    return aux;
+}
+
+// runs the newton algorithm to find the zero of `fiberHeight`
+// starting from phi0
+float _height_newton(float shRhoOver2SQ, float w0, float phi0) {
+    float phi = phi0;
+    float aux;
+    float val;
+    for (int i=0; i < MAX_NEWTON_ITERATION; i++){
+        // value of _height at phi
+        val = fiberHeight(shRhoOver2SQ, w0, phi);
+        // backup of the previous value of phi
+        aux = phi;
+        // new value of phi
+        phi = phi - val/dfiberHeight(shRhoOver2SQ, w0, phi);
+        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+            break;
         }
     }
     return phi;
 }
 
-// Take a point p and return the data (a,c,t) as a vec3
-// such that the geodesic starting at the origin directed by (a,0,c)
-// reach the point p after time t.
-// The algorithm is a dichotomy.
-// This part is mean as as a preliminary step for a Newtown algorithm.
-
-vec3 _dichoDist(Point p) {
-    // we assume that phi is positive (always possible up to flipping)
-    // note that the flip does not change rho
-    float phi = abs(p.fiber);
-    float shRhoOver2SQ = pow(p.proj.z, 2.) + pow(p.proj.w, 2.);
+// return the first zero of `fiberHeight` (seen as a function of phi)
+// - use the Newton method
+// - the starting point of the Newton method is obtained via a binary search
+// the solution belongs to (atan(sh(rho/2) - pi, 0)
+float zero_height(float shRhoOver2SQ, float w0) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
-
-
-    /*
-    float thetaMin;
-    float thetaMax;
-    float thetaDicho;
-    // we can detect in advance what kind of geodesic we are following
-    // this allow to narrow a little the initial domain.
-    // Note sure this is totally relevant, as it involved a lot of computation,
-    // while one or two dichotomy step would bring us back to this level.
-    if (0.5 * abs(phi) < 2. * shRhoOver2 - atan(shRhoOver2)){
-        // hyperbolic type geodesic
-        thetaMin = -atan(shRhoOver2);
-        thetaMax = 0.;
-        thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
-    }
-    else if (0.5 * abs(phi) == abs(2. * shRhoOver2 - atan(shRhoOver2))) {
-        // parabolic type geodesic
-        thetaDicho = - atan(shRhoOver2);
-    }
-    else {
-        if (0.5 * abs(phi) < PI * (chRhoOver2 - 0.5)){
-            // geodesic with less than half a turn
-            thetaMin = -0.5 * PI;
-            thetaMax = -atan(shRhoOver2);
-            thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
-        }
-        else {
-            // geodesic with at least half a turn
-            thetaMin = atan(shRhoOver2) - PI;
-            thetaMax = -0.5 * PI;
-            thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
-        }
-    }*/
-
-
-    float thetaMin = atan(shRhoOver2) - PI;
-    float thetaMax = 0.;
-    float thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
-
-
-    //return vec3(thetaDicho);
-
-    vec3 res = computeParams(shRhoOver2SQ, thetaDicho, phi);
-    // if needed we flip back the result
-    if (p.fiber < 0.) {
-        res.y = -res.y;
-    }
-    return res;
-
+    float phiMin = atan(shRhoOver2) - PI;
+    float phi0 = _height_newton_init(shRhoOver2SQ, w0, phiMin, 0., false);
+    return _height_newton(shRhoOver2SQ, w0, phi0);
 }
+
+
+
+
+// Consider a minimizing geodesic gamma starting at the origin with tangent vector of the form (a,0,c)
+// Assume that after time t its polar coordinates are (rho, theta, phi).
+// The function takes as an input rho -- given as sinh(rho/2)^2 -- phi and w
+// and returns (a,c,t) in a vec3
+//vec3 computeParams(float shRhoOver2SQ, float phi, float w){
+//
+//    float shRhoOver2 = sqrt(shRhoOver2SQ);
+//    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+//
+//    float tanTheta = tan(phi);
+//    float tanThetaSQ = pow(tanTheta, 2.);
+//
+//    float omega;
+//    float omega2;
+//    float a;
+//    float c;
+//    float t;
+//
+//    if (abs(tanTheta) < shRhoOver2) {
+//        // hyperbolic type geodesic
+//        // omega = sqrt(a^2 - c^2)
+//        omega2 = (shRhoOver2SQ - tanThetaSQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
+//        omega = sqrt(omega2);
+//        a = sqrt(0.5 * (1. + omega2));
+//        c = sign(w) * sqrt(0.5 * (1. - omega2));
+//        t = 2. * atanh(sqrt(shRhoOver2SQ - tanThetaSQ) / chRhoOver2) / omega;
+//
+//    }
+//    else if (abs(tanTheta) == shRhoOver2) {
+//        // parabolic type geodesic
+//        a = 1. / sqrt2;
+//        c = sign(w) * 1. / sqrt2;
+//        t = 2. * sqrt2 * shRhoOver2;
+//    }
+//    else {
+//        // elliptic type geodesic
+//        // omega = sqrt(c^2 - a^2)
+//        omega2 = (tanThetaSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanThetaSQ + shRhoOver2SQ);
+//        omega = sqrt(omega2);
+//        a = sqrt(0.5 * (1. - omega2));
+//        c = sign(w) * sqrt(0.5 * (1. + omega2));
+//        t = 2. * atan(sqrt(tanThetaSQ - shRhoOver2SQ) / chRhoOver2) / omega;
+//        // geodesic that made more than a half turn
+//        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
+//            t = t + sign(w) * 2. * PI / omega;
+//        }
+//    }
+//    return vec3(a, c, t);
+//}
+//
+//
+//
+//const int DICHOTOMY_MAX_STEPS = 10;
+//const float DICHOTOMY_THRESHOLD = 0.01;
+//
+//// given rho and w, find the parameter phi between phiMin and phiMax
+//// which (almos) vanishes the function fiberHeight.
+//// (One assumes that the problem has a solution on this interval)
+//float _dichoSearch(float shRhoOver2SQ, float w, float phiMin, float phiMax){
+//    float auxM = phiMin;
+//    float auxP = phiMax;
+//    float phi;
+//    float height;
+//    for (int i=0; i < DICHOTOMY_MAX_STEPS; i++) {
+//        if (abs(auxM - auxP) < DICHOTOMY_THRESHOLD) {
+//            break;
+//        }
+//        phi = 0.5 * auxM + 0.5 * auxP;
+//        height = fiberHeight(shRhoOver2SQ, w, phi);
+//        if (height > 0.) {
+//            auxM = phi;
+//        }
+//        else {
+//            auxP = phi;
+//        }
+//    }
+//    return phi;
+//}
+//
+//// Take a point p and return the data (a,c,t) as a vec3
+//// such that the geodesic starting at the origin directed by (a,0,c)
+//// reach the point p after time t.
+//// The algorithm is a dichotomy.
+//// This part is mean as as a preliminary step for a Newtown algorithm.
+//
+//vec3 _dichoDist(Point p) {
+//    // we assume that phi is positive (always possible up to flipping)
+//    // note that the flip does not change rho
+//    float phi = abs(p.fiber);
+//    float shRhoOver2SQ = pow(p.proj.z, 2.) + pow(p.proj.w, 2.);
+//    float shRhoOver2 = sqrt(shRhoOver2SQ);
+//    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
+//
+//
+//    /*
+//    float thetaMin;
+//    float thetaMax;
+//    float thetaDicho;
+//    // we can detect in advance what kind of geodesic we are following
+//    // this allow to narrow a little the initial domain.
+//    // Note sure this is totally relevant, as it involved a lot of computation,
+//    // while one or two dichotomy step would bring us back to this level.
+//    if (0.5 * abs(phi) < 2. * shRhoOver2 - atan(shRhoOver2)){
+//        // hyperbolic type geodesic
+//        thetaMin = -atan(shRhoOver2);
+//        thetaMax = 0.;
+//        thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+//    }
+//    else if (0.5 * abs(phi) == abs(2. * shRhoOver2 - atan(shRhoOver2))) {
+//        // parabolic type geodesic
+//        thetaDicho = - atan(shRhoOver2);
+//    }
+//    else {
+//        if (0.5 * abs(phi) < PI * (chRhoOver2 - 0.5)){
+//            // geodesic with less than half a turn
+//            thetaMin = -0.5 * PI;
+//            thetaMax = -atan(shRhoOver2);
+//            thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+//        }
+//        else {
+//            // geodesic with at least half a turn
+//            thetaMin = atan(shRhoOver2) - PI;
+//            thetaMax = -0.5 * PI;
+//            thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+//        }
+//    }*/
+//
+//
+//    float thetaMin = atan(shRhoOver2) - PI;
+//    float thetaMax = 0.;
+//    float thetaDicho = _dichoSearch(shRhoOver2SQ, phi, thetaMin, thetaMax);
+//
+//
+//    //return vec3(thetaDicho);
+//
+//    vec3 res = computeParams(shRhoOver2SQ, thetaDicho, phi);
+//    // if needed we flip back the result
+//    if (p.fiber < 0.) {
+//        res.y = -res.y;
+//    }
+//    return res;
+//
+//}
+
+
+
+
+//float _exactDistToOrign(Point p) {
+//    vec3 params = _dichoDist(p);
+//    return params.z;
+//
+//    //float res = _fakeDistToOrigin(p);
+//    //return res;
+//
+//}
 
 
 float _exactDistToOrign(Point p) {
-    vec3 params = _dichoDist(p);
-    return params.z;
-
-    //float res = _fakeDistToOrigin(p);
-    //return res;
-
+    Point paux;
+    if (p.fiber < 0.) paux = flip(p); else paux = p;
+    float w = p.fiber;
+    float shRhoOver2SQ = pow(p.proj.z, 2.) + pow(p.proj.w, 2.);
+    if (shRhoOver2SQ == 0.){
+        // points on the fiber axis
+        if(w < 2. * PI) {
+            return w;
+        }
+        else {
+            float k = floor(0.5 * w /PI);
+            return 2. * k * PI * sqrt(0.5 * pow(w / (2. * k * PI) + 1., 2.) - 1.);
+        }
+    }
+    else {
+        // generic point
+        float phi = zero_height(shRhoOver2SQ, w);
+        float length;
+        _lengthFromPhi(shRhoOver2SQ, w, phi, length);
+        return length;
+    }
 }
 
+// IN PROGRESS STOP !!
 
 // distance between two points
 float exactDist(Point p1, Point p2){
@@ -1208,8 +1376,8 @@ float lightAtt(float dist){
 
 
 float sphereSDF(Point p, Point center, float radius){
-    return fakeDistance(p, center) - radius;
-    //return exactDist(p, center) - radius;
+    //return fakeDistance(p, center) - radius;
+    return exactDist(p, center) - radius;
 }
 
 float cylSDF(Point p, float r){
