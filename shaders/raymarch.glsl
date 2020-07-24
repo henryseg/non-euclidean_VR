@@ -2191,14 +2191,6 @@ vec3 phongModel(Isometry totalFixIsom, vec3 color){
 
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
 
-    // DEBUGGING
-    /*
-    int i = 0;
-    Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
-    TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
-    color = lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
-    */
-
 
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
