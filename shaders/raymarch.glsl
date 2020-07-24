@@ -654,7 +654,7 @@ float _fakeDistToOrigin(Point p) {
 }
 
 // fake distance between two points
-float fakeDistance(Point p1, Point p2){
+float fakeDist(Point p1, Point p2){
 
     Isometry shift = makeInvLeftTranslation(p1);
     return _fakeDistToOrigin(translate(shift, p2));
@@ -665,8 +665,8 @@ float fakeDistance(Point p1, Point p2){
 }
 
 // overload of the previous function in case we work with tangent vectors
-float fakeDistance(Vector v1, Vector v2){
-    return fakeDistance(v1.pos, v2.pos);
+float fakeDist(Vector v1, Vector v2){
+    return fakeDist(v1.pos, v2.pos);
 }
 
 
@@ -682,8 +682,10 @@ float fakeDistance(Vector v1, Vector v2){
 // when reaching the point at distance rho of the axis (O,w)
 // return the value of 0.5(w - w0), where w is the height of gamma at that point
 // the distance rho is pased as sh(rho/2)^2
-// We assume that rho > 0 and w0 >=0
-float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
+// We assume that rho > 0, w0 >=0, and phi < 0
+
+// CHECKED (with SageMath)
+float _height(float shRhoOver2SQ, float w0, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
     float tanPhi = tan(phi);
@@ -710,16 +712,16 @@ float fiberHeight(float shRhoOver2SQ, float w0, float phi) {
             res = - 0.5 * w0 + phi  - 2. * tanPhi * (atan(aux) - eps * m * PI) / aux;
         }
         else {
-            float m = round(-0.5 - phi/PI);
-            res = - 0.5 * w0 - 0.5 * PI + PI * chRhoOver2 + m * PI * (2. * chRhoOver2 - 1.);
+            res = - 0.5 * w0  + phi - 2. * phi * chRhoOver2;
         }
     }
 
     return res;
 }
 
-// derivative with repsect to phi of the function fiberHeight
-float dfiberHeight(float shRhoOver2SQ, float w0, float phi) {
+// derivative with repsect to phi of the function _height
+// CHECKED (with SageMath)
+float _dheight(float shRhoOver2SQ, float w0, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
     float tanPhi = tan(phi);
@@ -731,11 +733,11 @@ float dfiberHeight(float shRhoOver2SQ, float w0, float phi) {
     if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
         // hyperbolic like geodesics
         aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
-        res = -2. * (atanh(aux)/aux - 1.) * (1. / pow(aux, 2.) - 1.) * shRhoOver2SQ -1.;
+        res = - 2. * (atanh(aux) / aux - 1.) * (1. / pow(aux, 2.) - 1.) * shRhoOver2SQ - 1.;
     }
     else if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
         // parabolic like geodesics
-        res = -(2./3.) * shRhoOver2SQ - 1.;
+        res = -(2. / 3.) * shRhoOver2SQ - 1.;
     }
     else if (abs(tanPhi) > shRhoOver2){
         // elliptic like geodesics
@@ -744,11 +746,10 @@ float dfiberHeight(float shRhoOver2SQ, float w0, float phi) {
             float eps = sign(tanPhi);
             float m = floor(0.5 - phi / PI);
             aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
-            res = -2. * (eps * m * PI / aux - atan(aux) / aux + 1.) * (1. / pow(aux, 2.) + 1.) * shRhoOver2SQ - 1.;
+            res = - 2. * (eps * m * PI / aux - atan(aux) / aux + 1.) * (1. / pow(aux, 2.) + 1.) * shRhoOver2SQ - 1.;
         }
         else {
-            float m = round(-0.5 - phi/PI);
-            res = -2. * shRhoOver2SQ - 1.;
+            res = - 2. * shRhoOver2SQ - 1.;
         }
     }
     return res;
@@ -789,12 +790,11 @@ float dfiberHeight(float shRhoOver2SQ, float w0, float phi) {
 //    return res;
 //}
 
-// IN PROGRESS BEGIN !!
-
 // assume that a geodesic starting from the origin reach the point q
 // after describing an angle theta (in the hyperbolic plane)
 // return the length of this geodesic
-// we assume that rho > 0 and z > 0
+// we assume that rho > 0, w > 0, and phi < 0
+// CHECKED (with SageMath)
 void _lengthFromPhi(float shRhoOver2SQ, float w, float phi, out float len) {
 
     float shRhoOver2 = sqrt(shRhoOver2SQ);
@@ -806,12 +806,14 @@ void _lengthFromPhi(float shRhoOver2SQ, float w, float phi, out float len) {
     float omega;
     float omega2;
 
+
     if (abs(tanPhi) < shRhoOver2) {
         // hyperbolic type geodesic
         // omega = sqrt(a^2 - c^2)
         omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
         omega = sqrt(omega2);
-        len = 2. * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2) / omega;
+
+        len = (2. / omega) * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2);
 
     }
     else if (abs(tanPhi) == shRhoOver2) {
@@ -823,18 +825,19 @@ void _lengthFromPhi(float shRhoOver2SQ, float w, float phi, out float len) {
         // omega = sqrt(c^2 - a^2)
         omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
         omega = sqrt(omega2);
-        len = 2. * atan(sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) / omega;
-        // geodesic that made more than a half turn
-        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
-            len = len + sign(w) * 2. * PI / omega;
-        }
+        float eps = sign(tanPhi);
+        float m = floor(0.5 - phi / PI);
+
+        len = (2. / omega) *  (atan(-eps * sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) + m * PI);
     }
+
 }
 
 // assume that a geodesic starting from the origin reach the point q
 // after describing an angle phi (in the hyperbolic plane)
 // return the unit tangent vector of this geodesic and its length
-// we assume that rho > 0
+// we assume that rho > 0, w > 0 and phi < 0
+// CHECKED (with SageMath)
 void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out Vector tv, out float len) {
 
     float shRhoOver2 = sqrt(shRhoOver2SQ);
@@ -853,15 +856,16 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
         // omega = sqrt(a^2 - c^2)
         omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
         omega = sqrt(omega2);
+
         a = sqrt(0.5 * (1. + omega2));
-        c = sign(w) * sqrt(0.5 * (1. - omega2));
-        len = 2. * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2) / omega;
+        c = sqrt(0.5 * (1. - omega2));
+        len = (2. / omega) * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2);
 
     }
     else if (abs(tanPhi) == shRhoOver2) {
         // parabolic type geodesic
         a = 1. / sqrt2;
-        c = sign(w) * 1. / sqrt2;
+        c = 1. / sqrt2;
         len = 2. * sqrt2 * shRhoOver2;
     }
     else {
@@ -869,13 +873,12 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
         // omega = sqrt(c^2 - a^2)
         omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
         omega = sqrt(omega2);
+        float eps = sign(tanPhi);
+        float m = floor(0.5 - phi / PI);
+
         a = sqrt(0.5 * (1. - omega2));
-        c = sign(w) * sqrt(0.5 * (1. + omega2));
-        len = 2. * atan(sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) / omega;
-        // geodesic that made more than a half turn
-        if (abs(w) > PI * (chRhoOver2 - 0.5)) {
-            len = len + sign(w) * 2. * PI / omega;
-        }
+        c = sqrt(0.5 * (1. + omega2));
+        len = (2. / omega) *  (atan(-eps * sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) + m * PI);
     }
     float alpha = theta + c * len - 0.5 * w;
     tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
@@ -886,66 +889,68 @@ const int MAX_NEWTON_ITERATION = 10;
 const float NEWTON_INIT_TOLERANCE = 0.001;
 const float NEWTON_TOLERANCE = 0.0001;
 
-// return a value of phi between phimin and phimax such that `fiberHeight`
+// return a value of phi between phimin and phimax such that `_height`
 // (seen as a function of phi) is positive
 // this value will serve as starting point for the newtown method
 // the output is found using a binary search
 // we assume that _height is defined and monotone on the whole interval (phimin, phimax)
 // the boolean `increasing` says if it is increasing or decreasing
-float _height_newton_init(float shRhoOver2SQ, float w0, float phimin, float phimax, bool increasing) {
-    float auxmin = phimin;
-    float auxmax = phimax;
+// CHECKED
+float _height_newton_init(float shRhoOver2SQ, float w0, float phiMin, float phiMax, bool increasing) {
+    float auxMin = phiMin;
+    float auxMax = phiMax;
     float aux, val;
     for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){
-        aux = 0.5 * auxmin + 0.5 * auxmax;
-        val = fiberHeight(shRhoOver2SQ, w0, aux);
+        aux = 0.5 * auxMin + 0.5 * auxMax;
+        val = _height(shRhoOver2SQ, w0, aux);
         if (val >= 0.) {
             break;
         }
         else {
             if (increasing) {
-                auxmin = aux;
+                auxMin = aux;
             }
             else {
-                auxmax = aux;
+                auxMax = aux;
             }
         }
     }
     return aux;
 }
 
-// runs the newton algorithm to find the zero of `fiberHeight`
+// runs the newton algorithm to find the zero of `_height`
 // starting from phi0
+// CHECKED
 float _height_newton(float shRhoOver2SQ, float w0, float phi0) {
     float phi = phi0;
-    float aux;
+    float tmp;
     float val;
     for (int i=0; i < MAX_NEWTON_ITERATION; i++){
         // value of _height at phi
-        val = fiberHeight(shRhoOver2SQ, w0, phi);
+        val = _height(shRhoOver2SQ, w0, phi);
         // backup of the previous value of phi
-        aux = phi;
+        tmp = phi;
         // new value of phi
-        phi = phi - val/dfiberHeight(shRhoOver2SQ, w0, phi);
-        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+        phi = phi - val/_dheight(shRhoOver2SQ, w0, phi);
+        if (abs(phi - tmp) < NEWTON_TOLERANCE) {
             break;
         }
     }
     return phi;
 }
 
-// return the first zero of `fiberHeight` (seen as a function of phi)
+// return the first zero of `_height` (seen as a function of phi)
 // - use the Newton method
 // - the starting point of the Newton method is obtained via a binary search
 // the solution belongs to (atan(sh(rho/2) - pi, 0)
+// CHECKED
 float zero_height(float shRhoOver2SQ, float w0) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float phiMin = atan(shRhoOver2) - PI;
-    float phi0 = _height_newton_init(shRhoOver2SQ, w0, phiMin, 0., false);
+    float phiMax = 0.;
+    float phi0 = _height_newton_init(shRhoOver2SQ, w0, phiMin, phiMax, false);
     return _height_newton(shRhoOver2SQ, w0, phi0);
 }
-
-
 
 
 // Consider a minimizing geodesic gamma starting at the origin with tangent vector of the form (a,0,c)
@@ -1004,7 +1009,7 @@ float zero_height(float shRhoOver2SQ, float w0) {
 //const float DICHOTOMY_THRESHOLD = 0.01;
 //
 //// given rho and w, find the parameter phi between phiMin and phiMax
-//// which (almos) vanishes the function fiberHeight.
+//// which (almos) vanishes the function _height.
 //// (One assumes that the problem has a solution on this interval)
 //float _dichoSearch(float shRhoOver2SQ, float w, float phiMin, float phiMax){
 //    float auxM = phiMin;
@@ -1016,7 +1021,7 @@ float zero_height(float shRhoOver2SQ, float w0) {
 //            break;
 //        }
 //        phi = 0.5 * auxM + 0.5 * auxP;
-//        height = fiberHeight(shRhoOver2SQ, w, phi);
+//        height = _height(shRhoOver2SQ, w, phi);
 //        if (height > 0.) {
 //            auxM = phi;
 //        }
@@ -1093,8 +1098,6 @@ float zero_height(float shRhoOver2SQ, float w0) {
 //}
 
 
-
-
 //float _exactDistToOrign(Point p) {
 //    vec3 params = _dichoDist(p);
 //    return params.z;
@@ -1108,19 +1111,22 @@ float zero_height(float shRhoOver2SQ, float w0) {
 float _exactDistToOrign(Point p) {
     Point paux;
     if (p.fiber < 0.) paux = flip(p); else paux = p;
-    float w = p.fiber;
-    float shRhoOver2SQ = pow(p.proj.z, 2.) + pow(p.proj.w, 2.);
+    float w = paux.fiber;
+    float shRhoOver2SQ = pow(paux.proj.z, 2.) + pow(paux.proj.w, 2.);
     if (shRhoOver2SQ == 0.){
         // points on the fiber axis
-        if(w < 2. * PI) {
+        if (w < 2. * PI) {
+            //debugColor = vec3(1, 0, 0);
             return w;
         }
         else {
+            //debugColor = vec3(0, 1, 0);
             float k = floor(0.5 * w /PI);
             return 2. * k * PI * sqrt(0.5 * pow(w / (2. * k * PI) + 1., 2.) - 1.);
         }
     }
     else {
+        //debugColor = vec3(0, 0, 1);
         // generic point
         float phi = zero_height(shRhoOver2SQ, w);
         float length;
@@ -1376,8 +1382,15 @@ float lightAtt(float dist){
 
 
 float sphereSDF(Point p, Point center, float radius){
-    //return fakeDistance(p, center) - radius;
-    return exactDist(p, center) - radius;
+    //return fakeDist(p, center) - radius;
+
+    float fake  = fakeDist(p, center) - radius;
+    if(fake > 10. * EPSILON) {
+        return fake;
+    }
+    else{
+        return exactDist(p, center) - radius;
+    }
 }
 
 float cylSDF(Point p, float r){
@@ -2258,7 +2271,7 @@ vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 li
     // Small hack:
     // if the light is too far (and the related computations could create numerical erroe such as nan),
     // then we simply ignore it
-    float distToLight = fakeDistance(SP, TLP);
+    float distToLight = fakeDist(SP, TLP);
 
     if (distToLight < 1000.) {
         //Calculations - Phong Reflection Model
@@ -2509,6 +2522,12 @@ void main(){
         rayDir = translate(currentBoost, rayDir);
     }
 
+    /*
+    Point p = fromVec4(vec4(0, 0, 1, -1));
+    //float d = 0.5 * fakeDist(rayDir.pos, p);
+    float d = 0.5 * exactDist(rayDir.pos, p);
+    out_FragColor = vec4(debugColor, 1);
+    */
 
     Isometry totalFixIsom = identity;
 
@@ -2548,4 +2567,6 @@ void main(){
         out_FragColor = vec4(debugColor, 1.0);
         break;
     }
+
+
 }
