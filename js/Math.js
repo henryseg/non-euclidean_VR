@@ -224,12 +224,12 @@ function initGeometry() {
 
     globals.position = new Position();
     // DEBUGGING
-    globals.position.boost.target = new Point().fromVector4(new Vector4(
-        0,
-        0,
-        1.0000000000000002,
-        0.013400000000000002
-    ));
+    // globals.position.boost.target = new Point().fromVector4(new Vector4(
+    //     0,
+    //     0,
+    //     1.0000000000000002,
+    //     0.013400000000000002
+    // ));
     globals.cellPosition = new Position();
     globals.invCellPosition = new Position();
     globals.gens = createGenerators();
