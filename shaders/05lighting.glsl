@@ -28,41 +28,9 @@ Vector estimateNormal(Point p) {
     n = createVector(p, vec3(vx, vy, vz));
     n = tangNormalize(n);
     vec4 dir = n.dir;
-    // shift = makeLeftTranslation(p);
-    //dir = shift.mat * dir;
-    //debugColor = 0.5 + 0.5 *dir.xyz;
-    //debugColor = vec3(0, 0, dir.z);
-    //debugColor = dir.xyz;
     return n;
 }
 
-
-//Vector estimateNormal(vec4 p) { // normal vector is in tangent hyperplane to hyperboloid at p
-//    // float denom = sqrt(1.0 + p.x*p.x + p.y*p.y + p.z*p.z);  // first, find basis for that tangent hyperplane
-//    float newEp = EPSILON * 10.0;
-//    mat4 theBasis= tangBasis(p);
-//    vec4 basis_x = theBasis[0];
-//    vec4 basis_y = theBasis[1];
-//    vec4 basis_z = theBasis[2];
-//    if (hitWhich != 3){ //global light scene
-//        //p+EPSILON * basis_x should be lorentz normalized however it is close enough to be good enough
-//        Vector tv = Vector(p,
-//        basis_x * (globalSceneSDF(p + newEp*basis_x) - globalSceneSDF(p - newEp*basis_x)) +
-//        basis_y * (globalSceneSDF(p + newEp*basis_y) - globalSceneSDF(p - newEp*basis_y)) +
-//        basis_z * (globalSceneSDF(p + newEp*basis_z) - globalSceneSDF(p - newEp*basis_z))
-//        );
-//        return tangNormalize(tv);
-//
-//    }
-//    else { //local scene
-//        Vector tv = Vector(p,
-//        basis_x * (localSceneSDF(p + newEp*basis_x) - localSceneSDF(p - newEp*basis_x)) +
-//        basis_y * (localSceneSDF(p + newEp*basis_y) - localSceneSDF(p - newEp*basis_y)) +
-//        basis_z * (localSceneSDF(p + newEp*basis_z) - localSceneSDF(p - newEp*basis_z))
-//        );
-//        return tangNormalize(tv);
-//    }
-//}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,32 +52,6 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 //--------------------------------------------------------------------
 //SP - Sample Point | TLP - Translated Light Position | V - View Vector
 
-//made some modifications to lighting calcuatiojns
-//put a coefficient of 2 in front of specular to make things shiny-er
-//changed the power from original of 10 on specular
-//in PHONG MODEL changed amount of color from 0.1 to more
-//vec3 lightingCalculations(vec4 SP, vec4 TLP, Vector V, vec3 baseColor, vec4 lightIntensity){
-//    //Calculations - Phong Reflection Model
-//    Vector L = tangDirection(SP, TLP);
-//    Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
-//    //Calculate Diffuse Component
-//    float nDotL = 1.-max(-cosAng(N, L), 0.0);
-//    vec3 diffuse = vec3(1., 1., 1.)*lightIntensity.rgb * nDotL;
-//    //Calculate Specular Component
-//    float rDotV = max(cosAng(R, V), 0.0);
-//    vec3 specular = (0.5*lightIntensity.rgb+vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
-//    //Attenuation - Inverse Square
-//    //float distToLight = fakeDistance(SP, TLP);
-//    float att = 0.5;
-//    //0.8/(0.1+distToLight);
-//    //0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
-//    //Compute final color
-//    vec3 amb=0.1*vec3(0.2, 1., 1.)*baseColor;
-//    vec3 diff=0.5*diffuse*baseColor;
-//    vec3 spec=1.5*specular;
-//    return diff+spec;
-//}
-
 
 // overload of the previous function
 //SP - Sample Point | DTLP - Direction to the Translated Light Position | V - View Vector
@@ -119,24 +61,21 @@ vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
 //changed the power from original of 10 on specular
 //in PHONG MODEL changed amount of color from 0.1 to more
 vec3 lightingCalculations(Point SP, Vector DTLP, float distToLight, Vector V, vec3 baseColor, vec4 lightIntensity){
-    //Calculations - Phong Reflection Model
-    Vector R = reflectOff(DTLP, N);
-    //debugColor = R.dir.xyz;
-    //Vector R = sub(scalarMult(2.0 * cosAng(DTLP, N), N), DTLP);
-
+    //this is tangent vector to the incomming light ray
+    Vector fromLight=turnAround(DTLP);
+    //now reflect it off the surfce
+    Vector reflectedRay = reflectOff(fromLight, N);
     //Calculate Diffuse Component
-    //float nDotL = 1. - max(-cosAng(N, DTLP), 0.0);
     float nDotL = max(cosAng(N, DTLP), 0.0);
-    vec3 diffuse = vec3(1., 1., 1.) * lightIntensity.rgb * nDotL;
+    vec3 diffuse = lightIntensity.rgb * nDotL;
     //Calculate Specular Component
-    float rDotV = max(cosAng(R, V), 0.0);
+    float rDotV = max(cosAng(reflectedRay, V), 0.0);
     vec3 specular = (0.5 * lightIntensity.rgb + vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
-
-    //Attenuation - Inverse Square
+    //Attenuation - of the light intensity due to distance from source
     float att = 1.;
     //float att =  5. / (0.1 + distToLight);
-    //float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
-    //Compute final color
+    // float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
+    //Combine the above terms to compute the final color
     return att*((diffuse*baseColor) + specular);
     //    vec3 amb = 0.1 * vec3(0.2, 1., 1.) * baseColor;
     //    vec3 diff = 0.5 * diffuse * baseColor;
@@ -177,67 +116,39 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
     vec4 lightColor4 = vec4(245. / 256., 61. / 256., 82. / 256., 1.);// red
     vec4 lightColor3 = vec4(1, 1, 1, 1);// white
 
-    bool otherDir = (!FAKE_LIGHT) && (SECOND_DIR_LIGHT || THIRD_DIR_LIGHT);
+    int nbDir;// number of directions for the point to the light
+    Vector[MAX_DIRS_LIGHT] dirs;// directions from the point to the light
+    float[MAX_DIRS_LIGHT] lens;// length of the corresponding geodesics
+
+
+    //bool otherDir = (!FAKE_LIGHT) && (SECOND_DIR_LIGHT || THIRD_DIR_LIGHT);
 
 
     shiftLight = composeIsometry(totalFixIsom, unserializeIsom(invCellBoost));
-
     TLP = translate(shiftLight, Point(vec4(10., 0., 10., 1.)));
-    tangDirection(SP, TLP, DTLP, distToLight);
-    color = lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor1);
-    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
-        //debugColor = lightColor1.xyz;
-        if (SECOND_DIR_LIGHT) {
-            color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor1);
-        }
-        if (THIRD_DIR_LIGHT){
-            color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor1);
-        }
+    nbDir = directions(SP, TLP, 0, dirs, lens);
+    for (int k=0; k < nbDir; k ++) {
+        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor1);
     }
-
 
     TLP = translate(shiftLight, Point(vec4(0., 10., 10., 1.)));
-    tangDirection(SP, TLP, DTLP, distToLight);
-    color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor2);
-    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
-        if (SECOND_DIR_LIGHT) {
-            color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor2);
-        }
-        if (THIRD_DIR_LIGHT){
-            color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor2);
-        }
+    nbDir = directions(SP, TLP, 0, dirs, lens);
+    for (int k=0; k < nbDir; k ++) {
+        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor2);
     }
 
-
-//    TLP = translate(shiftLight, Point(vec4(-10., 0, 5., 1.)));
-//    tangDirection(SP, TLP, DTLP, distToLight);
-//    color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor3);
-//    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
-//        if (SECOND_DIR_LIGHT) {
-//            color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor3);
-//        }
-//        if (THIRD_DIR_LIGHT){
-//            color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor3);
-//        }
-//    }
-
+    //    TLP = translate(shiftLight, Point(vec4(-10., 0, 5., 1.)));
+    //    nbDir = directions(SP, TLP, dirs, lens);
+    //    for (int k=0; k < nbDir; k ++) {
+    //        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor3);
+    //    }
 
     TLP = translate(shiftLight, Point(vec4(1, 1, 12, 1.)));
-    tangDirection(SP, TLP, DTLP, distToLight);
-    color += lightingCalculations(SP, DTLP, distToLight, V, baseColor, lightColor4);
-    if (otherDir && tangDirectionBis(SP, TLP, DTLPbis, distToLightBis)) {
-        if (SECOND_DIR_LIGHT) {
-            vec3 aux = lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor4);
-            //debugColor = abs(aux);
-            color += lightingCalculations(SP, DTLPbis[0], distToLightBis[0], V, baseColor, lightColor4);
-        }
-        if (THIRD_DIR_LIGHT){
-            color += lightingCalculations(SP, DTLPbis[1], distToLightBis[1], V, baseColor, lightColor4);
-        }
+    nbDir = directions(SP, TLP, 0, dirs, lens);
+    for (int k=0; k < nbDir; k ++) {
+        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor4);
     }
 
-
-    //    }
 
     //    if(LOCAL_LIGHTS){
     //    //pick up light from the light source in your fundamental domain

@@ -87,7 +87,7 @@ vec3 sphereOffset(mat4 objectFacing, Point pt){
     pt = translate(shift, pt);
     Vector earthPoint;
     float len;
-    tangDirection(ORIGIN, pt, earthPoint, len);
+    direction(ORIGIN, pt, earthPoint, len);
     earthPoint = rotateFacing(objectFacing, earthPoint);
     return earthPoint.dir.xyz;
 }
@@ -99,7 +99,7 @@ vec3 globalSphereOffset(mat4 objectFacing, Point pt){
     pt = translate(shift, pt);
     Vector earthPoint;
     float len;
-    tangDirection(ORIGIN, pt, earthPoint, len);
+    direction(ORIGIN, pt, earthPoint, len);
     earthPoint=rotateFacing(objectFacing, earthPoint);
     return earthPoint.dir.xyz;
 }

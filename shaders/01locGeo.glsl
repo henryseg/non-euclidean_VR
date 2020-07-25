@@ -211,32 +211,9 @@ Vector turnAround(Vector v){
 
 //reflect the unit tangent vector u off the surface with unit normal n
 Vector reflectOff(Vector u, Vector n){
-    return sub(scalarMult(2.0 * cosAng(u, n), n), u);
+    return add(scalarMult(-2.0 * tangDot(u, n), n), u);
 }
 
-
-//mat4 tangBasis(vec4 p){
-//    // return a basis of vectors at the point p
-//
-//    /*
-//    vec4 basis_x = tangNormalize(p, vec4(p.w, 0.0, 0.0, p.x));
-//    vec4 basis_y = vec4(0.0, p.w, 0.0, p.y);
-//    vec4 basis_z = vec4(0.0, 0.0, p.w, p.z);
-//    //make this orthonormal
-//    basis_y = tangNormalize(p, basis_y - cosAng(p, basis_y, basis_x)*basis_x);// need to Gram Schmidt
-//    basis_z = tangNormalize(p, basis_z - cosAng(p, basis_z, basis_x)*basis_x - cosAng(p, basis_z, basis_y)*basis_y);
-//    mat4 theBasis=mat4(0.);
-//    */
-//
-//    vec4 basis_x = vec4(1., 0., 0., 0.);
-//    vec4 basis_y = vec4(0., 1., 0., 0.);
-//    vec4 basis_z = vec4(0., 0., 1., 0.);
-//    mat4 theBasis=mat4(0.);
-//    theBasis[0]=basis_x;
-//    theBasis[1]=basis_y;
-//    theBasis[2]=basis_z;
-//    return theBasis;
-//}
 
 
 /*
@@ -261,17 +238,6 @@ Vector createVector(Point p, vec3 dp) {
     return Vector(p, vec4(dp, 0));
 }
 
-
-//// test : take the canonical frame at every point
-//Point smallShift(Point p, vec3 dp) {
-//    return Point(p.coords + vec4(dp, 0));
-//}
-//
-//Vector createVector(Point p, vec3 dp) {
-//    Isometry shift = makeInvLeftTranslation(p);
-//    vec4 dir = shift.mat * vec4(dp, 0);
-//    return Vector(p, dir);
-//}
 
 
 
