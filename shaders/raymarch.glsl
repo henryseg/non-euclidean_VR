@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=false;
-const bool TILING_SCENE=true;
+const bool GLOBAL_SCENE=true;
+const bool TILING_SCENE=false;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -45,9 +45,9 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
 //----------------------------------------------------------------------------------------------------------------------
-int MAX_MARCHING_STEPS =  500;
+int MAX_MARCHING_STEPS =  100;
 const float MIN_DIST = 0.0;
-float MAX_DIST = 320.0;
+float MAX_DIST = 600.0;
 
 
 void setResolution(int UIVar){
@@ -849,10 +849,10 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
     tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
 }
 
-const int MAX_NEWTON_INIT_ITERATION = 10;
-const int MAX_NEWTON_ITERATION = 10;
-const float NEWTON_INIT_TOLERANCE = 0.001;
-const float NEWTON_TOLERANCE = 0.00001;
+const int MAX_NEWTON_INIT_ITERATION = 100;
+const int MAX_NEWTON_ITERATION = 100;
+const float NEWTON_INIT_TOLERANCE = 0.0001;
+const float NEWTON_TOLERANCE = 0.000001;
 
 // return a value of phi between phimin and phimax such that `_height`
 // (seen as a function of phi) is positive
