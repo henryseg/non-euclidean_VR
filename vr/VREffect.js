@@ -22,188 +22,211 @@
  * https://drive.google.com/folderview?id=0BzudLt22BqGRbW9WTHMtOWMzNjQ&usp=sharing#list
  *
  */
-THREE.VREffect = function ( renderer, done ) {
-	// var frameData = new VRFrameData();
 
-	this._renderer = renderer;
+THREE.VREffect = function (renderer, done) {
+    // var frameData = new VRFrameData();
 
-	this._init = function() {
-		var self = this;
+    this._renderer = renderer;
 
-		self.getEyeRotation = function(translationDistance, rotateEyes){
-			var turningAngle = Math.PI/2.0 - Math.asin(1.0/Math.cosh(Math.abs(translationDistance)));
-			var leftEyeRotation = new THREE.Quaternion();
-			var rightEyeRotation = new THREE.Quaternion();
-			if(rotateEyes){
-				leftEyeRotation.setFromAxisAngle(new THREE.Vector3(0,1,0), turningAngle);
-				rightEyeRotation.setFromAxisAngle(new THREE.Vector3(0,1,0), -turningAngle);
-				g_stereoBoosts[0].multiply(new THREE.Matrix4().makeRotationFromQuaternion(leftEyeRotation));
-				g_stereoBoosts[1].multiply(new THREE.Matrix4().makeRotationFromQuaternion(rightEyeRotation));
-			}
-		}
+    this._init = function () {
+        var self = this;
 
-		// default some stuff for mobile VR
-		self.leftEyeTranslation = { x: -0.03200000151991844, y: 0, z: 0, w: 0 };
-		self.rightEyeTranslation = { x: 0.03200000151991844, y: 0, z: 0, w: 0 };
-		// g_stereoBoosts[0] = translateByVector(g_geometry, self.leftEyeTranslation);
-		// g_stereoBoosts[1] = translateByVector(g_geometry, self.rightEyeTranslation);
-		//self.getEyeRotation(self.leftEyeTranslation.x);
+        self.getEyeRotation = function (translationDistance, rotateEyes) {
+            var turningAngle = Math.PI / 2.0 - Math.asin(1.0 / Math.cosh(Math.abs(translationDistance)));
+            var leftEyeRotation = new THREE.Quaternion();
+            var rightEyeRotation = new THREE.Quaternion();
+            if (rotateEyes) {
+                leftEyeRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), turningAngle);
+                rightEyeRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -turningAngle);
+                g_stereoBoosts[0].multiply(new THREE.Matrix4().makeRotationFromQuaternion(leftEyeRotation));
+                g_stereoBoosts[1].multiply(new THREE.Matrix4().makeRotationFromQuaternion(rightEyeRotation));
+            }
+        }
 
-		if (!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices) {
-			if(done) done("Your browser is not VR Ready");
-			return;
-		}
+        // default some stuff for mobile VR
+        self.leftEyeTranslation = {
+            x: -0.03200000151991844,
+            y: 0,
+            z: 0,
+            w: 0
+        };
+        self.rightEyeTranslation = {
+            x: 0.03200000151991844,
+            y: 0,
+            z: 0,
+            w: 0
+        };
+        // g_stereoBoosts[0] = translateByVector(g_geometry, self.leftEyeTranslation);
+        // g_stereoBoosts[1] = translateByVector(g_geometry, self.rightEyeTranslation);
+        //self.getEyeRotation(self.leftEyeTranslation.x);
 
-		if (navigator.getVRDisplays) navigator.getVRDisplays().then( gotVRDisplay );
-		else if ( navigator.getVRDevices ) navigator.getVRDevices().then( gotVRDevices );
-		else navigator.mozGetVRDevices( gotVRDevices );
+        if (!navigator.getVRDisplays && !navigator.mozGetVRDevices && !navigator.getVRDevices) {
+            if (done) done("Your browser is not VR Ready");
+            return;
+        }
 
-		// if(self.leftEyeTranslation.x == undefined){
-		// 	//we need these to be objects instead of arrays in order to process the information correctly
-		// 	self.leftEyeTranslation = {x: self.leftEyeTranslation[0], y:self.leftEyeTranslation[1], z:self.leftEyeTranslation[2], w:0 };
-		// 	self.rightEyeTranslation = {x: self.rightEyeTranslation[0], y:self.rightEyeTranslation[1], z:self.rightEyeTranslation[2], w:0}
-		// 	// g_stereoBoosts[0] = translateByVector(g_geometry, self.leftEyeTranslation);
-		// 	// g_stereoBoosts[1] = translateByVector(g_geometry, self.rightEyeTranslation);
-		// 	self.getEyeRotation(self.leftEyeTranslation.x);
-		// }
+        if (navigator.getVRDisplays) navigator.getVRDisplays().then(gotVRDisplay);
+        else if (navigator.getVRDevices) navigator.getVRDevices().then(gotVRDevices);
+        else navigator.mozGetVRDevices(gotVRDevices);
 
-		function gotVRDisplay( devices ) {
-			var vrHMD;
-			var error;
-			for ( var i = 0; i < devices.length; ++i ) {
-				if ( devices[i] instanceof VRDisplay ) {
-					vrHMD = devices[i];
-					self._vrHMD = vrHMD;
-					var parametersLeft = vrHMD.getEyeParameters( "left" );
-					var parametersRight = vrHMD.getEyeParameters( "right" );
-					self.leftEyeTranslation.x = parametersLeft.offset[0];
-					self.rightEyeTranslation.x = parametersRight.offset[0];
-					//self.getEyeRotation(self.leftEyeTranslation.x);
-					break; // We keep the first we encounter
-				}
-			}
+        // if(self.leftEyeTranslation.x == undefined){
+        // 	//we need these to be objects instead of arrays in order to process the information correctly
+        // 	self.leftEyeTranslation = {x: self.leftEyeTranslation[0], y:self.leftEyeTranslation[1], z:self.leftEyeTranslation[2], w:0 };
+        // 	self.rightEyeTranslation = {x: self.rightEyeTranslation[0], y:self.rightEyeTranslation[1], z:self.rightEyeTranslation[2], w:0}
+        // 	// g_stereoBoosts[0] = translateByVector(g_geometry, self.leftEyeTranslation);
+        // 	// g_stereoBoosts[1] = translateByVector(g_geometry, self.rightEyeTranslation);
+        // 	self.getEyeRotation(self.leftEyeTranslation.x);
+        // }
 
-			if ( done ) {
-				if ( !vrHMD ) error = 'HMD not available';
-				done( error );
-			}
-		}
+        function gotVRDisplay(devices) {
+            var vrHMD;
+            var error;
+            for (var i = 0; i < devices.length; ++i) {
+                if (devices[i] instanceof VRDisplay) {
+                    vrHMD = devices[i];
+                    self._vrHMD = vrHMD;
+                    var parametersLeft = vrHMD.getEyeParameters("left");
+                    var parametersRight = vrHMD.getEyeParameters("right");
+                    self.leftEyeTranslation.x = parametersLeft.offset[0];
+                    self.rightEyeTranslation.x = parametersRight.offset[0];
+                    //self.getEyeRotation(self.leftEyeTranslation.x);
+                    break; // We keep the first we encounter
+                }
+            }
 
-		function gotVRDevices( devices ) {
-			var vrHMD;
-			var error;
-			for ( var i = 0; i < devices.length; ++i ) {
-				if ( devices[i] instanceof HMDVRDevice ) {
-					vrHMD = devices[i];
-					self._vrHMD = vrHMD;
-					var parametersLeft = vrHMD.getEyeParameters( "left" );
-					var parametersRight = vrHMD.getEyeParameters( "right" );
-					self.leftEyeTranslation.x = parametersLeft.offset[0];
-					self.rightEyeTranslation.x = parametersRight.offset[0];
-					self.getEyeRotation(self.leftEyeTranslation.x);
-					break; // We keep the first we encounter
-				}
-			}
-			if ( done ) {
-				if ( !vrHMD ) error = 'HMD not available';
-				done( error );
-			}
-		}
-	};
+            if (done) {
+                if (!vrHMD) error = 'HMD not available';
+                done(error);
+            }
+        }
 
-	this._init();
+        function gotVRDevices(devices) {
+            var vrHMD;
+            var error;
+            for (var i = 0; i < devices.length; ++i) {
+                if (devices[i] instanceof HMDVRDevice) {
+                    vrHMD = devices[i];
+                    self._vrHMD = vrHMD;
+                    var parametersLeft = vrHMD.getEyeParameters("left");
+                    var parametersRight = vrHMD.getEyeParameters("right");
+                    self.leftEyeTranslation.x = parametersLeft.offset[0];
+                    self.rightEyeTranslation.x = parametersRight.offset[0];
+                    self.getEyeRotation(self.leftEyeTranslation.x);
+                    break; // We keep the first we encounter
+                }
+            }
+            if (done) {
+                if (!vrHMD) error = 'HMD not available';
+                done(error);
+            }
+        }
+    };
 
-	var iconHidden = true;
-	var fixLeaveStereo = false;
+    this._init();
 
-	this.render = function ( scene, camera, animate ) {
-		var renderer = this._renderer;
-		var vrHMD = this._vrHMD;
-		// VR render mode if HMD is available
-		if ( vrHMD ) {
-			g_material.uniforms.isStereo.value = 1;
-			vrHMD.requestAnimationFrame(animate);
-			renderer.render.apply( this._renderer, [scene, camera]  );
-			if (vrHMD.submitFrame !== undefined && this._vrMode) {
-				// vrHMD.getAnimationFrame(frameData);
-				vrHMD.submitFrame();
-			}
-			return;
-		}
+    var iconHidden = true;
+    var fixLeaveStereo = false;
 
-		requestAnimationFrame(animate);
-		// if (iconHidden) {
-		// 	iconHidden = false;
-		// 	document.getElementById("vr-icon").style.display = "block";
-		// }
+    this.render = function (scene, camera, animate) {
+        var renderer = this._renderer;
+        var vrHMD = this._vrHMD;
+        // VR render mode if HMD is available
+        if (vrHMD) {
+            g_material.uniforms.isStereo.value = 1;
+            vrHMD.requestAnimationFrame(animate);
+            renderer.render.apply(this._renderer, [scene, camera]);
+            if (vrHMD.submitFrame !== undefined && this._vrMode) {
+                // vrHMD.getAnimationFrame(frameData);
+                vrHMD.submitFrame();
+            }
+            return;
+        }
 
-		renderer.render.apply( this._renderer, [scene, camera]  );
-	};
+        requestAnimationFrame(animate);
+        // if (iconHidden) {
+        // 	iconHidden = false;
+        // 	document.getElementById("vr-icon").style.display = "block";
+        // }
 
-	this.setSize = function( width, height ) {
-		renderer.setSize( width, height );
-	};
+        renderer.render.apply(this._renderer, [scene, camera]);
+        if (guiInfo.recording == true) {
+            capturer.capture(canvas);
+        }
+    };
 
-	var _vrMode = false;
-	this.toggleVRMode = function () {
-		var vrHMD = this._vrHMD;
-		var canvas = renderer.domElement;
+    this.setSize = function (width, height) {
+        renderer.setSize(width, height);
+    };
 
-		if (!vrHMD) return;
+    var _vrMode = false;
+    this.toggleVRMode = function () {
+        var vrHMD = this._vrHMD;
+        var canvas = renderer.domElement;
 
- 		this._vrMode = !this._vrMode
- 		if (this._vrMode) vrHMD.requestPresent([{source: canvas, leftBounds: [0.0, 0.0, 0.5, 1.0], rightBounds: [0.5, 0.0, 0.5, 1.0]}]);
-		else vrHMD.exitPresent();
-	}
-	
-	this.setFullScreen = function( enable ) {
-		var renderer = this._renderer;
-		var vrHMD = this._vrHMD;
+        if (!vrHMD) return;
 
-		var canvasOriginalSize = this._canvasOriginalSize;
+        this._vrMode = !this._vrMode
+        if (this._vrMode) vrHMD.requestPresent([{
+            source: canvas,
+            leftBounds: [0.0, 0.0, 0.5, 1.0],
+            rightBounds: [0.5, 0.0, 0.5, 1.0]
+        }]);
+        else vrHMD.exitPresent();
+    }
 
-		// If state doesn't change we do nothing
-		if ( enable === this._fullScreen ) return;
-		this._fullScreen = !!enable;
+    this.setFullScreen = function (enable) {
+        var renderer = this._renderer;
+        var vrHMD = this._vrHMD;
 
-		if (!vrHMD) {
-			var canvas = renderer.domElement;
-			if (canvas.mozRequestFullScreen)  canvas.mozRequestFullScreen(); // Firefox
-			else if (canvas.webkitRequestFullscreen)  canvas.webkitRequestFullscreen(); // Chrome and Safari
-			else if (canvas.requestFullScreen) canvas.requestFullscreen();
-			return;
-		}
+        var canvasOriginalSize = this._canvasOriginalSize;
 
-		// VR Mode disabled
-		if ( !enable ) {
-			// Restores canvas original size
-			renderer.setSize( canvasOriginalSize.width, canvasOriginalSize.height );
-			return;
-		}
+        // If state doesn't change we do nothing
+        if (enable === this._fullScreen) return;
+        this._fullScreen = !!enable;
 
-		// VR Mode enabled
-		this._canvasOriginalSize = {
-			width: renderer.domElement.width,
-			height: renderer.domElement.height
-		};
+        if (!vrHMD) {
+            var canvas = renderer.domElement;
+            if (canvas.mozRequestFullScreen) canvas.mozRequestFullScreen(); // Firefox
+            else if (canvas.webkitRequestFullscreen) canvas.webkitRequestFullscreen(); // Chrome and Safari
+            else if (canvas.requestFullScreen) canvas.requestFullscreen();
+            return;
+        }
 
-		// Hardcoded Rift display size
-		renderer.setSize( 1280, 800, false );
-		this.startFullscreen();
-	};
+        // VR Mode disabled
+        if (!enable) {
+            // Restores canvas original size
+            renderer.setSize(canvasOriginalSize.width, canvasOriginalSize.height);
+            return;
+        }
 
-	this.startFullscreen = function() {
-		var self = this;
-		var renderer = this._renderer;
-		var vrHMD = this._vrHMD;
-		var canvas = renderer.domElement;
-		var fullScreenChange = canvas.mozRequestFullScreen? 'mozfullscreenchange' : 'webkitfullscreenchange';
+        // VR Mode enabled
+        this._canvasOriginalSize = {
+            width: renderer.domElement.width,
+            height: renderer.domElement.height
+        };
 
-		document.addEventListener( fullScreenChange, onFullScreenChanged, false );
-		function onFullScreenChanged() {
-			if ( !document.mozFullScreenElement && !document.webkitFullScreenElement ) self.setFullScreen( false );
-		}
-		if ( canvas.mozRequestFullScreen ) canvas.mozRequestFullScreen( { vrDisplay: vrHMD } );
-		else canvas.webkitRequestFullscreen( { vrDisplay: vrHMD } );
-	};
+        // Hardcoded Rift display size
+        renderer.setSize(1280, 800, false);
+        this.startFullscreen();
+    };
+
+    this.startFullscreen = function () {
+        var self = this;
+        var renderer = this._renderer;
+        var vrHMD = this._vrHMD;
+        var canvas = renderer.domElement;
+        var fullScreenChange = canvas.mozRequestFullScreen ? 'mozfullscreenchange' : 'webkitfullscreenchange';
+
+        document.addEventListener(fullScreenChange, onFullScreenChanged, false);
+
+        function onFullScreenChanged() {
+            if (!document.mozFullScreenElement && !document.webkitFullScreenElement) self.setFullScreen(false);
+        }
+        if (canvas.mozRequestFullScreen) canvas.mozRequestFullScreen({
+            vrDisplay: vrHMD
+        });
+        else canvas.webkitRequestFullscreen({
+            vrDisplay: vrHMD
+        });
+    };
 };

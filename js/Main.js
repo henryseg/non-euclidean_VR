@@ -77,6 +77,7 @@ let scene;
 let mesh;
 let camera;
 let stats;
+let canvas;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Shader variables
@@ -91,7 +92,7 @@ let mainFrag;
 function init() {
     //Setup our THREE scene--------------------------------
     scene = new Scene();
-    let canvas = document.createElement('canvas');
+    canvas = document.createElement('canvas');
     let context = canvas.getContext('webgl2');
     globals.renderer = new WebGLRenderer({
         canvas: canvas,
@@ -121,15 +122,15 @@ function loadShaders() {
     //Since our shader is made up of strings we can construct it from parts
     let loader = new FileLoader();
     loader.setResponseType('text');
-    loader.load('shaders/uniforms.glsl', function (unifs) {
-        loader.load('shaders/ellipticInt.glsl', function (ellInt) {
-            loader.load('shaders/isom.glsl', function (isom) {
-                loader.load('shaders/tangVect.glsl', function (tvect) {
-                    loader.load('shaders/geodesicFlow.glsl', function (geoflow) {
-                        loader.load('shaders/scene.glsl', function (sceneSDF) {
-                            loader.load('shaders/raymarch2.glsl', function (raymarch) {
-                                loader.load('shaders/colors.glsl', function (colors) {
-                                    loader.load('shaders/main.glsl', function (main1) {
+    loader.load('shaders/01uniforms.glsl', function (unifs) {
+        loader.load('shaders/02ellipticInt.glsl', function (ellInt) {
+            loader.load('shaders/03isom.glsl', function (isom) {
+                loader.load('shaders/04tangVect.glsl', function (tvect) {
+                    loader.load('shaders/05geodesicFlow.glsl', function (geoflow) {
+                        loader.load('shaders/06scene.glsl', function (sceneSDF) {
+                            loader.load('shaders/07raymarch2.glsl', function (raymarch) {
+                                loader.load('shaders/08colors.glsl', function (colors) {
+                                    loader.load('shaders/09main.glsl', function (main1) {
                                         let main = unifs.concat(ellInt).concat(isom).concat(tvect).concat(geoflow).concat(sceneSDF).concat(raymarch).concat(colors).concat(main1);
                                         mainFrag = main;
                                         setupMaterial(main);
@@ -183,5 +184,6 @@ init();
 
 export {
     init,
-    globals
+    globals,
+    canvas
 };
