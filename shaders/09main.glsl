@@ -94,11 +94,117 @@ void main(){
         out_FragColor=vec4(pixelColor, 1.0);
         return;
     }
+    
+    
+    
+    
+      
+  // ------- SHINY THINGS ---------  
+    
+    
+    
+    
+
+//    
+    
+    
+    
+    
+    
+    
     else if (hitWhich==3) {
         // local objects
         vec3 pixelColor= tilingColor(totalFixMatrix, sampletv);
         out_FragColor=vec4(pixelColor, 1.0);
-        return;
+        
+        
+        
+        
+        
+        //----uncomment below for reflections
+      
+//        //now: do another pass!
+//        //save data from the first pass
+//    
+//    float origDistToViewer=distToViewer;//this is set by raymarch, along with sampletv
+//    tangVector toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer
+//    tangVector surfNormal=estimateNormal(sampletv.pos);//normal vector to surface
+//        
+//        //this means...we do the raymarch again! starting from this position (sampletv)
+//    //first, reflect this direction wtih respect to the surface normal
+//    tangVector newDir = reflectOff(sampletv, surfNormal);
+//    //move the new ray off a little bit
+//        
+//        
+//        
+//        
+//    newDir=flow(newDir,0.01);
+//    //then, raymarch in this new direction
+//
+//    //the raymarcher reflectmarch is built to allow some corner-cutting for speed
+//    //but, you can also run raymarch here directly
+//    raymarch(toLocalTangVector(newDir), totalFixMatrix);
+//    //this has reset values like distToViewer (why we had to save the old one above), and sampletv to reflect the new positions
+//        
+//    vec3 reflColor;
+//        
+//        
+//        
+//        
+//          if (hitWhich == 0){ //Didn't hit anything ------------------------
+//        //COLOR THE FRAME DARK GRAY
+//        //0.2 is medium gray, 0 is black
+//        out_FragColor = vec4(0.3);
+//        return;
+//    }
+//    else if (hitWhich == 1){
+//        // global lights
+//        vec3 pixelColor= lightColor(totalFixMatrix, sampletv, colorOfLight);
+//        out_FragColor=vec4(pixelColor, 1.0);
+//        return;
+//    }
+//
+//    else if (hitWhich == 2){
+//        // global object
+//        vec3 pixelColor= ballColor(totalFixMatrix, sampletv);
+//        out_FragColor=vec4(pixelColor, 1.0);
+//        return;
+//    }
+//    
+//    else { // the TILING
+//    reflColor=tilingColor(totalFixMatrix, sampletv);
+//    } 
+//        
+//        
+//        
+//    vec3 totalColor=0.95*pixelColor+0.05*reflColor;
+//    
+//    //add in fog
+//   // totalColor=fog(totalColor,vec3(0.02,0.02,0.02),origDistToViewer);
+//
+//    out_FragColor=vec4(totalColor, 1.0);
+//
+
+
+
+        return;  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 
+  
+    
+    
+    
 }

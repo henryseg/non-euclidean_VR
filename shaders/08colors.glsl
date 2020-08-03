@@ -174,6 +174,8 @@ vec3 ballColor(Isometry totalFixMatrix, tangVector sampletv){
 }
 
 
+
+
 vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     //    if (FAKE_LIGHT){//always fake light in Sol so far
 
@@ -206,3 +208,12 @@ vec3 tilingColor(Isometry totalFixMatrix, tangVector sampletv){
     //        return color;
     //    }
 }
+
+
+
+vec3 fog(vec3 color, vec3 fogColor, float distToViewer){
+ 
+    return exp(-distToViewer)*color;
+}
+
+

@@ -156,7 +156,7 @@ bool isOutsideCell(localTangVector v, out Isometry fixMatrix){
 // variation on the raymarch algorithm
 // now each step is the march is made from the previously achieved position (useful later for Sol).
 // done with local vectors
-
+float distToViewer;
 int BINARY_SEARCH_STEPS=6;
 
 void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
@@ -184,6 +184,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             
             if (localDist < EPSILON){
                   sampletv = toTangVector(localtv);
+                distToViewer=globalDepth;
                   break;
               }
               marchStep = localDist;
@@ -268,6 +269,7 @@ void raymarch(localTangVector rayDir, out Isometry totalFixMatrix){
             float globalDist = globalSceneSDF(tv.pos);
             if (globalDist < EPSILON){
                 // hitWhich has now been set
+                distToViewer=globalDepth;
                 totalFixMatrix = identityIsometry;
                 sampletv = toTangVector(tv);
                 //hitWhich = 5;

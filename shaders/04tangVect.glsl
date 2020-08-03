@@ -74,6 +74,7 @@ tangVector scalarMult(float a, tangVector v) {
     return tangVector(v.pos, a * v.dir);
 }
 
+
 /*
 tangVector translate(mat4 isom, tangVector v) {
     // apply an isometry to the tangent vector (both the point and the direction)
@@ -271,6 +272,31 @@ float cosAng(localTangVector u, localTangVector v){
     return tangDot(u, v);
 }
 
+
+
+
+
+
+
+tangVector turnAround(tangVector tv){
+    return tangVector(tv.pos,-tv.dir);
+}
+
+localTangVector turnAround(localTangVector tv){
+    return localTangVector(tv.pos,-tv.dir);
+}
+
+
+
+//reflect the unit tangent vector u off the surface with unit normal nVec
+tangVector reflectOff(tangVector u,tangVector nVec){
+    return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
+}
+
+//reflect the unit tangent vector u off the surface with unit normal nVec
+localTangVector reflectOff(localTangVector u,localTangVector nVec){
+    return add(scalarMult(-2.0 * tangDot(u, nVec), nVec), u);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // CONVERSION BETWEEN TANGVECTOR AND LOCALTANGVECTOR
