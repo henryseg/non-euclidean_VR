@@ -134,15 +134,15 @@ function loadShaders() {
             loader.load('shaders/03localGeo.glsl', function (locGeo) {
                 loader.load('shaders/04globalGeo.glsl', function (globGeo) {
                     loader.load('shaders/05basicSDFs.glsl', function (basic) {
-                        loader.load('shaders/06compoundSDFs.glsl', function (compound) {
-                            loader.load('shaders/07localScene.glsl', function (locScene) {
-                                loader.load('shaders/08globalScene.glsl', function (globScene) {
+                        loader.load('shaders/06localScene.glsl', function (locScene) {
+                            loader.load('shaders/07globalScene.glsl', function (globScene) {
+                                loader.load('shaders/08teleport.glsl', function (teleport) {
                                     loader.load('shaders/09raymarch.glsl', function (raymarch) {
                                         loader.load('shaders/10materials.glsl', function (material) {
                                             loader.load('shaders/11lighting.glsl', function (light) {
                                                 loader.load('shaders/12shader.glsl', function (shade) {
                                                     loader.load('shaders/13main.glsl', function (run) {
-                                                        let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(compound).concat(locScene).concat(globScene).concat(raymarch).concat(material).concat(light).concat(shade).concat(run);
+                                                        let main = structs.concat(setup).concat(locGeo).concat(globGeo).concat(basic).concat(locScene).concat(globScene).concat(teleport).concat(raymarch).concat(material).concat(light).concat(shade).concat(run);
                                                         //The rest of the shader-building is below
                                                         mainFrag = main;
                                                         setupMaterial(main);

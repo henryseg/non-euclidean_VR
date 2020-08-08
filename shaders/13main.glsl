@@ -16,24 +16,17 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
     return tv;
 }
 
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
-// Main
+// Setup
 //----------------------------------------------------------------------------------------------------------------------
 
 
-void main(){
-    setResolution(resol);
-    currentBoost = unserializeIsom(currentBoostMat);
-    leftBoost = unserializeIsom(leftBoostMat);
-    rightBoost = unserializeIsom(rightBoostMat);
-    cellBoost = unserializeIsom(cellBoostMat);
-    invCellBoost = unserializeIsom(invCellBoostMat);
-    globalObjectBoost = unserializeIsom(globalObjectBoostMat);
+Vector setRayDir(){
 
-    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 1.));
-
-
-    //stereo translations ----------------------------------------------------
+ //stereo translations ----------------------------------------------------
     bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
     Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
@@ -55,12 +48,43 @@ void main(){
         rayDir = translate(currentBoost, rayDir);
     }
 
-    /*
-    Point p = fromVec4(vec4(0, 0, 1, -1));
-    //float d = 0.5 * fakeDist(rayDir.pos, p);
-    float d = 0.5 * exactDist(rayDir.pos, p);
-    out_FragColor = vec4(debugColor, 1);
-    */
+
+return rayDir;
+}
+
+
+
+
+
+void setVariables(){
+        setResolution(resol);
+    currentBoost = unserializeIsom(currentBoostMat);
+    leftBoost = unserializeIsom(leftBoostMat);
+    rightBoost = unserializeIsom(rightBoostMat);
+    cellBoost = unserializeIsom(cellBoostMat);
+    invCellBoost = unserializeIsom(invCellBoostMat);
+    globalObjectBoost = unserializeIsom(globalObjectBoostMat);
+
+    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 1.));
+}
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Main
+//----------------------------------------------------------------------------------------------------------------------
+
+
+void main(){
+
+setVariables();
+    
+   Vector rayDir=setRayDir();
+
+
 
     Isometry totalFixIsom = identity;
 
