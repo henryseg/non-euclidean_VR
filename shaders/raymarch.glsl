@@ -14,7 +14,7 @@ Some parameters that can be changed to change the scence
 
 //determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -1413,7 +1413,7 @@ float localSceneSDF(Point p){
 
     // Tiling
 
-    tilingDist = -ellipsoidSDF(p, 0.9, 2.5);
+    tilingDist = -ellipsoidSDF(p, 0.5, 4.);
     //tilingDist = -sphereSDF(p, ORIGIN, PI+0.2);
     distance = min(distance, tilingDist);
     if (tilingDist < EPSILON){
@@ -1781,9 +1781,9 @@ bool isOutsideCellSurface(Point p, out Isometry fixIsom){
 
 bool isOutsideCell(Point p, out Isometry fixIsom){
     //return isOutsideCellModular(p, fixIsom);
-    //return isOutsideCellSquare(p, fixIsom);
+    return isOutsideCellSquare(p, fixIsom);
     //return isOutsideCellFiber(p, fixIsom);
-    return isOutsideCellSurface(p, fixIsom);
+   // return isOutsideCellSurface(p, fixIsom);
 }
 
 // overload of the previous method with tangent vector
