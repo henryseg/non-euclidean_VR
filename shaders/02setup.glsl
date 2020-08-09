@@ -121,9 +121,10 @@ uniform float time;
 uniform float lightRad;
 
 uniform int display;
-// 1=tiling
-// 2= planes
-// 3= dragon skin
+// 1=cone torus
+// 2= surface
+// 3=sl2z
+// 4=fibers
 
 uniform int resol;
 
@@ -139,5 +140,20 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 // Re-packaging isometries, facings in the shader
 //----------------------------------------------------------------------------------------------------------------------
 
-//This actually occurs at the beginning of main() as it needs to be inside of a function
+
+
+
+void setVariables(){
+     
+
+   
+    currentBoost = unserializeIsom(currentBoostMat);
+    leftBoost = unserializeIsom(leftBoostMat);
+    rightBoost = unserializeIsom(rightBoostMat);
+    cellBoost = unserializeIsom(cellBoostMat);
+    invCellBoost = unserializeIsom(invCellBoostMat);
+    globalObjectBoost = unserializeIsom(globalObjectBoostMat);
+
+    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 1.));
+}
 

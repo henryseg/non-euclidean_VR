@@ -306,8 +306,23 @@ bool isOutsideCellSurface(Point p, out Isometry fixIsom){
 
 
 bool isOutsideCell(Point p, out Isometry fixIsom){
+    
+    switch (display){
+        case 1://ConeTorus
+         return isOutsideCellSquare(p, fixIsom);
+        
+        case 2://Surface
+        return isOutsideCellSurface(p, fixIsom);
+            
+        case 3://SL2Z
+        return isOutsideCellModular(p, fixIsom);
+            
+        case 4://Fiber
+        return isOutsideCellFiber(p, fixIsom);   
+    
+    }
     //return isOutsideCellModular(p, fixIsom);
-    return isOutsideCellSquare(p, fixIsom);
+    //return isOutsideCellSquare(p, fixIsom);
     //return isOutsideCellFiber(p, fixIsom);
    // return isOutsideCellSurface(p, fixIsom);
 }

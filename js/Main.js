@@ -64,7 +64,7 @@ let globals = {
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
-    display: 3,
+    display: 1,
     res: 1,
     lightRad: 0.05,
 };

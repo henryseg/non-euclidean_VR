@@ -23,8 +23,8 @@ let initGui = function () {
         //        modelHalfCube: 0.5,
         //        ipDist: 0.03200000151991844,
         //        stereoScreenOffset: globals.stereoScreenOffset,
-        keyboard: 'fr',
-        display: 3,
+        keyboard: 'us',
+        display: 1,
         res: 1,
         lightRad: 0.02
     };
@@ -44,10 +44,10 @@ let initGui = function () {
     globals.controls.setKeyboard(guiInfo.keyboard);
 
     let displayController = gui.add(guiInfo, 'display', {
-        Tiling: '1',
-        TorusBundle: '2',
-        Dragon: '3',
-        DragonPlanes: '4'
+        ConeTorus: '1',
+        Surface: '2',
+        SL2Z: '3',
+        Fibers: '4'
     });
 
     let resController = gui.add(guiInfo, 'res', {

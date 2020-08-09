@@ -56,19 +56,6 @@ return rayDir;
 
 
 
-void setVariables(){
-        setResolution(resol);
-    currentBoost = unserializeIsom(currentBoostMat);
-    leftBoost = unserializeIsom(leftBoostMat);
-    rightBoost = unserializeIsom(rightBoostMat);
-    cellBoost = unserializeIsom(cellBoostMat);
-    invCellBoost = unserializeIsom(invCellBoostMat);
-    globalObjectBoost = unserializeIsom(globalObjectBoostMat);
-
-    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 1.));
-}
-
-
 
 
 
@@ -79,14 +66,16 @@ void setVariables(){
 
 
 void main(){
-
-setVariables();
+ Isometry totalFixIsom = identity;
     
-   Vector rayDir=setRayDir();
+    
+    setVariables();
+    
+    setResolution(resol);
+    
+    Vector rayDir=setRayDir();
 
 
-
-    Isometry totalFixIsom = identity;
 
     //do the marching
     raymarch(rayDir, totalFixIsom);
