@@ -3,30 +3,29 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 vec3 allLocalLights(vec3 baseColor, Isometry fixPosition){
-    //just one local light
-    return localLight(localLightPos,vec3(1.),1.,baseColor,fixPosition);
+    //just one local light right now
+    return localLight(localLightPos,vec3(1.),4.,baseColor,fixPosition);
 }
 
-vec3 allGlobalLights(vec3 baseColor, Isometry fixPosition){
-    
-    vec3 globalColor=vec3(0.);
-    Point TLP;
-    
-     for (int i=0; i<4; i++){
-         //move the light appropriately
-        Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
-        TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
-    
-         //add its color contribution
-         globalColor+=globalLight(TLP, lightIntensities[i].xyz, 1.,baseColor,fixPosition);
-     }
-    
-    //normalize the output color by dividing by the number of light sources
-    return globalColor/4.;
-    
-    
-    return baseColor;
-}
+//vec3 allGlobalLights(vec3 baseColor, Isometry fixPosition){
+//    
+//    vec3 globalColor=vec3(0.);
+//    Point TLP;
+//    
+//    //move the light appropriately
+//        Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
+//        TLP = translate(totalIsom, unserializePoint(lightPositions[1]));
+//    
+//         //add its color contribution
+//         globalColor+=localLight(TLP, lightIntensities[1].xyz, 1.,baseColor,fixPosition);
+//
+//    
+//    //normalize the output color by dividing by the number of light sources
+//    return globalColor;
+//    
+//    
+//   // return baseColor;
+//}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -34,22 +33,25 @@ vec3 allGlobalLights(vec3 baseColor, Isometry fixPosition){
 //----------------------------------------------------------------------------------------------------------------------
 
 
-vec3 marchedColor(Vector rayDir, out float surfRefl){
+vec3 getPixelColor(Vector rayDir){
     
     //CHOOSE THIS WITH A PROPER FUNCTION
     Isometry fixPosition=identity;
     
     vec3 baseColor;//color of the surface where it is struck
     
-    vec3 localColor;//the total lighting  computation from local lights
-    vec3 globalColor;//the total lighting  computation from global lights
-    vec3 totalColor;// the  total lighting computation from all sources
-       
+    vec3 firstColor;//orig lighting
+    
+    vec3 reflColor;//reflected lighting
+    
+    vec3 totalColor;// combined lighting
+    
+    float origDist;
     
     //------ DOING THE RAYMARCH ----------
 
     raymarch(rayDir,totalFixIsom);//do the  raymarch    
-   
+    origDist=distToViewer;
     
     //------ Basic Surface Properties ----------
     //we need these quantities to run the local / global lighting functions
@@ -59,29 +61,72 @@ vec3 marchedColor(Vector rayDir, out float surfRefl){
     toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer / origin of raymarch
     surfNormal=surfaceNormal(sampletv.pos);//normal vector to surface
     
-    
+
     //------ Local Lighting ----------
     //fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
-    localColor=allLocalLights(baseColor, fixPosition);
+    firstColor=allLocalLights(baseColor, fixPosition)+0.2*baseColor;
+    
+    
+     if(surfRefl==0.){
+        return fog(firstColor,distToViewer);
+    }
+    
+    //otherwise, we carry on and do a reflection pass
+    else{
+    
+   // firstPassDist=distToViewer;
+    //firstPassFix=totalFixMatrix;
+    
+    //first, reflect the impact direction wtih respect to the surface normal
+    Vector newDir = reflectOff(sampletv, surfNormal);
+    //move the new ray off the surface a little bit
+    newDir=flow(newDir,0.01);
+    //now march in this new direction and retrieve a color!
+     
+    //------ DOING THE RAYMARCH ----------
 
-    //------ Global Lighting ----------
-    globalColor=allGlobalLights(baseColor, fixPosition);
+    raymarch(newDir,totalFixIsom);//do the  raymarch    
     
+    //------ Basic Surface Properties ----------
+    //we need these quantities to run the local / global lighting functions
+    baseColor=materialColor(hitWhich);
+    surfacePosition=sampletv.pos;//position on the surface of the sample point, set by raymarch
+    toViewer=turnAround(sampletv);//tangent vector on surface pointing to viewer / origin of raymarch
+    surfNormal=surfaceNormal(sampletv.pos);//normal vector to surface
     
-    //------ TOTAL FIRST PASS LIGHTING ----------
 
-    //mix these two lighting contributions into the first-pass color
-    //the proportion is global/local
-    totalColor=0.75*localColor+0.25*globalColor;
+    //------ Local Lighting ----------
+    //fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
+    reflColor=allLocalLights(baseColor, fixPosition)+0.2*baseColor;
     
-    //add fog for distance to the mixed color
-    totalColor=fog(totalColor, distToViewer);
+        
+    //now, have the colors from both passes, time to combine them into a final pixel color.
     
+    //first move: suitably darken the reflected pass contribution, by weighting by distance of reflection surface from viewer
+    reflColor=fog(reflColor,distToViewer);
+    
+    //then, combine with the first pass color using reflectivity:
+    totalColor=(1.-surfRefl)*firstColor+surfRefl*reflColor;
+
+        
+    //now add fog
+    totalColor=fog(totalColor,origDist);
+        
     return totalColor;
+    }
 }
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -91,31 +136,31 @@ vec3 marchedColor(Vector rayDir, out float surfRefl){
 // Total color: reflections + fog + whatever
 //----------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-vec3 getPixelColor(Vector rayDir){
-    
-    vec3 firstPassColor;
-    vec3 reflectPassColor;
-    vec3 combinedColor;
-    
-    float firstPassDist;
-    float reflectivity;
-    Isometry firstPassFix;
-
-    
-    firstPassColor=marchedColor(rayDir,surfRefl);
- //marched color runs the raymarch for rayDir, then computes the contributions of the base color, local and global lightings
-//    //in addition to returning this color, it (via raymarch), sets the global variables sampletv and distToViewer
-// via the SDFs, this sets hitWhich, hitLocal
-//and internally sets surfNormal
- 
-//marchedColor passes out the reflectivity of the surface it  reaches, to  determine if marching must continue
-    reflectivity=surfRefl;
-    
-    return firstPassColor;
+//
+//
+//
+//
+//vec3 getPixelColor(Vector rayDir){
+//    
+//    vec3 firstPassColor;
+//    vec3 reflectPassColor;
+//    vec3 combinedColor;
+//    
+//    float firstPassDist;
+//    float reflectivity;
+//    Isometry firstPassFix;
+//
+//    
+//    firstPassColor=marchedColor(rayDir,surfRefl);
+// //marched color runs the raymarch for rayDir, then computes the contributions of the base color, local and global lightings
+////    //in addition to returning this color, it (via raymarch), sets the global variables sampletv and distToViewer
+//// via the SDFs, this sets hitWhich, hitLocal
+////and internally sets surfNormal
+// 
+////marchedColor passes out the reflectivity of the surface it  reaches, to  determine if marching must continue
+//    reflectivity=surfRefl;
+//    
+//    return firstPassColor;
 //    //if the reflectivity is zero, we are done
 //    if(reflectivity==0.){
 //        return firstPassColor;
@@ -148,18 +193,18 @@ vec3 getPixelColor(Vector rayDir){
 //
 //    return combinedColor;
 //    }
-}
-
-
-
-
-
-
-
-
-
-
-
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 

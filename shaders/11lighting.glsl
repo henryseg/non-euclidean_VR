@@ -5,7 +5,7 @@
 float lightAtt(float dist){
     
     //actual distance function
-    return 0.2*exp(-dist*dist*10.)+dist*dist;
+    return 0.2*exp(-dist*dist*10.)+dist;
 }
 
 
@@ -20,7 +20,7 @@ float lightAtt(float dist, Vector angle){
     }
     
     //actual distance function
-    return 0.2*exp(-dist*dist*10.)+dist*dist;
+    return 0.2*exp(-dist*dist*10.)+dist;
         //0.1+areaElement(dist,angle);//make a function like surfArea in globalGeometry to compute this
 }
 
@@ -83,7 +83,7 @@ Vector surfaceNormal(Point p){
 
 
 vec3 fog(vec3 color, float distToViewer){
-    return exp(-distToViewer/3.)*color;
+    return exp(-distToViewer/10.)*color;
 }
 
 
@@ -148,20 +148,20 @@ vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 
 
 //
 //
-vec3 globalLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
-    
-    //compute the local data we need at the point of intersection
-    Point surfacePosition=sampletv.pos;
-    surfNormal=surfaceNormal(surfacePosition);
-    toViewer=turnAround(sampletv);
-    
-    tangDirection(surfacePosition,lightPosition, toLight,distToLight);
-    
-    
-    //apply the phong shading model
-    return phongShading(toLight, toViewer, surfNormal, distToLight,baseColor,lightColor,lightIntensity);
-}
-
+//vec3 globalLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
+//    
+//    //compute the local data we need at the point of intersection
+//    Point surfacePosition=sampletv.pos;
+//    surfNormal=surfaceNormal(surfacePosition);
+//    toViewer=turnAround(sampletv);
+//    
+//    tangDirection(surfacePosition,lightPosition, toLight,distToLight);
+//    
+//    
+//    //apply the phong shading model
+//    return phongShading(toLight, toViewer, surfNormal, distToLight,baseColor,lightColor,lightIntensity);
+//}
+//
 
 
 
