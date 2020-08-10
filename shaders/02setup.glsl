@@ -15,7 +15,7 @@ const bool EARTH=false;
 
 
 
-const bool FAKE_LIGHT_FALLOFF=true;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = false;
 
 
@@ -94,6 +94,7 @@ Isometry globalObjectBoost;
 
 Point surfacePosition;
 Vector toLight;
+Vector atLight;
 Vector toViewer;
 Vector surfNormal;
 float surfRefl;
@@ -161,6 +162,6 @@ void setVariables(){
     invCellBoost = unserializeIsom(invCellBoostMat);
     globalObjectBoost = unserializeIsom(globalObjectBoostMat);
 
-    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 1.));
+    localLightPos = fromVec4(vec4(0.1, 0.1, 0.2, 1.));
 }
 

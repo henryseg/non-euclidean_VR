@@ -588,3 +588,57 @@ Vector flow(Vector v, float t) {
     return res;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Area Density
+//----------------------------------------------------------------------------------------------------------------------
+
+
+//takes in a tangent vector and a length
+// returns the function A(r,u)
+
+
+//generalized sine curve of curvature k
+float genSin(float k, float r){
+    if(k<0.){//hpyerbolic trig
+        return sinh(r*sqrt(abs(k)))/sqrt(abs(k));
+    }
+    else{//then k>0, so spherical trig
+        return sin(r*sqrt(abs(k)))/sqrt(abs(k));
+    }
+}
+
+
+
+
+float AreaDensity(float r,Vector u){
+    
+    //fiber component of unit tangent vector
+    float cosBeta=u.dir.z;
+    
+    
+    float cb2=cosBeta*cosBeta;
+    float sb2=1.-cb2;
+
+
+    float kMin=0.25*(cb2-7.*sb2);
+    float kMax=0.25;
+    
+    float aDens=abs(genSin(kMin,r)*genSin(kMax,r));
+    
+    return aDens;
+}
+
+
