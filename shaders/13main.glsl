@@ -66,8 +66,8 @@ return rayDir;
 
 
 void main(){
- Isometry totalFixIsom = identity;
-    
+
+     
     
     setVariables();
     
@@ -75,44 +75,8 @@ void main(){
     
     Vector rayDir=setRayDir();
 
+    vec3 pixelColor=getPixelColor(rayDir);
 
-
-    //do the marching
-    raymarch(rayDir, totalFixIsom);
-
-
-    vec3 pixelColor;
-    //Based on hitWhich decide whether we hit a global object, local object, or nothing
-    switch (hitWhich){
-        case 0://Didn't hit anything
-        //COLOR THE FRAME DARK GRAY
-        //0.2 is medium gray, 0 is black
-        out_FragColor = vec4(0.4);
-        break;
-
-        case 1:// global lights
-        pixelColor= lightColor(totalFixIsom, sampletv, colorOfLight);
-        //out_FragColor=vec4(pixelColor, 1.0);
-        out_FragColor = vec4(colorOfLight, 1.0);
-        break;
-
-        case 2:// global object
-        pixelColor= ballColor(totalFixIsom, sampletv);
-        //debugColor = abs(N.dir);
-        //pixelColor = debugColor;
-        out_FragColor=vec4(pixelColor, 1.0);
-        break;
-
-        case 3:// local objects
-        pixelColor= tilingColor(totalFixIsom, sampletv);
-        out_FragColor=vec4(pixelColor, 1.0);
-        break;
-
-        case 5:
-        //debug
-        out_FragColor = vec4(debugColor, 1.0);
-        break;
-    }
-
+    out_FragColor=vec4(pixelColor,1.);
 
 }

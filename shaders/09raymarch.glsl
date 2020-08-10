@@ -187,7 +187,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
             float localDist = localSceneSDF(localtv.pos);
             if (localDist < EPSILON){
                 sampletv = localtv;
-                //distToViewer=localDepth;
+                distToViewer=localDepth;
                 break;
             }
             marchStep = localDist;
@@ -254,6 +254,7 @@ void raymarchDirect(Vector rayDir, out Isometry totalFixIsom){
                 //debugColor = abs(tv.dir);
                 totalFixIsom = identity;
                 sampletv = tv;
+                distToViewer=globalDepth;
                 return;
             }
             //marchStep = globalDist;

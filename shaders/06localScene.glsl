@@ -64,6 +64,7 @@ float localSceneSDF(Point p){
              cylDist = cylSDF(p, 0.4);
     distance = min(distance, cylDist);
     if (cylDist < EPSILON){
+        isLocal=true;
         hitWhich=3;
         return cylDist;
     }

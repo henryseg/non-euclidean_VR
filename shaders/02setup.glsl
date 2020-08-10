@@ -17,11 +17,11 @@ const bool EARTH=false;
 
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = false;
-const bool FAKE_DIST_SPHERE = false;
+
 
 //const float globalObjectRadius = 0.4;
-const float centerSphereRadius =0.67;
-const float modelHalfCube = 0.5;
+//const float centerSphereRadius =0.67;
+//const float modelHalfCube = 0.5;
 
 //----------------------------------------------------------------------------------------------------------------------
 // "TRUE" CONSTANTS
@@ -91,6 +91,13 @@ Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
 
+
+Point surfacePosition;
+Vector toViewer;
+Vector surfNormal;
+Isometry totalFixIsom;
+float distToViewer;
+
 //----------------------------------------------------------------------------------------------------------------------
 // Translation & Utility Variables
 //----------------------------------------------------------------------------------------------------------------------
@@ -143,7 +150,7 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 void setVariables(){
      
 
-   
+   totalFixIsom=identity;
     currentBoost = unserializeIsom(currentBoostMat);
     leftBoost = unserializeIsom(leftBoostMat);
     rightBoost = unserializeIsom(rightBoostMat);

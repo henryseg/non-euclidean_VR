@@ -43,8 +43,15 @@ Vector estimateNormal(Point p) {
 
     Vector n;
 
-    if (hitWhich!=3){
-        // little hack, otherwise the shader collaspe when there are too many objets in the scene.
+    if (hitWhich==3||hitWhich==1){
+         n = createVector(p, vec3(
+        localSceneSDF(shiftPX) - localSceneSDF(shiftMX),
+        localSceneSDF(shiftPY) - localSceneSDF(shiftMY),
+        localSceneSDF(shiftPZ) - localSceneSDF(shiftMZ)
+        ));
+        
+    }
+    else {// little hack, otherwise the shader collaspe when there are too many objets in the scene.
         /*
         float ref = globalSceneSDF(p);
         float vgx = globalSceneSDF(shiftPX) - ref;
@@ -57,20 +64,23 @@ Vector estimateNormal(Point p) {
         float vgz = globalSceneSDF(shiftPZ) - globalSceneSDF(shiftMZ);
         n = createVector(p, vec3(vgx, vgy, vgz));
     }
-    else { //local scene
-        n = createVector(p, vec3(
-        localSceneSDF(shiftPX) - localSceneSDF(shiftMX),
-        localSceneSDF(shiftPY) - localSceneSDF(shiftMY),
-        localSceneSDF(shiftPZ) - localSceneSDF(shiftMZ)
-        ));
-    }
     n = tangNormalize(n);
     return n;
 }
 
+
+//match the other naming convention 
 Vector surfaceNormal(Point p){
     return estimateNormal(p);
 }
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fog
+//----------------------------------------------------------------------------------------------------------------------
+
 
 vec3 fog(vec3 color, float distToViewer){
     return exp(-distToViewer/3.)*color;
@@ -81,12 +91,40 @@ vec3 fog(vec3 color, float distToViewer){
 
 
 
+//----------------------------------------------------------------------------------------------------------------------
+// Specularity and Diffusivity of Surfaces
+//----------------------------------------------------------------------------------------------------------------------
+
+//toLight and toViewer are tangent vectors at sample point, pointed at the light source and viewer respectively
+vec3 phongShading(Vector toLight, Vector toViewer, Vector  surfNormal, float distToLight, vec3 baseColor, vec3 lightColor, float lightIntensity){
+    //Calculations - Phong Reflection Model
+
+    //this is tangent vector to the incomming light ray
+    Vector fromLight=turnAround(toLight);
+    //now reflect it off the surfce
+    Vector reflectedRay = reflectOff(fromLight,surfNormal);
+    //Calculate Diffuse Component
+    float nDotL = max(cosAng(surfNormal, toLight), 0.0);
+    vec3 diffuse = lightColor.rgb * nDotL;
+    //Calculate Specular Component
+    float rDotV = max(cosAng(reflectedRay, toViewer), 0.0);
+    vec3 specular = lightColor.rgb * pow(rDotV,25.0);
+    //Attenuation - of the light intensity due to distance from source
+    float att = lightIntensity /lightAtt(distToLight);
+    //Combine the above terms to compute the final color
+    return (baseColor*(diffuse + .15) + vec3(.6, .5, .5)*specular*2.) * att;
+  // return att*(baseColor) ;
+}
 
 
 
 
 
 
+
+//----------------------------------------------------------------------------------------------------------------------
+// Packaging this up: LOCAL LIGHTING ROUTINES
+//----------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -266,9 +304,6 @@ vec3 tilingColor(Isometry totalFixIsom, Vector sampletv){
     float x=aux.x;
     float y=aux.y;
     float z=aux.z;
-    x = 0.9 * x / modelHalfCube;
-    y = 0.9 * y / modelHalfCube;
-    z = 0.9 * z / modelHalfCube;
     vec3 color = vec3(x, y, z);
 
 
