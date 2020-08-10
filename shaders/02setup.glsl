@@ -13,11 +13,6 @@ const bool GLOBAL_SCENE=true;
 const bool TILING_SCENE=true;
 const bool EARTH=false;
 
-//const bool TILING=false;
-//const bool PLANES=false;
-
-//bool DRAGON=!(TILING||PLANES);
-//bool DRAGON_PLANE=not(TILING||PLANES);
 
 
 const bool FAKE_LIGHT_FALLOFF=true;
@@ -37,6 +32,8 @@ const float sqrt3 = 1.7320508075688772;
 const float sqrt2 = 1.4142135623730951;
 
 vec3 debugColor = vec3(0.5, 0, 0.8);
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Constants
@@ -72,7 +69,7 @@ const float fov = 120.0;
 //----------------------------------------------------------------------------------------------------------------------
 
 int hitWhich = 0;
-
+bool isLocal=true;
 
 
 

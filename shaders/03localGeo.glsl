@@ -60,6 +60,11 @@ Vector reflectOff(Vector v, Vector n){
 }
 
 
+//Vector turnAround(Vector v){
+//    return Vector(v.pos,-v.dir);
+//}
+
+
 /*
 
 For the next four method,

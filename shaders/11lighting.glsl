@@ -1,6 +1,30 @@
 //----------------------------------------------------------------------------------------------------------------------
-// GEOM DEPENDENT
+// Light Attenuation with  Distance and Angle
 //----------------------------------------------------------------------------------------------------------------------
+//light intensity as a fn of distance
+float lightAtt(float dist){
+    
+    //actual distance function
+    return 0.2*exp(-dist*dist*10.)+dist*dist;
+}
+
+
+//the function below is an overload of the above, for when we are able to provide the correct function
+
+float lightAtt(float dist, Vector angle){
+    //distance is the distance between the viewer and the lightsource.
+    //angle is the unit tangent vector pointing from the light source towards the illuminated object
+        if (FAKE_LIGHT_FALLOFF){
+        //fake falloff
+        return 0.1+0.5*dist;
+    }
+    
+    //actual distance function
+    return 0.2*exp(-dist*dist*10.)+dist*dist;
+        //0.1+areaElement(dist,angle);//make a function like surfArea in globalGeometry to compute this
+}
+
+
 
 
 //NORMAL FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -19,7 +43,7 @@ Vector estimateNormal(Point p) {
 
     Vector n;
 
-    if (hitWhich != 3){
+    if (hitWhich!=3){
         // little hack, otherwise the shader collaspe when there are too many objets in the scene.
         /*
         float ref = globalSceneSDF(p);
@@ -44,34 +68,65 @@ Vector estimateNormal(Point p) {
     return n;
 }
 
-
-
-
-
-
-
-
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-//Geometry of the Models
-//----------------------------------------------------------------------------------------------------------------------
-
-/*
-TODO. Check if needed in general ? Geometry dependent ?
-*/
-
-//project point back onto the geometry
-Point geomProject(Point p){
-    return p;
+Vector surfaceNormal(Point p){
+    return estimateNormal(p);
 }
 
-//Project onto the Klein Model
-Point modelProject(Point p){
-    return p;
-
+vec3 fog(vec3 color, float distToViewer){
+    return exp(-distToViewer/3.)*color;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Lighting Functions
@@ -159,41 +214,6 @@ vec3 phongModel(Isometry totalFixIsom, vec3 color){
 }
 
 
-//EARTH TEXTURING COLOR COMMANDS
-
-// return the two smallest numbers in a triplet
-vec2 smallest(vec3 v)
-{
-    float mi = min(v.x, min(v.y, v.z));
-    float ma = max(v.x, max(v.y, v.z));
-    float me = v.x + v.y + v.z - mi - ma;
-    return vec2(mi, me);
-}
-
-/*
-// texture a 4D surface by doing 4 2D projections in the most
-// perpendicular possible directions, and then blend them
-// together based on the surface normal
-// TODO. Check with Steve how to make this part geometry independent.
-vec3 boxMapping(sampler2D sam, Vector point)
-{ // from Inigo Quilez
-    vec4 m = point.dir * point.dir; m=m*m; m=m*m;
-
-    vec3 x = texture(sam, smallest(point.pos.yzw)).xyz;
-    vec3 y = texture(sam, smallest(point.pos.zwx)).xyz;
-    vec3 z = texture(sam, smallest(point.pos.wxy)).xyz;
-    vec3 w = texture(sam, smallest(point.pos.xyz)).xyz;
-
-    return (x*m.x + y*m.y + z*m.z + w*m.w)/(m.x+m.y+m.z+m.w);
-}
-
-// TODO. Rémi: not sure what it does.
-vec3 sphereOffset(Isometry globalObjectBoost, vec4 pt){
-    pt = translate(cellBoost, pt);
-    Isometry aux = makeInvLeftTranslation(globalObjectBoostMat);
-    pt = translate(aux, pt);
-    return tangDirection(ORIGIN, pt).global_dir.xyz;
-}*/
 
 vec3 lightColor(Isometry totalFixIsom, Vector sampletv, vec3  colorOfLight){
     N = estimateNormal(sampletv.pos);
@@ -233,7 +253,7 @@ vec3 tilingColor(Isometry totalFixIsom, Vector sampletv){
 
     //make the objects have their own color
     //color the object based on its position in the cube
-    Point samplePos=modelProject(sampletv.pos);
+    Point samplePos=sampletv.pos;
 
     /*
     vec4 aux4 = abs(toVec4(samplePos));

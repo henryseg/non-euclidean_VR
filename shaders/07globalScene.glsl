@@ -11,6 +11,7 @@ float globalSceneSDF(Point p){
         objDist = sphereSDF(absolutep, unserializePoint(lightPositions[i]), 0.1);
         distance = min(distance, objDist);
         if (distance < EPSILON){
+            isLocal=false;
             hitWhich = 1;
             colorOfLight = lightIntensities[i].xyz;
             globalLightColor = lightIntensities[i];
@@ -25,6 +26,7 @@ float globalSceneSDF(Point p){
 
     distance = min(distance, objDist);
     if (distance < EPSILON){
+        isLocal=false;
         hitWhich = 2;
         return distance;
     }
