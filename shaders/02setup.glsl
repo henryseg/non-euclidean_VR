@@ -93,10 +93,13 @@ Isometry globalObjectBoost;
 
 
 Point surfacePosition;
+Vector toLight;
 Vector toViewer;
 Vector surfNormal;
+float surfRefl;
 Isometry totalFixIsom;
 float distToViewer;
+float distToLight;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Translation & Utility Variables
