@@ -123,7 +123,7 @@ vec3 phongShading(Vector toLight, Vector toViewer, Vector  surfNormal, float dis
 
 
 //contribution from a single light source
-vec3 lighting(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
+vec3 Light(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
     
     //compute the local data we need at the point of intersection
     Point surfacePosition=sampletv.pos;
@@ -149,7 +149,9 @@ vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 
     Point transLightPosition;
     
     //light from the main source
-    vec3 totalLight=lighting(lightPosition,lightColor,lightIntensity,baseColor,fixPosition);
+    vec3 totalLight=vec3(0.);
+        
+    totalLight+=Light(lightPosition,lightColor,lightIntensity,baseColor,fixPosition);
     
     //light from nearest neighbor sources
     for(int i=0;i<numGens;i++){
@@ -157,11 +159,11 @@ vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 
         transLightPosition=translate(gens[i],lightPosition);
         
         //run the lighting command
-        totalLight+=lighting(transLightPosition,lightColor,lightIntensity,baseColor,fixPosition);
+        totalLight+=Light(transLightPosition,lightColor,lightIntensity,baseColor,fixPosition);
         
     }
 
-    return totalLight/float(numGens);
+    return totalLight;
     
 }
 
