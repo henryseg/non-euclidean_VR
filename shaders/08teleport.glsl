@@ -1,3 +1,203 @@
+
+
+//makes a list of generators by modifying a fixed list of length 8 (the max for now)
+//also updates global variable storing the length of the gen list
+void generators(inout Isometry gens[10]){
+    if(display==1){
+                // lift of the first rotation
+    Isometry gen1 = Isometry(Point(
+    vec4(sqrt3 / 2., sqrt3 / 2., sqrt2 / 2., 0),
+    PI / 2.
+    ));
+
+    Isometry gen1inv = Isometry(Point(
+    vec4(sqrt3 / 2., -sqrt3 / 2., -sqrt2 / 2., 0),
+    -PI / 2.
+    ));
+
+    // lift of the second rotation
+    Isometry gen2 = Isometry(Point(
+    vec4(sqrt3 / 2., sqrt3 / 2., - sqrt2 / 2., 0),
+    PI / 2.
+    ));
+
+    Isometry gen2inv = Isometry(Point(
+    vec4(sqrt3 / 2., -sqrt3 / 2., sqrt2 / 2., 0),
+    -PI / 2.
+    ));
+
+    // translation by 2pi along the fiber
+    Isometry gen3 = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    2. * PI
+    ));
+
+    // translation by -2pi along the fiber
+    Isometry gen3inv = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    - 2. * PI
+    ));
+            
+            
+    gens[0]=gen1;
+        gens[1]=gen1inv;
+        gens[2]=gen2;
+        gens[3]=gen2inv;
+        gens[4]=gen3;
+        gens[5]=gen3inv;
+    
+    numGens=6;
+    }
+        
+    
+    
+    
+    else if(display==2){
+        
+      float auxSurfaceP = sqrt(sqrt2 + 1.);
+    float auxSurfaceM = sqrt(sqrt2 - 1.);
+
+    // lifts of the 4 translations (and their inverses)
+    Isometry genA1 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., auxSurfaceP, -auxSurfaceP),
+    PI / 2.
+    ));
+
+    Isometry genA1inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -auxSurfaceP, auxSurfaceP),
+    -PI / 2.
+    ));
+
+    Isometry genA2 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -auxSurfaceP, auxSurfaceP),
+    PI / 2.
+    ));
+
+    Isometry genA2inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., auxSurfaceP, -auxSurfaceP),
+    -PI / 2.
+    ));
+
+    Isometry genB1 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., sqrt2 * auxSurfaceP, 0),
+    PI / 2.
+    ));
+
+    Isometry genB1inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., -sqrt2 * auxSurfaceP, 0),
+    -PI / 2.
+    ));
+
+    Isometry genB2 = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -sqrt2 * auxSurfaceP, 0),
+    PI / 2.
+    ));
+
+    Isometry genB2inv = Isometry(Point(
+    vec4(0.5 * sqrt2 + 1., -0.5 * sqrt2 - 1., sqrt2 * auxSurfaceP, 0),
+    -PI / 2.
+    ));
+
+    // translation by 2pi along the fiber
+    Isometry genC = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    2. * PI
+    ));
+
+    // translation by -2pi along the fiber
+    Isometry genCinv = Isometry(Point(
+    vec4(-1, 0, 0, 0),
+    - 2. * PI
+    ));
+  
+        
+        
+       gens[0]=genA1;
+        gens[1]=genA1inv;
+        gens[2]=genA2;
+        gens[3]=genA2inv;
+        gens[4]=genB1;
+        gens[5]=genB1inv;
+        gens[6]=genB2;
+        gens[7]=genB2inv;
+        gens[8]=genC;
+        gens[9]=genCinv;
+        
+        
+    
+    
+       numGens=8; 
+    }
+    
+    
+    
+    
+    else if(display==3){
+       
+         // lift of the rotation of angle pi around the origin
+    Isometry gen0 = Isometry(Point(
+    vec4(0, -1, 0, 0),
+    - PI
+    ));
+    // lift the the parabolic z -> z - 1 (in the upper half plane model)
+    Isometry gen2 = Isometry(Point(
+    vec4(1, -0.5, -0.5, 0),
+    -2. * atan(0.5)
+    ));
+    // lift the the parabolic z -> z + 1 (in the upper half plane model)
+    // inverse of the previous one
+    Isometry gen3 = Isometry(Point(
+    vec4(1, 0.5, 0.5, 0),
+    2. * atan(0.5)
+    ));
+    // translation by -4pi along the fiber
+    Isometry gen4 = Isometry(Point(
+    vec4(1, 0, 0, 0),
+    -4. * PI
+    ));
+    // translation by 4pi along the fiber
+    Isometry gen5 = Isometry(Point(
+    vec4(1, 0, 0, 0),
+    4. * PI
+    ));   
+            
+    gens[0]=gen0;
+        gens[1]=gen2;
+        gens[2]=gen3;
+        gens[3]=gen4;
+        gens[4]=gen5;
+        
+        numGens=5;
+    }
+            
+            
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Check if the given point p is in the fundamental domain of the lattice.
 // Lattice = SL(2,Z)
 bool isOutsideCellModular(Point p, out Isometry fixIsom){

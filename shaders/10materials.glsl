@@ -52,7 +52,7 @@ vec3 materialColor(int hitWhich){
             return vec3(0.,0.,0.);//black sphere
             
         case 3: //Local Tiling
-            return vec3(0.2,0.3,0.55)+0.1*sampletv.pos.proj.xyz;
+            return vec3(0.2,0.3,0.55)+0.5*sampletv.pos.proj.xyz;
             
         case 5://debug
             return vec3(1.,0.,1.);

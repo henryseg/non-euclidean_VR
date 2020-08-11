@@ -4,7 +4,7 @@
 
 vec3 allLocalLights(vec3 baseColor, Isometry fixPosition){
     //just one local light right now
-    return localLight(localLightPos,vec3(1.),4.,baseColor,fixPosition);
+    return localLight(localLightPos,vec3(1.),2.,baseColor,fixPosition);
 }
 
 //vec3 allGlobalLights(vec3 baseColor, Isometry fixPosition){

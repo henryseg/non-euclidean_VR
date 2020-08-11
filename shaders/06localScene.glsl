@@ -26,8 +26,8 @@ float localSceneSDF(Point p){
     switch(display){
             
         case 1://ConeTorus
-            tilingDist = -ellipsoidSDF(p, 0.5, 4.);
-            //tilingDist = -sphereSDF(p, ORIGIN, PI+0.2);
+            //tilingDist = -ellipsoidSDF(p, 0.5, 4.);
+            tilingDist = sphereSDF(p, ORIGIN, 0.2);
             distance = min(distance, tilingDist);
             if (tilingDist < EPSILON){
                 isLocal=true;
@@ -37,8 +37,8 @@ float localSceneSDF(Point p){
              break;
 
         case 2://Surface
-           // tilingDist = -ellipsoidSDF(p, 2.5, 1.1);
-            tilingDist = -ellipsoidSDF(p, 0.9, 2.5);
+           // tilingDist = -ellipsoidSDF(p, 0.9, 2.5);
+             tilingDist = sphereSDF(p, ORIGIN, 0.5);
             distance = min(distance, tilingDist);
             if (tilingDist < EPSILON){
                 isLocal=true;

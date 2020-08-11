@@ -92,6 +92,9 @@ Isometry invCellBoost;
 Isometry globalObjectBoost;
 
 
+Isometry gens[10];
+int numGens;
+
 Point surfacePosition;
 Vector toLight;
 Vector atLight;
@@ -153,7 +156,6 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 
 void setVariables(){
      
-
    totalFixIsom=identity;
     currentBoost = unserializeIsom(currentBoostMat);
     leftBoost = unserializeIsom(leftBoostMat);
@@ -162,6 +164,6 @@ void setVariables(){
     invCellBoost = unserializeIsom(invCellBoostMat);
     globalObjectBoost = unserializeIsom(globalObjectBoostMat);
 
-    localLightPos = fromVec4(vec4(0.1, 0.1, 0.2, 1.));
+    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 2.));
 }
 

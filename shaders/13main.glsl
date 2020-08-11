@@ -71,6 +71,8 @@ void main(){
     
     setVariables();
     
+    generators(gens);
+    
     setResolution(resol);
     
     Vector rayDir=setRayDir();

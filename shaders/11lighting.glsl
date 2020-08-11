@@ -122,8 +122,8 @@ vec3 phongShading(Vector toLight, Vector toViewer, Vector  surfNormal, float dis
 
 
 
-
-vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
+//contribution from a single light source
+vec3 lighting(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
     
     //compute the local data we need at the point of intersection
     Point surfacePosition=sampletv.pos;
@@ -137,27 +137,33 @@ vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 
     
     //apply the phong shading model
     return phongShading(toLight, toViewer, surfNormal, distToLight,baseColor,lightColor,lightIntensity,atLight);
+ 
 }
 
 
 
+//local light, done via nearest neighbors
 
-//
-//
-//vec3 globalLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
-//    
-//    //compute the local data we need at the point of intersection
-//    Point surfacePosition=sampletv.pos;
-//    surfNormal=surfaceNormal(surfacePosition);
-//    toViewer=turnAround(sampletv);
-//    
-//    tangDirection(surfacePosition,lightPosition, toLight,distToLight);
-//    
-//    
-//    //apply the phong shading model
-//    return phongShading(toLight, toViewer, surfNormal, distToLight,baseColor,lightColor,lightIntensity);
-//}
-//
+vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 baseColor, Isometry fixPosition){
+    
+    Point transLightPosition;
+    
+    //light from the main source
+    vec3 totalLight=lighting(lightPosition,lightColor,lightIntensity,baseColor,fixPosition);
+    
+    //light from nearest neighbor sources
+    for(int i=0;i<numGens;i++){
+        //translate light position by generator
+        transLightPosition=translate(gens[i],lightPosition);
+        
+        //run the lighting command
+        totalLight+=lighting(transLightPosition,lightColor,lightIntensity,baseColor,fixPosition);
+        
+    }
+
+    return totalLight/float(numGens);
+    
+}
 
 
 
