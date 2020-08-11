@@ -14,7 +14,7 @@ float lightAtt(float dist, Vector angle){
     }
     
     //actual distance function
-    return 0.2*exp(-dist*dist*10.)+AreaDensity(dist,angle);
+    return 5.*exp(-dist*dist*10.)+AreaDensity(dist,angle);
         //0.1+areaElement(dist,angle);//make a function like surfArea in globalGeometry to compute this
 }
 

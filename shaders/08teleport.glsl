@@ -2,7 +2,7 @@
 
 //makes a list of generators by modifying a fixed list of length 8 (the max for now)
 //also updates global variable storing the length of the gen list
-void generators(inout Isometry gens[11]){
+void generators(int display, out Isometry gens[11]){
     if(display==1){
                 // lift of the first rotation
     Isometry gen1 = Isometry(Point(
@@ -128,7 +128,7 @@ void generators(inout Isometry gens[11]){
         
     
     
-       numGens=8; 
+       numGens=10; 
     }
     
     

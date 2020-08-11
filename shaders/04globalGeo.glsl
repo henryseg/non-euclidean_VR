@@ -636,7 +636,7 @@ float AreaDensity(float r,Vector u){
     float kMin=0.25*(cb2-7.*sb2);
     float kMax=0.25;
     
-    float aDens=abs(genSin(kMin,r)*genSin(kMax,r));
+    float aDens=abs(genSin(kMin,r)*genSin(kMax,r))+0.05;
     
     return aDens;
 }

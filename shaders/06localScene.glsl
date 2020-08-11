@@ -39,6 +39,7 @@ float localSceneSDF(Point p){
         case 2://Surface
            // tilingDist = -ellipsoidSDF(p, 0.9, 2.5);
              tilingDist = sphereSDF(p, ORIGIN, 0.5);
+           // tilingDist=cylSDF(p,0.5);
             distance = min(distance, tilingDist);
             if (tilingDist < EPSILON){
                 isLocal=true;

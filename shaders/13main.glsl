@@ -71,7 +71,7 @@ void main(){
     
     setVariables();
     
-    generators(gens);
+    generators(display,gens);
     
     setResolution(resol);
     

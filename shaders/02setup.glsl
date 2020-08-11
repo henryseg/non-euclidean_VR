@@ -62,7 +62,7 @@ void setResolution(int UIVar){
 
 const float EPSILON = 0.0001;
 //const float fov = 90.0;
-const float fov = 130.0;
+const float fov = 110.0;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Some global variables
@@ -152,8 +152,6 @@ vec3 colorOfLight=vec3(1., 1., 1.);
 //----------------------------------------------------------------------------------------------------------------------
 
 
-
-
 void setVariables(){
      
    totalFixIsom=identity;
@@ -164,6 +162,6 @@ void setVariables(){
     invCellBoost = unserializeIsom(invCellBoostMat);
     globalObjectBoost = unserializeIsom(globalObjectBoostMat);
 
-    localLightPos = fromVec4(vec4(0.1, 0.1, -0.2, 2.));
+    localLightPos = fromVec4(vec4(0.5, 0.5, -0.71, 2.));
 }
 
