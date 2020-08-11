@@ -62,7 +62,7 @@ void setResolution(int UIVar){
 
 const float EPSILON = 0.0001;
 //const float fov = 90.0;
-const float fov = 120.0;
+const float fov = 130.0;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Some global variables
@@ -92,7 +92,7 @@ Isometry invCellBoost;
 Isometry globalObjectBoost;
 
 
-Isometry gens[10];
+Isometry gens[11];
 int numGens;
 
 Point surfacePosition;

@@ -2,7 +2,7 @@
 
 //makes a list of generators by modifying a fixed list of length 8 (the max for now)
 //also updates global variable storing the length of the gen list
-void generators(inout Isometry gens[10]){
+void generators(inout Isometry gens[11]){
     if(display==1){
                 // lift of the first rotation
     Isometry gen1 = Isometry(Point(
@@ -45,6 +45,7 @@ void generators(inout Isometry gens[10]){
         gens[3]=gen2inv;
         gens[4]=gen3;
         gens[5]=gen3inv;
+        gens[6]=identity;
     
     numGens=6;
     }
@@ -122,6 +123,7 @@ void generators(inout Isometry gens[10]){
         gens[7]=genB2inv;
         gens[8]=genC;
         gens[9]=genCinv;
+        gens[10]=identity;
         
         
     
@@ -161,11 +163,12 @@ void generators(inout Isometry gens[10]){
     4. * PI
     ));   
             
-    gens[0]=gen0;
+        gens[0]=gen0;
         gens[1]=gen2;
         gens[2]=gen3;
         gens[3]=gen4;
         gens[4]=gen5;
+        gens[5]=identity;
         
         numGens=5;
     }

@@ -77,7 +77,7 @@ Vector surfaceNormal(Point p){
 
 
 vec3 fog(vec3 color, float distToViewer){
-    return exp(-distToViewer/10.)*color;
+    return exp(-distToViewer/20.)*color;
 }
 
 
@@ -151,10 +151,11 @@ vec3 localLight(Point lightPosition, vec3 lightColor, float lightIntensity,vec3 
     //light from the main source
     vec3 totalLight=vec3(0.);
         
-    totalLight+=Light(lightPosition,lightColor,lightIntensity,baseColor,fixPosition);
+    //for some reason it doesnt like doing both in the same function
+    //totalLight+=Light(lightPosition,lightColor,lightIntensity,baseColor,fixPosition);
     
     //light from nearest neighbor sources
-    for(int i=0;i<numGens;i++){
+    for(int i=0;i<numGens+1;i++){
         //translate light position by generator
         transLightPosition=translate(gens[i],lightPosition);
         

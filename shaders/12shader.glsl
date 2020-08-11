@@ -4,28 +4,14 @@
 
 vec3 allLocalLights(vec3 baseColor, Isometry fixPosition){
     //just one local light right now
-    return localLight(localLightPos,vec3(1.),2.,baseColor,fixPosition);
+    
+
+    return localLight(localLightPos,vec3(1.),1.,baseColor,fixPosition);
+        
+  
 }
 
-//vec3 allGlobalLights(vec3 baseColor, Isometry fixPosition){
-//    
-//    vec3 globalColor=vec3(0.);
-//    Point TLP;
-//    
-//    //move the light appropriately
-//        Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
-//        TLP = translate(totalIsom, unserializePoint(lightPositions[1]));
-//    
-//         //add its color contribution
-//         globalColor+=localLight(TLP, lightIntensities[1].xyz, 1.,baseColor,fixPosition);
-//
-//    
-//    //normalize the output color by dividing by the number of light sources
-//    return globalColor;
-//    
-//    
-//   // return baseColor;
-//}
+
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -64,7 +50,7 @@ vec3 getPixelColor(Vector rayDir){
 
     //------ Local Lighting ----------
     //fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
-    firstColor=allLocalLights(baseColor, fixPosition)+0.2*baseColor;
+    firstColor=allLocalLights(baseColor, fixPosition);
     
     
     //NO REFLECTIONS
