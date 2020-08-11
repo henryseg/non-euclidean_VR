@@ -77,7 +77,7 @@ Vector surfaceNormal(Point p){
 
 
 vec3 fog(vec3 color, float distToViewer){
-    return exp(-distToViewer/20.)*color;
+    return exp(-distToViewer/15.)*color;
 }
 
 

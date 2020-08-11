@@ -50,12 +50,12 @@ vec3 getPixelColor(Vector rayDir){
 
     //------ Local Lighting ----------
     //fixPosition=identityIsometry;//CHOOSE THIS WITH PROPER FUNCTION
-    firstColor=allLocalLights(baseColor, fixPosition);
+    firstColor=allLocalLights(baseColor, fixPosition)+0.2*baseColor;
     
     
     //NO REFLECTIONS
  return fog(firstColor,distToViewer);
-    
+ //   return firstColor;
     
     
     
