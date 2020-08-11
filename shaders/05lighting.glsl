@@ -60,11 +60,15 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
     vec3 specular = (0.5*lightIntensity.rgb+vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
+    
+    
+    
     //Attenuation - Inverse Square
-    //float distToLight = fakeDistance(SP, TLP);
+
+//direction to object at light source
+    
     float att = 0.5;
-    //0.8/(0.1+distToLight);
-    //0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
+
     //Compute final color
     vec3 amb=0.1*vec3(0.2, 1., 1.)*baseColor;
     vec3 diff=0.5*diffuse*baseColor;
@@ -80,6 +84,8 @@ vec3 lightingCalculations(vec4 SP, vec4 TLP, tangVector V, vec3 baseColor, vec4 
 //put a coefficient of 2 in front of specular to make things shiny-er
 //changed the power from original of 10 on specular
 //in PHONG MODEL changed amount of color from 0.1 to more
+
+//add in  distance to light?
 vec3 lightingCalculations(vec4 SP, tangVector DTLP, tangVector V, vec3 baseColor, vec4 lightIntensity){
     //Calculations - Phong Reflection Model
     tangVector R = sub(scalarMult(2.0 * cosAng(DTLP, N), N), DTLP);
@@ -89,16 +95,18 @@ vec3 lightingCalculations(vec4 SP, tangVector DTLP, tangVector V, vec3 baseColor
     //Calculate Specular Component
     float rDotV = max(cosAng(R, V), 0.0);
     vec3 specular = (0.5*lightIntensity.rgb+vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
+    
+    
     //Attenuation - Inverse Square
-    //float distToLight = fakeDistance(SP, TLP);
-    float att = 0.5;
-    //0.8/(0.1+distToLight);
-    //0.6*lightIntensity.w /(0.01 + lightAtt(distToLight));
+//    tangVector atLight=turnAround(flow(DTLP,distToLight));
+//    float att = lightIntensity/lightAtt(distToLight,atLight);
+//    
+    float att=1.;
     //Compute final color
-    vec3 amb=0.1*vec3(0.2, 1., 1.)*baseColor;
+    vec3 amb=0.1*baseColor;
     vec3 diff=0.5*diffuse*baseColor;
     vec3 spec=1.5*specular;
-    return diff+spec;
+    return att*(amb+diff+spec);
 }
 
 vec3 phongModel(mat4 totalFixMatrix, vec3 baseColor){

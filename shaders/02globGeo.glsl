@@ -439,9 +439,80 @@ vec4 geomNormalize(vec4 u){
 //-------------------------------------------------------
 // LIGHT
 //-------------------------------------------------------
+
+
+
+//takes in a tangent vector and a length
+// returns the function A(r,u)
+
+
+//generalized sine curve of curvature k
+float genSin(float k, float r){
+    if(k<0.){//hpyerbolic trig
+        return sinh(r*sqrt(abs(k)))/sqrt(abs(k));
+    }
+    else{//then k>0, so spherical trig
+        return sin(r*sqrt(abs(k)))/sqrt(abs(k));
+    }
+}
+
+
+
+
+float AreaDensity(float r,tangVector u){
+    
+    //fiber component of unit tangent vector
+    float cosBeta=u.dir.z;
+    
+    
+    float cb2=cosBeta*cosBeta;
+    float sb2=1.-cb2;
+
+
+    float kMin=0.25*(cb2-3.*sb2);
+    float kMax=0.25;
+    
+    float aDens=abs(genSin(kMin,r)*genSin(kMax,r));
+    
+    return aDens;
+}
+
+
+
+
+//inverse area density, or fake lighting
+
+float lightAtt(float dist, tangVector angle){
+    //distance is the distance between the viewer and the lightsource.
+    //angle is the unit tangent vector pointing from the light source towards the illuminated object
+        if (FAKE_LIGHT_FALLOFF){
+        //fake falloff
+        return 0.1+0.5*dist;
+    }
+    
+    //actual distance function
+    return 0.2*exp(-dist*dist*10.)+AreaDensity(dist,angle);
+        //0.1+areaElement(dist,angle);//make a function like surfArea in globalGeometry to compute this
+}
+
+
+
+
+
+
+
+
+
+
+
 //light intensity as a fn of distance
 float lightAtt(float dist){
     //fake linear falloff
     return dist;
 
 }
+
+
+
+
+

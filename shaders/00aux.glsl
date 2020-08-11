@@ -13,6 +13,7 @@ Some parameters that can be changed to change the scence
 */
 
 const bool FAKE_LIGHT = false;
+const bool FAKE_LIGHT_FALLOFF=false;
 const bool SURFACE_COLOR=true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
