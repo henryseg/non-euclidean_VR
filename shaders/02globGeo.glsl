@@ -65,7 +65,7 @@ float ellipsoidDistance(Vector u, Vector v){
 // the point q is given in cylinder coordiantes (rho, theta, z)
 // we assume that rho > 0 and z > 0
 void _lengthFromPhi(float rhoSq, float z, float phi, out float len) {
-    float c = 2. * sin(0.5 * phi) / sqrt(rhoSq + 4.0 * pow(sin(0.5 * phi), 2.));
+    float c = 2. * abs(sin(0.5 * phi)) / sqrt(rhoSq + 4.0 * pow(sin(0.5 * phi), 2.));
     len = phi / c;
 }
 
