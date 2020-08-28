@@ -75,10 +75,14 @@ void _lengthFromPhi(float rhoSq, float z, float phi, out float len) {
 // the point q is given in cylinder coordiantes (rho, theta, z)
 // we assume that rho > 0 and z > 0
 void _dirLengthFromPhi(float rhoSq, float theta, float z, float phi, out Vector dir, out float len) {
-    float c = 2. * sin(0.5 * phi) / sqrt(rhoSq + 4. * pow(sin(0.5 * phi), 2.));
-    float a = sqrt(1.  - pow(c, 2.));
+    float a = sqrt(rhoSq) / sqrt(rhoSq + 4. * pow(sin(0.5 * phi), 2.));
+    float c = 2. * abs(sin(0.5 * phi)) / sqrt(rhoSq + 4. * pow(sin(0.5 * phi), 2.));
     float alpha = - 0.5 * phi + theta;
+    if (sin(0.5 * phi) <  0.) {
+        alpha = alpha + PI;
+    }
     dir = Vector(ORIGIN, vec4(a * cos(alpha), a * sin(alpha), c, 0.));
+    dir = tangNormalize(dir);
     len = phi / c;
 }
 
@@ -241,10 +245,10 @@ int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, 
 int directions(Point p, Point q, int n, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
     Vector resOrigin;
     int maxDir;
-    if(n <= 0) {
+    if (n <= 0) {
         maxDir = MAX_DIRS_LIGHT;
     }
-    else{
+    else {
         maxDir = min(n, MAX_DIRS_LIGHT);
     }
 
