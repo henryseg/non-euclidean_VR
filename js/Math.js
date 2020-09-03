@@ -340,8 +340,10 @@ var initObjects = function () {
     PointLightObject(new THREE.Vector3(0, 1., 1), lightColor2);
     PointLightObject(new THREE.Vector3(-1, 0, 2), lightColor3);
     PointLightObject(new THREE.Vector3(0, -1, -1), lightColor4);
-    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -0.3));
+
+    globalObjectBoost = translateByVector(new THREE.Vector3(0, 0, -0.2));
     localObjectBoost = translateByVector(new THREE.Vector3(0, 0.1, -0.2));
+    //localObjectBoost = translateByVector(new THREE.Vector3(0, 0, -0.2));
 }
 
 

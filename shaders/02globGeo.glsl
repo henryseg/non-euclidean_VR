@@ -76,14 +76,14 @@ void _lengthFromPhi(float rhoSq, float z, float phi, out float len) {
 // we assume that rho > 0 and z > 0
 void _dirLengthFromPhi(float rhoSq, float theta, float z, float phi, out Vector dir, out float len) {
     float a = sqrt(rhoSq) / sqrt(rhoSq + 4. * pow(sin(0.5 * phi), 2.));
-    float c = 2. * abs(sin(0.5 * phi)) / sqrt(rhoSq + 4. * pow(sin(0.5 * phi), 2.));
+    float c = 2. * sin(0.5 * phi) / sqrt(rhoSq + 4. * pow(sin(0.5 * phi), 2.));
     float alpha = - 0.5 * phi + theta;
     if (sin(0.5 * phi) <  0.) {
         alpha = alpha + PI;
     }
-    dir = Vector(ORIGIN, vec4(a * cos(alpha), a * sin(alpha), c, 0.));
+    dir = Vector(ORIGIN, vec4(a * cos(alpha), a * sin(alpha), abs(c), 0.));
     dir = tangNormalize(dir);
-    len = phi / c;
+    len = abs(phi / c);
 }
 
 
@@ -197,7 +197,7 @@ int _dirFromOriginFiber(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, ou
 // maxDir is a integer between 1 and MAX_DIRS_LIGHT
 // we return at most maxDir directions
 // we assume that rho > 0  and z > 0
-int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+int _dirFromOriginGenericOLD(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
     float rhoSq = pow(q.coords.x, 2.) + pow(q.coords.y, 2.);
     float z = q.coords.z;
     float theta = atan(q.coords.y, q.coords.x);
@@ -239,6 +239,119 @@ int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, 
     return count;
 }
 
+// direction from the origin to a generic point q
+// maxDir is a integer between 1 and MAX_DIRS_LIGHT
+// we return at most maxDir directions
+// we assume that rho > 0  and z > 0
+int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    float rhoSq = pow(q.coords.x, 2.) + pow(q.coords.y, 2.);
+    float z = q.coords.z;
+    float theta = atan(q.coords.y, q.coords.x);
+    int count = 0;
+
+    // declaring more variables
+    Vector dir;
+    float len;
+    float phi;
+    bool check;
+
+    float phiMin;
+    float phiMax;
+    float s;
+
+    // loop over the number of desired directions
+    for (int k=0; k < maxDir; k++) {
+        phiMin = 2. * PI * floor(float((k+1)/2));
+        phiMax = phiMin + 2. * PI;
+        s = 1.;
+        for (int i=0; i < k; i++) {
+            s = -1. * s;
+        }
+        check = zero_chi_light(rhoSq, z, phiMin, phiMax, s, phi);
+        if (!check) {
+            if (k==0) {
+                debugColor = vec3(0, 0, 1);
+            }
+            break;
+        }
+        _dirLengthFromPhi(rhoSq, theta, z, phi, dir, len);
+        dirs[k] = dir;
+        lens[k] = len;
+        count++;
+//        if (k==2) {
+//            //debugColor = 100.*vec3(0, z - 3.*PI-0.1, 0);
+//            //debugColor = 100.*vec3(0, 0, sqrt(rhoSq)-0.01);
+//            //debugColor = 10.*vec3(phi -2.*PI, 0, 0);
+//            //debugColor = 10. * (dir.dir.z - 0.69) * vec3(0, 1, 1);
+//            //float test = sqrt(dir.dir.x * dir.dir.x + dir.dir.y * dir.dir.y);
+//            //debugColor = 10. * (test - 0.69) * vec3(1, 1, 0);
+//            //debugColor = vec3(-s, 0, 0);
+//            //debugColor = 10. * (len - 8.9) * vec3(1, 0, 1);
+//            //debugColor = dir.dir.xyz;
+//            //debugColor = vec3(dir.dir.x,-dir.dir.x,0);
+//        }
+    }
+    return count;
+}
+
+
+// The output m is min of n, N = MAX_DIRS_LIGHT and the number of direction from p to q
+// The function also populates dirs[0:m] and len[0:m] with the corresponding directions and lengths
+// n <= 0 this means that n = infty
+int directionsLight(Point p, Point q, int n, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    Vector resOrigin;
+    int maxDir;
+    if (n <= 0) {
+        maxDir = MAX_DIRS_LIGHT;
+    }
+    else {
+        maxDir = min(n, MAX_DIRS_LIGHT);
+    }
+
+    if (FAKE_LIGHT) {
+        return _fakeDirections(p, q, maxDir, dirs, lens);
+    }
+
+    int res;
+    Vector[MAX_DIRS_LIGHT] dirsOrigin;
+
+    // move p to the origin and q accordingly
+    Isometry shift = makeInvLeftTranslation(p);
+    Point qOrigin = translate(shift, q);
+    bool flipped = false;
+    // if needed we flip the point qOrigin so that its z-coordinates is positive.
+    if (qOrigin.coords.z < 0.) {
+        flipped = true;
+        qOrigin = translate(flip, qOrigin);
+    }
+
+    float rhoSq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
+    float z = qOrigin.coords.z;
+
+    if (z == 0.0) {
+        // qOrigin on the xy-plane
+        res = _dirFromOriginPlane(qOrigin, maxDir, dirsOrigin, lens);
+    }
+    else if (rhoSq == 0.) {
+        // qOrigin on the z-axis
+        res = _dirFromOriginFiber(qOrigin, maxDir, dirsOrigin, lens);
+    }
+    else {
+        // qOrigin generic
+        res = _dirFromOriginGeneric(qOrigin, maxDir, dirsOrigin, lens);
+    }
+
+    for (int k = 0; k < res; k++) {
+        Vector aux = dirsOrigin[k];
+        if (flipped) {
+            aux = translate(flip, aux);
+        }
+        dirs[k] = Vector(p, aux.dir);
+    }
+    return res;
+
+}
+
 // The output m is min of n, N = MAX_DIRS_LIGHT and the number of direction from p to q
 // The function also populates dirs[0:m] and len[0:m] with the corresponding directions and lengths
 // n <= 0 this means that n = infty
@@ -255,45 +368,45 @@ int directions(Point p, Point q, int n, out Vector[MAX_DIRS_LIGHT] dirs, out flo
     if (FAKE_LIGHT) {
         return _fakeDirections(p, q, maxDir, dirs, lens);
     }
-    else {
-        int res;
-        Vector[MAX_DIRS_LIGHT] dirsOrigin;
 
-        // move p to the origin and q accordingly
-        Isometry shift = makeInvLeftTranslation(p);
-        Point qOrigin = translate(shift, q);
-        bool flipped = false;
-        // if needed we flip the point qOrigin so that its z-coordinates is positive.
-        if (qOrigin.coords.z < 0.) {
-            flipped = true;
-            qOrigin = translate(flip, qOrigin);
-        }
+    int res;
+    Vector[MAX_DIRS_LIGHT] dirsOrigin;
 
-        float rhoSq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
-        float z = qOrigin.coords.z;
-
-        if (z == 0.0) {
-            // qOrigin on the xy-plane
-            res = _dirFromOriginPlane(qOrigin, maxDir, dirsOrigin, lens);
-        }
-        else if (rhoSq == 0.) {
-            // qOrigin on the z-axis
-            res = _dirFromOriginFiber(qOrigin, maxDir, dirsOrigin, lens);
-        }
-        else {
-            // qOrigin generic
-            res = _dirFromOriginGeneric(qOrigin, maxDir, dirsOrigin, lens);
-        }
-
-        for (int k = 0; k < res; k++) {
-            Vector aux = dirsOrigin[k];
-            if (flipped) {
-                aux = translate(flip, aux);
-            }
-            dirs[k] = Vector(p, aux.dir);
-        }
-        return res;
+    // move p to the origin and q accordingly
+    Isometry shift = makeInvLeftTranslation(p);
+    Point qOrigin = translate(shift, q);
+    bool flipped = false;
+    // if needed we flip the point qOrigin so that its z-coordinates is positive.
+    if (qOrigin.coords.z < 0.) {
+        flipped = true;
+        qOrigin = translate(flip, qOrigin);
     }
+
+    float rhoSq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);
+    float z = qOrigin.coords.z;
+
+    if (z == 0.0) {
+        // qOrigin on the xy-plane
+        res = _dirFromOriginPlane(qOrigin, maxDir, dirsOrigin, lens);
+    }
+    else if (rhoSq == 0.) {
+        // qOrigin on the z-axis
+        res = _dirFromOriginFiber(qOrigin, maxDir, dirsOrigin, lens);
+    }
+    else {
+        // qOrigin generic
+        res = _dirFromOriginGeneric(qOrigin, maxDir, dirsOrigin, lens);
+    }
+
+    for (int k = 0; k < res; k++) {
+        Vector aux = dirsOrigin[k];
+        if (flipped) {
+            aux = translate(flip, aux);
+        }
+        dirs[k] = Vector(p, aux.dir);
+    }
+    return res;
+
 }
 
 

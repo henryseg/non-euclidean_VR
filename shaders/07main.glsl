@@ -123,8 +123,8 @@ void main(){
     else if (hitWhich == 8){ // the GLOBAL earth
 
         //earthBoostNow=composeIsometry(totalFixMatrix,earthBoostNow);
-        // vec3 pixelColor=tilingColor(totalFixMatrix,sampletv);
-        vec3 pixelColor=globalSphereTexture(totalFixIsom, sampletv, earthCubeTex);
+        vec3 pixelColor=tilingColor(totalFixIsom,sampletv);
+        //vec3 pixelColor=globalSphereTexture(totalFixIsom, sampletv, earthCubeTex);
 
         out_FragColor = vec4(pixelColor, 1.0);
     }

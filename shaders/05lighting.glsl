@@ -32,7 +32,6 @@ Vector estimateNormal(Point p) {
 }
 
 
-
 //----------------------------------------------------------------------------------------------------------------------
 // Fog
 //----------------------------------------------------------------------------------------------------------------------
@@ -72,7 +71,7 @@ vec3 lightingCalculations(Point SP, Vector DTLP, float distToLight, Vector V, ve
     float rDotV = max(cosAng(reflectedRay, V), 0.0);
     vec3 specular = (0.5 * lightIntensity.rgb + vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
     //Attenuation - of the light intensity due to distance from source
-    float att = 1.;
+    float att = .5;
     //float att =  5. / (0.1 + distToLight);
     // float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
     //Combine the above terms to compute the final color
@@ -125,17 +124,17 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
 
 
     shiftLight = composeIsometry(totalFixIsom, unserializeIsom(invCellBoost));
-    TLP = translate(shiftLight, Point(vec4(10., 0., 10., 1.)));
-    nbDir = directions(SP, TLP, 0, dirs, lens);
-    for (int k=0; k < nbDir; k ++) {
-        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor1);
-    }
-
-    TLP = translate(shiftLight, Point(vec4(0., 10., 10., 1.)));
-    nbDir = directions(SP, TLP, 0, dirs, lens);
-    for (int k=0; k < nbDir; k ++) {
-        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor2);
-    }
+    //    TLP = translate(shiftLight, Point(vec4(10., 0., 10., 1.)));
+    //    nbDir = directions(SP, TLP, 0, dirs, lens);
+    //    for (int k=0; k < nbDir; k ++) {
+    //        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor1);
+    //    }
+    //
+    //    TLP = translate(shiftLight, Point(vec4(0., 10., 10., 1.)));
+    //    nbDir = directions(SP, TLP, 0, dirs, lens);
+    //    for (int k=0; k < nbDir; k ++) {
+    //        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor2);
+    //    }
 
     //    TLP = translate(shiftLight, Point(vec4(-10., 0, 5., 1.)));
     //    nbDir = directions(SP, TLP, dirs, lens);
@@ -143,10 +142,13 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
     //        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor3);
     //    }
 
-    TLP = translate(shiftLight, Point(vec4(1, 1, 12, 1.)));
-    nbDir = directions(SP, TLP, 0, dirs, lens);
+    //TLP = translate(shiftLight, Point(vec4(1, 1, 12, 1.)));
+    TLP = translate(shiftLight, Point(vec4(0, 0, 3.*PI, 1.)));
+    nbDir = directionsLight(SP, TLP, 0, dirs, lens);
     for (int k=0; k < nbDir; k ++) {
-        color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor4);
+//        if (k==2) {
+            color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor4);
+//        }
     }
 
 

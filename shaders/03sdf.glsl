@@ -128,23 +128,23 @@ float globalSceneSDF(Point p){
 
     //Global Sphere Object
     float objDist;
-    objDist = sphereSDF(absolutep, Point(globalObjectBoost[3]), globalObjectRadius);
+    objDist = sphereSDF(absolutep, Point(globalObjectBoost[3]), 0.1);
     distance = min(distance, objDist);
     if (distance < EPSILON){
         hitWhich = 2;
     }
 
-    if (GLOBAL_EARTH){
-        Isometry shift = unserializeIsom(globalEarthBoost);
-        Point earthCenter = translate(shift, ORIGIN);
-        earthDist = sphereSDF(absolutep, earthCenter, 0.15);
-        distance = min(distance, earthDist);
-        if (earthDist < EPSILON){
-            // hitLocal = true;
-            hitWhich = 8;
-            return earthDist;
-        }
-    }
+//    if (GLOBAL_EARTH){
+//        Isometry shift = unserializeIsom(globalEarthBoost);
+//        Point earthCenter = translate(shift, ORIGIN);
+//        earthDist = sphereSDF(absolutep, earthCenter, 0.15);
+//        distance = min(distance, earthDist);
+//        if (earthDist < EPSILON){
+//            // hitLocal = true;
+//            hitWhich = 8;
+//            return earthDist;
+//        }
+//    }
 
     return distance;
 }

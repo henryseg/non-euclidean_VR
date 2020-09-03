@@ -13,13 +13,13 @@ Some parameters that can be changed to change the scence
 */
 
 const bool FAKE_LIGHT = false;
-const int MAX_DIRS_LIGHT = 3;
+const int MAX_DIRS_LIGHT = 1;
 const bool SURFACE_COLOR = true;
 const bool FAKE_DIST_SPHERE = false;
 const float globalObjectRadius = 0.;
-const bool LOCAL_EARTH = true;
+const bool LOCAL_EARTH = false;
 const bool TILING = false;
-const bool GLOBAL_EARTH = false;
+const bool GLOBAL_EARTH = true;
 
 //local lights only on without the tiling: they help with definition on the earth but wash out the tiling
 const bool LOCAL_LIGHTS = false;
@@ -46,8 +46,8 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 //-------------------------------------------------------
 
 
-const int MAX_NEWTON_INIT_ITERATION = 10;
-const int MAX_NEWTON_ITERATION = 10;
+const int MAX_NEWTON_INIT_ITERATION = 50;
+const int MAX_NEWTON_ITERATION = 50;
 const float NEWTON_INIT_TOLERANCE = 0.001;
 const float NEWTON_TOLERANCE = 0.0001;
 
@@ -71,7 +71,7 @@ float chi(float rhoSq, float z, float phi) {
         res = res + rhoSq * phi * (phi2 + 30.) * (phi4 + 840.) / 302400.;
     }
     else {
-        res = res + 0.5 * rhoSq * (phi - sin(phi)) / pow(2. * sin(0.5 * phi), 2.0);
+        res = res + rhoSq * (phi - sin(phi)) / (8. * pow(sin(0.5 * phi), 2.0));
     }
     return res;
 }
@@ -103,7 +103,7 @@ float dchi(float rhoSq, float z, float phi) {
 // * dchi(phi) has the same as s
 float zero_chi_init(float rhoSq, float z, float phiMin, float phiMax, float s) {
     float bdy;
-    if (s > 0) {
+    if (s > 0.) {
         bdy = phiMax;
     }
     else {
@@ -111,7 +111,7 @@ float zero_chi_init(float rhoSq, float z, float phiMin, float phiMax, float s) {
     }
     float aux = 0.5 * phiMin + 0.5 * phiMax;
     for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){
-        if (sign(dchi(rhoSq, z, aux) == s) && chi(rhoSq, z, aux) > 0) {
+        if (sign(dchi(rhoSq, z, aux)) == s && chi(rhoSq, z, aux) > 0.) {
             break;
         }
         aux = 0.5 * aux + 0.5 * bdy;
@@ -127,10 +127,10 @@ float zero_chi_init(float rhoSq, float z, float phiMin, float phiMax, float s) {
 // Use the Newton method.
 // if such a zero is found return true and update the value of phi
 // otherwise return false
-bool zero_chi(float rhoSq, float z, float phiMin, float phiMax, float s, out phi) {
-    float phi = zero_chi_init(rhoSq, z, phiMin, phiMax, s);
+bool zero_chi(float rhoSq, float z, float phiMin, float phiMax, float s, out float phi) {
     float aux;
 
+    phi = zero_chi_init(rhoSq, z, phiMin, phiMax, s);
     for (int i=0; i < MAX_NEWTON_ITERATION; i++){
         // backup of the previous value of phi
         aux = phi;
@@ -146,6 +146,34 @@ bool zero_chi(float rhoSq, float z, float phiMin, float phiMax, float s, out phi
             return true;
         }
     }
+    return false;
+}
+
+bool zero_chi_light(float rhoSq, float z, float phiMin, float phiMax, float s, out float phi) {
+    float aux;
+
+    phi = zero_chi_init(rhoSq, z, phiMin, phiMax, s);
+    for (int i=0; i < MAX_NEWTON_ITERATION; i++){
+        // backup of the previous value of phi
+        aux = phi;
+        // new value of phi
+        phi = phi - chi(rhoSq, z, phi) / dchi(rhoSq, z, phi);
+        if (phi < phiMin || phi > phiMax) {
+            //debugColor = vec3(1,0,0);
+            return false;
+        }
+        if (sign(dchi(rhoSq, z, phi)) != s) {
+            //debugColor = vec3(0,1,0);
+            return false;
+        }
+        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+            //debugColor = vec3(0,0,1);
+            //debugColor = 10. * vec3(phi -2.*PI, 0, 0);
+            //debugColor = 10. * vec3(phi -6.2, 0, 0);
+            return true;
+        }
+    }
+    //debugColor = vec3(0,1,1);
     return false;
 }
 
