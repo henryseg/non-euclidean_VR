@@ -138,13 +138,11 @@ struct Vector {
 
 Vector add(Vector v1, Vector v2) {
     // add two tangent vector at the same point
-    // TODO : check if the underlyig point are indeed the same ?
     return Vector(v1.pos, v1.dir + v2.dir);
 }
 
 Vector sub(Vector v1, Vector v2) {
     // subtract two tangent vector at the same point
-    // TODO : check if the underlyig point are indeed the same ?
     return Vector(v1.pos, v1.dir - v2.dir);
 }
 
@@ -175,7 +173,7 @@ Vector applyMatrixToDir(mat4 matrix, Vector v) {
 */
 
 Vector rotateFacing(mat4 mat, Vector v){
-    // apply an isometry to the tangent vector (both the point and the direction)
+    // rotate the direction of the given vector by mat
     return Vector(v.pos, mat * v.dir);
 }
 

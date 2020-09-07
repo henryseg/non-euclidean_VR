@@ -144,7 +144,7 @@ vec3 phongModel(Isometry totalFixIsom, vec3 baseColor){
 
     //TLP = translate(shiftLight, Point(vec4(1, 1, 12, 1.)));
     TLP = translate(shiftLight, Point(vec4(0, 0, 3.*PI, 1.)));
-    nbDir = directionsLight(SP, TLP, 0, dirs, lens);
+    nbDir = directions(SP, TLP, 0, dirs, lens);
     for (int k=0; k < nbDir; k ++) {
 //        if (k==2) {
             color += lightingCalculations(SP, dirs[k], lens[k], V, baseColor, lightColor4);
