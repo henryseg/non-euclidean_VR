@@ -26,7 +26,8 @@ const bool EARTH=false;
 
 const bool FAKE_LIGHT_FALLOFF=true;
 const bool FAKE_LIGHT = false;
-const bool FAKE_DIST_SPHERE = false;
+const int MAX_DIRS_LIGHT = 1;
+const bool FAKE_DIST_SPHERE = true;
 
 //const float globalObjectRadius = 0.4;
 const float centerSphereRadius =0.67;
@@ -678,29 +679,28 @@ float fakeDist(Vector v1, Vector v2){
 // TODO. Use asymptotic expansion around the parabolic type geodesics?
 
 
-// consider a geodesic gamma from the origin describing an angle phi
-// when reaching the point at distance rho of the axis (O,w)
-// return the value of 0.5(w - w0), where w is the height of gamma at that point
-// the distance rho is pased as sh(rho/2)^2
+// Auxiliary function.
+// The geodesics joining to origin to the point with cylindrical coordiantes (rho, *,z)
+// are in one-to-one correspondance with the zeros of chi (see paper)
 // We assume that rho > 0, w0 >=0, and phi < 0
 
 // CHECKED (with SageMath)
-float _height(float shRhoOver2SQ, float w0, float phi) {
+float chi(float shRhoOver2SQ, float w, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
     float tanPhi = tan(phi);
     float tanPhiSQ = pow(tanPhi, 2.);
     float aux;
-    float res;
+    float res = -0.5 * w + phi;
 
     if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
         // hyperbolic like geodesics
         aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
-        res = -0.5 * w0 + phi - 2. * tanPhi * atanh(aux) / aux;
+        res = res - 2. * tanPhi * atanh(aux) / aux;
     }
     else if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
         // parabolic like geodesics
-        res = -0.5 * w0 + phi - 2. * tanPhi;
+        res = res - 2. * tanPhi;
     }
     else if (abs(tanPhi) > shRhoOver2){
         // elliptic like geodesics
@@ -709,19 +709,19 @@ float _height(float shRhoOver2SQ, float w0, float phi) {
             float eps = sign(tanPhi);
             float m = floor(0.5 - phi / PI);
             aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
-            res = - 0.5 * w0 + phi  - 2. * tanPhi * (atan(aux) - eps * m * PI) / aux;
+            res = res  - 2. * tanPhi * (atan(aux) - eps * m * PI) / aux;
         }
         else {
-            res = - 0.5 * w0  + phi - 2. * phi * chRhoOver2;
+            res = res - 2. * phi * chRhoOver2;
         }
     }
 
     return res;
 }
 
-// derivative with repsect to phi of the function _height
+// derivative with repsect to phi of the function chi
 // CHECKED (with SageMath)
-float _dheight(float shRhoOver2SQ, float w0, float phi) {
+float dchi(float shRhoOver2SQ, float w, float phi) {
     float shRhoOver2 = sqrt(shRhoOver2SQ);
     float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
     float tanPhi = tan(phi);
@@ -815,6 +815,7 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
     float omega2;
     float a;
     float c;
+    float alpha = theta - phi;
 
     if (abs(tanPhi) < shRhoOver2) {
         // hyperbolic type geodesic
@@ -824,14 +825,12 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
 
         a = sqrt(0.5 * (1. + omega2));
         c = sqrt(0.5 * (1. - omega2));
-        len = (2. / omega) * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2);
 
     }
     else if (abs(tanPhi) == shRhoOver2) {
         // parabolic type geodesic
         a = 1. / sqrt2;
         c = 1. / sqrt2;
-        len = 2. * sqrt2 * shRhoOver2;
     }
     else {
         // elliptic type geodesic
@@ -843,9 +842,11 @@ void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out 
 
         a = sqrt(0.5 * (1. - omega2));
         c = sqrt(0.5 * (1. + omega2));
-        len = (2. / omega) *  (atan(-eps * sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) + m * PI);
+        if(sin(phi) > 0.) {
+            alpha = alpha + PI;
+        }
     }
-    float alpha = theta + c * len - 0.5 * w;
+    len = 0.5 * (w - 2. * phi) / c;
     tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
 }
 
@@ -854,68 +855,60 @@ const int MAX_NEWTON_ITERATION = 100;
 const float NEWTON_INIT_TOLERANCE = 0.0001;
 const float NEWTON_TOLERANCE = 0.000001;
 
-// return a value of phi between phimin and phimax such that `_height`
-// (seen as a function of phi) is positive
-// this value will serve as starting point for the newtown method
-// the output is found using a binary search
-// we assume that _height is defined and monotone on the whole interval (phimin, phimax)
-// the boolean `increasing` says if it is increasing or decreasing
-// CHECKED
-float _height_newton_init(float shRhoOver2SQ, float w0, float phiMin, float phiMax, bool increasing) {
-    float auxMin = phiMin;
-    float auxMax = phiMax;
-    float aux, val;
+
+// initialization of the Newthon method to find the zeros of chi
+// we look for a value of phi such that
+// * phiMin < phi < phiMax
+// * chi(phi) > 0
+// * dchi(phi) has the same as s
+float zero_chi_init(float shRhoOver2SQ, float w, float phiMin, float phiMax, float s) {
+    float bdy;
+    if (s > 0.) {
+        bdy = phiMax;
+    }
+    else {
+        bdy = phiMin;
+    }
+    float aux = 0.5 * phiMin + 0.5 * phiMax;
     for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){
-        aux = 0.5 * auxMin + 0.5 * auxMax;
-        val = _height(shRhoOver2SQ, w0, aux);
-        if (val >= 0.) {
+        if (sign(dchi(shRhoOver2SQ, w, aux)) == s && chi(shRhoOver2SQ, w, aux) > 0.) {
             break;
         }
-        else {
-            if (increasing) {
-                auxMin = aux;
-            }
-            else {
-                auxMax = aux;
-            }
-        }
+        aux = 0.5 * aux + 0.5 * bdy;
     }
     return aux;
 }
 
-// runs the newton algorithm to find the zero of `_height`
-// starting from phi0
-// CHECKED
-float _height_newton(float shRhoOver2SQ, float w0, float phi0) {
-    float phi = phi0;
-    float tmp;
-    float val;
+
+// find a zero phi of chi such that
+// * phiMin < phi < phiMax
+// * chi(phi) = 0 (of course !)
+// * dchi(phi) has the same as s
+// Use the Newton method.
+// if such a zero is found return true and update the value of phi
+// otherwise return false
+bool zero_chi(float shRhoOver2SQ, float w, float phiMin, float phiMax, float s, out float phi) {
+    float aux = -1.;
+    phi = zero_chi_init(shRhoOver2SQ, w, phiMin, phiMax, s);
     for (int i=0; i < MAX_NEWTON_ITERATION; i++){
-        // value of _height at phi
-        val = _height(shRhoOver2SQ, w0, phi);
         // backup of the previous value of phi
-        tmp = phi;
+        aux = phi;
         // new value of phi
-        phi = phi - val/_dheight(shRhoOver2SQ, w0, phi);
-        if (abs(phi - tmp) < NEWTON_TOLERANCE) {
-            break;
+        phi = phi - chi(shRhoOver2SQ, w, phi) / dchi(shRhoOver2SQ, w, phi);
+        if (phi < phiMin || phi > phiMax) {
+            return false;
+        }
+        if (sign(dchi(shRhoOver2SQ, w, phi)) != s) {
+            return false;
+        }
+        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+            return true;
         }
     }
-    return phi;
+    return false;
 }
 
-// return the first zero of `_height` (seen as a function of phi)
-// - use the Newton method
-// - the starting point of the Newton method is obtained via a binary search
-// the solution belongs to (atan(sh(rho/2) - pi, 0)
-// CHECKED
-float zero_height(float shRhoOver2SQ, float w0) {
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float phiMin = atan(shRhoOver2) - PI;
-    float phiMax = 0.;
-    float phi0 = _height_newton_init(shRhoOver2SQ, w0, phiMin, phiMax, false);
-    return _height_newton(shRhoOver2SQ, w0, phi0);
-}
+
 
 
 float _exactDistToOrign(Point p) {
@@ -927,7 +920,7 @@ float _exactDistToOrign(Point p) {
         paux = p;
     }
     float w = paux.fiber;
-    float shRhoOver2SQ = pow(paux.proj.z, 2.) + pow(paux.proj.w, 2.);
+    float shRhoOver2SQ = paux.proj.z * paux.proj.z + paux.proj.w * paux.proj.w;
     if (shRhoOver2SQ == 0.){
         // points on the fiber axis
         if (w < 2. * PI) {
@@ -948,7 +941,10 @@ float _exactDistToOrign(Point p) {
     }
     else {
         // generic point
-        float phi = zero_height(shRhoOver2SQ, w);
+        float phi;
+        float phiMax = 0.;
+        float phiMin = atan(sqrt(shRhoOver2SQ)) - PI;
+        zero_chi(shRhoOver2SQ, w, phiMin, phiMax, -1., phi);
         float length;
         _lengthFromPhi(shRhoOver2SQ, w, phi, length);
         return length;
@@ -967,6 +963,183 @@ float exactDist(Vector v1, Vector v2){
     return exactDist(v1.pos, v2.pos);
 }
 
+
+// fake direction from p to q
+// just return the direction in H2 X E
+// maxDir is a integer between 1 and MAX_DIRS_LIGHT
+// we return at most maxDir directions
+int _fakeDirections(Point p, Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    // isometry moving back p to the origin
+    Isometry shift = makeInvLeftTranslation(p);
+    // translation of q at the origin
+    Point qAtOrigin = translate(shift, q);
+
+    vec4 aux = toVec4(qAtOrigin);
+    Vector resOrigin = Vector(ORIGIN, aux.xyw);
+    resOrigin = tangNormalize(resOrigin);
+
+    dirs[0] =  Vector(p, resOrigin.dir);
+    lens[0] = _fakeDistToOrigin(qAtOrigin);
+
+    return 1;
+}
+
+// direction from the origin to a point q on the fiber axis, that rho = 0.
+// we also assume that w > 0
+// for each rotation invariant family of geodesic, we return only one of them
+// maxDir is a integer between 1 and MAX_DIRS_LIGHT
+// we return at most maxDir directions
+int _dirFromOriginFiber(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    float shRhoOver2SQ = q.proj.z * q.proj.z + q.proj.w * q.proj.w;
+    float w = q.fiber;
+
+    if (w < 2. * PI){
+        dirs[0] = Vector(ORIGIN, vec3(0, 0, 1));
+        lens[0] = w;
+        return 1;
+    }
+    else {
+        float n = floor(0.5 * w /PI);
+        int nInt = int(n);
+        int count = 0;
+        for (int k = 1; k <= maxDir; k++) {
+            float kFloat = float(k);
+            if (k <= nInt) {
+                float den = 2. * pow(w + 2. * kFloat * PI, 2.) - pow(4.* kFloat * PI, 2.);
+                dirs[k-1] = Vector(ORIGIN, vec3(
+                sqrt((pow(w + 2. * kFloat * PI, 2.) - pow(4.* kFloat * PI, 2.)) / den),
+                0,
+                (w + 2. * kFloat * PI) / sqrt(den)
+                ));
+                lens[k-1] = 2. * kFloat * PI * sqrt(0.5 * pow(w / (2. * kFloat * PI) + 1., 2.) - 1.);
+                count++;
+            }
+            else {
+                dirs[k-1] = Vector(ORIGIN, vec3(0, 0, 1));
+                lens[k-1] = w;
+                count++;
+                break;
+            }
+        }
+        return count;
+    }
+}
+
+
+// direction from the origin to a generic point q
+// maxDir is a integer between 1 and MAX_DIRS_LIGHT
+// we return at most maxDir directions
+// we assume that rho > 0  and w > 0
+int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    float shRhoOver2SQ = q.proj.z * q.proj.z + q.proj.w * q.proj.w;
+    float w = q.fiber;
+    vec3 aux = SLtoH2(q.proj);
+    float theta = atan(aux.y, aux.x);
+    float phi0 = atan(sqrt(shRhoOver2SQ));
+    int count = 0;
+
+    // declaring more variables
+    Vector dir;
+    float len;
+    float phi;
+    bool check;
+
+    float phiMin;
+    float phiMax;
+    float s;
+
+
+    // loop over the number of desired directions
+    for (int k=0; k < maxDir; k++) {
+        if(k==0) {
+            phiMin = phi0 - PI;
+            phiMax = 0.;
+        }
+        else {
+            float auxPi = PI * floor(float((k+1)/2));
+            phiMin = phi0 - auxPi - PI;
+            phiMax = -phi0 - auxPi;
+        }
+
+        s = -1.;
+        for (int i=0; i < k; i++) {
+            s = -1. * s;
+        }
+        check = zero_chi(shRhoOver2SQ, w, phiMin, phiMax, s, phi);
+        if (!check) {
+            break;
+        }
+        _dirLengthFromPhi(shRhoOver2SQ, theta, w, phi, dir, len);
+        dirs[k] = dir;
+        lens[k] = len;
+        count++;
+    }
+    return count;
+}
+
+
+int directions(Point p, Point q, int n, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    int maxDir;
+    if (n <= 0) {
+        maxDir = MAX_DIRS_LIGHT;
+    }
+    else {
+        maxDir = min(n, MAX_DIRS_LIGHT);
+    }
+
+    int res;
+    Vector[MAX_DIRS_LIGHT] dirsOrigin;
+    float[MAX_DIRS_LIGHT] lensOrigin;
+
+    // move p to the origin and q accordingly
+    Isometry shift = makeInvLeftTranslation(p);
+    Point qOrigin = translate(shift, q);
+    bool flipped = false;
+    // if needed we flip the point qOrigin so that its fiber coordinates is positive.
+    if (qOrigin.fiber < 0.) {
+        flipped = true;
+        qOrigin = flip(qOrigin);
+    }
+
+    float shRhoOver2SQ = qOrigin.proj.z * qOrigin.proj.z + qOrigin.proj.w * qOrigin.proj.w;
+    float w = qOrigin.fiber;
+
+    if (shRhoOver2SQ == 0.){
+        // qOrigin on the fiber axis
+        res = _dirFromOriginFiber(qOrigin, maxDir, dirsOrigin, lensOrigin);
+    }
+    else {
+        // qOrigin generic
+        res = _dirFromOriginGeneric(qOrigin, maxDir, dirsOrigin, lensOrigin);
+    }
+
+    for (int k = 0; k < res; k++) {
+        Vector aux = dirsOrigin[k];
+        if (flipped) {
+            aux = flip(aux);
+        }
+        dirs[k] = Vector(p, aux.dir);
+        lens[k] = lensOrigin[k];
+    }
+    return res;
+}
+
+
+void direction(Point p, Point q, out Vector dir, out float len){
+    // return the unit tangent to shortest geodesic connecting p to q.
+    // if FAKE_LIGHT is true, use the Euclidean metric for the computation (straight lines).
+    Vector[MAX_DIRS_LIGHT] dirs;
+    float[MAX_DIRS_LIGHT] lens;
+    directions(p, q, 1, dirs, lens);
+    dir = dirs[0];
+    len = lens[0];
+}
+
+void direction(Vector u, Vector v, out Vector dir, out float len){
+    direction(u.pos, v.pos, dir, len);
+}
+
+/*
 void tangDirection(Point p, Point q, out Vector tv, out float len){
     // return the unit tangent to geodesic connecting p to q.
     // if FAKE_LIGHT is true, use the Euclidean metric for the computation (straight lines).
@@ -995,14 +1168,14 @@ void tangDirection(Point p, Point q, out Vector tv, out float len){
 
         if (shRhoOver2SQ == 0.){
             if (w < 2. * PI){
-                resOrigin = Vector(ORIGIN,vec3(0, 0, 1));
+                resOrigin = Vector(ORIGIN, vec3(0, 0, 1));
                 len = w;
             }
             else {
                 resOrigin = Vector(ORIGIN, vec3(
-                sqrt((pow(w + 2. * PI,2.) - pow(4.* PI, 2.)) / (2. * pow(w + 2. * PI, 2.) - pow(4.* PI,2.))),
+                sqrt((pow(w + 2. * PI, 2.) - pow(4.* PI, 2.)) / (2. * pow(w + 2. * PI, 2.) - pow(4.* PI, 2.))),
                 0,
-                (w + 2. * PI) / sqrt(2. * pow(w + 2. * PI, 2.) - pow(4.* PI,2.))
+                (w + 2. * PI) / sqrt(2. * pow(w + 2. * PI, 2.) - pow(4.* PI, 2.))
                 ));
                 len = 2. *  PI * sqrt(0.5 * pow(w / (2. * PI) + 1., 2.) - 1.);
             }
@@ -1028,8 +1201,7 @@ void tangDirection(Vector u, Vector v, out Vector tv, out float len){
     // overload of the previous function in case we work with tangent vectors
     tangDirection(u.pos, v.pos, tv, len);
 }
-
-
+*/
 
 // flow the given vector during time t using exact formulas
 // this method is to be called  by `flow`
@@ -2134,42 +2306,73 @@ Point modelProject(Point p){
 //----------------------------------------------------------------------------------------------------------------------
 // Lighting Functions
 //----------------------------------------------------------------------------------------------------------------------
-//SP - Sample Point | TLP - Translated Light Position | V - View Vector
-vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 lightIntensity){
+//SP - Sample Point | DTLP - Direction to the Translated Light Position | V - View Vector
+
+
+vec3 lightingCalculations(Point SP, Vector DTLP, float distToLight, Vector V, vec3 baseColor, vec4 lightIntensity){
     // Distance to the light
     // Small hack:
     // if the light is too far (and the related computations could create numerical erroe such as nan),
     // then we simply ignore it
-    float fakeDistToLight = fakeDist(SP, TLP);
 
-    if (fakeDistToLight < 1000.) {
-        //Calculations - Phong Reflection Model
-        Vector L;
-        float distToLight;
-        tangDirection(SP, TLP, L, distToLight);
-        Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
+    if (distToLight < 1000.) {
+        //this is tangent vector to the incomming light ray
+        Vector fromLight=turnAround(DTLP);
+        //now reflect it off the surfce
+        Vector reflectedRay = reflectOff(fromLight, N);
         //Calculate Diffuse Component
-        float nDotL = max(cosAng(N, L), 0.0);
+        float nDotL = max(cosAng(N, DTLP), 0.0);
         vec3 diffuse = lightIntensity.rgb * nDotL;
         //Calculate Specular Component
-        float rDotV = max(cosAng(R, V), 0.0);
-        vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
-        //Attenuation - Of the Light Intensity
-
+        float rDotV = max(cosAng(reflectedRay, V), 0.0);
+        vec3 specular = (0.5 * lightIntensity.rgb + vec3(0.5, 0.5, 0.5)) * pow(rDotV, 5.0);
+        //Attenuation - of the light intensity due to distance from source
         float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
-        //Compute final color
-
-        // DEBUGGING
+        //Combine the above terms to compute the final color
         return att*((diffuse*baseColor) + specular);
-        //return L.dir;
-        //return vec3(distToLight);
     }
     else {
         return vec3(0);
     }
-
-
 }
+
+
+//
+//vec3 lightingCalculations(Point SP, Point TLP, Vector V, vec3 baseColor, vec4 lightIntensity){
+//    // Distance to the light
+//    // Small hack:
+//    // if the light is too far (and the related computations could create numerical erroe such as nan),
+//    // then we simply ignore it
+//    float fakeDistToLight = fakeDist(SP, TLP);
+//
+//    if (fakeDistToLight < 1000.) {
+//        //Calculations - Phong Reflection Model
+//        Vector L;
+//        float distToLight;
+//        tangDirection(SP, TLP, L, distToLight);
+//        Vector R = sub(scalarMult(2.0 * cosAng(L, N), N), L);
+//        //Calculate Diffuse Component
+//        float nDotL = max(cosAng(N, L), 0.0);
+//        vec3 diffuse = lightIntensity.rgb * nDotL;
+//        //Calculate Specular Component
+//        float rDotV = max(cosAng(R, V), 0.0);
+//        vec3 specular = lightIntensity.rgb * pow(rDotV, 10.0);
+//        //Attenuation - Of the Light Intensity
+//
+//        float att = 0.6 * lightIntensity.w / (0.01 + lightAtt(distToLight));
+//        //Compute final color
+//
+//        // DEBUGGING
+//        return att*((diffuse*baseColor) + specular);
+//        //return L.dir;
+//        //return vec3(distToLight);
+//    }
+//    else {
+//        return vec3(0);
+//    }
+//
+//
+//}
 
 vec3 phongModel(Isometry totalFixIsom, vec3 color){
     Point SP = sampletv.pos;
@@ -2192,16 +2395,27 @@ vec3 phongModel(Isometry totalFixIsom, vec3 color){
     //GLOBAL LIGHTS THAT WE DONT ACTUALLY RENDER
 
 
+    int nbDir;// number of directions for the point to the light
+    Vector[MAX_DIRS_LIGHT] dirs;// directions from the point to the light
+    float[MAX_DIRS_LIGHT] lens;// length of the corresponding geodesics
+
+
     for (int i = 0; i<4; i++){
         Isometry totalIsom = composeIsometry(totalFixIsom, invCellBoost);
         TLP = translate(totalIsom, unserializePoint(lightPositions[i]));
-        color += lightingCalculations(SP, TLP, V, surfColor, lightIntensities[i]);
+        nbDir = directions(SP, TLP, 0, dirs, lens);
+        for (int k=0; k < nbDir; k ++) {
+            color += lightingCalculations(SP, dirs[k], lens[k], V, surfColor, lightIntensities[i]);
+        }
     }
 
 
     //LOCAL LIGHT
     //color += lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
-    color += 2. * lightingCalculations(SP, localLightPos, V, surfColor, localLightColor);
+    nbDir = directions(SP, localLightPos, 0, dirs, lens);
+    for (int k=0; k < nbDir; k ++) {
+        color += lightingCalculations(SP, dirs[k], lens[k], V, surfColor, localLightColor);
+    }
     //light color and intensity hard coded in
 
     /*
