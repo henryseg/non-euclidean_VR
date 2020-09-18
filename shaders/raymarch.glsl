@@ -13,8 +13,8 @@ Some parameters that can be changed to change the scence
 */
 
 //determine what we draw: ball and lights,
-const bool GLOBAL_SCENE=true;
-const bool TILING_SCENE=false;
+const bool GLOBAL_SCENE=false;
+const bool TILING_SCENE=true;
 const bool EARTH=false;
 
 //const bool TILING=false;
@@ -683,76 +683,124 @@ float fakeDist(Vector v1, Vector v2){
 // The geodesics joining to origin to the point with cylindrical coordiantes (rho, *,z)
 // are in one-to-one correspondance with the zeros of chi (see paper)
 // We assume that rho > 0, w0 >=0, and phi < 0
+// - rho is given as a vec4 with the following entries [cosh(rho/2), sinh(rho/2), cosh^2(rho/2), sinh^2(rho/2)]
+// - phi is given as a vec3 with the following entries [phi, tan(phi), tan^2(phi)]
 
-// CHECKED (with SageMath)
-float chi(float shRhoOver2SQ, float w, float phi) {
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
-    float tanPhi = tan(phi);
-    float tanPhiSQ = pow(tanPhi, 2.);
-    float aux;
+
+// Case of elliptic regime of the geodesic flow
+float chiElliptic(vec4 rhoVec, float w, vec3 phiVec) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
     float res = -0.5 * w + phi;
 
-    if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
-        // hyperbolic like geodesics
-        aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
-        res = res - 2. * tanPhi * atanh(aux) / aux;
+    float test = mod(phi + 0.5 * PI, PI);
+    if (test != 0.) {
+        float aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+        float eps = sign(tanPhi);
+        float n = floor(0.5 - phi / PI);
+        res = res  - 2. * tanPhi * (atan(aux) - eps * n * PI) / aux;
     }
-    else if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
-        // parabolic like geodesics
-        res = res - 2. * tanPhi;
+    else {
+        res = res - 2. * phi * chRhoOver2;
     }
-    else if (abs(tanPhi) > shRhoOver2){
-        // elliptic like geodesics
-        float test = mod(phi + 0.5 * PI, PI);
-        if (test != 0.) {
-            float eps = sign(tanPhi);
-            float m = floor(0.5 - phi / PI);
-            aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
-            res = res  - 2. * tanPhi * (atan(aux) - eps * m * PI) / aux;
-        }
-        else {
-            res = res - 2. * phi * chRhoOver2;
-        }
-    }
-
     return res;
 }
 
-// derivative with repsect to phi of the function chi
-// CHECKED (with SageMath)
-float dchi(float shRhoOver2SQ, float w, float phi) {
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
-    float tanPhi = tan(phi);
-    float tanPhiSQ = pow(tanPhi, 2.);
-    float aux;
-    float res;
+// Case of parabolic regime of the geodesic flow
+float chiParabolic(vec4 rhoVec, float w, vec3 phiVec) {
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    return -0.5 * w + phi - 2. * tanPhi;
+}
 
+
+// Case of hyperbolic regime of the geodesic flow
+float chiHyperbolic(vec4 rhoVec, float w, vec3 phiVec) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
+    float aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
+    return -0.5 * w + phi - 2. * tanPhi * atanh(aux) / aux;
+}
+
+
+// CHECKED (with SageMath)
+float chi(vec4 rhoVec, float w, vec3 phiVec) {
+    float shRhoOver2 = rhoVec[1];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
 
     if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
-        // hyperbolic like geodesics
-        aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
-        res = - 2. * (atanh(aux) / aux - 1.) * (1. / pow(aux, 2.) - 1.) * shRhoOver2SQ - 1.;
+        return chiHyperbolic(rhoVec, w, phiVec);
     }
-    else if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
-        // parabolic like geodesics
-        res = -(2. / 3.) * shRhoOver2SQ - 1.;
+    if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
+        return chiParabolic(rhoVec, w, phiVec);
     }
-    else if (abs(tanPhi) > shRhoOver2){
-        // elliptic like geodesics
-        float test = mod(phi + 0.5 * PI, PI);
-        if (test != 0.) {
-            float eps = sign(tanPhi);
-            float m = floor(0.5 - phi / PI);
-            aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
-            res = - 2. * (eps * m * PI / aux - atan(aux) / aux + 1.) * (1. / pow(aux, 2.) + 1.) * shRhoOver2SQ - 1.;
-        }
-        else {
-            res = - 2. * shRhoOver2SQ - 1.;
-        }
+    return chiElliptic(rhoVec, w, phiVec);
+}
+
+
+// derivative with repsect to phi of the function chi
+// CHECKED (with SageMath)
+
+// Case of elliptic regime of the geodesic flow
+float dchiElliptic(vec4 rhoVec, float w, vec3 phiVec) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
+    float res = -0.5 * w + phi;
+
+    float test = mod(phi + 0.5 * PI, PI);
+    if (test != 0.) {
+        float aux = sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2;
+        float eps = sign(tanPhi);
+        float n = floor(0.5 - phi / PI);
+        res = - 2. * (eps * n * PI / aux - atan(aux) / aux + 1.) * (1. / (aux * aux) + 1.) * shRhoOver2SQ - 1.;
+    }
+    else {
+        res = - 2. * shRhoOver2SQ - 1.;
     }
     return res;
+}
+
+float dchiParabolic(vec4 rhoVec, float w, vec3 phiVec) {
+    float shRhoOver2SQ = rhoVec[3];
+    return -(2. / 3.) * shRhoOver2SQ - 1.;
+}
+float dchiHyperbolic(vec4 rhoVec, float w, vec3 phiVec) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
+    float aux = sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2;
+    return - 2. * (atanh(aux) / aux - 1.) * (1. / (aux * aux) - 1.) * shRhoOver2SQ - 1.;
+}
+
+
+float dchi(vec4 rhoVec, float w, vec3 phiVec) {
+    float shRhoOver2 = rhoVec[1];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+
+    if (phi > - 0.5 * PI && tanPhi > - shRhoOver2) {
+        return dchiHyperbolic(rhoVec, w, phiVec);
+    }
+    if (phi > - 0.5 * PI && tanPhi == - shRhoOver2) {
+        return dchiParabolic(rhoVec, w, phiVec);
+    }
+    return dchiElliptic(rhoVec, w, phiVec);
 }
 
 // assume that a geodesic starting from the origin reach the point q
@@ -760,42 +808,62 @@ float dchi(float shRhoOver2SQ, float w, float phi) {
 // return the length of this geodesic
 // we assume that rho > 0, w > 0, and phi < 0
 // CHECKED (with SageMath)
-void _lengthFromPhi(float shRhoOver2SQ, float w, float phi, out float len) {
+// - rho is given as a vec4 with the following entries [cosh(rho/2), sinh(rho/2), cosh^2(rho/2), sinh^2(rho/2)]
+// - phi is given as a vec3 with the following entries [phi, tan(phi), tan^2(phi)]
 
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
 
-    float tanPhi = tan(phi);
-    float tanPhiSQ = pow(tanPhi, 2.);
+void _lengthFromPhiElliptic(vec4 rhoVec, float w, vec3 phiVec, out float len) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
 
-    float omega;
-    float omega2;
+    // omega = sqrt(c^2 - a^2)
+    float omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+    float omega = sqrt(omega2);
+    float eps = sign(tanPhi);
+    float m = floor(0.5 - phi / PI);
 
+    len = (2. / omega) *  (atan(-eps * sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) + m * PI);
+}
+
+void _lengthFromPhiParabolic(vec4 rhoVec, float w, vec3 phiVec, out float len) {
+    float shRhoOver2 = rhoVec[1];
+    len = 2. * sqrt2 * shRhoOver2;
+}
+
+void _lengthFromPhiHyperbolic(vec4 rhoVec, float w, vec3 phiVec, out float len) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
+
+    // omega = sqrt(a^2 - c^2)
+    float omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+    float omega = sqrt(omega2);
+
+    len = (2. / omega) * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2);
+}
+
+
+void _lengthFromPhi(vec4 rhoVec, float w, vec3 phiVec, out float len) {
+    float shRhoOver2 = rhoVec[1];
+    float tanPhi = phiVec[1];
 
     if (abs(tanPhi) < shRhoOver2) {
-        // hyperbolic type geodesic
-        // omega = sqrt(a^2 - c^2)
-        omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
-        omega = sqrt(omega2);
-
-        len = (2. / omega) * atanh(sqrt(shRhoOver2SQ - tanPhiSQ) / chRhoOver2);
-
+        _lengthFromPhiHyperbolic(rhoVec, w, phiVec, len);
+        return;
     }
-    else if (abs(tanPhi) == shRhoOver2) {
-        // parabolic type geodesic
-        len = 2. * sqrt2 * shRhoOver2;
+    if (abs(tanPhi) == shRhoOver2) {
+        _lengthFromPhiParabolic(rhoVec, w, phiVec, len);
+        return;
     }
-    else {
-        // elliptic type geodesic
-        // omega = sqrt(c^2 - a^2)
-        omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
-        omega = sqrt(omega2);
-        float eps = sign(tanPhi);
-        float m = floor(0.5 - phi / PI);
-
-        len = (2. / omega) *  (atan(-eps * sqrt(tanPhiSQ - shRhoOver2SQ) / chRhoOver2) + m * PI);
-    }
-
+    _lengthFromPhiElliptic(rhoVec, w, phiVec, len);
+    return;
 }
 
 // assume that a geodesic starting from the origin reach the point q
@@ -803,51 +871,81 @@ void _lengthFromPhi(float shRhoOver2SQ, float w, float phi, out float len) {
 // return the unit tangent vector of this geodesic and its length
 // we assume that rho > 0, w > 0 and phi < 0
 // CHECKED (with SageMath)
-void _dirLengthFromPhi(float shRhoOver2SQ, float theta, float w, float phi, out Vector tv, out float len) {
+// - rho is given as a vec4 with the following entries [cosh(rho/2), sinh(rho/2), cosh^2(rho/2), sinh^2(rho/2)]
+// - phi is given as a vec3 with the following entries [phi, tan(phi), tan^2(phi)]
 
-    float shRhoOver2 = sqrt(shRhoOver2SQ);
-    float chRhoOver2 = sqrt(1. + shRhoOver2SQ);
 
-    float tanPhi = tan(phi);
-    float tanPhiSQ = pow(tanPhi, 2.);
 
-    float omega;
-    float omega2;
-    float a;
-    float c;
+void _dirLengthFromPhiElliptic(vec4 rhoVec, float theta, float w, vec3 phiVec, out Vector tv, out float len) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
+
+    // omega = sqrt(c^2 - a^2)
+    float omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+    float omega = sqrt(omega2);
+    float eps = sign(tanPhi);
+    float m = floor(0.5 - phi / PI);
+
+    float a = sqrt(0.5 * (1. - omega2));
+    float c = sqrt(0.5 * (1. + omega2));
     float alpha = theta - phi;
-
-    if (abs(tanPhi) < shRhoOver2) {
-        // hyperbolic type geodesic
-        // omega = sqrt(a^2 - c^2)
-        omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
-        omega = sqrt(omega2);
-
-        a = sqrt(0.5 * (1. + omega2));
-        c = sqrt(0.5 * (1. - omega2));
-
-    }
-    else if (abs(tanPhi) == shRhoOver2) {
-        // parabolic type geodesic
-        a = 1. / sqrt2;
-        c = 1. / sqrt2;
-    }
-    else {
-        // elliptic type geodesic
-        // omega = sqrt(c^2 - a^2)
-        omega2 = (tanPhiSQ - shRhoOver2SQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
-        omega = sqrt(omega2);
-        float eps = sign(tanPhi);
-        float m = floor(0.5 - phi / PI);
-
-        a = sqrt(0.5 * (1. - omega2));
-        c = sqrt(0.5 * (1. + omega2));
-        if(sin(phi) > 0.) {
-            alpha = alpha + PI;
-        }
+    if (sin(phi) > 0.) {
+        alpha = alpha + PI;
     }
     len = 0.5 * (w - 2. * phi) / c;
     tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
+}
+
+
+void _dirLengthFromPhiParabolic(vec4 rhoVec, float theta, float w, vec3 phiVec, out Vector tv, out float len) {
+    float phi = phiVec[0];
+
+    float a = 1. / sqrt2;
+    float c = 1. / sqrt2;
+    float alpha = theta - phi;
+
+    len = 0.5 * (w - 2. * phi) / c;
+    tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
+}
+
+void _dirLengthFromPhiHyperbolic(vec4 rhoVec, float theta, float w, vec3 phiVec, out Vector tv, out float len) {
+    float chRhoOver2 = rhoVec[0];
+    float shRhoOver2 = rhoVec[1];
+    float shRhoOver2SQ = rhoVec[3];
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+    float tanPhiSQ = phiVec[2];
+
+    // omega = sqrt(a^2 - c^2)
+    float omega2 = (shRhoOver2SQ - tanPhiSQ) / ((2.* shRhoOver2SQ +1.) * tanPhiSQ + shRhoOver2SQ);
+    float omega = sqrt(omega2);
+
+    float a = sqrt(0.5 * (1. + omega2));
+    float c = sqrt(0.5 * (1. - omega2));
+    float alpha = theta - phi;
+    len = 0.5 * (w - 2. * phi) / c;
+    tv = Vector(ORIGIN, vec3(a * cos(alpha), a * sin(alpha), c));
+}
+
+
+void _dirLengthFromPhi(vec4 rhoVec, float theta, float w, vec3 phiVec, out Vector tv, out float len) {
+    float shRhoOver2 = rhoVec[1];
+    float tanPhi = phiVec[1];
+
+    if (abs(tanPhi) < shRhoOver2) {
+        _dirLengthFromPhiHyperbolic(rhoVec, theta, w, phiVec, tv, len);
+        return;
+    }
+    if (abs(tanPhi) == shRhoOver2) {
+        _dirLengthFromPhiParabolic(rhoVec, theta, w, phiVec, tv, len);
+        return;
+    }
+    _dirLengthFromPhiElliptic(rhoVec, theta, w, phiVec, tv, len);
+    return;
 }
 
 const int MAX_NEWTON_INIT_ITERATION = 100;
@@ -861,7 +959,7 @@ const float NEWTON_TOLERANCE = 0.000001;
 // * phiMin < phi < phiMax
 // * chi(phi) > 0
 // * dchi(phi) has the same as s
-float zero_chi_init(float shRhoOver2SQ, float w, float phiMin, float phiMax, float s) {
+vec3 zero_chi_init(vec4 rhoVec, float w, float phiMin, float phiMax, float s) {
     float bdy;
     if (s > 0.) {
         bdy = phiMax;
@@ -870,13 +968,18 @@ float zero_chi_init(float shRhoOver2SQ, float w, float phiMin, float phiMax, flo
         bdy = phiMin;
     }
     float aux = 0.5 * phiMin + 0.5 * phiMax;
+    float tanAux = tan(aux);
+    vec3 auxVec = vec3(aux, tanAux, tanAux * tanAux);
+
     for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){
-        if (sign(dchi(shRhoOver2SQ, w, aux)) == s && chi(shRhoOver2SQ, w, aux) > 0.) {
+        if (sign(dchi(rhoVec, w, auxVec)) == s && chi(rhoVec, w, auxVec) > 0.) {
             break;
         }
         aux = 0.5 * aux + 0.5 * bdy;
+        tanAux = tan(aux);
+        auxVec = vec3(aux, tanAux, tanAux * tanAux);
     }
-    return aux;
+    return auxVec;
 }
 
 
@@ -887,21 +990,26 @@ float zero_chi_init(float shRhoOver2SQ, float w, float phiMin, float phiMax, flo
 // Use the Newton method.
 // if such a zero is found return true and update the value of phi
 // otherwise return false
-bool zero_chi(float shRhoOver2SQ, float w, float phiMin, float phiMax, float s, out float phi) {
-    float aux = -1.;
-    phi = zero_chi_init(shRhoOver2SQ, w, phiMin, phiMax, s);
+bool zero_chi(vec4 rhoVec, float w, float phiMin, float phiMax, float s, out vec3 phiVec) {
+    vec3 auxVec = vec3(-1., -1., -1.);
+    phiVec = zero_chi_init(rhoVec, w, phiMin, phiMax, s);
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+
     for (int i=0; i < MAX_NEWTON_ITERATION; i++){
         // backup of the previous value of phi
-        aux = phi;
+        auxVec = phiVec;
         // new value of phi
-        phi = phi - chi(shRhoOver2SQ, w, phi) / dchi(shRhoOver2SQ, w, phi);
+        phi = phi - chi(rhoVec, w, phiVec) / dchi(rhoVec, w, phiVec);
+        tanPhi = tan(phi);
+        phiVec = vec3(phi, tanPhi, tanPhi * tanPhi);
         if (phi < phiMin || phi > phiMax) {
             return false;
         }
-        if (sign(dchi(shRhoOver2SQ, w, phi)) != s) {
+        if (sign(dchi(rhoVec, w, phiVec)) != s) {
             return false;
         }
-        if (abs(phi - aux) < NEWTON_TOLERANCE) {
+        if (abs(phi - auxVec[0]) < NEWTON_TOLERANCE) {
             return true;
         }
     }
@@ -909,6 +1017,72 @@ bool zero_chi(float shRhoOver2SQ, float w, float phiMin, float phiMax, float s, 
 }
 
 
+
+// SAME AS BEFORE IN RESTRICTION TO THE ELLIPTIC MODE
+// (hopefully more efficient for second geodesics and beyond)
+// initialization of the Newthon method to find the zeros of chi
+// we look for a value of phi such that
+// * phiMin < phi < phiMax
+// * chi(phi) > 0
+// * dchi(phi) has the same as s
+vec3 zero_chi_elliptic_init(vec4 rhoVec, float w, float phiMin, float phiMax, float s) {
+    float bdy;
+    if (s > 0.) {
+        bdy = phiMax;
+    }
+    else {
+        bdy = phiMin;
+    }
+    float aux = 0.5 * phiMin + 0.5 * phiMax;
+    float tanAux = tan(aux);
+    vec3 auxVec = vec3(aux, tanAux, tanAux * tanAux);
+
+    for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){
+        if (sign(dchiElliptic(rhoVec, w, auxVec)) == s && chiElliptic(rhoVec, w, auxVec) > 0.) {
+            break;
+        }
+        aux = 0.5 * aux + 0.5 * bdy;
+        tanAux = tan(aux);
+        auxVec = vec3(aux, tanAux, tanAux * tanAux);
+    }
+    return auxVec;
+}
+
+
+// SAME AS BEFORE IN RESTRICTION TO THE ELLIPTIC MODE
+// (hopefully more efficient for second geodesics and beyond)
+// find a zero phi of chi such that
+// * phiMin < phi < phiMax
+// * chi(phi) = 0 (of course !)
+// * dchi(phi) has the same as s
+// Use the Newton method.
+// if such a zero is found return true and update the value of phi
+// otherwise return false
+bool zero_chi_elliptic(vec4 rhoVec, float w, float phiMin, float phiMax, float s, out vec3 phiVec) {
+    vec3 auxVec = vec3(-1., -1., -1.);
+    phiVec = zero_chi_elliptic_init(rhoVec, w, phiMin, phiMax, s);
+    float phi = phiVec[0];
+    float tanPhi = phiVec[1];
+
+    for (int i=0; i < MAX_NEWTON_ITERATION; i++){
+        // backup of the previous value of phi
+        auxVec = phiVec;
+        // new value of phi
+        phi = phi - chiElliptic(rhoVec, w, phiVec) / dchiElliptic(rhoVec, w, phiVec);
+        tanPhi = tan(phi);
+        phiVec = vec3(phi, tanPhi, tanPhi * tanPhi);
+        if (phi < phiMin || phi > phiMax) {
+            return false;
+        }
+        if (sign(dchiElliptic(rhoVec, w, phiVec)) != s) {
+            return false;
+        }
+        if (abs(phi - auxVec[0]) < NEWTON_TOLERANCE) {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 float _exactDistToOrign(Point p) {
@@ -920,7 +1094,9 @@ float _exactDistToOrign(Point p) {
         paux = p;
     }
     float w = paux.fiber;
+    float chRhoOver2SQ = paux.proj.x * paux.proj.x + paux.proj.y * paux.proj.y;
     float shRhoOver2SQ = paux.proj.z * paux.proj.z + paux.proj.w * paux.proj.w;
+    vec4 rhoVec = vec4(sqrt(chRhoOver2SQ), sqrt(shRhoOver2SQ), chRhoOver2SQ, shRhoOver2SQ);
     if (shRhoOver2SQ == 0.){
         // points on the fiber axis
         if (w < 2. * PI) {
@@ -931,22 +1107,22 @@ float _exactDistToOrign(Point p) {
             // (see the difference in the next formula)
             // use an asymptotic expansion around 2 * PI of the next formula
             float res = w;
-            res = res - pow(w - 2. * PI, 2.) / (8. * PI);
-            res = res + pow(w - 2. * PI, 3.) / (16. * PI * PI);
+            res = res - (w - 2. * PI)  * (w - 2. * PI)/ (8. * PI);
+            res = res + (w - 2. * PI) * (w - 2. * PI) * (w - 2. * PI) / (16. * PI * PI);
             return res;
         }
         else {
-            return 2. *  PI * sqrt(0.5 * pow(w / (2. * PI) + 1., 2.) - 1.);
+            return 2. *  PI * sqrt(0.5 * (w / (2. * PI) + 1.) * (w / (2. * PI) + 1.) - 1.);
         }
     }
     else {
         // generic point
-        float phi;
+        vec3 phiVec;
         float phiMax = 0.;
         float phiMin = atan(sqrt(shRhoOver2SQ)) - PI;
-        zero_chi(shRhoOver2SQ, w, phiMin, phiMax, -1., phi);
+        zero_chi(rhoVec, w, phiMin, phiMax, -1., phiVec);
         float length;
-        _lengthFromPhi(shRhoOver2SQ, w, phi, length);
+        _lengthFromPhi(rhoVec, w, phiVec, length);
         return length;
     }
 }
@@ -1031,7 +1207,9 @@ int _dirFromOriginFiber(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, ou
 // we return at most maxDir directions
 // we assume that rho > 0  and w > 0
 int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, out float[MAX_DIRS_LIGHT] lens){
+    float chRhoOver2SQ = q.proj.x * q.proj.x + q.proj.y * q.proj.y;
     float shRhoOver2SQ = q.proj.z * q.proj.z + q.proj.w * q.proj.w;
+    vec4 rhoVec = vec4(sqrt(chRhoOver2SQ), sqrt(shRhoOver2SQ), chRhoOver2SQ, shRhoOver2SQ);
     float w = q.fiber;
     vec3 aux = SLtoH2(q.proj);
     float theta = atan(aux.y, aux.x);
@@ -1041,35 +1219,38 @@ int _dirFromOriginGeneric(Point q, int maxDir, out Vector[MAX_DIRS_LIGHT] dirs, 
     // declaring more variables
     Vector dir;
     float len;
-    float phi;
+    vec3 phiVec;
     bool check;
 
     float phiMin;
     float phiMax;
     float s;
 
+    // find the shortest geodesic
+    phiMin = phi0 - PI;
+    phiMax = 0.;
+    s = -1.;
+    check = zero_chi(rhoVec, w, phiMin, phiMax, s, phiVec);
+    _dirLengthFromPhi(rhoVec, theta, w, phiVec, dir, len);
+    dirs[0] = dir;
+    lens[0] = len;
+    count++;
 
+    // for the other geodesics use only the elliptic regime of chi
     // loop over the number of desired directions
-    for (int k=0; k < maxDir; k++) {
-        if(k==0) {
-            phiMin = phi0 - PI;
-            phiMax = 0.;
-        }
-        else {
-            float auxPi = PI * floor(float((k+1)/2));
-            phiMin = phi0 - auxPi - PI;
-            phiMax = -phi0 - auxPi;
-        }
-
+    for (int k=1; k < maxDir; k++) {
+        float auxPi = PI * floor(float((k+1)/2));
+        phiMin = phi0 - auxPi - PI;
+        phiMax = -phi0 - auxPi;
         s = -1.;
         for (int i=0; i < k; i++) {
             s = -1. * s;
         }
-        check = zero_chi(shRhoOver2SQ, w, phiMin, phiMax, s, phi);
+        check = zero_chi_elliptic(rhoVec, w, phiMin, phiMax, s, phiVec);
         if (!check) {
             break;
         }
-        _dirLengthFromPhi(shRhoOver2SQ, theta, w, phi, dir, len);
+        _dirLengthFromPhi(rhoVec, theta, w, phiVec, dir, len);
         dirs[k] = dir;
         lens[k] = len;
         count++;
@@ -1139,69 +1320,6 @@ void direction(Vector u, Vector v, out Vector dir, out float len){
     direction(u.pos, v.pos, dir, len);
 }
 
-/*
-void tangDirection(Point p, Point q, out Vector tv, out float len){
-    // return the unit tangent to geodesic connecting p to q.
-    // if FAKE_LIGHT is true, use the Euclidean metric for the computation (straight lines).
-    Vector resOrigin;
-    // isometry moving back p to the origin
-    Isometry shift = makeInvLeftTranslation(p);
-    // translation of q at the origin
-    Point qAtOrigin = translate(shift, q);
-
-    if (FAKE_LIGHT) {
-        vec4 aux = toVec4(qAtOrigin);
-        resOrigin = Vector(ORIGIN, aux.xyw);
-        resOrigin = tangNormalize(resOrigin);
-        len = _fakeDistToOrigin(qAtOrigin);
-    }
-    else {
-        bool flipped = false;
-        // if needed we flip the point qOrigin so that its z-coordinates is positive.
-        if (qAtOrigin.fiber < 0.) {
-            flipped = true;
-            qAtOrigin = flip(qAtOrigin);
-        }
-
-        float shRhoOver2SQ = pow(qAtOrigin.proj.z, 2.) + pow(qAtOrigin.proj.w, 2.);
-        float w = qAtOrigin.fiber;
-
-        if (shRhoOver2SQ == 0.){
-            if (w < 2. * PI){
-                resOrigin = Vector(ORIGIN, vec3(0, 0, 1));
-                len = w;
-            }
-            else {
-                resOrigin = Vector(ORIGIN, vec3(
-                sqrt((pow(w + 2. * PI, 2.) - pow(4.* PI, 2.)) / (2. * pow(w + 2. * PI, 2.) - pow(4.* PI, 2.))),
-                0,
-                (w + 2. * PI) / sqrt(2. * pow(w + 2. * PI, 2.) - pow(4.* PI, 2.))
-                ));
-                len = 2. *  PI * sqrt(0.5 * pow(w / (2. * PI) + 1., 2.) - 1.);
-            }
-        }
-        else {
-            vec3 aux = SLtoH2(qAtOrigin.proj);
-            float theta = atan(aux.y, aux.x);
-            float phi = zero_height(shRhoOver2SQ, w);
-            _dirLengthFromPhi(shRhoOver2SQ, theta, w, phi, resOrigin, len);
-        }
-
-        if (flipped) {
-            resOrigin = flip(resOrigin);
-        }
-
-    }
-
-    // move back to p
-    tv =  Vector(p, resOrigin.dir);
-}
-
-void tangDirection(Vector u, Vector v, out Vector tv, out float len){
-    // overload of the previous function in case we work with tangent vectors
-    tangDirection(u.pos, v.pos, tv, len);
-}
-*/
 
 // flow the given vector during time t using exact formulas
 // this method is to be called  by `flow`
@@ -1571,7 +1689,7 @@ float localSceneSDF(Point p){
     }
 
     // Sphere
-    /*
+
     float aux = 0.;
     Point center = fromVec4(vec4(0., aux, sqrt(1. + aux * aux), 0));
     sphDist = sphereSDF(p, center, 0.1);
@@ -1580,10 +1698,11 @@ float localSceneSDF(Point p){
         hitWhich = 3;
         return sphDist;
     }
-    */
+
 
 
     // Tiling
+/*
 
     tilingDist = -ellipsoidSDF(p, 0.9, 2.5);
     //tilingDist = -sphereSDF(p, ORIGIN, PI+0.2);
@@ -1592,6 +1711,7 @@ float localSceneSDF(Point p){
         hitWhich=3;
         return tilingDist;
     }
+*/
 
 
     // Cylinders
@@ -1949,13 +2069,11 @@ bool isOutsideCellSurface(Point p, out Isometry fixIsom){
 }
 
 
-
-
 bool isOutsideCell(Point p, out Isometry fixIsom){
     //return isOutsideCellModular(p, fixIsom);
     //return isOutsideCellSquare(p, fixIsom);
-    //return isOutsideCellFiber(p, fixIsom);
-    return isOutsideCellSurface(p, fixIsom);
+    return isOutsideCellFiber(p, fixIsom);
+    //return isOutsideCellSurface(p, fixIsom);
 }
 
 // overload of the previous method with tangent vector
