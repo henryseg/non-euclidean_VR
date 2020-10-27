@@ -29,60 +29,60 @@ import {
 function fixOutsideCentralCell(position) {
 
     let bestIndex = -1;
-    //    let p = new Point().translateBy(position.boost);
-    //    let klein = p.toKlein();
-    //
-    //
-    //    const sqrt2 = Math.sqrt(2);
-    //    const auxSurfaceM = Math.sqrt(sqrt2 - 1.);
-    //    const threshold = sqrt2 * auxSurfaceM;
-    //
-    //    let nh = new Vector4().set(1, 0, 0, 0);
-    //    let nv = new Vector4().set(0, 1, 0, 0);
-    //    let nd1 = new Vector4().set(0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
-    //    let nd2 = new Vector4().set(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
-    //    let nfiber = new Vector4().set(0, 0, 0, 1);
-    //
-    //
-    //
-    //    if (klein.dot(nh) > threshold) {
-    //        bestIndex = 1;
-    //    }
-    //    if (klein.dot(nd1) > threshold) {
-    //        bestIndex = 5;
-    //    }
-    //    if (klein.dot(nv) > threshold) {
-    //        bestIndex = 0;
-    //    }
-    //    if (klein.dot(nd2) > threshold) {
-    //        bestIndex = 4;
-    //    }
-    //    if (klein.dot(nh) < -threshold) {
-    //        bestIndex = 3;
-    //    }
-    //    if (klein.dot(nd1) < -threshold) {
-    //        bestIndex = 7;
-    //    }
-    //    if (klein.dot(nv) < -threshold) {
-    //        bestIndex = 2;
-    //    }
-    //    if (klein.dot(nd2) < -threshold) {
-    //        bestIndex = 6;
-    //    }
-    //    if (klein.dot(nfiber) > Math.PI) {
-    //        bestIndex = 9;
-    //    }
-    //    if (klein.dot(nfiber) < -Math.PI) {
-    //        bestIndex = 8;
-    //    }
-    //
-    //
-    //    if (bestIndex !== -1) {
-    //        position.translateBy(globals.gens[bestIndex]);
-    //        return bestIndex;
-    //    } else {
-    return -1;
-    // }
+    let p = new Point().translateBy(position.boost);
+    let klein = p.toKlein();
+
+
+    const sqrt2 = Math.sqrt(2);
+    const auxSurfaceM = Math.sqrt(sqrt2 - 1.);
+    const threshold = sqrt2 * auxSurfaceM;
+
+    let nh = new Vector4().set(1, 0, 0, 0);
+    let nv = new Vector4().set(0, 1, 0, 0);
+    let nd1 = new Vector4().set(0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+    let nd2 = new Vector4().set(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+    let nfiber = new Vector4().set(0, 0, 0, 1);
+
+
+
+    if (klein.dot(nh) > threshold) {
+        bestIndex = 1;
+    }
+    if (klein.dot(nd1) > threshold) {
+        bestIndex = 5;
+    }
+    if (klein.dot(nv) > threshold) {
+        bestIndex = 0;
+    }
+    if (klein.dot(nd2) > threshold) {
+        bestIndex = 4;
+    }
+    if (klein.dot(nh) < -threshold) {
+        bestIndex = 3;
+    }
+    if (klein.dot(nd1) < -threshold) {
+        bestIndex = 7;
+    }
+    if (klein.dot(nv) < -threshold) {
+        bestIndex = 2;
+    }
+    if (klein.dot(nd2) < -threshold) {
+        bestIndex = 6;
+    }
+    if (klein.dot(nfiber) > Math.PI) {
+        bestIndex = 9;
+    }
+    if (klein.dot(nfiber) < -Math.PI) {
+        bestIndex = 8;
+    }
+
+
+    if (bestIndex !== -1) {
+        position.translateBy(globals.gens[bestIndex]);
+        return bestIndex;
+    } else {
+        return -1;
+    }
 }
 
 
