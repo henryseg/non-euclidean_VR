@@ -4,7 +4,7 @@
 <head>
     <!-- Basic Page Needs –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
-    <title>Hyperbolic Raymarching</title>
+    <title>SL(2,R) Raymarching</title>
     <!-- Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <!-- Style –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -22,28 +22,34 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 
-<body>
+<!--<body>
     <img id="vr-icon" src="images/vr-icon.png" height="50px" style="
         position: fixed;
         bottom: 30px;
         right: 50px;
         display: block;" />
-</body>
+</body>-->
+
+<!-- Vertex Shader
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<script type="x-shader/x-vertex" id="vertexShader">
+    #version 300 es
+
+  void main()
+  {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
 
 <!-- Libraries ––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script src="js/lib/three.min.js"></script>
+
+<script src="js/lib/dat.gui.min.js"></script>
+<script src="js/lib/math.min.js"></script>
+<script src="js/lib/WebGL.js"></script>
 <script src="js/lib/stats.min.js"></script>
-<!-- Post Processing ----------------------------------------- -->
-<script src="js/lib/EffectComposer.js"></script>
-<script src="js/lib/ShaderPass.js"></script>
-<script src="js/lib/RenderPass.js"></script>
-<script src="js/lib/CopyShader.js"></script>
-<!-- Post Processing Shaders --------------------------------- -->
-<script src="shaders/ray.js"></script>
-<!-- Main Scripts -------------------------------------------- -->
-<script src="js/Math.js"></script>
-<script src="js/Events.js"></script>
-<script src="js/Controls.js"></script>
-<script src="js/Main.js" id="mainCode"></script>
+
+
+<script src="js/Main.js" type="module" id="mainCode"></script>
 
 </html>
