@@ -71,6 +71,19 @@ float ellipsoidSDF(Point p, float radius, float wRescale){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 float halfSpace(Point p){
     float X=toVec4(p).x;
    // float X=toKlein(p).x;
