@@ -24,7 +24,7 @@ let initGui = function () {
         //        ipDist: 0.03200000151991844,
         //        stereoScreenOffset: globals.stereoScreenOffset,
         keyboard: 'us',
-        display: 1,
+        display: 2,
         res: 1,
         lightRad: 0.02
     };

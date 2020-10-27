@@ -26,8 +26,25 @@ float localSceneSDF(Point p){
     switch(display){
             
         case 1://ConeTorus
-           // tilingDist = -ellipsoidSDF(p, 0.5, 4.);
-            tilingDist = sphereSDF(p, ORIGIN, 0.2);
+            
+//        
+//    Point pt0=fromVec4(vec4(0, 0, 0, 0.));
+//    Point pt1=fromVec4(vec4(0, 0, 0, 3.14/2.));
+//    Point pt2=fromVec4(vec4(0, 0, 0, 3.14/2.));
+//    
+//   float  tdistance=sphereSDF(p,pt0,2.25);
+//   tdistance=min(tdistance,sphereSDF(p,pt1,2.));
+//    tdistance=min(tdistance,sphereSDF(p,pt2,2.));
+//    
+//   // tdistance=min(distance,cylSDF(p,1.5));
+//    tdistance=-tdistance;
+//    
+            
+//            tilingDist=-tdistance;
+            
+            
+            tilingDist = -ellipsoidSDF(p, 0.5, 4.);
+            //tilingDist = sphereSDF(p, ORIGIN, 0.2);
        
             if (tilingDist < EPSILON){
                 isLocal=true;
@@ -64,24 +81,24 @@ float localSceneSDF(Point p){
         
             
 //                //two spheres translated up and down:
-//    Point pt0=fromVec4(vec4(0, 0, 0, 0.));
-//    Point pt1=fromVec4(vec4(0, 0, 0, 3.14/2.));
-//    Point pt2=fromVec4(vec4(0, 0, 0, 3.14/2.));
-//    
-//   float  tdistance=sphereSDF(p,pt0,2.25);
-//   tdistance=min(tdistance,sphereSDF(p,pt1,2.));
-//    tdistance=min(tdistance,sphereSDF(p,pt2,2.));
-//    
-//   // tdistance=min(distance,cylSDF(p,1.5));
-//    tdistance=-tdistance;
-//    
-//            
-//            tilingDist=-tdistance;
+    Point pt0=fromVec4(vec4(0, 0, 0, 0.));
+    Point pt1=fromVec4(vec4(0, 0, 0, 3.14/2.));
+    Point pt2=fromVec4(vec4(0, 0, 0, 3.14/2.));
+    
+   float  tdistance=sphereSDF(p,pt0,2.25);
+   tdistance=min(tdistance,sphereSDF(p,pt1,2.));
+    tdistance=min(tdistance,sphereSDF(p,pt2,2.));
+    
+   // tdistance=min(distance,cylSDF(p,1.5));
+    tdistance=-tdistance;
+    
+            
+            tilingDist=-tdistance;
             
             
             
             //comment this line out when you add the above;
-            tilingDist = -ellipsoidSDF(p, 0.5, 4.);
+            //tilingDist = -ellipsoidSDF(p, 0.5, 4.);
        
             if (tilingDist < EPSILON){
                 isLocal=true;
