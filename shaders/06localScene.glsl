@@ -9,96 +9,80 @@ int planeNumber;
 
 float localSceneSDF(Point p){
     float sphDist;
-    float tilingDist;
-    float cylDist;
-    float lightDist;
+//    float tilingDist;
+//    float cylDist;
+//    float lightDist;
     float distance = MAX_DIST;
+    
+    //in addition to the central sphere, how many levels above and below are cut out of a single fundamental domain?
+    int level;
+   int numSpheres;
+    
+    float sphereSep;
+    float sphereRad;
+    float cylDist;
 
-////
-//  if(planes==1){
-//      
-//      distance=halfSpace(p);
-//     distance= halfSpace2(p);
-//    if(distance<EPSILON){
-//        hitWhich=3;
-//        planeNumber=2;
-//        return distance;
-//    }
-//    
-//    distance=min(distance,halfSpace3(p));
-//        if(distance<EPSILON){
-//        hitWhich=3;
-//        planeNumber=3;
-//        return distance;
-//    }
-//      
-//      return distance;
-//      
-//  }  
-//    
-//      if(planes==2){
-//      
-//      distance=halfSpace(p);
-//     distance= halfSpace2(p);
-//    if(distance<EPSILON){
-//        hitWhich=3;
-//        planeNumber=2;
-//        return distance;
-//    }
-//
-//      
-//      return distance;
-//      
-//  }  
-//    
-//      if(planes==3){
-//      
-//    
-//    distance=min(distance,halfSpace3(p));
-//        if(distance<EPSILON){
-//        hitWhich=3;
-//        planeNumber=3;
-//        return distance;
-//    }
-//      
-//      return distance;
-//      
-//  }  
+    Point pt;
     
     
+//SETTING THE PARAMETERS DEPENDING ON THE SPACE:
+    
+ if(display==1){//the genus 2 surface group
+    level=1;
+    numSpheres=2*level+1;
+    sphereSep=2.*PI/float(numSpheres);
+     
+    sphereRad=sphereSep/2.+0.67;
+     
+    //no cylinder
+    //cylDist=1000.;
+   
+     
+ }
+    
+    if(display==2){//the sphere with cone points:
+    level=2;
+    numSpheres=2*level+1;
+    sphereSep=2.*PI/float(numSpheres);
+        
+    sphereRad=sphereSep/2.+0.2;
+    
+    //only need a cylinder if sphere rad is less than sphereSep/2.
+    //cylDist=cylSDF(p,0.5);
+  }  
+
+  
+    //remove the central sphere;
+    pt=fromVec4(vec4(0, 0, 0, 0.));
+    distance=sphereSDF(p,pt,sphereRad);
+    
+    numSpheres=2*level+1;
+    
+    for(int i=1;i<level+1;i++){
+        //remove the other levels of spheres:
+        
+        //level in positive direction
+        pt=fromVec4(vec4(0, 0, 0, float(i)*sphereSep));
+        sphDist=sphereSDF(p,pt,sphereRad);
+        distance=min(distance,sphDist);
+        
+        //level in negative direction:
+        pt=fromVec4(vec4(0, 0, 0, -float(i)*sphereSep));
+        sphDist=sphereSDF(p,pt,sphereRad);
+        distance=min(distance,sphDist);
+        
+    }
 
     
-    //two spheres translated up and down:
-    Point pt0=Point(vec4(1, 0, 0, 0), 0.);
-    Point pt1=Point(vec4(1, 0, 0, 0),6.28/9.);
-    Point pt2=Point(vec4(1, 0, 0, 0), 6.28/9.);
-    Point pt3=Point(vec4(1, 0, 0, 0), 2.*6.28/9.);
-    Point pt4=Point(vec4(1, 0, 0, 0), -2.*6.28/9.);
-        Point pt5=Point(vec4(1, 0, 0, 0), 3.*6.28/9.);
-    Point pt6=Point(vec4(1, 0, 0, 0), -3.*6.28/9.);
-            Point pt7=Point(vec4(1, 0, 0, 0), 4.*6.28/9.);
-    Point pt8=Point(vec4(1, 0, 0, 0), -4.*6.28/9.);
+    //if you needed to remove a cylinder do this
+    //distance=min(distance,cylDist);
     
-    distance=sphereSDF(p,pt0,2.25);
-   distance=min(distance,sphereSDF(p,pt1,2.));
-    distance=min(distance,sphereSDF(p,pt2,2.));
-    distance=min(distance,sphereSDF(p,pt3,2.));
-       distance=min(distance,sphereSDF(p,pt4,2.));
-        distance=min(distance,sphereSDF(p,pt5,2.));
-       distance=min(distance,sphereSDF(p,pt6,2.));
-            distance=min(distance,sphereSDF(p,pt7,2.));
-       distance=min(distance,sphereSDF(p,pt8,2.));
-    
-    
-    distance=min(distance,cylSDF(p,1.5));
+    //take the complement to draw the tiling
     distance=-distance;
     
-    //NON-PLANE THINGS
-  // distance= -ellipsoidSDF(p, 0.9, 2.5);
-    //distance=sphereSDF(p,ORIGIN,1.);
+
         if(distance<EPSILON){
-        hitWhich=3;
-        planeNumber=3;
+        hitWhich=3;//coloring choice
         return distance;
     }
 

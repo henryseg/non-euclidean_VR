@@ -52,15 +52,15 @@ void main(){
     
     setVariables();
     
-    generators(display,gens);
+   // generators(display,gens);
     
-    setResolution(resol);
     
     Vector rayDir=setRayDir();
     
     
 //do the first raymarch and get the color
     vec3 pixelColor=getPixelColor(rayDir);
+    pixelColor=pow(pixelColor,vec3(1./2.2));
    
     out_FragColor=vec4(pixelColor,1.);
     

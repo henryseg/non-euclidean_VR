@@ -200,7 +200,7 @@ function setupMaterial(fShader) {
 
 
             // ----- uniforms for rendering the scene -----
-            resol: {
+            colorScheme: {
                 type: "int",
                 value: globals.res
             },
@@ -244,9 +244,11 @@ function updateMaterial() {
     //
     globals.material.uniforms.time.value = (new Date().getTime()) - time0;
     //
-    //    // globals.material.uniforms.display.value = globals.display;
-    //    globals.material.uniforms.resol.value = globals.res;
-    //    // globals.material.uniforms.lightRad.value = globals.lightRad;
+    globals.material.uniforms.display.value = globals.display;
+
+    globals.material.uniforms.colorScheme.value = globals.res;
+    //    globals.material.uniforms.lightRad.value = globals.lightRad;
+    globals.material.uniforms.foggy.value = globals.foggy;
 }
 
 

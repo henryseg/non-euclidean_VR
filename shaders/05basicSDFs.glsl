@@ -1,15 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// LIGHT
-////----------------------------------------------------------------------------------------------------------------------
-////light intensity as a fn of distance
-//float lightAtt(float dist){
-//    if (FAKE_LIGHT_FALLOFF){
-//        //fake linear falloff
-//        return dist;
-//    }
-//    return dist*dist;
-//}
-
 
 //----------------------------------------------------------------------------------------------------------------------
 // Raymarch Primitives
@@ -68,16 +56,6 @@ float ellipsoidSDF(Point p, float radius, float wRescale){
     float dist = 0.5 * sqrt(pow(acosh(fix), 2.) + pow(aux.w / wRescale, 2.));
     return dist - radius;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

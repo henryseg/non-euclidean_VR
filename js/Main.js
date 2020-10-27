@@ -18,7 +18,8 @@ import {
 
 import {
     initGui,
-    guiInfo
+    guiInfo,
+    capturer
 } from "./UI.js";
 import {
     initEvents,
