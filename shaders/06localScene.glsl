@@ -8,21 +8,22 @@
 int planeNumber;
 
 float localSceneSDF(Point p){
-    float sphDist;
-//    float tilingDist;
-//    float cylDist;
-//    float lightDist;
-    float distance = MAX_DIST;
-    
+
+    float tilingDist;
+    float earthDist;
+
     //in addition to the central sphere, how many levels above and below are cut out of a single fundamental domain?
     int level;
-   int numSpheres;
+    int numSpheres;
     
     float sphereSep;
     float sphereRad;
+    float earthRad;
+    
     float cylDist;
-
     Point pt;
+    
+float fiberCoord;
     
     
 //SETTING THE PARAMETERS DEPENDING ON THE SPACE:
@@ -33,7 +34,7 @@ float localSceneSDF(Point p){
     sphereSep=2.*PI/float(numSpheres);
      
     sphereRad=sphereSep/2.+0.67;
-     
+    earthRad=0.5;
     //no cylinder
     //cylDist=1000.;
    
@@ -46,7 +47,7 @@ float localSceneSDF(Point p){
     sphereSep=2.*PI/float(numSpheres);
         
     sphereRad=sphereSep/2.+0.2;
-    
+    earthRad=0.3;
     //only need a cylinder if sphere rad is less than sphereSep/2.
     //cylDist=cylSDF(p,0.5);
   }  
@@ -54,22 +55,54 @@ float localSceneSDF(Point p){
   
     //remove the central sphere;
     pt=fromVec4(vec4(0, 0, 0, 0.));
-    distance=sphereSDF(p,pt,sphereRad);
+    tilingDist=sphereSDF(p,pt,sphereRad);
+    earthDist=sphereSDF(p,pt,earthRad);
+    
+    //check if we hit this earth, so we know the fiber height
+    if(earthDist<EPSILON){
+        fiberHeight=0.;
+        hitWhich=2;
+        return earthDist;
+    }
+    
+    
     
     numSpheres=2*level+1;
     
     for(int i=1;i<level+1;i++){
         //remove the other levels of spheres:
+        fiberCoord= float(i)*sphereSep;
         
         //level in positive direction
-        pt=fromVec4(vec4(0, 0, 0, float(i)*sphereSep));
-        sphDist=sphereSDF(p,pt,sphereRad);
-        distance=min(distance,sphDist);
+        pt=fromVec4(vec4(0, 0, 0, fiberCoord));
+        
+        earthDist=min(earthDist,sphereSDF(p,pt,earthRad));
+        //check if we hit this earth, so we know the fiber height
+    if(earthDist<EPSILON){
+        fiberHeight=fiberCoord;
+        hitWhich=2;
+        return earthDist;
+    }
+        
+        //take care of tiling sphere at same height
+        tilingDist=min(tilingDist,sphereSDF(p,pt,sphereRad));
+        
+        
         
         //level in negative direction:
-        pt=fromVec4(vec4(0, 0, 0, -float(i)*sphereSep));
-        sphDist=sphereSDF(p,pt,sphereRad);
-        distance=min(distance,sphDist);
+        pt=fromVec4(vec4(0, 0, 0, -fiberCoord));
+        
+        earthDist=min(earthDist,sphereSDF(p,pt,earthRad));
+               //check if we hit this earth, so we know the fiber height
+            if(earthDist<EPSILON){
+        fiberHeight=-fiberCoord;
+        hitWhich=2;
+        return earthDist;
+    }
+        
+        
+        //take care of tiling sphere at same height
+        tilingDist=min(tilingDist,sphereSDF(p,pt,sphereRad));
         
     }
 
@@ -78,13 +111,13 @@ float localSceneSDF(Point p){
     //distance=min(distance,cylDist);
     
     //take the complement to draw the tiling
-    distance=-distance;
+    tilingDist=-tilingDist;
+    
+        if(tilingDist<EPSILON){
+        hitWhich=3;//coloring choice
+        return tilingDist;
+    }
     
 
-        if(distance<EPSILON){
-        hitWhich=3;//coloring choice
-        return distance;
-    }
-
-   return distance;
+   return min(tilingDist,earthDist);
 }

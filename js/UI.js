@@ -21,7 +21,7 @@ let initGui = function () {
         //        },
         toggleUI: true,
         keyboard: 'us',
-        display: 1,
+        display: 2,
         //planes: 1,
         res: 2,
         lightRad: 0.5,
@@ -41,7 +41,7 @@ let initGui = function () {
 
     let resController = gui.add(guiInfo, 'res', {
         Pastel: '1',
-        Golden: '2',
+        BlueGreen: '2',
         //        High: '3'
     });
 

@@ -11,14 +11,11 @@ Some parameters that can be changed to change the scence
 //determine what we draw: ball and lights,
 const bool GLOBAL_SCENE=false;
 const bool TILING_SCENE=true;
-const bool EARTH=false;
 
 
-
+//const bool EARTH=true;
 const bool FAKE_LIGHT_FALLOFF=false;
 const bool FAKE_LIGHT = false;
-
-
 //const float globalObjectRadius = 0.4;
 //const float centerSphereRadius =0.67;
 //const float modelHalfCube = 0.5;
@@ -72,6 +69,8 @@ int hitWhich = 0;
 bool isLocal=true;
 
 
+//record the height of the earth we hit
+float fiberHeight;
 
 
 
@@ -81,7 +80,7 @@ bool isLocal=true;
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
 //----------------------------------------------------------------------------------------------------------------------
-Vector N;//normal vector
+//Vector N;//normal vector
 Vector sampletv;
 vec4 globalLightColor;
 Isometry currentBoost;
@@ -91,9 +90,9 @@ Isometry cellBoost;
 Isometry invCellBoost;
 Isometry globalObjectBoost;
 
-
-Isometry gens[11];
-int numGens;
+//
+//Isometry gens[11];
+//int numGens;
 
 Point surfacePosition;
 Vector toLight;

@@ -1,4 +1,36 @@
 
+//--------Texturing the Earth -------------------
+
+//special command for when the earth is just at the origin
+
+vec3 sphereOffset(Point pt){
+    Vector sphDir;
+    float len;
+    
+    //what needs to happen:
+    //we need to know which earth we impacted, and then translate our point in the fiber direction accordingly
+
+tangDirection(ORIGIN,pt,sphDir,len);//get the direction you are pointing from the origin.
+    
+    //this is a point on the unit sphere, and can be used to look up a  spherical  texture
+    vec3 dir= sphDir.dir;
+    return dir;
+    //return vec3(dir.x,dir.z,-dir.y);//rotate earth
+}
+
+vec3 earthColor(Vector sampletv){
+    
+    //what needs to happen:
+    //we need to know which earth we impacted, and then translate our point in the fiber direction accordingly
+    //then use sphereOffset() on this translated sampletv;
+        
+        vec3 color = texture(earthCubeTex, sphereOffset(sampletv.pos)).xyz;
+ 
+    return color;
+    }
+
+
+
 
 
 
@@ -33,6 +65,15 @@ vec3 goldenColor(Vector sampletv){
 
 }
 
+
+vec3 blueGreenColor(Vector sampletv){
+    
+    vec4 p=toVec4(sampletv.pos);
+    vec3 q=p.xyw;
+    
+   return vec3(0.1,0.2,0.35)+(q/2.+vec3(0.1,0.2,0.2))/10.;
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 // DECIDING BASE COLOR OF HIT OBJECTS, AND MATERIAL PROPERTIES
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,13 +92,13 @@ vec3 materialColor(int hitWhich){
             return vec3(0.8);
             
         case 2://The Earth
-            return vec3(0.2);//black sphere
+            return earthColor(sampletv);//black sphere
             
         case 3: //Local Tiling
             if(colorScheme==1){
             return pastelColor(sampletv);}
             else if(colorScheme==2){
-                return goldenColor(sampletv);
+                return blueGreenColor(sampletv);
             }
             
         case 5://debug

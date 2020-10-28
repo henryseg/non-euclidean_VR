@@ -65,7 +65,8 @@ vec3 getReflectColor(Vector rayDir){
     firstColor+=fakeLight(baseColor,vec3(0.,0.,1.));
     
     
-    if(refl==0.||distToViewer>4.){
+    if(refl==0.||distToViewer>4.||hitWhich==2){
+        //if the reflection is zero, or you are far away, or you are at the earth
         totalColor=firstColor;
     }
     
