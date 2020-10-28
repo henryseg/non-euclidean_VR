@@ -7,6 +7,7 @@ import {
 //-------------------------------------------------------
 
 let guiInfo;
+let capturer;
 
 // Inputs are from the UI parameterizations.
 // gI is the guiInfo object from initGui
@@ -15,86 +16,57 @@ let guiInfo;
 //What we need to init our dat GUI
 let initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
-        GetHelp: function () {
-            window.open('https://github.com/henryseg/non-euclidean_VR');
-        },
+        //        GetHelp: function () {
+        //            window.open('https://github.com/henryseg/non-euclidean_VR');
+        //        },
         toggleUI: true,
-        //        globalSphereRad: 0.2,
-        //        modelHalfCube: 0.5,
-        //        ipDist: 0.03200000151991844,
-        //        stereoScreenOffset: globals.stereoScreenOffset,
         keyboard: 'us',
-        display: 2,
-        res: 1,
-        lightRad: 0.02
+        display: 1,
+        //planes: 1,
+        res: 2,
+        lightRad: 0.5,
+        refl: 0.,
+        foggy: 0.5,
+        recording: false
     };
 
     let gui = new dat.GUI();
     gui.close();
-    // gui.add(guiInfo, 'GetHelp').name("Help/About");
 
-    //    let globalSphereRadController = gui.add(guiInfo, 'globalSphereRad', 0.0, 1.5).name("Earth radius");
-    //    let halfCubeController = gui.add(guiInfo, 'modelHalfCube', 0.2, 1.5).name("Half cube");
-    //    let ipDistController = gui.add(guiInfo, 'ipDist', 0.0, 0.5).name("ip Dist");
-    //    let stereoScreenOffsetController = gui.add(guiInfo, 'stereoScreenOffset', 0.02, 0.04).name("Stereo offset");
     let keyboardController = gui.add(guiInfo, 'keyboard', {
         QWERTY: 'us',
         AZERTY: 'fr'
     }).name("Keyboard");
     globals.controls.setKeyboard(guiInfo.keyboard);
 
-    let displayController = gui.add(guiInfo, 'display', {
-        ConeTorus: '1',
-        Surface: '2',
-        SL2Z: '3',
-        Fibers: '4'
-    });
-
     let resController = gui.add(guiInfo, 'res', {
-        Low: '1',
-        Med: '2',
-        High: '3'
+        Pastel: '1',
+        Golden: '2',
+        //        High: '3'
     });
-    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
 
-    // ------------------------------
-    // UI Controllers
-    // ------------ ------------------
+    //    let planesController = gui.add(guiInfo, 'planes', {
+    //        Both: '1',
+    //        Rust: '2',
+    //        Turquoise: '3',
+    //    }).name("Planes");
 
-    //    globalSphereRadController.onChange(function (value) {
-    //        globals.material.uniforms.globalSphereRad.value = value;
-    //    });
-    //
-    //    halfCubeController.onChange(function (value) {
-    //        globals.cubeHalfWidth = value;
-    //        globals.gens = createGenerators();
-    //        globals.invGens = invGenerators(globals.gens);
-    //        globals.invGensMatrices = unpackageMatrix(globals.invGens);
-    //        globals.material.uniforms.modelHalfCube.value = value;
-    //        globals.material.uniforms.invGenerators.value = globals.invGensMatrices;
-    //    });
-    //
-    //
-    //    ipDistController.onChange(function (value) {
-    //        globals.ipDist = value;
-
-    /*
-    let vectorLeft = new THREE.Vector3(-value, 0, 0).rotateByFacing(g_position);
-    g_leftPosition = g_position.clone().localFlow(vectorLeft);
-    g_material.uniforms.leftBoostMat.value = g_leftPosition.boost.matrix;
-    g_material.uniforms.leftFacing.value = g_leftPosition.facing;
-    let vectorRight = new THREE.Vector3(value, 0, 0).rotateByFacing(g_position);
-    g_rightPosition = g_position.clone().localFlow(vectorRight);
-    g_material.uniforms.rightBoostMat.value = g_rightPosition.boost.matrix;
-    g_material.uniforms.rightFacing.value = g_rightPosition.facing;
-    */
-    //});
+    let displayController = gui.add(guiInfo, 'display', {
+        Genus2: '1',
+        SphereOrbifold: '2',
+    }).name("Lattice");
 
 
-    //    stereoScreenOffsetController.onChange(function (value) {
-    //        globals.stereoScreenOffset = value;
-    //        globals.material.uniforms.stereoScreenOffset.value = value;
-    //    });
+    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 1., 0.01).name("Brightness");
+
+    let reflController = gui.add(guiInfo, 'refl', 0.0, 0.5, 0.01).name("Reflectivity");
+
+    let foggyController = gui.add(guiInfo, 'foggy', 0.0, 1., 0.01).name("Fog");
+
+    let recordingController = gui.add(guiInfo, 'recording').name("Record video");
+
+
+
 
     keyboardController.onChange(function (value) {
         globals.controls.setKeyboard(value);
@@ -108,11 +80,43 @@ let initGui = function () {
         globals.res = value;
     });
 
+    //    planesController.onChange(function (value) {
+    //        globals.material.uniforms.planes.value = value;
+    //    });
+
     lightRadController.onChange(function (value) {
         globals.material.uniforms.lightRad.value = value;
     });
+
+    reflController.onChange(function (value) {
+        globals.refl = value;
+    });
+
+    foggyController.onChange(function (value) {
+        globals.foggy = value;
+        // globals.material.uniforms.foggy.value = value;
+    });
+
+
+
+    recordingController.onFinishChange(function (value) {
+        if (value == true) {
+            capturer = new CCapture({
+                format: 'jpg'
+            });
+            capturer.start();
+        } else {
+            capturer.stop();
+            capturer.save();
+            // onResize(); //Resets us back to window size
+        }
+    });
+
+
 };
 
 export {
-    initGui
+    initGui,
+    guiInfo,
+    capturer
 }

@@ -610,35 +610,69 @@ Vector flow(Vector v, float t) {
 // returns the function A(r,u)
 
 
-//generalized sine curve of curvature k
-float genSin(float k, float r){
-    if(k<0.){//hpyerbolic trig
-        return sinh(r*sqrt(abs(k)))/sqrt(abs(k));
-    }
-    else{//then k>0, so spherical trig
-        return sin(r*sqrt(abs(k)))/sqrt(abs(k));
-    }
-}
-
-
-
 
 float AreaDensity(float r,Vector u){
     
-    //fiber component of unit tangent vector
-    float cosBeta=u.dir.z;
+   
+    float L=r*length(u.dir.xy);
+    float z=r*u.dir.z;
+    //Stuff Needed to compute the intensity
+    
+    //first; the components of the cylindrical coordinate polynomials
+    float L2, L4, L6,z2,z4,z6;
+    L2=L*L;
+    L4=L2*L2;
+    L6=L2*L4;
+    z2=z*z;
+    z4=z2*z2;
+    z6=z2*z4;
+    
+    //the hyperbola you lie on
+    float k=sqrt(abs(L2-z2));
+    
+    //the polynomials coefficients of the area density
+    float f1=(L2+z2)/pow(abs(L2-z2),6.);
+    float f2=17.*L6+7.*L4*z2+16.*L2*z4+32.*z6;
+    float f3=48.*L2*z2*(L2+z2);
+    float f4=3.*L4*(5.*L2+3.*z2);
+    float f5=L6-2.*L2*z2-z4-L4*(1.+z2);
+    float f6=(L6+2.*L2*z2+z4-L4*(z2-1.));
+    float f7=2.*L2*(L2+z2)*k;
     
     
-    float cb2=cosBeta*cosBeta;
-    float sb2=1.-cb2;
-
-
-    float kMin=0.25*(cb2-7.*sb2);
-    float kMax=0.25;
+    //Trigonometric Components
+    float c1=cos(k);
+    float c2=cos(2.*k);
+    float s1=sin(k);
+    float s2=sin(k/2.);
+    s2*=s2;//now sin(k/2)^2;
     
-    float aDens=abs(genSin(kMin,r)*genSin(kMax,r))+0.05;
+    float C1=cosh(k);
+    float C2=cosh(2.*k);
+    float S1=sinh(k);
     
-    return aDens;
+    float S2=sinh(k/2.);
+    S2*=S2;//now it's sinh(k/2)^2
+    
+    //the signs that change depending on formula type:
+    float sgn=1.;
+    float Sgn=-1.;
+    
+    //the area density function, depending on if you are in or out of the lightcone
+    float areaDensity;
+    
+    
+  if(abs(z)>abs(L)){
+            areaDensity=sqrt(abs(f1*s2*(f2 - f3*c1 + f4*c2)*(f5 + f6*c1 + sgn* f7*s1)))/2.;
+        }
+        else if(abs(z)<abs(L)){
+            areaDensity=sqrt(abs(f1*S2*(f2 - f3*C1 + f4*C2)*(f5 + f6*C1 + Sgn*f7*S1)))/2.;
+        }   
+   
+    return areaDensity;
+    
 }
+
+
 
 

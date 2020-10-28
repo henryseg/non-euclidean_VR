@@ -14,25 +14,20 @@ import {
     initObjects,
     setupMaterial,
     updateMaterial
-} from "./Math.js";
+} from "./Uniforms.js";
 
 import {
-    initGui
+    initGui,
+    guiInfo,
+    capturer
 } from "./UI.js";
 import {
-    initEvents
+    initEvents,
+    //VREffect
 } from './Events.js';
 import {
     Controls
 } from './Controls.js';
-
-import {
-    VRController
-} from './module/VRController.js';
-
-import {
-    VREffect
-} from './module/VREffect.js';
 
 //----------------------------------------------------------------------------------------------------------------------
 // Global Variables
@@ -45,28 +40,31 @@ import {
  */
 
 let globals = {
-    ipDist: 0.03200000151991844,
+    // ipDist: 0.03200000151991844,
     effect: undefined,
     material: undefined,
     controls: undefined,
     position: undefined,
     cellPosition: undefined,
     invCellPosition: undefined,
-    phoneOrient: undefined,
+    //phoneOrient: undefined,
     renderer: undefined,
     screenResolution: undefined,
-    vr: 0,
-    leftPosition: undefined,
-    rightPosition: undefined,
-    stereoScreenOffset: 0.03,
+    //vr: 0,
+    //leftPosition: undefined,
+    //rightPosition: undefined,
+    //stereoScreenOffset: 0.03,
     gens: undefined,
     invGens: undefined,
     lightPositions: [],
     lightIntensities: [],
     globalObjectPosition: undefined,
-    display: 2,
-    res: 1,
-    lightRad: 0.05,
+    display: 1,
+    res: 2,
+    lightRad: 0.5,
+    refl: 0.,
+    foggy: 0.5,
+    planes: 1
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,12 +75,21 @@ let scene;
 let mesh;
 let camera;
 let stats;
+let canvas;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Shader variables
 //----------------------------------------------------------------------------------------------------------------------
 
 let mainFrag;
+
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Sets up the scene
@@ -91,7 +98,7 @@ let mainFrag;
 function init() {
     //Setup our THREE scene--------------------------------
     scene = new Scene();
-    let canvas = document.createElement('canvas');
+    canvas = document.createElement('canvas');
     let context = canvas.getContext('webgl2');
     globals.renderer = new WebGLRenderer({
         canvas: canvas,
@@ -104,7 +111,7 @@ function init() {
     globals.controls = new Controls();
     initGeometry();
     initObjects();
-    globals.phoneOrient = [null, null, null];
+    //globals.phoneOrient = [null, null, null];
 
     loadShaders();
     initEvents();
@@ -180,56 +187,40 @@ function loadShaders() {
 
 
 
-
-
-
-
-
-
-//
-//
-//
-//
-//function loadShaders() {
-//    //Since our shader is made up of strings we can construct it from parts
-//    let loader = new FileLoader();
-//    loader.setResponseType('text');
-//    loader.load(
-//        //'shaders/sandbox.glsl',
-//        'shaders/raymarch.glsl',
-//        function (main) {
-//            mainFrag = main;
-//            setupMaterial(main);
-//            globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
-//
-//            //Setup a "quad" to render on-------------------------
-//            let geom = new BufferGeometry();
-//            let vertices = new Float32Array([
-//                -1.0, -1.0, 0.0,
-//                1.0, -1.0, 0.0,
-//                1.0, 1.0, 0.0,
-//
-//                -1.0, -1.0, 0.0,
-//                1.0, 1.0, 0.0,
-//                -1.0, 1.0, 0.0
-//            ]);
-//            geom.setAttribute('position', new BufferAttribute(vertices, 3));
-//            mesh = new Mesh(geom, globals.material);
-//            scene.add(mesh);
-//            animate();
-//        });
-//}
-
 //----------------------------------------------------------------------------------------------------------------------
 // Where our scene actually renders out to screen
 //----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Renderer
+//----------------------------------------------------------------------------------------------------------------------
+
+//this controls the effect part of the animate loop
+let VREffect = function (renderer, done) {
+
+    this._renderer = renderer;
+
+    this.render = function (scene, camera, animate) {
+        let renderer = this._renderer;
+
+        requestAnimationFrame(animate);
+
+        renderer.render.apply(this._renderer, [scene, camera]);
+        if (guiInfo.recording === true) {
+            capturer.capture(canvas);
+        }
+    };
+    this.setSize = function (width, height) {
+        renderer.setSize(width, height);
+    };
+};
+
+
 
 
 function animate() {
     stats.begin();
     globals.controls.update();
     updateMaterial();
-    VRController.update();
     globals.effect.render(scene, camera, animate);
     stats.end();
 }
@@ -243,5 +234,6 @@ init();
 
 export {
     init,
-    globals
+    globals,
+    canvas
 };

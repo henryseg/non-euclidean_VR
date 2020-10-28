@@ -2,11 +2,8 @@
 // Tangent Space Functions
 //----------------------------------------------------------------------------------------------------------------------
 
-Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a tangent vector for our ray
-    if (isStereo == 1){
-        resolution.x = resolution.x * 0.5;
-        if (!isLeft) { fragCoord.x = fragCoord.x - resolution.x; }
-    }
+Vector getRayPoint(vec2 resolution, vec2 fragCoord){ //creates a tangent vector for our ray
+
     vec2 xy = 0.2 * ((fragCoord - 0.5*resolution)/resolution.x);
     float z = 0.1 / tan(radians(fov * 0.5));
     // coordinates in the prefered frame at the origin
@@ -26,27 +23,11 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord, bool isLeft){ //creates a ta
 
 Vector setRayDir(){
 
- //stereo translations ----------------------------------------------------
-    bool isLeft = gl_FragCoord.x/screenResolution.x <= 0.5;
-    Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy, isLeft);
 
+    Vector rayDir = getRayPoint(screenResolution, gl_FragCoord.xy);
 
-
-    if (isStereo == 1){
-        if (isLeft){
-            rayDir = rotateByFacing(leftFacing, rayDir);
-            rayDir = translate(leftBoost, rayDir);
-        }
-        else {
-            rayDir = rotateByFacing(rightFacing, rayDir);
-            rayDir = translate(rightBoost, rayDir);
-        }
-    }
-    else {
-        //debugColor = vec3(0, 1, 1);
         rayDir = rotateByFacing(facing, rayDir);
         rayDir = translate(currentBoost, rayDir);
-    }
 
 
 return rayDir;
@@ -71,14 +52,17 @@ void main(){
     
     setVariables();
     
-    generators(display,gens);
+   // generators(display,gens);
     
-    setResolution(resol);
     
     Vector rayDir=setRayDir();
-
-    vec3 pixelColor=getPixelColor(rayDir);
-
+    
+    
+//do the first raymarch and get the color
+    vec3 pixelColor=getReflectColor(rayDir);
+    pixelColor=pow(pixelColor,vec3(1./2.2));
+   
     out_FragColor=vec4(pixelColor,1.);
+    
 
 }

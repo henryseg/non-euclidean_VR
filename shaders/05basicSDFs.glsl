@@ -1,15 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// LIGHT
-////----------------------------------------------------------------------------------------------------------------------
-////light intensity as a fn of distance
-//float lightAtt(float dist){
-//    if (FAKE_LIGHT_FALLOFF){
-//        //fake linear falloff
-//        return dist;
-//    }
-//    return dist*dist;
-//}
-
 
 //----------------------------------------------------------------------------------------------------------------------
 // Raymarch Primitives
@@ -69,30 +57,28 @@ float ellipsoidSDF(Point p, float radius, float wRescale){
     return dist - radius;
 }
 
-/*
-float centerSDF(vec4 p, vec4 center, float radius){
-    return sphereSDF(p, center, radius);
+
+
+
+
+
+float halfSpace(Point p){
+    float X=toVec4(p).x;
+   // float X=toKlein(p).x;
+    return abs(asinh(X))-0.1;
 }
 
-
-float vertexSDF(vec4 p, vec4 cornerPoint, float size){
-    return sphereSDF(abs(p), cornerPoint, size);
+float halfSpace2(Point p){
+    Point pos=fromVec4(vec4(.5,0.,1.12,0.));
+    Isometry iso=makeInvLeftTranslation(pos);
+    return halfSpace(translate(iso,p));
+    
 }
 
-float horizontalHalfSpaceSDF(vec4 p, float h) {
-    //signed distance function to the half space z < h
-    return p.z - h;
+float halfSpace3(Point p){
+    Point pos=fromVec4(vec4(-.5,0.,1.12,0.));
+    Isometry iso=makeInvLeftTranslation(pos);
+    return halfSpace(translate(iso,p));
+    
 }
-
-
-float sliceSDF(vec4 p) {
-    float HS1= 0.;
-    HS1=horizontalHalfSpaceSDF(p, -0.1);
-    float HS2=0.;
-    HS2=-horizontalHalfSpaceSDF(p, -1.);
-    return max(HS1, HS2);
-}
-
-
-*/
 

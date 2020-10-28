@@ -527,9 +527,38 @@ class Isometry {
 
 }
 
+
+/**
+ * Serialize an array of isometries
+ *
+ * @param {Array.<Isometry>} isomArr - the isometries to serialize
+ * @returns {Array.<Vector4>} - the serialized isometries
+ */
+function serializeIsoms(isomArr) {
+    return isomArr.map(function (isom) {
+        return isom.serialize();
+    });
+}
+
+/**
+ * Serialize an array of Points
+ *
+ * @param {Array.<Point>} pointArr - the isometries to serialize
+ * @returns {Array.<Vector4>} - the serialized isometries
+ */
+function serializePoints(pointArr) {
+    return pointArr.map(function (point) {
+        return point.serialize();
+    });
+}
+
+
+
 export {
     SL2,
     Point,
     Vector,
-    Isometry
+    Isometry,
+    serializeIsoms,
+    serializePoints
 }
