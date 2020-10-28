@@ -59,7 +59,7 @@ void main(){
     
     
 //do the first raymarch and get the color
-    vec3 pixelColor=getPixelColor(rayDir);
+    vec3 pixelColor=getReflectColor(rayDir);
     pixelColor=pow(pixelColor,vec3(1./2.2));
    
     out_FragColor=vec4(pixelColor,1.);

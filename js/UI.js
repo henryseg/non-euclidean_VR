@@ -25,7 +25,7 @@ let initGui = function () {
         //planes: 1,
         res: 2,
         lightRad: 0.5,
-        // refl: 0.,
+        refl: 0.,
         foggy: 0.5,
         recording: false
     };
@@ -57,11 +57,11 @@ let initGui = function () {
     }).name("Lattice");
 
 
-    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 1.).name("Brightness");
+    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 1., 0.01).name("Brightness");
 
-    //    let reflController = gui.add(guiInfo, 'refl', 0.0, 0.5).name("Reflectivity");
+    let reflController = gui.add(guiInfo, 'refl', 0.0, 0.5, 0.01).name("Reflectivity");
 
-    let foggyController = gui.add(guiInfo, 'foggy', 0.0, 1.).name("Fog");
+    let foggyController = gui.add(guiInfo, 'foggy', 0.0, 1., 0.01).name("Fog");
 
     let recordingController = gui.add(guiInfo, 'recording').name("Record video");
 
@@ -88,9 +88,9 @@ let initGui = function () {
         globals.material.uniforms.lightRad.value = value;
     });
 
-    //    reflController.onChange(function (value) {
-    //        globals.material.uniforms.refl.value = value;
-    //    });
+    reflController.onChange(function (value) {
+        globals.refl = value;
+    });
 
     foggyController.onChange(function (value) {
         globals.foggy = value;

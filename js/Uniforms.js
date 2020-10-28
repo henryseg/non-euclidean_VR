@@ -249,6 +249,7 @@ function updateMaterial() {
     globals.material.uniforms.colorScheme.value = globals.res;
     //    globals.material.uniforms.lightRad.value = globals.lightRad;
     globals.material.uniforms.foggy.value = globals.foggy;
+    globals.material.uniforms.refl.value = globals.refl;
 }
 
 

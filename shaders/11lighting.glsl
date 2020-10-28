@@ -60,7 +60,7 @@ vec3 fakeLight(vec3 baseColor,vec3 dir){
     vec3 diffuse = vec3(1.)* nDotL;
     //Calculate Specular Component
     float rDotV = max(cosAng(reflectedRay, toViewer), 0.0);
-    vec3 specular = 0.5*vec3(1.)* pow(rDotV,25.0);
+    vec3 specular = vec3(1.)* pow(rDotV,25.0);
     
     
     //Combine the above terms to compute the final color

@@ -130,7 +130,7 @@ uniform vec4 invCellBoostMat;
 uniform samplerCube earthCubeTex;
 uniform float time;
 uniform float lightRad;
-//uniform float refl;
+uniform float refl;
 uniform float foggy;
 //uniform int planes;
 

@@ -6,12 +6,12 @@ vec3 pastelColor(Vector sampletv){
 
     vec4 p=toVec4(sampletv.pos);
     
-    float z=sampletv.pos.fiber;
+    float w=sampletv.pos.fiber;
     float y =asinh(p.y);
     float x=asinh(p.x);
 
     
-   vec3 color=0.5*vec3((2./3.14*atan(-y)+1.)/2.,(2./3.14*atan(z)+1.)/2.,(2./3.14*atan(z+y)+1.)/2.)+vec3(0.1,0.2,0.35);
+   vec3 color=0.5*vec3((2./3.14*atan(-y)+1.)/2.,(2./3.14*atan(w)+1.)/2.,(2./3.14*atan(w+y)+1.)/2.)+vec3(0.1,0.2,0.35);
     
     return color;
 }
@@ -21,7 +21,15 @@ vec3 pastelColor(Vector sampletv){
 vec3 goldenColor(Vector sampletv){
     vec4 p=toVec4(sampletv.pos);
     
-    return vec3(1.,0.,0.);
+    float w=sampletv.pos.fiber;
+    float y =asinh(p.y);
+    float x=asinh(p.x);
+
+    vec3 xColor=vec3(176./255.,34./255.,2./255.);
+    vec3 yColor=vec3(0.2,0.1,0);
+    vec3 wColor=vec3(255./255.,152./255.,25./255.);
+    
+    return abs(w)*wColor+abs(x)*xColor+abs(y)*yColor;
 
 }
 
@@ -46,9 +54,9 @@ vec3 materialColor(int hitWhich){
             return vec3(0.2);//black sphere
             
         case 3: //Local Tiling
-            if(colorScheme==2){
+            if(colorScheme==1){
             return pastelColor(sampletv);}
-            else if(colorScheme==1){
+            else if(colorScheme==2){
                 return goldenColor(sampletv);
             }
             
