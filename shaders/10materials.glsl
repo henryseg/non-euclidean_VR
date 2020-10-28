@@ -23,8 +23,15 @@ vec3 earthColor(Vector sampletv){
     //what needs to happen:
     //we need to know which earth we impacted, and then translate our point in the fiber direction accordingly
     //then use sphereOffset() on this translated sampletv;
+    //the SDF actually saves the fiber coordinate to the global variable fiberHeight;
+    
+    //so, presumably we just need to convert our point to a vec4, then subtract the value stored in fiberHeight, then convert back and run this sphereOffset
+    
+    Point adjustedPoint=sampletv.pos;
+    
+    vec3 direction=sphereOffset(adjustedPoint);
         
-        vec3 color = texture(earthCubeTex, sphereOffset(sampletv.pos)).xyz;
+        vec3 color = texture(earthCubeTex, direction).xyz;
  
     return color;
     }
