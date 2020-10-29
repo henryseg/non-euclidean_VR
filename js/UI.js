@@ -58,7 +58,7 @@ let initGui = function () {
         Med: '2',
         High: '3'
     });
-    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light radius");
+    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 0.5).name("Light Intensity");
 
     let recordingController = gui.add(guiInfo, 'recording').name("Record video");
 

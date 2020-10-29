@@ -188,7 +188,7 @@ if(cubeNumber==2){
     
 
     N = estimateNormal(sampletv.pos);
-    color = phongModel(totalFixMatrix, color);
+    color = (1.+lightRad)*phongModel(totalFixMatrix, color);
 
     return 0.9*color+0.1;
     
