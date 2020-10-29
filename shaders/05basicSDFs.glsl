@@ -1,0 +1,81 @@
+//----------------------------------------------------------------------------------------------------------------------
+// Spheres, Ellipsoids
+//----------------------------------------------------------------------------------------------------------------------
+
+
+float sphereSDF(vec4 p, vec4 center, float radius){
+    return exactDist(p, center) - radius;
+}
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Half Spaces, Slices
+//----------------------------------------------------------------------------------------------------------------------
+
+
+//NEED TO COME IN AND FIX
+
+//
+float horizontalHalfSpaceSDF(vec4 p, float h) {
+    //signed distance function to the half space w < h
+    return p.w - h;
+}
+
+
+float sliceSDF(vec4 p) {
+    float HS1= 0.;
+    HS1=horizontalHalfSpaceSDF(p, 0.1);
+    float HS2=0.;
+    HS2=-horizontalHalfSpaceSDF(p,-0.1);
+    return max(HS1, HS2);
+}
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Cylinders
+//----------------------------------------------------------------------------------------------------------------------
+
+float cylSDF(vec4 p, float r){
+    //cylinder about z-axis of radius r.
+    return sphereSDF(vec4(p.x, p.y, 0., 1.), ORIGIN, r);
+}
+
+
+
+
+float cSDF(vec4 p, vec4 q, float r) {
+    // move p to the origin
+    return sphDist(p,q)-r;
+}
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fake Distances to Objects
+//----------------------------------------------------------------------------------------------------------------------
+
+
+float ellipsoidSDF(vec4 p, vec4 center, float l1,float l2, float l3){
+    //distance functions for these ellipsoids; modeled as affine squished spheres.
+    return exactDist(vec4(p.x/(l1), p.y/(l2), p.z/(l3), 1.), center) - 1.;
+}
+
+
+
+float EllipsoidSDF(vec4 p, vec4 center, float radius){
+    //distance function applying affine transformation to a sphere.
+    return exactDist(vec4(p.x, p.y, p.z, p.w/1.2), center) - radius;
+}
+
+
+
+
+
+
+
