@@ -56,15 +56,15 @@ float fiberCoord;
     //remove the central sphere;
     pt=fromVec4(vec4(0, 0, 0, 0.));
     tilingDist=sphereSDF(p,pt,sphereRad);
-    earthDist=sphereSDF(p,pt,earthRad);
-    
-    //check if we hit this earth, so we know the fiber height
-    if(earthDist<EPSILON){
-        fiberHeight=0.;
-        hitWhich=2;
-        return earthDist;
-    }
-    
+//    earthDist=sphereSDF(p,pt,earthRad);
+//    
+//    //check if we hit this earth, so we know the fiber height
+//    if(earthDist<EPSILON){
+//        fiberHeight=0.;
+//        hitWhich=2;
+//        return earthDist;
+//    }
+//    
     
     
     numSpheres=2*level+1;
@@ -76,13 +76,13 @@ float fiberCoord;
         //level in positive direction
         pt=fromVec4(vec4(0, 0, 0, fiberCoord));
         
-        earthDist=min(earthDist,sphereSDF(p,pt,earthRad));
-        //check if we hit this earth, so we know the fiber height
-    if(earthDist<EPSILON){
-        fiberHeight=fiberCoord;
-        hitWhich=2;
-        return earthDist;
-    }
+//        earthDist=min(earthDist,sphereSDF(p,pt,earthRad));
+//        //check if we hit this earth, so we know the fiber height
+//    if(earthDist<EPSILON){
+//        fiberHeight=fiberCoord;
+//        hitWhich=2;
+//        return earthDist;
+//    }
         
         //take care of tiling sphere at same height
         tilingDist=min(tilingDist,sphereSDF(p,pt,sphereRad));
@@ -92,13 +92,13 @@ float fiberCoord;
         //level in negative direction:
         pt=fromVec4(vec4(0, 0, 0, -fiberCoord));
         
-        earthDist=min(earthDist,sphereSDF(p,pt,earthRad));
-               //check if we hit this earth, so we know the fiber height
-            if(earthDist<EPSILON){
-        fiberHeight=-fiberCoord;
-        hitWhich=2;
-        return earthDist;
-    }
+//        earthDist=min(earthDist,sphereSDF(p,pt,earthRad));
+//               //check if we hit this earth, so we know the fiber height
+//            if(earthDist<EPSILON){
+//        fiberHeight=-fiberCoord;
+//        hitWhich=2;
+//        return earthDist;
+//    }
         
         
         //take care of tiling sphere at same height
@@ -118,6 +118,6 @@ float fiberCoord;
         return tilingDist;
     }
     
-
-   return min(tilingDist,earthDist);
+return tilingDist;
+  // return min(tilingDist,earthDist);
 }
