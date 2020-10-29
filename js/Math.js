@@ -1,229 +1,328 @@
-// console.log(m) prints column by column, which is not what you expect...
+import {
+    Vector3,
+    Vector4,
+    ShaderMaterial,
+    CubeTextureLoader
+} from "./module/three.module.js";
 
-// v.applyMatrix4(m) does m*v
-
-// m.multiply(n) does m*n
-
-//----------------------------------------------------------------------
-//	Basic Geometric Operations
-//----------------------------------------------------------------------
-
-var cubeHalfWidth = 0.6584789485;
-
-
-THREE.Vector4.prototype.geomDot = function (v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z - this.w * v.w;
-}
-
-THREE.Vector4.prototype.geomLength = function () {
-    return Math.sqrt(Math.abs(this.geomDot(this)));
-}
-
-THREE.Vector4.prototype.geomNormalize = function () {
-    return this.divideScalar(this.geomLength());
-}
-
-function geomDist(v) { //good enough for comparison of distances on the hyperboloid. Only used in fixOutsideCentralCell in this file.
-    return Math.acosh(v.w);
-}
-
-//----------------------------------------------------------------------
-//	Matrix Operations
-//----------------------------------------------------------------------
+import {
+    globals
+} from './Main.js';
+import {
+    Isometry
+} from "./Isometry.js";
+import {
+    Position,
+    ORIGIN
+} from "./Position.js";
 
 
-function reduceBoostError(boost) { // for H^3, this is gramSchmidt
-    var m = boost[0];
-    var n = m.elements; //elements are stored in column major order we need row major
-    var temp = new THREE.Vector4();
-    var temp2 = new THREE.Vector4();
-    for (var i = 0; i < 4; i++) { ///normalize row
-        var invRowNorm = 1.0 / temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomLength();
-        for (var l = 0; l < 4; l++) {
-            n[4 * i + l] = n[4 * i + l] * invRowNorm;
+//----------------------------------------------------------------------------------------------------------------------
+//	Geometry constants
+//----------------------------------------------------------------------------------------------------------------------
+
+let cubeHalfWidth = 0.5;
+
+const GoldenRatio = 0.5 * (1 + Math.sqrt(5.)); //1.618033988749895;
+const z0 = 2 * Math.log(GoldenRatio); //0.9624236
+//----------------------------------------------------------------------------------------------------------------------
+//	Teleporting back to central cell
+//----------------------------------------------------------------------------------------------------------------------
+
+function fixOutsideCentralCell(position) {
+    let bestIndex = -1;
+    let p = new Vector4(0, 0, 0, 1).applyMatrix4(position.boost.matrix);
+    //lattice basis divided by the norm square
+    let v1 = new Vector4(GoldenRatio, -1., 0., 0.);
+    let v2 = new Vector4(1., GoldenRatio, 0., 0.);
+    let v3 = new Vector4(0., 0., 1. / z0, 0.);
+
+
+    if (globals.display != 3) { //this turns off the vertical teleporation when there is no vertical syymetries
+        if (p.dot(v3) > 0.5) {
+            bestIndex = 5;
         }
-        for (var j = i + 1; j < 4; j++) { // subtract component of ith vector from later vectors
-            var component = temp.fromArray(n.slice(4 * i, 4 * i + 4)).geomDot(temp2.fromArray(n.slice(4 * j, 4 * j + 4)));
-            for (var l = 0; l < 4; l++) {
-                n[4 * j + l] -= component * n[4 * i + l];
-            }
+        if (p.dot(v3) < -0.5) {
+            bestIndex = 4;
         }
     }
-    m.elements = n;
-    boost[0].elements = m.elements;
-}
 
-
-//----------------------------------------------------------------------
-//	Moving Around - Translate By Vector
-//----------------------------------------------------------------------
-function translateByVector(v) { // trickery stolen from Jeff Weeks' Curved Spaces app
-    var dx = v.x;
-    var dy = v.y;
-    var dz = v.z;
-    var len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-    var c1 = Math.sinh(len);
-    var c2 = Math.cosh(len) - 1;
-
-    if (len == 0) return new THREE.Matrix4().identity();
-    else {
-        dx /= len;
-        dy /= len;
-        dz /= len;
-        var m = new THREE.Matrix4().set(
-            0, 0, 0, dx,
-            0, 0, 0, dy,
-            0, 0, 0, dz,
-            dx, dy, dz, 0.0);
-        var m2 = new THREE.Matrix4().copy(m).multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        var result = new THREE.Matrix4().identity();
-        result.add(m);
-        result.add(m2);
-        return result;
+    if (p.dot(v1) > 0.5) {
+        bestIndex = 1;
     }
-}
-
-
-
-
-
-
-
-
-
-//----------------------------------------------------------------------
-//  Boost Operations  (The boost may not be a single matrix for some geometries)
-//----------------------------------------------------------------------
-
-//adding matrices
-THREE.Matrix4.prototype.add = function (m) {
-    this.set.apply(this, [].map.call(this.elements, function (c, i) {
-        return c + m.elements[i]
-    }));
-};
-
-
-function translate(boost, trans) { // deal with a translation of the camera
-    boost[0].multiply(trans[0]);
-    // if we are at boost of b, our position is b.0. We want to fly forward, and t = translateByVector
-    // tells me how to do this if I were at 0. So I want to apply b.t.b^-1 to b.0, and I get b.t.0.
-
-    // In other words, translate boost by the conjugate of trans by boost
-}
-
-function rotate(boost1, rotMatrix) { // deal with a rotation of the camera
-    console.log(boost1[0]);
-    boost1[0].multiply(rotMatrix);
-    console.log(rotMatrix);
-    console.log(boost1[0]);
-}
-
-function setInverse(boost1, boost2) { //set boost1 to be the inverse of boost2
-    boost1[0].getInverse(boost2[0]);
-}
-
-
-
-
-
-//-----------------------------------------------------------------------------------------------------------------------------
-//	Teleporting Back to Central Cell
-//-----------------------------------------------------------------------------------------------------------------------------
-
-////////check if we are still inside the central fund dom, alter boost if so
-function fixOutsideCentralCell(boost) {
-    var cPos = new THREE.Vector4(0, 0, 0, 1).applyMatrix4(boost[0]); //central
-    var bestDist = geomDist(cPos);
-    var bestIndex = -1;
-    for (var i = 0; i < gens.length; i++) {
-        var pos = cPos.clone();
-        pos.applyMatrix4(gens[i]);
-        if (geomDist(pos) < bestDist) {
-            bestDist = geomDist(pos);
-            bestIndex = i;
-        }
+    if (p.dot(v1) < -0.5) {
+        bestIndex = 0;
     }
-    if (bestIndex != -1) {
-        boost[0].premultiply(gens[bestIndex]);
+    if (p.dot(v2) > 0.5) {
+        bestIndex = 3;
+    }
+    if (p.dot(v2) < -0.5) {
+        bestIndex = 2;
+    }
+
+    if (bestIndex !== -1) {
+        position.translateBy(globals.gens[bestIndex]);
         return bestIndex;
-    } else
+    } else {
         return -1;
+    }
+    return -1;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------------
-//  Tiling Generators Constructors
-//-----------------------------------------------------------------------------------------------------------------------------
 
-var createGenerators = function () { /// generators for the tiling by cubes. 
-    var gen0 = translateByVector(new THREE.Vector3(2.0 * cubeHalfWidth, 0.0, 0.0));
-    var gen1 = translateByVector(new THREE.Vector3(-2.0 * cubeHalfWidth, 0.0, 0.0));
-    var gen2 = translateByVector(new THREE.Vector3(0.0, 2.0 * cubeHalfWidth, 0.0));
-    var gen3 = translateByVector(new THREE.Vector3(0.0, -2.0 * cubeHalfWidth, 0.0));
-    var gen4 = translateByVector(new THREE.Vector3(0.0, 0.0, 2.0 * cubeHalfWidth));
-    var gen5 = translateByVector(new THREE.Vector3(0.0, 0.0, -2.0 * cubeHalfWidth));
+
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Tiling Generators Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
+function createGenerators() { /// generators for the tiling by cubes.
+
+    const denominator = GoldenRatio + 2;
+
+    const gen0 = new Isometry().makeLeftTranslation(GoldenRatio / denominator, -1. / denominator, 0.);
+    const gen1 = new Isometry().makeInvLeftTranslation(GoldenRatio / denominator, -1. / denominator, 0.);
+    const gen2 = new Isometry().makeLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
+    const gen3 = new Isometry().makeInvLeftTranslation(1. / denominator, GoldenRatio / denominator, 0.);
+
+    const gen4 = new Isometry().makeLeftTranslation(0., 0., z0);
+    const gen5 = new Isometry().makeLeftTranslation(0., 0., -z0);
+
+
     return [gen0, gen1, gen2, gen3, gen4, gen5];
 }
 
-var invGenerators = function (genArr) {
+function invGenerators(genArr) {
     return [genArr[1], genArr[0], genArr[3], genArr[2], genArr[5], genArr[4]];
 }
 
-// The position of the camera, and transformations coming from movement or rotation are all packaged as "boosts"
-// For H^3, our boosts are arrays containing a single element: an elt of SO(3,1). 
-// For other geometries there may be multiple objects in the array. For example, for non-isotropic spaces,
-// we have to deal with rotation carefully: the camera can turn in ways that the geometry has no isometry for.
-var packageBoosts = function (genArr) {
-    return [[genArr[0]], [genArr[1]], [genArr[2]], [genArr[3]], [genArr[4]], [genArr[5]]]
+//Unpackage boosts into their components (for hyperbolic space, just pull out the matrix which is the first component)
+function unpackageMatrix(genArr) {
+    let out = [];
+    for (let i = 0; i < genArr.length; i++) {
+        out.push(genArr[i].matrix);
+    }
+    return out
 }
 
-//-----------------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
 //	Initialise things
-//-----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-var initGeometry = function () {
-    g_currentBoost = [new THREE.Matrix4()];
-    g_cellBoost = [new THREE.Matrix4()];
-    g_invCellBoost = [new THREE.Matrix4()];
-    gens = createGenerators();
-    invGens = invGenerators(gens);
-    invGenBoosts = packageBoosts(invGens);
+let invGensMatrices; // need lists of things to give to the shader, lists of types of object to unpack for the shader go here
+const time0 = new Date().getTime();
+
+function initGeometry() {
+    globals.position = new Position();
+    globals.cellPosition = new Position();
+    globals.invCellPosition = new Position();
+    globals.gens = createGenerators();
+    globals.invGens = invGenerators(globals.gens);
+    invGensMatrices = unpackageMatrix(globals.invGens);
+
+    let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
+
+    let vectorRight = new Vector3(globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    globals.rightPosition = globals.position.clone().localFlow(vectorRight);
 }
 
-var PointLightObject = function (pos, colorInt) { //position is a euclidean Vector3
-    lightPositions.push(new THREE.Vector4(0, 0, 0, 1).applyMatrix4(translateByVector(pos)));
-    lightIntensities.push(colorInt);
+
+function PointLightObject(v, colorInt) {
+    //position is a euclidean Vector4
+    let isom = new Position().localFlow(v).boost;
+    let lp = ORIGIN.clone().translateBy(isom);
+    globals.lightPositions.push(lp);
+    globals.lightIntensities.push(colorInt);
 }
 
-var initObjects = function () {
-    PointLightObject(new THREE.Vector3(1.5 * cubeHalfWidth, 0, 0), new THREE.Vector4(68 / 256, 197 / 256, 203 / 256, 1));
-    PointLightObject(new THREE.Vector3(0, 1.5 * cubeHalfWidth, 0), new THREE.Vector4(252 / 256, 227 / 256, 21 / 256, 1));
-    PointLightObject(new THREE.Vector3(0, 0, 1.5 * cubeHalfWidth), new THREE.Vector4(245 / 256, 61 / 256, 82 / 256, 1));
-    PointLightObject(new THREE.Vector3(-1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth, -1.5 * cubeHalfWidth), new THREE.Vector4(238 / 256, 142 / 256, 226 / 256, 1));
-    globalObjectBoost = new THREE.Matrix4().multiply(translateByVector(new THREE.Vector3(-0.5, 0, 0)));
+//DEFINE THE LIGHT COLORS
+const lightColor1 = new Vector4(68 / 256, 197 / 256, 203 / 256, 1); // blue
+const lightColor2 = new Vector4(252 / 256, 227 / 256, 21 / 256, 1); // yellow
+const lightColor3 = new Vector4(245 / 256, 61 / 256, 82 / 256, 1); // red
+const lightColor4 = new Vector4(256 / 256, 142 / 256, 226 / 256, 1); // purple
+
+
+function initObjects() {
+    PointLightObject(new Vector3(1., 1.5, 0), lightColor1);
+    PointLightObject(new Vector3(-1, 1.5, 0), lightColor2);
+    PointLightObject(new Vector3(0, 0, 1.), lightColor3);
+    PointLightObject(new Vector3(-1., -1., -1.), lightColor4);
+
+    globals.globalObjectPosition = new Position().localFlow(new Vector3(0, 0, -1));
 }
 
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Set up shader
-//-------------------------------------------------------
-// We must unpackage the boost data here for sending to the shader.
+//----------------------------------------------------------------------------------------------------------------------
 
-var raymarchPass = function (screenRes) {
-    var pass = new THREE.ShaderPass(THREE.ray);
-    pass.uniforms.isStereo.value = g_vr;
-    pass.uniforms.screenResolution.value = screenRes;
-    pass.uniforms.lightIntensities.value = lightIntensities;
+// status of the textures: number of textures already loaded
+let textureStatus = 0;
 
-    //--- geometry dependent stuff here ---//
-    pass.uniforms.invGenerators.value = invGens;
-    pass.uniforms.currentBoost.value = g_currentBoost[0]; //currentBoost is an array
-    pass.uniforms.cellBoost.value = g_cellBoost[0];
-    pass.uniforms.invCellBoost.value = g_invCellBoost[0];
-    pass.uniforms.lightPositions.value = lightPositions;
-    pass.uniforms.globalObjectBoost.value = globalObjectBoost;
-    //--- end of geometry dependent stuff ---//
+function setupMaterial(fShader) {
 
-    return pass;
+    globals.material = new ShaderMaterial({
+        uniforms: {
+
+            isStereo: {
+                type: "bool",
+                value: globals.vr
+            },
+            screenResolution: {
+                type: "v2",
+                value: globals.screenResolution
+            },
+            lightIntensities: {
+                type: "v4",
+                value: globals.lightIntensities
+            },
+            //--- geometry dependent stuff here ---//
+            //--- lists of stuff that goes into each invGenerator
+            invGenerators: {
+                type: "m4",
+                value: invGensMatrices
+            },
+            //--- end of invGen stuff
+            currentBoostMat: {
+                type: "m4",
+                value: globals.position.boost.matrix
+            },
+            leftBoostMat: {
+                type: "m4",
+                value: globals.leftPosition.boost.matrix
+            },
+            rightBoostMat: {
+                type: "m4",
+                value: globals.rightPosition.boost.matrix
+            },
+            //currentBoost is an array
+            facing: {
+                type: "m4",
+                value: globals.position.facing
+            },
+            leftFacing: {
+                type: "m4",
+                value: globals.leftPosition.facing
+            },
+            rightFacing: {
+                type: "m4",
+                value: globals.rightPosition.facing
+            },
+            cellBoostMat: {
+                type: "m4",
+                value: globals.cellPosition.boost.matrix
+            },
+            invCellBoostMat: {
+                type: "m4",
+                value: globals.invCellPosition.boost.matrix
+            },
+            cellFacing: {
+                type: "m4",
+                value: globals.cellPosition.facing
+            },
+            invCellFacing: {
+                type: "m4",
+                value: globals.invCellPosition.facing
+            },
+            lightPositions: {
+                type: "v4",
+                value: globals.lightPositions
+            },
+            globalObjectBoostMat: {
+                type: "m4",
+                value: globals.globalObjectPosition.boost.matrix
+            },
+            globalSphereRad: {
+                type: "f",
+                value: 0.2
+            },
+            earthCubeTex: { //earth texture to global object
+                type: "t",
+                value: new CubeTextureLoader().setPath('images/cubemap512/')
+                    .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
+                        'posx.jpg',
+                        'negx.jpg',
+                        'posy.jpg',
+                        'negy.jpg',
+                        'posz.jpg',
+                        'negz.jpg'
+                    ])
+            },
+            modelHalfCube: {
+                type: "f",
+                value: 0.5
+            },
+            stereoScreenOffset: {
+                type: "f",
+                value: globals.stereoScreenOffset
+            },
+            time: {
+                type: "f",
+                value: (new Date().getTime()) - time0
+            },
+            display: {
+                type: "int",
+                value: globals.display
+            },
+            res: {
+                type: "int",
+                value: globals.res
+            },
+            lightRad: {
+                type: "float",
+                value: globals.lightRad
+            }
+        },
+
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: fShader,
+        transparent: true
+    });
 }
+
+
+function updateMaterial() {
+    /*
+        It seems that to be properly passed to the shader,
+        a uniform `foo` cannot be updated on the js side by a statement of the form
+        > foo = new_value_of_foo
+        One has to use a statement that alter the object `foo` e.g.
+        > foo. attribute = new_value of the attribute
+        (Maybe some subtleties in the pointer management ?)
+
+        This can be an issue when passing float to the shader
+        (Remark: is foo += 1 totally equivalent to foo = foo + 1 in this context?)
+        This method is called each time `animate` is used (at every frame ?) and can be used to update uniforms
+        > g_material.uniforms.foo.value = new_value_of_foo
+
+     */
+
+    let vectorLeft = new Vector3(-globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    globals.leftPosition = globals.position.clone().localFlow(vectorLeft);
+    globals.material.uniforms.leftBoostMat.value = globals.leftPosition.boost.matrix;
+    globals.material.uniforms.leftFacing.value = globals.leftPosition.facing;
+
+    let vectorRight = new Vector3(globals.ipDist, 0, 0).rotateByFacing(globals.position);
+    globals.rightPosition = globals.position.clone().localFlow(vectorRight);
+    globals.material.uniforms.rightBoostMat.value = globals.rightPosition.boost.matrix;
+    globals.material.uniforms.rightFacing.value = globals.rightPosition.facing;
+
+    globals.material.uniforms.time.value = (new Date().getTime()) - time0;
+
+    globals.material.uniforms.display.value = globals.display;
+    globals.material.uniforms.res.value = globals.res;
+    // globals.material.uniforms.lightRad.value = globals.lightRad;
+
+}
+
+export {
+    initGeometry,
+    initObjects,
+    setupMaterial,
+    updateMaterial,
+    fixOutsideCentralCell,
+    createGenerators,
+    invGenerators,
+    unpackageMatrix
+};
