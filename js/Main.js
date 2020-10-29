@@ -1,89 +1,189 @@
-//-------------------------------------------------------
-// Constant Variables
-//-------------------------------------------------------
-const c_ipDist = 0.03200000151991844; // inter pupil
+import {
+    Scene,
+    WebGLRenderer,
+    Vector2,
+    OrthographicCamera,
+    FileLoader,
+    BufferGeometry,
+    BufferAttribute,
+    Mesh
+} from './module/three.module.js';
 
-//-------------------------------------------------------
+import {
+    initGeometry,
+    initObjects,
+    setupMaterial,
+    updateMaterial
+} from "./Math.js";
+
+import {
+    initGui
+} from "./UI.js";
+import {
+    initEvents
+} from './Events.js';
+import {
+    Controls
+} from './Controls.js';
+
+import {
+    VRController
+} from './module/VRController.js';
+
+import {
+    VREffect
+} from './module/VREffect.js';
+
+//----------------------------------------------------------------------------------------------------------------------
 // Global Variables
-//-------------------------------------------------------
-var g_material;
-var g_controls;
-var g_renderer;
-var g_currentBoost;
-var g_cellBoost;
-var g_invCellBoost;
-var g_phoneOrient;
-var g_raymarch;
-var g_vr = 0;
-var g_leftBoost, g_rightBoost;
+//----------------------------------------------------------------------------------------------------------------------
 
-//-------------------------------------------------------
-// Scene Variables
-//-------------------------------------------------------
-var composer;
-var stats;
-//-------------------------------------------------------
-// Sets up precalculated values
-//-------------------------------------------------------
-var gens;
-var invGens;
+/*
 
-//-------------------------------------------------------
-// Sets up the global objects
-//-------------------------------------------------------
-var lightPositions = [];
-var lightIntensities = [];
-var globalObjectBoost;
+    TODO: break the globals in several groups. Indeed the other modules do not need to access all the variables.
 
-//-------------------------------------------------------
+ */
+
+let globals = {
+    ipDist: 0.03200000151991844,
+    effect: undefined,
+    material: undefined,
+    controls: undefined,
+    position: undefined,
+    cellPosition: undefined,
+    invCellPosition: undefined,
+    phoneOrient: undefined,
+    renderer: undefined,
+    screenResolution: undefined,
+    vr: 0,
+    leftPosition: undefined,
+    rightPosition: undefined,
+    stereoScreenOffset: 0.03,
+    gens: undefined,
+    invGens: undefined,
+    lightPositions: [],
+    lightIntensities: [],
+    globalObjectPosition: undefined,
+    display: 3,
+    res: 1,
+    lightRad: 0.05
+};
+
+//----------------------------------------------------------------------------------------------------------------------
+// Scene variables
+//----------------------------------------------------------------------------------------------------------------------
+
+let scene;
+let mesh;
+let camera;
+let stats;
+let canvas;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Shader variables
+//----------------------------------------------------------------------------------------------------------------------
+
+let mainFrag;
+
+//----------------------------------------------------------------------------------------------------------------------
 // Sets up the scene
-//-------------------------------------------------------
-var init = function(){
-  //Setup our THREE scene--------------------------------
-  g_renderer = new THREE.WebGLRenderer();
-  var screenRes = new THREE.Vector2(window.innerWidth, window.innerHeight);
-  g_renderer.setSize(screenRes.x, screenRes.y);
-  document.body.appendChild(g_renderer.domElement);
+//----------------------------------------------------------------------------------------------------------------------
 
-  //Initialize varirables, objects, and stats
-  stats = new Stats(); stats.showPanel(1); stats.showPanel(2); stats.showPanel(0); document.body.appendChild(stats.dom);
-  g_controls = new THREE.Controls(); 
-  initGeometry();
-  initObjects();
-  g_phoneOrient = [null, null, null];
+function init() {
+    //Setup our THREE scene--------------------------------
+    scene = new Scene();
+    canvas = document.createElement('canvas');
+    let context = canvas.getContext('webgl2');
+    globals.renderer = new WebGLRenderer({
+        canvas: canvas,
+        context: context
+    });
+    document.body.appendChild(globals.renderer.domElement);
+    globals.screenResolution = new Vector2(window.innerWidth, window.innerHeight);
+    globals.effect = new VREffect(globals.renderer);
+    camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
+    globals.controls = new Controls();
+    initGeometry();
+    initObjects();
+    globals.phoneOrient = [null, null, null];
 
-  //-------------------------------------------------------
-  // "Post" Processing - Since we are not using meshes we actually 
-  //                     don't need to do traditional rendering we 
-  //                     can just use post processed effects
-  //-------------------------------------------------------
-
-  //Composer **********************************************
-  composer = new THREE.EffectComposer(g_renderer);
-
-  //Shader Passes *****************************************
-  //Raymarch
-  g_raymarch = raymarchPass(screenRes);
-  composer.addPass(g_raymarch);
-  g_raymarch.renderToScreen = true;
-  //------------------------------------------------------
-  //Let's get rendering
-  //------------------------------------------------------
-  animate();
+    loadShaders();
+    initEvents();
+    initGui();
+    stats = new Stats();
+    stats.showPanel(1);
+    stats.showPanel(2);
+    stats.showPanel(0);
+    document.body.appendChild(stats.dom);
 }
 
-//-------------------------------------------------------
+
+function loadShaders() {
+    //Since our shader is made up of strings we can construct it from parts
+    let loader = new FileLoader();
+    loader.setResponseType('text');
+    loader.load('shaders/01uniforms.glsl', function (unifs) {
+        loader.load('shaders/02ellipticInt.glsl', function (ellInt) {
+            loader.load('shaders/03isom.glsl', function (isom) {
+                loader.load('shaders/04tangVect.glsl', function (tvect) {
+                    loader.load('shaders/05geodesicFlow.glsl', function (geoflow) {
+                        loader.load('shaders/06scene.glsl', function (sceneSDF) {
+                            loader.load('shaders/07raymarch2.glsl', function (raymarch) {
+                                loader.load('shaders/08colors.glsl', function (colors) {
+                                    loader.load('shaders/09main.glsl', function (main1) {
+                                        let main = unifs.concat(ellInt).concat(isom).concat(tvect).concat(geoflow).concat(sceneSDF).concat(raymarch).concat(colors).concat(main1);
+                                        mainFrag = main;
+                                        setupMaterial(main);
+                                        globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+
+                                        //Setup a "quad" to render on-------------------------
+                                        let geom = new BufferGeometry();
+                                        let vertices = new Float32Array([
+                -1.0, -1.0, 0.0,
+                1.0, -1.0, 0.0,
+                1.0, 1.0, 0.0,
+
+                -1.0, -1.0, 0.0,
+                1.0, 1.0, 0.0,
+                -1.0, 1.0, 0.0
+            ]);
+                                        geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                        mesh = new Mesh(geom, globals.material);
+                                        scene.add(mesh);
+                                        animate();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 // Where our scene actually renders out to screen
-//-------------------------------------------------------
-var animate = function(){
-  stats.begin();
-  requestAnimationFrame(animate);
-  composer.render();
-  g_controls.update();
-  stats.end();
+//----------------------------------------------------------------------------------------------------------------------
+
+function animate() {
+    stats.begin();
+    globals.controls.update();
+    updateMaterial();
+    VRController.update();
+    globals.effect.render(scene, camera, animate);
+    stats.end();
 }
 
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Where the magic happens
-//-------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+
 init();
+
+
+export {
+    init,
+    globals,
+    canvas
+};
