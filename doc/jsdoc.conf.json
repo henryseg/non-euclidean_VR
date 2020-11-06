@@ -1,0 +1,22 @@
+{
+    "plugins": [
+        "plugins/markdown"
+    ],
+
+    "source": {
+        "include": [
+            "../js/geometry/",
+            "../js/scene/"
+        ],
+        "exclude": [
+            "../js/lib",
+            "../js/unittest"
+        ],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+
+    "opts" : {
+        "destination": "./jsdoc/"
+    }
+}
