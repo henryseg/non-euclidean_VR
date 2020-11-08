@@ -149,7 +149,7 @@ class Point {
      * Return a preferred isometry sending the current point to the origin (typically in Nil, Sol, SL2, etc).
      * @return {Isometry}
      */
-    makeTranslationInverse() {
+    makeInvTranslation() {
     }
 
     /**
