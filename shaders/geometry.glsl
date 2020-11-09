@@ -113,20 +113,20 @@ Vector reduceError(Vector v){}
 
 /**
  * Add the given vectors.
- * @return v1 + v2
+ * @return @f$ v_1 + v_2 @f$
  */
 Vector add(Vector v1, Vector v2){ }
 
 /**
  * Subtrack the given vectors.
- * @return v1 - v2
+ * @return @f$ v_1 - v_2 @f$
  */
 Vector sub(Vector v1, Vector v2){ }
 
 /**
  * Multiply the vector by a scalar.
  * Previously `scalarMult`.
- * @return s * v
+ * @return @f$ s v @f$
  */
 Vector multiplyScalar(float s, Vector v){ }
 
@@ -180,7 +180,7 @@ float cosAngle(Vector v1, Vector v2){
  * <a href=" https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/reflect.xhtml">OpenGL reflect</a>
  * @param[in] v the vector to reflect
  * @param[in] n the normal to the plane, it should be a unit vector
- * @returns the reflectec vector, i.e. v - 2 <v,n> n
+ * @returns the reflectec vector, i.e. @f$ v - 2 \left<v,n\right> n @f$
  */
 Vector reflect(Vector v, Vector n){
     return sub(v, multiplyScalar(2. * dot(v, n), n);

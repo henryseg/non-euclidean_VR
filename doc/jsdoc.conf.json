@@ -6,7 +6,8 @@
     "source": {
         "include": [
             "../js/geometry/",
-            "../js/scene/"
+            "../js/scene/",
+            "../js/"
         ],
         "exclude": [
             "../js/lib",
