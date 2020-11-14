@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.20"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Non-euclideanVR: /Volumes/Data/outreach/non-euclidean_VR/shaders/main.glsl File Reference</title>
+<title>Non-euclideanVR: /Users/lamiremi/outreach/non-euclidean_VR/shaders/main.glsl File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -75,8 +75,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">main.glsl File Reference</div>  </div>
 </div><!--header-->
@@ -84,17 +83,10 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af2857c86b460c1cf95f017ce1485659e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#af2857c86b460c1cf95f017ce1485659e">unserializeBoosts</a> ()</td></tr>
-<tr class="separator:af2857c86b460c1cf95f017ce1485659e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada77c5d251114666db373595c3331086"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#ada77c5d251114666db373595c3331086">setupDir</a> ()</td></tr>
-<tr class="separator:ada77c5d251114666db373595c3331086"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60635395f2e61246230ff17cf7cf40ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#a60635395f2e61246230ff17cf7cf40ac">rayDir</a> (vec2 coords)</td></tr>
+<tr class="separator:a60635395f2e61246230ff17cf7cf40ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdef7a1fd863a6d3770c1268cb06add3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">main</a> ()</td></tr>
 <tr class="separator:acdef7a1fd863a6d3770c1268cb06add3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a63542922584990aef3fad3c697d01d96"><td class="memItemLeft" align="right" valign="top">out vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#a63542922584990aef3fad3c697d01d96">out_FragColor</a></td></tr>
-<tr class="separator:a63542922584990aef3fad3c697d01d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="acdef7a1fd863a6d3770c1268cb06add3"></a>
@@ -114,60 +106,32 @@ Variables</h2></td></tr>
 <p>Main function. Wrap everything together:</p><ul>
 <li>Compute the direction where to start the ray-marching.</li>
 <li>Ray-march in this direction.</li>
-<li>If we hit an object compute the correspondng color. </li>
+<li>If we hit an object compute the corresponding color. </li>
 </ul>
 
 </div>
 </div>
-<a id="ada77c5d251114666db373595c3331086"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada77c5d251114666db373595c3331086">&#9670;&nbsp;</a></span>setupDir()</h2>
+<a id="a60635395f2e61246230ff17cf7cf40ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60635395f2e61246230ff17cf7cf40ac">&#9670;&nbsp;</a></span>rayDir()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> setupDir </td>
+          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> rayDir </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">vec2&#160;</td>
+          <td class="paramname"><em>coords</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the initial direction for the ray-marching </p>
-
-</div>
-</div>
-<a id="af2857c86b460c1cf95f017ce1485659e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2857c86b460c1cf95f017ce1485659e">&#9670;&nbsp;</a></span>unserializeBoosts()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void unserializeBoosts </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Setup all the boost from the raw data passed to the shader </p>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a63542922584990aef3fad3c697d01d96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63542922584990aef3fad3c697d01d96">&#9670;&nbsp;</a></span>out_FragColor</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">out vec4 out_FragColor</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Computed color for this pixel </p>
+<p>Computed color for this pixel Compute the initial direction for the ray-marching </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">coords</td><td>the coordinates of the point (in pixels) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -75,13 +75,21 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>The shader is split in several files that need be concatenated as follows</p><ul>
-<li><a class="el" href="header_8glsl.html">header.glsl</a> (header, numerical constants, uniforms, etc)</li>
-<li><a class="el" href="geometry_8glsl.html">geometry.glsl</a> (everything about the geometry)</li>
-<li><a class="el" href="sdf_8glsl.html">sdf.glsl</a> (basic and compound signed distance functions / distance underestimators)</li>
+<li><a class="el" href="header_8glsl.html">header.glsl</a> (constants, uniforms)</li>
+<li><a class="el" href="geometry_2euc_8glsl.html">geometry/euc.glsl</a> (geometry functions)</li>
+<li><a class="el" href="geometry_2common_8glsl.html">geometry/common.glsl</a> (common stuff)</li>
+<li><a class="el" href="setup_8glsl.html">setup.glsl</a> (global variables, etc)</li>
+<li><a class="el" href="sdf_2euc_8glsl.html">sdf/euc.glsl</a> (basic signed distance functions / distance underestimators)</li>
+<li><a class="el" href="sdf_2common_8glsl.html">sdf/common.glsl</a> (common stuff)</li>
 <li><a class="el" href="scene_8glsl.html">scene.glsl</a> (the scene built by the JavaScript scene builder)</li>
 <li><a class="el" href="raymarch_8glsl.html">raymarch.glsl</a> (the ray-marching algorithm)</li>
 <li><a class="el" href="lighting_8glsl.html">lighting.glsl</a> (scene illumination)</li>
-<li><a class="el" href="main_8glsl.html">main.glsl</a> (wrapping up everything) </li>
+<li><a class="el" href="main_8glsl.html">main.glsl</a> (wrapping up everything)</li>
+</ul>
+<p>The files <a class="el" href="geometry_2euc_8glsl.html">geometry/euc.glsl</a> and <a class="el" href="sdf_2euc_8glsl.html">sdf/euc.glsl</a> need be changed depending on the geometry.</p>
+<p>Sadly, OpenGL does not seem to allow overloading built-in functions. Thus we followed the following naming rules. The rules for naming functions are the following:</p><ul>
+<li>If we are extending an GLSL function (e.g. dot, length, reflect, etc), then we use the same name as the GLSL function prefixed by <code>geom</code>.</li>
+<li>If there is no analogue function (typically when we extend operators *,+,etc), then we use the same name as the Three.js analogue </li>
 </ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->

@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['phongmodel_60',['phongModel',['../lighting_8glsl.html#a0dba339dd553638e2ff6255842e257b6',1,'lighting.glsl']]],
-  ['pi_61',['PI',['../header_8glsl.html#aa08a577393243b86dfd2a97e61443673',1,'header.glsl']]],
-  ['point_62',['Point',['../struct_point.html',1,'']]],
-  ['pos_63',['pos',['../struct_vector.html#a76fcb6b6afe3d7ec0e96b3e52311a889',1,'Vector']]]
+  ['objectboost_64',['objectBoost',['../setup_8glsl.html#a42fae8e17437b1927b5a2cc05cf6d15a',1,'setup.glsl']]],
+  ['objectbootrawb_65',['objectBootRawB',['../header_8glsl.html#a2ecab376683ba8db1e4a42fadcc03d7b',1,'header.glsl']]],
+  ['objectfacing_66',['objectFacing',['../header_8glsl.html#acb3124eb88e51622417ebbec613b09fb',1,'header.glsl']]],
+  ['objetboostrawa_67',['objetBoostRawA',['../header_8glsl.html#a4cd04eefc23dd6a2360205d35d539dfb',1,'header.glsl']]],
+  ['origin_68',['ORIGIN',['../abstract_8glsl.html#a1db97dc3a9910e17a2e3463dc5af4459',1,'ORIGIN():&#160;abstract.glsl'],['../geometry_2euc_8glsl.html#a1db97dc3a9910e17a2e3463dc5af4459',1,'ORIGIN():&#160;euc.glsl']]]
 ];

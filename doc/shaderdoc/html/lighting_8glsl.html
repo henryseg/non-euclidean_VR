@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.20"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Non-euclideanVR: /Volumes/Data/outreach/non-euclidean_VR/shaders/lighting.glsl File Reference</title>
+<title>Non-euclideanVR: /Users/lamiremi/outreach/non-euclidean_VR/shaders/lighting.glsl File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -75,28 +75,20 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">lighting.glsl File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_material.html">Material</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a552ccdf1e22b4e2048d768c34c7ccd57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#a552ccdf1e22b4e2048d768c34c7ccd57">sceneNormal</a> (<a class="el" href="struct_point.html">Point</a> p, int id)</td></tr>
-<tr class="separator:a552ccdf1e22b4e2048d768c34c7ccd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bc6ab2e2478af52fb71f92586221d07"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#a2bc6ab2e2478af52fb71f92586221d07">lightIntensity</a> (<a class="el" href="struct_vector.html">Vector</a> dir, float len)</td></tr>
 <tr class="separator:a2bc6ab2e2478af52fb71f92586221d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95d3ecdfaa6247b95c0ada281eb1674d"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#a95d3ecdfaa6247b95c0ada281eb1674d">lightComputation</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_vector.html">Vector</a> n, <a class="el" href="struct_vector.html">Vector</a> dir, float len, <a class="el" href="struct_material.html">Material</a> material, vec4 lightColor)</td></tr>
 <tr class="separator:a95d3ecdfaa6247b95c0ada281eb1674d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dba339dd553638e2ff6255842e257b6"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#a0dba339dd553638e2ff6255842e257b6">phongModel</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_material.html">Material</a> material)</td></tr>
-<tr class="separator:a0dba339dd553638e2ff6255842e257b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21ff29a7a4f37da8d119b134fd8ddc3"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#ae21ff29a7a4f37da8d119b134fd8ddc3">phongModel</a> (<a class="el" href="struct_vector.html">Vector</a> v, int id)</td></tr>
+<tr class="separator:ae21ff29a7a4f37da8d119b134fd8ddc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a95d3ecdfaa6247b95c0ada281eb1674d"></a>
@@ -160,7 +152,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the contribution the this direction to the illumination.</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000012">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
 
 </div>
 </div>
@@ -200,8 +192,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0dba339dd553638e2ff6255842e257b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0dba339dd553638e2ff6255842e257b6">&#9670;&nbsp;</a></span>phongModel()</h2>
+<a id="ae21ff29a7a4f37da8d119b134fd8ddc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae21ff29a7a4f37da8d119b134fd8ddc3">&#9670;&nbsp;</a></span>phongModel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -211,42 +203,6 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
           <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_material.html">Material</a>&#160;</td>
-          <td class="paramname"><em>material</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Phong lighting model. Take into account all possible lights and directions </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>incidence vector </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">material</td><td>the material of the object </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000009">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
-
-</div>
-</div>
-<a id="a552ccdf1e22b4e2048d768c34c7ccd57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a552ccdf1e22b4e2048d768c34c7ccd57">&#9670;&nbsp;</a></span>sceneNormal()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> sceneNormal </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -261,14 +217,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the normal to the scene at the point <code>p</code> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Phong lighting model. Take into account all possible lights and directions </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>the point at which we hit the scene </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>the specific object that has been hitted </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>incidence vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>id of the of hit object </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">material</td><td>the material of the object </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section remark"><dt>Remarks</dt><dd>Since we know, which object has been hitted, we don't need to use the scenceSDF to estimate the normal. We can directly use the SDF of that object. It is probably faster. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
 
 </div>
 </div>

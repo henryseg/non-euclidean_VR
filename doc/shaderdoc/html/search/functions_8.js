@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['objetsdf_124',['objetSDF',['../sdf_8glsl.html#adda67ddee0f0b0c8833fc82fae21a645',1,'sdf.glsl']]]
+  ['negate_140',['negate',['../geometry_2common_8glsl.html#a8775dc5aaff062ad542d57987b160876',1,'common.glsl']]]
 ];

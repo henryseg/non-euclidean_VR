@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.20"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Non-euclideanVR: /Volumes/Data/outreach/non-euclidean_VR/shaders/scene.glsl File Reference</title>
+<title>Non-euclideanVR: /Users/lamiremi/outreach/non-euclidean_VR/shaders/scene.glsl File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -75,18 +75,26 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">scene.glsl File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_material.html">Material</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:afa438230c67c206a19d9ab32bbcaa892"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#afa438230c67c206a19d9ab32bbcaa892">localSceneSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, out int id)</td></tr>
 <tr class="separator:afa438230c67c206a19d9ab32bbcaa892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a064696f9bdc957d6f30aa641bf2bf9dc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a064696f9bdc957d6f30aa641bf2bf9dc">globalSceneSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, out int id)</td></tr>
 <tr class="separator:a064696f9bdc957d6f30aa641bf2bf9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af39f8b97f8a810e02aac96b8f7c6c2a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#af39f8b97f8a810e02aac96b8f7c6c2a5">sceneNormal</a> (<a class="el" href="struct_vector.html">Vector</a> v, int id)</td></tr>
+<tr class="separator:af39f8b97f8a810e02aac96b8f7c6c2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a064696f9bdc957d6f30aa641bf2bf9dc"></a>
@@ -156,6 +164,42 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="af39f8b97f8a810e02aac96b8f7c6c2a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af39f8b97f8a810e02aac96b8f7c6c2a5">&#9670;&nbsp;</a></span>sceneNormal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> sceneNormal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compute the normal to the scene at the vector <code>v</code> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the vector when we hit the scene </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>the specific object that has been hit </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Since we know, which object has been hit, we don't need to use the scenceSDF to estimate the normal. We can directly use the SDF of that object. It is probably faster. </dd></dl>
 
 </div>
 </div>

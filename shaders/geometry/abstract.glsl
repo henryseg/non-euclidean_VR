@@ -10,13 +10,7 @@ struct Isometry{ };
  * Identity isometry
  * @todo Check if one can build a structure as a constant, or does it have to be a global variable
  */
-const Isometry IDENTITY; /**< Idendity isometry */
-Isometry currentBoost; /**< Current boost */
-Isometry leftBoost; /**< Left eye boost */
-Isometry rightBoost; /**< Right eye boost */
-Isometry cellBoost; /**< Cell boost */
-Isometry invCellBoost; /**< Inverse of the cell boot */
-Isometry objectBoost; /**< objetBoost (model for the template) */
+const Isometry IDENTITY; /**< Identity isometry */
 
 /**
  * Convert the data passed to the shader into an isometry.
@@ -42,7 +36,7 @@ Isometry multiply(Isometry isom1, Isometry isom2) {
 /**
  * Return the inverse of the given isometry.
  */
-Isometry getInverse(Isometry isom) { }
+Isometry geomInverse(Isometry isom) { }
 
 /***********************************************************************************************************************
  *
@@ -69,7 +63,7 @@ Point reduceError(Point p){}
 /**
  * Translate the point by the isometry.
  */
-Point translate(Isometry isom, Point p) { }
+Point applyIsometry(Isometry isom, Point p) { }
 
 /**
  * Return a preferred isometry sending the origin to the given point.
@@ -96,16 +90,6 @@ struct Vector{
 };
 
 
-const Vector E1;///< Reference frame at the origin (first vector)
-const Vector E2;///< Reference frame at the origin (second vector)
-const Vector E3;///< Reference frame at the origin (third vector)
-
-/**
- * Convert the data passed to the shader into an vector.
- * @todo Decide which type of data is passed to the shader.
- */
-Vector unserializeVector(genType data) { }
-
 /**
  * Reduce the eventual numerical errors of the given vector.
  */
@@ -131,28 +115,19 @@ Vector sub(Vector v1, Vector v2){ }
 Vector multiplyScalar(float s, Vector v){ }
 
 /**
- * Return the opposite of the given vector.
- * Previously `turnAround`.
- * @return -v
- */
-Vector negate(Vector v) {
-    return multiplyScalar(-1., v);
-}
-
-/**
  * Return the dot product of the two vectors (with respect to the metric tensor).
  * Previouly `tangDot`.
  * Overload GLSL dot product (hopefully this is not an issue).
  */
-float dot(Vector v1, Vector v2) { }
+float geomDot(Vector v1, Vector v2) { }
 
 /**
  * Return the length of the given vector.
  * Previously `tangNorm`.
  * Overload GLSL dot product (hopefully this is not an issue).
  */
-float length(Vector v){
-    return sqrt(dot(v, v));
+float geomLength(Vector v){
+    return sqrt(geomDot(v, v));
 }
 
 /**
@@ -160,7 +135,7 @@ float length(Vector v){
  * Previously `tangNormalize`.
  * Overload GLSL normalization (hopefully this is not an issue).
  */
-Vector normalize(Vector v){
+Vector geomNormalize(Vector v){
     float a = length(v);
     return multiplyScalar(1./a, v);
 }
@@ -171,7 +146,7 @@ Vector normalize(Vector v){
 float cosAngle(Vector v1, Vector v2){
     float a1 = length(v1);
     float a2 = length(v2);
-    return dot(v1, v2)/ (a1 * a2);
+    return geomDot(v1, v2)/ (a1 * a2);
 }
 
 /**
@@ -182,15 +157,15 @@ float cosAngle(Vector v1, Vector v2){
  * @param[in] n the normal to the plane, it should be a unit vector
  * @returns the reflectec vector, i.e. @f$ v - 2 \left<v,n\right> n @f$
  */
-Vector reflect(Vector v, Vector n){
-    return sub(v, multiplyScalar(2. * dot(v, n), n);
+Vector geomReflect(Vector v, Vector n){
+    return sub(v, multiplyScalar(2. * geomDot(v, n), n);
 }
 
 
 /**
  * Translate the vector by the isometry.
  */
-Vector translate(Isometry isom, Vector v) { }
+Vector applyIsometry(Isometry isom, Vector v) { }
 
 /**
  * Return a preferred isometry sending the origin to the underlying point.
@@ -212,11 +187,12 @@ Isometry makeInvTranslation(Vector v) {
  * Rotation the given vector by a matrix representing an element of O(3).
  * @todo Check where this is used. Does v need be a vector at the **origin**?
  */
-Vector rotateByFacign(mat4 m, Vector v) { }
+Vector applyFacing(mat4 m, Vector v) { }
 
 
 /**
- * Section of the frame bundle
+ * Section of the frame bundle.
+ * The section at the origin, should coincide with the reference frame.
  * @param[in] p point on the geometry
  * @param[out] frame computed frame at the given point
  * @todo Not completely convinced by this - and the function createVector() and smallShift().

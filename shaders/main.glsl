@@ -1,30 +1,56 @@
 /**
  * Computed color for this pixel
  */
-out vec4 out_FragColor;
-
-/**
- * Setup all the boost from the raw data passed to the shader
- */
-void unserializeBoosts() {
-    currentBoost = unserializeIsom(currentBoostRawA, currentBoostRawB);
-    leftBoost = unserializeIsom(leftBoostRawA, leftBoostRawB);
-    rightBoost = unserializeIsom(rightBoostRawA, rightBoostRawB);
-    cellBoost = unserializeIsom(cellBoostRawA, cellBoostRawB);
-    invCellBoost = unserializeIsom(invCellBoostRawA, invCellBoostRawB);
-}
 
 /**
  * Compute the initial direction for the ray-marching
+ * @param[in] coords the coordinates of the point (in pixels)
  */
-Vector setupDir(){}
+Vector rayDir(vec2 coords){
+  // Change of coordinates:
+  // The origin is at the center of the screen.
+  // The x-coordinates runs between -0.5 and 0.5 (the screen has width 1).
+  // The y-coordiantes is updated accordingly, respecting ratio.
+  vec2 xy = (coords - 0.5 * resolution)/ resolution.x;
+  // Depth is a function of the field of view.
+  float z = -0.5 / tan(0.5 * fov);
+
+  // Building the corresponding vector in the tangent space at the origin.
+  vec3 dir = vec3(xy,z);
+  Vector res = createVector(ORIGIN, dir);
+  res = geomNormalize(res);
+
+  // Translating the vector according to the boost and facing.
+  res = applyFacing(facing,res);
+  res = applyIsometry(boost,res);
+  return res;
+}
 
 /**
  * Main function. Wrap everything together:
  * - Compute the direction where to start the ray-marching.
  * - Ray-march in this direction.
- * - If we hit an object compute the correspondng color.
+ * - If we hit an object compute the corresponding color.
  */
 void main() {
+  vec3 color;
+  Isometry fixIsom;
+
+  unserializeData();
+  Vector v = rayDir(gl_FragCoord.xy);
+
+  int id = raymarch(v, fixIsom);
+
+  switch(id) {
+    case -1:
+      color = debugColor;
+      break;
+    case 0:
+      color = vec3(0.2,0.2,0.2);
+      break;
+    default:
+      color = phongModel(v,id);
+  }
+  gl_FragColor = vec4(color,1);
 
 }

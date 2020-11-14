@@ -1,0 +1,12 @@
+#vr-icon {
+  height:50px;
+  position: fixed;
+  bottom: 30px;
+  right: 50px;
+  display: block;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+}

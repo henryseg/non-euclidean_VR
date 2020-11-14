@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cosangle_104',['cosAngle',['../geometry_8glsl.html#a8917ba32ec22067cc7bcc0b4b8e1731e',1,'geometry.glsl']]],
-  ['createvector_105',['createVector',['../geometry_8glsl.html#a644496bcbd56e5baa3666cd749d6df85',1,'geometry.glsl']]]
+  ['ballgrad_117',['ballGRAD',['../sdf_2euc_8glsl.html#adfd6a8020d641e17ab89b98a1dc1ff4a',1,'euc.glsl']]],
+  ['ballsdf_118',['ballSDF',['../sdf_2euc_8glsl.html#a359c68439ec94915f7ee438efe75be87',1,'euc.glsl']]]
 ];

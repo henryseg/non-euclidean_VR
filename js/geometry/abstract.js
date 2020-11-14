@@ -1,5 +1,5 @@
 /**
- * @module abstract
+ * @module Abstract
  *
  * @description
  * Defines the objects required by each geometry.
@@ -15,7 +15,7 @@
 import {
     Vector3,
     Matrix4
-} from "../lib/three.min.js"
+} from "../lib/three.module.js"
 
 
 /**
@@ -71,7 +71,25 @@ class Isometry {
      * @param {Isometry} isom
      * @return {Isometry}
      */
-    inverse(isom) {
+    getInverse(isom) {
+    }
+
+    /**
+     * Return a preferred isometry sending the origin to the given point
+     * (typically in Nil, Sol, SL2, etc).
+     * @param {Point} point
+     * @return {Isometry}
+     */
+    makeTranslation(point) {
+    }
+
+    /**
+     * Return a preferred isometry sending the given point to the origin
+     * (typically in Nil, Sol, SL2, etc).
+     * @param {Point} point
+     * @return {Isometry}
+     */
+    makeInvTranslation(point) {
     }
 
     /**
@@ -135,21 +153,7 @@ class Point {
      * @param {Isometry} isom
      * @return {Point}
      */
-    translateBy(isom) {
-    }
-
-    /**
-     * Return a preferred isometry sending the origin to the current point (typically in Nil, Sol, SL2, etc).
-     * @return {Isometry}
-     */
-    makeTranslation() {
-    }
-
-    /**
-     * Return a preferred isometry sending the current point to the origin (typically in Nil, Sol, SL2, etc).
-     * @return {Isometry}
-     */
-    makeInvTranslation() {
+    applyIsometry(isom) {
     }
 
     /**
@@ -195,20 +199,20 @@ class Point {
  */
 class Vector extends Vector3 {
 
-    /**
-     * Rotate the current vector by the facing component of the position.
-     * @param {Position} position
-     * @return {Vector}
-     */
-    rotateByFacing(position) {
-    }
-
-    /**
-     * Encode the vector in a way that can be easily passed to the shader.
-     * @todo Decide what type is used to pass a position to the shader
-     */
-    serialize() {
-    }
+  /**
+   * Rotate the current vector by the facing component of the position.
+   * This method is geometry independent as the coordinates of the vector
+   * are given in a chosen reference frame.
+   * Only the reference frame depends on the geometry.
+   * @param {Position} position
+   * @return {Vector}
+   */
+  applyFacing(position) {
+    let aux = Vector4(this.x, this.y, this.z, 0);
+    aux.applyMatrix4(position.facing);
+    this.set(aux.x, aux.y, aux.z);
+    return this;
+  }
 }
 
 /**
@@ -227,9 +231,31 @@ class Position {
      *
      * @property {Isometry} boost - the isometry component  of the position
      * @property {Matrix4} facing - the O(3) component of the position (stored as a `Matrix4`)
-     *
      */
     constructor() {
+      this.boost = new Isometry();
+      this.facing = new Matrix4();
+    }
+
+    /**
+     * Return the type used for isometries
+     */
+    isometryType(){
+      return Object;
+    }
+
+    /**
+     * Return the type used for points
+     */
+    unserializePointType(){
+      return Object;
+    }
+
+    /**
+     * Return the type used for vectors
+     */
+    vectorType(){
+      return Object;
     }
 
     /**
@@ -238,6 +264,8 @@ class Position {
      * @return {Position}
      */
     setBoost(isom) {
+      this.boost = isom;
+      return this;
     }
 
     /**
@@ -246,6 +274,8 @@ class Position {
      * @return {Position}
      */
     setFacing(facing) {
+      this.facing = facing;
+      return this;
     }
 
     /**
@@ -253,13 +283,17 @@ class Position {
      * @return {Position}
      */
     reduceErrorBoost() {
+      this.boost.reduceError();
+      return this;
     }
 
     /**
      * Reduce the eventual numerical error of the current facing.
      * @return {Position}
+     * @todo To be completed
      */
     reduceErrorFacing() {
+      return this;
     }
 
     /**
@@ -267,6 +301,9 @@ class Position {
      * @return {Position}
      */
     reduceError() {
+      this.reduceErrorBoost();
+      this.reduceErrorFacing();
+      return this;
     }
 
     /**
@@ -274,15 +311,19 @@ class Position {
      * @param {Isometry} isom
      * @return {Position}
      */
-    translateBy(isom) {
+    applyIsometry(isom) {
+      this.boost.premultiply(isom);
+      return this;
     }
 
     /**
      * Rotate the facing by `m` (right action of O(3) in the set of positions).
-     * @param {Matrix4} m
+     * @param {Matrix4} matrix
      * @return {Position}
      */
-    rotateBy(m) {
+    applyFacing(matrix) {
+      this.facing.multiply(matrix)
+      return this;
     }
 
     /**
@@ -290,6 +331,9 @@ class Position {
      * @param {Position} position
      */
     multiply(position) {
+      this.boost.multiply(position.boost);
+      this.facing.premultiply(position.facing);
+      return this;
     }
 
     /**
@@ -297,6 +341,9 @@ class Position {
      * @param {Position} position
      */
     premultiply(position) {
+      this.boost.premultiply(position.boost);
+      this.facing.multiply(position.facing);
+      return this;
     }
 
     /**
@@ -304,6 +351,9 @@ class Position {
      * @param {Position} position
      */
     getInverse(position) {
+      this.boost.getInverse(position.boost);
+      this.facing.getInverse(position.facing);
+      return this;
     }
 
     /**
@@ -321,6 +371,8 @@ class Position {
      * @return {Vector}
      */
     getFwdVector() {
+      let aux = new Vector(0,0,-1);
+      return aux.applyFacing(this);
     }
 
     /**
@@ -328,6 +380,8 @@ class Position {
      * @return {Vector}
      */
     getRightVector() {
+      let aux = new Vector(1,0,0);
+      return aux.applyFacing(this);
     }
 
     /**
@@ -335,6 +389,8 @@ class Position {
      * @return {Vector}
      */
     getUpVector() {
+      let aux = new Vector(0,1,0);
+      return aux.applyFacing(this);
     }
 
     /**
@@ -343,6 +399,7 @@ class Position {
      * @return {boolean}
      */
     equals(position) {
+      return this.boost.equals(position.boost) && this.facing.equals(position.facing);
     }
 
     /**
@@ -350,6 +407,10 @@ class Position {
      * @return {Position}
      */
     clone() {
+      let res = new Position()
+      res.setBoost(this.boost.clone());
+      res.setFacing(this.facing.clone());
+      return res;
     }
 
     /**
@@ -358,6 +419,8 @@ class Position {
      * @return {Position}
      */
     copy(position) {
+      this.boost.copy(position.boost);
+      this.facing.copy(position.facing);
     }
 
     /**
@@ -365,6 +428,7 @@ class Position {
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
+      return [this.boost.serialize()] + [this.facing];
     }
 
 

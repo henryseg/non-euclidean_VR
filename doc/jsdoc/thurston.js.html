@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: thurston.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: thurston.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Thurston
+ *
+ * @description
+ * Module used to define and render a scene in one of the eight Thruston geometries.
+ */
+
+import {
+ WebGLRenderer,
+ Scene,
+ OrthographicCamera,
+ PlaneBufferGeometry,
+ ShaderMaterial,
+ Mesh
+} from "./lib/three.module.js"
+
+import {
+ gui,
+ stats,
+} from "./ui.js"
+
+import {
+ initEvents
+} from "./events.js"
+
+import {
+    Position
+} from "../geometry/abstract.js";
+
+
+/**
+* @const {WebGLRenderer}
+* @default The WebGL Renderer used to produce the pictures
+*/
+const renderer = new WebGLRenderer();
+/**
+* @const {Scene}
+* @default The Three.js scene (that will consists of a single square)
+*/
+const scene = new Scene();
+/**
+* @const {OrthographicCamera}
+* @default The Three.js camera
+*/
+const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+
+
+/**
+ *
+ *
+ * @class
+ *
+ * @classdesc
+ * Object used to create a scene.
+ *
+ * @property {string} geometry - the underlying geometry
+ * @property lattice - the lattice used for local scenes
+ * @property {array} options - the general options of the scene
+ * @property {array} items - the list of items in the scene (lights, objects, etc)
+ *
+ * @todo Decide the list of available options
+ */
+class Thurston{
+
+    /**
+     * Create an instance dedicated to build a scene in the prescribed geometry.
+     * @param {string} geometry - the underlying geometry
+     * @param {array} options - a list of options
+     */
+    constructor (geometry, options = null){
+      this.geometry = geometry;
+    }
+
+
+    /**
+     * Setup the lattice used for the local scene.
+     * @param data - some data describing the lattice
+     * @return {Thurston}
+     *
+     * @todo Decide how the lattice should be defined
+     */
+    setLattice(data){}
+
+    /**
+     * Set the given options.
+     * @param {array} options - global options for the scene
+     * @return {Thurston}
+     */
+    setOptions(options){}
+
+    /**
+     * Set the given option.
+     * @param {string} key - key of the option
+     * @param {Object} value - the value of the option
+     * @return {Thurston}
+     */
+    setOption(key, value){}
+
+    /**
+     * Adding an item to the scene.
+     * This method need be declined for every kind of objects available in the geometry.
+     * The precise lists of items will vary depending on the geometry.
+     * @return {Thurston}
+     */
+    addItem(){}
+
+    /**
+     * Build the shader from templates files.
+     * @return {string} - the code of the shader
+     */
+    async buildShader(){}
+
+    /**
+     * Init
+     * Setup the genral WebGL machinery via Three.js
+     * Create a simple scene with a screen and an orthographic camera
+     * Setup the shaders
+     */
+    async init() {
+      // setup WebGL machinery through Three.js
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // building a simple scene with a single screen and a camera
+      let geometry = new PlaneBufferGeometry(2, 2);
+      // setup the shaders
+      let response;
+      response = await fetch("../shaders/vertex.glsl");
+      let vShader = await response.text();
+      console.log(vShader);
+      response = await fetch("../shaders/fragment.glsl");
+      let fShader = await response.text();
+      console.log(fShader);
+
+      let material = new ShaderMaterial({
+        vertexShader : vShader,
+        fragmentShader: fShader,
+        transparent: true
+      });
+      let mesh = new Mesh(geometry, material);
+    	scene.add(mesh);
+    }
+
+
+    /**
+     * Animates the simulation
+     */
+    animate() {
+    	window.requestAnimationFrame(animate);
+      this.stats.begin();
+    	renderer.render(this.scene, this.camera);
+      this.stats.end();
+    }
+
+
+}
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Material for objects in the scene
+ *
+ * @see Further information on the {@link https://en.wikipedia.org/wiki/Phong_reflection_model|Phong lighting model}
+ *
+ * @property {Vector4} color - color of the object
+ * @property {number} specular - specular reflection constant
+ * @property {number} diffuse - diffuse reflection constant
+ * @property {number} ambient - ambient reflection constant
+ * @property {number} shininess - shininess constant
+ *
+ * @todo Decide what to do for texture, color given by formulas, etc
+ */
+
+class SceneMaterial {
+
+    /**
+     * Constructor. Build a new material from the given data
+     * @param {array} data - the properties of the material
+     */
+    constructor(data) {
+    }
+}
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Generic class for items in the scene (objects, lights, etc)
+ * This class should never be instantiated directly.
+ * Classes that inherit from SceneItem can be instantiated
+ * All the properties are not mandatory.
+ * Their use will depend on the type of objects.
+ * The philosophy is to collect in this class all properties that can be used in more that one inherited class,
+ * so that the code is factored as much as possible
+ *
+ * @property {number} id - a unique ID
+ * @property {boolean} global  - flag: true if the item is in the global scene, false otherwise
+ * @property {boolean} light - flag: true if the item is a light, false otherwise
+ * @property {boolean} render - flag: true if the item should be rendered, false otherwise (useful for lights)
+ * @property {SceneMaterial}  material - material of the item
+ * @property {Vector3} lightColor - color of the light (if the item is a light)
+ * @property {Position} position - location and facing of the object. The facing only matters for textures?
+ * @property {function} positionCallback - a function that update the position (for animated objects)
+ *
+ */
+class SceneItem {
+
+    /**
+     * Constructor.
+     * @param {array} data
+     * @todo Decide what arguments the generic constructor should receive
+     */
+    constructor(data) {
+    }
+}
+
+export {
+    SceneMaterial
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-abstract.html">abstract</a></li><li><a href="module-events.html">events</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-User%2520Interface.html">User Interface</a></li></ul><h3>Classes</h3><ul><li><a href="Controls.html">Controls</a></li><li><a href="module-abstract-Isometry.html">Isometry</a></li><li><a href="module-abstract-Point.html">Point</a></li><li><a href="module-abstract-Position.html">Position</a></li><li><a href="module-abstract-Vector.html">Vector</a></li><li><a href="module-Thurston-SceneItem.html">SceneItem</a></li><li><a href="module-Thurston-SceneMaterial.html">SceneMaterial</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul><h3>Global</h3><ul><li><a href="global.html#keyboard">keyboard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 11 2020 21:17:00 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
