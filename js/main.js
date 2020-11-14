@@ -2,6 +2,10 @@ import {
   Thurston
 } from "./thurston.js"
 
-const thurston = new Thurston('euc');
-thurston.init();
-thurston.animate();
+async function test() {
+  let thurston = new Thurston('euc');
+  await thurston.init();
+  thurston.animate();
+}
+
+test();

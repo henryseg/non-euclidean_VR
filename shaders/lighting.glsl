@@ -37,5 +37,5 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
  */
 vec3 phongModel(Vector v, int id) {
   //Vector n = sceneNormal(v,id);
-  return vec3(1,0,0);
+  return objects[id].material.color;
 }

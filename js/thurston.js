@@ -48,26 +48,10 @@ const scene = new Scene();
 const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
 /**
-* @const {Object}
-* @default The list of supported geometries, key and complete names
-*/
-const supportedGeom = {
-  'euc': 'Euclidean space',
-  'sph': '3-Sphere',
-  'hyp': 'Hyperbolic space',
-  'h2e': 'Product geometry: H2 x E',
-  's2e': 'Product geometry: S2 x E',
-  'nil': 'Nil',
-  'slr': 'SL(2,R)',
-  'sol': 'Sol'
-};
-
-
-/**
 * @const {string}
 * @default Path to the shader directory, relative to the current script
 */
-const shaderDir = '../shaders/'
+const shaderDir = '../shaders/';
 
 /**
 * @const {array}
@@ -79,6 +63,7 @@ const shaderFiles = [
   'header.glsl',
   'geometry/XXX.glsl',
   'geometry/common.glsl',
+  'items.glsl',
   'setup.glsl',
   'sdf/XXX.glsl',
   'sdf/common.glsl',
@@ -107,27 +92,38 @@ class Thurston{
 
     /**
      * Create an instance dedicated to build a scene in the prescribed geometry.
-     * @param {string} geom - the underlying geometry
+     * @param {string} geomKey - the underlying geometry
      * @param {array} options - a list of options
+     * @todo Check if the geometry is supported, i.e. if the relevant files exist.
      */
-    constructor (geom, options = null){
-      // check if the geometry is supported
-      if(!(geom in supportedGeom)){
-        throw new Error("This geometry is not supported yet");
-      }
-      this.geom = geom;
-      // load the relevant library (todo)
-      
+    constructor (geomKey, options = null) {
+      // define all the properties (maybe not needed in JS, but good practice I guess)
+      this.geomKey = geomKey;
+
+      this.geomMod = undefined;
       this.uniforms = undefined;
       this.resolution = undefined;
+      this.position = undefined;
+      this.leftPosition = undefined;
+      this.rightPosition = undefined;
+      this.cellBoost = undefined;
+      this.invCellBoost = undefined;
+    }
+
+    async initGeom() {
+      // load the relevant library
+      this.geomMod = await import('./geometry/' + this.geomKey + '.js');
 
       // init all the boosts
-      this.boost = new Position();
-      this.leftBoost = new Position();
-      this.rightBoost = new Position();
-      this.cellBoost = new Position();
-      this.invCellBoost = new Position();
+      this.position = new this.geomMod.Position();
+      this.leftPosition = new this.geomMod.Position();
+      this.rightPosition = new this.geomMod.Position();
+      this.cellBoost = new this.geomMod.Isometry();
+      this.invCellBoost = new this.geomMod.Isometry();
+
+      return this;
     }
+
 
 
     /**
@@ -174,7 +170,7 @@ class Thurston{
      */
     appendTitle(){
       const title = document.querySelector('title');
-      title.append(' - ' + supportedGeom[this.geom]);
+      title.append(' - ' + this.geomMod.name);
       return this;
     }
 
@@ -199,7 +195,7 @@ class Thurston{
       let fShader = "";
       for(const shaderFile of shaderFiles){
         // update if needed the placeholder with the relevant geometry
-        file = shaderFile.replace('XXX', this.geom);
+        file = shaderFile.replace('XXX', this.geomMod.key);
         // load the file and append it to the shader
         response = await fetch(shaderDir + file);
         fShader = fShader + await response.text();
@@ -208,9 +204,42 @@ class Thurston{
     }
 
     /**
+     * Serialize all the positions and boost in a form that can be passed to the shader
+     * @return {array} the output in an array with three entries:
+     * - a list of 5 Matrix4 (the part A of the isometries position, left/right position, cell and invCell).
+     * - a list of 5 floating numbers (the part B of the isometries position, left/right position, cell and invCell).
+     * - a list of 3 Matrix4 (the facing, left and right facings).
+     */
+     serializeData(){
+       const rawA = [];
+       const rawB = [];
+       const facings = [];
+       let i = 0;
+       let raw;
+       const data = [
+         this.position,
+         this.leftPosition,
+         this.rightPosition,
+         this.cellBoost,
+         this.invCellBoost
+       ]
+       for(const pos of data){
+         raw = pos.serialize();
+         rawA[i] = raw[0];
+         rawB[i] = raw[1];
+         if(i < 3){
+           facings[i] = raw[2];
+         }
+         i = i+1;
+       }
+       return [rawA, rawB, facings];
+     }
+
+    /**
      * Setup the uniforms which are passed to the shader
      */
     setupUniforms(){
+      const rawData = this.serializeData();
       this.uniforms = {
         maxMarchingSteps: {
           type: "int",
@@ -242,15 +271,15 @@ class Thurston{
         },
         boostsRawA: {
           type: "mat4",
-          value: new Matrix4()
+          value: rawData[0]
         },
         boostsRawB: {
           type: "float",
-          value: 0.
+          value: rawData[1]
         },
         facings: {
           type: "mat4",
-          value: new Matrix4()
+          value: rawData[2]
         },
       }
     }
@@ -258,7 +287,12 @@ class Thurston{
     /**
      * Update the uniforms which are passed to the shader
      */
-     updateUniforms(){}
+     updateUniforms(){
+       const rawData = this.serializeData();
+       this.uniforms.boostsRawA.value = rawData[0];
+       this.uniforms.boostsRawB.value = rawData[1];
+       this.uniforms.facings.value = rawData[2];
+     }
 
 
     /**
@@ -268,6 +302,9 @@ class Thurston{
      * Setup the shaders
      */
     async init() {
+      // setup the geoemetry
+      await this.initGeom();
+
       // setup WebGL machinery through Three.js
       renderer.setPixelRatio(window.devicePixelRatio);
 		  renderer.setSize(window.innerWidth, window.innerHeight);
@@ -299,6 +336,7 @@ class Thurston{
           self.animate();
       });
       stats.begin();
+      this.updateUniforms();
     	renderer.render(scene, camera);
       stats.end();
     }

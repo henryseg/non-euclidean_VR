@@ -10,7 +10,7 @@ Vector rayDir(vec2 coords){
   // Change of coordinates:
   // The origin is at the center of the screen.
   // The x-coordinates runs between -0.5 and 0.5 (the screen has width 1).
-  // The y-coordiantes is updated accordingly, respecting ratio.
+  // The y-coordinates is updated accordingly, respecting ratio.
   vec2 xy = (coords - 0.5 * resolution)/ resolution.x;
   // Depth is a function of the field of view.
   float z = -0.5 / tan(0.5 * fov);
@@ -21,8 +21,8 @@ Vector rayDir(vec2 coords){
   res = geomNormalize(res);
 
   // Translating the vector according to the boost and facing.
-  res = applyFacing(facing,res);
-  res = applyIsometry(boost,res);
+  res = applyFacing(facing, res);
+  res = applyIsometry(boost, res);
   return res;
 }
 
@@ -42,10 +42,10 @@ void main() {
   int id = raymarch(v, fixIsom);
 
   switch(id) {
-    case -1:
+    case -2:
       color = debugColor;
       break;
-    case 0:
+    case -1:
       color = vec3(0.2,0.2,0.2);
       break;
     default:

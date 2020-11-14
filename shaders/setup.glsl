@@ -10,6 +10,11 @@ mat4 leftFacing;
 mat4 rightFacing;
 
 
+Object[2] objects;
+Light[1] lights;
+
+
+
 /**
  * Setup all the boost from the raw data passed to the shader
  */
@@ -23,4 +28,14 @@ void unserializeData() {
     facing = facings[0];
     leftFacing = facings[1];
     rightFacing = facings[2];
+
+    Material objMat0 = Material(vec3(1,1,0),1.,1.,1.,1.);
+    Point objPos0 = Point(vec4(0,0,-1,1));
+    Isometry objBoost0 = makeTranslation(objPos0);
+    objects[0] = createObject(objBoost0,mat4(1.),objMat0);
+
+    Material objMat1 = Material(vec3(0,1,1),1.,1.,1.,1.);
+    Point objPos1 = Point(vec4(0,0.5,-2,1));
+    Isometry objBoost1 = makeTranslation(objPos1);
+    objects[1] = createObject(objBoost1,mat4(1.),objMat1);
 }

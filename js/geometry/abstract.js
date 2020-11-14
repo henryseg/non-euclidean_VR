@@ -17,6 +17,16 @@ import {
     Matrix4
 } from "../lib/three.module.js"
 
+/**
+ * @const {string}
+ * @default computer name for the geometry
+ */
+const key='abstract';
+/**
+ * @const {string}
+ * @default Full name of the geometry
+ */
+const name='Abstract geometry';
 
 /**
  * @class
@@ -24,7 +34,6 @@ import {
  * @classdesc
  * Isometry of the geometry.
  */
-
 class Isometry {
 
     /**
@@ -196,6 +205,11 @@ class Point {
  * Are available form three.js:
  * - all the linear algebra
  * - the length of a vector
+ *
+ * @todo It seems that this class is actually geometry independent
+ * (because of the choice of a reference frame).
+ * If so, remove for the other files the class extensions,
+ * and replace them by an `export {Vector} from './abstract.js'`
  */
 class Vector extends Vector3 {
 
@@ -233,29 +247,32 @@ class Position {
      * @property {Matrix4} facing - the O(3) component of the position (stored as a `Matrix4`)
      */
     constructor() {
-      this.boost = new Isometry();
+      this.boost = new this.isometryType();
       this.facing = new Matrix4();
     }
 
     /**
-     * Return the type used for isometries
+     * Return the type used for isometries.
+     * This getter needs to be overload in each geometry.
      */
-    isometryType(){
-      return Object;
+    get isometryType(){
+      return Isometry;
     }
 
     /**
-     * Return the type used for points
+     * Return the type used for points.
+     * This getter needs to be overload in each geometry.
      */
-    unserializePointType(){
-      return Object;
+    get unserializePointType(){
+      return Point;
     }
 
     /**
-     * Return the type used for vectors
+     * Return the type used for vectors.
+     * This getter needs to be overload in each geometry.
      */
-    vectorType(){
-      return Object;
+    get vectorType(){
+      return Vector;
     }
 
     /**
@@ -371,7 +388,7 @@ class Position {
      * @return {Vector}
      */
     getFwdVector() {
-      let aux = new Vector(0,0,-1);
+      let aux = new this.vectorType(0,0,-1);
       return aux.applyFacing(this);
     }
 
@@ -380,7 +397,7 @@ class Position {
      * @return {Vector}
      */
     getRightVector() {
-      let aux = new Vector(1,0,0);
+      let aux = new this.vectorType(1,0,0);
       return aux.applyFacing(this);
     }
 
@@ -389,7 +406,7 @@ class Position {
      * @return {Vector}
      */
     getUpVector() {
-      let aux = new Vector(0,1,0);
+      let aux = new this.vectorType(0,1,0);
       return aux.applyFacing(this);
     }
 
@@ -428,10 +445,8 @@ class Position {
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
-      return [this.boost.serialize()] + [this.facing];
+      return this.boost.serialize().concat(this.facing);
     }
-
-
 }
 
 export {

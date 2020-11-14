@@ -19,8 +19,8 @@ bool teleport(inout Vector v, inout Isometry fixIsom){
  * @param[out] fixIsom isometry collecting all the teleportations done during the ray-marching
  * @return
  * - the id of the hit object (if any)
- * - 0 if no object has been hit
- * - -1 if there is a bug
+ * - -1 if no object has been hit
+ * - -2 if there is a bug
  * @remark Should we start ids at 0?
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
  */
@@ -32,7 +32,7 @@ int raymarch(inout Vector v, out Isometry fixIsom){
 
   for(int i=0; i < maxMarchingSteps; i++){
     dist = globalSceneSDF(vaux, id);
-    if(id != 0) {
+    if(id > -1) {
       // we hit an object
       break;
     }

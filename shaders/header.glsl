@@ -39,7 +39,6 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
  */
 const int MAX_DIRS = 10;
 
-
 uniform int maxMarchingSteps; /**< Maximal number of steps before stoping the ray-marching. */
 uniform float minDist; /**< Miniaml distance when starting the ray-marching. */
 uniform float maxDist; /**< Maximal distance before stopping the ray-marching. */
@@ -48,9 +47,9 @@ uniform float fov; /**< Field of view (in degrees). */
 uniform bool stereo; /**< True for the stereographic vision. */
 uniform vec2 resolution; /**< Screen resolution */
 
-uniform mat4[5] boostsRawA; /**< Serialized boost of the current positions, part A. */
-uniform float[5] boostsRawB; /**< Serialized boost of the current positions, part B. */
-uniform mat4[3] facings; /**< Facings. */
+uniform mat4 boostsRawA[5]; /**< Serialized boost of the current positions, part A. */
+uniform float boostsRawB[5]; /**< Serialized boost of the current positions, part B. */
+uniform mat4 facings[3]; /**< Facings. */
 
 uniform mat4 objetBoostRawA; /**< Serialized boost of the object, part A (model for the template). */
 uniform float objectBootRawB; /**< Serialized boost of the object, part B (model for the template). */

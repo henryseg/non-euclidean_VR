@@ -2,11 +2,12 @@
     "plugins": [
         "plugins/markdown"
     ],
-
+    "markdown": {
+        "tags": ["todo"]
+    },
     "source": {
         "include": [
             "../js/geometry/",
-            "../js/scene/",
             "../js/"
         ],
         "exclude": [

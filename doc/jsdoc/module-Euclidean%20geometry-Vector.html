@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ui.js</title>
+    <title>JSDoc: Class: Vector</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,66 +17,154 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ui.js</h1>
+    <h1 class="page-title">Class: Vector</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module User Interface
- *
- * @description
- * Control the panel used to change the parameters of the scene.
- * Rely on {@link https://github.com/dataarts/dat.gui| dat.GUI}
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a>~</span>Vector<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Tangent vector at the origin written in the reference frame.
+Are available form three.js:</p>
+<ul>
+<li>all the linear algebra</li>
+<li>the length of a vector</li>
+</ul></div>
+        
+    
+</header>
 
-import {
-  GUI
-} from "./lib/dat.gui.module.js"
+<article>
+    <div class="container-overview">
+    
+        
 
+    
+    <h2>Constructor</h2>
+    
 
-let stats;
-let gui;
+    
+    <h4 class="name" id="Vector"><span class="type-signature"></span>new Vector<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-/**
- * Init the User Interface.
- */
-function initUI() {
-  let guiInfo = {
-    help: function () {
-      window.open('https://github.com/henryseg/non-euclidean_VR');
-    },
-  };
-  gui = new GUI();
-  gui.close();
-  gui.add(guiInfo, 'help').name("Help/About");
-}
-
-/**
- * Init the Stats pannel.
- * @todo Understand how to make it work as a module…
- */
-function initStats() {
-  stats = new Stats();
-  stats.showPanel(0);
-  document.body.appendChild(stats.dom);
-}
+    
 
 
-initUI();
-initStats();
 
-export{
-    gui,
-    stats,
-};
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_euc.js.html">geometry/euc.js</a>, <a href="geometry_euc.js.html#line262">line 262</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Vector3</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

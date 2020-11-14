@@ -1,20 +1,3 @@
-/***********************************************************************************************************************
- *
- * @struct Material
- * Material of an object in the scene
- * @todo enrich this structure to handle texture, formula based colors, etc
- *
- **********************************************************************************************************************/
-struct Material {
-    vec3 color; ///< base color
-    float specular; ///< specular reflection constant
-    float diffuse; ///< diffuse reflection constant
-    float ambient; ///< ambient reflection constant
-    float shininess; ///< shininess constant
-};
-
-
-
 /**
  * Distance along the geodesic directed by `v` to the closest object in the local scene
  * @param[in] v the direction to follows
@@ -30,16 +13,16 @@ float localSceneSDF(Vector v, out int id){
 /**
  * Distance along the geodesic directed by `v` to the closest object in the global scene
  * @param[in] v the direction to follows
- * @param[out] id `id`=0 as long as the ray has not hit an object.
+ * @param[out] id `id` = -1 as long as the ray has not hit an object.
  * If the ray has it an object, `id` is updated with the id of that object.
- * `id` = -1 can be used for debugging purposes.
+ * `id` = -2 can be used for debugging purposes.
  */
 float globalSceneSDF(Vector v, out int id){
-  id = 0;
+  id = -1;
   Point c = Point(vec4(0, 0, -1, 1));
   float dist = ballSDF(v, c, 0.3);
   if(abs(dist) < marchingThreshold) {
-    id = 1;
+    id = 0;
     return dist;
   }
   return dist;
