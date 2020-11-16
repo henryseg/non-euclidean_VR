@@ -1,5 +1,5 @@
 import {
-  Thurston
+  Thurston,
 } from "./thurston.js"
 
 async function test() {
