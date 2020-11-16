@@ -11,7 +11,6 @@ struct Item{
   Isometry boost;/**< isometry part of the position */
   mat4 facing;/**< facing part of the position */
   Point pos; /**< location of the object */
-  bool posFlag; /**< flag, true if the location has been computed false otherwise */
 };
 
 /**
@@ -20,29 +19,9 @@ struct Item{
  */
 Item createItem(Isometry boost, mat4 facing){
   // the ORIGIN is just a placeholder here, since posFlag is set to false
-  Item res = Item(boost, facing, ORIGIN, false);
+  Point pos = applyIsometry(boost, ORIGIN);
+  Item res = Item(boost, facing, pos);
   return res;
-}
-
-/**
- * Return the position as a Point of the given item
- */
-Point getPosition(inout Item item) {
-  if(!item.posFlag){
-    item.pos = applyIsometry(item.boost, ORIGIN);
-    item.posFlag = true;
-  }
-  return item.pos;
-}
-
-/**
- * Reset the flag `posFlag`.
- * This means that the next time `getPosition` is called,
- * the position will be recomputed.
- * useful if we update the `boost` and/or `facing` of the item.
- */
-void resetPosition(inout Item item){
-  item.posFlag = false;
 }
 
 /***********************************************************************************************************************
@@ -54,9 +33,9 @@ void resetPosition(inout Item item){
  **********************************************************************************************************************/
 struct Material {
     vec3 color; /**< base color */
-    float specular; /**< specular reflection constant */
-    float diffuse; /**< diffuse reflection constant */
     float ambient; /**< ambient reflection constant */
+    float diffuse; /**< diffuse reflection constant */
+    float specular; /**< specular reflection constant */
     float shininess; /**< shininess constant */
 };
 
@@ -80,24 +59,6 @@ Object createObject(Isometry boost, mat4 facing, Material material){
   return Object(item, material);
 }
 
-/**
- * Return the position as a Point of the given object.
- * Overload of `getPosition`
- */
-Point getPosition(inout Object obj){
-  return getPosition(obj.item);
-}
-
-/**
- * Reset the flag `posFlag`.
- * Overload of `resetPosition`.
- */
-void resetPosition(inout Object obj){
-  resetPosition(obj.item);
-}
-
-
-
 
 /***********************************************************************************************************************
  *
@@ -118,20 +79,4 @@ struct Light{
 Light createLight(Isometry boost, mat4 facing, vec3 color){
   Item item = createItem(boost, facing);
   return Light(item, color);
-}
-
-/**
- * Return the position as a Point of the given light.
- * Overload of `getPosition`
- */
-Point getPosition(inout Light light){
-  return getPosition(light.item);
-}
-
-/**
- * Reset the flag `posFlag`.
- * Overload of `resetPosition`.
- */
-void resetPosition(inout Light light){
-  resetPosition(light.item);
 }

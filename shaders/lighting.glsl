@@ -6,7 +6,7 @@
  * @return intensity of the light
  */
 float lightIntensity(Vector dir, float len){
-  return 0.;
+  return 1./len;
 }
 
 /**
@@ -22,8 +22,19 @@ float lightIntensity(Vector dir, float len){
  * @todo Choose a convention for the incidence vector `v`.
  * Should it point toward the object, or the observer?
  */
-vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material material, vec4 lightColor){
-  return vec3(0);
+vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material material, vec3 lightColor){
+  Vector auxV = negate(v);
+  Vector auxL = dir;
+  Vector auxN = n;
+  Vector auxR = geomReflect(negate(auxL),auxN);
+  float NdotL = max(geomDot(auxN, auxL), 0.);
+  float RdotV = max(geomDot(auxR, auxV), 0.);
+  float intensity = lightIntensity(dir,len);
+
+  float coeff = material.diffuse * NdotL + material.specular * pow(RdotV, material.shininess);
+  coeff = coeff * intensity;
+  vec3 res = coeff * lightColor.rgb;
+  return res;
 }
 
 /**
@@ -36,6 +47,54 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
  * Should it point toward the object, or the observer?
  */
 vec3 phongModel(Vector v, int id) {
-  //Vector n = sceneNormal(v,id);
-  return objects[id].material.color;
+  //return vec3(1,1,0);
+  Vector n = sceneNormal(v,id);
+
+  Light light;
+  Object obj;
+  switch(id) {
+    case 0:
+      obj = object0;
+      break;
+    case 1:
+      obj = object1;
+      break;
+  }
+
+  Vector[MAX_DIRS] dirs;
+  float[MAX_DIRS] lens;
+  int k;
+
+  vec3 color = obj.material.ambient * obj.material.color;
+
+  light = light0;
+  k = directions(v.pos, lightPos0, MAX_DIRS, dirs, lens);
+  for(int j=0; j < k; j++){
+    color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
+  }
+
+  light = light1;
+  k = directions(v.pos, lightPos1, MAX_DIRS, dirs, lens);
+  for(int j=0; j < k; j++){
+    color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
+  }
+
+  light = light2;
+  k = directions(v.pos, lightPos2, MAX_DIRS, dirs, lens);
+  for(int j=0; j < k; j++){
+    color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
+  }
+
+
+/*
+  for(int i=0; i < LIGHT_NUMBER; i++) {
+    light = lights[i];
+    k = directions(v.pos, light.item.pos, MAX_DIRS, dirs, lens);
+    for(int j=0; j < k; j++){
+      color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
+    }
+  }
+  */
+
+  return color;
 }

@@ -97,25 +97,3 @@ void direction(Point p, Point q, out Vector dir, out float len){
     dir = dirs[0];
     len = lens[0];
 }
-
-/**
- * Let `p` and `q` be the underlying point of `u` and `v`.
- * Compute the direction and length of the geodesics from p to q.
- * Overlaod the function directions()
- */
-int directions(Vector u, Vector v, int n, out Vector[MAX_DIRS] dirs, out float[MAX_DIRS] lens){
-    return directions(u.pos, v.pos, n, dirs, lens);
-}
-
-/**
- * Let `p` and `q` be the underlying point of `u` and `v`.
- * Compute the direction and length of the shortest geodesic from `p` to `q`.
- * Overlaod the function direction()
- */
-void direction(Vector u, Vector v, out Vector dir, out float len){
-    Vector dirAux;
-    float lenAux;
-    direction(u.pos, v.pos, dirAux, lenAux);
-    dir = dirAux;
-    len = lenAux;
-}

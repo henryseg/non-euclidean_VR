@@ -23,7 +23,7 @@ float ballSDF(Vector v, Point c, float r){
  * @param[in] r the radius of the ball
  * @return the distance from `p` to the ball
  */
-Vector ballGRAD(Vector v, Point c, float r){
+Vector ballSDFGrad(Vector v, Point c, float r){
   Vector res = Vector(v.pos, v.pos.coords - c.coords);
   return geomNormalize(res);
 }

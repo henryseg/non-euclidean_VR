@@ -4,6 +4,7 @@
  * - header.glsl (constants, uniforms)
  * - geometry/euc.glsl (geometry functions)
  * - geometry/common.glsl (common stuff)
+ * - items.glsl (structures for objets and lights)
  * - setup.glsl (global variables, etc)
  * - sdf/euc.glsl (basic signed distance functions / distance underestimators)
  * - sdf/common.glsl (common stuff)
@@ -37,7 +38,9 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
  * This number needs to be a constant and cannot be passed a uniform.
  * Hence it will be setup once for all via the JavaScript template engine.
  */
-const int MAX_DIRS = 10;
+const int MAX_DIRS = 1;
+const int OBJECT_NUMBER = 2;
+const int LIGHT_NUMBER = 3;
 
 uniform int maxMarchingSteps; /**< Maximal number of steps before stoping the ray-marching. */
 uniform float minDist; /**< Miniaml distance when starting the ray-marching. */

@@ -19,13 +19,25 @@ float localSceneSDF(Vector v, out int id){
  */
 float globalSceneSDF(Vector v, out int id){
   id = -1;
-  Point c = Point(vec4(0, 0, -1, 1));
-  float dist = ballSDF(v, c, 0.3);
+  Object obj;
+  float res = maxDist;
+  float dist;
+
+  dist = ballSDF(v, objPos0, .4);
   if(abs(dist) < marchingThreshold) {
     id = 0;
     return dist;
   }
-  return dist;
+  res = min(res, dist);
+
+  dist = ballSDF(v, objPos1, .1);
+  if(abs(dist) < marchingThreshold) {
+    id = 1;
+    return dist;
+  }
+  res = min(res, dist);
+
+  return res;
 }
 
 
@@ -38,5 +50,10 @@ float globalSceneSDF(Vector v, out int id){
  * It is probably faster.
  */
 Vector sceneNormal(Vector v, int id){
-  return createVector(ORIGIN, vec3(0));
+  switch(id){
+    case 0:
+      return ballSDFGrad(v, object0.item.pos, 0.);
+    case 1:
+      return ballSDFGrad(v, object1.item.pos, 0.);
+  }
 }

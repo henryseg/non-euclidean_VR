@@ -124,8 +124,6 @@ class Thurston{
       return this;
     }
 
-
-
     /**
      * Setup the lattice used for the local scene.
      * @param data - some data describing the lattice
