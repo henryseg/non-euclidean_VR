@@ -38,18 +38,19 @@ void main() {
 
   unserializeData();
   Vector v = rayDir(gl_FragCoord.xy);
+  Object obj;
 
-  int id = raymarch(v, fixIsom);
+  int hit = raymarch(v, fixIsom, obj);
 
-  switch(id) {
-    case -2:
+  switch(hit) {
+    case -1:
       color = debugColor;
       break;
-    case -1:
+    case 0:
       color = vec3(0.2,0.2,0.2);
       break;
     default:
-      color = phongModel(v,id);
+      color = phongModel(v,obj);
   }
   gl_FragColor = vec4(color,1);
 

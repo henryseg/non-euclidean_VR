@@ -41,26 +41,16 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
  * Phong lighting model.
  * Take into account all possible lights and directions
  * @param[in] v incidence vector
- * @param[in] id id of the of hit object
+ * @param[in] obj the object we are rendering
  * @param[in] material the material of the object
  * @todo Choose a convention for the incidence vector `v`.
  * Should it point toward the object, or the observer?
  */
-vec3 phongModel(Vector v, int id) {
+vec3 phongModel(Vector v, Object obj) {
   //return vec3(1,1,0);
-  Vector n = sceneNormal(v,id);
+  Vector n = sceneNormal(v,obj);
 
   Light light;
-  Object obj;
-  switch(id) {
-    case 0:
-      obj = object0;
-      break;
-    case 1:
-      obj = object1;
-      break;
-  }
-
   Vector[MAX_DIRS] dirs;
   float[MAX_DIRS] lens;
   int k;

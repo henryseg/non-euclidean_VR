@@ -17,22 +17,22 @@ bool teleport(inout Vector v, inout Isometry fixIsom){
  * The vector is updated by the function,
  * that is at the end, `v` is the incidence vector at which we hit an object (if any)
  * @param[out] fixIsom isometry collecting all the teleportations done during the ray-marching
+ * @param[out] obj the object that we enventually hit
  * @return
- * - the id of the hit object (if any)
- * - -1 if no object has been hit
- * - -2 if there is a bug
- * @remark Should we start ids at 0?
+ * - 1 if an object has been hit
+ * - 0 if no object has bee hit
+ * - -1, if there is a bug
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
  */
-int raymarch(inout Vector v, out Isometry fixIsom){
+int raymarch(inout Vector v, out Isometry fixIsom, out Object obj){
   Vector vaux = v;
   float depth = minDist;
   float dist;
-  int id;
+  int hit = 0;
 
   for(int i=0; i < maxMarchingSteps; i++){
-    dist = globalSceneSDF(vaux, id);
-    if(id > -1) {
+    dist = globalSceneSDF(vaux, hit, obj);
+    if(hit == 1) {
       // we hit an object
       break;
     }
@@ -44,5 +44,5 @@ int raymarch(inout Vector v, out Isometry fixIsom){
     vaux = flow(v, depth);
   }
   v = vaux;
-  return id;
+  return hit;
 }

@@ -8,6 +8,7 @@
  *
  **********************************************************************************************************************/
 struct Item{
+  int id; /**< Identifyer of the item */
   Isometry boost;/**< isometry part of the position */
   mat4 facing;/**< facing part of the position */
   Point pos; /**< location of the object */
@@ -17,10 +18,10 @@ struct Item{
  * Shortcut to create an item.
  * Take care of the properties `pos` and `posFlag`
  */
-Item createItem(Isometry boost, mat4 facing){
+Item createItem(int id, Isometry boost, mat4 facing){
   // the ORIGIN is just a placeholder here, since posFlag is set to false
   Point pos = applyIsometry(boost, ORIGIN);
-  Item res = Item(boost, facing, pos);
+  Item res = Item(id, boost, facing, pos);
   return res;
 }
 
@@ -54,8 +55,8 @@ struct Object{
 /**
  * Shortcut for creating objects
  */
-Object createObject(Isometry boost, mat4 facing, Material material){
-  Item item = createItem(boost, facing);
+Object createObject(int id, Isometry boost, mat4 facing, Material material){
+  Item item = createItem(id, boost, facing);
   return Object(item, material);
 }
 
@@ -76,7 +77,7 @@ struct Light{
 /**
  * Shortcut for creating lights
  */
-Light createLight(Isometry boost, mat4 facing, vec3 color){
-  Item item = createItem(boost, facing);
+Light createLight(int id, Isometry boost, mat4 facing, vec3 color){
+  Item item = createItem(id, boost, facing);
   return Light(item, color);
 }
