@@ -17,3 +17,7 @@ Running this locally requires a simple web server (to source the shader files at
 
 # Done or in progress
 S^3, E^3, H^3, S^2 x R, H^2 x R, Nil, Sol, and SL(2,R)
+
+# Licence
+
+Released under the terms of the GNU [General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html), version 3 or later.
