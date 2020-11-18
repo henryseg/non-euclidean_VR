@@ -80,10 +80,11 @@ const shaderFiles = [
 * @classdesc
 * Object used to create a scene.
 *
-* @property {string} geometry - the underlying geometry
+* @property {Object} geometry - the underlying geometry
 * @property lattice - the lattice used for local scenes
 * @property {array} options - the general options of the scene
-* @property {array} items - the list of items in the scene (lights, objects, etc)
+* @property {Object} solids - the list of solids in the scene
+* @property {Object} lights - the list of lights in the scene
 * @property {Object} uniforms - the list of uniforsm passed to the shader
 * @property {Vector2} resolution - the resolution of the windows
 *
@@ -93,39 +94,31 @@ class Thurston{
 
   /**
   * Create an instance dedicated to build a scene in the prescribed geometry.
-  * @param {string} geomKey - the underlying geometry
+  * @param {Object} geom - a module handing the relevant geometry
   * @param {array} options - a list of options
   * @todo Check if the geometry is supported, i.e. if the relevant files exist.
   */
-  constructor (geomKey, options = null) {
-    // define all the properties (maybe not needed in JS, but good practice I guess)
-    this.geomKey = geomKey;
+  constructor (geom, options = null) {
+    // setup the geometry (as a module)
+    this.geom = geom;
 
-    this.geomMod = undefined;
+    // setup the initial positions
+    this.position = new this.geom.Position();
+    this.leftPosition = new this.geom.Position();
+    this.rightPosition = new this.geom.Position();
+    this.cellBoost = new this.geom.Position();
+    this.invCellBoost = new this.geom.Position();
+
+    // init the list of items in the scene
+    this.solids = {};
+    this.lights = {};
+    // first available id of an item (to be incremented when adding items)
+    this.id = 0;
+
+    // define all the remaining properties
+    // (maybe not needed in JS, but good practice I guess)
     this.uniforms = undefined;
     this.resolution = undefined;
-    this.position = undefined;
-    this.leftPosition = undefined;
-    this.rightPosition = undefined;
-    this.cellBoost = undefined;
-    this.invCellBoost = undefined;
-  }
-
-  async initGeom() {
-    // load the relevant library
-    this.geomMod = await import('./geometry/' + this.geomKey + '.js');
-
-    // init all the boosts
-    this.position = new this.geomMod.Position();
-    this.leftPosition = new this.geomMod.Position();
-    this.rightPosition = new this.geomMod.Position();
-    this.cellBoost = new this.geomMod.Isometry();
-    this.invCellBoost = new this.geomMod.Isometry();
-
-    // loading the item library for the relevant geometry
-    await import('./items/' + this.geomKey + '.js');
-
-    return this;
   }
 
   /**
@@ -160,11 +153,34 @@ class Thurston{
 
   /**
   * Adding an item to the scene.
-  * This method need be declined for every kind of objects available in the geometry.
-  * The precise lists of items will vary depending on the geometry.
+  * @param{Item} item - the item to add
   * @return {Thurston}
   */
-  addItem(){}
+  addItem(item){
+    item.id = this.id;
+    if(item.isSolid()){
+      this.solids[this.id] = item;
+    }
+    if(item.isLight()){
+      this.lights[this.id] = item;
+    }
+    this.id = this.id + 1;
+
+    return this;
+  }
+
+  /**
+  * Adding a list of item to the scene.
+  * @param{Array} items - the list of items to add
+  * @return {Thurston}
+  */
+  addItem(items){
+    for(item of items){
+        this.addItem(item);
+    }
+    return this
+  }
+
 
   /**
   * add the name of the geometry to the title of the page
@@ -172,7 +188,7 @@ class Thurston{
   */
   appendTitle(){
     const title = document.querySelector('title');
-    title.append(' - ' + this.geomMod.name);
+    title.append(' - ' + this.geom.name);
     return this;
   }
 
@@ -197,7 +213,7 @@ class Thurston{
     let fShader = "";
     for(const shaderFile of shaderFiles){
       // update if needed the placeholder with the relevant geometry
-      file = shaderFile.replace('XXX', this.geomMod.key);
+      file = shaderFile.replace('XXX', this.geom.key);
       // load the file and append it to the shader
       response = await fetch(shaderDir + file);
       fShader = fShader + await response.text();
@@ -304,9 +320,6 @@ class Thurston{
   * Setup the shaders
   */
   async init() {
-    // setup the geoemetry
-    await this.initGeom();
-
     // setup WebGL machinery through Three.js
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
