@@ -7,7 +7,8 @@
     },
     "source": {
         "include": [
-            "../js/geometry/",
+            "../js/geometry/foundations",
+            "../js/geometry/items",
             "../js/"
         ],
         "exclude": [

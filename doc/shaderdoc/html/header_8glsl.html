@@ -87,7 +87,7 @@ Variables</h2></td></tr>
 <tr class="separator:aa08a577393243b86dfd2a97e61443673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d887a73bed2b3bc298802d3459cf83d"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a3d887a73bed2b3bc298802d3459cf83d">debugColor</a> = vec3(0.5, 0, 0.8)</td></tr>
 <tr class="separator:a3d887a73bed2b3bc298802d3459cf83d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae31ccd1ef4f44fae673f3a843c019c5a"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#ae31ccd1ef4f44fae673f3a843c019c5a">MAX_DIRS</a> = 10</td></tr>
+<tr class="memitem:ae31ccd1ef4f44fae673f3a843c019c5a"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#ae31ccd1ef4f44fae673f3a843c019c5a">MAX_DIRS</a> = {{maxDirs}}</td></tr>
 <tr class="separator:ae31ccd1ef4f44fae673f3a843c019c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ede5a0277456898cb3dddf745f9f957"><td class="memItemLeft" align="right" valign="top">uniform int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a2ede5a0277456898cb3dddf745f9f957">maxMarchingSteps</a></td></tr>
 <tr class="separator:a2ede5a0277456898cb3dddf745f9f957"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -103,32 +103,12 @@ Variables</h2></td></tr>
 <tr class="separator:a8be2c3d011ebf9864b3f54afa9472dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82a370b8868b81eda75c3735dd622b44"><td class="memItemLeft" align="right" valign="top">uniform vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a82a370b8868b81eda75c3735dd622b44">resolution</a></td></tr>
 <tr class="separator:a82a370b8868b81eda75c3735dd622b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26b6aaf43ce3f8f437dab42e45cd7561"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a26b6aaf43ce3f8f437dab42e45cd7561">boostRawA</a></td></tr>
-<tr class="separator:a26b6aaf43ce3f8f437dab42e45cd7561"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ec4209f26791a9821e0deb7477a0bc8"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a1ec4209f26791a9821e0deb7477a0bc8">boostRawB</a></td></tr>
-<tr class="separator:a1ec4209f26791a9821e0deb7477a0bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8883ac492412750ce457fe7368c0141"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#af8883ac492412750ce457fe7368c0141">leftBoostRawA</a></td></tr>
-<tr class="separator:af8883ac492412750ce457fe7368c0141"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8316660810663fb720ff19f1273f8041"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a8316660810663fb720ff19f1273f8041">leftBoostRawB</a></td></tr>
-<tr class="separator:a8316660810663fb720ff19f1273f8041"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22d396c7da7c0a462fec9c434f008673"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a22d396c7da7c0a462fec9c434f008673">rightBoostRawA</a></td></tr>
-<tr class="separator:a22d396c7da7c0a462fec9c434f008673"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01a576f8013bb6927b96538f2877f944"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a01a576f8013bb6927b96538f2877f944">rightBoostRawB</a></td></tr>
-<tr class="separator:a01a576f8013bb6927b96538f2877f944"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f7f4d0b0e8ea40fa55e87e8a68c4479"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a2f7f4d0b0e8ea40fa55e87e8a68c4479">cellBoostRawA</a></td></tr>
-<tr class="separator:a2f7f4d0b0e8ea40fa55e87e8a68c4479"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae32091fdb02eeb7d0198461f418bf3d8"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#ae32091fdb02eeb7d0198461f418bf3d8">cellBoostRawB</a></td></tr>
-<tr class="separator:ae32091fdb02eeb7d0198461f418bf3d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3bacef1dadf9d19d3665985f1f3d607"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#aa3bacef1dadf9d19d3665985f1f3d607">invCellBoostRawA</a></td></tr>
-<tr class="separator:aa3bacef1dadf9d19d3665985f1f3d607"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cf3992ba81d10be06f7fe8efaa5ec5f"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a3cf3992ba81d10be06f7fe8efaa5ec5f">invCellBoostRawB</a></td></tr>
-<tr class="separator:a3cf3992ba81d10be06f7fe8efaa5ec5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaa88ebf5458415bd1bce5acc1f57bae"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#afaa88ebf5458415bd1bce5acc1f57bae">facing</a></td></tr>
-<tr class="separator:afaa88ebf5458415bd1bce5acc1f57bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac783aad9cd32bbbbf957a0b3a83812b7"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#ac783aad9cd32bbbbf957a0b3a83812b7">leftFacing</a></td></tr>
-<tr class="separator:ac783aad9cd32bbbbf957a0b3a83812b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4aa188ae4c06c3983b69b56d45d8f7f1"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a4aa188ae4c06c3983b69b56d45d8f7f1">rightFacing</a></td></tr>
-<tr class="separator:a4aa188ae4c06c3983b69b56d45d8f7f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bb67bf0299aa8d217a3c66a016f3276"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a4bb67bf0299aa8d217a3c66a016f3276">boostsRawA</a> [5]</td></tr>
+<tr class="separator:a4bb67bf0299aa8d217a3c66a016f3276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac244233d4e09f0cb4db40db329164206"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#ac244233d4e09f0cb4db40db329164206">boostsRawB</a> [5]</td></tr>
+<tr class="separator:ac244233d4e09f0cb4db40db329164206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d69187e5641708d273c1d99ec8ab64a"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a2d69187e5641708d273c1d99ec8ab64a">facings</a> [3]</td></tr>
+<tr class="separator:a2d69187e5641708d273c1d99ec8ab64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cd04eefc23dd6a2360205d35d539dfb"><td class="memItemLeft" align="right" valign="top">uniform mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a4cd04eefc23dd6a2360205d35d539dfb">objetBoostRawA</a></td></tr>
 <tr class="separator:a4cd04eefc23dd6a2360205d35d539dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ecab376683ba8db1e4a42fadcc03d7b"><td class="memItemLeft" align="right" valign="top">uniform float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="header_8glsl.html#a2ecab376683ba8db1e4a42fadcc03d7b">objectBootRawB</a></td></tr>
@@ -137,63 +117,33 @@ Variables</h2></td></tr>
 <tr class="separator:acb3124eb88e51622417ebbec613b09fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="a26b6aaf43ce3f8f437dab42e45cd7561"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26b6aaf43ce3f8f437dab42e45cd7561">&#9670;&nbsp;</a></span>boostRawA</h2>
+<a id="a4bb67bf0299aa8d217a3c66a016f3276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bb67bf0299aa8d217a3c66a016f3276">&#9670;&nbsp;</a></span>boostsRawA</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uniform mat4 boostRawA</td>
+          <td class="memname">uniform mat4 boostsRawA[5]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Serialized boost of the current position, part A. </p>
+<p>Serialized boost of the current positions, part A. </p>
 
 </div>
 </div>
-<a id="a1ec4209f26791a9821e0deb7477a0bc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ec4209f26791a9821e0deb7477a0bc8">&#9670;&nbsp;</a></span>boostRawB</h2>
+<a id="ac244233d4e09f0cb4db40db329164206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac244233d4e09f0cb4db40db329164206">&#9670;&nbsp;</a></span>boostsRawB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uniform float boostRawB</td>
+          <td class="memname">uniform float boostsRawB[5]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Serialized boost of the current position, part B. </p>
-
-</div>
-</div>
-<a id="a2f7f4d0b0e8ea40fa55e87e8a68c4479"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f7f4d0b0e8ea40fa55e87e8a68c4479">&#9670;&nbsp;</a></span>cellBoostRawA</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform mat4 cellBoostRawA</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of the cell position, part A. </p>
-
-</div>
-</div>
-<a id="ae32091fdb02eeb7d0198461f418bf3d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae32091fdb02eeb7d0198461f418bf3d8">&#9670;&nbsp;</a></span>cellBoostRawB</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform float cellBoostRawB</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of the cell position, part B. </p>
+<p>Serialized boost of the current positions, part B. </p>
 
 </div>
 </div>
@@ -212,18 +162,18 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="afaa88ebf5458415bd1bce5acc1f57bae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afaa88ebf5458415bd1bce5acc1f57bae">&#9670;&nbsp;</a></span>facing</h2>
+<a id="a2d69187e5641708d273c1d99ec8ab64a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d69187e5641708d273c1d99ec8ab64a">&#9670;&nbsp;</a></span>facings</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uniform mat4 facing</td>
+          <td class="memname">uniform mat4 facings[3]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Main facing. </p>
+<p>Facings. </p>
 
 </div>
 </div>
@@ -239,81 +189,6 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Field of view (in degrees). </p>
-
-</div>
-</div>
-<a id="aa3bacef1dadf9d19d3665985f1f3d607"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3bacef1dadf9d19d3665985f1f3d607">&#9670;&nbsp;</a></span>invCellBoostRawA</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform mat4 invCellBoostRawA</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of inverse cell position, part A. </p>
-
-</div>
-</div>
-<a id="a3cf3992ba81d10be06f7fe8efaa5ec5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cf3992ba81d10be06f7fe8efaa5ec5f">&#9670;&nbsp;</a></span>invCellBoostRawB</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform float invCellBoostRawB</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of inverse cell position, part B. </p>
-
-</div>
-</div>
-<a id="af8883ac492412750ce457fe7368c0141"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8883ac492412750ce457fe7368c0141">&#9670;&nbsp;</a></span>leftBoostRawA</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform mat4 leftBoostRawA</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of the left eye position, part A. </p>
-
-</div>
-</div>
-<a id="a8316660810663fb720ff19f1273f8041"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8316660810663fb720ff19f1273f8041">&#9670;&nbsp;</a></span>leftBoostRawB</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform float leftBoostRawB</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of the left eye position, part B. </p>
-
-</div>
-</div>
-<a id="ac783aad9cd32bbbbf957a0b3a83812b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac783aad9cd32bbbbf957a0b3a83812b7">&#9670;&nbsp;</a></span>leftFacing</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform mat4 leftFacing</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Left eye facing. </p>
 
 </div>
 </div>
@@ -339,7 +214,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const int MAX_DIRS = 10</td>
+          <td class="memname">const int MAX_DIRS = {{maxDirs}}</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -464,51 +339,6 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Screen resolution </p>
-
-</div>
-</div>
-<a id="a22d396c7da7c0a462fec9c434f008673"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22d396c7da7c0a462fec9c434f008673">&#9670;&nbsp;</a></span>rightBoostRawA</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform mat4 rightBoostRawA</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of the right eye position, part A. </p>
-
-</div>
-</div>
-<a id="a01a576f8013bb6927b96538f2877f944"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01a576f8013bb6927b96538f2877f944">&#9670;&nbsp;</a></span>rightBoostRawB</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform float rightBoostRawB</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Serialized boost of the right eye position, part B. </p>
-
-</div>
-</div>
-<a id="a4aa188ae4c06c3983b69b56d45d8f7f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4aa188ae4c06c3983b69b56d45d8f7f1">&#9670;&nbsp;</a></span>rightFacing</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uniform mat4 rightFacing</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Right eye facing. </p>
 
 </div>
 </div>

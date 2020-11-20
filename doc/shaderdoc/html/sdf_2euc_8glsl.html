@@ -87,53 +87,10 @@ Functions</h2></td></tr>
 <tr class="separator:a0b64710c8f93238fd1c94b878bbd182c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a359c68439ec94915f7ee438efe75be87"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sdf_2euc_8glsl.html#a359c68439ec94915f7ee438efe75be87">ballSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_point.html">Point</a> c, float r)</td></tr>
 <tr class="separator:a359c68439ec94915f7ee438efe75be87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfd6a8020d641e17ab89b98a1dc1ff4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sdf_2euc_8glsl.html#adfd6a8020d641e17ab89b98a1dc1ff4a">ballGRAD</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_point.html">Point</a> c, float r)</td></tr>
-<tr class="separator:adfd6a8020d641e17ab89b98a1dc1ff4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a450afefb678b39035e06a5e5f9ed707e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sdf_2euc_8glsl.html#a450afefb678b39035e06a5e5f9ed707e">ballSDFGrad</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_point.html">Point</a> c, float r)</td></tr>
+<tr class="separator:a450afefb678b39035e06a5e5f9ed707e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="adfd6a8020d641e17ab89b98a1dc1ff4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfd6a8020d641e17ab89b98a1dc1ff4a">&#9670;&nbsp;</a></span>ballGRAD()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> ballGRAD </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>r</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Gradient of the ball sdf </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the vector at which we evaluated the sdf </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>the center of the ball </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>the radius of the ball </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the distance from <code>p</code> to the ball </dd></dl>
-
-</div>
-</div>
 <a id="a359c68439ec94915f7ee438efe75be87"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a359c68439ec94915f7ee438efe75be87">&#9670;&nbsp;</a></span>ballSDF()</h2>
 
@@ -166,6 +123,49 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Signed distance function for the ball of radius <code>r</code> centered at <code>c</code> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the vector at which we evaluated the sdf </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>the center of the ball </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>the radius of the ball </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the distance from <code>p</code> to the ball </dd></dl>
+
+</div>
+</div>
+<a id="a450afefb678b39035e06a5e5f9ed707e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a450afefb678b39035e06a5e5f9ed707e">&#9670;&nbsp;</a></span>ballSDFGrad()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> ballSDFGrad </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gradient of the ball sdf </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the vector at which we evaluated the sdf </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>the center of the ball </td></tr>

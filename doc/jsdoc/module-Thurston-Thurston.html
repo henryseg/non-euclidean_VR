@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-Thurston.html">Thurston</a>~</span>Thurston<span class="signature">(geomKey, options)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-Thurston.html">Thurston</a>~</span>Thurston<span class="signature">(geom, options)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>Object used to create a scene.</p></div>
         
@@ -46,7 +46,7 @@
     
 
     
-    <h4 class="name" id="Thurston"><span class="type-signature"></span>new Thurston<span class="signature">(geomKey, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Thurston"><span class="type-signature"></span>new Thurston<span class="signature">(geom, options)</span><span class="type-signature"></span></h4>
     
 
     
@@ -92,13 +92,13 @@
 
         <tr>
             
-                <td class="name"><code>geomKey</code></td>
+                <td class="name"><code>geom</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -112,7 +112,7 @@
                 </td>
             
 
-            <td class="description last"><p>the underlying geometry</p></td>
+            <td class="description last"><p>a module handing the relevant geometry</p></td>
         </tr>
 
     
@@ -185,7 +185,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -243,13 +243,13 @@
 
         <tr>
             
-                <td class="name"><code>items</code></td>
+                <td class="name"><code>solids</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">Object</span>
 
 
             
@@ -259,7 +259,30 @@
 
             
 
-            <td class="description last"><p>the list of items in the scene (lights, objects, etc)</p></td>
+            <td class="description last"><p>the list of solids in the scene</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lights</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the list of lights in the scene</p></td>
         </tr>
 
     
@@ -344,7 +367,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line90">line 90</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -415,9 +438,7 @@
 
 
 <div class="description">
-    <p>Adding an item to the scene.
-This method need be declined for every kind of objects available in the geometry.
-The precise lists of items will vary depending on the geometry.</p>
+    <p>Adding an item to the scene.</p>
 </div>
 
 
@@ -461,7 +482,113 @@ The precise lists of items will vary depending on the geometry.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line164">line 164</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Thurston</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addItem"><span class="type-signature"></span>addItem<span class="signature">()</span><span class="type-signature"> &rarr; {Thurston}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adding a list of item to the scene.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line177">line 177</a>
     </li></ul></dd>
     
 
@@ -567,7 +694,7 @@ The precise lists of items will vary depending on the geometry.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line328">line 328</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line348">line 348</a>
     </li></ul></dd>
     
 
@@ -655,7 +782,7 @@ The precise lists of items will vary depending on the geometry.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line170">line 170</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line189">line 189</a>
     </li></ul></dd>
     
 
@@ -761,7 +888,7 @@ The precise lists of items will vary depending on the geometry.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line190">line 190</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -873,7 +1000,7 @@ The precise lists of items will vary depending on the geometry.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line180">line 180</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line199">line 199</a>
     </li></ul></dd>
     
 
@@ -988,7 +1115,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line299">line 299</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line322">line 322</a>
     </li></ul></dd>
     
 
@@ -1076,7 +1203,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line212">line 212</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line231">line 231</a>
     </li></ul></dd>
     
 
@@ -1235,7 +1362,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line135">line 135</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -1420,7 +1547,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line154">line 154</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line150">line 150</a>
     </li></ul></dd>
     
 
@@ -1575,7 +1702,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line144">line 144</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line140">line 140</a>
     </li></ul></dd>
     
 
@@ -1681,7 +1808,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line240">line 240</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line259">line 259</a>
     </li></ul></dd>
     
 
@@ -1769,7 +1896,7 @@ Setup the shaders</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line290">line 290</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line308">line 308</a>
     </li></ul></dd>
     
 
@@ -1815,13 +1942,13 @@ Setup the shaders</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract.html">Abstract</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-events.html">events</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-User%2520Interface.html">User Interface</a></li></ul><h3>Classes</h3><ul><li><a href="Controls.html">Controls</a></li><li><a href="module-Abstract-Isometry.html">Isometry</a></li><li><a href="module-Abstract-Point.html">Point</a></li><li><a href="module-Abstract-Position.html">Position</a></li><li><a href="module-Abstract-Vector.html">Vector</a></li><li><a href="module-Euclidean%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Euclidean%2520geometry-Point.html">Point</a></li><li><a href="module-Euclidean%2520geometry-Position.html">Position</a></li><li><a href="module-Euclidean%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston-SceneItem.html">SceneItem</a></li><li><a href="module-Thurston-SceneMaterial.html">SceneMaterial</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul><h3>Global</h3><ul><li><a href="global.html#keyboard">keyboard</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-events.html">events</a></li><li><a href="module-Thruston%2520Euclidean%2520items.html">Thruston Euclidean items</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li><li><a href="module-User%2520Interface.html">User Interface</a></li></ul><h3>Classes</h3><ul><li><a href="Controls.html">Controls</a></li><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul><h3>Global</h3><ul><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#materialDefault">materialDefault</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Nov 14 2020 20:10:51 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 18 2020 17:23:03 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

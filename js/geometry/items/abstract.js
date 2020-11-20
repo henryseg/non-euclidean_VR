@@ -32,9 +32,9 @@ import {
 * This class should never be instantiated directly.
 *
 * @property {number} id - an ID (to be set when the object is added to the scene)
-* @property {boolean} global  - flag: true if the item is in the global scene, false otherwise
-* @property {Position} position - location and facing of the item. The facing only matters for textures?
-* @property {function} positionCallback - a function that update the position (for animated objects) Optional
+* @property {boolean} _global  - private storing of `global`
+* @property {Position} _position - private storing of `position`
+* @property {function} _positionCallback - private storing of `positionCallback`
 *
 */
 class Item {
@@ -45,25 +45,27 @@ class Item {
   */
   constructor(data={}) {
     this.id = undefined;
-    buildFromModel(this, itemDefault, data);
+    for(const property of this.toBuild()){
+      this[property] = data[property];
+    }
   }
 
   /**
-  * Say if the item is a light
-  * @return {bool} true if the item is a light
-  */
-  isLight(){
-    throw new Error("This method need be overloaded.")
+   * Return the list of all the properties (other than the id)
+   * that should be setup during the construction.
+   * The list should be expanded by classes that inherit from Item.
+   */
+  toBuild(){
+    return [
+      'global',
+      'position',
+      'positionCallback'
+    ]
   }
 
   /**
-  * Say if the item is an objects
-  * @return {bool} true if the item is an object
-  */
-  isSolid(){
-    throw new Error("This method need be overloaded.")
-  }
-
+   * Setter for the property `global`
+   */
   set global(global){
     if(global == undefined){
       this._global = true;
@@ -97,17 +99,24 @@ class Item {
   get positionCallback(){
     return this._positionCallback;
   }
+
+  /**
+  * Say if the item is a light
+  * @return {bool} true if the item is a light
+  */
+  isLight(){
+    throw new Error("This method need be overloaded.")
+  }
+
+  /**
+  * Say if the item is an objects
+  * @return {bool} true if the item is an object
+  */
+  isSolid(){
+    throw new Error("This method need be overloaded.")
+  }
 }
 
-
-
-/**
-* @const {Object}
-* @default The default (additional) values of the Object properties
-*/
-const solidDefault = {
-  material: new Material()
-}
 
 /**
 * @class
@@ -118,7 +127,7 @@ const solidDefault = {
 * This class should never be instantiated directly.
 * Classes that inherit from Object can be instantiated.
 *
-* @property {Material}  material - material of the item
+* @property {Material}  _material - private storing of `material`
 */
 
 class Solid extends Item {
@@ -130,7 +139,25 @@ class Solid extends Item {
   */
   constructor(data={}) {
     super(data);
-    buildFromModel(this, solidDefault, data);
+  }
+
+  toBuild() {
+    const res = super.toBuild();
+    res.push('material');
+    return res;
+  }
+
+  set material(material){
+    if(material == undefined){
+      this._material = new Material();
+    }
+    else {
+      this._material = material;
+    }
+  }
+
+  get material(){
+    return this._material;
   }
 
   /**
@@ -152,20 +179,12 @@ class Solid extends Item {
 
 
 /**
-* @const {Object}
-* @default The default (additional) values of the Object properties
-*/
-const lighDefault = {
-  color: new Vector3(1,1,1)
-}
-
-/**
 * @class
 *
 * @classdesc
 * Generic class for point lights in the scene.
 *
-* @property {Vector3}  color - the color of the light
+* @property {Vector3}  _color - private storing for color
 *
 * @todo How do we handle light intensity
 */
@@ -178,8 +197,27 @@ class Light extends Item {
   */
   constructor(data={}) {
     super(data);
-    buildFromModel(this, lighDefault, data);
   }
+
+  toBuild() {
+    const res = super.toBuild();
+    res.push('color');
+    return res;
+  }
+
+  set color(color){
+    if(color == undefined){
+      this._color = new Vector3(1,1,1);
+    }
+    else {
+      this._color = color;
+    }
+  }
+
+  get color(){
+    return this._color;
+  }
+
 
   /**
   * Say if the item is a light

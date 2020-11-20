@@ -75,30 +75,24 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">scene.glsl File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_material.html">Material</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afa438230c67c206a19d9ab32bbcaa892"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#afa438230c67c206a19d9ab32bbcaa892">localSceneSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, out int id)</td></tr>
-<tr class="separator:afa438230c67c206a19d9ab32bbcaa892"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a064696f9bdc957d6f30aa641bf2bf9dc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a064696f9bdc957d6f30aa641bf2bf9dc">globalSceneSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, out int id)</td></tr>
-<tr class="separator:a064696f9bdc957d6f30aa641bf2bf9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af39f8b97f8a810e02aac96b8f7c6c2a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#af39f8b97f8a810e02aac96b8f7c6c2a5">sceneNormal</a> (<a class="el" href="struct_vector.html">Vector</a> v, int id)</td></tr>
-<tr class="separator:af39f8b97f8a810e02aac96b8f7c6c2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16b3aa4eec1fbf1912a3778339acbd60"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a16b3aa4eec1fbf1912a3778339acbd60">localSceneSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, out int hit, out <a class="el" href="struct_object.html">Object</a> obj)</td></tr>
+<tr class="separator:a16b3aa4eec1fbf1912a3778339acbd60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b3b9be152191cc5f3ed8816dd0354ee"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a3b3b9be152191cc5f3ed8816dd0354ee">globalSceneSDF</a> (<a class="el" href="struct_vector.html">Vector</a> v, out int hit, out <a class="el" href="struct_object.html">Object</a> obj)</td></tr>
+<tr class="separator:a3b3b9be152191cc5f3ed8816dd0354ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a713ec353bdafea9b8fc836901d4fef24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a713ec353bdafea9b8fc836901d4fef24">sceneNormal</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_object.html">Object</a> obj)</td></tr>
+<tr class="separator:a713ec353bdafea9b8fc836901d4fef24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a064696f9bdc957d6f30aa641bf2bf9dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a064696f9bdc957d6f30aa641bf2bf9dc">&#9670;&nbsp;</a></span>globalSceneSDF()</h2>
+<a id="a3b3b9be152191cc5f3ed8816dd0354ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b3b9be152191cc5f3ed8816dd0354ee">&#9670;&nbsp;</a></span>globalSceneSDF()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -113,7 +107,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">out int&#160;</td>
-          <td class="paramname"><em>id</em>&#160;</td>
+          <td class="paramname"><em>hit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_object.html">Object</a>&#160;</td>
+          <td class="paramname"><em>obj</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -125,15 +125,16 @@ Functions</h2></td></tr>
 <p>Distance along the geodesic directed by <code>v</code> to the closest object in the global scene </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the direction to follows </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">id</td><td><code>id</code> is zero as long as the ray has not hit an object. If the ray has it an object, <code>id</code> is updated with the id of that object. <code>id</code> = -1 can be used for debugging purposes. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">hit</td><td>say if we hit an object (1), nothing (0) or if there is a bug (-1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>the object that we hit. There are two void object for background and debug </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="afa438230c67c206a19d9ab32bbcaa892"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa438230c67c206a19d9ab32bbcaa892">&#9670;&nbsp;</a></span>localSceneSDF()</h2>
+<a id="a16b3aa4eec1fbf1912a3778339acbd60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16b3aa4eec1fbf1912a3778339acbd60">&#9670;&nbsp;</a></span>localSceneSDF()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,7 +149,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">out int&#160;</td>
-          <td class="paramname"><em>id</em>&#160;</td>
+          <td class="paramname"><em>hit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_object.html">Object</a>&#160;</td>
+          <td class="paramname"><em>obj</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -160,15 +167,16 @@ Functions</h2></td></tr>
 <p>Distance along the geodesic directed by <code>v</code> to the closest object in the local scene </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the direction to follows </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">id</td><td><code>id</code> is zero as long as the ray has not hit an object. If the ray has it an object, <code>id</code> is updated with the id of that object. <code>id</code> = -1 can be used for debugging purposes. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">hit</td><td>say if we hit an object (1), nothing (0) or if there is a bug (-1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>the object that we hit. There are two void object for background and debug </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="af39f8b97f8a810e02aac96b8f7c6c2a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af39f8b97f8a810e02aac96b8f7c6c2a5">&#9670;&nbsp;</a></span>sceneNormal()</h2>
+<a id="a713ec353bdafea9b8fc836901d4fef24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a713ec353bdafea9b8fc836901d4fef24">&#9670;&nbsp;</a></span>sceneNormal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,8 +190,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>id</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_object.html">Object</a>&#160;</td>
+          <td class="paramname"><em>obj</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -195,7 +203,7 @@ Functions</h2></td></tr>
 <p>Compute the normal to the scene at the vector <code>v</code> </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the vector when we hit the scene </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>the specific object that has been hit </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">obj</td><td>the specific object that has been hit </td></tr>
   </table>
   </dd>
 </dl>

@@ -9,18 +9,14 @@ mat4 facing;
 mat4 leftFacing;
 mat4 rightFacing;
 
-Object objects[OBJECT_NUMBER];
-Light[LIGHT_NUMBER] lights;
-Object object0;
-Object object1;
-Light light0;
-Light light1;
-Light light2;
-Point objPos0;
-Point objPos1;
-Point lightPos0;
-Point lightPos1;
-Point lightPos2;
+// Declare all the items (solids and lights).
+{{#solids}}
+  Solid solid{{id}};
+{{/solids}}
+
+{{#lights}}
+  Light light{{id}};
+{{/lights}}
 
 /**
  * Setup all the boost from the raw data passed to the shader

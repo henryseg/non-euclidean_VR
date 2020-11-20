@@ -47,7 +47,7 @@ struct Material {
  * Object in the scene.
  *
  **********************************************************************************************************************/
-struct Object{
+struct Solid{
   Item item; /**< Underlying item */
   Material material; /**< material of the object */
 };
@@ -55,9 +55,9 @@ struct Object{
 /**
  * Shortcut for creating objects
  */
-Object createObject(int id, Isometry boost, mat4 facing, Material material){
+Object createSolid(int id, Isometry boost, mat4 facing, Material material){
   Item item = createItem(id, boost, facing);
-  return Object(item, material);
+  return Solid(item, material);
 }
 
 

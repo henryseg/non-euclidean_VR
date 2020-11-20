@@ -93,7 +93,7 @@ Isometry.prototype.getInverse = function(isom) {
 * @return {Isometry}
 */
 Isometry.prototype.makeTranslation = function(point) {
-  [x,y,z,] = point.coords;
+  const [x,y,z,] = point.coords.toArray();
   this.matrix.set(
     1, 0, 0, x,
     0, 1, 0, y,

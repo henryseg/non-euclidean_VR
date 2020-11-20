@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vector_74',['Vector',['../struct_vector.html',1,'']]]
+  ['point_116',['Point',['../struct_point.html',1,'']]]
 ];

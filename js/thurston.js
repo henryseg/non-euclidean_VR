@@ -15,20 +15,20 @@ import {
   Vector2,
   Vector3,
   Matrix4
-} from "./lib/three.module.js"
+} from "./lib/three.module.js";
 
 import {
   mustache
-} from "./lib/mustache.mjs";
+} from './lib/mustache.mjs';
 
 import {
   gui,
   stats,
-} from "./ui.js"
+} from "./ui.js";
 
 import {
   addListeners
-} from "./events.js"
+} from "./events.js";
 
 /**
 * @const {WebGLRenderer}
@@ -61,17 +61,17 @@ const shaderDir = '../shaders/';
 * The path are relative to the shaders directory
 */
 const shaderFiles = [
-  'header.glsl',
-  'geometry/XXX.glsl',
-  'geometry/common.glsl',
-  'items.glsl',
+  //'header.glsl',
+  //'geometry/XXX.glsl',
+  //'geometry/common.glsl',
+  //'items.glsl',
   'setup.glsl',
-  'sdf/XXX.glsl',
-  'sdf/common.glsl',
-  'scene.glsl',
-  'raymarch.glsl',
-  'lighting.glsl',
-  'main.glsl'
+  //'sdf/XXX.glsl',
+  //'sdf/common.glsl',
+  //'scene.glsl',
+  //'raymarch.glsl',
+  //'lighting.glsl',
+  //'main.glsl'
 ];
 
 /**
@@ -119,6 +119,32 @@ class Thurston{
     // (maybe not needed in JS, but good practice I guess)
     this.uniforms = undefined;
     this.resolution = undefined;
+
+    this.options = this.defaultOptions();
+    for(const type in this.options) {
+      for(const property in this.options.type){
+        if(property in options){
+          this.options.type[property] = options[property];
+        }
+      }
+    }
+  }
+
+  defaultOptions() {
+    return {
+      consts:{
+        maxDirs:3,
+      },
+      uniforms:{}
+    };
+  }
+
+  get listSolids(){
+    return Object.values(this.solids);
+  }
+
+  get listLights(){
+    return Object.values(this.lights);
   }
 
   /**
@@ -174,8 +200,8 @@ class Thurston{
   * @param{Array} items - the list of items to add
   * @return {Thurston}
   */
-  addItem(items){
-    for(item of items){
+  addItems(items){
+    for(const item of items){
         this.addItem(item);
     }
     return this
@@ -207,17 +233,25 @@ class Thurston{
   * @return {string} - the code of the shader
   */
   async buildFragmentShader(){
-    // process the shader files.
+    const data = Object.assign(
+      {},
+      this.options.consts,
+      {solids:this.listSolids, lights:this.listLights}
+    );
+    console.log(this.solids);
     let file;
     let response;
+    let template;
     let fShader = "";
     for(const shaderFile of shaderFiles){
       // update if needed the placeholder with the relevant geometry
       file = shaderFile.replace('XXX', this.geom.key);
       // load the file and append it to the shader
       response = await fetch(shaderDir + file);
-      fShader = fShader + await response.text();
+      template = await response.text();
+      fShader = fShader + mustache.render(template, data);
     }
+    console.log(fShader);
     return fShader;
   }
 

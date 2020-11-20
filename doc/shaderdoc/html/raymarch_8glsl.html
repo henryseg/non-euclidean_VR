@@ -83,14 +83,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa28eef73bd118664eaae069980f9db8f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#aa28eef73bd118664eaae069980f9db8f">teleport</a> (inout <a class="el" href="struct_vector.html">Vector</a> v, inout fixIsom)</td></tr>
-<tr class="separator:aa28eef73bd118664eaae069980f9db8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a519bd2b4f9d905683fb226d46b53f259"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#a519bd2b4f9d905683fb226d46b53f259">raymarch</a> (inout <a class="el" href="struct_vector.html">Vector</a> v, out fixIsom)</td></tr>
-<tr class="separator:a519bd2b4f9d905683fb226d46b53f259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b63b104aad2fce29901ebfa225618a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#a7b63b104aad2fce29901ebfa225618a8">teleport</a> (inout <a class="el" href="struct_vector.html">Vector</a> v, inout <a class="el" href="struct_isometry.html">Isometry</a> fixIsom)</td></tr>
+<tr class="separator:a7b63b104aad2fce29901ebfa225618a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bfa96353f34200f43875f97a700c6ed"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#a3bfa96353f34200f43875f97a700c6ed">raymarch</a> (inout <a class="el" href="struct_vector.html">Vector</a> v, out <a class="el" href="struct_isometry.html">Isometry</a> fixIsom, out <a class="el" href="struct_object.html">Object</a> obj)</td></tr>
+<tr class="separator:a3bfa96353f34200f43875f97a700c6ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a519bd2b4f9d905683fb226d46b53f259"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a519bd2b4f9d905683fb226d46b53f259">&#9670;&nbsp;</a></span>raymarch()</h2>
+<a id="a3bfa96353f34200f43875f97a700c6ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bfa96353f34200f43875f97a700c6ed">&#9670;&nbsp;</a></span>raymarch()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -104,8 +104,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">out&#160;</td>
-          <td class="paramname"><em>fixIsom</em>&#160;</td>
+          <td class="paramtype">out <a class="el" href="struct_isometry.html">Isometry</a>&#160;</td>
+          <td class="paramname"><em>fixIsom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_object.html">Object</a>&#160;</td>
+          <td class="paramname"><em>obj</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -118,23 +124,22 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">v</td><td>The initial vector for raymarching. The vector is updated by the function, that is at the end, <code>v</code> is the incidence vector at which we hit an object (if any) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">fixIsom</td><td>isometry collecting all the teleportations done during the ray-marching </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>the object that we enventually hit </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><ul>
-<li>the id of the hit object (if any)</li>
-<li>0 if no object has been hit</li>
-<li>-1 if there is a bug </li>
+<li>1 if an object has been hit</li>
+<li>0 if no object has bee hit</li>
+<li>-1, if there is a bug </li>
 </ul>
 </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>Should we start ids at 0? </dd>
-<dd>
-Raymarch, starting each new step from the origin (goal : reduce accumulative errors) </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Raymarch, starting each new step from the origin (goal : reduce accumulative errors) </dd></dl>
 
 </div>
 </div>
-<a id="aa28eef73bd118664eaae069980f9db8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa28eef73bd118664eaae069980f9db8f">&#9670;&nbsp;</a></span>teleport()</h2>
+<a id="a7b63b104aad2fce29901ebfa225618a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b63b104aad2fce29901ebfa225618a8">&#9670;&nbsp;</a></span>teleport()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,7 +153,7 @@ Raymarch, starting each new step from the origin (goal : reduce accumulative err
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">inout&#160;</td>
+          <td class="paramtype">inout <a class="el" href="struct_isometry.html">Isometry</a>&#160;</td>
           <td class="paramname"><em>fixIsom</em>&#160;</td>
         </tr>
         <tr>

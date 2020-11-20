@@ -93,18 +93,14 @@ Functions</h2></td></tr>
 <tr class="separator:a8917ba32ec22067cc7bcc0b4b8e1731e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62a0ee31a906e995f2e56c8b5857072f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#a62a0ee31a906e995f2e56c8b5857072f">geomReflect</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_vector.html">Vector</a> n)</td></tr>
 <tr class="separator:a62a0ee31a906e995f2e56c8b5857072f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79746f95eedc75f9552bd11e42fa8626"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isometry.html">Isometry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#a79746f95eedc75f9552bd11e42fa8626">makeTranslation</a> (<a class="el" href="struct_vector.html">Vector</a> p)</td></tr>
-<tr class="separator:a79746f95eedc75f9552bd11e42fa8626"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b8afe49ae22385eea464c99e8c27aad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isometry.html">Isometry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#a2b8afe49ae22385eea464c99e8c27aad">makeTranslation</a> (<a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
+<tr class="separator:a2b8afe49ae22385eea464c99e8c27aad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac836875589bb6b2e16850b7311b4f5e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isometry.html">Isometry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#ac836875589bb6b2e16850b7311b4f5e8">makeInvTranslation</a> (<a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
 <tr class="separator:ac836875589bb6b2e16850b7311b4f5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a644496bcbd56e5baa3666cd749d6df85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#a644496bcbd56e5baa3666cd749d6df85">createVector</a> (<a class="el" href="struct_point.html">Point</a> p, vec3 coords)</td></tr>
 <tr class="separator:a644496bcbd56e5baa3666cd749d6df85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7ae70af474f971a709b7ea5c513db6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#aa7ae70af474f971a709b7ea5c513db6c">direction</a> (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, out <a class="el" href="struct_vector.html">Vector</a> dir, out float len)</td></tr>
 <tr class="separator:aa7ae70af474f971a709b7ea5c513db6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b1d1208a381e0abcfbba17c5680583e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#a9b1d1208a381e0abcfbba17c5680583e">directions</a> (<a class="el" href="struct_vector.html">Vector</a> u, <a class="el" href="struct_vector.html">Vector</a> v, int n, out <a class="el" href="struct_vector.html">Vector</a>[<a class="el" href="header_8glsl.html#ae31ccd1ef4f44fae673f3a843c019c5a">MAX_DIRS</a>] dirs, out float[<a class="el" href="header_8glsl.html#ae31ccd1ef4f44fae673f3a843c019c5a">MAX_DIRS</a>] lens)</td></tr>
-<tr class="separator:a9b1d1208a381e0abcfbba17c5680583e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f89d766fea5acf4ae1812c183a273b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry_2common_8glsl.html#a0f89d766fea5acf4ae1812c183a273b7">direction</a> (<a class="el" href="struct_vector.html">Vector</a> u, <a class="el" href="struct_vector.html">Vector</a> v, out <a class="el" href="struct_vector.html">Vector</a> dir, out float len)</td></tr>
-<tr class="separator:a0f89d766fea5acf4ae1812c183a273b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a8917ba32ec22067cc7bcc0b4b8e1731e"></a>
@@ -166,7 +162,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aa7ae70af474f971a709b7ea5c513db6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7ae70af474f971a709b7ea5c513db6c">&#9670;&nbsp;</a></span>direction() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7ae70af474f971a709b7ea5c513db6c">&#9670;&nbsp;</a></span>direction()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -203,94 +199,6 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Compute the direction and length of the shortest geodesic from <code>p</code> to <code>q</code>. The result are passed to the variables <code>dir</code> and <code>len</code>. </p>
-
-</div>
-</div>
-<a id="a0f89d766fea5acf4ae1812c183a273b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f89d766fea5acf4ae1812c183a273b7">&#9670;&nbsp;</a></span>direction() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void direction </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>u</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out <a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>dir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out float&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Let <code>p</code> and <code>q</code> be the underlying point of <code>u</code> and <code>v</code>. Compute the direction and length of the shortest geodesic from <code>p</code> to <code>q</code>. Overlaod the function <a class="el" href="geometry_2common_8glsl.html#aa7ae70af474f971a709b7ea5c513db6c">direction()</a> </p>
-
-</div>
-</div>
-<a id="a9b1d1208a381e0abcfbba17c5680583e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b1d1208a381e0abcfbba17c5680583e">&#9670;&nbsp;</a></span>directions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int directions </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>u</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out <a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>dirs</em>[MAX_DIRS], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out float&#160;</td>
-          <td class="paramname"><em>lens</em>[MAX_DIRS]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Let <code>p</code> and <code>q</code> be the underlying point of <code>u</code> and <code>v</code>. Compute the direction and length of the geodesics from p to q. Overlaod the function <a class="el" href="geometry_2common_8glsl.html#a9b1d1208a381e0abcfbba17c5680583e">directions()</a> </p>
 
 </div>
 </div>
@@ -387,8 +295,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a79746f95eedc75f9552bd11e42fa8626"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79746f95eedc75f9552bd11e42fa8626">&#9670;&nbsp;</a></span>makeTranslation()</h2>
+<a id="a2b8afe49ae22385eea464c99e8c27aad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b8afe49ae22385eea464c99e8c27aad">&#9670;&nbsp;</a></span>makeTranslation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -397,12 +305,12 @@ Functions</h2></td></tr>
           <td class="memname"><a class="el" href="struct_isometry.html">Isometry</a> makeTranslation </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>p</em></td><td>)</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a preferred isometry sending the origin to the underlying point. Overlaod the function <a class="el" href="geometry_2common_8glsl.html#a79746f95eedc75f9552bd11e42fa8626">makeTranslation()</a>. </p>
+<p>Return a preferred isometry sending the origin to the underlying point. Overlaod the function <a class="el" href="geometry_2common_8glsl.html#a2b8afe49ae22385eea464c99e8c27aad">makeTranslation()</a>. </p>
 
 </div>
 </div>
