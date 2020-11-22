@@ -27,7 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @module Abstract
+ * @module Abstract geometry
  *
  * @description
  * Defines the objects required by each geometry.
@@ -42,6 +42,7 @@
 
 import {
     Vector3,
+    Vector4,
     Matrix4
 } from "../lib/three.module.js"
 
@@ -49,12 +50,42 @@ import {
  * @const {string}
  * @default computer name for the geometry
  */
-const key='abstract';
+const key = 'abstract';
+
 /**
  * @const {string}
  * @default Full name of the geometry
  */
-const name='Abstract geometry';
+const name = 'Abstract geometry';
+
+/**
+ * @const {string}
+ * @default Path to the geometry dependent part of the shader
+ * @todo The path is relative to the file 'thurston.js'. Look at good practices for handling paths
+ */
+const shader = 'geometry/model.glsl';
+
+
+Number.prototype.toGLSL = function () {
+    let res = this.toString();
+    if (Number.isInteger(this)) {
+        res = res + '.';
+    }
+    return res;
+};
+
+Vector3.prototype.toGLSL = function () {
+    return `vec3(${this.toArray()})`;
+}
+
+Vector4.prototype.toGLSL = function () {
+    return `vec4(${this.toArray()})`;
+}
+
+Matrix4.prototype.toGLSL = function () {
+    return `mat4(${this.toArray()})`;
+};
+
 
 /**
  * @class
@@ -64,11 +95,27 @@ const name='Abstract geometry';
  */
 class Isometry {
 
+
     /**
      * Constructor.
      * Return the identity.
+     * Since the constructor is different for each geometry,
+     * the constructor delegate the task to the method build
+     * (that can be overwritten easily unlike the constructor)
+     * Another way to do would be to implement for each geometry a new class
+     * that inherit from Isometry.
+     * How ever the draw back is that the class Position would need also to be extended,
+     * so that it manipulate the right classes.
      */
     constructor() {
+        this.build();
+    }
+
+    /**
+     * Fake constructor
+     */
+    build() {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -77,6 +124,7 @@ class Isometry {
      * @return {Isometry}
      */
     set(data) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -85,6 +133,7 @@ class Isometry {
      * @return {Isometry}
      */
     reduceError() {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -93,6 +142,7 @@ class Isometry {
      * @return {Isometry}
      */
     multiply(isom) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -101,6 +151,7 @@ class Isometry {
      * @return {Isometry}
      */
     premultiply(isom) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -109,6 +160,7 @@ class Isometry {
      * @return {Isometry}
      */
     getInverse(isom) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -118,6 +170,7 @@ class Isometry {
      * @return {Isometry}
      */
     makeTranslation(point) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -127,6 +180,7 @@ class Isometry {
      * @return {Isometry}
      */
     makeInvTranslation(point) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -135,6 +189,7 @@ class Isometry {
      * @return {boolean}
      */
     equals(isom) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -142,6 +197,7 @@ class Isometry {
      * @return {Isometry}
      */
     clone() {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -150,6 +206,7 @@ class Isometry {
      * @return {Isometry}
      */
     copy(isom) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -157,6 +214,16 @@ class Isometry {
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
+     * Return a line of GLSL code creating the same isometry
+     * Used when dynamically building shaders.
+     * @return {string}
+     */
+    toGLSL() {
+        throw new Error("This method need be overloaded.");
     }
 
 
@@ -173,8 +240,17 @@ class Point {
     /**
      * Constructor.
      * Return the origin of the space.
+     * Same remark as for isometries.
      */
     constructor() {
+        this.build()
+    }
+
+    /**
+     * Fake constructor
+     */
+    build() {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -183,6 +259,7 @@ class Point {
      * @return {Point}
      */
     set(data) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -191,6 +268,7 @@ class Point {
      * @return {Point}
      */
     applyIsometry(isom) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -199,6 +277,7 @@ class Point {
      * @return {boolean}
      */
     equals(point) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -206,6 +285,7 @@ class Point {
      * @return {Point}
      */
     clone() {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -214,6 +294,7 @@ class Point {
      * @return {Point}
      */
     copy(point) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -221,6 +302,16 @@ class Point {
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
+     * Return a line of GLSL code creating the same point
+     * Used when dynamically building shaders.
+     * @return {string}
+     */
+    toGLSL() {
+        throw new Error("This method need be overloaded.");
     }
 }
 
@@ -241,20 +332,20 @@ class Point {
  */
 class Vector extends Vector3 {
 
-  /**
-   * Rotate the current vector by the facing component of the position.
-   * This method is geometry independent as the coordinates of the vector
-   * are given in a chosen reference frame.
-   * Only the reference frame depends on the geometry.
-   * @param {Position} position
-   * @return {Vector}
-   */
-  applyFacing(position) {
-    let aux = Vector4(this.x, this.y, this.z, 0);
-    aux.applyMatrix4(position.facing);
-    this.set(aux.x, aux.y, aux.z);
-    return this;
-  }
+    /**
+     * Rotate the current vector by the facing component of the position.
+     * This method is geometry independent as the coordinates of the vector
+     * are given in a chosen reference frame.
+     * Only the reference frame depends on the geometry.
+     * @param {Position} position
+     * @return {Vector}
+     */
+    applyFacing(position) {
+        let aux = new Vector4(this.x, this.y, this.z, 0);
+        aux.applyMatrix4(position.facing);
+        this.set(aux.x, aux.y, aux.z);
+        return this;
+    }
 }
 
 /**
@@ -275,32 +366,8 @@ class Position {
      * @property {Matrix4} facing - the O(3) component of the position (stored as a `Matrix4`)
      */
     constructor() {
-      this.boost = new this.isometryType();
-      this.facing = new Matrix4();
-    }
-
-    /**
-     * Return the type used for isometries.
-     * This getter needs to be overload in each geometry.
-     */
-    get isometryType(){
-      return Isometry;
-    }
-
-    /**
-     * Return the type used for points.
-     * This getter needs to be overload in each geometry.
-     */
-    get unserializePointType(){
-      return Point;
-    }
-
-    /**
-     * Return the type used for vectors.
-     * This getter needs to be overload in each geometry.
-     */
-    get vectorType(){
-      return Vector;
+        this.boost = new Isometry();
+        this.facing = new Matrix4();
     }
 
     /**
@@ -309,8 +376,8 @@ class Position {
      * @return {Position}
      */
     setBoost(isom) {
-      this.boost = isom;
-      return this;
+        this.boost = isom;
+        return this;
     }
 
     /**
@@ -319,8 +386,8 @@ class Position {
      * @return {Position}
      */
     setFacing(facing) {
-      this.facing = facing;
-      return this;
+        this.facing = facing;
+        return this;
     }
 
     /**
@@ -328,8 +395,8 @@ class Position {
      * @return {Position}
      */
     reduceErrorBoost() {
-      this.boost.reduceError();
-      return this;
+        this.boost.reduceError();
+        return this;
     }
 
     /**
@@ -338,7 +405,7 @@ class Position {
      * @todo To be completed
      */
     reduceErrorFacing() {
-      return this;
+        return this;
     }
 
     /**
@@ -346,9 +413,9 @@ class Position {
      * @return {Position}
      */
     reduceError() {
-      this.reduceErrorBoost();
-      this.reduceErrorFacing();
-      return this;
+        this.reduceErrorBoost();
+        this.reduceErrorFacing();
+        return this;
     }
 
     /**
@@ -357,8 +424,8 @@ class Position {
      * @return {Position}
      */
     applyIsometry(isom) {
-      this.boost.premultiply(isom);
-      return this;
+        this.boost.premultiply(isom);
+        return this;
     }
 
     /**
@@ -367,8 +434,8 @@ class Position {
      * @return {Position}
      */
     applyFacing(matrix) {
-      this.facing.multiply(matrix)
-      return this;
+        this.facing.multiply(matrix)
+        return this;
     }
 
     /**
@@ -376,9 +443,9 @@ class Position {
      * @param {Position} position
      */
     multiply(position) {
-      this.boost.multiply(position.boost);
-      this.facing.premultiply(position.facing);
-      return this;
+        this.boost.multiply(position.boost);
+        this.facing.premultiply(position.facing);
+        return this;
     }
 
     /**
@@ -386,9 +453,9 @@ class Position {
      * @param {Position} position
      */
     premultiply(position) {
-      this.boost.premultiply(position.boost);
-      this.facing.multiply(position.facing);
-      return this;
+        this.boost.premultiply(position.boost);
+        this.facing.multiply(position.facing);
+        return this;
     }
 
     /**
@@ -396,19 +463,20 @@ class Position {
      * @param {Position} position
      */
     getInverse(position) {
-      this.boost.getInverse(position.boost);
-      this.facing.getInverse(position.facing);
-      return this;
+        this.boost.getInverse(position.boost);
+        this.facing.getInverse(position.facing);
+        return this;
     }
 
     /**
-     * Flow the current position in the direction `v`.
-     * The facing is updated using parallel transport.
+     * Flow the current position.
+     * `v` is the pull back at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
      * @param {Vector} v
      * @return {Position}
      */
     flow(v) {
+        throw new Error("This method need be overloaded.");
     }
 
     /**
@@ -416,8 +484,8 @@ class Position {
      * @return {Vector}
      */
     getFwdVector() {
-      let aux = new this.vectorType(0,0,-1);
-      return aux.applyFacing(this);
+        let aux = new Vector(0, 0, -1);
+        return aux.applyFacing(this);
     }
 
     /**
@@ -425,8 +493,8 @@ class Position {
      * @return {Vector}
      */
     getRightVector() {
-      let aux = new this.vectorType(1,0,0);
-      return aux.applyFacing(this);
+        let aux = new Vector(1, 0, 0);
+        return aux.applyFacing(this);
     }
 
     /**
@@ -434,8 +502,8 @@ class Position {
      * @return {Vector}
      */
     getUpVector() {
-      let aux = new this.vectorType(0,1,0);
-      return aux.applyFacing(this);
+        let aux = new Vector(0, 1, 0);
+        return aux.applyFacing(this);
     }
 
     /**
@@ -444,7 +512,7 @@ class Position {
      * @return {boolean}
      */
     equals(position) {
-      return this.boost.equals(position.boost) &amp;&amp; this.facing.equals(position.facing);
+        return this.boost.equals(position.boost) &amp;&amp; this.facing.equals(position.facing);
     }
 
     /**
@@ -452,10 +520,10 @@ class Position {
      * @return {Position}
      */
     clone() {
-      let res = new Position()
-      res.setBoost(this.boost.clone());
-      res.setFacing(this.facing.clone());
-      return res;
+        let res = new Position()
+        res.setBoost(this.boost.clone());
+        res.setFacing(this.facing.clone());
+        return res;
     }
 
     /**
@@ -464,8 +532,8 @@ class Position {
      * @return {Position}
      */
     copy(position) {
-      this.boost.copy(position.boost);
-      this.facing.copy(position.facing);
+        this.boost.copy(position.boost);
+        this.facing.copy(position.facing);
     }
 
     /**
@@ -473,11 +541,14 @@ class Position {
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
-      return this.boost.serialize().concat(this.facing);
+        return this.boost.serialize().concat(this.facing);
     }
 }
 
 export {
+    key,
+    name,
+    shader,
     Isometry,
     Point,
     Vector,
@@ -493,13 +564,13 @@ export {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract.html">Abstract</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-events.html">events</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-User%2520Interface.html">User Interface</a></li></ul><h3>Classes</h3><ul><li><a href="Controls.html">Controls</a></li><li><a href="module-Abstract-Isometry.html">Isometry</a></li><li><a href="module-Abstract-Point.html">Point</a></li><li><a href="module-Abstract-Position.html">Position</a></li><li><a href="module-Abstract-Vector.html">Vector</a></li><li><a href="module-Euclidean%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Euclidean%2520geometry-Point.html">Point</a></li><li><a href="module-Euclidean%2520geometry-Position.html">Position</a></li><li><a href="module-Euclidean%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston-SceneItem.html">SceneItem</a></li><li><a href="module-Thurston-SceneMaterial.html">SceneMaterial</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul><h3>Global</h3><ul><li><a href="global.html#keyboard">keyboard</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Nov 14 2020 20:10:51 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Nov 22 2020 16:36:56 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

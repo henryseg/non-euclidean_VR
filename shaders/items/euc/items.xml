@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+    <background>
+        /**
+         * Distance between two points
+         */
+        float dist(Point p1, Point p2){
+            return length(p1.coords - p2.coords);
+        }
+    </background>
+    <items>
+        <solid class="ball">
+            <shader type="declare">
+                Solid {{name}};
+            </shader>
+            <shader type="setup">
+                {{name}} = {{toGLSL}};
+            </shader>
+            <shader type="sdf">
+                return dist(v.pos, {{name}}.item.loc) - {{radius}};
+            </shader>
+            <shader type="gradient">
+                Vector res = Vector(v.pos, v.pos.coords - {{name}}.item.loc.coords);
+                return geomNormalize(res);
+            </shader>
+        </solid>
+
+        <light class="pointLight">
+            <shader type="declare">
+                Light {{name}};
+            </shader>
+            <shader type="setup">
+                {{name}} = {{toGLSL}};
+            </shader>
+        </light>
+    </items>
+</library>

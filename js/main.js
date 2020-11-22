@@ -1,52 +1,51 @@
 import {
-  Vector4,
-  Vector3
+    Vector4,
+    Vector3,
+    Color,
 } from './lib/three.module.js';
 
 import {
-  Thurston,
+    Thurston,
 } from './thurston.js';
 
 import {
-  Material
+    Material
 } from './material.js';
 
 
-import * as geom from './geometry/foundations/euc.js';
-import * as items from './geometry/items/euc.js';
-
-const thurston = new Thurston(geom);
-thurston.init();
+import * as geom from './geometry/euc.js';
+import * as items from './items/euc.js';
 
 
-const ball0 = new items.Ball({
-  center: new geom.Point().set([new Vector4(0,0,-1,1)]),
-  radius: 0.4,
-  material: new Material({color: new Vector3(1,1,1)})
-})
+const thurston = new Thurston(geom, {keyboard: 'fr'});
 
-const ball1 = new items.Ball({
-  center: new geom.Point().set([new Vector4(-0.3,-0.3,-0.5,1)]),
-  radius: 0.2,
-  material: new Material({color: new Vector3(0,0,1)})
-})
+const ball0 = new items.Ball(
+    new geom.Point().set([new Vector4(0, 0, -1, 1)]),
+    0.5,
+    new Material({color: new Color(1, 1, 1)})
+);
 
-const light0 = new items.PointLight({
-  location: new geom.Point().set([new Vector4(1,0,0,1)]),
-  color: new Vector3(1,1,0)
-});
+const ball1 = new items.Ball(
+    new geom.Point().set([new Vector4(-.3, -0.1, -.5, 1)]),
+    0.1,
+    new Material({color: new Color(0, 0, 1)})
+);
 
-const light1 = new items.PointLight({
-  location: new geom.Point().set([new Vector4(0,1,-1,1)]),
-  color: new Vector3(0,1,1)
-});
+const light0 = new items.PointLight(
+    new geom.Point().set([new Vector4(1, 0, 0, 1)]),
+    new Color(1, 1, 0)
+);
 
-const light2 = new items.PointLight({
-  location: new geom.Point().set([new Vector4(-1,-1,1,1)]),
-  color: new Vector3(1,0,1)
-});
+const light1 = new items.PointLight(
+    new geom.Point().set([new Vector4(0, 1, -1, 1)]),
+    new Color(0, 1, 1)
+);
+
+const light2 = new items.PointLight(
+    new geom.Point().set([new Vector4(-1, -1, 1, 1)]),
+    new Color(1, 0, 1)
+);
 
 
-thurston.addItems([ball0, light0, ball1, light1, light2]);
-
-//thurston.animate();
+thurston.addItems([ball0, ball1, light0, light1, light2]);
+thurston.run();

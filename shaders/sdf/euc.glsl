@@ -1,9 +1,4 @@
-/**
- * Distance between two points
- */
-float dist(Point p1, Point p2){
-  return length(p1.coords - p2.coords);
-}
+
 
 /**
  * Signed distance function for the ball of radius `r` centered at `c`

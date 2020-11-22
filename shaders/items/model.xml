@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+    <background>
+        // auxiliary shader code, e.g. distance between tow points for the ball sdf
+    </background>
+    <items>
+        <solid class="solidClassName">
+            <shader type="declare">
+                // code used to declare the solid
+            </shader>
+            <shader type="setup">
+                // code used to setup the solid
+            </shader>
+            <shader type="sdf">
+                // body of the corresponding sdf or distance underestimator
+            </shader>
+            <shader type="gradient">
+               // body of the gradient of the sdf
+            </shader>
+        </solid>
+    </items>
+</library>

@@ -36,11 +36,12 @@ void main() {
   vec3 color;
   Isometry fixIsom;
 
-  unserializeData();
+  setup();
   Vector v = rayDir(gl_FragCoord.xy);
-  Object obj;
+  Solid solid;
 
-  int hit = raymarch(v, fixIsom, obj);
+
+  int hit = raymarch(v, fixIsom, solid);
 
   switch(hit) {
     case -1:
@@ -50,8 +51,9 @@ void main() {
       color = vec3(0.2,0.2,0.2);
       break;
     default:
-      color = phongModel(v,obj);
+      color = phongModel(v,solid);
   }
+
   gl_FragColor = vec4(color,1);
 
 }

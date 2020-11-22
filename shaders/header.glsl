@@ -3,11 +3,11 @@
  * The shader is split in several files that need be concatenated as follows
  * - header.glsl (constants, uniforms)
  * - geometry/euc.glsl (geometry functions)
- * - geometry/common.glsl (common stuff)
- * - items.glsl (structures for objets and lights)
+ * - geometry/commons.glsl (common stuff)
+ * - items/model.glsl (structures for objets and lights)
  * - setup.glsl (global variables, etc)
  * - sdf/euc.glsl (basic signed distance functions / distance underestimators)
- * - sdf/common.glsl (common stuff)
+ * - sdf/commons.glsl (common stuff)
  * - scene.glsl (the scene built by the JavaScript scene builder)
  * - raymarch.glsl (the ray-marching algorithm)
  * - lighting.glsl (scene illumination)
@@ -40,18 +40,7 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
  */
 const int MAX_DIRS = {{maxDirs}};
 
-uniform int maxMarchingSteps; /**< Maximal number of steps before stoping the ray-marching. */
-uniform float minDist; /**< Miniaml distance when starting the ray-marching. */
-uniform float maxDist; /**< Maximal distance before stopping the ray-marching. */
-uniform float marchingThreshold; /**< Threshold to decide if we hit an object in the scene. */
-uniform float fov; /**< Field of view (in degrees). */
-uniform bool stereo; /**< True for the stereographic vision. */
-uniform vec2 resolution; /**< Screen resolution */
+{{#uniforms}}
+uniform {{type}} {{name}};
+{{/uniforms}}
 
-uniform mat4 boostsRawA[5]; /**< Serialized boost of the current positions, part A. */
-uniform float boostsRawB[5]; /**< Serialized boost of the current positions, part B. */
-uniform mat4 facings[3]; /**< Facings. */
-
-uniform mat4 objetBoostRawA; /**< Serialized boost of the object, part A (model for the template). */
-uniform float objectBootRawB; /**< Serialized boost of the object, part B (model for the template). */
-uniform mat4 objectFacing; /**< Facing of the object (model for the template). */

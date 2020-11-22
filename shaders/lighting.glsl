@@ -46,45 +46,25 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
  * @todo Choose a convention for the incidence vector `v`.
  * Should it point toward the object, or the observer?
  */
-vec3 phongModel(Vector v, Object obj) {
-  //return vec3(1,1,0);
-  Vector n = sceneNormal(v,obj);
+vec3 phongModel(Vector v, Solid solid) {
+  Vector n = sceneNormal(v,solid);
 
   Light light;
   Vector[MAX_DIRS] dirs;
   float[MAX_DIRS] lens;
   int k;
 
-  vec3 color = obj.material.ambient * obj.material.color;
-
-  light = light0;
-  k = directions(v.pos, lightPos0, MAX_DIRS, dirs, lens);
-  for(int j=0; j < k; j++){
-    color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
-  }
-
-  light = light1;
-  k = directions(v.pos, lightPos1, MAX_DIRS, dirs, lens);
-  for(int j=0; j < k; j++){
-    color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
-  }
-
-  light = light2;
-  k = directions(v.pos, lightPos2, MAX_DIRS, dirs, lens);
-  for(int j=0; j < k; j++){
-    color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
-  }
+  vec3 color = solid.material.ambient * solid.material.color;
 
 
-/*
-  for(int i=0; i < LIGHT_NUMBER; i++) {
-    light = lights[i];
-    k = directions(v.pos, light.item.pos, MAX_DIRS, dirs, lens);
+  {{#lights}}
+    light = {{name}};
+    k = directions(v.pos, light.item.loc, MAX_DIRS, dirs, lens);
     for(int j=0; j < k; j++){
-      color = color + lightComputation(v, n, dirs[j], lens[j], obj.material, light.color);
+      color = color + lightComputation(v, n, dirs[j], lens[j], solid.material, light.color);
     }
-  }
-  */
+  {{/lights}}
+
 
   return color;
 }

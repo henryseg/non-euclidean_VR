@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Module used to define and render a scene in one of the eight Thruston geometries.</p></div>
+            <div class="description"><p>Module used to define and render a scene in one of the eight Thurston geometries.</p></div>
         
 
         
@@ -145,10 +145,15 @@
 
         
             
-<h4 class="name" id="~camera"><span class="type-signature">(inner, constant) </span>camera<span class="type-signature"> :OrthographicCamera</span></h4>
+<h4 class="name" id="~keyboard"><span class="type-signature">(inner, constant) </span>keyboard<span class="type-signature"> :Object</span></h4>
 
 
 
+
+<div class="description">
+    <p>Keyboard commands.
+Each main entry correspond to a keyboard type (American, French, etc).</p>
+</div>
 
 
 
@@ -156,7 +161,7 @@
     <ul>
         <li>
             
-<span class="param-type">OrthographicCamera</span>
+<span class="param-type">Object</span>
 
 
         </li>
@@ -191,16 +196,11 @@
     
 
     
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy">
-            <li>The Three.js camera</li>
-        </ul></dd>
-    
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line49">line 49</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -218,7 +218,7 @@
 
         
             
-<h4 class="name" id="~renderer"><span class="type-signature">(inner, constant) </span>renderer<span class="type-signature"> :WebGLRenderer</span></h4>
+<h4 class="name" id="~MOVE_X_NEG"><span class="type-signature">(inner, constant) </span>MOVE_X_NEG<span class="type-signature"> :number</span></h4>
 
 
 
@@ -229,7 +229,7 @@
     <ul>
         <li>
             
-<span class="param-type">WebGLRenderer</span>
+<span class="param-type">number</span>
 
 
         </li>
@@ -266,14 +266,14 @@
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy">
-            <li>The WebGL Renderer used to produce the pictures</li>
+            <li>Code for a translation in the negative x-direction</li>
         </ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line37">line 37</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -291,7 +291,7 @@
 
         
             
-<h4 class="name" id="~scene"><span class="type-signature">(inner, constant) </span>scene<span class="type-signature"> :Scene</span></h4>
+<h4 class="name" id="~MOVE_X_POS"><span class="type-signature">(inner, constant) </span>MOVE_X_POS<span class="type-signature"> :number</span></h4>
 
 
 
@@ -302,7 +302,7 @@
     <ul>
         <li>
             
-<span class="param-type">Scene</span>
+<span class="param-type">number</span>
 
 
         </li>
@@ -339,7 +339,445 @@
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy">
-            <li>The Three.js scene (that will consists of a single square)</li>
+            <li>Code for a translation in the positive x-direction</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~MOVE_Y_NEG"><span class="type-signature">(inner, constant) </span>MOVE_Y_NEG<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a translation in the negative y-direction</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~MOVE_Y_POS"><span class="type-signature">(inner, constant) </span>MOVE_Y_POS<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a translation in the positive y-direction</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~MOVE_Z_NEG"><span class="type-signature">(inner, constant) </span>MOVE_Z_NEG<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a translation in the negative z-direction</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~MOVE_Z_POS"><span class="type-signature">(inner, constant) </span>MOVE_Z_POS<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a translation in the positive z-direction</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~ROTATE_X_NEG"><span class="type-signature">(inner, constant) </span>ROTATE_X_NEG<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a negative rotation around the x-axis</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~ROTATE_X_POS"><span class="type-signature">(inner, constant) </span>ROTATE_X_POS<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a positive rotation around the x-axis</li>
         </ul></dd>
     
 
@@ -364,7 +802,7 @@
 
         
             
-<h4 class="name" id="~shaderDir"><span class="type-signature">(inner, constant) </span>shaderDir<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="~ROTATE_Y_NEG"><span class="type-signature">(inner, constant) </span>ROTATE_Y_NEG<span class="type-signature"> :number</span></h4>
 
 
 
@@ -375,7 +813,7 @@
     <ul>
         <li>
             
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
         </li>
@@ -412,14 +850,14 @@
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy">
-            <li>Path to the shader directory, relative to the current script</li>
+            <li>Code for a negative rotation around the y-axis</li>
         </ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line55">line 55</a>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -437,7 +875,7 @@
 
         
             
-<h4 class="name" id="~shaderFiles"><span class="type-signature">(inner, constant) </span>shaderFiles<span class="type-signature"> :array</span></h4>
+<h4 class="name" id="~ROTATE_Y_POS"><span class="type-signature">(inner, constant) </span>ROTATE_Y_POS<span class="type-signature"> :number</span></h4>
 
 
 
@@ -448,7 +886,7 @@
     <ul>
         <li>
             
-<span class="param-type">array</span>
+<span class="param-type">number</span>
 
 
         </li>
@@ -485,9 +923,7 @@
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy">
-            <li>List of the files used for the fragment shader.
-`XXX` is placeholder. It should be replaced by the key of the geometry.
-The path are relative to the shaders directory</li>
+            <li>Code for a positive rotation around the y-axis</li>
         </ul></dd>
     
 
@@ -495,6 +931,152 @@ The path are relative to the shaders directory</li>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~ROTATE_Z_NEG"><span class="type-signature">(inner, constant) </span>ROTATE_Z_NEG<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a negative rotation around the z-axis</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~ROTATE_Z_POS"><span class="type-signature">(inner, constant) </span>ROTATE_Z_POS<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>Code for a positive rotation around the z-axis</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -528,13 +1110,13 @@ The path are relative to the shaders directory</li>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-events.html">events</a></li><li><a href="module-Thruston%2520Euclidean%2520items.html">Thruston Euclidean items</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li><li><a href="module-User%2520Interface.html">User Interface</a></li></ul><h3>Classes</h3><ul><li><a href="Controls.html">Controls</a></li><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul><h3>Global</h3><ul><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#materialDefault">materialDefault</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 18 2020 17:23:03 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Nov 22 2020 16:36:56 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

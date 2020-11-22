@@ -5,7 +5,7 @@
  * @param[out] obj the object that we hit.
  * There are two void object for background and debug
  */
-float localSceneSDF(Vector v, out int hit, out Object obj){
+float localSceneSDF(Vector v, out int hit, out Solid solid){
   return 0.;
 }
 
@@ -17,26 +17,23 @@ float localSceneSDF(Vector v, out int hit, out Object obj){
  * @param[out] obj the object that we hit.
  * There are two void object for background and debug
  */
-float globalSceneSDF(Vector v, out int hit, out Object obj){
+float globalSceneSDF(Vector v, out int hit, out Solid solid){
   hit = 0;
   float res = maxDist;
   float dist;
 
-  dist = ballSDF(v, objPos0, .4);
-  if(abs(dist) < marchingThreshold) {
-    hit = 1;
-    obj = object0;
-    return dist;
-  }
-  res = min(res, dist);
+  {{#solids}}
+    {{#global}}
+        dist = {{name}}SDF(v);
+        if(abs(dist) < marchingThreshold) {
+          hit = 1;
+          solid = {{name}};
+          return dist;
+        }
+        res = min(res, dist);
 
-  dist = ballSDF(v, objPos1, .1);
-  if(abs(dist) < marchingThreshold) {
-    hit = 1;
-    obj = object1;
-    return dist;
-  }
-  res = min(res, dist);
+    {{/global}}
+  {{/solids}}
 
   return res;
 }
@@ -50,11 +47,13 @@ float globalSceneSDF(Vector v, out int hit, out Object obj){
  * We can directly use the SDF of that object.
  * It is probably faster.
  */
-Vector sceneNormal(Vector v, Object obj){
-  switch(obj.item.id){
-    case 0:
-      return ballSDFGrad(v, object0.item.pos, 0.);
-    case 1:
-      return ballSDFGrad(v, object1.item.pos, 0.);
+Vector sceneNormal(Vector v, Solid solid){
+  switch(solid.item.id){
+  {{#solids}}
+   {{#global}}
+    case {{id}}:
+      return {{name}}Grad(v);
+    {{/global}}
+  {{/solids}}
   }
 }
