@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Light</title>
+    <title>JSDoc: Class: AbstractProp</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Light</h1>
+    <h1 class="page-title">Class: AbstractProp</h1>
 
     
 
@@ -28,10 +28,10 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-Thurston%2520Items.html">Thurston Items</a>~</span>Light<span class="signature">(data)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature">(abstract) </span></span>
+            <span class="ancestors"><a href="module-Properties.html">Properties</a>~</span>AbstractProp<span class="signature">(options)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Generic class for point lights in the scene.</p></div>
+            <div class="class-description"><p>Abstract class to handle a generic property.</p></div>
         
     
 </header>
@@ -46,7 +46,7 @@
     
 
     
-    <h4 class="name" id="Light"><span class="type-signature"></span>new Light<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AbstractProp"><span class="type-signature">(abstract) </span>new AbstractProp<span class="signature">(options)</span><span class="type-signature"></span></h4>
     
 
     
@@ -54,7 +54,7 @@
 
 
 <div class="description">
-    <p>Constructor.</p>
+    <p>Constructor</p>
 </div>
 
 
@@ -90,7 +90,7 @@
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -106,7 +106,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>the argument passed as an object</p></td>
         </tr>
 
     
@@ -144,13 +144,13 @@
 
         <tr>
             
-                <td class="name"><code>color</code></td>
+                <td class="name"><code>shaderCst</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Color</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -160,7 +160,53 @@
 
             
 
-            <td class="description last"><p>private storing for color</p></td>
+            <td class="description last"><p>true if this property should be passed to the shader as a constant</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>shaderUni</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if this property should be passed to the shader as a uniform</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>shaderType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of the property on the shader side (when needed)</p></td>
         </tr>
 
     
@@ -199,7 +245,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="items_abstract.js.html">items/abstract.js</a>, <a href="items_abstract.js.html#line238">line 238</a>
+        <a href="property.js.html">property.js</a>, <a href="property.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -207,13 +253,6 @@
 
     
 
-    
-    <dt class="tag-todo">To Do:</dt>
-    <dd class="tag-todo">
-        <ul>
-            <li><p>How do we handle light intensity</p></li>
-        </ul>
-    </dd>
     
 </dl>
 
@@ -262,7 +301,7 @@
     
 
     
-    <h4 class="name" id="isLight"><span class="type-signature"></span>isLight<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="defaultOptions"><span class="type-signature"></span>defaultOptions<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -270,7 +309,7 @@
 
 
 <div class="description">
-    <p>Say if the item is a light</p>
+    <p>Return the default value of the available options</p>
 </div>
 
 
@@ -314,7 +353,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="items_abstract.js.html">items/abstract.js</a>, <a href="items_abstract.js.html#line258">line 258</a>
+        <a href="property.js.html">property.js</a>, <a href="property.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -342,10 +381,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>true if the item is a light</p>
-</div>
-
 
 
 <dl>
@@ -354,7 +389,7 @@
     </dt>
     <dd>
         
-<span class="param-type">boolean</span>
+<span class="param-type">Object</span>
 
 
     </dd>
@@ -372,7 +407,7 @@
     
 
     
-    <h4 class="name" id="isSolid"><span class="type-signature"></span>isSolid<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="value"><span class="type-signature"></span>value<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -380,7 +415,7 @@
 
 
 <div class="description">
-    <p>Say if the item is an objects</p>
+    <p>Return the value of the property</p>
 </div>
 
 
@@ -424,7 +459,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="items_abstract.js.html">items/abstract.js</a>, <a href="items_abstract.js.html#line266">line 266</a>
+        <a href="property.js.html">property.js</a>, <a href="property.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -449,28 +484,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>true if the item is an object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

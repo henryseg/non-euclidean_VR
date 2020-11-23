@@ -38,7 +38,11 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
  * This number needs to be a constant and cannot be passed a uniform.
  * Hence it will be setup once for all via the JavaScript template engine.
  */
-const int MAX_DIRS = {{maxDirs}};
+
+
+{{#constants}}
+const {{type}} {{name}} = {{value}};
+{{/constants}}
 
 {{#uniforms}}
 uniform {{type}} {{name}};

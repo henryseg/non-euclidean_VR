@@ -85,6 +85,7 @@ class Isometry {
 
     /**
      * Fake constructor
+     * @abstract
      */
     build() {
         throw new Error("This method need be overloaded.");
@@ -92,6 +93,7 @@ class Isometry {
 
     /**
      * Set the current isometry with the given data.
+     * @abstract
      * @param {array} data - the input data (depends on the geometry)
      * @return {Isometry}
      */
@@ -102,6 +104,7 @@ class Isometry {
     /**
      * Reduce the eventual numerical errors of the current isometry
      * (typically Gram-Schmidt).
+     * @abstract
      * @return {Isometry}
      */
     reduceError() {
@@ -110,6 +113,7 @@ class Isometry {
 
     /**
      * Multiply the current isometry by isom on the left, i.e. replace `this` by `this * isom`.
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -119,6 +123,7 @@ class Isometry {
 
     /**
      * Multiply the current isometry by isom on the right, i.e. replace `this` by `isom * this`.
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -128,6 +133,7 @@ class Isometry {
 
     /**
      * Set the current isometry to the inverse of `isom`.
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -138,6 +144,7 @@ class Isometry {
     /**
      * Return a preferred isometry sending the origin to the given point
      * (typically in Nil, Sol, SL2, etc).
+     * @abstract
      * @param {Point} point
      * @return {Isometry}
      */
@@ -148,6 +155,7 @@ class Isometry {
     /**
      * Return a preferred isometry sending the given point to the origin
      * (typically in Nil, Sol, SL2, etc).
+     * @abstract
      * @param {Point} point
      * @return {Isometry}
      */
@@ -157,6 +165,7 @@ class Isometry {
 
     /**
      * Check if the current isometry and `isom` are the same.
+     * @abstract
      * @param isom
      * @return {boolean}
      */
@@ -166,6 +175,7 @@ class Isometry {
 
     /**
      * Return a new copy of the current isometry.
+     * @abstract
      * @return {Isometry}
      */
     clone() {
@@ -174,6 +184,7 @@ class Isometry {
 
     /**
      * Set the current isometry with the given isometry
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -183,6 +194,7 @@ class Isometry {
 
     /**
      * Encode the isometry in a way that can be easily passed to the shader.
+     * @abstract
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
@@ -192,6 +204,7 @@ class Isometry {
     /**
      * Return a line of GLSL code creating the same isometry
      * Used when dynamically building shaders.
+     * @abstract
      * @return {string}
      */
     toGLSL() {
@@ -220,6 +233,7 @@ class Point {
 
     /**
      * Fake constructor
+     * @abstract
      */
     build() {
         throw new Error("This method need be overloaded.");
@@ -227,6 +241,7 @@ class Point {
 
     /**
      * Update the current point with the given data.
+     * @abstract
      * @param {array} data
      * @return {Point}
      */
@@ -236,6 +251,7 @@ class Point {
 
     /**
      * Translate the current point by the given isometry.
+     * @abstract
      * @param {Isometry} isom
      * @return {Point}
      */
@@ -245,6 +261,7 @@ class Point {
 
     /**
      * Check if the current point and `point ` are the same.
+     * @abstract
      * @param {Point} point
      * @return {boolean}
      */
@@ -254,6 +271,7 @@ class Point {
 
     /**
      * Return a new copy of the current point.
+     * @abstract
      * @return {Point}
      */
     clone() {
@@ -262,6 +280,7 @@ class Point {
 
     /**
      * set the current point with the given point
+     * @abstract
      * @param {Point} point
      * @return {Point}
      */
@@ -271,6 +290,7 @@ class Point {
 
     /**
      * Encode the point in a way that can be easily passed to the shader.
+     * @abstract
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
@@ -280,6 +300,7 @@ class Point {
     /**
      * Return a line of GLSL code creating the same point
      * Used when dynamically building shaders.
+     * @abstract
      * @return {string}
      */
     toGLSL() {
@@ -444,6 +465,7 @@ class Position {
      * Flow the current position.
      * `v` is the pull back at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
+     * @abstract
      * @param {Vector} v
      * @return {Position}
      */

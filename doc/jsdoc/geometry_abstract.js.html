@@ -113,6 +113,7 @@ class Isometry {
 
     /**
      * Fake constructor
+     * @abstract
      */
     build() {
         throw new Error("This method need be overloaded.");
@@ -120,6 +121,7 @@ class Isometry {
 
     /**
      * Set the current isometry with the given data.
+     * @abstract
      * @param {array} data - the input data (depends on the geometry)
      * @return {Isometry}
      */
@@ -130,6 +132,7 @@ class Isometry {
     /**
      * Reduce the eventual numerical errors of the current isometry
      * (typically Gram-Schmidt).
+     * @abstract
      * @return {Isometry}
      */
     reduceError() {
@@ -138,6 +141,7 @@ class Isometry {
 
     /**
      * Multiply the current isometry by isom on the left, i.e. replace `this` by `this * isom`.
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -147,6 +151,7 @@ class Isometry {
 
     /**
      * Multiply the current isometry by isom on the right, i.e. replace `this` by `isom * this`.
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -156,6 +161,7 @@ class Isometry {
 
     /**
      * Set the current isometry to the inverse of `isom`.
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -166,6 +172,7 @@ class Isometry {
     /**
      * Return a preferred isometry sending the origin to the given point
      * (typically in Nil, Sol, SL2, etc).
+     * @abstract
      * @param {Point} point
      * @return {Isometry}
      */
@@ -176,6 +183,7 @@ class Isometry {
     /**
      * Return a preferred isometry sending the given point to the origin
      * (typically in Nil, Sol, SL2, etc).
+     * @abstract
      * @param {Point} point
      * @return {Isometry}
      */
@@ -185,6 +193,7 @@ class Isometry {
 
     /**
      * Check if the current isometry and `isom` are the same.
+     * @abstract
      * @param isom
      * @return {boolean}
      */
@@ -194,6 +203,7 @@ class Isometry {
 
     /**
      * Return a new copy of the current isometry.
+     * @abstract
      * @return {Isometry}
      */
     clone() {
@@ -202,6 +212,7 @@ class Isometry {
 
     /**
      * Set the current isometry with the given isometry
+     * @abstract
      * @param {Isometry} isom
      * @return {Isometry}
      */
@@ -211,6 +222,7 @@ class Isometry {
 
     /**
      * Encode the isometry in a way that can be easily passed to the shader.
+     * @abstract
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
@@ -220,6 +232,7 @@ class Isometry {
     /**
      * Return a line of GLSL code creating the same isometry
      * Used when dynamically building shaders.
+     * @abstract
      * @return {string}
      */
     toGLSL() {
@@ -248,6 +261,7 @@ class Point {
 
     /**
      * Fake constructor
+     * @abstract
      */
     build() {
         throw new Error("This method need be overloaded.");
@@ -255,6 +269,7 @@ class Point {
 
     /**
      * Update the current point with the given data.
+     * @abstract
      * @param {array} data
      * @return {Point}
      */
@@ -264,6 +279,7 @@ class Point {
 
     /**
      * Translate the current point by the given isometry.
+     * @abstract
      * @param {Isometry} isom
      * @return {Point}
      */
@@ -273,6 +289,7 @@ class Point {
 
     /**
      * Check if the current point and `point ` are the same.
+     * @abstract
      * @param {Point} point
      * @return {boolean}
      */
@@ -282,6 +299,7 @@ class Point {
 
     /**
      * Return a new copy of the current point.
+     * @abstract
      * @return {Point}
      */
     clone() {
@@ -290,6 +308,7 @@ class Point {
 
     /**
      * set the current point with the given point
+     * @abstract
      * @param {Point} point
      * @return {Point}
      */
@@ -299,6 +318,7 @@ class Point {
 
     /**
      * Encode the point in a way that can be easily passed to the shader.
+     * @abstract
      * @todo Decide what type is used to pass a position to the shader
      */
     serialize() {
@@ -308,6 +328,7 @@ class Point {
     /**
      * Return a line of GLSL code creating the same point
      * Used when dynamically building shaders.
+     * @abstract
      * @return {string}
      */
     toGLSL() {
@@ -472,6 +493,7 @@ class Position {
      * Flow the current position.
      * `v` is the pull back at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
+     * @abstract
      * @param {Vector} v
      * @return {Position}
      */
@@ -564,13 +586,13 @@ export {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Properties.html">Properties</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Properties-AbstractProp.html">AbstractProp</a></li><li><a href="module-Properties-DynamicProp.html">DynamicProp</a></li><li><a href="module-Properties-StaticProp.html">StaticProp</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Nov 22 2020 16:36:56 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Nov 23 2020 20:32:40 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

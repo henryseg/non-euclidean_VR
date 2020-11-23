@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['light_85',['Light',['../struct_light.html',1,'']]]
+  ['light_84',['Light',['../struct_light.html',1,'']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['debugcolor_147',['debugColor',['../header_8glsl.html#a3d887a73bed2b3bc298802d3459cf83d',1,'header.glsl']]],
-  ['diffuse_148',['diffuse',['../struct_material.html#a8485892cad1aeac22ff9f164725b41ad',1,'Material']]],
-  ['dir_149',['dir',['../struct_vector.html#ac9afb4ffdd70817b55077a480bff8a5c',1,'Vector']]]
+  ['debugcolor_146',['debugColor',['../header_8glsl.html#a3d887a73bed2b3bc298802d3459cf83d',1,'header.glsl']]],
+  ['diffuse_147',['diffuse',['../struct_material.html#a8485892cad1aeac22ff9f164725b41ad',1,'Material']]],
+  ['dir_148',['dir',['../struct_vector.html#ac9afb4ffdd70817b55077a480bff8a5c',1,'Vector']]]
 ];
