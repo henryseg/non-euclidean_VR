@@ -1,19 +1,19 @@
 import {
     Vector4,
     Color,
-} from './lib/three.module.js';
+} from "./lib/three.module.js";
 
 import {
     Thurston,
-} from './thurston.js';
+} from "./thurston.js";
 
 import {
     Material
-} from './material.js';
+} from "./material.js";
 
 
-import * as geom from './geometry/euc.js';
-import * as items from './items/euc.js';
+import * as geom from "./geometry/euc.js";
+import * as items from "./items/euc.js";
 
 const thurston = new Thurston(geom, {keyboard: 'fr'});
 
@@ -46,4 +46,3 @@ const light2 = new items.PointLight(
 
 thurston.addItems([ball0, ball1, light0, light1, light2]);
 thurston.run();
-

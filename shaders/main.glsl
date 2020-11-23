@@ -40,18 +40,17 @@ void main() {
   Vector v = rayDir(gl_FragCoord.xy);
   Solid solid;
 
-
   int hit = raymarch(v, fixIsom, solid);
 
-  switch(hit) {
+  switch (hit) {
     case -1:
-      color = debugColor;
-      break;
+    color = debugColor;
+    break;
     case 0:
-      color = vec3(0.2,0.2,0.2);
-      break;
-    default:
-      color = phongModel(v,solid);
+    color = vec3(0.2, 0.2, 0.2);
+    break;
+    default :
+    color = phongModel(v, solid);
   }
 
   gl_FragColor = vec4(color,1);
