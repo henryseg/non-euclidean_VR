@@ -170,18 +170,44 @@ const PARAMS = {
     stereo: {
         shaderPass: SHADER_PASS.UNIFORM,
         shaderType: 'bool'
+    },
+    cellBoost: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Isometry'
+    },
+    invCellBoost: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Isometry'
+    },
+    position: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Position'
+    },
+    leftPosition: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Position'
+    },
+    rightPosition: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Position'
     }
 };
 
 const handlerParams = {
     set: function (target, prop, value, receiver) {
+        // basic security checks.
+        // the uniforms cannot be reassigned.
         if (prop === 'uniforms') {
             throw new Error("The uniforms cannot be reassigned.");
         }
+        // only the declared parameters are accepted.
         if (!(prop in PARAMS)) {
             throw new Error(`The parameter ${prop} is not supported.`);
         }
+
+        // regular update of the property
         target[prop] = value;
+
         // if needed we update the uniforms
         if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
             target.uniforms[prop] = {
@@ -214,7 +240,7 @@ const handlerParams = {
  * @property {Isometry} cellBoost - isometry moving you in the correct cell
  * @property {Isometry} invCellBoost - isometry moving you back from the correct cell
  *
- * @todo Decide how to represent a lattice
+ * @todo Decide how to represent a lattice.
  */
 class Thurston {
     /**
@@ -245,11 +271,11 @@ class Thurston {
         this.params.stereo = false;
 
         // setup the initial positions
-        this.position = new this.geom.Position();
-        this.leftPosition = new this.geom.Position();
-        this.rightPosition = new this.geom.Position();
-        this.cellBoost = new this.geom.Isometry();
-        this.invCellBoost = new this.geom.Isometry();
+        this.params.position = new this.geom.Position();
+        this.params.leftPosition = new this.geom.Position();
+        this.params.rightPosition = new this.geom.Position();
+        this.params.cellBoost = new this.geom.Isometry();
+        this.params.invCellBoost = new this.geom.Isometry();
 
         // init the list of items in the scene
         this._solids = {};
@@ -369,101 +395,6 @@ class Thurston {
     }
 
     /**
-     * Serialize all the positions and boost in a form that can be passed to the shader
-     * @return {array} the output in an array with three entries:
-     * - a list of 5 Matrix4 (the part A of the isometries position, left/right position, cell and invCell).
-     * - a list of 5 floating numbers (the part B of the isometries position, left/right position, cell and invCell).
-     * - a list of 3 Matrix4 (the facing, left and right facings).
-     */
-    serialize() {
-        const rawA = [];
-        const rawB = [];
-        const facings = [];
-        let i = 0;
-        let raw;
-        const data = [
-            this.position,
-            this.leftPosition,
-            this.rightPosition,
-            this.cellBoost,
-            this.invCellBoost
-        ]
-        for (const pos of data) {
-            raw = pos.serialize();
-            rawA[i] = raw[0];
-            rawB[i] = raw[1];
-            if (i < 3) {
-                facings[i] = raw[2];
-            }
-            i = i + 1;
-        }
-        return [rawA, rawB, facings];
-    }
-
-    /**
-     * Setup the uniforms which are passed to the shader
-     */
-    setupUniforms() {
-        const rawData = this.serialize();
-        Object.assign(this.params.uniforms,
-            this.uniforms = {
-                boostRawA: {
-                    type: "mat4",
-                    value: rawData[0][0]
-                },
-                leftBoostRawA: {
-                    type: "mat4",
-                    value: rawData[0][1]
-                },
-                rightBoostRawA: {
-                    type: "mat4",
-                    value: rawData[0][2]
-                },
-                cellBoostRawA: {
-                    type: "mat4",
-                    value: rawData[0][3]
-                },
-                invCellBoostRawA: {
-                    type: "mat4",
-                    value: rawData[0][4]
-                },
-                boostRawB: {
-                    type: "float",
-                    value: rawData[1][0]
-                },
-                leftBoostRawB: {
-                    type: "float",
-                    value: rawData[1][1]
-                },
-                rightBoostRawB: {
-                    type: "float",
-                    value: rawData[1][2]
-                },
-                cellBoostRawB: {
-                    type: "float",
-                    value: rawData[1][3]
-                },
-                invCellBoostRawB: {
-                    type: "float",
-                    value: rawData[1][4]
-                },
-                facing: {
-                    type: "mat4",
-                    value: rawData[2][0]
-                },
-                leftFacing: {
-                    type: "mat4",
-                    value: rawData[2][1]
-                },
-                rightFacing: {
-                    type: "mat4",
-                    value: rawData[2][2]
-                },
-            }
-        );
-    }
-
-    /**
      * Build the vertex shader from templates files.
      * @return {string} - the code of the shader
      */
@@ -473,42 +404,30 @@ class Thurston {
     }
 
 
-    buildShaderDataHeader() {
-        const res = {constants: [], uniforms: []};
+    buildShaderDataConstants() {
+        const res = [];
         for (const property in PARAMS) {
-            if (PARAMS.hasOwnProperty(property)) {
-                switch (PARAMS[property].shaderPass) {
-                    case SHADER_PASS.CONSTANT:
-                        res.constants.push({
-                            name: property,
-                            type: PARAMS[property].shaderType,
-                            value: this.params[property]
-                        });
-                        break;
-                    case SHADER_PASS.UNIFORM:
-                        res.uniforms.push({
-                            name: property,
-                            type: PARAMS[property].shaderType
-                        });
-                        break;
-                }
+            if (PARAMS[property].shaderPass === SHADER_PASS.CONSTANT) {
+                res.push({
+                    name: property,
+                    type: PARAMS[property].shaderType,
+                    value: this.params[property]
+                });
             }
         }
-        res.uniforms.push(
-            {name: 'boostRawA', type: 'mat4'},
-            {name: 'leftBoostRawA', type: 'mat4'},
-            {name: 'rightBoostRawA', type: 'mat4'},
-            {name: 'cellBoostRawA', type: 'mat4'},
-            {name: 'invCellBoostRawA', type: 'mat4'},
-            {name: 'boostRawB', type: 'float'},
-            {name: 'leftBoostRawB', type: 'float'},
-            {name: 'rightBoostRawB', type: 'float'},
-            {name: 'cellBoostRawB', type: 'float'},
-            {name: 'invCellBoostRawB', type: 'float'},
-            {name: 'facing', type: 'mat4'},
-            {name: 'leftFacing', type: 'mat4'},
-            {name: 'rightFacing', type: 'mat4'},
-        )
+        return res;
+    }
+
+    buildShaderDataUniforms() {
+        const res = [];
+        for (const property in PARAMS) {
+            if (PARAMS[property].shaderPass === SHADER_PASS.UNIFORM) {
+                res.push({
+                    name: property,
+                    type: PARAMS[property].shaderType
+                });
+            }
+        }
         return res;
     }
 
@@ -552,9 +471,10 @@ class Thurston {
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
-        const header = this.buildShaderDataHeader();
+        const header = {constants: this.buildShaderDataConstants()};
         const background = await this.buildShaderDataBackground();
         const items = await this.buildShaderDataItems();
+        const setup = Object.assign({}, items, {uniforms: this.buildShaderDataUniforms()});
 
 
         // A list of pairs (file, data)
@@ -566,7 +486,7 @@ class Thurston {
             {file: 'shaders/geometry/commons.glsl', data: undefined},
             {file: 'shaders/items/abstract.glsl', data: undefined},
             {file: 'shaders/background.glsl', data: background},
-            {file: 'shaders/setup.glsl', data: items},
+            {file: 'shaders/setup.glsl', data: setup},
             {file: 'shaders/sdf.glsl', data: items},
             {file: 'shaders/scene.glsl', data: items},
             {file: 'shaders/raymarch.glsl', data: undefined},
@@ -587,7 +507,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        // console.log(fShader);
+        console.log(fShader);
 
         return fShader;
     }
@@ -643,13 +563,13 @@ class Thurston {
         // build the scene with a single screen
         this._scene = new Scene();
         const geometry = new PlaneBufferGeometry(2, 2);
-        this.setupUniforms();
         let material = new ShaderMaterial({
             uniforms: this.params.uniforms,
             vertexShader: await this.buildShaderVertex(),
             fragmentShader: await this.buildShaderFragment(),
             transparent: true
         });
+        console.log(this.params.uniforms);
         const mesh = new Mesh(geometry, material);
         this._scene.add(mesh);
 
@@ -687,17 +607,13 @@ class Thurston {
         const deltaPosition = this._keyboardDirs.translation
             .clone()
             .multiplyScalar(this.params.speedTranslation * deltaTime);
-        this.position.flow(deltaPosition);
+        this.params.position.flow(deltaPosition);
 
         const deltaRotation = new Quaternion().setFromAxisAngle(
             this._keyboardDirs.rotation,
             0.5 * this.params.speedRotation * deltaTime
         );
-        this.position.applyFacing(new Matrix4().makeRotationFromQuaternion(deltaRotation));
-
-        const raw = this.position.serialize();
-        this.params.uniforms.boostRawA.value = raw[0];
-        this.params.uniforms.boostRawB.value = raw[1];
+        this.params.position.applyFacing(new Matrix4().makeRotationFromQuaternion(deltaRotation));
     }
 
     /**

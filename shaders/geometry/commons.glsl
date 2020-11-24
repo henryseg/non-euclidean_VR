@@ -97,3 +97,23 @@ void direction(Point p, Point q, out Vector dir, out float len){
     dir = dirs[0];
     len = lens[0];
 }
+
+
+
+/***********************************************************************************************************************
+ *
+ * @struct Position
+ * Structure for position (boost and facing) in the geometry.
+ * This structure is essentially meant to receive data from the JS part
+ *
+ **********************************************************************************************************************/
+
+struct Position {
+    Isometry boost;
+    mat4 facing;
+};
+
+Vector applyPosition(Position p, Vector v){
+    Vector res = applyFacing(p.facing, v);
+    return applyIsometry(p.boost, res);
+}

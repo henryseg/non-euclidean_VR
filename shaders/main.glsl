@@ -21,8 +21,7 @@ Vector rayDir(vec2 coords){
   res = geomNormalize(res);
 
   // Translating the vector according to the boost and facing.
-  res = applyFacing(facing, res);
-  res = applyIsometry(boost, res);
+  res = applyPosition(position, res);
   return res;
 }
 

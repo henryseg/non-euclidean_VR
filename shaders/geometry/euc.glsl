@@ -15,15 +15,6 @@ struct Isometry{
 const Isometry IDENTITY = Isometry(mat4(1.)); /**< Identity isometry */
 
 /**
- * Convert the data passed to the shader into an isometry.
- * @param[in] rawA first part of a serialized isometry.
- * @param[in] rawB second part of a serialized isometry.
- */
-Isometry unserializeIsom(mat4 rawA, float rawB) {
-  return Isometry(rawA);
-}
-
-/**
  * Reduce the eventual numerical errors of the given isometry.
  * @todo to be written
  */
@@ -59,13 +50,6 @@ struct Point{
 
 const Point ORIGIN = Point(vec4(0,0,0,1));///< Origin of the geometry
 
-/**
- * Convert the data passed to the shader into an point.
- * @todo Decide which type of data is passed to the shader.
- */
-Point unserializePoint(vec4 data) {
-  return Point(data);
-}
 
 /**
  * Reduce the eventual numerical errors of the given point.

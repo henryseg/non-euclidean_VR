@@ -44,7 +44,4 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 const {{type}} {{name}} = {{value}};
 {{/constants}}
 
-{{#uniforms}}
-uniform {{type}} {{name}};
-{{/uniforms}}
 

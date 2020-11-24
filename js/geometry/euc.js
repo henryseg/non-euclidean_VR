@@ -159,15 +159,6 @@ Isometry.prototype.copy = function (isom) {
 };
 
 /**
- * Encode the isometry in a way that can be easily passed to the shader.
- * @todo Decide what type is used to pass a position to the shader
- */
-Isometry.prototype.serialize = function () {
-    return [this.matrix, 0];
-};
-
-
-/**
  * Return a line of GLSL code creating the same isometry
  * Used when dynamically building shaders.
  * @return {string}
@@ -234,14 +225,6 @@ Point.prototype.clone = function () {
 Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
     return this;
-};
-
-/**
- * Encode the point in a way that can be easily passed to the shader.
- * @todo Decide what type is used to pass a position to the shader
- */
-Point.prototype.serialize = function () {
-    return this.coords;
 };
 
 /**

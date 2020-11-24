@@ -192,14 +192,6 @@ class Isometry {
         throw new Error("This method need be overloaded.");
     }
 
-    /**
-     * Encode the isometry in a way that can be easily passed to the shader.
-     * @abstract
-     * @todo Decide what type is used to pass a position to the shader
-     */
-    serialize() {
-        throw new Error("This method need be overloaded.");
-    }
 
     /**
      * Return a line of GLSL code creating the same isometry
@@ -285,15 +277,6 @@ class Point {
      * @return {Point}
      */
     copy(point) {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
-     * Encode the point in a way that can be easily passed to the shader.
-     * @abstract
-     * @todo Decide what type is used to pass a position to the shader
-     */
-    serialize() {
         throw new Error("This method need be overloaded.");
     }
 
@@ -528,14 +511,6 @@ class Position {
     copy(position) {
         this.boost.copy(position.boost);
         this.facing.copy(position.facing);
-    }
-
-    /**
-     * Encode the position in a way that can be easily passed to the shader.
-     * @todo Decide what type is used to pass a position to the shader
-     */
-    serialize() {
-        return this.boost.serialize().concat(this.facing);
     }
 }
 
