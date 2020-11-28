@@ -1,0 +1,11 @@
+<subgroup>
+    <background>
+        // auxiliary shader code that can be used by all teleports
+    </background>
+    <teleports>
+        <teleport>
+            // body of the test for the corresponding teleport
+            // the wrapping into a function is done by the template engine
+        </teleport>
+    </teleports>
+</subgroup>

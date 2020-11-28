@@ -6,7 +6,7 @@
  * @return intensity of the light
  */
 float lightIntensity(Vector dir, float len){
-  return 1./len;
+  return 1./(len * len);
 }
 
 /**
@@ -46,10 +46,11 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
  * @todo Choose a convention for the incidence vector `v`.
  * Should it point toward the object, or the observer?
  */
-vec3 phongModel(Vector v, Solid solid) {
-  Vector n = sceneNormal(v,solid);
+vec3 phongModel(GenVector v, Solid solid) {
+  GenVector n = sceneNormal(v, solid);
 
   Light light;
+  Point lightLoc;
   Vector[MAX_DIRS] dirs;
   float[MAX_DIRS] lens;
   int k;
@@ -59,12 +60,12 @@ vec3 phongModel(Vector v, Solid solid) {
 
   {{#lights}}
     light = {{name}};
-    k = directions(v.pos, light.item.loc, MAX_DIRS, dirs, lens);
+    lightLoc = applyIsometry(v.invCellBoost, light.item.loc);
+    k = directions(v.vec.pos, lightLoc, MAX_DIRS, dirs, lens);
     for(int j=0; j < k; j++){
-      color = color + lightComputation(v, n, dirs[j], lens[j], solid.material, light.color);
+      color = color + lightComputation(v.vec, n.vec, dirs[j], lens[j], solid.material, light.color);
     }
   {{/lights}}
-
 
   return color;
 }

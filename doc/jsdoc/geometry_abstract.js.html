@@ -220,14 +220,6 @@ class Isometry {
         throw new Error("This method need be overloaded.");
     }
 
-    /**
-     * Encode the isometry in a way that can be easily passed to the shader.
-     * @abstract
-     * @todo Decide what type is used to pass a position to the shader
-     */
-    serialize() {
-        throw new Error("This method need be overloaded.");
-    }
 
     /**
      * Return a line of GLSL code creating the same isometry
@@ -313,15 +305,6 @@ class Point {
      * @return {Point}
      */
     copy(point) {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
-     * Encode the point in a way that can be easily passed to the shader.
-     * @abstract
-     * @todo Decide what type is used to pass a position to the shader
-     */
-    serialize() {
         throw new Error("This method need be overloaded.");
     }
 
@@ -557,13 +540,234 @@ class Position {
         this.boost.copy(position.boost);
         this.facing.copy(position.facing);
     }
+}
+
+/**
+ * @class
+ */
+class Teleport {
 
     /**
-     * Encode the position in a way that can be easily passed to the shader.
-     * @todo Decide what type is used to pass a position to the shader
+     * @property {Function} test - A test saying if a teleportation is needed
+     * The test is a function with the signature Point -> boolean
      */
-    serialize() {
-        return this.boost.serialize().concat(this.facing);
+    test;
+    /** @property {Isometry} isom - the isometry to apply when teleporting **/
+    isom;
+    /** @property {Isometry} inv - the inverse of the isometry*/
+    inv;
+
+    /**
+     * Constructor
+     * @param {Function} test - A test saying if a teleportation is needed
+     * @param {Isometry} isom - the isometry to apply when teleporting
+     * @param {Isometry} inv - the inverse of the isometry (optional)
+     */
+    constructor(test, isom, inv = undefined) {
+        this.test = test;
+        this.isom = isom;
+        if (inv === undefined) {
+            this.inv = new Isometry().getInverse(isom);
+        } else {
+            this.inv = inv;
+        }
+    }
+
+}
+
+/**
+ * @class
+ */
+class DiscreteSubgroup {
+
+}
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Generalized position.
+ * A general position is represented as a triple (h,g,m) where
+ * - h (cellBoost) is an Isometry representing an element of a lattice
+ * - g (boost) is an Isometry
+ * - m (facing) is a Matrix 4, seen as an isometry of the tangent space at the origin.
+ * If e is the reference frame (in the tangent space at the origin) then the frame represented by the position is
+ * f = d_o(hg) m e
+ *
+ * We split the isometry part (hg) in two pieces.
+ * The idea is to g should gives a position in the fundamental domain of the (implicit) underlying lattice.
+ * This will keep the coordinates of g in a bounded range.
+ *
+ * For simplicity we also keep track of the inverse of the cellBoost.
+ *
+ * @todo Allow a more combinatorial way to represent discrete subgroups, to avoid numerical error in the cellBoost
+ */
+class GenPosition {
+
+    /** @property {Isometry} boost - the "discrete" component of the isometry par of the boost */
+    cellBoost;
+    /** @property {Isometry} boost - the inverse of cellBoost */
+    invCellBoost;
+    /** @property {Isometry} boost - the isometry component of the position inside the fundamental domain */
+    boost;
+    /** @property {DiscreteSubgroup} sbgp - the isometry component of the position inside the fundamental domain */
+    sbgp;
+    /** @property {Matrix4} facing - the O(3) component of the position (stored as a `Matrix4`) */
+    facing;
+
+    /**
+     * Constructor.
+     * Return the position corresponding to the origin with the reference frame.
+     */
+    constructor(sbgp) {
+        this.cellBoost = new Isometry();
+        this.invCellBoost = new Isometry();
+        this.boost = new Isometry();
+        this.facing = new Matrix4();
+        this.sbgp = sbgp;
+    }
+
+    /**
+     * Set the boost part of the position.
+     * @param {Isometry} isom
+     * @return {Position}
+     */
+    setBoost(isom) {
+        this.boost = isom;
+        return this;
+    }
+
+    /**
+     * Set the facing part of the position.
+     * @param {Matrix4} facing
+     * @return {Position}
+     */
+    setFacing(facing) {
+        this.facing = facing;
+        return this;
+    }
+
+    /**
+     * Reduce the eventual numerical error of the current boost.
+     * @return {Position}
+     */
+    reduceErrorBoost() {
+        this.boost.reduceError();
+        return this;
+    }
+
+    /**
+     * Reduce the eventual numerical error of the current facing.
+     * @return {Position}
+     * @todo To be completed
+     */
+    reduceErrorFacing() {
+        return this;
+    }
+
+    /**
+     * Reduce the eventual numerical error of the current position.
+     * @return {Position}
+     */
+    reduceError() {
+        this.reduceErrorBoost();
+        this.reduceErrorFacing();
+        return this;
+    }
+
+    /**
+     * Return the underlying point
+     * @return {Point}
+     */
+    get location() {
+        return new Point().applyIsometry(this.boost).applyIsometry(this.cellBoost);
+    }
+
+    /**
+     * Rotate the facing by `m` (right action of O(3) in the set of positions).
+     * @param {Matrix4} matrix - An isometry of the tangent space at the origin, i.e. a matrix in O(3).
+     * @return {Position} the updated version of the current Position
+     */
+    applyFacing(matrix) {
+        this.facing.multiply(matrix)
+        return this;
+    }
+
+
+    /**
+     * Multiply the current position (g0,m0) on the right by the given position (g,m), i.e. return (g0 * g, m * m0)
+     * @param {Position} position
+     * @return {Position} the updated version of the current Position
+     */
+    multiply(position) {
+        this.boost.multiply(position.boost);
+        this.facing.premultiply(position.facing);
+        return this;
+    }
+
+    /**
+     * Multiply the current position (g0,m0) on the left by the given position (g,m), i.e. return (g * g0, m0 * m)
+     * @param {Position} position
+     * @return {Position} the updated version of the current Position
+     */
+    premultiply(position) {
+        this.boost.premultiply(position.boost);
+        this.facing.multiply(position.facing);
+        return this;
+    }
+
+    /**
+     * Set the current position with the inverse of the given position
+     * @param {Position} position
+     * @return {Position} the updated version of the current Position
+     */
+    getInverse(position) {
+        this.boost.getInverse(position.boost);
+        this.facing.getInverse(position.facing);
+        return this;
+    }
+
+    /**
+     * Flow the current position.
+     * `v` is the pull back at the origin by the position of the direction in which we flow
+     * The time by which we flow is the norm of `v`
+     * @abstract
+     * @param {Vector} v
+     * @return {Position} the updated version of the current Position
+     */
+    flow(v) {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
+     * Check if the current position and `position ` are the same.
+     * @param {Position} position
+     * @return {boolean}
+     */
+    equals(position) {
+        return this.boost.equals(position.boost) &amp;&amp; this.facing.equals(position.facing);
+    }
+
+    /**
+     * Return a new copy of the current position.
+     * @return {Position}
+     */
+    clone() {
+        let res = new Position()
+        res.setBoost(this.boost.clone());
+        res.setFacing(this.facing.clone());
+        return res;
+    }
+
+    /**
+     * Set the current position with the given position.
+     * @param {Position} position
+     * @return {Position} the updated version of the current Position
+     */
+    copy(position) {
+        this.boost.copy(position.boost);
+        this.facing.copy(position.facing);
     }
 }
 
@@ -574,7 +778,9 @@ export {
     Isometry,
     Point,
     Vector,
-    Position
+    Position,
+    Teleport,
+    DiscreteSubgroup
 }
 </code></pre>
         </article>
@@ -586,13 +792,13 @@ export {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Properties.html">Properties</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Properties-AbstractProp.html">AbstractProp</a></li><li><a href="module-Properties-DynamicProp.html">DynamicProp</a></li><li><a href="module-Properties-StaticProp.html">StaticProp</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-DiscreteSubgroup.html">DiscreteSubgroup</a></li><li><a href="module-Abstract%2520geometry-GenPosition.html">GenPosition</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Teleport.html">Teleport</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Nov 23 2020 20:32:40 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Nov 24 2020 23:36:37 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

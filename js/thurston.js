@@ -171,17 +171,9 @@ const PARAMS = {
         shaderPass: SHADER_PASS.UNIFORM,
         shaderType: 'bool'
     },
-    cellBoost: {
-        shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'Isometry'
-    },
-    invCellBoost: {
-        shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'Isometry'
-    },
     position: {
         shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'Position'
+        shaderType: 'GenPosition'
     },
     leftPosition: {
         shaderPass: SHADER_PASS.UNIFORM,
@@ -215,7 +207,6 @@ const handlerParams = {
                 value: target[prop]
             };
         }
-
         return true;
     }
 }
@@ -248,12 +239,15 @@ class Thurston {
      * Property that are not setup yet, but will be used later are defined as `undefined`.
      * (Maybe not needed in JS, but good practice I guess.)
      * @param {Object} geom - a module handing the relevant geometry
+     * @param {DiscreteSubgroup} subgroup - a discrete subgroups
      * @param {Object} options - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
+     * @todo If a subgroups is not provided use the trivial one.
      */
-    constructor(geom, options = {}) {
+    constructor(geom, subgroup, options = {}) {
         // setup the geometry (as a module)
         this.geom = geom;
+        this.subgroup = subgroup;
 
         // setup all the options
         this.params = new Proxy({uniforms: {}}, handlerParams);
@@ -271,11 +265,26 @@ class Thurston {
         this.params.stereo = false;
 
         // setup the initial positions
-        this.params.position = new this.geom.Position();
+        this.params.position = new this.geom.GenPosition(this.subgroup);
         this.params.leftPosition = new this.geom.Position();
         this.params.rightPosition = new this.geom.Position();
-        this.params.cellBoost = new this.geom.Isometry();
-        this.params.invCellBoost = new this.geom.Isometry();
+
+        // register the isometries involved in the discrete subgroup
+        for (const teleport of this.subgroup.teleports) {
+            // first add the isometries to the list of parameters
+            // this cannot be static as the number/names of isometries depend on the subgroup
+            PARAMS[`${teleport.name}Isom`] = {
+                shaderPass: SHADER_PASS.UNIFORM,
+                shaderType: 'Isometry'
+            };
+            PARAMS[`${teleport.name}Inv`] = {
+                shaderPass: SHADER_PASS.UNIFORM,
+                shaderType: 'Isometry'
+            };
+            // then register the isometries
+            this.params[`${teleport.name}Isom`] = teleport.isom;
+            this.params[`${teleport.name}Inv`] = teleport.inv;
+        }
 
         // init the list of items in the scene
         this._solids = {};
@@ -433,6 +442,7 @@ class Thurston {
 
     async buildShaderDataBackground() {
         const files = [];
+        // items files
         for (const list of [this._solids, this._lights]) {
             for (const item of Object.values(list)) {
                 if (!files.includes(item.shaderSource)) {
@@ -440,6 +450,8 @@ class Thurston {
                 }
             }
         }
+        // subgroup file
+        files.push(this.subgroup.shaderSource);
         const blocks = [];
         let response;
         let xml
@@ -449,6 +461,7 @@ class Thurston {
             xml = parser.parseFromString(await response.text(), 'application/xml');
             blocks.push(xml.querySelector('background').childNodes[0].nodeValue);
         }
+
         return {blocks: blocks};
     }
 
@@ -475,6 +488,7 @@ class Thurston {
         const background = await this.buildShaderDataBackground();
         const items = await this.buildShaderDataItems();
         const setup = Object.assign({}, items, {uniforms: this.buildShaderDataUniforms()});
+        await this.subgroup.glslBuildData();
 
 
         // A list of pairs (file, data)
@@ -487,6 +501,7 @@ class Thurston {
             {file: 'shaders/items/abstract.glsl', data: undefined},
             {file: 'shaders/background.glsl', data: background},
             {file: 'shaders/setup.glsl', data: setup},
+            {file: 'shaders/subgroup.glsl', data: this.subgroup},
             {file: 'shaders/sdf.glsl', data: items},
             {file: 'shaders/scene.glsl', data: items},
             {file: 'shaders/raymarch.glsl', data: undefined},
@@ -569,7 +584,7 @@ class Thurston {
             fragmentShader: await this.buildShaderFragment(),
             transparent: true
         });
-        console.log(this.params.uniforms);
+        //console.log(this.params.uniforms);
         const mesh = new Mesh(geometry, material);
         this._scene.add(mesh);
 
@@ -589,6 +604,7 @@ class Thurston {
         });
 
         this.updatePosition();
+        //console.log(this.params.position.point.coords);
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }

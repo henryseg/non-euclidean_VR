@@ -17,11 +17,20 @@
                 {{name}} = {{toGLSL}};
             </shader>
             <shader type="sdf">
-                return dist(v.pos, {{name}}.item.loc) - {{radius}};
+                Point loc = {{name}}.item.loc;
+                {{#global}}
+                loc = applyIsometry(v.invCellBoost, loc);
+                {{/global}}
+                return dist(v.vec.pos, loc) - {{radius}};
             </shader>
             <shader type="gradient">
-                Vector res = Vector(v.pos, v.pos.coords - {{name}}.item.loc.coords);
-                return geomNormalize(res);
+                Point loc = {{name}}.item.loc;
+                {{#global}}
+                loc = applyIsometry(v.invCellBoost, loc);
+                {{/global}}
+                Vector res = Vector(v.vec.pos, v.vec.pos.coords - loc.coords);
+                res =  geomNormalize(res);
+                return GenVector(v.cellBoost, v.invCellBoost, res);
             </shader>
         </solid>
 

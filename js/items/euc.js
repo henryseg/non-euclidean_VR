@@ -19,19 +19,20 @@ import {
 
 class Ball extends Solid {
 
-    constructor(center, radius, material) {
+    constructor(center, radius, material, global = true) {
         const position = new Position();
         position.setBoost(new Isometry().makeTranslation(center));
         const data = {
             position: position,
             material: material,
+            global: global
         }
         super(data);
         this.center = center;
         this.radius = radius;
     }
 
-    get shaderSource(){
+    get shaderSource() {
         return 'shaders/items/euc/items.xml';
     }
 
@@ -53,15 +54,15 @@ class PointLight extends Light {
         super(data);
     }
 
-    get shaderSource(){
+    get shaderSource() {
         return 'shaders/items/euc/items.xml';
     }
 
-        /*
-    default() {
-        const res = super.default();
-        return Object.assign(res, {location: new Point()});
-    }*/
+    /*
+default() {
+    const res = super.default();
+    return Object.assign(res, {location: new Point()});
+}*/
 }
 
 export {

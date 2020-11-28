@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Position</title>
+    <title>JSDoc: Class: GenPosition</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Position</h1>
+    <h1 class="page-title">Class: GenPosition</h1>
 
     
 
@@ -29,10 +29,21 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-Abstract%2520geometry.html">Abstract geometry</a>~</span>Position<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-Abstract%2520geometry.html">Abstract geometry</a>~</span>GenPosition<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Location and facing (of the observer, an object, etc).</p>
-<p>Note that the set of position is a group with the following law: (g1, m1) * (g2, m2) = (g1 * g2, m2 * m1)</p></div>
+            <div class="class-description"><p>Generalized position.
+A general position is represented as a triple (h,g,m) where</p>
+<ul>
+<li>h (cellBoost) is an Isometry representing an element of a lattice</li>
+<li>g (boost) is an Isometry</li>
+<li>m (facing) is a Matrix 4, seen as an isometry of the tangent space at the origin.
+If e is the reference frame (in the tangent space at the origin) then the frame represented by the position is
+f = d_o(hg) m e</li>
+</ul>
+<p>We split the isometry part (hg) in two pieces.
+The idea is to g should gives a position in the fundamental domain of the (implicit) underlying lattice.
+This will keep the coordinates of g in a bounded range.</p>
+<p>For simplicity we also keep track of the inverse of the cellBoost.</p></div>
         
     
 </header>
@@ -47,7 +58,7 @@
     
 
     
-    <h4 class="name" id="Position"><span class="type-signature"></span>new Position<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="GenPosition"><span class="type-signature"></span>new GenPosition<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -61,6 +72,103 @@ Return the position corresponding to the origin with the reference frame.</p>
 
 
 
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line578">line 578</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li><p>Allow a more combinatorial way to represent discrete subgroups, to avoid numerical error in the cellBoost</p></li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="boost"><span class="type-signature"></span>boost<span class="type-signature"></span></h4>
 
 
 
@@ -113,9 +221,206 @@ Return the position corresponding to the origin with the reference frame.</p>
 
             
 
-            <td class="description last"><p>the isometry component  of the position</p></td>
+            <td class="description last"><p>the isometry component of the position inside the fundamental domain</p></td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line585">line 585</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="cellBoost"><span class="type-signature"></span>cellBoost<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>boost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Isometry</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the &quot;discrete&quot; component of the isometry par of the boost</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line581">line 581</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="facing"><span class="type-signature"></span>facing<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -175,7 +480,7 @@ Return the position corresponding to the origin with the reference frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line335">line 335</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line589">line 589</a>
     </li></ul></dd>
     
 
@@ -191,6 +496,9 @@ Return the position corresponding to the origin with the reference frame.</p>
 
 
 
+        
+            
+<h4 class="name" id="invCellBoost"><span class="type-signature"></span>invCellBoost<span class="type-signature"></span></h4>
 
 
 
@@ -201,15 +509,68 @@ Return the position corresponding to the origin with the reference frame.</p>
 
 
 
-
-
-
-
-    
-    </div>
+    <h5 class="subsection-title">Properties:</h5>
 
     
 
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>boost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Isometry</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the inverse of cellBoost</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -220,6 +581,204 @@ Return the position corresponding to the origin with the reference frame.</p>
 
     
 
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line583">line 583</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="location"><span class="type-signature"></span>location<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Return the underlying point</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line655">line 655</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="sbgp"><span class="type-signature"></span>sbgp<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sbgp</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DiscreteSubgroup</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the isometry component of the position inside the fundamental domain</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line587">line 587</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     
@@ -291,7 +850,7 @@ Return the position corresponding to the origin with the reference frame.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>An isometry of the tangent space at the origin, i.e. a matrix in O(3).</p></td>
         </tr>
 
     
@@ -332,7 +891,7 @@ Return the position corresponding to the origin with the reference frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line412">line 412</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line664">line 664</a>
     </li></ul></dd>
     
 
@@ -360,161 +919,10 @@ Return the position corresponding to the origin with the reference frame.</p>
 <h5>Returns:</h5>
 
         
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Position</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="applyIsometry"><span class="type-signature"></span>applyIsometry<span class="signature">(isom)</span><span class="type-signature"> &rarr; {Position}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Translate the current position by <code>isom</code> (left action of the isometry group G on the set of positions).</p>
+<div class="param-desc">
+    <p>the updated version of the current Position</p>
 </div>
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>isom</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Isometry</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line402">line 402</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
 
 
 <dl>
@@ -593,7 +1001,7 @@ Return the position corresponding to the origin with the reference frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line499">line 499</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line728">line 728</a>
     </li></ul></dd>
     
 
@@ -748,7 +1156,7 @@ Return the position corresponding to the origin with the reference frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line511">line 511</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line740">line 740</a>
     </li></ul></dd>
     
 
@@ -776,6 +1184,10 @@ Return the position corresponding to the origin with the reference frame.</p>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>the updated version of the current Position</p>
+</div>
+
 
 
 <dl>
@@ -903,7 +1315,7 @@ Return the position corresponding to the origin with the reference frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line491">line 491</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line720">line 720</a>
     </li></ul></dd>
     
 
@@ -1060,7 +1472,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line455">line 455</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line711">line 711</a>
     </li></ul></dd>
     
 
@@ -1088,6 +1500,10 @@ The time by which we flow is the norm of <code>v</code></p>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>the updated version of the current Position</p>
+</div>
+
 
 
 <dl>
@@ -1114,270 +1530,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
 
     
-    <h4 class="name" id="flow"><span class="type-signature"></span>flow<span class="signature">(v)</span><span class="type-signature"> &rarr; {Position}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Flow the current position.
-<code>v</code> is the pull back at the origin by the position of the direction in which we flow
-The time by which we flow is the norm of <code>v</code></p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>v</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Vector</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_euc.js.html">geometry/euc.js</a>, <a href="geometry_euc.js.html#line246">line 246</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Position</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getFwdVector"><span class="type-signature"></span>getFwdVector<span class="signature">()</span><span class="type-signature"> &rarr; {Vector}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Return the vector pointing forwards (taking into account the facing).</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line463">line 463</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Vector</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getInverse"><span class="type-signature"></span>getInverse<span class="signature">(position)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getInverse"><span class="type-signature"></span>getInverse<span class="signature">(position)</span><span class="type-signature"> &rarr; {Position}</span></h4>
     
 
     
@@ -1478,95 +1631,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line441">line 441</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getRightVector"><span class="type-signature"></span>getRightVector<span class="signature">()</span><span class="type-signature"> &rarr; {Vector}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Return the vector pointing to the right (taking into account the facing).</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line472">line 472</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line697">line 697</a>
     </li></ul></dd>
     
 
@@ -1594,121 +1659,19 @@ The time by which we flow is the norm of <code>v</code></p>
 <h5>Returns:</h5>
 
         
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Vector</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getUpVector"><span class="type-signature"></span>getUpVector<span class="signature">()</span><span class="type-signature"> &rarr; {Vector}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>return the vector pointing upwards (taking into account the facing)</p>
+<div class="param-desc">
+    <p>the updated version of the current Position</p>
 </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line481">line 481</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
 <dl>
     <dt>
         Type
     </dt>
     <dd>
         
-<span class="param-type">Vector</span>
+<span class="param-type">Position</span>
 
 
     </dd>
@@ -1726,7 +1689,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
 
     
-    <h4 class="name" id="multiply"><span class="type-signature"></span>multiply<span class="signature">(position)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="multiply"><span class="type-signature"></span>multiply<span class="signature">(position)</span><span class="type-signature"> &rarr; {Position}</span></h4>
     
 
     
@@ -1827,7 +1790,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line421">line 421</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line675">line 675</a>
     </li></ul></dd>
     
 
@@ -1852,6 +1815,28 @@ The time by which we flow is the norm of <code>v</code></p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the updated version of the current Position</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Position</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1863,7 +1848,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
 
     
-    <h4 class="name" id="premultiply"><span class="type-signature"></span>premultiply<span class="signature">(position)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="premultiply"><span class="type-signature"></span>premultiply<span class="signature">(position)</span><span class="type-signature"> &rarr; {Position}</span></h4>
     
 
     
@@ -1964,7 +1949,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line431">line 431</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line686">line 686</a>
     </li></ul></dd>
     
 
@@ -1989,6 +1974,28 @@ The time by which we flow is the norm of <code>v</code></p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the updated version of the current Position</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Position</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -2052,7 +2059,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line391">line 391</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line645">line 645</a>
     </li></ul></dd>
     
 
@@ -2158,7 +2165,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line373">line 373</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line627">line 627</a>
     </li></ul></dd>
     
 
@@ -2264,7 +2271,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line383">line 383</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line637">line 637</a>
     </li></ul></dd>
     
 
@@ -2426,7 +2433,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line354">line 354</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line608">line 608</a>
     </li></ul></dd>
     
 
@@ -2581,7 +2588,7 @@ The time by which we flow is the norm of <code>v</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line364">line 364</a>
+        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line618">line 618</a>
     </li></ul></dd>
     
 

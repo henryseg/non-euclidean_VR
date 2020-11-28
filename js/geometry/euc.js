@@ -14,14 +14,10 @@ import {
 import {
     Isometry,
     Point,
-    Position
+    Position,
+    GenPosition
 } from "./abstract.js"
 
-/**
- * @const {string}
- * @default computer name for the geometry
- */
-const key = 'euc';
 
 /**
  * @const {string}
@@ -169,11 +165,16 @@ Isometry.prototype.toGLSL = function () {
 
 
 /**
- * Constructor.
+ * Fake constructor.
  * Return the origin of the space.
  */
 Point.prototype.build = function () {
-    this.coords = new Vector4(0, 0, 0, 1);
+    if (arguments.length === 0) {
+        this.coords = new Vector4(0, 0, 0, 1);
+    } else {
+        this.coords = new Vector4(...arguments);
+    }
+
 };
 
 /**
@@ -183,7 +184,8 @@ Point.prototype.build = function () {
  * @return {Point}
  */
 Point.prototype.set = function (data) {
-    this.coords = data[0].clone();
+    //console.log("data set", data[0]);
+    this.coords.copy(data[0]);
     return this;
 };
 
@@ -250,15 +252,31 @@ Position.prototype.flow = function (v) {
     return this;
 }
 
+/**
+ * Flow the current position.
+ * `v` is the pull back at the origin by the position of the direction in which we flow
+ * The time by which we flow is the norm of `v`
+ * @param {Vector} v
+ * @return {GenPosition}
+ */
+GenPosition.prototype._flow = function (v) {
+    const dir = v.clone().applyFacing(this);
+    const point = new Point().set([new Vector4(dir.x, dir.y, dir.z, 1)]);
+    this.boost.multiply(new Isometry().makeTranslation(point));
+    return this;
+}
+
 export {
-    key,
     name,
     shader,
     Isometry,
     Point,
-    Position
+    Position,
+    GenPosition
 }
 
 export {
     Vector,
+    Teleport,
+    DiscreteSubgroup,
 } from './abstract.js'

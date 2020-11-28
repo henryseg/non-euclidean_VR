@@ -13,9 +13,13 @@
             </shader>
             <shader type="sdf">
                 // body of the corresponding sdf or distance underestimator
+                // the wrapping into a function is done by the template engine
+                // be careful with global objects (see examples)
             </shader>
             <shader type="gradient">
                // body of the gradient of the sdf
+               // the wrapping into a function is done by the template engine
+               // be careful with global objects (see examples)
             </shader>
         </solid>
     </items>

@@ -204,9 +204,9 @@ Point smallShift(Point p, vec3 dp){
  */
 int directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX_DIRS] lens){
   vec4 dir = q.coords - p.coords;
+  lens[0] = length(dir);
   dir = normalize(dir);
   dirs[0] = Vector(p,dir);
-  lens[0] = length(dir);
   return 1;
 }
 

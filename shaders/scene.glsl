@@ -5,8 +5,24 @@
  * @param[out] obj the object that we hit.
  * There are two void object for background and debug
  */
-float localSceneSDF(Vector v, out int hit, out Solid solid){
-  return 0.;
+float localSceneSDF(GenVector v, out int hit, out Solid solid){
+    hit = 0;
+    float res = maxDist;
+    float dist;
+
+    {{#solids}}
+        {{#local}}
+            dist = {{name}}SDF(v);
+            if(abs(dist) < marchingThreshold) {
+                hit = 1;
+                solid = {{name}};
+                return dist;
+            }
+            res = min(res, dist);
+        {{/local}}
+    {{/solids}}
+
+    return res;
 }
 
 
@@ -17,7 +33,7 @@ float localSceneSDF(Vector v, out int hit, out Solid solid){
  * @param[out] obj the object that we hit.
  * There are two void object for background and debug
  */
-float globalSceneSDF(Vector v, out int hit, out Solid solid){
+float globalSceneSDF(GenVector v, out int hit, out Solid solid){
   hit = 0;
   float res = maxDist;
   float dist;
@@ -47,13 +63,11 @@ float globalSceneSDF(Vector v, out int hit, out Solid solid){
  * We can directly use the SDF of that object.
  * It is probably faster.
  */
-Vector sceneNormal(Vector v, Solid solid){
+GenVector sceneNormal(GenVector v, Solid solid){
   switch(solid.item.id){
   {{#solids}}
-   {{#global}}
     case {{id}}:
       return {{name}}Grad(v);
-    {{/global}}
   {{/solids}}
   }
 }

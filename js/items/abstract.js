@@ -55,7 +55,6 @@ class Item {
         // properties to be setup later
         this.id = undefined;
         this._name = undefined;
-        this._location = undefined;
         this.glsl = {
             declare: undefined,
             setup: undefined,
@@ -110,19 +109,18 @@ class Item {
         if (this._name === undefined) {
             this._name = this.className + this.id;
             // just for fun, on can add a random suffix to the name
-            /*
-            this._name = this._name + '-' + Math.random().toString(16).substr(2, 8);
-            */
-
+            // in case somebody used accidentally the same name.
+            this._name = this._name + '_' + Math.random().toString(16).substr(2, 8);
         }
         return this._name;
     }
 
     get location() {
-        if (this._location === undefined) {
-            this._location = new Point().applyIsometry(this.position.boost);
-        }
-        return this._location;
+        return this.position.point;
+    }
+
+    get local() {
+        return !this.global;
     }
 
     toGLSL() {
@@ -155,12 +153,12 @@ class Item {
             rendered = mustache.render(template.childNodes[0].nodeValue, this);
             switch (type) {
                 case 'sdf':
-                    this.glsl[type] = `float ${this.name}SDF(Vector v){
+                    this.glsl[type] = `float ${this.name}SDF(GenVector v){
                         ${rendered}
                     }`;
                     break;
                 case 'gradient':
-                    this.glsl[type] = `Vector ${this.name}Grad(Vector v){
+                    this.glsl[type] = `GenVector ${this.name}Grad(GenVector v){
                         ${rendered}
                     }`;
                     break;

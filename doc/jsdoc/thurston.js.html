@@ -54,16 +54,6 @@ import {
     GUI
 } from "./lib/dat.gui.module.js";
 
-import {
-    SHADER_PASS,
-    StaticProp,
-    DynamicProp,
-    isShaderCst,
-    isShaderUni,
-    addShaderCst,
-    addShaderUni
-} from "./property.js";
-
 /**
  * Code for movement of the observer.
  * @const
@@ -122,6 +112,144 @@ const KEYBOARD_BINDINGS = {
 
 
 /**
+ * Code for the way a property can be passed to the shader
+ * @const
+ */
+const SHADER_PASS = {
+    NONE: 0,
+    CONSTANT: 1,
+    UNIFORM: 2,
+}
+
+/**
+ * List of available parameters
+ * Only the parameters that come with a default value are options accepted in the constructor of Thurston.
+ * Each options that is not passed to the constructor is set to its default value.
+ * When the default value is an object, the function default should create a new instance of this object.
+ * (Hence the need to use a function to generate the default value of the option.)
+ * Each parameter has also tags to say how its value should be passed to the shader, and under which type.
+ * @const
+ */
+const PARAMS = {
+    keyboard: {
+        default: function () {
+            return 'us';
+        },
+        shaderPass: SHADER_PASS.NONE
+    },
+    speedTranslation: {
+        default: function () {
+            return 0.2;
+        },
+        shaderPass: SHADER_PASS.NONE
+    },
+    speedRotation: {
+        default: function () {
+            return 0.4;
+        },
+        shaderPass: SHADER_PASS.NONE
+    },
+    MAX_DIRS: {
+        default: function () {
+            return 3;
+        },
+        shaderPass: SHADER_PASS.CONSTANT,
+        shaderType: 'int'
+    },
+    maxMarchingSteps: {
+        default: function () {
+            return 100;
+        },
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'int'
+    },
+    minDist: {
+        default: function () {
+            return 0;
+        },
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'float'
+    },
+    maxDist: {
+        default: function () {
+            return 50;
+        },
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'float'
+    },
+    marchingThreshold: {
+        default: function () {
+            return 0.0001;
+        },
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'float'
+    },
+    fov: {
+        default: function () {
+            return 90;
+        },
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'float'
+    },
+    resolution: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'vec2'
+    },
+    stereo: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'bool'
+    },
+    cellBoost: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Isometry'
+    },
+    invCellBoost: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Isometry'
+    },
+    position: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Position'
+    },
+    leftPosition: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Position'
+    },
+    rightPosition: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'Position'
+    }
+};
+
+const handlerParams = {
+    set: function (target, prop, value, receiver) {
+        // basic security checks.
+        // the uniforms cannot be reassigned.
+        if (prop === 'uniforms') {
+            throw new Error("The uniforms cannot be reassigned.");
+        }
+        // only the declared parameters are accepted.
+        if (!(prop in PARAMS)) {
+            throw new Error(`The parameter ${prop} is not supported.`);
+        }
+
+        // regular update of the property
+        target[prop] = value;
+
+        // if needed we update the uniforms
+        if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
+            target.uniforms[prop] = {
+                type: PARAMS[prop].shaderType,
+                value: target[prop]
+            };
+        }
+
+        return true;
+    }
+}
+
+
+/**
  * @class
  *
  * @classdesc
@@ -140,11 +268,13 @@ const KEYBOARD_BINDINGS = {
  * @property {Isometry} cellBoost - isometry moving you in the correct cell
  * @property {Isometry} invCellBoost - isometry moving you back from the correct cell
  *
- * @todo Decide how to represent a lattice
+ * @todo Decide how to represent a lattice.
  */
 class Thurston {
     /**
      * Create an instance dedicated to build a scene in the prescribed geometry.
+     * Property that are not setup yet, but will be used later are defined as `undefined`.
+     * (Maybe not needed in JS, but good practice I guess.)
      * @param {Object} geom - a module handing the relevant geometry
      * @param {Object} options - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
@@ -153,34 +283,27 @@ class Thurston {
         // setup the geometry (as a module)
         this.geom = geom;
 
-        const defaultOptions = Thurston.defaultOptions();
-        let optionValue;
-        for (const property in defaultOptions) {
-            if (defaultOptions.hasOwnProperty(property)) {
-                if (options.hasOwnProperty(property)) {
-                    optionValue = options[property];
+        // setup all the options
+        this.params = new Proxy({uniforms: {}}, handlerParams);
+        for (const property in PARAMS) {
+            if ('default' in PARAMS[property]) {
+                if (property in options) {
+                    this.params[property] = options[property];
                 } else {
-                    optionValue = defaultOptions[property].value;
-                }
-                switch (defaultOptions[property].shaderPass) {
-                    case SHADER_PASS.CONSTANT:
-                        this[property] = addShaderCst(optionValue, defaultOptions[property].shaderType);
-                        break;
-                    case SHADER_PASS.UNIFORM:
-                        this[property] = addShaderUni(optionValue, defaultOptions[property].shaderType);
-                        break;
-                    default:
-                        this[property] = optionValue;
+                    this.params[property] = PARAMS[property].default();
                 }
             }
         }
+        // complete the set of parameters
+        this.params.resolution = new Vector2();
+        this.params.stereo = false;
 
         // setup the initial positions
-        this.position = new this.geom.Position();
-        this.leftPosition = new this.geom.Position();
-        this.rightPosition = new this.geom.Position();
-        this.cellBoost = new this.geom.Isometry();
-        this.invCellBoost = new this.geom.Isometry();
+        this.params.position = new this.geom.Position();
+        this.params.leftPosition = new this.geom.Position();
+        this.params.rightPosition = new this.geom.Position();
+        this.params.cellBoost = new this.geom.Isometry();
+        this.params.invCellBoost = new this.geom.Isometry();
 
         // init the list of items in the scene
         this._solids = {};
@@ -188,23 +311,19 @@ class Thurston {
         // first available id of an item (to be incremented when adding items)
         this._id = 0;
 
-        // define all the remaining properties
-        // (maybe not needed in JS, but good practice I guess)
+        this._renderer = undefined;
+        this._scene = undefined;
+        this._camera = undefined;
+
         // some of these properties are setup via an asynchronous procedure, which cannot take place in a constructor
         this.gui = undefined;
         this.guiInfo = undefined;
         this.stats = undefined;
-        this.uniforms = undefined;
-        this.resolution = addShaderUni(new Vector2(), 'vec2');
-        this._renderer = undefined;
-        this._scene = undefined;
-        this._camera = undefined;
-        this.stereo = addShaderUni(false, 'bool');
 
         // setup the controls for the keyboard
         // fix the default keyboard binding
         // its value can be changed in the UI
-        this._keyboardBinding = KEYBOARD_BINDINGS[this.keyboard];
+        this._keyboardBinding = KEYBOARD_BINDINGS[this.params.keyboard];
         // setup the controls for keyboard action
         // used to handle an active tag, in case the user hold a key down.
         this._keyboardControls = {};
@@ -219,33 +338,6 @@ class Thurston {
         this._clockPosition = new Clock();
     }
 
-
-    /**
-     * Return the list of all available options, with there default value.
-     * Only those options are accepted in the constructor.
-     * Each options that is not passed to the constructor is set to its default value.
-     *
-     * The format for each default option should have the form
-     * propertyName : {
-     *      value: default value of the property,
-     *      shader: undefined || { shaderPass : int, shaderType : string }
-     * }
-     *
-     * @return {Object} the default values of the available options.
-     */
-    static defaultOptions() {
-        return {
-            keyboard: {value: 'us', shaderPass: SHADER_PASS.NONE},
-            speedTranslation: {value: 0.2, shaderPass: SHADER_PASS.NONE},
-            speedRotation: {value: 0.4, shaderPass: SHADER_PASS.NONE},
-            MAX_DIRS: {value: 3, shaderPass: SHADER_PASS.CONSTANT, shaderType: 'int'},
-            maxMarchingSteps: {value: 50, shaderPass: SHADER_PASS.UNIFORM, shaderType: 'int'},
-            minDist: {value: 0, shaderPass: SHADER_PASS.UNIFORM, shaderType: 'float'},
-            maxDist: {value: 30, shaderPass: SHADER_PASS.UNIFORM, shaderType: 'float'},
-            marchingThreshold: {value: 0.001, shaderPass: SHADER_PASS.CONSTANT, shaderType: 'float'},
-            fov: {value: 90, shaderPass: SHADER_PASS.UNIFORM, shaderType: 'float'},
-        }
-    }
 
     get listSolids() {
         return Object.values(this._solids);
@@ -331,109 +423,6 @@ class Thurston {
     }
 
     /**
-     * Serialize all the positions and boost in a form that can be passed to the shader
-     * @return {array} the output in an array with three entries:
-     * - a list of 5 Matrix4 (the part A of the isometries position, left/right position, cell and invCell).
-     * - a list of 5 floating numbers (the part B of the isometries position, left/right position, cell and invCell).
-     * - a list of 3 Matrix4 (the facing, left and right facings).
-     */
-    serialize() {
-        const rawA = [];
-        const rawB = [];
-        const facings = [];
-        let i = 0;
-        let raw;
-        const data = [
-            this.position,
-            this.leftPosition,
-            this.rightPosition,
-            this.cellBoost,
-            this.invCellBoost
-        ]
-        for (const pos of data) {
-            raw = pos.serialize();
-            rawA[i] = raw[0];
-            rawB[i] = raw[1];
-            if (i &lt; 3) {
-                facings[i] = raw[2];
-            }
-            i = i + 1;
-        }
-        return [rawA, rawB, facings];
-    }
-
-    /**
-     * Setup the uniforms which are passed to the shader
-     */
-    setupUniforms() {
-        const rawData = this.serialize();
-        this.uniforms = {
-            boostRawA: {
-                type: "mat4",
-                value: rawData[0][0]
-            },
-            leftBoostRawA: {
-                type: "mat4",
-                value: rawData[0][1]
-            },
-            rightBoostRawA: {
-                type: "mat4",
-                value: rawData[0][2]
-            },
-            cellBoostRawA: {
-                type: "mat4",
-                value: rawData[0][3]
-            },
-            invCellBoostRawA: {
-                type: "mat4",
-                value: rawData[0][4]
-            },
-            boostRawB: {
-                type: "float",
-                value: rawData[1][0]
-            },
-            leftBoostRawB: {
-                type: "float",
-                value: rawData[1][1]
-            },
-            rightBoostRawB: {
-                type: "float",
-                value: rawData[1][2]
-            },
-            cellBoostRawB: {
-                type: "float",
-                value: rawData[1][3]
-            },
-            invCellBoostRawB: {
-                type: "float",
-                value: rawData[1][4]
-            },
-            facing: {
-                type: "mat4",
-                value: rawData[2][0]
-            },
-            leftFacing: {
-                type: "mat4",
-                value: rawData[2][1]
-            },
-            rightFacing: {
-                type: "mat4",
-                value: rawData[2][2]
-            },
-        }
-        for (const property in this) {
-            if (this.hasOwnProperty(property)) {
-                if (isShaderUni(this[property])) {
-                    this.uniforms[property] = {
-                        type: this[property].shaderType,
-                        value: this[property].shaderValue()
-                    };
-                }
-            }
-        }
-    }
-
-    /**
      * Build the vertex shader from templates files.
      * @return {string} - the code of the shader
      */
@@ -443,24 +432,27 @@ class Thurston {
     }
 
 
-    buildShaderDataHeader() {
-        const res = {constants: [], uniforms: []};
-        for (const property in this) {
-            if (this.hasOwnProperty(property)) {
-                if (isShaderCst(this[property])) {
-                    res.constants.push({
-                        name: property,
-                        type: this[property].shaderType,
-                        value: this[property].shaderValue()
-                    });
-                }
+    buildShaderDataConstants() {
+        const res = [];
+        for (const property in PARAMS) {
+            if (PARAMS[property].shaderPass === SHADER_PASS.CONSTANT) {
+                res.push({
+                    name: property,
+                    type: PARAMS[property].shaderType,
+                    value: this.params[property]
+                });
             }
         }
-        for (const name in this.uniforms) {
-            if (this.uniforms.hasOwnProperty(name)) {
-                res.uniforms.push({
-                    name: name,
-                    type: this.uniforms[name].type
+        return res;
+    }
+
+    buildShaderDataUniforms() {
+        const res = [];
+        for (const property in PARAMS) {
+            if (PARAMS[property].shaderPass === SHADER_PASS.UNIFORM) {
+                res.push({
+                    name: property,
+                    type: PARAMS[property].shaderType
                 });
             }
         }
@@ -507,9 +499,10 @@ class Thurston {
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
-        const header = this.buildShaderDataHeader();
+        const header = {constants: this.buildShaderDataConstants()};
         const background = await this.buildShaderDataBackground();
         const items = await this.buildShaderDataItems();
+        const setup = Object.assign({}, items, {uniforms: this.buildShaderDataUniforms()});
 
 
         // A list of pairs (file, data)
@@ -521,7 +514,7 @@ class Thurston {
             {file: 'shaders/geometry/commons.glsl', data: undefined},
             {file: 'shaders/items/abstract.glsl', data: undefined},
             {file: 'shaders/background.glsl', data: background},
-            {file: 'shaders/setup.glsl', data: items},
+            {file: 'shaders/setup.glsl', data: setup},
             {file: 'shaders/sdf.glsl', data: items},
             {file: 'shaders/scene.glsl', data: items},
             {file: 'shaders/raymarch.glsl', data: undefined},
@@ -542,7 +535,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        // console.log(fShader);
+        console.log(fShader);
 
         return fShader;
     }
@@ -553,7 +546,7 @@ class Thurston {
             help: function () {
                 window.open('https://github.com/henryseg/non-euclidean_VR');
             },
-            keyboard: this.keyboard
+            keyboard: this.params.keyboard
         };
         this.gui = new GUI();
         this.gui.close();
@@ -565,7 +558,7 @@ class Thurston {
 
         let self = this;
         keyboardController.onChange(function (value) {
-            self.options.pureJS.keyboard = value;
+            self.params.keyboard = value;
             self._keyboardControls = KEYBOARD_BINDINGS[value];
         });
 
@@ -590,7 +583,7 @@ class Thurston {
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this._renderer.domElement);
-        this.resolution.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
+        this.params.resolution.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
 
         // setup the camera
         this._camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -598,13 +591,13 @@ class Thurston {
         // build the scene with a single screen
         this._scene = new Scene();
         const geometry = new PlaneBufferGeometry(2, 2);
-        this.setupUniforms();
         let material = new ShaderMaterial({
-            uniforms: this.uniforms,
+            uniforms: this.params.uniforms,
             vertexShader: await this.buildShaderVertex(),
             fragmentShader: await this.buildShaderFragment(),
             transparent: true
         });
+        console.log(this.params.uniforms);
         const mesh = new Mesh(geometry, material);
         this._scene.add(mesh);
 
@@ -641,18 +634,14 @@ class Thurston {
 
         const deltaPosition = this._keyboardDirs.translation
             .clone()
-            .multiplyScalar(this.speedTranslation * deltaTime);
-        this.position.flow(deltaPosition);
+            .multiplyScalar(this.params.speedTranslation * deltaTime);
+        this.params.position.flow(deltaPosition);
 
         const deltaRotation = new Quaternion().setFromAxisAngle(
             this._keyboardDirs.rotation,
-            0.5 * this.speedRotation * deltaTime
+            0.5 * this.params.speedRotation * deltaTime
         );
-        this.position.applyFacing(new Matrix4().makeRotationFromQuaternion(deltaRotation));
-
-        const raw = this.position.serialize();
-        this.uniforms.boostRawA.value = raw[0];
-        this.uniforms.boostRawB.value = raw[1];
+        this.params.position.applyFacing(new Matrix4().makeRotationFromQuaternion(deltaRotation));
     }
 
     /**
@@ -661,7 +650,7 @@ class Thurston {
      */
     onWindowResize(event) {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
-        this.resolution
+        this.params.resolution
             .set(window.innerWidth, window.innerHeight)
             .multiplyScalar(window.devicePixelRatio);
     }
@@ -770,13 +759,13 @@ export {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Properties.html">Properties</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Properties-AbstractProp.html">AbstractProp</a></li><li><a href="module-Properties-DynamicProp.html">DynamicProp</a></li><li><a href="module-Properties-StaticProp.html">StaticProp</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-DiscreteSubgroup.html">DiscreteSubgroup</a></li><li><a href="module-Abstract%2520geometry-GenPosition.html">GenPosition</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Teleport.html">Teleport</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Nov 23 2020 20:32:40 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Nov 24 2020 23:36:37 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -6,7 +6,7 @@
  * Compute the initial direction for the ray-marching
  * @param[in] coords the coordinates of the point (in pixels)
  */
-Vector rayDir(vec2 coords){
+GenVector rayDir(vec2 coords){
   // Change of coordinates:
   // The origin is at the center of the screen.
   // The x-coordinates runs between -0.5 and 0.5 (the screen has width 1).
@@ -21,8 +21,8 @@ Vector rayDir(vec2 coords){
   res = geomNormalize(res);
 
   // Translating the vector according to the boost and facing.
-  res = applyPosition(position, res);
-  return res;
+  res = applyLocalPosition(position, res);
+  return GenVector(position.cellBoost, position.invCellBoost, res);
 }
 
 /**
@@ -36,7 +36,7 @@ void main() {
   Isometry fixIsom;
 
   setup();
-  Vector v = rayDir(gl_FragCoord.xy);
+  GenVector v = rayDir(gl_FragCoord.xy);
   Solid solid;
 
   int hit = raymarch(v, fixIsom, solid);

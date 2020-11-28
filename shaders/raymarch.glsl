@@ -1,17 +1,4 @@
 /**
- * Teleporting.
- * Check the the underlying point is still in the fundamental domain.
- * If not, teleport the vector `v`, update `fixIsom`, and return true.
- * Otherwise, return false.
- * @param[inout] v - the current vector during the raymarching
- * @param[inout] fixIsom - the current status of the isometry collecting all teleportations
- * @return True if a teleportation has been performed, False otherwise
- */
-bool teleport(inout Vector v, inout Isometry fixIsom){
-  return false;
-}
-
-/**
  * Ray-marching.
  * @param[inout] v The initial vector for raymarching.
  * The vector is updated by the function,
@@ -24,25 +11,67 @@ bool teleport(inout Vector v, inout Isometry fixIsom){
  * - -1, if there is a bug
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
  */
-int raymarch(inout Vector v, out Isometry fixIsom, out Solid solid){
-  Vector vaux = v;
-  float depth = minDist;
-  float dist;
-  int hit = 0;
+int raymarch(inout GenVector v, out Isometry fixIsom, out Solid solid){
+    GenVector globalV0 = v;
+    GenVector globalV = v;
+    GenVector localV0 = v;
+    GenVector localV = v;
+    GenVector res = v;
+    Solid auxSolid;
+    float marchingStep = minDist;
+    float globalDepth = minDist;
+    float localDepth = minDist;
+    float dist;
+    bool hasTeleported;
+    int auxHit;
+    int hit = 0;
 
-  for(int i=0; i < maxMarchingSteps; i++){
-    dist = globalSceneSDF(vaux, hit, solid);
-    if(hit == 1) {
-      // we hit an object
-      break;
+
+    // local scene
+    for (int i = 0; i < maxMarchingSteps; i++){
+        localV = teleport(localV, hasTeleported);
+        if (hasTeleported){
+            localV0 = localV;
+            marchingStep = minDist;
+        }
+        else {
+            if (localDepth > maxDist) {
+                break;
+            }
+            dist = localSceneSDF(localV, auxHit, auxSolid);
+            if (auxHit == 1) {
+                // we hit an object
+                hit = auxHit;
+                solid = auxSolid;
+                res = localV;
+                //return -1;
+                break;
+            }
+            marchingStep = marchingStep + dist;
+            localDepth  = localDepth + dist;
+            localV = flow(localV0, marchingStep);
+        }
     }
-    depth = depth + dist;
-    if(depth > maxDist){
-      // we reached the maximal distance
-      break;
+
+
+    //global scene
+    for (int i=0; i < maxMarchingSteps; i++){
+        if (globalDepth > localDepth || globalDepth > maxDist){
+            // we reached the maximal distance
+            break;
+        }
+        dist = globalSceneSDF(globalV, auxHit, auxSolid);
+        if (auxHit == 1) {
+            // we hit an object
+            hit = auxHit;
+            solid = auxSolid;
+            res = globalV;
+            break;
+        }
+        globalDepth = globalDepth + dist;
+        globalV = flow(globalV0, globalDepth);
     }
-    vaux = flow(v, depth);
-  }
-  v = vaux;
-  return hit;
+
+    v = res;
+    return hit;
 }

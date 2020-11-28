@@ -99,7 +99,6 @@ void direction(Point p, Point q, out Vector dir, out float len){
 }
 
 
-
 /***********************************************************************************************************************
  *
  * @struct Position
@@ -116,4 +115,63 @@ struct Position {
 Vector applyPosition(Position p, Vector v){
     Vector res = applyFacing(p.facing, v);
     return applyIsometry(p.boost, res);
+}
+
+
+/***********************************************************************************************************************
+ *
+ * @struct GenVector
+ * Structure for a generalized vector
+ * Such a vector is a triple (cellBoost, invCellBoost, vec) where
+ * - cellBoost is an Isometry representing an element of a discrete subgroup
+ * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
+ * - vec is a Vector
+ * Such a generalized vector represent the vector vec translated by cellBoost
+ * It is meant to track easily teleportation when raymarching in quotient manifolds.
+ *
+ * inside is a flag used during teleportation.
+ * inside will not be turned to true, unless the vector has been moved back in the fundamental domain.
+ *
+ **********************************************************************************************************************/
+
+struct GenVector {
+    Isometry cellBoost;
+    Isometry invCellBoost;
+    Vector vec;
+};
+
+GenVector geomNormalize(GenVector v){
+    v.vec = geomNormalize(v.vec);
+    return v;
+}
+
+GenVector flow(GenVector v, float t) {
+    v.vec = flow(v.vec, t);
+    return v;
+}
+
+
+/***********************************************************************************************************************
+ *
+ * @struct GenPosition
+ * Structure for a generalized position (subgroup element, boost and facing) in the geometry.
+ * This structure is essentially meant to receive data from the JS part
+ *
+ **********************************************************************************************************************/
+
+struct GenPosition {
+    Isometry boost;
+    mat4 facing;
+    Isometry cellBoost;
+    Isometry invCellBoost;
+};
+
+Vector applyLocalPosition(GenPosition p, Vector v){
+    Vector res = applyFacing(p.facing, v);
+    return applyIsometry(p.boost, res);
+}
+
+Vector applyPosition(GenPosition p, Vector v){
+    Vector res = applyLocalPosition(p, v);
+    return applyIsometry(p.cellBoost, res);
 }
