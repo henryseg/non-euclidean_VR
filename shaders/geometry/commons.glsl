@@ -1,8 +1,6 @@
 /***********************************************************************************************************************
- *
  * @file
  * Geometric computations common to all the geometries
- *
  **********************************************************************************************************************/
 
 
@@ -19,7 +17,6 @@ Vector negate(Vector v) {
 /**
  * Return the length of the given vector.
  * Previously `tangNorm`.
- * Overload GLSL dot product (hopefully this is not an issue).
  */
 float geomLength(Vector v){
     return sqrt(geomDot(v, v));
@@ -28,7 +25,6 @@ float geomLength(Vector v){
 /**
  * Normalize the given vector (so that it has length one).
  * Previously `tangNormalize`.
- * Overload GLSL normalization (hopefully this is not an issue).
  */
 Vector geomNormalize(Vector v){
     float a = geomLength(v);
@@ -112,6 +108,12 @@ struct Position {
     mat4 facing;
 };
 
+
+/**
+ * Apply the given position to a vector.
+ * @param[in] p a position
+ * @param[in] v a vector **at the origin**.
+ */
 Vector applyPosition(Position p, Vector v){
     Vector res = applyFacing(p.facing, v);
     return applyIsometry(p.boost, res);
@@ -120,58 +122,69 @@ Vector applyPosition(Position p, Vector v){
 
 /***********************************************************************************************************************
  *
- * @struct GenVector
+ * @struct RelVector
  * Structure for a generalized vector
- * Such a vector is a triple (cellBoost, invCellBoost, vec) where
+ * Such a vector is a triple (local, cellBoost, invCellBoost) where
+ * - local is a Vector
  * - cellBoost is an Isometry representing an element of a discrete subgroup
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
- * - vec is a Vector
- * Such a generalized vector represent the vector vec translated by cellBoost
+ * Such a generalized vector represent the vector local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.
- *
- * inside is a flag used during teleportation.
- * inside will not be turned to true, unless the vector has been moved back in the fundamental domain.
  *
  **********************************************************************************************************************/
 
-struct GenVector {
+struct RelVector {
+    Vector local;
     Isometry cellBoost;
     Isometry invCellBoost;
-    Vector vec;
+
 };
 
-GenVector geomNormalize(GenVector v){
-    v.vec = geomNormalize(v.vec);
+/**
+ * Normalize the given vector.
+ */
+RelVector geomNormalize(RelVector v){
+    v.local = geomNormalize(v.local);
     return v;
 }
 
-GenVector flow(GenVector v, float t) {
-    v.vec = flow(v.vec, t);
+/**
+ * Flow the given vector.
+ * This method does apply any teleportation.
+ * Hence the local part of the vector, may leaves the fundamental domain.
+ */
+RelVector flow(RelVector v, float t) {
+    v.local = flow(v.local, t);
     return v;
 }
 
 
 /***********************************************************************************************************************
  *
- * @struct GenPosition
- * Structure for a generalized position (subgroup element, boost and facing) in the geometry.
+ * @struct RelPosition
+ * Structure for a generalized position in the geometry.
+ * Such a position is a triple (local, cellBoost, invCellBoost) where
+ * - local is a Position
+ * - cellBoost is an Isometry representing an element of a discrete subgroup
+ * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
+ * Such a generalized position represent the position local translated by cellBoost
+ * It is meant to track easily teleportation when raymarching in quotient manifolds.
  * This structure is essentially meant to receive data from the JS part
  *
  **********************************************************************************************************************/
 
-struct GenPosition {
-    Isometry boost;
-    mat4 facing;
+struct RelPosition {
+    Position local;
     Isometry cellBoost;
     Isometry invCellBoost;
 };
 
-Vector applyLocalPosition(GenPosition p, Vector v){
-    Vector res = applyFacing(p.facing, v);
-    return applyIsometry(p.boost, res);
-}
-
-Vector applyPosition(GenPosition p, Vector v){
-    Vector res = applyLocalPosition(p, v);
-    return applyIsometry(p.cellBoost, res);
+/**
+ * Apply the given position (including the cellBoost) to a vector.
+ * @param[in] p a position
+ * @param[in] v a vector **at the origin**.
+ */
+RelVector applyPosition(RelPosition position, Vector v) {
+    Vector local = applyPosition(position.local, v);
+    return RelVector(local, position.cellBoost, position.invCellBoost);
 }

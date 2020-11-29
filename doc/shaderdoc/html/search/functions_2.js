@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cosangle_110',['cosAngle',['../commons_8glsl.html#a8917ba32ec22067cc7bcc0b4b8e1731e',1,'commons.glsl']]],
-  ['createvector_111',['createVector',['../commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85',1,'commons.glsl']]]
+  ['direction_109',['direction',['../commons_8glsl.html#aa7ae70af474f971a709b7ea5c513db6c',1,'commons.glsl']]],
+  ['directions_110',['directions',['../euc_8glsl.html#aff97aec31adc13050de75e8af8f84a8c',1,'directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX_DIRS] lens):&#160;euc.glsl'],['../model_8glsl.html#aff97aec31adc13050de75e8af8f84a8c',1,'directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX_DIRS] lens):&#160;model.glsl']]]
 ];

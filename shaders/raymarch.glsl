@@ -1,3 +1,10 @@
+/***********************************************************************************************************************
+ * @file
+ * Raymarching (merge this file with other small files ?)
+ **********************************************************************************************************************/
+
+
+
 /**
  * Ray-marching.
  * @param[inout] v The initial vector for raymarching.
@@ -11,12 +18,12 @@
  * - -1, if there is a bug
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
  */
-int raymarch(inout GenVector v, out Isometry fixIsom, out Solid solid){
-    GenVector globalV0 = v;
-    GenVector globalV = v;
-    GenVector localV0 = v;
-    GenVector localV = v;
-    GenVector res = v;
+int raymarch(inout RelVector v, out Isometry fixIsom, out Solid solid){
+    RelVector globalV0 = v;
+    RelVector globalV = v;
+    RelVector localV0 = v;
+    RelVector localV = v;
+    RelVector res = v;
     Solid auxSolid;
     float marchingStep = minDist;
     float globalDepth = minDist;

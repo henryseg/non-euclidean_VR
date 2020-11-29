@@ -70,9 +70,9 @@ const subgroup = new geom.DiscreteSubgroup([
 const thurston = new Thurston(geom, subgroup, {keyboard: 'fr'});
 
 const ball0 = new items.Ball(
-    new geom.Point(0, 0, -0.15),
-    0.05,
-    new Material({color: new Color(1, 1, 1)}),
+    new geom.Point(0, 0, 0),
+    0.1,
+    new Material({color: new Color(1, 0.2, 0.2)}),
     false
 );
 

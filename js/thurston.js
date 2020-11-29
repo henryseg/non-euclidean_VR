@@ -94,7 +94,7 @@ const SHADER_PASS = {
 }
 
 /**
- * List of available parameters
+ * List of registered parameters
  * Only the parameters that come with a default value are options accepted in the constructor of Thurston.
  * Each options that is not passed to the constructor is set to its default value.
  * When the default value is an object, the function default should create a new instance of this object.
@@ -173,7 +173,7 @@ const PARAMS = {
     },
     position: {
         shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'GenPosition'
+        shaderType: 'RelPosition'
     },
     leftPosition: {
         shaderPass: SHADER_PASS.UNIFORM,
@@ -185,8 +185,16 @@ const PARAMS = {
     }
 };
 
-const handlerParams = {
-    set: function (target, prop, value, receiver) {
+
+/**
+ * This handler is designed to traps the setters or the field `params` in a `Thurston` object
+ * Each time a setter is called to assign a property to `params` the handler does the following
+ * - Check if the property belongs to `PARAMS` (the list of registered parameters)
+ * - If this property is listed as a uniform in `PARAMS`, update the list of uniforms
+ * @const
+ */
+const PARAMS_HANDLER = {
+    set: function (target, prop, value) {
         // basic security checks.
         // the uniforms cannot be reassigned.
         if (prop === 'uniforms') {
@@ -202,7 +210,7 @@ const handlerParams = {
 
         // if needed we update the uniforms
         if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
-            target.uniforms[prop] = {
+            target._uniforms[prop] = {
                 type: PARAMS[prop].shaderType,
                 value: target[prop]
             };
@@ -217,21 +225,6 @@ const handlerParams = {
  *
  * @classdesc
  * Class used to create a scene in the specified geometry
- *
- * @property {Object} geometry - the underlying geometry (in the form of an imported module)
- * @property lattice - the lattice used for local scenes
- * @property {Object} options - the general options of the scene
- * @property {Object} solids - the list of solids in the scene
- * @property {Object} lights - the list of lights in the scene
- * @property {Object} _uniforms - the list of uniform passed to the shader
- * @property {Vector2} _resolution - the resolution of the windows
- * @property {Position} position - position of the observer
- * @property {Position} leftPosition - position of the left eye (relative to the observer's position)
- * @property {Position} rightPosition - position of the right eye (relative to the observer's position)
- * @property {Isometry} cellBoost - isometry moving you in the correct cell
- * @property {Isometry} invCellBoost - isometry moving you back from the correct cell
- *
- * @todo Decide how to represent a lattice.
  */
 class Thurston {
     /**
@@ -240,21 +233,31 @@ class Thurston {
      * (Maybe not needed in JS, but good practice I guess.)
      * @param {Object} geom - a module handing the relevant geometry
      * @param {DiscreteSubgroup} subgroup - a discrete subgroups
-     * @param {Object} options - a list of options. See defaultOptions for the list of available options.
+     * @param {Object} params - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
-     * @todo If a subgroups is not provided use the trivial one.
+     * @todo If a subgroup is not provided use the trivial one.
      */
-    constructor(geom, subgroup, options = {}) {
-        // setup the geometry (as a module)
+    constructor(geom, subgroup, params = {}) {
+        /**
+         * The underlying geometry
+         * @type {Object}
+         */
         this.geom = geom;
+        /**
+         * The discrete subgroup defining a quotient manifold/orbifold
+         * @type {DiscreteSubgroup}
+         */
         this.subgroup = subgroup;
-
-        // setup all the options
-        this.params = new Proxy({uniforms: {}}, handlerParams);
+        /**
+         * The list of parameters of the object.
+         * Interactions with `params` go through a proxy to automatically keep the list of uniforms up to date.
+         * @type {Object}
+         */
+        this.params = new Proxy({_uniforms: {}}, PARAMS_HANDLER);
         for (const property in PARAMS) {
             if ('default' in PARAMS[property]) {
-                if (property in options) {
-                    this.params[property] = options[property];
+                if (property in params) {
+                    this.params[property] = params[property];
                 } else {
                     this.params[property] = PARAMS[property].default();
                 }
@@ -265,7 +268,7 @@ class Thurston {
         this.params.stereo = false;
 
         // setup the initial positions
-        this.params.position = new this.geom.GenPosition(this.subgroup);
+        this.params.position = new this.geom.RelPosition(this.subgroup);
         this.params.leftPosition = new this.geom.Position();
         this.params.rightPosition = new this.geom.Position();
 
@@ -273,38 +276,41 @@ class Thurston {
         for (const teleport of this.subgroup.teleports) {
             // first add the isometries to the list of parameters
             // this cannot be static as the number/names of isometries depend on the subgroup
-            PARAMS[`${teleport.name}Isom`] = {
-                shaderPass: SHADER_PASS.UNIFORM,
-                shaderType: 'Isometry'
-            };
-            PARAMS[`${teleport.name}Inv`] = {
-                shaderPass: SHADER_PASS.UNIFORM,
-                shaderType: 'Isometry'
-            };
+            this.registerParam(`${teleport.name}Isom`, SHADER_PASS.UNIFORM, 'Isometry');
+            this.registerParam(`${teleport.name}Inv`, SHADER_PASS.UNIFORM, 'Isometry');
             // then register the isometries
             this.params[`${teleport.name}Isom`] = teleport.isom;
             this.params[`${teleport.name}Inv`] = teleport.inv;
         }
+        /**
+         * The graphical user interface
+         * @type {GUI}
+         */
+        this.gui = undefined;
+        /**
+         * The performance stats
+         * @type {undefined}
+         */
+        this.stats = undefined;
 
-        // init the list of items in the scene
+        // The list of solids in the scene as an object {id: solid}
         this._solids = {};
+        // The list of lights in the scene as an object {id: light}
         this._lights = {};
+
         // first available id of an item (to be incremented when adding items)
         this._id = 0;
 
+        // the Three.js WebGL renderer
         this._renderer = undefined;
+        // The Three.js scene
         this._scene = undefined;
+        // The Three.js camera
         this._camera = undefined;
 
-        // some of these properties are setup via an asynchronous procedure, which cannot take place in a constructor
-        this.gui = undefined;
-        this.guiInfo = undefined;
-        this.stats = undefined;
-
-        // setup the controls for the keyboard
         // fix the default keyboard binding
-        // its value can be changed in the UI
-        this._keyboardBinding = KEYBOARD_BINDINGS[this.params.keyboard];
+        this._keyboardBinding = undefined;
+        this.setKeyboard(this.params.keyboard);
         // setup the controls for keyboard action
         // used to handle an active tag, in case the user hold a key down.
         this._keyboardControls = {};
@@ -316,38 +322,62 @@ class Thurston {
             translation: new this.geom.Vector(),
             rotation: new this.geom.Vector(),
         };
-        this._clockPosition = new Clock();
+        // clock to measure the time between two frames
+        this._clock = new Clock();
     }
 
+    /**
+     * Set the keyboard
+     * @param {string} keyboardCode - currently supported values are 'us' and 'fr' (US and French keyboard)
+     */
+    setKeyboard(keyboardCode) {
+        this.params.keyboard = keyboardCode;
+        this._keyboardBinding = KEYBOARD_BINDINGS[this.params.keyboard];
+    }
 
+    /**
+     * The solids in the scene as a list
+     * @type {Solid[]}
+     */
     get listSolids() {
         return Object.values(this._solids);
     }
 
+    /**
+     * The lights in the scene as a list
+     * @type {Light[]}
+     */
     get listLights() {
         return Object.values(this._lights);
     }
 
     /**
-     * Setup the lattice used for the local scene.
-     * @param data - some data describing the lattice
+     * Register a new parameter to `PARAMS`
+     * @param {string} name - the name of the parameter
+     * @param {number} pass - the way it should be passed to the shader
+     * @param {string} type - the type of the parameter on the shader side
      * @return {Thurston} the current Thurston object
-     *
-     * @todo Decide how the lattice should be defined
      */
-    setLattice(data) {
+    registerParam(name, pass, type) {
+        if (name in PARAMS) {
+            throw new Error(`A parameter called ${name} already exists`);
+        }
+        PARAMS[name] = {
+            shaderPass: pass,
+            shaderType: type
+        };
         return this;
     }
 
     /**
      * Set the given options.
-     * @param {Object} options - a list of option
+     * @param {Object} params - a list of option
      * @return {Thurston} the current Thurston object
      */
-    setOptions(options) {
-        for (const key in options) {
-            if (options.hasOwnProperty(key)) {
-                this.setOption(key, options[key]);
+    setParams(params) {
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                this.setParam(key, params[key]);
             }
         }
         return this;
@@ -359,7 +389,8 @@ class Thurston {
      * @param  value - the value of the option
      * @return {Thurston} the current Thurston object
      */
-    setOption(key, value) {
+    setParam(key, value) {
+        this.params[key] = value;
         return this;
     }
 
@@ -383,7 +414,7 @@ class Thurston {
 
     /**
      * Adding a list of item to the scene.
-     * @param{Array} items - the list of items to add
+     * @param{array} items - the list of items to add
      * @return {Thurston} the current Thurston object
      */
     addItems(items) {
@@ -413,6 +444,10 @@ class Thurston {
     }
 
 
+    /**
+     * Collect all the parameters that will be passed to the shader as constants
+     * @return {Object[]} the constants as a list of objects {name: string, type: string, value: *}
+     */
     buildShaderDataConstants() {
         const res = [];
         for (const property in PARAMS) {
@@ -427,6 +462,10 @@ class Thurston {
         return res;
     }
 
+    /**
+     * Collect all the parameters that will be passed to the shader as uniforms
+     * @return {Object[]} the uniforms as a list of object {name: string, type:string}
+     */
     buildShaderDataUniforms() {
         const res = [];
         for (const property in PARAMS) {
@@ -440,8 +479,13 @@ class Thurston {
         return res;
     }
 
+    /**
+     * Return the list of all "background" blocks of GLSL code which are required for items and subgroup.
+     * @return {Promise<string[]>}
+     */
     async buildShaderDataBackground() {
         const files = [];
+
         // items files
         for (const list of [this._solids, this._lights]) {
             for (const item of Object.values(list)) {
@@ -450,8 +494,10 @@ class Thurston {
                 }
             }
         }
-        // subgroup file
+        // discrete subgroup file
         files.push(this.subgroup.shaderSource);
+
+        // for each file, extract the content of the background XML tag
         const blocks = [];
         let response;
         let xml
@@ -461,10 +507,14 @@ class Thurston {
             xml = parser.parseFromString(await response.text(), 'application/xml');
             blocks.push(xml.querySelector('background').childNodes[0].nodeValue);
         }
-
-        return {blocks: blocks};
+        return blocks;
     }
 
+    /**
+     * Review all the items in the scene and setup their `glsl` property
+     * Return the solids and lights as lists
+     * @return {Promise<{solids: Solid[], lights: Light[]}>}
+     */
     async buildShaderDataItems() {
         for (const solid of this.listSolids) {
             await solid.glslBuildData();
@@ -481,11 +531,17 @@ class Thurston {
 
     /**
      * Build the fragment shader from templates files.
+     * The data used to populate the templates are build by the functions
+     * - buildShaderDataConstants (constants)
+     * - buildShaderDataUniforms (uniforms)
+     * - buildShaderDataBackground (background routines for the items and the subgroup)
+     * - buildShaderDataItems (items)
+     * - this.subgroup.glslBuildData (subgroup)
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
         const header = {constants: this.buildShaderDataConstants()};
-        const background = await this.buildShaderDataBackground();
+        const blocks = {blocks: await this.buildShaderDataBackground()};
         const items = await this.buildShaderDataItems();
         const setup = Object.assign({}, items, {uniforms: this.buildShaderDataUniforms()});
         await this.subgroup.glslBuildData();
@@ -499,7 +555,7 @@ class Thurston {
             {file: this.geom.shader, data: undefined},
             {file: 'shaders/geometry/commons.glsl', data: undefined},
             {file: 'shaders/items/abstract.glsl', data: undefined},
-            {file: 'shaders/background.glsl', data: background},
+            {file: 'shaders/background.glsl', data: blocks},
             {file: 'shaders/setup.glsl', data: setup},
             {file: 'shaders/subgroup.glsl', data: this.subgroup},
             {file: 'shaders/sdf.glsl', data: items},
@@ -512,10 +568,12 @@ class Thurston {
         let response;
         let template;
         let fShader = "";
+        // loop over the list of files
         for (const shader of shaders) {
-            // load the file, render the template and append the result to the shader
+            // load the template
             response = await fetch(shader.file);
             template = await response.text();
+            // render the template and append the result to the shader
             if (shader.data === undefined) {
                 fShader = fShader + template;
             } else {
@@ -528,33 +586,39 @@ class Thurston {
     }
 
 
+    /**
+     * Initialize the graphic user interface
+     * @return {Thurston} the current Thurston object
+     */
     initUI() {
-        this.guiInfo = {
-            help: function () {
-                window.open('https://github.com/henryseg/non-euclidean_VR');
-            },
-            keyboard: this.params.keyboard
-        };
         this.gui = new GUI();
         this.gui.close();
-        this.gui.add(this.guiInfo, 'help').name("Help/About");
-        const keyboardController = this.gui.add(this.guiInfo, 'keyboard', {
+        this.gui.add({
+            help: function () {
+                window.open('https://github.com/henryseg/non-euclidean_VR');
+            }
+        }, 'help').name("Help/About");
+        const keyboardController = this.gui.add(this.params, 'keyboard', {
             QWERTY: 'us',
             AZERTY: 'fr'
         }).name("Keyboard");
 
         let self = this;
         keyboardController.onChange(function (value) {
-            self.params.keyboard = value;
-            self._keyboardControls = KEYBOARD_BINDINGS[value];
+            self.setKeyboard(value);
         });
-
+        return this;
     }
 
+    /**
+     * Initialize the performance stats
+     * @return {Thurston} the current Thurston object
+     */
     initStats() {
         this.stats = new Stats();
         this.stats.showPanel(0);
         document.body.appendChild(this.stats.dom);
+        return this;
     }
 
 
@@ -579,7 +643,7 @@ class Thurston {
         this._scene = new Scene();
         const geometry = new PlaneBufferGeometry(2, 2);
         let material = new ShaderMaterial({
-            uniforms: this.params.uniforms,
+            uniforms: this.params._uniforms,
             vertexShader: await this.buildShaderVertex(),
             fragmentShader: await this.buildShaderFragment(),
             transparent: true
@@ -602,13 +666,17 @@ class Thurston {
         window.requestAnimationFrame(function () {
             self.animate();
         });
-
-        this.updatePosition();
+        const deltaTime = this._clock.getDelta();
+        this.updatePosition(deltaTime);
         //console.log(this.params.position.point.coords);
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }
 
+    /**
+     * Wrap together initialization and animation
+     * @return {Promise<void>}
+     */
     async run() {
         await this.init();
         this.animate();
@@ -616,10 +684,9 @@ class Thurston {
 
     /**
      * Update the position of the observer
+     * @param {number} deltaTime - The time between the current and the next position
      */
-    updatePosition() {
-        const deltaTime = this._clockPosition.getDelta();
-
+    updatePosition(deltaTime) {
         const deltaPosition = this._keyboardDirs.translation
             .clone()
             .multiplyScalar(this.params.speedTranslation * deltaTime);
@@ -643,6 +710,10 @@ class Thurston {
             .multiplyScalar(window.devicePixelRatio);
     }
 
+    /**
+     * Action when a key is up or down
+     * @param {Event} event
+     */
     onKey(event) {
         if (this._keyboardBinding.hasOwnProperty(event.keyCode)) {
             event.preventDefault();

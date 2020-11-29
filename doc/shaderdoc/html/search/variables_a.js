@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rightboost_162',['rightBoost',['../setup_8glsl.html#a36cb1546ce1de87139068b1968bdf6da',1,'setup.glsl']]]
+  ['shininess_156',['shininess',['../struct_material.html#a9dc184c883ec135ace28c1917af3fe84',1,'Material']]],
+  ['specular_157',['specular',['../struct_material.html#a8cb88ff425239410cd0e8dd8c938ec0c',1,'Material']]]
 ];

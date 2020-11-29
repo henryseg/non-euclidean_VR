@@ -1,5 +1,5 @@
 /**
- * @module Euclidean geometry
+ * @module EuclideanGeometry
  *
  * @description
  * Extension of the abstract geometry modeule for the euclidean space.
@@ -15,7 +15,6 @@ import {
     Isometry,
     Point,
     Position,
-    GenPosition
 } from "./abstract.js"
 
 
@@ -34,17 +33,14 @@ const shader = 'shaders/geometry/euc.glsl';
 
 
 /**
- * Fake constructor
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
 }
 
 /**
- * Set the current isometry with the given data.
- * @param {array} data - the first entry of data
- * should be the matrix representing the isometry
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.set = function (data) {
     this.matrix = data[0].clone();
@@ -52,18 +48,14 @@ Isometry.prototype.set = function (data) {
 };
 
 /**
- * Reduce the eventual numerical errors of the current isometry
- * (typically Gram-Schmidt).
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.reduceError = function () {
     return this;
 };
 
 /**
- * Multiply the current isometry by isom on the left, i.e. replace `this` by `this * isom`.
- * @param {Isometry} isom
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.multiply = function (isom) {
     this.matrix.multiply(isom.matrix);
@@ -71,9 +63,7 @@ Isometry.prototype.multiply = function (isom) {
 };
 
 /**
- * Multiply the current isometry by isom on the right, i.e. replace `this` by `isom * this`.
- * @param {Isometry} isom
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.premultiply = function (isom) {
     this.matrix.premultiply(isom.matrix);
@@ -81,9 +71,7 @@ Isometry.prototype.premultiply = function (isom) {
 };
 
 /**
- * Set the current isometry to the inverse of `isom`.
- * @param {Isometry} isom
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.getInverse = function (isom) {
     this.matrix.getInverse(isom.matrix);
@@ -91,10 +79,7 @@ Isometry.prototype.getInverse = function (isom) {
 };
 
 /**
- * Return a preferred isometry sending the origin to the given point
- * (typically in Nil, Sol, SL2, etc).
- * @param {Point} point
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.makeTranslation = function (point) {
     const [x, y, z,] = point.coords.toArray();
@@ -108,10 +93,7 @@ Isometry.prototype.makeTranslation = function (point) {
 };
 
 /**
- * Return a preferred isometry sending the given point to the origin
- * (typically in Nil, Sol, SL2, etc).
- * @param {Point} point
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.makeInvTranslation = function (point) {
     [x, y, z,] = point.coords;
@@ -126,17 +108,14 @@ Isometry.prototype.makeInvTranslation = function (point) {
 
 
 /**
- * Check if the current isometry and `isom` are the same.
- * @param isom
- * @return {boolean}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(this.isom);
 };
 
 /**
- * Return a new copy of the current isometry.
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.clone = function () {
     let res = new Isometry();
@@ -145,9 +124,7 @@ Isometry.prototype.clone = function () {
 };
 
 /**
- * Set the current isometry with the given isometry
- * @param {Isometry} isom
- * @return {Isometry}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);
@@ -155,9 +132,7 @@ Isometry.prototype.copy = function (isom) {
 };
 
 /**
- * Return a line of GLSL code creating the same isometry
- * Used when dynamically building shaders.
- * @return {string}
+ * Euclidean implementation of the abstract method
  */
 Isometry.prototype.toGLSL = function () {
     return `Isometry(${this.matrix.toGLSL()})`;
@@ -165,8 +140,7 @@ Isometry.prototype.toGLSL = function () {
 
 
 /**
- * Fake constructor.
- * Return the origin of the space.
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.build = function () {
     if (arguments.length === 0) {
@@ -178,10 +152,7 @@ Point.prototype.build = function () {
 };
 
 /**
- * Update the current point with the given data.
- * @param {array} data - the first entry of data
- * are the coordinates of the point as a `Vector4`
- * @return {Point}
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.set = function (data) {
     //console.log("data set", data[0]);
@@ -190,9 +161,7 @@ Point.prototype.set = function (data) {
 };
 
 /**
- * Translate the current point by the given isometry.
- * @param {Isometry} isom
- * @return {Point}
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.applyIsometry = function (isom) {
     this.coords.applyMatrix4(isom.matrix)
@@ -201,17 +170,14 @@ Point.prototype.applyIsometry = function (isom) {
 
 
 /**
- * Check if the current point and `point ` are the same.
- * @param {Point} point
- * @return {boolean}
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.equals = function (point) {
     return this.coords.equals(point.coords)
 };
 
 /**
- * Return a new copy of the current point.
- * @return {Point}
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.clone = function () {
     let res = new Point()
@@ -220,9 +186,7 @@ Point.prototype.clone = function () {
 };
 
 /**
- * set the current point with the given point
- * @param {Point} point
- * @return {Point}
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
@@ -230,36 +194,16 @@ Point.prototype.copy = function (point) {
 };
 
 /**
- * Return a line of GLSL code creating the same point
- * Used when dynamically building shaders.
- * @return {string}
+ * Euclidean implementation of the abstract method
  */
 Point.prototype.toGLSL = function () {
     return `Point(${this.coords.toGLSL()})`;
 }
 
 /**
- * Flow the current position.
- * `v` is the pull back at the origin by the position of the direction in which we flow
- * The time by which we flow is the norm of `v`
- * @param {Vector} v
- * @return {Position}
+ * Euclidean implementation of the abstract method
  */
 Position.prototype.flow = function (v) {
-    const dir = v.clone().applyFacing(this);
-    const point = new Point().set([new Vector4(dir.x, dir.y, dir.z, 1)]);
-    this.boost.multiply(new Isometry().makeTranslation(point));
-    return this;
-}
-
-/**
- * Flow the current position.
- * `v` is the pull back at the origin by the position of the direction in which we flow
- * The time by which we flow is the norm of `v`
- * @param {Vector} v
- * @return {GenPosition}
- */
-GenPosition.prototype._flow = function (v) {
     const dir = v.clone().applyFacing(this);
     const point = new Point().set([new Vector4(dir.x, dir.y, dir.z, 1)]);
     this.boost.multiply(new Isometry().makeTranslation(point));
@@ -272,11 +216,11 @@ export {
     Isometry,
     Point,
     Position,
-    GenPosition
 }
 
 export {
     Vector,
     Teleport,
     DiscreteSubgroup,
-} from './abstract.js'
+    RelPosition
+} from "./abstract.js";

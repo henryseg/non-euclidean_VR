@@ -1,9 +1,9 @@
-/**
+/***********************************************************************************************************************
  * @file
  * This file is a model to impletement other geometries.
  * The content of the structures can be customized.
  * The signatures and the roles of each method need to be implemented strictly.
- */
+ **********************************************************************************************************************/
 
 
 
@@ -13,20 +13,14 @@
  * Structure for isometries of the geometry.
  *
  **********************************************************************************************************************/
-struct Isometry{ };
+struct Isometry{
+// Define here the fields of the structure
+};
 
 /**
  * Identity isometry
- * @todo Check if one can build a structure as a constant, or does it have to be a global variable
  */
-const Isometry IDENTITY; /**< Identity isometry */
-
-/**
- * Convert the data passed to the shader into an isometry.
- * @param[in] rawA first part of a serialized isometry.
- * @param[in] rawB second part of a serialized isometry.
- */
-Isometry unserializeIsom(mat4 rawA, float rawB) { }
+const Isometry IDENTITY = Isometry(); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
@@ -49,16 +43,12 @@ Isometry geomInverse(Isometry isom) { }
  * Structure for points in the geometry.
  *
  **********************************************************************************************************************/
-struct Point{ };
+struct Point{
+// Define here the fields of the structure
+};
 
 
-const Point ORIGIN; /**< Origin of the geometry */
-
-/**
- * Convert the data passed to the shader into an point.
- * @todo Decide which type of data is passed to the shader.
- */
-Point unserializePoint(genType data) { }
+const Point ORIGIN = Point(); /**< Origin of the geometry */
 
 /**
  * Reduce the eventual numerical errors of the given point.
@@ -92,6 +82,7 @@ Isometry makeInvTranslation(Point p) { }
  **********************************************************************************************************************/
 struct Vector{
     Point pos; /**< Underlying point */
+// Define here the other fields of the structure
 };
 
 
@@ -122,7 +113,6 @@ Vector multiplyScalar(float s, Vector v){ }
 /**
  * Return the dot product of the two vectors (with respect to the metric tensor).
  * Previouly `tangDot`.
- * Overload GLSL dot product (hopefully this is not an issue).
  */
 float geomDot(Vector v1, Vector v2) { }
 
@@ -134,8 +124,9 @@ Vector applyIsometry(Isometry isom, Vector v) { }
 
 
 /**
- * Rotation the given vector by a matrix representing an element of O(3).
- * @todo Check where this is used. Does v need be a vector at the **origin**?
+ * Rotate the given vector by a matrix representing an element of O(3).
+ * @param[in] m an isometry of the tangent space. The matrix is written in the reference frame at the orign
+ * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) { }
 
@@ -173,3 +164,12 @@ int directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX
  * The vector `v` is assume to be a **unit** vector
  */
 Vector flow(Vector v, float t){ }
+
+
+/**
+ * Intensity of the light after travelling a length `len` in the direction `dir`
+ * @param[in] dir unit vector at the light position
+ * @param[in] len distance from the light
+ * @return intensity of the light
+ */
+float lightIntensity(Vector dir, float len){ }

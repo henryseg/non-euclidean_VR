@@ -1,4 +1,9 @@
 /***********************************************************************************************************************
+ * @file
+ * Implementation of the euclidean geometry
+ **********************************************************************************************************************/
+
+/***********************************************************************************************************************
  *
  * @struct Isometry
  * Structure for isometries of the geometry.
@@ -10,7 +15,6 @@ struct Isometry{
 
 /**
  * Identity isometry
- * @todo Check if one can build a structure as a constant, or does it have to be a global variable
  */
 const Isometry IDENTITY = Isometry(mat4(1.)); /**< Identity isometry */
 
@@ -48,7 +52,7 @@ struct Point{
 };
 
 
-const Point ORIGIN = Point(vec4(0,0,0,1));///< Origin of the geometry
+const Point ORIGIN = Point(vec4(0,0,0,1));/**< Origin of the geometry */
 
 
 /**
@@ -145,7 +149,6 @@ Vector multiplyScalar(float s, Vector v){
 /**
  * Return the dot product of the two vectors (with respect to the metric tensor).
  * Previouly `tangDot`.
- * Overload GLSL dot product (hopefully this is not an issue).
  */
 float geomDot(Vector v1, Vector v2) {
   return dot(v1.dir, v2.dir);
@@ -163,7 +166,8 @@ Vector applyIsometry(Isometry isom, Vector v) {
 
 /**
  * Rotation the given vector by a matrix representing an element of O(3).
- * @todo Check where this is used. Does v need be a vector at the **origin**?
+ * @param[in] m an isometry of the tangent space. The matrix is written in the reference frame at the orign
+ * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
   return Vector(v.pos, m * v.dir);
@@ -219,4 +223,14 @@ Vector flow(Vector v, float t){
   vec4 coords = v.pos.coords + t * v.dir;
   Point p = Point(coords);
   return Vector(p, v.dir);
+}
+
+/**
+ * Intensity of the light after travelling a length `len` in the direction `dir`
+ * @param[in] dir unit vector at the light position
+ * @param[in] len distance from the light
+ * @return intensity of the light
+ */
+float lightIntensity(Vector dir, float len){
+  return 1./(len);
 }

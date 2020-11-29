@@ -1,5 +1,5 @@
 /**
- * @module Abstract geometry
+ * @module AbstractGeometry
  *
  * @description
  * Defines the objects required by each geometry.
@@ -88,14 +88,12 @@ class Isometry {
 
     /**
      * Constructor.
-     * If no argument is passed, it should return the identity.
-     * Since the constructor is different for each geometry,
-     * the constructor delegate the task to the method build
-     * (that can be overwritten easily unlike the constructor)
-     * Another way to do would be to implement for each geometry a new class
-     * that inherit from Isometry.
-     * How ever the draw back is that the class Position would need also to be extended,
+     * Since the constructor is different for each geometry, it delegates the task to the method `build`
+     * (that can be overwritten easily unlike the constructor).
+     * Another way to do would be to implement for each geometry a new class that inherit from Isometry.
+     * How ever the drawback is that the class Position would need also to be extended,
      * so that it manipulate the right classes.
+     *
      */
     constructor(...args) {
         this.build(...args);
@@ -103,7 +101,7 @@ class Isometry {
 
     /**
      * Fake constructor
-     * If no argument is passed, it should return the identity.
+     * If no argument is passed, return the identity.
      * @abstract
      */
     build() {
@@ -113,18 +111,17 @@ class Isometry {
     /**
      * Set the current isometry with the given data.
      * @abstract
-     * @param {array} data - the input data (depends on the geometry)
-     * @return {Isometry}
+     * @param data - the input data (depends on the geometry)
+     * @return {Isometry} The current isometry
      */
     set(data) {
         throw new Error("This method need be overloaded.");
     }
 
     /**
-     * Reduce the eventual numerical errors of the current isometry
-     * (typically Gram-Schmidt).
+     * Reduce the eventual numerical errors of the current isometry (typically Gram-Schmidt).
      * @abstract
-     * @return {Isometry}
+     * @return {Isometry} The current isometry
      */
     reduceError() {
         throw new Error("This method need be overloaded.");
@@ -134,7 +131,7 @@ class Isometry {
      * Multiply the current isometry by isom on the left, i.e. replace `this` by `this * isom`.
      * @abstract
      * @param {Isometry} isom
-     * @return {Isometry}
+     * @return {Isometry} The current isometry
      */
     multiply(isom) {
         throw new Error("This method need be overloaded.");
@@ -144,7 +141,7 @@ class Isometry {
      * Multiply the current isometry by isom on the right, i.e. replace `this` by `isom * this`.
      * @abstract
      * @param {Isometry} isom
-     * @return {Isometry}
+     * @return {Isometry} The current isometry
      */
     premultiply(isom) {
         throw new Error("This method need be overloaded.");
@@ -153,8 +150,8 @@ class Isometry {
     /**
      * Set the current isometry to the inverse of `isom`.
      * @abstract
-     * @param {Isometry} isom
-     * @return {Isometry}
+     * @param {Isometry} isom - the isometry to invert
+     * @return {Isometry} The current isometry
      */
     getInverse(isom) {
         throw new Error("This method need be overloaded.");
@@ -164,8 +161,8 @@ class Isometry {
      * Return a preferred isometry sending the origin to the given point
      * (typically in Nil, Sol, SL2, etc).
      * @abstract
-     * @param {Point} point
-     * @return {Isometry}
+     * @param {Point} point - the target point
+     * @return {Isometry} The current isometry
      */
     makeTranslation(point) {
         throw new Error("This method need be overloaded.");
@@ -175,8 +172,8 @@ class Isometry {
      * Return a preferred isometry sending the given point to the origin
      * (typically in Nil, Sol, SL2, etc).
      * @abstract
-     * @param {Point} point
-     * @return {Isometry}
+     * @param {Point} point - the point that is moved back to the orign
+     * @return {Isometry} The current isometry
      */
     makeInvTranslation(point) {
         throw new Error("This method need be overloaded.");
@@ -184,9 +181,10 @@ class Isometry {
 
     /**
      * Check if the current isometry and `isom` are the same.
+     * Mainly for debugging purposes.
      * @abstract
      * @param isom
-     * @return {boolean}
+     * @return {boolean} true if the isometries are equal, false otherwise
      */
     equals(isom) {
         throw new Error("This method need be overloaded.");
@@ -195,7 +193,7 @@ class Isometry {
     /**
      * Return a new copy of the current isometry.
      * @abstract
-     * @return {Isometry}
+     * @return {Isometry} The clone of the current isometry
      */
     clone() {
         throw new Error("This method need be overloaded.");
@@ -204,8 +202,8 @@ class Isometry {
     /**
      * Set the current isometry with the given isometry
      * @abstract
-     * @param {Isometry} isom
-     * @return {Isometry}
+     * @param {Isometry} isom - the isometry to copy
+     * @return {Isometry} The current isometry
      */
     copy(isom) {
         throw new Error("This method need be overloaded.");
@@ -216,7 +214,7 @@ class Isometry {
      * Return a block of GLSL code creating the same isometry
      * Used when dynamically building shaders.
      * @abstract
-     * @return {string}
+     * @return {string} the equivalent GLSL code
      */
     toGLSL() {
         throw new Error("This method need be overloaded.");
@@ -235,7 +233,6 @@ class Point {
 
     /**
      * Constructor.
-     * If no argument is passed, it should return the origin of the space.
      * Same remark as for isometries.
      */
     constructor(...args) {
@@ -244,7 +241,7 @@ class Point {
 
     /**
      * Fake constructor.
-     * If no argument is passed, it should return the origin of the space.
+     * If no argument is passed, return the origin of the space.
      * @abstract
      */
     build() {
@@ -254,8 +251,8 @@ class Point {
     /**
      * Update the current point with the given data.
      * @abstract
-     * @param {array} data
-     * @return {Point}
+     * @param data - the input data (depends on the geometry)
+     * @return {Point} The current point
      */
     set(data) {
         throw new Error("This method need be overloaded.");
@@ -264,8 +261,8 @@ class Point {
     /**
      * Translate the current point by the given isometry.
      * @abstract
-     * @param {Isometry} isom
-     * @return {Point}
+     * @param {Isometry} isom - the isometry to apply
+     * @return {Point} The current point
      */
     applyIsometry(isom) {
         throw new Error("This method need be overloaded.");
@@ -273,9 +270,10 @@ class Point {
 
     /**
      * Check if the current point and `point ` are the same.
+     * Mainly for debugging purposes.
      * @abstract
      * @param {Point} point
-     * @return {boolean}
+     * @return {boolean} true if the points are equal, false otherwise
      */
     equals(point) {
         throw new Error("This method need be overloaded.");
@@ -284,7 +282,7 @@ class Point {
     /**
      * Return a new copy of the current point.
      * @abstract
-     * @return {Point}
+     * @return {Point} the clone of the current point
      */
     clone() {
         throw new Error("This method need be overloaded.");
@@ -293,18 +291,18 @@ class Point {
     /**
      * set the current point with the given point
      * @abstract
-     * @param {Point} point
-     * @return {Point}
+     * @param {Point} point - the point to copy
+     * @return {Point} The current point
      */
     copy(point) {
         throw new Error("This method need be overloaded.");
     }
 
     /**
-     * Return a line of GLSL code creating the same point
+     * Return a line of GLSL code creating the same point.
      * Used when dynamically building shaders.
      * @abstract
-     * @return {string}
+     * @return {string} the equivalent GLSL code
      */
     toGLSL() {
         throw new Error("This method need be overloaded.");
@@ -334,7 +332,7 @@ class Vector extends Vector3 {
      * are given in a chosen reference frame.
      * Only the reference frame depends on the geometry.
      * @param {Position} position
-     * @return {Vector}
+     * @return {Vector} The current vector
      */
     applyFacing(position) {
         let aux = new Vector4(this.x, this.y, this.z, 0);
@@ -350,26 +348,31 @@ class Vector extends Vector3 {
  * @classdesc
  * Location and facing (of the observer, an object, etc).
  *
- * Note that the set of position is a group with the following law: (g1, m1) * (g2, m2) = (g1 * g2, m2 * m1)
+ * @todo Choose a better name ??
  */
 class Position {
 
     /**
      * Constructor.
      * Return the position corresponding to the origin with the reference frame.
-     *
-     * @property {Isometry} boost - the isometry component  of the position
-     * @property {Matrix4} facing - the O(3) component of the position (stored as a `Matrix4`)
      */
     constructor() {
+        /**
+         * The isometry component  of the position.
+         * @type {Isometry}
+         */
         this.boost = new Isometry();
+        /**
+         * The O(3) component of the position.
+         * @type {Matrix4}
+         */
         this.facing = new Matrix4();
     }
 
     /**
      * Set the boost part of the position.
      * @param {Isometry} isom
-     * @return {Position}
+     * @return {Position} The current position
      */
     setBoost(isom) {
         this.boost = isom;
@@ -379,7 +382,7 @@ class Position {
     /**
      * Set the facing part of the position.
      * @param {Matrix4} facing
-     * @return {Position}
+     * @return {Position} The current position
      */
     setFacing(facing) {
         this.facing = facing;
@@ -388,7 +391,7 @@ class Position {
 
     /**
      * Reduce the eventual numerical error of the current boost.
-     * @return {Position}
+     * @return {Position} The current position
      */
     reduceErrorBoost() {
         this.boost.reduceError();
@@ -397,7 +400,7 @@ class Position {
 
     /**
      * Reduce the eventual numerical error of the current facing.
-     * @return {Position}
+     * @return {Position} The current position
      * @todo To be completed
      */
     reduceErrorFacing() {
@@ -406,7 +409,7 @@ class Position {
 
     /**
      * Reduce the eventual numerical error of the current position.
-     * @return {Position}
+     * @return {Position} The current position
      */
     reduceError() {
         this.reduceErrorBoost();
@@ -416,7 +419,7 @@ class Position {
 
     /**
      * Return the underlying point
-     * @return {Point}
+     * @return {Point} the translate of the origin by the isometry part of the position
      */
     get point() {
         return new Point().applyIsometry(this.boost);
@@ -424,8 +427,8 @@ class Position {
 
     /**
      * Translate the current position by `isom` (left action of the isometry group G on the set of positions).
-     * @param {Isometry} isom
-     * @return {Position}
+     * @param {Isometry} isom - the isometry to apply
+     * @return {Position} The current position
      */
     applyIsometry(isom) {
         this.boost.premultiply(isom);
@@ -434,8 +437,8 @@ class Position {
 
     /**
      * Rotate the facing by `m` (right action of O(3) in the set of positions).
-     * @param {Matrix4} matrix
-     * @return {Position}
+     * @param {Matrix4} matrix - the facing to apply (in the observer frame)
+     * @return {Position} The current position
      */
     applyFacing(matrix) {
         this.facing.multiply(matrix)
@@ -444,7 +447,9 @@ class Position {
 
     /**
      * Multiply the current position (g0,m0) on the right by the given position (g,m), i.e. return (g0 * g, m * m0)
+     * @deprecated Not sure this is really needed
      * @param {Position} position
+     * @return {Position} The current position
      */
     multiply(position) {
         this.boost.multiply(position.boost);
@@ -454,7 +459,9 @@ class Position {
 
     /**
      * Multiply the current position (g0,m0) on the left by the given position (g,m), i.e. return (g * g0, m0 * m)
+     * @deprecated Not sure this is really needed
      * @param {Position} position
+     * @return {Position} The current position
      */
     premultiply(position) {
         this.boost.premultiply(position.boost);
@@ -464,7 +471,9 @@ class Position {
 
     /**
      * Set the current position with the inverse of the given position
+     * @deprecated Not sure this is really needed
      * @param {Position} position
+     * @return {Position} The current position
      */
     getInverse(position) {
         this.boost.getInverse(position.boost);
@@ -477,44 +486,17 @@ class Position {
      * `v` is the pull back at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
      * @abstract
-     * @param {Vector} v
-     * @return {Position}
+     * @param {Vector} v - the direction in the observer frame
+     * @return {Position} The current position
      */
     flow(v) {
         throw new Error("This method need be overloaded.");
     }
 
     /**
-     * Return the vector pointing forwards (taking into account the facing).
-     * @return {Vector}
-     */
-    getFwdVector() {
-        let aux = new Vector(0, 0, -1);
-        return aux.applyFacing(this);
-    }
-
-    /**
-     * Return the vector pointing to the right (taking into account the facing).
-     * @return {Vector}
-     */
-    getRightVector() {
-        let aux = new Vector(1, 0, 0);
-        return aux.applyFacing(this);
-    }
-
-    /**
-     * return the vector pointing upwards (taking into account the facing)
-     * @return {Vector}
-     */
-    getUpVector() {
-        let aux = new Vector(0, 1, 0);
-        return aux.applyFacing(this);
-    }
-
-    /**
      * Check if the current position and `position ` are the same.
      * @param {Position} position
-     * @return {boolean}
+     * @return {boolean} true if the positions are equal, false otherwise
      */
     equals(position) {
         return this.boost.equals(position.boost) && this.facing.equals(position.facing);
@@ -522,7 +504,7 @@ class Position {
 
     /**
      * Return a new copy of the current position.
-     * @return {Position}
+     * @return {Position} The clone of the current position
      */
     clone() {
         let res = new Position()
@@ -532,13 +514,25 @@ class Position {
     }
 
     /**
-     * Set the current position with the given position.
-     * @param {Position} position
-     * @return {Position}
+     * Set the current position with the given one.
+     * @param {Position} position - the position to copy
+     * @return {Position} the current position
      */
     copy(position) {
         this.boost.copy(position.boost);
         this.facing.copy(position.facing);
+    }
+
+    /**
+     * Return a line of GLSL code creating the same position.
+     * Used when dynamically building shaders.
+     * @return {string} the equivalent GLSL code
+     */
+    toGLSL() {
+        return `Position(
+            ${this.boost.toGLSL()},
+            ${this.facing.toGLSL()}
+        )`;
     }
 }
 
@@ -547,51 +541,75 @@ class Position {
  *
  * @classdesc
  * Elementary brick of a discrete subgroups.
- * We describe a discrete subgroups by a set of generator.
- * Each generator is seen as a teleportation (to move a point back in the fundamental domain).
- * A Teleport encode both the generator, and the test needed to decide if a teleportation is needed.
+ * We describe a discrete subgroups by a set of generators.
+ * Each generator is seen as a "teleportation" (to move a point back in the fundamental domain).
+ * A Teleport encode both the generator, and the test to decide if a teleportation is needed.
  */
 class Teleport {
-
-    /**
-     * @property {Function} test - A test saying if a teleportation is needed
-     * The test is a function with the signature Point -> boolean
-     * The test returns true if a teleportation is needed and false otherwise.
-     */
-    test;
-    /** @property {Isometry} isom - the isometry to apply when teleporting */
-    isom;
-    /** @property {Isometry} inv - the inverse of the isometry */
-    inv;
-    /** @property {string} _name - a name (to be automatically setup when building the discrete subgroup) */
-    id;
-    /** @property {string} _name - a unique name, build from the id (private version) */
-    _name;
-    /** @property {Array<string>} glsl - the code to the test on the shader side (to be setup at the subgroup level) */
-    glsl;
-
 
     /**
      * Constructor
      * @param {Function} test - A test saying if a teleportation is needed
      * @param {Isometry} isom - the isometry to apply when teleporting
      * @param {Isometry} inv - the inverse of the isometry (optional)
+     * If the inverse is not passed as an argument, it is computed automatically.
      */
     constructor(test, isom, inv = undefined) {
+        /**
+         * A test saying if a teleportation is needed
+         * The test is a function with the signature Point -> boolean
+         * The test returns true if a teleportation is needed and false otherwise.
+         * @type {Function}
+         */
         this.test = test;
+        /**
+         * The isometry to apply when teleporting
+         * @type {Isometry}
+         */
         this.isom = isom;
+        /**
+         * The inverse of the  teleporting isometry
+         * @type {Isometry}
+         */
+        this.inv = undefined;
         if (inv === undefined) {
             this.inv = new Isometry().getInverse(isom);
         } else {
             this.inv = inv;
         }
+        /**
+         * A unique id.
+         * (To be automatically setup at the subgroup level.)
+         * @type {number}
+         */
         this.id = undefined;
+        /**
+         * A unique name, build from the id (private version).
+         * (To be automatically setup at the subgroup level.)
+         * @type {string}
+         */
         this._name = undefined;
+        /**
+         * The GLSL code to perform the test.
+         * (To be automatically setup at the subgroup level.)
+         * @type {string}
+         */
         this.glsl = undefined;
     }
 
+    /**
+     * The name of the the teleport.
+     * This name is computed (from the id) the first time the getter is called.
+     * This getter should not be called before the teleportation has received an id.
+     * @type {string}
+     */
     get name() {
         if (this._name === undefined) {
+            // security check
+            if (this.id === undefined) {
+                throw new Error("The name getter should not be called before the teleportation receives an id");
+            }
+            // build a name from the id
             this._name = 'teleport' + this.id;
             // just for fun, on can add a random suffix to the name
             // in case somebody used accidentally the same name.
@@ -607,36 +625,64 @@ class Teleport {
  * @classdesc
  * We describe a discrete subgroups by a set of generator.
  * Each generator is seen as a teleportation (to move a point back in the fundamental domain).
- * Thus a discrete subgroups is described by a list of teleportation.
- * The order of those teleportation, is the order in which the teleportation are performed.
+ * Thus a discrete subgroups is described by a list of teleportations.
+ * The order of those teleportations is the order in which the teleportation are performed.
  * This plays an important role if the discrete subgroups is not abelian.
+ *
+ *
+ * A possible extension would be to implement a symbolic representation of the elements in the subgroup.
+ * For the lattices we implemented in E^3, S^3, S^2 x E, Nil and Sol this is probably easy. Indeed
+ * - E^3, the lattice will be a semi-direct product of Z^2 by a finite group.
+ * - S^3 the lattice is a finite group
+ * - S^2 x E the lattice is the product of a finite group and Z
+ * - Nil and Sol, the lattices we used are semi-direct product of Z^2 and Z
+ * In those case we still need to define our own structures : OpenGL does not handle integer matrices for instance.
+ *
+ * For H^3, H^2 x E and SL(2,R) this is not that obvious : OpenGL does not seem to handle strings.
+ * One possibility would be to find a representations of those groups in GL(n, A) where A is a number field.
+ * We could define our structures to handle formally this number field (probably not too bad in terms of performances)
+ * And then matrices in this number field.
+ * The advantage (compare to a word representation) are the following:
+ * - Going from the symbolic representation to the actual Isometry would be straightforward.
+ * - Checking the equality of tow elements in the lattice should be straight forward.
  *
  * @todo Implement a more combinatorial representation of elements in the discrete subgroups.
  */
 class DiscreteSubgroup {
 
-    /** @property {Array<Teleport>} teleports - the list of teleports "generating" the subgroups */
-    teleports;
-    /** @property {string} shaderSource - the path to a GLSL file, implementing the teleportations tests */
-    shaderSource;
-    /** @property {Array<string>} glsl - the code to the test on the shader side. Each entry is a test */
-    glsl;
 
     /**
      * Constructor
-     * @param {Array<Teleport>} teleports - the list of teleports "generating" the subgroups
-     * @param {string} shaderSource - the path to a GLSL file, implementing the teleportations tests
+     * @param {Array<Teleport>} teleports - the list of teleports "generating" the subgroups.
+     * @param {string} shaderSource - the path to a GLSL file, implementing the teleportations tests.
      */
     constructor(teleports, shaderSource) {
+        /**
+         * The list of teleports "generating" the subgroups.
+         * The order matters (see the class description).
+         * @type {Array<Teleport>}
+         */
         this.teleports = teleports;
+        /**
+         * The path to a GLSL file, implementing the teleportations tests.
+         * The teleportations should be lister **in the same order** on the GLSL side.
+         * @type {string}
+         */
+        this.shaderSource = shaderSource;
+
+        // set the IDs of all teleportations
         let id = 0;
         for (const teleport of this.teleports) {
             teleport.id = id;
             id = id + 1;
         }
-        this.shaderSource = shaderSource;
     }
 
+    /**
+     * Goes through all the teleportations in the discrete subgroup
+     * and build the GLSL code performing the associated test.
+     * @return {Promise<void>}
+     */
     async glslBuildData() {
         const response = await fetch(this.shaderSource);
         const parser = new DOMParser();
@@ -644,7 +690,7 @@ class DiscreteSubgroup {
 
         let rendered;
         const templates = xml.querySelectorAll('teleport');
-        for (let i = 0; i < templates.length; i++) {
+        for (let i = 0; i < this.teleports.length; i++) {
             rendered = mustache.render(templates[i].childNodes[0].nodeValue, this.teleports[i]);
             this.teleports[i].glsl = `bool test_${this.teleports[i].name}(Point p){
                 ${rendered}
@@ -658,13 +704,11 @@ class DiscreteSubgroup {
  * @class
  *
  * @classdesc
- * Generalized position.
- * A general position is represented as a triple (h,g,m) where
+ * Relative position.
+ * A general position is represented as a pair (h,p) where
  * - h (cellBoost) is an Isometry representing an element of a discrete subgroups
- * - g (boost) is an Isometry
- * - m (facing) is a Matrix 4, seen as an isometry of the tangent space at the origin.
- * If e is the reference frame (in the tangent space at the origin) then the frame represented by the position is
- * f = d_o(hg) m e
+ * - p (local) is a Position
+ * The frame represented by the relative position is the image by h of the frame represented by the position p
  *
  * We split the isometry part (hg) in two pieces.
  * The idea is to g should gives a position in the fundamental domain of the (implicit) underlying lattice.
@@ -672,20 +716,9 @@ class DiscreteSubgroup {
  *
  * For simplicity we also keep track of the inverse of the cellBoost.
  *
- * @todo Allow a more combinatorial way to represent discrete subgroups, to avoid numerical error in the cellBoost
+ * @todo Allow a more combinatorial way to represent discrete subgroups, to avoid numerical error in the cellBoost.
  */
-class GenPosition {
-
-    /** @property {Isometry} boost - the "discrete" component of the isometry par of the boost */
-    cellBoost;
-    /** @property {Isometry} boost - the inverse of cellBoost */
-    invCellBoost;
-    /** @property {Isometry} boost - the isometry component of the position inside the fundamental domain */
-    boost;
-    /** @property {DiscreteSubgroup} sbgp - the isometry component of the position inside the fundamental domain */
-    sbgp;
-    /** @property {Matrix4} facing - the O(3) component of the position (stored as a `Matrix4`) */
-    facing;
+class RelPosition {
 
     /**
      * Constructor.
@@ -694,25 +727,60 @@ class GenPosition {
      * @param {DiscreteSubgroup} sbgp - the underlying discrete subgroups.
      */
     constructor(sbgp) {
+        /**
+         * the local position
+         * @type {Position}
+         */
+        this.local = new Position();
+        /**
+         * the "discrete" component of the isometry par of the boost
+         * @type {Isometry}
+         */
         this.cellBoost = new Isometry();
+        /**
+         * the inverse of cellBoost
+         * @type {Isometry}
+         */
         this.invCellBoost = new Isometry();
-        this.boost = new Isometry();
-        this.facing = new Matrix4();
+        /**
+         * the isometry component of the position inside the fundamental domain
+         * @type {DiscreteSubgroup}
+         */
         this.sbgp = sbgp;
     }
 
     /**
      * Reduce the eventual numerical error of the current boost.
-     * @return {GenPosition} the updated version of the current Position
+     * @return {RelPosition} the current relative position
      */
     reduceErrorBoost() {
-        this.boost.reduceError();
+        this.local.reduceErrorBoost();
+        return this;
+    }
+
+    /**
+     * Reduce the eventual numerical error of the current facing.
+     * @return {RelPosition} the current relative position
+     * @todo To be completed
+     */
+    reduceErrorFacing() {
+        this.local.reduceErrorFacing();
+        return this;
+    }
+
+    /**
+     * Reduce the eventual numerical error of the current facing.
+     * @return {RelPosition} the current relative position
+     * @todo To be completed
+     */
+    reduceErrorLocal() {
+        this.local.reduceError();
         return this;
     }
 
     /**
      * Reduce the eventual numerical error of the current boost.
-     * @return {GenPosition} the updated version of the current Position
+     * @return {RelPosition} the current relative position
      */
     reduceErrorCellBoost() {
         this.cellBoost.reduceError();
@@ -721,70 +789,47 @@ class GenPosition {
     }
 
     /**
-     * Reduce the eventual numerical error of the current facing.
-     * @return {GenPosition} the updated version of the current Position
-     * @todo To be completed
-     */
-    reduceErrorFacing() {
-        return this;
-    }
-
-    /**
      * Reduce the eventual numerical error of the current position.
-     * @return {GenPosition} the updated version of the current Position
+     * @return {RelPosition} the current relative position
      */
     reduceError() {
-        this.reduceErrorBoost();
+        this.reduceErrorLocal();
         this.reduceErrorCellBoost();
-        this.reduceErrorFacing();
         return this;
     }
 
 
     /**
-     * Return the underlying local point (i.e. ignoring the cell boos)
-     * @return {Point}
+     * The underlying local point (i.e. ignoring the cell boost)
+     * @type {Point}
      */
     get localPoint() {
-        return new Point().applyIsometry(this.boost);
+        return this.local.point;
     }
 
     /**
-     * Return the underlying point
-     * @return {Point}
+     * The underlying point (taking into account the cell boost)
+     * @type {Point}
      */
     get point() {
-        return new Point().applyIsometry(this.boost).applyIsometry(this.cellBoost);
+        return this.local.point.applyIsometry(this.cellBoost);
     }
 
     /**
      * Rotate the facing by `m` (right action of O(3) in the set of positions).
      * @param {Matrix4} matrix - An isometry of the tangent space at the origin, i.e. a matrix in O(3).
-     * @return {GenPosition} the updated version of the current Position
+     * @return {RelPosition} the updated version of the current Position
      */
     applyFacing(matrix) {
-        this.facing.multiply(matrix)
+        this.local.applyFacing(matrix)
         return this;
     }
 
     /**
-     * Flow the current position.
-     * `v` is the pull back at the origin by the position of the direction in which we flow
-     * The time by which we flow is the norm of `v`.
-     * This version does not check if the boost stays in a fundamental domain.
-     * @abstract
-     * @param {Vector} v
-     * @return {GenPosition} the updated version of the current Position
-     */
-    _flow(v) {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
      * Apply if needed a teleportation to bring back the local boos in the fundamental domain
-     * @return {GenPosition}
+     * @return {RelPosition} the current relative position
      */
-    _teleport() {
+    teleport() {
         let inside;
         let localPoint;
         while (true) {
@@ -797,7 +842,7 @@ class GenPosition {
                 // we perform the teleportation and exit the loop
                 // (to restart the checks from the beginning).
                 if (!inside) {
-                    this.boost.premultiply(teleport.isom);
+                    this.local.applyIsometry(teleport.isom);
                     this.cellBoost.multiply(teleport.inv);
                     this.invCellBoost.premultiply(teleport.isom);
                     break;
@@ -814,53 +859,63 @@ class GenPosition {
      * Flow the current position.
      * `v` is the pull back at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
-     * Additional layer to `_flow`: this method makes sure that the boost stays in the fundamental domain
-     * @abstract
-     * @param {Vector} v
-     * @return {GenPosition} the updated version of the current Position
+     * This method makes sure that the boost stays in the fundamental domain
+     * @param {Vector} v - the direction (and length) to follow
+     * @return {RelPosition} the current relative position
      */
     flow(v) {
-        this._flow(v);
-        this._teleport();
+        this.local.flow(v);
+        this.teleport();
         return this;
     }
 
     /**
      * Check if the current position and `position ` are the same.
-     * @param {GenPosition} position
-     * @return {boolean}
+     * Mainly for debugging purposes
+     * @param {RelPosition} position
+     * @return {boolean} true if the relative positions are the same, false otherwise
      */
     equals(position) {
         let res = true;
-        res = res && this.boost.equals(position.boost);
+        res = res && this.local.equals(position.local);
         res = res && this.cellBoost.equals(position.cellBoost);
-        res = res && this.facing.equals(position.facing);
         return res;
     }
 
     /**
      * Return a new copy of the current position.
-     * @return {GenPosition} the copy of the current position
+     * @return {RelPosition} the clone of the current relative position
      */
     clone() {
-        let res = new GenPosition(this.sbgp);
+        let res = new RelPosition(this.sbgp);
         res.cellBoost.copy(this.cellBoost);
         res.invCellBoost.copy(this.invCellBoost);
-        res.boost.copy(this.boost);
-        res.facing.copy(this.facing);
+        res.local.copy(this.local);
         return res;
     }
 
     /**
      * Set the current position with the given position.
-     * @param {GenPosition} position
-     * @return {GenPosition} the updated version of the current Position
+     * @param {RelPosition} position - the relative position to copy
+     * @return {RelPosition} the current relative position
      */
     copy(position) {
         this.cellBoost.copy(position.cellBoost);
         this.invCellBoost.copy(position.invCellBoost);
-        this.boost.copy(position.boost);
-        this.facing.copy(position.facing);
+        this.local.copy(position.local);
+    }
+
+    /**
+     * Return a line of GLSL code creating the same position.
+     * Used when dynamically building shaders.
+     * @return {string} the equivalent GLSL code
+     */
+    toGLSL() {
+        return `RelPosition(
+            ${this.local.toGLSL()},
+            ${this.cellBoost.toGLSL()},
+            ${this.invCellBoost.toGLSL()}
+        )`;
     }
 }
 
@@ -873,5 +928,5 @@ export {
     Position,
     Teleport,
     DiscreteSubgroup,
-    GenPosition
+    RelPosition
 }

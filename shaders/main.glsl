@@ -1,12 +1,16 @@
-/**
- * Computed color for this pixel
- */
+/***********************************************************************************************************************
+ * @file
+ * Main file :
+ * - Create a new direction for each vector on the "screen".
+ * - Launch the raymarching
+ * - If an object has been hit, call the lighting functions
+ **********************************************************************************************************************/
 
 /**
  * Compute the initial direction for the ray-marching
  * @param[in] coords the coordinates of the point (in pixels)
  */
-GenVector rayDir(vec2 coords){
+RelVector rayDir(vec2 coords){
   // Change of coordinates:
   // The origin is at the center of the screen.
   // The x-coordinates runs between -0.5 and 0.5 (the screen has width 1).
@@ -21,8 +25,7 @@ GenVector rayDir(vec2 coords){
   res = geomNormalize(res);
 
   // Translating the vector according to the boost and facing.
-  res = applyLocalPosition(position, res);
-  return GenVector(position.cellBoost, position.invCellBoost, res);
+  return applyPosition(position, res);
 }
 
 /**
@@ -36,7 +39,7 @@ void main() {
   Isometry fixIsom;
 
   setup();
-  GenVector v = rayDir(gl_FragCoord.xy);
+  RelVector v = rayDir(gl_FragCoord.xy);
   Solid solid;
 
   int hit = raymarch(v, fixIsom, solid);
@@ -46,7 +49,7 @@ void main() {
     color = debugColor;
     break;
     case 0:
-    color = vec3(0.2, 0.2, 0.2);
+    color = vec3(0, 0, 0);
     break;
     default :
     color = phongModel(v, solid);

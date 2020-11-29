@@ -1,5 +1,5 @@
 /**
- * @module Thurston Items
+ * @module ThurstonItems
  *
  * @description
  * Add to the Thurston module a library of items (objects, lights, etc)
@@ -24,37 +24,29 @@ import {
 
 /**
  * @class
+ * @abstract
  *
  * @classdesc
  * Generic class for items in the scene (solids, lights, etc)
  * This class should never be instantiated directly.
- *
- * @property {number} id - an ID (to be set when the object is added to the scene)
- * @property {boolean} global  - is the object local or global
- * @property {Position} position - position of the object
- * @property {string} _name - a unique name, build from the id (private version)
- * @property {Point} _location - the image of the origin by the position, to avoid redundant computations (private version)
- *
  */
 class Item {
-
     /**
      * Constructor.
      * @param {Object} data - the parameters of this item
      */
     constructor(data = {}) {
-        const def = this.default();
-        for (const property in def) {
-            if (property in data) {
-                this[property] = data[property];
-            } else {
-                this[property] = def[property];
-            }
-        }
-
-        // properties to be setup later
+        this.position = data.position;
+        this.global = data.global;
+        /**
+         * A unique ID (to be set when the object is added to the scene)
+         * @type {number}
+         */
         this.id = undefined;
-        this._name = undefined;
+        /**
+         * The GLSL code for the item (declaration, signed distance function and gradient)
+         * @type {Object}
+         */
         this.glsl = {
             declare: undefined,
             setup: undefined,
@@ -63,16 +55,44 @@ class Item {
 
     }
 
-    default() {
-        /**
-         * Return the list of all default values of the parameters
-         * that should be setup during the construction.
-         * The list should be expanded by classes that inherit from Item.
-         */
-        return {
-            global: true,
-            position: new Position()
+    /**
+     * The position of the object
+     * @type {Position}
+     */
+    get position() {
+        return this._position;
+    }
+
+    set position(value) {
+        if (value === undefined) {
+            this._position = new Position();
+        } else {
+            this._position = value;
         }
+    }
+
+    /**
+     * Flag: true, if the item is global
+     * @type {boolean}
+     */
+    get global() {
+        return this._global;
+    }
+
+    set global(value) {
+        if (value === undefined) {
+            this._global = true;
+        } else {
+            this._global = value;
+        }
+    }
+
+    /**
+     * Flag: true, if the item is local (i.e. in a quotient manifold/orbifold)
+     * @type {boolean}
+     */
+    get local() {
+        return !this.global;
     }
 
     /**
@@ -93,18 +113,29 @@ class Item {
     }
 
     /**
-     * Say if the item is an objects
-     * @return {boolean} true if the item is an object
+     * Say if the item is an solid
+     * @return {boolean} true if the item is an solid
      */
     isSolid() {
         throw new Error("This method need be overloaded.");
     }
 
+    /**
+     * The name of the class (with first letter lower case).
+     * Useful to generate the name of items
+     * @return {string}
+     */
     get className() {
         const name = this.constructor.name;
         return name[0].toLowerCase() + name.substr(1);
     }
 
+    /**
+     * The name of the item.
+     * This name is computed (from the id) the first time the getter is called.
+     * This getter should not be called before the item has received an id.
+     * @type {string}
+     */
     get name() {
         if (this._name === undefined) {
             this._name = this.className + this.id;
@@ -115,23 +146,31 @@ class Item {
         return this._name;
     }
 
-    get location() {
-        return this.position.point;
+    /**
+     * The underlying point of the item's position
+     * @type {Point}
+     */
+    get point() {
+        return this._position.point;
     }
 
-    get local() {
-        return !this.global;
-    }
 
+    /**
+     * Return a block of GLSL code recreating the same item as an Item
+     * @return {string}
+     */
     toGLSL() {
         return `Item(
             ${this.id}, 
-            ${this.position.boost.toGLSL()},
-            ${this.position.facing.toGLSL()},
-            ${this.location.toGLSL()}
+            ${this.position.toGLSL()},
+            ${this.point.toGLSL()}
             )`;
     }
 
+    /**
+     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
+     * @return {Promise<void>}
+     */
     async glslBuildData() {
         const response = await fetch(this.shaderSource);
         const parser = new DOMParser();
@@ -153,12 +192,12 @@ class Item {
             rendered = mustache.render(template.childNodes[0].nodeValue, this);
             switch (type) {
                 case 'sdf':
-                    this.glsl[type] = `float ${this.name}SDF(GenVector v){
+                    this.glsl[type] = `float ${this.name}SDF(RelVector v){
                         ${rendered}
                     }`;
                     break;
                 case 'gradient':
-                    this.glsl[type] = `GenVector ${this.name}Grad(GenVector v){
+                    this.glsl[type] = `RelVector ${this.name}Grad(RelVector v){
                         ${rendered}
                     }`;
                     break;
@@ -172,35 +211,46 @@ class Item {
 
 /**
  * @class
+ * @extends Item
  *
  * @classdesc
  * Generic class for objects in the scene
  * The class is named Solid, as Object is a built-in name in Javascript
  * This class should never be instantiated directly.
  * Classes that inherit from Object can be instantiated.
- *
- * @property {Material}  material - private storing of `material`
  */
 
 class Solid extends Item {
 
+
     /**
      * Constructor.
      * @param {Object} data - the parameters of this object
-     * @todo Decide what arguments the generic constructor should receive
      */
     constructor(data = {}) {
         super(data);
+        this.material = data.material;
     }
 
-    default() {
-        const res = super.default();
-        return Object.assign(res, {material: new Material()});
+    /**
+     * Material of the solid
+     * @type {Material}
+     */
+    get material() {
+        return this._material;
+    }
+
+    set material(value) {
+        if (value === undefined) {
+            this._material = new Material();
+        } else {
+            this._material = value;
+        }
     }
 
     /**
      * Say if the item is a light
-     * @return {boolean} true if the item is a light
+     * @return {boolean} false
      */
     isLight() {
         return false;
@@ -208,16 +258,20 @@ class Solid extends Item {
 
     /**
      * Say if the item is an objects
-     * @return {boolean} true if the item is an object
+     * @return {boolean} true
      */
     isSolid() {
         return true;
     }
 
+    /**
+     * Return a block of GLSL code recreating the same solid as a Solid
+     * @return {string}
+     */
     toGLSL() {
         return `Solid(
             ${super.toGLSL()},
-            ${this.material.toGLSL()}
+            ${this._material.toGLSL()}
         )`;
     }
 }
@@ -225,15 +279,14 @@ class Solid extends Item {
 
 /**
  * @class
+ * @extends Item
  *
  * @classdesc
  * Generic class for point lights in the scene.
- *
- * @property {Color}  color - private storing for color
- *
  * @todo How do we handle light intensity
  */
 class Light extends Item {
+
 
     /**
      * Constructor.
@@ -242,16 +295,28 @@ class Light extends Item {
      */
     constructor(data = {}) {
         super(data);
+        this.color = data.color;
     }
 
-    default() {
-        const res = super.default();
-        return Object.assign(res, {color: new Color(1, 1, 1)});
+    /**
+     * Color of the light
+     * @type {Color}
+     */
+    get color() {
+        return this._color;
+    }
+
+    set color(value) {
+        if (value === undefined) {
+            this._color = new Color(1,1,1);
+        } else {
+            this._color = value;
+        }
     }
 
     /**
      * Say if the item is a light
-     * @return {boolean} true if the item is a light
+     * @return {boolean} true
      */
     isLight() {
         return true;
@@ -259,16 +324,20 @@ class Light extends Item {
 
     /**
      * Say if the item is an objects
-     * @return {boolean} true if the item is an object
+     * @return {boolean} false
      */
     isSolid() {
         return false;
     }
 
+    /**
+     * Return a block of GLSL code recreating the same light as a Light
+     * @return {string}
+     */
     toGLSL() {
         return `Light(
             ${super.toGLSL()},
-            vec3(${this.color.toArray()})
+            vec3(${this._color.toArray()})
         )`;
     }
 }

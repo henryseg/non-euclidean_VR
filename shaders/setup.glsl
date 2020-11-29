@@ -1,3 +1,12 @@
+/***********************************************************************************************************************
+ * @file
+ * Main setup :
+ * - Declare the parameters passed to the shader as uniforms
+ * - Declare (as global variables) all the items in the scene
+ * - Setup all the items
+ **********************************************************************************************************************/
+
+
 // Defining all the variables passed to the shader as uniforms.
 {{#uniforms}}
 uniform {{type}} {{name}};
@@ -13,7 +22,7 @@ uniform {{type}} {{name}};
 {{/lights}}
 
 /**
- * Setup all the boost from the raw data passed to the shader
+ * Setup all the items in the scene
  */
 void setup() {
     {{#solids}}

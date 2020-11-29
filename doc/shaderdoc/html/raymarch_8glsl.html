@@ -83,14 +83,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7b63b104aad2fce29901ebfa225618a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#a7b63b104aad2fce29901ebfa225618a8">teleport</a> (inout <a class="el" href="struct_vector.html">Vector</a> v, inout <a class="el" href="struct_isometry.html">Isometry</a> fixIsom)</td></tr>
-<tr class="separator:a7b63b104aad2fce29901ebfa225618a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9319bd02d27703621e6d472c95aaf6b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#a9319bd02d27703621e6d472c95aaf6b6">raymarch</a> (inout <a class="el" href="struct_vector.html">Vector</a> v, out <a class="el" href="struct_isometry.html">Isometry</a> fixIsom, out <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
-<tr class="separator:a9319bd02d27703621e6d472c95aaf6b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac24cdd00ca438957730ec7f7c9e695e8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#ac24cdd00ca438957730ec7f7c9e695e8">raymarch</a> (inout <a class="el" href="struct_rel_vector.html">RelVector</a> v, out <a class="el" href="struct_isometry.html">Isometry</a> fixIsom, out <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
+<tr class="separator:ac24cdd00ca438957730ec7f7c9e695e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a9319bd02d27703621e6d472c95aaf6b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9319bd02d27703621e6d472c95aaf6b6">&#9670;&nbsp;</a></span>raymarch()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Raymarching (merge this file with other small files ?) </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ac24cdd00ca438957730ec7f7c9e695e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac24cdd00ca438957730ec7f7c9e695e8">&#9670;&nbsp;</a></span>raymarch()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -98,7 +98,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int raymarch </td>
           <td>(</td>
-          <td class="paramtype">inout <a class="el" href="struct_vector.html">Vector</a>&#160;</td>
+          <td class="paramtype">inout <a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
           <td class="paramname"><em>v</em>, </td>
         </tr>
         <tr>
@@ -135,42 +135,6 @@ Functions</h2></td></tr>
 </ul>
 </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Raymarch, starting each new step from the origin (goal : reduce accumulative errors) </dd></dl>
-
-</div>
-</div>
-<a id="a7b63b104aad2fce29901ebfa225618a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b63b104aad2fce29901ebfa225618a8">&#9670;&nbsp;</a></span>teleport()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool teleport </td>
-          <td>(</td>
-          <td class="paramtype">inout <a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">inout <a class="el" href="struct_isometry.html">Isometry</a>&#160;</td>
-          <td class="paramname"><em>fixIsom</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Teleporting. Check the the underlying point is still in the fundamental domain. If not, teleport the vector <code>v</code>, update <code>fixIsom</code>, and return true. Otherwise, return false. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">v</td><td>- the current vector during the raymarching </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">fixIsom</td><td>- the current status of the isometry collecting all teleportations </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if a teleportation has been performed, False otherwise </dd></dl>
 
 </div>
 </div>

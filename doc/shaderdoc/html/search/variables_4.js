@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['facing_149',['facing',['../struct_item.html#af6098a09cd6e7928c21bf12b002e19e1',1,'Item']]]
+  ['facing_143',['facing',['../struct_position.html#ad3d22623c781a9390777d69379352ea6',1,'Position']]]
 ];

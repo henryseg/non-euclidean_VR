@@ -75,36 +75,24 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><dl class="reflist">
-<dt>Member <a class="el" href="geometry_2euc_8glsl.html#a5c80d0d9954b7a5c2ac2874a1690b91e">IDENTITY</a>  </dt>
-<dd><a class="anchor" id="_todo000001"></a>Check if one can build a structure as a constant, or does it have to be a global variable  </dd>
-<dt>Member <a class="el" href="geometry_2euc_8glsl.html#acfa7342ea3747c977ad1236733214b5f">reduceError</a>  (<a class="el" href="struct_isometry.html">Isometry</a> isom)</dt>
-<dd><a class="anchor" id="_todo000002"></a>to be written  </dd>
-<dt>Member <a class="el" href="geometry_2euc_8glsl.html#accea08f1938d7bc85ff649acc10a2b74">unserializePoint</a>  (vec4 data)</dt>
-<dd><a class="anchor" id="_todo000003"></a>Decide which type of data is passed to the shader.  </dd>
-<dt>Member <a class="el" href="geometry_2euc_8glsl.html#a7d5ebaf0c515f5ebd27f9e0e5e2a8e98">applyFacing</a>  (mat4 m, <a class="el" href="struct_vector.html">Vector</a> v)</dt>
-<dd><a class="anchor" id="_todo000004"></a>Check where this is used. Does v need be a vector at the <b>origin</b>?  </dd>
-<dt>Member <a class="el" href="geometry_2euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame</a>  (<a class="el" href="struct_point.html">Point</a> p, out <a class="el" href="struct_vector.html">Vector</a>[3] frame)</dt>
-<dd><a class="anchor" id="_todo000005"></a>Not completely convinced by this - and the function <a class="el" href="commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85">createVector()</a> and <a class="el" href="geometry_2euc_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959">smallShift()</a>. If you know a better way to do it…  </dd>
-<dt>Member <a class="el" href="geometry_2euc_8glsl.html#aff97aec31adc13050de75e8af8f84a8c">directions</a>  (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, int n, out <a class="el" href="struct_vector.html">Vector</a>[MAX_DIRS] dirs, out float[MAX_DIRS] lens)</dt>
-<dd><a class="anchor" id="_todo000006"></a>Write a better description?  </dd>
-<dt>Member <a class="el" href="model_8glsl.html#a5c80d0d9954b7a5c2ac2874a1690b91e">IDENTITY</a>  </dt>
-<dd><a class="anchor" id="_todo000007"></a>Check if one can build a structure as a constant, or does it have to be a global variable  </dd>
-<dt>Member <a class="el" href="model_8glsl.html#ac03d15538ba9393157fedc4cb83b816b">unserializePoint</a>  (genType data)</dt>
-<dd><a class="anchor" id="_todo000008"></a>Decide which type of data is passed to the shader.  </dd>
-<dt>Member <a class="el" href="model_8glsl.html#a7d5ebaf0c515f5ebd27f9e0e5e2a8e98">applyFacing</a>  (mat4 m, <a class="el" href="struct_vector.html">Vector</a> v)</dt>
-<dd><a class="anchor" id="_todo000009"></a>Check where this is used. Does v need be a vector at the <b>origin</b>?  </dd>
+<dt>Member <a class="el" href="euc_8glsl.html#acfa7342ea3747c977ad1236733214b5f">reduceError</a>  (<a class="el" href="struct_isometry.html">Isometry</a> isom)</dt>
+<dd><a class="anchor" id="_todo000001"></a>to be written  </dd>
+<dt>Member <a class="el" href="euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame</a>  (<a class="el" href="struct_point.html">Point</a> p, out <a class="el" href="struct_vector.html">Vector</a>[3] frame)</dt>
+<dd><a class="anchor" id="_todo000002"></a>Not completely convinced by this - and the function <a class="el" href="commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85">createVector()</a> and <a class="el" href="euc_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959">smallShift()</a>. If you know a better way to do it…  </dd>
+<dt>Member <a class="el" href="euc_8glsl.html#aff97aec31adc13050de75e8af8f84a8c">directions</a>  (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, int n, out <a class="el" href="struct_vector.html">Vector</a>[MAX_DIRS] dirs, out float[MAX_DIRS] lens)</dt>
+<dd><a class="anchor" id="_todo000003"></a>Write a better description?  </dd>
 <dt>Member <a class="el" href="model_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame</a>  (<a class="el" href="struct_point.html">Point</a> p, out <a class="el" href="struct_vector.html">Vector</a>[3] frame)</dt>
-<dd><a class="anchor" id="_todo000010"></a>Not completely convinced by this - and the function <a class="el" href="commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85">createVector()</a> and <a class="el" href="geometry_2euc_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959">smallShift()</a>. If you know a better way to do it…  </dd>
+<dd><a class="anchor" id="_todo000004"></a>Not completely convinced by this - and the function <a class="el" href="commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85">createVector()</a> and <a class="el" href="euc_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959">smallShift()</a>. If you know a better way to do it…  </dd>
 <dt>Member <a class="el" href="model_8glsl.html#aff97aec31adc13050de75e8af8f84a8c">directions</a>  (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, int n, out <a class="el" href="struct_vector.html">Vector</a>[MAX_DIRS] dirs, out float[MAX_DIRS] lens)</dt>
-<dd><a class="anchor" id="_todo000011"></a>Write a better description?  </dd>
+<dd><a class="anchor" id="_todo000005"></a>Write a better description?  </dd>
 <dt>Class <a class="el" href="struct_material.html">Material</a>  </dt>
-<dd><a class="anchor" id="_todo000012"></a>enrich this structure to handle texture, formula based colors, etc </dd>
+<dd><a class="anchor" id="_todo000006"></a>enrich this structure to handle texture, formula based colors, etc </dd>
 <dt>Class <a class="el" href="struct_light.html">Light</a>  </dt>
-<dd><a class="anchor" id="_todo000013"></a>How do we handle the intensity of the light? In a fourth channel for the color ? </dd>
+<dd><a class="anchor" id="_todo000007"></a>How do we handle the intensity of the light? In a fourth channel for the color ? </dd>
 <dt>Member <a class="el" href="lighting_8glsl.html#ab1e25d845b88da6a1ff55f2a87a514e0">lightComputation</a>  (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_vector.html">Vector</a> n, <a class="el" href="struct_vector.html">Vector</a> dir, float len, <a class="el" href="struct_material.html">Material</a> material, vec3 lightColor)</dt>
-<dd><a class="anchor" id="_todo000014"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer?  </dd>
-<dt>Member <a class="el" href="lighting_8glsl.html#a4c4191ccae7e7f695b3dae7345d4ab7b">phongModel</a>  (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_solid.html">Solid</a> solid)</dt>
-<dd><a class="anchor" id="_todo000015"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd>
+<dd><a class="anchor" id="_todo000008"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer?  </dd>
+<dt>Member <a class="el" href="lighting_8glsl.html#a3551ab0e19971284ce81ce19cc1b9d95">phongModel</a>  (<a class="el" href="struct_rel_vector.html">RelVector</a> v, <a class="el" href="struct_solid.html">Solid</a> solid)</dt>
+<dd><a class="anchor" id="_todo000009"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

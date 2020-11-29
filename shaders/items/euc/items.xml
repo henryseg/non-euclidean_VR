@@ -21,16 +21,16 @@
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
-                return dist(v.vec.pos, loc) - {{radius}};
+                return dist(v.local.pos, loc) - {{radius}};
             </shader>
             <shader type="gradient">
                 Point loc = {{name}}.item.loc;
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
-                Vector res = Vector(v.vec.pos, v.vec.pos.coords - loc.coords);
-                res =  geomNormalize(res);
-                return GenVector(v.cellBoost, v.invCellBoost, res);
+                Vector local = Vector(v.local.pos, v.local.pos.coords - loc.coords);
+                local =  geomNormalize(local);
+                return RelVector(local, v.cellBoost, v.invCellBoost);
             </shader>
         </solid>
 

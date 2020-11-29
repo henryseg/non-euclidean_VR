@@ -9,3 +9,6 @@ __pycache__/**
 .idea/**
 **/.idea/**
 
+/doc/package.json
+/doc/package-lock.json
+/doc/node_modules/**

@@ -75,12 +75,22 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">commons.glsl File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_position.html">Position</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_rel_vector.html">RelVector</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_rel_position.html">RelPosition</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a8775dc5aaff062ad542d57987b160876"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a8775dc5aaff062ad542d57987b160876">negate</a> (<a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
@@ -101,10 +111,88 @@ Functions</h2></td></tr>
 <tr class="separator:a644496bcbd56e5baa3666cd749d6df85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7ae70af474f971a709b7ea5c513db6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#aa7ae70af474f971a709b7ea5c513db6c">direction</a> (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, out <a class="el" href="struct_vector.html">Vector</a> dir, out float len)</td></tr>
 <tr class="separator:aa7ae70af474f971a709b7ea5c513db6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a700730c1b881461bdac0ee9080a0c99f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a700730c1b881461bdac0ee9080a0c99f">applyPosition</a> (<a class="el" href="struct_position.html">Position</a> p, <a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
+<tr class="separator:a700730c1b881461bdac0ee9080a0c99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79150cae91c14ff121203068e444fbf2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a79150cae91c14ff121203068e444fbf2">geomNormalize</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v)</td></tr>
+<tr class="separator:a79150cae91c14ff121203068e444fbf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8a43b407f75e585972a51ba5d29dc43"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#ab8a43b407f75e585972a51ba5d29dc43">flow</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, float t)</td></tr>
+<tr class="separator:ab8a43b407f75e585972a51ba5d29dc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a598e50c5c41681cd7c73c385c82cc7b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a598e50c5c41681cd7c73c385c82cc7b5">applyPosition</a> (<a class="el" href="struct_rel_position.html">RelPosition</a> position, <a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
+<tr class="separator:a598e50c5c41681cd7c73c385c82cc7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Geometric computations common to all the geometries </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a700730c1b881461bdac0ee9080a0c99f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a700730c1b881461bdac0ee9080a0c99f">&#9670;&nbsp;</a></span>applyPosition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_vector.html">Vector</a> applyPosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_position.html">Position</a>&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Apply the given position to a vector. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>a position </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>a vector <b>at the origin</b>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a598e50c5c41681cd7c73c385c82cc7b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a598e50c5c41681cd7c73c385c82cc7b5">&#9670;&nbsp;</a></span>applyPosition() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> applyPosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rel_position.html">RelPosition</a>&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Apply the given position (including the cellBoost) to a vector. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>a position </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>a vector <b>at the origin</b>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a8917ba32ec22067cc7bcc0b4b8e1731e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8917ba32ec22067cc7bcc0b4b8e1731e">&#9670;&nbsp;</a></span>cosAngle()</h2>
 
@@ -159,7 +247,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the vector at p whose coordinates are given by the section of the frame bundle. See <a class="el" href="geometry_2euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame()</a>. </p>
+<p>Compute the vector at p whose coordinates are given by the section of the frame bundle. See <a class="el" href="euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame()</a>. </p>
 
 </div>
 </div>
@@ -204,6 +292,35 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ab8a43b407f75e585972a51ba5d29dc43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8a43b407f75e585972a51ba5d29dc43">&#9670;&nbsp;</a></span>flow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> flow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Flow the given vector. This method does apply any teleportation. Hence the local part of the vector, may leaves the fundamental domain. </p>
+
+</div>
+</div>
 <a id="a2deb53c560e6f5ec90b01ac377dba9d5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2deb53c560e6f5ec90b01ac377dba9d5">&#9670;&nbsp;</a></span>geomLength()</h2>
 
@@ -219,12 +336,31 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the length of the given vector. Previously <code>tangNorm</code>. Overload GLSL dot product (hopefully this is not an issue). </p>
+<p>Return the length of the given vector. Previously <code>tangNorm</code>. </p>
+
+</div>
+</div>
+<a id="a79150cae91c14ff121203068e444fbf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79150cae91c14ff121203068e444fbf2">&#9670;&nbsp;</a></span>geomNormalize() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> geomNormalize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Normalize the given vector. </p>
 
 </div>
 </div>
 <a id="a7f0706b1ec3783c39e6485a5aa8a7dca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f0706b1ec3783c39e6485a5aa8a7dca">&#9670;&nbsp;</a></span>geomNormalize()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f0706b1ec3783c39e6485a5aa8a7dca">&#9670;&nbsp;</a></span>geomNormalize() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +374,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Normalize the given vector (so that it has length one). Previously <code>tangNormalize</code>. Overload GLSL normalization (hopefully this is not an issue). </p>
+<p>Normalize the given vector (so that it has length one). Previously <code>tangNormalize</code>. </p>
 
 </div>
 </div>

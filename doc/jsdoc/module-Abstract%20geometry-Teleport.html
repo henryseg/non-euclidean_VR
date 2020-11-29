@@ -1,601 +1,526 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Class: Teleport</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>Abstract geometry~Teleport</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":"false","inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
 </head>
-
 <body>
-
-<div id="main">
-
-    <h1 class="page-title">Class: Teleport</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-Abstract%2520geometry.html">Abstract geometry</a>~</span>Teleport<span class="signature">(test, isom, inv)</span><span class="type-signature"></span></h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    
-    <h4 class="name" id="Teleport"><span class="type-signature"></span>new Teleport<span class="signature">(test, isom, inv)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Constructor</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>test</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>A test saying if a teleportation is needed</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isom</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Isometry</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the isometry to apply when teleporting</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>inv</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Isometry</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the inverse of the isometry (optional)</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line520">line 520</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="inv"><span class="type-signature"></span>inv<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>inv</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Isometry</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the inverse of the isometry</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line530">line 530</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="isom"><span class="type-signature"></span>isom<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>isom</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Isometry</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the isometry to apply when teleporting</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line528">line 528</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="test"><span class="type-signature"></span>test<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>test</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>A test saying if a teleportation is needed
-The test is a function with the signature Point -&gt; boolean</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line526">line 526</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-DiscreteSubgroup.html">DiscreteSubgroup</a></li><li><a href="module-Abstract%2520geometry-GenPosition.html">GenPosition</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Teleport.html">Teleport</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Nov 24 2020 23:36:37 GMT+0100 (heure normale d’Europe centrale)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Non-euclidean VR
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="Material.html">Material</a></li>
+											<li><a href="module-Abstract%2520geometry-DiscreteSubgroup.html">Abstract geometry~DiscreteSubgroup</a></li>
+											<li><a href="module-Abstract%2520geometry-Isometry.html">Abstract geometry~Isometry</a></li>
+											<li><a href="module-Abstract%2520geometry-Point.html">Abstract geometry~Point</a></li>
+											<li><a href="module-Abstract%2520geometry-Position.html">Abstract geometry~Position</a></li>
+											<li><a href="module-Abstract%2520geometry-RelPosition.html">Abstract geometry~RelPosition</a></li>
+											<li><a href="module-Abstract%2520geometry-Teleport.html">Abstract geometry~Teleport</a></li>
+											<li><a href="module-Abstract%2520geometry-Vector.html">Abstract geometry~Vector</a></li>
+											<li><a href="module-Thurston%2520Items-Item.html">Thurston Items~Item</a></li>
+											<li><a href="module-Thurston%2520Items-Light.html">Thurston Items~Light</a></li>
+											<li><a href="module-Thurston%2520Items-Solid.html">Thurston Items~Solid</a></li>
+											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li>
+											<li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li>
+											<li><a href="module-Thurston.html">Thurston</a></li>
+											<li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li>
+											<li><a href="module-Thurston%2520Items.html">Thurston Items</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">class</span>
+				<h1><span class="ancestors"><a href="module-Abstract%2520geometry.html">Abstract geometry</a>~</span><span class="name">Teleport</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_class.html">Classes</a></li>
+							<li class="active"><a href="module-Abstract%2520geometry.html">Abstract geometry</a>~Teleport</li>
+						</ol>
+					<section>
+							<dl class="symbol primary">
+								<dt class="symbol-title class collapsible-symbol expanded">
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Teleport</span><span class="signature-params">( <span class="signature-param">test</span>, <span class="signature-param">isom</span>, <span class="signature-param">inv</span>&nbsp;)</span><span class="signature-type"></span></h2>
+</dt>
+<dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Elementary brick of a discrete subgroups.
+			We describe a discrete subgroups by a set of generators.
+			Each generator is seen as a &quot;teleportation&quot; (to move a point back in the fundamental domain).
+			A Teleport encode both the generator, and the test to decide if a teleportation is needed.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>test</code></td>
+							<td><span class="param-type">function</span></td>
+							<td class="last">
+									<p>A test saying if a teleportation is needed</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>isom</code></td>
+							<td><span class="param-type">Isometry</span></td>
+							<td class="last">
+									<p>the isometry to apply when teleporting</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>inv</code></td>
+							<td><span class="param-type">Isometry</span></td>
+							<td class="last">
+									<p>the inverse of the isometry (optional)
+			If the inverse is not passed as an argument, it is computed automatically.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-536">line 536</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+							</dl>
+							<article class="secondary">
+									<h3>Members</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="test" class="member public"><span class="name">test</span><span class="signature-type"> :function</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A test saying if a teleportation is needed
+			The test is a function with the signature Point -&gt; boolean
+			The test returns true if a teleportation is needed and false otherwise.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">function</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-552">line 552</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="isom" class="member public"><span class="name">isom</span><span class="signature-type"> :Isometry</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The isometry to apply when teleporting</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Isometry</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-557">line 557</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="inv" class="member public"><span class="name">inv</span><span class="signature-type"> :Isometry</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The inverse of the  teleporting isometry</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Isometry</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-562">line 562</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="id" class="member public"><span class="name">id</span><span class="signature-type"> :number</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A unique id.
+			(To be automatically setup at the subgroup level.)</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">number</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-573">line 573</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="_name" class="member public"><span class="name">_name</span><span class="signature-type"> :string</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A unique name, build from the id (private version).
+			(To be automatically setup at the subgroup level.)</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">string</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-579">line 579</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="glsl" class="member public"><span class="name">glsl</span><span class="signature-type"> :string</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The GLSL code to perform the test.
+			(To be automatically setup at the subgroup level.)</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">string</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-585">line 585</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="name" class="member public"><span class="name">name</span><span class="signature-type"> :string</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The name of the the teleport.
+			This name is computed (from the id) the first time the getter is called.
+			This getter should not be called before the teleportation has received an id.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">string</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometry_abstract.js.html">geometry/abstract.js</a>, <a href="geometry_abstract.js.html#line-594">line 594</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+									</dl>
+							</article>
+					</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 29th Nov 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
 </body>
 </html>

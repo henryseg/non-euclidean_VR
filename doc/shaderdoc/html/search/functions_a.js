@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['raydir_132',['rayDir',['../main_8glsl.html#a60635395f2e61246230ff17cf7cf40ac',1,'main.glsl']]],
-  ['raymarch_133',['raymarch',['../raymarch_8glsl.html#a9319bd02d27703621e6d472c95aaf6b6',1,'raymarch.glsl']]],
-  ['reduceerror_134',['reduceError',['../geometry_2euc_8glsl.html#acfa7342ea3747c977ad1236733214b5f',1,'reduceError(Isometry isom):&#160;euc.glsl'],['../geometry_2euc_8glsl.html#a9736771d71fc80100c348ba8be691133',1,'reduceError(Point p):&#160;euc.glsl'],['../geometry_2euc_8glsl.html#a742075effaa73e716ed8d1499b1ff82e',1,'reduceError(Vector v):&#160;euc.glsl'],['../model_8glsl.html#acfa7342ea3747c977ad1236733214b5f',1,'reduceError(Isometry isom):&#160;model.glsl'],['../model_8glsl.html#a9736771d71fc80100c348ba8be691133',1,'reduceError(Point p):&#160;model.glsl'],['../model_8glsl.html#a742075effaa73e716ed8d1499b1ff82e',1,'reduceError(Vector v):&#160;model.glsl']]]
+  ['scenenormal_132',['sceneNormal',['../scene_8glsl.html#ab334ea37f93dba9b2f81929003488e20',1,'scene.glsl']]],
+  ['smallshift_133',['smallShift',['../euc_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959',1,'smallShift(Point p, vec3 dp):&#160;euc.glsl'],['../model_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959',1,'smallShift(Point p, vec3 dp):&#160;model.glsl']]],
+  ['sub_134',['sub',['../euc_8glsl.html#ae738400ea859c65719d99fd258141b97',1,'sub(Vector v1, Vector v2):&#160;euc.glsl'],['../model_8glsl.html#ae738400ea859c65719d99fd258141b97',1,'sub(Vector v1, Vector v2):&#160;model.glsl']]]
 ];

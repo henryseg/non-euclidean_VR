@@ -1,4 +1,11 @@
 /***********************************************************************************************************************
+ * @file
+ * This file defines the basic structures needed to handle itmes (solids and lights)
+ * Custom structures can be defined in the background of the item XML files (see items/model.xml)
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
  *
  * @struct Item
  * Common denominator for light and objects
@@ -9,8 +16,7 @@
  **********************************************************************************************************************/
 struct Item{
     int id; /**< Identifyer of the item */
-    Isometry boost;/**< isometry part of the position */
-    mat4 facing;/**< facing part of the position */
+    Position position;/**< the position of the item*/
     Point loc; /**< location of the object */
 };
 

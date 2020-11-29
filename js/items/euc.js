@@ -1,5 +1,5 @@
 /**
- * @module Thurston Euclidean items
+ * @module ThurstonEuclideanItems
  *
  * @description
  * Add to the Thurston module a library of euclidean items (objects, lights, etc)
@@ -57,12 +57,6 @@ class PointLight extends Light {
     get shaderSource() {
         return 'shaders/items/euc/items.xml';
     }
-
-    /*
-default() {
-    const res = super.default();
-    return Object.assign(res, {location: new Point()});
-}*/
 }
 
 export {

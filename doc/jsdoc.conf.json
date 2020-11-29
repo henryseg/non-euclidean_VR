@@ -7,8 +7,6 @@
     },
     "source": {
         "include": [
-            "../js/geometry/",
-            "../js/items/",
             "../js/"
         ],
         "exclude": [
@@ -20,6 +18,15 @@
     },
 
     "opts" : {
-        "destination": "./jsdoc/"
+        "destination": "./jsdoc/",
+        "readme": "./jsdoc.md",
+        "recurse": true,
+        "template": "./node_modules/foodoc/template"
+    },
+
+    "templates": {
+        "systemName"            : "Non-euclidean VR",
+        "systemSummary"         : "First person exploration of Thurston's geoemtries",
+        "includeDate"           : "true"
     }
 }

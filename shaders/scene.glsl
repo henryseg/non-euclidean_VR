@@ -1,3 +1,10 @@
+/***********************************************************************************************************************
+ * @file
+ * This file defines the scene SDF and scene Gradient used during the raymarching and lightening.
+ **********************************************************************************************************************/
+
+
+
 /**
  * Distance along the geodesic directed by `v` to the closest object in the local scene
  * @param[in] v the direction to follows
@@ -5,7 +12,7 @@
  * @param[out] obj the object that we hit.
  * There are two void object for background and debug
  */
-float localSceneSDF(GenVector v, out int hit, out Solid solid){
+float localSceneSDF(RelVector v, out int hit, out Solid solid){
     hit = 0;
     float res = maxDist;
     float dist;
@@ -33,7 +40,7 @@ float localSceneSDF(GenVector v, out int hit, out Solid solid){
  * @param[out] obj the object that we hit.
  * There are two void object for background and debug
  */
-float globalSceneSDF(GenVector v, out int hit, out Solid solid){
+float globalSceneSDF(RelVector v, out int hit, out Solid solid){
   hit = 0;
   float res = maxDist;
   float dist;
@@ -63,7 +70,7 @@ float globalSceneSDF(GenVector v, out int hit, out Solid solid){
  * We can directly use the SDF of that object.
  * It is probably faster.
  */
-GenVector sceneNormal(GenVector v, Solid solid){
+RelVector sceneNormal(RelVector v, Solid solid){
   switch(solid.item.id){
   {{#solids}}
     case {{id}}:

@@ -1,13 +1,10 @@
+/***********************************************************************************************************************
+ * @file
+ * This file defines all the illumination functions
+ **********************************************************************************************************************/
 
-/**
- * Intensity of the light after travelling a length `len` in the direction `dir`
- * @param[in] dir unit vector at the light position
- * @param[in] len distance from the light
- * @return intensity of the light
- */
-float lightIntensity(Vector dir, float len){
-  return 1./(len * len);
-}
+
+
 
 /**
  * Compute the contribution of one direction to the illumination
@@ -31,9 +28,10 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
   float RdotV = max(geomDot(auxR, auxV), 0.);
   float intensity = lightIntensity(dir,len);
 
+  vec3 baseColor = material.ambient * material.color;
   float coeff = material.diffuse * NdotL + material.specular * pow(RdotV, material.shininess);
   coeff = coeff * intensity;
-  vec3 res = coeff * lightColor.rgb;
+  vec3 res = coeff * (baseColor + lightColor.rgb);
   return res;
 }
 
@@ -42,12 +40,11 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, float len, Material materi
  * Take into account all possible lights and directions
  * @param[in] v incidence vector
  * @param[in] obj the object we are rendering
- * @param[in] material the material of the object
  * @todo Choose a convention for the incidence vector `v`.
  * Should it point toward the object, or the observer?
  */
-vec3 phongModel(GenVector v, Solid solid) {
-  GenVector n = sceneNormal(v, solid);
+vec3 phongModel(RelVector v, Solid solid) {
+  RelVector n = sceneNormal(v, solid);
 
   Light light;
   Point lightLoc;
@@ -55,15 +52,15 @@ vec3 phongModel(GenVector v, Solid solid) {
   float[MAX_DIRS] lens;
   int k;
 
-  vec3 color = solid.material.ambient * solid.material.color;
-
+  //vec3 color = solid.material.ambient * solid.material.color;
+  vec3 color = vec3(0);
 
   {{#lights}}
     light = {{name}};
     lightLoc = applyIsometry(v.invCellBoost, light.item.loc);
-    k = directions(v.vec.pos, lightLoc, MAX_DIRS, dirs, lens);
+    k = directions(v.local.pos, lightLoc, MAX_DIRS, dirs, lens);
     for(int j=0; j < k; j++){
-      color = color + lightComputation(v.vec, n.vec, dirs[j], lens[j], solid.material, light.color);
+      color = color + lightComputation(v.local, n.local, dirs[j], lens[j], solid.material, light.color);
     }
   {{/lights}}
 

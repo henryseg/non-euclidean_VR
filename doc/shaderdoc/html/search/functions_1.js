@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ballsdf_108',['ballSDF',['../sdf_2euc_8glsl.html#a359c68439ec94915f7ee438efe75be87',1,'euc.glsl']]],
-  ['ballsdfgrad_109',['ballSDFGrad',['../sdf_2euc_8glsl.html#a450afefb678b39035e06a5e5f9ed707e',1,'euc.glsl']]]
+  ['cosangle_107',['cosAngle',['../commons_8glsl.html#a8917ba32ec22067cc7bcc0b4b8e1731e',1,'commons.glsl']]],
+  ['createvector_108',['createVector',['../commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85',1,'commons.glsl']]]
 ];
