@@ -7,26 +7,22 @@
  **********************************************************************************************************************/
 
 /**
+ * Position on the sphere.
+ */
+varying vec3 spherePosition;
+
+
+/**
  * Compute the initial direction for the ray-marching
  * @param[in] coords the coordinates of the point (in pixels)
  */
-RelVector rayDir(vec2 coords){
-  // Change of coordinates:
-  // The origin is at the center of the screen.
-  // The x-coordinates runs between -0.5 and 0.5 (the screen has width 1).
-  // The y-coordinates is updated accordingly, respecting ratio.
-  vec2 xy = (coords - 0.5 * resolution)/ resolution.x;
-  // Depth is a function of the field of view.
-  float z = -0.5 / tan(0.5 * fov);
-
-  // Building the corresponding vector in the tangent space at the origin.
-  vec3 dir = vec3(xy,z);
-  Vector res = createVector(ORIGIN, dir);
-  res = geomNormalize(res);
-
-  // Translating the vector according to the boost and facing.
-  return applyPosition(position, res);
+RelVector rayDir(vec3 coords){
+    vec3 dir = normalize(coords);
+    Vector v = createVector(ORIGIN, dir);
+    return applyPosition(position, v);
 }
+
+
 
 /**
  * Main function. Wrap everything together:
@@ -35,26 +31,27 @@ RelVector rayDir(vec2 coords){
  * - If we hit an object compute the corresponding color.
  */
 void main() {
-  vec3 color;
-  Isometry fixIsom;
+    vec3 color;
+    Isometry fixIsom;
 
-  setup();
-  RelVector v = rayDir(gl_FragCoord.xy);
-  Solid solid;
 
-  int hit = raymarch(v, fixIsom, solid);
+    setup();
+    RelVector v = rayDir(spherePosition);
+    Solid solid;
 
-  switch (hit) {
-    case -1:
-    color = debugColor;
-    break;
-    case 0:
-    color = vec3(0, 0, 0);
-    break;
-    default :
-    color = phongModel(v, solid);
-  }
+    int hit = raymarch(v, fixIsom, solid);
 
-  gl_FragColor = vec4(color,1);
+    switch (hit) {
+        case -1:
+        color = debugColor;
+        break;
+        case 0:
+        color = vec3(0, 0, 0);
+        break;
+        default :
+        color = phongModel(v, solid);
+    }
+
+    gl_FragColor = vec4(color, 1);
 
 }

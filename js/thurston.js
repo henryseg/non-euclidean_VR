@@ -9,10 +9,13 @@ import {
     WebGLRenderer,
     Scene,
     OrthographicCamera,
+    PerspectiveCamera,
     PlaneBufferGeometry,
+    SphereBufferGeometry,
     ShaderMaterial,
     Mesh,
     Vector2,
+    Vector3,
     Clock,
     Quaternion,
     Matrix4
@@ -637,11 +640,17 @@ class Thurston {
         this.params.resolution.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
 
         // setup the camera
-        this._camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        //this._camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        this._camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.0001, 5);
+        this._camera.lookAt(new Vector3(0,0,-1));
+        this._camera.position.set(0,0,0);
 
         // build the scene with a single screen
         this._scene = new Scene();
-        const geometry = new PlaneBufferGeometry(2, 2);
+        // const geometry = new PlaneBufferGeometry(2, 2);
+        const geometry = new SphereBufferGeometry( 2, 60, 40 );
+        // sphere eversion !
+        geometry.scale(1, 1, -1);
         let material = new ShaderMaterial({
             uniforms: this.params._uniforms,
             vertexShader: await this.buildShaderVertex(),
