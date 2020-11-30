@@ -1,5 +1,4 @@
 import {
-    Vector4,
     Color,
 } from "./lib/three.module.js";
 
@@ -79,7 +78,7 @@ const ball0 = new items.Ball(
 const ball1 = new items.Ball(
     // new geom.Point(-.3, -0.1, -.5),
     new geom.Point(0, 0, -.5),
-    0.2,
+    0.4,
     new Material({color: new Color(0, 0, 1)})
 );
 

@@ -15,6 +15,7 @@
 import {
     Vector3,
     Vector4,
+    Matrix3,
     Matrix4
 } from "../lib/three.module.js"
 
@@ -35,6 +36,47 @@ const name = 'Abstract geometry';
  * @todo The path is relative to the file 'thurston.js'. Look at good practices for handling paths
  */
 const shader = 'geometry/model.glsl';
+
+
+/**
+ * Add a method to Three.js Matrix3.
+ * Return a human-readable version of the matrix (for debugging purpose)
+ * @return {string}
+ */
+Matrix3.prototype.toLog = function () {
+    let res = '\r\n';
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (j !== 0) {
+                res = res + ",\t";
+            }
+            res = res + this.elements[i + 3 * j];
+        }
+        res = res + "\r\n";
+    }
+    return res;
+}
+
+/**
+ * Add a method to Three.js Matrix4.
+ * Return a human-readable version of the matrix (for debugging purpose)
+ * @return {string}
+ */
+Matrix4.prototype.toLog = function () {
+    let res = '\r\n';
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            if (j !== 0) {
+                res = res + ",\t";
+            }
+            res = res + this.elements[i + 4 * j];
+        }
+        res = res + "\r\n";
+    }
+    return res;
+}
+
+
 
 /**
  * Add a method to numbers.

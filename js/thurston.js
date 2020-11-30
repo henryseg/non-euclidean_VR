@@ -8,17 +8,13 @@
 import {
     WebGLRenderer,
     Scene,
-    OrthographicCamera,
     PerspectiveCamera,
-    PlaneBufferGeometry,
     SphereBufferGeometry,
     ShaderMaterial,
     Mesh,
     Vector2,
-    Vector3,
     Clock,
     Quaternion,
-    Matrix4
 } from "./lib/three.module.js";
 
 import {
@@ -195,6 +191,7 @@ const PARAMS = {
  * - Check if the property belongs to `PARAMS` (the list of registered parameters)
  * - If this property is listed as a uniform in `PARAMS`, update the list of uniforms
  * @const
+ * @todo Change the strategy for the "magic": use a callback `_onChange` as in the Three.js library ?
  */
 const PARAMS_HANDLER = {
     set: function (target, prop, value) {
@@ -640,15 +637,14 @@ class Thurston {
         this.params.resolution.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
 
         // setup the camera
-        //this._camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        this._camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.0001, 5);
-        this._camera.lookAt(new Vector3(0,0,-1));
-        this._camera.position.set(0,0,0);
+        this._camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.0001, 5);
+        this._camera.position.set(0, 0, 0);
+        this._camera.lookAt(0, 0, -1);
+
 
         // build the scene with a single screen
         this._scene = new Scene();
-        // const geometry = new PlaneBufferGeometry(2, 2);
-        const geometry = new SphereBufferGeometry( 2, 60, 40 );
+        const geometry = new SphereBufferGeometry(2, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         let material = new ShaderMaterial({
@@ -677,7 +673,6 @@ class Thurston {
         });
         const deltaTime = this._clock.getDelta();
         this.updatePosition(deltaTime);
-        //console.log(this.params.position.point.coords);
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }
@@ -698,14 +693,16 @@ class Thurston {
     updatePosition(deltaTime) {
         const deltaPosition = this._keyboardDirs.translation
             .clone()
-            .multiplyScalar(this.params.speedTranslation * deltaTime);
+            .multiplyScalar(this.params.speedTranslation * deltaTime)
+            .applyMatrix4(this._camera.matrix);
         this.params.position.flow(deltaPosition);
 
         const deltaRotation = new Quaternion().setFromAxisAngle(
             this._keyboardDirs.rotation,
             0.5 * this.params.speedRotation * deltaTime
         );
-        this.params.position.applyFacing(new Matrix4().makeRotationFromQuaternion(deltaRotation));
+        this._camera.quaternion.multiply(deltaRotation);
+        this._camera.updateProjectionMatrix();
     }
 
     /**
@@ -714,6 +711,8 @@ class Thurston {
      */
     onWindowResize(event) {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
+        this._camera.aspect =  window.innerWidth / window.innerHeight
+        this._camera.updateProjectionMatrix();
         this.params.resolution
             .set(window.innerWidth, window.innerHeight)
             .multiplyScalar(window.devicePixelRatio);
