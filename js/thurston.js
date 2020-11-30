@@ -12,10 +12,13 @@ import {
     SphereBufferGeometry,
     ShaderMaterial,
     Mesh,
-    Vector2,
     Clock,
     Quaternion,
 } from "./lib/three.module.js";
+
+import {
+    VRButton
+} from "./lib/VRButton.js";
 
 import {
     mustache
@@ -159,16 +162,10 @@ const PARAMS = {
         default: function () {
             return 90;
         },
-        shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'float'
-    },
-    resolution: {
-        shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'vec2'
+        shaderPass: SHADER_PASS.NONE,
     },
     stereo: {
-        shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'bool'
+        shaderPass: SHADER_PASS.NONE
     },
     position: {
         shaderPass: SHADER_PASS.UNIFORM,
@@ -264,7 +261,6 @@ class Thurston {
             }
         }
         // complete the set of parameters
-        this.params.resolution = new Vector2();
         this.params.stereo = false;
 
         // setup the initial positions
@@ -633,13 +629,17 @@ class Thurston {
         this._renderer = new WebGLRenderer();
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(window.innerWidth, window.innerHeight);
+        this._renderer.xr.enabled = true;
+        this._renderer.xr.setReferenceSpaceType('local');
         document.body.appendChild(this._renderer.domElement);
-        this.params.resolution.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
+        // add the VR button
+        document.body.appendChild(VRButton.createButton(this._renderer));
 
         // setup the camera
-        this._camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.0001, 5);
+        this._camera = new PerspectiveCamera(this.params.fov, window.innerWidth / window.innerHeight, 0.0001, 5);
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
+        this._camera.layers.enable(1);
 
 
         // build the scene with a single screen
@@ -654,8 +654,9 @@ class Thurston {
             transparent: true
         });
         //console.log(this.params.uniforms);
-        const mesh = new Mesh(geometry, material);
-        this._scene.add(mesh);
+        const horizon = new Mesh(geometry, material);
+        horizon.layers.set(1);
+        this._scene.add(horizon);
 
         this.appendTitle();
         this.initUI();
@@ -667,10 +668,6 @@ class Thurston {
      * Animates the simulation
      */
     animate() {
-        let self = this;
-        window.requestAnimationFrame(function () {
-            self.animate();
-        });
         const deltaTime = this._clock.getDelta();
         this.updatePosition(deltaTime);
         this._renderer.render(this._scene, this._camera);
@@ -682,8 +679,14 @@ class Thurston {
      * @return {Promise<void>}
      */
     async run() {
+        // initialize the scene
         await this.init();
-        this.animate();
+        // because of the VR, the animation loop is declared with setAnimationLoop,
+        // see https://threejs.org/docs/#manual/en/introduction/How-to-create-VR-content
+        let self = this;
+        this._renderer.setAnimationLoop(function () {
+            self.animate()
+        });
     }
 
     /**
@@ -711,11 +714,8 @@ class Thurston {
      */
     onWindowResize(event) {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
-        this._camera.aspect =  window.innerWidth / window.innerHeight
+        this._camera.aspect = window.innerWidth / window.innerHeight
         this._camera.updateProjectionMatrix();
-        this.params.resolution
-            .set(window.innerWidth, window.innerHeight)
-            .multiplyScalar(window.devicePixelRatio);
     }
 
     /**
