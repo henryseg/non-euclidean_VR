@@ -1,3 +1,9 @@
+import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
+
+const polyfill = new WebXRPolyfill.default();
+
+
+
 import {
     Color,
 } from "./lib/three.module.js";
@@ -13,6 +19,8 @@ import {
 
 import * as geom from "./geometry/euc.js";
 import * as items from "./items/euc.js";
+
+
 
 
 const cubeHalfWidth = 0.5;
