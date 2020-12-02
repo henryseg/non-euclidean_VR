@@ -19,7 +19,7 @@ varying vec3 spherePosition;
 RelVector rayDir(vec3 coords){
     vec3 dir = normalize(coords);
     Vector v = createVector(ORIGIN, dir);
-    return applyPosition(position, v);
+    return applyPosition(eyePosition, v);
 }
 
 

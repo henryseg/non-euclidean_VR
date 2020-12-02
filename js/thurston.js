@@ -92,7 +92,7 @@ const KEYBOARD_BINDINGS = {
 const SHADER_PASS = {
     NONE: 0,
     CONSTANT: 1,
-    UNIFORM: 2,
+    UNIFORM: 2
 }
 
 /**
@@ -102,6 +102,13 @@ const SHADER_PASS = {
  * When the default value is an object, the function default should create a new instance of this object.
  * (Hence the need to use a function to generate the default value of the option.)
  * Each parameter has also tags to say how its value should be passed to the shader, and under which type.
+ *
+ * If a parameter `param` is tag with `stereo : true`, it means that the left and right eye shader to not receive the same data
+ * (typically for the eye position).
+ * In this situation, the parameter should be assigned as
+ * `this.params.param = values` where `values` is an array of length 2.
+ * The proxy will assign the first value to the left shader and the second one to the right shader.
+ *
  * @const
  */
 const PARAMS = {
@@ -164,21 +171,21 @@ const PARAMS = {
         },
         shaderPass: SHADER_PASS.NONE,
     },
-    stereo: {
+    ipDist: {
+        default: function () {
+            return 0.03200000151991844;
+        },
         shaderPass: SHADER_PASS.NONE
     },
     position: {
-        shaderPass: SHADER_PASS.UNIFORM,
+        shaderPass: SHADER_PASS.NONE,
         shaderType: 'RelPosition'
     },
-    leftPosition: {
+    eyePosition: {
         shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'Position'
+        shaderType: 'RelPosition',
+        stereo: true
     },
-    rightPosition: {
-        shaderPass: SHADER_PASS.UNIFORM,
-        shaderType: 'Position'
-    }
 };
 
 
@@ -194,7 +201,10 @@ const PARAMS_HANDLER = {
     set: function (target, prop, value) {
         // basic security checks.
         // the uniforms cannot be reassigned.
-        if (prop === 'uniforms') {
+        if (prop === '_uniformsLeft') {
+            throw new Error("The uniforms cannot be reassigned.");
+        }
+        if (prop === '_uniformsRight') {
             throw new Error("The uniforms cannot be reassigned.");
         }
         // only the declared parameters are accepted.
@@ -206,11 +216,32 @@ const PARAMS_HANDLER = {
         target[prop] = value;
 
         // if needed we update the uniforms
+        // if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
+        //     target._uniforms[prop] = {
+        //         type: PARAMS[prop].shaderType,
+        //         value: target[prop]
+        //     };
+        // }
         if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
-            target._uniforms[prop] = {
-                type: PARAMS[prop].shaderType,
-                value: target[prop]
-            };
+            if (PARAMS[prop].stereo) {
+                target._uniformsLeft[prop] = {
+                    type: PARAMS[prop].shaderType,
+                    value: target[prop][0]
+                };
+                target._uniformsRight[prop] = {
+                    type: PARAMS[prop].shaderType,
+                    value: target[prop][1]
+                };
+            } else {
+                target._uniformsLeft[prop] = {
+                    type: PARAMS[prop].shaderType,
+                    value: target[prop]
+                };
+                target._uniformsRight[prop] = {
+                    type: PARAMS[prop].shaderType,
+                    value: target[prop]
+                };
+            }
         }
         return true;
     }
@@ -250,7 +281,7 @@ class Thurston {
          * Interactions with `params` go through a proxy to automatically keep the list of uniforms up to date.
          * @type {Object}
          */
-        this.params = new Proxy({_uniforms: {}}, PARAMS_HANDLER);
+        this.params = new Proxy({_uniformsLeft: {}, _uniformsRight: {}}, PARAMS_HANDLER);
         for (const property in PARAMS) {
             if ('default' in PARAMS[property]) {
                 if (property in params) {
@@ -260,13 +291,10 @@ class Thurston {
                 }
             }
         }
-        // complete the set of parameters
-        this.params.stereo = false;
 
         // setup the initial positions
         this.params.position = new this.geom.RelPosition(this.subgroup);
-        this.params.leftPosition = new this.geom.Position();
-        this.params.rightPosition = new this.geom.Position();
+        this.params.eyePosition = this.getEyePositions();
 
         // register the isometries involved in the discrete subgroup
         for (const teleport of this.subgroup.teleports) {
@@ -418,6 +446,26 @@ class Thurston {
             this.addItem(item);
         }
         return this
+    }
+
+    /**
+     * Return the position of the left and right eye, computed from the current position
+     * @return{RelPosition[]} the left and right eye positions
+     */
+    getEyePositions() {
+        const xDir = new this.geom.Vector(1, 0, 0).multiplyScalar(0.5 * this.params.ipDist);
+
+        const rightDir = xDir.applyFacing(this.params.position.local);
+        const rightShift = new this.geom.Position().flow(rightDir);
+        const rightEye = this.params.position.clone();
+        rightEye.local.multiply(rightShift);
+
+        const leftDir = xDir.clone().negate();
+        const leftShift = new this.geom.Position().flow(leftDir);
+        const leftEye = this.params.position.clone();
+        leftEye.local.multiply(leftShift);
+
+        return [leftEye, rightEye]
     }
 
 
@@ -647,16 +695,25 @@ class Thurston {
         const geometry = new SphereBufferGeometry(2, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
-        let material = new ShaderMaterial({
-            uniforms: this.params._uniforms,
+        const materialLeft = new ShaderMaterial({
+            uniforms: this.params._uniformsLeft,
+            vertexShader: await this.buildShaderVertex(),
+            fragmentShader: await this.buildShaderFragment(),
+            transparent: true
+        });
+        const materialRight = new ShaderMaterial({
+            uniforms: this.params._uniformsRight,
             vertexShader: await this.buildShaderVertex(),
             fragmentShader: await this.buildShaderFragment(),
             transparent: true
         });
         //console.log(this.params.uniforms);
-        const horizon = new Mesh(geometry, material);
-        horizon.layers.set(1);
-        this._scene.add(horizon);
+        const horizonLeft = new Mesh(geometry, materialLeft);
+        const horizonRight = new Mesh(geometry, materialRight);
+        horizonLeft.layers.set(1);
+        horizonRight.layers.set(2);
+        this._scene.add(horizonLeft);
+        this._scene.add(horizonRight);
 
         this.appendTitle();
         this.initUI();
@@ -699,6 +756,7 @@ class Thurston {
             .multiplyScalar(this.params.speedTranslation * deltaTime)
             .applyMatrix4(this._camera.matrix);
         this.params.position.flow(deltaPosition);
+        this.params.eyePosition = this.getEyePositions();
 
         const deltaRotation = new Quaternion().setFromAxisAngle(
             this._keyboardDirs.rotation,

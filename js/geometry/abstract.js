@@ -489,7 +489,6 @@ class Position {
 
     /**
      * Multiply the current position (g0,m0) on the right by the given position (g,m), i.e. return (g0 * g, m * m0)
-     * @deprecated Not sure this is really needed
      * @param {Position} position
      * @return {Position} The current position
      */
@@ -501,7 +500,6 @@ class Position {
 
     /**
      * Multiply the current position (g0,m0) on the left by the given position (g,m), i.e. return (g * g0, m0 * m)
-     * @deprecated Not sure this is really needed
      * @param {Position} position
      * @return {Position} The current position
      */
