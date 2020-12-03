@@ -44,7 +44,8 @@ const ACTION_CODES = {
     ROTATE_Y_POS: 8,
     ROTATE_Y_NEG: 9,
     ROTATE_Z_POS: 10,
-    ROTATE_Z_NEG: 11
+    ROTATE_Z_NEG: 11,
+    INFOS: 12
 }
 
 
@@ -67,6 +68,7 @@ const KEYBOARD_BINDINGS = {
         39: ACTION_CODES.TRANSLATE_X_POS,// right
         222: ACTION_CODES.TRANSLATE_Y_POS,// single quote
         191: ACTION_CODES.TRANSLATE_Y_NEG,// fwd slash
+        73: ACTION_CODES.INFOS, // i
     },
     'fr': {
         81: ACTION_CODES.ROTATE_Y_POS, // q
@@ -81,6 +83,7 @@ const KEYBOARD_BINDINGS = {
         39: ACTION_CODES.TRANSLATE_X_POS, // right
         165: ACTION_CODES.TRANSLATE_Y_POS, // ù
         61: ACTION_CODES.TRANSLATE_Y_NEG, // =
+        73: ACTION_CODES.INFOS, // i
     }
 };
 
@@ -276,6 +279,16 @@ class Thurston {
          * @type {DiscreteSubgroup}
          */
         this.subgroup = subgroup;
+
+        /// setup the WebGL renderer
+        this._renderer = new WebGLRenderer();
+        this._renderer.setPixelRatio(window.devicePixelRatio);
+        this._renderer.setSize(window.innerWidth, window.innerHeight);
+        this._renderer.xr.enabled = true;
+        this._renderer.xr.setReferenceSpaceType('local');
+        document.body.appendChild(this._renderer.domElement);
+        document.body.appendChild(VRButton.createButton(this._renderer));
+
         /**
          * The list of parameters of the object.
          * Interactions with `params` go through a proxy to automatically keep the list of uniforms up to date.
@@ -325,8 +338,8 @@ class Thurston {
         // first available id of an item (to be incremented when adding items)
         this._id = 0;
 
-        // the Three.js WebGL renderer
-        this._renderer = undefined;
+
+
         // The Three.js scene
         this._scene = undefined;
         // The Three.js camera
@@ -449,23 +462,32 @@ class Thurston {
     }
 
     /**
-     * Return the position of the left and right eye, computed from the current position
+     * Return the position of the left and right eye, computed from the current position.
+     * If the VR mode is not on, then both eye coincide with the observer position.
      * @return{RelPosition[]} the left and right eye positions
      */
     getEyePositions() {
-        const xDir = new this.geom.Vector(1, 0, 0).multiplyScalar(0.5 * this.params.ipDist);
-
-        const rightDir = xDir.applyFacing(this.params.position.local);
-        const rightShift = new this.geom.Position().flow(rightDir);
+        // start from the position of the observer.
         const rightEye = this.params.position.clone();
-        rightEye.local.multiply(rightShift);
-
-        const leftDir = xDir.clone().negate();
-        const leftShift = new this.geom.Position().flow(leftDir);
         const leftEye = this.params.position.clone();
-        leftEye.local.multiply(leftShift);
 
-        return [leftEye, rightEye]
+        // check if we are in VR mode or not
+        if(this._renderer.xr.isPresenting){
+            // if we are in VR mode we offset the position of the left and right eyes
+            const xDir = new this.geom.Vector(1, 0, 0).multiplyScalar(0.5 * this.params.ipDist);
+
+            const rightDir = xDir.applyFacing(this.params.position.local);
+            const rightShift = new this.geom.Position().flow(rightDir);
+            rightEye.local.multiply(rightShift);
+
+            const leftDir = xDir.clone().negate();
+            const leftShift = new this.geom.Position().flow(leftDir);
+            leftEye.local.multiply(leftShift);
+        }
+
+        // return the positions of the eyes
+        return [leftEye, rightEye];
+
     }
 
 
@@ -624,7 +646,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        console.log(fShader);
+        //console.log(fShader);
 
         return fShader;
     }
@@ -673,16 +695,6 @@ class Thurston {
      * Setup the shaders
      */
     async init() {
-        // setup the WebGL renderer
-        this._renderer = new WebGLRenderer();
-        this._renderer.setPixelRatio(window.devicePixelRatio);
-        this._renderer.setSize(window.innerWidth, window.innerHeight);
-        this._renderer.xr.enabled = true;
-        this._renderer.xr.setReferenceSpaceType('local');
-        document.body.appendChild(this._renderer.domElement);
-        // add the VR button
-        document.body.appendChild(VRButton.createButton(this._renderer));
-
         // setup the camera
         this._camera = new PerspectiveCamera(this.params.fov, window.innerWidth / window.innerHeight, 0.0001, 5);
         this._camera.position.set(0, 0, 0);
@@ -777,13 +789,29 @@ class Thurston {
     }
 
     /**
+     * The action to perform when the user press the info key.
+     * Typically display some log
+     */
+    infos(){
+        console.log(this._camera);
+    }
+
+    /**
      * Action when a key is up or down
      * @param {Event} event
      */
     onKey(event) {
         if (this._keyboardBinding.hasOwnProperty(event.keyCode)) {
             event.preventDefault();
-            const action = this._keyboardBinding[event.keyCode]
+            const action = this._keyboardBinding[event.keyCode];
+
+            // if the user asked for infos.
+            // call the infos function and exit
+            if(action === ACTION_CODES.INFOS && event.type === "keydown"){
+                this.infos();
+                return;
+            }
+
             const control = this._keyboardControls[action];
             const dirs = this._keyboardDirs;
             let sign;
