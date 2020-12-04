@@ -1,6 +1,3 @@
-import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
-
-const polyfill = new WebXRPolyfill.default();
 
 
 
@@ -77,7 +74,7 @@ const subgroup = new geom.DiscreteSubgroup([
 const thurston = new Thurston(geom, subgroup, {keyboard: 'fr'});
 
 const ball0 = new items.Ball(
-    new geom.Point(0, 0, 0),
+    new geom.Point(0,0,0),
     0.1,
     new Material({color: new Color(1, 0.2, 0.2)}),
     false
@@ -86,7 +83,7 @@ const ball0 = new items.Ball(
 const ball1 = new items.Ball(
     // new geom.Point(-.3, -0.1, -.5),
     new geom.Point(0, 0, -.5),
-    0.4,
+    0.2,
     new Material({color: new Color(0, 0, 1)})
 );
 

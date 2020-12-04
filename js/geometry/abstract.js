@@ -39,6 +39,25 @@ const shader = 'geometry/model.glsl';
 
 
 /**
+ * Add a method to Three.js Vector3.
+ * Return a human-readable version of the vector (for debugging purpose)
+ * @return {string}
+ */
+Vector3.prototype.toLog = function () {
+    return `[${this.x}, ${this.y}, ${this.z}]`
+}
+
+/**
+ * Add a method to Three.js Vector4.
+ * Return a human-readable version of the vector (for debugging purpose)
+ * @return {string}
+ */
+Vector4.prototype.toLog = function () {
+    return `[${this.x}, ${this.y}, ${this.z}, ${this.w}]`
+}
+
+
+/**
  * Add a method to Three.js Matrix3.
  * Return a human-readable version of the matrix (for debugging purpose)
  * @return {string}

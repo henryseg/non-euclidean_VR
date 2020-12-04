@@ -5,6 +5,9 @@
  * Module used to define and render a scene in one of the eight Thurston geometries.
  */
 
+import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
+
+
 import {
     WebGLRenderer,
     Scene,
@@ -14,7 +17,11 @@ import {
     Mesh,
     Clock,
     Quaternion,
+    Vector3,
+    Vector4,
+    Matrix4,
 } from "./lib/three.module.js";
+
 
 import {
     VRButton
@@ -23,6 +30,8 @@ import {
 import {
     mustache
 } from "./lib/mustache.mjs";
+
+import Stats from './lib/stats.module.js';
 
 import {
     GUI
@@ -52,38 +61,39 @@ const ACTION_CODES = {
 /**
  * Keyboard commands.
  * Each main entry correspond to a keyboard type (American, French, etc).
+ * KeyCode are replaced by Key (as KeyCode are now deprecated).
  * @const
  */
 const KEYBOARD_BINDINGS = {
     'us': {
-        65: ACTION_CODES.ROTATE_Y_POS, // a
-        68: ACTION_CODES.ROTATE_Y_NEG, // d
-        87: ACTION_CODES.ROTATE_X_POS,// w
-        83: ACTION_CODES.ROTATE_X_NEG, // s
-        81: ACTION_CODES.ROTATE_Z_POS, // q
-        69: ACTION_CODES.ROTATE_Z_NEG, // e
-        38: ACTION_CODES.TRANSLATE_Z_NEG, // up
-        40: ACTION_CODES.TRANSLATE_Z_POS,// down
-        37: ACTION_CODES.TRANSLATE_X_NEG, // left
-        39: ACTION_CODES.TRANSLATE_X_POS,// right
-        222: ACTION_CODES.TRANSLATE_Y_POS,// single quote
-        191: ACTION_CODES.TRANSLATE_Y_NEG,// fwd slash
-        73: ACTION_CODES.INFOS, // i
+        "a": ACTION_CODES.ROTATE_Y_POS, // a
+        "d": ACTION_CODES.ROTATE_Y_NEG, // d
+        "w": ACTION_CODES.ROTATE_X_POS,// w
+        "s": ACTION_CODES.ROTATE_X_NEG, // s
+        "q": ACTION_CODES.ROTATE_Z_POS, // q
+        "e": ACTION_CODES.ROTATE_Z_NEG, // e
+        "ArrowUp": ACTION_CODES.TRANSLATE_Z_NEG, // up
+        "ArrowDown": ACTION_CODES.TRANSLATE_Z_POS,// down
+        "ArrowLeft": ACTION_CODES.TRANSLATE_X_NEG, // left
+        "ArrowRight": ACTION_CODES.TRANSLATE_X_POS,// right
+        "'": ACTION_CODES.TRANSLATE_Y_POS,// single quote
+        "/": ACTION_CODES.TRANSLATE_Y_NEG,// fwd slash
+        "i": ACTION_CODES.INFOS, // i
     },
     'fr': {
-        81: ACTION_CODES.ROTATE_Y_POS, // q
-        68: ACTION_CODES.ROTATE_Y_NEG,// d
-        90: ACTION_CODES.ROTATE_X_POS, // z
-        83: ACTION_CODES.ROTATE_X_NEG, // s
-        65: ACTION_CODES.ROTATE_Z_POS,// a
-        69: ACTION_CODES.ROTATE_Z_NEG,// e
-        38: ACTION_CODES.TRANSLATE_Z_NEG,// up
-        40: ACTION_CODES.TRANSLATE_Z_POS,// down
-        37: ACTION_CODES.TRANSLATE_X_NEG, // left
-        39: ACTION_CODES.TRANSLATE_X_POS, // right
-        165: ACTION_CODES.TRANSLATE_Y_POS, // ù
-        61: ACTION_CODES.TRANSLATE_Y_NEG, // =
-        73: ACTION_CODES.INFOS, // i
+        "q": ACTION_CODES.ROTATE_Y_POS, // q
+        "d": ACTION_CODES.ROTATE_Y_NEG,// d
+        "z": ACTION_CODES.ROTATE_X_POS, // z
+        "s": ACTION_CODES.ROTATE_X_NEG, // s
+        "a": ACTION_CODES.ROTATE_Z_POS,// a
+        "e": ACTION_CODES.ROTATE_Z_NEG,// e
+        "ArrowUp": ACTION_CODES.TRANSLATE_Z_NEG,// up
+        "ArrowDown": ACTION_CODES.TRANSLATE_Z_POS,// down
+        "ArrowLeft": ACTION_CODES.TRANSLATE_X_NEG, // left
+        "ArrowRight": ACTION_CODES.TRANSLATE_X_POS, // right
+        "ù": ACTION_CODES.TRANSLATE_Y_POS, // ù
+        "=": ACTION_CODES.TRANSLATE_Y_NEG, // =
+        "i": ACTION_CODES.INFOS, // i
     }
 };
 
@@ -218,13 +228,6 @@ const PARAMS_HANDLER = {
         // regular update of the property
         target[prop] = value;
 
-        // if needed we update the uniforms
-        // if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
-        //     target._uniforms[prop] = {
-        //         type: PARAMS[prop].shaderType,
-        //         value: target[prop]
-        //     };
-        // }
         if (PARAMS[prop].shaderPass === SHADER_PASS.UNIFORM) {
             if (PARAMS[prop].stereo) {
                 target._uniformsLeft[prop] = {
@@ -269,6 +272,9 @@ class Thurston {
      * @todo If a subgroup is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
+        // loading the polyfill if WebXR is not supported
+        const polyfill = new WebXRPolyfill.default();
+
         /**
          * The underlying geometry
          * @type {Object}
@@ -339,11 +345,14 @@ class Thurston {
         this._id = 0;
 
 
-
         // The Three.js scene
         this._scene = undefined;
         // The Three.js camera
         this._camera = undefined;
+        this._cameraOldPosition = new Vector3();
+        this._cameraNewPosition = new Vector3();
+        this._horizonRight = undefined;
+        this._horizonLeft = undefined;
 
         // fix the default keyboard binding
         this._keyboardBinding = undefined;
@@ -356,8 +365,8 @@ class Thurston {
         }
         // setup the translation/rotation "direction" used when the user moves via the keyboard
         this._keyboardDirs = {
-            translation: new this.geom.Vector(),
-            rotation: new this.geom.Vector(),
+            translation: new Vector4(0, 0, 0, 0),
+            rotation: new Vector4(0, 0, 0, 0),
         };
         // clock to measure the time between two frames
         this._clock = new Clock();
@@ -472,7 +481,7 @@ class Thurston {
         const leftEye = this.params.position.clone();
 
         // check if we are in VR mode or not
-        if(this._renderer.xr.isPresenting){
+        if (this._renderer.xr.isPresenting) {
             // if we are in VR mode we offset the position of the left and right eyes
             const xDir = new this.geom.Vector(1, 0, 0).multiplyScalar(0.5 * this.params.ipDist);
 
@@ -698,6 +707,7 @@ class Thurston {
         // setup the camera
         this._camera = new PerspectiveCamera(this.params.fov, window.innerWidth / window.innerHeight, 0.0001, 5);
         this._camera.position.set(0, 0, 0);
+        this._cameraNewPosition.copy(this._camera.position);
         this._camera.lookAt(0, 0, -1);
         this._camera.layers.enable(1);
 
@@ -719,13 +729,12 @@ class Thurston {
             fragmentShader: await this.buildShaderFragment(),
             transparent: true
         });
-        //console.log(this.params.uniforms);
-        const horizonLeft = new Mesh(geometry, materialLeft);
-        const horizonRight = new Mesh(geometry, materialRight);
-        horizonLeft.layers.set(1);
-        horizonRight.layers.set(2);
-        this._scene.add(horizonLeft);
-        this._scene.add(horizonRight);
+        this._horizonLeft = new Mesh(geometry, materialLeft);
+        this._horizonRight = new Mesh(geometry, materialRight);
+        this._horizonLeft.layers.set(1);
+        this._horizonRight.layers.set(2);
+        this._scene.add(this._horizonLeft);
+        this._scene.add(this._horizonRight);
 
         this.appendTitle();
         this.initUI();
@@ -734,11 +743,52 @@ class Thurston {
     }
 
     /**
+     * Update with the keyboard the position and rotation of the camera
+     * The rest of the scene and geometry will follow the camera.
+     * @param {number} deltaTime - The time between the current and the next position
+     */
+    updateManual(deltaTime) {
+        //console.log(this._keyboardDirs.translation.toLog());
+        const deltaPosition = this._keyboardDirs.translation
+            .clone()
+            .multiplyScalar(this.params.speedTranslation * deltaTime)
+            .applyMatrix4(this._camera.matrixWorld);
+        const translation = new Matrix4().makeTranslation(deltaPosition.x, deltaPosition.y, deltaPosition.z);
+        //console.log(translation.toLog());
+        this._camera.applyMatrix4(translation);
+
+        const deltaRotation = new Quaternion().setFromAxisAngle(
+            this._keyboardDirs.rotation,
+            0.5 * this.params.speedRotation * deltaTime
+        );
+        this._camera.quaternion.multiply(deltaRotation);
+        this._camera.updateProjectionMatrix();
+    }
+
+    /**
+     * Update the Three.js scene (moving the horizon sphere with the camera)
+     * And the position in the geometry (passed to the shader).
+     */
+    updateScene() {
+        this._cameraOldPosition.copy(this._cameraNewPosition);
+        this._cameraNewPosition = new Vector3().setFromMatrixPosition(this._camera.matrixWorld);
+        this._horizonLeft.position.copy(this._cameraNewPosition);
+        this._horizonRight.position.copy(this._cameraNewPosition);
+
+        const deltaPosition = new this.geom.Vector().subVectors(this._cameraNewPosition, this._cameraOldPosition);
+        this.params.position.flow(deltaPosition);
+        this.params.eyePosition = this.getEyePositions();
+    }
+
+    /**
      * Animates the simulation
      */
     animate() {
-        const deltaTime = this._clock.getDelta();
-        this.updatePosition(deltaTime);
+        if (!this._renderer.xr.isPresenting) {
+            const deltaTime = this._clock.getDelta();
+            this.updateManual(deltaTime);
+        }
+        this.updateScene();
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }
@@ -759,28 +809,8 @@ class Thurston {
     }
 
     /**
-     * Update the position of the observer
-     * @param {number} deltaTime - The time between the current and the next position
-     */
-    updatePosition(deltaTime) {
-        const deltaPosition = this._keyboardDirs.translation
-            .clone()
-            .multiplyScalar(this.params.speedTranslation * deltaTime)
-            .applyMatrix4(this._camera.matrix);
-        this.params.position.flow(deltaPosition);
-        this.params.eyePosition = this.getEyePositions();
-
-        const deltaRotation = new Quaternion().setFromAxisAngle(
-            this._keyboardDirs.rotation,
-            0.5 * this.params.speedRotation * deltaTime
-        );
-        this._camera.quaternion.multiply(deltaRotation);
-        this._camera.updateProjectionMatrix();
-    }
-
-    /**
      * Action when the window is resized
-     * @param {Event} event
+     * @param {UIEvent} event
      */
     onWindowResize(event) {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
@@ -789,28 +819,56 @@ class Thurston {
     }
 
     /**
-     * The action to perform when the user press the info key.
-     * Typically display some log
+     * Action when the info key is down
+     * @param {KeyboardEvent} event
      */
-    infos(){
-        console.log(this._camera);
+    onInfos(event) {
+        const action = this._keyboardBinding[event.key];
+        if (action === ACTION_CODES.INFOS) {
+            event.preventDefault();
+            console.log(this._camera);
+            // console.log("position", this._camera.position.toLog());
+            console.log("matrixWorld 0", this._camera.matrixWorld);
+            // console.log("matrixWorldInverse", this._camera.matrixWorldInverse.toLog());
+            // console.log("matrix", this._camera.matrix.toLog());
+            // console.log("projectionMatrix", this._camera.projectionMatrix.toLog());
+
+            this._camera.updateWorldMatrix(false, false);
+            console.log(this._camera);
+            // console.log("position", this._camera.position.toLog());
+
+            console.log("matrixWorld 0", this._camera.matrixWorld);
+            let matrix = this._camera.matrixWorld.clone();
+            console.log("matrixWorld 2", matrix);
+
+            let res = '\r\n';
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    if (j !== 0) {
+                        res = res + ",\t";
+                    }
+                    res = res + matrix.elements[i + 4 * j];
+                }
+                res = res + "\r\n";
+            }
+
+            console.log("matrixWorld 1", res);
+
+            // console.log("matrixWorldInverse", this._camera.matrixWorldInverse.toLog());
+            // console.log("matrix", this._camera.matrix.toLog());
+            // console.log("projectionMatrix", this._camera.projectionMatrix.toLog());
+        }
     }
+
 
     /**
      * Action when a key is up or down
-     * @param {Event} event
+     * @param {KeyboardEvent} event
      */
     onKey(event) {
-        if (this._keyboardBinding.hasOwnProperty(event.keyCode)) {
+        if (this._keyboardBinding.hasOwnProperty(event.key)) {
             event.preventDefault();
-            const action = this._keyboardBinding[event.keyCode];
-
-            // if the user asked for infos.
-            // call the infos function and exit
-            if(action === ACTION_CODES.INFOS && event.type === "keydown"){
-                this.infos();
-                return;
-            }
+            const action = this._keyboardBinding[event.key];
 
             const control = this._keyboardControls[action];
             const dirs = this._keyboardDirs;
@@ -881,19 +939,26 @@ class Thurston {
             function (event) {
                 self.onWindowResize(event)
             },
-            false);
+            false
+        );
         document.addEventListener(
             "keydown",
             function (event) {
                 self.onKey(event);
             }
-        )
+        );
+        document.addEventListener(
+            "keydown",
+            function (event) {
+                self.onInfos(event);
+            }
+        );
         document.addEventListener(
             "keyup",
             function (event) {
                 self.onKey(event);
             }
-        )
+        );
     }
 
 }
