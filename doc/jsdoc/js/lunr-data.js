@@ -156,21 +156,6 @@ window.lunrData = {
           "string",
           "uuid"
         ],
-        "module-ThurstonItems-Item.html#id": [
-          "ad",
-          "assign",
-          "automat",
-          "edit",
-          "get",
-          "id",
-          "item",
-          "member",
-          "module:thurstonitems~item#id",
-          "number",
-          "numer",
-          "scene",
-          "shouldn't"
-        ],
         "module-ThurstonItems-Item.html#glsl": [
           "code",
           "declar",
@@ -2144,7 +2129,7 @@ window.lunrData = {
           "us"
         ]
       },
-      "length": 157
+      "length": 156
     },
     "tokenStore": {
       "root": {
@@ -2472,10 +2457,6 @@ window.lunrData = {
                   "module-ThurstonItems-Item.html#uuid": {
                     "ref": "module-ThurstonItems-Item.html#uuid",
                     "tf": 6.25
-                  },
-                  "module-ThurstonItems-Item.html#id": {
-                    "ref": "module-ThurstonItems-Item.html#id",
-                    "tf": 5
                   },
                   "module-AbstractGeometry-Teleport.html#uuid": {
                     "ref": "module-AbstractGeometry-Teleport.html#uuid",
@@ -3866,10 +3847,6 @@ window.lunrData = {
                   "ref": "module-ThurstonItems-Item.html#uuid",
                   "tf": 6.25
                 },
-                "module-ThurstonItems-Item.html#id": {
-                  "ref": "module-ThurstonItems-Item.html#id",
-                  "tf": 5
-                },
                 "module-AbstractGeometry-Teleport.html#uuid": {
                   "ref": "module-AbstractGeometry-Teleport.html#uuid",
                   "tf": 6.25
@@ -4770,10 +4747,6 @@ window.lunrData = {
                     "ref": "module-ThurstonItems-Item.html",
                     "tf": 504.54545454545456
                   },
-                  "module-ThurstonItems-Item.html#id": {
-                    "ref": "module-ThurstonItems-Item.html#id",
-                    "tf": 5
-                  },
                   "module-ThurstonItems-Item.html#glsl": {
                     "ref": "module-ThurstonItems-Item.html#glsl",
                     "tf": 6.25
@@ -4874,12 +4847,40 @@ window.lunrData = {
               }
             }
           },
+          ".": {
+            "docs": {
+              "module-ThurstonItems-Item.html#local": {
+                "ref": "module-ThurstonItems-Item.html#local",
+                "tf": 7.142857142857142
+              },
+              "KeyboardControls.html#update": {
+                "ref": "KeyboardControls.html#update",
+                "tf": 1.834862385321101
+              },
+              "module-AbstractGeometry-Isometry.html#multiply": {
+                "ref": "module-AbstractGeometry-Isometry.html#multiply",
+                "tf": 6.25
+              },
+              "module-AbstractGeometry-Isometry.html#premultiply": {
+                "ref": "module-AbstractGeometry-Isometry.html#premultiply",
+                "tf": 6.25
+              },
+              "module-AbstractGeometry-Position.html#multiply": {
+                "ref": "module-AbstractGeometry-Position.html#multiply",
+                "tf": 3.571428571428571
+              },
+              "module-AbstractGeometry-Position.html#premultiply": {
+                "ref": "module-AbstractGeometry-Position.html#premultiply",
+                "tf": 3.571428571428571
+              },
+              "module-AbstractGeometry-RelPosition.html#localPoint": {
+                "ref": "module-AbstractGeometry-RelPosition.html#localPoint",
+                "tf": 7.142857142857142
+              }
+            }
+          },
           "d": {
             "docs": {
-              "module-ThurstonItems-Item.html#id": {
-                "ref": "module-ThurstonItems-Item.html#id",
-                "tf": 705
-              },
               "module-ThurstonItems-Item.html#name": {
                 "ref": "module-ThurstonItems-Item.html#name",
                 "tf": 6.666666666666667
@@ -4913,38 +4914,6 @@ window.lunrData = {
                     "tf": 0.9615384615384616
                   }
                 }
-              }
-            }
-          },
-          ".": {
-            "docs": {
-              "module-ThurstonItems-Item.html#local": {
-                "ref": "module-ThurstonItems-Item.html#local",
-                "tf": 7.142857142857142
-              },
-              "KeyboardControls.html#update": {
-                "ref": "KeyboardControls.html#update",
-                "tf": 1.834862385321101
-              },
-              "module-AbstractGeometry-Isometry.html#multiply": {
-                "ref": "module-AbstractGeometry-Isometry.html#multiply",
-                "tf": 6.25
-              },
-              "module-AbstractGeometry-Isometry.html#premultiply": {
-                "ref": "module-AbstractGeometry-Isometry.html#premultiply",
-                "tf": 6.25
-              },
-              "module-AbstractGeometry-Position.html#multiply": {
-                "ref": "module-AbstractGeometry-Position.html#multiply",
-                "tf": 3.571428571428571
-              },
-              "module-AbstractGeometry-Position.html#premultiply": {
-                "ref": "module-AbstractGeometry-Position.html#premultiply",
-                "tf": 3.571428571428571
-              },
-              "module-AbstractGeometry-RelPosition.html#localPoint": {
-                "ref": "module-AbstractGeometry-RelPosition.html#localPoint",
-                "tf": 7.142857142857142
               }
             }
           },
@@ -5409,10 +5378,6 @@ window.lunrData = {
                         "ref": "Material.html#shininess",
                         "tf": 50
                       },
-                      "module-ThurstonItems-Item.html#id": {
-                        "ref": "module-ThurstonItems-Item.html#id",
-                        "tf": 50
-                      },
                       "module-Thurston-Thurston.html#maxLightDirs": {
                         "ref": "module-Thurston-Thurston.html#maxLightDirs",
                         "tf": 62.5
@@ -5433,10 +5398,6 @@ window.lunrData = {
                 "docs": {},
                 "r": {
                   "docs": {
-                    "module-ThurstonItems-Item.html#id": {
-                      "ref": "module-ThurstonItems-Item.html#id",
-                      "tf": 5
-                    },
                     "module-AbstractGeometry-Isometry.html#reduceError": {
                       "ref": "module-AbstractGeometry-Isometry.html#reduceError",
                       "tf": 5.555555555555555
@@ -10723,60 +10684,6 @@ window.lunrData = {
                                                                 }
                                                               }
                                                             },
-                                                            "i": {
-                                                              "docs": {},
-                                                              "d": {
-                                                                "docs": {
-                                                                  "module-ThurstonItems-Item.html#id": {
-                                                                    "ref": "module-ThurstonItems-Item.html#id",
-                                                                    "tf": 1150
-                                                                  }
-                                                                }
-                                                              },
-                                                              "s": {
-                                                                "docs": {},
-                                                                "l": {
-                                                                  "docs": {},
-                                                                  "i": {
-                                                                    "docs": {},
-                                                                    "g": {
-                                                                      "docs": {},
-                                                                      "h": {
-                                                                        "docs": {},
-                                                                        "t": {
-                                                                          "docs": {
-                                                                            "module-ThurstonItems-Item.html#isLight": {
-                                                                              "ref": "module-ThurstonItems-Item.html#isLight",
-                                                                              "tf": 1150
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                },
-                                                                "s": {
-                                                                  "docs": {},
-                                                                  "o": {
-                                                                    "docs": {},
-                                                                    "l": {
-                                                                      "docs": {},
-                                                                      "i": {
-                                                                        "docs": {},
-                                                                        "d": {
-                                                                          "docs": {
-                                                                            "module-ThurstonItems-Item.html#isSolid": {
-                                                                              "ref": "module-ThurstonItems-Item.html#isSolid",
-                                                                              "tf": 1150
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
                                                             "g": {
                                                               "docs": {},
                                                               "l": {
@@ -10967,6 +10874,52 @@ window.lunrData = {
                                                                     "module-ThurstonItems-Item.html#name": {
                                                                       "ref": "module-ThurstonItems-Item.html#name",
                                                                       "tf": 1150
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            },
+                                                            "i": {
+                                                              "docs": {},
+                                                              "s": {
+                                                                "docs": {},
+                                                                "l": {
+                                                                  "docs": {},
+                                                                  "i": {
+                                                                    "docs": {},
+                                                                    "g": {
+                                                                      "docs": {},
+                                                                      "h": {
+                                                                        "docs": {},
+                                                                        "t": {
+                                                                          "docs": {
+                                                                            "module-ThurstonItems-Item.html#isLight": {
+                                                                              "ref": "module-ThurstonItems-Item.html#isLight",
+                                                                              "tf": 1150
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "s": {
+                                                                  "docs": {},
+                                                                  "o": {
+                                                                    "docs": {},
+                                                                    "l": {
+                                                                      "docs": {},
+                                                                      "i": {
+                                                                        "docs": {},
+                                                                        "d": {
+                                                                          "docs": {
+                                                                            "module-ThurstonItems-Item.html#isSolid": {
+                                                                              "ref": "module-ThurstonItems-Item.html#isSolid",
+                                                                              "tf": 1150
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
                                                                     }
                                                                   }
                                                                 }
@@ -14642,10 +14595,6 @@ window.lunrData = {
                         "ref": "module-ThurstonItems-Item.html#uuid",
                         "tf": 110
                       },
-                      "module-ThurstonItems-Item.html#id": {
-                        "ref": "module-ThurstonItems-Item.html#id",
-                        "tf": 110
-                      },
                       "module-ThurstonItems-Item.html#glsl": {
                         "ref": "module-ThurstonItems-Item.html#glsl",
                         "tf": 110
@@ -15416,10 +15365,6 @@ window.lunrData = {
                       "ref": "module-ThurstonItems-Item.html",
                       "tf": 4.545454545454546
                     },
-                    "module-ThurstonItems-Item.html#id": {
-                      "ref": "module-ThurstonItems-Item.html#id",
-                      "tf": 5
-                    },
                     "module-Thurston-Thurston.html": {
                       "ref": "module-Thurston-Thurston.html",
                       "tf": 8.333333333333332
@@ -15701,10 +15646,6 @@ window.lunrData = {
                             "module-ThurstonItems-Item.html#uuid": {
                               "ref": "module-ThurstonItems-Item.html#uuid",
                               "tf": 6.25
-                            },
-                            "module-ThurstonItems-Item.html#id": {
-                              "ref": "module-ThurstonItems-Item.html#id",
-                              "tf": 5
                             },
                             "module-AbstractGeometry-Teleport.html#uuid": {
                               "ref": "module-AbstractGeometry-Teleport.html#uuid",
@@ -16621,10 +16562,6 @@ window.lunrData = {
                         "ref": "module-ThurstonItems-Item.html#uuid",
                         "tf": 6.25
                       },
-                      "module-ThurstonItems-Item.html#id": {
-                        "ref": "module-ThurstonItems-Item.html#id",
-                        "tf": 5
-                      },
                       "module-AbstractGeometry-Teleport.html#uuid": {
                         "ref": "module-AbstractGeometry-Teleport.html#uuid",
                         "tf": 6.25
@@ -16702,10 +16639,6 @@ window.lunrData = {
                           "ref": "module-ThurstonItems-Item.html#uuid",
                           "tf": 6.25
                         },
-                        "module-ThurstonItems-Item.html#id": {
-                          "ref": "module-ThurstonItems-Item.html#id",
-                          "tf": 5
-                        },
                         "module-Thurston-Thurston.html#params": {
                           "ref": "module-Thurston-Thurston.html#params",
                           "tf": 3.571428571428571
@@ -16721,120 +16654,6 @@ window.lunrData = {
                         "module-AbstractGeometry-Teleport.html#glsl": {
                           "ref": "module-AbstractGeometry-Teleport.html#glsl",
                           "tf": 6.25
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "d": {
-            "docs": {
-              "module-ThurstonItems-Item.html#id": {
-                "ref": "module-ThurstonItems-Item.html#id",
-                "tf": 5
-              },
-              "module-Thurston-Thurston.html#addItem": {
-                "ref": "module-Thurston-Thurston.html#addItem",
-                "tf": 16.666666666666664
-              },
-              "module-Thurston-Thurston.html#addItems": {
-                "ref": "module-Thurston-Thurston.html#addItems",
-                "tf": 12.5
-              }
-            },
-            "d": {
-              "docs": {
-                "module-Thurston-Thurston.html#appendTitle": {
-                  "ref": "module-Thurston-Thurston.html#appendTitle",
-                  "tf": 10
-                },
-                "module-ThurstonItems.html": {
-                  "ref": "module-ThurstonItems.html",
-                  "tf": 6.25
-                },
-                "module-ThurstonEuclideanItems.html": {
-                  "ref": "module-ThurstonEuclideanItems.html",
-                  "tf": 5.555555555555555
-                }
-              },
-              "i": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "m": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#addItem": {
-                          "ref": "module-Thurston-Thurston.html#addItem",
-                          "tf": 700
-                        },
-                        "module-Thurston-Thurston.html#addItems": {
-                          "ref": "module-Thurston-Thurston.html#addItems",
-                          "tf": 700
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "v": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "n": {
-                      "docs": {},
-                      "t": {
-                        "docs": {},
-                        "l": {
-                          "docs": {},
-                          "i": {
-                            "docs": {},
-                            "s": {
-                              "docs": {},
-                              "t": {
-                                "docs": {},
-                                "e": {
-                                  "docs": {},
-                                  "n": {
-                                    "docs": {
-                                      "module-Thurston-Thurston.html#addEventListeners": {
-                                        "ref": "module-Thurston-Thurston.html#addEventListeners",
-                                        "tf": 750
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "v": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "n": {
-                  "docs": {},
-                  "t": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "g": {
-                        "docs": {
-                          "module-AbstractGeometry-DiscreteSubgroup.html": {
-                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
-                            "tf": 0.3546099290780142
-                          }
                         }
                       }
                     }
@@ -17413,6 +17232,116 @@ window.lunrData = {
                                 }
                               }
                             }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "d": {
+            "docs": {
+              "module-Thurston-Thurston.html#addItem": {
+                "ref": "module-Thurston-Thurston.html#addItem",
+                "tf": 16.666666666666664
+              },
+              "module-Thurston-Thurston.html#addItems": {
+                "ref": "module-Thurston-Thurston.html#addItems",
+                "tf": 12.5
+              }
+            },
+            "d": {
+              "docs": {
+                "module-Thurston-Thurston.html#appendTitle": {
+                  "ref": "module-Thurston-Thurston.html#appendTitle",
+                  "tf": 10
+                },
+                "module-ThurstonItems.html": {
+                  "ref": "module-ThurstonItems.html",
+                  "tf": 6.25
+                },
+                "module-ThurstonEuclideanItems.html": {
+                  "ref": "module-ThurstonEuclideanItems.html",
+                  "tf": 5.555555555555555
+                }
+              },
+              "i": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "m": {
+                      "docs": {
+                        "module-Thurston-Thurston.html#addItem": {
+                          "ref": "module-Thurston-Thurston.html#addItem",
+                          "tf": 700
+                        },
+                        "module-Thurston-Thurston.html#addItems": {
+                          "ref": "module-Thurston-Thurston.html#addItems",
+                          "tf": 700
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "e": {
+                "docs": {},
+                "v": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "t": {
+                        "docs": {},
+                        "l": {
+                          "docs": {},
+                          "i": {
+                            "docs": {},
+                            "s": {
+                              "docs": {},
+                              "t": {
+                                "docs": {},
+                                "e": {
+                                  "docs": {},
+                                  "n": {
+                                    "docs": {
+                                      "module-Thurston-Thurston.html#addEventListeners": {
+                                        "ref": "module-Thurston-Thurston.html#addEventListeners",
+                                        "tf": 750
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "v": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "t": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "g": {
+                        "docs": {
+                          "module-AbstractGeometry-DiscreteSubgroup.html": {
+                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
+                            "tf": 0.3546099290780142
                           }
                         }
                       }
@@ -19319,7 +19248,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 1930
+      "length": 1917
     },
     "corpusTokens": [
       "0",
@@ -19712,7 +19641,6 @@ window.lunrData = {
       "module:thurstonitems~item#classnam",
       "module:thurstonitems~item#glob",
       "module:thurstonitems~item#glsl",
-      "module:thurstonitems~item#id",
       "module:thurstonitems~item#islight",
       "module:thurstonitems~item#issolid",
       "module:thurstonitems~item#loadglsltempl",
@@ -20124,16 +20052,6 @@ window.lunrData = {
       "tags": "module:ThurstonItems~Item#uuid uuid",
       "summary": "",
       "description": "UUID of this object instance. This gets automatically assigned, so this shouldn't be edited."
-    },
-    "module-ThurstonItems-Item.html#id": {
-      "id": "module-ThurstonItems-Item.html#id",
-      "kind": "member",
-      "title": "id :number",
-      "longname": "module:ThurstonItems~Item#id",
-      "name": "id",
-      "tags": "module:ThurstonItems~Item#id id",
-      "summary": "",
-      "description": "An numerical ID. This gets automatically assigned, so this shouldn't be edited, when the item is added to the scene"
     },
     "module-ThurstonItems-Item.html#glsl": {
       "id": "module-ThurstonItems-Item.html#glsl",

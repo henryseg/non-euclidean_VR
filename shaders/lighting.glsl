@@ -38,13 +38,12 @@ vec3 lightComputation(Vector v, Vector n, Vector dir, Material material, vec3 li
  * Phong lighting model.
  * Take into account all possible lights and directions
  * @param[in] v incidence vector
- * @param[in] obj the object we are rendering
+ * @param[in] solid the solid we are rendering
+ * @param[in] normal the normal to the solid at the point we hit it
  * @todo Choose a convention for the incidence vector `v`.
  * Should it point toward the object, or the observer?
  */
-vec3 phongModel(RelVector v, Solid solid) {
-  RelVector n = sceneNormal(v, solid);
-
+vec3 phongModel(RelVector v, Solid solid, RelVector normal) {
   RelVector[{{maxLightDirs}}] dirs;
   float[{{maxLightDirs}}] intensities;
   int k;
@@ -54,7 +53,7 @@ vec3 phongModel(RelVector v, Solid solid) {
   {{#lights}}
     k = {{name}}Dir(v, dirs, intensities);
     for(int j=0; j < k; j++){
-      color = color + lightComputation(v.local, n.local, dirs[j].local, solid.material, {{name}}.color, intensities[j]);
+      color = color + lightComputation(v.local, normal.local, dirs[j].local, solid.material, {{name}}.color, intensities[j]);
     }
   {{/lights}}
 

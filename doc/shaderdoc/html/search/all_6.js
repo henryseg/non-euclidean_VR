@@ -5,5 +5,5 @@ var searchData=
   ['geomlength_23',['geomLength',['../commons_8glsl.html#a2deb53c560e6f5ec90b01ac377dba9d5',1,'commons.glsl']]],
   ['geomnormalize_24',['geomNormalize',['../commons_8glsl.html#a7f0706b1ec3783c39e6485a5aa8a7dca',1,'geomNormalize(Vector v):&#160;commons.glsl'],['../commons_8glsl.html#a79150cae91c14ff121203068e444fbf2',1,'geomNormalize(RelVector v):&#160;commons.glsl']]],
   ['geomreflect_25',['geomReflect',['../commons_8glsl.html#a62a0ee31a906e995f2e56c8b5857072f',1,'commons.glsl']]],
-  ['globalscenesdf_26',['globalSceneSDF',['../scene_8glsl.html#ab627fd1334b8fc43e2a53a551045ab11',1,'scene.glsl']]]
+  ['globalscenesdf_26',['globalSceneSDF',['../scene_8glsl.html#a03b28906ed87e2fcce6b50bf50d86ea4',1,'scene.glsl']]]
 ];

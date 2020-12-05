@@ -10,14 +10,15 @@
  * @param[inout] v The initial vector for raymarching.
  * The vector is updated by the function,
  * that is at the end, `v` is the incidence vector at which we hit an object (if any)
- * @param[out] solid the object that we enventually hit
+ * @param[out] solid the solid that we enventually hit
+ * @param[out] normal the normal to the solid at the point we hit it
  * @return
  * - 1 if an object has been hit
  * - 0 if no object has bee hit
  * - -1, if there is a bug
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
  */
-int raymarch(inout RelVector v, out Solid solid){
+int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
     RelVector globalV0 = v;
     RelVector globalV = v;
     RelVector localV0 = v;
@@ -30,6 +31,7 @@ int raymarch(inout RelVector v, out Solid solid){
     float dist;
     bool hasTeleported;
     int auxHit;
+    RelVector auxNormal;
     int hit = 0;
 
 
@@ -44,13 +46,13 @@ int raymarch(inout RelVector v, out Solid solid){
             if (localDepth > maxDist) {
                 break;
             }
-            dist = localSceneSDF(localV, auxHit, auxSolid);
+            dist = localSceneSDF(localV, auxHit, auxSolid, auxNormal);
             if (auxHit == 1) {
                 // we hit an object
                 hit = auxHit;
                 solid = auxSolid;
+                normal = auxNormal;
                 res = localV;
-                //return -1;
                 break;
             }
             marchingStep = marchingStep + dist;
@@ -66,11 +68,12 @@ int raymarch(inout RelVector v, out Solid solid){
             // we reached the maximal distance
             break;
         }
-        dist = globalSceneSDF(globalV, auxHit, auxSolid);
+        dist = globalSceneSDF(globalV, auxHit, auxSolid, auxNormal);
         if (auxHit == 1) {
             // we hit an object
             hit = auxHit;
             solid = auxSolid;
+            normal = auxNormal;
             res = globalV;
             break;
         }

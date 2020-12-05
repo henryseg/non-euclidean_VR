@@ -83,18 +83,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a3f484899e021d4a557cca5f18d08ea4e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a3f484899e021d4a557cca5f18d08ea4e">localSceneSDF</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, out int hit, out <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
-<tr class="separator:a3f484899e021d4a557cca5f18d08ea4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab627fd1334b8fc43e2a53a551045ab11"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#ab627fd1334b8fc43e2a53a551045ab11">globalSceneSDF</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, out int hit, out <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
-<tr class="separator:ab627fd1334b8fc43e2a53a551045ab11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab334ea37f93dba9b2f81929003488e20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#ab334ea37f93dba9b2f81929003488e20">sceneNormal</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
-<tr class="separator:ab334ea37f93dba9b2f81929003488e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a91290db249731d94ba7be46763f16"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#ad7a91290db249731d94ba7be46763f16">localSceneSDF</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, out int hit, out <a class="el" href="struct_solid.html">Solid</a> solid, out <a class="el" href="struct_rel_vector.html">RelVector</a> normal)</td></tr>
+<tr class="separator:ad7a91290db249731d94ba7be46763f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03b28906ed87e2fcce6b50bf50d86ea4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scene_8glsl.html#a03b28906ed87e2fcce6b50bf50d86ea4">globalSceneSDF</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, out int hit, out <a class="el" href="struct_solid.html">Solid</a> solid, out <a class="el" href="struct_rel_vector.html">RelVector</a> normal)</td></tr>
+<tr class="separator:a03b28906ed87e2fcce6b50bf50d86ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file defines the scene SDF and scene Gradient used during the raymarching and lightening. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ab627fd1334b8fc43e2a53a551045ab11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab627fd1334b8fc43e2a53a551045ab11">&#9670;&nbsp;</a></span>globalSceneSDF()</h2>
+<a id="a03b28906ed87e2fcce6b50bf50d86ea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03b28906ed87e2fcce6b50bf50d86ea4">&#9670;&nbsp;</a></span>globalSceneSDF()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -115,7 +113,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">out <a class="el" href="struct_solid.html">Solid</a>&#160;</td>
-          <td class="paramname"><em>solid</em>&#160;</td>
+          <td class="paramname"><em>solid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>normal</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -128,15 +132,16 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the direction to follows </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">hit</td><td>say if we hit an object (1), nothing (0) or if there is a bug (-1) </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>the object that we hit. There are two void object for background and debug </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">solid</td><td>the solid that we hit. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">normal</td><td>the normal to the solid at the point we hit it There are two void object for background and debug </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a3f484899e021d4a557cca5f18d08ea4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f484899e021d4a557cca5f18d08ea4e">&#9670;&nbsp;</a></span>localSceneSDF()</h2>
+<a id="ad7a91290db249731d94ba7be46763f16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7a91290db249731d94ba7be46763f16">&#9670;&nbsp;</a></span>localSceneSDF()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -157,7 +162,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">out <a class="el" href="struct_solid.html">Solid</a>&#160;</td>
-          <td class="paramname"><em>solid</em>&#160;</td>
+          <td class="paramname"><em>solid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>normal</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -170,46 +181,11 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the direction to follows </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">hit</td><td>say if we hit an object (1), nothing (0) or if there is a bug (-1) </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>the object that we hit. There are two void object for background and debug </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">solid</td><td>the solid that we hit. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">normal</td><td>the normal to the solid at the point we hit it There are two void object for background and debug </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="ab334ea37f93dba9b2f81929003488e20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab334ea37f93dba9b2f81929003488e20">&#9670;&nbsp;</a></span>sceneNormal()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> sceneNormal </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_solid.html">Solid</a>&#160;</td>
-          <td class="paramname"><em>solid</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Compute the normal to the scene at the vector <code>v</code> </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>the vector when we hit the scene </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">obj</td><td>the specific object that has been hit </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section remark"><dt>Remarks</dt><dd>Since we know, which object has been hit, we don't need to use the scenceSDF to estimate the normal. We can directly use the SDF of that object. It is probably faster. </dd></dl>
 
 </div>
 </div>

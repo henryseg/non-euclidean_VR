@@ -83,14 +83,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae85dfaac1ff406f7e785d45aefd63d87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#ae85dfaac1ff406f7e785d45aefd63d87">raymarch</a> (inout <a class="el" href="struct_rel_vector.html">RelVector</a> v, out <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
-<tr class="separator:ae85dfaac1ff406f7e785d45aefd63d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a129de7f2464e51cc868a93a985a504ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="raymarch_8glsl.html#a129de7f2464e51cc868a93a985a504ca">raymarch</a> (inout <a class="el" href="struct_rel_vector.html">RelVector</a> v, out <a class="el" href="struct_solid.html">Solid</a> solid, out <a class="el" href="struct_rel_vector.html">RelVector</a> normal)</td></tr>
+<tr class="separator:a129de7f2464e51cc868a93a985a504ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Raymarching (merge this file with other small files ?) </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ae85dfaac1ff406f7e785d45aefd63d87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae85dfaac1ff406f7e785d45aefd63d87">&#9670;&nbsp;</a></span>raymarch()</h2>
+<a id="a129de7f2464e51cc868a93a985a504ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a129de7f2464e51cc868a93a985a504ca">&#9670;&nbsp;</a></span>raymarch()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -105,7 +105,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">out <a class="el" href="struct_solid.html">Solid</a>&#160;</td>
-          <td class="paramname"><em>solid</em>&#160;</td>
+          <td class="paramname"><em>solid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>normal</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -117,7 +123,8 @@ Functions</h2></td></tr>
 <p>Ray-marching. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">v</td><td>The initial vector for raymarching. The vector is updated by the function, that is at the end, <code>v</code> is the incidence vector at which we hit an object (if any) </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">solid</td><td>the object that we enventually hit </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">solid</td><td>the solid that we enventually hit </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">normal</td><td>the normal to the solid at the point we hit it </td></tr>
   </table>
   </dd>
 </dl>

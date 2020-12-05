@@ -15,7 +15,6 @@
  *
  **********************************************************************************************************************/
 struct Item{
-    int id; /**< Identifyer of the item */
     Position position;/**< the position of the item*/
     Point loc; /**< location of the object */
 };

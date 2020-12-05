@@ -34,10 +34,12 @@ RelVector rayDir(vec3 coords){
 void main() {
     vec3 color;
     Solid solid;
+    RelVector normal;
 
     setup();
     RelVector v = rayDir(spherePosition);
-    int hit = raymarch(v, solid);
+
+    int hit = raymarch(v, solid, normal);
 
     switch (hit) {
         case -1:
@@ -47,7 +49,7 @@ void main() {
         color = vec3(0, 0, 0);
         break;
         default :
-        color = phongModel(v, solid);
+        color = phongModel(v, solid, normal);
     }
 
     gl_FragColor = vec4(color, 1);

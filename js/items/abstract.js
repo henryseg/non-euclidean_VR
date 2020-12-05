@@ -49,12 +49,6 @@ class Item {
          */
         this.uuid = MathUtils.generateUUID().replaceAll('-','_');
         /**
-         * An numerical ID.
-         * This gets automatically assigned, so this shouldn't be edited, when the item is added to the scene
-         * @type {number}
-         */
-        this.id = undefined
-        /**
          * The GLSL code for the item (declaration, signed distance function and gradient)
          * @type {Object}
          */
@@ -169,7 +163,6 @@ class Item {
      */
     toGLSL() {
         return `Item(
-            ${this.id}, 
             ${this.position.toGLSL()},
             ${this.point.toGLSL()}
             )`;

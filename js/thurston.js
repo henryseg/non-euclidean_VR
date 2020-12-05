@@ -262,9 +262,6 @@ class Thurston {
         // The maximal number of directions for a light
         this._maxLightDirs = undefined;
 
-        // first available id of an item (to be incremented when adding items)
-        this._id = 0;
-
         // setup the keyboard controls
         this._controls = new KeyboardControls(
             this.params.position,
@@ -352,10 +349,6 @@ class Thurston {
      * @return {Thurston} the current Thurston object
      */
     addItem(item) {
-        // setup a numerical id for the item
-        item.id = this._id;
-        // update the value of the next available ide
-        this._id = this._id + 1;
         // add the item to the appropriate list
         if (item.isSolid()) {
             this._solids.push(item);
