@@ -75,7 +75,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">main.glsl File Reference</div>  </div>
 </div><!--header-->
@@ -83,10 +84,15 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a17eed11dc77abb4124af5cee5d4614a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#a17eed11dc77abb4124af5cee5d4614a5">rayDir</a> (vec2 coords)</td></tr>
-<tr class="separator:a17eed11dc77abb4124af5cee5d4614a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5820bc3ad101e7f281fa7698064145b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#aa5820bc3ad101e7f281fa7698064145b">rayDir</a> (vec3 coords)</td></tr>
+<tr class="separator:aa5820bc3ad101e7f281fa7698064145b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdef7a1fd863a6d3770c1268cb06add3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">main</a> ()</td></tr>
 <tr class="separator:acdef7a1fd863a6d3770c1268cb06add3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a6680c771438c8f647ce914ec20263bc2"><td class="memItemLeft" align="right" valign="top">varying vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8glsl.html#a6680c771438c8f647ce914ec20263bc2">spherePosition</a></td></tr>
+<tr class="separator:a6680c771438c8f647ce914ec20263bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main file :</p><ul>
@@ -117,8 +123,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a17eed11dc77abb4124af5cee5d4614a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17eed11dc77abb4124af5cee5d4614a5">&#9670;&nbsp;</a></span>rayDir()</h2>
+<a id="aa5820bc3ad101e7f281fa7698064145b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5820bc3ad101e7f281fa7698064145b">&#9670;&nbsp;</a></span>rayDir()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -126,7 +132,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> rayDir </td>
           <td>(</td>
-          <td class="paramtype">vec2&#160;</td>
+          <td class="paramtype">vec3&#160;</td>
           <td class="paramname"><em>coords</em></td><td>)</td>
           <td></td>
         </tr>
@@ -134,10 +140,26 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Compute the initial direction for the ray-marching </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">coords</td><td>the coordinates of the point (in pixels) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">coords</td><td>the coordinates of the point on the sphere </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a6680c771438c8f647ce914ec20263bc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6680c771438c8f647ce914ec20263bc2">&#9670;&nbsp;</a></span>spherePosition</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">varying vec3 spherePosition</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="struct_position.html">Position</a> on the sphere. </p>
 
 </div>
 </div>

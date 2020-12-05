@@ -168,43 +168,14 @@ class Item {
     }
 
     /**
-     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
-     * @return {Promise<void>}
+     * Load the XML file containing the GLSL blocks of code.
+     * Return the XML as a DOM
+     * @return {Promise<Document>}
      */
-    async glslBuildData() {
+    async loadGLSLTemplate() {
         const response = await fetch(this.shaderSource);
         const parser = new DOMParser();
-        const xml = parser.parseFromString(await response.text(), 'application/xml');
-
-        let tag;
-        if (this.isSolid()) {
-            tag = 'solid';
-        }
-        if (this.isLight()) {
-            tag = 'light';
-        }
-        const selector = `${tag}[class=${this.className}] shader`;
-        const templates = xml.querySelectorAll(selector);
-        let rendered;
-        let type;
-        for (const template of templates) {
-            type = template.getAttribute('type');
-            rendered = mustache.render(template.childNodes[0].nodeValue, this);
-            switch (type) {
-                case 'sdf':
-                    this.glsl[type] = `float ${this.name}SDF(RelVector v){
-                        ${rendered}
-                    }`;
-                    break;
-                case 'gradient':
-                    this.glsl[type] = `RelVector ${this.name}Grad(RelVector v){
-                        ${rendered}
-                    }`;
-                    break;
-                default:
-                    this.glsl[type] = rendered;
-            }
-        }
+        return parser.parseFromString(await response.text(), 'application/xml');
     }
 }
 
@@ -274,6 +245,39 @@ class Solid extends Item {
             ${this._material.toGLSL()}
         )`;
     }
+
+    /**
+     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
+     * @param {Object} globals - Global parameters needed to build the GLSL blocks
+     * @return {Promise<void>}
+     */
+    async glslBuildData(globals = {}) {
+        const xml = await this.loadGLSLTemplate();
+        const selector = `solid[class=${this.className}] shader`;
+        const templates = xml.querySelectorAll(selector);
+        let rendered;
+        let type;
+        for (const template of templates) {
+            type = template.getAttribute('type');
+            rendered = mustache.render(template.childNodes[0].nodeValue, this);
+            switch (type) {
+                case 'sdf':
+                    // SDF for the solid
+                    this.glsl[type] = `float ${this.name}SDF(RelVector v){
+                        ${rendered}
+                    }`;
+                    break;
+                case 'gradient':
+                    // gradient of SDF for the solid
+                    this.glsl[type] = `RelVector ${this.name}Grad(RelVector v){
+                        ${rendered}
+                    }`;
+                    break;
+                default:
+                    this.glsl[type] = rendered;
+            }
+        }
+    }
 }
 
 
@@ -296,6 +300,7 @@ class Light extends Item {
     constructor(data = {}) {
         super(data);
         this.color = data.color;
+        this.maxDirs = data.maxDirs;
     }
 
     /**
@@ -308,9 +313,25 @@ class Light extends Item {
 
     set color(value) {
         if (value === undefined) {
-            this._color = new Color(1,1,1);
+            this._color = new Color(1, 1, 1);
         } else {
             this._color = value;
+        }
+    }
+
+    /**
+     * Maximal number of directions returned at each point
+     * @return {number}
+     */
+    get maxDirs() {
+        return this._maxDirs;
+    }
+
+    set maxDirs(value) {
+        if (value === undefined) {
+            this._maxDirs = 1;
+        } else {
+            this._maxDirs = value;
         }
     }
 
@@ -339,6 +360,33 @@ class Light extends Item {
             ${super.toGLSL()},
             vec3(${this._color.toArray()})
         )`;
+    }
+
+    /**
+     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
+     * @param {Object} globals - Global parameters needed to build the GLSL blocks
+     * @return {Promise<void>}
+     */
+    async glslBuildData(globals) {
+        const xml = await this.loadGLSLTemplate();
+        const selector = `light[class=${this.className}] shader`;
+        const templates = xml.querySelectorAll(selector);
+        let rendered;
+        let type;
+        for (const template of templates) {
+            type = template.getAttribute('type');
+            rendered = mustache.render(template.childNodes[0].nodeValue, this);
+            switch (type) {
+                case 'direction':
+                    // direction field for a light
+                    this.glsl[type] = `int ${this.name}Dir(RelVector v, out RelVector[${globals.maxLightDirs}] dirs, out float[${globals.maxLightDirs}] intensities){
+                        ${rendered}
+                    }`
+                    break;
+                default:
+                    this.glsl[type] = rendered;
+            }
+        }
     }
 }
 

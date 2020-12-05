@@ -340,6 +340,8 @@ class Thurston {
         this._solids = {};
         // The list of lights in the scene as an object {id: light}
         this._lights = {};
+        // The maximal number of directions for a light
+        this._maxLightDirs = undefined;
 
         // first available id of an item (to be incremented when adding items)
         this._id = 0;
@@ -471,6 +473,22 @@ class Thurston {
     }
 
     /**
+     * The maximal number of light directions
+     * @type {number}
+     */
+    get maxLightDirs() {
+        if (this._maxLightDirs === undefined) {
+            this._maxLightDirs = 0;
+            for (const light of this.listLights) {
+                if (light.maxDirs > this._maxLightDirs) {
+                    this._maxLightDirs = light.maxDirs
+                }
+            }
+        }
+        return this._maxLightDirs
+    }
+
+    /**
      * Return the position of the left and right eye, computed from the current position.
      * If the VR mode is not on, then both eye coincide with the observer position.
      * @return{RelPosition[]} the left and right eye positions
@@ -595,7 +613,7 @@ class Thurston {
             await solid.glslBuildData();
         }
         for (const light of this.listLights) {
-            await light.glslBuildData();
+            await light.glslBuildData({maxLightDirs: this.maxLightDirs});
         }
         return {
             solids: this.listSolids,
@@ -636,7 +654,7 @@ class Thurston {
             {file: 'shaders/sdf.glsl', data: items},
             {file: 'shaders/scene.glsl', data: items},
             {file: 'shaders/raymarch.glsl', data: undefined},
-            {file: 'shaders/lighting.glsl', data: items},
+            {file: 'shaders/lighting.glsl', data: Object.assign({maxLightDirs: this.maxLightDirs},items)},
             {file: 'shaders/main.glsl', data: undefined}
         ];
 
@@ -655,7 +673,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        //console.log(fShader);
+        console.log(fShader);
 
         return fShader;
     }

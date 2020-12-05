@@ -155,6 +155,7 @@ Point smallShift(Point p, vec3 dp){ }
  * In addition we also store ìn `lens` the length of the corresponding geodesic between `p` and `q`.
  * The function return the number of computed directions.
  * This number is always bounded above by MAX_DIRS (a global constant) and the paramter `n`.
+ * @deprecated The light directions are computed at the light level
  * @todo Write a better description?
  */
 int directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX_DIRS] lens){ }
@@ -165,11 +166,3 @@ int directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX
  */
 Vector flow(Vector v, float t){ }
 
-
-/**
- * Intensity of the light after travelling a length `len` in the direction `dir`
- * @param[in] dir unit vector at the light position
- * @param[in] len distance from the light
- * @return intensity of the light
- */
-float lightIntensity(Vector dir, float len){ }

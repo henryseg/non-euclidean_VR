@@ -44,12 +44,13 @@ class Ball extends Solid {
 
 class PointLight extends Light {
 
-    constructor(location, color) {
+    constructor(location, color, global = true) {
         const position = new Position();
         position.setBoost(new Isometry().makeTranslation(location));
         const data = {
             position: position,
             color: color,
+            global: global
         }
         super(data);
     }

@@ -10,3 +10,7 @@
     {{{glsl.sdf}}}
     {{{glsl.gradient}}}
 {{/solids}}
+
+{{#lights}}
+    {{{glsl.direction}}}
+{{/lights}}

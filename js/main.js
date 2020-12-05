@@ -87,16 +87,20 @@ const ball1 = new items.Ball(
     new Material({color: new Color(0, 0, 1)})
 );
 
+//  yellow light
 const light0 = new items.PointLight(
     new geom.Point(1, 0, 0),
-    new Color(1, 1, 0)
+    new Color(1, 1, 0),
+    true
 );
 
+// cyan light
 const light1 = new items.PointLight(
     new geom.Point(0, 1, -1),
     new Color(0, 1, 1)
 );
 
+// magenta light
 const light2 = new items.PointLight(
     new geom.Point(-1, -1, 1),
     new Color(1, 0, 1)
