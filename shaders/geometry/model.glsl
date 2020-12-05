@@ -149,16 +149,6 @@ void frame(Point p, out Vector[3] frame){ }
  */
 Point smallShift(Point p, vec3 dp){ }
 
-/**
- * Compute the directions of the geodesics starting at `p` and reaching `q`.
- * Each direction is stored in the array `dirs`.
- * In addition we also store ìn `lens` the length of the corresponding geodesic between `p` and `q`.
- * The function return the number of computed directions.
- * This number is always bounded above by MAX_DIRS (a global constant) and the paramter `n`.
- * @deprecated The light directions are computed at the light level
- * @todo Write a better description?
- */
-int directions(Point p, Point q, int n, out Vector[MAX_DIRS] dirs, out float[MAX_DIRS] lens){ }
 
 /**
  * Flow the vector `v` for a time `t`.

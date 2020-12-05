@@ -2,23 +2,21 @@
 <library>
     <background>
         /**
-         * Distance between two points
-         */
+        * Distance between two points
+        */
         float dist(Point p1, Point p2){
-            return length(p1.coords - p2.coords);
+        return length(p1.coords - p2.coords);
         }
-
 
         /**
-         * Intensity of the light after travelling a length `len` in the direction `dir`
-         * @param[in] dir unit vector at the light position
-         * @param[in] len distance from the light
-         * @return intensity of the light
-         */
+        * Intensity of the light after travelling a length `len` in the direction `dir`
+        * @param[in] dir unit vector at the light position
+        * @param[in] len distance from the light
+        * @return intensity of the light
+        */
         float lightIntensity(float len){
-            return 1./(len);
+        return 1./(len);
         }
-
     </background>
     <items>
         <solid class="ball">
@@ -41,10 +39,37 @@
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
                 Vector local = Vector(v.local.pos, v.local.pos.coords - loc.coords);
-                local =  geomNormalize(local);
+                local = geomNormalize(local);
                 return RelVector(local, v.cellBoost, v.invCellBoost);
             </shader>
         </solid>
+
+
+        <solid class="ballComplement">
+            <shader type="declare">
+                Solid {{name}};
+            </shader>
+            <shader type="setup">
+                {{name}} = {{toGLSL}};
+            </shader>
+            <shader type="sdf">
+                Point loc = {{name}}.item.loc;
+                {{#global}}
+                loc = applyIsometry(v.invCellBoost, loc);
+                {{/global}}
+                return {{radius}} - dist(v.local.pos, loc);
+            </shader>
+            <shader type="gradient">
+                Point loc = {{name}}.item.loc;
+                {{#global}}
+                loc = applyIsometry(v.invCellBoost, loc);
+                {{/global}}
+                Vector local = Vector(v.local.pos, loc.coords - v.local.pos.coords);
+                local = geomNormalize(local);
+                return RelVector(local, v.cellBoost, v.invCellBoost);
+            </shader>
+        </solid>
+
 
         <light class="pointLight">
             <shader type="declare">

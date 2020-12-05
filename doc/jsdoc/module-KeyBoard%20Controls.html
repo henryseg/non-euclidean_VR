@@ -1,10 +1,9 @@
-<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>material.js</title>
+		<title>KeyBoard Controls</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -14,7 +13,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -36,15 +35,8 @@
 			<div class="navbar-collapse collapse" id="topNavigation">
 				<ul class="nav navbar-nav">
 								<li class="dropdown">
-									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="module-AbstractGeometry-DiscreteSubgroup.html">AbstractGeometry~DiscreteSubgroup</a></li>
 											<li><a href="module-AbstractGeometry-Isometry.html">AbstractGeometry~Isometry</a></li>
@@ -53,6 +45,7 @@
 											<li><a href="module-AbstractGeometry-RelPosition.html">AbstractGeometry~RelPosition</a></li>
 											<li><a href="module-AbstractGeometry-Teleport.html">AbstractGeometry~Teleport</a></li>
 											<li><a href="module-AbstractGeometry-Vector.html">AbstractGeometry~Vector</a></li>
+											<li><a href="module-KeyBoard%2520Controls-KeyboardControls.html">KeyBoard Controls~KeyboardControls</a></li>
 											<li><a href="module-ThurstonItems-Item.html">ThurstonItems~Item</a></li>
 											<li><a href="module-ThurstonItems-Light.html">ThurstonItems~Light</a></li>
 											<li><a href="module-ThurstonItems-Solid.html">ThurstonItems~Solid</a></li>
@@ -64,6 +57,7 @@
 									<ul class="dropdown-menu">
 											<li><a href="module-AbstractGeometry.html">AbstractGeometry</a></li>
 											<li><a href="module-EuclideanGeometry.html">EuclideanGeometry</a></li>
+											<li><a href="module-KeyBoard%2520Controls.html">KeyBoard Controls</a></li>
 											<li><a href="module-Thurston.html">Thurston</a></li>
 											<li><a href="module-ThurstonEuclideanItems.html">ThurstonEuclideanItems</a></li>
 											<li><a href="module-ThurstonItems.html">ThurstonItems</a></li>
@@ -86,157 +80,74 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">source</span>
-				<h1><span class="name">material.js</span></h1>
+				<span class="kind">module</span>
+				<h1><span class="name">KeyBoard Controls</span></h1>
 			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-12 main-content">
-		<section class="source-section">
-			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {
-    Color
-} from './lib/three.module.js';
-
-/**
- * Add a method to Three.js Color.
- * Return a block of GLSL code recreating the same color as a vec3
- * @return {string}
- */
-Color.prototype.toGLSL = function () {
-    return `vec3(${this.toArray()})`;
-}
-
-
-/**
- * @class
- *
- * @classdesc
- * Material for objects in the scene
- *
- * @see Further information on the {@link https://en.wikipedia.org/wiki/Phong_reflection_model|Phong lighting model}
- *
- * @todo Decide what to do for texture, color given by formulas, etc.
- * @todo Actually, could we just reuse Three.js Material class? (or another existing class)
- * The name of the class is in conflict the the Three.js one.
- * Do we want to fix this ? Maybe note, modules have tools to handle this situation.
- */
-class Material {
-    /**
-     * Constructor. Build a new material from the given data
-     * @param {Object} data - the properties of the material
-     */
-    constructor(data = {}) {
-        this.color = data.color;
-        this.ambient = data.ambient;
-        this.diffuse = data.diffuse;
-        this.specular = data.specular;
-        this.shininess = data.shininess;
-    }
-
-    /**
-     * Color of the material
-     * @type {Color}
-     */
-    get color() {
-        return this._color;
-    }
-
-    set color(value) {
-        if (value === undefined) {
-            this._color = new Color(1, 1, 1);
-        } else {
-            this._color = value;
-        }
-    }
-
-    /**
-     * ambient reflection constant
-     * @type {number}
-     */
-    get ambient() {
-        return this._ambient;
-    }
-
-    set ambient(value) {
-        if (value === undefined) {
-            this._ambient = 0.5;
-        } else {
-            this._ambient = value;
-        }
-    }
-
-    /**
-     * diffuse reflection constant
-     * @type {number}
-     */
-    get diffuse() {
-        return this._diffuse;
-    }
-
-    set diffuse(value) {
-        if (value === undefined) {
-            this._diffuse = 0.5;
-        } else {
-            this._diffuse = value;
-        }
-    }
-
-    /**
-     * specular reflection constant
-     * @type {number}
-     */
-    get specular() {
-        return this._specular;
-    }
-
-    set specular(value) {
-        if (value === undefined) {
-            this._specular = 0.5;
-        } else {
-            this._specular = value;
-        }
-    }
-
-    /**
-     * shininess reflection constant
-     * @type {number}
-     */
-    get shininess() {
-        return this._shininess;
-    }
-
-    set shininess(value) {
-        if (value === undefined) {
-            this._shininess = 10;
-        } else {
-            this._shininess = value;
-        }
-    }
-
-    /**
-     * Return a line of GLSL code creating the same material
-     * Used when dynamically building shaders.
-     * @return {string}
-     */
-    toGLSL() {
-        return `Material(
-            ${this.color.toGLSL()}, 
-            ${this.ambient.toGLSL()}, 
-            ${this.diffuse.toGLSL()}, 
-            ${this.specular.toGLSL()}, 
-            ${this.shininess.toGLSL()}
-            )`;
-    }
-}
-
-export {
-    Material
-}
-</code></pre>
-		</section>
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_module.html">Modules</a></li>
+							<li class="active">KeyBoard Controls</li>
+						</ol>
+					<section>
+		<dl class="symbol">
+			<dt class="symbol-title "></dt>
+			<dd class="symbol-details ">
+				<div class="symbol-details-inner">
+					<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Add controls to fly in the geometry using the keyboard
+					This is very much inspired from Three.js <a href="https://threejs.org/docs/#examples/en/controls/FlyControls%20"> FlyControls</a></p></div>
+					</div>					<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+									<!-- source -->
+									<div class="form-group">
+										<label class="col-sm-3 control-label">Source</label>
+										<div class="col-sm-9">
+											<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-1">line 1</a></p>
+										</div>
+									</div>
+					
+					
+					
+					
+							</form>
+					</div>				</div>
+			</dd>
+		</dl>
+							<article class="secondary">
+									<h3>Classes</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title class public">
+			<h4 id="KeyboardControls" class="class public"><a href="module-KeyBoard%20Controls-KeyboardControls.html"><span class="signature-new">new&nbsp;</span><span class="name">KeyboardControls</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+		</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+									</dl>
+							</article>
+					</section>
 			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
 		</div>
 	</div>
 	<footer>
@@ -268,4 +179,3 @@ export {
 	
 </body>
 </html>
-<!-- end:source.tmpl.hbs -->

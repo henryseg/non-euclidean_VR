@@ -16,7 +16,7 @@ import {
     Vector3,
     Vector4,
     Matrix3,
-    Matrix4
+    Matrix4, MathUtils
 } from "../lib/three.module.js"
 
 import {
@@ -94,7 +94,6 @@ Matrix4.prototype.toLog = function () {
     }
     return res;
 }
-
 
 
 /**
@@ -388,6 +387,21 @@ class Point {
 class Vector extends Vector3 {
 
     /**
+     * Overload Three.js `applyMatrix4`.
+     * Indeed Three.js considers the `Vector3` as a 3D **point**
+     * It multiplies the vector (with an implicit 1 in the 4th dimension) and `m`, and divides by perspective.
+     * Here the data represents a **vector**, thus the implicit 4th coordinate is 0
+     * @param {Matrix4} m - The matrix to apply
+     * @return {Vector3} The current vector
+     */
+    applyMatrix4(m) {
+        const aux = new Vector4(this.x, this.y, this.z, 0);
+        aux.applyMatrix4(m);
+        this.set(aux.x, aux.y, aux.z);
+        return this;
+    }
+
+    /**
      * Rotate the current vector by the facing component of the position.
      * This method is geometry independent as the coordinates of the vector
      * are given in a chosen reference frame.
@@ -396,9 +410,7 @@ class Vector extends Vector3 {
      * @return {Vector} The current vector
      */
     applyFacing(position) {
-        let aux = new Vector4(this.x, this.y, this.z, 0);
-        aux.applyMatrix4(position.facing);
-        this.set(aux.x, aux.y, aux.z);
+        this.applyMatrix4(position.facing);
         return this;
     }
 }
@@ -410,6 +422,7 @@ class Vector extends Vector3 {
  * Location and facing (of the observer, an object, etc).
  *
  * @todo Choose a better name ??
+ * @todo Replace the facing matrix by a quaternion (to stay closer to Three.js)?
  */
 class Position {
 
@@ -502,7 +515,7 @@ class Position {
      * @return {Position} The current position
      */
     applyFacing(matrix) {
-        this.facing.multiply(matrix)
+        this.facing.multiply(matrix);
         return this;
     }
 
@@ -541,15 +554,42 @@ class Position {
     }
 
     /**
+     * Replace the current position, by the one obtained by flow the initial position `(id, id)`
+     * in the direction `v` (given in the reference frame).
+     * @abstract
+     * @param {Vector} v - the direction in the reference frame
+     * @return {Position} The current position
+     */
+    flowFromOrigin(v) {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
      * Flow the current position.
      * `v` is the pull back at the origin by the position of the direction in which we flow
-     * The time by which we flow is the norm of `v`
+     * The time by which we flow is the norm of `v`.
+     *
+     * The procedure goes as follows.
+     * Let `e = (e1, e2, e3)` be the reference frame in the tangent space at the origin.
+     * Assume that the current position is `(g,m)`
+     * The vector `v = (v1, v2, v3)` is given in the observer frame, that is `v = d_og m u`,
+     * where `u = u1 . e1 + u2 . e2 + u3 . e3`.
+     * - We first pull back the data at the origin by the inverse of `g`.
+     * - We compute the position `(g',m')` obtained from the initial position `(id, id)` by flowing in the direction `w = m u`.
+     * This position send the frame `m e` to `d_o g' . m ' . m . e `
+     * - We move everything back using `g`, so that the new observer frame is `d_o (gg') . m' . m e`.
+     *
+     * Hence the new position `(gg', m'm)` is obtained by multiplying `(g,m)` and `(g',m')`
+     *
      * @abstract
      * @param {Vector} v - the direction in the observer frame
      * @return {Position} The current position
      */
     flow(v) {
-        throw new Error("This method need be overloaded.");
+        const w = v.clone().applyFacing(this);
+        const shift = new Position().flowFromOrigin(w);
+        this.multiply(shift);
+        return this;
     }
 
     /**
@@ -637,44 +677,23 @@ class Teleport {
             this.inv = inv;
         }
         /**
-         * A unique id.
-         * (To be automatically setup at the subgroup level.)
-         * @type {number}
+         * UUID of this object instance.
+         * This gets automatically assigned, so this shouldn't be edited.
+         * @type {String}
          */
-        this.id = undefined;
+        this.uuid = MathUtils.generateUUID().replaceAll('-', '_');
         /**
-         * A unique name, build from the id (private version).
-         * (To be automatically setup at the subgroup level.)
+         * A unique name, build from the uuid (private version).
+         * This gets automatically assigned, so this shouldn't be edited.
          * @type {string}
          */
-        this._name = undefined;
+        this.name = `teleport_${this.uuid}`;
         /**
          * The GLSL code to perform the test.
          * (To be automatically setup at the subgroup level.)
          * @type {string}
          */
         this.glsl = undefined;
-    }
-
-    /**
-     * The name of the the teleport.
-     * This name is computed (from the id) the first time the getter is called.
-     * This getter should not be called before the teleportation has received an id.
-     * @type {string}
-     */
-    get name() {
-        if (this._name === undefined) {
-            // security check
-            if (this.id === undefined) {
-                throw new Error("The name getter should not be called before the teleportation receives an id");
-            }
-            // build a name from the id
-            this._name = 'teleport' + this.id;
-            // just for fun, on can add a random suffix to the name
-            // in case somebody used accidentally the same name.
-            this._name = this._name + '_' + Math.random().toString(16).substr(2, 8);
-        }
-        return this._name;
     }
 }
 
@@ -728,13 +747,6 @@ class DiscreteSubgroup {
          * @type {string}
          */
         this.shaderSource = shaderSource;
-
-        // set the IDs of all teleportations
-        let id = 0;
-        for (const teleport of this.teleports) {
-            teleport.id = id;
-            id = id + 1;
-        }
     }
 
     /**
@@ -880,7 +892,7 @@ class RelPosition {
      * @return {RelPosition} the updated version of the current Position
      */
     applyFacing(matrix) {
-        this.local.applyFacing(matrix)
+        this.local.applyFacing(matrix);
         return this;
     }
 

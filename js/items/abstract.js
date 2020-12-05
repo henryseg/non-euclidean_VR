@@ -22,6 +22,10 @@ import {
     Material
 } from '../material.js'
 
+import {
+    MathUtils
+} from "../lib/three.module.js";
+
 /**
  * @class
  * @abstract
@@ -39,10 +43,17 @@ class Item {
         this.position = data.position;
         this.global = data.global;
         /**
-         * A unique ID (to be set when the object is added to the scene)
+         * UUID of this object instance.
+         * This gets automatically assigned, so this shouldn't be edited.
+         * @type {String}
+         */
+        this.uuid = MathUtils.generateUUID().replaceAll('-','_');
+        /**
+         * An numerical ID.
+         * This gets automatically assigned, so this shouldn't be edited, when the item is added to the scene
          * @type {number}
          */
-        this.id = undefined;
+        this.id = undefined
         /**
          * The GLSL code for the item (declaration, signed distance function and gradient)
          * @type {Object}
@@ -138,10 +149,7 @@ class Item {
      */
     get name() {
         if (this._name === undefined) {
-            this._name = this.className + this.id;
-            // just for fun, on can add a random suffix to the name
-            // in case somebody used accidentally the same name.
-            this._name = this._name + '_' + Math.random().toString(16).substr(2, 8);
+            this._name = `${this.className}_${this.uuid}`;
         }
         return this._name;
     }

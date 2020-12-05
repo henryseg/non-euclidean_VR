@@ -203,10 +203,10 @@ Point.prototype.toGLSL = function () {
 /**
  * Euclidean implementation of the abstract method
  */
-Position.prototype.flow = function (v) {
-    const dir = v.clone().applyFacing(this);
-    const point = new Point().set([new Vector4(dir.x, dir.y, dir.z, 1)]);
+Position.prototype.flowFromOrigin = function (v) {
+    const point = new Point(v.x, v.y, v.z);
     this.boost.multiply(new Isometry().makeTranslation(point));
+    this.facing = new Matrix4();
     return this;
 }
 

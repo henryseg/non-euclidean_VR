@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Material</title>
+		<title>KeyboardControls</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -86,7 +86,7 @@
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
 				<span class="kind">class</span>
-				<h1><span class="name">Material</span></h1>
+				<h1><span class="name">KeyboardControls</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -95,16 +95,18 @@
 						<ol class="breadcrumb">
 							<li><a href="index.html">Home</a></li>
 							<li><a href="list_class.html">Classes</a></li>
-							<li class="active">Material</li>
+							<li class="active">KeyboardControls</li>
 						</ol>
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Material</span><span class="signature-params">( <span class="signature-param">data</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">KeyboardControls</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">camera</span>, <span class="signature-param">domElement</span>, <span class="signature-param">keyboard</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Material for objects in the scene</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Implements keyboard controls to fly in the geometry using the keyboard.
+			This is inspired from Three.js
+			<a href="https://threejs.org/docs/#examples/en/controls/FlyControls%20"> FlyControls</a></p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -117,10 +119,33 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>data</code></td>
-							<td><span class="param-type">Object</span></td>
+								<td><code>position</code></td>
+							<td><span class="param-type">RelPosition</span></td>
 							<td class="last">
-									<p>the properties of the material</p>
+									<p>the position in the geometry of the observer.
+			(and not the one of the three.js camera in the virtual euclidean space).</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>camera</code></td>
+							<td><span class="param-type">Camera</span></td>
+							<td class="last">
+									<p>the Three.js camera
+			(needed to get the orientation of the observer when using both VR and keyboard).</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>domElement</code></td>
+							<td><span class="param-type">HTMLElement</span></td>
+							<td class="last">
+									<p>The HTML element used for event listeners.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>keyboard</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>the keyboard type (us, fr, etc)</p>
 							</td>
 						</tr>
 					</tbody>
@@ -146,31 +171,12 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-28">line 28</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-73">line 73</a></p>
 								</div>
 							</div>
 			
 			
-							<!-- see -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">See</label>
-								<div class="col-sm-9">
-										<p class="form-control-static">Further information on the <a href="https://en.wikipedia.org/wiki/Phong_reflection_model">Phong lighting model</a></p>
-								</div>
-							</div>
 			
-							<!-- todo -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">To Do</label>
-								<div class="col-sm-9">
-										<ul class="form-control-static">
-												<li>&lt;p&gt;Decide what to do for texture, color given by formulas, etc.&lt;/p&gt;</li>
-												<li>&lt;p&gt;Actually, could we just reuse Three.js Material class? (or another existing class)
-			The name of the class is in conflict the the Three.js one.
-			Do we want to fix this ? Maybe note, modules have tools to handle this situation.&lt;/p&gt;</li>
-										</ul>
-								</div>
-							</div>
 			
 					</form>
 			</div>	</div>
@@ -181,18 +187,18 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="color" class="member public"><span class="name">color</span><span class="signature-type"> :<a href="Color.html">Color</a></span></h4>
+			<h4 id="keyboard" class="member public"><span class="name">keyboard</span><span class="signature-type"> :string</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Color of the material</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The keyboard used for the controls</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 							<!-- type -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type"><a href="Color.html">Color</a></span></div>
+									<div class="form-control-static type-names"><span class="param-type">string</span></div>
 								</div>
 							</div>
 			
@@ -213,7 +219,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-45">line 45</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-128">line 128</a></p>
 								</div>
 							</div>
 			
@@ -225,18 +231,18 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="ambient" class="member public"><span class="name">ambient</span><span class="signature-type"> :number</span></h4>
+			<h4 id="infos" class="member public"><span class="name">infos</span><span class="signature-type"> :function</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>ambient reflection constant</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Function called when pressing the info key</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 							<!-- type -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
+									<div class="form-control-static type-names"><span class="param-type">function</span></div>
 								</div>
 							</div>
 			
@@ -257,139 +263,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-61">line 61</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="diffuse" class="member public"><span class="name">diffuse</span><span class="signature-type"> :number</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>diffuse reflection constant</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-77">line 77</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="specular" class="member public"><span class="name">specular</span><span class="signature-type"> :number</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>specular reflection constant</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-93">line 93</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="shininess" class="member public"><span class="name">shininess</span><span class="signature-type"> :number</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>shininess reflection constant</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-109">line 109</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-145">line 145</a></p>
 								</div>
 							</div>
 			
@@ -404,20 +278,127 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="toGLSL" class="function public"><span class="name">toGLSL</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{string}</span></h4>
+			<h4 id="onKeyDown" class="function public"><span class="name">onKeyDown</span><span class="signature-params">( <span class="signature-param">event</span>&nbsp;)</span><span class="signature-type"></span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return a line of GLSL code creating the same material
-			Used when dynamically building shaders.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event handler when a key is pressed</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>event</code></td>
+							<td><span class="param-type">KeyboardEvent</span></td>
+							<td class="last">
+									<p>the caught event</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">string</span></label>
+								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<div class="form-control-static returns-description"></div>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-164">line 164</a></p>
 								</div>
 							</div>
+			
+			
+			
+			
 					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="onKeyUp" class="function public"><span class="name">onKeyUp</span><span class="signature-params">( <span class="signature-param">event</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event handler when a key is pressed</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>event</code></td>
+							<td><span class="param-type">KeyboardEvent</span></td>
+							<td class="last">
+									<p>the caught event</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-184">line 184</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="updateMovementVector" class="function public"><span class="name">updateMovementVector</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Update the movement vector</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
@@ -438,12 +419,130 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-126">line 126</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-200">line 200</a></p>
 								</div>
 							</div>
 			
 			
 			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="updateRotationVector" class="function public"><span class="name">updateRotationVector</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Update the rotation vector</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-212">line 212</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="update" class="function public"><span class="name">update</span><span class="signature-params">( <span class="signature-param">delta</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Produce a function to update the position</p>
+			<p>Assume that the current position is <code>(g,m)</code> where</p>
+			<ul>
+			<li><code>g</code> is the boost, i.e. subgroup element * local boost</li>
+			<li><code>m</code> is the facing, i.e. an element of O(3)</li>
+			</ul>
+			<p>Denote by <code>a</code> the Matrix4 representing the Three.js camera orientation, understood as an element of O(3) as well.
+			Denote by <code>e = (e1, e2, e3)</code> the reference frame in the tangent space at the origin.
+			Then the frame at <code>p = go</code> attach to the camera is <code>f = d_og . m . a . e</code>
+			That is the camera is looking at the direction <code>-f3 = - d_og . m . a . e3</code></p>
+			<p>Assume now that we want to move in the direction of <code>v = (v1,v2,v3)</code> where the vector is given in the frame <code>f</code>,
+			i.e. <code>v = v1. f1 + v2 . f2 + v3. f3</code>.
+			We need to flow the current position in the direction <code>w</code>,
+			where <code>w</code> corresponds to <code>v</code> written in the &quot;position frame&quot;, i.e. <code>d_og . m . e</code>.
+			In other words <code>w = a . u</code>, where <code>u = v1 . e1 + v2 . e2 + v3 . e3</code>.
+			Note that we do not change the camera orientation.</p>
+			<p>A similar strategy works for the rotations.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>delta</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>time delta between two updates</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-245">line 245</a></p>
+								</div>
+							</div>
+			
+			
+			
+							<!-- todo -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">To Do</label>
+								<div class="col-sm-9">
+										<p class="form-control-static">&lt;p&gt;Dispatch an event, when the position has sufficiently changed.&lt;/p&gt;</p>
+								</div>
+							</div>
 			
 					</form>
 			</div>	</div>

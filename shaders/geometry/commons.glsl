@@ -82,19 +82,6 @@ Vector createVector(Point p, vec3 coords){
     return add(c0, add(c1, c2));
 }
 
-/**
- * Compute the direction and length of the shortest geodesic from `p` to `q`.
- * The result are passed to the variables `dir` and `len`.
- * @deprecated The light directions are computed at the light level
- */
-void direction(Point p, Point q, out Vector dir, out float len){
-    Vector[MAX_DIRS] dirs;
-    float[MAX_DIRS] lens;
-    directions(p, q, 1, dirs, lens);
-    dir = dirs[0];
-    len = lens[0];
-}
-
 
 /***********************************************************************************************************************
  *

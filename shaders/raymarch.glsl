@@ -18,7 +18,7 @@
  * - -1, if there is a bug
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
  */
-int raymarch(inout RelVector v, out Isometry fixIsom, out Solid solid){
+int raymarch(inout RelVector v, out Solid solid){
     RelVector globalV0 = v;
     RelVector globalV = v;
     RelVector localV0 = v;

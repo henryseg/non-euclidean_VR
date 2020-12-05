@@ -83,16 +83,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab1e25d845b88da6a1ff55f2a87a514e0"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#ab1e25d845b88da6a1ff55f2a87a514e0">lightComputation</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_vector.html">Vector</a> n, <a class="el" href="struct_vector.html">Vector</a> dir, float len, <a class="el" href="struct_material.html">Material</a> material, vec3 lightColor)</td></tr>
-<tr class="separator:ab1e25d845b88da6a1ff55f2a87a514e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a548d018f08cf598a2b167e554fe5a07d"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#a548d018f08cf598a2b167e554fe5a07d">lightComputation</a> (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_vector.html">Vector</a> n, <a class="el" href="struct_vector.html">Vector</a> dir, <a class="el" href="struct_material.html">Material</a> material, vec3 lightColor, float intensity)</td></tr>
+<tr class="separator:a548d018f08cf598a2b167e554fe5a07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3551ab0e19971284ce81ce19cc1b9d95"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lighting_8glsl.html#a3551ab0e19971284ce81ce19cc1b9d95">phongModel</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, <a class="el" href="struct_solid.html">Solid</a> solid)</td></tr>
 <tr class="separator:a3551ab0e19971284ce81ce19cc1b9d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file defines all the illumination functions </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ab1e25d845b88da6a1ff55f2a87a514e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1e25d845b88da6a1ff55f2a87a514e0">&#9670;&nbsp;</a></span>lightComputation()</h2>
+<a id="a548d018f08cf598a2b167e554fe5a07d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a548d018f08cf598a2b167e554fe5a07d">&#9670;&nbsp;</a></span>lightComputation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -118,12 +118,6 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype"><a class="el" href="struct_material.html">Material</a>&#160;</td>
           <td class="paramname"><em>material</em>, </td>
         </tr>
@@ -131,7 +125,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">vec3&#160;</td>
-          <td class="paramname"><em>lightColor</em>&#160;</td>
+          <td class="paramname"><em>lightColor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>intensity</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -143,16 +143,16 @@ Functions</h2></td></tr>
 <p>Compute the contribution of one direction to the illumination </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>incidence vector </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>normal vector to the object (pointing outside the object) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>normal vector to the object (pointing outside the solid) </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dir</td><td>the direction from on the object to a light </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>the length of the geodesic from <code>p</code> directed by <code>v</code> to the light </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">material</td><td>material of the object </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">lightColor</td><td>the color of the light </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">intensity</td><td>the intensity of the light when it hits the solid </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the contribution the this direction to the illumination.</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
 
 </div>
 </div>
@@ -188,7 +188,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000009">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd></dl>
 
 </div>
 </div>

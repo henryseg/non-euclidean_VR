@@ -36,8 +36,15 @@
 			<div class="navbar-collapse collapse" id="topNavigation">
 				<ul class="nav navbar-nav">
 								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="module-AbstractGeometry-DiscreteSubgroup.html">AbstractGeometry~DiscreteSubgroup</a></li>
 											<li><a href="module-AbstractGeometry-Isometry.html">AbstractGeometry~Isometry</a></li>
@@ -112,6 +119,10 @@ import {
     Material
 } from '../material.js'
 
+import {
+    MathUtils
+} from "../lib/three.module.js";
+
 /**
  * @class
  * @abstract
@@ -129,10 +140,17 @@ class Item {
         this.position = data.position;
         this.global = data.global;
         /**
-         * A unique ID (to be set when the object is added to the scene)
+         * UUID of this object instance.
+         * This gets automatically assigned, so this shouldn't be edited.
+         * @type {String}
+         */
+        this.uuid = MathUtils.generateUUID().replaceAll('-','_');
+        /**
+         * An numerical ID.
+         * This gets automatically assigned, so this shouldn't be edited, when the item is added to the scene
          * @type {number}
          */
-        this.id = undefined;
+        this.id = undefined
         /**
          * The GLSL code for the item (declaration, signed distance function and gradient)
          * @type {Object}
@@ -228,10 +246,7 @@ class Item {
      */
     get name() {
         if (this._name === undefined) {
-            this._name = this.className + this.id;
-            // just for fun, on can add a random suffix to the name
-            // in case somebody used accidentally the same name.
-            this._name = this._name + '_' + Math.random().toString(16).substr(2, 8);
+            this._name = `${this.className}_${this.uuid}`;
         }
         return this._name;
     }
@@ -258,43 +273,14 @@ class Item {
     }
 
     /**
-     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
-     * @return {Promise&lt;void>}
+     * Load the XML file containing the GLSL blocks of code.
+     * Return the XML as a DOM
+     * @return {Promise&lt;Document>}
      */
-    async glslBuildData() {
+    async loadGLSLTemplate() {
         const response = await fetch(this.shaderSource);
         const parser = new DOMParser();
-        const xml = parser.parseFromString(await response.text(), 'application/xml');
-
-        let tag;
-        if (this.isSolid()) {
-            tag = 'solid';
-        }
-        if (this.isLight()) {
-            tag = 'light';
-        }
-        const selector = `${tag}[class=${this.className}] shader`;
-        const templates = xml.querySelectorAll(selector);
-        let rendered;
-        let type;
-        for (const template of templates) {
-            type = template.getAttribute('type');
-            rendered = mustache.render(template.childNodes[0].nodeValue, this);
-            switch (type) {
-                case 'sdf':
-                    this.glsl[type] = `float ${this.name}SDF(RelVector v){
-                        ${rendered}
-                    }`;
-                    break;
-                case 'gradient':
-                    this.glsl[type] = `RelVector ${this.name}Grad(RelVector v){
-                        ${rendered}
-                    }`;
-                    break;
-                default:
-                    this.glsl[type] = rendered;
-            }
-        }
+        return parser.parseFromString(await response.text(), 'application/xml');
     }
 }
 
@@ -364,6 +350,39 @@ class Solid extends Item {
             ${this._material.toGLSL()}
         )`;
     }
+
+    /**
+     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
+     * @param {Object} globals - Global parameters needed to build the GLSL blocks
+     * @return {Promise&lt;void>}
+     */
+    async glslBuildData(globals = {}) {
+        const xml = await this.loadGLSLTemplate();
+        const selector = `solid[class=${this.className}] shader`;
+        const templates = xml.querySelectorAll(selector);
+        let rendered;
+        let type;
+        for (const template of templates) {
+            type = template.getAttribute('type');
+            rendered = mustache.render(template.childNodes[0].nodeValue, this);
+            switch (type) {
+                case 'sdf':
+                    // SDF for the solid
+                    this.glsl[type] = `float ${this.name}SDF(RelVector v){
+                        ${rendered}
+                    }`;
+                    break;
+                case 'gradient':
+                    // gradient of SDF for the solid
+                    this.glsl[type] = `RelVector ${this.name}Grad(RelVector v){
+                        ${rendered}
+                    }`;
+                    break;
+                default:
+                    this.glsl[type] = rendered;
+            }
+        }
+    }
 }
 
 
@@ -386,6 +405,7 @@ class Light extends Item {
     constructor(data = {}) {
         super(data);
         this.color = data.color;
+        this.maxDirs = data.maxDirs;
     }
 
     /**
@@ -398,9 +418,25 @@ class Light extends Item {
 
     set color(value) {
         if (value === undefined) {
-            this._color = new Color(1,1,1);
+            this._color = new Color(1, 1, 1);
         } else {
             this._color = value;
+        }
+    }
+
+    /**
+     * Maximal number of directions returned at each point
+     * @return {number}
+     */
+    get maxDirs() {
+        return this._maxDirs;
+    }
+
+    set maxDirs(value) {
+        if (value === undefined) {
+            this._maxDirs = 1;
+        } else {
+            this._maxDirs = value;
         }
     }
 
@@ -430,6 +466,33 @@ class Light extends Item {
             vec3(${this._color.toArray()})
         )`;
     }
+
+    /**
+     * build the GLSL code relative to the item (declaration, signed distance function and gradient)
+     * @param {Object} globals - Global parameters needed to build the GLSL blocks
+     * @return {Promise&lt;void>}
+     */
+    async glslBuildData(globals) {
+        const xml = await this.loadGLSLTemplate();
+        const selector = `light[class=${this.className}] shader`;
+        const templates = xml.querySelectorAll(selector);
+        let rendered;
+        let type;
+        for (const template of templates) {
+            type = template.getAttribute('type');
+            rendered = mustache.render(template.childNodes[0].nodeValue, this);
+            switch (type) {
+                case 'direction':
+                    // direction field for a light
+                    this.glsl[type] = `int ${this.name}Dir(RelVector v, out RelVector[${globals.maxLightDirs}] dirs, out float[${globals.maxLightDirs}] intensities){
+                        ${rendered}
+                    }`
+                    break;
+                default:
+                    this.glsl[type] = rendered;
+            }
+        }
+    }
 }
 
 
@@ -445,7 +508,7 @@ export {
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 29th Nov 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 5th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

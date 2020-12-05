@@ -9,18 +9,18 @@
         ]]></teleport>
         <teleport><![CDATA[
             return p.coords.x < - cubeHalfWidth;
-            ]]></teleport>
+        ]]></teleport>
         <teleport><![CDATA[
             return p.coords.y > cubeHalfWidth;
-            ]]></teleport>
+        ]]></teleport>
         <teleport><![CDATA[
             return p.coords.y < - cubeHalfWidth;
-            ]]></teleport>
+        ]]></teleport>
         <teleport><![CDATA[
             return p.coords.z > cubeHalfWidth;
-            ]]></teleport>
+        ]]></teleport>
         <teleport><![CDATA[
             return p.coords.z < - cubeHalfWidth;
-            ]]></teleport>
+        ]]></teleport>
     </teleports>
 </subgroup>

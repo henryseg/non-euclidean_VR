@@ -109,8 +109,6 @@ Functions</h2></td></tr>
 <tr class="separator:ac836875589bb6b2e16850b7311b4f5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a644496bcbd56e5baa3666cd749d6df85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85">createVector</a> (<a class="el" href="struct_point.html">Point</a> p, vec3 coords)</td></tr>
 <tr class="separator:a644496bcbd56e5baa3666cd749d6df85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7ae70af474f971a709b7ea5c513db6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#aa7ae70af474f971a709b7ea5c513db6c">direction</a> (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, out <a class="el" href="struct_vector.html">Vector</a> dir, out float len)</td></tr>
-<tr class="separator:aa7ae70af474f971a709b7ea5c513db6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a700730c1b881461bdac0ee9080a0c99f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a700730c1b881461bdac0ee9080a0c99f">applyPosition</a> (<a class="el" href="struct_position.html">Position</a> p, <a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
 <tr class="separator:a700730c1b881461bdac0ee9080a0c99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79150cae91c14ff121203068e444fbf2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a79150cae91c14ff121203068e444fbf2">geomNormalize</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v)</td></tr>
@@ -248,47 +246,6 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Compute the vector at p whose coordinates are given by the section of the frame bundle. See <a class="el" href="euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame()</a>. </p>
-
-</div>
-</div>
-<a id="aa7ae70af474f971a709b7ea5c513db6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7ae70af474f971a709b7ea5c513db6c">&#9670;&nbsp;</a></span>direction()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void direction </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>q</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out <a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>dir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out float&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Compute the direction and length of the shortest geodesic from <code>p</code> to <code>q</code>. The result are passed to the variables <code>dir</code> and <code>len</code>. </p><dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>The light directions are computed at the light level </dd></dl>
 
 </div>
 </div>

@@ -126,12 +126,8 @@ Functions</h2></td></tr>
 <tr class="separator:aba30cc39d0eb225aee334cacf5c78ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6cca01d889afecf9ff9d7eb0ae0b959"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_point.html">Point</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="euc_8glsl.html#ab6cca01d889afecf9ff9d7eb0ae0b959">smallShift</a> (<a class="el" href="struct_point.html">Point</a> p, vec3 dp)</td></tr>
 <tr class="separator:ab6cca01d889afecf9ff9d7eb0ae0b959"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff97aec31adc13050de75e8af8f84a8c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="euc_8glsl.html#aff97aec31adc13050de75e8af8f84a8c">directions</a> (<a class="el" href="struct_point.html">Point</a> p, <a class="el" href="struct_point.html">Point</a> q, int n, out <a class="el" href="struct_vector.html">Vector</a>[MAX_DIRS] dirs, out float[MAX_DIRS] lens)</td></tr>
-<tr class="separator:aff97aec31adc13050de75e8af8f84a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd66c6c87944bbdc9f11d74fe5b40471"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_vector.html">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="euc_8glsl.html#acd66c6c87944bbdc9f11d74fe5b40471">flow</a> (<a class="el" href="struct_vector.html">Vector</a> v, float t)</td></tr>
 <tr class="separator:acd66c6c87944bbdc9f11d74fe5b40471"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bc6ab2e2478af52fb71f92586221d07"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="euc_8glsl.html#a2bc6ab2e2478af52fb71f92586221d07">lightIntensity</a> (<a class="el" href="struct_vector.html">Vector</a> dir, float len)</td></tr>
-<tr class="separator:a2bc6ab2e2478af52fb71f92586221d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -265,53 +261,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aff97aec31adc13050de75e8af8f84a8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff97aec31adc13050de75e8af8f84a8c">&#9670;&nbsp;</a></span>directions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int directions </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>q</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out <a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>dirs</em>[MAX_DIRS], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out float&#160;</td>
-          <td class="paramname"><em>lens</em>[MAX_DIRS]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Compute the directions of the geodesics starting at <code>p</code> and reaching <code>q</code>. Each direction is stored in the array <code>dirs</code>. In addition we also store ìn <code>lens</code> the length of the corresponding geodesic between <code>p</code> and <code>q</code>. The function return the number of computed directions. This number is always bounded above by MAX_DIRS (a global constant) and the paramter <code>n</code>. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Write a better description? </dd></dl>
-
-</div>
-</div>
 <a id="acd66c6c87944bbdc9f11d74fe5b40471"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd66c6c87944bbdc9f11d74fe5b40471">&#9670;&nbsp;</a></span>flow()</h2>
 
@@ -422,42 +371,6 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Return the inverse of the given isometry. </p>
-
-</div>
-</div>
-<a id="a2bc6ab2e2478af52fb71f92586221d07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2bc6ab2e2478af52fb71f92586221d07">&#9670;&nbsp;</a></span>lightIntensity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float lightIntensity </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_vector.html">Vector</a>&#160;</td>
-          <td class="paramname"><em>dir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Intensity of the light after travelling a length <code>len</code> in the direction <code>dir</code> </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">dir</td><td>unit vector at the light position </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>distance from the light </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>intensity of the light </dd></dl>
 
 </div>
 </div>
