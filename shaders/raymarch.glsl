@@ -10,8 +10,7 @@
  * @param[inout] v The initial vector for raymarching.
  * The vector is updated by the function,
  * that is at the end, `v` is the incidence vector at which we hit an object (if any)
- * @param[out] fixIsom isometry collecting all the teleportations done during the ray-marching
- * @param[out] obj the object that we enventually hit
+ * @param[out] solid the object that we enventually hit
  * @return
  * - 1 if an object has been hit
  * - 0 if no object has bee hit
