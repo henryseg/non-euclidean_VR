@@ -115,6 +115,10 @@ Functions</h2></td></tr>
 <tr class="separator:a79150cae91c14ff121203068e444fbf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8a43b407f75e585972a51ba5d29dc43"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#ab8a43b407f75e585972a51ba5d29dc43">flow</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, float t)</td></tr>
 <tr class="separator:ab8a43b407f75e585972a51ba5d29dc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab31b324a953a9f098d0de02a1e4cbeb2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#ab31b324a953a9f098d0de02a1e4cbeb2">smallShift</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, vec3 dp)</td></tr>
+<tr class="separator:ab31b324a953a9f098d0de02a1e4cbeb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e2ebd28e57b5f25e73972454761c64a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a6e2ebd28e57b5f25e73972454761c64a">createVector</a> (<a class="el" href="struct_rel_vector.html">RelVector</a> v, vec3 coords)</td></tr>
+<tr class="separator:a6e2ebd28e57b5f25e73972454761c64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a598e50c5c41681cd7c73c385c82cc7b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="commons_8glsl.html#a598e50c5c41681cd7c73c385c82cc7b5">applyPosition</a> (<a class="el" href="struct_rel_position.html">RelPosition</a> position, <a class="el" href="struct_vector.html">Vector</a> v)</td></tr>
 <tr class="separator:a598e50c5c41681cd7c73c385c82cc7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -221,7 +225,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a644496bcbd56e5baa3666cd749d6df85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a644496bcbd56e5baa3666cd749d6df85">&#9670;&nbsp;</a></span>createVector()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a644496bcbd56e5baa3666cd749d6df85">&#9670;&nbsp;</a></span>createVector() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,6 +250,35 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Compute the vector at p whose coordinates are given by the section of the frame bundle. See <a class="el" href="euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame()</a>. </p>
+
+</div>
+</div>
+<a id="a6e2ebd28e57b5f25e73972454761c64a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e2ebd28e57b5f25e73972454761c64a">&#9670;&nbsp;</a></span>createVector() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> createVector </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vec3&#160;</td>
+          <td class="paramname"><em>coords</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compute the vector at the same point as <code>v</code> whose coordinates are given by the section of the frame bundle. Overload of createVector </p>
 
 </div>
 </div>
@@ -425,6 +458,41 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Return the opposite of the given vector. Previously <code>turnAround</code>. </p><dl class="section return"><dt>Returns</dt><dd>-v </dd></dl>
+
+</div>
+</div>
+<a id="ab31b324a953a9f098d0de02a1e4cbeb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab31b324a953a9f098d0de02a1e4cbeb2">&#9670;&nbsp;</a></span>smallShift()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_rel_vector.html">RelVector</a> smallShift </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rel_vector.html">RelVector</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vec3&#160;</td>
+          <td class="paramname"><em>dp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compute (an approximation of) the vector obtained from <code>v</code> by moving the given direction. Shift only the base point of the vector (does not update the direction). This method is intended to numerically compute the gradient to a solid. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>initial vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dp</td><td>the coordinate of the direction with repsect to the frame provided by <a class="el" href="euc_8glsl.html#aba30cc39d0eb225aee334cacf5c78ed1">frame()</a> </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

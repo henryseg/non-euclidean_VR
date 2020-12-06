@@ -36,11 +36,14 @@ int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
 
     // local scene
     for (int i = 0; i < maxMarchingSteps; i++){
+        // start by teleporting eventually the vector
         if (teleport(localV)){
+            // if a teleport was needed, update the starting point of the local raymarching
             localV0 = localV;
             marchingStep = minDist;
         }
         else {
+            // if no teleport was needed, then march
             if (localDepth > maxDist) {
                 break;
             }

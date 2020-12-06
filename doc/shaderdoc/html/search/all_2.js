@@ -5,5 +5,5 @@ var searchData=
   ['commons_2eglsl_10',['commons.glsl',['../commons_8glsl.html',1,'']]],
   ['coords_11',['coords',['../struct_point.html#aad3c30d92c748ad55610af732654ebea',1,'Point']]],
   ['cosangle_12',['cosAngle',['../commons_8glsl.html#a8917ba32ec22067cc7bcc0b4b8e1731e',1,'commons.glsl']]],
-  ['createvector_13',['createVector',['../commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85',1,'commons.glsl']]]
+  ['createvector_13',['createVector',['../commons_8glsl.html#a644496bcbd56e5baa3666cd749d6df85',1,'createVector(Point p, vec3 coords):&#160;commons.glsl'],['../commons_8glsl.html#a6e2ebd28e57b5f25e73972454761c64a',1,'createVector(RelVector v, vec3 coords):&#160;commons.glsl']]]
 ];

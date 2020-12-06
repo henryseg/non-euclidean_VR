@@ -47,17 +47,12 @@ class Item {
          * This gets automatically assigned, so this shouldn't be edited.
          * @type {String}
          */
-        this.uuid = MathUtils.generateUUID().replaceAll('-','_');
+        this.uuid = MathUtils.generateUUID().replaceAll('-', '_');
         /**
          * The GLSL code for the item (declaration, signed distance function and gradient)
          * @type {Object}
          */
-        this.glsl = {
-            declare: undefined,
-            setup: undefined,
-            sdf: undefined,
-        };
-
+        this.glsl = undefined;
     }
 
     /**
@@ -178,6 +173,17 @@ class Item {
         const parser = new DOMParser();
         return parser.parseFromString(await response.text(), 'application/xml');
     }
+
+    /**
+     * Load the XML file containing the GLSL blocks of code.
+     * Return the XML as a DOM
+     * @return {Promise<Document>}
+     */
+    async loadGLSLDefaultTemplate() {
+        const response = await fetch('../../shaders/items/default.xml');
+        const parser = new DOMParser();
+        return parser.parseFromString(await response.text(), 'application/xml');
+    }
 }
 
 
@@ -202,6 +208,12 @@ class Solid extends Item {
     constructor(data = {}) {
         super(data);
         this.material = data.material;
+        this.glsl = {
+            declare: undefined,
+            setup: undefined,
+            sdf: undefined,
+            gradient: undefined
+        };
     }
 
     /**
@@ -278,6 +290,48 @@ class Solid extends Item {
                     this.glsl[type] = rendered;
             }
         }
+        // List all the blocks that have not been assigned yet
+        const missing = [];
+        for (const block in this.glsl) {
+            if (this.glsl.hasOwnProperty(block) && this.glsl[block] === undefined) {
+                missing.push(block);
+            }
+        }
+        await this.glslBuildDataDefault(globals, missing);
+    }
+
+    /**
+     * Build the GLSL blocks listed in blocks using the default templates
+     * @param {Object} globals - Global parameters needed to build the GLSL blocks
+     * @param {String[]} blocks - The list of blocks that need to be built
+     * @return {Promise<void>}
+     */
+    async glslBuildDataDefault(globals = {}, blocks) {
+        if ('sdf' in blocks) {
+            // The SDF cannot be setup by default!
+            throw new Error(`No signed distance function for ${this.name}`);
+        }
+
+        const xml = await this.loadGLSLDefaultTemplate();
+
+        let selector;
+        let template;
+        let rendered;
+        for(const block of blocks){
+            selector = `solid[class=default] shader[type=${block}]`;
+            template = xml.querySelector(selector);
+            rendered = mustache.render(template.childNodes[0].nodeValue, this);
+            switch(block) {
+                case 'gradient':
+                    // gradient of SDF for the solid
+                    this.glsl[block] = `RelVector ${this.name}Grad(RelVector v){
+                        ${rendered}
+                    }`;
+                    break;
+                default:
+                    this.glsl[block] = rendered;
+            }
+        }
     }
 }
 
@@ -302,6 +356,11 @@ class Light extends Item {
         super(data);
         this.color = data.color;
         this.maxDirs = data.maxDirs;
+        this.glsl = {
+            declare: undefined,
+            setup: undefined,
+            direction: undefined
+        };
     }
 
     /**
@@ -386,6 +445,43 @@ class Light extends Item {
                     break;
                 default:
                     this.glsl[type] = rendered;
+            }
+        }
+        // List all the blocks that have not been assigned yet
+        const missing = [];
+        for (const block in this.glsl) {
+            if (this.glsl.hasOwnProperty(block) && this.glsl[block] === undefined) {
+                missing.push(block);
+            }
+        }
+        await this.glslBuildDataDefault(globals, missing);
+    }
+
+
+    /**
+     * Build the GLSL blocks listed in blocks using the default templates
+     * @param {Object} globals - Global parameters needed to build the GLSL blocks
+     * @param {String[]} blocks - The list of blocks that need to be built
+     * @return {Promise<void>}
+     */
+    async glslBuildDataDefault(globals = {}, blocks) {
+        if ('direction' in blocks) {
+            // The SDF cannot be setup by default!
+            throw new Error(`No direction field for ${this.name}`);
+        }
+
+        const xml = await this.loadGLSLDefaultTemplate();
+
+        let selector;
+        let template;
+        let rendered;
+        for(const block of blocks){
+            selector = `light[class=default] shader[type=${block}]`;
+            template = xml.querySelector(selector);
+            rendered = mustache.render(template.childNodes[0].nodeValue, this);
+            switch(block) {
+                default:
+                    this.glsl[block] = rendered;
             }
         }
     }

@@ -288,6 +288,22 @@
           "return",
           "xml"
         ],
+        "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": [
+          "block",
+          "code",
+          "contain",
+          "dom",
+          "file",
+          "function",
+          "glsl",
+          "load",
+          "loadglsldefaulttempl",
+          "lt;async&gt",
+          "module:thurstonitems~item#loadglsldefaulttempl",
+          "promise.&lt;document&gt",
+          "return",
+          "xml"
+        ],
         "KeyboardControls.html": [
           "class",
           "control",
@@ -1029,6 +1045,21 @@
           "rel",
           "sign"
         ],
+        "module-ThurstonItems-Solid.html#glslBuildDataDefault": [
+          "block",
+          "build",
+          "default",
+          "function",
+          "global",
+          "glsl",
+          "glslbuilddatadefault",
+          "list",
+          "lt;async&gt",
+          "module:thurstonitems~solid#glslbuilddatadefault",
+          "promise.&lt;void&gt",
+          "templat",
+          "us"
+        ],
         "module-AbstractGeometry-Point.html": [
           "abstractgeometry~point",
           "class",
@@ -1196,6 +1227,21 @@
           "promise.&lt;void&gt",
           "rel",
           "sign"
+        ],
+        "module-ThurstonItems-Light.html#glslBuildDataDefault": [
+          "block",
+          "build",
+          "default",
+          "function",
+          "global",
+          "glsl",
+          "glslbuilddatadefault",
+          "list",
+          "lt;async&gt",
+          "module:thurstonitems~light#glslbuilddatadefault",
+          "promise.&lt;void&gt",
+          "templat",
+          "us"
         ],
         "module-AbstractGeometry-Vector.html": [
           "abstractgeometry~vector",
@@ -2129,7 +2175,7 @@
           "us"
         ]
       },
-      "length": 156
+      "length": 159
     },
     "tokenStore": {
       "root": {
@@ -2845,6 +2891,10 @@
                     "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                     "tf": 5
                   },
+                  "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                    "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                    "tf": 5
+                  },
                   "module-Thurston-Thurston.html#buildShaderVertex": {
                     "ref": "module-Thurston-Thurston.html#buildShaderVertex",
                     "tf": 10
@@ -2933,6 +2983,10 @@
                           },
                           "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                             "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
+                            "tf": 110
+                          },
+                          "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                            "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
                             "tf": 110
                           },
                           "KeyboardControls.html#infos": {
@@ -3119,6 +3173,10 @@
                             "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                             "tf": 115
                           },
+                          "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                            "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                            "tf": 110
+                          },
                           "module-AbstractGeometry-Point.html#build": {
                             "ref": "module-AbstractGeometry-Point.html#build",
                             "tf": 110
@@ -3162,6 +3220,10 @@
                           "module-ThurstonItems-Light.html#glslBuildData": {
                             "ref": "module-ThurstonItems-Light.html#glslBuildData",
                             "tf": 115
+                          },
+                          "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                            "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                            "tf": 110
                           },
                           "module-AbstractGeometry-Vector.html#applyMatrix4": {
                             "ref": "module-AbstractGeometry-Vector.html#applyMatrix4",
@@ -3950,9 +4012,17 @@
                         "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                         "tf": 25
                       },
+                      "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                        "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                        "tf": 20
+                      },
                       "module-ThurstonItems-Light.html#glslBuildData": {
                         "ref": "module-ThurstonItems-Light.html#glslBuildData",
                         "tf": 25
+                      },
+                      "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                        "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                        "tf": 20
                       }
                     }
                   }
@@ -3979,6 +4049,10 @@
                     "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                     "tf": 5
                   },
+                  "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                    "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                    "tf": 5
+                  },
                   "module-AbstractGeometry-Isometry.html#toGLSL": {
                     "ref": "module-AbstractGeometry-Isometry.html#toGLSL",
                     "tf": 4.545454545454546
@@ -3999,6 +4073,10 @@
                     "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                     "tf": 5
                   },
+                  "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                    "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                    "tf": 6.25
+                  },
                   "module-AbstractGeometry-Point.html#toGLSL": {
                     "ref": "module-AbstractGeometry-Point.html#toGLSL",
                     "tf": 4.545454545454546
@@ -4010,6 +4088,10 @@
                   "module-ThurstonItems-Light.html#glslBuildData": {
                     "ref": "module-ThurstonItems-Light.html#glslBuildData",
                     "tf": 5
+                  },
+                  "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                    "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                    "tf": 6.25
                   },
                   "module-AbstractGeometry-Position.html#toGLSL": {
                     "ref": "module-AbstractGeometry-Position.html#toGLSL",
@@ -4061,6 +4143,36 @@
                                     "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData": {
                                       "ref": "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData",
                                       "tf": 683.3333333333334
+                                    }
+                                  },
+                                  "d": {
+                                    "docs": {},
+                                    "e": {
+                                      "docs": {},
+                                      "f": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "u": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {},
+                                              "t": {
+                                                "docs": {
+                                                  "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                                                    "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                                                    "tf": 670
+                                                  },
+                                                  "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                                                    "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                                                    "tf": 670
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -6127,6 +6239,10 @@
                                                         "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                                                           "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                                                           "tf": 33.33333333333333
+                                                        },
+                                                        "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                                                          "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                                                          "tf": 33.33333333333333
                                                         }
                                                       }
                                                     }
@@ -6293,9 +6409,17 @@
                                                   "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                                                   "tf": 25
                                                 },
+                                                "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                                                  "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                                                  "tf": 20
+                                                },
                                                 "module-ThurstonItems-Light.html#glslBuildData": {
                                                   "ref": "module-ThurstonItems-Light.html#glslBuildData",
                                                   "tf": 25
+                                                },
+                                                "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                                                  "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                                                  "tf": 20
                                                 },
                                                 "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData": {
                                                   "ref": "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData",
@@ -6679,6 +6803,10 @@
                       },
                       "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                         "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
+                        "tf": 5
+                      },
+                      "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                        "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
                         "tf": 5
                       },
                       "module-AbstractGeometry-Isometry.html#build": {
@@ -8020,6 +8148,14 @@
                         "module-Thurston-Thurston.html#buildShaderFragment": {
                           "ref": "module-Thurston-Thurston.html#buildShaderFragment",
                           "tf": 4.166666666666666
+                        },
+                        "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                          "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                          "tf": 6.25
+                        },
+                        "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                          "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                          "tf": 6.25
                         }
                       }
                     }
@@ -8371,6 +8507,10 @@
               "docs": {
                 "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                   "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
+                  "tf": 5
+                },
+                "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                  "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
                   "tf": 5
                 }
               },
@@ -8803,6 +8943,27 @@
                     }
                   }
                 }
+              },
+              "a": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "l": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                          "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                          "tf": 6.25
+                        },
+                        "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                          "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                          "tf": 6.25
+                        }
+                      }
+                    }
+                  }
+                }
               }
             },
             "p": {
@@ -9197,6 +9358,10 @@
                         "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                           "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                           "tf": 5
+                        },
+                        "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                          "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                          "tf": 5
                         }
                       }
                     }
@@ -9248,6 +9413,10 @@
                   },
                   "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                     "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
+                    "tf": 5
+                  },
+                  "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                    "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
                     "tf": 5
                   },
                   "module-AbstractGeometry-Isometry.html#toGLSL": {
@@ -9922,6 +10091,14 @@
                     "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
                     "tf": 5
                   },
+                  "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                    "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                    "tf": 6.25
+                  },
+                  "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                    "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                    "tf": 6.25
+                  },
                   "module-AbstractGeometry-DiscreteSubgroup.html": {
                     "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
                     "tf": 0.3546099290780142
@@ -10251,6 +10428,10 @@
                                   "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                                   "tf": 33.33333333333333
                                 },
+                                "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                                  "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                                  "tf": 33.33333333333333
+                                },
                                 "module-Thurston-Thurston.html#buildShaderVertex": {
                                   "ref": "module-Thurston-Thurston.html#buildShaderVertex",
                                   "tf": 33.33333333333333
@@ -10275,9 +10456,17 @@
                                   "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                                   "tf": 25
                                 },
+                                "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                                  "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                                  "tf": 20
+                                },
                                 "module-ThurstonItems-Light.html#glslBuildData": {
                                   "ref": "module-ThurstonItems-Light.html#glslBuildData",
                                   "tf": 25
+                                },
+                                "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                                  "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                                  "tf": 20
                                 },
                                 "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData": {
                                   "ref": "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData",
@@ -10379,6 +10568,10 @@
                   "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                     "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                     "tf": 5
+                  },
+                  "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                    "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                    "tf": 5
                   }
                 },
                 "g": {
@@ -10402,6 +10595,47 @@
                                     "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                                       "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                                       "tf": 683.3333333333334
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "d": {
+                          "docs": {},
+                          "e": {
+                            "docs": {},
+                            "f": {
+                              "docs": {},
+                              "a": {
+                                "docs": {},
+                                "u": {
+                                  "docs": {},
+                                  "l": {
+                                    "docs": {},
+                                    "t": {
+                                      "docs": {},
+                                      "t": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "m": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {},
+                                              "l": {
+                                                "docs": {
+                                                  "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                                                    "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                                                    "tf": 683.3333333333334
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -10789,6 +11023,47 @@
                                                                                   }
                                                                                 }
                                                                               }
+                                                                            },
+                                                                            "d": {
+                                                                              "docs": {},
+                                                                              "e": {
+                                                                                "docs": {},
+                                                                                "f": {
+                                                                                  "docs": {},
+                                                                                  "a": {
+                                                                                    "docs": {},
+                                                                                    "u": {
+                                                                                      "docs": {},
+                                                                                      "l": {
+                                                                                        "docs": {},
+                                                                                        "t": {
+                                                                                          "docs": {},
+                                                                                          "t": {
+                                                                                            "docs": {},
+                                                                                            "e": {
+                                                                                              "docs": {},
+                                                                                              "m": {
+                                                                                                "docs": {},
+                                                                                                "p": {
+                                                                                                  "docs": {},
+                                                                                                  "l": {
+                                                                                                    "docs": {
+                                                                                                      "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                                                                                                        "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                                                                                                        "tf": 1150
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
                                                                             }
                                                                           }
                                                                         }
@@ -11092,6 +11367,32 @@
                                                                                             "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                                                                                             "tf": 1150
                                                                                           }
+                                                                                        },
+                                                                                        "d": {
+                                                                                          "docs": {},
+                                                                                          "e": {
+                                                                                            "docs": {},
+                                                                                            "f": {
+                                                                                              "docs": {},
+                                                                                              "a": {
+                                                                                                "docs": {},
+                                                                                                "u": {
+                                                                                                  "docs": {},
+                                                                                                  "l": {
+                                                                                                    "docs": {},
+                                                                                                    "t": {
+                                                                                                      "docs": {
+                                                                                                        "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                                                                                                          "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                                                                                                          "tf": 1150
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
                                                                                         }
                                                                                       }
                                                                                     }
@@ -11270,6 +11571,32 @@
                                                                                           "module-ThurstonItems-Light.html#glslBuildData": {
                                                                                             "ref": "module-ThurstonItems-Light.html#glslBuildData",
                                                                                             "tf": 1150
+                                                                                          }
+                                                                                        },
+                                                                                        "d": {
+                                                                                          "docs": {},
+                                                                                          "e": {
+                                                                                            "docs": {},
+                                                                                            "f": {
+                                                                                              "docs": {},
+                                                                                              "a": {
+                                                                                                "docs": {},
+                                                                                                "u": {
+                                                                                                  "docs": {},
+                                                                                                  "l": {
+                                                                                                    "docs": {},
+                                                                                                    "t": {
+                                                                                                      "docs": {
+                                                                                                        "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                                                                                                          "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                                                                                                          "tf": 1150
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
                                                                                           }
                                                                                         }
                                                                                       }
@@ -17641,6 +17968,10 @@
                       "ref": "module-ThurstonItems-Solid.html#glslBuildData",
                       "tf": 5
                     },
+                    "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                      "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                      "tf": 6.25
+                    },
                     "module-AbstractGeometry-Point.html#build": {
                       "ref": "module-AbstractGeometry-Point.html#build",
                       "tf": 700
@@ -17652,6 +17983,10 @@
                     "module-ThurstonItems-Light.html#glslBuildData": {
                       "ref": "module-ThurstonItems-Light.html#glslBuildData",
                       "tf": 5
+                    },
+                    "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                      "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                      "tf": 6.25
                     },
                     "module-AbstractGeometry-Position.html#toGLSL": {
                       "ref": "module-AbstractGeometry-Position.html#toGLSL",
@@ -18055,6 +18390,10 @@
                       "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
                       "tf": 5
                     },
+                    "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                      "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+                      "tf": 5
+                    },
                     "module-AbstractGeometry-Isometry.html#toGLSL": {
                       "ref": "module-AbstractGeometry-Isometry.html#toGLSL",
                       "tf": 4.545454545454546
@@ -18067,9 +18406,17 @@
                       "ref": "module-ThurstonItems-Solid.html#toGLSL",
                       "tf": 6.25
                     },
+                    "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                      "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                      "tf": 32.5
+                    },
                     "module-ThurstonItems-Light.html#toGLSL": {
                       "ref": "module-ThurstonItems-Light.html#toGLSL",
                       "tf": 6.25
+                    },
+                    "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                      "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                      "tf": 32.5
                     }
                   }
                 }
@@ -18239,9 +18586,17 @@
                 "ref": "module-Thurston-Thurston.html#buildShaderFragment",
                 "tf": 2.083333333333333
               },
+              "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+                "ref": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+                "tf": 6.25
+              },
               "module-AbstractGeometry-Point.html#toGLSL": {
                 "ref": "module-AbstractGeometry-Point.html#toGLSL",
                 "tf": 4.545454545454546
+              },
+              "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+                "ref": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+                "tf": 6.25
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -18586,6 +18941,10 @@
               "docs": {
                 "module-ThurstonItems-Item.html#loadGLSLTemplate": {
                   "ref": "module-ThurstonItems-Item.html#loadGLSLTemplate",
+                  "tf": 10
+                },
+                "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+                  "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
                   "tf": 10
                 }
               }
@@ -19248,7 +19607,7 @@
           }
         }
       },
-      "length": 1917
+      "length": 1957
     },
     "corpusTokens": [
       "0",
@@ -19350,6 +19709,7 @@
       "debug",
       "decid",
       "declar",
+      "default",
       "defin",
       "delta",
       "denot",
@@ -19439,6 +19799,7 @@
       "global",
       "glsl",
       "glslbuilddata",
+      "glslbuilddatadefault",
       "go",
       "goe",
       "gradient",
@@ -19521,6 +19882,7 @@
       "listen",
       "lister",
       "load",
+      "loadglsldefaulttempl",
       "loadglsltempl",
       "local",
       "localpoint",
@@ -19643,6 +20005,7 @@
       "module:thurstonitems~item#glsl",
       "module:thurstonitems~item#islight",
       "module:thurstonitems~item#issolid",
+      "module:thurstonitems~item#loadglsldefaulttempl",
       "module:thurstonitems~item#loadglsltempl",
       "module:thurstonitems~item#loc",
       "module:thurstonitems~item#nam",
@@ -19654,12 +20017,14 @@
       "module:thurstonitems~light",
       "module:thurstonitems~light#color",
       "module:thurstonitems~light#glslbuilddata",
+      "module:thurstonitems~light#glslbuilddatadefault",
       "module:thurstonitems~light#islight",
       "module:thurstonitems~light#issolid",
       "module:thurstonitems~light#maxdir",
       "module:thurstonitems~light#toglsl",
       "module:thurstonitems~solid",
       "module:thurstonitems~solid#glslbuilddata",
+      "module:thurstonitems~solid#glslbuilddatadefault",
       "module:thurstonitems~solid#islight",
       "module:thurstonitems~solid#issolid",
       "module:thurstonitems~solid#materi",
@@ -20170,6 +20535,16 @@
       "longname": "module:ThurstonItems~Item#loadGLSLTemplate",
       "name": "loadGLSLTemplate",
       "tags": "module:ThurstonItems~Item#loadGLSLTemplate loadGLSLTemplate",
+      "summary": "",
+      "description": "Load the XML file containing the GLSL blocks of code. Return the XML as a DOM"
+    },
+    "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate": {
+      "id": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
+      "kind": "function",
+      "title": "&lt;async&gt; loadGLSLDefaultTemplate() → {Promise.&lt;Document&gt;}",
+      "longname": "module:ThurstonItems~Item#loadGLSLDefaultTemplate",
+      "name": "loadGLSLDefaultTemplate",
+      "tags": "module:ThurstonItems~Item#loadGLSLDefaultTemplate loadGLSLDefaultTemplate",
       "summary": "",
       "description": "Load the XML file containing the GLSL blocks of code. Return the XML as a DOM"
     },
@@ -20757,6 +21132,16 @@
       "summary": "",
       "description": "build the GLSL code relative to the item (declaration, signed distance function and gradient)"
     },
+    "module-ThurstonItems-Solid.html#glslBuildDataDefault": {
+      "id": "module-ThurstonItems-Solid.html#glslBuildDataDefault",
+      "kind": "function",
+      "title": "&lt;async&gt; glslBuildDataDefault( globals, blocks ) → {Promise.&lt;void&gt;}",
+      "longname": "module:ThurstonItems~Solid#glslBuildDataDefault",
+      "name": "glslBuildDataDefault",
+      "tags": "module:ThurstonItems~Solid#glslBuildDataDefault glslBuildDataDefault",
+      "summary": "",
+      "description": "Build the GLSL blocks listed in blocks using the default templates"
+    },
     "module-AbstractGeometry-Point.html": {
       "id": "module-AbstractGeometry-Point.html",
       "kind": "class",
@@ -20908,6 +21293,16 @@
       "tags": "module:ThurstonItems~Light#glslBuildData glslBuildData",
       "summary": "",
       "description": "build the GLSL code relative to the item (declaration, signed distance function and gradient)"
+    },
+    "module-ThurstonItems-Light.html#glslBuildDataDefault": {
+      "id": "module-ThurstonItems-Light.html#glslBuildDataDefault",
+      "kind": "function",
+      "title": "&lt;async&gt; glslBuildDataDefault( globals, blocks ) → {Promise.&lt;void&gt;}",
+      "longname": "module:ThurstonItems~Light#glslBuildDataDefault",
+      "name": "glslBuildDataDefault",
+      "tags": "module:ThurstonItems~Light#glslBuildDataDefault glslBuildDataDefault",
+      "summary": "",
+      "description": "Build the GLSL blocks listed in blocks using the default templates"
     },
     "module-AbstractGeometry-Vector.html": {
       "id": "module-AbstractGeometry-Vector.html",

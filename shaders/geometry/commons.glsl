@@ -146,6 +146,33 @@ RelVector flow(RelVector v, float t) {
     return v;
 }
 
+/**
+ * Compute (an approximation of) the vector obtained from `v` by moving the given direction.
+ * Shift only the base point of the vector (does not update the direction).
+ * This method is intended to numerically compute the gradient to a solid.
+ * @param[in] v initial vector.
+ * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
+ */
+RelVector smallShift(RelVector v, vec3 dp){
+    Point pos = smallShift(v.local.pos, dp);
+    Vector local = Vector(pos, v.local.dir);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+
+/**
+ * Compute the vector at the same point as `v` whose coordinates are given by the section of the frame bundle.
+ * Overload of createVector
+ */
+RelVector createVector(RelVector v, vec3 coords){
+    Vector local = createVector(v.local.pos, coords);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+
+
+
+
 
 /***********************************************************************************************************************
  *

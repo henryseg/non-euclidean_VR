@@ -645,7 +645,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        //console.log(fShader);
+        // console.log(fShader);
 
         return fShader;
     }
