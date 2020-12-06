@@ -460,7 +460,9 @@ class Thurston {
      */
     initThreeJS() {
         // setup the renderer
-        this._renderer = new WebGLRenderer();
+        this._renderer = new WebGLRenderer({
+            logarithmicDepthBuffer: true,
+        });
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(window.innerWidth, window.innerHeight);
         this._renderer.xr.enabled = true;
@@ -472,8 +474,8 @@ class Thurston {
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.0001,
-            2000
+            0.00001,
+            4000
         );
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
@@ -659,7 +661,7 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
+        const geometry = new SphereBufferGeometry(2000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         const materialLeft = new ShaderMaterial({
