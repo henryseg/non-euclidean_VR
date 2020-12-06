@@ -20,19 +20,17 @@
  * Otherwie, do nothing and set teleported to false
  * @param[in] v the relative vector to teleport.
  * @param[out] teleported a flag to know if a teleportation has been done.
- * @return the teleported relative vector.
+ * @return true if the vector has been teleported and false otherwise
  */
-RelVector teleport(RelVector v, out bool teleported){
+bool teleport(inout RelVector v){
     {{#teleports}}
         if(test_{{name}}(v.local.pos)){
             v.local = applyIsometry({{name}}Isom, v.local);
             v.cellBoost = multiply(v.cellBoost,{{name}}Inv);
             v.invCellBoost = multiply({{name}}Isom, v.invCellBoost);
-            teleported = true;
-            return v;
+            return true;
         }
     {{/teleports}}
-    teleported = false;
-  return v;
+    return false;
 }
 

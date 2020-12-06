@@ -25,20 +25,18 @@ int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
     RelVector localV = v;
     RelVector res = v;
     Solid auxSolid;
+    int auxHit;
+    RelVector auxNormal;
     float marchingStep = minDist;
     float globalDepth = minDist;
     float localDepth = minDist;
     float dist;
-    bool hasTeleported;
-    int auxHit;
-    RelVector auxNormal;
     int hit = 0;
 
 
     // local scene
     for (int i = 0; i < maxMarchingSteps; i++){
-        localV = teleport(localV, hasTeleported);
-        if (hasTeleported){
+        if (teleport(localV)){
             localV0 = localV;
             marchingStep = minDist;
         }
