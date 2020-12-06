@@ -121,6 +121,10 @@ import {
 } from "./lib/VRButton.js";
 
 import {
+    XRControllerModelFactory
+} from "./lib/XRControllerModelFactory.js";
+
+import {
     mustache
 } from "./lib/mustache.mjs";
 
@@ -291,7 +295,7 @@ class Thurston {
      * @param {DiscreteSubgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
-     * @todo If a subgroup is not provided use the trivial one.
+     * @todo If a subgroups is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
         // loading the polyfill if WebXR is not supported
@@ -303,7 +307,7 @@ class Thurston {
          */
         this.geom = geom;
         /**
-         * The discrete subgroup defining a quotient manifold/orbifold
+         * The discrete subgroups defining a quotient manifold/orbifold
          * @type {DiscreteSubgroup}
          */
         this.subgroup = subgroup;
@@ -328,23 +332,40 @@ class Thurston {
         // Three.js content
         // Declaring first all the fields.
         // Maybe not needed, but perhaps good practice.
+        /**
+         * The renderer used by Three.js
+         * @type {WebGLRenderer}
+         * @private
+         */
         this._renderer = undefined;
+        /**
+         * The Three.js camera
+         * @type {PerspectiveCamera}
+         * @private
+         */
         this._camera = undefined;
         this._cameraOldPosition = undefined;
         this._cameraNewPosition = undefined;
+        /**
+         * The underlying Three.js scene
+         * @type {Scene}
+         * @private
+         */
         this._scene = undefined;
         this._horizonRight = undefined;
         this._horizonLeft = undefined;
+        this._controllerGrip0 = undefined;
+        this._controllerGrip1 = undefined;
         this.initThreeJS();
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
         this.params.eyePosition = this.getEyePositions();
 
-        // register the isometries involved in the discrete subgroup
+        // register the isometries involved in the discrete subgroups
         for (const teleport of this.subgroup.teleports) {
             // first add the isometries to the list of parameters
-            // this cannot be static as the number/names of isometries depend on the subgroup
+            // this cannot be static as the number/names of isometries depend on the subgroups
             this.registerParam(`${teleport.name}Isom`, SHADER_PASS.UNIFORM, 'Isometry');
             this.registerParam(`${teleport.name}Inv`, SHADER_PASS.UNIFORM, 'Isometry');
             // then register the isometries
@@ -352,14 +373,32 @@ class Thurston {
             this.params[`${teleport.name}Inv`] = teleport.inv;
         }
 
-        // The list of solids in the scene as an object {id: solid}
+        /**
+         * The list of solids in the non-euclidean scene
+         * @type {Solid[]}
+         * @private
+         */
         this._solids = [];
-        // The list of lights in the scene as an object {id: light}
+        /**
+         * The list of lights in the non-euclidean scene
+         * @type {Light[]}
+         * @private
+         */
         this._lights = [];
-        // The maximal number of directions for a light
+        /**
+         * The maximal number of lights directions
+         * Computed automatically from the list of lights.
+         * @type {number}
+         * @private
+         */
         this._maxLightDirs = undefined;
 
-        // setup the keyboard controls
+
+        /**
+         * The keyboard controls
+         * @type {KeyboardControls}
+         * @private
+         */
         this._controls = new KeyboardControls(
             this.params.position,
             this._camera,
@@ -368,7 +407,11 @@ class Thurston {
         );
         this._controls.infos = bind(this, this.infos);
 
-        // clock to measure the time between two frames
+        /**
+         * A clock to measure the time between two call of animate
+         * @type {Clock}
+         * @private
+         */
         this._clock = new Clock();
 
 
@@ -557,7 +600,9 @@ class Thurston {
      */
     initThreeJS() {
         // setup the renderer
-        this._renderer = new WebGLRenderer();
+        this._renderer = new WebGLRenderer({
+            logarithmicDepthBuffer: true,
+        });
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(window.innerWidth, window.innerHeight);
         this._renderer.xr.enabled = true;
@@ -569,8 +614,8 @@ class Thurston {
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.0001,
-            2000
+            0.00001,
+            4000
         );
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
@@ -580,6 +625,19 @@ class Thurston {
 
         // build the scene with a single screen
         this._scene = new Scene();
+
+        const controllerModelFactory = new XRControllerModelFactory();
+
+        this._controllerGrip0 = this._renderer.xr.getControllerGrip(0);
+        const model0 = controllerModelFactory.createControllerModel(this._controllerGrip0);
+        this._controllerGrip0.add(model0);
+        this._scene.add(this._controllerGrip0);
+
+        this._controllerGrip1 = this._renderer.xr.getControllerGrip(1);
+        const model1 = controllerModelFactory.createControllerModel(this._controllerGrip1);
+        this._controllerGrip1.add(model1);
+        this._scene.add(this._controllerGrip1);
+
 
         return this;
     }
@@ -642,7 +700,7 @@ class Thurston {
     }
 
     /**
-     * Return the list of all "background" blocks of GLSL code which are required for items and subgroup.
+     * Return the list of all "background" blocks of GLSL code which are required for items and subgroups.
      * @return {Promise&lt;string[]>}
      */
     async buildShaderDataBackground() {
@@ -656,7 +714,7 @@ class Thurston {
                 }
             }
         }
-        // discrete subgroup file
+        // discrete subgroups file
         files.push(this.subgroup.shaderSource);
 
         // for each file, extract the content of the background XML tag
@@ -696,9 +754,9 @@ class Thurston {
      * The data used to populate the templates are build by the functions
      * - buildShaderDataConstants (constants)
      * - buildShaderDataUniforms (uniforms)
-     * - buildShaderDataBackground (background routines for the items and the subgroup)
+     * - buildShaderDataBackground (background routines for the items and the subgroups)
      * - buildShaderDataItems (items)
-     * - this.subgroup.glslBuildData (subgroup)
+     * - this.subgroups.glslBuildData (subgroups)
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
@@ -756,7 +814,7 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
+        const geometry = new SphereBufferGeometry(2000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         const materialLeft = new ShaderMaterial({
@@ -805,7 +863,7 @@ class Thurston {
     animate() {
         const delta = this._clock.getDelta();
         this._controls.update(delta);
-        this.chaseCamera()
+        this.chaseCamera();
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);
         this.stats.update();

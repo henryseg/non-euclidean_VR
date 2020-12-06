@@ -235,8 +235,23 @@ class Thurston {
         // Three.js content
         // Declaring first all the fields.
         // Maybe not needed, but perhaps good practice.
+        /**
+         * The renderer used by Three.js
+         * @type {WebGLRenderer}
+         * @private
+         */
         this._renderer = undefined;
+        /**
+         * The Three.js camera
+         * @type {PerspectiveCamera}
+         * @private
+         */
         this._camera = undefined;
+        /**
+         * The underlying Three.js scene
+         * @type {Scene}
+         * @private
+         */
         this._cameraOldPosition = undefined;
         this._cameraNewPosition = undefined;
         this._scene = undefined;
@@ -261,14 +276,32 @@ class Thurston {
             this.params[`${teleport.name}Inv`] = teleport.inv;
         }
 
-        // The list of solids in the scene as an object {id: solid}
+        /**
+         * The list of solids in the non-euclidean scene
+         * @type {Solid[]}
+         * @private
+         */
         this._solids = [];
-        // The list of lights in the scene as an object {id: light}
+        /**
+         * The list of lights in the non-euclidean scene
+         * @type {Light[]}
+         * @private
+         */
         this._lights = [];
-        // The maximal number of directions for a light
+        /**
+         * The maximal number of lights directions
+         * Computed automatically from the list of lights.
+         * @type {number}
+         * @private
+         */
         this._maxLightDirs = undefined;
 
-        // setup the keyboard controls
+
+        /**
+         * The keyboard controls
+         * @type {KeyboardControls}
+         * @private
+         */
         this._controls = new KeyboardControls(
             this.params.position,
             this._camera,
@@ -277,7 +310,11 @@ class Thurston {
         );
         this._controls.infos = bind(this, this.infos);
 
-        // clock to measure the time between two frames
+        /**
+         * A clock to measure the time between two call of animate
+         * @type {Clock}
+         * @private
+         */
         this._clock = new Clock();
 
 
@@ -303,7 +340,9 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        return this.params.eyePosition[0].local.facing.toLog();
+        const cam = this._renderer.xr.getCamera(this._camera).cameras[0];
+        console.log(cam);
+        console.log(this._horizonLeft);
     }
 
     /**
@@ -489,16 +528,19 @@ class Thurston {
         this._cameraOldPosition = this._camera.position.clone();
         this._cameraNewPosition = this._camera.position.clone();
 
+
         // build the scene with a single screen
         this._scene = new Scene();
 
+        const controllerModelFactory = new XRControllerModelFactory();
+
         this._controllerGrip0 = this._renderer.xr.getControllerGrip(0);
-        const model0 = new XRControllerModelFactory().createControllerModel(this._controllerGrip0);
+        const model0 = controllerModelFactory.createControllerModel(this._controllerGrip0);
         this._controllerGrip0.add(model0);
         this._scene.add(this._controllerGrip0);
 
         this._controllerGrip1 = this._renderer.xr.getControllerGrip(1);
-        const model1 = new XRControllerModelFactory().createControllerModel(this._controllerGrip1);
+        const model1 = controllerModelFactory.createControllerModel(this._controllerGrip1);
         this._controllerGrip1.add(model1);
         this._scene.add(this._controllerGrip1);
 
@@ -709,6 +751,7 @@ class Thurston {
      * and the non-euclidean one (by changing the position).
      * The eye positions are not updated here.
      * This should be done manually somewhere else.
+     * @type{Function}
      */
     chaseCamera() {
         this._cameraOldPosition.copy(this._cameraNewPosition);
@@ -720,6 +763,59 @@ class Thurston {
         this.params.position.flow(deltaPosition);
         return this;
     }
+    //
+    // /**
+    //  * If the camera moved (most likely because VR headset updated its position),
+    //  * then we update both the Three.js scene (by moving the horizon sphere)
+    //  * and the non-euclidean one (by changing the position).
+    //  * The eye positions are not updated here.
+    //  * This should be done manually somewhere else.
+    //  * @type{Function}
+    //  */
+    // get chaseCamera() {
+    //     if (this._chaseCamera === undefined) {
+    //         let oldPositionL = new Vector3();
+    //         let oldPositionR = new Vector3();
+    //         this._chaseCamera = function () {
+    //
+    //             // declare the new positions of the left and right cameras
+    //             const newPositionL = new Vector3();
+    //             const newPositionR = new Vector3();
+    //
+    //             newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
+    //             newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
+    //             if (this._renderer.xr.isPresenting) {
+    //                 // if XR is enable, we get the position of the left and right camera
+    //                 const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+    //                 newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
+    //                 newPositionR.setFromMatrixPosition(camerasVR[1].matrixWorld);
+    //                 console.log("from VR", newPositionL.toLog(), newPositionR.toLog());
+    //             } else {
+    //                 // if XR is off, both positions coincide with the one of the camera
+    //                 newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
+    //                 newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
+    //                 console.log("regular", newPositionL.toLog(), newPositionR.toLog());
+    //             }
+    //             // center each horizon sphere at the appropriate point
+    //             this._horizonLeft.position.copy(newPositionL);
+    //             this._horizonRight.position.copy(newPositionR);
+    //             // compute the old and new position (midpoint between the left and right cameras)
+    //             const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
+    //             const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
+    //             // flow the position along the difference of positions
+    //             const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
+    //             // console.log(deltaPosition.toLog());
+    //             this.params.position.flow(deltaPosition);
+    //
+    //             // update the old left and right positions
+    //             oldPositionL.copy(newPositionL);
+    //             oldPositionR.copy(newPositionR);
+    //
+    //             return this;
+    //         };
+    //     }
+    //     return this._chaseCamera;
+    // }
 
     /**
      * Animates the simulation

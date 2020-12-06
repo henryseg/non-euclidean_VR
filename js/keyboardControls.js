@@ -149,7 +149,7 @@ class KeyboardControls extends EventDispatcher {
     set infos(value) {
         if (value === undefined) {
             this._infos = function () {
-                return "Information function has not been set up";
+                console.log("Information function has not been set up");
             }
         } else {
             this._infos = value;
@@ -166,7 +166,7 @@ class KeyboardControls extends EventDispatcher {
             const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
             switch (action) {
                 case "info":
-                    console.log(this.infos());
+                    this.infos();
                     break;
                 default:
                     this._moveState[action] = 1;
