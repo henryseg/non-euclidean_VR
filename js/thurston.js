@@ -46,6 +46,10 @@ import {
     KeyboardControls
 } from "./keyboardControls.js";
 
+import {
+    VRControls
+} from "./VRControls.js";
+
 /**
  * Code for the way a property can be passed to the shader
  * @const
@@ -198,7 +202,7 @@ class Thurston {
      * @param {DiscreteSubgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
-     * @todo If a subgroups is not provided use the trivial one.
+     * @todo If a subgroup is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
         // loading the polyfill if WebXR is not supported
@@ -210,7 +214,7 @@ class Thurston {
          */
         this.geom = geom;
         /**
-         * The discrete subgroups defining a quotient manifold/orbifold
+         * The discrete subgroup defining a quotient manifold/orbifold
          * @type {DiscreteSubgroup}
          */
         this.subgroup = subgroup;
@@ -252,20 +256,16 @@ class Thurston {
          * @type {Scene}
          * @private
          */
-        this._cameraOldPosition = undefined;
-        this._cameraNewPosition = undefined;
         this._scene = undefined;
         this._horizonRight = undefined;
         this._horizonLeft = undefined;
-        this._controllerGrip0 = undefined;
-        this._controllerGrip1 = undefined;
         this.initThreeJS();
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
         this.params.eyePosition = this.getEyePositions();
 
-        // register the isometries involved in the discrete subgroups
+        // register the isometries involved in the discrete subgroup
         for (const teleport of this.subgroup.teleports) {
             // first add the isometries to the list of parameters
             // this cannot be static as the number/names of isometries depend on the subgroups
@@ -302,13 +302,15 @@ class Thurston {
          * @type {KeyboardControls}
          * @private
          */
-        this._controls = new KeyboardControls(
+        this._keyboardControls = new KeyboardControls(
             this.params.position,
             this._camera,
             this._renderer.domElement,
             params.keyboard
         );
-        this._controls.infos = bind(this, this.infos);
+        this._keyboardControls.infos = bind(this, this.infos);
+
+        this._VRControls = new VRControls(this.params.position, this._controller0);
 
         /**
          * A clock to measure the time between two call of animate
@@ -340,9 +342,9 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        const cam = this._renderer.xr.getCamera(this._camera).cameras[0];
-        console.log(cam);
-        console.log(this._horizonLeft);
+        const test = new Vector3();
+        this._controller0.getWorldDirection(test);
+        console.log(test.length(), Math.atan2(test.z, test.y), test.toLog());
     }
 
     /**
@@ -475,7 +477,7 @@ class Thurston {
      * @param {string} value - the keyboard type (us, fr,...)
      */
     setKeyboard(value) {
-        this._controls.keyboard = value;
+        this._keyboardControls.keyboard = value;
     }
 
 
@@ -491,7 +493,7 @@ class Thurston {
                 window.open('https://github.com/henryseg/non-euclidean_VR');
             }
         }, 'help').name("Help/About");
-        const keyboardController = this.gui.add(this._controls, 'keyboard', {
+        const keyboardController = this.gui.add(this._keyboardControls, 'keyboard', {
             QWERTY: 'us',
             AZERTY: 'fr'
         }).name("Keyboard");
@@ -519,15 +521,12 @@ class Thurston {
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.00001,
-            4000
+            0.0001,
+            2000
         );
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
         this._camera.layers.enable(1);
-        this._cameraOldPosition = this._camera.position.clone();
-        this._cameraNewPosition = this._camera.position.clone();
-
 
         // build the scene with a single screen
         this._scene = new Scene();
@@ -543,6 +542,11 @@ class Thurston {
         const model1 = controllerModelFactory.createControllerModel(this._controllerGrip1);
         this._controllerGrip1.add(model1);
         this._scene.add(this._controllerGrip1);
+
+        this._controller0 = this._renderer.xr.getController(0);
+        this._scene.add(this._controller0);
+        this._controller1 = this._renderer.xr.getController(1);
+        this._scene.add(this._controller1);
 
 
         return this;
@@ -606,7 +610,7 @@ class Thurston {
     }
 
     /**
-     * Return the list of all "background" blocks of GLSL code which are required for items and subgroups.
+     * Return the list of all "background" blocks of GLSL code which are required for items and subgroup.
      * @return {Promise<string[]>}
      */
     async buildShaderDataBackground() {
@@ -620,7 +624,7 @@ class Thurston {
                 }
             }
         }
-        // discrete subgroups file
+        // discrete subgroup file
         files.push(this.subgroup.shaderSource);
 
         // for each file, extract the content of the background XML tag
@@ -660,9 +664,9 @@ class Thurston {
      * The data used to populate the templates are build by the functions
      * - buildShaderDataConstants (constants)
      * - buildShaderDataUniforms (uniforms)
-     * - buildShaderDataBackground (background routines for the items and the subgroups)
+     * - buildShaderDataBackground (background routines for the items and the subgroup)
      * - buildShaderDataItems (items)
-     * - this.subgroups.glslBuildData (subgroups)
+     * - this.subgroup.glslBuildData (subgroup)
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
@@ -720,7 +724,7 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(2000, 60, 40);
+        const geometry = new SphereBufferGeometry(1000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         const materialLeft = new ShaderMaterial({
@@ -753,76 +757,55 @@ class Thurston {
      * This should be done manually somewhere else.
      * @type{Function}
      */
-    chaseCamera() {
-        this._cameraOldPosition.copy(this._cameraNewPosition);
-        this._cameraNewPosition = new Vector3().setFromMatrixPosition(this._camera.matrixWorld);
-        this._horizonLeft.position.copy(this._cameraNewPosition);
-        this._horizonRight.position.copy(this._cameraNewPosition);
+    get chaseCamera() {
+        if (this._chaseCamera === undefined) {
+            let oldPositionL = new Vector3();
+            let oldPositionR = new Vector3();
+            this._chaseCamera = function () {
 
-        const deltaPosition = new Vector().subVectors(this._cameraNewPosition, this._cameraOldPosition);
-        this.params.position.flow(deltaPosition);
-        return this;
+                // declare the new positions of the left and right cameras
+                const newPositionL = new Vector3();
+                const newPositionR = new Vector3();
+
+                newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
+                newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
+                if (this._renderer.xr.isPresenting) {
+                    // if XR is enable, we get the position of the left and right camera
+                    const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+                    newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
+                    newPositionR.setFromMatrixPosition(camerasVR[1].matrixWorld);
+                } else {
+                    // if XR is off, both positions coincide with the one of the camera
+                    newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
+                    newPositionR.copy(newPositionL);
+                }
+                // center each horizon sphere at the appropriate point
+                this._horizonLeft.position.copy(newPositionL);
+                this._horizonRight.position.copy(newPositionR);
+                // compute the old and new position (midpoint between the left and right cameras)
+                const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
+                const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
+                // flow the position along the difference of positions
+                const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
+                this.params.position.flow(deltaPosition);
+
+                // update the old left and right positions
+                oldPositionL.copy(newPositionL);
+                oldPositionR.copy(newPositionR);
+
+                return this;
+            };
+        }
+        return this._chaseCamera;
     }
-    //
-    // /**
-    //  * If the camera moved (most likely because VR headset updated its position),
-    //  * then we update both the Three.js scene (by moving the horizon sphere)
-    //  * and the non-euclidean one (by changing the position).
-    //  * The eye positions are not updated here.
-    //  * This should be done manually somewhere else.
-    //  * @type{Function}
-    //  */
-    // get chaseCamera() {
-    //     if (this._chaseCamera === undefined) {
-    //         let oldPositionL = new Vector3();
-    //         let oldPositionR = new Vector3();
-    //         this._chaseCamera = function () {
-    //
-    //             // declare the new positions of the left and right cameras
-    //             const newPositionL = new Vector3();
-    //             const newPositionR = new Vector3();
-    //
-    //             newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-    //             newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
-    //             if (this._renderer.xr.isPresenting) {
-    //                 // if XR is enable, we get the position of the left and right camera
-    //                 const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
-    //                 newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
-    //                 newPositionR.setFromMatrixPosition(camerasVR[1].matrixWorld);
-    //                 console.log("from VR", newPositionL.toLog(), newPositionR.toLog());
-    //             } else {
-    //                 // if XR is off, both positions coincide with the one of the camera
-    //                 newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-    //                 newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
-    //                 console.log("regular", newPositionL.toLog(), newPositionR.toLog());
-    //             }
-    //             // center each horizon sphere at the appropriate point
-    //             this._horizonLeft.position.copy(newPositionL);
-    //             this._horizonRight.position.copy(newPositionR);
-    //             // compute the old and new position (midpoint between the left and right cameras)
-    //             const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
-    //             const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
-    //             // flow the position along the difference of positions
-    //             const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
-    //             // console.log(deltaPosition.toLog());
-    //             this.params.position.flow(deltaPosition);
-    //
-    //             // update the old left and right positions
-    //             oldPositionL.copy(newPositionL);
-    //             oldPositionR.copy(newPositionR);
-    //
-    //             return this;
-    //         };
-    //     }
-    //     return this._chaseCamera;
-    // }
 
     /**
      * Animates the simulation
      */
     animate() {
         const delta = this._clock.getDelta();
-        this._controls.update(delta);
+        this._keyboardControls.update(delta);
+        this._VRControls.update(delta);
         this.chaseCamera();
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);

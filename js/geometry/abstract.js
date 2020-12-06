@@ -690,7 +690,7 @@ class Teleport {
         this.name = `teleport_${this.uuid}`;
         /**
          * The GLSL code to perform the test.
-         * (To be automatically setup at the subgroups level.)
+         * (To be automatically setup at the subgroup level.)
          * @type {string}
          */
         this.glsl = undefined;
@@ -708,7 +708,7 @@ class Teleport {
  * This plays an important role if the discrete subgroups is not abelian.
  *
  *
- * A possible extension would be to implement a symbolic representation of the elements in the subgroups.
+ * A possible extension would be to implement a symbolic representation of the elements in the subgroup.
  * For the lattices we implemented in E^3, S^3, S^2 x E, Nil and Sol this is probably easy. Indeed
  * - E^3, the lattice will be a semi-direct product of Z^2 by a finite group.
  * - S^3 the lattice is a finite group
@@ -750,7 +750,7 @@ class DiscreteSubgroup {
     }
 
     /**
-     * Goes through all the teleportations in the discrete subgroups
+     * Goes through all the teleportations in the discrete subgroup
      * and build the GLSL code performing the associated test.
      * @return {Promise<void>}
      */

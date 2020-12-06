@@ -66,7 +66,7 @@ function bind(scope, fn) {
  * @class
  *
  * @classdesc
- * Implements keyboard controls to fly in the geometry using the keyboard.
+ * Implements controls to fly in the geometry using the keyboard.
  * This is inspired from Three.js
  * {@link https://threejs.org/docs/#examples/en/controls/FlyControls | FlyControls}
  */
@@ -135,7 +135,6 @@ class KeyboardControls extends EventDispatcher {
         } else {
             this._keyboard = value;
         }
-
     }
 
     /**
@@ -219,10 +218,10 @@ class KeyboardControls extends EventDispatcher {
     };
 
     /**
-     * Produce a function to update the position
+     * Function to update the position
      *
      * Assume that the current position is `(g,m)` where
-     * - `g` is the boost, i.e. subgroups element * local boost
+     * - `g` is the boost, i.e. subgroup element * local boost
      * - `m` is the facing, i.e. an element of O(3)
      *
      * Denote by `a` the Matrix4 representing the Three.js camera orientation, understood as an element of O(3) as well.
