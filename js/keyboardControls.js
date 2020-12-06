@@ -1,6 +1,6 @@
 import {
-    EventDispatcher, Matrix4, Quaternion,
-    Vector3
+    EventDispatcher,
+    Matrix4
 } from "./lib/three.module.js";
 
 import {
@@ -135,7 +135,6 @@ class KeyboardControls extends EventDispatcher {
         } else {
             this._keyboard = value;
         }
-
     }
 
     /**
