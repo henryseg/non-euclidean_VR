@@ -15,7 +15,7 @@ import * as geom from "./geometry/euc.js";
 import * as items from "./items/euc.js";
 import {
     torusSubgroup
-} from "./subgroup/euc/torus.js";
+} from "./subgroups/euc/torus.js";
 
 
 const thurston = new Thurston(geom, torusSubgroup, {keyboard: 'fr'});

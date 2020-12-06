@@ -7,15 +7,13 @@
 
 import {
     Isometry,
-    Point,
     Position
-} from '../geometry/abstract.js'
+} from "../geometry/euc.js";
 
 import {
-    Item,
     Solid,
     Light
-} from './abstract.js'
+} from "./abstract.js";
 
 class Ball extends Solid {
 
@@ -34,11 +32,6 @@ class Ball extends Solid {
 
     get shaderSource() {
         return 'shaders/items/euc/items.xml';
-    }
-
-    default() {
-        const res = super.default();
-        return Object.assign(res, {center: new Point(), radius: 0.2});
     }
 }
 
@@ -60,11 +53,6 @@ class BallComplement extends Solid {
 
     get shaderSource() {
         return 'shaders/items/euc/items.xml';
-    }
-
-    default() {
-        const res = super.default();
-        return Object.assign(res, {center: new Point(), radius: 0.2});
     }
 }
 

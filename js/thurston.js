@@ -24,6 +24,10 @@ import {
 } from "./lib/VRButton.js";
 
 import {
+    XRControllerModelFactory
+} from "./lib/XRControllerModelFactory.js";
+
+import {
     mustache
 } from "./lib/mustache.mjs";
 
@@ -194,7 +198,7 @@ class Thurston {
      * @param {DiscreteSubgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
-     * @todo If a subgroup is not provided use the trivial one.
+     * @todo If a subgroups is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
         // loading the polyfill if WebXR is not supported
@@ -206,7 +210,7 @@ class Thurston {
          */
         this.geom = geom;
         /**
-         * The discrete subgroup defining a quotient manifold/orbifold
+         * The discrete subgroups defining a quotient manifold/orbifold
          * @type {DiscreteSubgroup}
          */
         this.subgroup = subgroup;
@@ -238,16 +242,18 @@ class Thurston {
         this._scene = undefined;
         this._horizonRight = undefined;
         this._horizonLeft = undefined;
+        this._controllerGrip0 = undefined;
+        this._controllerGrip1 = undefined;
         this.initThreeJS();
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
         this.params.eyePosition = this.getEyePositions();
 
-        // register the isometries involved in the discrete subgroup
+        // register the isometries involved in the discrete subgroups
         for (const teleport of this.subgroup.teleports) {
             // first add the isometries to the list of parameters
-            // this cannot be static as the number/names of isometries depend on the subgroup
+            // this cannot be static as the number/names of isometries depend on the subgroups
             this.registerParam(`${teleport.name}Isom`, SHADER_PASS.UNIFORM, 'Isometry');
             this.registerParam(`${teleport.name}Inv`, SHADER_PASS.UNIFORM, 'Isometry');
             // then register the isometries
@@ -486,6 +492,17 @@ class Thurston {
         // build the scene with a single screen
         this._scene = new Scene();
 
+        this._controllerGrip0 = this._renderer.xr.getControllerGrip(0);
+        const model0 = new XRControllerModelFactory().createControllerModel(this._controllerGrip0);
+        this._controllerGrip0.add(model0);
+        this._scene.add(this._controllerGrip0);
+
+        this._controllerGrip1 = this._renderer.xr.getControllerGrip(1);
+        const model1 = new XRControllerModelFactory().createControllerModel(this._controllerGrip1);
+        this._controllerGrip1.add(model1);
+        this._scene.add(this._controllerGrip1);
+
+
         return this;
     }
 
@@ -547,7 +564,7 @@ class Thurston {
     }
 
     /**
-     * Return the list of all "background" blocks of GLSL code which are required for items and subgroup.
+     * Return the list of all "background" blocks of GLSL code which are required for items and subgroups.
      * @return {Promise<string[]>}
      */
     async buildShaderDataBackground() {
@@ -561,7 +578,7 @@ class Thurston {
                 }
             }
         }
-        // discrete subgroup file
+        // discrete subgroups file
         files.push(this.subgroup.shaderSource);
 
         // for each file, extract the content of the background XML tag
@@ -601,9 +618,9 @@ class Thurston {
      * The data used to populate the templates are build by the functions
      * - buildShaderDataConstants (constants)
      * - buildShaderDataUniforms (uniforms)
-     * - buildShaderDataBackground (background routines for the items and the subgroup)
+     * - buildShaderDataBackground (background routines for the items and the subgroups)
      * - buildShaderDataItems (items)
-     * - this.subgroup.glslBuildData (subgroup)
+     * - this.subgroups.glslBuildData (subgroups)
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
@@ -710,7 +727,7 @@ class Thurston {
     animate() {
         const delta = this._clock.getDelta();
         this._controls.update(delta);
-        this.chaseCamera()
+        this.chaseCamera();
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);
         this.stats.update();

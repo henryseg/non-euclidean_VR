@@ -17,6 +17,9 @@
  * - 0 if no object has bee hit
  * - -1, if there is a bug
  * @remark Raymarch, starting each new step from the origin (goal : reduce accumulative errors)
+ * @todo Should we also teleport during the global raymarching?
+ * - the telportations accumulate numerical errors, but the coordinates of the local vector, will remain bounded.
+ * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
 int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
     RelVector globalV0 = v;

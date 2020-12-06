@@ -466,7 +466,7 @@ class Light extends Item {
      */
     async glslBuildDataDefault(globals = {}, blocks) {
         if ('direction' in blocks) {
-            // The SDF cannot be setup by default!
+            // The direction field cannot be setup by default!
             throw new Error(`No direction field for ${this.name}`);
         }
 
