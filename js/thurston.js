@@ -196,7 +196,7 @@ class Thurston {
      * Property that are not setup yet, but will be used later are defined as `undefined`.
      * (Maybe not needed in JS, but good practice I guess.)
      * @param {Object} geom - a module handing the relevant geometry
-     * @param {DiscreteSubgroup} subgroup - a discrete subgroups
+     * @param {Subgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
      * @todo If a subgroup is not provided use the trivial one.
@@ -212,7 +212,7 @@ class Thurston {
         this.geom = geom;
         /**
          * The discrete subgroup defining a quotient manifold/orbifold
-         * @type {DiscreteSubgroup}
+         * @type {Subgroup}
          */
         this.subgroup = subgroup;
 
@@ -527,7 +527,7 @@ class Thurston {
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.0001,
+            0.00001,
             2000
         );
         this._camera.position.set(0, 0, 0);
@@ -730,7 +730,7 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
+        const geometry = new SphereBufferGeometry(500, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         const materialLeft = new ShaderMaterial({

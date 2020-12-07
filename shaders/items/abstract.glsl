@@ -14,7 +14,7 @@
  * The flag `posFlag` is there to say if this computation has already been done.
  *
  **********************************************************************************************************************/
-struct Item{
+struct ObjectThurston{
     Position position;/**< the position of the item*/
     Point loc; /**< location of the object */
 };
@@ -42,7 +42,7 @@ struct Material {
  *
  **********************************************************************************************************************/
 struct Solid{
-    Item item; /**< Underlying item */
+    ObjectThurston obj; /**< Underlying item */
     Material material; /**< material of the object */
 };
 
@@ -55,7 +55,7 @@ struct Solid{
  *
  **********************************************************************************************************************/
 struct Light{
-    Item item; /**< The underlying item */
+    ObjectThurston obj; /**< The underlying item */
     vec3 color; /**< The color of the light */
 };
 

@@ -26,7 +26,7 @@ class RelPosition {
      * Constructor.
      * Return the position corresponding to the origin with the reference frame.
      *
-     * @param {DiscreteSubgroup} sbgp - the underlying discrete subgroups.
+     * @param {Subgroup} sbgp - the underlying discrete subgroups.
      */
     constructor(sbgp) {
         /**
@@ -46,7 +46,7 @@ class RelPosition {
         this.invCellBoost = new Isometry();
         /**
          * the isometry component of the position inside the fundamental domain
-         * @type {DiscreteSubgroup}
+         * @type {Subgroup}
          */
         this.sbgp = sbgp;
     }
