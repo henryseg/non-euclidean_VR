@@ -2,8 +2,8 @@ import {
     Point,
     Isometry,
     Teleport,
-    DiscreteSubgroup
-} from "../../geometry/euc.js";
+    Subgroup
+} from "../../geometry/euc/General.js";
 
 
 const cubeHalfWidth = 0.5;
@@ -46,7 +46,7 @@ const teleportYn = new Teleport(testYn, shiftYn, shiftYp);
 const teleportZp = new Teleport(testZp, shiftZp, shiftZn);
 const teleportZn = new Teleport(testZn, shiftZn, shiftZp);
 
-const torusSubgroup = new DiscreteSubgroup([
+const torusSubgroup = new Subgroup([
     teleportXp,
     teleportXn,
     teleportYp,

@@ -6,8 +6,7 @@ import {
 
 import {
     Vector,
-
-} from "./geometry/abstract.js";
+} from "./geometry/abstract/Vector.js";
 
 import {
     bind
@@ -23,17 +22,15 @@ const EPS = 0.000001;
  */
 Matrix4.prototype.makeRotationFromVectors = function (source, target) {
     const axis = new Vector3().crossVectors(source, target)
-    if(axis.lengthSq() < EPS){
+    if (axis.lengthSq() < EPS) {
         this.identity();
-    }
-    else{
+    } else {
         axis.normalize();
         const angle = Math.acos(source.dot(target));
         this.makeRotationAxis(axis, angle);
     }
     return this;
 }
-
 
 
 /**
@@ -117,6 +114,7 @@ class VRControls extends EventDispatcher {
                 // call the new direction of the controller
                 const newDirection = new Vector();
                 this.controller.getWorldDirection(newDirection);
+                newDirection.normalize();
 
                 if (this._isSelecting) {
                     // flow if the select button is pressed
@@ -127,7 +125,7 @@ class VRControls extends EventDispatcher {
                 }
                 if (this._isSqueezing) {
                     // rotate if the squeeze button is pressed
-                    const m = new Matrix4().makeRotationFromVectors(newDirection,oldDirection);
+                    const m = new Matrix4().makeRotationFromVectors(newDirection, oldDirection);
                     this.position.applyFacing(m);
                 }
 

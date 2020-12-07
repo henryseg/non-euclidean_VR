@@ -7,7 +7,6 @@
 
 import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
 
-
 import {
     WebGLRenderer,
     Scene,
@@ -40,7 +39,7 @@ import {
 import {
     RelPosition,
     Vector
-} from "./geometry/abstract.js";
+} from "./geometry/abstract/General.js";
 
 import {
     KeyboardControls
@@ -717,7 +716,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        // console.log(fShader);
+        console.log(fShader);
 
         return fShader;
     }

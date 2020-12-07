@@ -8,7 +8,7 @@
 import {
     Isometry,
     Position
-} from "../geometry/euc.js";
+} from "../geometry/euc/General.js";
 
 import {
     Solid,

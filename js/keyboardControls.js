@@ -6,7 +6,7 @@ import {
 import {
     RelPosition,
     Vector
-} from "./geometry/abstract.js";
+} from "./geometry/abstract/General.js";
 
 import {
     bind

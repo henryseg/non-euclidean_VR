@@ -16,7 +16,7 @@ import {
 import {
     Point,
     Position
-} from '../geometry/abstract.js'
+} from '../geometry/abstract/General.js'
 
 import {
     Material

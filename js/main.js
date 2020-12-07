@@ -11,7 +11,7 @@ import {
 } from "./material.js";
 
 
-import * as geom from "./geometry/euc.js";
+import * as geom from "./geometry/euc/General.js";
 import * as items from "./items/euc.js";
 import {
     torusSubgroup
