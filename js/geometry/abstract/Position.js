@@ -168,7 +168,6 @@ class Position {
      *
      * Hence the new position `(gg', m'm)` is obtained by multiplying `(g,m)` and `(g',m')`
      *
-     * @abstract
      * @param {Vector} v - the direction in the observer frame
      * @return {Position} The current position
      */

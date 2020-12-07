@@ -3,9 +3,6 @@ import {Point} from "../abstract/Point.js";
 import {Position} from "../abstract/Position.js";
 import {Matrix4} from "../../lib/three.module.js";
 
-/**
- * Euclidean implementation of the abstract method
- */
 Position.prototype.flowFromOrigin = function (v) {
     const point = new Point(v.x, v.y, v.z);
     this.boost.multiply(new Isometry().makeTranslation(point));

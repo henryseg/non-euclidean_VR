@@ -2,15 +2,15 @@ import {
     EventDispatcher,
     Matrix4,
     Vector3
-} from "./lib/three.module.js";
+} from "../lib/three.module.js";
 
 import {
     Vector,
-} from "./geometry/abstract/Vector.js";
+} from "../geometry/abstract/Vector.js";
 
 import {
     bind
-} from "./utils.js";
+} from "../utils.js";
 
 const EPS = 0.000001;
 

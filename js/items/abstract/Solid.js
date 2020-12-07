@@ -1,4 +1,4 @@
-import {Material} from "../../material.js";
+import {Material} from "../../Material.js";
 import {mustache} from "../../lib/mustache.mjs";
 import {ObjectThurston} from "./ObjectThruston.js";
 

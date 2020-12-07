@@ -43,11 +43,11 @@ import {
 
 import {
     KeyboardControls
-} from "./keyboardControls.js";
+} from "./controls/KeyboardControls.js";
 
 import {
     VRControls
-} from "./VRControls.js";
+} from "./controls/VRControls.js";
 
 import {
     bind

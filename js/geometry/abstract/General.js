@@ -7,7 +7,7 @@ const name = 'Abstract geometry';
 /**
  * @const {string}
  * @default Path to the geometry dependent part of the shader
- * @todo The path is relative to the file 'thurston.js'. Look at good practices for handling paths
+ * @todo The path is relative to the file 'Thurston.js'. Look at good practices for handling paths
  */
 const shader = 'geometry/model.glsl';
 

@@ -4,11 +4,11 @@ import {
 
 import {
     Thurston,
-} from "./thurston.js";
+} from "./Thurston.js";
 
 import {
     Material
-} from "./material.js";
+} from "./Material.js";
 
 
 import * as geom from "./geometry/euc/General.js";

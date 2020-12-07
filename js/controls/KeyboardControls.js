@@ -1,16 +1,16 @@
 import {
     EventDispatcher,
     Matrix4,
-} from "./lib/three.module.js";
+} from "../lib/three.module.js";
 
 import {
     RelPosition,
     Vector
-} from "./geometry/abstract/General.js";
+} from "../geometry/abstract/General.js";
 
 import {
     bind
-} from "./utils.js";
+} from "../utils.js";
 
 /**
  * @desc

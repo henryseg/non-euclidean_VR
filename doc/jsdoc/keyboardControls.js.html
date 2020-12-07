@@ -40,35 +40,35 @@
 									<ul class="dropdown-menu">
 											<li><a href="global.html#bind">bind</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#name">name</a></li>
+											<li><a href="global.html#name">name</a></li>
+											<li><a href="global.html#shader">shader</a></li>
+											<li><a href="global.html#shader">shader</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
+											<li><a href="Light.html">Light</a></li>
 											<li><a href="Material.html">Material</a></li>
-											<li><a href="module-AbstractGeometry-DiscreteSubgroup.html">AbstractGeometry~DiscreteSubgroup</a></li>
-											<li><a href="module-AbstractGeometry-Isometry.html">AbstractGeometry~Isometry</a></li>
-											<li><a href="module-AbstractGeometry-Point.html">AbstractGeometry~Point</a></li>
-											<li><a href="module-AbstractGeometry-Position.html">AbstractGeometry~Position</a></li>
-											<li><a href="module-AbstractGeometry-RelPosition.html">AbstractGeometry~RelPosition</a></li>
-											<li><a href="module-AbstractGeometry-Teleport.html">AbstractGeometry~Teleport</a></li>
-											<li><a href="module-AbstractGeometry-Vector.html">AbstractGeometry~Vector</a></li>
-											<li><a href="module-ThurstonItems-Item.html">ThurstonItems~Item</a></li>
-											<li><a href="module-ThurstonItems-Light.html">ThurstonItems~Light</a></li>
-											<li><a href="module-ThurstonItems-Solid.html">ThurstonItems~Solid</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="ObjectThurston.html">ObjectThurston</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Subgroup.html">Subgroup</a></li>
+											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Vector.html">Vector</a></li>
 											<li><a href="VRControls.html">VRControls</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="module-AbstractGeometry.html">AbstractGeometry</a></li>
-											<li><a href="module-EuclideanGeometry.html">EuclideanGeometry</a></li>
 											<li><a href="module-Thurston.html">Thurston</a></li>
-											<li><a href="module-ThurstonEuclideanItems.html">ThurstonEuclideanItems</a></li>
-											<li><a href="module-ThurstonItems.html">ThurstonItems</a></li>
 									</ul>
 								</li>
 				</ul>
@@ -105,7 +105,7 @@
 import {
     RelPosition,
     Vector
-} from "./geometry/abstract.js";
+} from "./geometry/abstract/General.js";
 
 import {
     bind
@@ -266,8 +266,6 @@ class KeyboardControls extends EventDispatcher {
                     break;
                 default:
                     this._moveState[action] = 1;
-                    this.updateMovementVector();
-                    this.updateRotationVector();
             }
         }
     }
@@ -281,10 +279,10 @@ class KeyboardControls extends EventDispatcher {
         if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
             const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
             switch (action) {
+                case "info":
+                    break;
                 default:
                     this._moveState[action] = 0;
-                    this.updateMovementVector();
-                    this.updateRotationVector();
             }
         }
     }
@@ -339,12 +337,14 @@ class KeyboardControls extends EventDispatcher {
      * @param {number} delta - time delta between two updates
      */
     update(delta) {
+        this.updateMovementVector();
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
             .applyMatrix4(this.camera.matrixWorld);
         this.position.flow(deltaPosition);
 
+        this.updateRotationVector();
         const axis = this._rotationVector
             .clone()
             .applyMatrix4(this.camera.matrixWorld)
