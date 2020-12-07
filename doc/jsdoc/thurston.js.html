@@ -38,6 +38,7 @@
 								<li class="dropdown">
 									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 									</ul>
 								</li>
@@ -57,6 +58,7 @@
 											<li><a href="module-ThurstonItems-Light.html">ThurstonItems~Light</a></li>
 											<li><a href="module-ThurstonItems-Solid.html">ThurstonItems~Solid</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="VRControls.html">VRControls</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
@@ -142,6 +144,14 @@ import {
 import {
     KeyboardControls
 } from "./keyboardControls.js";
+
+import {
+    VRControls
+} from "./VRControls.js";
+
+import {
+    bind
+} from "./utils.js";
 
 /**
  * Code for the way a property can be passed to the shader
@@ -273,12 +283,6 @@ const PARAMS_HANDLER = {
     }
 }
 
-function bind(scope, fn) {
-    return function () {
-        return fn.apply(scope, arguments);
-    };
-}
-
 
 /**
  * @class
@@ -295,7 +299,7 @@ class Thurston {
      * @param {DiscreteSubgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
      * @todo Check if the geometry satisfies all the requirement?
-     * @todo If a subgroups is not provided use the trivial one.
+     * @todo If a subgroup is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
         // loading the polyfill if WebXR is not supported
@@ -307,7 +311,7 @@ class Thurston {
          */
         this.geom = geom;
         /**
-         * The discrete subgroups defining a quotient manifold/orbifold
+         * The discrete subgroup defining a quotient manifold/orbifold
          * @type {DiscreteSubgroup}
          */
         this.subgroup = subgroup;
@@ -344,8 +348,6 @@ class Thurston {
          * @private
          */
         this._camera = undefined;
-        this._cameraOldPosition = undefined;
-        this._cameraNewPosition = undefined;
         /**
          * The underlying Three.js scene
          * @type {Scene}
@@ -354,15 +356,13 @@ class Thurston {
         this._scene = undefined;
         this._horizonRight = undefined;
         this._horizonLeft = undefined;
-        this._controllerGrip0 = undefined;
-        this._controllerGrip1 = undefined;
         this.initThreeJS();
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
         this.params.eyePosition = this.getEyePositions();
 
-        // register the isometries involved in the discrete subgroups
+        // register the isometries involved in the discrete subgroup
         for (const teleport of this.subgroup.teleports) {
             // first add the isometries to the list of parameters
             // this cannot be static as the number/names of isometries depend on the subgroups
@@ -399,13 +399,15 @@ class Thurston {
          * @type {KeyboardControls}
          * @private
          */
-        this._controls = new KeyboardControls(
+        this._keyboardControls = new KeyboardControls(
             this.params.position,
             this._camera,
             this._renderer.domElement,
             params.keyboard
         );
-        this._controls.infos = bind(this, this.infos);
+        this._keyboardControls.infos = bind(this, this.infos);
+
+        this._VRControls = new VRControls(this.params.position, this._controller0);
 
         /**
          * A clock to measure the time between two call of animate
@@ -437,7 +439,18 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        return this.params.eyePosition[0].local.facing.toLog();
+        const p1 = new Vector3();
+        const p2 = new Vector3();
+        if (this._renderer.xr.isPresenting) {
+            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+            camerasVR[0].getWorldPosition(p1);
+            camerasVR[1].getWorldPosition(p2);
+            console.log("VR", p1.toLog(), p2.toLog());
+            console.log(camerasVR);
+        } else {
+            this._camera.getWorldPosition(p1);
+            console.log("No VR", p1.toLog());
+        }
     }
 
     /**
@@ -570,7 +583,7 @@ class Thurston {
      * @param {string} value - the keyboard type (us, fr,...)
      */
     setKeyboard(value) {
-        this._controls.keyboard = value;
+        this._keyboardControls.keyboard = value;
     }
 
 
@@ -586,7 +599,7 @@ class Thurston {
                 window.open('https://github.com/henryseg/non-euclidean_VR');
             }
         }, 'help').name("Help/About");
-        const keyboardController = this.gui.add(this._controls, 'keyboard', {
+        const keyboardController = this.gui.add(this._keyboardControls, 'keyboard', {
             QWERTY: 'us',
             AZERTY: 'fr'
         }).name("Keyboard");
@@ -614,14 +627,12 @@ class Thurston {
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.00001,
-            4000
+            0.0001,
+            2000
         );
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
         this._camera.layers.enable(1);
-        this._cameraOldPosition = this._camera.position.clone();
-        this._cameraNewPosition = this._camera.position.clone();
 
         // build the scene with a single screen
         this._scene = new Scene();
@@ -637,6 +648,11 @@ class Thurston {
         const model1 = controllerModelFactory.createControllerModel(this._controllerGrip1);
         this._controllerGrip1.add(model1);
         this._scene.add(this._controllerGrip1);
+
+        this._controller0 = this._renderer.xr.getController(0);
+        this._scene.add(this._controller0);
+        this._controller1 = this._renderer.xr.getController(1);
+        this._scene.add(this._controller1);
 
 
         return this;
@@ -700,7 +716,7 @@ class Thurston {
     }
 
     /**
-     * Return the list of all "background" blocks of GLSL code which are required for items and subgroups.
+     * Return the list of all "background" blocks of GLSL code which are required for items and subgroup.
      * @return {Promise&lt;string[]>}
      */
     async buildShaderDataBackground() {
@@ -714,7 +730,7 @@ class Thurston {
                 }
             }
         }
-        // discrete subgroups file
+        // discrete subgroup file
         files.push(this.subgroup.shaderSource);
 
         // for each file, extract the content of the background XML tag
@@ -754,9 +770,9 @@ class Thurston {
      * The data used to populate the templates are build by the functions
      * - buildShaderDataConstants (constants)
      * - buildShaderDataUniforms (uniforms)
-     * - buildShaderDataBackground (background routines for the items and the subgroups)
+     * - buildShaderDataBackground (background routines for the items and the subgroup)
      * - buildShaderDataItems (items)
-     * - this.subgroups.glslBuildData (subgroups)
+     * - this.subgroup.glslBuildData (subgroup)
      * @return {string} - the code of the shader
      */
     async buildShaderFragment() {
@@ -814,7 +830,7 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(2000, 60, 40);
+        const geometry = new SphereBufferGeometry(1000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         const materialLeft = new ShaderMaterial({
@@ -845,16 +861,48 @@ class Thurston {
      * and the non-euclidean one (by changing the position).
      * The eye positions are not updated here.
      * This should be done manually somewhere else.
+     * @type{Function}
      */
-    chaseCamera() {
-        this._cameraOldPosition.copy(this._cameraNewPosition);
-        this._cameraNewPosition = new Vector3().setFromMatrixPosition(this._camera.matrixWorld);
-        this._horizonLeft.position.copy(this._cameraNewPosition);
-        this._horizonRight.position.copy(this._cameraNewPosition);
+    get chaseCamera() {
+        if (this._chaseCamera === undefined) {
+            let oldPositionL = new Vector3();
+            let oldPositionR = new Vector3();
 
-        const deltaPosition = new Vector().subVectors(this._cameraNewPosition, this._cameraOldPosition);
-        this.params.position.flow(deltaPosition);
-        return this;
+            this._chaseCamera = function () {
+                // declare the new positions of the left and right cameras
+                const newPositionL = new Vector3();
+                const newPositionR = new Vector3();
+
+                newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
+                newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
+                if (this._renderer.xr.isPresenting) {
+                    // if XR is enable, we get the position of the left and right camera
+                    const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+                    newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
+                    newPositionR.setFromMatrixPosition(camerasVR[1].matrixWorld);
+                } else {
+                    // if XR is off, both positions coincide with the one of the camera
+                    newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
+                    newPositionR.copy(newPositionL);
+                }
+                // center each horizon sphere at the appropriate point
+                this._horizonLeft.position.copy(newPositionL);
+                this._horizonRight.position.copy(newPositionR);
+                // compute the old and new position (midpoint between the left and right cameras)
+                const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
+                const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
+                // flow the position along the difference of positions
+                const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
+                this.params.position.flow(deltaPosition);
+
+                // update the old left and right positions
+                oldPositionL.copy(newPositionL);
+                oldPositionR.copy(newPositionR);
+
+                return this;
+            };
+        }
+        return this._chaseCamera;
     }
 
     /**
@@ -862,7 +910,8 @@ class Thurston {
      */
     animate() {
         const delta = this._clock.getDelta();
-        this._controls.update(delta);
+        this._keyboardControls.update(delta);
+        this._VRControls.update(delta);
         this.chaseCamera();
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);
@@ -921,7 +970,7 @@ export {
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 6th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

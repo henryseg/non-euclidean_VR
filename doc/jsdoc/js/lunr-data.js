@@ -304,6 +304,74 @@ window.lunrData = {
           "return",
           "xml"
         ],
+        "VRControls.html": [
+          "button",
+          "class",
+          "control",
+          "direct",
+          "drag",
+          "fli",
+          "flycontrol",
+          "geometri",
+          "implement",
+          "inspir",
+          "move",
+          "rotat",
+          "scene",
+          "select",
+          "squeez",
+          "three.j",
+          "us",
+          "vr",
+          "vrcontrol"
+        ],
+        "VRControls.html#update": [
+          "function",
+          "member",
+          "posit",
+          "updat",
+          "vrcontrols#upd"
+        ],
+        "VRControls.html#onSelectStart": [
+          "event",
+          "function",
+          "handler",
+          "onselectstart",
+          "select",
+          "start",
+          "user",
+          "vrcontrols#onselectstart"
+        ],
+        "VRControls.html#onSelectEnd": [
+          "event",
+          "function",
+          "handler",
+          "onselectend",
+          "select",
+          "stop",
+          "user",
+          "vrcontrols#onselectend"
+        ],
+        "VRControls.html#onSqueezeStart": [
+          "event",
+          "function",
+          "handler",
+          "onsqueezestart",
+          "squeez",
+          "start",
+          "user",
+          "vrcontrols#onsqueezestart"
+        ],
+        "VRControls.html#onSqueezeEnd": [
+          "event",
+          "function",
+          "handler",
+          "onsqueezeend",
+          "squeez",
+          "stop",
+          "user",
+          "vrcontrols#onsqueezeend"
+        ],
         "KeyboardControls.html": [
           "class",
           "control",
@@ -412,7 +480,6 @@ window.lunrData = {
           "origin",
           "p",
           "posit",
-          "produc",
           "refer",
           "repres",
           "rotat",
@@ -720,14 +787,14 @@ window.lunrData = {
           "module:thurston~thurston#_maxlightdir",
           "number"
         ],
-        "module-Thurston-Thurston.html#_controls": [
-          "_control",
+        "module-Thurston-Thurston.html#_keyboardControls": [
+          "_keyboardcontrol",
           "control",
           "keyboard",
           "keyboardcontrol",
           "lt;private&gt",
           "member",
-          "module:thurston~thurston#_control"
+          "module:thurston~thurston#_keyboardcontrol"
         ],
         "module-Thurston-Thurston.html#_clock": [
           "_clock",
@@ -764,6 +831,31 @@ window.lunrData = {
           "member",
           "module:thurston~thurston#maxlightdir",
           "number"
+        ],
+        "module-Thurston-Thurston.html#chaseCamera": [
+          "both",
+          "camera",
+          "chang",
+          "chasecamera",
+          "done",
+          "euclidean",
+          "ey",
+          "headset",
+          "here",
+          "horizon",
+          "manual",
+          "member",
+          "module:thurston~thurston#chasecamera",
+          "move",
+          "non",
+          "on",
+          "posit",
+          "scene",
+          "somewher",
+          "sphere",
+          "three.j",
+          "updat",
+          "vr"
         ],
         "module-Thurston-Thurston.html#infos": [
           "data",
@@ -983,7 +1075,7 @@ window.lunrData = {
           "string",
           "subgroup",
           "templat",
-          "this.subgroups.glslbuilddata",
+          "this.subgroup.glslbuilddata",
           "uniform",
           "us"
         ],
@@ -1001,31 +1093,6 @@ window.lunrData = {
           "seen",
           "shader",
           "three.j"
-        ],
-        "module-Thurston-Thurston.html#chaseCamera": [
-          "both",
-          "camera",
-          "chang",
-          "chasecamera",
-          "done",
-          "euclidean",
-          "ey",
-          "function",
-          "headset",
-          "here",
-          "horizon",
-          "manual",
-          "module:thurston~thurston#chasecamera",
-          "move",
-          "non",
-          "on",
-          "posit",
-          "scene",
-          "somewher",
-          "sphere",
-          "three.j",
-          "updat",
-          "vr"
         ],
         "module-Thurston-Thurston.html#animate": [
           "anim",
@@ -2262,7 +2329,7 @@ window.lunrData = {
           "us"
         ]
       },
-      "length": 167
+      "length": 173
     },
     "tokenStore": {
       "root": {
@@ -2313,7 +2380,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.9174311926605505
+                "tf": 0.9259259259259258
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -2325,7 +2392,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.9174311926605505
+                "tf": 0.9259259259259258
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -2337,7 +2404,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 1.3761467889908259
+                "tf": 1.3888888888888888
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -2348,7 +2415,7 @@ window.lunrData = {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 1.3761467889908259
+              "tf": 1.3888888888888888
             },
             "module-AbstractGeometry-Position.html#flow": {
               "ref": "module-AbstractGeometry-Position.html#flow",
@@ -2619,6 +2686,22 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
+                    "VRControls.html#onSelectStart": {
+                      "ref": "VRControls.html#onSelectStart",
+                      "tf": 10
+                    },
+                    "VRControls.html#onSelectEnd": {
+                      "ref": "VRControls.html#onSelectEnd",
+                      "tf": 10
+                    },
+                    "VRControls.html#onSqueezeStart": {
+                      "ref": "VRControls.html#onSqueezeStart",
+                      "tf": 10
+                    },
+                    "VRControls.html#onSqueezeEnd": {
+                      "ref": "VRControls.html#onSqueezeEnd",
+                      "tf": 10
+                    },
                     "KeyboardControls.html#onKeyDown": {
                       "ref": "KeyboardControls.html#onKeyDown",
                       "tf": 62.5
@@ -2711,7 +2794,7 @@ window.lunrData = {
                       "docs": {
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 1.3761467889908259
+                          "tf": 1.3888888888888888
                         },
                         "module-AbstractGeometry-DiscreteSubgroup.html": {
                           "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
@@ -2826,13 +2909,13 @@ window.lunrData = {
           },
           "y": {
             "docs": {
-              "module-Thurston-Thurston.html#getEyePositions": {
-                "ref": "module-Thurston-Thurston.html#getEyePositions",
-                "tf": 6.666666666666667
-              },
               "module-Thurston-Thurston.html#chaseCamera": {
                 "ref": "module-Thurston-Thurston.html#chaseCamera",
                 "tf": 2
+              },
+              "module-Thurston-Thurston.html#getEyePositions": {
+                "ref": "module-Thurston-Thurston.html#getEyePositions",
+                "tf": 6.666666666666667
               }
             }
           },
@@ -2924,7 +3007,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.45871559633027525
+                "tf": 0.4629629629629629
               }
             }
           },
@@ -2932,7 +3015,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.45871559633027525
+                "tf": 0.4629629629629629
               }
             }
           },
@@ -2940,14 +3023,14 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.9174311926605505
+                "tf": 0.9259259259259258
               }
             }
           },
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 0.9174311926605505
+              "tf": 0.9259259259259258
             }
           },
           "i": {
@@ -3084,6 +3167,26 @@ window.lunrData = {
                             "ref": "module-ThurstonItems-Item.html#loadGLSLDefaultTemplate",
                             "tf": 110
                           },
+                          "VRControls.html#update": {
+                            "ref": "VRControls.html#update",
+                            "tf": 66.66666666666666
+                          },
+                          "VRControls.html#onSelectStart": {
+                            "ref": "VRControls.html#onSelectStart",
+                            "tf": 110
+                          },
+                          "VRControls.html#onSelectEnd": {
+                            "ref": "VRControls.html#onSelectEnd",
+                            "tf": 110
+                          },
+                          "VRControls.html#onSqueezeStart": {
+                            "ref": "VRControls.html#onSqueezeStart",
+                            "tf": 110
+                          },
+                          "VRControls.html#onSqueezeEnd": {
+                            "ref": "VRControls.html#onSqueezeEnd",
+                            "tf": 110
+                          },
                           "KeyboardControls.html#infos": {
                             "ref": "KeyboardControls.html#infos",
                             "tf": 60
@@ -3106,7 +3209,7 @@ window.lunrData = {
                           },
                           "KeyboardControls.html#update": {
                             "ref": "KeyboardControls.html#update",
-                            "tf": 110.45871559633028
+                            "tf": 110.46296296296296
                           },
                           "module-AbstractGeometry-Isometry.html#build": {
                             "ref": "module-AbstractGeometry-Isometry.html#build",
@@ -3231,10 +3334,6 @@ window.lunrData = {
                           "module-Thurston-Thurston.html#initHorizon": {
                             "ref": "module-Thurston-Thurston.html#initHorizon",
                             "tf": 115.55555555555556
-                          },
-                          "module-Thurston-Thurston.html#chaseCamera": {
-                            "ref": "module-Thurston-Thurston.html#chaseCamera",
-                            "tf": 110
                           },
                           "module-Thurston-Thurston.html#animate": {
                             "ref": "module-Thurston-Thurston.html#animate",
@@ -3518,9 +3617,13 @@ window.lunrData = {
             },
             "i": {
               "docs": {
+                "VRControls.html": {
+                  "ref": "VRControls.html",
+                  "tf": 2.272727272727273
+                },
                 "KeyboardControls.html": {
                   "ref": "KeyboardControls.html",
-                  "tf": 5
+                  "tf": 5.555555555555555
                 }
               }
             },
@@ -3540,9 +3643,13 @@ window.lunrData = {
                           "docs": {},
                           "l": {
                             "docs": {
+                              "VRControls.html": {
+                                "ref": "VRControls.html",
+                                "tf": 2.272727272727273
+                              },
                               "KeyboardControls.html": {
                                 "ref": "KeyboardControls.html",
-                                "tf": 5
+                                "tf": 5.555555555555555
                               }
                             }
                           }
@@ -3559,7 +3666,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   },
                   "module-AbstractGeometry-Position.html#flowFromOrigin": {
                     "ref": "module-AbstractGeometry-Position.html#flowFromOrigin",
@@ -3620,7 +3727,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   },
                   "module-AbstractGeometry-Vector.html#applyFacing": {
                     "ref": "module-AbstractGeometry-Vector.html#applyFacing",
@@ -3698,7 +3805,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 1.834862385321101
+                      "tf": 1.8518518518518516
                     },
                     "module-AbstractGeometry-Vector.html": {
                       "ref": "module-AbstractGeometry-Vector.html",
@@ -3847,7 +3954,7 @@ window.lunrData = {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 0.45871559633027525
+              "tf": 0.4629629629629629
             },
             "module-AbstractGeometry-Position.html#applyIsometry": {
               "ref": "module-AbstractGeometry-Position.html#applyIsometry",
@@ -3909,9 +4016,13 @@ window.lunrData = {
                       "docs": {},
                       "i": {
                         "docs": {
+                          "VRControls.html": {
+                            "ref": "VRControls.html",
+                            "tf": 2.272727272727273
+                          },
                           "KeyboardControls.html": {
                             "ref": "KeyboardControls.html",
-                            "tf": 5
+                            "tf": 5.555555555555555
                           },
                           "module-AbstractGeometry-Isometry.html": {
                             "ref": "module-AbstractGeometry-Isometry.html",
@@ -4380,7 +4491,7 @@ window.lunrData = {
               "docs": {
                 "KeyboardControls.html#update": {
                   "ref": "KeyboardControls.html#update",
-                  "tf": 0.45871559633027525
+                  "tf": 0.4629629629629629
                 },
                 "module-AbstractGeometry-Position.html#multiply": {
                   "ref": "module-AbstractGeometry-Position.html#multiply",
@@ -4412,7 +4523,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.45871559633027525
+                      "tf": 0.4629629629629629
                     },
                     "module-AbstractGeometry-Isometry.html#set": {
                       "ref": "module-AbstractGeometry-Isometry.html#set",
@@ -4491,7 +4602,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.45871559633027525
+                "tf": 0.4629629629629629
               },
               "module-Thurston-Thurston.html#params": {
                 "ref": "module-Thurston-Thurston.html#params",
@@ -4653,9 +4764,13 @@ window.lunrData = {
                   "docs": {},
                   "r": {
                     "docs": {
+                      "VRControls.html": {
+                        "ref": "VRControls.html",
+                        "tf": 2.272727272727273
+                      },
                       "KeyboardControls.html": {
                         "ref": "KeyboardControls.html",
-                        "tf": 5
+                        "tf": 5.555555555555555
                       }
                     }
                   }
@@ -5062,7 +5177,7 @@ window.lunrData = {
               },
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 1.834862385321101
+                "tf": 1.8518518518518516
               },
               "module-AbstractGeometry-Isometry.html#multiply": {
                 "ref": "module-AbstractGeometry-Isometry.html#multiply",
@@ -5343,9 +5458,13 @@ window.lunrData = {
                         "docs": {},
                         "t": {
                           "docs": {
+                            "VRControls.html": {
+                              "ref": "VRControls.html",
+                              "tf": 2.272727272727273
+                            },
                             "KeyboardControls.html": {
                               "ref": "KeyboardControls.html",
-                              "tf": 5
+                              "tf": 5.555555555555555
                             },
                             "module-AbstractGeometry-Isometry.html#build": {
                               "ref": "module-AbstractGeometry-Isometry.html#build",
@@ -5538,7 +5657,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   }
                 }
               }
@@ -5547,7 +5666,7 @@ window.lunrData = {
               "docs": {
                 "KeyboardControls.html#update": {
                   "ref": "KeyboardControls.html#update",
-                  "tf": 0.45871559633027525
+                  "tf": 0.4629629629629629
                 }
               }
             },
@@ -5684,7 +5803,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   },
                   "module-AbstractGeometry-Teleport.html": {
                     "ref": "module-AbstractGeometry-Teleport.html",
@@ -5796,7 +5915,7 @@ window.lunrData = {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 0.45871559633027525
+              "tf": 0.4629629629629629
             },
             "module-AbstractGeometry-RelPosition.html": {
               "ref": "module-AbstractGeometry-RelPosition.html",
@@ -5921,17 +6040,21 @@ window.lunrData = {
                       "ref": "module-ThurstonItems-Item.html#point",
                       "tf": 12.5
                     },
+                    "VRControls.html#update": {
+                      "ref": "VRControls.html#update",
+                      "tf": 16.666666666666664
+                    },
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 1.834862385321101
-                    },
-                    "module-Thurston-Thurston.html#getEyePositions": {
-                      "ref": "module-Thurston-Thurston.html#getEyePositions",
-                      "tf": 10
+                      "tf": 1.8518518518518516
                     },
                     "module-Thurston-Thurston.html#chaseCamera": {
                       "ref": "module-Thurston-Thurston.html#chaseCamera",
                       "tf": 6
+                    },
+                    "module-Thurston-Thurston.html#getEyePositions": {
+                      "ref": "module-Thurston-Thurston.html#getEyePositions",
+                      "tf": 10
                     },
                     "module-AbstractGeometry-Vector.html#applyFacing": {
                       "ref": "module-AbstractGeometry-Vector.html#applyFacing",
@@ -6581,28 +6704,6 @@ window.lunrData = {
                   }
                 }
               },
-              "d": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "c": {
-                    "docs": {
-                      "KeyboardControls.html#update": {
-                        "ref": "KeyboardControls.html#update",
-                        "tf": 0.45871559633027525
-                      }
-                    },
-                    "t": {
-                      "docs": {
-                        "module-AbstractGeometry-DiscreteSubgroup.html": {
-                          "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
-                          "tf": 1.0638297872340425
-                        }
-                      }
-                    }
-                  }
-                }
-              },
               "x": {
                 "docs": {},
                 "i": {
@@ -6665,6 +6766,23 @@ window.lunrData = {
                         "module-AbstractGeometry-DiscreteSubgroup.html": {
                           "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
                           "tf": 0.7092198581560284
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "d": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "c": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "module-AbstractGeometry-DiscreteSubgroup.html": {
+                          "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
+                          "tf": 1.0638297872340425
                         }
                       }
                     }
@@ -6894,7 +7012,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.45871559633027525
+                      "tf": 0.4629629629629629
                     },
                     "module-AbstractGeometry-Vector.html": {
                       "ref": "module-AbstractGeometry-Vector.html",
@@ -7093,7 +7211,7 @@ window.lunrData = {
                     "docs": {
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 0.45871559633027525
+                        "tf": 0.4629629629629629
                       },
                       "module-AbstractGeometry-Vector.html#applyMatrix4": {
                         "ref": "module-AbstractGeometry-Vector.html#applyMatrix4",
@@ -7514,13 +7632,17 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
+                    "VRControls.html": {
+                      "ref": "VRControls.html",
+                      "tf": 2.272727272727273
+                    },
                     "KeyboardControls.html#updateRotationVector": {
                       "ref": "KeyboardControls.html#updateRotationVector",
                       "tf": 16.666666666666664
                     },
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.45871559633027525
+                      "tf": 0.4629629629629629
                     },
                     "module-AbstractGeometry-Vector.html#applyFacing": {
                       "ref": "module-AbstractGeometry-Vector.html#applyFacing",
@@ -7876,13 +7998,17 @@ window.lunrData = {
                     "docs": {},
                     "j": {
                       "docs": {
+                        "VRControls.html": {
+                          "ref": "VRControls.html",
+                          "tf": 2.272727272727273
+                        },
                         "KeyboardControls.html": {
                           "ref": "KeyboardControls.html",
-                          "tf": 5
+                          "tf": 5.555555555555555
                         },
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 0.45871559633027525
+                          "tf": 0.4629629629629629
                         },
                         "module-Thurston-Thurston.html#_renderer": {
                           "ref": "module-Thurston-Thurston.html#_renderer",
@@ -7896,6 +8022,10 @@ window.lunrData = {
                           "ref": "module-Thurston-Thurston.html#_scene",
                           "tf": 16.666666666666664
                         },
+                        "module-Thurston-Thurston.html#chaseCamera": {
+                          "ref": "module-Thurston-Thurston.html#chaseCamera",
+                          "tf": 2
+                        },
                         "module-Thurston-Thurston.html#initThreeJS": {
                           "ref": "module-Thurston-Thurston.html#initThreeJS",
                           "tf": 16.666666666666664
@@ -7903,10 +8033,6 @@ window.lunrData = {
                         "module-Thurston-Thurston.html#initHorizon": {
                           "ref": "module-Thurston-Thurston.html#initHorizon",
                           "tf": 5.555555555555555
-                        },
-                        "module-Thurston-Thurston.html#chaseCamera": {
-                          "ref": "module-Thurston-Thurston.html#chaseCamera",
-                          "tf": 2
                         },
                         "module-AbstractGeometry-Vector.html": {
                           "ref": "module-AbstractGeometry-Vector.html",
@@ -7965,40 +8091,37 @@ window.lunrData = {
                                 "docs": {},
                                 "p": {
                                   "docs": {},
-                                  "s": {
+                                  ".": {
                                     "docs": {},
-                                    ".": {
+                                    "g": {
                                       "docs": {},
-                                      "g": {
+                                      "l": {
                                         "docs": {},
-                                        "l": {
+                                        "s": {
                                           "docs": {},
-                                          "s": {
+                                          "l": {
                                             "docs": {},
-                                            "l": {
+                                            "b": {
                                               "docs": {},
-                                              "b": {
+                                              "u": {
                                                 "docs": {},
-                                                "u": {
+                                                "i": {
                                                   "docs": {},
-                                                  "i": {
+                                                  "l": {
                                                     "docs": {},
-                                                    "l": {
+                                                    "d": {
                                                       "docs": {},
                                                       "d": {
                                                         "docs": {},
-                                                        "d": {
+                                                        "a": {
                                                           "docs": {},
-                                                          "a": {
+                                                          "t": {
                                                             "docs": {},
-                                                            "t": {
-                                                              "docs": {},
-                                                              "a": {
-                                                                "docs": {
-                                                                  "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                                    "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                                    "tf": 2.083333333333333
-                                                                  }
+                                                            "a": {
+                                                              "docs": {
+                                                                "module-Thurston-Thurston.html#buildShaderFragment": {
+                                                                  "ref": "module-Thurston-Thurston.html#buildShaderFragment",
+                                                                  "tf": 2.083333333333333
                                                                 }
                                                               }
                                                             }
@@ -8226,7 +8349,7 @@ window.lunrData = {
                       "docs": {
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 0.45871559633027525
+                          "tf": 0.4629629629629629
                         },
                         "module-AbstractGeometry-Vector.html": {
                           "ref": "module-AbstractGeometry-Vector.html",
@@ -8440,7 +8563,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.9174311926605505
+                "tf": 0.9259259259259258
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -8459,7 +8582,7 @@ window.lunrData = {
                         "docs": {
                           "KeyboardControls.html#update": {
                             "ref": "KeyboardControls.html#update",
-                            "tf": 0.45871559633027525
+                            "tf": 0.4629629629629629
                           }
                         }
                       },
@@ -8475,7 +8598,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.9174311926605505
+                "tf": 0.9259259259259258
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -8487,7 +8610,7 @@ window.lunrData = {
             "docs": {
               "KeyboardControls.html#update": {
                 "ref": "KeyboardControls.html#update",
-                "tf": 0.9174311926605505
+                "tf": 0.9259259259259258
               },
               "module-AbstractGeometry-Position.html#flow": {
                 "ref": "module-AbstractGeometry-Position.html#flow",
@@ -8498,7 +8621,7 @@ window.lunrData = {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 1.3761467889908259
+              "tf": 1.3888888888888888
             },
             "module-AbstractGeometry-Position.html#flowFromOrigin": {
               "ref": "module-AbstractGeometry-Position.html#flowFromOrigin",
@@ -8519,13 +8642,173 @@ window.lunrData = {
                 "ref": "index.html",
                 "tf": 200
               },
-              "module-Thurston-Thurston.html#getEyePositions": {
-                "ref": "module-Thurston-Thurston.html#getEyePositions",
-                "tf": 3.3333333333333335
+              "VRControls.html": {
+                "ref": "VRControls.html",
+                "tf": 2.272727272727273
               },
               "module-Thurston-Thurston.html#chaseCamera": {
                 "ref": "module-Thurston-Thurston.html#chaseCamera",
                 "tf": 2
+              },
+              "module-Thurston-Thurston.html#getEyePositions": {
+                "ref": "module-Thurston-Thurston.html#getEyePositions",
+                "tf": 3.3333333333333335
+              }
+            },
+            "c": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "t": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "o": {
+                        "docs": {},
+                        "l": {
+                          "docs": {
+                            "VRControls.html": {
+                              "ref": "VRControls.html",
+                              "tf": 1900
+                            }
+                          },
+                          "s": {
+                            "docs": {},
+                            "#": {
+                              "docs": {},
+                              "u": {
+                                "docs": {},
+                                "p": {
+                                  "docs": {},
+                                  "d": {
+                                    "docs": {
+                                      "VRControls.html#update": {
+                                        "ref": "VRControls.html#update",
+                                        "tf": 1150
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "o": {
+                                "docs": {},
+                                "n": {
+                                  "docs": {},
+                                  "s": {
+                                    "docs": {},
+                                    "e": {
+                                      "docs": {},
+                                      "l": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "c": {
+                                            "docs": {},
+                                            "t": {
+                                              "docs": {},
+                                              "s": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {},
+                                                  "a": {
+                                                    "docs": {},
+                                                    "r": {
+                                                      "docs": {},
+                                                      "t": {
+                                                        "docs": {
+                                                          "VRControls.html#onSelectStart": {
+                                                            "ref": "VRControls.html#onSelectStart",
+                                                            "tf": 1150
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "e": {
+                                                "docs": {},
+                                                "n": {
+                                                  "docs": {},
+                                                  "d": {
+                                                    "docs": {
+                                                      "VRControls.html#onSelectEnd": {
+                                                        "ref": "VRControls.html#onSelectEnd",
+                                                        "tf": 1150
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "q": {
+                                      "docs": {},
+                                      "u": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "z": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "s": {
+                                                  "docs": {},
+                                                  "t": {
+                                                    "docs": {},
+                                                    "a": {
+                                                      "docs": {},
+                                                      "r": {
+                                                        "docs": {},
+                                                        "t": {
+                                                          "docs": {
+                                                            "VRControls.html#onSqueezeStart": {
+                                                              "ref": "VRControls.html#onSqueezeStart",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "e": {
+                                                  "docs": {},
+                                                  "n": {
+                                                    "docs": {},
+                                                    "d": {
+                                                      "docs": {
+                                                        "VRControls.html#onSqueezeEnd": {
+                                                          "ref": "VRControls.html#onSqueezeEnd",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -8557,7 +8840,7 @@ window.lunrData = {
                       },
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 0.45871559633027525
+                        "tf": 0.4629629629629629
                       },
                       "module-AbstractGeometry-Vector.html": {
                         "ref": "module-AbstractGeometry-Vector.html",
@@ -8719,13 +9002,13 @@ window.lunrData = {
               "docs": {},
               "e": {
                 "docs": {
-                  "module-Thurston-Thurston.html#initHorizon": {
-                    "ref": "module-Thurston-Thurston.html#initHorizon",
-                    "tf": 5.555555555555555
-                  },
                   "module-Thurston-Thurston.html#chaseCamera": {
                     "ref": "module-Thurston-Thurston.html#chaseCamera",
                     "tf": 2
+                  },
+                  "module-Thurston-Thurston.html#initHorizon": {
+                    "ref": "module-Thurston-Thurston.html#initHorizon",
+                    "tf": 5.555555555555555
                   },
                   "module-AbstractGeometry.html": {
                     "ref": "module-AbstractGeometry.html",
@@ -8762,9 +9045,13 @@ window.lunrData = {
                   "docs": {},
                   "t": {
                     "docs": {
+                      "VRControls.html": {
+                        "ref": "VRControls.html",
+                        "tf": 2.272727272727273
+                      },
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 1.3761467889908259
+                        "tf": 1.3888888888888888
                       },
                       "module-Thurston-Thurston.html#_maxLightDirs": {
                         "ref": "module-Thurston-Thurston.html#_maxLightDirs",
@@ -9061,7 +9348,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.9174311926605505
+                      "tf": 0.9259259259259258
                     }
                   }
                 }
@@ -9207,6 +9494,20 @@ window.lunrData = {
               }
             }
           },
+          "r": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "g": {
+                "docs": {
+                  "VRControls.html": {
+                    "ref": "VRControls.html",
+                    "tf": 2.272727272727273
+                  }
+                }
+              }
+            }
+          },
           "_": {
             "docs": {},
             "o": {
@@ -9220,7 +9521,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 1.3761467889908259
+                    "tf": 1.3888888888888888
                   },
                   "module-AbstractGeometry-Position.html#flow": {
                     "ref": "module-AbstractGeometry-Position.html#flow",
@@ -9298,6 +9599,10 @@ window.lunrData = {
                     "module-ThurstonItems-Item.html#className": {
                       "ref": "module-ThurstonItems-Item.html#className",
                       "tf": 5
+                    },
+                    "VRControls.html": {
+                      "ref": "VRControls.html",
+                      "tf": 110
                     },
                     "KeyboardControls.html": {
                       "ref": "KeyboardControls.html",
@@ -9554,16 +9859,20 @@ window.lunrData = {
                     "docs": {},
                     "l": {
                       "docs": {
+                        "VRControls.html": {
+                          "ref": "VRControls.html",
+                          "tf": 6.8181818181818175
+                        },
                         "KeyboardControls.html": {
                           "ref": "KeyboardControls.html",
-                          "tf": 5
+                          "tf": 5.555555555555555
                         },
                         "KeyboardControls.html#keyboard": {
                           "ref": "KeyboardControls.html#keyboard",
                           "tf": 16.666666666666664
                         },
-                        "module-Thurston-Thurston.html#_controls": {
-                          "ref": "module-Thurston-Thurston.html#_controls",
+                        "module-Thurston-Thurston.html#_keyboardControls": {
+                          "ref": "module-Thurston-Thurston.html#_keyboardControls",
                           "tf": 25
                         },
                         "module-Thurston-Thurston.html#setKeyboard": {
@@ -9736,7 +10045,7 @@ window.lunrData = {
                             "docs": {
                               "KeyboardControls.html#update": {
                                 "ref": "KeyboardControls.html#update",
-                                "tf": 0.45871559633027525
+                                "tf": 0.4629629629629629
                               }
                             }
                           }
@@ -9918,7 +10227,7 @@ window.lunrData = {
                     "docs": {
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 1.834862385321101
+                        "tf": 1.8518518518518516
                       },
                       "module-Thurston-Thurston.html#_camera": {
                         "ref": "module-Thurston-Thurston.html#_camera",
@@ -9944,7 +10253,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.45871559633027525
+                      "tf": 0.4629629629629629
                     },
                     "module-Thurston-Thurston.html#chaseCamera": {
                       "ref": "module-Thurston-Thurston.html#chaseCamera",
@@ -10056,7 +10365,7 @@ window.lunrData = {
                       "docs": {
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 0.9174311926605505
+                          "tf": 0.9259259259259258
                         },
                         "module-AbstractGeometry-Isometry.html#set": {
                           "ref": "module-AbstractGeometry-Isometry.html#set",
@@ -10742,8 +11051,8 @@ window.lunrData = {
                                       "ref": "module-Thurston-Thurston.html#_maxLightDirs",
                                       "tf": 33.33333333333333
                                     },
-                                    "module-Thurston-Thurston.html#_controls": {
-                                      "ref": "module-Thurston-Thurston.html#_controls",
+                                    "module-Thurston-Thurston.html#_keyboardControls": {
+                                      "ref": "module-Thurston-Thurston.html#_keyboardControls",
                                       "tf": 33.33333333333333
                                     },
                                     "module-Thurston-Thurston.html#_clock": {
@@ -10777,7 +11086,7 @@ window.lunrData = {
                     },
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.45871559633027525
+                      "tf": 0.4629629629629629
                     },
                     "module-AbstractGeometry-RelPosition.html": {
                       "ref": "module-AbstractGeometry-RelPosition.html",
@@ -10935,7 +11244,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   }
                 }
               }
@@ -11064,7 +11373,7 @@ window.lunrData = {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 1.834862385321101
+              "tf": 1.8518518518518516
             },
             "module-AbstractGeometry-Vector.html#applyMatrix4": {
               "ref": "module-AbstractGeometry-Vector.html#applyMatrix4",
@@ -12158,29 +12467,6 @@ window.lunrData = {
                                                                   }
                                                                 }
                                                               },
-                                                              "o": {
-                                                                "docs": {},
-                                                                "n": {
-                                                                  "docs": {},
-                                                                  "t": {
-                                                                    "docs": {},
-                                                                    "r": {
-                                                                      "docs": {},
-                                                                      "o": {
-                                                                        "docs": {},
-                                                                        "l": {
-                                                                          "docs": {
-                                                                            "module-Thurston-Thurston.html#_controls": {
-                                                                              "ref": "module-Thurston-Thurston.html#_controls",
-                                                                              "tf": 1150
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
                                                               "l": {
                                                                 "docs": {},
                                                                 "o": {
@@ -12290,6 +12576,56 @@ window.lunrData = {
                                                                   }
                                                                 }
                                                               }
+                                                            },
+                                                            "k": {
+                                                              "docs": {},
+                                                              "e": {
+                                                                "docs": {},
+                                                                "y": {
+                                                                  "docs": {},
+                                                                  "b": {
+                                                                    "docs": {},
+                                                                    "o": {
+                                                                      "docs": {},
+                                                                      "a": {
+                                                                        "docs": {},
+                                                                        "r": {
+                                                                          "docs": {},
+                                                                          "d": {
+                                                                            "docs": {},
+                                                                            "c": {
+                                                                              "docs": {},
+                                                                              "o": {
+                                                                                "docs": {},
+                                                                                "n": {
+                                                                                  "docs": {},
+                                                                                  "t": {
+                                                                                    "docs": {},
+                                                                                    "r": {
+                                                                                      "docs": {},
+                                                                                      "o": {
+                                                                                        "docs": {},
+                                                                                        "l": {
+                                                                                          "docs": {
+                                                                                            "module-Thurston-Thurston.html#_keyboardControls": {
+                                                                                              "ref": "module-Thurston-Thurston.html#_keyboardControls",
+                                                                                              "tf": 1150
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
                                                             }
                                                           },
                                                           "m": {
@@ -12316,6 +12652,44 @@ window.lunrData = {
                                                                                 "docs": {
                                                                                   "module-Thurston-Thurston.html#maxLightDirs": {
                                                                                     "ref": "module-Thurston-Thurston.html#maxLightDirs",
+                                                                                    "tf": 1150
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          "c": {
+                                                            "docs": {},
+                                                            "h": {
+                                                              "docs": {},
+                                                              "a": {
+                                                                "docs": {},
+                                                                "s": {
+                                                                  "docs": {},
+                                                                  "e": {
+                                                                    "docs": {},
+                                                                    "c": {
+                                                                      "docs": {},
+                                                                      "a": {
+                                                                        "docs": {},
+                                                                        "m": {
+                                                                          "docs": {},
+                                                                          "e": {
+                                                                            "docs": {},
+                                                                            "r": {
+                                                                              "docs": {},
+                                                                              "a": {
+                                                                                "docs": {
+                                                                                  "module-Thurston-Thurston.html#chaseCamera": {
+                                                                                    "ref": "module-Thurston-Thurston.html#chaseCamera",
                                                                                     "tf": 1150
                                                                                   }
                                                                                 }
@@ -12769,44 +13143,6 @@ window.lunrData = {
                                                                                         }
                                                                                       }
                                                                                     }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "c": {
-                                                            "docs": {},
-                                                            "h": {
-                                                              "docs": {},
-                                                              "a": {
-                                                                "docs": {},
-                                                                "s": {
-                                                                  "docs": {},
-                                                                  "e": {
-                                                                    "docs": {},
-                                                                    "c": {
-                                                                      "docs": {},
-                                                                      "a": {
-                                                                        "docs": {},
-                                                                        "m": {
-                                                                          "docs": {},
-                                                                          "e": {
-                                                                            "docs": {},
-                                                                            "r": {
-                                                                              "docs": {},
-                                                                              "a": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#chaseCamera": {
-                                                                                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                                                                                    "tf": 1150
                                                                                   }
                                                                                 }
                                                                               }
@@ -14855,9 +15191,13 @@ window.lunrData = {
               "docs": {},
               "e": {
                 "docs": {
+                  "VRControls.html": {
+                    "ref": "VRControls.html",
+                    "tf": 2.272727272727273
+                  },
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   },
                   "module-Thurston-Thurston.html#chaseCamera": {
                     "ref": "module-Thurston-Thurston.html#chaseCamera",
@@ -15084,7 +15424,7 @@ window.lunrData = {
                       "docs": {
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 0.45871559633027525
+                          "tf": 0.4629629629629629
                         },
                         "module-AbstractGeometry-Position.html#facing": {
                           "ref": "module-AbstractGeometry-Position.html#facing",
@@ -15419,6 +15759,10 @@ window.lunrData = {
                         "ref": "module-ThurstonItems-Item.html#point",
                         "tf": 110
                       },
+                      "VRControls.html#update": {
+                        "ref": "VRControls.html#update",
+                        "tf": 110
+                      },
                       "KeyboardControls.html#keyboard": {
                         "ref": "KeyboardControls.html#keyboard",
                         "tf": 110
@@ -15463,8 +15807,8 @@ window.lunrData = {
                         "ref": "module-Thurston-Thurston.html#_maxLightDirs",
                         "tf": 110
                       },
-                      "module-Thurston-Thurston.html#_controls": {
-                        "ref": "module-Thurston-Thurston.html#_controls",
+                      "module-Thurston-Thurston.html#_keyboardControls": {
+                        "ref": "module-Thurston-Thurston.html#_keyboardControls",
                         "tf": 110
                       },
                       "module-Thurston-Thurston.html#_clock": {
@@ -15481,6 +15825,10 @@ window.lunrData = {
                       },
                       "module-Thurston-Thurston.html#maxLightDirs": {
                         "ref": "module-Thurston-Thurston.html#maxLightDirs",
+                        "tf": 110
+                      },
+                      "module-Thurston-Thurston.html#chaseCamera": {
+                        "ref": "module-Thurston-Thurston.html#chaseCamera",
                         "tf": 110
                       },
                       "module-ThurstonItems-Solid.html#material": {
@@ -15913,6 +16261,110 @@ window.lunrData = {
                 "tf": 5.555555555555555
               }
             },
+            "s": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "c": {
+                      "docs": {},
+                      "t": {
+                        "docs": {},
+                        "s": {
+                          "docs": {},
+                          "t": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "r": {
+                                "docs": {},
+                                "t": {
+                                  "docs": {
+                                    "VRControls.html#onSelectStart": {
+                                      "ref": "VRControls.html#onSelectStart",
+                                      "tf": 750
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "e": {
+                          "docs": {},
+                          "n": {
+                            "docs": {},
+                            "d": {
+                              "docs": {
+                                "VRControls.html#onSelectEnd": {
+                                  "ref": "VRControls.html#onSelectEnd",
+                                  "tf": 750
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "q": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "e": {
+                      "docs": {},
+                      "z": {
+                        "docs": {},
+                        "e": {
+                          "docs": {},
+                          "s": {
+                            "docs": {},
+                            "t": {
+                              "docs": {},
+                              "a": {
+                                "docs": {},
+                                "r": {
+                                  "docs": {},
+                                  "t": {
+                                    "docs": {
+                                      "VRControls.html#onSqueezeStart": {
+                                        "ref": "VRControls.html#onSqueezeStart",
+                                        "tf": 750
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "e": {
+                            "docs": {},
+                            "n": {
+                              "docs": {},
+                              "d": {
+                                "docs": {
+                                  "VRControls.html#onSqueezeEnd": {
+                                    "ref": "VRControls.html#onSqueezeEnd",
+                                    "tf": 750
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "k": {
               "docs": {},
               "e": {
@@ -15988,7 +16440,7 @@ window.lunrData = {
               "docs": {
                 "KeyboardControls.html#update": {
                   "ref": "KeyboardControls.html#update",
-                  "tf": 0.9174311926605505
+                  "tf": 0.9259259259259258
                 },
                 "module-AbstractGeometry-Position.html#facing": {
                   "ref": "module-AbstractGeometry-Position.html#facing",
@@ -16018,7 +16470,7 @@ window.lunrData = {
                     "docs": {
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 0.9174311926605505
+                        "tf": 0.9259259259259258
                       }
                     }
                   }
@@ -16032,7 +16484,7 @@ window.lunrData = {
                     "docs": {
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 0.45871559633027525
+                        "tf": 0.4629629629629629
                       },
                       "module-AbstractGeometry-Isometry.html#makeTranslation": {
                         "ref": "module-AbstractGeometry-Isometry.html#makeTranslation",
@@ -16206,6 +16658,10 @@ window.lunrData = {
                       "ref": "module-ThurstonItems-Item.html",
                       "tf": 4.545454545454546
                     },
+                    "VRControls.html": {
+                      "ref": "VRControls.html",
+                      "tf": 2.272727272727273
+                    },
                     "module-Thurston-Thurston.html": {
                       "ref": "module-Thurston-Thurston.html",
                       "tf": 8.333333333333332
@@ -16222,6 +16678,10 @@ window.lunrData = {
                       "ref": "module-Thurston-Thurston.html#_lights",
                       "tf": 10
                     },
+                    "module-Thurston-Thurston.html#chaseCamera": {
+                      "ref": "module-Thurston-Thurston.html#chaseCamera",
+                      "tf": 2
+                    },
                     "module-Thurston-Thurston.html#addItem": {
                       "ref": "module-Thurston-Thurston.html#addItem",
                       "tf": 16.666666666666664
@@ -16237,10 +16697,6 @@ window.lunrData = {
                     "module-Thurston-Thurston.html#buildShaderDataItems": {
                       "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
                       "tf": 5
-                    },
-                    "module-Thurston-Thurston.html#chaseCamera": {
-                      "ref": "module-Thurston-Thurston.html#chaseCamera",
-                      "tf": 2
                     },
                     "module-ThurstonItems-Solid.html": {
                       "ref": "module-ThurstonItems-Solid.html",
@@ -16331,7 +16787,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.45871559633027525
+                      "tf": 0.4629629629629629
                     },
                     "module-AbstractGeometry-Point.html#build": {
                       "ref": "module-AbstractGeometry-Point.html#build",
@@ -16685,7 +17141,7 @@ window.lunrData = {
                         "docs": {
                           "KeyboardControls.html#update": {
                             "ref": "KeyboardControls.html#update",
-                            "tf": 0.45871559633027525
+                            "tf": 0.4629629629629629
                           }
                         }
                       }
@@ -16759,6 +17215,21 @@ window.lunrData = {
             },
             "a": {
               "docs": {},
+              "r": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "VRControls.html#onSelectStart": {
+                      "ref": "VRControls.html#onSelectStart",
+                      "tf": 10
+                    },
+                    "VRControls.html#onSqueezeStart": {
+                      "ref": "VRControls.html#onSqueezeStart",
+                      "tf": 10
+                    }
+                  }
+                }
+              },
               "t": {
                 "docs": {
                   "module-Thurston-Thurston.html#stats": {
@@ -16776,6 +17247,21 @@ window.lunrData = {
                   "module-AbstractGeometry-RelPosition.html#flow": {
                     "ref": "module-AbstractGeometry-RelPosition.html#flow",
                     "tf": 2.380952380952381
+                  }
+                }
+              }
+            },
+            "o": {
+              "docs": {},
+              "p": {
+                "docs": {
+                  "VRControls.html#onSelectEnd": {
+                    "ref": "VRControls.html#onSelectEnd",
+                    "tf": 10
+                  },
+                  "VRControls.html#onSqueezeEnd": {
+                    "ref": "VRControls.html#onSqueezeEnd",
+                    "tf": 10
                   }
                 }
               }
@@ -16922,7 +17408,7 @@ window.lunrData = {
                       "docs": {
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 0.45871559633027525
+                          "tf": 0.4629629629629629
                         }
                       }
                     }
@@ -16970,81 +17456,33 @@ window.lunrData = {
               }
             }
           },
-          "u": {
+          "e": {
             "docs": {},
-            "b": {
+            "l": {
               "docs": {},
-              "g": {
+              "e": {
                 "docs": {},
-                "r": {
+                "c": {
                   "docs": {},
-                  "o": {
-                    "docs": {},
-                    "u": {
-                      "docs": {},
-                      "p": {
-                        "docs": {
-                          "KeyboardControls.html#update": {
-                            "ref": "KeyboardControls.html#update",
-                            "tf": 0.45871559633027525
-                          },
-                          "module-Thurston-Thurston.html#subgroup": {
-                            "ref": "module-Thurston-Thurston.html#subgroup",
-                            "tf": 710
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                            "tf": 5.555555555555555
-                          },
-                          "module-Thurston-Thurston.html#buildShaderFragment": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                            "tf": 4.166666666666666
-                          },
-                          "module-AbstractGeometry-Teleport.html": {
-                            "ref": "module-AbstractGeometry-Teleport.html",
-                            "tf": 3.8461538461538463
-                          },
-                          "module-AbstractGeometry-Teleport.html#glsl": {
-                            "ref": "module-AbstractGeometry-Teleport.html#glsl",
-                            "tf": 6.25
-                          },
-                          "module-AbstractGeometry-DiscreteSubgroup.html": {
-                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
-                            "tf": 1.4184397163120568
-                          },
-                          "module-AbstractGeometry-DiscreteSubgroup.html#teleports": {
-                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html#teleports",
-                            "tf": 5.555555555555555
-                          },
-                          "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData": {
-                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData",
-                            "tf": 4.545454545454546
-                          },
-                          "module-AbstractGeometry-RelPosition.html": {
-                            "ref": "module-AbstractGeometry-RelPosition.html",
-                            "tf": 0.9615384615384616
-                          }
-                        }
+                  "t": {
+                    "docs": {
+                      "VRControls.html": {
+                        "ref": "VRControls.html",
+                        "tf": 2.272727272727273
+                      },
+                      "VRControls.html#onSelectStart": {
+                        "ref": "VRControls.html#onSelectStart",
+                        "tf": 10
+                      },
+                      "VRControls.html#onSelectEnd": {
+                        "ref": "VRControls.html#onSelectEnd",
+                        "tf": 10
                       }
                     }
                   }
                 }
               }
             },
-            "r": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "module-AbstractGeometry-RelPosition.html#flow": {
-                    "ref": "module-AbstractGeometry-RelPosition.html#flow",
-                    "tf": 2.380952380952381
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
             "t": {
               "docs": {
                 "module-AbstractGeometry-Isometry.html#set": {
@@ -17294,6 +17732,107 @@ window.lunrData = {
               }
             }
           },
+          "q": {
+            "docs": {},
+            "u": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "z": {
+                    "docs": {
+                      "VRControls.html": {
+                        "ref": "VRControls.html",
+                        "tf": 2.272727272727273
+                      },
+                      "VRControls.html#onSqueezeStart": {
+                        "ref": "VRControls.html#onSqueezeStart",
+                        "tf": 10
+                      },
+                      "VRControls.html#onSqueezeEnd": {
+                        "ref": "VRControls.html#onSqueezeEnd",
+                        "tf": 10
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "b": {
+              "docs": {},
+              "g": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "u": {
+                      "docs": {},
+                      "p": {
+                        "docs": {
+                          "KeyboardControls.html#update": {
+                            "ref": "KeyboardControls.html#update",
+                            "tf": 0.4629629629629629
+                          },
+                          "module-Thurston-Thurston.html#subgroup": {
+                            "ref": "module-Thurston-Thurston.html#subgroup",
+                            "tf": 710
+                          },
+                          "module-Thurston-Thurston.html#buildShaderDataBackground": {
+                            "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
+                            "tf": 5.555555555555555
+                          },
+                          "module-Thurston-Thurston.html#buildShaderFragment": {
+                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
+                            "tf": 4.166666666666666
+                          },
+                          "module-AbstractGeometry-Teleport.html": {
+                            "ref": "module-AbstractGeometry-Teleport.html",
+                            "tf": 3.8461538461538463
+                          },
+                          "module-AbstractGeometry-Teleport.html#glsl": {
+                            "ref": "module-AbstractGeometry-Teleport.html#glsl",
+                            "tf": 6.25
+                          },
+                          "module-AbstractGeometry-DiscreteSubgroup.html": {
+                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
+                            "tf": 1.4184397163120568
+                          },
+                          "module-AbstractGeometry-DiscreteSubgroup.html#teleports": {
+                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html#teleports",
+                            "tf": 5.555555555555555
+                          },
+                          "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData": {
+                            "ref": "module-AbstractGeometry-DiscreteSubgroup.html#glslBuildData",
+                            "tf": 4.545454545454546
+                          },
+                          "module-AbstractGeometry-RelPosition.html": {
+                            "ref": "module-AbstractGeometry-RelPosition.html",
+                            "tf": 0.9615384615384616
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "module-AbstractGeometry-RelPosition.html#flow": {
+                    "ref": "module-AbstractGeometry-RelPosition.html#flow",
+                    "tf": 2.380952380952381
+                  }
+                }
+              }
+            }
+          },
           "l": {
             "2": {
               "docs": {
@@ -17437,7 +17976,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.9174311926605505
+                      "tf": 0.9259259259259258
                     },
                     "module-AbstractGeometry-Position.html#flow": {
                       "ref": "module-AbstractGeometry-Position.html#flow",
@@ -17535,7 +18074,7 @@ window.lunrData = {
                     "docs": {
                       "KeyboardControls.html#update": {
                         "ref": "KeyboardControls.html#update",
-                        "tf": 0.45871559633027525
+                        "tf": 0.4629629629629629
                       }
                     }
                   }
@@ -18746,6 +19285,23 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "t": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "n": {
+                    "docs": {
+                      "VRControls.html": {
+                        "ref": "VRControls.html",
+                        "tf": 4.545454545454546
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "o": {
@@ -18828,7 +19384,7 @@ window.lunrData = {
                   "docs": {
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 0.9174311926605505
+                      "tf": 0.9259259259259258
                     },
                     "module-AbstractGeometry-Position.html#boost": {
                       "ref": "module-AbstractGeometry-Position.html#boost",
@@ -18874,13 +19430,13 @@ window.lunrData = {
               "docs": {},
               "h": {
                 "docs": {
-                  "module-Thurston-Thurston.html#getEyePositions": {
-                    "ref": "module-Thurston-Thurston.html#getEyePositions",
-                    "tf": 3.3333333333333335
-                  },
                   "module-Thurston-Thurston.html#chaseCamera": {
                     "ref": "module-Thurston-Thurston.html#chaseCamera",
                     "tf": 2
+                  },
+                  "module-Thurston-Thurston.html#getEyePositions": {
+                    "ref": "module-Thurston-Thurston.html#getEyePositions",
+                    "tf": 3.3333333333333335
                   },
                   "module-AbstractGeometry-Teleport.html": {
                     "ref": "module-AbstractGeometry-Teleport.html",
@@ -19112,7 +19668,7 @@ window.lunrData = {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 0.9174311926605505
+              "tf": 0.9259259259259258
             },
             "module-AbstractGeometry-Position.html#flow": {
               "ref": "module-AbstractGeometry-Position.html#flow",
@@ -19129,9 +19685,13 @@ window.lunrData = {
                 "ref": "module-ThurstonItems-Item.html#className",
                 "tf": 5
               },
+              "VRControls.html": {
+                "ref": "VRControls.html",
+                "tf": 6.8181818181818175
+              },
               "KeyboardControls.html": {
                 "ref": "KeyboardControls.html",
-                "tf": 5
+                "tf": 5.555555555555555
               },
               "KeyboardControls.html#keyboard": {
                 "ref": "KeyboardControls.html#keyboard",
@@ -19194,6 +19754,22 @@ window.lunrData = {
               "docs": {},
               "r": {
                 "docs": {
+                  "VRControls.html#onSelectStart": {
+                    "ref": "VRControls.html#onSelectStart",
+                    "tf": 10
+                  },
+                  "VRControls.html#onSelectEnd": {
+                    "ref": "VRControls.html#onSelectEnd",
+                    "tf": 10
+                  },
+                  "VRControls.html#onSqueezeStart": {
+                    "ref": "VRControls.html#onSqueezeStart",
+                    "tf": 10
+                  },
+                  "VRControls.html#onSqueezeEnd": {
+                    "ref": "VRControls.html#onSqueezeEnd",
+                    "tf": 10
+                  },
                   "module-Thurston-Thurston.html#gui": {
                     "ref": "module-Thurston-Thurston.html#gui",
                     "tf": 16.666666666666664
@@ -19283,7 +19859,7 @@ window.lunrData = {
                             "docs": {
                               "KeyboardControls.html#update": {
                                 "ref": "KeyboardControls.html#update",
-                                "tf": 0.45871559633027525
+                                "tf": 0.4629629629629629
                               }
                             }
                           }
@@ -19347,6 +19923,10 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
+                    "VRControls.html#update": {
+                      "ref": "VRControls.html#update",
+                      "tf": 716.6666666666666
+                    },
                     "KeyboardControls.html#updateMovementVector": {
                       "ref": "KeyboardControls.html#updateMovementVector",
                       "tf": 16.666666666666664
@@ -19357,7 +19937,7 @@ window.lunrData = {
                     },
                     "KeyboardControls.html#update": {
                       "ref": "KeyboardControls.html#update",
-                      "tf": 700.4587155963303
+                      "tf": 700.4629629629629
                     },
                     "module-Thurston-Thurston.html#chaseCamera": {
                       "ref": "module-Thurston-Thurston.html#chaseCamera",
@@ -19526,6 +20106,188 @@ window.lunrData = {
             }
           }
         },
+        "h": {
+          "docs": {
+            "module-AbstractGeometry-RelPosition.html": {
+              "ref": "module-AbstractGeometry-RelPosition.html",
+              "tf": 1.9230769230769231
+            }
+          },
+          "a": {
+            "docs": {},
+            "n": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "module-Thurston-Thurston.html#run": {
+                      "ref": "module-Thurston-Thurston.html#run",
+                      "tf": 5
+                    },
+                    "module-AbstractGeometry-DiscreteSubgroup.html": {
+                      "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
+                      "tf": 1.0638297872340425
+                    },
+                    "module-AbstractGeometry.html": {
+                      "ref": "module-AbstractGeometry.html",
+                      "tf": 1.6666666666666667
+                    }
+                  },
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "VRControls.html#onSelectStart": {
+                          "ref": "VRControls.html#onSelectStart",
+                          "tf": 10
+                        },
+                        "VRControls.html#onSelectEnd": {
+                          "ref": "VRControls.html#onSelectEnd",
+                          "tf": 10
+                        },
+                        "VRControls.html#onSqueezeStart": {
+                          "ref": "VRControls.html#onSqueezeStart",
+                          "tf": 10
+                        },
+                        "VRControls.html#onSqueezeEnd": {
+                          "ref": "VRControls.html#onSqueezeEnd",
+                          "tf": 10
+                        },
+                        "KeyboardControls.html#onKeyDown": {
+                          "ref": "KeyboardControls.html#onKeyDown",
+                          "tf": 12.5
+                        },
+                        "KeyboardControls.html#onKeyUp": {
+                          "ref": "KeyboardControls.html#onKeyUp",
+                          "tf": 12.5
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "e": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "s": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "module-Thurston-Thurston.html#chaseCamera": {
+                          "ref": "module-Thurston-Thurston.html#chaseCamera",
+                          "tf": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "module-Thurston-Thurston.html#chaseCamera": {
+                    "ref": "module-Thurston-Thurston.html#chaseCamera",
+                    "tf": 2
+                  },
+                  "module-Thurston-Thurston.html#run": {
+                    "ref": "module-Thurston-Thurston.html#run",
+                    "tf": 5
+                  },
+                  "module-AbstractGeometry-Vector.html#applyMatrix4": {
+                    "ref": "module-AbstractGeometry-Vector.html#applyMatrix4",
+                    "tf": 1.8518518518518516
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {},
+              "c": {
+                "docs": {
+                  "module-AbstractGeometry-Position.html#flow": {
+                    "ref": "module-AbstractGeometry-Position.html#flow",
+                    "tf": 0.49504950495049505
+                  }
+                }
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "z": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "n": {
+                      "docs": {
+                        "module-Thurston-Thurston.html#chaseCamera": {
+                          "ref": "module-Thurston-Thurston.html#chaseCamera",
+                          "tf": 2
+                        },
+                        "module-Thurston-Thurston.html#initHorizon": {
+                          "ref": "module-Thurston-Thurston.html#initHorizon",
+                          "tf": 5.555555555555555
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "^": {
+            "2": {
+              "docs": {
+                "module-AbstractGeometry-DiscreteSubgroup.html": {
+                  "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
+                  "tf": 0.3546099290780142
+                }
+              }
+            },
+            "3": {
+              "docs": {
+                "module-AbstractGeometry-DiscreteSubgroup.html": {
+                  "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
+                  "tf": 0.3546099290780142
+                }
+              }
+            },
+            "docs": {}
+          },
+          ",": {
+            "docs": {},
+            "p": {
+              "docs": {
+                "module-AbstractGeometry-RelPosition.html": {
+                  "ref": "module-AbstractGeometry-RelPosition.html",
+                  "tf": 0.9615384615384616
+                }
+              }
+            }
+          },
+          "g": {
+            "docs": {
+              "module-AbstractGeometry-RelPosition.html": {
+                "ref": "module-AbstractGeometry-RelPosition.html",
+                "tf": 0.9615384615384616
+              }
+            }
+          }
+        },
         "k": {
           "docs": {},
           "e": {
@@ -19565,14 +20327,14 @@ window.lunrData = {
                         "docs": {
                           "KeyboardControls.html": {
                             "ref": "KeyboardControls.html",
-                            "tf": 10
+                            "tf": 5.555555555555555
                           },
                           "KeyboardControls.html#keyboard": {
                             "ref": "KeyboardControls.html#keyboard",
                             "tf": 716.6666666666666
                           },
-                          "module-Thurston-Thurston.html#_controls": {
-                            "ref": "module-Thurston-Thurston.html#_controls",
+                          "module-Thurston-Thurston.html#_keyboardControls": {
+                            "ref": "module-Thurston-Thurston.html#_keyboardControls",
                             "tf": 25
                           },
                           "module-Thurston-Thurston.html#setKeyboard": {
@@ -19598,8 +20360,8 @@ window.lunrData = {
                                           "ref": "KeyboardControls.html",
                                           "tf": 1900
                                         },
-                                        "module-Thurston-Thurston.html#_controls": {
-                                          "ref": "module-Thurston-Thurston.html#_controls",
+                                        "module-Thurston-Thurston.html#_keyboardControls": {
+                                          "ref": "module-Thurston-Thurston.html#_keyboardControls",
                                           "tf": 33.33333333333333
                                         }
                                       },
@@ -19845,177 +20607,11 @@ window.lunrData = {
             }
           }
         },
-        "h": {
-          "docs": {
-            "module-AbstractGeometry-RelPosition.html": {
-              "ref": "module-AbstractGeometry-RelPosition.html",
-              "tf": 1.9230769230769231
-            }
-          },
-          "a": {
-            "docs": {},
-            "n": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "module-Thurston-Thurston.html#run": {
-                      "ref": "module-Thurston-Thurston.html#run",
-                      "tf": 5
-                    },
-                    "module-AbstractGeometry-DiscreteSubgroup.html": {
-                      "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
-                      "tf": 1.0638297872340425
-                    },
-                    "module-AbstractGeometry.html": {
-                      "ref": "module-AbstractGeometry.html",
-                      "tf": 1.6666666666666667
-                    }
-                  },
-                  "e": {
-                    "docs": {},
-                    "r": {
-                      "docs": {
-                        "KeyboardControls.html#onKeyDown": {
-                          "ref": "KeyboardControls.html#onKeyDown",
-                          "tf": 12.5
-                        },
-                        "KeyboardControls.html#onKeyUp": {
-                          "ref": "KeyboardControls.html#onKeyUp",
-                          "tf": 12.5
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "o": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "z": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "n": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#initHorizon": {
-                          "ref": "module-Thurston-Thurston.html#initHorizon",
-                          "tf": 5.555555555555555
-                        },
-                        "module-Thurston-Thurston.html#chaseCamera": {
-                          "ref": "module-Thurston-Thurston.html#chaseCamera",
-                          "tf": 2
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "s": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#chaseCamera": {
-                          "ref": "module-Thurston-Thurston.html#chaseCamera",
-                          "tf": 2
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "r": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "module-Thurston-Thurston.html#chaseCamera": {
-                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                    "tf": 2
-                  },
-                  "module-Thurston-Thurston.html#run": {
-                    "ref": "module-Thurston-Thurston.html#run",
-                    "tf": 5
-                  },
-                  "module-AbstractGeometry-Vector.html#applyMatrix4": {
-                    "ref": "module-AbstractGeometry-Vector.html#applyMatrix4",
-                    "tf": 1.8518518518518516
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "c": {
-                "docs": {
-                  "module-AbstractGeometry-Position.html#flow": {
-                    "ref": "module-AbstractGeometry-Position.html#flow",
-                    "tf": 0.49504950495049505
-                  }
-                }
-              }
-            }
-          },
-          "^": {
-            "2": {
-              "docs": {
-                "module-AbstractGeometry-DiscreteSubgroup.html": {
-                  "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
-                  "tf": 0.3546099290780142
-                }
-              }
-            },
-            "3": {
-              "docs": {
-                "module-AbstractGeometry-DiscreteSubgroup.html": {
-                  "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
-                  "tf": 0.3546099290780142
-                }
-              }
-            },
-            "docs": {}
-          },
-          ",": {
-            "docs": {},
-            "p": {
-              "docs": {
-                "module-AbstractGeometry-RelPosition.html": {
-                  "ref": "module-AbstractGeometry-RelPosition.html",
-                  "tf": 0.9615384615384616
-                }
-              }
-            }
-          },
-          "g": {
-            "docs": {
-              "module-AbstractGeometry-RelPosition.html": {
-                "ref": "module-AbstractGeometry-RelPosition.html",
-                "tf": 0.9615384615384616
-              }
-            }
-          }
-        },
         "w": {
           "docs": {
             "KeyboardControls.html#update": {
               "ref": "KeyboardControls.html#update",
-              "tf": 1.3761467889908259
+              "tf": 1.3888888888888888
             },
             "module-AbstractGeometry-Position.html#flow": {
               "ref": "module-AbstractGeometry-Position.html#flow",
@@ -20030,7 +20626,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   }
                 }
               }
@@ -20044,7 +20640,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   }
                 }
               }
@@ -20090,7 +20686,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   },
                   "module-AbstractGeometry-DiscreteSubgroup.html": {
                     "ref": "module-AbstractGeometry-DiscreteSubgroup.html",
@@ -20102,7 +20698,7 @@ window.lunrData = {
                 "docs": {
                   "KeyboardControls.html#update": {
                     "ref": "KeyboardControls.html#update",
-                    "tf": 0.45871559633027525
+                    "tf": 0.4629629629629629
                   }
                 }
               }
@@ -20122,7 +20718,7 @@ window.lunrData = {
                       "docs": {
                         "KeyboardControls.html#update": {
                           "ref": "KeyboardControls.html#update",
-                          "tf": 0.45871559633027525
+                          "tf": 0.4629629629629629
                         },
                         "module-AbstractGeometry-Vector.html": {
                           "ref": "module-AbstractGeometry-Vector.html",
@@ -20207,29 +20803,6 @@ window.lunrData = {
                         "module-Thurston-Thurston.html#_camera": {
                           "ref": "module-Thurston-Thurston.html#_camera",
                           "tf": 683.3333333333334
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "o": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "l": {
-                        "docs": {
-                          "module-Thurston-Thurston.html#_controls": {
-                            "ref": "module-Thurston-Thurston.html#_controls",
-                            "tf": 683.3333333333334
-                          }
                         }
                       }
                     }
@@ -20349,6 +20922,56 @@ window.lunrData = {
                 }
               }
             }
+          },
+          "k": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "y": {
+                "docs": {},
+                "b": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "r": {
+                        "docs": {},
+                        "d": {
+                          "docs": {},
+                          "c": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "n": {
+                                "docs": {},
+                                "t": {
+                                  "docs": {},
+                                  "r": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {},
+                                      "l": {
+                                        "docs": {
+                                          "module-Thurston-Thurston.html#_keyboardControls": {
+                                            "ref": "module-Thurston-Thurston.html#_keyboardControls",
+                                            "tf": 683.3333333333334
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "j": {
@@ -20406,7 +21029,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 2028
+      "length": 2083
     },
     "corpusTokens": [
       "0",
@@ -20415,7 +21038,7 @@ window.lunrData = {
       "4th",
       "_camera",
       "_clock",
-      "_control",
+      "_keyboardcontrol",
       "_light",
       "_maxlightdir",
       "_render",
@@ -20481,6 +21104,7 @@ window.lunrData = {
       "buildshaderfrag",
       "buildshadervertex",
       "built",
+      "button",
       "call",
       "camera",
       "case",
@@ -20540,6 +21164,7 @@ window.lunrData = {
       "dom",
       "domain",
       "done",
+      "drag",
       "dynam",
       "e",
       "e1",
@@ -20844,7 +21469,7 @@ window.lunrData = {
       "module:thurston~thurston",
       "module:thurston~thurston#_camera",
       "module:thurston~thurston#_clock",
-      "module:thurston~thurston#_control",
+      "module:thurston~thurston#_keyboardcontrol",
       "module:thurston~thurston#_light",
       "module:thurston~thurston#_maxlightdir",
       "module:thurston~thurston#_render",
@@ -20901,6 +21526,10 @@ window.lunrData = {
       "on",
       "onkeydown",
       "onkeyup",
+      "onselectend",
+      "onselectstart",
+      "onsqueezeend",
+      "onsqueezestart",
       "onwindowres",
       "opengl",
       "option",
@@ -20935,7 +21564,6 @@ window.lunrData = {
       "privat",
       "probabl",
       "procedur",
-      "produc",
       "product",
       "promis",
       "promise.&lt;array.&lt;string&gt;&gt",
@@ -20987,6 +21615,7 @@ window.lunrData = {
       "see",
       "seem",
       "seen",
+      "select",
       "semi",
       "send",
       "set",
@@ -21016,9 +21645,12 @@ window.lunrData = {
       "specular",
       "sphere",
       "split",
+      "squeez",
+      "start",
       "stat",
       "stay",
       "still",
+      "stop",
       "straight",
       "straightforward",
       "strategi",
@@ -21033,7 +21665,7 @@ window.lunrData = {
       "templat",
       "term",
       "test",
-      "this.subgroups.glslbuilddata",
+      "this.subgroup.glslbuilddata",
       "those",
       "three.j",
       "through",
@@ -21083,6 +21715,12 @@ window.lunrData = {
       "version",
       "vertex",
       "vr",
+      "vrcontrol",
+      "vrcontrols#onselectend",
+      "vrcontrols#onselectstart",
+      "vrcontrols#onsqueezeend",
+      "vrcontrols#onsqueezestart",
+      "vrcontrols#upd",
       "w",
       "want",
       "webglrender",
@@ -21370,6 +22008,67 @@ window.lunrData = {
       "summary": "",
       "description": "Load the XML file containing the GLSL blocks of code. Return the XML as a DOM"
     },
+    "VRControls.html": {
+      "id": "VRControls.html",
+      "kind": "class",
+      "title": "VRControls",
+      "longname": "VRControls",
+      "name": "VRControls",
+      "tags": "VRControls",
+      "summary": "",
+      "description": "Implements controls to fly in the geometry using the VR controllers. The squeeze button is used to drag (and rotate) the scene. The select button is used to move in the direction of the controller This is inspired from Three.js FlyControls",
+      "body": ""
+    },
+    "VRControls.html#update": {
+      "id": "VRControls.html#update",
+      "kind": "member",
+      "title": "update :function",
+      "longname": "VRControls#update",
+      "name": "update",
+      "tags": "VRControls#update update",
+      "summary": "",
+      "description": "Function to update the position"
+    },
+    "VRControls.html#onSelectStart": {
+      "id": "VRControls.html#onSelectStart",
+      "kind": "function",
+      "title": "onSelectStart()",
+      "longname": "VRControls#onSelectStart",
+      "name": "onSelectStart",
+      "tags": "VRControls#onSelectStart onSelectStart",
+      "summary": "",
+      "description": "Event handler when the user starts selecting"
+    },
+    "VRControls.html#onSelectEnd": {
+      "id": "VRControls.html#onSelectEnd",
+      "kind": "function",
+      "title": "onSelectEnd()",
+      "longname": "VRControls#onSelectEnd",
+      "name": "onSelectEnd",
+      "tags": "VRControls#onSelectEnd onSelectEnd",
+      "summary": "",
+      "description": "Event handler when the user stops selecting"
+    },
+    "VRControls.html#onSqueezeStart": {
+      "id": "VRControls.html#onSqueezeStart",
+      "kind": "function",
+      "title": "onSqueezeStart()",
+      "longname": "VRControls#onSqueezeStart",
+      "name": "onSqueezeStart",
+      "tags": "VRControls#onSqueezeStart onSqueezeStart",
+      "summary": "",
+      "description": "Event handler when the user starts squeezing"
+    },
+    "VRControls.html#onSqueezeEnd": {
+      "id": "VRControls.html#onSqueezeEnd",
+      "kind": "function",
+      "title": "onSqueezeEnd()",
+      "longname": "VRControls#onSqueezeEnd",
+      "name": "onSqueezeEnd",
+      "tags": "VRControls#onSqueezeEnd onSqueezeEnd",
+      "summary": "",
+      "description": "Event handler when the user stops squeezing"
+    },
     "KeyboardControls.html": {
       "id": "KeyboardControls.html",
       "kind": "class",
@@ -21378,7 +22077,7 @@ window.lunrData = {
       "name": "KeyboardControls",
       "tags": "KeyboardControls",
       "summary": "",
-      "description": "Implements keyboard controls to fly in the geometry using the keyboard. This is inspired from Three.js FlyControls",
+      "description": "Implements controls to fly in the geometry using the keyboard. This is inspired from Three.js FlyControls",
       "body": ""
     },
     "KeyboardControls.html#keyboard": {
@@ -21449,7 +22148,7 @@ window.lunrData = {
       "name": "update",
       "tags": "KeyboardControls#update update",
       "summary": "",
-      "description": "Produce a function to update the position Assume that the current position is (g,m) where g is the boost, i.e. subgroups element * local boost m is the facing, i.e. an element of O(3) Denote by a the Matrix4 representing the Three.js camera orientation, understood as an element of O(3) as well. Denote by e = (e1, e2, e3) the reference frame in the tangent space at the origin. Then the frame at p = go attach to the camera is f = d_og . m . a . e That is the camera is looking at the direction -f3 = - d_og . m . a . e3 Assume now that we want to move in the direction of v = (v1,v2,v3) where the vector is given in the frame f, i.e. v = v1. f1 + v2 . f2 + v3. f3. We need to flow the current position in the direction w, where w corresponds to v written in the \"position frame\", i.e. d_og . m . e. In other words w = a . u, where u = v1 . e1 + v2 . e2 + v3 . e3. Note that we do not change the camera orientation. A similar strategy works for the rotations."
+      "description": "Function to update the position Assume that the current position is (g,m) where g is the boost, i.e. subgroup element * local boost m is the facing, i.e. an element of O(3) Denote by a the Matrix4 representing the Three.js camera orientation, understood as an element of O(3) as well. Denote by e = (e1, e2, e3) the reference frame in the tangent space at the origin. Then the frame at p = go attach to the camera is f = d_og . m . a . e That is the camera is looking at the direction -f3 = - d_og . m . a . e3 Assume now that we want to move in the direction of v = (v1,v2,v3) where the vector is given in the frame f, i.e. v = v1. f1 + v2 . f2 + v3. f3. We need to flow the current position in the direction w, where w corresponds to v written in the \"position frame\", i.e. d_og . m . e. In other words w = a . u, where u = v1 . e1 + v2 . e2 + v3 . e3. Note that we do not change the camera orientation. A similar strategy works for the rotations."
     },
     "module-AbstractGeometry-Isometry.html": {
       "id": "module-AbstractGeometry-Isometry.html",
@@ -21611,7 +22310,7 @@ window.lunrData = {
       "name": "subgroup",
       "tags": "module:Thurston~Thurston#subgroup subgroup",
       "summary": "",
-      "description": "The discrete subgroups defining a quotient manifold/orbifold"
+      "description": "The discrete subgroup defining a quotient manifold/orbifold"
     },
     "module-Thurston-Thurston.html#params": {
       "id": "module-Thurston-Thurston.html#params",
@@ -21683,13 +22382,13 @@ window.lunrData = {
       "summary": "",
       "description": "The maximal number of lights directions Computed automatically from the list of lights."
     },
-    "module-Thurston-Thurston.html#_controls": {
-      "id": "module-Thurston-Thurston.html#_controls",
+    "module-Thurston-Thurston.html#_keyboardControls": {
+      "id": "module-Thurston-Thurston.html#_keyboardControls",
       "kind": "member",
-      "title": "&lt;private&gt; _controls :KeyboardControls",
-      "longname": "module:Thurston~Thurston#_controls",
-      "name": "_controls",
-      "tags": "module:Thurston~Thurston#_controls _controls",
+      "title": "&lt;private&gt; _keyboardControls :KeyboardControls",
+      "longname": "module:Thurston~Thurston#_keyboardControls",
+      "name": "_keyboardControls",
+      "tags": "module:Thurston~Thurston#_keyboardControls _keyboardControls",
       "summary": "",
       "description": "The keyboard controls"
     },
@@ -21732,6 +22431,16 @@ window.lunrData = {
       "tags": "module:Thurston~Thurston#maxLightDirs maxLightDirs",
       "summary": "",
       "description": "The maximal number of light directions"
+    },
+    "module-Thurston-Thurston.html#chaseCamera": {
+      "id": "module-Thurston-Thurston.html#chaseCamera",
+      "kind": "member",
+      "title": "chaseCamera",
+      "longname": "module:Thurston~Thurston#chaseCamera",
+      "name": "chaseCamera",
+      "tags": "module:Thurston~Thurston#chaseCamera chaseCamera",
+      "summary": "",
+      "description": "If the camera moved (most likely because VR headset updated its position), then we update both the Three.js scene (by moving the horizon sphere) and the non-euclidean one (by changing the position). The eye positions are not updated here. This should be done manually somewhere else."
     },
     "module-Thurston-Thurston.html#infos": {
       "id": "module-Thurston-Thurston.html#infos",
@@ -21891,7 +22600,7 @@ window.lunrData = {
       "name": "buildShaderDataBackground",
       "tags": "module:Thurston~Thurston#buildShaderDataBackground buildShaderDataBackground",
       "summary": "",
-      "description": "Return the list of all \"background\" blocks of GLSL code which are required for items and subgroups."
+      "description": "Return the list of all \"background\" blocks of GLSL code which are required for items and subgroup."
     },
     "module-Thurston-Thurston.html#buildShaderDataItems": {
       "id": "module-Thurston-Thurston.html#buildShaderDataItems",
@@ -21911,7 +22620,7 @@ window.lunrData = {
       "name": "buildShaderFragment",
       "tags": "module:Thurston~Thurston#buildShaderFragment buildShaderFragment",
       "summary": "",
-      "description": "Build the fragment shader from templates files. The data used to populate the templates are build by the functions buildShaderDataConstants (constants) buildShaderDataUniforms (uniforms) buildShaderDataBackground (background routines for the items and the subgroups) buildShaderDataItems (items) this.subgroups.glslBuildData (subgroups)"
+      "description": "Build the fragment shader from templates files. The data used to populate the templates are build by the functions buildShaderDataConstants (constants) buildShaderDataUniforms (uniforms) buildShaderDataBackground (background routines for the items and the subgroup) buildShaderDataItems (items) this.subgroup.glslBuildData (subgroup)"
     },
     "module-Thurston-Thurston.html#initHorizon": {
       "id": "module-Thurston-Thurston.html#initHorizon",
@@ -21922,16 +22631,6 @@ window.lunrData = {
       "tags": "module:Thurston~Thurston#initHorizon initHorizon",
       "summary": "",
       "description": "Init the horizon of the Three.js seen (with its shaders) This cannot be done in the constructor as it is an async function."
-    },
-    "module-Thurston-Thurston.html#chaseCamera": {
-      "id": "module-Thurston-Thurston.html#chaseCamera",
-      "kind": "function",
-      "title": "chaseCamera()",
-      "longname": "module:Thurston~Thurston#chaseCamera",
-      "name": "chaseCamera",
-      "tags": "module:Thurston~Thurston#chaseCamera chaseCamera",
-      "summary": "",
-      "description": "If the camera moved (most likely because VR headset updated its position), then we update both the Three.js scene (by moving the horizon sphere) and the non-euclidean one (by changing the position). The eye positions are not updated here. This should be done manually somewhere else."
     },
     "module-Thurston-Thurston.html#animate": {
       "id": "module-Thurston-Thurston.html#animate",
@@ -22507,7 +23206,7 @@ window.lunrData = {
       "name": "glsl",
       "tags": "module:AbstractGeometry~Teleport#glsl glsl",
       "summary": "",
-      "description": "The GLSL code to perform the test. (To be automatically setup at the subgroups level.)"
+      "description": "The GLSL code to perform the test. (To be automatically setup at the subgroup level.)"
     },
     "module-AbstractGeometry-DiscreteSubgroup.html": {
       "id": "module-AbstractGeometry-DiscreteSubgroup.html",
@@ -22517,7 +23216,7 @@ window.lunrData = {
       "name": "DiscreteSubgroup",
       "tags": "module:AbstractGeometry~DiscreteSubgroup",
       "summary": "",
-      "description": "We describe a discrete subgroups by a set of generator. Each generator is seen as a teleportation (to move a point back in the fundamental domain). Thus a discrete subgroups is described by a list of teleportations. The order of those teleportations is the order in which the teleportation are performed. This plays an important role if the discrete subgroups is not abelian. A possible extension would be to implement a symbolic representation of the elements in the subgroups. For the lattices we implemented in E^3, S^3, S^2 x E, Nil and Sol this is probably easy. Indeed E^3, the lattice will be a semi-direct product of Z^2 by a finite group. S^3 the lattice is a finite group S^2 x E the lattice is the product of a finite group and Z Nil and Sol, the lattices we used are semi-direct product of Z^2 and Z In those case we still need to define our own structures : OpenGL does not handle integer matrices for instance. For H^3, H^2 x E and SL(2,R) this is not that obvious : OpenGL does not seem to handle strings. One possibility would be to find a representations of those groups in GL(n, A) where A is a number field. We could define our structures to handle formally this number field (probably not too bad in terms of performances) And then matrices in this number field. The advantage (compare to a word representation) are the following: Going from the symbolic representation to the actual Isometry would be straightforward. Checking the equality of tow elements in the lattice should be straight forward.",
+      "description": "We describe a discrete subgroups by a set of generator. Each generator is seen as a teleportation (to move a point back in the fundamental domain). Thus a discrete subgroups is described by a list of teleportations. The order of those teleportations is the order in which the teleportation are performed. This plays an important role if the discrete subgroups is not abelian. A possible extension would be to implement a symbolic representation of the elements in the subgroup. For the lattices we implemented in E^3, S^3, S^2 x E, Nil and Sol this is probably easy. Indeed E^3, the lattice will be a semi-direct product of Z^2 by a finite group. S^3 the lattice is a finite group S^2 x E the lattice is the product of a finite group and Z Nil and Sol, the lattices we used are semi-direct product of Z^2 and Z In those case we still need to define our own structures : OpenGL does not handle integer matrices for instance. For H^3, H^2 x E and SL(2,R) this is not that obvious : OpenGL does not seem to handle strings. One possibility would be to find a representations of those groups in GL(n, A) where A is a number field. We could define our structures to handle formally this number field (probably not too bad in terms of performances) And then matrices in this number field. The advantage (compare to a word representation) are the following: Going from the symbolic representation to the actual Isometry would be straightforward. Checking the equality of tow elements in the lattice should be straight forward.",
       "body": ""
     },
     "module-AbstractGeometry-DiscreteSubgroup.html#teleports": {
@@ -22548,7 +23247,7 @@ window.lunrData = {
       "name": "glslBuildData",
       "tags": "module:AbstractGeometry~DiscreteSubgroup#glslBuildData glslBuildData",
       "summary": "",
-      "description": "Goes through all the teleportations in the discrete subgroups and build the GLSL code performing the associated test."
+      "description": "Goes through all the teleportations in the discrete subgroup and build the GLSL code performing the associated test."
     },
     "module-AbstractGeometry-RelPosition.html": {
       "id": "module-AbstractGeometry-RelPosition.html",

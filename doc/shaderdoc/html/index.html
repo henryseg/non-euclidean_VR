@@ -79,16 +79,16 @@ $(function() {
 <li><a class="el" href="model_8glsl.html">geometry/model.glsl</a> (geometry functions)</li>
 <li><a class="el" href="commons_8glsl.html">geometry/commons.glsl</a> (common stuff)</li>
 <li><a class="el" href="abstract_8glsl.html">items/abstract.glsl</a> (structures for objets and lights)</li>
-<li><a class="el" href="background_8glsl.html">background.glsl</a> (block of code used by the subgroup of the items)</li>
+<li><a class="el" href="background_8glsl.html">background.glsl</a> (block of code used by the subgroups of the items)</li>
 <li><a class="el" href="setup_8glsl.html">setup.glsl</a> (global variables, etc)</li>
 <li><a class="el" href="sdf_8glsl.html">sdf.glsl</a> (basic signed distance functions / distance underestimators)</li>
-<li><a class="el" href="subgroup_8glsl.html">subgroup.glsl</a> (definition of the subgroup : teleportation and isometries)</li>
+<li>subgroups.glsl (definition of the subgroups : teleportation and isometries)</li>
 <li><a class="el" href="scene_8glsl.html">scene.glsl</a> (the scene built by the JavaScript scene builder)</li>
 <li><a class="el" href="raymarch_8glsl.html">raymarch.glsl</a> (the ray-marching algorithm)</li>
 <li><a class="el" href="lighting_8glsl.html">lighting.glsl</a> (scene illumination)</li>
 <li><a class="el" href="main_8glsl.html">main.glsl</a> (wrapping up everything)</li>
 </ul>
-<p>The file <a class="el" href="model_8glsl.html">geometry/model.glsl</a> need be changed depending on the geometry. The path of this file is specified in the JS geometry library load by the Thurston object The other geometry depenedends sharders (definition of items, definition of subgroup) are built by the Thurston object based on block of codes declared on the Javascript file. (see items/model.xml and subgroups/model.xml).</p>
+<p>The file <a class="el" href="model_8glsl.html">geometry/model.glsl</a> need be changed depending on the geometry. The path of this file is specified in the JS geometry library load by the Thurston object The other geometry depenedends sharders (definition of items, definition of subgroups) are built by the Thurston object based on block of codes declared on the Javascript file. (see items/model.xml and subgroups/model.xml).</p>
 <p>Sadly, OpenGL does not seem to allow overloading built-in functions. Thus we followed the following naming rules. The rules for naming functions are the following:</p><ul>
 <li>If we are extending an GLSL function (e.g. dot, length, reflect, etc), then we use the same name as the GLSL function prefixed by <code>geom</code>.</li>
 <li>If there is no analogue function (typically when we extend operators *,+,etc), then we use the same name as the Three.js analogue </li>

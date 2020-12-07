@@ -1,12 +1,16 @@
 import {
-    EventDispatcher, Matrix4, Quaternion,
-    Vector3
+    EventDispatcher,
+    Matrix4,
 } from "./lib/three.module.js";
 
 import {
     RelPosition,
     Vector
 } from "./geometry/abstract.js";
+
+import {
+    bind
+} from "./utils.js";
 
 /**
  * @desc
@@ -55,12 +59,6 @@ const KEYBOARD_BINDINGS = {
 const CHANGE_EVENT = {type: "change"};
 const EPS = 0.000001;
 
-
-function bind(scope, fn) {
-    return function () {
-        return fn.apply(scope, arguments);
-    };
-}
 
 /**
  * @class

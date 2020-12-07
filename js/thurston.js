@@ -50,6 +50,10 @@ import {
     VRControls
 } from "./VRControls.js";
 
+import {
+    bind
+} from "./utils.js";
+
 /**
  * Code for the way a property can be passed to the shader
  * @const
@@ -178,12 +182,6 @@ const PARAMS_HANDLER = {
         }
         return true;
     }
-}
-
-function bind(scope, fn) {
-    return function () {
-        return fn.apply(scope, arguments);
-    };
 }
 
 
@@ -342,9 +340,18 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        const test = new Vector3();
-        this._controller0.getWorldDirection(test);
-        console.log(test.length(), Math.atan2(test.z, test.y), test.toLog());
+        const p1 = new Vector3();
+        const p2 = new Vector3();
+        if (this._renderer.xr.isPresenting) {
+            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+            camerasVR[0].getWorldPosition(p1);
+            camerasVR[1].getWorldPosition(p2);
+            console.log("VR", p1.toLog(), p2.toLog());
+            console.log(camerasVR);
+        } else {
+            this._camera.getWorldPosition(p1);
+            console.log("No VR", p1.toLog());
+        }
     }
 
     /**
@@ -761,8 +768,8 @@ class Thurston {
         if (this._chaseCamera === undefined) {
             let oldPositionL = new Vector3();
             let oldPositionR = new Vector3();
-            this._chaseCamera = function () {
 
+            this._chaseCamera = function () {
                 // declare the new positions of the left and right cameras
                 const newPositionL = new Vector3();
                 const newPositionR = new Vector3();

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Globals</title>
+		<title>VRControls</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -87,28 +87,32 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">global</span>
-				<h1><span class="name">Globals</span></h1>
-				<div class="summary"><p>All documented globals.</p></div>			</div>
+				<span class="kind">class</span>
+				<h1><span class="name">VRControls</span></h1>
+			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
 			<div class="col-md-9 main-content">
 						<ol class="breadcrumb">
 							<li><a href="index.html">Home</a></li>
-							<li class="active">Globals</li>
+							<li><a href="list_class.html">Classes</a></li>
+							<li class="active">VRControls</li>
 						</ol>
 					<section>
-							<article class="secondary">
-									<h3>Methods</h3>
-									<dl class="symbol">
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="bind" class="function public"><span class="name">bind</span><span class="signature-params">( <span class="signature-param">scope</span>, <span class="signature-param">fn</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{function}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+							<dl class="symbol primary">
+								<dt class="symbol-title class collapsible-symbol expanded">
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">VRControls</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">controller</span>&nbsp;)</span><span class="signature-type"></span></h2>
+</dt>
+<dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Transform a method attached to an object into a function.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Implements controls to fly in the geometry using the VR controllers.</p>
+			<ul>
+			<li>The squeeze button is used to drag (and rotate) the scene.</li>
+			<li>The select button is used to move in the direction of the controller
+			This is inspired from Three.js
+			<a href="https://threejs.org/docs/#examples/en/controls/FlyControls%20"> FlyControls</a></li>
+			</ul></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -121,30 +125,117 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>scope</code></td>
-							<td><span class="param-type">Object</span></td>
+								<td><code>position</code></td>
+							<td><span class="param-type">RelPosition</span></td>
 							<td class="last">
-									<p>the object on which the method is called</p>
+									<p>the position in the geometry of the observer</p>
 							</td>
 						</tr>
 						<tr>
-								<td><code>fn</code></td>
-							<td><span class="param-type">function</span></td>
+								<td><code>controller</code></td>
+							<td><span class="param-type">Group</span></td>
 							<td class="last">
-									<p>the method to call</p>
+									<p>the group representing the controller</p>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">function</span></label>
+								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<div class="form-control-static returns-description"></div>
+									<p class="form-control-static"><a href="VRControls.js.html">VRControls.js</a>, <a href="VRControls.js.html#line-49">line 49</a></p>
 								</div>
 							</div>
+			
+			
+			
+			
 					</form>
+			</div>	</div>
+</dd>
+							</dl>
+							<article class="secondary">
+									<h3>Members</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="update" class="member public"><span class="name">update</span><span class="signature-type"> :function</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Function to update the position</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">function</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="VRControls.js.html">VRControls.js</a>, <a href="VRControls.js.html#line-112">line 112</a></p>
+								</div>
+							</div>
+			
+			
+			
+							<!-- todo -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">To Do</label>
+								<div class="col-sm-9">
+										<p class="form-control-static">&lt;p&gt;Dispatch an event, when the position has sufficiently changed.&lt;/p&gt;</p>
+								</div>
+							</div>
+			
+					</form>
+			</div>	</div>
+</dd>
+									</dl>
+									<h3>Methods</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="onSelectStart" class="function public"><span class="name">onSelectStart</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event handler when the user starts selecting</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
@@ -165,7 +256,118 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line-7">line 7</a></p>
+									<p class="form-control-static"><a href="VRControls.js.html">VRControls.js</a>, <a href="VRControls.js.html#line-81">line 81</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="onSelectEnd" class="function public"><span class="name">onSelectEnd</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event handler when the user stops selecting</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="VRControls.js.html">VRControls.js</a>, <a href="VRControls.js.html#line-88">line 88</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="onSqueezeStart" class="function public"><span class="name">onSqueezeStart</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event handler when the user starts squeezing</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="VRControls.js.html">VRControls.js</a>, <a href="VRControls.js.html#line-95">line 95</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="onSqueezeEnd" class="function public"><span class="name">onSqueezeEnd</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event handler when the user stops squeezing</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="VRControls.js.html">VRControls.js</a>, <a href="VRControls.js.html#line-102">line 102</a></p>
 								</div>
 							</div>
 			

@@ -1,16 +1,40 @@
 import {
     EventDispatcher,
+    Matrix4,
+    Vector3
 } from "./lib/three.module.js";
 
 import {
-    Vector
+    Vector,
+
 } from "./geometry/abstract.js";
 
-function bind(scope, fn) {
-    return function () {
-        return fn.apply(scope, arguments);
-    };
+import {
+    bind
+} from "./utils.js";
+
+const EPS = 0.000001;
+
+
+/**
+ * Compute a rotation matrix sending the source to the target
+ * @param {Vector3} source
+ * @param {Vector3} target
+ */
+Matrix4.prototype.makeRotationFromVectors = function (source, target) {
+    const axis = new Vector3().crossVectors(source, target)
+    if(axis.lengthSq() < EPS){
+        this.identity();
+    }
+    else{
+        axis.normalize();
+        const angle = Math.acos(source.dot(target));
+        this.makeRotationAxis(axis, angle);
+    }
+    return this;
 }
+
+
 
 /**
  * @class
@@ -37,9 +61,7 @@ class VRControls extends EventDispatcher {
         this.movementSpeed = 0.5;
 
         this._isSelecting = false;
-        this._directionAtSelectStart = new Vector();
         this._isSqueezing = false;
-        this._directionAtSqueezeStart = new Vector();
 
         const _onSelectStart = bind(this, this.onSelectStart);
         const _onSelectEnd = bind(this, this.onSelectEnd);
@@ -58,8 +80,6 @@ class VRControls extends EventDispatcher {
      */
     onSelectStart() {
         this._isSelecting = true;
-        this.controller.getWorldDirection(this._directionAtSelectStart);
-        this._directionAtSelectStart.normalize();
     }
 
     /**
@@ -87,15 +107,37 @@ class VRControls extends EventDispatcher {
      * Function to update the position
      * @todo Dispatch an event, when the position has sufficiently changed.
      *
-     * @param {number} delta - time delta between two updates
+     * @type {Function}
      */
-    update(delta) {
-        if (this._isSelecting) {
-            const deltaPosition = this._directionAtSelectStart
-                .clone()
-                .multiplyScalar(-this.movementSpeed * delta)
-            this.position.flow(deltaPosition);
+    get update() {
+        if (this._update === undefined) {
+            const oldDirection = new Vector();
+
+            this._update = function (delta) {
+                // call the new direction of the controller
+                const newDirection = new Vector();
+                this.controller.getWorldDirection(newDirection);
+
+                if (this._isSelecting) {
+                    // flow if the select button is pressed
+                    const deltaPosition = newDirection
+                        .clone()
+                        .multiplyScalar(-this.movementSpeed * delta)
+                    this.position.flow(deltaPosition);
+                }
+                if (this._isSqueezing) {
+                    // rotate if the squeeze button is pressed
+                    const m = new Matrix4().makeRotationFromVectors(newDirection,oldDirection);
+                    this.position.applyFacing(m);
+                }
+
+                // record the direction for the next call of this.udpate
+                oldDirection.copy(newDirection);
+            }
         }
+        return this._update;
+
+
     }
 
 

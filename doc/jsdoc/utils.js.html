@@ -1,9 +1,10 @@
+<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>ThurstonEuclideanItems</title>
+		<title>utils.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -13,7 +14,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -87,62 +88,33 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">module</span>
-				<h1><span class="name">ThurstonEuclideanItems</span></h1>
+				<span class="kind">source</span>
+				<h1><span class="name">utils.js</span></h1>
 			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-9 main-content">
-						<ol class="breadcrumb">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="list_module.html">Modules</a></li>
-							<li class="active">ThurstonEuclideanItems</li>
-						</ol>
-					<section>
-		<dl class="symbol">
-			<dt class="symbol-title "></dt>
-			<dd class="symbol-details ">
-				<div class="symbol-details-inner">
-					<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Add to the Thurston module a library of euclidean items (objects, lights, etc)</p></div>
-					</div>					<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-									<!-- source -->
-									<div class="form-group">
-										<label class="col-sm-3 control-label">Source</label>
-										<div class="col-sm-9">
-											<p class="form-control-static"><a href="items_euc.js.html">items/euc.js</a>, <a href="items_euc.js.html#line-1">line 1</a></p>
-										</div>
-									</div>
-					
-					
-					
-					
-							</form>
-					</div>				</div>
-			</dd>
-		</dl>
-							<article class="secondary">
-							</article>
-					</section>
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * Transform a method attached to an object into a function.
+ * @param {Object} scope - the object on which the method is called
+ * @param {function} fn - the method to call
+ * @return {function(): *}
+ */
+function bind(scope, fn) {
+    return function () {
+        return fn.apply(scope, arguments);
+    };
+}
+
+
+export {
+    bind
+}</code></pre>
+		</section>
 			</div>
-				<div class="col-md-3 side-content">
-					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
-				</div>
 		</div>
 	</div>
 	<footer>
@@ -174,3 +146,4 @@
 	
 </body>
 </html>
+<!-- end:source.tmpl.hbs -->

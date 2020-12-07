@@ -37,6 +37,7 @@
 								<li class="dropdown">
 									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 									</ul>
 								</li>
@@ -56,6 +57,7 @@
 											<li><a href="module-ThurstonItems-Light.html">ThurstonItems~Light</a></li>
 											<li><a href="module-ThurstonItems-Solid.html">ThurstonItems~Solid</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="VRControls.html">VRControls</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
@@ -104,7 +106,7 @@
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Implements keyboard controls to fly in the geometry using the keyboard.
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Implements controls to fly in the geometry using the keyboard.
 			This is inspired from Three.js
 			<a href="https://threejs.org/docs/#examples/en/controls/FlyControls%20"> FlyControls</a></p></div>
 			</div>			<div class="callout callout-info">
@@ -171,7 +173,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-73">line 73</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-71">line 71</a></p>
 								</div>
 							</div>
 			
@@ -219,7 +221,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-128">line 128</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-126">line 126</a></p>
 								</div>
 							</div>
 			
@@ -263,7 +265,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-145">line 145</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-142">line 142</a></p>
 								</div>
 							</div>
 			
@@ -324,7 +326,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-164">line 164</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-161">line 161</a></p>
 								</div>
 							</div>
 			
@@ -382,7 +384,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-184">line 184</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-181">line 181</a></p>
 								</div>
 							</div>
 			
@@ -419,7 +421,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-200">line 200</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-197">line 197</a></p>
 								</div>
 							</div>
 			
@@ -456,7 +458,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-212">line 212</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-209">line 209</a></p>
 								</div>
 							</div>
 			
@@ -472,10 +474,10 @@
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Produce a function to update the position</p>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Function to update the position</p>
 			<p>Assume that the current position is <code>(g,m)</code> where</p>
 			<ul>
-			<li><code>g</code> is the boost, i.e. subgroups element * local boost</li>
+			<li><code>g</code> is the boost, i.e. subgroup element * local boost</li>
 			<li><code>m</code> is the facing, i.e. an element of O(3)</li>
 			</ul>
 			<p>Denote by <code>a</code> the Matrix4 representing the Three.js camera orientation, understood as an element of O(3) as well.
@@ -530,7 +532,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-245">line 245</a></p>
+									<p class="form-control-static"><a href="keyboardControls.js.html">keyboardControls.js</a>, <a href="keyboardControls.js.html#line-242">line 242</a></p>
 								</div>
 							</div>
 			
@@ -558,7 +560,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 6th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
