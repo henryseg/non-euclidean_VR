@@ -10,13 +10,17 @@
  * - an origin
  * - a reference frame in the tangent space at the origin
  * (see paper)
+ *
+ * @todo Replace rotation matrices by quaternions?
+ * The matrices would then only be computed at the moment they are passed to the shader.
  */
 
 import {
     Vector3,
     Vector4,
     Matrix3,
-    Matrix4, MathUtils
+    Matrix4,
+    MathUtils
 } from "../lib/three.module.js"
 
 import {

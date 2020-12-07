@@ -51,7 +51,7 @@ int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
                 break;
             }
             dist = localSceneSDF(localV, auxHit, auxSolid, auxNormal);
-            if (auxHit == 1) {
+            if (auxHit == HIT_SOLID) {
                 // we hit an object
                 hit = auxHit;
                 solid = auxSolid;
@@ -73,7 +73,7 @@ int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
             break;
         }
         dist = globalSceneSDF(globalV, auxHit, auxSolid, auxNormal);
-        if (auxHit == 1) {
+        if (auxHit == HIT_SOLID) {
             // we hit an object
             hit = auxHit;
             solid = auxSolid;

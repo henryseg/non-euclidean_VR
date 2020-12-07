@@ -14,7 +14,7 @@
  * There are two void object for background and debug
  */
 float localSceneSDF(RelVector v, out int hit, out Solid solid, out RelVector normal){
-    hit = 0;
+    hit = HIT_NOTHING;
     float res = maxDist;
     float dist;
 
@@ -22,7 +22,7 @@ float localSceneSDF(RelVector v, out int hit, out Solid solid, out RelVector nor
         {{#local}}
             dist = {{name}}SDF(v);
             if(abs(dist) < marchingThreshold) {
-                hit = 1;
+                hit = HIT_SOLID;
                 solid = {{name}};
                 normal = {{name}}Grad(v);
                 return dist;
@@ -44,7 +44,7 @@ float localSceneSDF(RelVector v, out int hit, out Solid solid, out RelVector nor
  * There are two void object for background and debug
  */
 float globalSceneSDF(RelVector v, out int hit, out Solid solid, out RelVector normal){
-    hit = 0;
+    hit = HIT_NOTHING;
     float res = maxDist;
     float dist;
 
@@ -52,7 +52,7 @@ float globalSceneSDF(RelVector v, out int hit, out Solid solid, out RelVector no
         {{#global}}
             dist = {{name}}SDF(v);
             if(abs(dist) < marchingThreshold) {
-                hit = 1;
+                hit = HIT_SOLID;
                 solid = {{name}};
                 normal = {{name}}Grad(v);
                 return dist;

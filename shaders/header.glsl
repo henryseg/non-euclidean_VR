@@ -56,3 +56,19 @@ const {{type}} {{name}} = {{value}};
 {{/constants}}
 
 
+/**
+ * Value of hit when we hit nothing.
+ * @const
+ */
+const int HIT_NOTHING = 0;
+/**
+ * Value of hit when we hit a solid.
+ * @const
+ */
+const int HIT_SOLID = 1;
+/**
+ * Value of hit when we hit a bug!
+ * @const
+ */
+const int HIT_DEBUG = -1;
+
