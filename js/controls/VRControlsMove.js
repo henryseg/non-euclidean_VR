@@ -16,24 +16,6 @@ const EPS = 0.000001;
 
 
 /**
- * Compute a rotation matrix sending the source to the target
- * @param {Vector3} source
- * @param {Vector3} target
- */
-Matrix4.prototype.makeRotationFromVectors = function (source, target) {
-    const axis = new Vector3().crossVectors(source, target)
-    if (axis.lengthSq() < EPS) {
-        this.identity();
-    } else {
-        axis.normalize();
-        const angle = Math.acos(source.dot(target));
-        this.makeRotationAxis(axis, angle);
-    }
-    return this;
-}
-
-
-/**
  * @class
  *
  * @classdesc
@@ -43,7 +25,7 @@ Matrix4.prototype.makeRotationFromVectors = function (source, target) {
  * This is inspired from Three.js
  * {@link https://threejs.org/docs/#examples/en/controls/FlyControls | FlyControls}
  */
-class VRControls extends EventDispatcher {
+class VRControlsMove extends EventDispatcher {
 
     /**
      * Constructor
@@ -103,44 +85,21 @@ class VRControls extends EventDispatcher {
     /**
      * Function to update the position
      * @todo Dispatch an event, when the position has sufficiently changed.
-     *
-     * @type {Function}
      */
-    get update() {
-        if (this._update === undefined) {
-            const oldDirection = new Vector();
-
-            this._update = function (delta) {
-                // call the new direction of the controller
-                const newDirection = new Vector();
-                this.controller.getWorldDirection(newDirection);
-                newDirection.normalize();
-
-                if (this._isSelecting) {
-                    // flow if the select button is pressed
-                    const deltaPosition = newDirection
-                        .clone()
-                        .multiplyScalar(-this.movementSpeed * delta)
-                    this.position.flow(deltaPosition);
-                }
-                if (this._isSqueezing) {
-                    // rotate if the squeeze button is pressed
-                    const m = new Matrix4().makeRotationFromVectors(newDirection, oldDirection);
-                    this.position.applyFacing(m);
-                }
-
-                // record the direction for the next call of this.udpate
-                oldDirection.copy(newDirection);
-            }
+    update(delta) {
+        // call the new direction of the controller
+        if (this._isSelecting) {
+            // flow if the select button is pressed
+            const deltaPosition = new Vector();
+            this.controller.getWorldDirection(deltaPosition);
+            deltaPosition
+                .normalize()
+                .multiplyScalar(-this.movementSpeed * delta)
+            this.position.flow(deltaPosition);
         }
-        return this._update;
-
-
     }
-
-
 }
 
 export {
-    VRControls
+    VRControlsMove
 }
