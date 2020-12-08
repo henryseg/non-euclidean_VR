@@ -50,12 +50,16 @@ import {
 } from "./controls/KeyboardControls.js";
 
 import {
-    VRControls
-} from "./controls/VRControls.js";
+    VRControlsMove
+} from "./controls/VRControlsMove.js";
+import {
+    VRControlsDrag
+} from "./controls/VRControlsDrag.js";
 
 import {
     bind
 } from "./utils.js";
+
 
 /**
  * Code for the way a property can be passed to the shader
@@ -309,7 +313,8 @@ class Thurston {
         );
         this._keyboardControls.infos = bind(this, this.infos);
 
-        this._VRControls = new VRControls(this.params.position, this._controller0);
+        this._VRControlsMove = new VRControlsMove(this.params.position, this._controller0);
+        this._VRControlsDrag = new VRControlsDrag(this.params.position, this._controller1);
 
         /**
          * A clock to measure the time between two call of animate
@@ -813,7 +818,8 @@ class Thurston {
     animate() {
         const delta = this._clock.getDelta();
         this._keyboardControls.update(delta);
-        this._VRControls.update(delta);
+        this._VRControlsMove.update(delta);
+        this._VRControlsDrag.update(delta);
         this.chaseCamera();
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);
