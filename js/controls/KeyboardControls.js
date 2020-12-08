@@ -167,6 +167,8 @@ class KeyboardControls extends EventDispatcher {
                     break;
                 default:
                     this._moveState[action] = 1;
+                    this.updateMovementVector();
+                    this.updateRotationVector();
             }
         }
     }
@@ -184,6 +186,8 @@ class KeyboardControls extends EventDispatcher {
                     break;
                 default:
                     this._moveState[action] = 0;
+                    this.updateMovementVector();
+                    this.updateRotationVector();
             }
         }
     }
@@ -238,14 +242,12 @@ class KeyboardControls extends EventDispatcher {
      * @param {number} delta - time delta between two updates
      */
     update(delta) {
-        this.updateMovementVector();
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
             .applyMatrix4(this.camera.matrixWorld);
         this.position.flow(deltaPosition);
 
-        this.updateRotationVector();
         const axis = this._rotationVector
             .clone()
             .applyMatrix4(this.camera.matrixWorld)
