@@ -1,4 +1,4 @@
-import {Matrix4} from "../../lib/three.module.js";
+import {Matrix4, Quaternion} from "../../lib/three.module.js";
 import {Isometry} from "./Isometry.js";
 import {Point} from "./Point.js";
 
@@ -9,7 +9,6 @@ import {Point} from "./Point.js";
  * Location and facing (of the observer, an object, etc).
  *
  * @todo Choose a better name ??
- * @todo Replace the facing matrix by a quaternion (to stay closer to Three.js)?
  */
 class Position {
 
@@ -24,10 +23,19 @@ class Position {
          */
         this.boost = new Isometry();
         /**
-         * The O(3) component of the position.
-         * @type {Matrix4}
+         * The facing.
+         * We represent it as quaternion, whose action by conjugation on R^3 defines an element of O(3)
          */
-        this.facing = new Matrix4();
+        this.quaternion = new Quaternion();
+    }
+
+    /**
+     * The facing as a Matrix4, representing an element of O(3).
+     * This is the data that is actually passed to the shader
+     * @type {Matrix4}
+     */
+    get facing() {
+        return new Matrix4().makeRotationFromQuaternion(this.quaternion);
     }
 
     /**
@@ -42,11 +50,11 @@ class Position {
 
     /**
      * Set the facing part of the position.
-     * @param {Matrix4} facing
+     * @param {Quaternion} quaternion
      * @return {Position} The current position
      */
-    setFacing(facing) {
-        this.facing = facing;
+    setQuaternion(quaternion) {
+        this.quaternion = quaternion;
         return this;
     }
 
@@ -60,21 +68,21 @@ class Position {
     }
 
     /**
-     * Reduce the eventual numerical error of the current facing.
+     * Make the the quaternion has length one.
      * @return {Position} The current position
-     * @todo To be completed
      */
-    reduceErrorFacing() {
+    reduceErrorQuaternion() {
+        this.quaternion.normalize();
         return this;
     }
 
     /**
-     * Reduce the eventual numerical error of the current position.
+     * Reduce the error of the boost part and the quaternion part.
      * @return {Position} The current position
      */
     reduceError() {
         this.reduceErrorBoost();
-        this.reduceErrorFacing();
+        this.reduceErrorQuaternion();
         return this;
     }
 
@@ -98,11 +106,11 @@ class Position {
 
     /**
      * Rotate the facing by `m` (right action of O(3) in the set of positions).
-     * @param {Matrix4} matrix - the facing to apply (in the observer frame)
+     * @param {Quaternion} quaternion - the facing to apply (in the observer frame)
      * @return {Position} The current position
      */
-    applyFacing(matrix) {
-        this.facing.multiply(matrix);
+    applyQuaternion(quaternion) {
+        this.quaternion.multiply(quaternion);
         return this;
     }
 
@@ -113,7 +121,7 @@ class Position {
      */
     multiply(position) {
         this.boost.multiply(position.boost);
-        this.facing.premultiply(position.facing);
+        this.quaternion.premultiply(position.quaternion);
         return this;
     }
 
@@ -124,7 +132,7 @@ class Position {
      */
     premultiply(position) {
         this.boost.premultiply(position.boost);
-        this.facing.multiply(position.facing);
+        this.quaternion.multiply(position.quaternion);
         return this;
     }
 
@@ -136,7 +144,8 @@ class Position {
      */
     getInverse(position) {
         this.boost.getInverse(position.boost);
-        this.facing.getInverse(position.facing);
+        this.quaternion.copy(position.quaternion);
+        this.quaternion.conjugate();
         return this;
     }
 
@@ -184,7 +193,7 @@ class Position {
      * @return {boolean} true if the positions are equal, false otherwise
      */
     equals(position) {
-        return this.boost.equals(position.boost) && this.facing.equals(position.facing);
+        return this.boost.equals(position.boost) && this.quaternion.equals(position.quaternion);
     }
 
     /**
@@ -192,9 +201,9 @@ class Position {
      * @return {Position} The clone of the current position
      */
     clone() {
-        let res = new Position()
-        res.setBoost(this.boost.clone());
-        res.setFacing(this.facing.clone());
+        let res = new Position();
+        res.boost.copy(this.boost);
+        res.quaternion.copy(this.quaternion);
         return res;
     }
 
@@ -205,7 +214,7 @@ class Position {
      */
     copy(position) {
         this.boost.copy(position.boost);
-        this.facing.copy(position.facing);
+        this.quaternion.copy(position.quaternion);
     }
 
     /**

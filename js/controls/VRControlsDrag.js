@@ -1,6 +1,6 @@
 import {
     EventDispatcher,
-    Matrix4,
+    Matrix4, Quaternion,
     Vector3
 } from "../lib/three.module.js";
 
@@ -11,26 +11,6 @@ import {
 import {
     bind
 } from "../utils.js";
-
-const EPS = 0.00000001;
-
-
-/**
- * Compute a rotation matrix sending the source to the target
- * @param {Vector3} source
- * @param {Vector3} target
- */
-Matrix4.prototype.makeRotationFromVectors = function (source, target) {
-    const axis = new Vector3().crossVectors(source, target)
-    if (axis.lengthSq() < EPS) {
-        this.identity();
-    } else {
-        axis.normalize();
-        const angle = Math.acos(source.dot(target));
-        this.makeRotationAxis(axis, angle);
-    }
-    return this;
-}
 
 
 /**
@@ -115,9 +95,8 @@ class VRControlsDrag extends EventDispatcher {
                 newDirection.normalize();
 
                 if (this._isSelecting) {
-                    // rotate if the squeeze button is pressed
-                    const m = new Matrix4().makeRotationFromVectors(newDirection, oldDirection);
-                    this.position.applyFacing(m);
+                    const quaternion = new Quaternion().setFromUnitVectors(newDirection, oldDirection).normalize();
+                    this.position.applyQuaternion(quaternion);
                 }
 
                 // record the direction for the next call of this.udpate

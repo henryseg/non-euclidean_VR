@@ -57,11 +57,7 @@ import {
 } from "./utils.js";
 
 
-
 import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
-
-// loading the polyfill if WebXR is not supported
-const polyfill = new WebXRPolyfill.default();
 
 
 /**
@@ -213,6 +209,8 @@ class Thurston {
      * @todo If a subgroup is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
+        // loading the polyfill if WebXR is not supported
+        const polyfill = new WebXRPolyfill.default();
 
         /**
          * The underlying geometry
@@ -349,7 +347,7 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        console.log(this.params.position.local.facing.toLog(), this.params.position.local.boost.matrix.toLog());
+
     }
 
     /**
@@ -519,7 +517,7 @@ class Thurston {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
         this._renderer.xr.enabled = true;
         this._renderer.xr.setReferenceSpaceType('local');
-        this._renderer.setClearColor(new Color(0,0,1),1);
+        this._renderer.setClearColor(new Color(0, 0, 1), 1);
         document.body.appendChild(this._renderer.domElement);
         document.body.appendChild(VRButton.createButton(this._renderer));
 

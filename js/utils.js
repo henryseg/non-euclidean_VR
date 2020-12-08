@@ -2,8 +2,19 @@ import {
     Vector3,
     Vector4,
     Matrix3,
-    Matrix4
+    Matrix4,
+    Quaternion
 } from "./lib/three.module.js"
+
+
+/**
+ * Add a method to Three.js Quaternion.
+ * Return a human-readable version of the vector (for debugging purpose)
+ * @return {string}
+ */
+Quaternion.prototype.toLog = function () {
+    return `[${this.x}, ${this.y}, ${this.z}, ${this.w}]`
+}
 
 
 /**

@@ -1,6 +1,6 @@
 import {
     EventDispatcher,
-    Matrix4,
+    Quaternion,
 } from "../lib/three.module.js";
 
 import {
@@ -242,24 +242,21 @@ class KeyboardControls extends EventDispatcher {
      * @param {number} delta - time delta between two updates
      */
     update(delta) {
+        // Somehow, in VR mode, the cameras' quaternion is not updated.
+        // Thus we use the cameras' matrixWorld for our computations.
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
             .applyMatrix4(this.camera.matrixWorld);
         this.position.flow(deltaPosition);
 
-        if(this._rotationVector.lengthSq() > 0.1) {
-          // if the rotation vector is zero (no keypressed)
-          // none of the computation bellow makes sense !
-          const axis = this._rotationVector
-              .clone()
-              .applyMatrix4(this.camera.matrixWorld)
-              .normalize();
-          const angle = 0.5 * this.rollSpeed * delta;
-          const m = new Matrix4().makeRotationAxis(axis, angle);
-          console.log(m.toLog());
-          this.position.applyFacing(m);
-        }
+        const deltaRotation = this._rotationVector
+            .clone()
+            .multiplyScalar(this.movementSpeed * delta)
+            .applyMatrix4(this.camera.matrixWorld);
+        const quaternion = new Quaternion(deltaRotation.x, deltaRotation.y, deltaRotation.z, 1).normalize();
+        this.position.applyQuaternion(quaternion);
+
 
         // if (false) {
         //     this.dispatchEvent(CHANGE_EVENT);

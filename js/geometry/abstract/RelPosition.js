@@ -119,11 +119,11 @@ class RelPosition {
 
     /**
      * Rotate the facing by `m` (right action of O(3) in the set of positions).
-     * @param {Matrix4} matrix - An isometry of the tangent space at the origin, i.e. a matrix in O(3).
+     * @param {Quaternion} quaternion - An isometry of the tangent space at the origin, i.e. a matrix in O(3).
      * @return {RelPosition} the updated version of the current Position
      */
-    applyFacing(matrix) {
-        this.local.applyFacing(matrix);
+    applyQuaternion(quaternion) {
+        this.local.applyQuaternion(quaternion);
         return this;
     }
 

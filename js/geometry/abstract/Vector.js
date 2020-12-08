@@ -44,7 +44,7 @@ class Vector extends Vector3 {
      * @return {Vector} The current vector
      */
     applyFacing(position) {
-        this.applyMatrix4(position.facing);
+        this.applyQuaternion(position.quaternion);
         return this;
     }
 }
