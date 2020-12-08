@@ -7,6 +7,10 @@
 
 import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
 
+// loading the polyfill if WebXR is not supported
+const polyfill = new WebXRPolyfill.default();
+
+
 import {
     WebGLRenderer,
     Scene,
@@ -202,8 +206,6 @@ class Thurston {
      * @todo If a subgroup is not provided use the trivial one.
      */
     constructor(geom, subgroup, params = {}) {
-        // loading the polyfill if WebXR is not supported
-        const polyfill = new WebXRPolyfill.default();
 
         /**
          * The underlying geometry
