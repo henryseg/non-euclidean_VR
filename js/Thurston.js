@@ -810,7 +810,7 @@ class Thurston {
      */
     animate() {
         const delta = this._clock.getDelta();
-        //this._keyboardControls.update(delta);
+        this._keyboardControls.update(delta);
         this._VRControlsMove.update(delta);
         this._VRControlsDrag.update(delta);
         this.chaseCamera();
