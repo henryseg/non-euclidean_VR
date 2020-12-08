@@ -5,11 +5,6 @@
  * Module used to define and render a scene in one of the eight Thurston geometries.
  */
 
-import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
-
-// loading the polyfill if WebXR is not supported
-const polyfill = new WebXRPolyfill.default();
-
 
 import {
     WebGLRenderer,
@@ -20,6 +15,7 @@ import {
     Mesh,
     Clock,
     Vector3,
+    Color
 } from "./lib/three.module.js";
 
 import {
@@ -59,6 +55,13 @@ import {
 import {
     bind
 } from "./utils.js";
+
+
+
+import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
+
+// loading the polyfill if WebXR is not supported
+const polyfill = new WebXRPolyfill.default();
 
 
 /**
@@ -346,18 +349,7 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        const p1 = new Vector3();
-        const p2 = new Vector3();
-        if (this._renderer.xr.isPresenting) {
-            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
-            camerasVR[0].getWorldPosition(p1);
-            camerasVR[1].getWorldPosition(p2);
-            console.log("VR", p1.toLog(), p2.toLog());
-            console.log(camerasVR);
-        } else {
-            this._camera.getWorldPosition(p1);
-            console.log("No VR", p1.toLog());
-        }
+        console.log(this.params.position.local.facing.toLog(), this.params.position.local.boost.matrix.toLog());
     }
 
     /**
@@ -527,6 +519,7 @@ class Thurston {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
         this._renderer.xr.enabled = true;
         this._renderer.xr.setReferenceSpaceType('local');
+        this._renderer.setClearColor(new Color(0,0,1),1);
         document.body.appendChild(this._renderer.domElement);
         document.body.appendChild(VRButton.createButton(this._renderer));
 
@@ -534,7 +527,7 @@ class Thurston {
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.00001,
+            0.01,
             2000
         );
         this._camera.position.set(0, 0, 0);
@@ -723,7 +716,7 @@ class Thurston {
                 fShader = fShader + mustache.render(template, shader.data);
             }
         }
-        console.log(fShader);
+        //console.log(fShader);
 
         return fShader;
     }
@@ -737,7 +730,7 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(500, 60, 40);
+        const geometry = new SphereBufferGeometry(1000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
         const materialLeft = new ShaderMaterial({
@@ -817,10 +810,11 @@ class Thurston {
      */
     animate() {
         const delta = this._clock.getDelta();
-        this._keyboardControls.update(delta);
+        //this._keyboardControls.update(delta);
         this._VRControlsMove.update(delta);
         this._VRControlsDrag.update(delta);
         this.chaseCamera();
+
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);
         this.stats.update();

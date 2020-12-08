@@ -12,7 +12,7 @@ import {
     bind
 } from "../utils.js";
 
-const EPS = 0.000001;
+const EPS = 0.00000001;
 
 
 /**
