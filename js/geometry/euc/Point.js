@@ -8,13 +8,6 @@ Point.prototype.build = function () {
     } else {
         this.coords = new Vector4(...arguments);
     }
-
-};
-
-Point.prototype.set = function (data) {
-    //console.log("data set", data[0]);
-    this.coords.copy(data[0]);
-    return this;
 };
 
 Point.prototype.applyIsometry = function (isom) {
@@ -28,7 +21,7 @@ Point.prototype.equals = function (point) {
 
 Point.prototype.clone = function () {
     let res = new Point()
-    res.set([this.coords.clone()]);
+    res.coords.copy(this.coords);
     return res;
 };
 

@@ -1,7 +1,6 @@
 import {
     EventDispatcher,
-    Matrix4, Quaternion,
-    Vector3
+    Quaternion,
 } from "../lib/three.module.js";
 
 import {

@@ -254,6 +254,9 @@ class KeyboardControls extends EventDispatcher {
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
             .applyMatrix4(this.camera.matrixWorld);
+        // the parameter delta is assumed to be very small
+        // in this way, so is the corresponding rotation angle
+        // this explains why the w-coordinate of the quaternion is not zero.
         const quaternion = new Quaternion(deltaRotation.x, deltaRotation.y, deltaRotation.z, 1).normalize();
         this.position.applyQuaternion(quaternion);
 

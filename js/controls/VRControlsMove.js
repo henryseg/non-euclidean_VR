@@ -1,7 +1,5 @@
 import {
     EventDispatcher,
-    Matrix4,
-    Vector3
 } from "../lib/three.module.js";
 
 import {

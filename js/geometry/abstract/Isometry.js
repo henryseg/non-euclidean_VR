@@ -6,7 +6,6 @@
  */
 class Isometry {
 
-
     /**
      * Constructor.
      * Since the constructor is different for each geometry, it delegates the task to the method `build`
@@ -26,16 +25,6 @@ class Isometry {
      * @abstract
      */
     build() {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
-     * Set the current isometry with the given data.
-     * @abstract
-     * @param data - the input data (depends on the geometry)
-     * @return {Isometry} The current isometry
-     */
-    set(data) {
         throw new Error("This method need be overloaded.");
     }
 
@@ -69,13 +58,12 @@ class Isometry {
     }
 
     /**
-     * Set the current isometry to the inverse of `isom`.
-     * @abstract
-     * @param {Isometry} isom - the isometry to invert
-     * @return {Isometry} The current isometry
+     * Invert the current isometry
+     *
      */
-    getInverse(isom) {
-        throw new Error("This method need be overloaded.");
+    invert() {
+        this.matrix.invert();
+        return this;
     }
 
     /**

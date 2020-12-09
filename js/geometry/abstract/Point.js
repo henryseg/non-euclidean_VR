@@ -12,7 +12,7 @@ class Point {
      * Same remark as for isometries.
      */
     constructor(...args) {
-        this.build(...args)
+        this.build(...args);
     }
 
     /**
@@ -21,16 +21,6 @@ class Point {
      * @abstract
      */
     build() {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
-     * Update the current point with the given data.
-     * @abstract
-     * @param data - the input data (depends on the geometry)
-     * @return {Point} The current point
-     */
-    set(data) {
         throw new Error("This method need be overloaded.");
     }
 

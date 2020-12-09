@@ -6,11 +6,6 @@ Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
 }
 
-Isometry.prototype.set = function (data) {
-    this.matrix = data[0].clone();
-    return this;
-};
-
 Isometry.prototype.reduceError = function () {
     return this;
 };
@@ -25,8 +20,8 @@ Isometry.prototype.premultiply = function (isom) {
     return this;
 };
 
-Isometry.prototype.getInverse = function (isom) {
-    this.matrix.getInverse(isom.matrix);
+Isometry.prototype.invert = function () {
+    this.matrix.invert();
     return this;
 };
 
@@ -42,7 +37,7 @@ Isometry.prototype.makeTranslation = function (point) {
 };
 
 Isometry.prototype.makeInvTranslation = function (point) {
-    [x, y, z,] = point.coords;
+    const [x, y, z,] = point.coords.toArray();
     this.matrix.set(
         1, 0, 0, -x,
         0, 1, 0, -y,
@@ -53,12 +48,12 @@ Isometry.prototype.makeInvTranslation = function (point) {
 };
 
 Isometry.prototype.equals = function (isom) {
-    return this.matrix.equals(this.isom);
+    return this.matrix.equals(isom.matrix);
 };
 
 Isometry.prototype.clone = function () {
     let res = new Isometry();
-    res.set([this.matrix.clone()]);
+    res.matrix.copy(this.matrix);
     return res;
 };
 
