@@ -89,6 +89,16 @@ class Isometry {
     }
 
     /**
+     * Return a preferred isometry sending the origin to the image of v by the exponential map.
+     * @abstract
+     * @param {Vector} vec - the vector in the tangent space
+     * @return {Isometry} The current isometry
+     */
+    makeTranslationFromDir(vec) {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
      * Check if the current isometry and `isom` are the same.
      * Mainly for debugging purposes.
      * @abstract

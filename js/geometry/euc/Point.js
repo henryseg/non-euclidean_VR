@@ -25,7 +25,7 @@ Point.prototype.reduceError = function () {
 }
 
 Point.prototype.clone = function () {
-    let res = new Point()
+    let res = new Point();
     res.coords.copy(this.coords);
     return res;
 };

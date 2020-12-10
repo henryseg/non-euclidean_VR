@@ -10,8 +10,14 @@ Point.prototype.build = function () {
     }
 };
 
+Point.prototype.reduceError = function () {
+    this.coords.normalize();
+    return this;
+};
+
 Point.prototype.applyIsometry = function (isom) {
-    this.coords.applyMatrix4(isom.matrix)
+    this.coords.applyMatrix4(isom.matrix);
+    this.reduceError();
     return this;
 };
 
@@ -20,7 +26,7 @@ Point.prototype.equals = function (point) {
 };
 
 Point.prototype.clone = function () {
-    let res = new Point()
+    let res = new Point();
     res.coords.copy(this.coords);
     return res;
 };

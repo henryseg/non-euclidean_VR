@@ -47,6 +47,17 @@ Isometry.prototype.makeInvTranslation = function (point) {
     return this;
 };
 
+Isometry.prototype.makeTranslationFromDir = function (vec) {
+    const [x, y, z] = vec.toArray();
+    this.matrix.set(
+        1, 0, 0, x,
+        0, 1, 0, y,
+        0, 0, 1, z,
+        0, 0, 0, 1,
+    )
+    return this;
+}
+
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
