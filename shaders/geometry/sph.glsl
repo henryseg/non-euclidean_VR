@@ -1,7 +1,11 @@
 /***********************************************************************************************************************
  * @file
- * Implementation of the euclidean geometry
+ * This file is a model to impletement other geometries.
+ * The content of the structures can be customized.
+ * The signatures and the roles of each method need to be implemented strictly.
  **********************************************************************************************************************/
+
+
 
 /***********************************************************************************************************************
  *
@@ -10,7 +14,7 @@
  *
  **********************************************************************************************************************/
 struct Isometry{
-  mat4 matrix;
+    mat4 matrix;
 };
 
 /**
@@ -20,25 +24,23 @@ const Isometry IDENTITY = Isometry(mat4(1.)); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
- * @todo to be written
  */
 Isometry reduceError(Isometry isom){
-  return isom;
+    return isom;
 }
 
 /**
  * Multiply the two given isometries.
  */
 Isometry multiply(Isometry isom1, Isometry isom2) {
-  return Isometry(isom1.matrix * isom2.matrix);
+    return Isometry(isom1.matrix * isom2.matrix);
 }
 
 /**
  * Return the inverse of the given isometry.
  */
 Isometry geomInverse(Isometry isom) {
-  mat4 inv = inverse(isom.matrix);
-  return Isometry(inv);
+    return Isometry(inverse(isom.matrix));
 }
 
 /***********************************************************************************************************************
@@ -48,26 +50,26 @@ Isometry geomInverse(Isometry isom) {
  *
  **********************************************************************************************************************/
 struct Point{
-  vec4 coords;
+    vec4 coords;
 };
 
 
-const Point ORIGIN = Point(vec4(0,0,0,1));/**< Origin of the geometry */
-
+const Point ORIGIN = Point(vec4(0, 0, 0, 1)); /**< Origin of the geometry */
 
 /**
  * Reduce the eventual numerical errors of the given point.
  */
 Point reduceError(Point p){
-  return p;
+    return Point(normalize(p.coords));
 }
 
 /**
  * Translate the point by the isometry.
  */
 Point applyIsometry(Isometry isom, Point p) {
-  vec4 coords = isom.matrix * p.coords;
-  return Point(coords);
+    vec4 coords = isom.matrix * p.coords;
+    Point res = Point(coords);
+    return reduceError(res);
 }
 
 /**
@@ -76,14 +78,23 @@ Point applyIsometry(Isometry isom, Point p) {
  */
 
 Isometry makeTranslation(Point p) {
-  vec4 c = p.coords;
-  mat4 matrix =  mat4(
-    1, 0., 0., 0.,
-    0., 1, 0., 0.,
-    0., 0., 1., 0,
-    c.x, c.y, c.z, 1.
+    mat4 res = mat4(1.);
+    vec3 u = p.coords.xyz;
+    float c1 = length(u);
+    if (c1 == 0) {
+        return Isometry(res);
+    }
+
+    float c2 = 1 - p.coords.w;
+    u = normalize(u);
+    mat4 m = mat4(
+    0, 0, 0, -u.x,
+    0, 0, 0, -u.y,
+    0, 0, 0, -u.z,
+    u.x, u.y, u.z, 0
     );
-    return Isometry(matrix);
+    res = res + c1 * m + c2 * m * m;
+    return Isometry(res);
 }
 
 /**
@@ -91,14 +102,8 @@ Isometry makeTranslation(Point p) {
  * Previously `makeInvLeftTranslation`.
  */
 Isometry makeInvTranslation(Point p) {
-  vec4 c = p.coords;
-  mat4 matrix =  mat4(
-    1, 0., 0., 0.,
-    0., 1, 0., 0.,
-    0., 0., 1., 0,
-    -c.x, -c.y, -c.z, 1.
-    );
-    return Isometry(matrix);
+    Isometry isom = makeTranslation(p);
+    return geomInverse(isom);
 }
 
 /***********************************************************************************************************************
@@ -109,15 +114,16 @@ Isometry makeInvTranslation(Point p) {
  *
  **********************************************************************************************************************/
 struct Vector{
-    Point pos;///< Underlying point
-    vec4 dir;///< Direction of the vector
+    Point pos; /**< Underlying point */
+    vec4 dir; /**< direction of the vector */
 };
+
 
 /**
  * Reduce the eventual numerical errors of the given vector.
  */
 Vector reduceError(Vector v){
-  return v;
+    return Vector(reduceError(v.pos), v.dir);
 }
 
 /**
@@ -125,7 +131,7 @@ Vector reduceError(Vector v){
  * @return @f$ v_1 + v_2 @f$
  */
 Vector add(Vector v1, Vector v2){
-  return Vector(v1.pos, v1.dir + v2.dir);
+    return Vector(v1.pos, v1.dir + v2.dir);
 }
 
 /**
@@ -133,7 +139,7 @@ Vector add(Vector v1, Vector v2){
  * @return @f$ v_1 - v_2 @f$
  */
 Vector sub(Vector v1, Vector v2){
-  return Vector(v1.pos, v1.dir - v2.dir);
+    return Vector(v1.pos, v1.dir - v2.dir);
 }
 
 /**
@@ -142,37 +148,39 @@ Vector sub(Vector v1, Vector v2){
  * @return @f$ s v @f$
  */
 Vector multiplyScalar(float s, Vector v){
-  return Vector(v.pos, s * v.dir);
+    return Vector(v.pos, s * v.dir);
 }
-
 
 /**
  * Return the dot product of the two vectors (with respect to the metric tensor).
  * Previouly `tangDot`.
  */
 float geomDot(Vector v1, Vector v2) {
-  return dot(v1.dir, v2.dir);
+    return dot(v1.dir, v2.dir);
 }
-
 
 /**
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-  Point p = applyIsometry(isom, v.pos);
-  return Vector(p, isom.matrix * v.dir);
+    Point p = applyIsometry(isom, v.pos);
+    return Vector(p, isom.matrix * v.dir);
 }
 
 
 /**
- * Rotation the given vector by a matrix representing an element of O(3).
+ * Rotate the given vector by a matrix representing an element of O(3).
  * @param[in] m an isometry of the tangent space. The matrix is written in the reference frame at the orign
  * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
-  return Vector(v.pos, m * v.dir);
+    return Vector(v.pos, m * v.dir);
 }
 
+/**
+ * Maybe this part should be moved after some commons are defined
+ * so that we can use geomNormalize()
+ */
 
 /**
  * Section of the frame bundle.
@@ -183,19 +191,29 @@ Vector applyFacing(mat4 m, Vector v) {
  * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] frame){
-  frame[0] = Vector(p, vec4(1,0,0,0));
-  frame[1] = Vector(p, vec4(0,1,0,0));
-  frame[2] = Vector(p, vec4(0,0,1,0));
+    vec4 dir0 = vec4(p.coords.w, 0, 0, -p.coords.x);
+    vec4 dir1 = vec4(0, p.coords.w, 0, -p.coords.y);
+    vec4 dir2 = vec4(0, 0, p.coords.x, -p.coords.z);
+    dir0 = normalize(dir0);
+    dir1 = normalize(dir1);
+    dir2 = normalize(dir2);
+    frame[0] = Vector(p, dir0);
+    frame[1] = Vector(p, dir1);
+    frame[2] = Vector(p, dir2);
 }
+
 
 /**
  * Compute (an approximation of) the point obtained from `p` by moving the given direction.
  * @param[in] p initial point.
- * @param[in] dp the coordinate of the direction with respect to the frame provided by frame()
+ * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
  */
 Point smallShift(Point p, vec3 dp){
-  vec4 aux = vec4(dp,0);
-  return Point(p.coords + aux);
+    Vector[3] frame;
+    frame(p, frame);
+    vec4 coords = p.coords + dp[0] * frame[0].dir + dp[1] * frame[1].dir + dp[2] * frame[2].dir;
+    Point res = Point(coords);
+    return reduceError(res);
 }
 
 
@@ -204,7 +222,9 @@ Point smallShift(Point p, vec3 dp){
  * The vector `v` is assume to be a **unit** vector
  */
 Vector flow(Vector v, float t){
-  vec4 coords = v.pos.coords + t * v.dir;
-  Point p = Point(coords);
-  return Vector(p, v.dir);
+    vec4 coords = cos(t) * v.pos.coords + sin(t) * v.dir;
+    Point pos = Point(coords);
+    vec4 dir = -sin(t) * v.pos.coords + cos(t) * v.dir;
+    return Vector(pos,dir);
 }
+

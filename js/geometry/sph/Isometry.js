@@ -1,5 +1,5 @@
 import {Isometry} from "../abstract/Isometry.js";
-import {Matrix4} from "../../lib/three.module.js";
+import {Matrix4, Vector3} from "../../lib/three.module.js";
 
 
 Isometry.prototype.build = function () {
@@ -26,24 +26,35 @@ Isometry.prototype.invert = function () {
 };
 
 Isometry.prototype.makeTranslation = function (point) {
-    const [x, y, z,] = point.coords.toArray();
-    this.matrix.set(
-        1, 0, 0, x,
-        0, 1, 0, y,
-        0, 0, 1, z,
-        0, 0, 0, 1,
-    )
+    this.matrix.identity();
+    const [x, y, z, w] = point.coords.toArray();
+    const u = new Vector3(x, y, z);
+    const c1 = u.length();
+
+    if (c1 === 0) {
+        return this;
+    }
+
+    const c2 = 1 - w;
+    u.normalize();
+    const m = new Matrix4().set(
+        0, 0, 0, u.x,
+        0, 0, 0, u.y,
+        0, 0, 0, u.z,
+        -u.x, -u.y, -u.z, 0
+    );
+    const m2 = m.clone().multiply(m);
+    m.multiplyScalar(c1);
+    this.matrix.add(m);
+    m2.multiplyScalar(c2);
+    this.matrix.add(m2);
+
     return this;
 };
 
 Isometry.prototype.makeInvTranslation = function (point) {
-    const [x, y, z,] = point.coords.toArray();
-    this.matrix.set(
-        1, 0, 0, -x,
-        0, 1, 0, -y,
-        0, 0, 1, -z,
-        0, 0, 0, 1,
-    )
+    this.makeTranslation(point);
+    this.invert();
     return this;
 };
 
@@ -51,7 +62,7 @@ Isometry.prototype.makeInvTranslation = function (point) {
 Isometry.prototype.makeTranslationFromDir = function (vec) {
     this.matrix.identity();
     const t = vec.length();
-    if(t === 0) {
+    if (t === 0) {
         return this;
     }
 
@@ -67,9 +78,8 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
     const m2 = m.clone().multiply(m);
     m.multiplyScalar(c1);
     this.matrix.add(m);
-
-
-
+    m2.multiplyScalar(c2);
+    this.matrix.add(m2);
 
     return this;
 };
