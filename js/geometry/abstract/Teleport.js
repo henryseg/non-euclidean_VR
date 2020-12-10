@@ -38,7 +38,7 @@ class Teleport {
          */
         this.inv = undefined;
         if (inv === undefined) {
-            this.inv = new Isometry().getInverse(isom);
+            this.inv = isom.clone().invert();
         } else {
             this.inv = inv;
         }

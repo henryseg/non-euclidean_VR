@@ -14,13 +14,11 @@ import {
 import * as geom from "./geometry/euc/General.js";
 import {Ball, BallComplement, PointLight} from "./items/euc/Library.js";
 import {
-    torusSubgroup
-} from "./subgroups/euc/torus.js";
+    torus
+} from "./geometry/euc/subgroups/torus.js";
 
 
-
-
-const thurston = new Thurston(geom, torusSubgroup, {keyboard: 'fr'});
+const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
 
 const ball0 = new BallComplement(
     new geom.Point(0, 0, 0),

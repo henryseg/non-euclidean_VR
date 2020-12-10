@@ -137,14 +137,12 @@ class Position {
     }
 
     /**
-     * Set the current position with the inverse of the given position
+     * Set the current position to its inverse
      * @deprecated Not sure this is really needed
-     * @param {Position} position
      * @return {Position} The current position
      */
-    getInverse(position) {
-        this.boost.getInverse(position.boost);
-        this.quaternion.copy(position.quaternion);
+    invert() {
+        this.boost.invert();
         this.quaternion.conjugate();
         return this;
     }

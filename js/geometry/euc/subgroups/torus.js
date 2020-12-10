@@ -3,7 +3,7 @@ import {
     Isometry,
     Teleport,
     Subgroup
-} from "../../geometry/euc/General.js";
+} from "../General.js";
 
 
 const cubeHalfWidth = 0.5;
@@ -46,7 +46,7 @@ const teleportYn = new Teleport(testYn, shiftYn, shiftYp);
 const teleportZp = new Teleport(testZp, shiftZp, shiftZn);
 const teleportZn = new Teleport(testZn, shiftZn, shiftZp);
 
-const torusSubgroup = new Subgroup([
+const torus = new Subgroup([
     teleportXp,
     teleportXn,
     teleportYp,
@@ -56,5 +56,5 @@ const torusSubgroup = new Subgroup([
 ], "shaders/subgroups/euc/torus.xml");
 
 export {
-    torusSubgroup
+    torus
 }
