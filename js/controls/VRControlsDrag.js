@@ -86,20 +86,38 @@ class VRControlsDrag extends EventDispatcher {
     get update() {
         if (this._update === undefined) {
             const oldDirection = new Vector();
+            const newDirection = new Vector();
+            const skip = 5;
+            let count = 0;
+            let progress = 0;
 
             this._update = function (delta) {
                 // call the new direction of the controller
-                const newDirection = new Vector();
-                this.controller.getWorldDirection(newDirection);
-                newDirection.normalize();
 
-                if (this._isSelecting) {
-                    const quaternion = new Quaternion().setFromUnitVectors(newDirection, oldDirection).normalize();
+                if(count === 0) {
+                  this.controller.getWorldDirection(newDirection);
+                  newDirection.normalize();
+                  if(progress === 0) {
+                    progress = 1;
+                  }
+                }
+
+                if(progress === 2 && this._isSelecting) {
+                    const vec1 = new Vector().lerpVectors(oldDirection, newDirection, count/skip).normalize();
+                    const vec2 = new Vector().lerpVectors(oldDirection, newDirection, (count+1)/skip).normalize();
+                    const quaternion = new Quaternion().setFromUnitVectors(vec2, vec1).normalize();
                     this.position.applyQuaternion(quaternion);
                 }
 
-                // record the direction for the next call of this.udpate
-                oldDirection.copy(newDirection);
+                if (count === 0 && progress > 0) {
+                  oldDirection.copy(newDirection);
+                  if(progress === 1) {
+                    progress = 2;
+                  }
+                }
+
+                count = (count+1) % skip;
+
             }
         }
         return this._update;
