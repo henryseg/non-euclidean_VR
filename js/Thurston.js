@@ -814,18 +814,6 @@ class Thurston {
         this.chaseCamera();
 
         this.params.eyePosition = this.getEyePositions();
-        if (this._renderer.xr.isPresenting) {
-            this._renderer.xr.isPresenting = false;
-
-            this._renderer.setFramebuffer(null);
-            this._renderer.setRenderTarget(this._renderer.getRenderTarget()); // Hack #15830
-
-            this._renderer.clear();
-            this._renderer.render(this._scene, this._camera);
-
-            this._renderer.xr.isPresenting = true;
-        }
-
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }
