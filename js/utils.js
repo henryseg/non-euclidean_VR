@@ -115,6 +115,19 @@ Matrix4.prototype.toGLSL = function () {
     return `mat4(${this.toArray()})`;
 };
 
+/**
+ * A a method to Three.js Matrix4
+ * Addition of matrices
+ * @param {Matrix4} matrix - the matrix to add
+ * @returns {Matrix4} - the current matrix
+ */
+Matrix4.prototype.add = function (matrix) {
+    // addition of tow 4x4 matrices
+    this.set.apply(this, [].map.call(this.elements, function (c, i) {
+        return c + matrix.elements[i];
+    }));
+    return this;
+};
 
 /**
  * Transform a method attached to an object into a function.

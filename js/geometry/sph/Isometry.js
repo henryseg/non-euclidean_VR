@@ -47,6 +47,33 @@ Isometry.prototype.makeInvTranslation = function (point) {
     return this;
 };
 
+
+Isometry.prototype.makeTranslationFromDir = function (vec) {
+    this.matrix.identity();
+    const t = vec.length();
+    if(t === 0) {
+        return this;
+    }
+
+    const u = vec.clone().normalize();
+    const c1 = Math.sin(t);
+    const c2 = 1 - Math.cos(t);
+    const m = new Matrix4().set(
+        0, 0, 0, u.x,
+        0, 0, 0, u.y,
+        0, 0, 0, u.z,
+        -u.x, -u.y, -u.z, 0
+    );
+    const m2 = m.clone().multiply(m);
+    m.multiplyScalar(c1);
+    this.matrix.add(m);
+
+
+
+
+    return this;
+};
+
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
