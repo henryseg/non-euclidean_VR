@@ -19,11 +19,6 @@ Point.prototype.equals = function (point) {
     return this.coords.equals(point.coords)
 };
 
-
-Point.prototype.reduceError = function () {
-    return this;
-}
-
 Point.prototype.clone = function () {
     let res = new Point()
     res.coords.copy(this.coords);

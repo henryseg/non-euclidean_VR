@@ -35,6 +35,15 @@ class Point {
     }
 
     /**
+     * Reduce possible errors
+     * @abstract
+     * @return {Point} The current point
+     */
+    reduceError() {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
      * Check if the current point and `point ` are the same.
      * Mainly for debugging purposes.
      * @abstract
