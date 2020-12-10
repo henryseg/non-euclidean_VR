@@ -85,39 +85,37 @@ class VRControlsDrag extends EventDispatcher {
      */
     get update() {
         if (this._update === undefined) {
-            const oldDirection = new Vector();
-            const newDirection = new Vector();
-            const skip = 5;
-            let count = 0;
-            let progress = 0;
+            const n = 10;
+            const avgDirection0 = new Vector();
+            const avgDirection1 = new Vector();
+            const directions = [];
+            let i = 0;
+            let start = false;
 
             this._update = function (delta) {
                 // call the new direction of the controller
+                const newDirection = new Vector();
+                this.controller.getWorldDirection(newDirection);
+                newDirection.normalize().multiplyScalar(1 / n);
 
-                if(count === 0) {
-                  this.controller.getWorldDirection(newDirection);
-                  newDirection.normalize();
-                  if(progress === 0) {
-                    progress = 1;
-                  }
+                avgDirection1.add(newDirection);
+                if (start) {
+                    avgDirection1.sub(directions[i]);
                 }
+                directions[i] = newDirection;
 
-                if(progress === 2 && this._isSelecting) {
-                    const vec1 = new Vector().lerpVectors(oldDirection, newDirection, count/skip).normalize();
-                    const vec2 = new Vector().lerpVectors(oldDirection, newDirection, (count+1)/skip).normalize();
-                    const quaternion = new Quaternion().setFromUnitVectors(vec2, vec1).normalize();
+                if (start) {
+                    const target = avgDirection1.clone().normalize();
+                    const source = avgDirection0.clone().normalize();
+                    const quaternion = new Quaternion().setFromUnitVectors(target, source).normalize();
                     this.position.applyQuaternion(quaternion);
                 }
 
-                if (count === 0 && progress > 0) {
-                  oldDirection.copy(newDirection);
-                  if(progress === 1) {
-                    progress = 2;
-                  }
+                avgDirection0.copy(avgDirection1);
+                i = (i + 1) % n;
+                if(i === 0){
+                    start = true;
                 }
-
-                count = (count+1) % skip;
-
             }
         }
         return this._update;
