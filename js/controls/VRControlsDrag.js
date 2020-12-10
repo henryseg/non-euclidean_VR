@@ -88,34 +88,36 @@ class VRControlsDrag extends EventDispatcher {
             const n = 10;
             const avgDirection0 = new Vector();
             const avgDirection1 = new Vector();
-            const directions = [];
+            let directions = [];
             let i = 0;
             let start = false;
 
             this._update = function (delta) {
                 // call the new direction of the controller
-                const newDirection = new Vector();
-                this.controller.getWorldDirection(newDirection);
-                newDirection.normalize().multiplyScalar(1 / n);
 
-                avgDirection1.add(newDirection);
-                if (start) {
-                    avgDirection1.sub(directions[i]);
-                }
-                directions[i] = newDirection;
+                  const newDirection = new Vector();
+                  this.controller.getWorldDirection(newDirection);
+                  newDirection.normalize().multiplyScalar(1 / n);
 
-                if (start) {
-                    const target = avgDirection1.clone().normalize();
-                    const source = avgDirection0.clone().normalize();
-                    const quaternion = new Quaternion().setFromUnitVectors(target, source).normalize();
-                    this.position.applyQuaternion(quaternion);
-                }
+                  avgDirection1.add(newDirection);
+                  if (start) {
+                      avgDirection1.sub(directions[i]);
+                  }
+                  directions[i] = newDirection;
 
-                avgDirection0.copy(avgDirection1);
-                i = (i + 1) % n;
-                if(i === 0){
-                    start = true;
-                }
+                  if (start && this._isSelecting) {
+                      const target = avgDirection1.clone().normalize();
+                      const source = avgDirection0.clone().normalize();
+                      const quaternion = new Quaternion().setFromUnitVectors(target, source).normalize();
+                      this.position.applyQuaternion(quaternion);
+                  }
+
+                  avgDirection0.copy(avgDirection1);
+                  i = (i + 1) % n;
+                  if(i === 0){
+                      start = true;
+                  }
+
             }
         }
         return this._update;
