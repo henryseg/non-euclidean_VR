@@ -139,7 +139,7 @@ Vector applyFacing(mat4 m, Vector v) { }
  * @todo Not completely convinced by this - and the function createVector() and smallShift().
  * If you know a better way to do it…
  */
-void frame(Point p, out Vector[3] frame){ }
+void frame(Point p, out Vector[3] f){ }
 
 
 /**

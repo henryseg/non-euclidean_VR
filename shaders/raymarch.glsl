@@ -68,6 +68,11 @@ int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
 
     //global scene
     for (int i=0; i < maxMarchingSteps; i++){
+//        if(i==0){
+//            hit = HIT_DEBUG;
+//            debugColor = abs(globalV.local.dir.xyz);
+//            break;
+//        }
         if (globalDepth > localDepth || globalDepth > maxDist){
             // we reached the maximal distance
             break;
@@ -75,6 +80,7 @@ int raymarch(inout RelVector v, out Solid solid, out RelVector normal){
         dist = globalSceneSDF(globalV, auxHit, auxSolid, auxNormal);
         if (auxHit == HIT_SOLID) {
             // we hit an object
+//            hit = HIT_DEBUG;
             hit = auxHit;
             solid = auxSolid;
             normal = auxNormal;

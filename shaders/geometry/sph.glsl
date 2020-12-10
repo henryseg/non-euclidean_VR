@@ -81,11 +81,11 @@ Isometry makeTranslation(Point p) {
     mat4 res = mat4(1.);
     vec3 u = p.coords.xyz;
     float c1 = length(u);
-    if (c1 == 0) {
+    if (c1 == 0.) {
         return Isometry(res);
     }
 
-    float c2 = 1 - p.coords.w;
+    float c2 = 1. - p.coords.w;
     u = normalize(u);
     mat4 m = mat4(
     0, 0, 0, -u.x,
@@ -190,16 +190,16 @@ Vector applyFacing(mat4 m, Vector v) {
  * @todo Not completely convinced by this - and the function createVector() and smallShift().
  * If you know a better way to do it…
  */
-void frame(Point p, out Vector[3] frame){
+void frame(Point p, out Vector[3] f){
     vec4 dir0 = vec4(p.coords.w, 0, 0, -p.coords.x);
     vec4 dir1 = vec4(0, p.coords.w, 0, -p.coords.y);
-    vec4 dir2 = vec4(0, 0, p.coords.x, -p.coords.z);
+    vec4 dir2 = vec4(0, 0, p.coords.w, -p.coords.z);
     dir0 = normalize(dir0);
     dir1 = normalize(dir1);
     dir2 = normalize(dir2);
-    frame[0] = Vector(p, dir0);
-    frame[1] = Vector(p, dir1);
-    frame[2] = Vector(p, dir2);
+    f[0] = Vector(p, dir0);
+    f[1] = Vector(p, dir1);
+    f[2] = Vector(p, dir2);
 }
 
 
@@ -209,9 +209,9 @@ void frame(Point p, out Vector[3] frame){
  * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
  */
 Point smallShift(Point p, vec3 dp){
-    Vector[3] frame;
-    frame(p, frame);
-    vec4 coords = p.coords + dp[0] * frame[0].dir + dp[1] * frame[1].dir + dp[2] * frame[2].dir;
+    Vector[3] f;
+    frame(p, f);
+    vec4 coords = p.coords + dp[0] * f[0].dir + dp[1] * f[1].dir + dp[2] * f[2].dir;
     Point res = Point(coords);
     return reduceError(res);
 }

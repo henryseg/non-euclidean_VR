@@ -23,7 +23,6 @@ RelVector rayDir(vec3 coords){
 }
 
 
-
 /**
  * Main function. Wrap everything together:
  * - setup all the data
