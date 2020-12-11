@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<subgroup>
+    <background>
+    </background>
+    <teleports>
+        <teleport><![CDATA[
+            vec4 n = vec4(1,0,0,-1);
+            return dot(n,p.coords) > 0.;
+        ]]></teleport>
+        <teleport><![CDATA[
+            vec4 n = vec4(-1,0,0,-1);
+            return dot(n,p.coords) > 0.;
+        ]]></teleport>
+        <teleport><![CDATA[
+            vec4 n = vec4(0,1,0,-1);
+            return dot(n,p.coords) > 0.;
+        ]]></teleport>
+        <teleport><![CDATA[
+            vec4 n = vec4(0,-1,0,-1);
+            return dot(n,p.coords) > 0.;
+        ]]></teleport>
+        <teleport><![CDATA[
+            vec4 n = vec4(0,0,1,-1);
+            return dot(n,p.coords) > 0.;
+        ]]></teleport>
+        <teleport><![CDATA[
+            vec4 n = vec4(0,0,-1,-1);
+            return dot(n,p.coords) > 0.;
+        ]]></teleport>
+    </teleports>
+</subgroup>
