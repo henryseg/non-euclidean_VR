@@ -1,27 +1,27 @@
 import {
     Color,
     Vector3
-} from "./lib/three.module.js";
+} from "../../js/lib/three.module.js";
 
 import {
     Thurston,
-} from "./Thurston.js";
+} from "../../js/Thurston.js";
 
 import {
     Material
-} from "./Material.js";
+} from "../../js/Material.js";
 
 
-import * as geom from "./geometry/hyp/General.js";
+import * as geom from "../../js/geometry/hyp/General.js";
 import {
     Ball,
     PointLight,
     BallComplement
-} from "./items/hyp/Library.js";
+} from "../../js/items/hyp/Library.js";
 
 import {
     trivial
-} from "./geometry/abstract/subgroups/trivial.js";
+} from "../../js/geometry/abstract/subgroups/trivial.js";
 
 
 

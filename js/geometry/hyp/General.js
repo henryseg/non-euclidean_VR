@@ -7,9 +7,9 @@ const name = 'Hyperbolic space';
 /**
  * @const {string}
  * @default Path to the geometry dependent part of the shader
- * @todo The path is relative to the file 'Thurston.js'. Look at good practices for handling paths
+ * @todo The path is absolute with respect to the root of the server
  */
-const shader = 'shaders/geometry/hyp.glsl';
+const shader = '/shaders/geometry/hyp.glsl';
 
 
 export {name, shader};

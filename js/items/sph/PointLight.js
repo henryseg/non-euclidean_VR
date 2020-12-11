@@ -16,7 +16,7 @@ class PointLight extends Light {
     }
 
     get shaderSource() {
-        return 'shaders/items/sph/items.xml';
+        return '/shaders/items/sph/items.xml';
     }
 }
 

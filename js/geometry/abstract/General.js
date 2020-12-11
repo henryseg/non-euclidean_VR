@@ -7,9 +7,9 @@ const name = 'Abstract geometry';
 /**
  * @const {string}
  * @default Path to the geometry dependent part of the shader
- * @todo The path is relative to the file 'Thurston.js'. Look at good practices for handling paths
+ * @todo The path is absolute with respect to the root of the server
  */
-const shader = 'geometry/model.glsl';
+const shader = '/shaders/geometry/model.glsl';
 
 export {name, shader};
 export {Isometry} from "./Isometry.js";

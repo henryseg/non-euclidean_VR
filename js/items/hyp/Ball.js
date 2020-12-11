@@ -24,7 +24,7 @@ class Ball extends Solid {
     }
 
     get shaderSource() {
-        return 'shaders/items/hyp/items.xml';
+        return '/shaders/items/hyp/items.xml';
     }
 }
 

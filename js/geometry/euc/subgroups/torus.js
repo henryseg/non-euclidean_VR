@@ -53,7 +53,7 @@ const torus = new Subgroup([
     teleportYn,
     teleportZp,
     teleportZn
-], "shaders/subgroups/euc/torus.xml");
+], "/shaders/subgroups/euc/torus.xml");
 
 export {
     torus

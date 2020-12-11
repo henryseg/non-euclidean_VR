@@ -73,7 +73,7 @@ class ObjectThurston {
     /**
      * Return the path to the shader code of the item
      * @return {string} the path the the shader;
-     * @todo The path is relative to the file 'Thurston.js'. Look at good practices for handling paths
+     * @todo The path is absolute with respect to the root of the server
      */
     get shaderSource() {
         throw new Error("This method need be overloaded.");

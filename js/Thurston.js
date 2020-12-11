@@ -212,6 +212,7 @@ class Thurston {
         // loading the polyfill if WebXR is not supported
         const polyfill = new WebXRPolyfill.default();
 
+
         /**
          * The underlying geometry
          * @type {Object}
@@ -573,7 +574,7 @@ class Thurston {
      * @return {string} - the code of the shader
      */
     async buildShaderVertex() {
-        const response = await fetch("../shaders/vertex.glsl");
+        const response = await fetch("/shaders/vertex.glsl");
         return await response.text();
     }
 
@@ -685,18 +686,18 @@ class Thurston {
         // - file is a path a a shader file
         // - data are the data passed to the template (if undefined, the file is just a plain GLSL file)
         const shaders = [
-            {file: 'shaders/header.glsl', data: header},
+            {file: '/shaders/header.glsl', data: header},
             {file: this.geom.shader, data: undefined},
-            {file: 'shaders/geometry/commons.glsl', data: undefined},
-            {file: 'shaders/items/abstract.glsl', data: undefined},
-            {file: 'shaders/background.glsl', data: blocks},
-            {file: 'shaders/setup.glsl', data: setup},
-            {file: 'shaders/subgroup.glsl', data: this.subgroup},
-            {file: 'shaders/sdf.glsl', data: items},
-            {file: 'shaders/scene.glsl', data: items},
-            {file: 'shaders/raymarch.glsl', data: undefined},
-            {file: 'shaders/lighting.glsl', data: Object.assign({maxLightDirs: this.maxLightDirs}, items)},
-            {file: 'shaders/main.glsl', data: undefined}
+            {file: '/shaders/geometry/commons.glsl', data: undefined},
+            {file: '/shaders/items/abstract.glsl', data: undefined},
+            {file: '/shaders/background.glsl', data: blocks},
+            {file: '/shaders/setup.glsl', data: setup},
+            {file: '/shaders/subgroup.glsl', data: this.subgroup},
+            {file: '/shaders/sdf.glsl', data: items},
+            {file: '/shaders/scene.glsl', data: items},
+            {file: '/shaders/raymarch.glsl', data: undefined},
+            {file: '/shaders/lighting.glsl', data: Object.assign({maxLightDirs: this.maxLightDirs}, items)},
+            {file: '/shaders/main.glsl', data: undefined}
         ];
 
         let response;

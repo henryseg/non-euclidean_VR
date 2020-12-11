@@ -18,7 +18,7 @@ class Ball extends Solid {
     }
 
     get shaderSource() {
-        return 'shaders/items/euc/items.xml';
+        return '/shaders/items/euc/items.xml';
     }
 }
 

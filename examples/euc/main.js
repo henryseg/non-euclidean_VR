@@ -1,21 +1,21 @@
 import {
     Color,
-} from "./lib/three.module.js";
+} from "../../js/lib/three.module.js";
 
 import {
     Thurston,
-} from "./Thurston.js";
+} from "../../js/Thurston.js";
 
 import {
     Material
-} from "./Material.js";
+} from "../../js/Material.js";
 
 
-import * as geom from "./geometry/euc/General.js";
-import {Ball, BallComplement, PointLight} from "./items/euc/Library.js";
+import * as geom from "../../js/geometry/euc/General.js";
+import {Ball, BallComplement, PointLight} from "../../js/items/euc/Library.js";
 import {
     torus
-} from "./geometry/euc/subgroups/torus.js";
+} from "../../js/geometry/euc/subgroups/torus.js";
 
 
 const thurston = new Thurston(geom, torus, {keyboard: 'fr'});

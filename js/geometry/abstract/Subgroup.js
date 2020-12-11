@@ -46,6 +46,7 @@ class Subgroup {
         this.teleports = teleports;
         /**
          * The path to a GLSL file, implementing the teleportations tests.
+         * The path of the file is absolute with respect to the root of the local server
          * The teleportations should be lister **in the same order** on the GLSL side.
          * @type {string}
          */

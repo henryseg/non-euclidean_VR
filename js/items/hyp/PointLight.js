@@ -22,7 +22,7 @@ class PointLight extends Light {
     }
 
     get shaderSource() {
-        return 'shaders/items/hyp/items.xml';
+        return '/shaders/items/hyp/items.xml';
     }
 }
 
