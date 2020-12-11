@@ -49,15 +49,15 @@ const teleportYn = new Teleport(testYn, shiftYn, shiftYp);
 const teleportZp = new Teleport(testZp, shiftZp, shiftZn);
 const teleportZn = new Teleport(testZn, shiftZn, shiftZp);
 
-const torus = new Subgroup([
+const cube = new Subgroup([
     teleportXp,
     teleportXn,
     teleportYp,
     teleportYn,
     teleportZp,
     teleportZn
-], "shaders/subgroups/euc/torus.xml");
+], "shaders/subgroups/hyp/cube.xml");
 
 export {
-    torus
+    cube
 }

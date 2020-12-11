@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<subgroup>
+    <background>
+        const float cubeHalfWidth = 0.577;
+    </background>
+    <teleports>
+        <teleport>
+            <![CDATA[
+            return p.coords.x/p.coords.w > cubeHalfWidth;
+        ]]>
+        </teleport>
+        <teleport>
+            <![CDATA[
+            return p.coords.x/p.coords.w  < - cubeHalfWidth;
+        ]]>
+        </teleport>
+        <teleport>
+            <![CDATA[
+            return p.coords.y/p.coords.w  > cubeHalfWidth;
+        ]]>
+        </teleport>
+        <teleport>
+            <![CDATA[
+            return p.coords.y/p.coords.w  < - cubeHalfWidth;
+        ]]>
+        </teleport>
+        <teleport>
+            <![CDATA[
+            return p.coords.z/p.coords.w  > cubeHalfWidth;
+        ]]>
+        </teleport>
+        <teleport>
+            <![CDATA[
+            return p.coords.z/p.coords.w  < - cubeHalfWidth;
+        ]]>
+        </teleport>
+    </teleports>
+</subgroup>

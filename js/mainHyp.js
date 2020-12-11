@@ -17,31 +17,37 @@ import {
     Ball,
     PointLight
 } from "./items/hyp/Library.js";
+
 import {
     trivial
 } from "./geometry/abstract/subgroups/trivial.js";
+
+
+import {
+    cube
+} from "./geometry/hyp/subgroups/cube.js";
 
 
 const thurston = new Thurston(geom, trivial, {
     keyboard: 'us'
 });
 
-//const ball0 = new BallComplement(
-//    new geom.Point(0, 0, 0),
-//    0.67,
-//    new Material({
-//        color: new Color(1, 0.2, 0.2)
-//    }),
-//    false
-//);
+const ball0 = new Ball(
+    new Vector3(0, 0, -0.3),
+    0.1,
+    new Material({
+        color: new Color(1, 0.2, 0.2)
+    }),
+    false
+);
 
 const ball1 = new Ball(
-    // new geom.Point(-.3, -0.1, -.5),
     new Vector3(0, 0, -2),
     0.2,
     new Material({
         color: new Color(0, 0, 1)
-    })
+    }),
+    true
 );
 
 //  yellow light
@@ -63,5 +69,5 @@ const light2 = new PointLight(
     new Color(1, 0, 1)
 );
 
-thurston.addItems([ball1, light0, light1, light2]);
+thurston.addItems([ball0, ball1, light0, light1, light2]);
 thurston.run();
