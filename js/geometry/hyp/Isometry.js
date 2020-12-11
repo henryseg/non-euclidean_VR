@@ -34,16 +34,16 @@ Isometry.prototype.makeTranslation = function (point) {
 
     this.matrix.identity();
 
-    onst[x, y, z, w] = point.coords.toArray();
-
+    const [x, y, z, w] = point.coords.toArray();
     const u = new Vector3(x, y, z);
     const c1 = u.length(); //sinh
-    const c2 = u.w - 1 //cosh
+
 
     if (c1 === 0) {
         return this;
     }
 
+    const c2 = w - 1 //cosh
     u.normalize();
 
     const m = new Matrix4().set(
@@ -58,7 +58,6 @@ Isometry.prototype.makeTranslation = function (point) {
     this.matrix.add(m);
 
     m2.multiplyScalar(c2);
-
     this.matrix.add(m2);
 
     return this;
@@ -85,7 +84,7 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
     const u = vec.clone().normalize();
 
     const c1 = Math.sinh(t);
-    const c2 = Math.cosh(t);
+    const c2 = Math.cosh(t) - 1.;
 
     const m = new Matrix4().set(
         0, 0, 0, u.x,
