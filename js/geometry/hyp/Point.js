@@ -4,6 +4,7 @@ import {
 import {
     Vector4
 } from "../../lib/three.module.js";
+import * as Utils from "./Utils.js";
 
 
 Point.prototype.build = function () {
@@ -16,9 +17,10 @@ Point.prototype.build = function () {
 
 
 Point.prototype.reduceError = function () {
-    let v = this.coords;
-    let norm = Math.sqrt(-v.x * v.x - v.y * v.y - v.z * v.z + v.w * v.w);
-    this.coords.multiplyScalar(1 / norm);
+    // let v = this.coords;
+    // let norm = Math.sqrt(-v.x * v.x - v.y * v.y - v.z * v.z + v.w * v.w);
+    // this.coords.multiplyScalar(1 / norm);
+    this.coords.hypNormalize();
     return this;
 }
 

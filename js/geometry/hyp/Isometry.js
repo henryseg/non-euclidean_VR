@@ -3,8 +3,11 @@ import {
 } from "../abstract/Isometry.js";
 import {
     Matrix4,
-    Vector3
+    Vector3,
+    Vector4
 } from "../../lib/three.module.js";
+
+import * as Utils from "./Utils.js";
 
 
 Isometry.prototype.build = function () {
@@ -12,21 +15,50 @@ Isometry.prototype.build = function () {
 }
 
 Isometry.prototype.reduceError = function () {
+    // Hyperbolic Gram-Schmidt
+    const col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.matrix);
+    const col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.matrix);
+    const col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.matrix);
+    const col3 = new Vector4(0, 0, 0, 1).applyMatrix4(this.matrix);
+
+    col0.hypNormalize();
+
+    const aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
+    col1.sub(aux10).hypNormalize();
+
+    const aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
+    const aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
+    col2.sub(aux20).sub(aux21).hypNormalize();
+
+    const aux30 = col0.clone().multiplyScalar(col0.hypDot(col3));
+    const aux31 = col1.clone().multiplyScalar(col1.hypDot(col3));
+    const aux32 = col2.clone().multiplyScalar(col2.hypDot(col3));
+    col3.sub(aux30).sub(aux31).sub(aux32).hypNormalize();
+
+    this.matrix.set(
+        col0.x, col1.x, col2.x, col3.x,
+        col0.y, col1.y, col2.y, col3.y,
+        col0.z, col1.z, col2.z, col3.z,
+        col0.w, col1.w, col2.w, col3.w
+    );
     return this;
 };
 
 Isometry.prototype.multiply = function (isom) {
     this.matrix.multiply(isom.matrix);
+    this.reduceError();
     return this;
 };
 
 Isometry.prototype.premultiply = function (isom) {
     this.matrix.premultiply(isom.matrix);
+    this.reduceError();
     return this;
 };
 
 Isometry.prototype.invert = function () {
     this.matrix.invert();
+    this.reduceError();
     return this;
 };
 
@@ -103,7 +135,6 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
 
     return this;
 };
-
 
 
 Isometry.prototype.equals = function (isom) {
