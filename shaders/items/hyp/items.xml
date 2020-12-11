@@ -69,6 +69,30 @@
 
 
 
+        <solid class="ballComplement">
+            <shader type="declare">
+                Solid {{name}};
+            </shader>
+            <shader type="setup">
+                {{name}} = {{toGLSL}};
+            </shader>
+            <shader type="sdf">
+                Point loc = {{name}}.obj.loc;
+                {{#global}}
+                    loc = applyIsometry(v.invCellBoost, loc);
+                {{/global}}
+                return {{radius}} - dist(v.local.pos, loc);
+            </shader>
+            <shader type="gradient">
+                Point loc = {{name}}.obj.loc;
+                {{#global}}
+                    loc = applyIsometry(v.invCellBoost, loc);
+                {{/global}}
+                Vector local = direction(v.local.pos,loc);
+                return RelVector(local, v.cellBoost, v.invCellBoost);
+            </shader>
+        </solid>
+
 
         <light class="pointLight">
             <shader type="declare">
