@@ -681,7 +681,6 @@ class Thurston {
         const setup = Object.assign({}, items, {uniforms: this.buildShaderDataUniforms()});
         await this.subgroup.glslBuildData();
 
-
         // A list of pairs (file, data)
         // - file is a path a a shader file
         // - data are the data passed to the template (if undefined, the file is just a plain GLSL file)
@@ -732,16 +731,19 @@ class Thurston {
         const geometry = new SphereBufferGeometry(1000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
+
+        const vertexShader = await this.buildShaderVertex();
+        const fragmentShader = await this.buildShaderFragment();
         const materialLeft = new ShaderMaterial({
             uniforms: this.params._uniformsLeft,
-            vertexShader: await this.buildShaderVertex(),
-            fragmentShader: await this.buildShaderFragment(),
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
             transparent: true
         });
         const materialRight = new ShaderMaterial({
             uniforms: this.params._uniformsRight,
-            vertexShader: await this.buildShaderVertex(),
-            fragmentShader: await this.buildShaderFragment(),
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
             transparent: true
         });
         this._horizonLeft = new Mesh(geometry, materialLeft);

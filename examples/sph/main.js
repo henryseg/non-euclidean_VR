@@ -12,7 +12,7 @@ import {
 
 
 import * as geom from "../../js/geometry/sph/General.js";
-import {Ball, PointLight} from "../../js/items/sph/Library.js";
+import {Ball, BallComplement, PointLight} from "../../js/items/sph/Library.js";
 import {
     cube
 } from "../../js/geometry/sph/subgroups/cube.js";
@@ -20,9 +20,9 @@ import {
 
 const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
 
-const ball0 = new Ball(
+const ball0 = new BallComplement(
     new geom.Vector(0, 0, 0),
-    0.1,
+    0.28 * Math.PI,
     new Material({color: new Color(1, 0.2, 0.2)}),
     false
 );
