@@ -1,46 +1,44 @@
 import {
     Point,
+    Vector,
     Isometry,
     Teleport,
     Subgroup
 } from "../General.js";
 
-import {
-    Vector3
-} from "../../../lib/three.module.js"
 
 const cubeHalfWidth = 0.57735026;
 
 function testXp(p) {
-    return p.coords.x > cubeHalfWidth;
+    return p.coords.x > cubeHalfWidth * p.coords.w;
 }
 
 function testXn(p) {
-    return p.coords.x < -cubeHalfWidth;
+    return p.coords.x < -cubeHalfWidth * p.coords.w;
 }
 
 function testYp(p) {
-    return p.coords.y > cubeHalfWidth;
+    return p.coords.y > cubeHalfWidth * p.coords.w;
 }
 
 function testYn(p) {
-    return p.coords.y < -cubeHalfWidth;
+    return p.coords.y < -cubeHalfWidth * p.coords.w;
 }
 
 function testZp(p) {
-    return p.coords.z > cubeHalfWidth;
+    return p.coords.z > cubeHalfWidth * p.coords.w;
 }
 
 function testZn(p) {
-    return p.coords.z < -cubeHalfWidth;
+    return p.coords.z < -cubeHalfWidth * p.coords.w;
 }
 
-const shiftXp = new Isometry().makeTranslationFromDir(new Vector3(-2 * cubeHalfWidth, 0, 0));
-const shiftXn = new Isometry().makeTranslationFromDir(new Vector3(2 * cubeHalfWidth, 0, 0));
-const shiftYp = new Isometry().makeTranslationFromDir(new Vector3(0, -2 * cubeHalfWidth, 0));
-const shiftYn = new Isometry().makeTranslationFromDir(new Vector3(0, 2 * cubeHalfWidth, 0));
-const shiftZp = new Isometry().makeTranslationFromDir(new Vector3(0, 0, -2 * cubeHalfWidth));
-const shiftZn = new Isometry().makeTranslationFromDir(new Vector3(0, 0, 2 * cubeHalfWidth));
+const shiftXp = new Isometry().makeTranslationFromDir(new Vector(-2 * cubeHalfWidth, 0, 0));
+const shiftXn = new Isometry().makeTranslationFromDir(new Vector(2 * cubeHalfWidth, 0, 0));
+const shiftYp = new Isometry().makeTranslationFromDir(new Vector(0, -2 * cubeHalfWidth, 0));
+const shiftYn = new Isometry().makeTranslationFromDir(new Vector(0, 2 * cubeHalfWidth, 0));
+const shiftZp = new Isometry().makeTranslationFromDir(new Vector(0, 0, -2 * cubeHalfWidth));
+const shiftZn = new Isometry().makeTranslationFromDir(new Vector(0, 0, 2 * cubeHalfWidth));
 
 const teleportXp = new Teleport(testXp, shiftXp, shiftXn);
 const teleportXn = new Teleport(testXn, shiftXn, shiftXp);
@@ -56,7 +54,7 @@ const cube = new Subgroup([
     teleportYn,
     teleportZp,
     teleportZn
-], "shaders/subgroups/hyp/cube.xml");
+], "/shaders/subgroups/hyp/cube.xml");
 
 export {
     cube

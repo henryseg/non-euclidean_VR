@@ -20,32 +20,32 @@ import {
 } from "../../js/items/hyp/Library.js";
 
 import {
-    trivial
-} from "../../js/geometry/abstract/subgroups/trivial.js";
+    cube
+} from "../../js/geometry/hyp/subgroups/cube.js";
 
 
 
 
-const thurston = new Thurston(geom, trivial, {
+const thurston = new Thurston(geom, cube, {
     keyboard: 'us'
 });
 
 const ball0 = new Ball(
-    new Vector3(0, 0, -0.3),
+    new Vector3(0, 0, 0),
     0.1,
     new Material({
         color: new Color(1, 0.2, 0.2)
     }),
-    true
+    false
 );
 
 const ball1 = new BallComplement(
     new Vector3(0, 0, 0),
-    3.12,
+    1.05,
     new Material({
         color: new Color(0, 0, 1)
     }),
-    true
+    false
 );
 
 //  yellow light
@@ -67,5 +67,5 @@ const light2 = new PointLight(
     new Color(1, 0, 1)
 );
 
-thurston.addItems([ball0, light0, light1, light2]);
+thurston.addItems([ball0, ball1,light0, light1, light2]);
 thurston.run();
