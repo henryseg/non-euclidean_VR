@@ -27,14 +27,14 @@
                 {{name}} = {{toGLSL}};
             </shader>
             <shader type="sdf">
-                Point loc = {{name}}.item.loc;
+                Point loc = {{name}}.obj.loc;
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
                 return dist(v.local.pos, loc) - {{radius}};
             </shader>
             <shader type="gradient">
-                Point loc = {{name}}.item.loc;
+                Point loc = {{name}}.obj.loc;
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
@@ -53,14 +53,14 @@
                 {{name}} = {{toGLSL}};
             </shader>
             <shader type="sdf">
-                Point loc = {{name}}.item.loc;
+                Point loc = {{name}}.obj.loc;
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
                 return {{radius}} - dist(v.local.pos, loc);
             </shader>
             <shader type="gradient">
-                Point loc = {{name}}.item.loc;
+                Point loc = {{name}}.obj.loc;
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);
                 {{/global}}
@@ -79,7 +79,7 @@
                 {{name}} = {{toGLSL}};
             </shader>
             <shader type="direction">
-                Point loc = {{name}}.item.loc;
+                Point loc = {{name}}.obj.loc;
                 Point pos = v.local.pos;
                 {{#global}}
                 loc = applyIsometry(v.invCellBoost, loc);

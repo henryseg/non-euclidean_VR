@@ -88,7 +88,13 @@ $(function() {
 <dt>Member <a class="el" href="lighting_8glsl.html#a548d018f08cf598a2b167e554fe5a07d">lightComputation</a>  (<a class="el" href="struct_vector.html">Vector</a> v, <a class="el" href="struct_vector.html">Vector</a> n, <a class="el" href="struct_vector.html">Vector</a> dir, <a class="el" href="struct_material.html">Material</a> material, vec3 lightColor, float intensity)</dt>
 <dd><a class="anchor" id="_todo000006"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer?  </dd>
 <dt>Member <a class="el" href="lighting_8glsl.html#a79d794e600cddf4ceb996246bfe94abb">phongModel</a>  (<a class="el" href="struct_rel_vector.html">RelVector</a> v, <a class="el" href="struct_solid.html">Solid</a> solid, <a class="el" href="struct_rel_vector.html">RelVector</a> normal)</dt>
-<dd><a class="anchor" id="_todo000007"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer? </dd>
+<dd><a class="anchor" id="_todo000007"></a>Choose a convention for the incidence vector <code>v</code>. Should it point toward the object, or the observer?  </dd>
+<dt>Member <a class="el" href="raymarch_8glsl.html#a129de7f2464e51cc868a93a985a504ca">raymarch</a>  (inout <a class="el" href="struct_rel_vector.html">RelVector</a> v, out <a class="el" href="struct_solid.html">Solid</a> solid, out <a class="el" href="struct_rel_vector.html">RelVector</a> normal)</dt>
+<dd><a class="anchor" id="_todo000008"></a>Should we also teleport during the global raymarching?<ul>
+<li>the telportations accumulate numerical errors, but the coordinates of the local vector, will remain bounded.</li>
+<li>if we go in this directiion, maybe we should merge the local and global raymarching. </li>
+</ul>
+</dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

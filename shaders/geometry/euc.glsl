@@ -183,9 +183,9 @@ Vector applyFacing(mat4 m, Vector v) {
  * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] frame){
-  frame[0] = Vector(ORIGIN, vec4(1,0,0,0));
-  frame[1] = Vector(ORIGIN, vec4(0,1,0,0));
-  frame[2] = Vector(ORIGIN, vec4(0,0,1,0));
+  frame[0] = Vector(p, vec4(1,0,0,0));
+  frame[1] = Vector(p, vec4(0,1,0,0));
+  frame[2] = Vector(p, vec4(0,0,1,0));
 }
 
 /**

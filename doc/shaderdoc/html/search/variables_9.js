@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['pi_144',['PI',['../header_8glsl.html#aa08a577393243b86dfd2a97e61443673',1,'header.glsl']]],
-  ['pos_145',['pos',['../struct_vector.html#a76fcb6b6afe3d7ec0e96b3e52311a889',1,'Vector']]],
-  ['position_146',['position',['../struct_item.html#a5b473b68d7153eb7aeb83b5508cfc0f5',1,'Item']]]
+  ['obj_149',['obj',['../struct_solid.html#a30d5c32aea91cc6aa185c9764b98705d',1,'Solid::obj()'],['../struct_light.html#a987105b07f3b325bfac80dfff626ff51',1,'Light::obj()']]],
+  ['origin_150',['ORIGIN',['../euc_8glsl.html#a1db97dc3a9910e17a2e3463dc5af4459',1,'ORIGIN():&#160;euc.glsl'],['../model_8glsl.html#a1db97dc3a9910e17a2e3463dc5af4459',1,'ORIGIN():&#160;model.glsl']]]
 ];

@@ -21,6 +21,7 @@
         "destination": "./jsdoc/",
         "readme": "./jsdoc.md",
         "recurse": true,
+        "private": true,
         "template": "./node_modules/foodoc/template"
     },
 

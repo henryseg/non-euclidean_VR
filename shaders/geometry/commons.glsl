@@ -114,7 +114,7 @@ Vector applyPosition(Position p, Vector v){
  * Structure for a generalized vector
  * Such a vector is a triple (local, cellBoost, invCellBoost) where
  * - local is a Vector
- * - cellBoost is an Isometry representing an element of a discrete subgroup
+ * - cellBoost is an Isometry representing an element of a discrete subgroups
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
  * Such a generalized vector represent the vector local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.
@@ -180,7 +180,7 @@ RelVector createVector(RelVector v, vec3 coords){
  * Structure for a generalized position in the geometry.
  * Such a position is a triple (local, cellBoost, invCellBoost) where
  * - local is a Position
- * - cellBoost is an Isometry representing an element of a discrete subgroup
+ * - cellBoost is an Isometry representing an element of a discrete subgroups
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
  * Such a generalized position represent the position local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.

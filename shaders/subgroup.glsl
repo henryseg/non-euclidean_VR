@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  * @file
- * Discrete subgroup.
+ * Discrete subgroups.
  * This file define all the tests used for teleportations
  * (isometries have been passed as uniforms in setup.glsl)
  * It also implements the (global) teleportation function

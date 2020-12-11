@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['loc_139',['loc',['../struct_item.html#ad97d77388eadc6c06b6d29f068e855ee',1,'Item']]],
-  ['local_140',['local',['../struct_rel_vector.html#aebe979ee50fd6e9c96cbd0486451940b',1,'RelVector::local()'],['../struct_rel_position.html#a3af120b899701dcec570ebf6e72d8b63',1,'RelPosition::local()']]]
+  ['identity_143',['IDENTITY',['../euc_8glsl.html#a5c80d0d9954b7a5c2ac2874a1690b91e',1,'IDENTITY():&#160;euc.glsl'],['../model_8glsl.html#a5c80d0d9954b7a5c2ac2874a1690b91e',1,'IDENTITY():&#160;model.glsl']]],
+  ['invcellboost_144',['invCellBoost',['../struct_rel_vector.html#a58d2acc0a672d3f16cbb283af88ae712',1,'RelVector::invCellBoost()'],['../struct_rel_position.html#ac2a66051e8a009e24f1be60082f2221a',1,'RelPosition::invCellBoost()']]]
 ];

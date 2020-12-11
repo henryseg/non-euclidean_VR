@@ -5,10 +5,10 @@
  * - geometry/model.glsl (geometry functions)
  * - geometry/commons.glsl (common stuff)
  * - items/abstract.glsl (structures for objets and lights)
- * - background.glsl (block of code used by the subgroup of the items)
+ * - background.glsl (block of code used by the subgroups of the items)
  * - setup.glsl (global variables, etc)
  * - sdf.glsl (basic signed distance functions / distance underestimators)
- * - subgroup.glsl (definition of the subgroup : teleportation and isometries)
+ * - subgroups.glsl (definition of the subgroups : teleportation and isometries)
  * - scene.glsl (the scene built by the JavaScript scene builder)
  * - raymarch.glsl (the ray-marching algorithm)
  * - lighting.glsl (scene illumination)
@@ -16,7 +16,7 @@
  *
  * The file geometry/model.glsl need be changed depending on the geometry.
  * The path of this file is specified in the JS geometry library load by the Thurston object
- * The other geometry depenedends sharders (definition of items, definition of subgroup)
+ * The other geometry depenedends sharders (definition of items, definition of subgroups)
  * are built by the Thurston object based on block of codes declared on the Javascript file.
  * (see items/model.xml and subgroups/model.xml).
  *
@@ -55,4 +55,20 @@ vec3 debugColor = vec3(0.5, 0, 0.8);
 const {{type}} {{name}} = {{value}};
 {{/constants}}
 
+
+/**
+ * Value of hit when we hit nothing.
+ * @const
+ */
+const int HIT_NOTHING = 0;
+/**
+ * Value of hit when we hit a solid.
+ * @const
+ */
+const int HIT_SOLID = 1;
+/**
+ * Value of hit when we hit a bug!
+ * @const
+ */
+const int HIT_DEBUG = -1;
 

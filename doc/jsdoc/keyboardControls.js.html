@@ -38,35 +38,37 @@
 								<li class="dropdown">
 									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#name">name</a></li>
+											<li><a href="global.html#name">name</a></li>
+											<li><a href="global.html#shader">shader</a></li>
+											<li><a href="global.html#shader">shader</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
+											<li><a href="Light.html">Light</a></li>
 											<li><a href="Material.html">Material</a></li>
-											<li><a href="module-AbstractGeometry-DiscreteSubgroup.html">AbstractGeometry~DiscreteSubgroup</a></li>
-											<li><a href="module-AbstractGeometry-Isometry.html">AbstractGeometry~Isometry</a></li>
-											<li><a href="module-AbstractGeometry-Point.html">AbstractGeometry~Point</a></li>
-											<li><a href="module-AbstractGeometry-Position.html">AbstractGeometry~Position</a></li>
-											<li><a href="module-AbstractGeometry-RelPosition.html">AbstractGeometry~RelPosition</a></li>
-											<li><a href="module-AbstractGeometry-Teleport.html">AbstractGeometry~Teleport</a></li>
-											<li><a href="module-AbstractGeometry-Vector.html">AbstractGeometry~Vector</a></li>
-											<li><a href="module-ThurstonItems-Item.html">ThurstonItems~Item</a></li>
-											<li><a href="module-ThurstonItems-Light.html">ThurstonItems~Light</a></li>
-											<li><a href="module-ThurstonItems-Solid.html">ThurstonItems~Solid</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="ObjectThurston.html">ObjectThurston</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Subgroup.html">Subgroup</a></li>
+											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VRControls.html">VRControls</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="module-AbstractGeometry.html">AbstractGeometry</a></li>
-											<li><a href="module-EuclideanGeometry.html">EuclideanGeometry</a></li>
 											<li><a href="module-Thurston.html">Thurston</a></li>
-											<li><a href="module-ThurstonEuclideanItems.html">ThurstonEuclideanItems</a></li>
-											<li><a href="module-ThurstonItems.html">ThurstonItems</a></li>
 									</ul>
 								</li>
 				</ul>
@@ -96,14 +98,18 @@
 		<section class="source-section">
 			<article></article>
 			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {
-    EventDispatcher, Matrix4, Quaternion,
-    Vector3
+    EventDispatcher,
+    Matrix4,
 } from "./lib/three.module.js";
 
 import {
     RelPosition,
     Vector
-} from "./geometry/abstract.js";
+} from "./geometry/abstract/General.js";
+
+import {
+    bind
+} from "./utils.js";
 
 /**
  * @desc
@@ -153,17 +159,11 @@ const CHANGE_EVENT = {type: "change"};
 const EPS = 0.000001;
 
 
-function bind(scope, fn) {
-    return function () {
-        return fn.apply(scope, arguments);
-    };
-}
-
 /**
  * @class
  *
  * @classdesc
- * Implements keyboard controls to fly in the geometry using the keyboard.
+ * Implements controls to fly in the geometry using the keyboard.
  * This is inspired from Three.js
  * {@link https://threejs.org/docs/#examples/en/controls/FlyControls | FlyControls}
  */
@@ -232,7 +232,6 @@ class KeyboardControls extends EventDispatcher {
         } else {
             this._keyboard = value;
         }
-
     }
 
     /**
@@ -246,7 +245,7 @@ class KeyboardControls extends EventDispatcher {
     set infos(value) {
         if (value === undefined) {
             this._infos = function () {
-                return "Information function has not been set up";
+                console.log("Information function has not been set up");
             }
         } else {
             this._infos = value;
@@ -263,12 +262,10 @@ class KeyboardControls extends EventDispatcher {
             const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
             switch (action) {
                 case "info":
-                    console.log(this.infos());
+                    this.infos();
                     break;
                 default:
                     this._moveState[action] = 1;
-                    this.updateMovementVector();
-                    this.updateRotationVector();
             }
         }
     }
@@ -282,10 +279,10 @@ class KeyboardControls extends EventDispatcher {
         if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
             const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
             switch (action) {
+                case "info":
+                    break;
                 default:
                     this._moveState[action] = 0;
-                    this.updateMovementVector();
-                    this.updateRotationVector();
             }
         }
     }
@@ -316,7 +313,7 @@ class KeyboardControls extends EventDispatcher {
     };
 
     /**
-     * Produce a function to update the position
+     * Function to update the position
      *
      * Assume that the current position is `(g,m)` where
      * - `g` is the boost, i.e. subgroup element * local boost
@@ -340,12 +337,14 @@ class KeyboardControls extends EventDispatcher {
      * @param {number} delta - time delta between two updates
      */
     update(delta) {
+        this.updateMovementVector();
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
             .applyMatrix4(this.camera.matrixWorld);
         this.position.flow(deltaPosition);
 
+        this.updateRotationVector();
         const axis = this._rotationVector
             .clone()
             .applyMatrix4(this.camera.matrixWorld)
@@ -363,14 +362,15 @@ class KeyboardControls extends EventDispatcher {
 
 export {
     KeyboardControls
-}</code></pre>
+}
+</code></pre>
 		</section>
 			</div>
 		</div>
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 6th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
