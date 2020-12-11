@@ -172,6 +172,29 @@ class RelPosition {
     }
 
     /**
+     * Return the two positions corresponding to the left and right eye.
+     * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
+     * @param {number} ipDist - the interpupillary distance
+     * @param {string} stereoMode - a mode (defining a correction at the facing level)
+     * @return {RelPosition[]} - the position of the left and right eye
+     */
+    eyes(cameraMatrix, ipDist, stereoMode = undefined) {
+        const locals = this.local.eyes(cameraMatrix, ipDist, stereoMode);
+
+        const leftEye = new RelPosition(this.sbgp);
+        leftEye.local.copy(locals[0]);
+        leftEye.cellBoost.copy(this.cellBoost);
+        leftEye.invCellBoost.copy(this.invCellBoost)
+
+        const rightEye = new RelPosition(this.sbgp);
+        rightEye.local.copy(locals[1]);
+        rightEye.cellBoost.copy(this.cellBoost);
+        rightEye.invCellBoost.copy(this.invCellBoost);
+
+        return [leftEye, rightEye];
+    }
+
+    /**
      * Check if the current position and `position ` are the same.
      * Mainly for debugging purposes
      * @param {RelPosition} position

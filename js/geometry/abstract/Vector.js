@@ -26,7 +26,7 @@ class Vector extends Vector3 {
      * It multiplies the vector (with an implicit 1 in the 4th dimension) and `m`, and divides by perspective.
      * Here the data represents a **vector**, thus the implicit 4th coordinate is 0
      * @param {Matrix4} m - The matrix to apply
-     * @return {Vector3} The current vector
+     * @return {Vector} The current vector
      */
     applyMatrix4(m) {
         const aux = new Vector4(this.x, this.y, this.z, 0);

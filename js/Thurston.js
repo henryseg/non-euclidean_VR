@@ -127,6 +127,12 @@ const PARAMS = {
         },
         shaderPass: SHADER_PASS.NONE
     },
+    stereoMode: {
+        default: function () {
+            return undefined;
+        },
+        shaderPass: SHADER_PASS.NONE,
+    },
     position: {
         shaderPass: SHADER_PASS.NONE,
         shaderType: 'RelPosition'
@@ -444,25 +450,18 @@ class Thurston {
      * @return{RelPosition[]} the left and right eye positions
      */
     getEyePositions() {
-        // start from the position of the observer.
-        const rightEye = this.params.position.clone();
-        const leftEye = this.params.position.clone();
-
-        // check if we are in VR mode or not
         if (this._renderer.xr.isPresenting) {
-            // if we are in VR mode we offset the position of the left and right eyes
-            // to that end, we flow the position along the left / right direction
-            // we have to be careful that left and right are meant in the point of view of the camera.
-            const right = new Vector(1, 0, 0)
-                .multiplyScalar(0.5 * this.params.ipDist)
-                .applyMatrix4(this._camera.matrixWorld);
-            const left = right.clone().negate();
-            rightEye.flow(right);
-            leftEye.flow(left);
+            return this.params.position.eyes(
+                this._camera.matrixWorld,
+                this.params.ipDist,
+                this.params.stereoMode
+            );
+        } else {
+            return [
+                this.params.position.clone(),
+                this.params.position.clone()
+            ];
         }
-
-        // return the positions of the eyes
-        return [leftEye, rightEye];
     }
 
 
