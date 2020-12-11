@@ -5,11 +5,8 @@ import {
     Subgroup
 } from "../General.js";
 
-import {
-    Vector3
-} from "../../../lib/three.module.js"
 
-const cubeHalfWidth = 0.57735026;
+const cubeHalfWidth = 0.5;
 
 function testXp(p) {
     return p.coords.x > cubeHalfWidth;
@@ -35,12 +32,12 @@ function testZn(p) {
     return p.coords.z < -cubeHalfWidth;
 }
 
-const shiftXp = new Isometry().makeTranslationFromDir(new Vector3(-2 * cubeHalfWidth, 0, 0));
-const shiftXn = new Isometry().makeTranslationFromDir(new Vector3(2 * cubeHalfWidth, 0, 0));
-const shiftYp = new Isometry().makeTranslationFromDir(new Vector3(0, -2 * cubeHalfWidth, 0));
-const shiftYn = new Isometry().makeTranslationFromDir(new Vector3(0, 2 * cubeHalfWidth, 0));
-const shiftZp = new Isometry().makeTranslationFromDir(new Vector3(0, 0, -2 * cubeHalfWidth));
-const shiftZn = new Isometry().makeTranslationFromDir(new Vector3(0, 0, 2 * cubeHalfWidth));
+const shiftXp = new Isometry().makeTranslation(new Point(-2 * cubeHalfWidth, 0, 0));
+const shiftXn = new Isometry().makeTranslation(new Point(2 * cubeHalfWidth, 0, 0));
+const shiftYp = new Isometry().makeTranslation(new Point(0, -2 * cubeHalfWidth, 0));
+const shiftYn = new Isometry().makeTranslation(new Point(0, 2 * cubeHalfWidth, 0));
+const shiftZp = new Isometry().makeTranslation(new Point(0, 0, -2 * cubeHalfWidth));
+const shiftZn = new Isometry().makeTranslation(new Point(0, 0, 2 * cubeHalfWidth));
 
 const teleportXp = new Teleport(testXp, shiftXp, shiftXn);
 const teleportXn = new Teleport(testXn, shiftXn, shiftXp);
