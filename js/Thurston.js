@@ -123,7 +123,7 @@ const PARAMS = {
     },
     ipDist: {
         default: function () {
-            return 0.03200000151991844;
+            return 2 * 0.03200000151991844;
         },
         shaderPass: SHADER_PASS.NONE
     },
@@ -818,6 +818,7 @@ class Thurston {
         this.chaseCamera();
 
         this.params.eyePosition = this.getEyePositions();
+        // console.log(this.params.eyePosition[0].local.quaternion.toLog(),this.params.eyePosition[1].local.quaternion.toLog())
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }
