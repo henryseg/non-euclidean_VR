@@ -3,7 +3,7 @@ import {
     Teleport,
     Subgroup
 } from "../General.js";
-import {Vector4} from "../../../lib/three.module.js";
+import {Matrix4, Vector4} from "../../../lib/three.module.js";
 
 
 const normalXp = new Vector4(1, 0, 0, -1);
@@ -79,7 +79,17 @@ shiftZn.matrix.set(
     0, 1, 0, 0,
     0, 0, 0, 1,
     0, 0, -1, 0
+
 );
+
+
+//ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
+shiftXp.matrix.multiply(new Matrix4().makeRotationX(Math.PI / 2).transpose());
+shiftXn.matrix.multiply(new Matrix4().makeRotationX(-Math.PI / 2).transpose());
+shiftYp.matrix.multiply(new Matrix4().makeRotationY(Math.PI / 2).transpose());
+shiftYn.matrix.multiply(new Matrix4().makeRotationY(-Math.PI / 2).transpose());
+shiftZp.matrix.multiply(new Matrix4().makeRotationZ(Math.PI / 2).transpose());
+shiftZn.matrix.multiply(new Matrix4().makeRotationZ(-Math.PI / 2).transpose());
 
 const teleportXp = new Teleport(testXp, shiftXp, shiftXn);
 const teleportXn = new Teleport(testXn, shiftXn, shiftXp);
