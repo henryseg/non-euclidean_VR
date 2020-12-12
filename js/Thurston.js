@@ -121,6 +121,7 @@ const PARAMS = {
         },
         shaderPass: SHADER_PASS.NONE,
     },
+    // HALF THE INTERPUPILLARY DISTANCE
     ipDist: {
         default: function () {
             return 0.03200000151991844;
@@ -818,6 +819,7 @@ class Thurston {
         this.chaseCamera();
 
         this.params.eyePosition = this.getEyePositions();
+        // console.log(this.params.eyePosition[0].local.quaternion.toLog(),this.params.eyePosition[1].local.quaternion.toLog())
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }

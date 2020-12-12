@@ -204,7 +204,7 @@ class Position {
         // to that end, we flow the position along the left / right direction
         // we have to be careful that left and right are meant in the point of view of the camera.
         const rightDir = new Vector(1, 0, 0)
-            .multiplyScalar(0.5 * ipDist)
+            .multiplyScalar(ipDist)
             .applyMatrix4(cameraMatrix);
         const leftDir = rightDir.clone().negate();
         rightEye.flow(rightDir);
