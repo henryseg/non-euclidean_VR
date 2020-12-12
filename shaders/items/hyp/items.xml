@@ -36,7 +36,9 @@
         * @return intensity of the light
         */
         float lightIntensity(float len){
-        return 1./len;//should change to 1./sinh(len);
+        return 1./len;
+        //should change to 1./sinh(len);
+        //return 1./sinh(len);
         }
     </background>
     <items>
