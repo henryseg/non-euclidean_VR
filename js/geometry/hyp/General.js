@@ -6,13 +6,18 @@ const name = 'Hyperbolic space';
 
 /**
  * @const {string}
- * @default Path to the geometry dependent part of the shader
+ * @default Path to the geometry dependent part of the shader (part 1)
  * @todo The path is absolute with respect to the root of the server
  */
-const shader = '/shaders/geometry/hyp.glsl';
+const shader1 = '/shaders/geometry/hyp/part1.glsl';
+/**
+ * @const {string}
+ * @default Path to the geometry dependent part of the shader (part 2)
+ * @todo The path is absolute with respect to the root of the server
+ */
+const shader2 = '/shaders/geometry/hyp/part2.glsl';
 
-
-export {name, shader};
+export {name, shader1, shader2};
 export {Isometry} from "./Isometry.js";
 export {Point} from "./Point.js";
 export {Vector} from "../abstract/Vector.js";

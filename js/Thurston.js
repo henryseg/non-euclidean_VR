@@ -685,8 +685,10 @@ class Thurston {
         // - data are the data passed to the template (if undefined, the file is just a plain GLSL file)
         const shaders = [
             {file: '/shaders/header.glsl', data: header},
-            {file: this.geom.shader, data: undefined},
-            {file: '/shaders/geometry/commons.glsl', data: undefined},
+            {file: this.geom.shader1, data: undefined},
+            {file: '/shaders/geometry/abstract/commons1.glsl', data: undefined},
+            {file: this.geom.shader2, data: undefined},
+            {file: '/shaders/geometry/abstract/commons2.glsl', data: undefined},
             {file: '/shaders/items/abstract.glsl', data: undefined},
             {file: '/shaders/background.glsl', data: blocks},
             {file: '/shaders/setup.glsl', data: setup},
