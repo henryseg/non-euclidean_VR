@@ -121,9 +121,10 @@ const PARAMS = {
         },
         shaderPass: SHADER_PASS.NONE,
     },
+    // HALF THE INTERPUPILLARY DISTANCE
     ipDist: {
         default: function () {
-            return 2 * 0.03200000151991844;
+            return 0.03200000151991844;
         },
         shaderPass: SHADER_PASS.NONE
     },
