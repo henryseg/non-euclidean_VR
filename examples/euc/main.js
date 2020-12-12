@@ -18,7 +18,7 @@ import {
 } from "../../js/geometry/euc/subgroups/torus.js";
 
 
-const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
+const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxDist:5});
 
 const ball0 = new BallComplement(
     new geom.Point(0, 0, 0),
