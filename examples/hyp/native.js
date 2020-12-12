@@ -68,5 +68,5 @@ const light2 = new PointLight(
     new Color(1, 0, 1)
 );
 
-thurston.addItems([ball0, ball1,light0, light1, light2]);
+thurston.addItems([ball1,light0, light1, light2]);
 thurston.run();
