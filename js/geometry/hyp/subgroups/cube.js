@@ -8,7 +8,7 @@ import {Matrix4} from "../../../lib/three.module.js";
 
 
 const cubeHalfWidth = 0.6584789485;
-const modelHalfCube = 0.5773502692
+const modelHalfCube = 0.5773502692;
 
 function testXp(p) {
     return p.coords.x > modelHalfCube * p.coords.w;
