@@ -17,6 +17,7 @@ import {
     torus
 } from "../../js/geometry/euc/subgroups/torus.js";
 import {FixedDirectionStereo} from "../../js/geometry/abstract/stereo/FixedDirectionStereo.js";
+import {Stereo} from "../../js/geometry/abstract/Stereo.js";
 
 
 
@@ -24,7 +25,7 @@ const thurston = new Thurston(
     geom,
     torus,
     {keyboard: 'fr', maxDist: 5},
-    new FixedDirectionStereo()
+    new Stereo()
 );
 
 const ball0 = new BallComplement(

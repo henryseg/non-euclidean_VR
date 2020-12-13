@@ -3,9 +3,9 @@
  * @param[in] coords the coordinates of the point on the sphere
  */
 RelVector rayDir(vec3 coords){
-    //    vec4 dir = normalize(vec4(coords,0));
-    //    vec4 aux = inverse(camera) * dir;
-    vec4 aux = normalize(vec4(coords,0));
-    Vector v = createVector(ORIGIN, aux.xyz);
+    vec4 dir = normalize(vec4(coords, 0));
+    dir = camera * dir;
+    dir = normalize(dir);
+    Vector v = createVector(ORIGIN, dir.xyz);
     return applyPosition(eyePosition, v);
 }

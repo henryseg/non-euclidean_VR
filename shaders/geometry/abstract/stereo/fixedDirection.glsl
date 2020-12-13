@@ -1,11 +1,10 @@
 /**
  * Compute the initial direction for the ray-marching
+ * Don't update the direction with the camera (debuging purpose only)
  * @param[in] coords the coordinates of the point on the sphere
  */
 RelVector rayDir(vec3 coords){
-    vec4 aux = vec4(coords, 0);
-    aux = inverse(eyeMatrix) * aux;
-    aux = normalize(aux);
-    Vector v = createVector(ORIGIN, aux.xyz);
+    vec3 dir = normalize(coords);
+    Vector v = createVector(ORIGIN, dir);
     return applyPosition(eyePosition, v);
 }

@@ -805,21 +805,19 @@ class Thurston {
      * and the non-euclidean one (by changing the position).
      * The eye positions are not updated here.
      * This should be done manually somewhere else.
+     * @todo We chase the camera, even if the VR mode is off. Change this ?
      * @type{Function}
      */
     get chaseCamera() {
         if (this._chaseCamera === undefined) {
-            let oldPositionL = new Vector3();
-            let oldPositionR = new Vector3();
+            let oldPosition = new Vector();
 
             this._chaseCamera = function () {
                 // declare the new positions of the left and right cameras
                 const newPositionL = new Vector3();
                 const newPositionR = new Vector3();
 
-                newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-                newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
-                if (this._renderer.xr.isPresenting) {
+                if (this.stereo.on) {
                     // if XR is enable, we get the position of the left and right camera
                     const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
                     newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
@@ -827,19 +825,17 @@ class Thurston {
                 } else {
                     // if XR is off, both positions coincide with the one of the camera
                     newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-                    newPositionR.copy(newPositionL);
+                    newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
                 }
                 // center each horizon sphere at the appropriate point
                 // compute the old and new position (midpoint between the left and right cameras)
-                const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
-                const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
+                const newPosition = new Vector().lerpVectors(newPositionL, newPositionR, 0.5);
                 // flow the position along the difference of positions
                 const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
                 this.params.position.flow(deltaPosition);
 
                 // update the old left and right positions
-                oldPositionL.copy(newPositionL);
-                oldPositionR.copy(newPositionR);
+                oldPosition.copy(newPosition);
 
                 return this;
             };
