@@ -1,10 +1,4 @@
 /**
- * Position on the sphere.
- */
-varying vec3 spherePosition;
-
-
-/**
  * Compute the initial direction for the ray-marching
  * @param[in] coords the coordinates of the point on the sphere
  */

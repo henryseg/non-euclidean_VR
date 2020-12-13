@@ -140,6 +140,11 @@ const PARAMS = {
         shaderType: 'RelPosition',
         stereo: true
     },
+    eyeMatrix: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'mat4',
+        stereo: true
+    },
     camera: {
         shaderPass: SHADER_PASS.UNIFORM,
         shaderType: 'mat4',
@@ -233,7 +238,6 @@ class Thurston {
          * @type {Subgroup}
          */
         this.subgroup = subgroup;
-
         this.stereo = stereo;
 
         /**
@@ -377,7 +381,6 @@ class Thurston {
         } else {
             this._stereo = value;
         }
-
     }
 
     /**
@@ -480,6 +483,20 @@ class Thurston {
      * @return{RelPosition[]} the left and right eye positions
      */
     getEyePositions() {
+        if (this._renderer.xr.isPresenting) {
+            // if XR is enable, we get the position of the left and right camera
+            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+            this.params.eyeMatrix = [
+                camerasVR[0].matrixWorld,
+                camerasVR[1].matrixWorld,
+            ]
+        } else {
+            this.params.eyeMatrix = [
+                this._camera.matrixWorld,
+                this._camera.matrixWorld,
+            ]
+        }
+
         return this.stereo.eyes(
             this._camera.matrixWorld,
             this.params.position
@@ -813,8 +830,6 @@ class Thurston {
                     newPositionR.copy(newPositionL);
                 }
                 // center each horizon sphere at the appropriate point
-                this._horizonLeft.position.copy(newPositionL);
-                this._horizonRight.position.copy(newPositionR);
                 // compute the old and new position (midpoint between the left and right cameras)
                 const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
                 const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);

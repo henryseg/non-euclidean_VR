@@ -6,6 +6,10 @@
  * - If an object has been hit, call the lighting functions
  **********************************************************************************************************************/
 
+/**
+ * Position on the sphere.
+ */
+varying vec3 spherePosition;
 
 
 
