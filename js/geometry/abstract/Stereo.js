@@ -60,8 +60,6 @@ class Stereo {
         return "/shaders/geometry/abstract/stereo.glsl"
     }
 
-
-
     /**
      * Return the two positions corresponding to the left and right eye.
      * The method just offset the eyes using parallel transport.

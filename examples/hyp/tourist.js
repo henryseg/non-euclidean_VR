@@ -27,7 +27,6 @@ import {
 
 const thurston = new Thurston(geom, cube, {
     keyboard: 'fr',
-    stereoMode: 'tourist',
 });
 
 const ball0 = new Ball(

@@ -1,5 +1,8 @@
 /**
  * Compute the initial direction for the ray-marching
+ * Native view in hyperbolic space.
+ * The direction are computed in such a way that,
+ * two parallel directions from the eyes converge to the same point in the boundary at infinity of H3
  * @param[in] coords the coordinates of the point on the sphere
  */
 RelVector rayDir(vec3 coords){
@@ -16,7 +19,7 @@ RelVector rayDir(vec3 coords){
     dir.w = 1.;
     dir = m * dir;
     dir.w = 0.;
-    dir = camera * dir;
+    dir = eyeMatrix * dir;
     dir = normalize(dir);
     Vector v = createVector(ORIGIN, dir.xyz);
     return applyPosition(eyePosition, v);

@@ -122,11 +122,7 @@ const PARAMS = {
         },
         shaderPass: SHADER_PASS.NONE,
     },
-    // HALF THE INTERPUPILLARY DISTANCE
     ipDist: {
-        default: function () {
-            return [-0.03200000151991844, 0.03200000151991844];
-        },
         shaderPass: SHADER_PASS.UNIFORM,
         shaderType: 'float',
         stereo: true
@@ -290,6 +286,7 @@ class Thurston {
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
+        this.params.ipDist = [-this.stereo.ipDist, this.stereo.ipDist];
         this.params.eyePosition = this.getEyePositions();
 
         // register the isometries involved in the discrete subgroup
@@ -387,7 +384,7 @@ class Thurston {
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        console.log(this._stereo.on);
+        console.log(this.params.ipDist);
     }
 
     /**
@@ -781,13 +778,11 @@ class Thurston {
             uniforms: this.params._uniformsLeft,
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
-            transparent: true
         });
         const materialRight = new ShaderMaterial({
             uniforms: this.params._uniformsRight,
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
-            transparent: true
         });
         this._horizonLeft = new Mesh(geometry, materialLeft);
         this._horizonRight = new Mesh(geometry, materialRight);
