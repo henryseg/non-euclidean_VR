@@ -66,6 +66,14 @@ RelVector geomNormalize(RelVector v){
 }
 
 /**
+ * Return the opposition of the given vector
+ */
+RelVector negate(RelVector v){
+    v.local = negate(v.local);
+    return v;
+}
+
+/**
  * Flow the given vector.
  * This method does apply any teleportation.
  * Hence the local part of the vector, may leaves the fundamental domain.
