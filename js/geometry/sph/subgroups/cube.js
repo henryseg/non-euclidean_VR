@@ -105,7 +105,7 @@ const cube = new Subgroup([
     teleportYn,
     teleportZp,
     teleportZn
-], "/shaders/subgroups/sph/cube.xml");
+], "/shaders/geometry/sph/subgroups/cube.xml");
 
 export {
     cube

@@ -38,7 +38,8 @@ import {
 
 import {
     RelPosition,
-    Vector
+    Vector,
+    Stereo
 } from "./geometry/abstract/General.js";
 
 import {
@@ -121,18 +122,10 @@ const PARAMS = {
         },
         shaderPass: SHADER_PASS.NONE,
     },
-    // HALF THE INTERPUPILLARY DISTANCE
     ipDist: {
-        default: function () {
-            return 0.03200000151991844;
-        },
-        shaderPass: SHADER_PASS.NONE
-    },
-    stereoMode: {
-        default: function () {
-            return undefined;
-        },
-        shaderPass: SHADER_PASS.NONE,
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'float',
+        stereo: true
     },
     position: {
         shaderPass: SHADER_PASS.NONE,
@@ -143,6 +136,16 @@ const PARAMS = {
         shaderType: 'RelPosition',
         stereo: true
     },
+    eyeMatrix: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'mat4',
+        stereo: true
+    },
+    camera: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'mat4',
+        stereo: false
+    }
 };
 
 
@@ -212,10 +215,11 @@ class Thurston {
      * @param {Object} geom - a module handing the relevant geometry
      * @param {Subgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
+     * @param {Stereo} stereo - the stero handler
      * @todo Check if the geometry satisfies all the requirement?
      * @todo If a subgroup is not provided use the trivial one.
      */
-    constructor(geom, subgroup, params = {}) {
+    constructor(geom, subgroup, params = {}, stereo = undefined) {
         // loading the polyfill if WebXR is not supported
         const polyfill = new WebXRPolyfill.default();
 
@@ -230,6 +234,7 @@ class Thurston {
          * @type {Subgroup}
          */
         this.subgroup = subgroup;
+        this.stereo = stereo;
 
         /**
          * The list of parameters of the object.
@@ -269,12 +274,19 @@ class Thurston {
          * @private
          */
         this._scene = undefined;
+        /**
+         * VR Button
+         * @type {HTMLButtonElement}
+         * @private
+         */
+        this._VRButton = undefined;
         this._horizonRight = undefined;
         this._horizonLeft = undefined;
         this.initThreeJS();
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
+        this.params.ipDist = [-this.stereo.ipDist, this.stereo.ipDist];
         this.params.eyePosition = this.getEyePositions();
 
         // register the isometries involved in the discrete subgroup
@@ -352,10 +364,27 @@ class Thurston {
     }
 
     /**
+     * Object used for stereo related computations
+     * (offset of the eyes, pre-processing on the shader, etc).
+     * @type {Stereo}
+     */
+    get stereo() {
+        return this._stereo;
+    }
+
+    set stereo(value) {
+        if (value === undefined) {
+            this._stereo = new Stereo();
+        } else {
+            this._stereo = value;
+        }
+    }
+
+    /**
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-
+        console.log(this.params.ipDist);
     }
 
     /**
@@ -403,7 +432,7 @@ class Thurston {
 
     /**
      * Adding an item to the scene.
-     * @param{Item} item - the item to add
+     * @param{Solid|Light} item - the object to add
      * @return {Thurston} the current Thurston object
      */
     addItem(item) {
@@ -452,17 +481,23 @@ class Thurston {
      */
     getEyePositions() {
         if (this._renderer.xr.isPresenting) {
-            return this.params.position.eyes(
-                this._camera.matrixWorld,
-                this.params.ipDist,
-                this.params.stereoMode
-            );
+            // if XR is enable, we get the position of the left and right camera
+            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+            this.params.eyeMatrix = [
+                camerasVR[0].matrixWorld,
+                camerasVR[1].matrixWorld,
+            ]
         } else {
-            return [
-                this.params.position.clone(),
-                this.params.position.clone()
-            ];
+            this.params.eyeMatrix = [
+                this._camera.matrixWorld,
+                this._camera.matrixWorld,
+            ]
         }
+
+        return this.stereo.eyes(
+            this._camera.matrixWorld,
+            this.params.position
+        );
     }
 
 
@@ -520,7 +555,8 @@ class Thurston {
         this._renderer.xr.setReferenceSpaceType('local');
         this._renderer.setClearColor(new Color(0, 0, 1), 1);
         document.body.appendChild(this._renderer.domElement);
-        document.body.appendChild(VRButton.createButton(this._renderer));
+        this._VRButton = VRButton.createButton(this._renderer);
+        document.body.appendChild(this._VRButton);
 
         // setup the camera
         this._camera = new PerspectiveCamera(
@@ -532,6 +568,8 @@ class Thurston {
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
         this._camera.layers.enable(1);
+
+        this.params.camera = this._camera.matrixWorld;
 
         // build the scene with a single screen
         this._scene = new Scene();
@@ -552,7 +590,6 @@ class Thurston {
         this._scene.add(this._controller0);
         this._controller1 = this._renderer.xr.getController(1);
         this._scene.add(this._controller1);
-
 
         return this;
     }
@@ -698,6 +735,7 @@ class Thurston {
             {file: '/shaders/scene.glsl', data: items},
             {file: '/shaders/raymarch.glsl', data: undefined},
             {file: '/shaders/lighting.glsl', data: Object.assign({maxLightDirs: this.maxLightDirs}, items)},
+            {file: this.stereo.shaderSource, data: undefined},
             {file: '/shaders/main.glsl', data: undefined}
         ];
 
@@ -740,13 +778,11 @@ class Thurston {
             uniforms: this.params._uniformsLeft,
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
-            transparent: true
         });
         const materialRight = new ShaderMaterial({
             uniforms: this.params._uniformsRight,
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
-            transparent: true
         });
         this._horizonLeft = new Mesh(geometry, materialLeft);
         this._horizonRight = new Mesh(geometry, materialRight);
@@ -764,21 +800,19 @@ class Thurston {
      * and the non-euclidean one (by changing the position).
      * The eye positions are not updated here.
      * This should be done manually somewhere else.
+     * @todo We chase the camera, even if the VR mode is off. Change this ?
      * @type{Function}
      */
     get chaseCamera() {
         if (this._chaseCamera === undefined) {
-            let oldPositionL = new Vector3();
-            let oldPositionR = new Vector3();
+            let oldPosition = new Vector();
 
             this._chaseCamera = function () {
                 // declare the new positions of the left and right cameras
                 const newPositionL = new Vector3();
                 const newPositionR = new Vector3();
 
-                newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-                newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
-                if (this._renderer.xr.isPresenting) {
+                if (this.stereo.on) {
                     // if XR is enable, we get the position of the left and right camera
                     const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
                     newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
@@ -786,21 +820,17 @@ class Thurston {
                 } else {
                     // if XR is off, both positions coincide with the one of the camera
                     newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-                    newPositionR.copy(newPositionL);
+                    newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
                 }
                 // center each horizon sphere at the appropriate point
-                this._horizonLeft.position.copy(newPositionL);
-                this._horizonRight.position.copy(newPositionR);
                 // compute the old and new position (midpoint between the left and right cameras)
-                const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
-                const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
+                const newPosition = new Vector().lerpVectors(newPositionL, newPositionR, 0.5);
                 // flow the position along the difference of positions
                 const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
                 this.params.position.flow(deltaPosition);
 
                 // update the old left and right positions
-                oldPositionL.copy(newPositionL);
-                oldPositionR.copy(newPositionR);
+                oldPosition.copy(newPosition);
 
                 return this;
             };
@@ -819,7 +849,6 @@ class Thurston {
         this.chaseCamera();
 
         this.params.eyePosition = this.getEyePositions();
-        // console.log(this.params.eyePosition[0].local.quaternion.toLog(),this.params.eyePosition[1].local.quaternion.toLog())
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
     }
@@ -861,6 +890,13 @@ class Thurston {
             },
             false
         );
+        this._VRButton.addEventListener(
+            "click",
+            function (event) {
+                self.stereo.switch();
+            },
+            false
+        )
     }
 
 }

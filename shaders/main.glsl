@@ -12,16 +12,6 @@
 varying vec3 spherePosition;
 
 
-/**
- * Compute the initial direction for the ray-marching
- * @param[in] coords the coordinates of the point on the sphere
- */
-RelVector rayDir(vec3 coords){
-    vec3 dir = normalize(coords);
-    Vector v = createVector(ORIGIN, dir);
-    return applyPosition(eyePosition, v);
-}
-
 
 /**
  * Main function. Wrap everything together:

@@ -187,48 +187,6 @@ class Position {
     }
 
     /**
-     * Return the two positions corresponding to the left and right eye.
-     * The method just offset the eyes using parallel transport.
-     * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
-     * Hence if `(g,m)` is the current position and `e` the reference frame at then origin,
-     * then the frame of the user is `d_og . m . cameraMatrix . e`
-     * @param {number} ipDist - the interpupillary distance
-     * @return {Position[]} - the position of the left and right eye
-     */
-    _eyes(cameraMatrix, ipDist) {
-        // start from the position of the observer.
-        const rightEye = this.clone();
-        const leftEye = this.clone();
-
-        // if we are in VR mode we offset the position of the left and right eyes
-        // to that end, we flow the position along the left / right direction
-        // we have to be careful that left and right are meant in the point of view of the camera.
-        const rightDir = new Vector(1, 0, 0)
-            .multiplyScalar(ipDist)
-            .applyMatrix4(cameraMatrix);
-        const leftDir = rightDir.clone().negate();
-        rightEye.flow(rightDir);
-        leftEye.flow(leftDir);
-
-        // return the positions of the eyes
-        return [leftEye, rightEye];
-    }
-
-    /**
-     * Return the two positions corresponding to the left and right eye.
-     * By default, just call _eyes (is use only parallel transport).
-     * The method can be overloaded to add a correction at the facing level.
-     * This is for instance used in H3 (tourist view vs native view)
-     * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
-     * @param {number} ipDist - the interpupillary distance
-     * @param {string} stereoMode - a mode (defining a correction at the facing level)
-     * @return {Position[]} - the position of the left and right eye
-     */
-    eyes(cameraMatrix, ipDist, stereoMode = undefined) {
-        return this._eyes(cameraMatrix, ipDist);
-    }
-
-    /**
      * Check if the current position and `position ` are the same.
      * @param {Position} position
      * @return {boolean} true if the positions are equal, false otherwise

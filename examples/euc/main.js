@@ -16,9 +16,17 @@ import {Ball, BallComplement, PointLight} from "../../js/items/euc/Library.js";
 import {
     torus
 } from "../../js/geometry/euc/subgroups/torus.js";
+import {FixedDirectionStereo} from "../../js/geometry/abstract/stereo/FixedDirectionStereo.js";
+import {Stereo} from "../../js/geometry/abstract/Stereo.js";
 
 
-const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxDist:5});
+
+const thurston = new Thurston(
+    geom,
+    torus,
+    {keyboard: 'fr', maxDist: 5},
+    new Stereo()
+);
 
 const ball0 = new BallComplement(
     new geom.Point(0, 0, 0),

@@ -22,14 +22,15 @@ import {
 import {
     cube
 } from "../../js/geometry/hyp/subgroups/cube.js";
-
-
+import {NativeStereo} from "../../js/geometry/hyp/stereo/NativeStereo.js";
 
 
 const thurston = new Thurston(geom, cube, {
-    keyboard: 'fr',
-    stereoMode: 'native',
-});
+        keyboard: 'fr',
+        stereoMode: 'native',
+    },
+    new NativeStereo()
+);
 
 const ball0 = new Ball(
     new Vector3(0, 0, 0),
@@ -68,5 +69,5 @@ const light2 = new PointLight(
     new Color(1, 0, 1)
 );
 
-thurston.addItems([ball1,light0, light1, light2]);
+thurston.addItems([ball1, light0, light1, light2]);
 thurston.run();

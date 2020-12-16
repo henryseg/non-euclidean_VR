@@ -64,7 +64,7 @@ const cube = new Subgroup([
     teleportYn,
     teleportZp,
     teleportZn
-], "/shaders/subgroups/hyp/cube.xml");
+], "/shaders/geometry/hyp/subgroups/cube.xml");
 
 export {
     cube
