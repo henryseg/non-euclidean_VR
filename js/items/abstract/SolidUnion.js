@@ -1,30 +1,34 @@
 import {Solid} from "./Solid.js";
 import {mustache} from "../../lib/mustache.mjs";
 
-class SolidComplement extends Solid {
+class SolidUnion extends Solid {
 
     /**
      *
-     * @param {Solid} solid
+     * @param {Solid} solid1
+     * @param {Solid} solid2
      * @param {Material} material
      */
-    constructor(solid, material = undefined) {
-        const data = {
-            position: solid.position,
-            global: solid.global,
-        };
-        if (material === undefined) {
-            data.material = solid.material;
-        } else {
-            data.material = material;
+    constructor(solid1, solid2, material = undefined) {
+        if(solid1.global !== solid2.global) {
+            throw new Error("The solid should be both global or both local");
         }
+        const data = {
+            position: solid1.position,
+            global: solid1.global,
+            material: material
+        };
         super(data);
         /**
-         * The object we take the complement of
+         * The first object we take the union of
          * @type {Solid}
          */
-        this.child = solid;
-
+        this.child1 = solid1;
+        /**
+         * The second object we take the union of
+         * @type {Solid}
+         */
+        this.child2 = solid2;
     }
 
     /**
@@ -33,7 +37,7 @@ class SolidComplement extends Solid {
      * @todo The path is absolute with respect to the root of the server
      */
     get shaderSource() {
-        return "/shaders/items/abstract/SolidComplement.xml";
+        return "/shaders/items/abstract/SolidUnion.xml";
     }
 
     /**
@@ -43,7 +47,8 @@ class SolidComplement extends Solid {
      */
     async glslBuildData(globals = {}) {
         // build the shader chunk of the child
-        await this.child.glslBuildData();
+        await this.child1.glslBuildData();
+        await this.child2.glslBuildData();
 
         const xml = await this.loadGLSLTemplate();
         const selector = `solid[class=${this.className}] shader`;
@@ -56,7 +61,10 @@ class SolidComplement extends Solid {
             switch (type) {
                 case 'sdf':
                     // SDF for the solid
-                    this.glsl[type] = `${this.child.glsl[type]}
+                    this.glsl[type] = `
+                    ${this.child1.glsl[type]}
+                    
+                    ${this.child2.glsl[type]}
                     
                     float ${this.name}SDF(RelVector v){
                         ${rendered}
@@ -64,21 +72,26 @@ class SolidComplement extends Solid {
                     break;
                 case 'gradient':
                     // gradient of SDF for the solid
-                    this.glsl[type] = `${this.child.glsl[type]}
+                    this.glsl[type] = `
+                    ${this.child1.glsl[type]}
+                    
+                    ${this.child2.glsl[type]}
                     
                     RelVector ${this.name}Grad(RelVector v){
                         ${rendered}
                     }`;
                     break;
                 default:
-                    this.glsl[type] = `${this.child.glsl[type]}
+                    this.glsl[type] = `
+                    ${this.child1.glsl[type]}
+                    
+                    ${this.child2.glsl[type]}
                     
                     ${rendered}`;
             }
         }
-        console.log(this.glsl);
     }
 
 }
 
-export {SolidComplement};
+export {SolidUnion};

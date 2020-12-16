@@ -3,7 +3,7 @@
     <background>
     </background>
     <items>
-        <solid class="solidComplement">
+        <solid class="solidUnion">
             <shader type="declare">
                 Solid {{name}};
             </shader>
@@ -11,11 +11,20 @@
                 {{name}} = {{toGLSL}};
             </shader>
             <shader type="sdf">
-                return - {{child.name}}SDF(v);
+                float dist1 = {{child1.name}}SDF(v);
+                float dist2 = {{child2.name}}SDF(v);
+                return min(dist1,dist2);
             </shader>
-            <shader type="gradient">
-                return negate({{child.name}}Grad(v));
-            </shader>
+            <shader type="gradient"><![CDATA[
+                float dist1 = {{child1.name}}SDF(v);
+                float dist2 = {{child2.name}}SDF(v);
+                if(dist1 < dist2) {
+                    return {{child1.name}}Grad(v);
+                }
+                else {
+                    return {{child2.name}}Grad(v);
+                }
+            ]]></shader>
         </solid>
     </items>
 </library>

@@ -56,7 +56,8 @@ class SolidComplement extends Solid {
             switch (type) {
                 case 'sdf':
                     // SDF for the solid
-                    this.glsl[type] = `${this.child.glsl[type]}
+                    this.glsl[type] = `
+                    ${this.child.glsl[type]}
                     
                     float ${this.name}SDF(RelVector v){
                         ${rendered}
@@ -64,21 +65,21 @@ class SolidComplement extends Solid {
                     break;
                 case 'gradient':
                     // gradient of SDF for the solid
-                    this.glsl[type] = `${this.child.glsl[type]}
+                    this.glsl[type] = `
+                    ${this.child.glsl[type]}
                     
                     RelVector ${this.name}Grad(RelVector v){
                         ${rendered}
                     }`;
                     break;
                 default:
-                    this.glsl[type] = `${this.child.glsl[type]}
+                    this.glsl[type] = `
+                    ${this.child.glsl[type]}
                     
                     ${rendered}`;
             }
         }
-        console.log(this.glsl);
     }
-
 }
 
 export {SolidComplement};

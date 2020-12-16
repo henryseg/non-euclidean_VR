@@ -3,7 +3,7 @@
     <background>
     </background>
     <items>
-        <solid class="solidUnion">
+        <solid class="solidIntersection">
             <shader type="declare">
                 Solid {{name}};
             </shader>
@@ -13,12 +13,12 @@
             <shader type="sdf">
                 float dist1 = {{child1.name}}SDF(v);
                 float dist2 = {{child2.name}}SDF(v);
-                return min(dist1,dist2);
+                return max(dist1,dist2);
             </shader>
             <shader type="gradient"><![CDATA[
                 float dist1 = {{child1.name}}SDF(v);
                 float dist2 = {{child2.name}}SDF(v);
-                if(dist1 < dist2) {
+                if(dist1 > dist2) {
                     return {{child1.name}}Grad(v);
                 }
                 else {
