@@ -24,7 +24,7 @@ import {Stereo} from "../../js/geometry/abstract/Stereo.js";
 const thurston = new Thurston(
     geom,
     torus,
-    {keyboard: 'fr', maxDist: 5},
+    {keyboard: 'fr'},
     new Stereo()
 );
 
