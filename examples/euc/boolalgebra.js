@@ -22,10 +22,7 @@ import {
     torus
 } from "../../js/geometry/euc/subgroups/torus.js";
 import {Stereo} from "../../js/geometry/abstract/Stereo.js";
-import {SolidComplement} from "../../js/items/abstract/SolidComplement.js";
-import {SolidUnion} from "../../js/items/abstract/SolidUnion.js";
-import {SolidIntersection} from "../../js/items/abstract/SolidIntersection.js";
-
+import {SolidComplement, SolidUnion, SolidIntersection, SolidWrap} from "../../js/items/abstract/Solids.js";
 
 const thurston = new Thurston(
     geom,
@@ -37,21 +34,19 @@ const thurston = new Thurston(
 const ball0 = new Ball(
     new geom.Point(0, 0, 0),
     0.67,
-    new Material({color: new Color(1, 0.2, 0.2)}),
+    new Material({color: new Color(1, 0.6, 0.6)}),
     false
 );
 
 const complement = new SolidComplement(ball0);
 
 const ball1 = new Ball(
-    // new geom.Point(-.3, -0.1, -.5),
-    new geom.Point(-0.08, 0, .5),
+    new geom.Point(-0.5, -0.08, 0),
     0.15
 );
 
 const ball2 = new Ball(
-    // new geom.Point(-.3, -0.1, -.5),
-    new geom.Point(0.08, 0, .5),
+    new geom.Point(-0.5, 0.08, 0),
     0.15
 );
 
@@ -64,14 +59,12 @@ const union = new SolidUnion(
 
 
 const ball3 = new Ball(
-    // new geom.Point(-.3, -0.1, -.5),
-    new geom.Point(-0.08, 0, -.5),
+    new geom.Point(0.5, -0.08, 0),
     0.2
 );
 
 const ball4 = new Ball(
-    // new geom.Point(-.3, -0.1, -.5),
-    new geom.Point(0.08, 0, -.5),
+    new geom.Point(0.5, 0.08, 0),
     0.2
 );
 
@@ -80,6 +73,21 @@ const inter = new SolidIntersection(
     ball4,
     new Material({color: new Color(0, 1, 0)})
 );
+
+const ball5 = new Ball(
+    new geom.Point(0, 0, -0.5),
+    0.1,
+    new Material({color: new Color(1, 0, 0)})
+);
+
+
+const ball6 = new Ball(
+    new geom.Point(0, 0, -0.5),
+    0.2,
+    new Material({color: new Color(1, 0, 0)})
+);
+
+const wrapped = new SolidWrap(ball6, ball5);
 
 
 //  white light
@@ -101,5 +109,5 @@ const light2 = new PointLight(
     new Color(1, 1, 1)
 );
 
-thurston.addItems([complement, union, inter, light0, light1, light2]);
+thurston.addItems([complement, union, inter, wrapped, light0, light1, light2]);
 thurston.run();

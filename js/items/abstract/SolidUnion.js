@@ -11,7 +11,7 @@ class SolidUnion extends Solid {
      */
     constructor(solid1, solid2, material = undefined) {
         if(solid1.global !== solid2.global) {
-            throw new Error("The solid should be both global or both local");
+            throw new Error("The solidw should be both global or both local");
         }
         const data = {
             position: solid1.position,
