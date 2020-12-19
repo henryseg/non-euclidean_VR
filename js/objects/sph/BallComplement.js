@@ -2,7 +2,7 @@ import {Position} from "../../geometry/abstract/Position.js";
 import {Isometry} from "../../geometry/abstract/Isometry.js";
 import {Solid} from "../abstract/Solid.js";
 
-class Ball extends Solid {
+class BallComplement extends Solid {
 
     constructor(direction, radius, material, global = true) {
         const position = new Position();
@@ -18,10 +18,10 @@ class Ball extends Solid {
     }
 
     get shaderSource() {
-        return '/shaders/items/sph/items.xml';
+        return '/shaders/objects/sph/items.xml';
     }
 }
 
 export {
-    Ball
+    BallComplement
 }

@@ -12,7 +12,7 @@ import {
 
 
 import * as geom from "../../js/geometry/sph/General.js";
-import {Ball, BallComplement, PointLight} from "../../js/items/sph/Library.js";
+import {Ball, BallComplement, PointLight} from "../../js/objects/sph/Library.js";
 import {
     cube
 } from "../../js/geometry/sph/subgroups/cube.js";

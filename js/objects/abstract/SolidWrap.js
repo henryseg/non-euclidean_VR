@@ -1,34 +1,32 @@
 import {Solid} from "./Solid.js";
 import {mustache} from "../../lib/mustache.mjs";
 
-class SolidUnion extends Solid {
+class SolidWrap extends Solid {
 
     /**
-     *
-     * @param {Solid} solid1
-     * @param {Solid} solid2
-     * @param {Material} material
+     * @param {Solid} wrap - wrapping object
+     * @param {Solid} solid - the object to render. It should be entirely contained in the wrap
      */
-    constructor(solid1, solid2, material = undefined) {
-        if(solid1.global !== solid2.global) {
-            throw new Error("The solidw should be both global or both local");
+    constructor(wrap, solid) {
+        if (wrap.global !== solid.global) {
+            throw new Error("The solid and the wrap be both global or both local");
         }
         const data = {
-            position: solid1.position,
-            global: solid1.global,
-            material: material
+            position: wrap.position,
+            global: wrap.global,
+            material: solid.material
         };
         super(data);
         /**
          * The first object we take the union of
          * @type {Solid}
          */
-        this.child1 = solid1;
+        this.wrap = wrap;
         /**
          * The second object we take the union of
          * @type {Solid}
          */
-        this.child2 = solid2;
+        this.solid = solid;
     }
 
     /**
@@ -37,7 +35,7 @@ class SolidUnion extends Solid {
      * @todo The path is absolute with respect to the root of the server
      */
     get shaderSource() {
-        return "/shaders/items/abstract/SolidUnion.xml";
+        return "/shaders/objects/abstract/SolidWrap.xml";
     }
 
     /**
@@ -47,8 +45,8 @@ class SolidUnion extends Solid {
      */
     async glslBuildData(globals = {}) {
         // build the shader chunk of the child
-        await this.child1.glslBuildData();
-        await this.child2.glslBuildData();
+        await this.wrap.glslBuildData();
+        await this.solid.glslBuildData();
 
         const xml = await this.loadGLSLTemplate();
         const selector = `solid[class=${this.className}] shader`;
@@ -62,9 +60,9 @@ class SolidUnion extends Solid {
                 case 'sdf':
                     // SDF for the solid
                     this.glsl[type] = `
-                    ${this.child1.glsl[type]}
+                    ${this.wrap.glsl[type]}
                     
-                    ${this.child2.glsl[type]}
+                    ${this.solid.glsl[type]}
                     
                     float ${this.name}SDF(RelVector v){
                         ${rendered}
@@ -73,9 +71,7 @@ class SolidUnion extends Solid {
                 case 'gradient':
                     // gradient of SDF for the solid
                     this.glsl[type] = `
-                    ${this.child1.glsl[type]}
-                    
-                    ${this.child2.glsl[type]}
+                    ${this.solid.glsl[type]}
                     
                     RelVector ${this.name}Grad(RelVector v){
                         ${rendered}
@@ -83,9 +79,9 @@ class SolidUnion extends Solid {
                     break;
                 default:
                     this.glsl[type] = `
-                    ${this.child1.glsl[type]}
+                    ${this.wrap.glsl[type]}
                     
-                    ${this.child2.glsl[type]}
+                    ${this.solid.glsl[type]}
                     
                     ${rendered}`;
             }
@@ -94,4 +90,4 @@ class SolidUnion extends Solid {
 
 }
 
-export {SolidUnion};
+export {SolidWrap};

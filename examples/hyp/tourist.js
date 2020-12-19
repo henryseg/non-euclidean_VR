@@ -17,7 +17,7 @@ import {
     Ball,
     PointLight,
     BallComplement
-} from "../../js/items/hyp/Library.js";
+} from "../../js/objects/hyp/Library.js";
 
 import {
     cube

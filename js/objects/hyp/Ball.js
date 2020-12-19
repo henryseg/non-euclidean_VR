@@ -1,12 +1,18 @@
-import {Position} from "../../geometry/abstract/Position.js";
-import {Isometry} from "../../geometry/abstract/Isometry.js";
-import {Solid} from "../abstract/Solid.js";
+import {
+    Position
+} from "../../geometry/abstract/Position.js";
+import {
+    Isometry
+} from "../../geometry/abstract/Isometry.js";
+import {
+    Solid
+} from "../abstract/Solid.js";
 
 class Ball extends Solid {
 
     constructor(center, radius, material, global = true) {
         const position = new Position();
-        position.setBoost(new Isometry().makeTranslation(center));
+        position.setBoost(new Isometry().makeTranslationFromDir(center));
         const data = {
             position: position,
             material: material,
@@ -18,7 +24,7 @@ class Ball extends Solid {
     }
 
     get shaderSource() {
-        return '/shaders/items/euc/items.xml';
+        return '/shaders/objects/hyp/items.xml';
     }
 }
 

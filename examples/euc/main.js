@@ -12,7 +12,7 @@ import {
 
 
 import * as geom from "../../js/geometry/euc/General.js";
-import {Ball, BallComplement, PointLight} from "../../js/items/euc/Library.js";
+import {Ball, BallComplement, PointLight} from "../../js/objects/euc/Library.js";
 import {
     torus
 } from "../../js/geometry/euc/subgroups/torus.js";

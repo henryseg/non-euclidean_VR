@@ -1,7 +1,7 @@
 import {Solid} from "./Solid.js";
 import {mustache} from "../../lib/mustache.mjs";
 
-class SolidIntersection extends Solid {
+class SolidUnion extends Solid {
 
     /**
      *
@@ -10,7 +10,7 @@ class SolidIntersection extends Solid {
      * @param {Material} material
      */
     constructor(solid1, solid2, material = undefined) {
-        if (solid1.global !== solid2.global) {
+        if(solid1.global !== solid2.global) {
             throw new Error("The solids should be both global or both local");
         }
         const data = {
@@ -20,12 +20,12 @@ class SolidIntersection extends Solid {
         };
         super(data);
         /**
-         * The first object we take the intersection of
+         * The first object we take the union of
          * @type {Solid}
          */
         this.child1 = solid1;
         /**
-         * The second object we take the intersection of
+         * The second object we take the union of
          * @type {Solid}
          */
         this.child2 = solid2;
@@ -37,7 +37,7 @@ class SolidIntersection extends Solid {
      * @todo The path is absolute with respect to the root of the server
      */
     get shaderSource() {
-        return "/shaders/items/abstract/SolidIntersection.xml";
+        return "/shaders/objects/abstract/SolidUnion.xml";
     }
 
     /**
@@ -94,4 +94,4 @@ class SolidIntersection extends Solid {
 
 }
 
-export {SolidIntersection};
+export {SolidUnion};

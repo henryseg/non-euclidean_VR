@@ -727,7 +727,7 @@ class Thurston {
             {file: '/shaders/geometry/abstract/commons1.glsl', data: undefined},
             {file: this.geom.shader2, data: undefined},
             {file: '/shaders/geometry/abstract/commons2.glsl', data: undefined},
-            {file: '/shaders/items/abstract.glsl', data: undefined},
+            {file: '/shaders/objects/abstract.glsl', data: undefined},
             {file: '/shaders/background.glsl', data: blocks},
             {file: '/shaders/setup.glsl', data: setup},
             {file: '/shaders/subgroup.glsl', data: this.subgroup},

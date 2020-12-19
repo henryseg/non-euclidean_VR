@@ -24,10 +24,16 @@ class ObjectThurston {
          */
         this.uuid = MathUtils.generateUUID().replaceAll('-', '_');
         /**
-         * The GLSL code for the item (declaration, signed distance function and gradient)
+         * The GLSL code for the object (declaration, signed distance function, gradient, direction field, etc)
          * @type {Object}
          */
         this.glsl = undefined;
+        /**
+         * The idea of the object in the scene
+         * This is automatically set up when the object is added to the scene
+         * @type{number}
+         */
+        this.id = undefined;
     }
 
     /**
@@ -155,7 +161,7 @@ class ObjectThurston {
      * @return {Promise<Document>}
      */
     async loadGLSLDefaultTemplate() {
-        const response = await fetch('../../shaders/items/default.xml');
+        const response = await fetch('../../shaders/objects/default.xml');
         const parser = new DOMParser();
         return parser.parseFromString(await response.text(), 'application/xml');
     }

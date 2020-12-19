@@ -33,7 +33,7 @@ class SolidComplement extends Solid {
      * @todo The path is absolute with respect to the root of the server
      */
     get shaderSource() {
-        return "/shaders/items/abstract/SolidComplement.xml";
+        return "/shaders/objects/abstract/SolidComplement.xml";
     }
 
     /**

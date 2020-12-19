@@ -24,7 +24,7 @@ class BallComplement extends Solid {
     }
 
     get shaderSource() {
-        return '/shaders/items/hyp/items.xml';
+        return '/shaders/objects/hyp/items.xml';
     }
 }
 
