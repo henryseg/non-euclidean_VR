@@ -12,7 +12,7 @@ import {
 
 import {
     Material
-} from "../../js/Material.js";
+} from "../../js/commons/material/phong/Material.js";
 
 
 import * as geom from "../../js/geometry/euc/General.js";
@@ -21,7 +21,7 @@ import {Ball, PointLight} from "../../js/objects/euc/Library.js";
 import {
     torus
 } from "../../js/geometry/euc/subgroups/torus.js";
-import {Stereo} from "../../js/geometry/abstract/Stereo.js";
+import {Stereo} from "../../js/core/abstract/Stereo.js";
 import {SolidComplement, SolidUnion, SolidIntersection, SolidWrap} from "../../js/objects/abstract/Solids.js";
 
 const thurston = new Thurston(

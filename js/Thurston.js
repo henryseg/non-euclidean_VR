@@ -40,7 +40,7 @@ import {
     RelPosition,
     Vector,
     Stereo
-} from "./geometry/abstract/General.js";
+} from "./core/geometry/General.js";
 
 import {
     KeyboardControls

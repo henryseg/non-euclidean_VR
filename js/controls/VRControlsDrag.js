@@ -5,7 +5,7 @@ import {
 
 import {
     Vector,
-} from "../geometry/abstract/Vector.js";
+} from "../core/abstract/Vector.js";
 
 import {
     bind

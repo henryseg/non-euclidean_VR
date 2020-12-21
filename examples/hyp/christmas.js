@@ -13,7 +13,7 @@ import {
 
 import {
     Material
-} from "../../js/Material.js";
+} from "../../js/commons/material/phong/Material.js";
 
 
 import * as geom from "../../js/geometry/hyp/General.js";
