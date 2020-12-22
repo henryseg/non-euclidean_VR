@@ -41,8 +41,4 @@ export class Light extends Generic {
     glslInstance() {
         return this.glslDirections();
     }
-
-
-
-
 }

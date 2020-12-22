@@ -10,7 +10,8 @@ import {Point} from "../../js/core/geometry/Point.js";
 import {Ball} from "../../js/geometries/euc/solids/Ball.js";
 import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
 import {SingleColorMaterial} from "../../js/commons/material/singleColor/SingleColorMaterial.js";
-
+import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 
 
 // initial setup
@@ -27,7 +28,7 @@ document.body.appendChild(renderer.domElement);
 
 // single color material
 const singleColorMaterial = new SingleColorMaterial(new Color(0.7, 0.1, 0.2));
-const ball2 = new Ball(
+const ball0 = new Ball(
     new Point(-1, 0, -2),
     0.3,
     singleColorMaterial
@@ -42,11 +43,23 @@ const ball1 = new Ball(
     normalMaterial
 );
 
-
-
+const light1 = new PointLight(
+    new Point(2, 2, -2),
+    new Color(1, 1, 0),
+)
+const light2 = new PointLight(
+    new Point(1, -0.5, 0),
+    new Color(1, 0, 1),
+)
+const phongMaterial = new PhongMaterial({shininess: 5, lights: [light1, light2]});
+const ball2 = new Ball(
+    new Point(1, 0, -2),
+    0.3,
+    phongMaterial
+)
 
 // adding the solid to the scene
-scene.add(ball1, ball2);
+scene.add(light1, light2, ball0, ball1, ball2);
 
 // building there renderer
 renderer.build();

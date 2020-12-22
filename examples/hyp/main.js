@@ -8,8 +8,8 @@ import {
 } from "../../js/Thurston.js";
 
 import {
-    Material
-} from "../../js/commons/material/phong/Material.js";
+    PhongMaterial
+} from "../../js/commons/material/phong/PhongMaterial.js";
 
 
 import * as geom from "../../js/geometry/hyp/General.js";
@@ -33,7 +33,7 @@ const thurston = new Thurston(geom, cube, {
 const ball0 = new Ball(
     new Vector3(0, 0, 0),
     0.1,
-    new Material({
+    new PhongMaterial({
         color: new Color(1, 0.2, 0.2)
     }),
     false
@@ -42,7 +42,7 @@ const ball0 = new Ball(
 const ball1 = new BallComplement(
     new Vector3(0, 0, 0),
     1.05,
-    new Material({
+    new PhongMaterial({
         color: new Color(0, 0, 1)
     }),
     false

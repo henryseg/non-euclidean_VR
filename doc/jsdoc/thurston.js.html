@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>thurston.js</title>
+		<title>Thurston.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -42,32 +42,60 @@
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#name">name</a></li>
 											<li><a href="global.html#name">name</a></li>
-											<li><a href="global.html#shader">shader</a></li>
-											<li><a href="global.html#shader">shader</a></li>
+											<li><a href="global.html#shader1">shader1</a></li>
+											<li><a href="global.html#shader1">shader1</a></li>
+											<li><a href="global.html#shader2">shader2</a></li>
+											<li><a href="global.html#shader2">shader2</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="Camera.html">Camera</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="FixedDirectionStereo.html">FixedDirectionStereo</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
-											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
-											<li><a href="ObjectThurston.html">ObjectThurston</a></li>
+											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="Mono.html">Mono</a></li>
+											<li><a href="NativeStereo.html">NativeStereo</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
 											<li><a href="Subgroup.html">Subgroup</a></li>
 											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
-											<li><a href="VRControls.html">VRControls</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="module-Thurston.html">Thurston</a></li>
 											<li><a href="module-Thurston.html">Thurston</a></li>
 									</ul>
 								</li>
@@ -89,7 +117,7 @@
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
 				<span class="kind">source</span>
-				<h1><span class="name">thurston.js</span></h1>
+				<h1><span class="name">Thurston.js</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -104,7 +132,6 @@
  * Module used to define and render a scene in one of the eight Thurston geometries.
  */
 
-import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
 
 import {
     WebGLRenderer,
@@ -115,6 +142,7 @@ import {
     Mesh,
     Clock,
     Vector3,
+    Color
 } from "./lib/three.module.js";
 
 import {
@@ -137,20 +165,28 @@ import {
 
 import {
     RelPosition,
-    Vector
-} from "./geometry/abstract/General.js";
+    Vector,
+    Stereo
+} from "./core/geometry/General.js";
 
 import {
-    KeyboardControls
-} from "./keyboardControls.js";
+    FlyControls
+} from "./controls/FlyControls.js";
 
 import {
-    VRControls
-} from "./VRControls.js";
+    VRControlsMove
+} from "./controls/VRControlsMove.js";
+import {
+    VRControlsDrag
+} from "./controls/VRControlsDrag.js";
 
 import {
     bind
 } from "./utils.js";
+
+
+import * as WebXRPolyfill from "./lib/webxr-polyfill.module.js";
+
 
 /**
  * Code for the way a property can be passed to the shader
@@ -214,10 +250,9 @@ const PARAMS = {
         shaderPass: SHADER_PASS.NONE,
     },
     ipDist: {
-        default: function () {
-            return 0.03200000151991844;
-        },
-        shaderPass: SHADER_PASS.NONE
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'float',
+        stereo: true
     },
     position: {
         shaderPass: SHADER_PASS.NONE,
@@ -228,6 +263,16 @@ const PARAMS = {
         shaderType: 'RelPosition',
         stereo: true
     },
+    eyeMatrix: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'mat4',
+        stereo: true
+    },
+    camera: {
+        shaderPass: SHADER_PASS.UNIFORM,
+        shaderType: 'mat4',
+        stereo: false
+    }
 };
 
 
@@ -297,12 +342,14 @@ class Thurston {
      * @param {Object} geom - a module handing the relevant geometry
      * @param {Subgroup} subgroup - a discrete subgroups
      * @param {Object} params - a list of options. See defaultOptions for the list of available options.
+     * @param {Stereo} stereo - the stero handler
      * @todo Check if the geometry satisfies all the requirement?
      * @todo If a subgroup is not provided use the trivial one.
      */
-    constructor(geom, subgroup, params = {}) {
+    constructor(geom, subgroup, params = {}, stereo = undefined) {
         // loading the polyfill if WebXR is not supported
         const polyfill = new WebXRPolyfill.default();
+
 
         /**
          * The underlying geometry
@@ -314,6 +361,7 @@ class Thurston {
          * @type {Subgroup}
          */
         this.subgroup = subgroup;
+        this.stereo = stereo;
 
         /**
          * The list of parameters of the object.
@@ -353,12 +401,19 @@ class Thurston {
          * @private
          */
         this._scene = undefined;
+        /**
+         * VR Button
+         * @type {HTMLButtonElement}
+         * @private
+         */
+        this._VRButton = undefined;
         this._horizonRight = undefined;
         this._horizonLeft = undefined;
         this.initThreeJS();
 
         // setup the initial positions
         this.params.position = new RelPosition(this.subgroup);
+        this.params.ipDist = [-this.stereo.ipDist, this.stereo.ipDist];
         this.params.eyePosition = this.getEyePositions();
 
         // register the isometries involved in the discrete subgroup
@@ -395,10 +450,10 @@ class Thurston {
 
         /**
          * The keyboard controls
-         * @type {KeyboardControls}
+         * @type {FlyControls}
          * @private
          */
-        this._keyboardControls = new KeyboardControls(
+        this._keyboardControls = new FlyControls(
             this.params.position,
             this._camera,
             this._renderer.domElement,
@@ -406,7 +461,8 @@ class Thurston {
         );
         this._keyboardControls.infos = bind(this, this.infos);
 
-        this._VRControls = new VRControls(this.params.position, this._controller0);
+        this._VRControlsMove = new VRControlsMove(this.params.position, this._controller0);
+        this._VRControlsDrag = new VRControlsDrag(this.params.position, this._controller1);
 
         /**
          * A clock to measure the time between two call of animate
@@ -435,21 +491,27 @@ class Thurston {
     }
 
     /**
+     * Object used for stereo related computations
+     * (offset of the eyes, pre-processing on the shader, etc).
+     * @type {Stereo}
+     */
+    get stereo() {
+        return this._stereo;
+    }
+
+    set stereo(value) {
+        if (value === undefined) {
+            this._stereo = new Stereo();
+        } else {
+            this._stereo = value;
+        }
+    }
+
+    /**
      * Data displayed in the log, when the info key is pressed.
      */
     infos() {
-        const p1 = new Vector3();
-        const p2 = new Vector3();
-        if (this._renderer.xr.isPresenting) {
-            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
-            camerasVR[0].getWorldPosition(p1);
-            camerasVR[1].getWorldPosition(p2);
-            console.log("VR", p1.toLog(), p2.toLog());
-            console.log(camerasVR);
-        } else {
-            this._camera.getWorldPosition(p1);
-            console.log("No VR", p1.toLog());
-        }
+        console.log(this.params.ipDist);
     }
 
     /**
@@ -497,7 +559,7 @@ class Thurston {
 
     /**
      * Adding an item to the scene.
-     * @param{Item} item - the item to add
+     * @param{Solid|Light} item - the object to add
      * @return {Thurston} the current Thurston object
      */
     addItem(item) {
@@ -545,25 +607,24 @@ class Thurston {
      * @return{RelPosition[]} the left and right eye positions
      */
     getEyePositions() {
-        // start from the position of the observer.
-        const rightEye = this.params.position.clone();
-        const leftEye = this.params.position.clone();
-
-        // check if we are in VR mode or not
         if (this._renderer.xr.isPresenting) {
-            // if we are in VR mode we offset the position of the left and right eyes
-            // to that end, we flow the position along the left / right direction
-            // we have to be careful that left and right are meant in the point of view of the camera.
-            const right = new Vector(1, 0, 0)
-                .multiplyScalar(0.5 * this.params.ipDist)
-                .applyMatrix4(this._camera.matrixWorld);
-            const left = right.clone().negate();
-            rightEye.flow(right);
-            leftEye.flow(left);
+            // if XR is enable, we get the position of the left and right camera
+            const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
+            this.params.eyeMatrix = [
+                camerasVR[0].matrixWorld,
+                camerasVR[1].matrixWorld,
+            ]
+        } else {
+            this.params.eyeMatrix = [
+                this._camera.matrixWorld,
+                this._camera.matrixWorld,
+            ]
         }
 
-        // return the positions of the eyes
-        return [leftEye, rightEye];
+        return this.stereo.eyes(
+            this._camera.matrixWorld,
+            this.params.position
+        );
     }
 
 
@@ -619,19 +680,23 @@ class Thurston {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
         this._renderer.xr.enabled = true;
         this._renderer.xr.setReferenceSpaceType('local');
+        this._renderer.setClearColor(new Color(0, 0, 1), 1);
         document.body.appendChild(this._renderer.domElement);
-        document.body.appendChild(VRButton.createButton(this._renderer));
+        this._VRButton = VRButton.createButton(this._renderer);
+        document.body.appendChild(this._VRButton);
 
         // setup the camera
         this._camera = new PerspectiveCamera(
             this.params.fov,
             window.innerWidth / window.innerHeight,
-            0.00001,
+            0.01,
             2000
         );
         this._camera.position.set(0, 0, 0);
         this._camera.lookAt(0, 0, -1);
         this._camera.layers.enable(1);
+
+        this.params.camera = this._camera.matrixWorld;
 
         // build the scene with a single screen
         this._scene = new Scene();
@@ -653,7 +718,6 @@ class Thurston {
         this._controller1 = this._renderer.xr.getController(1);
         this._scene.add(this._controller1);
 
-
         return this;
     }
 
@@ -674,7 +738,7 @@ class Thurston {
      * @return {string} - the code of the shader
      */
     async buildShaderVertex() {
-        const response = await fetch("../shaders/vertex.glsl");
+        const response = await fetch("/shaders/vertex.glsl");
         return await response.text();
     }
 
@@ -781,23 +845,25 @@ class Thurston {
         const setup = Object.assign({}, items, {uniforms: this.buildShaderDataUniforms()});
         await this.subgroup.glslBuildData();
 
-
         // A list of pairs (file, data)
         // - file is a path a a shader file
         // - data are the data passed to the template (if undefined, the file is just a plain GLSL file)
         const shaders = [
-            {file: 'shaders/header.glsl', data: header},
-            {file: this.geom.shader, data: undefined},
-            {file: 'shaders/geometry/commons.glsl', data: undefined},
-            {file: 'shaders/items/abstract.glsl', data: undefined},
-            {file: 'shaders/background.glsl', data: blocks},
-            {file: 'shaders/setup.glsl', data: setup},
-            {file: 'shaders/subgroup.glsl', data: this.subgroup},
-            {file: 'shaders/sdf.glsl', data: items},
-            {file: 'shaders/scene.glsl', data: items},
-            {file: 'shaders/raymarch.glsl', data: undefined},
-            {file: 'shaders/lighting.glsl', data: Object.assign({maxLightDirs: this.maxLightDirs}, items)},
-            {file: 'shaders/main.glsl', data: undefined}
+            {file: '/shaders/header.glsl', data: header},
+            {file: this.geom.shader1, data: undefined},
+            {file: '/shaders/geometry/abstract/commons1.glsl', data: undefined},
+            {file: this.geom.shader2, data: undefined},
+            {file: '/shaders/geometry/abstract/commons2.glsl', data: undefined},
+            {file: '/shaders/objects/abstract.glsl', data: undefined},
+            {file: '/shaders/background.glsl', data: blocks},
+            {file: '/shaders/setup.glsl', data: setup},
+            {file: '/shaders/subgroup.glsl', data: this.subgroup},
+            {file: '/shaders/sdf.glsl', data: items},
+            {file: '/shaders/scene.glsl', data: items},
+            {file: '/shaders/raymarch.glsl', data: undefined},
+            {file: '/shaders/lighting.glsl', data: Object.assign({maxLightDirs: this.maxLightDirs}, items)},
+            {file: this.stereo.shaderSource, data: undefined},
+            {file: '/shaders/main.glsl', data: undefined}
         ];
 
         let response;
@@ -829,20 +895,21 @@ class Thurston {
     async initHorizon() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(500, 60, 40);
+        const geometry = new SphereBufferGeometry(1000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
+
+        const vertexShader = await this.buildShaderVertex();
+        const fragmentShader = await this.buildShaderFragment();
         const materialLeft = new ShaderMaterial({
             uniforms: this.params._uniformsLeft,
-            vertexShader: await this.buildShaderVertex(),
-            fragmentShader: await this.buildShaderFragment(),
-            transparent: true
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
         });
         const materialRight = new ShaderMaterial({
             uniforms: this.params._uniformsRight,
-            vertexShader: await this.buildShaderVertex(),
-            fragmentShader: await this.buildShaderFragment(),
-            transparent: true
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
         });
         this._horizonLeft = new Mesh(geometry, materialLeft);
         this._horizonRight = new Mesh(geometry, materialRight);
@@ -860,21 +927,19 @@ class Thurston {
      * and the non-euclidean one (by changing the position).
      * The eye positions are not updated here.
      * This should be done manually somewhere else.
+     * @todo We chase the camera, even if the VR mode is off. Change this ?
      * @type{Function}
      */
     get chaseCamera() {
         if (this._chaseCamera === undefined) {
-            let oldPositionL = new Vector3();
-            let oldPositionR = new Vector3();
+            let oldPosition = new Vector();
 
             this._chaseCamera = function () {
                 // declare the new positions of the left and right cameras
                 const newPositionL = new Vector3();
                 const newPositionR = new Vector3();
 
-                newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-                newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
-                if (this._renderer.xr.isPresenting) {
+                if (this.stereo.on) {
                     // if XR is enable, we get the position of the left and right camera
                     const camerasVR = this._renderer.xr.getCamera(this._camera).cameras;
                     newPositionL.setFromMatrixPosition(camerasVR[0].matrixWorld);
@@ -882,21 +947,17 @@ class Thurston {
                 } else {
                     // if XR is off, both positions coincide with the one of the camera
                     newPositionL.setFromMatrixPosition(this._camera.matrixWorld);
-                    newPositionR.copy(newPositionL);
+                    newPositionR.setFromMatrixPosition(this._camera.matrixWorld);
                 }
                 // center each horizon sphere at the appropriate point
-                this._horizonLeft.position.copy(newPositionL);
-                this._horizonRight.position.copy(newPositionR);
                 // compute the old and new position (midpoint between the left and right cameras)
-                const oldPosition = new Vector3().lerpVectors(oldPositionL, oldPositionR, 0.5);
-                const newPosition = new Vector3().lerpVectors(newPositionL, newPositionR, 0.5);
+                const newPosition = new Vector().lerpVectors(newPositionL, newPositionR, 0.5);
                 // flow the position along the difference of positions
                 const deltaPosition = new Vector().subVectors(newPosition, oldPosition);
                 this.params.position.flow(deltaPosition);
 
                 // update the old left and right positions
-                oldPositionL.copy(newPositionL);
-                oldPositionR.copy(newPositionR);
+                oldPosition.copy(newPosition);
 
                 return this;
             };
@@ -910,8 +971,10 @@ class Thurston {
     animate() {
         const delta = this._clock.getDelta();
         this._keyboardControls.update(delta);
-        this._VRControls.update(delta);
+        this._VRControlsMove.update(delta);
+        this._VRControlsDrag.update(delta);
         this.chaseCamera();
+
         this.params.eyePosition = this.getEyePositions();
         this._renderer.render(this._scene, this._camera);
         this.stats.update();
@@ -954,6 +1017,13 @@ class Thurston {
             },
             false
         );
+        this._VRButton.addEventListener(
+            "click",
+            function (event) {
+                self.stereo.switch();
+            },
+            false
+        )
     }
 
 }
@@ -969,7 +1039,7 @@ export {
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 22nd Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

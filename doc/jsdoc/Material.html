@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Material</title>
+		<title>&amp;lt;abstract&amp;gt; Material</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -41,32 +41,60 @@
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#name">name</a></li>
 											<li><a href="global.html#name">name</a></li>
-											<li><a href="global.html#shader">shader</a></li>
-											<li><a href="global.html#shader">shader</a></li>
+											<li><a href="global.html#shader1">shader1</a></li>
+											<li><a href="global.html#shader1">shader1</a></li>
+											<li><a href="global.html#shader2">shader2</a></li>
+											<li><a href="global.html#shader2">shader2</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="Camera.html">Camera</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="FixedDirectionStereo.html">FixedDirectionStereo</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
-											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
-											<li><a href="ObjectThurston.html">ObjectThurston</a></li>
+											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="Mono.html">Mono</a></li>
+											<li><a href="NativeStereo.html">NativeStereo</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
 											<li><a href="Subgroup.html">Subgroup</a></li>
 											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
-											<li><a href="VRControls.html">VRControls</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="module-Thurston.html">Thurston</a></li>
 											<li><a href="module-Thurston.html">Thurston</a></li>
 									</ul>
 								</li>
@@ -88,7 +116,7 @@
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
 				<span class="kind">class</span>
-				<h1><span class="name">Material</span></h1>
+				<h1><span class="signature-attribs">&lt;abstract> </span><span class="name">Material</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -102,33 +130,12 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Material</span><span class="signature-params">( <span class="signature-param">data</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Material</span><span class="signature-params">()</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Material for objects in the scene</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>data</code></td>
-							<td><span class="param-type">Object</span></td>
-							<td class="last">
-									<p>the properties of the material</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Abstract class for materials</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
 			
@@ -148,53 +155,45 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-28">line 28</a></p>
+									<p class="form-control-static"><a href="core_materials_Material.js.html">core/materials/Material.js</a>, <a href="core_materials_Material.js.html#line-10">line 10</a></p>
 								</div>
 							</div>
 			
 			
-							<!-- see -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">See</label>
-								<div class="col-sm-9">
-										<p class="form-control-static">Further information on the <a href="https://en.wikipedia.org/wiki/Phong_reflection_model">Phong lighting model</a></p>
-								</div>
-							</div>
 			
-							<!-- todo -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">To Do</label>
-								<div class="col-sm-9">
-										<ul class="form-control-static">
-												<li>&lt;p&gt;Decide what to do for texture, color given by formulas, etc.&lt;/p&gt;</li>
-												<li>&lt;p&gt;Actually, could we just reuse Three.js Material class? (or another existing class)
-			The name of the class is in conflict the the Three.js one.
-			Do we want to fix this ? Maybe note, modules have tools to handle this situation.&lt;/p&gt;</li>
-										</ul>
-								</div>
-							</div>
 			
 					</form>
 			</div>	</div>
 </dd>
 							</dl>
 							<article class="secondary">
+									<h3>Classes</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title class public">
+			<h4 id="Material" class="class public"><a href="Material.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Material</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+		</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+									</dl>
 									<h3>Members</h3>
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="color" class="member public"><span class="name">color</span><span class="signature-type"> :<a href="Color.html">Color</a></span></h4>
+			<h4 id="isMaterial" class="member public"><span class="name">isMaterial</span><span class="signature-type"> :boolean</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Color of the material</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says that the object inherits from <code>Material</code></p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 							<!-- type -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type"><a href="Color.html">Color</a></span></div>
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
 								</div>
 							</div>
 			
@@ -215,7 +214,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-45">line 45</a></p>
+									<p class="form-control-static"><a href="core_materials_Material.js.html">core/materials/Material.js</a>, <a href="core_materials_Material.js.html#line-23">line 23</a></p>
 								</div>
 							</div>
 			
@@ -227,18 +226,19 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="ambient" class="member public"><span class="name">ambient</span><span class="signature-type"> :number</span></h4>
+			<h4 id="isGlobal" class="member public"><span class="name">isGlobal</span><span class="signature-type"> :boolean</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>ambient reflection constant</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape is global.
+			This property does not make sense for material.</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 							<!-- type -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
 								</div>
 							</div>
 			
@@ -259,7 +259,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-61">line 61</a></p>
+									<p class="form-control-static"><a href="core_materials_Material.js.html">core/materials/Material.js</a>, <a href="core_materials_Material.js.html#line-32">line 32</a></p>
 								</div>
 							</div>
 			
@@ -271,18 +271,18 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="diffuse" class="member public"><span class="name">diffuse</span><span class="signature-type"> :number</span></h4>
+			<h4 id="isLocal" class="member public"><span class="name">isLocal</span><span class="signature-type"> :boolean</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>diffuse reflection constant</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape is local. True if local, false otherwise</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 							<!-- type -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
 								</div>
 							</div>
 			
@@ -303,95 +303,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-77">line 77</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="specular" class="member public"><span class="name">specular</span><span class="signature-type"> :number</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>specular reflection constant</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-93">line 93</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="shininess" class="member public"><span class="name">shininess</span><span class="signature-type"> :number</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>shininess reflection constant</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">number</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-109">line 109</a></p>
+									<p class="form-control-static"><a href="core_materials_Material.js.html">core/materials/Material.js</a>, <a href="core_materials_Material.js.html#line-40">line 40</a></p>
 								</div>
 							</div>
 			
@@ -406,12 +318,11 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="toGLSL" class="function public"><span class="name">toGLSL</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{string}</span></h4>
+			<h4 id="glslRender" class="function public"><span class="signature-attribs">&lt;abstract> </span><span class="name">glslRender</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{string}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return a line of GLSL code creating the same material
-			Used when dynamically building shaders.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the chunk of GLSL code used to compute the color of the material at the given point</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
 								<label class="col-sm-3 control-label returns-type"><span class="param-type">string</span></label>
@@ -440,7 +351,52 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="material.js.html">material.js</a>, <a href="material.js.html#line-126">line 126</a></p>
+									<p class="form-control-static"><a href="core_materials_Material.js.html">core/materials/Material.js</a>, <a href="core_materials_Material.js.html#line-49">line 49</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="glslInstance" class="function public"><span class="name">glslInstance</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{string}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Compile all the function directly related to the object (e.g. render).</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">string</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_materials_Material.js.html">core/materials/Material.js</a>, <a href="core_materials_Material.js.html#line-57">line 57</a></p>
 								</div>
 							</div>
 			
@@ -461,7 +417,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 22nd Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

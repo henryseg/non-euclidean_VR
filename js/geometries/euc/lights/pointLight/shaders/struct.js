@@ -8,7 +8,7 @@ export default `//
 struct PointLight {
     int id;
     Point position;
-    vec3 radius;
+    vec3 color;
 };
 
 int directions(PointLight light, RelVector v, out RelVector dir, out float intensity) {
