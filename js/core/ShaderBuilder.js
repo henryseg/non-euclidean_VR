@@ -22,9 +22,19 @@ export class ShaderBuilder {
         this.includedImports = [];
         /**
          * The list of classes already included.
-         * @type {Function[]}
+         * @type {string[]}
          */
-        this.includedDependencies = [];
+        this.includedClasses = [];
+        /**
+         * List of names of uniforms already included
+         * @type {string[]}
+         */
+        this.includedUniforms = [];
+        /**
+         * List of names of instances already included
+         * @type {string[]}
+         */
+        this.includedInstances = [];
         /**
          * An object with all the uniforms to pass to the shader.
          * @type {{}}
@@ -57,13 +67,14 @@ export class ShaderBuilder {
 
     /**
      * Incorporate the given dependency (if it does not already exists)
-     * @param {Function} dependency - the dependency to add
+     * @param {string} name - the name of the class
+     * @param {string} code - the code of the class
      * @return {ShaderBuilder} - the current shader builder
      */
-    addDependency(dependency) {
-        if (!this.includedDependencies.includes(dependency)) {
-            this.includedDependencies.push(dependency);
-            this.code = this.code + "\r\n\r\n" + dependency.glslStruct();
+    addClass(name, code) {
+        if (!this.includedClasses.includes(name)) {
+            this.includedClasses.push(name);
+            this.code = this.code + "\r\n\r\n" + code;
         }
         return this;
     }
@@ -77,8 +88,11 @@ export class ShaderBuilder {
      * @return {ShaderBuilder} - the current shader builder
      */
     addUniform(name, type, value) {
-        this.code = this.code + "\r\n\r\n" + `uniform ${type} ${name};`;
-        this.uniforms[name] = {type: type, value: value};
+        if (!this.includedUniforms.includes(name)) {
+            this.includedUniforms.push(name);
+            this.code = this.code + "\r\n\r\n" + `uniform ${type} ${name};`;
+            this.uniforms[name] = {type: type, value: value};
+        }
         return this;
     }
 
@@ -90,6 +104,21 @@ export class ShaderBuilder {
      */
     updateUniform(name, value) {
         this.uniforms[name] = value;
+        return this;
+    }
+
+    /**
+     * Add the given code (related to a specific instance of a class).
+     * Check before (using name) that the code has not been included before.
+     * @param {string} name - the name of the instance
+     * @param {string} code - the code of the instance
+     * @return {ShaderBuilder}
+     */
+    addInstance(name, code) {
+        if (!this.includedInstances.includes(name)) {
+            this.includedInstances.push(name);
+            this.code = this.code + "\r\n\r\n" + code;
+        }
         return this;
     }
 }

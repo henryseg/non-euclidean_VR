@@ -114,15 +114,15 @@ export class Generic {
      * @abstract
      * @return {string}
      */
-    static glslStruct() {
+    static glslClass() {
         throw new Error('Generic: this function should be implemented');
     }
 
     /**
-     * Compile all the function directly related to the object (e.g. sdf, gradient, direction field, etc).
+     * Compile all the function directly related to the instance of the class (e.g. sdf, gradient, direction field, etc).
      * @return {string}
      */
-    glslLogic() {
+    glslInstance() {
         throw new Error('Generic: this function should be implemented');
     }
 
@@ -137,7 +137,7 @@ export class Generic {
         }
 
         // add the struct dependencies (which only depends on the class and not the instance)
-        shaderBuilder.addDependency(this.constructor);
+        shaderBuilder.addClass(this.constructor.name, this.constructor.glslClass());
 
         // if needed declare the uniform for this instance
         if (this.uniformType !== '') {
@@ -145,6 +145,6 @@ export class Generic {
         }
 
         // add the logic specific to this instance
-        shaderBuilder.addChunk(this.glslLogic());
+        shaderBuilder.addInstance(this.name, this.glslInstance());
     }
 }

@@ -10,9 +10,9 @@ import gradient from "./shaders/gradient.js";
  * @class
  *
  * @classdesc
- * Shape of a euclidean ball
+ * Shape of a euclidean local ball
  */
-export class BallShape extends BasicShape {
+export class LocalBallShape extends BasicShape {
 
     /**
      * Construction
@@ -30,7 +30,7 @@ export class BallShape extends BasicShape {
      * Says that the object inherits from `Ball`
      * @type {boolean}
      */
-    get isBallShape() {
+    get isLocalBallShape() {
         return true;
     }
 
@@ -39,11 +39,11 @@ export class BallShape extends BasicShape {
      * @type {boolean}
      */
     get isGlobal() {
-        return true;
+        return false;
     }
 
     get uniformType() {
-        return 'BallShape';
+        return 'LocalBallShape';
     }
 
     static glslClass() {

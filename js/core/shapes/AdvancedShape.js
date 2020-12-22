@@ -26,7 +26,7 @@ export class AdvancedShape extends Shape {
      * that it is not build on top of other shapes.
      * @type {boolean}
      */
-    get isAdvancedShape() {
-        throw new Error('Shape: this method should be implemented');
+    get isBasicShape() {
+        throw false;
     }
 }

@@ -37,6 +37,15 @@ export class Shape extends Generic {
     }
 
     /**
+     * Says whether the shape is a basic shape,
+     * that it is not build on top of other shapes.
+     * @type {boolean}
+     */
+    get isAdvancedShape() {
+        return !this.isBasicShape;
+    }
+
+    /**
      * Return the chunk of GLSL code corresponding to the signed distance function.
      * @abstract
      * @return {string}
@@ -58,7 +67,7 @@ export class Shape extends Generic {
      * Compile all the function directly related to the object (e.g. sdf, gradient, etc).
      * @return {string}
      */
-    glslLogic() {
+    glslInstance() {
         return this.glslSDF() + "\r\n" + this.glslGradient();
     }
 }

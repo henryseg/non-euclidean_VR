@@ -196,6 +196,10 @@ export class Renderer {
         return this;
     }
 
+    checkShader(){
+        console.log(this._fragmentBuilder.code);
+    }
+
     /**
      * Render the non-euclidean scene.
      * The method `build` should be called before.

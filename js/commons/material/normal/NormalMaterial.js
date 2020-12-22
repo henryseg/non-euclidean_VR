@@ -25,7 +25,7 @@ export class NormalMaterial extends Material {
         return '';
     }
 
-    static glslStruct() {
+    static glslClass() {
         return struct;
     }
 

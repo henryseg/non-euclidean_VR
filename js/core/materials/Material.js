@@ -42,16 +42,6 @@ export class Material extends Generic {
     }
 
     /**
-     * Return the chunk of GLSL code defining the corresponding structure,
-     * And eventually basic functions associated to the structure.
-     * @abstract
-     * @return {string}
-     */
-    static glslStruct() {
-        throw new Error('Material: this function should be implemented');
-    }
-
-    /**
      * Return the chunk of GLSL code used to compute the color of the material at the given point
      * @abstract
      * @return {string}
@@ -64,7 +54,7 @@ export class Material extends Generic {
      * Compile all the function directly related to the object (e.g. render).
      * @return {string}
      */
-    glslLogic() {
+    glslInstance() {
         return this.glslRender();
     }
 }

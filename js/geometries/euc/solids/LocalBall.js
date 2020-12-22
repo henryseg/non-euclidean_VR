@@ -1,13 +1,13 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {BallShape} from "../shapes/ball/BallShape.js";
+import {LocalBallShape} from "../shapes/localBall/LocalBallShape.js";
 
 /**
  * @class
  *
  * @classdesc
- * Euclidean ball
+ * Euclidean local ball
  */
-export class Ball extends Solid {
+export class LocalBall extends Solid {
 
     /**
      * Constructor
@@ -16,7 +16,7 @@ export class Ball extends Solid {
      * @param {Material} material - the material of the ball
      */
     constructor(center, radius, material) {
-        const shape = new BallShape(center, radius);
+        const shape = new LocalBallShape(center, radius);
         super(shape, material);
     }
 }

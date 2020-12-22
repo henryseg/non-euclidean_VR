@@ -43,8 +43,8 @@ import {
 } from "./core/geometry/General.js";
 
 import {
-    KeyboardControls
-} from "./controls/KeyboardControls.js";
+    FlyControls
+} from "./controls/FlyControls.js";
 
 import {
     VRControlsMove
@@ -323,10 +323,10 @@ class Thurston {
 
         /**
          * The keyboard controls
-         * @type {KeyboardControls}
+         * @type {FlyControls}
          * @private
          */
-        this._keyboardControls = new KeyboardControls(
+        this._keyboardControls = new FlyControls(
             this.params.position,
             this._camera,
             this._renderer.domElement,

@@ -27,6 +27,6 @@ export class BasicShape extends Shape {
      * @type {boolean}
      */
     get isBasicShape() {
-        throw new Error('Shape: this method should be implemented');
+       return true;
     }
 }

@@ -1,0 +1,14 @@
+// language=Mustache + GLSL
+export default `//
+/**
+ * SDF for the union of two shapes
+ */
+RelVector {{name}}_gradient(RelVector v){
+    float dist1 = {{shape1.name}}_sdf(v);
+    float dist2 = {{shape2.name}}_sdf(v);
+    if(dist1 > dist2){
+        return {{shape1.name}}_gradient(v);
+    } else{
+        return {{shape2.name}}_gradient(v);
+    }
+}`;

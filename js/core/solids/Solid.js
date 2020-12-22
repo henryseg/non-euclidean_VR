@@ -2,7 +2,6 @@ import {Generic} from "../Generic.js";
 
 /**
  * @class
- * @abstract
  *
  * @classdesc
  * Abstract class for solids.
@@ -56,7 +55,7 @@ export class Solid extends Generic {
         return res;
     }
 
-    static glslStruct() {
+    static glslClass() {
         return '';
     }
 
@@ -64,7 +63,7 @@ export class Solid extends Generic {
      * Compile all the function directly related to the object (e.g. sdf, gradient, direction field, etc).
      * @return {string}
      */
-    glslLogic() {
+    glslInstance() {
         return '';
     }
 

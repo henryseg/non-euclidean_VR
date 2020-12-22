@@ -38,7 +38,7 @@ export class Light extends Generic {
      * Compile all the function directly related to the object (e.g. direction field).
      * @return {string}
      */
-    glslLogic() {
+    glslInstance() {
         return this.glslDirections();
     }
 

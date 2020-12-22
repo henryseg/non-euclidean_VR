@@ -105,7 +105,7 @@ export class Camera {
      * @param {ShaderBuilder} shaderBuilder
      */
     shader(shaderBuilder) {
-        shaderBuilder.addChunk(struct);
+        shaderBuilder.addClass('Camera', struct);
         shaderBuilder.addUniform('camera', 'Camera', this);
     }
 }

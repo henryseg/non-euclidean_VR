@@ -59,7 +59,7 @@ export class PointLight extends Light {
      * @abstract
      * @return {string}
      */
-    static glslStruct() {
+    static glslClass() {
         return struct;
     }
 

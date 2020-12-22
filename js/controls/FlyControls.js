@@ -6,7 +6,7 @@ import {
 import {
     RelPosition,
     Vector
-} from "../core/abstract/General.js";
+} from "../core/geometry/General.js";
 
 import {
     bind
@@ -33,8 +33,7 @@ const KEYBOARD_BINDINGS = {
         "ArrowLeft": "left",
         "ArrowRight": "right",
         "'": "up",
-        "/": "down",
-        "i": "info",
+        "/": "down"
     },
     'fr': {
         "q": "yawLeft",
@@ -48,8 +47,7 @@ const KEYBOARD_BINDINGS = {
         "ArrowLeft": "left",
         "ArrowRight": "right",
         "ù": "up",
-        "=": "down",
-        "i": "info",
+        "=": "down"
     }
 };
 
@@ -68,21 +66,19 @@ const EPS = 0.000001;
  * This is inspired from Three.js
  * {@link https://threejs.org/docs/#examples/en/controls/FlyControls | FlyControls}
  */
-class KeyboardControls extends EventDispatcher {
+class FlyControls extends EventDispatcher {
 
 
     /**
      * Constructor
-     * @param {RelPosition} position - the position in the geometry of the observer.
      * (and not the one of the three.js camera in the virtual euclidean space).
-     * @param {Camera} camera - the Three.js camera
+     * @param {Camera} camera - the non-euclidean camera
      * (needed to get the orientation of the observer when using both VR and keyboard).
      * @param {HTMLElement} domElement - The HTML element used for event listeners.
      * @param {string} keyboard - the keyboard type (us, fr, etc)
      */
-    constructor(position, camera, domElement, keyboard) {
+    constructor(camera, domElement, keyboard = 'us') {
         super();
-        this.position = position;
         this.camera = camera;
         this.domElement = domElement;
         if (domElement) this.domElement.setAttribute('tabindex', "- 1");
@@ -92,7 +88,6 @@ class KeyboardControls extends EventDispatcher {
         this.movementSpeed = 0.5;
         this.rollSpeed = 0.8;
 
-        this.infos = undefined;
 
         // private fields
         this._moveState = {
@@ -120,56 +115,16 @@ class KeyboardControls extends EventDispatcher {
     }
 
     /**
-     * The keyboard used for the controls
-     * @type {string}
-     */
-    get keyboard() {
-        return this._keyboard;
-    }
-
-    set keyboard(value) {
-        if (value === undefined) {
-            this._keyboard = 'us';
-        } else {
-            this._keyboard = value;
-        }
-    }
-
-    /**
-     * Function called when pressing the info key
-     * @type {Function}
-     */
-    get infos() {
-        return this._infos;
-    }
-
-    set infos(value) {
-        if (value === undefined) {
-            this._infos = function () {
-                console.log("Information function has not been set up");
-            }
-        } else {
-            this._infos = value;
-        }
-    }
-
-
-    /**
      * Event handler when a key is pressed
      * @param {KeyboardEvent} event - the caught event
      */
     onKeyDown(event) {
         if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
             const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
-            switch (action) {
-                case "info":
-                    this.infos();
-                    break;
-                default:
-                    this._moveState[action] = 1;
-                    this.updateMovementVector();
-                    this.updateRotationVector();
-            }
+            this._moveState[action] = 1;
+            this.updateMovementVector();
+            this.updateRotationVector();
+
         }
     }
 
@@ -181,14 +136,10 @@ class KeyboardControls extends EventDispatcher {
     onKeyUp(event) {
         if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
             const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
-            switch (action) {
-                case "info":
-                    break;
-                default:
-                    this._moveState[action] = 0;
-                    this.updateMovementVector();
-                    this.updateRotationVector();
-            }
+            this._moveState[action] = 0;
+            this.updateMovementVector();
+            this.updateRotationVector();
+
         }
     }
 
@@ -247,18 +198,18 @@ class KeyboardControls extends EventDispatcher {
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
-            .applyMatrix4(this.camera.matrixWorld);
-        this.position.flow(deltaPosition);
+            .applyMatrix4(this.camera.matrix);
+        this.camera.position.flow(deltaPosition);
 
         const deltaRotation = this._rotationVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
-            .applyMatrix4(this.camera.matrixWorld);
+            .applyMatrix4(this.camera.matrix);
         // the parameter delta is assumed to be very small
         // in this way, so is the corresponding rotation angle
         // this explains why the w-coordinate of the quaternion is not zero.
         const quaternion = new Quaternion(deltaRotation.x, deltaRotation.y, deltaRotation.z, 1).normalize();
-        this.position.applyQuaternion(quaternion);
+        this.camera.position.applyQuaternion(quaternion);
 
 
         // if (false) {
@@ -269,5 +220,5 @@ class KeyboardControls extends EventDispatcher {
 }
 
 export {
-    KeyboardControls
+    FlyControls
 }
