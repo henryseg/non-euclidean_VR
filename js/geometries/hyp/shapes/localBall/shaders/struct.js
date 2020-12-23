@@ -1,5 +1,5 @@
 // language=GLSL
-export default `
+export default `//
 /***********************************************************************************************************************
  * @struct
  * Shape of a hyperbolic ball

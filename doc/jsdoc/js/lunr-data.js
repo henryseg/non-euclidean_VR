@@ -61,12 +61,6 @@ window.lunrData = {
           "list",
           "list:class"
         ],
-        "list_module.html": [
-          "document",
-          "list",
-          "list:modul",
-          "modul"
-        ],
         "ShaderBuilder.html": [
           "build",
           "chunk",
@@ -715,15 +709,28 @@ window.lunrData = {
         ],
         "Ball.html": [
           "ball",
+          "ballbal",
           "class",
-          "euclidean"
+          "hyperbol"
         ],
         "LocalBall.html": [
           "ball",
           "class",
-          "euclidean",
+          "hyperbol",
+          "localbal",
+          "localballlocalbal"
+        ],
+        "Horoball.html": [
+          "class",
+          "horobal",
+          "hyperbol"
+        ],
+        "LocalHoroball.html": [
+          "class",
+          "horobal",
+          "hyperbol",
           "local",
-          "localbal"
+          "localhorobal"
         ],
         "NativeStereo.html": [
           "class",
@@ -1004,92 +1011,6 @@ window.lunrData = {
           "teleport",
           "teleport#nam",
           "test"
-        ],
-        "Shape.html": [
-          "3d",
-          "analogu",
-          "buffergeometri",
-          "class",
-          "confus",
-          "geometr",
-          "lt;abstract&gt",
-          "more",
-          "represent",
-          "shape",
-          "three.j"
-        ],
-        "Shape.html#isShape": [
-          "boolean",
-          "inherit",
-          "isshap",
-          "member",
-          "object",
-          "shape",
-          "shape#isshap"
-        ],
-        "Shape.html#isBasicShape": [
-          "basic",
-          "boolean",
-          "build",
-          "isbasicshap",
-          "member",
-          "shape",
-          "shape#isbasicshap",
-          "top",
-          "whether"
-        ],
-        "Shape.html#isAdvancedShape": [
-          "basic",
-          "boolean",
-          "build",
-          "isadvancedshap",
-          "member",
-          "shape",
-          "shape#isadvancedshap",
-          "top",
-          "whether"
-        ],
-        "Shape.html#glslSDF": [
-          "chunk",
-          "code",
-          "correspond",
-          "distanc",
-          "function",
-          "glsl",
-          "glslsdf",
-          "lt;abstract&gt",
-          "return",
-          "shape#glslsdf",
-          "sign",
-          "string"
-        ],
-        "Shape.html#glslGradient": [
-          "chunk",
-          "code",
-          "correspond",
-          "field",
-          "function",
-          "glsl",
-          "glslgradient",
-          "gradient",
-          "lt;abstract&gt",
-          "return",
-          "shape#glslgradi",
-          "string"
-        ],
-        "Shape.html#glslInstance": [
-          "compil",
-          "directli",
-          "e.g",
-          "etc",
-          "function",
-          "glslinstanc",
-          "gradient",
-          "object",
-          "relat",
-          "sdf",
-          "shape#glslinst",
-          "string"
         ],
         "Solid.html": [
           "abstract",
@@ -1375,78 +1296,6 @@ window.lunrData = {
           "object",
           "relat",
           "render",
-          "string"
-        ],
-        "SingleColorMaterial.html": [
-          "class",
-          "color",
-          "display",
-          "materi",
-          "plain",
-          "singl",
-          "singlecolormateri"
-        ],
-        "SingleColorMaterial.html#isMaterial": [
-          "boolean",
-          "inherit",
-          "ismateri",
-          "materi",
-          "member",
-          "object",
-          "singlecolormaterial#ismateri"
-        ],
-        "SingleColorMaterial.html#isGlobal": [
-          "boolean",
-          "global",
-          "isglob",
-          "make",
-          "materi",
-          "member",
-          "properti",
-          "sens",
-          "shape",
-          "singlecolormaterial#isglob",
-          "whether"
-        ],
-        "SingleColorMaterial.html#isLocal": [
-          "boolean",
-          "fals",
-          "isloc",
-          "local",
-          "member",
-          "otherwis",
-          "shape",
-          "singlecolormaterial#isloc",
-          "true",
-          "whether"
-        ],
-        "SingleColorMaterial.html#glslRender": [
-          "chunk",
-          "code",
-          "color",
-          "comput",
-          "function",
-          "given",
-          "glsl",
-          "glslrender",
-          "lt;abstract&gt",
-          "materi",
-          "point",
-          "return",
-          "singlecolormaterial#glslrend",
-          "string",
-          "us"
-        ],
-        "SingleColorMaterial.html#glslInstance": [
-          "compil",
-          "directli",
-          "e.g",
-          "function",
-          "glslinstanc",
-          "object",
-          "relat",
-          "render",
-          "singlecolormaterial#glslinst",
           "string"
         ],
         "Position.html": [
@@ -1892,11 +1741,104 @@ window.lunrData = {
           "top",
           "whether"
         ],
+        "Shape.html": [
+          "3d",
+          "analogu",
+          "buffergeometri",
+          "class",
+          "confus",
+          "geometr",
+          "lt;abstract&gt",
+          "more",
+          "represent",
+          "shape",
+          "three.j"
+        ],
+        "Shape.html#isShape": [
+          "boolean",
+          "inherit",
+          "isshap",
+          "member",
+          "object",
+          "shape",
+          "shape#isshap"
+        ],
+        "Shape.html#isBasicShape": [
+          "basic",
+          "boolean",
+          "build",
+          "isbasicshap",
+          "member",
+          "shape",
+          "shape#isbasicshap",
+          "top",
+          "whether"
+        ],
+        "Shape.html#isAdvancedShape": [
+          "basic",
+          "boolean",
+          "build",
+          "isadvancedshap",
+          "member",
+          "shape",
+          "shape#isadvancedshap",
+          "top",
+          "whether"
+        ],
+        "Shape.html#glslSDF": [
+          "chunk",
+          "code",
+          "correspond",
+          "distanc",
+          "function",
+          "glsl",
+          "glslsdf",
+          "lt;abstract&gt",
+          "return",
+          "shape#glslsdf",
+          "sign",
+          "string"
+        ],
+        "Shape.html#glslGradient": [
+          "approxim",
+          "chunk",
+          "code",
+          "comput",
+          "correspond",
+          "default",
+          "explicit",
+          "field",
+          "function",
+          "glsl",
+          "glslgradient",
+          "gradient",
+          "numer",
+          "overwritten",
+          "return",
+          "shape#glslgradi",
+          "string"
+        ],
+        "Shape.html#glslInstance": [
+          "compil",
+          "directli",
+          "e.g",
+          "etc",
+          "function",
+          "glslinstanc",
+          "gradient",
+          "object",
+          "relat",
+          "sdf",
+          "shape#glslinst",
+          "string"
+        ],
         "PointLight.html": [
           "class",
           "light",
           "point",
-          "pointlight"
+          "pointlight",
+          "pointlightpointlight",
+          "spheric"
         ],
         "PointLight.html#position": [
           "light",
@@ -1953,8 +1895,9 @@ window.lunrData = {
         "BallShape.html": [
           "ball",
           "ballshap",
+          "ballshapeballshap",
           "class",
-          "euclidean",
+          "hyperbol",
           "shape"
         ],
         "BallShape.html#isBallShape": [
@@ -1981,9 +1924,10 @@ window.lunrData = {
         "LocalBallShape.html": [
           "ball",
           "class",
-          "euclidean",
+          "hyperbol",
           "local",
           "localballshap",
+          "localballshapelocalballshap",
           "shape"
         ],
         "LocalBallShape.html#isLocalBallShape": [
@@ -2006,6 +1950,401 @@ window.lunrData = {
           "shape",
           "true",
           "whether"
+        ],
+        "HoroballShape.html": [
+          "class",
+          "horobal",
+          "horoballshap",
+          "hyperbol",
+          "shape"
+        ],
+        "HoroballShape.html#center": [
+          "boundari",
+          "center",
+          "horobal",
+          "horoballshape#cent",
+          "identifi",
+          "member",
+          "origin",
+          "space",
+          "sphere",
+          "tangent",
+          "unit",
+          "vector"
+        ],
+        "HoroballShape.html#offset": [
+          "correspond",
+          "horobal",
+          "horoballshape#offset",
+          "imag",
+          "member",
+          "number",
+          "offset",
+          "origin",
+          "outsid",
+          "posit",
+          "sdf"
+        ],
+        "HoroballShape.html#isHoroballShape": [
+          "ball",
+          "boolean",
+          "horoballshape#ishoroballshap",
+          "inherit",
+          "ishoroballshap",
+          "member",
+          "object"
+        ],
+        "HoroballShape.html#isGlobal": [
+          "boolean",
+          "fals",
+          "global",
+          "horoballshape#isglob",
+          "isglob",
+          "member",
+          "otherwis",
+          "shape",
+          "true",
+          "whether"
+        ],
+        "LocalHoroballShape.html": [
+          "class",
+          "horobal",
+          "hyperbol",
+          "local",
+          "localhoroballshap",
+          "shape"
+        ],
+        "LocalHoroballShape.html#center": [
+          "boundari",
+          "center",
+          "horobal",
+          "identifi",
+          "localhoroballshape#cent",
+          "member",
+          "origin",
+          "space",
+          "sphere",
+          "tangent",
+          "unit",
+          "vector"
+        ],
+        "LocalHoroballShape.html#offset": [
+          "correspond",
+          "horobal",
+          "imag",
+          "localhoroballshape#offset",
+          "member",
+          "number",
+          "offset",
+          "origin",
+          "outsid",
+          "posit",
+          "sdf"
+        ],
+        "LocalHoroballShape.html#isLocalHoroballShape": [
+          "ball",
+          "boolean",
+          "inherit",
+          "islocalhoroballshap",
+          "localhoroballshape#islocalhoroballshap",
+          "member",
+          "object"
+        ],
+        "LocalHoroballShape.html#isGlobal": [
+          "boolean",
+          "fals",
+          "global",
+          "isglob",
+          "localhoroballshape#isglob",
+          "member",
+          "otherwis",
+          "shape",
+          "true",
+          "whether"
+        ],
+        "PhongMaterial.html": [
+          "class",
+          "materi",
+          "object",
+          "phongmateri",
+          "scene"
+        ],
+        "PhongMaterial.html#color": [
+          "color",
+          "materi",
+          "member",
+          "phongmaterial#color"
+        ],
+        "PhongMaterial.html#ambient": [
+          "ambient",
+          "constant",
+          "member",
+          "number",
+          "phongmaterial#ambi",
+          "reflect"
+        ],
+        "PhongMaterial.html#diffuse": [
+          "constant",
+          "diffus",
+          "member",
+          "number",
+          "phongmaterial#diffus",
+          "reflect"
+        ],
+        "PhongMaterial.html#specular": [
+          "constant",
+          "member",
+          "number",
+          "phongmaterial#specular",
+          "reflect",
+          "specular"
+        ],
+        "PhongMaterial.html#shininess": [
+          "constant",
+          "member",
+          "number",
+          "phongmaterial#shini",
+          "reflect",
+          "shini"
+        ],
+        "PhongMaterial.html#lights": [
+          "affect",
+          "array.&lt;light&gt",
+          "light",
+          "materi",
+          "member",
+          "phongmaterial#light"
+        ],
+        "SingleColorMaterial.html": [
+          "class",
+          "color",
+          "display",
+          "materi",
+          "plain",
+          "singl",
+          "singlecolormateri"
+        ],
+        "SingleColorMaterial.html#isMaterial": [
+          "boolean",
+          "inherit",
+          "ismateri",
+          "materi",
+          "member",
+          "object",
+          "singlecolormaterial#ismateri"
+        ],
+        "SingleColorMaterial.html#isGlobal": [
+          "boolean",
+          "global",
+          "isglob",
+          "make",
+          "materi",
+          "member",
+          "properti",
+          "sens",
+          "shape",
+          "singlecolormaterial#isglob",
+          "whether"
+        ],
+        "SingleColorMaterial.html#isLocal": [
+          "boolean",
+          "fals",
+          "isloc",
+          "local",
+          "member",
+          "otherwis",
+          "shape",
+          "singlecolormaterial#isloc",
+          "true",
+          "whether"
+        ],
+        "SingleColorMaterial.html#glslRender": [
+          "chunk",
+          "code",
+          "color",
+          "comput",
+          "function",
+          "given",
+          "glsl",
+          "glslrender",
+          "lt;abstract&gt",
+          "materi",
+          "point",
+          "return",
+          "singlecolormaterial#glslrend",
+          "string",
+          "us"
+        ],
+        "SingleColorMaterial.html#glslInstance": [
+          "compil",
+          "directli",
+          "e.g",
+          "function",
+          "glslinstanc",
+          "object",
+          "relat",
+          "render",
+          "singlecolormaterial#glslinst",
+          "string"
+        ],
+        "Thurston.html": [
+          "api",
+          "class",
+          "combin",
+          "creat",
+          "main",
+          "part",
+          "quickli",
+          "scene",
+          "thurston",
+          "us"
+        ],
+        "Thurston.html#geom": [
+          "geom",
+          "geometri",
+          "member",
+          "object",
+          "thurston#geom",
+          "underli"
+        ],
+        "Thurston.html#subgroup": [
+          "member",
+          "subgroup",
+          "thurston#subgroup",
+          "underli"
+        ],
+        "Thurston.html#params": [
+          "member",
+          "object",
+          "param",
+          "paramet",
+          "thurston",
+          "thurston#param"
+        ],
+        "Thurston.html#camera": [
+          "camera",
+          "euclidean",
+          "member",
+          "non",
+          "thurston#camera"
+        ],
+        "Thurston.html#scene": [
+          "euclidean",
+          "member",
+          "non",
+          "scene",
+          "thurston#scen"
+        ],
+        "Thurston.html#stereo": [
+          "here",
+          "member",
+          "mode",
+          "mono",
+          "stereo",
+          "thurston#stereo"
+        ],
+        "Thurston.html#renderer": [
+          "d",
+          "euclidean",
+          "member",
+          "non",
+          "render",
+          "thurston#render"
+        ],
+        "Thurston.html#gui": [
+          "graphic",
+          "gui",
+          "interfac",
+          "member",
+          "thurston#gui",
+          "user"
+        ],
+        "Thurston.html#stats": [
+          "member",
+          "perform",
+          "stat",
+          "thurston#stat"
+        ],
+        "Thurston.html#flyControls": [
+          "control",
+          "flycontrol",
+          "keyboard",
+          "lt;private&gt",
+          "member",
+          "thurston#flycontrol"
+        ],
+        "Thurston.html#clock": [
+          "anim",
+          "between",
+          "call",
+          "clock",
+          "lt;private&gt",
+          "measur",
+          "member",
+          "thurston#clock",
+          "time",
+          "two"
+        ],
+        "Thurston.html#setParams": [
+          "constructor",
+          "function",
+          "param",
+          "paramet",
+          "set",
+          "setparam",
+          "thurston#setparam",
+          "us",
+          "valu"
+        ],
+        "Thurston.html#initGUI": [
+          "function",
+          "graphic",
+          "initgui",
+          "initi",
+          "interfac",
+          "thurston",
+          "thurston#initgui",
+          "user"
+        ],
+        "Thurston.html#initStats": [
+          "function",
+          "initi",
+          "initstat",
+          "perform",
+          "stat",
+          "thurston",
+          "thurston#initstat"
+        ],
+        "Thurston.html#add": [
+          "add",
+          "function",
+          "obj",
+          "object",
+          "scene",
+          "shortcut",
+          "thurston#add"
+        ],
+        "Thurston.html#onWindowResize": [
+          "action",
+          "event",
+          "function",
+          "onwindowres",
+          "resiz",
+          "thurston#onwindowres",
+          "window"
+        ],
+        "Thurston.html#animate": [
+          "anim",
+          "function",
+          "thurston#anim"
+        ],
+        "Thurston.html#run": [
+          "anim",
+          "build",
+          "function",
+          "render",
+          "run",
+          "thurston#run"
         ],
         "Vector.html": [
           "algebra",
@@ -2691,12 +3030,12 @@ window.lunrData = {
           "vertex",
           "vertexshad"
         ],
-        "Renderer.html#fragmentShader": [
+        "Renderer.html#buildFragmentShader": [
           "build",
+          "buildfragmentshad",
           "fragment",
-          "fragmentshad",
           "function",
-          "renderer#fragmentshad",
+          "renderer#buildfragmentshad",
           "shader"
         ],
         "Renderer.html#build": [
@@ -2720,68 +3059,6 @@ window.lunrData = {
           "render",
           "renderer#rend",
           "scene"
-        ],
-        "PhongMaterial.html": [
-          "class",
-          "materi",
-          "object",
-          "phongmateri",
-          "scene"
-        ],
-        "PhongMaterial.html#color": [
-          "color",
-          "materi",
-          "member",
-          "phongmaterial#color"
-        ],
-        "PhongMaterial.html#ambient": [
-          "ambient",
-          "constant",
-          "member",
-          "number",
-          "phongmaterial#ambi",
-          "reflect"
-        ],
-        "PhongMaterial.html#diffuse": [
-          "constant",
-          "diffus",
-          "member",
-          "number",
-          "phongmaterial#diffus",
-          "reflect"
-        ],
-        "PhongMaterial.html#specular": [
-          "constant",
-          "member",
-          "number",
-          "phongmaterial#specular",
-          "reflect",
-          "specular"
-        ],
-        "PhongMaterial.html#shininess": [
-          "constant",
-          "member",
-          "number",
-          "phongmaterial#shini",
-          "reflect",
-          "shini"
-        ],
-        "PhongMaterial.html#toGLSL": [
-          "build",
-          "code",
-          "creat",
-          "dynam",
-          "function",
-          "glsl",
-          "line",
-          "materi",
-          "phongmaterial#toglsl",
-          "return",
-          "same",
-          "shader",
-          "string",
-          "toglsl",
-          "us"
         ],
         "Subgroup.html": [
           "abelian",
@@ -3014,499 +3291,9 @@ window.lunrData = {
           "word",
           "work",
           "written"
-        ],
-        "module-Thurston-Thurston.html": [
-          "class",
-          "creat",
-          "geometri",
-          "module:thurston~thurston",
-          "scene",
-          "specifi",
-          "thurston",
-          "thurston~thurston",
-          "us"
-        ],
-        "module-Thurston-Thurston.html#geom": [
-          "geom",
-          "geometri",
-          "member",
-          "module:thurston~thurston#geom",
-          "object",
-          "underli"
-        ],
-        "module-Thurston-Thurston.html#subgroup": [
-          "defin",
-          "discret",
-          "manifold/orbifold",
-          "member",
-          "module:thurston~thurston#subgroup",
-          "quotient",
-          "subgroup"
-        ],
-        "module-Thurston-Thurston.html#params": [
-          "automat",
-          "date",
-          "go",
-          "interact",
-          "keep",
-          "list",
-          "member",
-          "module:thurston~thurston#param",
-          "object",
-          "param",
-          "paramet",
-          "proxi",
-          "through",
-          "uniform",
-          "up"
-        ],
-        "module-Thurston-Thurston.html#_renderer": [
-          "_render",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_render",
-          "render",
-          "three.j",
-          "us",
-          "webglrender"
-        ],
-        "module-Thurston-Thurston.html#_camera": [
-          "_camera",
-          "camera",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_camera",
-          "perspectivecamera",
-          "three.j"
-        ],
-        "module-Thurston-Thurston.html#_scene": [
-          "_scene",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_scen",
-          "scene",
-          "three.j",
-          "underli"
-        ],
-        "module-Thurston-Thurston.html#_VRButton": [
-          "_vrbutton",
-          "button",
-          "htmlbuttonel",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_vrbutton",
-          "vr"
-        ],
-        "module-Thurston-Thurston.html#_solids": [
-          "_solid",
-          "array.&lt;solid&gt",
-          "euclidean",
-          "list",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_solid",
-          "non",
-          "scene",
-          "solid"
-        ],
-        "module-Thurston-Thurston.html#_lights": [
-          "_light",
-          "array.&lt;light&gt",
-          "euclidean",
-          "light",
-          "list",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_light",
-          "non",
-          "scene"
-        ],
-        "module-Thurston-Thurston.html#_maxLightDirs": [
-          "_maxlightdir",
-          "automat",
-          "comput",
-          "direct",
-          "light",
-          "list",
-          "lt;private&gt",
-          "maxim",
-          "member",
-          "module:thurston~thurston#_maxlightdir",
-          "number"
-        ],
-        "module-Thurston-Thurston.html#_keyboardControls": [
-          "_keyboardcontrol",
-          "control",
-          "flycontrol",
-          "keyboard",
-          "lt;private&gt",
-          "member",
-          "module:thurston~thurston#_keyboardcontrol"
-        ],
-        "module-Thurston-Thurston.html#_clock": [
-          "_clock",
-          "anim",
-          "between",
-          "call",
-          "clock",
-          "lt;private&gt",
-          "measur",
-          "member",
-          "module:thurston~thurston#_clock",
-          "time",
-          "two"
-        ],
-        "module-Thurston-Thurston.html#gui": [
-          "graphic",
-          "gui",
-          "interfac",
-          "member",
-          "module:thurston~thurston#gui",
-          "user"
-        ],
-        "module-Thurston-Thurston.html#stats": [
-          "member",
-          "module:thurston~thurston#stat",
-          "perform",
-          "stat"
-        ],
-        "module-Thurston-Thurston.html#stereo": [
-          "comput",
-          "etc",
-          "ey",
-          "member",
-          "module:thurston~thurston#stereo",
-          "object",
-          "offset",
-          "pre",
-          "process",
-          "relat",
-          "shader",
-          "stereo",
-          "us"
-        ],
-        "module-Thurston-Thurston.html#maxLightDirs": [
-          "direct",
-          "light",
-          "maxim",
-          "maxlightdir",
-          "member",
-          "module:thurston~thurston#maxlightdir",
-          "number"
-        ],
-        "module-Thurston-Thurston.html#chaseCamera": [
-          "both",
-          "camera",
-          "chang",
-          "chasecamera",
-          "done",
-          "euclidean",
-          "ey",
-          "headset",
-          "here",
-          "horizon",
-          "manual",
-          "member",
-          "module:thurston~thurston#chasecamera",
-          "move",
-          "non",
-          "on",
-          "posit",
-          "scene",
-          "somewher",
-          "sphere",
-          "three.j",
-          "updat",
-          "vr"
-        ],
-        "module-Thurston-Thurston.html#infos": [
-          "data",
-          "display",
-          "function",
-          "info",
-          "key",
-          "log",
-          "module:thurston~thurston#info",
-          "press"
-        ],
-        "module-Thurston-Thurston.html#registerParam": [
-          "function",
-          "module:thurston~thurston#registerparam",
-          "name",
-          "new",
-          "param",
-          "paramet",
-          "pass",
-          "regist",
-          "registerparam",
-          "thurston",
-          "type"
-        ],
-        "module-Thurston-Thurston.html#setParams": [
-          "function",
-          "given",
-          "module:thurston~thurston#setparam",
-          "option",
-          "param",
-          "set",
-          "setparam",
-          "thurston"
-        ],
-        "module-Thurston-Thurston.html#setParam": [
-          "function",
-          "given",
-          "key",
-          "module:thurston~thurston#setparam",
-          "option",
-          "set",
-          "setparam",
-          "thurston",
-          "valu"
-        ],
-        "module-Thurston-Thurston.html#addItem": [
-          "ad",
-          "additem",
-          "function",
-          "item",
-          "module:thurston~thurston#additem",
-          "scene",
-          "thurston"
-        ],
-        "module-Thurston-Thurston.html#addItems": [
-          "ad",
-          "additem",
-          "function",
-          "item",
-          "list",
-          "module:thurston~thurston#additem",
-          "scene",
-          "thurston"
-        ],
-        "module-Thurston-Thurston.html#getEyePositions": [
-          "both",
-          "coincid",
-          "comput",
-          "current",
-          "ey",
-          "function",
-          "geteyeposit",
-          "left",
-          "mode",
-          "module:thurston~thurston#geteyeposit",
-          "observ",
-          "posit",
-          "return",
-          "right",
-          "vr"
-        ],
-        "module-Thurston-Thurston.html#appendTitle": [
-          "add",
-          "appendtitl",
-          "function",
-          "geometri",
-          "module:thurston~thurston#appendtitl",
-          "name",
-          "page",
-          "titl"
-        ],
-        "module-Thurston-Thurston.html#setKeyboard": [
-          "control",
-          "function",
-          "keyboard",
-          "module:thurston~thurston#setkeyboard",
-          "set",
-          "setkeyboard",
-          "us",
-          "valu"
-        ],
-        "module-Thurston-Thurston.html#initUI": [
-          "function",
-          "graphic",
-          "initi",
-          "initui",
-          "interfac",
-          "module:thurston~thurston#initui",
-          "thurston",
-          "user"
-        ],
-        "module-Thurston-Thurston.html#initThreeJS": [
-          "function",
-          "initthreej",
-          "module:thurston~thurston#initthreej",
-          "scene",
-          "setup",
-          "three.j"
-        ],
-        "module-Thurston-Thurston.html#initStats": [
-          "function",
-          "initi",
-          "initstat",
-          "module:thurston~thurston#initstat",
-          "perform",
-          "stat",
-          "thurston"
-        ],
-        "module-Thurston-Thurston.html#buildShaderVertex": [
-          "build",
-          "buildshadervertex",
-          "file",
-          "function",
-          "lt;async&gt",
-          "module:thurston~thurston#buildshadervertex",
-          "shader",
-          "string",
-          "templat",
-          "vertex"
-        ],
-        "module-Thurston-Thurston.html#buildShaderDataConstants": [
-          "array.&lt;object&gt",
-          "buildshaderdataconst",
-          "collect",
-          "constant",
-          "function",
-          "module:thurston~thurston#buildshaderdataconst",
-          "paramet",
-          "pass",
-          "shader"
-        ],
-        "module-Thurston-Thurston.html#buildShaderDataUniforms": [
-          "array.&lt;object&gt",
-          "buildshaderdatauniform",
-          "collect",
-          "function",
-          "module:thurston~thurston#buildshaderdatauniform",
-          "paramet",
-          "pass",
-          "shader",
-          "uniform"
-        ],
-        "module-Thurston-Thurston.html#buildShaderDataBackground": [
-          "background",
-          "block",
-          "buildshaderdatabackground",
-          "code",
-          "function",
-          "glsl",
-          "item",
-          "list",
-          "lt;async&gt",
-          "module:thurston~thurston#buildshaderdatabackground",
-          "promise.&lt;array.&lt;string&gt;&gt",
-          "requir",
-          "return",
-          "subgroup"
-        ],
-        "module-Thurston-Thurston.html#buildShaderDataItems": [
-          "array.&lt;light&gt;}&gt",
-          "array.&lt;solid&gt",
-          "buildshaderdataitem",
-          "function",
-          "glsl",
-          "item",
-          "light",
-          "list",
-          "lt;async&gt",
-          "module:thurston~thurston#buildshaderdataitem",
-          "promise.&lt;{solid",
-          "properti",
-          "return",
-          "review",
-          "scene",
-          "setup",
-          "solid"
-        ],
-        "module-Thurston-Thurston.html#buildShaderFragment": [
-          "background",
-          "build",
-          "buildshaderdatabackground",
-          "buildshaderdataconst",
-          "buildshaderdataitem",
-          "buildshaderdatauniform",
-          "buildshaderfrag",
-          "constant",
-          "data",
-          "file",
-          "fragment",
-          "function",
-          "item",
-          "lt;async&gt",
-          "module:thurston~thurston#buildshaderfrag",
-          "popul",
-          "routin",
-          "shader",
-          "string",
-          "subgroup",
-          "templat",
-          "this.subgroup.glslbuilddata",
-          "uniform",
-          "us"
-        ],
-        "module-Thurston-Thurston.html#initHorizon": [
-          "async",
-          "constructor",
-          "done",
-          "function",
-          "horizon",
-          "init",
-          "inithorizon",
-          "lt;async&gt",
-          "module:thurston~thurston#inithorizon",
-          "promise.&lt;thurston&gt",
-          "seen",
-          "shader",
-          "three.j"
-        ],
-        "module-Thurston-Thurston.html#animate": [
-          "anim",
-          "function",
-          "module:thurston~thurston#anim",
-          "simul"
-        ],
-        "module-Thurston-Thurston.html#run": [
-          "anim",
-          "async",
-          "function",
-          "handl",
-          "here",
-          "initi",
-          "module:thurston~thurston#run",
-          "more",
-          "promis",
-          "run",
-          "togeth",
-          "wrap"
-        ],
-        "module-Thurston-Thurston.html#onWindowResize": [
-          "action",
-          "event",
-          "function",
-          "module:thurston~thurston#onwindowres",
-          "onwindowres",
-          "resiz",
-          "window"
-        ],
-        "module-Thurston-Thurston.html#addEventListeners": [
-          "addeventlisten",
-          "event",
-          "function",
-          "listen",
-          "module:thurston~thurston#addeventlisten",
-          "regist"
-        ],
-        "module-Thurston.html": [
-          "defin",
-          "eight",
-          "geometri",
-          "modul",
-          "module:thurston",
-          "on",
-          "render",
-          "scene",
-          "thurston",
-          "us"
         ]
       },
-      "length": 280
+      "length": 268
     },
     "tokenStore": {
       "root": {
@@ -3530,10 +3317,6 @@ window.lunrData = {
           "docs": {},
           "d": {
             "docs": {
-              "Shape.html": {
-                "ref": "Shape.html",
-                "tf": 3.8461538461538463
-              },
               "AdvancedShape.html": {
                 "ref": "AdvancedShape.html",
                 "tf": 1.8518518518518516
@@ -3541,6 +3324,10 @@ window.lunrData = {
               "BasicShape.html": {
                 "ref": "BasicShape.html",
                 "tf": 1.8518518518518516
+              },
+              "Shape.html": {
+                "ref": "Shape.html",
+                "tf": 3.8461538461538463
               },
               "Vector.html#applyMatrix4": {
                 "ref": "Vector.html#applyMatrix4",
@@ -3663,6 +3450,18 @@ window.lunrData = {
                               "ref": "LocalBallShape.html",
                               "tf": 12.5
                             },
+                            "Thurston.html#camera": {
+                              "ref": "Thurston.html#camera",
+                              "tf": 16.666666666666664
+                            },
+                            "Thurston.html#scene": {
+                              "ref": "Thurston.html#scene",
+                              "tf": 16.666666666666664
+                            },
+                            "Thurston.html#renderer": {
+                              "ref": "Thurston.html#renderer",
+                              "tf": 12.5
+                            },
                             "Renderer.html": {
                               "ref": "Renderer.html",
                               "tf": 6.666666666666667
@@ -3690,18 +3489,6 @@ window.lunrData = {
                             "Renderer.html#render": {
                               "ref": "Renderer.html#render",
                               "tf": 6.25
-                            },
-                            "module-Thurston-Thurston.html#_solids": {
-                              "ref": "module-Thurston-Thurston.html#_solids",
-                              "tf": 10
-                            },
-                            "module-Thurston-Thurston.html#_lights": {
-                              "ref": "module-Thurston-Thurston.html#_lights",
-                              "tf": 10
-                            },
-                            "module-Thurston-Thurston.html#chaseCamera": {
-                              "ref": "module-Thurston-Thurston.html#chaseCamera",
-                              "tf": 2
                             }
                           }
                         }
@@ -3725,6 +3512,23 @@ window.lunrData = {
                       "index.html": {
                         "ref": "index.html",
                         "tf": 14
+                      }
+                    }
+                  }
+                },
+                "i": {
+                  "docs": {},
+                  "c": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "Shape.html#glslGradient": {
+                            "ref": "Shape.html#glslGradient",
+                            "tf": 3.125
+                          }
+                        }
                       }
                     }
                   }
@@ -3888,6 +3692,10 @@ window.lunrData = {
                 },
                 "t": {
                   "docs": {
+                    "Thurston.html#onWindowResize": {
+                      "ref": "Thurston.html#onWindowResize",
+                      "tf": 50
+                    },
                     "VRControlsDrag.html#onSelectStart": {
                       "ref": "VRControlsDrag.html#onSelectStart",
                       "tf": 10
@@ -3927,14 +3735,6 @@ window.lunrData = {
                     "FlyControls.html#onKeyUp": {
                       "ref": "FlyControls.html#onKeyUp",
                       "tf": 62.5
-                    },
-                    "module-Thurston-Thurston.html#onWindowResize": {
-                      "ref": "module-Thurston-Thurston.html#onWindowResize",
-                      "tf": 50
-                    },
-                    "module-Thurston-Thurston.html#addEventListeners": {
-                      "ref": "module-Thurston-Thurston.html#addEventListeners",
-                      "tf": 16.666666666666664
                     }
                   },
                   "u": {
@@ -4022,10 +3822,6 @@ window.lunrData = {
                   "ref": "Generic.html#glslInstance",
                   "tf": 4.166666666666666
                 },
-                "Shape.html#glslInstance": {
-                  "ref": "Shape.html#glslInstance",
-                  "tf": 5.555555555555555
-                },
                 "Solid.html#glslInstance": {
                   "ref": "Solid.html#glslInstance",
                   "tf": 4.545454545454546
@@ -4034,9 +3830,9 @@ window.lunrData = {
                   "ref": "Position.html",
                   "tf": 10
                 },
-                "module-Thurston-Thurston.html#stereo": {
-                  "ref": "module-Thurston-Thurston.html#stereo",
-                  "tf": 4.545454545454546
+                "Shape.html#glslInstance": {
+                  "ref": "Shape.html#glslInstance",
+                  "tf": 5.555555555555555
                 }
               }
             }
@@ -4087,18 +3883,6 @@ window.lunrData = {
               "RelPosition.html#eyes": {
                 "ref": "RelPosition.html#eyes",
                 "tf": 677.1428571428571
-              },
-              "module-Thurston-Thurston.html#stereo": {
-                "ref": "module-Thurston-Thurston.html#stereo",
-                "tf": 4.545454545454546
-              },
-              "module-Thurston-Thurston.html#chaseCamera": {
-                "ref": "module-Thurston-Thurston.html#chaseCamera",
-                "tf": 2
-              },
-              "module-Thurston-Thurston.html#getEyePositions": {
-                "ref": "module-Thurston-Thurston.html#getEyePositions",
-                "tf": 6.666666666666667
               }
             }
           },
@@ -4118,10 +3902,6 @@ window.lunrData = {
                   "ref": "Generic.html#glslInstance",
                   "tf": 4.166666666666666
                 },
-                "Shape.html#glslInstance": {
-                  "ref": "Shape.html#glslInstance",
-                  "tf": 5.555555555555555
-                },
                 "Solid.html#glslInstance": {
                   "ref": "Solid.html#glslInstance",
                   "tf": 4.545454545454546
@@ -4129,6 +3909,10 @@ window.lunrData = {
                 "NormalMaterial.html#glslInstance": {
                   "ref": "NormalMaterial.html#glslInstance",
                   "tf": 7.142857142857142
+                },
+                "Shape.html#glslInstance": {
+                  "ref": "Shape.html#glslInstance",
+                  "tf": 5.555555555555555
                 },
                 "SingleColorMaterial.html#glslInstance": {
                   "ref": "SingleColorMaterial.html#glslInstance",
@@ -4271,23 +4055,6 @@ window.lunrData = {
               }
             },
             "docs": {}
-          },
-          "i": {
-            "docs": {},
-            "g": {
-              "docs": {},
-              "h": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "module-Thurston.html": {
-                      "ref": "module-Thurston.html",
-                      "tf": 5.555555555555555
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "f": {
@@ -4427,10 +4194,6 @@ window.lunrData = {
                       "ref": "Generic.html#glslInstance",
                       "tf": 4.166666666666666
                     },
-                    "Shape.html#glslGradient": {
-                      "ref": "Shape.html#glslGradient",
-                      "tf": 7.142857142857142
-                    },
                     "Solid.html#glslInstance": {
                       "ref": "Solid.html#glslInstance",
                       "tf": 4.545454545454546
@@ -4438,6 +4201,10 @@ window.lunrData = {
                     "Camera.html#fov": {
                       "ref": "Camera.html#fov",
                       "tf": 7.142857142857142
+                    },
+                    "Shape.html#glslGradient": {
+                      "ref": "Shape.html#glslGradient",
+                      "tf": 3.125
                     },
                     "Subgroup.html": {
                       "ref": "Subgroup.html",
@@ -4465,21 +4232,6 @@ window.lunrData = {
                       "ref": "Subgroup.html",
                       "tf": 1.0638297872340425
                     }
-                  }
-                }
-              }
-            },
-            "l": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "module-Thurston-Thurston.html#buildShaderVertex": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                    "tf": 10
-                  },
-                  "module-Thurston-Thurston.html#buildShaderFragment": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                    "tf": 2.083333333333333
                   }
                 }
               }
@@ -4663,18 +4415,6 @@ window.lunrData = {
                             "ref": "Teleport.html#name",
                             "tf": 7.142857142857142
                           },
-                          "Shape.html#glslSDF": {
-                            "ref": "Shape.html#glslSDF",
-                            "tf": 116.25
-                          },
-                          "Shape.html#glslGradient": {
-                            "ref": "Shape.html#glslGradient",
-                            "tf": 110
-                          },
-                          "Shape.html#glslInstance": {
-                            "ref": "Shape.html#glslInstance",
-                            "tf": 115.55555555555556
-                          },
                           "Solid.html#setId": {
                             "ref": "Solid.html#setId",
                             "tf": 110
@@ -4697,14 +4437,6 @@ window.lunrData = {
                           },
                           "NormalMaterial.html#glslInstance": {
                             "ref": "NormalMaterial.html#glslInstance",
-                            "tf": 117.14285714285714
-                          },
-                          "SingleColorMaterial.html#glslRender": {
-                            "ref": "SingleColorMaterial.html#glslRender",
-                            "tf": 110
-                          },
-                          "SingleColorMaterial.html#glslInstance": {
-                            "ref": "SingleColorMaterial.html#glslInstance",
                             "tf": 117.14285714285714
                           },
                           "Position.html#setBoost": {
@@ -4787,8 +4519,56 @@ window.lunrData = {
                             "ref": "AdvancedShape.html",
                             "tf": 1.8518518518518516
                           },
+                          "Shape.html#glslSDF": {
+                            "ref": "Shape.html#glslSDF",
+                            "tf": 116.25
+                          },
+                          "Shape.html#glslGradient": {
+                            "ref": "Shape.html#glslGradient",
+                            "tf": 113.125
+                          },
+                          "Shape.html#glslInstance": {
+                            "ref": "Shape.html#glslInstance",
+                            "tf": 115.55555555555556
+                          },
                           "PointLight.html#.glslClass": {
                             "ref": "PointLight.html#.glslClass",
+                            "tf": 110
+                          },
+                          "SingleColorMaterial.html#glslRender": {
+                            "ref": "SingleColorMaterial.html#glslRender",
+                            "tf": 110
+                          },
+                          "SingleColorMaterial.html#glslInstance": {
+                            "ref": "SingleColorMaterial.html#glslInstance",
+                            "tf": 117.14285714285714
+                          },
+                          "Thurston.html#setParams": {
+                            "ref": "Thurston.html#setParams",
+                            "tf": 110
+                          },
+                          "Thurston.html#initGUI": {
+                            "ref": "Thurston.html#initGUI",
+                            "tf": 110
+                          },
+                          "Thurston.html#initStats": {
+                            "ref": "Thurston.html#initStats",
+                            "tf": 110
+                          },
+                          "Thurston.html#add": {
+                            "ref": "Thurston.html#add",
+                            "tf": 110
+                          },
+                          "Thurston.html#onWindowResize": {
+                            "ref": "Thurston.html#onWindowResize",
+                            "tf": 110
+                          },
+                          "Thurston.html#animate": {
+                            "ref": "Thurston.html#animate",
+                            "tf": 135
+                          },
+                          "Thurston.html#run": {
+                            "ref": "Thurston.html#run",
                             "tf": 110
                           },
                           "Vector.html#toLog": {
@@ -4919,8 +4699,8 @@ window.lunrData = {
                             "ref": "Renderer.html#vertexShader",
                             "tf": 110
                           },
-                          "Renderer.html#fragmentShader": {
-                            "ref": "Renderer.html#fragmentShader",
+                          "Renderer.html#buildFragmentShader": {
+                            "ref": "Renderer.html#buildFragmentShader",
                             "tf": 110
                           },
                           "Renderer.html#build": {
@@ -4929,10 +4709,6 @@ window.lunrData = {
                           },
                           "Renderer.html#render": {
                             "ref": "Renderer.html#render",
-                            "tf": 110
-                          },
-                          "PhongMaterial.html#toGLSL": {
-                            "ref": "PhongMaterial.html#toGLSL",
                             "tf": 110
                           },
                           "Subgroup.html#shader": {
@@ -4958,98 +4734,6 @@ window.lunrData = {
                           "FlyControls.html#update": {
                             "ref": "FlyControls.html#update",
                             "tf": 110.46296296296296
-                          },
-                          "module-Thurston-Thurston.html#infos": {
-                            "ref": "module-Thurston-Thurston.html#infos",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#registerParam": {
-                            "ref": "module-Thurston-Thurston.html#registerParam",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#setParams": {
-                            "ref": "module-Thurston-Thurston.html#setParams",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#setParam": {
-                            "ref": "module-Thurston-Thurston.html#setParam",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#addItem": {
-                            "ref": "module-Thurston-Thurston.html#addItem",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#addItems": {
-                            "ref": "module-Thurston-Thurston.html#addItems",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#getEyePositions": {
-                            "ref": "module-Thurston-Thurston.html#getEyePositions",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#appendTitle": {
-                            "ref": "module-Thurston-Thurston.html#appendTitle",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#setKeyboard": {
-                            "ref": "module-Thurston-Thurston.html#setKeyboard",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#initUI": {
-                            "ref": "module-Thurston-Thurston.html#initUI",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#initThreeJS": {
-                            "ref": "module-Thurston-Thurston.html#initThreeJS",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#initStats": {
-                            "ref": "module-Thurston-Thurston.html#initStats",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#buildShaderVertex": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataItems": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#buildShaderFragment": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                            "tf": 112.08333333333333
-                          },
-                          "module-Thurston-Thurston.html#initHorizon": {
-                            "ref": "module-Thurston-Thurston.html#initHorizon",
-                            "tf": 115.55555555555556
-                          },
-                          "module-Thurston-Thurston.html#animate": {
-                            "ref": "module-Thurston-Thurston.html#animate",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#run": {
-                            "ref": "module-Thurston-Thurston.html#run",
-                            "tf": 115
-                          },
-                          "module-Thurston-Thurston.html#onWindowResize": {
-                            "ref": "module-Thurston-Thurston.html#onWindowResize",
-                            "tf": 110
-                          },
-                          "module-Thurston-Thurston.html#addEventListeners": {
-                            "ref": "module-Thurston-Thurston.html#addEventListeners",
-                            "tf": 110
                           }
                         }
                       }
@@ -5147,10 +4831,6 @@ window.lunrData = {
                     "ref": "NormalMaterial.html#isLocal",
                     "tf": 7.142857142857142
                   },
-                  "SingleColorMaterial.html#isLocal": {
-                    "ref": "SingleColorMaterial.html#isLocal",
-                    "tf": 7.142857142857142
-                  },
                   "PointLight.html#isGlobal": {
                     "ref": "PointLight.html#isGlobal",
                     "tf": 7.142857142857142
@@ -5165,6 +4845,18 @@ window.lunrData = {
                   },
                   "LocalBallShape.html#isGlobal": {
                     "ref": "LocalBallShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "HoroballShape.html#isGlobal": {
+                    "ref": "HoroballShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "LocalHoroballShape.html#isGlobal": {
+                    "ref": "LocalHoroballShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "SingleColorMaterial.html#isLocal": {
+                    "ref": "SingleColorMaterial.html#isLocal",
                     "tf": 7.142857142857142
                   }
                 }
@@ -5376,22 +5068,6 @@ window.lunrData = {
                 }
               }
             },
-            "i": {
-              "docs": {
-                "VRControlsDrag.html": {
-                  "ref": "VRControlsDrag.html",
-                  "tf": 2.272727272727273
-                },
-                "VRControlsMove.html": {
-                  "ref": "VRControlsMove.html",
-                  "tf": 2.272727272727273
-                },
-                "FlyControls.html": {
-                  "ref": "FlyControls.html",
-                  "tf": 5.555555555555555
-                }
-              }
-            },
             "y": {
               "docs": {},
               "c": {
@@ -5408,6 +5084,10 @@ window.lunrData = {
                           "docs": {},
                           "l": {
                             "docs": {
+                              "Thurston.html#flyControls": {
+                                "ref": "Thurston.html#flyControls",
+                                "tf": 716.6666666666666
+                              },
                               "VRControlsDrag.html": {
                                 "ref": "VRControlsDrag.html",
                                 "tf": 2.272727272727273
@@ -5419,10 +5099,6 @@ window.lunrData = {
                               "FlyControls.html": {
                                 "ref": "FlyControls.html",
                                 "tf": 1905.5555555555557
-                              },
-                              "module-Thurston-Thurston.html#_keyboardControls": {
-                                "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                                "tf": 33.33333333333333
                               }
                             },
                             "s": {
@@ -5598,6 +5274,22 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "i": {
+              "docs": {
+                "VRControlsDrag.html": {
+                  "ref": "VRControlsDrag.html",
+                  "tf": 2.272727272727273
+                },
+                "VRControlsMove.html": {
+                  "ref": "VRControlsMove.html",
+                  "tf": 2.272727272727273
+                },
+                "FlyControls.html": {
+                  "ref": "FlyControls.html",
+                  "tf": 5.555555555555555
+                }
+              }
             }
           },
           "r": {
@@ -5649,30 +5341,9 @@ window.lunrData = {
                             "ref": "Renderer.html#_fragmentBuilder",
                             "tf": 16.666666666666664
                           },
-                          "Renderer.html#fragmentShader": {
-                            "ref": "Renderer.html#fragmentShader",
+                          "Renderer.html#buildFragmentShader": {
+                            "ref": "Renderer.html#buildFragmentShader",
                             "tf": 16.666666666666664
-                          },
-                          "module-Thurston-Thurston.html#buildShaderFragment": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                            "tf": 2.083333333333333
-                          }
-                        },
-                        "s": {
-                          "docs": {},
-                          "h": {
-                            "docs": {},
-                            "a": {
-                              "docs": {},
-                              "d": {
-                                "docs": {
-                                  "Renderer.html#fragmentShader": {
-                                    "ref": "Renderer.html#fragmentShader",
-                                    "tf": 750
-                                  }
-                                }
-                              }
-                            }
                           }
                         }
                       }
@@ -5766,13 +5437,13 @@ window.lunrData = {
               },
               "m": {
                 "docs": {
+                  "Thurston.html#geom": {
+                    "ref": "Thurston.html#geom",
+                    "tf": 700
+                  },
                   "Renderer.html#geom": {
                     "ref": "Renderer.html#geom",
                     "tf": 750
-                  },
-                  "module-Thurston-Thurston.html#geom": {
-                    "ref": "module-Thurston-Thurston.html#geom",
-                    "tf": 700
                   }
                 },
                 "e": {
@@ -5800,6 +5471,10 @@ window.lunrData = {
                             "ref": "Scene.html",
                             "tf": 5.555555555555555
                           },
+                          "Thurston.html#geom": {
+                            "ref": "Thurston.html#geom",
+                            "tf": 25
+                          },
                           "Vector.html#applyFacing": {
                             "ref": "Vector.html#applyFacing",
                             "tf": 5.263157894736842
@@ -5822,22 +5497,6 @@ window.lunrData = {
                           },
                           "FlyControls.html": {
                             "ref": "FlyControls.html",
-                            "tf": 5.555555555555555
-                          },
-                          "module-Thurston-Thurston.html": {
-                            "ref": "module-Thurston-Thurston.html",
-                            "tf": 8.333333333333332
-                          },
-                          "module-Thurston-Thurston.html#geom": {
-                            "ref": "module-Thurston-Thurston.html#geom",
-                            "tf": 25
-                          },
-                          "module-Thurston-Thurston.html#appendTitle": {
-                            "ref": "module-Thurston-Thurston.html#appendTitle",
-                            "tf": 10
-                          },
-                          "module-Thurston.html": {
-                            "ref": "module-Thurston.html",
                             "tf": 5.555555555555555
                           }
                         }
@@ -6192,35 +5851,6 @@ window.lunrData = {
                     }
                   }
                 }
-              },
-              "e": {
-                "docs": {},
-                "y": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "p": {
-                      "docs": {},
-                      "o": {
-                        "docs": {},
-                        "s": {
-                          "docs": {},
-                          "i": {
-                            "docs": {},
-                            "t": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#getEyePositions": {
-                                  "ref": "module-Thurston-Thurston.html#getEyePositions",
-                                  "tf": 750
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
               }
             }
           },
@@ -6250,10 +5880,6 @@ window.lunrData = {
                         "ref": "NormalMaterial.html#isGlobal",
                         "tf": 7.142857142857142
                       },
-                      "SingleColorMaterial.html#isGlobal": {
-                        "ref": "SingleColorMaterial.html#isGlobal",
-                        "tf": 7.142857142857142
-                      },
                       "PointLight.html#isGlobal": {
                         "ref": "PointLight.html#isGlobal",
                         "tf": 14.285714285714285
@@ -6265,6 +5891,18 @@ window.lunrData = {
                       "LocalBallShape.html#isGlobal": {
                         "ref": "LocalBallShape.html#isGlobal",
                         "tf": 14.285714285714285
+                      },
+                      "HoroballShape.html#isGlobal": {
+                        "ref": "HoroballShape.html#isGlobal",
+                        "tf": 14.285714285714285
+                      },
+                      "LocalHoroballShape.html#isGlobal": {
+                        "ref": "LocalHoroballShape.html#isGlobal",
+                        "tf": 14.285714285714285
+                      },
+                      "SingleColorMaterial.html#isGlobal": {
+                        "ref": "SingleColorMaterial.html#isGlobal",
+                        "tf": 7.142857142857142
                       }
                     }
                   }
@@ -6303,14 +5941,6 @@ window.lunrData = {
                     "ref": "Teleport.html#glslTest",
                     "tf": 4.166666666666666
                   },
-                  "Shape.html#glslSDF": {
-                    "ref": "Shape.html#glslSDF",
-                    "tf": 6.25
-                  },
-                  "Shape.html#glslGradient": {
-                    "ref": "Shape.html#glslGradient",
-                    "tf": 7.142857142857142
-                  },
                   "Camera.html#shader": {
                     "ref": "Camera.html#shader",
                     "tf": 8.333333333333332
@@ -6319,17 +5949,25 @@ window.lunrData = {
                     "ref": "NormalMaterial.html#glslRender",
                     "tf": 5
                   },
-                  "SingleColorMaterial.html#glslRender": {
-                    "ref": "SingleColorMaterial.html#glslRender",
-                    "tf": 5
-                  },
                   "Position.html#toGLSL": {
                     "ref": "Position.html#toGLSL",
                     "tf": 4.545454545454546
                   },
+                  "Shape.html#glslSDF": {
+                    "ref": "Shape.html#glslSDF",
+                    "tf": 6.25
+                  },
+                  "Shape.html#glslGradient": {
+                    "ref": "Shape.html#glslGradient",
+                    "tf": 3.125
+                  },
                   "PointLight.html#.glslClass": {
                     "ref": "PointLight.html#.glslClass",
                     "tf": 7.142857142857142
+                  },
+                  "SingleColorMaterial.html#glslRender": {
+                    "ref": "SingleColorMaterial.html#glslRender",
+                    "tf": 5
                   },
                   "Vector.html#toGLSL": {
                     "ref": "Vector.html#toGLSL",
@@ -6339,21 +5977,9 @@ window.lunrData = {
                     "ref": "RelPosition.html#toGLSL",
                     "tf": 4.545454545454546
                   },
-                  "PhongMaterial.html#toGLSL": {
-                    "ref": "PhongMaterial.html#toGLSL",
-                    "tf": 4.545454545454546
-                  },
                   "Subgroup.html#shader": {
                     "ref": "Subgroup.html#shader",
                     "tf": 4.545454545454546
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                    "tf": 5.555555555555555
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataItems": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                    "tf": 5
                   }
                 },
                 "d": {
@@ -6405,16 +6031,16 @@ window.lunrData = {
                                   "ref": "Generic.html#glslInstance",
                                   "tf": 700
                                 },
-                                "Shape.html#glslInstance": {
-                                  "ref": "Shape.html#glslInstance",
-                                  "tf": 700
-                                },
                                 "Solid.html#glslInstance": {
                                   "ref": "Solid.html#glslInstance",
                                   "tf": 700
                                 },
                                 "NormalMaterial.html#glslInstance": {
                                   "ref": "NormalMaterial.html#glslInstance",
+                                  "tf": 700
+                                },
+                                "Shape.html#glslInstance": {
+                                  "ref": "Shape.html#glslInstance",
                                   "tf": 700
                                 },
                                 "SingleColorMaterial.html#glslInstance": {
@@ -6533,7 +6159,7 @@ window.lunrData = {
                                 "docs": {
                                   "Shape.html#glslGradient": {
                                     "ref": "Shape.html#glslGradient",
-                                    "tf": 683.3333333333334
+                                    "tf": 700
                                   }
                                 }
                               }
@@ -6623,10 +6249,6 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#glslRender",
                       "tf": 5
                     },
-                    "SingleColorMaterial.html#glslRender": {
-                      "ref": "SingleColorMaterial.html#glslRender",
-                      "tf": 5
-                    },
                     "Position.html#multiply": {
                       "ref": "Position.html#multiply",
                       "tf": 3.571428571428571
@@ -6647,6 +6269,10 @@ window.lunrData = {
                       "ref": "Position.html#copy",
                       "tf": 10
                     },
+                    "SingleColorMaterial.html#glslRender": {
+                      "ref": "SingleColorMaterial.html#glslRender",
+                      "tf": 5
+                    },
                     "Vector.html#applyFacing": {
                       "ref": "Vector.html#applyFacing",
                       "tf": 2.631578947368421
@@ -6658,14 +6284,6 @@ window.lunrData = {
                     "FlyControls.html#update": {
                       "ref": "FlyControls.html#update",
                       "tf": 0.4629629629629629
-                    },
-                    "module-Thurston-Thurston.html#setParams": {
-                      "ref": "module-Thurston-Thurston.html#setParams",
-                      "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html#setParam": {
-                      "ref": "module-Thurston-Thurston.html#setParam",
-                      "tf": 16.666666666666664
                     }
                   }
                 }
@@ -6698,17 +6316,17 @@ window.lunrData = {
                             "ref": "Generic.html#glslInstance",
                             "tf": 4.166666666666666
                           },
+                          "Solid.html#glslInstance": {
+                            "ref": "Solid.html#glslInstance",
+                            "tf": 4.545454545454546
+                          },
                           "Shape.html#glslGradient": {
                             "ref": "Shape.html#glslGradient",
-                            "tf": 7.142857142857142
+                            "tf": 6.25
                           },
                           "Shape.html#glslInstance": {
                             "ref": "Shape.html#glslInstance",
                             "tf": 5.555555555555555
-                          },
-                          "Solid.html#glslInstance": {
-                            "ref": "Solid.html#glslInstance",
-                            "tf": 4.545454545454546
                           }
                         }
                       }
@@ -6724,12 +6342,12 @@ window.lunrData = {
                     "docs": {},
                     "c": {
                       "docs": {
-                        "module-Thurston-Thurston.html#gui": {
-                          "ref": "module-Thurston-Thurston.html#gui",
+                        "Thurston.html#gui": {
+                          "ref": "Thurston.html#gui",
                           "tf": 16.666666666666664
                         },
-                        "module-Thurston-Thurston.html#initUI": {
-                          "ref": "module-Thurston-Thurston.html#initUI",
+                        "Thurston.html#initGUI": {
+                          "ref": "Thurston.html#initGUI",
                           "tf": 12.5
                         }
                       }
@@ -6819,10 +6437,6 @@ window.lunrData = {
               "FlyControls.html#update": {
                 "ref": "FlyControls.html#update",
                 "tf": 0.4629629629629629
-              },
-              "module-Thurston-Thurston.html#params": {
-                "ref": "module-Thurston-Thurston.html#params",
-                "tf": 3.571428571428571
               }
             },
             "e": {
@@ -6842,8 +6456,8 @@ window.lunrData = {
             "docs": {},
             "i": {
               "docs": {
-                "module-Thurston-Thurston.html#gui": {
-                  "ref": "module-Thurston-Thurston.html#gui",
+                "Thurston.html#gui": {
+                  "ref": "Thurston.html#gui",
                   "tf": 750
                 }
               }
@@ -7280,32 +6894,18 @@ window.lunrData = {
                       }
                     }
                   },
-                  "a": {
-                    "docs": {},
-                    "c": {
-                      "docs": {},
-                      "t": {
-                        "docs": {
-                          "module-Thurston-Thurston.html#params": {
-                            "ref": "module-Thurston-Thurston.html#params",
-                            "tf": 3.571428571428571
-                          }
-                        }
-                      }
-                    }
-                  },
                   "f": {
                     "docs": {},
                     "a": {
                       "docs": {},
                       "c": {
                         "docs": {
-                          "module-Thurston-Thurston.html#gui": {
-                            "ref": "module-Thurston-Thurston.html#gui",
+                          "Thurston.html#gui": {
+                            "ref": "Thurston.html#gui",
                             "tf": 16.666666666666664
                           },
-                          "module-Thurston-Thurston.html#initUI": {
-                            "ref": "module-Thurston-Thurston.html#initUI",
+                          "Thurston.html#initGUI": {
+                            "ref": "Thurston.html#initGUI",
                             "tf": 12.5
                           }
                         }
@@ -7341,16 +6941,12 @@ window.lunrData = {
                           "ref": "Material.html#isMaterial",
                           "tf": 16.666666666666664
                         },
-                        "Shape.html#isShape": {
-                          "ref": "Shape.html#isShape",
-                          "tf": 16.666666666666664
-                        },
                         "NormalMaterial.html#isMaterial": {
                           "ref": "NormalMaterial.html#isMaterial",
                           "tf": 16.666666666666664
                         },
-                        "SingleColorMaterial.html#isMaterial": {
-                          "ref": "SingleColorMaterial.html#isMaterial",
+                        "Shape.html#isShape": {
+                          "ref": "Shape.html#isShape",
                           "tf": 16.666666666666664
                         },
                         "BallShape.html#isBallShape": {
@@ -7359,6 +6955,18 @@ window.lunrData = {
                         },
                         "LocalBallShape.html#isLocalBallShape": {
                           "ref": "LocalBallShape.html#isLocalBallShape",
+                          "tf": 16.666666666666664
+                        },
+                        "HoroballShape.html#isHoroballShape": {
+                          "ref": "HoroballShape.html#isHoroballShape",
+                          "tf": 16.666666666666664
+                        },
+                        "LocalHoroballShape.html#isLocalHoroballShape": {
+                          "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                          "tf": 16.666666666666664
+                        },
+                        "SingleColorMaterial.html#isMaterial": {
+                          "ref": "SingleColorMaterial.html#isMaterial",
                           "tf": 16.666666666666664
                         }
                       }
@@ -7370,12 +6978,7 @@ window.lunrData = {
             "i": {
               "docs": {},
               "t": {
-                "docs": {
-                  "module-Thurston-Thurston.html#initHorizon": {
-                    "ref": "module-Thurston-Thurston.html#initHorizon",
-                    "tf": 5.555555555555555
-                  }
-                },
+                "docs": {},
                 "i": {
                   "docs": {
                     "Position.html#flowFromOrigin": {
@@ -7386,49 +6989,25 @@ window.lunrData = {
                       "ref": "Position.html#flow",
                       "tf": 0.49504950495049505
                     },
-                    "module-Thurston-Thurston.html#initUI": {
-                      "ref": "module-Thurston-Thurston.html#initUI",
+                    "Thurston.html#initGUI": {
+                      "ref": "Thurston.html#initGUI",
                       "tf": 12.5
                     },
-                    "module-Thurston-Thurston.html#initStats": {
-                      "ref": "module-Thurston-Thurston.html#initStats",
+                    "Thurston.html#initStats": {
+                      "ref": "Thurston.html#initStats",
                       "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html#run": {
-                      "ref": "module-Thurston-Thurston.html#run",
-                      "tf": 5
                     }
                   }
                 },
-                "u": {
+                "g": {
                   "docs": {},
-                  "i": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#initUI": {
-                        "ref": "module-Thurston-Thurston.html#initUI",
-                        "tf": 700
-                      }
-                    }
-                  }
-                },
-                "t": {
-                  "docs": {},
-                  "h": {
+                  "u": {
                     "docs": {},
-                    "r": {
-                      "docs": {},
-                      "e": {
-                        "docs": {},
-                        "e": {
-                          "docs": {},
-                          "j": {
-                            "docs": {
-                              "module-Thurston-Thurston.html#initThreeJS": {
-                                "ref": "module-Thurston-Thurston.html#initThreeJS",
-                                "tf": 750
-                              }
-                            }
-                          }
+                    "i": {
+                      "docs": {
+                        "Thurston.html#initGUI": {
+                          "ref": "Thurston.html#initGUI",
+                          "tf": 700
                         }
                       }
                     }
@@ -7442,35 +7021,9 @@ window.lunrData = {
                       "docs": {},
                       "t": {
                         "docs": {
-                          "module-Thurston-Thurston.html#initStats": {
-                            "ref": "module-Thurston-Thurston.html#initStats",
+                          "Thurston.html#initStats": {
+                            "ref": "Thurston.html#initStats",
                             "tf": 700
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "h": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "r": {
-                      "docs": {},
-                      "i": {
-                        "docs": {},
-                        "z": {
-                          "docs": {},
-                          "o": {
-                            "docs": {},
-                            "n": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#initHorizon": {
-                                  "ref": "module-Thurston-Thurston.html#initHorizon",
-                                  "tf": 683.3333333333334
-                                }
-                              }
-                            }
                           }
                         }
                       }
@@ -7489,17 +7042,6 @@ window.lunrData = {
                       "ref": "Renderer.html",
                       "tf": 3.3333333333333335
                     }
-                  }
-                }
-              }
-            },
-            "f": {
-              "docs": {},
-              "o": {
-                "docs": {
-                  "module-Thurston-Thurston.html#infos": {
-                    "ref": "module-Thurston-Thurston.html#infos",
-                    "tf": 758.3333333333334
                   }
                 }
               }
@@ -7612,6 +7154,14 @@ window.lunrData = {
                   "Isometry.html#makeTranslationFromDir": {
                     "ref": "Isometry.html#makeTranslationFromDir",
                     "tf": 5.555555555555555
+                  },
+                  "HoroballShape.html#offset": {
+                    "ref": "HoroballShape.html#offset",
+                    "tf": 4.166666666666666
+                  },
+                  "LocalHoroballShape.html#offset": {
+                    "ref": "LocalHoroballShape.html#offset",
+                    "tf": 4.166666666666666
                   },
                   "RelPosition.html": {
                     "ref": "RelPosition.html",
@@ -8125,12 +7675,12 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#isLocal",
                       "tf": 700
                     },
-                    "SingleColorMaterial.html#isLocal": {
-                      "ref": "SingleColorMaterial.html#isLocal",
-                      "tf": 700
-                    },
                     "PointLight.html#isLocal": {
                       "ref": "PointLight.html#isLocal",
+                      "tf": 700
+                    },
+                    "SingleColorMaterial.html#isLocal": {
+                      "ref": "SingleColorMaterial.html#isLocal",
                       "tf": 700
                     }
                   },
@@ -8157,6 +7707,47 @@ window.lunrData = {
                                         "LocalBallShape.html#isLocalBallShape": {
                                           "ref": "LocalBallShape.html#isLocalBallShape",
                                           "tf": 700
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "h": {
+                        "docs": {},
+                        "o": {
+                          "docs": {},
+                          "r": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "b": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {},
+                                  "l": {
+                                    "docs": {},
+                                    "l": {
+                                      "docs": {},
+                                      "s": {
+                                        "docs": {},
+                                        "h": {
+                                          "docs": {},
+                                          "a": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {
+                                                "LocalHoroballShape.html#isLocalHoroballShape": {
+                                                  "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                                                  "tf": 700
+                                                }
+                                              }
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -8223,10 +7814,6 @@ window.lunrData = {
                         "ref": "NormalMaterial.html#isGlobal",
                         "tf": 700
                       },
-                      "SingleColorMaterial.html#isGlobal": {
-                        "ref": "SingleColorMaterial.html#isGlobal",
-                        "tf": 700
-                      },
                       "PointLight.html#isGlobal": {
                         "ref": "PointLight.html#isGlobal",
                         "tf": 700
@@ -8238,6 +7825,18 @@ window.lunrData = {
                       "LocalBallShape.html#isGlobal": {
                         "ref": "LocalBallShape.html#isGlobal",
                         "tf": 700
+                      },
+                      "HoroballShape.html#isGlobal": {
+                        "ref": "HoroballShape.html#isGlobal",
+                        "tf": 700
+                      },
+                      "LocalHoroballShape.html#isGlobal": {
+                        "ref": "LocalHoroballShape.html#isGlobal",
+                        "tf": 700
+                      },
+                      "SingleColorMaterial.html#isGlobal": {
+                        "ref": "SingleColorMaterial.html#isGlobal",
+                        "tf": 700
                       }
                     }
                   }
@@ -8246,20 +7845,6 @@ window.lunrData = {
             },
             "s": {
               "docs": {},
-              "h": {
-                "docs": {},
-                "a": {
-                  "docs": {},
-                  "p": {
-                    "docs": {
-                      "Shape.html#isShape": {
-                        "ref": "Shape.html#isShape",
-                        "tf": 700
-                      }
-                    }
-                  }
-                }
-              },
               "o": {
                 "docs": {},
                 "l": {
@@ -8272,6 +7857,20 @@ window.lunrData = {
                           "ref": "Solid.html#isSolid",
                           "tf": 700
                         }
+                      }
+                    }
+                  }
+                }
+              },
+              "h": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "p": {
+                    "docs": {
+                      "Shape.html#isShape": {
+                        "ref": "Shape.html#isShape",
+                        "tf": 700
                       }
                     }
                   }
@@ -8296,16 +7895,16 @@ window.lunrData = {
                             "docs": {},
                             "p": {
                               "docs": {
-                                "Shape.html#isBasicShape": {
-                                  "ref": "Shape.html#isBasicShape",
-                                  "tf": 700
-                                },
                                 "AdvancedShape.html#isBasicShape": {
                                   "ref": "AdvancedShape.html#isBasicShape",
                                   "tf": 700
                                 },
                                 "BasicShape.html#isBasicShape": {
                                   "ref": "BasicShape.html#isBasicShape",
+                                  "tf": 700
+                                },
+                                "Shape.html#isBasicShape": {
+                                  "ref": "Shape.html#isBasicShape",
                                   "tf": 700
                                 }
                               }
@@ -8381,6 +7980,47 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "h": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "b": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "l": {
+                          "docs": {},
+                          "l": {
+                            "docs": {},
+                            "s": {
+                              "docs": {},
+                              "h": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {},
+                                  "p": {
+                                    "docs": {
+                                      "HoroballShape.html#isHoroballShape": {
+                                        "ref": "HoroballShape.html#isHoroballShape",
+                                        "tf": 700
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "d": {
@@ -8431,6 +8071,24 @@ window.lunrData = {
                     "Isometry.html#build": {
                       "ref": "Isometry.html#build",
                       "tf": 8.333333333333332
+                    }
+                  },
+                  "i": {
+                    "docs": {},
+                    "f": {
+                      "docs": {},
+                      "i": {
+                        "docs": {
+                          "HoroballShape.html#center": {
+                            "ref": "HoroballShape.html#center",
+                            "tf": 5.555555555555555
+                          },
+                          "LocalHoroballShape.html#center": {
+                            "ref": "LocalHoroballShape.html#center",
+                            "tf": 5.555555555555555
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -8514,26 +8172,6 @@ window.lunrData = {
                   "Solid.html#isSolid": {
                     "ref": "Solid.html#isSolid",
                     "tf": 25
-                  },
-                  "module-Thurston-Thurston.html#addItem": {
-                    "ref": "module-Thurston-Thurston.html#addItem",
-                    "tf": 16.666666666666664
-                  },
-                  "module-Thurston-Thurston.html#addItems": {
-                    "ref": "module-Thurston-Thurston.html#addItems",
-                    "tf": 12.5
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                    "tf": 5.555555555555555
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataItems": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                    "tf": 5
-                  },
-                  "module-Thurston-Thurston.html#buildShaderFragment": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                    "tf": 4.166666666666666
                   }
                 }
               }
@@ -8575,6 +8213,18 @@ window.lunrData = {
                   "ref": "Scene.html",
                   "tf": 5.555555555555555
                 },
+                "Thurston.html#camera": {
+                  "ref": "Thurston.html#camera",
+                  "tf": 16.666666666666664
+                },
+                "Thurston.html#scene": {
+                  "ref": "Thurston.html#scene",
+                  "tf": 16.666666666666664
+                },
+                "Thurston.html#renderer": {
+                  "ref": "Thurston.html#renderer",
+                  "tf": 12.5
+                },
                 "Renderer.html": {
                   "ref": "Renderer.html",
                   "tf": 6.666666666666667
@@ -8602,18 +8252,6 @@ window.lunrData = {
                 "Renderer.html#render": {
                   "ref": "Renderer.html#render",
                   "tf": 6.25
-                },
-                "module-Thurston-Thurston.html#_solids": {
-                  "ref": "module-Thurston-Thurston.html#_solids",
-                  "tf": 10
-                },
-                "module-Thurston-Thurston.html#_lights": {
-                  "ref": "module-Thurston-Thurston.html#_lights",
-                  "tf": 10
-                },
-                "module-Thurston-Thurston.html#chaseCamera": {
-                  "ref": "module-Thurston-Thurston.html#chaseCamera",
-                  "tf": 2
                 }
               }
             },
@@ -8842,14 +8480,6 @@ window.lunrData = {
                   "Teleport.html#name": {
                     "ref": "Teleport.html#name",
                     "tf": 757.1428571428571
-                  },
-                  "module-Thurston-Thurston.html#registerParam": {
-                    "ref": "module-Thurston-Thurston.html#registerParam",
-                    "tf": 20
-                  },
-                  "module-Thurston-Thurston.html#appendTitle": {
-                    "ref": "module-Thurston-Thurston.html#appendTitle",
-                    "tf": 10
                   }
                 },
                 "/": {
@@ -8937,6 +8567,10 @@ window.lunrData = {
                       "ref": "Position.html#reduceErrorBoost",
                       "tf": 8.333333333333332
                     },
+                    "Shape.html#glslGradient": {
+                      "ref": "Shape.html#glslGradient",
+                      "tf": 3.125
+                    },
                     "RelPosition.html#reduceErrorBoost": {
                       "ref": "RelPosition.html#reduceErrorBoost",
                       "tf": 8.333333333333332
@@ -8998,6 +8632,14 @@ window.lunrData = {
                         "ref": "Scene.html#_nextId",
                         "tf": 33.33333333333333
                       },
+                      "HoroballShape.html#offset": {
+                        "ref": "HoroballShape.html#offset",
+                        "tf": 50
+                      },
+                      "LocalHoroballShape.html#offset": {
+                        "ref": "LocalHoroballShape.html#offset",
+                        "tf": 50
+                      },
                       "PhongMaterial.html#ambient": {
                         "ref": "PhongMaterial.html#ambient",
                         "tf": 50
@@ -9017,14 +8659,6 @@ window.lunrData = {
                       "Subgroup.html": {
                         "ref": "Subgroup.html",
                         "tf": 1.0638297872340425
-                      },
-                      "module-Thurston-Thurston.html#_maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                        "tf": 39.58333333333333
-                      },
-                      "module-Thurston-Thurston.html#maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                        "tf": 62.5
                       }
                     }
                   }
@@ -9074,10 +8708,6 @@ window.lunrData = {
                 "RelPosition.html#clone": {
                   "ref": "RelPosition.html#clone",
                   "tf": 10
-                },
-                "module-Thurston-Thurston.html#registerParam": {
-                  "ref": "module-Thurston-Thurston.html#registerParam",
-                  "tf": 12.5
                 }
               }
             },
@@ -9207,10 +8837,6 @@ window.lunrData = {
                                             "Camera.html#_threeCamera": {
                                               "ref": "Camera.html#_threeCamera",
                                               "tf": 33.33333333333333
-                                            },
-                                            "module-Thurston-Thurston.html#_camera": {
-                                              "ref": "module-Thurston-Thurston.html#_camera",
-                                              "tf": 33.33333333333333
                                             }
                                           }
                                         }
@@ -9235,6 +8861,14 @@ window.lunrData = {
                     "docs": {},
                     "m": {
                       "docs": {
+                        "Thurston.html#stats": {
+                          "ref": "Thurston.html#stats",
+                          "tf": 25
+                        },
+                        "Thurston.html#initStats": {
+                          "ref": "Thurston.html#initStats",
+                          "tf": 16.666666666666664
+                        },
                         "Subgroup.html": {
                           "ref": "Subgroup.html",
                           "tf": 0.7092198581560284
@@ -9242,14 +8876,6 @@ window.lunrData = {
                         "Subgroup.html#shader": {
                           "ref": "Subgroup.html#shader",
                           "tf": 4.545454545454546
-                        },
-                        "module-Thurston-Thurston.html#stats": {
-                          "ref": "module-Thurston-Thurston.html#stats",
-                          "tf": 25
-                        },
-                        "module-Thurston-Thurston.html#initStats": {
-                          "ref": "module-Thurston-Thurston.html#initStats",
-                          "tf": 16.666666666666664
                         }
                       }
                     }
@@ -9291,18 +8917,6 @@ window.lunrData = {
                   "BasicShape.html": {
                     "ref": "BasicShape.html",
                     "tf": 1.8518518518518516
-                  },
-                  "module-Thurston-Thurston.html#registerParam": {
-                    "ref": "module-Thurston-Thurston.html#registerParam",
-                    "tf": 20
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                    "tf": 10
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                    "tf": 10
                   }
                 }
               }
@@ -9335,37 +8949,25 @@ window.lunrData = {
                 },
                 "m": {
                   "docs": {
-                    "module-Thurston-Thurston.html#params": {
-                      "ref": "module-Thurston-Thurston.html#params",
-                      "tf": 703.5714285714286
+                    "Thurston.html#params": {
+                      "ref": "Thurston.html#params",
+                      "tf": 700
                     },
-                    "module-Thurston-Thurston.html#registerParam": {
-                      "ref": "module-Thurston-Thurston.html#registerParam",
-                      "tf": 12.5
-                    },
-                    "module-Thurston-Thurston.html#setParams": {
-                      "ref": "module-Thurston-Thurston.html#setParams",
-                      "tf": 33.33333333333333
+                    "Thurston.html#setParams": {
+                      "ref": "Thurston.html#setParams",
+                      "tf": 50
                     }
                   },
                   "e": {
                     "docs": {},
                     "t": {
                       "docs": {
-                        "module-Thurston-Thurston.html#params": {
-                          "ref": "module-Thurston-Thurston.html#params",
-                          "tf": 3.571428571428571
+                        "Thurston.html#params": {
+                          "ref": "Thurston.html#params",
+                          "tf": 16.666666666666664
                         },
-                        "module-Thurston-Thurston.html#registerParam": {
-                          "ref": "module-Thurston-Thurston.html#registerParam",
-                          "tf": 12.5
-                        },
-                        "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                          "tf": 10
-                        },
-                        "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
+                        "Thurston.html#setParams": {
+                          "ref": "Thurston.html#setParams",
                           "tf": 10
                         }
                       }
@@ -9387,6 +8989,10 @@ window.lunrData = {
                     "ref": "Position.html#reduceError",
                     "tf": 16.666666666666664
                   },
+                  "Thurston.html": {
+                    "ref": "Thurston.html",
+                    "tf": 6.25
+                  },
                   "RelPosition.html": {
                     "ref": "RelPosition.html",
                     "tf": 0.9615384615384616
@@ -9401,17 +9007,6 @@ window.lunrData = {
                   "RelPosition.html": {
                     "ref": "RelPosition.html",
                     "tf": 0.9615384615384616
-                  }
-                }
-              }
-            },
-            "g": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "module-Thurston-Thurston.html#appendTitle": {
-                    "ref": "module-Thurston-Thurston.html#appendTitle",
-                    "tf": 10
                   }
                 }
               }
@@ -9434,12 +9029,7 @@ window.lunrData = {
               }
             },
             "e": {
-              "docs": {
-                "module-Thurston-Thurston.html#stereo": {
-                  "ref": "module-Thurston-Thurston.html#stereo",
-                  "tf": 4.545454545454546
-                }
-              },
+              "docs": {},
               "v": {
                 "docs": {},
                 "i": {
@@ -9526,10 +9116,6 @@ window.lunrData = {
                     "FlyControls.html#onKeyUp": {
                       "ref": "FlyControls.html#onKeyUp",
                       "tf": 12.5
-                    },
-                    "module-Thurston-Thurston.html#infos": {
-                      "ref": "module-Thurston-Thurston.html#infos",
-                      "tf": 8.333333333333332
                     }
                   }
                 }
@@ -9555,10 +9141,6 @@ window.lunrData = {
                             "ref": "NormalMaterial.html#isGlobal",
                             "tf": 7.142857142857142
                           },
-                          "SingleColorMaterial.html#isGlobal": {
-                            "ref": "SingleColorMaterial.html#isGlobal",
-                            "tf": 7.142857142857142
-                          },
                           "AdvancedShape.html": {
                             "ref": "AdvancedShape.html",
                             "tf": 3.7037037037037033
@@ -9567,9 +9149,9 @@ window.lunrData = {
                             "ref": "BasicShape.html",
                             "tf": 3.7037037037037033
                           },
-                          "module-Thurston-Thurston.html#buildShaderDataItems": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                            "tf": 5
+                          "SingleColorMaterial.html#isGlobal": {
+                            "ref": "SingleColorMaterial.html#isGlobal",
+                            "tf": 7.142857142857142
                           }
                         }
                       }
@@ -9630,10 +9212,6 @@ window.lunrData = {
                         "Generic.html#setId": {
                           "ref": "Generic.html#setId",
                           "tf": 8.333333333333332
-                        },
-                        "module-Thurston-Thurston.html#stereo": {
-                          "ref": "module-Thurston-Thurston.html#stereo",
-                          "tf": 4.545454545454546
                         }
                       }
                     }
@@ -9682,184 +9260,6 @@ window.lunrData = {
                         "Subgroup.html": {
                           "ref": "Subgroup.html",
                           "tf": 1.0638297872340425
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "x": {
-                "docs": {},
-                "i": {
-                  "docs": {
-                    "module-Thurston-Thurston.html#params": {
-                      "ref": "module-Thurston-Thurston.html#params",
-                      "tf": 3.571428571428571
-                    }
-                  }
-                }
-              },
-              "m": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "s": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#run": {
-                        "ref": "module-Thurston-Thurston.html#run",
-                        "tf": 5
-                      }
-                    },
-                    "e": {
-                      "docs": {},
-                      ".": {
-                        "docs": {},
-                        "&": {
-                          "docs": {},
-                          "l": {
-                            "docs": {},
-                            "t": {
-                              "docs": {},
-                              ";": {
-                                "docs": {},
-                                "a": {
-                                  "docs": {},
-                                  "r": {
-                                    "docs": {},
-                                    "r": {
-                                      "docs": {},
-                                      "a": {
-                                        "docs": {},
-                                        "y": {
-                                          "docs": {},
-                                          ".": {
-                                            "docs": {},
-                                            "&": {
-                                              "docs": {},
-                                              "l": {
-                                                "docs": {},
-                                                "t": {
-                                                  "docs": {},
-                                                  ";": {
-                                                    "docs": {},
-                                                    "s": {
-                                                      "docs": {},
-                                                      "t": {
-                                                        "docs": {},
-                                                        "r": {
-                                                          "docs": {},
-                                                          "i": {
-                                                            "docs": {},
-                                                            "n": {
-                                                              "docs": {},
-                                                              "g": {
-                                                                "docs": {},
-                                                                "&": {
-                                                                  "docs": {},
-                                                                  "g": {
-                                                                    "docs": {},
-                                                                    "t": {
-                                                                      "docs": {},
-                                                                      ";": {
-                                                                        "docs": {},
-                                                                        "&": {
-                                                                          "docs": {},
-                                                                          "g": {
-                                                                            "docs": {},
-                                                                            "t": {
-                                                                              "docs": {
-                                                                                "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                                                                                  "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                                                                                  "tf": 33.33333333333333
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "{": {
-                                  "docs": {},
-                                  "s": {
-                                    "docs": {},
-                                    "o": {
-                                      "docs": {},
-                                      "l": {
-                                        "docs": {},
-                                        "i": {
-                                          "docs": {},
-                                          "d": {
-                                            "docs": {
-                                              "module-Thurston-Thurston.html#buildShaderDataItems": {
-                                                "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                                                "tf": 16.666666666666664
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "t": {
-                                  "docs": {},
-                                  "h": {
-                                    "docs": {},
-                                    "u": {
-                                      "docs": {},
-                                      "r": {
-                                        "docs": {},
-                                        "s": {
-                                          "docs": {},
-                                          "t": {
-                                            "docs": {},
-                                            "o": {
-                                              "docs": {},
-                                              "n": {
-                                                "docs": {},
-                                                "&": {
-                                                  "docs": {},
-                                                  "g": {
-                                                    "docs": {},
-                                                    "t": {
-                                                      "docs": {
-                                                        "module-Thurston-Thurston.html#initHorizon": {
-                                                          "ref": "module-Thurston-Thurston.html#initHorizon",
-                                                          "tf": 33.33333333333333
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
                         }
                       }
                     }
@@ -9936,21 +9336,21 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#glslRender",
                       "tf": 5
                     },
-                    "SingleColorMaterial.html#glslRender": {
-                      "ref": "SingleColorMaterial.html#glslRender",
-                      "tf": 5
-                    },
                     "Position.html#point": {
                       "ref": "Position.html#point",
                       "tf": 766.6666666666666
                     },
                     "PointLight.html": {
                       "ref": "PointLight.html",
-                      "tf": 25
+                      "tf": 16.666666666666664
                     },
                     "PointLight.html#position": {
                       "ref": "PointLight.html#position",
                       "tf": 50
+                    },
+                    "SingleColorMaterial.html#glslRender": {
+                      "ref": "SingleColorMaterial.html#glslRender",
+                      "tf": 5
                     },
                     "Vector.html#applyMatrix4": {
                       "ref": "Vector.html#applyMatrix4",
@@ -10168,7 +9568,7 @@ window.lunrData = {
                             "docs": {
                               "PointLight.html": {
                                 "ref": "PointLight.html",
-                                "tf": 1900
+                                "tf": 1800
                               }
                             },
                             "#": {
@@ -10274,6 +9674,41 @@ window.lunrData = {
                                                   "PointLight.html#.glslClass": {
                                                     "ref": "PointLight.html#.glslClass",
                                                     "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "p": {
+                              "docs": {},
+                              "o": {
+                                "docs": {},
+                                "i": {
+                                  "docs": {},
+                                  "n": {
+                                    "docs": {},
+                                    "t": {
+                                      "docs": {},
+                                      "l": {
+                                        "docs": {},
+                                        "i": {
+                                          "docs": {},
+                                          "g": {
+                                            "docs": {},
+                                            "h": {
+                                              "docs": {},
+                                              "t": {
+                                                "docs": {
+                                                  "PointLight.html": {
+                                                    "ref": "PointLight.html",
+                                                    "tf": 100
                                                   }
                                                 }
                                               }
@@ -10405,6 +9840,14 @@ window.lunrData = {
                       "ref": "PointLight.html#position",
                       "tf": 725
                     },
+                    "HoroballShape.html#offset": {
+                      "ref": "HoroballShape.html#offset",
+                      "tf": 4.166666666666666
+                    },
+                    "LocalHoroballShape.html#offset": {
+                      "ref": "LocalHoroballShape.html#offset",
+                      "tf": 4.166666666666666
+                    },
                     "Vector.html#applyFacing": {
                       "ref": "Vector.html#applyFacing",
                       "tf": 35.964912280701746
@@ -10464,14 +9907,6 @@ window.lunrData = {
                     "FlyControls.html#update": {
                       "ref": "FlyControls.html#update",
                       "tf": 1.8518518518518516
-                    },
-                    "module-Thurston-Thurston.html#chaseCamera": {
-                      "ref": "module-Thurston-Thurston.html#chaseCamera",
-                      "tf": 6
-                    },
-                    "module-Thurston-Thurston.html#getEyePositions": {
-                      "ref": "module-Thurston-Thurston.html#getEyePositions",
-                      "tf": 10
                     }
                   },
                   "i": {
@@ -11017,20 +10452,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "p": {
-              "docs": {},
-              "u": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "module-Thurston-Thurston.html#buildShaderFragment": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                      "tf": 2.083333333333333
-                    }
-                  }
-                }
-              }
             }
           },
           "u": {
@@ -11079,59 +10500,6 @@ window.lunrData = {
                   "RelPosition.html#flow": {
                     "ref": "RelPosition.html#flow",
                     "tf": 2.380952380952381
-                  }
-                }
-              }
-            }
-          },
-          "l": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "n": {
-                  "docs": {
-                    "SingleColorMaterial.html": {
-                      "ref": "SingleColorMaterial.html",
-                      "tf": 10
-                    }
-                  }
-                }
-              },
-              "y": {
-                "docs": {
-                  "Subgroup.html": {
-                    "ref": "Subgroup.html",
-                    "tf": 0.3546099290780142
-                  }
-                }
-              }
-            }
-          },
-          "i": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "c": {
-                "docs": {
-                  "RelPosition.html": {
-                    "ref": "RelPosition.html",
-                    "tf": 0.9615384615384616
-                  }
-                }
-              }
-            },
-            "x": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "Renderer.html#setPixelRatio": {
-                      "ref": "Renderer.html#setPixelRatio",
-                      "tf": 5
-                    }
                   }
                 }
               }
@@ -11274,22 +10642,19 @@ window.lunrData = {
                                         }
                                       }
                                     },
-                                    "t": {
+                                    "l": {
                                       "docs": {},
-                                      "o": {
+                                      "i": {
                                         "docs": {},
                                         "g": {
                                           "docs": {},
-                                          "l": {
+                                          "h": {
                                             "docs": {},
-                                            "s": {
-                                              "docs": {},
-                                              "l": {
-                                                "docs": {
-                                                  "PhongMaterial.html#toGLSL": {
-                                                    "ref": "PhongMaterial.html#toGLSL",
-                                                    "tf": 1150
-                                                  }
+                                            "t": {
+                                              "docs": {
+                                                "PhongMaterial.html#lights": {
+                                                  "ref": "PhongMaterial.html#lights",
+                                                  "tf": 1150
                                                 }
                                               }
                                             }
@@ -11304,6 +10669,59 @@ window.lunrData = {
                           }
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "l": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {
+                    "SingleColorMaterial.html": {
+                      "ref": "SingleColorMaterial.html",
+                      "tf": 10
+                    }
+                  }
+                }
+              },
+              "y": {
+                "docs": {
+                  "Subgroup.html": {
+                    "ref": "Subgroup.html",
+                    "tf": 0.3546099290780142
+                  }
+                }
+              }
+            }
+          },
+          "i": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "c": {
+                "docs": {
+                  "RelPosition.html": {
+                    "ref": "RelPosition.html",
+                    "tf": 0.9615384615384616
+                  }
+                }
+              }
+            },
+            "x": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "Renderer.html#setPixelRatio": {
+                      "ref": "Renderer.html#setPixelRatio",
+                      "tf": 5
                     }
                   }
                 }
@@ -11585,10 +11003,6 @@ window.lunrData = {
                       "ref": "Generic.html#glslInstance",
                       "tf": 4.166666666666666
                     },
-                    "Shape.html#glslInstance": {
-                      "ref": "Shape.html#glslInstance",
-                      "tf": 5.555555555555555
-                    },
                     "Solid.html#glslInstance": {
                       "ref": "Solid.html#glslInstance",
                       "tf": 4.545454545454546
@@ -11597,13 +11011,13 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#glslInstance",
                       "tf": 7.142857142857142
                     },
+                    "Shape.html#glslInstance": {
+                      "ref": "Shape.html#glslInstance",
+                      "tf": 5.555555555555555
+                    },
                     "SingleColorMaterial.html#glslInstance": {
                       "ref": "SingleColorMaterial.html#glslInstance",
                       "tf": 7.142857142857142
-                    },
-                    "module-Thurston-Thurston.html#stereo": {
-                      "ref": "module-Thurston-Thurston.html#stereo",
-                      "tf": 4.545454545454546
                     }
                   }
                 }
@@ -12214,20 +11628,8 @@ window.lunrData = {
                         "ref": "Teleport.html#glslTest",
                         "tf": 4.166666666666666
                       },
-                      "Shape.html#glslSDF": {
-                        "ref": "Shape.html#glslSDF",
-                        "tf": 6.25
-                      },
-                      "Shape.html#glslGradient": {
-                        "ref": "Shape.html#glslGradient",
-                        "tf": 7.142857142857142
-                      },
                       "NormalMaterial.html#glslRender": {
                         "ref": "NormalMaterial.html#glslRender",
-                        "tf": 5
-                      },
-                      "SingleColorMaterial.html#glslRender": {
-                        "ref": "SingleColorMaterial.html#glslRender",
                         "tf": 5
                       },
                       "Position.html#point": {
@@ -12250,9 +11652,21 @@ window.lunrData = {
                         "ref": "Position.html#toGLSL",
                         "tf": 4.545454545454546
                       },
+                      "Shape.html#glslSDF": {
+                        "ref": "Shape.html#glslSDF",
+                        "tf": 6.25
+                      },
+                      "Shape.html#glslGradient": {
+                        "ref": "Shape.html#glslGradient",
+                        "tf": 3.125
+                      },
                       "PointLight.html#.glslClass": {
                         "ref": "PointLight.html#.glslClass",
                         "tf": 7.142857142857142
+                      },
+                      "SingleColorMaterial.html#glslRender": {
+                        "ref": "SingleColorMaterial.html#glslRender",
+                        "tf": 5
                       },
                       "Vector.html#toLog": {
                         "ref": "Vector.html#toLog",
@@ -12273,22 +11687,6 @@ window.lunrData = {
                       "RelPosition.html#toGLSL": {
                         "ref": "RelPosition.html#toGLSL",
                         "tf": 4.545454545454546
-                      },
-                      "PhongMaterial.html#toGLSL": {
-                        "ref": "PhongMaterial.html#toGLSL",
-                        "tf": 4.545454545454546
-                      },
-                      "module-Thurston-Thurston.html#getEyePositions": {
-                        "ref": "module-Thurston-Thurston.html#getEyePositions",
-                        "tf": 3.3333333333333335
-                      },
-                      "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                        "tf": 5.555555555555555
-                      },
-                      "module-Thurston-Thurston.html#buildShaderDataItems": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                        "tf": 5
                       }
                     }
                   }
@@ -12356,10 +11754,6 @@ window.lunrData = {
                         "docs": {},
                         "t": {
                           "docs": {
-                            "Shape.html": {
-                              "ref": "Shape.html",
-                              "tf": 3.8461538461538463
-                            },
                             "AdvancedShape.html": {
                               "ref": "AdvancedShape.html",
                               "tf": 1.8518518518518516
@@ -12367,6 +11761,10 @@ window.lunrData = {
                             "BasicShape.html": {
                               "ref": "BasicShape.html",
                               "tf": 1.8518518518518516
+                            },
+                            "Shape.html": {
+                              "ref": "Shape.html",
+                              "tf": 3.8461538461538463
                             },
                             "Subgroup.html": {
                               "ref": "Subgroup.html",
@@ -12400,6 +11798,14 @@ window.lunrData = {
                         "ref": "SingleColorMaterial.html#glslInstance",
                         "tf": 7.142857142857142
                       },
+                      "Thurston.html#renderer": {
+                        "ref": "Thurston.html#renderer",
+                        "tf": 762.5
+                      },
+                      "Thurston.html#run": {
+                        "ref": "Thurston.html#run",
+                        "tf": 12.5
+                      },
                       "Renderer.html": {
                         "ref": "Renderer.html",
                         "tf": 1903.3333333333333
@@ -12431,14 +11837,6 @@ window.lunrData = {
                       "Renderer.html#render": {
                         "ref": "Renderer.html#render",
                         "tf": 756.25
-                      },
-                      "module-Thurston-Thurston.html#_renderer": {
-                        "ref": "module-Thurston-Thurston.html#_renderer",
-                        "tf": 16.666666666666664
-                      },
-                      "module-Thurston.html": {
-                        "ref": "module-Thurston.html",
-                        "tf": 5.555555555555555
                       }
                     },
                     "e": {
@@ -12861,47 +12259,6 @@ window.lunrData = {
                               }
                             }
                           },
-                          "f": {
-                            "docs": {},
-                            "r": {
-                              "docs": {},
-                              "a": {
-                                "docs": {},
-                                "g": {
-                                  "docs": {},
-                                  "m": {
-                                    "docs": {},
-                                    "e": {
-                                      "docs": {},
-                                      "n": {
-                                        "docs": {},
-                                        "t": {
-                                          "docs": {},
-                                          "s": {
-                                            "docs": {},
-                                            "h": {
-                                              "docs": {},
-                                              "a": {
-                                                "docs": {},
-                                                "d": {
-                                                  "docs": {
-                                                    "Renderer.html#fragmentShader": {
-                                                      "ref": "Renderer.html#fragmentShader",
-                                                      "tf": 1150
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
                           "b": {
                             "docs": {},
                             "u": {
@@ -12915,6 +12272,47 @@ window.lunrData = {
                                       "Renderer.html#build": {
                                         "ref": "Renderer.html#build",
                                         "tf": 1150
+                                      }
+                                    },
+                                    "f": {
+                                      "docs": {},
+                                      "r": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "g": {
+                                            "docs": {},
+                                            "m": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "n": {
+                                                  "docs": {},
+                                                  "t": {
+                                                    "docs": {},
+                                                    "s": {
+                                                      "docs": {},
+                                                      "h": {
+                                                        "docs": {},
+                                                        "a": {
+                                                          "docs": {},
+                                                          "d": {
+                                                            "docs": {
+                                                              "Renderer.html#buildFragmentShader": {
+                                                                "ref": "Renderer.html#buildFragmentShader",
+                                                                "tf": 1150
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
                                       }
                                     }
                                   }
@@ -12978,8 +12376,8 @@ window.lunrData = {
                 "docs": {},
                 "z": {
                   "docs": {
-                    "module-Thurston-Thurston.html#onWindowResize": {
-                      "ref": "module-Thurston-Thurston.html#onWindowResize",
+                    "Thurston.html#onWindowResize": {
+                      "ref": "Thurston.html#onWindowResize",
                       "tf": 16.666666666666664
                     }
                   }
@@ -13064,87 +12462,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "g": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "s": {
-                  "docs": {},
-                  "t": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#registerParam": {
-                        "ref": "module-Thurston-Thurston.html#registerParam",
-                        "tf": 12.5
-                      },
-                      "module-Thurston-Thurston.html#addEventListeners": {
-                        "ref": "module-Thurston-Thurston.html#addEventListeners",
-                        "tf": 16.666666666666664
-                      }
-                    },
-                    "e": {
-                      "docs": {},
-                      "r": {
-                        "docs": {},
-                        "p": {
-                          "docs": {},
-                          "a": {
-                            "docs": {},
-                            "r": {
-                              "docs": {},
-                              "a": {
-                                "docs": {},
-                                "m": {
-                                  "docs": {
-                                    "module-Thurston-Thurston.html#registerParam": {
-                                      "ref": "module-Thurston-Thurston.html#registerParam",
-                                      "tf": 670
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "q": {
-              "docs": {},
-              "u": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                        "tf": 5.555555555555555
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "v": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "w": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#buildShaderDataItems": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                        "tf": 5
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "i": {
@@ -13182,10 +12499,6 @@ window.lunrData = {
                     "RelPosition.html#eyes": {
                       "ref": "RelPosition.html#eyes",
                       "tf": 7.142857142857142
-                    },
-                    "module-Thurston-Thurston.html#getEyePositions": {
-                      "ref": "module-Thurston-Thurston.html#getEyePositions",
-                      "tf": 3.3333333333333335
                     }
                   }
                 }
@@ -13316,32 +12629,15 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "u": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "n": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#buildShaderFragment": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                        "tf": 2.083333333333333
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "u": {
             "docs": {},
             "n": {
               "docs": {
-                "module-Thurston-Thurston.html#run": {
-                  "ref": "module-Thurston-Thurston.html#run",
-                  "tf": 750
+                "Thurston.html#run": {
+                  "ref": "Thurston.html#run",
+                  "tf": 762.5
                 }
               }
             }
@@ -13372,41 +12668,21 @@ window.lunrData = {
                       "docs": {},
                       "n": {
                         "docs": {
-                          "module-Thurston-Thurston.html": {
-                            "ref": "module-Thurston-Thurston.html",
-                            "tf": 500
+                          "Thurston.html": {
+                            "ref": "Thurston.html",
+                            "tf": 1900
                           },
-                          "module-Thurston-Thurston.html#registerParam": {
-                            "ref": "module-Thurston-Thurston.html#registerParam",
-                            "tf": 20
+                          "Thurston.html#params": {
+                            "ref": "Thurston.html#params",
+                            "tf": 16.666666666666664
                           },
-                          "module-Thurston-Thurston.html#setParams": {
-                            "ref": "module-Thurston-Thurston.html#setParams",
-                            "tf": 33.33333333333333
-                          },
-                          "module-Thurston-Thurston.html#setParam": {
-                            "ref": "module-Thurston-Thurston.html#setParam",
-                            "tf": 25
-                          },
-                          "module-Thurston-Thurston.html#addItem": {
-                            "ref": "module-Thurston-Thurston.html#addItem",
+                          "Thurston.html#initGUI": {
+                            "ref": "Thurston.html#initGUI",
                             "tf": 50
                           },
-                          "module-Thurston-Thurston.html#addItems": {
-                            "ref": "module-Thurston-Thurston.html#addItems",
+                          "Thurston.html#initStats": {
+                            "ref": "Thurston.html#initStats",
                             "tf": 50
-                          },
-                          "module-Thurston-Thurston.html#initUI": {
-                            "ref": "module-Thurston-Thurston.html#initUI",
-                            "tf": 50
-                          },
-                          "module-Thurston-Thurston.html#initStats": {
-                            "ref": "module-Thurston-Thurston.html#initStats",
-                            "tf": 50
-                          },
-                          "module-Thurston.html": {
-                            "ref": "module-Thurston.html",
-                            "tf": 605.5555555555555
                           }
                         },
                         "'": {
@@ -13417,27 +12693,364 @@ window.lunrData = {
                             }
                           }
                         },
-                        "~": {
+                        "#": {
                           "docs": {},
-                          "t": {
+                          "g": {
                             "docs": {},
-                            "h": {
+                            "e": {
                               "docs": {},
-                              "u": {
+                              "o": {
+                                "docs": {},
+                                "m": {
+                                  "docs": {
+                                    "Thurston.html#geom": {
+                                      "ref": "Thurston.html#geom",
+                                      "tf": 1150
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "u": {
+                              "docs": {},
+                              "i": {
+                                "docs": {
+                                  "Thurston.html#gui": {
+                                    "ref": "Thurston.html#gui",
+                                    "tf": 1150
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "s": {
+                            "docs": {},
+                            "u": {
+                              "docs": {},
+                              "b": {
+                                "docs": {},
+                                "g": {
+                                  "docs": {},
+                                  "r": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {},
+                                      "u": {
+                                        "docs": {},
+                                        "p": {
+                                          "docs": {
+                                            "Thurston.html#subgroup": {
+                                              "ref": "Thurston.html#subgroup",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "c": {
+                              "docs": {},
+                              "e": {
+                                "docs": {},
+                                "n": {
+                                  "docs": {
+                                    "Thurston.html#scene": {
+                                      "ref": "Thurston.html#scene",
+                                      "tf": 1150
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "t": {
+                              "docs": {},
+                              "e": {
                                 "docs": {},
                                 "r": {
                                   "docs": {},
+                                  "e": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {
+                                        "Thurston.html#stereo": {
+                                          "ref": "Thurston.html#stereo",
+                                          "tf": 1150
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "a": {
+                                "docs": {},
+                                "t": {
+                                  "docs": {
+                                    "Thurston.html#stats": {
+                                      "ref": "Thurston.html#stats",
+                                      "tf": 1150
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "e": {
+                              "docs": {},
+                              "t": {
+                                "docs": {},
+                                "p": {
+                                  "docs": {},
+                                  "a": {
+                                    "docs": {},
+                                    "r": {
+                                      "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "m": {
+                                          "docs": {
+                                            "Thurston.html#setParams": {
+                                              "ref": "Thurston.html#setParams",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "p": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "r": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {},
+                                  "m": {
+                                    "docs": {
+                                      "Thurston.html#params": {
+                                        "ref": "Thurston.html#params",
+                                        "tf": 1150
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "c": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "m": {
+                                "docs": {},
+                                "e": {
+                                  "docs": {},
+                                  "r": {
+                                    "docs": {},
+                                    "a": {
+                                      "docs": {
+                                        "Thurston.html#camera": {
+                                          "ref": "Thurston.html#camera",
+                                          "tf": 1150
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "l": {
+                              "docs": {},
+                              "o": {
+                                "docs": {},
+                                "c": {
+                                  "docs": {},
+                                  "k": {
+                                    "docs": {
+                                      "Thurston.html#clock": {
+                                        "ref": "Thurston.html#clock",
+                                        "tf": 1150
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "r": {
+                            "docs": {},
+                            "e": {
+                              "docs": {},
+                              "n": {
+                                "docs": {},
+                                "d": {
+                                  "docs": {},
+                                  "e": {
+                                    "docs": {},
+                                    "r": {
+                                      "docs": {
+                                        "Thurston.html#renderer": {
+                                          "ref": "Thurston.html#renderer",
+                                          "tf": 1150
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "u": {
+                              "docs": {},
+                              "n": {
+                                "docs": {
+                                  "Thurston.html#run": {
+                                    "ref": "Thurston.html#run",
+                                    "tf": 1150
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "f": {
+                            "docs": {},
+                            "l": {
+                              "docs": {},
+                              "y": {
+                                "docs": {},
+                                "c": {
+                                  "docs": {},
+                                  "o": {
+                                    "docs": {},
+                                    "n": {
+                                      "docs": {},
+                                      "t": {
+                                        "docs": {},
+                                        "r": {
+                                          "docs": {},
+                                          "o": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {
+                                                "Thurston.html#flyControls": {
+                                                  "ref": "Thurston.html#flyControls",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "i": {
+                            "docs": {},
+                            "n": {
+                              "docs": {},
+                              "i": {
+                                "docs": {},
+                                "t": {
+                                  "docs": {},
+                                  "g": {
+                                    "docs": {},
+                                    "u": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {
+                                          "Thurston.html#initGUI": {
+                                            "ref": "Thurston.html#initGUI",
+                                            "tf": 1150
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
                                   "s": {
                                     "docs": {},
                                     "t": {
                                       "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "t": {
+                                          "docs": {
+                                            "Thurston.html#initStats": {
+                                              "ref": "Thurston.html#initStats",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "a": {
+                            "docs": {},
+                            "d": {
+                              "docs": {},
+                              "d": {
+                                "docs": {
+                                  "Thurston.html#add": {
+                                    "ref": "Thurston.html#add",
+                                    "tf": 1150
+                                  }
+                                }
+                              }
+                            },
+                            "n": {
+                              "docs": {},
+                              "i": {
+                                "docs": {},
+                                "m": {
+                                  "docs": {
+                                    "Thurston.html#animate": {
+                                      "ref": "Thurston.html#animate",
+                                      "tf": 1150
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "o": {
+                            "docs": {},
+                            "n": {
+                              "docs": {},
+                              "w": {
+                                "docs": {},
+                                "i": {
+                                  "docs": {},
+                                  "n": {
+                                    "docs": {},
+                                    "d": {
+                                      "docs": {},
                                       "o": {
                                         "docs": {},
-                                        "n": {
-                                          "docs": {
-                                            "module-Thurston-Thurston.html": {
-                                              "ref": "module-Thurston-Thurston.html",
-                                              "tf": 100
+                                        "w": {
+                                          "docs": {},
+                                          "r": {
+                                            "docs": {},
+                                            "e": {
+                                              "docs": {},
+                                              "s": {
+                                                "docs": {
+                                                  "Thurston.html#onWindowResize": {
+                                                    "ref": "Thurston.html#onWindowResize",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
                                             }
                                           }
                                         }
@@ -13470,10 +13083,6 @@ window.lunrData = {
                     "docs": {},
                     "j": {
                       "docs": {
-                        "Shape.html": {
-                          "ref": "Shape.html",
-                          "tf": 7.6923076923076925
-                        },
                         "Camera.html": {
                           "ref": "Camera.html",
                           "tf": 5
@@ -13497,6 +13106,10 @@ window.lunrData = {
                         "Camera.html#updateProjectionMatrix": {
                           "ref": "Camera.html#updateProjectionMatrix",
                           "tf": 7.142857142857142
+                        },
+                        "Shape.html": {
+                          "ref": "Shape.html",
+                          "tf": 7.6923076923076925
                         },
                         "Vector.html": {
                           "ref": "Vector.html",
@@ -13565,30 +13178,6 @@ window.lunrData = {
                         "FlyControls.html#update": {
                           "ref": "FlyControls.html#update",
                           "tf": 0.4629629629629629
-                        },
-                        "module-Thurston-Thurston.html#_renderer": {
-                          "ref": "module-Thurston-Thurston.html#_renderer",
-                          "tf": 16.666666666666664
-                        },
-                        "module-Thurston-Thurston.html#_camera": {
-                          "ref": "module-Thurston-Thurston.html#_camera",
-                          "tf": 25
-                        },
-                        "module-Thurston-Thurston.html#_scene": {
-                          "ref": "module-Thurston-Thurston.html#_scene",
-                          "tf": 16.666666666666664
-                        },
-                        "module-Thurston-Thurston.html#chaseCamera": {
-                          "ref": "module-Thurston-Thurston.html#chaseCamera",
-                          "tf": 2
-                        },
-                        "module-Thurston-Thurston.html#initThreeJS": {
-                          "ref": "module-Thurston-Thurston.html#initThreeJS",
-                          "tf": 16.666666666666664
-                        },
-                        "module-Thurston-Thurston.html#initHorizon": {
-                          "ref": "module-Thurston-Thurston.html#initHorizon",
-                          "tf": 5.555555555555555
                         }
                       }
                     }
@@ -13643,10 +13232,6 @@ window.lunrData = {
                         "Subgroup.html#shader": {
                           "ref": "Subgroup.html#shader",
                           "tf": 4.545454545454546
-                        },
-                        "module-Thurston-Thurston.html#params": {
-                          "ref": "module-Thurston-Thurston.html#params",
-                          "tf": 3.571428571428571
                         }
                       }
                     }
@@ -13677,86 +13262,6 @@ window.lunrData = {
                     "Subgroup.html": {
                       "ref": "Subgroup.html",
                       "tf": 1.0638297872340425
-                    }
-                  }
-                }
-              }
-            },
-            "i": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                ".": {
-                  "docs": {},
-                  "s": {
-                    "docs": {},
-                    "u": {
-                      "docs": {},
-                      "b": {
-                        "docs": {},
-                        "g": {
-                          "docs": {},
-                          "r": {
-                            "docs": {},
-                            "o": {
-                              "docs": {},
-                              "u": {
-                                "docs": {},
-                                "p": {
-                                  "docs": {},
-                                  ".": {
-                                    "docs": {},
-                                    "g": {
-                                      "docs": {},
-                                      "l": {
-                                        "docs": {},
-                                        "s": {
-                                          "docs": {},
-                                          "l": {
-                                            "docs": {},
-                                            "b": {
-                                              "docs": {},
-                                              "u": {
-                                                "docs": {},
-                                                "i": {
-                                                  "docs": {},
-                                                  "l": {
-                                                    "docs": {},
-                                                    "d": {
-                                                      "docs": {},
-                                                      "d": {
-                                                        "docs": {},
-                                                        "a": {
-                                                          "docs": {},
-                                                          "t": {
-                                                            "docs": {},
-                                                            "a": {
-                                                              "docs": {
-                                                                "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                                  "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                                  "tf": 2.083333333333333
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
                     }
                   }
                 }
@@ -13803,24 +13308,6 @@ window.lunrData = {
                       "RelPosition.html#toGLSL": {
                         "ref": "RelPosition.html#toGLSL",
                         "tf": 700
-                      },
-                      "PhongMaterial.html#toGLSL": {
-                        "ref": "PhongMaterial.html#toGLSL",
-                        "tf": 700
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "h": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#run": {
-                        "ref": "module-Thurston-Thurston.html#run",
-                        "tf": 5
                       }
                     }
                   }
@@ -13853,14 +13340,6 @@ window.lunrData = {
             },
             "p": {
               "docs": {
-                "Shape.html#isBasicShape": {
-                  "ref": "Shape.html#isBasicShape",
-                  "tf": 7.142857142857142
-                },
-                "Shape.html#isAdvancedShape": {
-                  "ref": "Shape.html#isAdvancedShape",
-                  "tf": 7.142857142857142
-                },
                 "AdvancedShape.html": {
                   "ref": "AdvancedShape.html",
                   "tf": 1.8518518518518516
@@ -13875,6 +13354,14 @@ window.lunrData = {
                 },
                 "BasicShape.html#isBasicShape": {
                   "ref": "BasicShape.html#isBasicShape",
+                  "tf": 7.142857142857142
+                },
+                "Shape.html#isBasicShape": {
+                  "ref": "Shape.html#isBasicShape",
+                  "tf": 7.142857142857142
+                },
+                "Shape.html#isAdvancedShape": {
+                  "ref": "Shape.html#isAdvancedShape",
                   "tf": 7.142857142857142
                 }
               }
@@ -14124,30 +13611,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "m": {
-              "docs": {},
-              "p": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "a": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#buildShaderVertex": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                          "tf": 10
-                        },
-                        "module-Thurston-Thurston.html#buildShaderFragment": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                          "tf": 4.166666666666666
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "y": {
@@ -14175,10 +13638,6 @@ window.lunrData = {
                   "BasicShape.html": {
                     "ref": "BasicShape.html",
                     "tf": 1.8518518518518516
-                  },
-                  "module-Thurston-Thurston.html#registerParam": {
-                    "ref": "module-Thurston-Thurston.html#registerParam",
-                    "tf": 20
                   }
                 }
               },
@@ -14304,10 +13763,6 @@ window.lunrData = {
                     "ref": "NormalMaterial.html#isLocal",
                     "tf": 7.142857142857142
                   },
-                  "SingleColorMaterial.html#isLocal": {
-                    "ref": "SingleColorMaterial.html#isLocal",
-                    "tf": 7.142857142857142
-                  },
                   "PointLight.html#isGlobal": {
                     "ref": "PointLight.html#isGlobal",
                     "tf": 7.142857142857142
@@ -14322,6 +13777,18 @@ window.lunrData = {
                   },
                   "LocalBallShape.html#isGlobal": {
                     "ref": "LocalBallShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "HoroballShape.html#isGlobal": {
+                    "ref": "HoroballShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "LocalHoroballShape.html#isGlobal": {
+                    "ref": "LocalHoroballShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "SingleColorMaterial.html#isLocal": {
+                    "ref": "SingleColorMaterial.html#isLocal",
                     "tf": 7.142857142857142
                   }
                 }
@@ -14362,6 +13829,14 @@ window.lunrData = {
                         "Position.html#flow": {
                           "ref": "Position.html#flow",
                           "tf": 0.49504950495049505
+                        },
+                        "HoroballShape.html#center": {
+                          "ref": "HoroballShape.html#center",
+                          "tf": 5.555555555555555
+                        },
+                        "LocalHoroballShape.html#center": {
+                          "ref": "LocalHoroballShape.html#center",
+                          "tf": 5.555555555555555
                         },
                         "Vector.html": {
                           "ref": "Vector.html",
@@ -14416,16 +13891,16 @@ window.lunrData = {
                   "ref": "UnionShape.html",
                   "tf": 16.666666666666664
                 },
+                "Thurston.html#clock": {
+                  "ref": "Thurston.html#clock",
+                  "tf": 7.142857142857142
+                },
                 "RelPosition.html": {
                   "ref": "RelPosition.html",
                   "tf": 0.9615384615384616
                 },
                 "RelPosition.html#eyes": {
                   "ref": "RelPosition.html#eyes",
-                  "tf": 7.142857142857142
-                },
-                "module-Thurston-Thurston.html#_clock": {
-                  "ref": "module-Thurston-Thurston.html#_clock",
                   "tf": 7.142857142857142
                 }
               }
@@ -14445,24 +13920,13 @@ window.lunrData = {
                     "ref": "Position.html#flow",
                     "tf": 0.49504950495049505
                   },
+                  "Thurston.html#clock": {
+                    "ref": "Thurston.html#clock",
+                    "tf": 7.142857142857142
+                  },
                   "RelPosition.html#flow": {
                     "ref": "RelPosition.html#flow",
                     "tf": 2.380952380952381
-                  },
-                  "module-Thurston-Thurston.html#_clock": {
-                    "ref": "module-Thurston-Thurston.html#_clock",
-                    "tf": 7.142857142857142
-                  }
-                }
-              }
-            },
-            "t": {
-              "docs": {},
-              "l": {
-                "docs": {
-                  "module-Thurston-Thurston.html#appendTitle": {
-                    "ref": "module-Thurston-Thurston.html#appendTitle",
-                    "tf": 10
                   }
                 }
               }
@@ -14564,18 +14028,6 @@ window.lunrData = {
               "VRControlsMove.html": {
                 "ref": "VRControlsMove.html",
                 "tf": 2.272727272727273
-              },
-              "module-Thurston-Thurston.html#_VRButton": {
-                "ref": "module-Thurston-Thurston.html#_VRButton",
-                "tf": 25
-              },
-              "module-Thurston-Thurston.html#chaseCamera": {
-                "ref": "module-Thurston-Thurston.html#chaseCamera",
-                "tf": 2
-              },
-              "module-Thurston-Thurston.html#getEyePositions": {
-                "ref": "module-Thurston-Thurston.html#getEyePositions",
-                "tf": 3.3333333333333335
               }
             },
             "c": {
@@ -14905,16 +14357,12 @@ window.lunrData = {
                     "ref": "ShaderBuilder.html#updateUniform",
                     "tf": 35
                   },
+                  "Thurston.html#setParams": {
+                    "ref": "Thurston.html#setParams",
+                    "tf": 10
+                  },
                   "Renderer.html#setPixelRatio": {
                     "ref": "Renderer.html#setPixelRatio",
-                    "tf": 50
-                  },
-                  "module-Thurston-Thurston.html#setParam": {
-                    "ref": "module-Thurston-Thurston.html#setParam",
-                    "tf": 25
-                  },
-                  "module-Thurston-Thurston.html#setKeyboard": {
-                    "ref": "module-Thurston-Thurston.html#setKeyboard",
                     "tf": 50
                   }
                 }
@@ -14992,6 +14440,14 @@ window.lunrData = {
                       "Position.html#flow": {
                         "ref": "Position.html#flow",
                         "tf": 0.49504950495049505
+                      },
+                      "HoroballShape.html#center": {
+                        "ref": "HoroballShape.html#center",
+                        "tf": 50
+                      },
+                      "LocalHoroballShape.html#center": {
+                        "ref": "LocalHoroballShape.html#center",
+                        "tf": 50
                       },
                       "Vector.html": {
                         "ref": "Vector.html",
@@ -15153,10 +14609,6 @@ window.lunrData = {
                       "Renderer.html#vertexShader": {
                         "ref": "Renderer.html#vertexShader",
                         "tf": 16.666666666666664
-                      },
-                      "module-Thurston-Thurston.html#buildShaderVertex": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                        "tf": 10
                       }
                     },
                     "s": {
@@ -15245,7 +14697,12 @@ window.lunrData = {
           }
         },
         "d": {
-          "docs": {},
+          "docs": {
+            "Thurston.html#renderer": {
+              "ref": "Thurston.html#renderer",
+              "tf": 12.5
+            }
+          },
           "o": {
             "docs": {},
             "c": {
@@ -15287,10 +14744,6 @@ window.lunrData = {
                           },
                           "list_class.html": {
                             "ref": "list_class.html",
-                            "tf": 35
-                          },
-                          "list_module.html": {
-                            "ref": "list_module.html",
                             "tf": 35
                           }
                         }
@@ -15352,21 +14805,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "n": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "module-Thurston-Thurston.html#chaseCamera": {
-                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                    "tf": 2
-                  },
-                  "module-Thurston-Thurston.html#initHorizon": {
-                    "ref": "module-Thurston-Thurston.html#initHorizon",
-                    "tf": 5.555555555555555
-                  }
-                }
-              }
             }
           },
           "e": {
@@ -15425,14 +14863,6 @@ window.lunrData = {
                     "Subgroup.html": {
                       "ref": "Subgroup.html",
                       "tf": 0.7092198581560284
-                    },
-                    "module-Thurston-Thurston.html#subgroup": {
-                      "ref": "module-Thurston-Thurston.html#subgroup",
-                      "tf": 10
-                    },
-                    "module-Thurston.html": {
-                      "ref": "module-Thurston.html",
-                      "tf": 5.555555555555555
                     }
                   }
                 }
@@ -15448,6 +14878,10 @@ window.lunrData = {
                         "Generic.html#imports": {
                           "ref": "Generic.html#imports",
                           "tf": 4.545454545454546
+                        },
+                        "Shape.html#glslGradient": {
+                          "ref": "Shape.html#glslGradient",
+                          "tf": 3.125
                         }
                       }
                     }
@@ -15616,10 +15050,6 @@ window.lunrData = {
                     "RelPosition.html#toGLSL": {
                       "ref": "RelPosition.html#toGLSL",
                       "tf": 4.545454545454546
-                    },
-                    "PhongMaterial.html#toGLSL": {
-                      "ref": "PhongMaterial.html#toGLSL",
-                      "tf": 4.545454545454546
                     }
                   }
                 }
@@ -15683,14 +15113,6 @@ window.lunrData = {
                       "FlyControls.html#update": {
                         "ref": "FlyControls.html#update",
                         "tf": 1.3888888888888888
-                      },
-                      "module-Thurston-Thurston.html#_maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                        "tf": 6.25
-                      },
-                      "module-Thurston-Thurston.html#maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                        "tf": 12.5
                       }
                     },
                     "l": {
@@ -15709,10 +15131,6 @@ window.lunrData = {
                             "ref": "Generic.html#glslInstance",
                             "tf": 4.166666666666666
                           },
-                          "Shape.html#glslInstance": {
-                            "ref": "Shape.html#glslInstance",
-                            "tf": 5.555555555555555
-                          },
                           "Solid.html#glslInstance": {
                             "ref": "Solid.html#glslInstance",
                             "tf": 4.545454545454546
@@ -15720,6 +15138,10 @@ window.lunrData = {
                           "NormalMaterial.html#glslInstance": {
                             "ref": "NormalMaterial.html#glslInstance",
                             "tf": 7.142857142857142
+                          },
+                          "Shape.html#glslInstance": {
+                            "ref": "Shape.html#glslInstance",
+                            "tf": 5.555555555555555
                           },
                           "SingleColorMaterial.html#glslInstance": {
                             "ref": "SingleColorMaterial.html#glslInstance",
@@ -15764,10 +15186,6 @@ window.lunrData = {
                           "ref": "Stereo.html#ipDist",
                           "tf": 16.666666666666664
                         },
-                        "Shape.html#glslSDF": {
-                          "ref": "Shape.html#glslSDF",
-                          "tf": 6.25
-                        },
                         "Camera.html#minDist": {
                           "ref": "Camera.html#minDist",
                           "tf": 12.5
@@ -15779,6 +15197,10 @@ window.lunrData = {
                         "AdvancedShape.html": {
                           "ref": "AdvancedShape.html",
                           "tf": 1.8518518518518516
+                        },
+                        "Shape.html#glslSDF": {
+                          "ref": "Shape.html#glslSDF",
+                          "tf": 6.25
                         }
                       }
                     }
@@ -15812,10 +15234,6 @@ window.lunrData = {
                         "Subgroup.html#shader": {
                           "ref": "Subgroup.html#shader",
                           "tf": 4.545454545454546
-                        },
-                        "module-Thurston-Thurston.html#subgroup": {
-                          "ref": "module-Thurston-Thurston.html#subgroup",
-                          "tf": 10
                         }
                       }
                     }
@@ -15833,11 +15251,24 @@ window.lunrData = {
                         "SingleColorMaterial.html": {
                           "ref": "SingleColorMaterial.html",
                           "tf": 10
-                        },
-                        "module-Thurston-Thurston.html#infos": {
-                          "ref": "module-Thurston-Thurston.html#infos",
-                          "tf": 8.333333333333332
                         }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "f": {
+              "docs": {},
+              "f": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "s": {
+                    "docs": {
+                      "PhongMaterial.html#diffuse": {
+                        "ref": "PhongMaterial.html#diffuse",
+                        "tf": 716.6666666666666
                       }
                     }
                   }
@@ -15870,23 +15301,6 @@ window.lunrData = {
                     "Vector.html#applyMatrix4": {
                       "ref": "Vector.html#applyMatrix4",
                       "tf": 1.8518518518518516
-                    }
-                  }
-                }
-              }
-            },
-            "f": {
-              "docs": {},
-              "f": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "s": {
-                    "docs": {
-                      "PhongMaterial.html#diffuse": {
-                        "ref": "PhongMaterial.html#diffuse",
-                        "tf": 716.6666666666666
-                      }
                     }
                   }
                 }
@@ -15929,22 +15343,6 @@ window.lunrData = {
                   "Vector.html#applyMatrix4": {
                     "ref": "Vector.html#applyMatrix4",
                     "tf": 1.8518518518518516
-                  },
-                  "module-Thurston-Thurston.html#infos": {
-                    "ref": "module-Thurston-Thurston.html#infos",
-                    "tf": 8.333333333333332
-                  },
-                  "module-Thurston-Thurston.html#buildShaderFragment": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                    "tf": 2.083333333333333
-                  }
-                }
-              },
-              "e": {
-                "docs": {
-                  "module-Thurston-Thurston.html#params": {
-                    "ref": "module-Thurston-Thurston.html#params",
-                    "tf": 3.571428571428571
                   }
                 }
               }
@@ -16079,6 +15477,14 @@ window.lunrData = {
                       "ref": "LocalBall.html",
                       "tf": 110
                     },
+                    "Horoball.html": {
+                      "ref": "Horoball.html",
+                      "tf": 110
+                    },
+                    "LocalHoroball.html": {
+                      "ref": "LocalHoroball.html",
+                      "tf": 110
+                    },
                     "NativeStereo.html": {
                       "ref": "NativeStereo.html",
                       "tf": 110
@@ -16098,10 +15504,6 @@ window.lunrData = {
                     "Teleport.html": {
                       "ref": "Teleport.html",
                       "tf": 110
-                    },
-                    "Shape.html": {
-                      "ref": "Shape.html",
-                      "tf": 117.6923076923077
                     },
                     "Solid.html": {
                       "ref": "Solid.html",
@@ -16127,10 +15529,6 @@ window.lunrData = {
                       "ref": "NormalMaterial.html",
                       "tf": 110
                     },
-                    "SingleColorMaterial.html": {
-                      "ref": "SingleColorMaterial.html",
-                      "tf": 110
-                    },
                     "Position.html": {
                       "ref": "Position.html",
                       "tf": 110
@@ -16147,6 +15545,10 @@ window.lunrData = {
                       "ref": "BasicShape.html",
                       "tf": 110
                     },
+                    "Shape.html": {
+                      "ref": "Shape.html",
+                      "tf": 117.6923076923077
+                    },
                     "PointLight.html": {
                       "ref": "PointLight.html",
                       "tf": 110
@@ -16157,6 +15559,26 @@ window.lunrData = {
                     },
                     "LocalBallShape.html": {
                       "ref": "LocalBallShape.html",
+                      "tf": 110
+                    },
+                    "HoroballShape.html": {
+                      "ref": "HoroballShape.html",
+                      "tf": 110
+                    },
+                    "LocalHoroballShape.html": {
+                      "ref": "LocalHoroballShape.html",
+                      "tf": 110
+                    },
+                    "PhongMaterial.html": {
+                      "ref": "PhongMaterial.html",
+                      "tf": 110
+                    },
+                    "SingleColorMaterial.html": {
+                      "ref": "SingleColorMaterial.html",
+                      "tf": 110
+                    },
+                    "Thurston.html": {
+                      "ref": "Thurston.html",
                       "tf": 110
                     },
                     "Vector.html": {
@@ -16179,10 +15601,6 @@ window.lunrData = {
                       "ref": "Renderer.html",
                       "tf": 110
                     },
-                    "PhongMaterial.html": {
-                      "ref": "PhongMaterial.html",
-                      "tf": 110
-                    },
                     "Subgroup.html": {
                       "ref": "Subgroup.html",
                       "tf": 110
@@ -16194,10 +15612,6 @@ window.lunrData = {
                     "FlyControls.html": {
                       "ref": "FlyControls.html",
                       "tf": 110
-                    },
-                    "module-Thurston-Thurston.html": {
-                      "ref": "module-Thurston-Thurston.html",
-                      "tf": 118.33333333333333
                     }
                   },
                   "n": {
@@ -16246,9 +15660,9 @@ window.lunrData = {
                 "docs": {},
                 "k": {
                   "docs": {
-                    "module-Thurston-Thurston.html#_clock": {
-                      "ref": "module-Thurston-Thurston.html#_clock",
-                      "tf": 40.47619047619047
+                    "Thurston.html#clock": {
+                      "ref": "Thurston.html#clock",
+                      "tf": 723.8095238095237
                     }
                   }
                 }
@@ -16301,25 +15715,25 @@ window.lunrData = {
                       "ref": "Generic.html#.glslClass",
                       "tf": 4.166666666666666
                     },
+                    "NormalMaterial.html#glslRender": {
+                      "ref": "NormalMaterial.html#glslRender",
+                      "tf": 5
+                    },
                     "Shape.html#glslSDF": {
                       "ref": "Shape.html#glslSDF",
                       "tf": 6.25
                     },
                     "Shape.html#glslGradient": {
                       "ref": "Shape.html#glslGradient",
-                      "tf": 7.142857142857142
-                    },
-                    "NormalMaterial.html#glslRender": {
-                      "ref": "NormalMaterial.html#glslRender",
-                      "tf": 5
-                    },
-                    "SingleColorMaterial.html#glslRender": {
-                      "ref": "SingleColorMaterial.html#glslRender",
-                      "tf": 5
+                      "tf": 3.125
                     },
                     "PointLight.html#.glslClass": {
                       "ref": "PointLight.html#.glslClass",
                       "tf": 7.142857142857142
+                    },
+                    "SingleColorMaterial.html#glslRender": {
+                      "ref": "SingleColorMaterial.html#glslRender",
+                      "tf": 5
                     }
                   }
                 }
@@ -16372,39 +15786,6 @@ window.lunrData = {
                     "FlyControls.html#update": {
                       "ref": "FlyControls.html#update",
                       "tf": 0.4629629629629629
-                    },
-                    "module-Thurston-Thurston.html#chaseCamera": {
-                      "ref": "module-Thurston-Thurston.html#chaseCamera",
-                      "tf": 2
-                    }
-                  }
-                }
-              },
-              "s": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "c": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "m": {
-                        "docs": {},
-                        "e": {
-                          "docs": {},
-                          "r": {
-                            "docs": {},
-                            "a": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#chaseCamera": {
-                                  "ref": "module-Thurston-Thurston.html#chaseCamera",
-                                  "tf": 750
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
                     }
                   }
                 }
@@ -16486,14 +15867,6 @@ window.lunrData = {
                     "ref": "Generic.html#shader",
                     "tf": 10
                   },
-                  "Shape.html#glslSDF": {
-                    "ref": "Shape.html#glslSDF",
-                    "tf": 6.25
-                  },
-                  "Shape.html#glslGradient": {
-                    "ref": "Shape.html#glslGradient",
-                    "tf": 7.142857142857142
-                  },
                   "Camera.html#shader": {
                     "ref": "Camera.html#shader",
                     "tf": 8.333333333333332
@@ -16502,17 +15875,25 @@ window.lunrData = {
                     "ref": "NormalMaterial.html#glslRender",
                     "tf": 5
                   },
-                  "SingleColorMaterial.html#glslRender": {
-                    "ref": "SingleColorMaterial.html#glslRender",
-                    "tf": 5
-                  },
                   "Position.html#toGLSL": {
                     "ref": "Position.html#toGLSL",
                     "tf": 4.545454545454546
                   },
+                  "Shape.html#glslSDF": {
+                    "ref": "Shape.html#glslSDF",
+                    "tf": 6.25
+                  },
+                  "Shape.html#glslGradient": {
+                    "ref": "Shape.html#glslGradient",
+                    "tf": 3.125
+                  },
                   "PointLight.html#.glslClass": {
                     "ref": "PointLight.html#.glslClass",
                     "tf": 7.142857142857142
+                  },
+                  "SingleColorMaterial.html#glslRender": {
+                    "ref": "SingleColorMaterial.html#glslRender",
+                    "tf": 5
                   },
                   "Vector.html#toGLSL": {
                     "ref": "Vector.html#toGLSL",
@@ -16522,17 +15903,9 @@ window.lunrData = {
                     "ref": "RelPosition.html#toGLSL",
                     "tf": 4.545454545454546
                   },
-                  "PhongMaterial.html#toGLSL": {
-                    "ref": "PhongMaterial.html#toGLSL",
-                    "tf": 4.545454545454546
-                  },
                   "Subgroup.html#shader": {
                     "ref": "Subgroup.html#shader",
                     "tf": 4.545454545454546
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                    "tf": 5.555555555555555
                   }
                 }
               }
@@ -16563,9 +15936,9 @@ window.lunrData = {
                                   "ref": "Point.html#build",
                                   "tf": 7.142857142857142
                                 },
-                                "module-Thurston-Thurston.html#initHorizon": {
-                                  "ref": "module-Thurston-Thurston.html#initHorizon",
-                                  "tf": 5.555555555555555
+                                "Thurston.html#setParams": {
+                                  "ref": "Thurston.html#setParams",
+                                  "tf": 10
                                 }
                               }
                             }
@@ -16595,14 +15968,6 @@ window.lunrData = {
                           "PhongMaterial.html#shininess": {
                             "ref": "PhongMaterial.html#shininess",
                             "tf": 16.666666666666664
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                            "tf": 10
-                          },
-                          "module-Thurston-Thurston.html#buildShaderFragment": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                            "tf": 2.083333333333333
                           }
                         }
                       }
@@ -16641,13 +16006,13 @@ window.lunrData = {
                   "docs": {},
                   "s": {
                     "docs": {
-                      "Shape.html": {
-                        "ref": "Shape.html",
-                        "tf": 3.8461538461538463
-                      },
                       "Camera.html": {
                         "ref": "Camera.html",
                         "tf": 5
+                      },
+                      "Shape.html": {
+                        "ref": "Shape.html",
+                        "tf": 3.8461538461538463
                       },
                       "Renderer.html": {
                         "ref": "Renderer.html",
@@ -16683,6 +16048,10 @@ window.lunrData = {
                     "docs": {},
                     "l": {
                       "docs": {
+                        "Thurston.html#flyControls": {
+                          "ref": "Thurston.html#flyControls",
+                          "tf": 25
+                        },
                         "VRControlsDrag.html": {
                           "ref": "VRControlsDrag.html",
                           "tf": 6.8181818181818175
@@ -16694,14 +16063,6 @@ window.lunrData = {
                         "FlyControls.html": {
                           "ref": "FlyControls.html",
                           "tf": 5.555555555555555
-                        },
-                        "module-Thurston-Thurston.html#_keyboardControls": {
-                          "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                          "tf": 25
-                        },
-                        "module-Thurston-Thurston.html#setKeyboard": {
-                          "ref": "module-Thurston-Thurston.html#setKeyboard",
-                          "tf": 12.5
                         }
                       }
                     }
@@ -16814,11 +16175,19 @@ window.lunrData = {
                               },
                               "Shape.html#glslGradient": {
                                 "ref": "Shape.html#glslGradient",
-                                "tf": 7.142857142857142
+                                "tf": 3.125
                               },
                               "PointLight.html#.glslClass": {
                                 "ref": "PointLight.html#.glslClass",
                                 "tf": 7.142857142857142
+                              },
+                              "HoroballShape.html#offset": {
+                                "ref": "HoroballShape.html#offset",
+                                "tf": 4.166666666666666
+                              },
+                              "LocalHoroballShape.html#offset": {
+                                "ref": "LocalHoroballShape.html#offset",
+                                "tf": 4.166666666666666
                               },
                               "RelPosition.html#eyes": {
                                 "ref": "RelPosition.html#eyes",
@@ -16857,10 +16226,6 @@ window.lunrData = {
                         "ref": "Generic.html#glslInstance",
                         "tf": 4.166666666666666
                       },
-                      "Shape.html#glslInstance": {
-                        "ref": "Shape.html#glslInstance",
-                        "tf": 5.555555555555555
-                      },
                       "Solid.html#glslInstance": {
                         "ref": "Solid.html#glslInstance",
                         "tf": 4.545454545454546
@@ -16868,6 +16233,10 @@ window.lunrData = {
                       "NormalMaterial.html#glslInstance": {
                         "ref": "NormalMaterial.html#glslInstance",
                         "tf": 7.142857142857142
+                      },
+                      "Shape.html#glslInstance": {
+                        "ref": "Shape.html#glslInstance",
+                        "tf": 5.555555555555555
                       },
                       "SingleColorMaterial.html#glslInstance": {
                         "ref": "SingleColorMaterial.html#glslInstance",
@@ -16896,25 +16265,17 @@ window.lunrData = {
                         "ref": "NormalMaterial.html#glslRender",
                         "tf": 5
                       },
-                      "SingleColorMaterial.html#glslRender": {
-                        "ref": "SingleColorMaterial.html#glslRender",
-                        "tf": 5
-                      },
                       "Position.html#flow": {
                         "ref": "Position.html#flow",
                         "tf": 0.49504950495049505
                       },
-                      "module-Thurston-Thurston.html#_maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#_maxLightDirs",
+                      "Shape.html#glslGradient": {
+                        "ref": "Shape.html#glslGradient",
                         "tf": 6.25
                       },
-                      "module-Thurston-Thurston.html#stereo": {
-                        "ref": "module-Thurston-Thurston.html#stereo",
-                        "tf": 4.545454545454546
-                      },
-                      "module-Thurston-Thurston.html#getEyePositions": {
-                        "ref": "module-Thurston-Thurston.html#getEyePositions",
-                        "tf": 3.3333333333333335
+                      "SingleColorMaterial.html#glslRender": {
+                        "ref": "SingleColorMaterial.html#glslRender",
+                        "tf": 5
                       }
                     }
                   }
@@ -17000,6 +16361,20 @@ window.lunrData = {
                     "tf": 2.1739130434782608
                   }
                 }
+              },
+              "b": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "n": {
+                    "docs": {
+                      "Thurston.html": {
+                        "ref": "Thurston.html",
+                        "tf": 6.25
+                      }
+                    }
+                  }
+                }
               }
             },
             "l": {
@@ -17020,6 +16395,14 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#glslRender",
                       "tf": 5
                     },
+                    "PointLight.html#color": {
+                      "ref": "PointLight.html#color",
+                      "tf": 775
+                    },
+                    "PhongMaterial.html#color": {
+                      "ref": "PhongMaterial.html#color",
+                      "tf": 775
+                    },
                     "SingleColorMaterial.html": {
                       "ref": "SingleColorMaterial.html",
                       "tf": 10
@@ -17028,58 +16411,9 @@ window.lunrData = {
                       "ref": "SingleColorMaterial.html#glslRender",
                       "tf": 5
                     },
-                    "PointLight.html#color": {
-                      "ref": "PointLight.html#color",
-                      "tf": 775
-                    },
                     "Renderer.html#setClearColor": {
                       "ref": "Renderer.html#setClearColor",
                       "tf": 38.33333333333333
-                    },
-                    "PhongMaterial.html#color": {
-                      "ref": "PhongMaterial.html#color",
-                      "tf": 775
-                    }
-                  }
-                }
-              },
-              "l": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "c": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                          "tf": 10
-                        },
-                        "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                          "tf": 10
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "i": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "c": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "d": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#getEyePositions": {
-                          "ref": "module-Thurston-Thurston.html#getEyePositions",
-                          "tf": 3.3333333333333335
-                        }
-                      }
                     }
                   }
                 }
@@ -17225,10 +16559,6 @@ window.lunrData = {
                         "FlyControls.html#update": {
                           "ref": "FlyControls.html#update",
                           "tf": 0.9259259259259258
-                        },
-                        "module-Thurston-Thurston.html#getEyePositions": {
-                          "ref": "module-Thurston-Thurston.html#getEyePositions",
-                          "tf": 3.3333333333333335
                         }
                       }
                     }
@@ -17257,17 +16587,13 @@ window.lunrData = {
                       "ref": "Position.html#toGLSL",
                       "tf": 4.545454545454546
                     },
+                    "Thurston.html": {
+                      "ref": "Thurston.html",
+                      "tf": 6.25
+                    },
                     "RelPosition.html#toGLSL": {
                       "ref": "RelPosition.html#toGLSL",
                       "tf": 4.545454545454546
-                    },
-                    "PhongMaterial.html#toGLSL": {
-                      "ref": "PhongMaterial.html#toGLSL",
-                      "tf": 4.545454545454546
-                    },
-                    "module-Thurston-Thurston.html": {
-                      "ref": "module-Thurston-Thurston.html",
-                      "tf": 8.333333333333332
                     }
                   }
                 }
@@ -17316,6 +16642,10 @@ window.lunrData = {
                         "ref": "Camera.html#shader",
                         "tf": 8.333333333333332
                       },
+                      "Thurston.html#camera": {
+                        "ref": "Thurston.html#camera",
+                        "tf": 766.6666666666666
+                      },
                       "Renderer.html": {
                         "ref": "Renderer.html",
                         "tf": 3.3333333333333335
@@ -17327,14 +16657,6 @@ window.lunrData = {
                       "FlyControls.html#update": {
                         "ref": "FlyControls.html#update",
                         "tf": 1.8518518518518516
-                      },
-                      "module-Thurston-Thurston.html#_camera": {
-                        "ref": "module-Thurston-Thurston.html#_camera",
-                        "tf": 25
-                      },
-                      "module-Thurston-Thurston.html#chaseCamera": {
-                        "ref": "module-Thurston-Thurston.html#chaseCamera",
-                        "tf": 2
                       }
                     },
                     "m": {
@@ -17680,13 +17002,13 @@ window.lunrData = {
                     "ref": "Generic.html#name",
                     "tf": 5.555555555555555
                   },
+                  "Thurston.html#clock": {
+                    "ref": "Thurston.html#clock",
+                    "tf": 7.142857142857142
+                  },
                   "Renderer.html#render": {
                     "ref": "Renderer.html#render",
                     "tf": 6.25
-                  },
-                  "module-Thurston-Thurston.html#_clock": {
-                    "ref": "module-Thurston-Thurston.html#_clock",
-                    "tf": 7.142857142857142
                   }
                 },
                 "b": {
@@ -17736,6 +17058,27 @@ window.lunrData = {
           },
           "e": {
             "docs": {},
+            "n": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "HoroballShape.html#center": {
+                        "ref": "HoroballShape.html#center",
+                        "tf": 705.5555555555555
+                      },
+                      "LocalHoroballShape.html#center": {
+                        "ref": "LocalHoroballShape.html#center",
+                        "tf": 705.5555555555555
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "l": {
               "docs": {},
               "l": {
@@ -17793,10 +17136,6 @@ window.lunrData = {
                     "ref": "list_class.html",
                     "tf": 110
                   },
-                  "list_module.html": {
-                    "ref": "list_module.html",
-                    "tf": 110
-                  },
                   "ShaderBuilder.html#includedImports": {
                     "ref": "ShaderBuilder.html#includedImports",
                     "tf": 10
@@ -17840,34 +17179,6 @@ window.lunrData = {
                   "Subgroup.html#teleports": {
                     "ref": "Subgroup.html#teleports",
                     "tf": 5.555555555555555
-                  },
-                  "module-Thurston-Thurston.html#params": {
-                    "ref": "module-Thurston-Thurston.html#params",
-                    "tf": 7.142857142857142
-                  },
-                  "module-Thurston-Thurston.html#_solids": {
-                    "ref": "module-Thurston-Thurston.html#_solids",
-                    "tf": 10
-                  },
-                  "module-Thurston-Thurston.html#_lights": {
-                    "ref": "module-Thurston-Thurston.html#_lights",
-                    "tf": 10
-                  },
-                  "module-Thurston-Thurston.html#_maxLightDirs": {
-                    "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                    "tf": 6.25
-                  },
-                  "module-Thurston-Thurston.html#addItems": {
-                    "ref": "module-Thurston-Thurston.html#addItems",
-                    "tf": 12.5
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                    "tf": 5.555555555555555
-                  },
-                  "module-Thurston-Thurston.html#buildShaderDataItems": {
-                    "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                    "tf": 5
                   }
                 },
                 ":": {
@@ -17891,37 +17202,6 @@ window.lunrData = {
                         }
                       }
                     }
-                  },
-                  "m": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "d": {
-                        "docs": {},
-                        "u": {
-                          "docs": {},
-                          "l": {
-                            "docs": {
-                              "list_module.html": {
-                                "ref": "list_module.html",
-                                "tf": 1300
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "e": {
-                  "docs": {},
-                  "n": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#addEventListeners": {
-                        "ref": "module-Thurston-Thurston.html#addEventListeners",
-                        "tf": 16.666666666666664
-                      }
-                    }
                   }
                 }
               }
@@ -17940,10 +17220,6 @@ window.lunrData = {
                   },
                   "RelPosition.html#toGLSL": {
                     "ref": "RelPosition.html#toGLSL",
-                    "tf": 4.545454545454546
-                  },
-                  "PhongMaterial.html#toGLSL": {
-                    "ref": "PhongMaterial.html#toGLSL",
                     "tf": 4.545454545454546
                   }
                 },
@@ -17988,7 +17264,7 @@ window.lunrData = {
                     },
                     "PointLight.html": {
                       "ref": "PointLight.html",
-                      "tf": 25
+                      "tf": 16.666666666666664
                     },
                     "PointLight.html#position": {
                       "ref": "PointLight.html#position",
@@ -17998,21 +17274,9 @@ window.lunrData = {
                       "ref": "PointLight.html#color",
                       "tf": 25
                     },
-                    "module-Thurston-Thurston.html#_lights": {
-                      "ref": "module-Thurston-Thurston.html#_lights",
-                      "tf": 10
-                    },
-                    "module-Thurston-Thurston.html#_maxLightDirs": {
-                      "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                      "tf": 12.5
-                    },
-                    "module-Thurston-Thurston.html#maxLightDirs": {
-                      "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                      "tf": 12.5
-                    },
-                    "module-Thurston-Thurston.html#buildShaderDataItems": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                      "tf": 21.666666666666664
+                    "PhongMaterial.html#lights": {
+                      "ref": "PhongMaterial.html#lights",
+                      "tf": 716.6666666666666
                     }
                   },
                   "#": {
@@ -18235,24 +17499,8 @@ window.lunrData = {
                                         "ref": "Generic.html",
                                         "tf": 50
                                       },
-                                      "Shape.html": {
-                                        "ref": "Shape.html",
-                                        "tf": 50
-                                      },
-                                      "Shape.html#glslSDF": {
-                                        "ref": "Shape.html#glslSDF",
-                                        "tf": 33.33333333333333
-                                      },
-                                      "Shape.html#glslGradient": {
-                                        "ref": "Shape.html#glslGradient",
-                                        "tf": 33.33333333333333
-                                      },
                                       "NormalMaterial.html#glslRender": {
                                         "ref": "NormalMaterial.html#glslRender",
-                                        "tf": 33.33333333333333
-                                      },
-                                      "SingleColorMaterial.html#glslRender": {
-                                        "ref": "SingleColorMaterial.html#glslRender",
                                         "tf": 33.33333333333333
                                       },
                                       "Position.html#flowFromOrigin": {
@@ -18266,51 +17514,21 @@ window.lunrData = {
                                       "BasicShape.html": {
                                         "ref": "BasicShape.html",
                                         "tf": 50
+                                      },
+                                      "Shape.html": {
+                                        "ref": "Shape.html",
+                                        "tf": 50
+                                      },
+                                      "Shape.html#glslSDF": {
+                                        "ref": "Shape.html#glslSDF",
+                                        "tf": 33.33333333333333
+                                      },
+                                      "SingleColorMaterial.html#glslRender": {
+                                        "ref": "SingleColorMaterial.html#glslRender",
+                                        "tf": 33.33333333333333
                                       }
                                     }
                                   }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "s": {
-                  "docs": {},
-                  "y": {
-                    "docs": {},
-                    "n": {
-                      "docs": {},
-                      "c": {
-                        "docs": {},
-                        "&": {
-                          "docs": {},
-                          "g": {
-                            "docs": {},
-                            "t": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#buildShaderVertex": {
-                                  "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                                  "tf": 33.33333333333333
-                                },
-                                "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                                  "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                                  "tf": 33.33333333333333
-                                },
-                                "module-Thurston-Thurston.html#buildShaderDataItems": {
-                                  "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                                  "tf": 16.666666666666664
-                                },
-                                "module-Thurston-Thurston.html#buildShaderFragment": {
-                                  "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                  "tf": 33.33333333333333
-                                },
-                                "module-Thurston-Thurston.html#initHorizon": {
-                                  "ref": "module-Thurston-Thurston.html#initHorizon",
-                                  "tf": 33.33333333333333
                                 }
                               }
                             }
@@ -18399,6 +17617,14 @@ window.lunrData = {
                                       "ref": "Scene.html#_nextId",
                                       "tf": 33.33333333333333
                                     },
+                                    "Thurston.html#flyControls": {
+                                      "ref": "Thurston.html#flyControls",
+                                      "tf": 33.33333333333333
+                                    },
+                                    "Thurston.html#clock": {
+                                      "ref": "Thurston.html#clock",
+                                      "tf": 33.33333333333333
+                                    },
                                     "Renderer.html#_threeRenderer": {
                                       "ref": "Renderer.html#_threeRenderer",
                                       "tf": 33.33333333333333
@@ -18413,42 +17639,6 @@ window.lunrData = {
                                     },
                                     "Renderer.html#_fragmentBuilder": {
                                       "ref": "Renderer.html#_fragmentBuilder",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_renderer": {
-                                      "ref": "module-Thurston-Thurston.html#_renderer",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_camera": {
-                                      "ref": "module-Thurston-Thurston.html#_camera",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_scene": {
-                                      "ref": "module-Thurston-Thurston.html#_scene",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_VRButton": {
-                                      "ref": "module-Thurston-Thurston.html#_VRButton",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_solids": {
-                                      "ref": "module-Thurston-Thurston.html#_solids",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_lights": {
-                                      "ref": "module-Thurston-Thurston.html#_lights",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_maxLightDirs": {
-                                      "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_keyboardControls": {
-                                      "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                                      "tf": 33.33333333333333
-                                    },
-                                    "module-Thurston-Thurston.html#_clock": {
-                                      "ref": "module-Thurston-Thurston.html#_clock",
                                       "tf": 33.33333333333333
                                     }
                                   }
@@ -18493,10 +17683,6 @@ window.lunrData = {
                   "RelPosition.html#eyes": {
                     "ref": "RelPosition.html#eyes",
                     "tf": 7.142857142857142
-                  },
-                  "module-Thurston-Thurston.html#getEyePositions": {
-                    "ref": "module-Thurston-Thurston.html#getEyePositions",
-                    "tf": 3.3333333333333335
                   }
                 }
               }
@@ -18539,16 +17725,16 @@ window.lunrData = {
                       "ref": "LocalBall.html",
                       "tf": 16.666666666666664
                     },
+                    "LocalHoroball.html": {
+                      "ref": "LocalHoroball.html",
+                      "tf": 16.666666666666664
+                    },
                     "Generic.html#isLocal": {
                       "ref": "Generic.html#isLocal",
                       "tf": 14.285714285714285
                     },
                     "NormalMaterial.html#isLocal": {
                       "ref": "NormalMaterial.html#isLocal",
-                      "tf": 14.285714285714285
-                    },
-                    "SingleColorMaterial.html#isLocal": {
-                      "ref": "SingleColorMaterial.html#isLocal",
                       "tf": 14.285714285714285
                     },
                     "PointLight.html#isLocal": {
@@ -18558,6 +17744,14 @@ window.lunrData = {
                     "LocalBallShape.html": {
                       "ref": "LocalBallShape.html",
                       "tf": 12.5
+                    },
+                    "LocalHoroballShape.html": {
+                      "ref": "LocalHoroballShape.html",
+                      "tf": 12.5
+                    },
+                    "SingleColorMaterial.html#isLocal": {
+                      "ref": "SingleColorMaterial.html#isLocal",
+                      "tf": 14.285714285714285
                     },
                     "RelPosition.html": {
                       "ref": "RelPosition.html",
@@ -18588,11 +17782,40 @@ window.lunrData = {
                         "docs": {
                           "LocalBall.html": {
                             "ref": "LocalBall.html",
-                            "tf": 1900
+                            "tf": 1800
                           }
                         },
                         "l": {
                           "docs": {},
+                          "l": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "c": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {},
+                                  "l": {
+                                    "docs": {},
+                                    "b": {
+                                      "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "l": {
+                                          "docs": {
+                                            "LocalBall.html": {
+                                              "ref": "LocalBall.html",
+                                              "tf": 100
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
                           "s": {
                             "docs": {},
                             "h": {
@@ -18603,7 +17826,7 @@ window.lunrData = {
                                   "docs": {
                                     "LocalBallShape.html": {
                                       "ref": "LocalBallShape.html",
-                                      "tf": 1900
+                                      "tf": 1800
                                     }
                                   },
                                   "e": {
@@ -18677,6 +17900,221 @@ window.lunrData = {
                                           }
                                         }
                                       }
+                                    },
+                                    "l": {
+                                      "docs": {},
+                                      "o": {
+                                        "docs": {},
+                                        "c": {
+                                          "docs": {},
+                                          "a": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {},
+                                              "b": {
+                                                "docs": {},
+                                                "a": {
+                                                  "docs": {},
+                                                  "l": {
+                                                    "docs": {},
+                                                    "l": {
+                                                      "docs": {},
+                                                      "s": {
+                                                        "docs": {},
+                                                        "h": {
+                                                          "docs": {},
+                                                          "a": {
+                                                            "docs": {},
+                                                            "p": {
+                                                              "docs": {
+                                                                "LocalBallShape.html": {
+                                                                  "ref": "LocalBallShape.html",
+                                                                  "tf": 100
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "h": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "r": {
+                        "docs": {},
+                        "o": {
+                          "docs": {},
+                          "b": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "l": {
+                                "docs": {
+                                  "LocalHoroball.html": {
+                                    "ref": "LocalHoroball.html",
+                                    "tf": 1900
+                                  }
+                                },
+                                "l": {
+                                  "docs": {},
+                                  "s": {
+                                    "docs": {},
+                                    "h": {
+                                      "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "p": {
+                                          "docs": {
+                                            "LocalHoroballShape.html": {
+                                              "ref": "LocalHoroballShape.html",
+                                              "tf": 1900
+                                            }
+                                          },
+                                          "e": {
+                                            "docs": {},
+                                            "#": {
+                                              "docs": {},
+                                              "c": {
+                                                "docs": {},
+                                                "e": {
+                                                  "docs": {},
+                                                  "n": {
+                                                    "docs": {},
+                                                    "t": {
+                                                      "docs": {
+                                                        "LocalHoroballShape.html#center": {
+                                                          "ref": "LocalHoroballShape.html#center",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "o": {
+                                                "docs": {},
+                                                "f": {
+                                                  "docs": {},
+                                                  "f": {
+                                                    "docs": {},
+                                                    "s": {
+                                                      "docs": {},
+                                                      "e": {
+                                                        "docs": {},
+                                                        "t": {
+                                                          "docs": {
+                                                            "LocalHoroballShape.html#offset": {
+                                                              "ref": "LocalHoroballShape.html#offset",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "i": {
+                                                "docs": {},
+                                                "s": {
+                                                  "docs": {},
+                                                  "l": {
+                                                    "docs": {},
+                                                    "o": {
+                                                      "docs": {},
+                                                      "c": {
+                                                        "docs": {},
+                                                        "a": {
+                                                          "docs": {},
+                                                          "l": {
+                                                            "docs": {},
+                                                            "h": {
+                                                              "docs": {},
+                                                              "o": {
+                                                                "docs": {},
+                                                                "r": {
+                                                                  "docs": {},
+                                                                  "o": {
+                                                                    "docs": {},
+                                                                    "b": {
+                                                                      "docs": {},
+                                                                      "a": {
+                                                                        "docs": {},
+                                                                        "l": {
+                                                                          "docs": {},
+                                                                          "l": {
+                                                                            "docs": {},
+                                                                            "s": {
+                                                                              "docs": {},
+                                                                              "h": {
+                                                                                "docs": {},
+                                                                                "a": {
+                                                                                  "docs": {},
+                                                                                  "p": {
+                                                                                    "docs": {
+                                                                                      "LocalHoroballShape.html#isLocalHoroballShape": {
+                                                                                        "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                                                                                        "tf": 1150
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "g": {
+                                                    "docs": {},
+                                                    "l": {
+                                                      "docs": {},
+                                                      "o": {
+                                                        "docs": {},
+                                                        "b": {
+                                                          "docs": {
+                                                            "LocalHoroballShape.html#isGlobal": {
+                                                              "ref": "LocalHoroballShape.html#isGlobal",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -18736,14 +18174,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "g": {
-              "docs": {
-                "module-Thurston-Thurston.html#infos": {
-                  "ref": "module-Thurston-Thurston.html#infos",
-                  "tf": 8.333333333333332
-                }
-              }
             }
           },
           "a": {
@@ -18766,2484 +18196,6 @@ window.lunrData = {
                       }
                     }
                   }
-                }
-              }
-            }
-          }
-        },
-        "m": {
-          "0": {
-            "docs": {
-              "Position.html#multiply": {
-                "ref": "Position.html#multiply",
-                "tf": 3.571428571428571
-              },
-              "Position.html#premultiply": {
-                "ref": "Position.html#premultiply",
-                "tf": 3.571428571428571
-              }
-            }
-          },
-          "docs": {
-            "Position.html#applyQuaternion": {
-              "ref": "Position.html#applyQuaternion",
-              "tf": 6.25
-            },
-            "Position.html#multiply": {
-              "ref": "Position.html#multiply",
-              "tf": 3.571428571428571
-            },
-            "Position.html#premultiply": {
-              "ref": "Position.html#premultiply",
-              "tf": 3.571428571428571
-            },
-            "Position.html#flow": {
-              "ref": "Position.html#flow",
-              "tf": 3.4653465346534658
-            },
-            "Vector.html#applyMatrix4": {
-              "ref": "Vector.html#applyMatrix4",
-              "tf": 35.18518518518518
-            },
-            "RelPosition.html#applyQuaternion": {
-              "ref": "RelPosition.html#applyQuaternion",
-              "tf": 6.25
-            },
-            "FlyControls.html#update": {
-              "ref": "FlyControls.html#update",
-              "tf": 1.8518518518518516
-            }
-          },
-          "o": {
-            "docs": {},
-            "d": {
-              "docs": {},
-              "u": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "list_module.html": {
-                      "ref": "list_module.html",
-                      "tf": 635
-                    },
-                    "module-Thurston.html": {
-                      "ref": "module-Thurston.html",
-                      "tf": 115.55555555555556
-                    }
-                  },
-                  "e": {
-                    "docs": {},
-                    ":": {
-                      "docs": {},
-                      "t": {
-                        "docs": {},
-                        "h": {
-                          "docs": {},
-                          "u": {
-                            "docs": {},
-                            "r": {
-                              "docs": {},
-                              "s": {
-                                "docs": {},
-                                "t": {
-                                  "docs": {},
-                                  "o": {
-                                    "docs": {},
-                                    "n": {
-                                      "docs": {
-                                        "module-Thurston.html": {
-                                          "ref": "module-Thurston.html",
-                                          "tf": 1300
-                                        }
-                                      },
-                                      "~": {
-                                        "docs": {},
-                                        "t": {
-                                          "docs": {},
-                                          "h": {
-                                            "docs": {},
-                                            "u": {
-                                              "docs": {},
-                                              "r": {
-                                                "docs": {},
-                                                "s": {
-                                                  "docs": {},
-                                                  "t": {
-                                                    "docs": {},
-                                                    "o": {
-                                                      "docs": {},
-                                                      "n": {
-                                                        "docs": {
-                                                          "module-Thurston-Thurston.html": {
-                                                            "ref": "module-Thurston-Thurston.html",
-                                                            "tf": 1300
-                                                          }
-                                                        },
-                                                        "#": {
-                                                          "docs": {},
-                                                          "g": {
-                                                            "docs": {},
-                                                            "e": {
-                                                              "docs": {},
-                                                              "o": {
-                                                                "docs": {},
-                                                                "m": {
-                                                                  "docs": {
-                                                                    "module-Thurston-Thurston.html#geom": {
-                                                                      "ref": "module-Thurston-Thurston.html#geom",
-                                                                      "tf": 1150
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              "t": {
-                                                                "docs": {},
-                                                                "e": {
-                                                                  "docs": {},
-                                                                  "y": {
-                                                                    "docs": {},
-                                                                    "e": {
-                                                                      "docs": {},
-                                                                      "p": {
-                                                                        "docs": {},
-                                                                        "o": {
-                                                                          "docs": {},
-                                                                          "s": {
-                                                                            "docs": {},
-                                                                            "i": {
-                                                                              "docs": {},
-                                                                              "t": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#getEyePositions": {
-                                                                                    "ref": "module-Thurston-Thurston.html#getEyePositions",
-                                                                                    "tf": 1150
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "u": {
-                                                              "docs": {},
-                                                              "i": {
-                                                                "docs": {
-                                                                  "module-Thurston-Thurston.html#gui": {
-                                                                    "ref": "module-Thurston-Thurston.html#gui",
-                                                                    "tf": 1150
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "s": {
-                                                            "docs": {},
-                                                            "u": {
-                                                              "docs": {},
-                                                              "b": {
-                                                                "docs": {},
-                                                                "g": {
-                                                                  "docs": {},
-                                                                  "r": {
-                                                                    "docs": {},
-                                                                    "o": {
-                                                                      "docs": {},
-                                                                      "u": {
-                                                                        "docs": {},
-                                                                        "p": {
-                                                                          "docs": {
-                                                                            "module-Thurston-Thurston.html#subgroup": {
-                                                                              "ref": "module-Thurston-Thurston.html#subgroup",
-                                                                              "tf": 1150
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "t": {
-                                                              "docs": {},
-                                                              "a": {
-                                                                "docs": {},
-                                                                "t": {
-                                                                  "docs": {
-                                                                    "module-Thurston-Thurston.html#stats": {
-                                                                      "ref": "module-Thurston-Thurston.html#stats",
-                                                                      "tf": 1150
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              "e": {
-                                                                "docs": {},
-                                                                "r": {
-                                                                  "docs": {},
-                                                                  "e": {
-                                                                    "docs": {},
-                                                                    "o": {
-                                                                      "docs": {
-                                                                        "module-Thurston-Thurston.html#stereo": {
-                                                                          "ref": "module-Thurston-Thurston.html#stereo",
-                                                                          "tf": 1150
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "e": {
-                                                              "docs": {},
-                                                              "t": {
-                                                                "docs": {},
-                                                                "p": {
-                                                                  "docs": {},
-                                                                  "a": {
-                                                                    "docs": {},
-                                                                    "r": {
-                                                                      "docs": {},
-                                                                      "a": {
-                                                                        "docs": {},
-                                                                        "m": {
-                                                                          "docs": {
-                                                                            "module-Thurston-Thurston.html#setParams": {
-                                                                              "ref": "module-Thurston-Thurston.html#setParams",
-                                                                              "tf": 1150
-                                                                            },
-                                                                            "module-Thurston-Thurston.html#setParam": {
-                                                                              "ref": "module-Thurston-Thurston.html#setParam",
-                                                                              "tf": 1150
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                },
-                                                                "k": {
-                                                                  "docs": {},
-                                                                  "e": {
-                                                                    "docs": {},
-                                                                    "y": {
-                                                                      "docs": {},
-                                                                      "b": {
-                                                                        "docs": {},
-                                                                        "o": {
-                                                                          "docs": {},
-                                                                          "a": {
-                                                                            "docs": {},
-                                                                            "r": {
-                                                                              "docs": {},
-                                                                              "d": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#setKeyboard": {
-                                                                                    "ref": "module-Thurston-Thurston.html#setKeyboard",
-                                                                                    "tf": 1150
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "p": {
-                                                            "docs": {},
-                                                            "a": {
-                                                              "docs": {},
-                                                              "r": {
-                                                                "docs": {},
-                                                                "a": {
-                                                                  "docs": {},
-                                                                  "m": {
-                                                                    "docs": {
-                                                                      "module-Thurston-Thurston.html#params": {
-                                                                        "ref": "module-Thurston-Thurston.html#params",
-                                                                        "tf": 1150
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "_": {
-                                                            "docs": {},
-                                                            "r": {
-                                                              "docs": {},
-                                                              "e": {
-                                                                "docs": {},
-                                                                "n": {
-                                                                  "docs": {},
-                                                                  "d": {
-                                                                    "docs": {},
-                                                                    "e": {
-                                                                      "docs": {},
-                                                                      "r": {
-                                                                        "docs": {
-                                                                          "module-Thurston-Thurston.html#_renderer": {
-                                                                            "ref": "module-Thurston-Thurston.html#_renderer",
-                                                                            "tf": 1150
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "c": {
-                                                              "docs": {},
-                                                              "a": {
-                                                                "docs": {},
-                                                                "m": {
-                                                                  "docs": {},
-                                                                  "e": {
-                                                                    "docs": {},
-                                                                    "r": {
-                                                                      "docs": {},
-                                                                      "a": {
-                                                                        "docs": {
-                                                                          "module-Thurston-Thurston.html#_camera": {
-                                                                            "ref": "module-Thurston-Thurston.html#_camera",
-                                                                            "tf": 1150
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              "l": {
-                                                                "docs": {},
-                                                                "o": {
-                                                                  "docs": {},
-                                                                  "c": {
-                                                                    "docs": {},
-                                                                    "k": {
-                                                                      "docs": {
-                                                                        "module-Thurston-Thurston.html#_clock": {
-                                                                          "ref": "module-Thurston-Thurston.html#_clock",
-                                                                          "tf": 1150
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "s": {
-                                                              "docs": {},
-                                                              "c": {
-                                                                "docs": {},
-                                                                "e": {
-                                                                  "docs": {},
-                                                                  "n": {
-                                                                    "docs": {
-                                                                      "module-Thurston-Thurston.html#_scene": {
-                                                                        "ref": "module-Thurston-Thurston.html#_scene",
-                                                                        "tf": 1150
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              "o": {
-                                                                "docs": {},
-                                                                "l": {
-                                                                  "docs": {},
-                                                                  "i": {
-                                                                    "docs": {},
-                                                                    "d": {
-                                                                      "docs": {
-                                                                        "module-Thurston-Thurston.html#_solids": {
-                                                                          "ref": "module-Thurston-Thurston.html#_solids",
-                                                                          "tf": 1150
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "v": {
-                                                              "docs": {},
-                                                              "r": {
-                                                                "docs": {},
-                                                                "b": {
-                                                                  "docs": {},
-                                                                  "u": {
-                                                                    "docs": {},
-                                                                    "t": {
-                                                                      "docs": {},
-                                                                      "t": {
-                                                                        "docs": {},
-                                                                        "o": {
-                                                                          "docs": {},
-                                                                          "n": {
-                                                                            "docs": {
-                                                                              "module-Thurston-Thurston.html#_VRButton": {
-                                                                                "ref": "module-Thurston-Thurston.html#_VRButton",
-                                                                                "tf": 1150
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "l": {
-                                                              "docs": {},
-                                                              "i": {
-                                                                "docs": {},
-                                                                "g": {
-                                                                  "docs": {},
-                                                                  "h": {
-                                                                    "docs": {},
-                                                                    "t": {
-                                                                      "docs": {
-                                                                        "module-Thurston-Thurston.html#_lights": {
-                                                                          "ref": "module-Thurston-Thurston.html#_lights",
-                                                                          "tf": 1150
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "m": {
-                                                              "docs": {},
-                                                              "a": {
-                                                                "docs": {},
-                                                                "x": {
-                                                                  "docs": {},
-                                                                  "l": {
-                                                                    "docs": {},
-                                                                    "i": {
-                                                                      "docs": {},
-                                                                      "g": {
-                                                                        "docs": {},
-                                                                        "h": {
-                                                                          "docs": {},
-                                                                          "t": {
-                                                                            "docs": {},
-                                                                            "d": {
-                                                                              "docs": {},
-                                                                              "i": {
-                                                                                "docs": {},
-                                                                                "r": {
-                                                                                  "docs": {
-                                                                                    "module-Thurston-Thurston.html#_maxLightDirs": {
-                                                                                      "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                                                                                      "tf": 1150
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "k": {
-                                                              "docs": {},
-                                                              "e": {
-                                                                "docs": {},
-                                                                "y": {
-                                                                  "docs": {},
-                                                                  "b": {
-                                                                    "docs": {},
-                                                                    "o": {
-                                                                      "docs": {},
-                                                                      "a": {
-                                                                        "docs": {},
-                                                                        "r": {
-                                                                          "docs": {},
-                                                                          "d": {
-                                                                            "docs": {},
-                                                                            "c": {
-                                                                              "docs": {},
-                                                                              "o": {
-                                                                                "docs": {},
-                                                                                "n": {
-                                                                                  "docs": {},
-                                                                                  "t": {
-                                                                                    "docs": {},
-                                                                                    "r": {
-                                                                                      "docs": {},
-                                                                                      "o": {
-                                                                                        "docs": {},
-                                                                                        "l": {
-                                                                                          "docs": {
-                                                                                            "module-Thurston-Thurston.html#_keyboardControls": {
-                                                                                              "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                                                                                              "tf": 1150
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "m": {
-                                                            "docs": {},
-                                                            "a": {
-                                                              "docs": {},
-                                                              "x": {
-                                                                "docs": {},
-                                                                "l": {
-                                                                  "docs": {},
-                                                                  "i": {
-                                                                    "docs": {},
-                                                                    "g": {
-                                                                      "docs": {},
-                                                                      "h": {
-                                                                        "docs": {},
-                                                                        "t": {
-                                                                          "docs": {},
-                                                                          "d": {
-                                                                            "docs": {},
-                                                                            "i": {
-                                                                              "docs": {},
-                                                                              "r": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#maxLightDirs": {
-                                                                                    "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                                                                                    "tf": 1150
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "c": {
-                                                            "docs": {},
-                                                            "h": {
-                                                              "docs": {},
-                                                              "a": {
-                                                                "docs": {},
-                                                                "s": {
-                                                                  "docs": {},
-                                                                  "e": {
-                                                                    "docs": {},
-                                                                    "c": {
-                                                                      "docs": {},
-                                                                      "a": {
-                                                                        "docs": {},
-                                                                        "m": {
-                                                                          "docs": {},
-                                                                          "e": {
-                                                                            "docs": {},
-                                                                            "r": {
-                                                                              "docs": {},
-                                                                              "a": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#chaseCamera": {
-                                                                                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                                                                                    "tf": 1150
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "i": {
-                                                            "docs": {},
-                                                            "n": {
-                                                              "docs": {},
-                                                              "f": {
-                                                                "docs": {},
-                                                                "o": {
-                                                                  "docs": {
-                                                                    "module-Thurston-Thurston.html#infos": {
-                                                                      "ref": "module-Thurston-Thurston.html#infos",
-                                                                      "tf": 1150
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              "i": {
-                                                                "docs": {},
-                                                                "t": {
-                                                                  "docs": {},
-                                                                  "u": {
-                                                                    "docs": {},
-                                                                    "i": {
-                                                                      "docs": {
-                                                                        "module-Thurston-Thurston.html#initUI": {
-                                                                          "ref": "module-Thurston-Thurston.html#initUI",
-                                                                          "tf": 1150
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  "t": {
-                                                                    "docs": {},
-                                                                    "h": {
-                                                                      "docs": {},
-                                                                      "r": {
-                                                                        "docs": {},
-                                                                        "e": {
-                                                                          "docs": {},
-                                                                          "e": {
-                                                                            "docs": {},
-                                                                            "j": {
-                                                                              "docs": {
-                                                                                "module-Thurston-Thurston.html#initThreeJS": {
-                                                                                  "ref": "module-Thurston-Thurston.html#initThreeJS",
-                                                                                  "tf": 1150
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  "s": {
-                                                                    "docs": {},
-                                                                    "t": {
-                                                                      "docs": {},
-                                                                      "a": {
-                                                                        "docs": {},
-                                                                        "t": {
-                                                                          "docs": {
-                                                                            "module-Thurston-Thurston.html#initStats": {
-                                                                              "ref": "module-Thurston-Thurston.html#initStats",
-                                                                              "tf": 1150
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  "h": {
-                                                                    "docs": {},
-                                                                    "o": {
-                                                                      "docs": {},
-                                                                      "r": {
-                                                                        "docs": {},
-                                                                        "i": {
-                                                                          "docs": {},
-                                                                          "z": {
-                                                                            "docs": {},
-                                                                            "o": {
-                                                                              "docs": {},
-                                                                              "n": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#initHorizon": {
-                                                                                    "ref": "module-Thurston-Thurston.html#initHorizon",
-                                                                                    "tf": 1150
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "r": {
-                                                            "docs": {},
-                                                            "e": {
-                                                              "docs": {},
-                                                              "g": {
-                                                                "docs": {},
-                                                                "i": {
-                                                                  "docs": {},
-                                                                  "s": {
-                                                                    "docs": {},
-                                                                    "t": {
-                                                                      "docs": {},
-                                                                      "e": {
-                                                                        "docs": {},
-                                                                        "r": {
-                                                                          "docs": {},
-                                                                          "p": {
-                                                                            "docs": {},
-                                                                            "a": {
-                                                                              "docs": {},
-                                                                              "r": {
-                                                                                "docs": {},
-                                                                                "a": {
-                                                                                  "docs": {},
-                                                                                  "m": {
-                                                                                    "docs": {
-                                                                                      "module-Thurston-Thurston.html#registerParam": {
-                                                                                        "ref": "module-Thurston-Thurston.html#registerParam",
-                                                                                        "tf": 1150
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "u": {
-                                                              "docs": {},
-                                                              "n": {
-                                                                "docs": {
-                                                                  "module-Thurston-Thurston.html#run": {
-                                                                    "ref": "module-Thurston-Thurston.html#run",
-                                                                    "tf": 1150
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "a": {
-                                                            "docs": {},
-                                                            "d": {
-                                                              "docs": {},
-                                                              "d": {
-                                                                "docs": {},
-                                                                "i": {
-                                                                  "docs": {},
-                                                                  "t": {
-                                                                    "docs": {},
-                                                                    "e": {
-                                                                      "docs": {},
-                                                                      "m": {
-                                                                        "docs": {
-                                                                          "module-Thurston-Thurston.html#addItem": {
-                                                                            "ref": "module-Thurston-Thurston.html#addItem",
-                                                                            "tf": 1150
-                                                                          },
-                                                                          "module-Thurston-Thurston.html#addItems": {
-                                                                            "ref": "module-Thurston-Thurston.html#addItems",
-                                                                            "tf": 1150
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                },
-                                                                "e": {
-                                                                  "docs": {},
-                                                                  "v": {
-                                                                    "docs": {},
-                                                                    "e": {
-                                                                      "docs": {},
-                                                                      "n": {
-                                                                        "docs": {},
-                                                                        "t": {
-                                                                          "docs": {},
-                                                                          "l": {
-                                                                            "docs": {},
-                                                                            "i": {
-                                                                              "docs": {},
-                                                                              "s": {
-                                                                                "docs": {},
-                                                                                "t": {
-                                                                                  "docs": {},
-                                                                                  "e": {
-                                                                                    "docs": {},
-                                                                                    "n": {
-                                                                                      "docs": {
-                                                                                        "module-Thurston-Thurston.html#addEventListeners": {
-                                                                                          "ref": "module-Thurston-Thurston.html#addEventListeners",
-                                                                                          "tf": 1150
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "p": {
-                                                              "docs": {},
-                                                              "p": {
-                                                                "docs": {},
-                                                                "e": {
-                                                                  "docs": {},
-                                                                  "n": {
-                                                                    "docs": {},
-                                                                    "d": {
-                                                                      "docs": {},
-                                                                      "t": {
-                                                                        "docs": {},
-                                                                        "i": {
-                                                                          "docs": {},
-                                                                          "t": {
-                                                                            "docs": {},
-                                                                            "l": {
-                                                                              "docs": {
-                                                                                "module-Thurston-Thurston.html#appendTitle": {
-                                                                                  "ref": "module-Thurston-Thurston.html#appendTitle",
-                                                                                  "tf": 1150
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "n": {
-                                                              "docs": {},
-                                                              "i": {
-                                                                "docs": {},
-                                                                "m": {
-                                                                  "docs": {
-                                                                    "module-Thurston-Thurston.html#animate": {
-                                                                      "ref": "module-Thurston-Thurston.html#animate",
-                                                                      "tf": 1150
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "b": {
-                                                            "docs": {},
-                                                            "u": {
-                                                              "docs": {},
-                                                              "i": {
-                                                                "docs": {},
-                                                                "l": {
-                                                                  "docs": {},
-                                                                  "d": {
-                                                                    "docs": {},
-                                                                    "s": {
-                                                                      "docs": {},
-                                                                      "h": {
-                                                                        "docs": {},
-                                                                        "a": {
-                                                                          "docs": {},
-                                                                          "d": {
-                                                                            "docs": {},
-                                                                            "e": {
-                                                                              "docs": {},
-                                                                              "r": {
-                                                                                "docs": {},
-                                                                                "v": {
-                                                                                  "docs": {},
-                                                                                  "e": {
-                                                                                    "docs": {},
-                                                                                    "r": {
-                                                                                      "docs": {},
-                                                                                      "t": {
-                                                                                        "docs": {},
-                                                                                        "e": {
-                                                                                          "docs": {},
-                                                                                          "x": {
-                                                                                            "docs": {
-                                                                                              "module-Thurston-Thurston.html#buildShaderVertex": {
-                                                                                                "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                                                                                                "tf": 1150
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                },
-                                                                                "d": {
-                                                                                  "docs": {},
-                                                                                  "a": {
-                                                                                    "docs": {},
-                                                                                    "t": {
-                                                                                      "docs": {},
-                                                                                      "a": {
-                                                                                        "docs": {},
-                                                                                        "c": {
-                                                                                          "docs": {},
-                                                                                          "o": {
-                                                                                            "docs": {},
-                                                                                            "n": {
-                                                                                              "docs": {},
-                                                                                              "s": {
-                                                                                                "docs": {},
-                                                                                                "t": {
-                                                                                                  "docs": {
-                                                                                                    "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                                                                                                      "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                                                                                                      "tf": 1150
-                                                                                                    }
-                                                                                                  }
-                                                                                                }
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        },
-                                                                                        "u": {
-                                                                                          "docs": {},
-                                                                                          "n": {
-                                                                                            "docs": {},
-                                                                                            "i": {
-                                                                                              "docs": {},
-                                                                                              "f": {
-                                                                                                "docs": {},
-                                                                                                "o": {
-                                                                                                  "docs": {},
-                                                                                                  "r": {
-                                                                                                    "docs": {},
-                                                                                                    "m": {
-                                                                                                      "docs": {
-                                                                                                        "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                                                                                                          "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                                                                                                          "tf": 1150
-                                                                                                        }
-                                                                                                      }
-                                                                                                    }
-                                                                                                  }
-                                                                                                }
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        },
-                                                                                        "b": {
-                                                                                          "docs": {},
-                                                                                          "a": {
-                                                                                            "docs": {},
-                                                                                            "c": {
-                                                                                              "docs": {},
-                                                                                              "k": {
-                                                                                                "docs": {},
-                                                                                                "g": {
-                                                                                                  "docs": {},
-                                                                                                  "r": {
-                                                                                                    "docs": {},
-                                                                                                    "o": {
-                                                                                                      "docs": {},
-                                                                                                      "u": {
-                                                                                                        "docs": {},
-                                                                                                        "n": {
-                                                                                                          "docs": {},
-                                                                                                          "d": {
-                                                                                                            "docs": {
-                                                                                                              "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                                                                                                                "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                                                                                                                "tf": 1150
-                                                                                                              }
-                                                                                                            }
-                                                                                                          }
-                                                                                                        }
-                                                                                                      }
-                                                                                                    }
-                                                                                                  }
-                                                                                                }
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        },
-                                                                                        "i": {
-                                                                                          "docs": {},
-                                                                                          "t": {
-                                                                                            "docs": {},
-                                                                                            "e": {
-                                                                                              "docs": {},
-                                                                                              "m": {
-                                                                                                "docs": {
-                                                                                                  "module-Thurston-Thurston.html#buildShaderDataItems": {
-                                                                                                    "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                                                                                                    "tf": 1150
-                                                                                                  }
-                                                                                                }
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                },
-                                                                                "f": {
-                                                                                  "docs": {},
-                                                                                  "r": {
-                                                                                    "docs": {},
-                                                                                    "a": {
-                                                                                      "docs": {},
-                                                                                      "g": {
-                                                                                        "docs": {
-                                                                                          "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                                                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                                                            "tf": 1150
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "o": {
-                                                            "docs": {},
-                                                            "n": {
-                                                              "docs": {},
-                                                              "w": {
-                                                                "docs": {},
-                                                                "i": {
-                                                                  "docs": {},
-                                                                  "n": {
-                                                                    "docs": {},
-                                                                    "d": {
-                                                                      "docs": {},
-                                                                      "o": {
-                                                                        "docs": {},
-                                                                        "w": {
-                                                                          "docs": {},
-                                                                          "r": {
-                                                                            "docs": {},
-                                                                            "e": {
-                                                                              "docs": {},
-                                                                              "s": {
-                                                                                "docs": {
-                                                                                  "module-Thurston-Thurston.html#onWindowResize": {
-                                                                                    "ref": "module-Thurston-Thurston.html#onWindowResize",
-                                                                                    "tf": 1150
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {
-                  "Stereo.html#switch": {
-                    "ref": "Stereo.html#switch",
-                    "tf": 16.666666666666664
-                  },
-                  "FixedDirectionStereo.html": {
-                    "ref": "FixedDirectionStereo.html",
-                    "tf": 5
-                  },
-                  "Renderer.html#stereo": {
-                    "ref": "Renderer.html#stereo",
-                    "tf": 25
-                  },
-                  "module-Thurston-Thurston.html#getEyePositions": {
-                    "ref": "module-Thurston-Thurston.html#getEyePositions",
-                    "tf": 3.3333333333333335
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "o": {
-                "docs": {
-                  "Mono.html": {
-                    "ref": "Mono.html",
-                    "tf": 1900
-                  }
-                },
-                "#": {
-                  "docs": {},
-                  "s": {
-                    "docs": {},
-                    "h": {
-                      "docs": {},
-                      "a": {
-                        "docs": {},
-                        "d": {
-                          "docs": {
-                            "Mono.html#shader": {
-                              "ref": "Mono.html#shader",
-                              "tf": 1150
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "v": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "Teleport.html": {
-                    "ref": "Teleport.html",
-                    "tf": 1.9230769230769231
-                  },
-                  "Position.html#flow": {
-                    "ref": "Position.html#flow",
-                    "tf": 0.49504950495049505
-                  },
-                  "VRControlsDrag.html": {
-                    "ref": "VRControlsDrag.html",
-                    "tf": 2.272727272727273
-                  },
-                  "VRControlsMove.html": {
-                    "ref": "VRControlsMove.html",
-                    "tf": 2.272727272727273
-                  },
-                  "Subgroup.html": {
-                    "ref": "Subgroup.html",
-                    "tf": 0.3546099290780142
-                  },
-                  "FlyControls.html#update": {
-                    "ref": "FlyControls.html#update",
-                    "tf": 0.4629629629629629
-                  },
-                  "module-Thurston-Thurston.html#chaseCamera": {
-                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                    "tf": 4
-                  }
-                },
-                "m": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "n": {
-                      "docs": {},
-                      "t": {
-                        "docs": {
-                          "FlyControls.html#updateMovementVector": {
-                            "ref": "FlyControls.html#updateMovementVector",
-                            "tf": 16.666666666666664
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "r": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "Shape.html": {
-                    "ref": "Shape.html",
-                    "tf": 3.8461538461538463
-                  },
-                  "Scene.html#add": {
-                    "ref": "Scene.html#add",
-                    "tf": 10
-                  },
-                  "module-Thurston-Thurston.html#run": {
-                    "ref": "module-Thurston-Thurston.html#run",
-                    "tf": 5
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
-            "m": {
-              "docs": {},
-              "b": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "ShaderBuilder.html#code": {
-                        "ref": "ShaderBuilder.html#code",
-                        "tf": 110
-                      },
-                      "ShaderBuilder.html#includedImports": {
-                        "ref": "ShaderBuilder.html#includedImports",
-                        "tf": 110
-                      },
-                      "ShaderBuilder.html#includedClasses": {
-                        "ref": "ShaderBuilder.html#includedClasses",
-                        "tf": 110
-                      },
-                      "ShaderBuilder.html#includedUniforms": {
-                        "ref": "ShaderBuilder.html#includedUniforms",
-                        "tf": 110
-                      },
-                      "ShaderBuilder.html#includedInstances": {
-                        "ref": "ShaderBuilder.html#includedInstances",
-                        "tf": 110
-                      },
-                      "ShaderBuilder.html#uniforms": {
-                        "ref": "ShaderBuilder.html#uniforms",
-                        "tf": 110
-                      },
-                      "Stereo.html#on": {
-                        "ref": "Stereo.html#on",
-                        "tf": 110
-                      },
-                      "Stereo.html#off": {
-                        "ref": "Stereo.html#off",
-                        "tf": 110
-                      },
-                      "Stereo.html#ipDist": {
-                        "ref": "Stereo.html#ipDist",
-                        "tf": 110
-                      },
-                      "Light.html#isLight": {
-                        "ref": "Light.html#isLight",
-                        "tf": 110
-                      },
-                      "Material.html#isMaterial": {
-                        "ref": "Material.html#isMaterial",
-                        "tf": 110
-                      },
-                      "Material.html#isGlobal": {
-                        "ref": "Material.html#isGlobal",
-                        "tf": 110
-                      },
-                      "Material.html#isLocal": {
-                        "ref": "Material.html#isLocal",
-                        "tf": 110
-                      },
-                      "Generic.html#uuid": {
-                        "ref": "Generic.html#uuid",
-                        "tf": 110
-                      },
-                      "Generic.html#id": {
-                        "ref": "Generic.html#id",
-                        "tf": 110
-                      },
-                      "Generic.html#imports": {
-                        "ref": "Generic.html#imports",
-                        "tf": 110
-                      },
-                      "Generic.html#className": {
-                        "ref": "Generic.html#className",
-                        "tf": 110
-                      },
-                      "Generic.html#name": {
-                        "ref": "Generic.html#name",
-                        "tf": 110
-                      },
-                      "Generic.html#isGlobal": {
-                        "ref": "Generic.html#isGlobal",
-                        "tf": 110
-                      },
-                      "Generic.html#isLocal": {
-                        "ref": "Generic.html#isLocal",
-                        "tf": 110
-                      },
-                      "Generic.html#uniformType": {
-                        "ref": "Generic.html#uniformType",
-                        "tf": 110
-                      },
-                      "Teleport.html#jsTest": {
-                        "ref": "Teleport.html#jsTest",
-                        "tf": 110
-                      },
-                      "Teleport.html#glslTest": {
-                        "ref": "Teleport.html#glslTest",
-                        "tf": 110
-                      },
-                      "Teleport.html#isom": {
-                        "ref": "Teleport.html#isom",
-                        "tf": 110
-                      },
-                      "Teleport.html#inv": {
-                        "ref": "Teleport.html#inv",
-                        "tf": 110
-                      },
-                      "Teleport.html#name": {
-                        "ref": "Teleport.html#name",
-                        "tf": 110
-                      },
-                      "Shape.html#isShape": {
-                        "ref": "Shape.html#isShape",
-                        "tf": 110
-                      },
-                      "Shape.html#isBasicShape": {
-                        "ref": "Shape.html#isBasicShape",
-                        "tf": 110
-                      },
-                      "Shape.html#isAdvancedShape": {
-                        "ref": "Shape.html#isAdvancedShape",
-                        "tf": 110
-                      },
-                      "Solid.html#shape": {
-                        "ref": "Solid.html#shape",
-                        "tf": 110
-                      },
-                      "Solid.html#material": {
-                        "ref": "Solid.html#material",
-                        "tf": 110
-                      },
-                      "Solid.html#isSolid": {
-                        "ref": "Solid.html#isSolid",
-                        "tf": 110
-                      },
-                      "Camera.html#_threeCamera": {
-                        "ref": "Camera.html#_threeCamera",
-                        "tf": 110
-                      },
-                      "Camera.html#minDist": {
-                        "ref": "Camera.html#minDist",
-                        "tf": 110
-                      },
-                      "Camera.html#maxDist": {
-                        "ref": "Camera.html#maxDist",
-                        "tf": 110
-                      },
-                      "Camera.html#maxSteps": {
-                        "ref": "Camera.html#maxSteps",
-                        "tf": 110
-                      },
-                      "Camera.html#threshold": {
-                        "ref": "Camera.html#threshold",
-                        "tf": 110
-                      },
-                      "Camera.html#position": {
-                        "ref": "Camera.html#position",
-                        "tf": 110
-                      },
-                      "Camera.html#aspect": {
-                        "ref": "Camera.html#aspect",
-                        "tf": 110
-                      },
-                      "Camera.html#fov": {
-                        "ref": "Camera.html#fov",
-                        "tf": 110
-                      },
-                      "Camera.html#matrix": {
-                        "ref": "Camera.html#matrix",
-                        "tf": 110
-                      },
-                      "NormalMaterial.html#isMaterial": {
-                        "ref": "NormalMaterial.html#isMaterial",
-                        "tf": 110
-                      },
-                      "NormalMaterial.html#isGlobal": {
-                        "ref": "NormalMaterial.html#isGlobal",
-                        "tf": 110
-                      },
-                      "NormalMaterial.html#isLocal": {
-                        "ref": "NormalMaterial.html#isLocal",
-                        "tf": 110
-                      },
-                      "SingleColorMaterial.html#isMaterial": {
-                        "ref": "SingleColorMaterial.html#isMaterial",
-                        "tf": 110
-                      },
-                      "SingleColorMaterial.html#isGlobal": {
-                        "ref": "SingleColorMaterial.html#isGlobal",
-                        "tf": 110
-                      },
-                      "SingleColorMaterial.html#isLocal": {
-                        "ref": "SingleColorMaterial.html#isLocal",
-                        "tf": 110
-                      },
-                      "Position.html#boost": {
-                        "ref": "Position.html#boost",
-                        "tf": 110
-                      },
-                      "Position.html#quaternion": {
-                        "ref": "Position.html#quaternion",
-                        "tf": 110
-                      },
-                      "Position.html#facing": {
-                        "ref": "Position.html#facing",
-                        "tf": 110
-                      },
-                      "Position.html#point": {
-                        "ref": "Position.html#point",
-                        "tf": 110
-                      },
-                      "Scene.html#_lights": {
-                        "ref": "Scene.html#_lights",
-                        "tf": 110
-                      },
-                      "Scene.html#_solids": {
-                        "ref": "Scene.html#_solids",
-                        "tf": 110
-                      },
-                      "Scene.html#_nextId": {
-                        "ref": "Scene.html#_nextId",
-                        "tf": 110
-                      },
-                      "AdvancedShape.html#isBasicShape": {
-                        "ref": "AdvancedShape.html#isBasicShape",
-                        "tf": 110
-                      },
-                      "BasicShape.html#isBasicShape": {
-                        "ref": "BasicShape.html#isBasicShape",
-                        "tf": 110
-                      },
-                      "PointLight.html#position": {
-                        "ref": "PointLight.html#position",
-                        "tf": 110
-                      },
-                      "PointLight.html#color": {
-                        "ref": "PointLight.html#color",
-                        "tf": 110
-                      },
-                      "PointLight.html#isGlobal": {
-                        "ref": "PointLight.html#isGlobal",
-                        "tf": 110
-                      },
-                      "PointLight.html#isLocal": {
-                        "ref": "PointLight.html#isLocal",
-                        "tf": 110
-                      },
-                      "BallShape.html#isBallShape": {
-                        "ref": "BallShape.html#isBallShape",
-                        "tf": 110
-                      },
-                      "BallShape.html#isGlobal": {
-                        "ref": "BallShape.html#isGlobal",
-                        "tf": 110
-                      },
-                      "LocalBallShape.html#isLocalBallShape": {
-                        "ref": "LocalBallShape.html#isLocalBallShape",
-                        "tf": 110
-                      },
-                      "LocalBallShape.html#isGlobal": {
-                        "ref": "LocalBallShape.html#isGlobal",
-                        "tf": 110
-                      },
-                      "RelPosition.html#local": {
-                        "ref": "RelPosition.html#local",
-                        "tf": 110
-                      },
-                      "RelPosition.html#cellBoost": {
-                        "ref": "RelPosition.html#cellBoost",
-                        "tf": 110
-                      },
-                      "RelPosition.html#invCellBoost": {
-                        "ref": "RelPosition.html#invCellBoost",
-                        "tf": 110
-                      },
-                      "RelPosition.html#sbgp": {
-                        "ref": "RelPosition.html#sbgp",
-                        "tf": 110
-                      },
-                      "RelPosition.html#localPoint": {
-                        "ref": "RelPosition.html#localPoint",
-                        "tf": 110
-                      },
-                      "RelPosition.html#point": {
-                        "ref": "RelPosition.html#point",
-                        "tf": 110
-                      },
-                      "VRControlsDrag.html#update": {
-                        "ref": "VRControlsDrag.html#update",
-                        "tf": 110
-                      },
-                      "Renderer.html#geom": {
-                        "ref": "Renderer.html#geom",
-                        "tf": 110
-                      },
-                      "Renderer.html#subgroup": {
-                        "ref": "Renderer.html#subgroup",
-                        "tf": 110
-                      },
-                      "Renderer.html#camera": {
-                        "ref": "Renderer.html#camera",
-                        "tf": 110
-                      },
-                      "Renderer.html#scene": {
-                        "ref": "Renderer.html#scene",
-                        "tf": 110
-                      },
-                      "Renderer.html#stereo": {
-                        "ref": "Renderer.html#stereo",
-                        "tf": 110
-                      },
-                      "Renderer.html#_threeRenderer": {
-                        "ref": "Renderer.html#_threeRenderer",
-                        "tf": 110
-                      },
-                      "Renderer.html#_threeScene": {
-                        "ref": "Renderer.html#_threeScene",
-                        "tf": 110
-                      },
-                      "Renderer.html#_horizon": {
-                        "ref": "Renderer.html#_horizon",
-                        "tf": 110
-                      },
-                      "Renderer.html#_fragmentBuilder": {
-                        "ref": "Renderer.html#_fragmentBuilder",
-                        "tf": 110
-                      },
-                      "Renderer.html#domElement": {
-                        "ref": "Renderer.html#domElement",
-                        "tf": 110
-                      },
-                      "PhongMaterial.html#color": {
-                        "ref": "PhongMaterial.html#color",
-                        "tf": 110
-                      },
-                      "PhongMaterial.html#ambient": {
-                        "ref": "PhongMaterial.html#ambient",
-                        "tf": 110
-                      },
-                      "PhongMaterial.html#diffuse": {
-                        "ref": "PhongMaterial.html#diffuse",
-                        "tf": 110
-                      },
-                      "PhongMaterial.html#specular": {
-                        "ref": "PhongMaterial.html#specular",
-                        "tf": 110
-                      },
-                      "PhongMaterial.html#shininess": {
-                        "ref": "PhongMaterial.html#shininess",
-                        "tf": 110
-                      },
-                      "Subgroup.html#teleports": {
-                        "ref": "Subgroup.html#teleports",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#geom": {
-                        "ref": "module-Thurston-Thurston.html#geom",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#subgroup": {
-                        "ref": "module-Thurston-Thurston.html#subgroup",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#params": {
-                        "ref": "module-Thurston-Thurston.html#params",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_renderer": {
-                        "ref": "module-Thurston-Thurston.html#_renderer",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_camera": {
-                        "ref": "module-Thurston-Thurston.html#_camera",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_scene": {
-                        "ref": "module-Thurston-Thurston.html#_scene",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_VRButton": {
-                        "ref": "module-Thurston-Thurston.html#_VRButton",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_solids": {
-                        "ref": "module-Thurston-Thurston.html#_solids",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_lights": {
-                        "ref": "module-Thurston-Thurston.html#_lights",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_keyboardControls": {
-                        "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#_clock": {
-                        "ref": "module-Thurston-Thurston.html#_clock",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#gui": {
-                        "ref": "module-Thurston-Thurston.html#gui",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#stats": {
-                        "ref": "module-Thurston-Thurston.html#stats",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#stereo": {
-                        "ref": "module-Thurston-Thurston.html#stereo",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#maxLightDirs": {
-                        "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                        "tf": 110
-                      },
-                      "module-Thurston-Thurston.html#chaseCamera": {
-                        "ref": "module-Thurston-Thurston.html#chaseCamera",
-                        "tf": 110
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "t": {
-              "docs": {},
-              "h": {
-                "docs": {},
-                "o": {
-                  "docs": {},
-                  "d": {
-                    "docs": {
-                      "Stereo.html#eyes": {
-                        "ref": "Stereo.html#eyes",
-                        "tf": 3.8461538461538463
-                      },
-                      "Vector.html#toLog": {
-                        "ref": "Vector.html#toLog",
-                        "tf": 4.545454545454546
-                      },
-                      "Vector.html#applyFacing": {
-                        "ref": "Vector.html#applyFacing",
-                        "tf": 2.631578947368421
-                      },
-                      "Vector.html#toGLSL": {
-                        "ref": "Vector.html#toGLSL",
-                        "tf": 4.166666666666666
-                      },
-                      "RelPosition.html#flow": {
-                        "ref": "RelPosition.html#flow",
-                        "tf": 2.380952380952381
-                      },
-                      "Renderer.html#render": {
-                        "ref": "Renderer.html#render",
-                        "tf": 6.25
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "s": {
-              "docs": {},
-              "h": {
-                "docs": {
-                  "Renderer.html#_horizon": {
-                    "ref": "Renderer.html#_horizon",
-                    "tf": 33.33333333333333
-                  }
-                }
-              }
-            },
-            "a": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#_clock": {
-                        "ref": "module-Thurston-Thurston.html#_clock",
-                        "tf": 7.142857142857142
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "u": {
-            "docs": {},
-            "l": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "p": {
-                    "docs": {},
-                    "l": {
-                      "docs": {},
-                      "i": {
-                        "docs": {
-                          "Isometry.html#multiply": {
-                            "ref": "Isometry.html#multiply",
-                            "tf": 681.25
-                          },
-                          "Isometry.html#premultiply": {
-                            "ref": "Isometry.html#premultiply",
-                            "tf": 6.25
-                          },
-                          "Position.html#multiply": {
-                            "ref": "Position.html#multiply",
-                            "tf": 686.9047619047619
-                          },
-                          "Position.html#premultiply": {
-                            "ref": "Position.html#premultiply",
-                            "tf": 3.571428571428571
-                          },
-                          "Position.html#flow": {
-                            "ref": "Position.html#flow",
-                            "tf": 0.49504950495049505
-                          },
-                          "Vector.html#applyMatrix4": {
-                            "ref": "Vector.html#applyMatrix4",
-                            "tf": 1.8518518518518516
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "a": {
-            "docs": {},
-            "k": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "Material.html#isGlobal": {
-                    "ref": "Material.html#isGlobal",
-                    "tf": 7.142857142857142
-                  },
-                  "NormalMaterial.html#isGlobal": {
-                    "ref": "NormalMaterial.html#isGlobal",
-                    "tf": 7.142857142857142
-                  },
-                  "SingleColorMaterial.html#isGlobal": {
-                    "ref": "SingleColorMaterial.html#isGlobal",
-                    "tf": 7.142857142857142
-                  },
-                  "Position.html#reduceErrorQuaternion": {
-                    "ref": "Position.html#reduceErrorQuaternion",
-                    "tf": 12.5
-                  },
-                  "RelPosition.html#flow": {
-                    "ref": "RelPosition.html#flow",
-                    "tf": 2.380952380952381
-                  },
-                  "Renderer.html": {
-                    "ref": "Renderer.html",
-                    "tf": 3.3333333333333335
-                  }
-                },
-                "t": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "n": {
-                        "docs": {},
-                        "s": {
-                          "docs": {},
-                          "l": {
-                            "docs": {
-                              "Isometry.html#makeTranslation": {
-                                "ref": "Isometry.html#makeTranslation",
-                                "tf": 675
-                              }
-                            },
-                            "a": {
-                              "docs": {},
-                              "t": {
-                                "docs": {},
-                                "i": {
-                                  "docs": {},
-                                  "o": {
-                                    "docs": {},
-                                    "n": {
-                                      "docs": {},
-                                      "f": {
-                                        "docs": {},
-                                        "r": {
-                                          "docs": {},
-                                          "o": {
-                                            "docs": {},
-                                            "m": {
-                                              "docs": {},
-                                              "d": {
-                                                "docs": {},
-                                                "i": {
-                                                  "docs": {},
-                                                  "r": {
-                                                    "docs": {
-                                                      "Isometry.html#makeTranslationFromDir": {
-                                                        "ref": "Isometry.html#makeTranslationFromDir",
-                                                        "tf": 675
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "i": {
-                  "docs": {},
-                  "n": {
-                    "docs": {},
-                    "v": {
-                      "docs": {},
-                      "t": {
-                        "docs": {},
-                        "r": {
-                          "docs": {},
-                          "a": {
-                            "docs": {},
-                            "n": {
-                              "docs": {},
-                              "s": {
-                                "docs": {},
-                                "l": {
-                                  "docs": {
-                                    "Isometry.html#makeInvTranslation": {
-                                      "ref": "Isometry.html#makeInvTranslation",
-                                      "tf": 675
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "p": {
-              "docs": {
-                "Isometry.html#makeTranslationFromDir": {
-                  "ref": "Isometry.html#makeTranslationFromDir",
-                  "tf": 5.555555555555555
-                },
-                "NormalMaterial.html": {
-                  "ref": "NormalMaterial.html",
-                  "tf": 8.333333333333332
-                }
-              }
-            },
-            "i": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "i": {
-                    "docs": {
-                      "Isometry.html#equals": {
-                        "ref": "Isometry.html#equals",
-                        "tf": 6.25
-                      },
-                      "Point.html#equals": {
-                        "ref": "Point.html#equals",
-                        "tf": 6.25
-                      },
-                      "RelPosition.html#equals": {
-                        "ref": "RelPosition.html#equals",
-                        "tf": 6.25
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "t": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "r": {
-                  "docs": {},
-                  "i": {
-                    "docs": {
-                      "Material.html": {
-                        "ref": "Material.html",
-                        "tf": 1866.6666666666667
-                      },
-                      "Material.html#isMaterial": {
-                        "ref": "Material.html#isMaterial",
-                        "tf": 16.666666666666664
-                      },
-                      "Material.html#isGlobal": {
-                        "ref": "Material.html#isGlobal",
-                        "tf": 7.142857142857142
-                      },
-                      "Material.html#glslRender": {
-                        "ref": "Material.html#glslRender",
-                        "tf": 5
-                      },
-                      "Generic.html": {
-                        "ref": "Generic.html",
-                        "tf": 5
-                      },
-                      "Solid.html": {
-                        "ref": "Solid.html",
-                        "tf": 4.3478260869565215
-                      },
-                      "Solid.html#material": {
-                        "ref": "Solid.html#material",
-                        "tf": 775
-                      },
-                      "Solid.html#setId": {
-                        "ref": "Solid.html#setId",
-                        "tf": 12.5
-                      },
-                      "NormalMaterial.html": {
-                        "ref": "NormalMaterial.html",
-                        "tf": 8.333333333333332
-                      },
-                      "NormalMaterial.html#isMaterial": {
-                        "ref": "NormalMaterial.html#isMaterial",
-                        "tf": 16.666666666666664
-                      },
-                      "NormalMaterial.html#isGlobal": {
-                        "ref": "NormalMaterial.html#isGlobal",
-                        "tf": 7.142857142857142
-                      },
-                      "NormalMaterial.html#glslRender": {
-                        "ref": "NormalMaterial.html#glslRender",
-                        "tf": 5
-                      },
-                      "SingleColorMaterial.html": {
-                        "ref": "SingleColorMaterial.html",
-                        "tf": 10
-                      },
-                      "SingleColorMaterial.html#isMaterial": {
-                        "ref": "SingleColorMaterial.html#isMaterial",
-                        "tf": 16.666666666666664
-                      },
-                      "SingleColorMaterial.html#isGlobal": {
-                        "ref": "SingleColorMaterial.html#isGlobal",
-                        "tf": 7.142857142857142
-                      },
-                      "SingleColorMaterial.html#glslRender": {
-                        "ref": "SingleColorMaterial.html#glslRender",
-                        "tf": 5
-                      },
-                      "PhongMaterial.html": {
-                        "ref": "PhongMaterial.html",
-                        "tf": 16.666666666666664
-                      },
-                      "PhongMaterial.html#color": {
-                        "ref": "PhongMaterial.html#color",
-                        "tf": 25
-                      },
-                      "PhongMaterial.html#toGLSL": {
-                        "ref": "PhongMaterial.html#toGLSL",
-                        "tf": 4.545454545454546
-                      }
-                    },
-                    "a": {
-                      "docs": {},
-                      "l": {
-                        "docs": {},
-                        "#": {
-                          "docs": {},
-                          "i": {
-                            "docs": {},
-                            "s": {
-                              "docs": {},
-                              "m": {
-                                "docs": {},
-                                "a": {
-                                  "docs": {},
-                                  "t": {
-                                    "docs": {},
-                                    "e": {
-                                      "docs": {},
-                                      "r": {
-                                        "docs": {},
-                                        "i": {
-                                          "docs": {
-                                            "Material.html#isMaterial": {
-                                              "ref": "Material.html#isMaterial",
-                                              "tf": 1150
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "g": {
-                                "docs": {},
-                                "l": {
-                                  "docs": {},
-                                  "o": {
-                                    "docs": {},
-                                    "b": {
-                                      "docs": {
-                                        "Material.html#isGlobal": {
-                                          "ref": "Material.html#isGlobal",
-                                          "tf": 1150
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "l": {
-                                "docs": {},
-                                "o": {
-                                  "docs": {},
-                                  "c": {
-                                    "docs": {
-                                      "Material.html#isLocal": {
-                                        "ref": "Material.html#isLocal",
-                                        "tf": 1150
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "g": {
-                            "docs": {},
-                            "l": {
-                              "docs": {},
-                              "s": {
-                                "docs": {},
-                                "l": {
-                                  "docs": {},
-                                  "r": {
-                                    "docs": {},
-                                    "e": {
-                                      "docs": {},
-                                      "n": {
-                                        "docs": {},
-                                        "d": {
-                                          "docs": {
-                                            "Material.html#glslRender": {
-                                              "ref": "Material.html#glslRender",
-                                              "tf": 1150
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "i": {
-                                    "docs": {},
-                                    "n": {
-                                      "docs": {},
-                                      "s": {
-                                        "docs": {},
-                                        "t": {
-                                          "docs": {
-                                            "Material.html#glslInstance": {
-                                              "ref": "Material.html#glslInstance",
-                                              "tf": 1150
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "r": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "x": {
-                    "4": {
-                      "docs": {
-                        "Camera.html#matrix": {
-                          "ref": "Camera.html#matrix",
-                          "tf": 50
-                        },
-                        "Position.html#facing": {
-                          "ref": "Position.html#facing",
-                          "tf": 55.55555555555556
-                        },
-                        "FlyControls.html#update": {
-                          "ref": "FlyControls.html#update",
-                          "tf": 0.4629629629629629
-                        }
-                      }
-                    },
-                    "docs": {
-                      "Camera.html#matrix": {
-                        "ref": "Camera.html#matrix",
-                        "tf": 707.1428571428571
-                      },
-                      "Camera.html#updateProjectionMatrix": {
-                        "ref": "Camera.html#updateProjectionMatrix",
-                        "tf": 7.142857142857142
-                      }
-                    }
-                  },
-                  "c": {
-                    "docs": {
-                      "Subgroup.html": {
-                        "ref": "Subgroup.html",
-                        "tf": 0.7092198581560284
-                      }
-                    }
-                  }
-                }
-              },
-              "t": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "Subgroup.html#teleports": {
-                        "ref": "Subgroup.html#teleports",
-                        "tf": 5.555555555555555
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "g": {
-                  "docs": {
-                    "Generic.html": {
-                      "ref": "Generic.html",
-                      "tf": 5
-                    }
-                  }
-                }
-              },
-              "i": {
-                "docs": {},
-                "f": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "l": {
-                      "docs": {},
-                      "d": {
-                        "docs": {},
-                        "/": {
-                          "docs": {},
-                          "o": {
-                            "docs": {},
-                            "r": {
-                              "docs": {},
-                              "b": {
-                                "docs": {},
-                                "i": {
-                                  "docs": {},
-                                  "f": {
-                                    "docs": {},
-                                    "o": {
-                                      "docs": {},
-                                      "l": {
-                                        "docs": {},
-                                        "d": {
-                                          "docs": {
-                                            "module-Thurston-Thurston.html#subgroup": {
-                                              "ref": "module-Thurston-Thurston.html#subgroup",
-                                              "tf": 10
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "u": {
-                "docs": {},
-                "a": {
-                  "docs": {},
-                  "l": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#chaseCamera": {
-                        "ref": "module-Thurston-Thurston.html#chaseCamera",
-                        "tf": 2
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "r": {
-              "docs": {},
-              "c": {
-                "docs": {},
-                "h": {
-                  "docs": {
-                    "Camera.html#minDist": {
-                      "ref": "Camera.html#minDist",
-                      "tf": 12.5
-                    },
-                    "Camera.html#maxDist": {
-                      "ref": "Camera.html#maxDist",
-                      "tf": 12.5
-                    },
-                    "Camera.html#maxSteps": {
-                      "ref": "Camera.html#maxSteps",
-                      "tf": 8.333333333333332
-                    },
-                    "Camera.html#threshold": {
-                      "ref": "Camera.html#threshold",
-                      "tf": 12.5
-                    }
-                  }
-                }
-              }
-            },
-            "x": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "s": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "Camera.html#maxDist": {
-                          "ref": "Camera.html#maxDist",
-                          "tf": 700
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "i": {
-                "docs": {},
-                "m": {
-                  "docs": {
-                    "Camera.html#maxDist": {
-                      "ref": "Camera.html#maxDist",
-                      "tf": 12.5
-                    },
-                    "Camera.html#maxSteps": {
-                      "ref": "Camera.html#maxSteps",
-                      "tf": 8.333333333333332
-                    },
-                    "module-Thurston-Thurston.html#_maxLightDirs": {
-                      "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                      "tf": 6.25
-                    },
-                    "module-Thurston-Thurston.html#maxLightDirs": {
-                      "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                      "tf": 12.5
-                    }
-                  }
-                }
-              },
-              "s": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "p": {
-                      "docs": {
-                        "Camera.html#maxSteps": {
-                          "ref": "Camera.html#maxSteps",
-                          "tf": 700
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "l": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "g": {
-                    "docs": {},
-                    "h": {
-                      "docs": {},
-                      "t": {
-                        "docs": {},
-                        "d": {
-                          "docs": {},
-                          "i": {
-                            "docs": {},
-                            "r": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#maxLightDirs": {
-                                  "ref": "module-Thurston-Thurston.html#maxLightDirs",
-                                  "tf": 700
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "g": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "c": {
-                  "docs": {
-                    "Renderer.html": {
-                      "ref": "Renderer.html",
-                      "tf": 3.3333333333333335
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "i": {
-            "docs": {},
-            "n": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "s": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "Camera.html#minDist": {
-                          "ref": "Camera.html#minDist",
-                          "tf": 700
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "i": {
-                "docs": {},
-                "m": {
-                  "docs": {
-                    "Camera.html#minDist": {
-                      "ref": "Camera.html#minDist",
-                      "tf": 12.5
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "'": {
-            "docs": {},
-            "m": {
-              "docs": {
-                "Position.html#flow": {
-                  "ref": "Position.html#flow",
-                  "tf": 0.49504950495049505
                 }
               }
             }
@@ -21287,14 +18239,6 @@ window.lunrData = {
                       "ref": "Mono.html#shader",
                       "tf": 16.666666666666664
                     },
-                    "Shape.html#isBasicShape": {
-                      "ref": "Shape.html#isBasicShape",
-                      "tf": 7.142857142857142
-                    },
-                    "Shape.html#isAdvancedShape": {
-                      "ref": "Shape.html#isAdvancedShape",
-                      "tf": 7.142857142857142
-                    },
                     "Camera.html#shader": {
                       "ref": "Camera.html#shader",
                       "tf": 8.333333333333332
@@ -21315,6 +18259,18 @@ window.lunrData = {
                       "ref": "BasicShape.html#isBasicShape",
                       "tf": 7.142857142857142
                     },
+                    "Shape.html#isBasicShape": {
+                      "ref": "Shape.html#isBasicShape",
+                      "tf": 7.142857142857142
+                    },
+                    "Shape.html#isAdvancedShape": {
+                      "ref": "Shape.html#isAdvancedShape",
+                      "tf": 7.142857142857142
+                    },
+                    "Thurston.html#run": {
+                      "ref": "Thurston.html#run",
+                      "tf": 12.5
+                    },
                     "RelPosition.html#toGLSL": {
                       "ref": "RelPosition.html#toGLSL",
                       "tf": 4.545454545454546
@@ -21323,8 +18279,8 @@ window.lunrData = {
                       "ref": "Renderer.html#vertexShader",
                       "tf": 16.666666666666664
                     },
-                    "Renderer.html#fragmentShader": {
-                      "ref": "Renderer.html#fragmentShader",
+                    "Renderer.html#buildFragmentShader": {
+                      "ref": "Renderer.html#buildFragmentShader",
                       "tf": 16.666666666666664
                     },
                     "Renderer.html#build": {
@@ -21335,21 +18291,9 @@ window.lunrData = {
                       "ref": "Renderer.html#render",
                       "tf": 6.25
                     },
-                    "PhongMaterial.html#toGLSL": {
-                      "ref": "PhongMaterial.html#toGLSL",
-                      "tf": 4.545454545454546
-                    },
                     "Subgroup.html#shader": {
                       "ref": "Subgroup.html#shader",
                       "tf": 4.545454545454546
-                    },
-                    "module-Thurston-Thurston.html#buildShaderVertex": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                      "tf": 10
-                    },
-                    "module-Thurston-Thurston.html#buildShaderFragment": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                      "tf": 4.166666666666666
                     }
                   },
                   "e": {
@@ -21363,178 +18307,35 @@ window.lunrData = {
                       }
                     }
                   },
-                  "s": {
+                  "f": {
                     "docs": {},
-                    "h": {
+                    "r": {
                       "docs": {},
                       "a": {
                         "docs": {},
-                        "d": {
+                        "g": {
                           "docs": {},
-                          "e": {
+                          "m": {
                             "docs": {},
-                            "r": {
+                            "e": {
                               "docs": {},
-                              "v": {
+                              "n": {
                                 "docs": {},
-                                "e": {
+                                "t": {
                                   "docs": {},
-                                  "r": {
+                                  "s": {
                                     "docs": {},
-                                    "t": {
+                                    "h": {
                                       "docs": {},
-                                      "e": {
+                                      "a": {
                                         "docs": {},
-                                        "x": {
+                                        "d": {
                                           "docs": {
-                                            "module-Thurston-Thurston.html#buildShaderVertex": {
-                                              "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                                              "tf": 683.3333333333334
+                                            "Renderer.html#buildFragmentShader": {
+                                              "ref": "Renderer.html#buildFragmentShader",
+                                              "tf": 750
                                             }
                                           }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "d": {
-                                "docs": {},
-                                "a": {
-                                  "docs": {},
-                                  "t": {
-                                    "docs": {},
-                                    "a": {
-                                      "docs": {},
-                                      "c": {
-                                        "docs": {},
-                                        "o": {
-                                          "docs": {},
-                                          "n": {
-                                            "docs": {},
-                                            "s": {
-                                              "docs": {},
-                                              "t": {
-                                                "docs": {
-                                                  "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                                                    "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                                                    "tf": 700
-                                                  },
-                                                  "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                    "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                    "tf": 2.083333333333333
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "u": {
-                                        "docs": {},
-                                        "n": {
-                                          "docs": {},
-                                          "i": {
-                                            "docs": {},
-                                            "f": {
-                                              "docs": {},
-                                              "o": {
-                                                "docs": {},
-                                                "r": {
-                                                  "docs": {},
-                                                  "m": {
-                                                    "docs": {
-                                                      "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                                                        "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                                                        "tf": 700
-                                                      },
-                                                      "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                        "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                        "tf": 2.083333333333333
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "b": {
-                                        "docs": {},
-                                        "a": {
-                                          "docs": {},
-                                          "c": {
-                                            "docs": {},
-                                            "k": {
-                                              "docs": {},
-                                              "g": {
-                                                "docs": {},
-                                                "r": {
-                                                  "docs": {},
-                                                  "o": {
-                                                    "docs": {},
-                                                    "u": {
-                                                      "docs": {},
-                                                      "n": {
-                                                        "docs": {},
-                                                        "d": {
-                                                          "docs": {
-                                                            "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                                                              "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                                                              "tf": 683.3333333333334
-                                                            },
-                                                            "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                              "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                              "tf": 2.083333333333333
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "i": {
-                                        "docs": {},
-                                        "t": {
-                                          "docs": {},
-                                          "e": {
-                                            "docs": {},
-                                            "m": {
-                                              "docs": {
-                                                "module-Thurston-Thurston.html#buildShaderDataItems": {
-                                                  "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                                                  "tf": 666.6666666666666
-                                                },
-                                                "module-Thurston-Thurston.html#buildShaderFragment": {
-                                                  "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                                  "tf": 2.083333333333333
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "f": {
-                                "docs": {},
-                                "r": {
-                                  "docs": {},
-                                  "a": {
-                                    "docs": {},
-                                    "g": {
-                                      "docs": {
-                                        "module-Thurston-Thurston.html#buildShaderFragment": {
-                                          "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                          "tf": 683.3333333333334
                                         }
                                       }
                                     }
@@ -21622,10 +18423,6 @@ window.lunrData = {
                       "VRControlsMove.html": {
                         "ref": "VRControlsMove.html",
                         "tf": 4.545454545454546
-                      },
-                      "module-Thurston-Thurston.html#_VRButton": {
-                        "ref": "module-Thurston-Thurston.html#_VRButton",
-                        "tf": 25
                       }
                     }
                   }
@@ -21667,8 +18464,8 @@ window.lunrData = {
                           "ref": "Stereo.html",
                           "tf": 2.7777777777777777
                         },
-                        "module-Thurston-Thurston.html#_clock": {
-                          "ref": "module-Thurston-Thurston.html#_clock",
+                        "Thurston.html#clock": {
+                          "ref": "Thurston.html#clock",
                           "tf": 7.142857142857142
                         }
                       }
@@ -21756,18 +18553,6 @@ window.lunrData = {
                           "ref": "Teleport.html#jsTest",
                           "tf": 2.7777777777777777
                         },
-                        "Shape.html#isShape": {
-                          "ref": "Shape.html#isShape",
-                          "tf": 50
-                        },
-                        "Shape.html#isBasicShape": {
-                          "ref": "Shape.html#isBasicShape",
-                          "tf": 50
-                        },
-                        "Shape.html#isAdvancedShape": {
-                          "ref": "Shape.html#isAdvancedShape",
-                          "tf": 50
-                        },
                         "Solid.html#isSolid": {
                           "ref": "Solid.html#isSolid",
                           "tf": 50
@@ -21784,18 +18569,6 @@ window.lunrData = {
                           "ref": "NormalMaterial.html#isLocal",
                           "tf": 50
                         },
-                        "SingleColorMaterial.html#isMaterial": {
-                          "ref": "SingleColorMaterial.html#isMaterial",
-                          "tf": 50
-                        },
-                        "SingleColorMaterial.html#isGlobal": {
-                          "ref": "SingleColorMaterial.html#isGlobal",
-                          "tf": 50
-                        },
-                        "SingleColorMaterial.html#isLocal": {
-                          "ref": "SingleColorMaterial.html#isLocal",
-                          "tf": 50
-                        },
                         "Position.html#equals": {
                           "ref": "Position.html#equals",
                           "tf": 33.33333333333333
@@ -21806,6 +18579,18 @@ window.lunrData = {
                         },
                         "BasicShape.html#isBasicShape": {
                           "ref": "BasicShape.html#isBasicShape",
+                          "tf": 50
+                        },
+                        "Shape.html#isShape": {
+                          "ref": "Shape.html#isShape",
+                          "tf": 50
+                        },
+                        "Shape.html#isBasicShape": {
+                          "ref": "Shape.html#isBasicShape",
+                          "tf": 50
+                        },
+                        "Shape.html#isAdvancedShape": {
+                          "ref": "Shape.html#isAdvancedShape",
                           "tf": 50
                         },
                         "PointLight.html#isGlobal": {
@@ -21830,6 +18615,34 @@ window.lunrData = {
                         },
                         "LocalBallShape.html#isGlobal": {
                           "ref": "LocalBallShape.html#isGlobal",
+                          "tf": 50
+                        },
+                        "HoroballShape.html#isHoroballShape": {
+                          "ref": "HoroballShape.html#isHoroballShape",
+                          "tf": 50
+                        },
+                        "HoroballShape.html#isGlobal": {
+                          "ref": "HoroballShape.html#isGlobal",
+                          "tf": 50
+                        },
+                        "LocalHoroballShape.html#isLocalHoroballShape": {
+                          "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                          "tf": 50
+                        },
+                        "LocalHoroballShape.html#isGlobal": {
+                          "ref": "LocalHoroballShape.html#isGlobal",
+                          "tf": 50
+                        },
+                        "SingleColorMaterial.html#isMaterial": {
+                          "ref": "SingleColorMaterial.html#isMaterial",
+                          "tf": 50
+                        },
+                        "SingleColorMaterial.html#isGlobal": {
+                          "ref": "SingleColorMaterial.html#isGlobal",
+                          "tf": 50
+                        },
+                        "SingleColorMaterial.html#isLocal": {
+                          "ref": "SingleColorMaterial.html#isLocal",
                           "tf": 50
                         },
                         "RelPosition.html#equals": {
@@ -21900,14 +18713,6 @@ window.lunrData = {
                   "Teleport.html": {
                     "ref": "Teleport.html",
                     "tf": 1.9230769230769231
-                  },
-                  "module-Thurston-Thurston.html#chaseCamera": {
-                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                    "tf": 2
-                  },
-                  "module-Thurston-Thurston.html#getEyePositions": {
-                    "ref": "module-Thurston-Thurston.html#getEyePositions",
-                    "tf": 3.3333333333333335
                   }
                 }
               }
@@ -21921,6 +18726,24 @@ window.lunrData = {
                     "RelPosition.html": {
                       "ref": "RelPosition.html",
                       "tf": 0.9615384615384616
+                    }
+                  },
+                  "a": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "i": {
+                        "docs": {
+                          "HoroballShape.html#center": {
+                            "ref": "HoroballShape.html#center",
+                            "tf": 5.555555555555555
+                          },
+                          "LocalHoroballShape.html#center": {
+                            "ref": "LocalHoroballShape.html#center",
+                            "tf": 5.555555555555555
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -21942,10 +18765,6 @@ window.lunrData = {
                     "Vector.html#toGLSL": {
                       "ref": "Vector.html#toGLSL",
                       "tf": 4.166666666666666
-                    },
-                    "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                      "tf": 5.555555555555555
                     }
                   }
                 }
@@ -21960,11 +18779,11 @@ window.lunrData = {
                 "docs": {
                   "Ball.html": {
                     "ref": "Ball.html",
-                    "tf": 1925
+                    "tf": 1825
                   },
                   "LocalBall.html": {
                     "ref": "LocalBall.html",
-                    "tf": 16.666666666666664
+                    "tf": 25
                   },
                   "BallShape.html": {
                     "ref": "BallShape.html",
@@ -21981,6 +18800,28 @@ window.lunrData = {
                   "LocalBallShape.html#isLocalBallShape": {
                     "ref": "LocalBallShape.html#isLocalBallShape",
                     "tf": 16.666666666666664
+                  },
+                  "HoroballShape.html#isHoroballShape": {
+                    "ref": "HoroballShape.html#isHoroballShape",
+                    "tf": 16.666666666666664
+                  },
+                  "LocalHoroballShape.html#isLocalHoroballShape": {
+                    "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                    "tf": 16.666666666666664
+                  }
+                },
+                "b": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "l": {
+                      "docs": {
+                        "Ball.html": {
+                          "ref": "Ball.html",
+                          "tf": 100
+                        }
+                      }
+                    }
                   }
                 },
                 "s": {
@@ -21993,7 +18834,7 @@ window.lunrData = {
                         "docs": {
                           "BallShape.html": {
                             "ref": "BallShape.html",
-                            "tf": 1900
+                            "tf": 1800
                           }
                         },
                         "e": {
@@ -22052,6 +18893,35 @@ window.lunrData = {
                                 }
                               }
                             }
+                          },
+                          "b": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "l": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "s": {
+                                    "docs": {},
+                                    "h": {
+                                      "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "p": {
+                                          "docs": {
+                                            "BallShape.html": {
+                                              "ref": "BallShape.html",
+                                              "tf": 100
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -22070,14 +18940,6 @@ window.lunrData = {
                       "ref": "Generic.html#.glslClass",
                       "tf": 4.166666666666666
                     },
-                    "Shape.html#isBasicShape": {
-                      "ref": "Shape.html#isBasicShape",
-                      "tf": 7.142857142857142
-                    },
-                    "Shape.html#isAdvancedShape": {
-                      "ref": "Shape.html#isAdvancedShape",
-                      "tf": 7.142857142857142
-                    },
                     "AdvancedShape.html#isBasicShape": {
                       "ref": "AdvancedShape.html#isBasicShape",
                       "tf": 7.142857142857142
@@ -22088,6 +18950,14 @@ window.lunrData = {
                     },
                     "BasicShape.html#isBasicShape": {
                       "ref": "BasicShape.html#isBasicShape",
+                      "tf": 7.142857142857142
+                    },
+                    "Shape.html#isBasicShape": {
+                      "ref": "Shape.html#isBasicShape",
+                      "tf": 7.142857142857142
+                    },
+                    "Shape.html#isAdvancedShape": {
+                      "ref": "Shape.html#isAdvancedShape",
                       "tf": 7.142857142857142
                     }
                   },
@@ -22178,33 +19048,6 @@ window.lunrData = {
                   "Subgroup.html": {
                     "ref": "Subgroup.html",
                     "tf": 0.3546099290780142
-                  }
-                },
-                "g": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "u": {
-                        "docs": {},
-                        "n": {
-                          "docs": {},
-                          "d": {
-                            "docs": {
-                              "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                                "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                                "tf": 5.555555555555555
-                              },
-                              "module-Thurston-Thurston.html#buildShaderFragment": {
-                                "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                                "tf": 2.083333333333333
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -22343,45 +19186,17 @@ window.lunrData = {
                         "ref": "Renderer.html#vertexShader",
                         "tf": 16.666666666666664
                       },
-                      "Renderer.html#fragmentShader": {
-                        "ref": "Renderer.html#fragmentShader",
+                      "Renderer.html#buildFragmentShader": {
+                        "ref": "Renderer.html#buildFragmentShader",
                         "tf": 16.666666666666664
                       },
                       "Renderer.html#build": {
                         "ref": "Renderer.html#build",
                         "tf": 8.333333333333332
                       },
-                      "PhongMaterial.html#toGLSL": {
-                        "ref": "PhongMaterial.html#toGLSL",
-                        "tf": 4.545454545454546
-                      },
                       "Subgroup.html#shader": {
                         "ref": "Subgroup.html#shader",
                         "tf": 750
-                      },
-                      "module-Thurston-Thurston.html#stereo": {
-                        "ref": "module-Thurston-Thurston.html#stereo",
-                        "tf": 4.545454545454546
-                      },
-                      "module-Thurston-Thurston.html#buildShaderVertex": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                        "tf": 10
-                      },
-                      "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                        "tf": 10
-                      },
-                      "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                        "tf": 10
-                      },
-                      "module-Thurston-Thurston.html#buildShaderFragment": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                        "tf": 2.083333333333333
-                      },
-                      "module-Thurston-Thurston.html#initHorizon": {
-                        "ref": "module-Thurston-Thurston.html#initHorizon",
-                        "tf": 5.555555555555555
                       }
                     },
                     "b": {
@@ -22793,22 +19608,6 @@ window.lunrData = {
                       "ref": "Generic.html#setId",
                       "tf": 8.333333333333332
                     },
-                    "Shape.html": {
-                      "ref": "Shape.html",
-                      "tf": 1857.6923076923076
-                    },
-                    "Shape.html#isShape": {
-                      "ref": "Shape.html#isShape",
-                      "tf": 16.666666666666664
-                    },
-                    "Shape.html#isBasicShape": {
-                      "ref": "Shape.html#isBasicShape",
-                      "tf": 21.428571428571427
-                    },
-                    "Shape.html#isAdvancedShape": {
-                      "ref": "Shape.html#isAdvancedShape",
-                      "tf": 21.428571428571427
-                    },
                     "Solid.html": {
                       "ref": "Solid.html",
                       "tf": 4.3478260869565215
@@ -22841,14 +19640,6 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#isLocal",
                       "tf": 7.142857142857142
                     },
-                    "SingleColorMaterial.html#isGlobal": {
-                      "ref": "SingleColorMaterial.html#isGlobal",
-                      "tf": 7.142857142857142
-                    },
-                    "SingleColorMaterial.html#isLocal": {
-                      "ref": "SingleColorMaterial.html#isLocal",
-                      "tf": 7.142857142857142
-                    },
                     "AdvancedShape.html": {
                       "ref": "AdvancedShape.html",
                       "tf": 11.11111111111111
@@ -22863,6 +19654,22 @@ window.lunrData = {
                     },
                     "BasicShape.html#isBasicShape": {
                       "ref": "BasicShape.html#isBasicShape",
+                      "tf": 21.428571428571427
+                    },
+                    "Shape.html": {
+                      "ref": "Shape.html",
+                      "tf": 1857.6923076923076
+                    },
+                    "Shape.html#isShape": {
+                      "ref": "Shape.html#isShape",
+                      "tf": 16.666666666666664
+                    },
+                    "Shape.html#isBasicShape": {
+                      "ref": "Shape.html#isBasicShape",
+                      "tf": 21.428571428571427
+                    },
+                    "Shape.html#isAdvancedShape": {
+                      "ref": "Shape.html#isAdvancedShape",
                       "tf": 21.428571428571427
                     },
                     "PointLight.html#isGlobal": {
@@ -22887,6 +19694,30 @@ window.lunrData = {
                     },
                     "LocalBallShape.html#isGlobal": {
                       "ref": "LocalBallShape.html#isGlobal",
+                      "tf": 7.142857142857142
+                    },
+                    "HoroballShape.html": {
+                      "ref": "HoroballShape.html",
+                      "tf": 16.666666666666664
+                    },
+                    "HoroballShape.html#isGlobal": {
+                      "ref": "HoroballShape.html#isGlobal",
+                      "tf": 7.142857142857142
+                    },
+                    "LocalHoroballShape.html": {
+                      "ref": "LocalHoroballShape.html",
+                      "tf": 12.5
+                    },
+                    "LocalHoroballShape.html#isGlobal": {
+                      "ref": "LocalHoroballShape.html#isGlobal",
+                      "tf": 7.142857142857142
+                    },
+                    "SingleColorMaterial.html#isGlobal": {
+                      "ref": "SingleColorMaterial.html#isGlobal",
+                      "tf": 7.142857142857142
+                    },
+                    "SingleColorMaterial.html#isLocal": {
+                      "ref": "SingleColorMaterial.html#isLocal",
                       "tf": 7.142857142857142
                     }
                   },
@@ -23079,6 +19910,10 @@ window.lunrData = {
                             "ref": "Camera.html#updateProjectionMatrix",
                             "tf": 7.142857142857142
                           },
+                          "Thurston.html#add": {
+                            "ref": "Thurston.html#add",
+                            "tf": 12.5
+                          },
                           "Renderer.html#domElement": {
                             "ref": "Renderer.html#domElement",
                             "tf": 5.555555555555555
@@ -23183,18 +20018,6 @@ window.lunrData = {
                         "ref": "Teleport.html#glslTest",
                         "tf": 50
                       },
-                      "Shape.html#glslSDF": {
-                        "ref": "Shape.html#glslSDF",
-                        "tf": 33.33333333333333
-                      },
-                      "Shape.html#glslGradient": {
-                        "ref": "Shape.html#glslGradient",
-                        "tf": 33.33333333333333
-                      },
-                      "Shape.html#glslInstance": {
-                        "ref": "Shape.html#glslInstance",
-                        "tf": 50
-                      },
                       "Solid.html#glslInstance": {
                         "ref": "Solid.html#glslInstance",
                         "tf": 50
@@ -23207,6 +20030,26 @@ window.lunrData = {
                         "ref": "NormalMaterial.html#glslInstance",
                         "tf": 50
                       },
+                      "Position.html#toGLSL": {
+                        "ref": "Position.html#toGLSL",
+                        "tf": 50
+                      },
+                      "Shape.html#glslSDF": {
+                        "ref": "Shape.html#glslSDF",
+                        "tf": 33.33333333333333
+                      },
+                      "Shape.html#glslGradient": {
+                        "ref": "Shape.html#glslGradient",
+                        "tf": 50
+                      },
+                      "Shape.html#glslInstance": {
+                        "ref": "Shape.html#glslInstance",
+                        "tf": 50
+                      },
+                      "PointLight.html#.glslClass": {
+                        "ref": "PointLight.html#.glslClass",
+                        "tf": 25
+                      },
                       "SingleColorMaterial.html#glslRender": {
                         "ref": "SingleColorMaterial.html#glslRender",
                         "tf": 33.33333333333333
@@ -23214,14 +20057,6 @@ window.lunrData = {
                       "SingleColorMaterial.html#glslInstance": {
                         "ref": "SingleColorMaterial.html#glslInstance",
                         "tf": 50
-                      },
-                      "Position.html#toGLSL": {
-                        "ref": "Position.html#toGLSL",
-                        "tf": 50
-                      },
-                      "PointLight.html#.glslClass": {
-                        "ref": "PointLight.html#.glslClass",
-                        "tf": 25
                       },
                       "Vector.html#toLog": {
                         "ref": "Vector.html#toLog",
@@ -23235,21 +20070,9 @@ window.lunrData = {
                         "ref": "RelPosition.html#toGLSL",
                         "tf": 50
                       },
-                      "PhongMaterial.html#toGLSL": {
-                        "ref": "PhongMaterial.html#toGLSL",
-                        "tf": 50
-                      },
                       "Subgroup.html": {
                         "ref": "Subgroup.html",
                         "tf": 0.3546099290780142
-                      },
-                      "module-Thurston-Thurston.html#buildShaderVertex": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderVertex",
-                        "tf": 33.33333333333333
-                      },
-                      "module-Thurston-Thurston.html#buildShaderFragment": {
-                        "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                        "tf": 33.33333333333333
                       }
                     }
                   }
@@ -23388,13 +20211,13 @@ window.lunrData = {
                         "ref": "Mono.html",
                         "tf": 4.166666666666666
                       },
+                      "Thurston.html#stereo": {
+                        "ref": "Thurston.html#stereo",
+                        "tf": 712.5
+                      },
                       "Renderer.html#stereo": {
                         "ref": "Renderer.html#stereo",
                         "tf": 775
-                      },
-                      "module-Thurston-Thurston.html#stereo": {
-                        "ref": "module-Thurston-Thurston.html#stereo",
-                        "tf": 754.5454545454545
                       }
                     },
                     "#": {
@@ -23537,12 +20360,12 @@ window.lunrData = {
               "docs": {},
               "t": {
                 "docs": {
-                  "module-Thurston-Thurston.html#stats": {
-                    "ref": "module-Thurston-Thurston.html#stats",
+                  "Thurston.html#stats": {
+                    "ref": "Thurston.html#stats",
                     "tf": 775
                   },
-                  "module-Thurston-Thurston.html#initStats": {
-                    "ref": "module-Thurston-Thurston.html#initStats",
+                  "Thurston.html#initStats": {
+                    "ref": "Thurston.html#initStats",
                     "tf": 16.666666666666664
                   }
                 },
@@ -23659,14 +20482,6 @@ window.lunrData = {
                         "ref": "ShaderBuilder.html#addInstance",
                         "tf": 3.571428571428571
                       }
-                    },
-                    "i": {
-                      "docs": {
-                        "module-Thurston-Thurston.html": {
-                          "ref": "module-Thurston-Thurston.html",
-                          "tf": 8.333333333333332
-                        }
-                      }
                     }
                   }
                 },
@@ -23707,6 +20522,14 @@ window.lunrData = {
                       "ref": "Position.html#flow",
                       "tf": 0.49504950495049505
                     },
+                    "HoroballShape.html#center": {
+                      "ref": "HoroballShape.html#center",
+                      "tf": 5.555555555555555
+                    },
+                    "LocalHoroballShape.html#center": {
+                      "ref": "LocalHoroballShape.html#center",
+                      "tf": 5.555555555555555
+                    },
                     "FlyControls.html#update": {
                       "ref": "FlyControls.html#update",
                       "tf": 0.4629629629629629
@@ -23727,13 +20550,36 @@ window.lunrData = {
                         "ref": "Stereo.html",
                         "tf": 2.7777777777777777
                       },
+                      "HoroballShape.html#center": {
+                        "ref": "HoroballShape.html#center",
+                        "tf": 5.555555555555555
+                      },
+                      "LocalHoroballShape.html#center": {
+                        "ref": "LocalHoroballShape.html#center",
+                        "tf": 5.555555555555555
+                      },
                       "Renderer.html#_horizon": {
                         "ref": "Renderer.html#_horizon",
                         "tf": 8.333333333333332
-                      },
-                      "module-Thurston-Thurston.html#chaseCamera": {
-                        "ref": "module-Thurston-Thurston.html#chaseCamera",
-                        "tf": 2
+                      }
+                    }
+                  },
+                  "i": {
+                    "docs": {},
+                    "c": {
+                      "docs": {
+                        "BallShape.html": {
+                          "ref": "BallShape.html",
+                          "tf": 16.666666666666664
+                        },
+                        "LocalBallShape.html": {
+                          "ref": "LocalBallShape.html",
+                          "tf": 12.5
+                        },
+                        "PointLight.html": {
+                          "ref": "PointLight.html",
+                          "tf": 16.666666666666664
+                        }
                       }
                     }
                   }
@@ -23827,6 +20673,22 @@ window.lunrData = {
                       "ref": "Scene.html#shader",
                       "tf": 12.5
                     },
+                    "PhongMaterial.html": {
+                      "ref": "PhongMaterial.html",
+                      "tf": 16.666666666666664
+                    },
+                    "Thurston.html": {
+                      "ref": "Thurston.html",
+                      "tf": 6.25
+                    },
+                    "Thurston.html#scene": {
+                      "ref": "Thurston.html#scene",
+                      "tf": 766.6666666666666
+                    },
+                    "Thurston.html#add": {
+                      "ref": "Thurston.html#add",
+                      "tf": 12.5
+                    },
                     "VRControlsDrag.html": {
                       "ref": "VRControlsDrag.html",
                       "tf": 2.272727272727273
@@ -23854,50 +20716,6 @@ window.lunrData = {
                     "Renderer.html#render": {
                       "ref": "Renderer.html#render",
                       "tf": 6.25
-                    },
-                    "PhongMaterial.html": {
-                      "ref": "PhongMaterial.html",
-                      "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html": {
-                      "ref": "module-Thurston-Thurston.html",
-                      "tf": 8.333333333333332
-                    },
-                    "module-Thurston-Thurston.html#_scene": {
-                      "ref": "module-Thurston-Thurston.html#_scene",
-                      "tf": 49.99999999999999
-                    },
-                    "module-Thurston-Thurston.html#_solids": {
-                      "ref": "module-Thurston-Thurston.html#_solids",
-                      "tf": 10
-                    },
-                    "module-Thurston-Thurston.html#_lights": {
-                      "ref": "module-Thurston-Thurston.html#_lights",
-                      "tf": 10
-                    },
-                    "module-Thurston-Thurston.html#chaseCamera": {
-                      "ref": "module-Thurston-Thurston.html#chaseCamera",
-                      "tf": 2
-                    },
-                    "module-Thurston-Thurston.html#addItem": {
-                      "ref": "module-Thurston-Thurston.html#addItem",
-                      "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html#addItems": {
-                      "ref": "module-Thurston-Thurston.html#addItems",
-                      "tf": 12.5
-                    },
-                    "module-Thurston-Thurston.html#initThreeJS": {
-                      "ref": "module-Thurston-Thurston.html#initThreeJS",
-                      "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html#buildShaderDataItems": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                      "tf": 5
-                    },
-                    "module-Thurston.html": {
-                      "ref": "module-Thurston.html",
-                      "tf": 5.555555555555555
                     }
                   },
                   "#": {
@@ -24109,6 +20927,10 @@ window.lunrData = {
                   "ref": "Position.html#copy",
                   "tf": 10
                 },
+                "Thurston.html#setParams": {
+                  "ref": "Thurston.html#setParams",
+                  "tf": 10
+                },
                 "RelPosition.html#applyQuaternion": {
                   "ref": "RelPosition.html#applyQuaternion",
                   "tf": 6.25
@@ -24136,18 +20958,6 @@ window.lunrData = {
                 "Subgroup.html": {
                   "ref": "Subgroup.html",
                   "tf": 0.3546099290780142
-                },
-                "module-Thurston-Thurston.html#setParams": {
-                  "ref": "module-Thurston-Thurston.html#setParams",
-                  "tf": 16.666666666666664
-                },
-                "module-Thurston-Thurston.html#setParam": {
-                  "ref": "module-Thurston-Thurston.html#setParam",
-                  "tf": 16.666666666666664
-                },
-                "module-Thurston-Thurston.html#setKeyboard": {
-                  "ref": "module-Thurston-Thurston.html#setKeyboard",
-                  "tf": 12.5
                 }
               },
               "i": {
@@ -24222,6 +21032,23 @@ window.lunrData = {
               },
               "p": {
                 "docs": {},
+                "a": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "m": {
+                        "docs": {
+                          "Thurston.html#setParams": {
+                            "ref": "Thurston.html#setParams",
+                            "tf": 700
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
                 "i": {
                   "docs": {},
                   "x": {
@@ -24248,27 +21075,6 @@ window.lunrData = {
                                 }
                               }
                             }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "a": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "m": {
-                        "docs": {
-                          "module-Thurston-Thurston.html#setParams": {
-                            "ref": "module-Thurston-Thurston.html#setParams",
-                            "tf": 683.3333333333334
-                          },
-                          "module-Thurston-Thurston.html#setParam": {
-                            "ref": "module-Thurston-Thurston.html#setParam",
-                            "tf": 675
                           }
                         }
                       }
@@ -24368,50 +21174,6 @@ window.lunrData = {
                     }
                   }
                 }
-              },
-              "k": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "y": {
-                    "docs": {},
-                    "b": {
-                      "docs": {},
-                      "o": {
-                        "docs": {},
-                        "a": {
-                          "docs": {},
-                          "r": {
-                            "docs": {},
-                            "d": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#setKeyboard": {
-                                  "ref": "module-Thurston-Thurston.html#setKeyboard",
-                                  "tf": 700
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "u": {
-                "docs": {},
-                "p": {
-                  "docs": {
-                    "module-Thurston-Thurston.html#initThreeJS": {
-                      "ref": "module-Thurston-Thurston.html#initThreeJS",
-                      "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html#buildShaderDataItems": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                      "tf": 5
-                    }
-                  }
-                }
               }
             },
             "e": {
@@ -24450,10 +21212,6 @@ window.lunrData = {
                   "Subgroup.html": {
                     "ref": "Subgroup.html",
                     "tf": 0.3546099290780142
-                  },
-                  "module-Thurston-Thurston.html#initHorizon": {
-                    "ref": "module-Thurston-Thurston.html#initHorizon",
-                    "tf": 5.555555555555555
                   }
                 }
               },
@@ -24602,14 +21360,6 @@ window.lunrData = {
                     "Scene.html#_solids": {
                       "ref": "Scene.html#_solids",
                       "tf": 16.666666666666664
-                    },
-                    "module-Thurston-Thurston.html#_solids": {
-                      "ref": "module-Thurston-Thurston.html#_solids",
-                      "tf": 10
-                    },
-                    "module-Thurston-Thurston.html#buildShaderDataItems": {
-                      "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                      "tf": 5
                     }
                   },
                   "#": {
@@ -24745,10 +21495,6 @@ window.lunrData = {
                           "Generic.html#imports": {
                             "ref": "Generic.html#imports",
                             "tf": 4.545454545454546
-                          },
-                          "module-Thurston-Thurston.html#chaseCamera": {
-                            "ref": "module-Thurston-Thurston.html#chaseCamera",
-                            "tf": 2
                           }
                         }
                       }
@@ -24803,10 +21549,6 @@ window.lunrData = {
                   "RelPosition.html#toGLSL": {
                     "ref": "RelPosition.html#toGLSL",
                     "tf": 4.545454545454546
-                  },
-                  "PhongMaterial.html#toGLSL": {
-                    "ref": "PhongMaterial.html#toGLSL",
-                    "tf": 4.545454545454546
                   }
                 }
               }
@@ -24852,13 +21594,21 @@ window.lunrData = {
                   "ref": "Generic.html#glslInstance",
                   "tf": 4.166666666666666
                 },
+                "Solid.html#glslInstance": {
+                  "ref": "Solid.html#glslInstance",
+                  "tf": 4.545454545454546
+                },
                 "Shape.html#glslInstance": {
                   "ref": "Shape.html#glslInstance",
                   "tf": 5.555555555555555
                 },
-                "Solid.html#glslInstance": {
-                  "ref": "Solid.html#glslInstance",
-                  "tf": 4.545454545454546
+                "HoroballShape.html#offset": {
+                  "ref": "HoroballShape.html#offset",
+                  "tf": 4.166666666666666
+                },
+                "LocalHoroballShape.html#offset": {
+                  "ref": "LocalHoroballShape.html#offset",
+                  "tf": 4.166666666666666
                 }
               }
             }
@@ -24880,6 +21630,10 @@ window.lunrData = {
                           "Teleport.html": {
                             "ref": "Teleport.html",
                             "tf": 3.8461538461538463
+                          },
+                          "Thurston.html#subgroup": {
+                            "ref": "Thurston.html#subgroup",
+                            "tf": 775
                           },
                           "RelPosition.html": {
                             "ref": "RelPosition.html",
@@ -24908,18 +21662,6 @@ window.lunrData = {
                           "FlyControls.html#update": {
                             "ref": "FlyControls.html#update",
                             "tf": 0.4629629629629629
-                          },
-                          "module-Thurston-Thurston.html#subgroup": {
-                            "ref": "module-Thurston-Thurston.html#subgroup",
-                            "tf": 760
-                          },
-                          "module-Thurston-Thurston.html#buildShaderDataBackground": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderDataBackground",
-                            "tf": 5.555555555555555
-                          },
-                          "module-Thurston-Thurston.html#buildShaderFragment": {
-                            "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                            "tf": 4.166666666666666
                           }
                         },
                         "#": {
@@ -24995,13 +21737,13 @@ window.lunrData = {
               "docs": {},
               "n": {
                 "docs": {
-                  "Shape.html#glslSDF": {
-                    "ref": "Shape.html#glslSDF",
-                    "tf": 6.25
-                  },
                   "AdvancedShape.html": {
                     "ref": "AdvancedShape.html",
                     "tf": 1.8518518518518516
+                  },
+                  "Shape.html#glslSDF": {
+                    "ref": "Shape.html#glslSDF",
+                    "tf": 6.25
                   }
                 },
                 "a": {
@@ -25239,17 +21981,6 @@ window.lunrData = {
                     }
                   }
                 }
-              },
-              "u": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "module-Thurston-Thurston.html#animate": {
-                      "ref": "module-Thurston-Thurston.html#animate",
-                      "tf": 25
-                    }
-                  }
-                }
               }
             },
             "z": {
@@ -25395,6 +22126,23 @@ window.lunrData = {
                 }
               }
             },
+            "n": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "w": {
+                    "docs": {
+                      "Thurston.html#onWindowResize": {
+                        "ref": "Thurston.html#onWindowResize",
+                        "tf": 16.666666666666664
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "d": {
               "docs": {},
               "t": {
@@ -25404,23 +22152,6 @@ window.lunrData = {
                     "Renderer.html#setSize": {
                       "ref": "Renderer.html#setSize",
                       "tf": 25
-                    }
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "o": {
-                  "docs": {},
-                  "w": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#onWindowResize": {
-                        "ref": "module-Thurston-Thurston.html#onWindowResize",
-                        "tf": 16.666666666666664
-                      }
                     }
                   }
                 }
@@ -25455,14 +22186,6 @@ window.lunrData = {
                           "ref": "Generic.html#isLocal",
                           "tf": 7.142857142857142
                         },
-                        "Shape.html#isBasicShape": {
-                          "ref": "Shape.html#isBasicShape",
-                          "tf": 7.142857142857142
-                        },
-                        "Shape.html#isAdvancedShape": {
-                          "ref": "Shape.html#isAdvancedShape",
-                          "tf": 7.142857142857142
-                        },
                         "NormalMaterial.html#isGlobal": {
                           "ref": "NormalMaterial.html#isGlobal",
                           "tf": 7.142857142857142
@@ -25471,20 +22194,20 @@ window.lunrData = {
                           "ref": "NormalMaterial.html#isLocal",
                           "tf": 7.142857142857142
                         },
-                        "SingleColorMaterial.html#isGlobal": {
-                          "ref": "SingleColorMaterial.html#isGlobal",
-                          "tf": 7.142857142857142
-                        },
-                        "SingleColorMaterial.html#isLocal": {
-                          "ref": "SingleColorMaterial.html#isLocal",
-                          "tf": 7.142857142857142
-                        },
                         "AdvancedShape.html#isBasicShape": {
                           "ref": "AdvancedShape.html#isBasicShape",
                           "tf": 7.142857142857142
                         },
                         "BasicShape.html#isBasicShape": {
                           "ref": "BasicShape.html#isBasicShape",
+                          "tf": 7.142857142857142
+                        },
+                        "Shape.html#isBasicShape": {
+                          "ref": "Shape.html#isBasicShape",
+                          "tf": 7.142857142857142
+                        },
+                        "Shape.html#isAdvancedShape": {
+                          "ref": "Shape.html#isAdvancedShape",
                           "tf": 7.142857142857142
                         },
                         "PointLight.html#isGlobal": {
@@ -25501,6 +22224,22 @@ window.lunrData = {
                         },
                         "LocalBallShape.html#isGlobal": {
                           "ref": "LocalBallShape.html#isGlobal",
+                          "tf": 7.142857142857142
+                        },
+                        "HoroballShape.html#isGlobal": {
+                          "ref": "HoroballShape.html#isGlobal",
+                          "tf": 7.142857142857142
+                        },
+                        "LocalHoroballShape.html#isGlobal": {
+                          "ref": "LocalHoroballShape.html#isGlobal",
+                          "tf": 7.142857142857142
+                        },
+                        "SingleColorMaterial.html#isGlobal": {
+                          "ref": "SingleColorMaterial.html#isGlobal",
+                          "tf": 7.142857142857142
+                        },
+                        "SingleColorMaterial.html#isLocal": {
+                          "ref": "SingleColorMaterial.html#isLocal",
                           "tf": 7.142857142857142
                         }
                       }
@@ -25562,10 +22301,6 @@ window.lunrData = {
                                 "Renderer.html#_threeRenderer": {
                                   "ref": "Renderer.html#_threeRenderer",
                                   "tf": 33.33333333333333
-                                },
-                                "module-Thurston-Thurston.html#_renderer": {
-                                  "ref": "module-Thurston-Thurston.html#_renderer",
-                                  "tf": 33.33333333333333
                                 }
                               }
                             }
@@ -25614,17 +22349,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "a": {
-              "docs": {},
-              "p": {
-                "docs": {
-                  "module-Thurston-Thurston.html#run": {
-                    "ref": "module-Thurston-Thurston.html#run",
-                    "tf": 5
-                  }
-                }
-              }
             }
           },
           "o": {
@@ -25663,6 +22387,1312 @@ window.lunrData = {
                     "ref": "FlyControls.html#update",
                     "tf": 0.4629629629629629
                   }
+                }
+              }
+            }
+          }
+        },
+        "m": {
+          "0": {
+            "docs": {
+              "Position.html#multiply": {
+                "ref": "Position.html#multiply",
+                "tf": 3.571428571428571
+              },
+              "Position.html#premultiply": {
+                "ref": "Position.html#premultiply",
+                "tf": 3.571428571428571
+              }
+            }
+          },
+          "docs": {
+            "Position.html#applyQuaternion": {
+              "ref": "Position.html#applyQuaternion",
+              "tf": 6.25
+            },
+            "Position.html#multiply": {
+              "ref": "Position.html#multiply",
+              "tf": 3.571428571428571
+            },
+            "Position.html#premultiply": {
+              "ref": "Position.html#premultiply",
+              "tf": 3.571428571428571
+            },
+            "Position.html#flow": {
+              "ref": "Position.html#flow",
+              "tf": 3.4653465346534658
+            },
+            "Vector.html#applyMatrix4": {
+              "ref": "Vector.html#applyMatrix4",
+              "tf": 35.18518518518518
+            },
+            "RelPosition.html#applyQuaternion": {
+              "ref": "RelPosition.html#applyQuaternion",
+              "tf": 6.25
+            },
+            "FlyControls.html#update": {
+              "ref": "FlyControls.html#update",
+              "tf": 1.8518518518518516
+            }
+          },
+          "e": {
+            "docs": {},
+            "m": {
+              "docs": {},
+              "b": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "ShaderBuilder.html#code": {
+                        "ref": "ShaderBuilder.html#code",
+                        "tf": 110
+                      },
+                      "ShaderBuilder.html#includedImports": {
+                        "ref": "ShaderBuilder.html#includedImports",
+                        "tf": 110
+                      },
+                      "ShaderBuilder.html#includedClasses": {
+                        "ref": "ShaderBuilder.html#includedClasses",
+                        "tf": 110
+                      },
+                      "ShaderBuilder.html#includedUniforms": {
+                        "ref": "ShaderBuilder.html#includedUniforms",
+                        "tf": 110
+                      },
+                      "ShaderBuilder.html#includedInstances": {
+                        "ref": "ShaderBuilder.html#includedInstances",
+                        "tf": 110
+                      },
+                      "ShaderBuilder.html#uniforms": {
+                        "ref": "ShaderBuilder.html#uniforms",
+                        "tf": 110
+                      },
+                      "Stereo.html#on": {
+                        "ref": "Stereo.html#on",
+                        "tf": 110
+                      },
+                      "Stereo.html#off": {
+                        "ref": "Stereo.html#off",
+                        "tf": 110
+                      },
+                      "Stereo.html#ipDist": {
+                        "ref": "Stereo.html#ipDist",
+                        "tf": 110
+                      },
+                      "Light.html#isLight": {
+                        "ref": "Light.html#isLight",
+                        "tf": 110
+                      },
+                      "Material.html#isMaterial": {
+                        "ref": "Material.html#isMaterial",
+                        "tf": 110
+                      },
+                      "Material.html#isGlobal": {
+                        "ref": "Material.html#isGlobal",
+                        "tf": 110
+                      },
+                      "Material.html#isLocal": {
+                        "ref": "Material.html#isLocal",
+                        "tf": 110
+                      },
+                      "Generic.html#uuid": {
+                        "ref": "Generic.html#uuid",
+                        "tf": 110
+                      },
+                      "Generic.html#id": {
+                        "ref": "Generic.html#id",
+                        "tf": 110
+                      },
+                      "Generic.html#imports": {
+                        "ref": "Generic.html#imports",
+                        "tf": 110
+                      },
+                      "Generic.html#className": {
+                        "ref": "Generic.html#className",
+                        "tf": 110
+                      },
+                      "Generic.html#name": {
+                        "ref": "Generic.html#name",
+                        "tf": 110
+                      },
+                      "Generic.html#isGlobal": {
+                        "ref": "Generic.html#isGlobal",
+                        "tf": 110
+                      },
+                      "Generic.html#isLocal": {
+                        "ref": "Generic.html#isLocal",
+                        "tf": 110
+                      },
+                      "Generic.html#uniformType": {
+                        "ref": "Generic.html#uniformType",
+                        "tf": 110
+                      },
+                      "Teleport.html#jsTest": {
+                        "ref": "Teleport.html#jsTest",
+                        "tf": 110
+                      },
+                      "Teleport.html#glslTest": {
+                        "ref": "Teleport.html#glslTest",
+                        "tf": 110
+                      },
+                      "Teleport.html#isom": {
+                        "ref": "Teleport.html#isom",
+                        "tf": 110
+                      },
+                      "Teleport.html#inv": {
+                        "ref": "Teleport.html#inv",
+                        "tf": 110
+                      },
+                      "Teleport.html#name": {
+                        "ref": "Teleport.html#name",
+                        "tf": 110
+                      },
+                      "Solid.html#shape": {
+                        "ref": "Solid.html#shape",
+                        "tf": 110
+                      },
+                      "Solid.html#material": {
+                        "ref": "Solid.html#material",
+                        "tf": 110
+                      },
+                      "Solid.html#isSolid": {
+                        "ref": "Solid.html#isSolid",
+                        "tf": 110
+                      },
+                      "Camera.html#_threeCamera": {
+                        "ref": "Camera.html#_threeCamera",
+                        "tf": 110
+                      },
+                      "Camera.html#minDist": {
+                        "ref": "Camera.html#minDist",
+                        "tf": 110
+                      },
+                      "Camera.html#maxDist": {
+                        "ref": "Camera.html#maxDist",
+                        "tf": 110
+                      },
+                      "Camera.html#maxSteps": {
+                        "ref": "Camera.html#maxSteps",
+                        "tf": 110
+                      },
+                      "Camera.html#threshold": {
+                        "ref": "Camera.html#threshold",
+                        "tf": 110
+                      },
+                      "Camera.html#position": {
+                        "ref": "Camera.html#position",
+                        "tf": 110
+                      },
+                      "Camera.html#aspect": {
+                        "ref": "Camera.html#aspect",
+                        "tf": 110
+                      },
+                      "Camera.html#fov": {
+                        "ref": "Camera.html#fov",
+                        "tf": 110
+                      },
+                      "Camera.html#matrix": {
+                        "ref": "Camera.html#matrix",
+                        "tf": 110
+                      },
+                      "NormalMaterial.html#isMaterial": {
+                        "ref": "NormalMaterial.html#isMaterial",
+                        "tf": 110
+                      },
+                      "NormalMaterial.html#isGlobal": {
+                        "ref": "NormalMaterial.html#isGlobal",
+                        "tf": 110
+                      },
+                      "NormalMaterial.html#isLocal": {
+                        "ref": "NormalMaterial.html#isLocal",
+                        "tf": 110
+                      },
+                      "Position.html#boost": {
+                        "ref": "Position.html#boost",
+                        "tf": 110
+                      },
+                      "Position.html#quaternion": {
+                        "ref": "Position.html#quaternion",
+                        "tf": 110
+                      },
+                      "Position.html#facing": {
+                        "ref": "Position.html#facing",
+                        "tf": 110
+                      },
+                      "Position.html#point": {
+                        "ref": "Position.html#point",
+                        "tf": 110
+                      },
+                      "Scene.html#_lights": {
+                        "ref": "Scene.html#_lights",
+                        "tf": 110
+                      },
+                      "Scene.html#_solids": {
+                        "ref": "Scene.html#_solids",
+                        "tf": 110
+                      },
+                      "Scene.html#_nextId": {
+                        "ref": "Scene.html#_nextId",
+                        "tf": 110
+                      },
+                      "AdvancedShape.html#isBasicShape": {
+                        "ref": "AdvancedShape.html#isBasicShape",
+                        "tf": 110
+                      },
+                      "BasicShape.html#isBasicShape": {
+                        "ref": "BasicShape.html#isBasicShape",
+                        "tf": 110
+                      },
+                      "Shape.html#isShape": {
+                        "ref": "Shape.html#isShape",
+                        "tf": 110
+                      },
+                      "Shape.html#isBasicShape": {
+                        "ref": "Shape.html#isBasicShape",
+                        "tf": 110
+                      },
+                      "Shape.html#isAdvancedShape": {
+                        "ref": "Shape.html#isAdvancedShape",
+                        "tf": 110
+                      },
+                      "PointLight.html#position": {
+                        "ref": "PointLight.html#position",
+                        "tf": 110
+                      },
+                      "PointLight.html#color": {
+                        "ref": "PointLight.html#color",
+                        "tf": 110
+                      },
+                      "PointLight.html#isGlobal": {
+                        "ref": "PointLight.html#isGlobal",
+                        "tf": 110
+                      },
+                      "PointLight.html#isLocal": {
+                        "ref": "PointLight.html#isLocal",
+                        "tf": 110
+                      },
+                      "BallShape.html#isBallShape": {
+                        "ref": "BallShape.html#isBallShape",
+                        "tf": 110
+                      },
+                      "BallShape.html#isGlobal": {
+                        "ref": "BallShape.html#isGlobal",
+                        "tf": 110
+                      },
+                      "LocalBallShape.html#isLocalBallShape": {
+                        "ref": "LocalBallShape.html#isLocalBallShape",
+                        "tf": 110
+                      },
+                      "LocalBallShape.html#isGlobal": {
+                        "ref": "LocalBallShape.html#isGlobal",
+                        "tf": 110
+                      },
+                      "HoroballShape.html#center": {
+                        "ref": "HoroballShape.html#center",
+                        "tf": 110
+                      },
+                      "HoroballShape.html#offset": {
+                        "ref": "HoroballShape.html#offset",
+                        "tf": 110
+                      },
+                      "HoroballShape.html#isHoroballShape": {
+                        "ref": "HoroballShape.html#isHoroballShape",
+                        "tf": 110
+                      },
+                      "HoroballShape.html#isGlobal": {
+                        "ref": "HoroballShape.html#isGlobal",
+                        "tf": 110
+                      },
+                      "LocalHoroballShape.html#center": {
+                        "ref": "LocalHoroballShape.html#center",
+                        "tf": 110
+                      },
+                      "LocalHoroballShape.html#offset": {
+                        "ref": "LocalHoroballShape.html#offset",
+                        "tf": 110
+                      },
+                      "LocalHoroballShape.html#isLocalHoroballShape": {
+                        "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                        "tf": 110
+                      },
+                      "LocalHoroballShape.html#isGlobal": {
+                        "ref": "LocalHoroballShape.html#isGlobal",
+                        "tf": 110
+                      },
+                      "PhongMaterial.html#color": {
+                        "ref": "PhongMaterial.html#color",
+                        "tf": 110
+                      },
+                      "PhongMaterial.html#ambient": {
+                        "ref": "PhongMaterial.html#ambient",
+                        "tf": 110
+                      },
+                      "PhongMaterial.html#diffuse": {
+                        "ref": "PhongMaterial.html#diffuse",
+                        "tf": 110
+                      },
+                      "PhongMaterial.html#specular": {
+                        "ref": "PhongMaterial.html#specular",
+                        "tf": 110
+                      },
+                      "PhongMaterial.html#shininess": {
+                        "ref": "PhongMaterial.html#shininess",
+                        "tf": 110
+                      },
+                      "PhongMaterial.html#lights": {
+                        "ref": "PhongMaterial.html#lights",
+                        "tf": 110
+                      },
+                      "SingleColorMaterial.html#isMaterial": {
+                        "ref": "SingleColorMaterial.html#isMaterial",
+                        "tf": 110
+                      },
+                      "SingleColorMaterial.html#isGlobal": {
+                        "ref": "SingleColorMaterial.html#isGlobal",
+                        "tf": 110
+                      },
+                      "SingleColorMaterial.html#isLocal": {
+                        "ref": "SingleColorMaterial.html#isLocal",
+                        "tf": 110
+                      },
+                      "Thurston.html#geom": {
+                        "ref": "Thurston.html#geom",
+                        "tf": 110
+                      },
+                      "Thurston.html#subgroup": {
+                        "ref": "Thurston.html#subgroup",
+                        "tf": 110
+                      },
+                      "Thurston.html#params": {
+                        "ref": "Thurston.html#params",
+                        "tf": 110
+                      },
+                      "Thurston.html#camera": {
+                        "ref": "Thurston.html#camera",
+                        "tf": 110
+                      },
+                      "Thurston.html#scene": {
+                        "ref": "Thurston.html#scene",
+                        "tf": 110
+                      },
+                      "Thurston.html#stereo": {
+                        "ref": "Thurston.html#stereo",
+                        "tf": 110
+                      },
+                      "Thurston.html#renderer": {
+                        "ref": "Thurston.html#renderer",
+                        "tf": 110
+                      },
+                      "Thurston.html#gui": {
+                        "ref": "Thurston.html#gui",
+                        "tf": 110
+                      },
+                      "Thurston.html#stats": {
+                        "ref": "Thurston.html#stats",
+                        "tf": 110
+                      },
+                      "Thurston.html#flyControls": {
+                        "ref": "Thurston.html#flyControls",
+                        "tf": 110
+                      },
+                      "Thurston.html#clock": {
+                        "ref": "Thurston.html#clock",
+                        "tf": 110
+                      },
+                      "RelPosition.html#local": {
+                        "ref": "RelPosition.html#local",
+                        "tf": 110
+                      },
+                      "RelPosition.html#cellBoost": {
+                        "ref": "RelPosition.html#cellBoost",
+                        "tf": 110
+                      },
+                      "RelPosition.html#invCellBoost": {
+                        "ref": "RelPosition.html#invCellBoost",
+                        "tf": 110
+                      },
+                      "RelPosition.html#sbgp": {
+                        "ref": "RelPosition.html#sbgp",
+                        "tf": 110
+                      },
+                      "RelPosition.html#localPoint": {
+                        "ref": "RelPosition.html#localPoint",
+                        "tf": 110
+                      },
+                      "RelPosition.html#point": {
+                        "ref": "RelPosition.html#point",
+                        "tf": 110
+                      },
+                      "VRControlsDrag.html#update": {
+                        "ref": "VRControlsDrag.html#update",
+                        "tf": 110
+                      },
+                      "Renderer.html#geom": {
+                        "ref": "Renderer.html#geom",
+                        "tf": 110
+                      },
+                      "Renderer.html#subgroup": {
+                        "ref": "Renderer.html#subgroup",
+                        "tf": 110
+                      },
+                      "Renderer.html#camera": {
+                        "ref": "Renderer.html#camera",
+                        "tf": 110
+                      },
+                      "Renderer.html#scene": {
+                        "ref": "Renderer.html#scene",
+                        "tf": 110
+                      },
+                      "Renderer.html#stereo": {
+                        "ref": "Renderer.html#stereo",
+                        "tf": 110
+                      },
+                      "Renderer.html#_threeRenderer": {
+                        "ref": "Renderer.html#_threeRenderer",
+                        "tf": 110
+                      },
+                      "Renderer.html#_threeScene": {
+                        "ref": "Renderer.html#_threeScene",
+                        "tf": 110
+                      },
+                      "Renderer.html#_horizon": {
+                        "ref": "Renderer.html#_horizon",
+                        "tf": 110
+                      },
+                      "Renderer.html#_fragmentBuilder": {
+                        "ref": "Renderer.html#_fragmentBuilder",
+                        "tf": 110
+                      },
+                      "Renderer.html#domElement": {
+                        "ref": "Renderer.html#domElement",
+                        "tf": 110
+                      },
+                      "Subgroup.html#teleports": {
+                        "ref": "Subgroup.html#teleports",
+                        "tf": 110
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "h": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "Stereo.html#eyes": {
+                        "ref": "Stereo.html#eyes",
+                        "tf": 3.8461538461538463
+                      },
+                      "Vector.html#toLog": {
+                        "ref": "Vector.html#toLog",
+                        "tf": 4.545454545454546
+                      },
+                      "Vector.html#applyFacing": {
+                        "ref": "Vector.html#applyFacing",
+                        "tf": 2.631578947368421
+                      },
+                      "Vector.html#toGLSL": {
+                        "ref": "Vector.html#toGLSL",
+                        "tf": 4.166666666666666
+                      },
+                      "RelPosition.html#flow": {
+                        "ref": "RelPosition.html#flow",
+                        "tf": 2.380952380952381
+                      },
+                      "Renderer.html#render": {
+                        "ref": "Renderer.html#render",
+                        "tf": 6.25
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "a": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "Thurston.html#clock": {
+                        "ref": "Thurston.html#clock",
+                        "tf": 7.142857142857142
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "s": {
+              "docs": {},
+              "h": {
+                "docs": {
+                  "Renderer.html#_horizon": {
+                    "ref": "Renderer.html#_horizon",
+                    "tf": 33.33333333333333
+                  }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "l": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "p": {
+                    "docs": {},
+                    "l": {
+                      "docs": {},
+                      "i": {
+                        "docs": {
+                          "Isometry.html#multiply": {
+                            "ref": "Isometry.html#multiply",
+                            "tf": 681.25
+                          },
+                          "Isometry.html#premultiply": {
+                            "ref": "Isometry.html#premultiply",
+                            "tf": 6.25
+                          },
+                          "Position.html#multiply": {
+                            "ref": "Position.html#multiply",
+                            "tf": 686.9047619047619
+                          },
+                          "Position.html#premultiply": {
+                            "ref": "Position.html#premultiply",
+                            "tf": 3.571428571428571
+                          },
+                          "Position.html#flow": {
+                            "ref": "Position.html#flow",
+                            "tf": 0.49504950495049505
+                          },
+                          "Vector.html#applyMatrix4": {
+                            "ref": "Vector.html#applyMatrix4",
+                            "tf": 1.8518518518518516
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {},
+            "k": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "Material.html#isGlobal": {
+                    "ref": "Material.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "NormalMaterial.html#isGlobal": {
+                    "ref": "NormalMaterial.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "Position.html#reduceErrorQuaternion": {
+                    "ref": "Position.html#reduceErrorQuaternion",
+                    "tf": 12.5
+                  },
+                  "SingleColorMaterial.html#isGlobal": {
+                    "ref": "SingleColorMaterial.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "RelPosition.html#flow": {
+                    "ref": "RelPosition.html#flow",
+                    "tf": 2.380952380952381
+                  },
+                  "Renderer.html": {
+                    "ref": "Renderer.html",
+                    "tf": 3.3333333333333335
+                  }
+                },
+                "t": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "n": {
+                        "docs": {},
+                        "s": {
+                          "docs": {},
+                          "l": {
+                            "docs": {
+                              "Isometry.html#makeTranslation": {
+                                "ref": "Isometry.html#makeTranslation",
+                                "tf": 675
+                              }
+                            },
+                            "a": {
+                              "docs": {},
+                              "t": {
+                                "docs": {},
+                                "i": {
+                                  "docs": {},
+                                  "o": {
+                                    "docs": {},
+                                    "n": {
+                                      "docs": {},
+                                      "f": {
+                                        "docs": {},
+                                        "r": {
+                                          "docs": {},
+                                          "o": {
+                                            "docs": {},
+                                            "m": {
+                                              "docs": {},
+                                              "d": {
+                                                "docs": {},
+                                                "i": {
+                                                  "docs": {},
+                                                  "r": {
+                                                    "docs": {
+                                                      "Isometry.html#makeTranslationFromDir": {
+                                                        "ref": "Isometry.html#makeTranslationFromDir",
+                                                        "tf": 675
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "i": {
+                  "docs": {},
+                  "n": {
+                    "docs": {},
+                    "v": {
+                      "docs": {},
+                      "t": {
+                        "docs": {},
+                        "r": {
+                          "docs": {},
+                          "a": {
+                            "docs": {},
+                            "n": {
+                              "docs": {},
+                              "s": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {
+                                    "Isometry.html#makeInvTranslation": {
+                                      "ref": "Isometry.html#makeInvTranslation",
+                                      "tf": 675
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "p": {
+              "docs": {
+                "Isometry.html#makeTranslationFromDir": {
+                  "ref": "Isometry.html#makeTranslationFromDir",
+                  "tf": 5.555555555555555
+                },
+                "NormalMaterial.html": {
+                  "ref": "NormalMaterial.html",
+                  "tf": 8.333333333333332
+                }
+              }
+            },
+            "i": {
+              "docs": {},
+              "n": {
+                "docs": {
+                  "Thurston.html": {
+                    "ref": "Thurston.html",
+                    "tf": 6.25
+                  }
+                },
+                "l": {
+                  "docs": {},
+                  "i": {
+                    "docs": {
+                      "Isometry.html#equals": {
+                        "ref": "Isometry.html#equals",
+                        "tf": 6.25
+                      },
+                      "Point.html#equals": {
+                        "ref": "Point.html#equals",
+                        "tf": 6.25
+                      },
+                      "RelPosition.html#equals": {
+                        "ref": "RelPosition.html#equals",
+                        "tf": 6.25
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "i": {
+                    "docs": {
+                      "Material.html": {
+                        "ref": "Material.html",
+                        "tf": 1866.6666666666667
+                      },
+                      "Material.html#isMaterial": {
+                        "ref": "Material.html#isMaterial",
+                        "tf": 16.666666666666664
+                      },
+                      "Material.html#isGlobal": {
+                        "ref": "Material.html#isGlobal",
+                        "tf": 7.142857142857142
+                      },
+                      "Material.html#glslRender": {
+                        "ref": "Material.html#glslRender",
+                        "tf": 5
+                      },
+                      "Generic.html": {
+                        "ref": "Generic.html",
+                        "tf": 5
+                      },
+                      "Solid.html": {
+                        "ref": "Solid.html",
+                        "tf": 4.3478260869565215
+                      },
+                      "Solid.html#material": {
+                        "ref": "Solid.html#material",
+                        "tf": 775
+                      },
+                      "Solid.html#setId": {
+                        "ref": "Solid.html#setId",
+                        "tf": 12.5
+                      },
+                      "NormalMaterial.html": {
+                        "ref": "NormalMaterial.html",
+                        "tf": 8.333333333333332
+                      },
+                      "NormalMaterial.html#isMaterial": {
+                        "ref": "NormalMaterial.html#isMaterial",
+                        "tf": 16.666666666666664
+                      },
+                      "NormalMaterial.html#isGlobal": {
+                        "ref": "NormalMaterial.html#isGlobal",
+                        "tf": 7.142857142857142
+                      },
+                      "NormalMaterial.html#glslRender": {
+                        "ref": "NormalMaterial.html#glslRender",
+                        "tf": 5
+                      },
+                      "PhongMaterial.html": {
+                        "ref": "PhongMaterial.html",
+                        "tf": 16.666666666666664
+                      },
+                      "PhongMaterial.html#color": {
+                        "ref": "PhongMaterial.html#color",
+                        "tf": 25
+                      },
+                      "PhongMaterial.html#lights": {
+                        "ref": "PhongMaterial.html#lights",
+                        "tf": 16.666666666666664
+                      },
+                      "SingleColorMaterial.html": {
+                        "ref": "SingleColorMaterial.html",
+                        "tf": 10
+                      },
+                      "SingleColorMaterial.html#isMaterial": {
+                        "ref": "SingleColorMaterial.html#isMaterial",
+                        "tf": 16.666666666666664
+                      },
+                      "SingleColorMaterial.html#isGlobal": {
+                        "ref": "SingleColorMaterial.html#isGlobal",
+                        "tf": 7.142857142857142
+                      },
+                      "SingleColorMaterial.html#glslRender": {
+                        "ref": "SingleColorMaterial.html#glslRender",
+                        "tf": 5
+                      }
+                    },
+                    "a": {
+                      "docs": {},
+                      "l": {
+                        "docs": {},
+                        "#": {
+                          "docs": {},
+                          "i": {
+                            "docs": {},
+                            "s": {
+                              "docs": {},
+                              "m": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {},
+                                  "t": {
+                                    "docs": {},
+                                    "e": {
+                                      "docs": {},
+                                      "r": {
+                                        "docs": {},
+                                        "i": {
+                                          "docs": {
+                                            "Material.html#isMaterial": {
+                                              "ref": "Material.html#isMaterial",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "g": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "o": {
+                                    "docs": {},
+                                    "b": {
+                                      "docs": {
+                                        "Material.html#isGlobal": {
+                                          "ref": "Material.html#isGlobal",
+                                          "tf": 1150
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "l": {
+                                "docs": {},
+                                "o": {
+                                  "docs": {},
+                                  "c": {
+                                    "docs": {
+                                      "Material.html#isLocal": {
+                                        "ref": "Material.html#isLocal",
+                                        "tf": 1150
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "g": {
+                            "docs": {},
+                            "l": {
+                              "docs": {},
+                              "s": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "r": {
+                                    "docs": {},
+                                    "e": {
+                                      "docs": {},
+                                      "n": {
+                                        "docs": {},
+                                        "d": {
+                                          "docs": {
+                                            "Material.html#glslRender": {
+                                              "ref": "Material.html#glslRender",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "i": {
+                                    "docs": {},
+                                    "n": {
+                                      "docs": {},
+                                      "s": {
+                                        "docs": {},
+                                        "t": {
+                                          "docs": {
+                                            "Material.html#glslInstance": {
+                                              "ref": "Material.html#glslInstance",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "r": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "x": {
+                    "4": {
+                      "docs": {
+                        "Camera.html#matrix": {
+                          "ref": "Camera.html#matrix",
+                          "tf": 50
+                        },
+                        "Position.html#facing": {
+                          "ref": "Position.html#facing",
+                          "tf": 55.55555555555556
+                        },
+                        "FlyControls.html#update": {
+                          "ref": "FlyControls.html#update",
+                          "tf": 0.4629629629629629
+                        }
+                      }
+                    },
+                    "docs": {
+                      "Camera.html#matrix": {
+                        "ref": "Camera.html#matrix",
+                        "tf": 707.1428571428571
+                      },
+                      "Camera.html#updateProjectionMatrix": {
+                        "ref": "Camera.html#updateProjectionMatrix",
+                        "tf": 7.142857142857142
+                      }
+                    }
+                  },
+                  "c": {
+                    "docs": {
+                      "Subgroup.html": {
+                        "ref": "Subgroup.html",
+                        "tf": 0.7092198581560284
+                      }
+                    }
+                  }
+                }
+              },
+              "t": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "Subgroup.html#teleports": {
+                        "ref": "Subgroup.html#teleports",
+                        "tf": 5.555555555555555
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "g": {
+                  "docs": {
+                    "Generic.html": {
+                      "ref": "Generic.html",
+                      "tf": 5
+                    }
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "c": {
+                "docs": {},
+                "h": {
+                  "docs": {
+                    "Camera.html#minDist": {
+                      "ref": "Camera.html#minDist",
+                      "tf": 12.5
+                    },
+                    "Camera.html#maxDist": {
+                      "ref": "Camera.html#maxDist",
+                      "tf": 12.5
+                    },
+                    "Camera.html#maxSteps": {
+                      "ref": "Camera.html#maxSteps",
+                      "tf": 8.333333333333332
+                    },
+                    "Camera.html#threshold": {
+                      "ref": "Camera.html#threshold",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            },
+            "x": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "s": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "Camera.html#maxDist": {
+                          "ref": "Camera.html#maxDist",
+                          "tf": 700
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "i": {
+                "docs": {},
+                "m": {
+                  "docs": {
+                    "Camera.html#maxDist": {
+                      "ref": "Camera.html#maxDist",
+                      "tf": 12.5
+                    },
+                    "Camera.html#maxSteps": {
+                      "ref": "Camera.html#maxSteps",
+                      "tf": 8.333333333333332
+                    }
+                  }
+                }
+              },
+              "s": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "p": {
+                      "docs": {
+                        "Camera.html#maxSteps": {
+                          "ref": "Camera.html#maxSteps",
+                          "tf": 700
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "g": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "c": {
+                  "docs": {
+                    "Renderer.html": {
+                      "ref": "Renderer.html",
+                      "tf": 3.3333333333333335
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "d": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "Stereo.html#switch": {
+                    "ref": "Stereo.html#switch",
+                    "tf": 16.666666666666664
+                  },
+                  "FixedDirectionStereo.html": {
+                    "ref": "FixedDirectionStereo.html",
+                    "tf": 5
+                  },
+                  "Thurston.html#stereo": {
+                    "ref": "Thurston.html#stereo",
+                    "tf": 12.5
+                  },
+                  "Renderer.html#stereo": {
+                    "ref": "Renderer.html#stereo",
+                    "tf": 25
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {},
+              "o": {
+                "docs": {
+                  "Mono.html": {
+                    "ref": "Mono.html",
+                    "tf": 1900
+                  },
+                  "Thurston.html#stereo": {
+                    "ref": "Thurston.html#stereo",
+                    "tf": 62.5
+                  }
+                },
+                "#": {
+                  "docs": {},
+                  "s": {
+                    "docs": {},
+                    "h": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "d": {
+                          "docs": {
+                            "Mono.html#shader": {
+                              "ref": "Mono.html#shader",
+                              "tf": 1150
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "v": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "Teleport.html": {
+                    "ref": "Teleport.html",
+                    "tf": 1.9230769230769231
+                  },
+                  "Position.html#flow": {
+                    "ref": "Position.html#flow",
+                    "tf": 0.49504950495049505
+                  },
+                  "VRControlsDrag.html": {
+                    "ref": "VRControlsDrag.html",
+                    "tf": 2.272727272727273
+                  },
+                  "VRControlsMove.html": {
+                    "ref": "VRControlsMove.html",
+                    "tf": 2.272727272727273
+                  },
+                  "Subgroup.html": {
+                    "ref": "Subgroup.html",
+                    "tf": 0.3546099290780142
+                  },
+                  "FlyControls.html#update": {
+                    "ref": "FlyControls.html#update",
+                    "tf": 0.4629629629629629
+                  }
+                },
+                "m": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "FlyControls.html#updateMovementVector": {
+                            "ref": "FlyControls.html#updateMovementVector",
+                            "tf": 16.666666666666664
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "Scene.html#add": {
+                    "ref": "Scene.html#add",
+                    "tf": 10
+                  },
+                  "Shape.html": {
+                    "ref": "Shape.html",
+                    "tf": 3.8461538461538463
+                  }
+                }
+              }
+            }
+          },
+          "i": {
+            "docs": {},
+            "n": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "s": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "Camera.html#minDist": {
+                          "ref": "Camera.html#minDist",
+                          "tf": 700
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "i": {
+                "docs": {},
+                "m": {
+                  "docs": {
+                    "Camera.html#minDist": {
+                      "ref": "Camera.html#minDist",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "'": {
+            "docs": {},
+            "m": {
+              "docs": {
+                "Position.html#flow": {
+                  "ref": "Position.html#flow",
+                  "tf": 0.49504950495049505
                 }
               }
             }
@@ -25829,14 +23859,6 @@ window.lunrData = {
                                               "Scene.html#_solids": {
                                                 "ref": "Scene.html#_solids",
                                                 "tf": 33.33333333333333
-                                              },
-                                              "module-Thurston-Thurston.html#_solids": {
-                                                "ref": "module-Thurston-Thurston.html#_solids",
-                                                "tf": 33.33333333333333
-                                              },
-                                              "module-Thurston-Thurston.html#buildShaderDataItems": {
-                                                "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                                                "tf": 16.666666666666664
                                               }
                                             }
                                           }
@@ -25918,29 +23940,9 @@ window.lunrData = {
                                                 "ref": "Scene.html#_lights",
                                                 "tf": 33.33333333333333
                                               },
-                                              "module-Thurston-Thurston.html#_lights": {
-                                                "ref": "module-Thurston-Thurston.html#_lights",
-                                                "tf": 33.33333333333333
-                                              }
-                                            },
-                                            ";": {
-                                              "docs": {},
-                                              "}": {
-                                                "docs": {},
-                                                "&": {
-                                                  "docs": {},
-                                                  "g": {
-                                                    "docs": {},
-                                                    "t": {
-                                                      "docs": {
-                                                        "module-Thurston-Thurston.html#buildShaderDataItems": {
-                                                          "ref": "module-Thurston-Thurston.html#buildShaderDataItems",
-                                                          "tf": 16.666666666666664
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
+                                              "PhongMaterial.html#lights": {
+                                                "ref": "PhongMaterial.html#lights",
+                                                "tf": 50
                                               }
                                             }
                                           }
@@ -25978,42 +23980,6 @@ window.lunrData = {
                                                       "tf": 50
                                                     }
                                                   }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "o": {
-                              "docs": {},
-                              "b": {
-                                "docs": {},
-                                "j": {
-                                  "docs": {},
-                                  "e": {
-                                    "docs": {},
-                                    "c": {
-                                      "docs": {},
-                                      "t": {
-                                        "docs": {},
-                                        "&": {
-                                          "docs": {},
-                                          "g": {
-                                            "docs": {},
-                                            "t": {
-                                              "docs": {
-                                                "module-Thurston-Thurston.html#buildShaderDataConstants": {
-                                                  "ref": "module-Thurston-Thurston.html#buildShaderDataConstants",
-                                                  "tf": 50
-                                                },
-                                                "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                                                  "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                                                  "tf": 50
                                                 }
                                               }
                                             }
@@ -26070,14 +24036,6 @@ window.lunrData = {
               "Scene.html": {
                 "ref": "Scene.html",
                 "tf": 5.555555555555555
-              },
-              "module-Thurston-Thurston.html#addItem": {
-                "ref": "module-Thurston-Thurston.html#addItem",
-                "tf": 16.666666666666664
-              },
-              "module-Thurston-Thurston.html#addItems": {
-                "ref": "module-Thurston-Thurston.html#addItems",
-                "tf": 12.5
               }
             },
             "d": {
@@ -26110,6 +24068,10 @@ window.lunrData = {
                   "ref": "Scene.html#add",
                   "tf": 693.3333333333334
                 },
+                "Thurston.html#add": {
+                  "ref": "Thurston.html#add",
+                  "tf": 712.5
+                },
                 "Vector.html#toLog": {
                   "ref": "Vector.html#toLog",
                   "tf": 4.545454545454546
@@ -26117,10 +24079,6 @@ window.lunrData = {
                 "Vector.html#toGLSL": {
                   "ref": "Vector.html#toGLSL",
                   "tf": 4.166666666666666
-                },
-                "module-Thurston-Thurston.html#appendTitle": {
-                  "ref": "module-Thurston-Thurston.html#appendTitle",
-                  "tf": 10
                 }
               },
               "c": {
@@ -26199,24 +24157,6 @@ window.lunrData = {
                       }
                     }
                   }
-                },
-                "t": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "m": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#addItem": {
-                          "ref": "module-Thurston-Thurston.html#addItem",
-                          "tf": 700
-                        },
-                        "module-Thurston-Thurston.html#addItems": {
-                          "ref": "module-Thurston-Thurston.html#addItems",
-                          "tf": 700
-                        }
-                      }
-                    }
-                  }
                 }
               },
               "u": {
@@ -26236,44 +24176,6 @@ window.lunrData = {
                               "ShaderBuilder.html#addUniform": {
                                 "ref": "ShaderBuilder.html#addUniform",
                                 "tf": 670
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "v": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "n": {
-                      "docs": {},
-                      "t": {
-                        "docs": {},
-                        "l": {
-                          "docs": {},
-                          "i": {
-                            "docs": {},
-                            "s": {
-                              "docs": {},
-                              "t": {
-                                "docs": {},
-                                "e": {
-                                  "docs": {},
-                                  "n": {
-                                    "docs": {
-                                      "module-Thurston-Thurston.html#addEventListeners": {
-                                        "ref": "module-Thurston-Thurston.html#addEventListeners",
-                                        "tf": 750
-                                      }
-                                    }
-                                  }
-                                }
                               }
                             }
                           }
@@ -26534,33 +24436,29 @@ window.lunrData = {
                         }
                       }
                     }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "n": {
-                  "docs": {},
-                  "d": {
+                  },
+                  "x": {
                     "docs": {},
-                    "t": {
+                    "i": {
                       "docs": {},
-                      "i": {
-                        "docs": {},
-                        "t": {
-                          "docs": {},
-                          "l": {
-                            "docs": {
-                              "module-Thurston-Thurston.html#appendTitle": {
-                                "ref": "module-Thurston-Thurston.html#appendTitle",
-                                "tf": 750
-                              }
-                            }
+                      "m": {
+                        "docs": {
+                          "Shape.html#glslGradient": {
+                            "ref": "Shape.html#glslGradient",
+                            "tf": 3.125
                           }
                         }
                       }
                     }
                   }
+                }
+              }
+            },
+            "i": {
+              "docs": {
+                "Thurston.html": {
+                  "ref": "Thurston.html",
+                  "tf": 6.25
                 }
               }
             }
@@ -26669,14 +24567,6 @@ window.lunrData = {
                         "Generic.html#id": {
                           "ref": "Generic.html#id",
                           "tf": 5
-                        },
-                        "module-Thurston-Thurston.html#params": {
-                          "ref": "module-Thurston-Thurston.html#params",
-                          "tf": 3.571428571428571
-                        },
-                        "module-Thurston-Thurston.html#_maxLightDirs": {
-                          "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                          "tf": 6.25
                         }
                       }
                     }
@@ -26739,74 +24629,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "y": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "c": {
-                  "docs": {
-                    "module-Thurston-Thurston.html#initHorizon": {
-                      "ref": "module-Thurston-Thurston.html#initHorizon",
-                      "tf": 5.555555555555555
-                    },
-                    "module-Thurston-Thurston.html#run": {
-                      "ref": "module-Thurston-Thurston.html#run",
-                      "tf": 5
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "n": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "l": {
-                "docs": {},
-                "o": {
-                  "docs": {},
-                  "g": {
-                    "docs": {},
-                    "u": {
-                      "docs": {
-                        "Shape.html": {
-                          "ref": "Shape.html",
-                          "tf": 3.8461538461538463
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "i": {
-              "docs": {},
-              "m": {
-                "docs": {
-                  "BasicShape.html": {
-                    "ref": "BasicShape.html",
-                    "tf": 1.8518518518518516
-                  },
-                  "Renderer.html#setAnimationLoop": {
-                    "ref": "Renderer.html#setAnimationLoop",
-                    "tf": 5
-                  },
-                  "module-Thurston-Thurston.html#_clock": {
-                    "ref": "module-Thurston-Thurston.html#_clock",
-                    "tf": 7.142857142857142
-                  },
-                  "module-Thurston-Thurston.html#animate": {
-                    "ref": "module-Thurston-Thurston.html#animate",
-                    "tf": 775
-                  },
-                  "module-Thurston-Thurston.html#run": {
-                    "ref": "module-Thurston-Thurston.html#run",
-                    "tf": 5
-                  }
-                }
-              }
             }
           },
           "c": {
@@ -26831,13 +24653,13 @@ window.lunrData = {
                         "ref": "Position.html#applyQuaternion",
                         "tf": 6.25
                       },
+                      "Thurston.html#onWindowResize": {
+                        "ref": "Thurston.html#onWindowResize",
+                        "tf": 16.666666666666664
+                      },
                       "RelPosition.html#applyQuaternion": {
                         "ref": "RelPosition.html#applyQuaternion",
                         "tf": 6.25
-                      },
-                      "module-Thurston-Thurston.html#onWindowResize": {
-                        "ref": "module-Thurston-Thurston.html#onWindowResize",
-                        "tf": 16.666666666666664
                       }
                     }
                   }
@@ -26883,6 +24705,56 @@ window.lunrData = {
               }
             }
           },
+          "n": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "m": {
+                "docs": {
+                  "BasicShape.html": {
+                    "ref": "BasicShape.html",
+                    "tf": 1.8518518518518516
+                  },
+                  "Thurston.html#clock": {
+                    "ref": "Thurston.html#clock",
+                    "tf": 7.142857142857142
+                  },
+                  "Thurston.html#animate": {
+                    "ref": "Thurston.html#animate",
+                    "tf": 775
+                  },
+                  "Thurston.html#run": {
+                    "ref": "Thurston.html#run",
+                    "tf": 12.5
+                  },
+                  "Renderer.html#setAnimationLoop": {
+                    "ref": "Renderer.html#setAnimationLoop",
+                    "tf": 5
+                  }
+                }
+              }
+            },
+            "a": {
+              "docs": {},
+              "l": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "g": {
+                    "docs": {},
+                    "u": {
+                      "docs": {
+                        "Shape.html": {
+                          "ref": "Shape.html",
+                          "tf": 3.8461538461538463
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "m": {
             "docs": {},
             "b": {
@@ -26899,6 +24771,26 @@ window.lunrData = {
                           "ref": "PhongMaterial.html#ambient",
                           "tf": 716.6666666666666
                         }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "f": {
+            "docs": {},
+            "f": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "c": {
+                  "docs": {},
+                  "t": {
+                    "docs": {
+                      "PhongMaterial.html#lights": {
+                        "ref": "PhongMaterial.html#lights",
+                        "tf": 16.666666666666664
                       }
                     }
                   }
@@ -26993,18 +24885,6 @@ window.lunrData = {
                         "Generic.html#uniformType": {
                           "ref": "Generic.html#uniformType",
                           "tf": 8.333333333333332
-                        },
-                        "module-Thurston-Thurston.html#params": {
-                          "ref": "module-Thurston-Thurston.html#params",
-                          "tf": 3.571428571428571
-                        },
-                        "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-                          "tf": 10
-                        },
-                        "module-Thurston-Thurston.html#buildShaderFragment": {
-                          "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                          "tf": 2.083333333333333
                         }
                       },
                       "t": {
@@ -27084,6 +24964,18 @@ window.lunrData = {
                     }
                   }
                 }
+              },
+              "t": {
+                "docs": {
+                  "HoroballShape.html#center": {
+                    "ref": "HoroballShape.html#center",
+                    "tf": 5.555555555555555
+                  },
+                  "LocalHoroballShape.html#center": {
+                    "ref": "LocalHoroballShape.html#center",
+                    "tf": 5.555555555555555
+                  }
+                }
               }
             },
             "d": {
@@ -27159,6 +25051,14 @@ window.lunrData = {
                           "ref": "Position.html#point",
                           "tf": 16.666666666666664
                         },
+                        "Thurston.html#geom": {
+                          "ref": "Thurston.html#geom",
+                          "tf": 25
+                        },
+                        "Thurston.html#subgroup": {
+                          "ref": "Thurston.html#subgroup",
+                          "tf": 25
+                        },
                         "RelPosition.html": {
                           "ref": "RelPosition.html",
                           "tf": 0.9615384615384616
@@ -27206,14 +25106,6 @@ window.lunrData = {
                         "Renderer.html#setAnimationLoop": {
                           "ref": "Renderer.html#setAnimationLoop",
                           "tf": 5
-                        },
-                        "module-Thurston-Thurston.html#geom": {
-                          "ref": "module-Thurston-Thurston.html#geom",
-                          "tf": 25
-                        },
-                        "module-Thurston-Thurston.html#_scene": {
-                          "ref": "module-Thurston-Thurston.html#_scene",
-                          "tf": 16.666666666666664
                         }
                       }
                     }
@@ -27237,12 +25129,7 @@ window.lunrData = {
             }
           },
           "p": {
-            "docs": {
-              "module-Thurston-Thurston.html#params": {
-                "ref": "module-Thurston-Thurston.html#params",
-                "tf": 3.571428571428571
-              }
-            },
+            "docs": {},
             "d": {
               "docs": {},
               "a": {
@@ -27280,10 +25167,6 @@ window.lunrData = {
                     "FlyControls.html#update": {
                       "ref": "FlyControls.html#update",
                       "tf": 700.4629629629629
-                    },
-                    "module-Thurston-Thurston.html#chaseCamera": {
-                      "ref": "module-Thurston-Thurston.html#chaseCamera",
-                      "tf": 6
                     }
                   },
                   "e": {
@@ -27521,10 +25404,6 @@ window.lunrData = {
                 "ref": "NormalMaterial.html#glslRender",
                 "tf": 5
               },
-              "SingleColorMaterial.html#glslRender": {
-                "ref": "SingleColorMaterial.html#glslRender",
-                "tf": 5
-              },
               "Position.html#flow": {
                 "ref": "Position.html#flow",
                 "tf": 0.49504950495049505
@@ -27532,6 +25411,18 @@ window.lunrData = {
               "Position.html#toGLSL": {
                 "ref": "Position.html#toGLSL",
                 "tf": 4.545454545454546
+              },
+              "SingleColorMaterial.html#glslRender": {
+                "ref": "SingleColorMaterial.html#glslRender",
+                "tf": 5
+              },
+              "Thurston.html": {
+                "ref": "Thurston.html",
+                "tf": 6.25
+              },
+              "Thurston.html#setParams": {
+                "ref": "Thurston.html#setParams",
+                "tf": 10
               },
               "RelPosition.html#toGLSL": {
                 "ref": "RelPosition.html#toGLSL",
@@ -27545,40 +25436,12 @@ window.lunrData = {
                 "ref": "VRControlsMove.html",
                 "tf": 6.8181818181818175
               },
-              "PhongMaterial.html#toGLSL": {
-                "ref": "PhongMaterial.html#toGLSL",
-                "tf": 4.545454545454546
-              },
               "Subgroup.html": {
                 "ref": "Subgroup.html",
                 "tf": 0.3546099290780142
               },
               "FlyControls.html": {
                 "ref": "FlyControls.html",
-                "tf": 5.555555555555555
-              },
-              "module-Thurston-Thurston.html": {
-                "ref": "module-Thurston-Thurston.html",
-                "tf": 8.333333333333332
-              },
-              "module-Thurston-Thurston.html#_renderer": {
-                "ref": "module-Thurston-Thurston.html#_renderer",
-                "tf": 16.666666666666664
-              },
-              "module-Thurston-Thurston.html#stereo": {
-                "ref": "module-Thurston-Thurston.html#stereo",
-                "tf": 4.545454545454546
-              },
-              "module-Thurston-Thurston.html#setKeyboard": {
-                "ref": "module-Thurston-Thurston.html#setKeyboard",
-                "tf": 12.5
-              },
-              "module-Thurston-Thurston.html#buildShaderFragment": {
-                "ref": "module-Thurston-Thurston.html#buildShaderFragment",
-                "tf": 2.083333333333333
-              },
-              "module-Thurston.html": {
-                "ref": "module-Thurston.html",
                 "tf": 5.555555555555555
               }
             },
@@ -27589,6 +25452,14 @@ window.lunrData = {
                   "FixedDirectionStereo.html": {
                     "ref": "FixedDirectionStereo.html",
                     "tf": 5
+                  },
+                  "Thurston.html#gui": {
+                    "ref": "Thurston.html#gui",
+                    "tf": 16.666666666666664
+                  },
+                  "Thurston.html#initGUI": {
+                    "ref": "Thurston.html#initGUI",
+                    "tf": 12.5
                   },
                   "VRControlsDrag.html#onSelectStart": {
                     "ref": "VRControlsDrag.html#onSelectStart",
@@ -27621,14 +25492,6 @@ window.lunrData = {
                   "VRControlsMove.html#onSqueezeEnd": {
                     "ref": "VRControlsMove.html#onSqueezeEnd",
                     "tf": 10
-                  },
-                  "module-Thurston-Thurston.html#gui": {
-                    "ref": "module-Thurston-Thurston.html#gui",
-                    "tf": 16.666666666666664
-                  },
-                  "module-Thurston-Thurston.html#initUI": {
-                    "ref": "module-Thurston-Thurston.html#initUI",
-                    "tf": 12.5
                   }
                 }
               }
@@ -27670,6 +25533,10 @@ window.lunrData = {
                 "Scene.html#add": {
                   "ref": "Scene.html#add",
                   "tf": 33.33333333333333
+                },
+                "Thurston.html#add": {
+                  "ref": "Thurston.html#add",
+                  "tf": 50
                 }
               },
               "e": {
@@ -27706,14 +25573,6 @@ window.lunrData = {
                         "ref": "Generic.html#id",
                         "tf": 10
                       },
-                      "Shape.html#isShape": {
-                        "ref": "Shape.html#isShape",
-                        "tf": 16.666666666666664
-                      },
-                      "Shape.html#glslInstance": {
-                        "ref": "Shape.html#glslInstance",
-                        "tf": 5.555555555555555
-                      },
                       "Solid.html#glslInstance": {
                         "ref": "Solid.html#glslInstance",
                         "tf": 4.545454545454546
@@ -27724,14 +25583,6 @@ window.lunrData = {
                       },
                       "NormalMaterial.html#glslInstance": {
                         "ref": "NormalMaterial.html#glslInstance",
-                        "tf": 7.142857142857142
-                      },
-                      "SingleColorMaterial.html#isMaterial": {
-                        "ref": "SingleColorMaterial.html#isMaterial",
-                        "tf": 16.666666666666664
-                      },
-                      "SingleColorMaterial.html#glslInstance": {
-                        "ref": "SingleColorMaterial.html#glslInstance",
                         "tf": 7.142857142857142
                       },
                       "Position.html": {
@@ -27750,6 +25601,14 @@ window.lunrData = {
                         "ref": "Scene.html#add",
                         "tf": 10
                       },
+                      "Shape.html#isShape": {
+                        "ref": "Shape.html#isShape",
+                        "tf": 16.666666666666664
+                      },
+                      "Shape.html#glslInstance": {
+                        "ref": "Shape.html#glslInstance",
+                        "tf": 5.555555555555555
+                      },
                       "BallShape.html#isBallShape": {
                         "ref": "BallShape.html#isBallShape",
                         "tf": 16.666666666666664
@@ -27758,21 +25617,37 @@ window.lunrData = {
                         "ref": "LocalBallShape.html#isLocalBallShape",
                         "tf": 16.666666666666664
                       },
+                      "HoroballShape.html#isHoroballShape": {
+                        "ref": "HoroballShape.html#isHoroballShape",
+                        "tf": 16.666666666666664
+                      },
+                      "LocalHoroballShape.html#isLocalHoroballShape": {
+                        "ref": "LocalHoroballShape.html#isLocalHoroballShape",
+                        "tf": 16.666666666666664
+                      },
                       "PhongMaterial.html": {
                         "ref": "PhongMaterial.html",
                         "tf": 16.666666666666664
                       },
-                      "module-Thurston-Thurston.html#geom": {
-                        "ref": "module-Thurston-Thurston.html#geom",
+                      "SingleColorMaterial.html#isMaterial": {
+                        "ref": "SingleColorMaterial.html#isMaterial",
+                        "tf": 16.666666666666664
+                      },
+                      "SingleColorMaterial.html#glslInstance": {
+                        "ref": "SingleColorMaterial.html#glslInstance",
+                        "tf": 7.142857142857142
+                      },
+                      "Thurston.html#geom": {
+                        "ref": "Thurston.html#geom",
                         "tf": 50
                       },
-                      "module-Thurston-Thurston.html#params": {
-                        "ref": "module-Thurston-Thurston.html#params",
-                        "tf": 53.57142857142857
+                      "Thurston.html#params": {
+                        "ref": "Thurston.html#params",
+                        "tf": 66.66666666666666
                       },
-                      "module-Thurston-Thurston.html#stereo": {
-                        "ref": "module-Thurston-Thurston.html#stereo",
-                        "tf": 4.545454545454546
+                      "Thurston.html#add": {
+                        "ref": "Thurston.html#add",
+                        "tf": 12.5
                       }
                     }
                   }
@@ -27794,10 +25669,6 @@ window.lunrData = {
                       "Position.html#flow": {
                         "ref": "Position.html#flow",
                         "tf": 0.9900990099009901
-                      },
-                      "module-Thurston-Thurston.html#getEyePositions": {
-                        "ref": "module-Thurston-Thurston.html#getEyePositions",
-                        "tf": 3.3333333333333335
                       }
                     }
                   }
@@ -27873,6 +25744,22 @@ window.lunrData = {
                         "ref": "Position.html#flow",
                         "tf": 1.4851485148514851
                       },
+                      "HoroballShape.html#center": {
+                        "ref": "HoroballShape.html#center",
+                        "tf": 5.555555555555555
+                      },
+                      "HoroballShape.html#offset": {
+                        "ref": "HoroballShape.html#offset",
+                        "tf": 8.333333333333332
+                      },
+                      "LocalHoroballShape.html#center": {
+                        "ref": "LocalHoroballShape.html#center",
+                        "tf": 5.555555555555555
+                      },
+                      "LocalHoroballShape.html#offset": {
+                        "ref": "LocalHoroballShape.html#offset",
+                        "tf": 8.333333333333332
+                      },
                       "Vector.html": {
                         "ref": "Vector.html",
                         "tf": 3.8461538461538463
@@ -27937,9 +25824,13 @@ window.lunrData = {
                         "ref": "Stereo.html#eyes",
                         "tf": 3.8461538461538463
                       },
-                      "module-Thurston-Thurston.html#stereo": {
-                        "ref": "module-Thurston-Thurston.html#stereo",
-                        "tf": 4.545454545454546
+                      "HoroballShape.html#offset": {
+                        "ref": "HoroballShape.html#offset",
+                        "tf": 712.5
+                      },
+                      "LocalHoroballShape.html#offset": {
+                        "ref": "LocalHoroballShape.html#offset",
+                        "tf": 712.5
                       }
                     }
                   }
@@ -27985,10 +25876,6 @@ window.lunrData = {
                             "ref": "NormalMaterial.html#isLocal",
                             "tf": 7.142857142857142
                           },
-                          "SingleColorMaterial.html#isLocal": {
-                            "ref": "SingleColorMaterial.html#isLocal",
-                            "tf": 7.142857142857142
-                          },
                           "PointLight.html#isGlobal": {
                             "ref": "PointLight.html#isGlobal",
                             "tf": 7.142857142857142
@@ -28003,6 +25890,18 @@ window.lunrData = {
                           },
                           "LocalBallShape.html#isGlobal": {
                             "ref": "LocalBallShape.html#isGlobal",
+                            "tf": 7.142857142857142
+                          },
+                          "HoroballShape.html#isGlobal": {
+                            "ref": "HoroballShape.html#isGlobal",
+                            "tf": 7.142857142857142
+                          },
+                          "LocalHoroballShape.html#isGlobal": {
+                            "ref": "LocalHoroballShape.html#isGlobal",
+                            "tf": 7.142857142857142
+                          },
+                          "SingleColorMaterial.html#isLocal": {
+                            "ref": "SingleColorMaterial.html#isLocal",
                             "tf": 7.142857142857142
                           }
                         }
@@ -28065,14 +25964,38 @@ window.lunrData = {
               "Subgroup.html": {
                 "ref": "Subgroup.html",
                 "tf": 0.3546099290780142
-              },
-              "module-Thurston-Thurston.html#chaseCamera": {
-                "ref": "module-Thurston-Thurston.html#chaseCamera",
-                "tf": 2
-              },
-              "module-Thurston.html": {
-                "ref": "module-Thurston.html",
-                "tf": 5.555555555555555
+              }
+            },
+            "w": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "d": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "w": {
+                        "docs": {},
+                        "r": {
+                          "docs": {},
+                          "e": {
+                            "docs": {},
+                            "s": {
+                              "docs": {
+                                "Thurston.html#onWindowResize": {
+                                  "ref": "Thurston.html#onWindowResize",
+                                  "tf": 700
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             },
             "s": {
@@ -28231,38 +26154,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "w": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "n": {
-                  "docs": {},
-                  "d": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "w": {
-                        "docs": {},
-                        "r": {
-                          "docs": {},
-                          "e": {
-                            "docs": {},
-                            "s": {
-                              "docs": {
-                                "module-Thurston-Thurston.html#onWindowResize": {
-                                  "ref": "module-Thurston-Thurston.html#onWindowResize",
-                                  "tf": 700
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "p": {
@@ -28278,14 +26169,6 @@ window.lunrData = {
                       "BasicShape.html": {
                         "ref": "BasicShape.html",
                         "tf": 1.8518518518518516
-                      },
-                      "module-Thurston-Thurston.html#setParams": {
-                        "ref": "module-Thurston-Thurston.html#setParams",
-                        "tf": 16.666666666666664
-                      },
-                      "module-Thurston-Thurston.html#setParam": {
-                        "ref": "module-Thurston-Thurston.html#setParam",
-                        "tf": 16.666666666666664
                       }
                     }
                   }
@@ -28316,6 +26199,32 @@ window.lunrData = {
               "docs": {},
               "r": {
                 "docs": {},
+                "w": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "t": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "e": {
+                            "docs": {},
+                            "n": {
+                              "docs": {
+                                "Shape.html#glslGradient": {
+                                  "ref": "Shape.html#glslGradient",
+                                  "tf": 3.125
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
                 "l": {
                   "docs": {},
                   "o": {
@@ -28329,6 +26238,30 @@ window.lunrData = {
                             "tf": 1.8518518518518516
                           }
                         }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "t": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "HoroballShape.html#offset": {
+                        "ref": "HoroballShape.html#offset",
+                        "tf": 4.166666666666666
+                      },
+                      "LocalHoroballShape.html#offset": {
+                        "ref": "LocalHoroballShape.html#offset",
+                        "tf": 4.166666666666666
                       }
                     }
                   }
@@ -28375,14 +26308,181 @@ window.lunrData = {
                         "Renderer.html#_horizon": {
                           "ref": "Renderer.html#_horizon",
                           "tf": 8.333333333333332
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "o": {
+                "docs": {},
+                "b": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "l": {
+                      "docs": {
+                        "Horoball.html": {
+                          "ref": "Horoball.html",
+                          "tf": 1925
                         },
-                        "module-Thurston-Thurston.html#chaseCamera": {
-                          "ref": "module-Thurston-Thurston.html#chaseCamera",
-                          "tf": 2
+                        "LocalHoroball.html": {
+                          "ref": "LocalHoroball.html",
+                          "tf": 16.666666666666664
                         },
-                        "module-Thurston-Thurston.html#initHorizon": {
-                          "ref": "module-Thurston-Thurston.html#initHorizon",
+                        "HoroballShape.html": {
+                          "ref": "HoroballShape.html",
+                          "tf": 16.666666666666664
+                        },
+                        "HoroballShape.html#center": {
+                          "ref": "HoroballShape.html#center",
                           "tf": 5.555555555555555
+                        },
+                        "HoroballShape.html#offset": {
+                          "ref": "HoroballShape.html#offset",
+                          "tf": 8.333333333333332
+                        },
+                        "LocalHoroballShape.html": {
+                          "ref": "LocalHoroballShape.html",
+                          "tf": 12.5
+                        },
+                        "LocalHoroballShape.html#center": {
+                          "ref": "LocalHoroballShape.html#center",
+                          "tf": 5.555555555555555
+                        },
+                        "LocalHoroballShape.html#offset": {
+                          "ref": "LocalHoroballShape.html#offset",
+                          "tf": 8.333333333333332
+                        }
+                      },
+                      "l": {
+                        "docs": {},
+                        "s": {
+                          "docs": {},
+                          "h": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "p": {
+                                "docs": {
+                                  "HoroballShape.html": {
+                                    "ref": "HoroballShape.html",
+                                    "tf": 1900
+                                  }
+                                },
+                                "e": {
+                                  "docs": {},
+                                  "#": {
+                                    "docs": {},
+                                    "c": {
+                                      "docs": {},
+                                      "e": {
+                                        "docs": {},
+                                        "n": {
+                                          "docs": {},
+                                          "t": {
+                                            "docs": {
+                                              "HoroballShape.html#center": {
+                                                "ref": "HoroballShape.html#center",
+                                                "tf": 1150
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "o": {
+                                      "docs": {},
+                                      "f": {
+                                        "docs": {},
+                                        "f": {
+                                          "docs": {},
+                                          "s": {
+                                            "docs": {},
+                                            "e": {
+                                              "docs": {},
+                                              "t": {
+                                                "docs": {
+                                                  "HoroballShape.html#offset": {
+                                                    "ref": "HoroballShape.html#offset",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "i": {
+                                      "docs": {},
+                                      "s": {
+                                        "docs": {},
+                                        "h": {
+                                          "docs": {},
+                                          "o": {
+                                            "docs": {},
+                                            "r": {
+                                              "docs": {},
+                                              "o": {
+                                                "docs": {},
+                                                "b": {
+                                                  "docs": {},
+                                                  "a": {
+                                                    "docs": {},
+                                                    "l": {
+                                                      "docs": {},
+                                                      "l": {
+                                                        "docs": {},
+                                                        "s": {
+                                                          "docs": {},
+                                                          "h": {
+                                                            "docs": {},
+                                                            "a": {
+                                                              "docs": {},
+                                                              "p": {
+                                                                "docs": {
+                                                                  "HoroballShape.html#isHoroballShape": {
+                                                                    "ref": "HoroballShape.html#isHoroballShape",
+                                                                    "tf": 1150
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "g": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "o": {
+                                              "docs": {},
+                                              "b": {
+                                                "docs": {
+                                                  "HoroballShape.html#isGlobal": {
+                                                    "ref": "HoroballShape.html#isGlobal",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -28413,10 +26513,6 @@ window.lunrData = {
                     "Subgroup.html": {
                       "ref": "Subgroup.html",
                       "tf": 1.0638297872340425
-                    },
-                    "module-Thurston-Thurston.html#run": {
-                      "ref": "module-Thurston-Thurston.html#run",
-                      "tf": 5
                     }
                   },
                   "e": {
@@ -28480,20 +26576,6 @@ window.lunrData = {
                     "ref": "FixedDirectionStereo.html",
                     "tf": 5
                   }
-                },
-                "s": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#chaseCamera": {
-                          "ref": "module-Thurston-Thurston.html#chaseCamera",
-                          "tf": 2
-                        }
-                      }
-                    }
-                  }
                 }
               }
             },
@@ -28512,17 +26594,13 @@ window.lunrData = {
               "docs": {},
               "e": {
                 "docs": {
+                  "Thurston.html#stereo": {
+                    "ref": "Thurston.html#stereo",
+                    "tf": 12.5
+                  },
                   "Vector.html#applyMatrix4": {
                     "ref": "Vector.html#applyMatrix4",
                     "tf": 1.8518518518518516
-                  },
-                  "module-Thurston-Thurston.html#chaseCamera": {
-                    "ref": "module-Thurston-Thurston.html#chaseCamera",
-                    "tf": 2
-                  },
-                  "module-Thurston-Thurston.html#run": {
-                    "ref": "module-Thurston-Thurston.html#run",
-                    "tf": 5
                   }
                 }
               }
@@ -28559,9 +26637,41 @@ window.lunrData = {
                       "docs": {},
                       "l": {
                         "docs": {
+                          "Ball.html": {
+                            "ref": "Ball.html",
+                            "tf": 25
+                          },
+                          "Horoball.html": {
+                            "ref": "Horoball.html",
+                            "tf": 25
+                          },
+                          "LocalBall.html": {
+                            "ref": "LocalBall.html",
+                            "tf": 25
+                          },
+                          "LocalHoroball.html": {
+                            "ref": "LocalHoroball.html",
+                            "tf": 16.666666666666664
+                          },
                           "NativeStereo.html": {
                             "ref": "NativeStereo.html",
                             "tf": 5.555555555555555
+                          },
+                          "HoroballShape.html": {
+                            "ref": "HoroballShape.html",
+                            "tf": 16.666666666666664
+                          },
+                          "LocalHoroballShape.html": {
+                            "ref": "LocalHoroballShape.html",
+                            "tf": 12.5
+                          },
+                          "BallShape.html": {
+                            "ref": "BallShape.html",
+                            "tf": 16.666666666666664
+                          },
+                          "LocalBallShape.html": {
+                            "ref": "LocalBallShape.html",
+                            "tf": 12.5
                           }
                         }
                       }
@@ -28625,44 +26735,6 @@ window.lunrData = {
               }
             },
             "docs": {}
-          },
-          "t": {
-            "docs": {},
-            "m": {
-              "docs": {},
-              "l": {
-                "docs": {},
-                "b": {
-                  "docs": {},
-                  "u": {
-                    "docs": {},
-                    "t": {
-                      "docs": {},
-                      "t": {
-                        "docs": {},
-                        "o": {
-                          "docs": {},
-                          "n": {
-                            "docs": {},
-                            "e": {
-                              "docs": {},
-                              "l": {
-                                "docs": {
-                                  "module-Thurston-Thurston.html#_VRButton": {
-                                    "ref": "module-Thurston-Thurston.html#_VRButton",
-                                    "tf": 33.33333333333333
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "j": {
@@ -28804,10 +26876,6 @@ window.lunrData = {
                       "Scene.html#_lights": {
                         "ref": "Scene.html#_lights",
                         "tf": 683.3333333333334
-                      },
-                      "module-Thurston-Thurston.html#_lights": {
-                        "ref": "module-Thurston-Thurston.html#_lights",
-                        "tf": 683.3333333333334
                       }
                     }
                   }
@@ -28827,27 +26895,6 @@ window.lunrData = {
                     "docs": {
                       "Scene.html#_solids": {
                         "ref": "Scene.html#_solids",
-                        "tf": 683.3333333333334
-                      },
-                      "module-Thurston-Thurston.html#_solids": {
-                        "ref": "module-Thurston-Thurston.html#_solids",
-                        "tf": 683.3333333333334
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "c": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "n": {
-                  "docs": {},
-                  "e": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#_scene": {
-                        "ref": "module-Thurston-Thurston.html#_scene",
                         "tf": 683.3333333333334
                       }
                     }
@@ -28962,186 +27009,6 @@ window.lunrData = {
                 }
               }
             }
-          },
-          "r": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "d": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "r": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#_renderer": {
-                          "ref": "module-Thurston-Thurston.html#_renderer",
-                          "tf": 683.3333333333334
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "c": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "m": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "a": {
-                      "docs": {
-                        "module-Thurston-Thurston.html#_camera": {
-                          "ref": "module-Thurston-Thurston.html#_camera",
-                          "tf": 683.3333333333334
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "l": {
-              "docs": {},
-              "o": {
-                "docs": {},
-                "c": {
-                  "docs": {},
-                  "k": {
-                    "docs": {
-                      "module-Thurston-Thurston.html#_clock": {
-                        "ref": "module-Thurston-Thurston.html#_clock",
-                        "tf": 683.3333333333334
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "v": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "b": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "t": {
-                    "docs": {},
-                    "t": {
-                      "docs": {},
-                      "o": {
-                        "docs": {},
-                        "n": {
-                          "docs": {
-                            "module-Thurston-Thurston.html#_VRButton": {
-                              "ref": "module-Thurston-Thurston.html#_VRButton",
-                              "tf": 683.3333333333334
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "m": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "x": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "g": {
-                      "docs": {},
-                      "h": {
-                        "docs": {},
-                        "t": {
-                          "docs": {},
-                          "d": {
-                            "docs": {},
-                            "i": {
-                              "docs": {},
-                              "r": {
-                                "docs": {
-                                  "module-Thurston-Thurston.html#_maxLightDirs": {
-                                    "ref": "module-Thurston-Thurston.html#_maxLightDirs",
-                                    "tf": 683.3333333333334
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "k": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "y": {
-                "docs": {},
-                "b": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "r": {
-                        "docs": {},
-                        "d": {
-                          "docs": {},
-                          "c": {
-                            "docs": {},
-                            "o": {
-                              "docs": {},
-                              "n": {
-                                "docs": {},
-                                "t": {
-                                  "docs": {},
-                                  "r": {
-                                    "docs": {},
-                                    "o": {
-                                      "docs": {},
-                                      "l": {
-                                        "docs": {
-                                          "module-Thurston-Thurston.html#_keyboardControls": {
-                                            "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                                            "tf": 683.3333333333334
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "q": {
@@ -29197,22 +27064,19 @@ window.lunrData = {
                 }
               }
             },
-            "o": {
+            "i": {
               "docs": {},
-              "t": {
+              "c": {
                 "docs": {},
-                "i": {
+                "k": {
                   "docs": {},
-                  "e": {
+                  "l": {
                     "docs": {},
-                    "n": {
-                      "docs": {},
-                      "t": {
-                        "docs": {
-                          "module-Thurston-Thurston.html#subgroup": {
-                            "ref": "module-Thurston-Thurston.html#subgroup",
-                            "tf": 10
-                          }
+                    "i": {
+                      "docs": {
+                        "Thurston.html": {
+                          "ref": "Thurston.html",
+                          "tf": 6.25
                         }
                       }
                     }
@@ -29226,21 +27090,6 @@ window.lunrData = {
           "docs": {},
           "e": {
             "docs": {},
-            "e": {
-              "docs": {},
-              "p": {
-                "docs": {
-                  "RelPosition.html": {
-                    "ref": "RelPosition.html",
-                    "tf": 1.9230769230769231
-                  },
-                  "module-Thurston-Thurston.html#params": {
-                    "ref": "module-Thurston-Thurston.html#params",
-                    "tf": 3.571428571428571
-                  }
-                }
-              }
-            },
             "y": {
               "docs": {
                 "FlyControls.html#onKeyDown": {
@@ -29250,14 +27099,6 @@ window.lunrData = {
                 "FlyControls.html#onKeyUp": {
                   "ref": "FlyControls.html#onKeyUp",
                   "tf": 12.5
-                },
-                "module-Thurston-Thurston.html#infos": {
-                  "ref": "module-Thurston-Thurston.html#infos",
-                  "tf": 8.333333333333332
-                },
-                "module-Thurston-Thurston.html#setParam": {
-                  "ref": "module-Thurston-Thurston.html#setParam",
-                  "tf": 25
                 }
               },
               "b": {
@@ -29270,21 +27111,28 @@ window.lunrData = {
                       "docs": {},
                       "d": {
                         "docs": {
+                          "Thurston.html#flyControls": {
+                            "ref": "Thurston.html#flyControls",
+                            "tf": 25
+                          },
                           "FlyControls.html": {
                             "ref": "FlyControls.html",
                             "tf": 5.555555555555555
-                          },
-                          "module-Thurston-Thurston.html#_keyboardControls": {
-                            "ref": "module-Thurston-Thurston.html#_keyboardControls",
-                            "tf": 25
-                          },
-                          "module-Thurston-Thurston.html#setKeyboard": {
-                            "ref": "module-Thurston-Thurston.html#setKeyboard",
-                            "tf": 12.5
                           }
                         }
                       }
                     }
+                  }
+                }
+              }
+            },
+            "e": {
+              "docs": {},
+              "p": {
+                "docs": {
+                  "RelPosition.html": {
+                    "ref": "RelPosition.html",
+                    "tf": 1.9230769230769231
                   }
                 }
               }
@@ -29319,7 +27167,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 3690
+      "length": 3439
     },
     "corpusTokens": [
       "0",
@@ -29327,21 +27175,14 @@ window.lunrData = {
       "3d",
       "4th",
       "_add",
-      "_camera",
-      "_clock",
       "_fragmentbuild",
       "_horizon",
-      "_keyboardcontrol",
       "_light",
-      "_maxlightdir",
       "_nextid",
-      "_render",
-      "_scene",
       "_solid",
       "_threecamera",
       "_threerender",
       "_threescen",
-      "_vrbutton",
       "abelian",
       "abstract",
       "account",
@@ -29351,32 +27192,30 @@ window.lunrData = {
       "add",
       "addchunk",
       "addclass",
-      "addeventlisten",
       "addimport",
       "addinst",
-      "additem",
       "adduniform",
       "advanc",
       "advancedshap",
       "advancedshape#isbasicshap",
       "advantag",
+      "affect",
       "algebra",
       "alpha",
       "alreadi",
       "ambient",
       "analogu",
       "anim",
-      "appendtitl",
+      "api",
       "appli",
       "applyfac",
       "applyisometri",
       "applymatrix4",
       "applyquaternion",
       "appropri",
+      "approxim",
       "argument",
       "array.&lt;light&gt",
-      "array.&lt;light&gt;}&gt",
-      "array.&lt;object&gt",
       "array.&lt;relposition&gt",
       "array.&lt;solid&gt",
       "array.&lt;string&gt",
@@ -29384,18 +27223,18 @@ window.lunrData = {
       "aspect",
       "associ",
       "assum",
-      "async",
       "attach",
       "automat",
       "avail",
       "avoid",
       "back",
-      "background",
       "bad",
       "ball",
+      "ballbal",
       "ballshap",
       "ballshape#isballshap",
       "ballshape#isglob",
+      "ballshapeballshap",
       "basic",
       "basicshap",
       "basicshape#isbasicshap",
@@ -29408,17 +27247,13 @@ window.lunrData = {
       "boost",
       "both",
       "bound",
+      "boundari",
       "brick",
       "bring",
       "buffergeometri",
       "build",
       "builder",
-      "buildshaderdatabackground",
-      "buildshaderdataconst",
-      "buildshaderdataitem",
-      "buildshaderdatauniform",
-      "buildshaderfrag",
-      "buildshadervertex",
+      "buildfragmentshad",
       "built",
       "button",
       "call",
@@ -29440,8 +27275,8 @@ window.lunrData = {
       "case",
       "cell",
       "cellboost",
+      "center",
       "chang",
-      "chasecamera",
       "check",
       "chosen",
       "chunk",
@@ -29451,9 +27286,8 @@ window.lunrData = {
       "clock",
       "clone",
       "code",
-      "coincid",
-      "collect",
       "color",
+      "combin",
       "come",
       "compar",
       "compil",
@@ -29472,11 +27306,11 @@ window.lunrData = {
       "correspond",
       "creat",
       "current",
+      "d",
       "d_o",
       "d_og",
       "dash",
       "data",
-      "date",
       "debug",
       "decid",
       "declar",
@@ -29502,7 +27336,6 @@ window.lunrData = {
       "dom",
       "domain",
       "domel",
-      "done",
       "drag",
       "drawn",
       "dure",
@@ -29515,7 +27348,6 @@ window.lunrData = {
       "e^3",
       "each",
       "easi",
-      "eight",
       "element",
       "elementari",
       "empti",
@@ -29530,6 +27362,7 @@ window.lunrData = {
       "everyth",
       "exactli",
       "exist",
+      "explicit",
       "explor",
       "exponenti",
       "extend",
@@ -29545,7 +27378,6 @@ window.lunrData = {
       "fake",
       "fals",
       "field",
-      "file",
       "find",
       "finit",
       "first",
@@ -29566,7 +27398,6 @@ window.lunrData = {
       "forward",
       "fov",
       "fragment",
-      "fragmentshad",
       "frame",
       "function",
       "fundament",
@@ -29593,7 +27424,6 @@ window.lunrData = {
       "geom",
       "geometr",
       "geometri",
-      "geteyeposit",
       "getter",
       "gg",
       "give",
@@ -29625,19 +27455,24 @@ window.lunrData = {
       "handl",
       "handler",
       "head",
-      "headset",
       "height",
       "henc",
       "here",
       "hg",
       "horizon",
-      "htmlbuttonel",
+      "horobal",
+      "horoballshap",
+      "horoballshape#cent",
+      "horoballshape#isglob",
+      "horoballshape#ishoroballshap",
+      "horoballshape#offset",
       "human",
       "hyperbol",
       "i.",
       "id",
       "idea",
       "ident",
+      "identifi",
       "ignor",
       "imag",
       "imp",
@@ -29653,20 +27488,15 @@ window.lunrData = {
       "inde",
       "independ",
       "index",
-      "info",
       "inherit",
-      "init",
-      "inithorizon",
+      "initgui",
       "initi",
       "initstat",
-      "initthreej",
-      "initui",
       "input",
       "insid",
       "inspir",
       "instanc",
       "integ",
-      "interact",
       "interfac",
       "interpupillari",
       "intersect",
@@ -29680,9 +27510,11 @@ window.lunrData = {
       "isballshap",
       "isbasicshap",
       "isglob",
+      "ishoroballshap",
       "islight",
       "isloc",
       "islocalballshap",
+      "islocalhoroballshap",
       "ismateri",
       "isom",
       "isometri",
@@ -29718,35 +27550,38 @@ window.lunrData = {
       "linear",
       "list",
       "list:class",
-      "list:modul",
-      "listen",
       "local",
       "localbal",
+      "localballlocalbal",
       "localballshap",
       "localballshape#isglob",
       "localballshape#islocalballshap",
+      "localballshapelocalballshap",
+      "localhorobal",
+      "localhoroballshap",
+      "localhoroballshape#cent",
+      "localhoroballshape#isglob",
+      "localhoroballshape#islocalhoroballshap",
+      "localhoroballshape#offset",
       "localpoint",
       "locat",
-      "log",
       "look",
       "loop",
       "lt;abstract",
       "lt;abstract&gt",
-      "lt;async&gt",
       "lt;private&gt",
       "lt;readonly&gt",
       "m",
       "m'm",
       "m0",
       "magic",
+      "main",
       "mainli",
       "make",
       "makeinvtransl",
       "maketransl",
       "maketranslationfromdir",
       "manag",
-      "manifold/orbifold",
-      "manual",
       "map",
       "march",
       "materi",
@@ -29761,7 +27596,6 @@ window.lunrData = {
       "matter",
       "maxdist",
       "maxim",
-      "maxlightdir",
       "maxstep",
       "measur",
       "member",
@@ -29770,47 +27604,6 @@ window.lunrData = {
       "mindist",
       "minim",
       "mode",
-      "modul",
-      "module:thurston",
-      "module:thurston~thurston",
-      "module:thurston~thurston#_camera",
-      "module:thurston~thurston#_clock",
-      "module:thurston~thurston#_keyboardcontrol",
-      "module:thurston~thurston#_light",
-      "module:thurston~thurston#_maxlightdir",
-      "module:thurston~thurston#_render",
-      "module:thurston~thurston#_scen",
-      "module:thurston~thurston#_solid",
-      "module:thurston~thurston#_vrbutton",
-      "module:thurston~thurston#addeventlisten",
-      "module:thurston~thurston#additem",
-      "module:thurston~thurston#anim",
-      "module:thurston~thurston#appendtitl",
-      "module:thurston~thurston#buildshaderdatabackground",
-      "module:thurston~thurston#buildshaderdataconst",
-      "module:thurston~thurston#buildshaderdataitem",
-      "module:thurston~thurston#buildshaderdatauniform",
-      "module:thurston~thurston#buildshaderfrag",
-      "module:thurston~thurston#buildshadervertex",
-      "module:thurston~thurston#chasecamera",
-      "module:thurston~thurston#geom",
-      "module:thurston~thurston#geteyeposit",
-      "module:thurston~thurston#gui",
-      "module:thurston~thurston#info",
-      "module:thurston~thurston#inithorizon",
-      "module:thurston~thurston#initstat",
-      "module:thurston~thurston#initthreej",
-      "module:thurston~thurston#initui",
-      "module:thurston~thurston#maxlightdir",
-      "module:thurston~thurston#onwindowres",
-      "module:thurston~thurston#param",
-      "module:thurston~thurston#registerparam",
-      "module:thurston~thurston#run",
-      "module:thurston~thurston#setkeyboard",
-      "module:thurston~thurston#setparam",
-      "module:thurston~thurston#stat",
-      "module:thurston~thurston#stereo",
-      "module:thurston~thurston#subgroup",
       "mono",
       "mono#shad",
       "more",
@@ -29859,9 +27652,10 @@ window.lunrData = {
       "orient",
       "origin",
       "otherwis",
+      "outsid",
       "overload",
+      "overwritten",
       "p",
-      "page",
       "pair",
       "par",
       "parallel",
@@ -29877,9 +27671,9 @@ window.lunrData = {
       "phongmaterial#ambi",
       "phongmaterial#color",
       "phongmaterial#diffus",
+      "phongmaterial#light",
       "phongmaterial#shini",
       "phongmaterial#specular",
-      "phongmaterial#toglsl",
       "piec",
       "pixel",
       "plain",
@@ -29899,7 +27693,7 @@ window.lunrData = {
       "pointlight#isloc",
       "pointlight#posit",
       "pointlight.glslclass",
-      "popul",
+      "pointlightpointlight",
       "posit",
       "position#applyisometri",
       "position#applyquaternion",
@@ -29922,7 +27716,6 @@ window.lunrData = {
       "position#setquaternion",
       "position#toglsl",
       "possibl",
-      "pre",
       "prefer",
       "premultipli",
       "press",
@@ -29934,17 +27727,12 @@ window.lunrData = {
       "process",
       "product",
       "project",
-      "promis",
-      "promise.&lt;array.&lt;string&gt;&gt",
-      "promise.&lt;thurston&gt",
-      "promise.&lt;{solid",
       "propag",
       "properti",
-      "proxi",
       "pull",
       "purpos",
       "quaternion",
-      "quotient",
+      "quickli",
       "r^3",
       "rang",
       "ratio",
@@ -29962,8 +27750,6 @@ window.lunrData = {
       "redund",
       "refer",
       "reflect",
-      "regist",
-      "registerparam",
       "rel",
       "relat",
       "relev",
@@ -29994,9 +27780,9 @@ window.lunrData = {
       "renderer#_threerender",
       "renderer#_threescen",
       "renderer#build",
+      "renderer#buildfragmentshad",
       "renderer#camera",
       "renderer#domel",
-      "renderer#fragmentshad",
       "renderer#geom",
       "renderer#rend",
       "renderer#scen",
@@ -30010,17 +27796,14 @@ window.lunrData = {
       "replac",
       "repres",
       "represent",
-      "requir",
       "reset",
       "resiz",
       "return",
       "reus",
-      "review",
       "rgb",
       "right",
       "role",
       "rotat",
-      "routin",
       "run",
       "s^2",
       "s^3",
@@ -30049,12 +27832,10 @@ window.lunrData = {
       "setboost",
       "setclearcolor",
       "setid",
-      "setkeyboard",
       "setparam",
       "setpixelratio",
       "setquaternion",
       "setsiz",
-      "setup",
       "shader",
       "shaderbuild",
       "shaderbuilder#addchunk",
@@ -30083,7 +27864,6 @@ window.lunrData = {
       "signatur",
       "similar",
       "simplic",
-      "simul",
       "singl",
       "singlecolormateri",
       "singlecolormaterial#glslinst",
@@ -30104,9 +27884,9 @@ window.lunrData = {
       "somewher",
       "space",
       "specif",
-      "specifi",
       "specular",
       "sphere",
+      "spheric",
       "split",
       "squeez",
       "start",
@@ -30145,12 +27925,10 @@ window.lunrData = {
       "teleport#isom",
       "teleport#jstest",
       "teleport#nam",
-      "templat",
       "term",
       "terminolog",
       "test",
       "these",
-      "this.subgroup.glslbuilddata",
       "those",
       "three",
       "three.j",
@@ -30159,11 +27937,26 @@ window.lunrData = {
       "through",
       "thu",
       "thurston",
+      "thurston#add",
+      "thurston#anim",
+      "thurston#camera",
+      "thurston#clock",
+      "thurston#flycontrol",
+      "thurston#geom",
+      "thurston#gui",
+      "thurston#initgui",
+      "thurston#initstat",
+      "thurston#onwindowres",
+      "thurston#param",
+      "thurston#render",
+      "thurston#run",
+      "thurston#scen",
+      "thurston#setparam",
+      "thurston#stat",
+      "thurston#stereo",
+      "thurston#subgroup",
       "thurston'",
-      "thurston~thurston",
       "time",
-      "titl",
-      "togeth",
       "toglsl",
       "tolog",
       "tool",
@@ -30191,9 +27984,9 @@ window.lunrData = {
       "union",
       "unionshap",
       "uniqu",
+      "unit",
       "univers",
       "unlik",
-      "up",
       "updat",
       "updatemovementvector",
       "updateprojectionmatrix",
@@ -30250,7 +28043,6 @@ window.lunrData = {
       "without",
       "word",
       "work",
-      "wrap",
       "written",
       "x",
       "z",
@@ -30293,17 +28085,6 @@ window.lunrData = {
       "name": "Classes",
       "tags": "list:class",
       "summary": "All documented classes.",
-      "description": "",
-      "body": ""
-    },
-    "list_module.html": {
-      "id": "list_module.html",
-      "kind": "list",
-      "title": "Modules",
-      "longname": "list:module",
-      "name": "Modules",
-      "tags": "list:module",
-      "summary": "All documented modules.",
       "description": "",
       "body": ""
     },
@@ -30868,23 +28649,45 @@ window.lunrData = {
     "Ball.html": {
       "id": "Ball.html",
       "kind": "class",
-      "title": "Ball",
+      "title": "BallBall",
       "longname": "Ball",
       "name": "Ball",
       "tags": "Ball",
       "summary": "",
-      "description": "Euclidean ball",
+      "description": "Hyperbolic ball",
       "body": ""
     },
     "LocalBall.html": {
       "id": "LocalBall.html",
       "kind": "class",
-      "title": "LocalBall",
+      "title": "LocalBallLocalBall",
       "longname": "LocalBall",
       "name": "LocalBall",
       "tags": "LocalBall",
       "summary": "",
-      "description": "Euclidean local ball",
+      "description": "Hyperbolic ball",
+      "body": ""
+    },
+    "Horoball.html": {
+      "id": "Horoball.html",
+      "kind": "class",
+      "title": "Horoball",
+      "longname": "Horoball",
+      "name": "Horoball",
+      "tags": "Horoball",
+      "summary": "",
+      "description": "Hyperbolic horoball",
+      "body": ""
+    },
+    "LocalHoroball.html": {
+      "id": "LocalHoroball.html",
+      "kind": "class",
+      "title": "LocalHoroball",
+      "longname": "LocalHoroball",
+      "name": "LocalHoroball",
+      "tags": "LocalHoroball",
+      "summary": "",
+      "description": "Hyperbolic local horoball",
       "body": ""
     },
     "NativeStereo.html": {
@@ -31099,77 +28902,6 @@ window.lunrData = {
       "tags": "Teleport#name name",
       "summary": "",
       "description": "The name of the JS test function serves as name/ID for the Teleport"
-    },
-    "Shape.html": {
-      "id": "Shape.html",
-      "kind": "class",
-      "title": "&lt;abstract&gt; Shape",
-      "longname": "Shape",
-      "name": "Shape",
-      "tags": "Shape",
-      "summary": "",
-      "description": "A representation of a 3D geometric shape. It should not be confused with Three.js Shape class. It is more an analogue of the class BufferGeometry in Three.js.",
-      "body": ""
-    },
-    "Shape.html#isShape": {
-      "id": "Shape.html#isShape",
-      "kind": "member",
-      "title": "isShape :boolean",
-      "longname": "Shape#isShape",
-      "name": "isShape",
-      "tags": "Shape#isShape isShape",
-      "summary": "",
-      "description": "Says that the object inherits from Shape"
-    },
-    "Shape.html#isBasicShape": {
-      "id": "Shape.html#isBasicShape",
-      "kind": "member",
-      "title": "isBasicShape :boolean",
-      "longname": "Shape#isBasicShape",
-      "name": "isBasicShape",
-      "tags": "Shape#isBasicShape isBasicShape",
-      "summary": "",
-      "description": "Says whether the shape is a basic shape, that it is not build on top of other shapes."
-    },
-    "Shape.html#isAdvancedShape": {
-      "id": "Shape.html#isAdvancedShape",
-      "kind": "member",
-      "title": "isAdvancedShape :boolean",
-      "longname": "Shape#isAdvancedShape",
-      "name": "isAdvancedShape",
-      "tags": "Shape#isAdvancedShape isAdvancedShape",
-      "summary": "",
-      "description": "Says whether the shape is a basic shape, that it is not build on top of other shapes."
-    },
-    "Shape.html#glslSDF": {
-      "id": "Shape.html#glslSDF",
-      "kind": "function",
-      "title": "&lt;abstract&gt; glslSDF() → {string}",
-      "longname": "Shape#glslSDF",
-      "name": "glslSDF",
-      "tags": "Shape#glslSDF glslSDF",
-      "summary": "",
-      "description": "Return the chunk of GLSL code corresponding to the signed distance function."
-    },
-    "Shape.html#glslGradient": {
-      "id": "Shape.html#glslGradient",
-      "kind": "function",
-      "title": "&lt;abstract&gt; glslGradient() → {string}",
-      "longname": "Shape#glslGradient",
-      "name": "glslGradient",
-      "tags": "Shape#glslGradient glslGradient",
-      "summary": "",
-      "description": "Return the chunk of GLSL code corresponding to the gradient field."
-    },
-    "Shape.html#glslInstance": {
-      "id": "Shape.html#glslInstance",
-      "kind": "function",
-      "title": "glslInstance() → {string}",
-      "longname": "Shape#glslInstance",
-      "name": "glslInstance",
-      "tags": "Shape#glslInstance glslInstance",
-      "summary": "",
-      "description": "Compile all the function directly related to the object (e.g. sdf, gradient, etc)."
     },
     "Solid.html": {
       "id": "Solid.html",
@@ -31444,67 +29176,6 @@ window.lunrData = {
       "longname": "NormalMaterial#glslInstance",
       "name": "glslInstance",
       "tags": "NormalMaterial#glslInstance glslInstance",
-      "summary": "",
-      "description": "Compile all the function directly related to the object (e.g. render)."
-    },
-    "SingleColorMaterial.html": {
-      "id": "SingleColorMaterial.html",
-      "kind": "class",
-      "title": "SingleColorMaterial",
-      "longname": "SingleColorMaterial",
-      "name": "SingleColorMaterial",
-      "tags": "SingleColorMaterial",
-      "summary": "",
-      "description": "A material that display a single plain color",
-      "body": ""
-    },
-    "SingleColorMaterial.html#isMaterial": {
-      "id": "SingleColorMaterial.html#isMaterial",
-      "kind": "member",
-      "title": "isMaterial :boolean",
-      "longname": "SingleColorMaterial#isMaterial",
-      "name": "isMaterial",
-      "tags": "SingleColorMaterial#isMaterial isMaterial",
-      "summary": "",
-      "description": "Says that the object inherits from Material"
-    },
-    "SingleColorMaterial.html#isGlobal": {
-      "id": "SingleColorMaterial.html#isGlobal",
-      "kind": "member",
-      "title": "isGlobal :boolean",
-      "longname": "SingleColorMaterial#isGlobal",
-      "name": "isGlobal",
-      "tags": "SingleColorMaterial#isGlobal isGlobal",
-      "summary": "",
-      "description": "Says whether the shape is global. This property does not make sense for material."
-    },
-    "SingleColorMaterial.html#isLocal": {
-      "id": "SingleColorMaterial.html#isLocal",
-      "kind": "member",
-      "title": "isLocal :boolean",
-      "longname": "SingleColorMaterial#isLocal",
-      "name": "isLocal",
-      "tags": "SingleColorMaterial#isLocal isLocal",
-      "summary": "",
-      "description": "Says whether the shape is local. True if local, false otherwise"
-    },
-    "SingleColorMaterial.html#glslRender": {
-      "id": "SingleColorMaterial.html#glslRender",
-      "kind": "function",
-      "title": "&lt;abstract&gt; glslRender() → {string}",
-      "longname": "SingleColorMaterial#glslRender",
-      "name": "glslRender",
-      "tags": "SingleColorMaterial#glslRender glslRender",
-      "summary": "",
-      "description": "Return the chunk of GLSL code used to compute the color of the material at the given point"
-    },
-    "SingleColorMaterial.html#glslInstance": {
-      "id": "SingleColorMaterial.html#glslInstance",
-      "kind": "function",
-      "title": "glslInstance() → {string}",
-      "longname": "SingleColorMaterial#glslInstance",
-      "name": "glslInstance",
-      "tags": "SingleColorMaterial#glslInstance glslInstance",
       "summary": "",
       "description": "Compile all the function directly related to the object (e.g. render)."
     },
@@ -31832,15 +29503,86 @@ window.lunrData = {
       "summary": "",
       "description": "Says whether the shape is a basic shape, that it is not build on top of other shapes."
     },
+    "Shape.html": {
+      "id": "Shape.html",
+      "kind": "class",
+      "title": "&lt;abstract&gt; Shape",
+      "longname": "Shape",
+      "name": "Shape",
+      "tags": "Shape",
+      "summary": "",
+      "description": "A representation of a 3D geometric shape. It should not be confused with Three.js Shape class. It is more an analogue of the class BufferGeometry in Three.js.",
+      "body": ""
+    },
+    "Shape.html#isShape": {
+      "id": "Shape.html#isShape",
+      "kind": "member",
+      "title": "isShape :boolean",
+      "longname": "Shape#isShape",
+      "name": "isShape",
+      "tags": "Shape#isShape isShape",
+      "summary": "",
+      "description": "Says that the object inherits from Shape"
+    },
+    "Shape.html#isBasicShape": {
+      "id": "Shape.html#isBasicShape",
+      "kind": "member",
+      "title": "isBasicShape :boolean",
+      "longname": "Shape#isBasicShape",
+      "name": "isBasicShape",
+      "tags": "Shape#isBasicShape isBasicShape",
+      "summary": "",
+      "description": "Says whether the shape is a basic shape, that it is not build on top of other shapes."
+    },
+    "Shape.html#isAdvancedShape": {
+      "id": "Shape.html#isAdvancedShape",
+      "kind": "member",
+      "title": "isAdvancedShape :boolean",
+      "longname": "Shape#isAdvancedShape",
+      "name": "isAdvancedShape",
+      "tags": "Shape#isAdvancedShape isAdvancedShape",
+      "summary": "",
+      "description": "Says whether the shape is a basic shape, that it is not build on top of other shapes."
+    },
+    "Shape.html#glslSDF": {
+      "id": "Shape.html#glslSDF",
+      "kind": "function",
+      "title": "&lt;abstract&gt; glslSDF() → {string}",
+      "longname": "Shape#glslSDF",
+      "name": "glslSDF",
+      "tags": "Shape#glslSDF glslSDF",
+      "summary": "",
+      "description": "Return the chunk of GLSL code corresponding to the signed distance function."
+    },
+    "Shape.html#glslGradient": {
+      "id": "Shape.html#glslGradient",
+      "kind": "function",
+      "title": "glslGradient() → {string}",
+      "longname": "Shape#glslGradient",
+      "name": "glslGradient",
+      "tags": "Shape#glslGradient glslGradient",
+      "summary": "",
+      "description": "Return the chunk of GLSL code corresponding to the gradient field. The default computation approximates numerically the gradient. This function can be overwritten for an explicit computation."
+    },
+    "Shape.html#glslInstance": {
+      "id": "Shape.html#glslInstance",
+      "kind": "function",
+      "title": "glslInstance() → {string}",
+      "longname": "Shape#glslInstance",
+      "name": "glslInstance",
+      "tags": "Shape#glslInstance glslInstance",
+      "summary": "",
+      "description": "Compile all the function directly related to the object (e.g. sdf, gradient, etc)."
+    },
     "PointLight.html": {
       "id": "PointLight.html",
       "kind": "class",
-      "title": "PointLight",
+      "title": "PointLightPointLight",
       "longname": "PointLight",
       "name": "PointLight",
       "tags": "PointLight",
       "summary": "",
-      "description": "Point light",
+      "description": "Spherical point light",
       "body": ""
     },
     "PointLight.html#position": {
@@ -31896,12 +29638,12 @@ window.lunrData = {
     "BallShape.html": {
       "id": "BallShape.html",
       "kind": "class",
-      "title": "BallShape",
+      "title": "BallShapeBallShape",
       "longname": "BallShape",
       "name": "BallShape",
       "tags": "BallShape",
       "summary": "",
-      "description": "Shape of a euclidean ball",
+      "description": "Shape of a hyperbolic ball",
       "body": ""
     },
     "BallShape.html#isBallShape": {
@@ -31927,12 +29669,12 @@ window.lunrData = {
     "LocalBallShape.html": {
       "id": "LocalBallShape.html",
       "kind": "class",
-      "title": "LocalBallShape",
+      "title": "LocalBallShapeLocalBallShape",
       "longname": "LocalBallShape",
       "name": "LocalBallShape",
       "tags": "LocalBallShape",
       "summary": "",
-      "description": "Shape of a euclidean local ball",
+      "description": "Shape of a hyperbolic local ball",
       "body": ""
     },
     "LocalBallShape.html#isLocalBallShape": {
@@ -31954,6 +29696,431 @@ window.lunrData = {
       "tags": "LocalBallShape#isGlobal isGlobal",
       "summary": "",
       "description": "Says whether the shape is global. True if global, false otherwise."
+    },
+    "HoroballShape.html": {
+      "id": "HoroballShape.html",
+      "kind": "class",
+      "title": "HoroballShape",
+      "longname": "HoroballShape",
+      "name": "HoroballShape",
+      "tags": "HoroballShape",
+      "summary": "",
+      "description": "Shape of a hyperbolic horoball",
+      "body": ""
+    },
+    "HoroballShape.html#center": {
+      "id": "HoroballShape.html#center",
+      "kind": "member",
+      "title": "center :Vector",
+      "longname": "HoroballShape#center",
+      "name": "center",
+      "tags": "HoroballShape#center center",
+      "summary": "",
+      "description": "The \"center\" of the horoball. We identify the boundary, with the unit sphere in the tangent space at the origin."
+    },
+    "HoroballShape.html#offset": {
+      "id": "HoroballShape.html#offset",
+      "kind": "member",
+      "title": "offset :number",
+      "longname": "HoroballShape#offset",
+      "name": "offset",
+      "tags": "HoroballShape#offset offset",
+      "summary": "",
+      "description": "Offset. The offset correspond to the image of the origin, by the SDF of the horoball. If the offset is positive, the origin is outside of the horoball"
+    },
+    "HoroballShape.html#isHoroballShape": {
+      "id": "HoroballShape.html#isHoroballShape",
+      "kind": "member",
+      "title": "isHoroballShape :boolean",
+      "longname": "HoroballShape#isHoroballShape",
+      "name": "isHoroballShape",
+      "tags": "HoroballShape#isHoroballShape isHoroballShape",
+      "summary": "",
+      "description": "Says that the object inherits from Ball"
+    },
+    "HoroballShape.html#isGlobal": {
+      "id": "HoroballShape.html#isGlobal",
+      "kind": "member",
+      "title": "isGlobal :boolean",
+      "longname": "HoroballShape#isGlobal",
+      "name": "isGlobal",
+      "tags": "HoroballShape#isGlobal isGlobal",
+      "summary": "",
+      "description": "Says whether the shape is global. True if global, false otherwise."
+    },
+    "LocalHoroballShape.html": {
+      "id": "LocalHoroballShape.html",
+      "kind": "class",
+      "title": "LocalHoroballShape",
+      "longname": "LocalHoroballShape",
+      "name": "LocalHoroballShape",
+      "tags": "LocalHoroballShape",
+      "summary": "",
+      "description": "Shape of a hyperbolic local horoball",
+      "body": ""
+    },
+    "LocalHoroballShape.html#center": {
+      "id": "LocalHoroballShape.html#center",
+      "kind": "member",
+      "title": "center :Vector",
+      "longname": "LocalHoroballShape#center",
+      "name": "center",
+      "tags": "LocalHoroballShape#center center",
+      "summary": "",
+      "description": "The \"center\" of the horoball. We identify the boundary, with the unit sphere in the tangent space at the origin."
+    },
+    "LocalHoroballShape.html#offset": {
+      "id": "LocalHoroballShape.html#offset",
+      "kind": "member",
+      "title": "offset :number",
+      "longname": "LocalHoroballShape#offset",
+      "name": "offset",
+      "tags": "LocalHoroballShape#offset offset",
+      "summary": "",
+      "description": "Offset. The offset correspond to the image of the origin, by the SDF of the horoball. If the offset is positive, the origin is outside of the horoball"
+    },
+    "LocalHoroballShape.html#isLocalHoroballShape": {
+      "id": "LocalHoroballShape.html#isLocalHoroballShape",
+      "kind": "member",
+      "title": "isLocalHoroballShape :boolean",
+      "longname": "LocalHoroballShape#isLocalHoroballShape",
+      "name": "isLocalHoroballShape",
+      "tags": "LocalHoroballShape#isLocalHoroballShape isLocalHoroballShape",
+      "summary": "",
+      "description": "Says that the object inherits from Ball"
+    },
+    "LocalHoroballShape.html#isGlobal": {
+      "id": "LocalHoroballShape.html#isGlobal",
+      "kind": "member",
+      "title": "isGlobal :boolean",
+      "longname": "LocalHoroballShape#isGlobal",
+      "name": "isGlobal",
+      "tags": "LocalHoroballShape#isGlobal isGlobal",
+      "summary": "",
+      "description": "Says whether the shape is global. True if global, false otherwise."
+    },
+    "PhongMaterial.html": {
+      "id": "PhongMaterial.html",
+      "kind": "class",
+      "title": "PhongMaterial",
+      "longname": "PhongMaterial",
+      "name": "PhongMaterial",
+      "tags": "PhongMaterial",
+      "summary": "",
+      "description": "Material for objects in the scene",
+      "body": ""
+    },
+    "PhongMaterial.html#color": {
+      "id": "PhongMaterial.html#color",
+      "kind": "member",
+      "title": "color :Color",
+      "longname": "PhongMaterial#color",
+      "name": "color",
+      "tags": "PhongMaterial#color color",
+      "summary": "",
+      "description": "Color of the material"
+    },
+    "PhongMaterial.html#ambient": {
+      "id": "PhongMaterial.html#ambient",
+      "kind": "member",
+      "title": "ambient :number",
+      "longname": "PhongMaterial#ambient",
+      "name": "ambient",
+      "tags": "PhongMaterial#ambient ambient",
+      "summary": "",
+      "description": "ambient reflection constant"
+    },
+    "PhongMaterial.html#diffuse": {
+      "id": "PhongMaterial.html#diffuse",
+      "kind": "member",
+      "title": "diffuse :number",
+      "longname": "PhongMaterial#diffuse",
+      "name": "diffuse",
+      "tags": "PhongMaterial#diffuse diffuse",
+      "summary": "",
+      "description": "diffuse reflection constant"
+    },
+    "PhongMaterial.html#specular": {
+      "id": "PhongMaterial.html#specular",
+      "kind": "member",
+      "title": "specular :number",
+      "longname": "PhongMaterial#specular",
+      "name": "specular",
+      "tags": "PhongMaterial#specular specular",
+      "summary": "",
+      "description": "specular reflection constant"
+    },
+    "PhongMaterial.html#shininess": {
+      "id": "PhongMaterial.html#shininess",
+      "kind": "member",
+      "title": "shininess :number",
+      "longname": "PhongMaterial#shininess",
+      "name": "shininess",
+      "tags": "PhongMaterial#shininess shininess",
+      "summary": "",
+      "description": "shininess reflection constant"
+    },
+    "PhongMaterial.html#lights": {
+      "id": "PhongMaterial.html#lights",
+      "kind": "member",
+      "title": "lights :Array.&lt;Light&gt;",
+      "longname": "PhongMaterial#lights",
+      "name": "lights",
+      "tags": "PhongMaterial#lights lights",
+      "summary": "",
+      "description": "lights affecting the material"
+    },
+    "SingleColorMaterial.html": {
+      "id": "SingleColorMaterial.html",
+      "kind": "class",
+      "title": "SingleColorMaterial",
+      "longname": "SingleColorMaterial",
+      "name": "SingleColorMaterial",
+      "tags": "SingleColorMaterial",
+      "summary": "",
+      "description": "A material that display a single plain color",
+      "body": ""
+    },
+    "SingleColorMaterial.html#isMaterial": {
+      "id": "SingleColorMaterial.html#isMaterial",
+      "kind": "member",
+      "title": "isMaterial :boolean",
+      "longname": "SingleColorMaterial#isMaterial",
+      "name": "isMaterial",
+      "tags": "SingleColorMaterial#isMaterial isMaterial",
+      "summary": "",
+      "description": "Says that the object inherits from Material"
+    },
+    "SingleColorMaterial.html#isGlobal": {
+      "id": "SingleColorMaterial.html#isGlobal",
+      "kind": "member",
+      "title": "isGlobal :boolean",
+      "longname": "SingleColorMaterial#isGlobal",
+      "name": "isGlobal",
+      "tags": "SingleColorMaterial#isGlobal isGlobal",
+      "summary": "",
+      "description": "Says whether the shape is global. This property does not make sense for material."
+    },
+    "SingleColorMaterial.html#isLocal": {
+      "id": "SingleColorMaterial.html#isLocal",
+      "kind": "member",
+      "title": "isLocal :boolean",
+      "longname": "SingleColorMaterial#isLocal",
+      "name": "isLocal",
+      "tags": "SingleColorMaterial#isLocal isLocal",
+      "summary": "",
+      "description": "Says whether the shape is local. True if local, false otherwise"
+    },
+    "SingleColorMaterial.html#glslRender": {
+      "id": "SingleColorMaterial.html#glslRender",
+      "kind": "function",
+      "title": "&lt;abstract&gt; glslRender() → {string}",
+      "longname": "SingleColorMaterial#glslRender",
+      "name": "glslRender",
+      "tags": "SingleColorMaterial#glslRender glslRender",
+      "summary": "",
+      "description": "Return the chunk of GLSL code used to compute the color of the material at the given point"
+    },
+    "SingleColorMaterial.html#glslInstance": {
+      "id": "SingleColorMaterial.html#glslInstance",
+      "kind": "function",
+      "title": "glslInstance() → {string}",
+      "longname": "SingleColorMaterial#glslInstance",
+      "name": "glslInstance",
+      "tags": "SingleColorMaterial#glslInstance glslInstance",
+      "summary": "",
+      "description": "Compile all the function directly related to the object (e.g. render)."
+    },
+    "Thurston.html": {
+      "id": "Thurston.html",
+      "kind": "class",
+      "title": "Thurston",
+      "longname": "Thurston",
+      "name": "Thurston",
+      "tags": "Thurston",
+      "summary": "",
+      "description": "A combination of all main parts of the API. It can be used to quickly create scenes",
+      "body": ""
+    },
+    "Thurston.html#geom": {
+      "id": "Thurston.html#geom",
+      "kind": "member",
+      "title": "geom :Object",
+      "longname": "Thurston#geom",
+      "name": "geom",
+      "tags": "Thurston#geom geom",
+      "summary": "",
+      "description": "The underlying geometry"
+    },
+    "Thurston.html#subgroup": {
+      "id": "Thurston.html#subgroup",
+      "kind": "member",
+      "title": "subgroup :Subgroup",
+      "longname": "Thurston#subgroup",
+      "name": "subgroup",
+      "tags": "Thurston#subgroup subgroup",
+      "summary": "",
+      "description": "The underlying subgroup"
+    },
+    "Thurston.html#params": {
+      "id": "Thurston.html#params",
+      "kind": "member",
+      "title": "params :Object",
+      "longname": "Thurston#params",
+      "name": "params",
+      "tags": "Thurston#params params",
+      "summary": "",
+      "description": "Parameters of the Thurston object"
+    },
+    "Thurston.html#camera": {
+      "id": "Thurston.html#camera",
+      "kind": "member",
+      "title": "camera :Camera",
+      "longname": "Thurston#camera",
+      "name": "camera",
+      "tags": "Thurston#camera camera",
+      "summary": "",
+      "description": "The non-euclidean camera"
+    },
+    "Thurston.html#scene": {
+      "id": "Thurston.html#scene",
+      "kind": "member",
+      "title": "scene :Scene",
+      "longname": "Thurston#scene",
+      "name": "scene",
+      "tags": "Thurston#scene scene",
+      "summary": "",
+      "description": "The non-euclidean scene"
+    },
+    "Thurston.html#stereo": {
+      "id": "Thurston.html#stereo",
+      "kind": "member",
+      "title": "stereo :Mono",
+      "longname": "Thurston#stereo",
+      "name": "stereo",
+      "tags": "Thurston#stereo stereo",
+      "summary": "",
+      "description": "The stereo mode (here mono)"
+    },
+    "Thurston.html#renderer": {
+      "id": "Thurston.html#renderer",
+      "kind": "member",
+      "title": "renderer :Renderer",
+      "longname": "Thurston#renderer",
+      "name": "renderer",
+      "tags": "Thurston#renderer renderer",
+      "summary": "",
+      "description": "d The non-euclidean renderer"
+    },
+    "Thurston.html#gui": {
+      "id": "Thurston.html#gui",
+      "kind": "member",
+      "title": "gui :GUI",
+      "longname": "Thurston#gui",
+      "name": "gui",
+      "tags": "Thurston#gui gui",
+      "summary": "",
+      "description": "The graphical user interface"
+    },
+    "Thurston.html#stats": {
+      "id": "Thurston.html#stats",
+      "kind": "member",
+      "title": "stats :Stats",
+      "longname": "Thurston#stats",
+      "name": "stats",
+      "tags": "Thurston#stats stats",
+      "summary": "",
+      "description": "The performance stats"
+    },
+    "Thurston.html#flyControls": {
+      "id": "Thurston.html#flyControls",
+      "kind": "member",
+      "title": "&lt;private&gt; flyControls :FlyControls",
+      "longname": "Thurston#flyControls",
+      "name": "flyControls",
+      "tags": "Thurston#flyControls flyControls",
+      "summary": "",
+      "description": "The keyboard controls"
+    },
+    "Thurston.html#clock": {
+      "id": "Thurston.html#clock",
+      "kind": "member",
+      "title": "&lt;private&gt; clock :Clock",
+      "longname": "Thurston#clock",
+      "name": "clock",
+      "tags": "Thurston#clock clock",
+      "summary": "",
+      "description": "A clock to measure the time between two call of animate"
+    },
+    "Thurston.html#setParams": {
+      "id": "Thurston.html#setParams",
+      "kind": "function",
+      "title": "setParams( params )",
+      "longname": "Thurston#setParams",
+      "name": "setParams",
+      "tags": "Thurston#setParams setParams",
+      "summary": "",
+      "description": "Set the value of the parameters. To be used in the constructor."
+    },
+    "Thurston.html#initGUI": {
+      "id": "Thurston.html#initGUI",
+      "kind": "function",
+      "title": "initGUI() → {Thurston}",
+      "longname": "Thurston#initGUI",
+      "name": "initGUI",
+      "tags": "Thurston#initGUI initGUI",
+      "summary": "",
+      "description": "Initialize the graphic user interface"
+    },
+    "Thurston.html#initStats": {
+      "id": "Thurston.html#initStats",
+      "kind": "function",
+      "title": "initStats() → {Thurston}",
+      "longname": "Thurston#initStats",
+      "name": "initStats",
+      "tags": "Thurston#initStats initStats",
+      "summary": "",
+      "description": "Initialize the performance stats"
+    },
+    "Thurston.html#add": {
+      "id": "Thurston.html#add",
+      "kind": "function",
+      "title": "add( ...obj )",
+      "longname": "Thurston#add",
+      "name": "add",
+      "tags": "Thurston#add add",
+      "summary": "",
+      "description": "Shortcut to add objects to the scene."
+    },
+    "Thurston.html#onWindowResize": {
+      "id": "Thurston.html#onWindowResize",
+      "kind": "function",
+      "title": "onWindowResize( event )",
+      "longname": "Thurston#onWindowResize",
+      "name": "onWindowResize",
+      "tags": "Thurston#onWindowResize onWindowResize",
+      "summary": "",
+      "description": "Action when the window is resized."
+    },
+    "Thurston.html#animate": {
+      "id": "Thurston.html#animate",
+      "kind": "function",
+      "title": "animate()",
+      "longname": "Thurston#animate",
+      "name": "animate",
+      "tags": "Thurston#animate animate",
+      "summary": "",
+      "description": "animation function"
+    },
+    "Thurston.html#run": {
+      "id": "Thurston.html#run",
+      "kind": "function",
+      "title": "run()",
+      "longname": "Thurston#run",
+      "name": "run",
+      "tags": "Thurston#run run",
+      "summary": "",
+      "description": "Build the renderer and run the animation."
     },
     "Vector.html": {
       "id": "Vector.html",
@@ -32490,13 +30657,13 @@ window.lunrData = {
       "summary": "",
       "description": "Build the vertex shader"
     },
-    "Renderer.html#fragmentShader": {
-      "id": "Renderer.html#fragmentShader",
+    "Renderer.html#buildFragmentShader": {
+      "id": "Renderer.html#buildFragmentShader",
       "kind": "function",
-      "title": "fragmentShader()",
-      "longname": "Renderer#fragmentShader",
-      "name": "fragmentShader",
-      "tags": "Renderer#fragmentShader fragmentShader",
+      "title": "buildFragmentShader()",
+      "longname": "Renderer#buildFragmentShader",
+      "name": "buildFragmentShader",
+      "tags": "Renderer#buildFragmentShader buildFragmentShader",
       "summary": "",
       "description": "Build the fragment shader"
     },
@@ -32519,77 +30686,6 @@ window.lunrData = {
       "tags": "Renderer#render render",
       "summary": "",
       "description": "Render the non-euclidean scene. The method build should be called before."
-    },
-    "PhongMaterial.html": {
-      "id": "PhongMaterial.html",
-      "kind": "class",
-      "title": "PhongMaterial",
-      "longname": "PhongMaterial",
-      "name": "PhongMaterial",
-      "tags": "PhongMaterial",
-      "summary": "",
-      "description": "Material for objects in the scene",
-      "body": ""
-    },
-    "PhongMaterial.html#color": {
-      "id": "PhongMaterial.html#color",
-      "kind": "member",
-      "title": "color :Color",
-      "longname": "PhongMaterial#color",
-      "name": "color",
-      "tags": "PhongMaterial#color color",
-      "summary": "",
-      "description": "Color of the material"
-    },
-    "PhongMaterial.html#ambient": {
-      "id": "PhongMaterial.html#ambient",
-      "kind": "member",
-      "title": "ambient :number",
-      "longname": "PhongMaterial#ambient",
-      "name": "ambient",
-      "tags": "PhongMaterial#ambient ambient",
-      "summary": "",
-      "description": "ambient reflection constant"
-    },
-    "PhongMaterial.html#diffuse": {
-      "id": "PhongMaterial.html#diffuse",
-      "kind": "member",
-      "title": "diffuse :number",
-      "longname": "PhongMaterial#diffuse",
-      "name": "diffuse",
-      "tags": "PhongMaterial#diffuse diffuse",
-      "summary": "",
-      "description": "diffuse reflection constant"
-    },
-    "PhongMaterial.html#specular": {
-      "id": "PhongMaterial.html#specular",
-      "kind": "member",
-      "title": "specular :number",
-      "longname": "PhongMaterial#specular",
-      "name": "specular",
-      "tags": "PhongMaterial#specular specular",
-      "summary": "",
-      "description": "specular reflection constant"
-    },
-    "PhongMaterial.html#shininess": {
-      "id": "PhongMaterial.html#shininess",
-      "kind": "member",
-      "title": "shininess :number",
-      "longname": "PhongMaterial#shininess",
-      "name": "shininess",
-      "tags": "PhongMaterial#shininess shininess",
-      "summary": "",
-      "description": "shininess reflection constant"
-    },
-    "PhongMaterial.html#toGLSL": {
-      "id": "PhongMaterial.html#toGLSL",
-      "kind": "function",
-      "title": "toGLSL() → {string}",
-      "longname": "PhongMaterial#toGLSL",
-      "name": "toGLSL",
-      "tags": "PhongMaterial#toGLSL toGLSL",
-      "summary": "",
-      "description": "Return a line of GLSL code creating the same material Used when dynamically building shaders."
     },
     "Subgroup.html": {
       "id": "Subgroup.html",
@@ -32682,428 +30778,6 @@ window.lunrData = {
       "tags": "FlyControls#update update",
       "summary": "",
       "description": "Function to update the position Assume that the current position is (g,m) where g is the boost, i.e. subgroup element * local boost m is the facing, i.e. an element of O(3) Denote by a the Matrix4 representing the Three.js camera orientation, understood as an element of O(3) as well. Denote by e = (e1, e2, e3) the reference frame in the tangent space at the origin. Then the frame at p = go attach to the camera is f = d_og . m . a . e That is the camera is looking at the direction -f3 = - d_og . m . a . e3 Assume now that we want to move in the direction of v = (v1,v2,v3) where the vector is given in the frame f, i.e. v = v1. f1 + v2 . f2 + v3. f3. We need to flow the current position in the direction w, where w corresponds to v written in the \"position frame\", i.e. d_og . m . e. In other words w = a . u, where u = v1 . e1 + v2 . e2 + v3 . e3. Note that we do not change the camera orientation. A similar strategy works for the rotations."
-    },
-    "module-Thurston-Thurston.html": {
-      "id": "module-Thurston-Thurston.html",
-      "kind": "class",
-      "title": "Thurston~Thurston",
-      "longname": "module:Thurston~Thurston",
-      "name": "Thurston",
-      "tags": "module:Thurston~Thurston",
-      "summary": "",
-      "description": "Class used to create a scene in the specified geometry",
-      "body": ""
-    },
-    "module-Thurston-Thurston.html#geom": {
-      "id": "module-Thurston-Thurston.html#geom",
-      "kind": "member",
-      "title": "geom :Object",
-      "longname": "module:Thurston~Thurston#geom",
-      "name": "geom",
-      "tags": "module:Thurston~Thurston#geom geom",
-      "summary": "",
-      "description": "The underlying geometry"
-    },
-    "module-Thurston-Thurston.html#subgroup": {
-      "id": "module-Thurston-Thurston.html#subgroup",
-      "kind": "member",
-      "title": "subgroup :Subgroup",
-      "longname": "module:Thurston~Thurston#subgroup",
-      "name": "subgroup",
-      "tags": "module:Thurston~Thurston#subgroup subgroup",
-      "summary": "",
-      "description": "The discrete subgroup defining a quotient manifold/orbifold"
-    },
-    "module-Thurston-Thurston.html#params": {
-      "id": "module-Thurston-Thurston.html#params",
-      "kind": "member",
-      "title": "params :Object",
-      "longname": "module:Thurston~Thurston#params",
-      "name": "params",
-      "tags": "module:Thurston~Thurston#params params",
-      "summary": "",
-      "description": "The list of parameters of the object. Interactions with params go through a proxy to automatically keep the list of uniforms up to date."
-    },
-    "module-Thurston-Thurston.html#_renderer": {
-      "id": "module-Thurston-Thurston.html#_renderer",
-      "kind": "member",
-      "title": "&lt;private&gt; _renderer :WebGLRenderer",
-      "longname": "module:Thurston~Thurston#_renderer",
-      "name": "_renderer",
-      "tags": "module:Thurston~Thurston#_renderer _renderer",
-      "summary": "",
-      "description": "The renderer used by Three.js"
-    },
-    "module-Thurston-Thurston.html#_camera": {
-      "id": "module-Thurston-Thurston.html#_camera",
-      "kind": "member",
-      "title": "&lt;private&gt; _camera :PerspectiveCamera",
-      "longname": "module:Thurston~Thurston#_camera",
-      "name": "_camera",
-      "tags": "module:Thurston~Thurston#_camera _camera",
-      "summary": "",
-      "description": "The Three.js camera"
-    },
-    "module-Thurston-Thurston.html#_scene": {
-      "id": "module-Thurston-Thurston.html#_scene",
-      "kind": "member",
-      "title": "&lt;private&gt; _scene :Scene",
-      "longname": "module:Thurston~Thurston#_scene",
-      "name": "_scene",
-      "tags": "module:Thurston~Thurston#_scene _scene",
-      "summary": "",
-      "description": "The underlying Three.js scene"
-    },
-    "module-Thurston-Thurston.html#_VRButton": {
-      "id": "module-Thurston-Thurston.html#_VRButton",
-      "kind": "member",
-      "title": "&lt;private&gt; _VRButton :HTMLButtonElement",
-      "longname": "module:Thurston~Thurston#_VRButton",
-      "name": "_VRButton",
-      "tags": "module:Thurston~Thurston#_VRButton _VRButton",
-      "summary": "",
-      "description": "VR Button"
-    },
-    "module-Thurston-Thurston.html#_solids": {
-      "id": "module-Thurston-Thurston.html#_solids",
-      "kind": "member",
-      "title": "&lt;private&gt; _solids :Array.&lt;Solid&gt;",
-      "longname": "module:Thurston~Thurston#_solids",
-      "name": "_solids",
-      "tags": "module:Thurston~Thurston#_solids _solids",
-      "summary": "",
-      "description": "The list of solids in the non-euclidean scene"
-    },
-    "module-Thurston-Thurston.html#_lights": {
-      "id": "module-Thurston-Thurston.html#_lights",
-      "kind": "member",
-      "title": "&lt;private&gt; _lights :Array.&lt;Light&gt;",
-      "longname": "module:Thurston~Thurston#_lights",
-      "name": "_lights",
-      "tags": "module:Thurston~Thurston#_lights _lights",
-      "summary": "",
-      "description": "The list of lights in the non-euclidean scene"
-    },
-    "module-Thurston-Thurston.html#_maxLightDirs": {
-      "id": "module-Thurston-Thurston.html#_maxLightDirs",
-      "kind": "member",
-      "title": "&lt;private&gt; _maxLightDirs :number",
-      "longname": "module:Thurston~Thurston#_maxLightDirs",
-      "name": "_maxLightDirs",
-      "tags": "module:Thurston~Thurston#_maxLightDirs _maxLightDirs",
-      "summary": "",
-      "description": "The maximal number of lights directions Computed automatically from the list of lights."
-    },
-    "module-Thurston-Thurston.html#_keyboardControls": {
-      "id": "module-Thurston-Thurston.html#_keyboardControls",
-      "kind": "member",
-      "title": "&lt;private&gt; _keyboardControls :FlyControls",
-      "longname": "module:Thurston~Thurston#_keyboardControls",
-      "name": "_keyboardControls",
-      "tags": "module:Thurston~Thurston#_keyboardControls _keyboardControls",
-      "summary": "",
-      "description": "The keyboard controls"
-    },
-    "module-Thurston-Thurston.html#_clock": {
-      "id": "module-Thurston-Thurston.html#_clock",
-      "kind": "member",
-      "title": "&lt;private&gt; _clock :Clock",
-      "longname": "module:Thurston~Thurston#_clock",
-      "name": "_clock",
-      "tags": "module:Thurston~Thurston#_clock _clock",
-      "summary": "",
-      "description": "A clock to measure the time between two call of animate"
-    },
-    "module-Thurston-Thurston.html#gui": {
-      "id": "module-Thurston-Thurston.html#gui",
-      "kind": "member",
-      "title": "gui :GUI",
-      "longname": "module:Thurston~Thurston#gui",
-      "name": "gui",
-      "tags": "module:Thurston~Thurston#gui gui",
-      "summary": "",
-      "description": "The graphical user interface"
-    },
-    "module-Thurston-Thurston.html#stats": {
-      "id": "module-Thurston-Thurston.html#stats",
-      "kind": "member",
-      "title": "stats :Stats",
-      "longname": "module:Thurston~Thurston#stats",
-      "name": "stats",
-      "tags": "module:Thurston~Thurston#stats stats",
-      "summary": "",
-      "description": "The performance stats"
-    },
-    "module-Thurston-Thurston.html#stereo": {
-      "id": "module-Thurston-Thurston.html#stereo",
-      "kind": "member",
-      "title": "stereo :Stereo",
-      "longname": "module:Thurston~Thurston#stereo",
-      "name": "stereo",
-      "tags": "module:Thurston~Thurston#stereo stereo",
-      "summary": "",
-      "description": "Object used for stereo related computations (offset of the eyes, pre-processing on the shader, etc)."
-    },
-    "module-Thurston-Thurston.html#maxLightDirs": {
-      "id": "module-Thurston-Thurston.html#maxLightDirs",
-      "kind": "member",
-      "title": "maxLightDirs :number",
-      "longname": "module:Thurston~Thurston#maxLightDirs",
-      "name": "maxLightDirs",
-      "tags": "module:Thurston~Thurston#maxLightDirs maxLightDirs",
-      "summary": "",
-      "description": "The maximal number of light directions"
-    },
-    "module-Thurston-Thurston.html#chaseCamera": {
-      "id": "module-Thurston-Thurston.html#chaseCamera",
-      "kind": "member",
-      "title": "chaseCamera",
-      "longname": "module:Thurston~Thurston#chaseCamera",
-      "name": "chaseCamera",
-      "tags": "module:Thurston~Thurston#chaseCamera chaseCamera",
-      "summary": "",
-      "description": "If the camera moved (most likely because VR headset updated its position), then we update both the Three.js scene (by moving the horizon sphere) and the non-euclidean one (by changing the position). The eye positions are not updated here. This should be done manually somewhere else."
-    },
-    "module-Thurston-Thurston.html#infos": {
-      "id": "module-Thurston-Thurston.html#infos",
-      "kind": "function",
-      "title": "infos()",
-      "longname": "module:Thurston~Thurston#infos",
-      "name": "infos",
-      "tags": "module:Thurston~Thurston#infos infos",
-      "summary": "",
-      "description": "Data displayed in the log, when the info key is pressed."
-    },
-    "module-Thurston-Thurston.html#registerParam": {
-      "id": "module-Thurston-Thurston.html#registerParam",
-      "kind": "function",
-      "title": "registerParam( name, pass, type ) → {Thurston}",
-      "longname": "module:Thurston~Thurston#registerParam",
-      "name": "registerParam",
-      "tags": "module:Thurston~Thurston#registerParam registerParam",
-      "summary": "",
-      "description": "Register a new parameter to PARAMS"
-    },
-    "module-Thurston-Thurston.html#setParams": {
-      "id": "module-Thurston-Thurston.html#setParams",
-      "kind": "function",
-      "title": "setParams( params ) → {Thurston}",
-      "longname": "module:Thurston~Thurston#setParams",
-      "name": "setParams",
-      "tags": "module:Thurston~Thurston#setParams setParams",
-      "summary": "",
-      "description": "Set the given options."
-    },
-    "module-Thurston-Thurston.html#setParam": {
-      "id": "module-Thurston-Thurston.html#setParam",
-      "kind": "function",
-      "title": "setParam( key, value ) → {Thurston}",
-      "longname": "module:Thurston~Thurston#setParam",
-      "name": "setParam",
-      "tags": "module:Thurston~Thurston#setParam setParam",
-      "summary": "",
-      "description": "Set the given option."
-    },
-    "module-Thurston-Thurston.html#addItem": {
-      "id": "module-Thurston-Thurston.html#addItem",
-      "kind": "function",
-      "title": "addItem() → {Thurston}",
-      "longname": "module:Thurston~Thurston#addItem",
-      "name": "addItem",
-      "tags": "module:Thurston~Thurston#addItem addItem",
-      "summary": "",
-      "description": "Adding an item to the scene."
-    },
-    "module-Thurston-Thurston.html#addItems": {
-      "id": "module-Thurston-Thurston.html#addItems",
-      "kind": "function",
-      "title": "addItems() → {Thurston}",
-      "longname": "module:Thurston~Thurston#addItems",
-      "name": "addItems",
-      "tags": "module:Thurston~Thurston#addItems addItems",
-      "summary": "",
-      "description": "Adding a list of item to the scene."
-    },
-    "module-Thurston-Thurston.html#getEyePositions": {
-      "id": "module-Thurston-Thurston.html#getEyePositions",
-      "kind": "function",
-      "title": "getEyePositions()",
-      "longname": "module:Thurston~Thurston#getEyePositions",
-      "name": "getEyePositions",
-      "tags": "module:Thurston~Thurston#getEyePositions getEyePositions",
-      "summary": "",
-      "description": "Return the position of the left and right eye, computed from the current position. If the VR mode is not on, then both eye coincide with the observer position."
-    },
-    "module-Thurston-Thurston.html#appendTitle": {
-      "id": "module-Thurston-Thurston.html#appendTitle",
-      "kind": "function",
-      "title": "appendTitle()",
-      "longname": "module:Thurston~Thurston#appendTitle",
-      "name": "appendTitle",
-      "tags": "module:Thurston~Thurston#appendTitle appendTitle",
-      "summary": "",
-      "description": "add the name of the geometry to the title of the page"
-    },
-    "module-Thurston-Thurston.html#setKeyboard": {
-      "id": "module-Thurston-Thurston.html#setKeyboard",
-      "kind": "function",
-      "title": "setKeyboard( value )",
-      "longname": "module:Thurston~Thurston#setKeyboard",
-      "name": "setKeyboard",
-      "tags": "module:Thurston~Thurston#setKeyboard setKeyboard",
-      "summary": "",
-      "description": "Set the keyboard used in the controls"
-    },
-    "module-Thurston-Thurston.html#initUI": {
-      "id": "module-Thurston-Thurston.html#initUI",
-      "kind": "function",
-      "title": "initUI() → {Thurston}",
-      "longname": "module:Thurston~Thurston#initUI",
-      "name": "initUI",
-      "tags": "module:Thurston~Thurston#initUI initUI",
-      "summary": "",
-      "description": "Initialize the graphic user interface"
-    },
-    "module-Thurston-Thurston.html#initThreeJS": {
-      "id": "module-Thurston-Thurston.html#initThreeJS",
-      "kind": "function",
-      "title": "initThreeJS()",
-      "longname": "module:Thurston~Thurston#initThreeJS",
-      "name": "initThreeJS",
-      "tags": "module:Thurston~Thurston#initThreeJS initThreeJS",
-      "summary": "",
-      "description": "Setup the Three.js scene"
-    },
-    "module-Thurston-Thurston.html#initStats": {
-      "id": "module-Thurston-Thurston.html#initStats",
-      "kind": "function",
-      "title": "initStats() → {Thurston}",
-      "longname": "module:Thurston~Thurston#initStats",
-      "name": "initStats",
-      "tags": "module:Thurston~Thurston#initStats initStats",
-      "summary": "",
-      "description": "Initialize the performance stats"
-    },
-    "module-Thurston-Thurston.html#buildShaderVertex": {
-      "id": "module-Thurston-Thurston.html#buildShaderVertex",
-      "kind": "function",
-      "title": "&lt;async&gt; buildShaderVertex() → {string}",
-      "longname": "module:Thurston~Thurston#buildShaderVertex",
-      "name": "buildShaderVertex",
-      "tags": "module:Thurston~Thurston#buildShaderVertex buildShaderVertex",
-      "summary": "",
-      "description": "Build the vertex shader from templates files."
-    },
-    "module-Thurston-Thurston.html#buildShaderDataConstants": {
-      "id": "module-Thurston-Thurston.html#buildShaderDataConstants",
-      "kind": "function",
-      "title": "buildShaderDataConstants() → {Array.&lt;Object&gt;}",
-      "longname": "module:Thurston~Thurston#buildShaderDataConstants",
-      "name": "buildShaderDataConstants",
-      "tags": "module:Thurston~Thurston#buildShaderDataConstants buildShaderDataConstants",
-      "summary": "",
-      "description": "Collect all the parameters that will be passed to the shader as constants"
-    },
-    "module-Thurston-Thurston.html#buildShaderDataUniforms": {
-      "id": "module-Thurston-Thurston.html#buildShaderDataUniforms",
-      "kind": "function",
-      "title": "buildShaderDataUniforms() → {Array.&lt;Object&gt;}",
-      "longname": "module:Thurston~Thurston#buildShaderDataUniforms",
-      "name": "buildShaderDataUniforms",
-      "tags": "module:Thurston~Thurston#buildShaderDataUniforms buildShaderDataUniforms",
-      "summary": "",
-      "description": "Collect all the parameters that will be passed to the shader as uniforms"
-    },
-    "module-Thurston-Thurston.html#buildShaderDataBackground": {
-      "id": "module-Thurston-Thurston.html#buildShaderDataBackground",
-      "kind": "function",
-      "title": "&lt;async&gt; buildShaderDataBackground() → {Promise.&lt;Array.&lt;string&gt;&gt;}",
-      "longname": "module:Thurston~Thurston#buildShaderDataBackground",
-      "name": "buildShaderDataBackground",
-      "tags": "module:Thurston~Thurston#buildShaderDataBackground buildShaderDataBackground",
-      "summary": "",
-      "description": "Return the list of all \"background\" blocks of GLSL code which are required for items and subgroup."
-    },
-    "module-Thurston-Thurston.html#buildShaderDataItems": {
-      "id": "module-Thurston-Thurston.html#buildShaderDataItems",
-      "kind": "function",
-      "title": "&lt;async&gt; buildShaderDataItems() → {Promise.&lt;{solids: Array.&lt;Solid&gt;, lights: Array.&lt;Light&gt;}&gt;}",
-      "longname": "module:Thurston~Thurston#buildShaderDataItems",
-      "name": "buildShaderDataItems",
-      "tags": "module:Thurston~Thurston#buildShaderDataItems buildShaderDataItems",
-      "summary": "",
-      "description": "Review all the items in the scene and setup their glsl property Return the solids and lights as lists"
-    },
-    "module-Thurston-Thurston.html#buildShaderFragment": {
-      "id": "module-Thurston-Thurston.html#buildShaderFragment",
-      "kind": "function",
-      "title": "&lt;async&gt; buildShaderFragment() → {string}",
-      "longname": "module:Thurston~Thurston#buildShaderFragment",
-      "name": "buildShaderFragment",
-      "tags": "module:Thurston~Thurston#buildShaderFragment buildShaderFragment",
-      "summary": "",
-      "description": "Build the fragment shader from templates files. The data used to populate the templates are build by the functions buildShaderDataConstants (constants) buildShaderDataUniforms (uniforms) buildShaderDataBackground (background routines for the items and the subgroup) buildShaderDataItems (items) this.subgroup.glslBuildData (subgroup)"
-    },
-    "module-Thurston-Thurston.html#initHorizon": {
-      "id": "module-Thurston-Thurston.html#initHorizon",
-      "kind": "function",
-      "title": "&lt;async&gt; initHorizon() → {Promise.&lt;Thurston&gt;}",
-      "longname": "module:Thurston~Thurston#initHorizon",
-      "name": "initHorizon",
-      "tags": "module:Thurston~Thurston#initHorizon initHorizon",
-      "summary": "",
-      "description": "Init the horizon of the Three.js seen (with its shaders) This cannot be done in the constructor as it is an async function."
-    },
-    "module-Thurston-Thurston.html#animate": {
-      "id": "module-Thurston-Thurston.html#animate",
-      "kind": "function",
-      "title": "animate()",
-      "longname": "module:Thurston~Thurston#animate",
-      "name": "animate",
-      "tags": "module:Thurston~Thurston#animate animate",
-      "summary": "",
-      "description": "Animates the simulation"
-    },
-    "module-Thurston-Thurston.html#run": {
-      "id": "module-Thurston-Thurston.html#run",
-      "kind": "function",
-      "title": "run()",
-      "longname": "module:Thurston~Thurston#run",
-      "name": "run",
-      "tags": "module:Thurston~Thurston#run run",
-      "summary": "",
-      "description": "Wrap together initialization and animation We handle the promise here so that the function is no more async"
-    },
-    "module-Thurston-Thurston.html#onWindowResize": {
-      "id": "module-Thurston-Thurston.html#onWindowResize",
-      "kind": "function",
-      "title": "onWindowResize( event )",
-      "longname": "module:Thurston~Thurston#onWindowResize",
-      "name": "onWindowResize",
-      "tags": "module:Thurston~Thurston#onWindowResize onWindowResize",
-      "summary": "",
-      "description": "Action when the window is resized"
-    },
-    "module-Thurston-Thurston.html#addEventListeners": {
-      "id": "module-Thurston-Thurston.html#addEventListeners",
-      "kind": "function",
-      "title": "addEventListeners()",
-      "longname": "module:Thurston~Thurston#addEventListeners",
-      "name": "addEventListeners",
-      "tags": "module:Thurston~Thurston#addEventListeners addEventListeners",
-      "summary": "",
-      "description": "Register all the event listeners"
-    },
-    "module-Thurston.html": {
-      "id": "module-Thurston.html",
-      "kind": "module",
-      "title": "Thurston",
-      "longname": "module:Thurston",
-      "name": "Thurston",
-      "tags": "module:Thurston",
-      "summary": "",
-      "description": "Module used to define and render a scene in one of the eight Thurston geometries.",
-      "body": ""
     }
   }
 };

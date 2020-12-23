@@ -7,7 +7,6 @@ import {Camera, Renderer, Scene} from "../../js/core/General.js";
 import {Mono} from "../../js/commons/stereos/mono/Mono.js";
 
 import {Point} from "../../js/core/geometry/Point.js";
-import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
 import {BallShape} from "../../js/geometries/euc/shapes/ball/BallShape.js";
 import {LocalBallShape} from "../../js/geometries/euc/shapes/localBall/LocalBallShape.js";
 import {UnionShape} from "../../js/commons/shapes/union/UnionShape.js";
