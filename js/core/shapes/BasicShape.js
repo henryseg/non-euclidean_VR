@@ -27,6 +27,6 @@ export class BasicShape extends Shape {
      * @type {boolean}
      */
     get isBasicShape() {
-       return true;
+        return true;
     }
 }

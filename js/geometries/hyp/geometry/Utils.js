@@ -1,6 +1,5 @@
 import {Vector4} from "../../../lib/three.module.js";
 
-
 /**
  * Lorentzian inner product in R^4
  * @param {Vector4} v

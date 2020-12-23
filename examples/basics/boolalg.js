@@ -37,7 +37,7 @@ const mat = new NormalMaterial();
 // Complement of a local ball
 const ball0 = new LocalBallShape(
     new Point(0, 0, 0),
-    0.67,
+    1.07,
 );
 
 const complementShape = new ComplementShape(ball0);

@@ -20,6 +20,10 @@ import {
  */
 class Vector extends Vector3 {
 
+    get isVector(){
+        return true;
+    }
+
     /**
      * Overload Three.js `applyMatrix4`.
      * Indeed Three.js considers the `Vector3` as a 3D **point**

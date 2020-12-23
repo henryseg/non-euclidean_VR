@@ -1,4 +1,5 @@
-export default /* glsl */`
+// language=GLSL
+export default `//
 /**
  * Distance between two points
  */

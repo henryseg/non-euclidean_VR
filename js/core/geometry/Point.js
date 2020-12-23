@@ -30,6 +30,10 @@ class Point {
         throw new Error("This method need be overloaded.");
     }
 
+    get isPoint(){
+        return true;
+    }
+
     /**
      * Translate the current point by the given isometry.
      * @abstract

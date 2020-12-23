@@ -27,6 +27,6 @@ export class AdvancedShape extends Shape {
      * @type {boolean}
      */
     get isBasicShape() {
-        throw false;
+        return false;
     }
 }

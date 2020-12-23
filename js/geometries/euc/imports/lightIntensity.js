@@ -1,4 +1,5 @@
-export default /* glsl */ `
+// language=GLSL
+export default `//
 /**
 * Intensity of the light after travelling a length \`len\` in the direction \`dir\`
 * @param[in] dir unit vector at the light position

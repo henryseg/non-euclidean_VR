@@ -1,1 +1,1 @@
-# Raymarchin in non-euclidean geometries
+# Ray-marching in Thurston geometries

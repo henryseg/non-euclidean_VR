@@ -38,7 +38,7 @@ export class Material extends Generic {
      * @type {boolean}
      */
     get isLocal() {
-        return !this.isGlobal;
+        throw new Error('Material: isLocal has no meaning for materials');
     }
 
     /**

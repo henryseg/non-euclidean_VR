@@ -43,6 +43,7 @@ const ball1 = new Ball(
     normalMaterial
 );
 
+// lights for the Phong material
 const light1 = new PointLight(
     new Point(2, 2, -2),
     new Color(1, 1, 0),
@@ -51,6 +52,8 @@ const light2 = new PointLight(
     new Point(1, -0.5, 0),
     new Color(1, 0, 1),
 )
+
+// Phong shading material
 const phongMaterial = new PhongMaterial({shininess: 5, lights: [light1, light2]});
 const ball2 = new Ball(
     new Point(1, 0, -2),
@@ -63,7 +66,6 @@ scene.add(light1, light2, ball0, ball1, ball2);
 
 // building there renderer
 renderer.build();
-
 
 // rendering the scene
 function animate() {

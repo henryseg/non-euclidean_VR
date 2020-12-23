@@ -1,23 +1,5 @@
-/**
- * @const {string}
- * @default Full name of the geometry
- */
-const name = 'Three-sphere space';
-
-/**
- * @const {string}
- * @default Path to the geometry dependent part of the shader (part 1)
- * @todo The path is absolute with respect to the root of the server
- */
-const shader1 = '/shaders/geometry/sph/part1.glsl';
-/**
- * @const {string}
- * @default Path to the geometry dependent part of the shader (part 2)
- * @todo The path is absolute with respect to the root of the server
- */
-const shader2 = '/shaders/geometry/sph/part2.glsl';
-
-export {name, shader1, shader2};
+export {default as shader1} from "./shaders/part1.js";
+export {default as shader2} from "./shaders/part2.js";
 export {Isometry} from "./Isometry.js";
 export {Point} from "./Point.js";
 export {Vector} from "../../../core/geometry/Vector.js";

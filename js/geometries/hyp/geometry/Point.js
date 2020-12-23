@@ -1,9 +1,5 @@
-import {
-    Point
-} from "../../../core/geometry/Point.js";
-import {
-    Vector4
-} from "../../../lib/three.module.js";
+import {Point} from "../../../core/geometry/Point.js";
+import {Vector4} from "../../../lib/three.module.js";
 import * as Utils from "./Utils.js";
 
 
@@ -15,7 +11,6 @@ Point.prototype.build = function () {
     }
 };
 
-
 Point.prototype.reduceError = function () {
     // let v = this.coords;
     // let norm = Math.sqrt(-v.x * v.x - v.y * v.y - v.z * v.z + v.w * v.w);
@@ -23,7 +18,6 @@ Point.prototype.reduceError = function () {
     this.coords.hypNormalize();
     return this;
 }
-
 
 Point.prototype.applyIsometry = function (isom) {
     this.coords.applyMatrix4(isom.matrix)
@@ -50,7 +44,4 @@ Point.prototype.toGLSL = function () {
     return `Point(${this.coords.toGLSL()})`;
 }
 
-
-export {
-    Point
-}
+export {Point};

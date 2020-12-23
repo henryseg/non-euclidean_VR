@@ -6,7 +6,7 @@ import {
 } from "../geometry/General.js";
 
 
-const cubeHalfWidth = 0.5;
+const cubeHalfWidth = 0.8;
 
 function testXp(p) {
     return p.coords.x > cubeHalfWidth;

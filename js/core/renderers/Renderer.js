@@ -146,7 +146,7 @@ export class Renderer {
     /**
      * Build the fragment shader
      */
-    fragmentShader() {
+    buildFragmentShader() {
 
         // constants
         this._fragmentBuilder.addChunk(constants);
@@ -182,11 +182,10 @@ export class Renderer {
         // sphere eversion !
         geometry.scale(1, 1, -1);
 
-        const vertexShader = this.vertexShader();
-        this.fragmentShader();
+        this.buildFragmentShader();
         const material = new ShaderMaterial({
             uniforms: this._fragmentBuilder.uniforms,
-            vertexShader: vertexShader,
+            vertexShader: this.vertexShader(),
             fragmentShader: this._fragmentBuilder.code,
         });
         this._horizon = new Mesh(geometry, material);
@@ -196,7 +195,7 @@ export class Renderer {
         return this;
     }
 
-    checkShader(){
+    checkShader() {
         console.log(this._fragmentBuilder.code);
     }
 

@@ -102,9 +102,7 @@ export class Generic {
      */
     addImport(imports) {
         for (const imp of arguments) {
-            if (!(imp in this.imports)) {
-                this.imports.push(imp);
-            }
+            this.imports.push(imp);
         }
     }
 
