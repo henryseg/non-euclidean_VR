@@ -1,4 +1,7 @@
+import {mustache} from "../../lib/mustache.mjs";
 import {Generic} from "../Generic.js";
+
+import gradient from "./shaders/gradient.js";
 
 /**
  * @class
@@ -56,11 +59,12 @@ export class Shape extends Generic {
 
     /**
      * Return the chunk of GLSL code corresponding to the gradient field.
-     * @abstract
+     * The default computation approximates numerically the gradient.
+     * This function can be overwritten for an explicit computation.
      * @return {string}
      */
     glslGradient() {
-        throw new Error('Shape: this method should be implemented');
+        return mustache.render(gradient, this);
     }
 
     /**
