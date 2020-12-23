@@ -15,7 +15,6 @@ import {LocalBallShape} from "../../js/geometries/sph/shapes/localBall/LocalBall
 
 const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
 
-
 // lights for the Phong material
 
 //  yellow light

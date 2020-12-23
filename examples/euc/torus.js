@@ -69,6 +69,7 @@ const ball1 = new Ball(
 
 thurston.add(complementSolid, ball1, light0, light1, light2);
 thurston.run();
+thurston.renderer.checkShader();
 
 
 
