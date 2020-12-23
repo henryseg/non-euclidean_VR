@@ -1,4 +1,4 @@
-import {Vector} from "../../../../../js/geometry/abstract/Vector.js";
+import {Vector} from "../../../../../js/core/abstract/Vector.js";
 import {Matrix4, Quaternion} from "../../../../../js/lib/three.module.js";
 import {Position as PositionEuc} from "../../../../../js/geometry/euc/General.js";
 

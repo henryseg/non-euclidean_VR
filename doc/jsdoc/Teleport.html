@@ -39,35 +39,63 @@
 									<ul class="dropdown-menu">
 											<li><a href="global.html#bind">bind</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
-											<li><a href="global.html#name">name</a></li>
-											<li><a href="global.html#name">name</a></li>
-											<li><a href="global.html#shader">shader</a></li>
-											<li><a href="global.html#shader">shader</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="Camera.html">Camera</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="FixedDirectionStereo.html">FixedDirectionStereo</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Horoball.html">Horoball</a></li>
+											<li><a href="HoroballShape.html">HoroballShape</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
-											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
+											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
 											<li><a href="Material.html">Material</a></li>
-											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
-											<li><a href="ObjectThurston.html">ObjectThurston</a></li>
+											<li><a href="Mono.html">Mono</a></li>
+											<li><a href="NativeStereo.html">NativeStereo</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
 											<li><a href="Subgroup.html">Subgroup</a></li>
 											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Thurston.html">Thurston</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
-											<li><a href="VRControls.html">VRControls</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
-									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="module-Thurston.html">Thurston</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
 									</ul>
 								</li>
 				</ul>
@@ -102,7 +130,7 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Teleport</span><span class="signature-params">( <span class="signature-param">test</span>, <span class="signature-param">isom</span>, <span class="signature-param">inv</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Teleport</span><span class="signature-params">( <span class="signature-param">jsTest</span>, <span class="signature-param">glslTest</span>, <span class="signature-param">isom</span>, <span class="signature-param">inv</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
@@ -122,10 +150,20 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>test</code></td>
+								<td><code>jsTest</code></td>
 							<td><span class="param-type">function</span></td>
 							<td class="last">
-									<p>A test saying if a teleportation is needed</p>
+									<p>A JS test saying if a teleportation is needed.
+			The test is a function with the signature Point -&gt; boolean.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>glslTest</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>a chunk of GLSL performing the same test.
+			The test should be encapsulated in a function with signature Point -&gt; bool,
+			whose name matches the one of the JS test.</p>
 							</td>
 						</tr>
 						<tr>
@@ -166,7 +204,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-13">line 13</a></p>
+									<p class="form-control-static"><a href="core_geometry_Teleport.js.html">core/geometry/Teleport.js</a>, <a href="core_geometry_Teleport.js.html#line-12">line 12</a></p>
 								</div>
 							</div>
 			
@@ -178,15 +216,26 @@
 </dd>
 							</dl>
 							<article class="secondary">
+									<h3>Classes</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title class public">
+			<h4 id="Teleport" class="class public"><a href="Teleport.html"><span class="signature-new">new&nbsp;</span><span class="name">Teleport</span><span class="signature-params">( <span class="signature-param">jsTest</span>, <span class="signature-param">glslTest</span>, <span class="signature-param">isom</span>, <span class="signature-param">inv</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+		</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+									</dl>
 									<h3>Members</h3>
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="test" class="member public"><span class="name">test</span><span class="signature-type"> :function</span></h4>
+			<h4 id="jsTest" class="member public"><span class="name">jsTest</span><span class="signature-type"> :function</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A test saying if a teleportation is needed
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A JS test saying if a teleportation is needed
 			The test is a function with the signature Point -&gt; boolean
 			The test returns true if a teleportation is needed and false otherwise.</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -216,7 +265,52 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-29">line 29</a></p>
+									<p class="form-control-static"><a href="core_geometry_Teleport.js.html">core/geometry/Teleport.js</a>, <a href="core_geometry_Teleport.js.html#line-32">line 32</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="glslTest" class="member public"><span class="name">glslTest</span><span class="signature-type"> :string</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A GLSL test saying if a teleportation is needed
+			The test returns true if a teleportation is needed and false otherwise.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">string</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_geometry_Teleport.js.html">core/geometry/Teleport.js</a>, <a href="core_geometry_Teleport.js.html#line-38">line 38</a></p>
 								</div>
 							</div>
 			
@@ -260,7 +354,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-34">line 34</a></p>
+									<p class="form-control-static"><a href="core_geometry_Teleport.js.html">core/geometry/Teleport.js</a>, <a href="core_geometry_Teleport.js.html#line-43">line 43</a></p>
 								</div>
 							</div>
 			
@@ -304,7 +398,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-39">line 39</a></p>
+									<p class="form-control-static"><a href="core_geometry_Teleport.js.html">core/geometry/Teleport.js</a>, <a href="core_geometry_Teleport.js.html#line-48">line 48</a></p>
 								</div>
 							</div>
 			
@@ -316,21 +410,21 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="uuid" class="member public"><span class="name">uuid</span><span class="signature-type"> :String</span></h4>
+			<h4 id="name" class="member public"><span class="name">name</span><span class="signature-type"></span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>UUID of this object instance.
-			This gets automatically assigned, so this shouldn't be edited.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The name of the JS test function serves as name/ID for the Teleport</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">string</span></label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">String</span></div>
+									<div class="form-control-static returns-description"></div>
 								</div>
 							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
 			
 			
 			
@@ -349,97 +443,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-50">line 50</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="name" class="member public"><span class="name">name</span><span class="signature-type"> :string</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A unique name, build from the uuid (private version).
-			This gets automatically assigned, so this shouldn't be edited.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">string</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-56">line 56</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="glsl" class="member public"><span class="name">glsl</span><span class="signature-type"> :string</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The GLSL code to perform the test.
-			(To be automatically setup at the subgroup level.)</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">string</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="geometry_abstract_Teleport.js.html">geometry/abstract/Teleport.js</a>, <a href="geometry_abstract_Teleport.js.html#line-62">line 62</a></p>
+									<p class="form-control-static"><a href="core_geometry_Teleport.js.html">core/geometry/Teleport.js</a>, <a href="core_geometry_Teleport.js.html#line-60">line 60</a></p>
 								</div>
 							</div>
 			
@@ -460,7 +464,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 24th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

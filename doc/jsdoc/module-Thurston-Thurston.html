@@ -41,32 +41,60 @@
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#name">name</a></li>
 											<li><a href="global.html#name">name</a></li>
-											<li><a href="global.html#shader">shader</a></li>
-											<li><a href="global.html#shader">shader</a></li>
+											<li><a href="global.html#shader1">shader1</a></li>
+											<li><a href="global.html#shader1">shader1</a></li>
+											<li><a href="global.html#shader2">shader2</a></li>
+											<li><a href="global.html#shader2">shader2</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="Camera.html">Camera</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="FixedDirectionStereo.html">FixedDirectionStereo</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
-											<li><a href="KeyboardControls.html">KeyboardControls</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
-											<li><a href="ObjectThurston.html">ObjectThurston</a></li>
+											<li><a href="module-Thurston-Thurston.html">Thurston~Thurston</a></li>
+											<li><a href="Mono.html">Mono</a></li>
+											<li><a href="NativeStereo.html">NativeStereo</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
+											<li><a href="Stereo.html">Stereo</a></li>
 											<li><a href="Subgroup.html">Subgroup</a></li>
 											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
-											<li><a href="VRControls.html">VRControls</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
 									</ul>
 								</li>
 								<li class="dropdown">
 									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+											<li><a href="module-Thurston.html">Thurston</a></li>
 											<li><a href="module-Thurston.html">Thurston</a></li>
 									</ul>
 								</li>
@@ -112,7 +140,7 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Thurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">subgroup</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Thurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">subgroup</span>, <span class="signature-param">params</span>, <span class="signature-param">stereo</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
@@ -149,6 +177,13 @@
 									<p>a list of options. See defaultOptions for the list of available options.</p>
 							</td>
 						</tr>
+						<tr>
+								<td><code>stereo</code></td>
+							<td><span class="param-type"><a href="Stereo.html">Stereo</a></span></td>
+							<td class="last">
+									<p>the stero handler</p>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -172,7 +207,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-193">line 193</a></p>
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-210">line 210</a></p>
 								</div>
 							</div>
 			
@@ -197,10 +232,10 @@
 									<h3>Members</h3>
 									<dl class="symbol">
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member public">
 			<h4 id="geom" class="member public"><span class="name">geom</span><span class="signature-type"> :Object</span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The underlying geometry</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -230,7 +265,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-212">line 212</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-231">line 231</a></p>
 								</div>
 							</div>
 			
@@ -241,10 +276,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member public">
 			<h4 id="subgroup" class="member public"><span class="name">subgroup</span><span class="signature-type"> :<a href="Subgroup.html">Subgroup</a></span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The discrete subgroup defining a quotient manifold/orbifold</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -274,7 +309,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-217">line 217</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-236">line 236</a></p>
 								</div>
 							</div>
 			
@@ -285,10 +320,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member public">
 			<h4 id="params" class="member public"><span class="name">params</span><span class="signature-type"> :Object</span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The list of parameters of the object.
 			Interactions with <code>params</code> go through a proxy to automatically keep the list of uniforms up to date.</p></div>
@@ -319,7 +354,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-224">line 224</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-244">line 244</a></p>
 								</div>
 							</div>
 			
@@ -330,10 +365,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
+											<dt class="symbol-title member private">
 			<h4 id="_renderer" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_renderer</span><span class="signature-type"> :WebGLRenderer</span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The renderer used by Three.js</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -363,7 +398,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-244">line 244</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-264">line 264</a></p>
 								</div>
 							</div>
 			
@@ -374,10 +409,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
+											<dt class="symbol-title member private">
 			<h4 id="_camera" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_camera</span><span class="signature-type"> :PerspectiveCamera</span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The Three.js camera</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -407,7 +442,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-250">line 250</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-270">line 270</a></p>
 								</div>
 							</div>
 			
@@ -418,10 +453,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
-			<h4 id="_scene" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_scene</span><span class="signature-type"> :Scene</span></h4>
+											<dt class="symbol-title member private">
+			<h4 id="_scene" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_scene</span><span class="signature-type"> :<a href="Scene.html">Scene</a></span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The underlying Three.js scene</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -430,7 +465,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">Scene</span></div>
+									<div class="form-control-static type-names"><span class="param-type"><a href="Scene.html">Scene</a></span></div>
 								</div>
 							</div>
 			
@@ -451,7 +486,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-256">line 256</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-276">line 276</a></p>
 								</div>
 							</div>
 			
@@ -462,10 +497,98 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
+											<dt class="symbol-title member private">
+			<h4 id="_VRButton" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_VRButton</span><span class="signature-type"> :HTMLButtonElement</span></h4>
+		</dt>
+<dd class="symbol-details member private">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>VR Button</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">HTMLButtonElement</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-282">line 282</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member private">
+			<h4 id="_VRButton" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_VRButton</span><span class="signature-type"> :HTMLButtonElement</span></h4>
+		</dt>
+<dd class="symbol-details member private">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>VR Button</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">HTMLButtonElement</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-282">line 282</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member private">
 			<h4 id="_solids" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_solids</span><span class="signature-type"> :Array.&lt;<a href="Solid.html">Solid</a>></span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The list of solids in the non-euclidean scene</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -495,7 +618,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-281">line 281</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-308">line 308</a></p>
 								</div>
 							</div>
 			
@@ -506,10 +629,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
+											<dt class="symbol-title member private">
 			<h4 id="_lights" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_lights</span><span class="signature-type"> :Array.&lt;<a href="Light.html">Light</a>></span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The list of lights in the non-euclidean scene</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -539,7 +662,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-287">line 287</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-314">line 314</a></p>
 								</div>
 							</div>
 			
@@ -550,10 +673,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
+											<dt class="symbol-title member private">
 			<h4 id="_maxLightDirs" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_maxLightDirs</span><span class="signature-type"> :number</span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The maximal number of lights directions
 			Computed automatically from the list of lights.</p></div>
@@ -584,7 +707,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-294">line 294</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-321">line 321</a></p>
 								</div>
 							</div>
 			
@@ -595,19 +718,20 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
-			<h4 id="_keyboardControls" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_keyboardControls</span><span class="signature-type"> :<a href="KeyboardControls.html">KeyboardControls</a></span></h4>
+											<dt class="symbol-title member private">
+			<h4 id="_maxLightDirs" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_maxLightDirs</span><span class="signature-type"> :number</span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The keyboard controls</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The maximal number of lights directions
+			Computed automatically from the list of lights.</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 							<!-- type -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type"><a href="KeyboardControls.html">KeyboardControls</a></span></div>
+									<div class="form-control-static type-names"><span class="param-type">number</span></div>
 								</div>
 							</div>
 			
@@ -628,7 +752,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-302">line 302</a></p>
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-321">line 321</a></p>
 								</div>
 							</div>
 			
@@ -639,10 +763,98 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member private collapsible-symbol">
+											<dt class="symbol-title member private">
+			<h4 id="_keyboardControls" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_keyboardControls</span><span class="signature-type"> :<a href="FlyControls.html">FlyControls</a></span></h4>
+		</dt>
+<dd class="symbol-details member private">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The keyboard controls</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="FlyControls.html">FlyControls</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-329">line 329</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member private">
+			<h4 id="_keyboardControls" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_keyboardControls</span><span class="signature-type"> :<a href="FlyControls.html">FlyControls</a></span></h4>
+		</dt>
+<dd class="symbol-details member private">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The keyboard controls</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="FlyControls.html">FlyControls</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-329">line 329</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member private">
 			<h4 id="_clock" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_clock</span><span class="signature-type"> :Clock</span></h4>
 		</dt>
-<dd class="symbol-details member private  collapsible-symbol">
+<dd class="symbol-details member private">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A clock to measure the time between two call of animate</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -672,7 +884,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-317">line 317</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-345">line 345</a></p>
 								</div>
 							</div>
 			
@@ -683,10 +895,54 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member private">
+			<h4 id="_clock" class="member private"><span class="signature-attribs">&lt;private> </span><span class="name">_clock</span><span class="signature-type"> :Clock</span></h4>
+		</dt>
+<dd class="symbol-details member private">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>A clock to measure the time between two call of animate</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Clock</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-345">line 345</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
 			<h4 id="gui" class="member public"><span class="name">gui</span><span class="signature-type"> :GUI</span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The graphical user interface</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -716,7 +972,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-324">line 324</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-352">line 352</a></p>
 								</div>
 							</div>
 			
@@ -727,10 +983,54 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member public">
+			<h4 id="gui" class="member public"><span class="name">gui</span><span class="signature-type"> :GUI</span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The graphical user interface</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">GUI</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-352">line 352</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
 			<h4 id="stats" class="member public"><span class="name">stats</span><span class="signature-type"> :Stats</span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The performance stats</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -760,7 +1060,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-331">line 331</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-359">line 359</a></p>
 								</div>
 							</div>
 			
@@ -771,10 +1071,99 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member public">
+			<h4 id="stats" class="member public"><span class="name">stats</span><span class="signature-type"> :Stats</span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The performance stats</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Stats</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-359">line 359</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
+			<h4 id="stereo" class="member public"><span class="name">stereo</span><span class="signature-type"> :<a href="Stereo.html">Stereo</a></span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Object used for stereo related computations
+			(offset of the eyes, pre-processing on the shader, etc).</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="Stereo.html">Stereo</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-371">line 371</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
 			<h4 id="maxLightDirs" class="member public"><span class="name">maxLightDirs</span><span class="signature-type"> :number</span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The maximal number of light directions</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -804,7 +1193,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-431">line 431</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-465">line 465</a></p>
 								</div>
 							</div>
 			
@@ -815,10 +1204,54 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
+											<dt class="symbol-title member public">
+			<h4 id="maxLightDirs" class="member public"><span class="name">maxLightDirs</span><span class="signature-type"> :number</span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The maximal number of light directions</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">number</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-465">line 465</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
 			<h4 id="chaseCamera" class="member public"><span class="name">chaseCamera</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
+<dd class="symbol-details member public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>If the camera moved (most likely because VR headset updated its position),
 			then we update both the Three.js scene (by moving the horizon sphere)
@@ -845,12 +1278,67 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-766">line 766</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-806">line 806</a></p>
 								</div>
 							</div>
 			
 			
 			
+							<!-- todo -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">To Do</label>
+								<div class="col-sm-9">
+										<p class="form-control-static">&lt;p&gt;We chase the camera, even if the VR mode is off. Change this ?&lt;/p&gt;</p>
+								</div>
+							</div>
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
+			<h4 id="chaseCamera" class="member public"><span class="name">chaseCamera</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>If the camera moved (most likely because VR headset updated its position),
+			then we update both the Three.js scene (by moving the horizon sphere)
+			and the non-euclidean one (by changing the position).
+			The eye positions are not updated here.
+			This should be done manually somewhere else.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-806">line 806</a></p>
+								</div>
+							</div>
+			
+			
+			
+							<!-- todo -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">To Do</label>
+								<div class="col-sm-9">
+										<p class="form-control-static">&lt;p&gt;We chase the camera, even if the VR mode is off. Change this ?&lt;/p&gt;</p>
+								</div>
+							</div>
 			
 					</form>
 			</div>	</div>
@@ -859,10 +1347,10 @@
 									<h3>Methods</h3>
 									<dl class="symbol">
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="infos" class="function public"><span class="name">infos</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Data displayed in the log, when the info key is pressed.</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -885,7 +1373,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-341">line 341</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-386">line 386</a></p>
 								</div>
 							</div>
 			
@@ -896,10 +1384,47 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="infos" class="function public"><span class="name">infos</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Data displayed in the log, when the info key is pressed.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-386">line 386</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="registerParam" class="function public"><span class="name">registerParam</span><span class="signature-params">( <span class="signature-param">name</span>, <span class="signature-param">pass</span>, <span class="signature-param">type</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Register a new parameter to <code>PARAMS</code></p></div>
 			</div>			<div class="callout callout-info">
@@ -965,7 +1490,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-363">line 363</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-397">line 397</a></p>
 								</div>
 							</div>
 			
@@ -976,10 +1501,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="setParams" class="function public"><span class="name">setParams</span><span class="signature-params">( <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the given options.</p></div>
 			</div>			<div class="callout callout-info">
@@ -1031,7 +1556,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-379">line 379</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-413">line 413</a></p>
 								</div>
 							</div>
 			
@@ -1042,10 +1567,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="setParam" class="function public"><span class="name">setParam</span><span class="signature-params">( <span class="signature-param">key</span>, <span class="signature-param">value</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the given option.</p></div>
 			</div>			<div class="callout callout-info">
@@ -1104,7 +1629,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-394">line 394</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-428">line 428</a></p>
 								</div>
 							</div>
 			
@@ -1115,10 +1640,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="addItem" class="function public"><span class="name">addItem</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adding an item to the scene.</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1149,7 +1674,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-404">line 404</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-438">line 438</a></p>
 								</div>
 							</div>
 			
@@ -1160,10 +1685,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="addItems" class="function public"><span class="name">addItems</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adding a list of item to the scene.</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1194,7 +1719,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-420">line 420</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-454">line 454</a></p>
 								</div>
 							</div>
 			
@@ -1205,10 +1730,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="getEyePositions" class="function public"><span class="name">getEyePositions</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the position of the left and right eye, computed from the current position.
 			If the VR mode is not on, then both eye coincide with the observer position.</p></div>
@@ -1232,7 +1757,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-448">line 448</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-482">line 482</a></p>
 								</div>
 							</div>
 			
@@ -1243,10 +1768,48 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="getEyePositions" class="function public"><span class="name">getEyePositions</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the position of the left and right eye, computed from the current position.
+			If the VR mode is not on, then both eye coincide with the observer position.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-482">line 482</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="appendTitle" class="function public"><span class="name">appendTitle</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>add the name of the geometry to the title of the page</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -1269,7 +1832,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-474">line 474</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-507">line 507</a></p>
 								</div>
 							</div>
 			
@@ -1280,10 +1843,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="setKeyboard" class="function public"><span class="name">setKeyboard</span><span class="signature-params">( <span class="signature-param">value</span>&nbsp;)</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the keyboard used in the controls</p></div>
 			</div>			<div class="callout callout-info">
@@ -1327,7 +1890,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-485">line 485</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-518">line 518</a></p>
 								</div>
 							</div>
 			
@@ -1338,10 +1901,68 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="setKeyboard" class="function public"><span class="name">setKeyboard</span><span class="signature-params">( <span class="signature-param">value</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the keyboard used in the controls</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>value</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>the keyboard type (us, fr,...)</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-518">line 518</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="initUI" class="function public"><span class="name">initUI</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Initialize the graphic user interface</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1372,7 +1993,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-494">line 494</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-527">line 527</a></p>
 								</div>
 							</div>
 			
@@ -1383,10 +2004,55 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="initUI" class="function public"><span class="name">initUI</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Initialize the graphic user interface</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Thurston</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><p>the current Thurston object</p></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-527">line 527</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="initThreeJS" class="function public"><span class="name">initThreeJS</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Setup the Three.js scene</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -1409,7 +2075,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-514">line 514</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-547">line 547</a></p>
 								</div>
 							</div>
 			
@@ -1420,10 +2086,47 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="initThreeJS" class="function public"><span class="name">initThreeJS</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Setup the Three.js scene</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-547">line 547</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="initStats" class="function public"><span class="name">initStats</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Initialize the performance stats</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1454,7 +2157,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-565">line 565</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-601">line 601</a></p>
 								</div>
 							</div>
 			
@@ -1465,10 +2168,55 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="initStats" class="function public"><span class="name">initStats</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Thurston}</span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Initialize the performance stats</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Thurston</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><p>the current Thurston object</p></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-601">line 601</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="buildShaderVertex" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">buildShaderVertex</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{string}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Build the vertex shader from templates files.</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1501,7 +2249,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-577">line 577</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-613">line 613</a></p>
 								</div>
 							</div>
 			
@@ -1512,10 +2260,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="buildShaderDataConstants" class="function public"><span class="name">buildShaderDataConstants</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;Object>}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Collect all the parameters that will be passed to the shader as constants</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1546,7 +2294,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-587">line 587</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-623">line 623</a></p>
 								</div>
 							</div>
 			
@@ -1557,10 +2305,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="buildShaderDataUniforms" class="function public"><span class="name">buildShaderDataUniforms</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;Object>}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Collect all the parameters that will be passed to the shader as uniforms</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1591,7 +2339,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-605">line 605</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-641">line 641</a></p>
 								</div>
 							</div>
 			
@@ -1602,10 +2350,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="buildShaderDataBackground" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">buildShaderDataBackground</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;string>>}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the list of all &quot;background&quot; blocks of GLSL code which are required for items and subgroup.</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -1636,7 +2384,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-622">line 622</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-658">line 658</a></p>
 								</div>
 							</div>
 			
@@ -1647,10 +2395,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="buildShaderDataItems" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">buildShaderDataItems</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;{solids: Array.&lt;<a href="Solid.html">Solid</a>>, lights: Array.&lt;<a href="Light.html">Light</a>>}>}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Review all the items in the scene and setup their <code>glsl</code> property
 			Return the solids and lights as lists</p></div>
@@ -1682,7 +2430,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-654">line 654</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-690">line 690</a></p>
 								</div>
 							</div>
 			
@@ -1693,10 +2441,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="buildShaderFragment" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">buildShaderFragment</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{string}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Build the fragment shader from templates files.
 			The data used to populate the templates are build by the functions</p>
@@ -1737,7 +2485,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-678">line 678</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-714">line 714</a></p>
 								</div>
 							</div>
 			
@@ -1748,10 +2496,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="initHorizon" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">initHorizon</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Thurston>}</span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Init the horizon of the Three.js seen (with its shaders)
 			This cannot be done in the constructor as it is an async function.</p></div>
@@ -1783,7 +2531,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-730">line 730</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-768">line 768</a></p>
 								</div>
 							</div>
 			
@@ -1794,10 +2542,10 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
 			<h4 id="animate" class="function public"><span class="name">animate</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Animates the simulation</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -1820,7 +2568,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-811">line 811</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-844">line 844</a></p>
 								</div>
 							</div>
 			
@@ -1831,10 +2579,47 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="animate" class="function public"><span class="name">animate</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Animates the simulation</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-844">line 844</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="run" class="function public"><span class="name">run</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Wrap together initialization and animation
 			We handle the promise here so that the function is no more async</p></div>
@@ -1858,7 +2643,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-826">line 826</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-861">line 861</a></p>
 								</div>
 							</div>
 			
@@ -1869,10 +2654,48 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="run" class="function public"><span class="name">run</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Wrap together initialization and animation
+			We handle the promise here so that the function is no more async</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-861">line 861</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="onWindowResize" class="function public"><span class="name">onWindowResize</span><span class="signature-params">( <span class="signature-param">event</span>&nbsp;)</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Action when the window is resized</p></div>
 			</div>			<div class="callout callout-info">
@@ -1915,7 +2738,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-839">line 839</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-874">line 874</a></p>
 								</div>
 							</div>
 			
@@ -1926,10 +2749,67 @@
 			</div>	</div>
 </dd>
 											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
+											<dt class="symbol-title function public">
+			<h4 id="onWindowResize" class="function public"><span class="name">onWindowResize</span><span class="signature-params">( <span class="signature-param">event</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Action when the window is resized</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>event</code></td>
+							<td><span class="param-type">UIEvent</span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-874">line 874</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
 			<h4 id="addEventListeners" class="function public"><span class="name">addEventListeners</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
+<dd class="symbol-details function public">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Register all the event listeners</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
@@ -1952,7 +2832,44 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="thurston.js.html">thurston.js</a>, <a href="thurston.js.html#line-849">line 849</a></p>
+									<p class="form-control-static"><a href="Thurston.js.html">Thurston.js</a>, <a href="Thurston.js.html#line-884">line 884</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public">
+			<h4 id="addEventListeners" class="function public"><span class="name">addEventListeners</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Register all the event listeners</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="Thurston_check.js.html">Thurston_check.js</a>, <a href="Thurston_check.js.html#line-884">line 884</a></p>
 								</div>
 							</div>
 			
@@ -1973,7 +2890,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 7th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 22nd Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

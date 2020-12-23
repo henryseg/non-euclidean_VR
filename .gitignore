@@ -12,3 +12,4 @@ __pycache__/**
 /doc/package.json
 /doc/package-lock.json
 /doc/node_modules/**
+/z_old_code/

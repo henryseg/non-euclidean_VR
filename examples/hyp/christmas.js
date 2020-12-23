@@ -12,8 +12,8 @@ import {
 } from "../../js/Thurston.js";
 
 import {
-    Material
-} from "../../js/Material.js";
+    PhongMaterial
+} from "../../js/commons/material/phong/PhongMaterial.js";
 
 
 import * as geom from "../../js/geometry/hyp/General.js";
@@ -21,7 +21,7 @@ import {
     Ball,
     PointLight,
     BallComplement
-} from "../../js/items/hyp/Library.js";
+} from "../../js/objects/hyp/Library.js";
 
 import {
     cube
@@ -39,7 +39,7 @@ const thurston = new Thurston(geom, cube, {
 const ball0 = new Ball(
     new Vector3(0, 0, 0),
     0.1,
-    new Material({
+    new PhongMaterial({
         shininess:3,
         specularity:0.8,
         color: new Color(255. / 256., 0. / 256., 0. / 256.)
@@ -50,7 +50,7 @@ const ball0 = new Ball(
 const ball1 = new BallComplement(
     new Vector3(0, 0, 0),
     1.05,
-    new Material({
+    new PhongMaterial({
         color: new Color('#3a9c2b')
     }),
     false
