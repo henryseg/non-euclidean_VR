@@ -49,3 +49,19 @@ export class IntersectionShape extends AdvancedShape {
         super.shader(shaderBuilder);
     }
 }
+
+/**
+ * The intersection of an arbitrary number of shapes
+ */
+export function intersection() {
+    let res;
+    const n = arguments.length;
+    if (n === 0) {
+        throw new Error('union: the function expect at least one argument');
+    }
+    res = arguments[0];
+    for (let i = 1; i < n; i++) {
+        res = new IntersectionShape(res, arguments[i]);
+    }
+    return res;
+}
