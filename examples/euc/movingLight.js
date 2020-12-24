@@ -20,14 +20,13 @@ const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
 const lightColor = new Color(1, 1, 1);
 const lightPosition = new Point(0.8, 0, -1.6);
 
-
 const light = new PointLight(lightPosition, lightColor);
 const lightMat = new SingleColorMaterial(lightColor);
 const lightBall = new Ball(lightPosition, 0.1, lightMat);
 
 
 // Phong shading material
-const mat0 = new PhongMaterial({
+const latticeMat = new PhongMaterial({
     color: new Color(1, 1, 1),
     shininess: 5,
     lights: [light]
@@ -35,7 +34,7 @@ const mat0 = new PhongMaterial({
 
 
 // Complement of a local ball
-const centerBall = new LocalBallShape(
+const center = new LocalBallShape(
     new Point(0, 0, 0),
     1.05,
 );
@@ -51,7 +50,7 @@ for (let i = 0; i < 8; i++) {
 }
 
 const unionShape = union(
-    centerBall,
+    center,
     vertices[0],
     vertices[1],
     vertices[2],
@@ -62,7 +61,7 @@ const unionShape = union(
     vertices[7],
 );
 const latticeShape = new ComplementShape(unionShape);
-const lattice = new Solid(latticeShape, mat0);
+const lattice = new Solid(latticeShape, latticeMat);
 
 thurston.add(lattice, light, lightBall);
 
