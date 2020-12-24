@@ -8,10 +8,8 @@ import {Mono} from "../../js/commons/stereos/mono/Mono.js";
 
 import {Point} from "../../js/core/geometry/Point.js";
 import {Ball} from "../../js/geometries/euc/solids/Ball.js";
-import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
-import {SingleColorMaterial} from "../../js/commons/material/singleColor/SingleColorMaterial.js";
+import {SingleColorMaterial, NormalMaterial, PhongMaterial} from "../../js/commons/material/all.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 
 
 // initial setup

@@ -5,13 +5,12 @@ import {Thurston} from "../../js/core/Thurston.js";
 import * as geom from "../../js/geometries/euc/geometry/General.js";
 import torus from "../../js/geometries/euc/subgroups/torus.js";
 
-import {LocalBallShape} from "../../js/geometries/euc/shapes/localBall/LocalBallShape.js";
 import {Point} from "../../js/core/geometry/Point.js";
-import {ComplementShape} from "../../js/commons/shapes/complement/ComplementShape.js";
-import {Solid} from "../../js/core/solids/Solid.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-import {Ball} from "../../js/geometries/euc/solids/Ball.js";
+
+import {LocalBallShape, ComplementShape, union} from "../../js/geometries/euc/shapes/all.js";
+import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
 
 
 const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
@@ -45,13 +44,36 @@ const mat0 = new PhongMaterial({
     lights: lights
 });
 
+
 // Complement of a local ball
-const ball0 = new LocalBallShape(
+const centerBall = new LocalBallShape(
     new Point(0, 0, 0),
-    1.07,
+    1.05,
 );
-const complementShape = new ComplementShape(ball0);
-const complementSolid = new Solid(complementShape, mat0);
+const vertices = [];
+for (let i = 0; i < 8; i++) {
+    const i0 = i % 2;
+    const i1 = 0.5 * (i - i0) % 2;
+    const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+    vertices[i] = new LocalBallShape(
+        new Point((2 * i0 - 1) * 0.8, (2 * i1 - 1) * 0.8, (2 * i2 - 1) * 0.8),
+        0.38
+    );
+}
+
+const unionShape = union(
+    centerBall,
+    vertices[0],
+    vertices[1],
+    vertices[2],
+    vertices[3],
+    vertices[4],
+    vertices[5],
+    vertices[6],
+    vertices[7],
+);
+const latticeShape = new ComplementShape(unionShape);
+const lattice = new Solid(latticeShape, mat0);
 
 
 // Phong shading material
@@ -67,7 +89,7 @@ const ball1 = new Ball(
     mat1
 );
 
-thurston.add(complementSolid, ball1, light0, light1, light2);
+thurston.add(lattice, ball1, light0, light1, light2);
 thurston.run();
 thurston.renderer.checkShader();
 

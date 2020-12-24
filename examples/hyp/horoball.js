@@ -63,7 +63,7 @@ const mat1 = new PhongMaterial({
 });
 
 const modelHalfCube = 0.5773502692;
-const horoball1 = new Horoball(
+const horoball1 = new LocalHoroball(
     new Vector(modelHalfCube, modelHalfCube, modelHalfCube),
     0.98,
     mat1

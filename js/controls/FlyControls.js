@@ -115,6 +115,15 @@ class FlyControls extends EventDispatcher {
     }
 
     /**
+     * Set the type of keyboard used for the controls.
+     * Just an alias of the setter, that can be called easily as a function.
+     * @param {string} keyboard - the new keyboard ('fr', 'us', etc).
+     */
+    setKeyboard(keyboard) {
+        this.keyboard = keyboard;
+    }
+
+    /**
      * Event handler when a key is pressed
      * @param {KeyboardEvent} event - the caught event
      */

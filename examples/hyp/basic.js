@@ -6,12 +6,10 @@ import * as geom from "../../js/geometries/hyp/geometry/General.js";
 import cube from "../../js/geometries/hyp/subgroups/cube.js";
 
 import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
-import {ComplementShape} from "../../js/commons/shapes/complement/ComplementShape.js";
-import {Solid} from "../../js/core/solids/Solid.js";
 import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-import {Ball} from "../../js/geometries/hyp/solids/Ball.js";
-import {LocalBallShape} from "../../js/geometries/hyp/shapes/localBall/LocalBallShape.js";
+import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
+import {LocalBallShape, ComplementShape} from "../../js/geometries/hyp/shapes/all.js";
 
 
 const thurston = new Thurston(geom, cube, {keyboard: 'fr'});

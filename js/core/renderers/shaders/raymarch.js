@@ -54,6 +54,7 @@ int raymarch(inout RelVector v, out int objId){
                 break;
             }
             dist = localSceneSDF(localV, auxHit, auxId);
+            dist = min(dist, 0.1); // cheep creeping
             if (auxHit == HIT_SOLID) {
                 // we hit an object
                 hit = auxHit;
