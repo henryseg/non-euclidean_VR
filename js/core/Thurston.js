@@ -45,6 +45,11 @@ export class Thurston {
         this.params = {}
         this.setParams(params);
 
+        /**
+         * A callback called at each frame
+         * @type {Function}
+         */
+        this.callback = undefined;
 
         /**
          * The non-euclidean camera
@@ -116,8 +121,11 @@ export class Thurston {
      * @param {Object} params - the parameters
      */
     setParams(params) {
+        /**
+         * The keyboard used by FlyControls
+         * @type {string}
+         */
         this.params.keyboard = params.keyboard !== undefined ? params.keyboard : 'us';
-        // Add here other assignments
     }
 
 
@@ -177,6 +185,9 @@ export class Thurston {
      */
     animate() {
         const delta = this.clock.getDelta();
+        if(this.callback !== undefined){
+            this.callback();
+        }
         this.flyControls.update(delta);
 
         this.renderer.render();

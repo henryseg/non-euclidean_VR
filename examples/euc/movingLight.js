@@ -1,0 +1,92 @@
+import {Clock, Color, Matrix3, Matrix4} from "../../js/lib/three.module.js";
+
+import {Thurston} from "../../js/core/Thurston.js";
+
+import * as geom from "../../js/geometries/euc/geometry/General.js";
+import torus from "../../js/geometries/euc/subgroups/torus.js";
+
+import {Point, Isometry} from "../../js/core/geometry/General.js";
+import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+
+import {LocalBallShape, ComplementShape, union} from "../../js/geometries/euc/shapes/all.js";
+import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
+import {SingleColorMaterial, PhongMaterial} from "../../js/commons/material/all.js";
+
+
+const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
+
+
+// light
+const lightColor = new Color(1, 1, 1);
+const lightPosition = new Point(0.8, 0, -1.6);
+
+
+const light = new PointLight(lightPosition, lightColor);
+const lightMat = new SingleColorMaterial(lightColor);
+const lightBall = new Ball(lightPosition, 0.1, lightMat);
+
+
+// Phong shading material
+const mat0 = new PhongMaterial({
+    color: new Color(1, 1, 1),
+    shininess: 5,
+    lights: [light]
+});
+
+
+// Complement of a local ball
+const centerBall = new LocalBallShape(
+    new Point(0, 0, 0),
+    1.05,
+);
+const vertices = [];
+for (let i = 0; i < 8; i++) {
+    const i0 = i % 2;
+    const i1 = 0.5 * (i - i0) % 2;
+    const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+    vertices[i] = new LocalBallShape(
+        new Point((2 * i0 - 1) * 0.8, (2 * i1 - 1) * 0.8, (2 * i2 - 1) * 0.8),
+        0.38
+    );
+}
+
+const unionShape = union(
+    centerBall,
+    vertices[0],
+    vertices[1],
+    vertices[2],
+    vertices[3],
+    vertices[4],
+    vertices[5],
+    vertices[6],
+    vertices[7],
+);
+const latticeShape = new ComplementShape(unionShape);
+const lattice = new Solid(latticeShape, mat0);
+
+thurston.add(lattice, light, lightBall);
+
+const clock = new Clock();
+const isometry = new Isometry();
+const translation = new Isometry().makeTranslation(new Point(0, 0, -1.6));
+const speed = 1.5;
+
+function animate() {
+    const time = clock.getElapsedTime();
+    const matrixZ = new Matrix4().makeRotationZ(speed * time);
+    const matrixX = new Matrix4().makeRotationX(0.1 * speed * time);
+    isometry.matrix.copy(matrixX).multiply(matrixZ);
+    const position = new Point(0.8, 0, 0);
+    lightPosition.copy(position).applyIsometry(isometry);
+    lightPosition.applyIsometry(translation);
+    lightColor.setHSL(Math.cos(0.103 * speed * time), 1, 0.5);
+}
+
+
+thurston.callback = animate;
+thurston.run();
+// thurston.renderer.checkShader();
+
+
+
+
