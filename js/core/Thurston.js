@@ -9,7 +9,6 @@ import {Camera, Renderer, Scene} from "./General.js";
 import {Mono} from "../commons/stereos/mono/Mono.js";
 
 
-
 /**
  * @class
  *
@@ -73,21 +72,6 @@ export class Thurston {
         document.body.appendChild(this.renderer.domElement);
 
 
-        /**
-         * The graphical user interface
-         * @type {GUI}
-         */
-        this.gui = undefined;
-        this.initGUI();
-
-        /**
-         * The performance stats
-         * @type {Stats}
-         */
-        this.stats = undefined;
-        this.initStats();
-
-
         // event listener
         const _onWindowResize = bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
@@ -109,6 +93,21 @@ export class Thurston {
          * @private
          */
         this.clock = new Clock();
+
+        /**
+         * The performance stats
+         * @type {Stats}
+         */
+        this.stats = undefined;
+        this.initStats();
+
+
+        /**
+         * The graphical user interface
+         * @type {GUI}
+         */
+        this.gui = undefined;
+        this.initGUI();
     }
 
     /**
@@ -134,12 +133,12 @@ export class Thurston {
                 window.open('https://github.com/henryseg/non-euclidean_VR');
             }
         }, 'help').name("Help/About");
-        // const keyboardController = this.gui.add(this._keyboardControls, 'keyboard', {
-        //     QWERTY: 'us',
-        //     AZERTY: 'fr'
-        // }).name("Keyboard");
-        //
-        // keyboardController.onChange = bind(this, this.setKeyboard)
+        const keyboardController = this.gui.add(this.flyControls, 'keyboard', {
+            QWERTY: 'us',
+            AZERTY: 'fr'
+        }).name("Keyboard");
+
+        keyboardController.onChange = bind(this.flyControls, this.flyControls.setKeyboard)
         return this;
     }
 
