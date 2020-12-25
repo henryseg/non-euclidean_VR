@@ -9,7 +9,7 @@ import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
 import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
-import {LocalBallShape, ComplementShape} from "../../js/geometries/hyp/shapes/all.js";
+import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
 
 
 const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
@@ -48,7 +48,7 @@ const ball0 = new LocalBallShape(
     new Point(),
     1.02,
 );
-const latticeShape = new ComplementShape(ball0);
+const latticeShape = complement(ball0);
 const lattice = new Solid(latticeShape, mat0);
 
 

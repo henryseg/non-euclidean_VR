@@ -42,3 +42,13 @@ export class ComplementShape extends AdvancedShape {
         super.shader(shaderBuilder);
     }
 }
+
+/**
+ * Return the complement of the given shape.
+ * The goal is a to have behavior similar to `union` and `intersection`.
+ * @param {Shape} shape - the shape to invert
+ * @return {ComplementShape} the complement of the given shape.
+ */
+export function complement(shape){
+    return new ComplementShape(shape);
+}

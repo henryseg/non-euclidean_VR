@@ -9,7 +9,7 @@ import {Point} from "../../js/core/geometry/Point.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 
-import {LocalBallShape, ComplementShape, union} from "../../js/geometries/euc/shapes/all.js";
+import {LocalBallShape, complement, union} from "../../js/geometries/euc/shapes/all.js";
 import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
 
 
@@ -72,7 +72,7 @@ const unionShape = union(
     vertices[6],
     vertices[7],
 );
-const latticeShape = new ComplementShape(unionShape);
+const latticeShape = complement(unionShape);
 const lattice = new Solid(latticeShape, mat0);
 
 

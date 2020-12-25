@@ -6,6 +6,10 @@ Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
 }
 
+Isometry.prototype.identity = function () {
+    this.matrix.identity();
+}
+
 Isometry.prototype.reduceError = function () {
     return this;
 };

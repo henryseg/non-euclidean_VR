@@ -1,4 +1,4 @@
-import {Clock, Color, Matrix3, Matrix4} from "../../js/lib/three.module.js";
+import {Clock, Color, Matrix4} from "../../js/lib/three.module.js";
 
 import {Thurston} from "../../js/core/Thurston.js";
 

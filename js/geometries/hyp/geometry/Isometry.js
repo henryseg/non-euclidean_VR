@@ -14,6 +14,10 @@ Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
 }
 
+Isometry.prototype.identity = function () {
+    this.matrix.identity();
+}
+
 Isometry.prototype.reduceError = function () {
     // Hyperbolic Gram-Schmidt
     const col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.matrix);

@@ -9,7 +9,7 @@ import {Point, Vector} from "../../js/geometries/sph/geometry/General.js";
 import {PointLight} from "../../js/geometries/sph/lights/pointLight/PointLight.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
-import {LocalBallShape, union, ComplementShape} from "../../js/geometries/sph/shapes/all.js";
+import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
 
 const thurston = new Thurston(geom, hypercube, {keyboard: 'fr'});
 
@@ -68,7 +68,7 @@ const unionShape = union(
     vertices[6],
     vertices[7],
 );
-const latticeShape = new ComplementShape(unionShape);
+const latticeShape = complement(unionShape);
 const lattice = new Solid(latticeShape, mat0);
 
 

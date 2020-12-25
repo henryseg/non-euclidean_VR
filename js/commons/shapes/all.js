@@ -1,3 +1,3 @@
-export {ComplementShape} from "./complement/ComplementShape.js";
-export {IntersectionShape} from "./instersection/IntersectionShape.js";
-export {UnionShape} from "./union/UnionShape.js";
+export {ComplementShape, complement} from "./complement/ComplementShape.js";
+export {IntersectionShape, intersection} from "./instersection/IntersectionShape.js";
+export {UnionShape, union} from "./union/UnionShape.js";

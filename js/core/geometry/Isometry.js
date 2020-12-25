@@ -29,6 +29,15 @@ class Isometry {
     }
 
     /**
+     * Set the current isometry to the identity.
+     * @abstract
+     * @return {Isometry} The current isometry
+     */
+    identity() {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
      * Reduce the eventual numerical errors of the current isometry (typically Gram-Schmidt).
      * @abstract
      * @return {Isometry} The current isometry

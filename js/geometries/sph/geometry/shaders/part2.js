@@ -35,6 +35,12 @@ Point smallShift(Point p, vec3 dp){
 }
 
 
+Vector smallShift(Vector v, vec3 dp){
+    Point pos = smallShift(v.pos, dp);
+    return Vector(pos,v.dir);
+}
+
+
 /**
  * Flow the vector v for a time t.
  * The vector v is assume to be a **unit** vector

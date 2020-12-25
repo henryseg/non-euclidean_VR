@@ -64,8 +64,7 @@ RelVector flow(RelVector v, float t) {
  * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
  */
 RelVector smallShift(RelVector v, vec3 dp){
-    Point pos = smallShift(v.local.pos, dp);
-    Vector local = Vector(pos, v.local.dir);
+    Vector local = smallShift(v.local, dp);
     return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
