@@ -1,8 +1,8 @@
 // language=Mustache + GLSL
 export default `//
 /**
- * Gradient for the complement of a shape
+ * Gradient for a wrapping
  */
 RelVector {{name}}_gradient(RelVector v){
-    return negate({{shape.name}}_gradient(v));
+    return {{shape.name}}_gradient(v);
 }`;

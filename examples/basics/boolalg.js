@@ -9,12 +9,10 @@ import {Mono} from "../../js/commons/stereos/mono/Mono.js";
 import {Point} from "../../js/core/geometry/Point.js";
 import {BallShape} from "../../js/geometries/euc/shapes/ball/BallShape.js";
 import {LocalBallShape} from "../../js/geometries/euc/shapes/localBall/LocalBallShape.js";
-import {UnionShape} from "../../js/commons/shapes/union/UnionShape.js";
-import {IntersectionShape} from "../../js/commons/shapes/instersection/IntersectionShape.js";
+import {UnionShape, IntersectionShape, ComplementShape, WrapShape} from "../../js/commons/shapes/all.js";
 import {Solid} from "../../js/core/solids/Solid.js";
 
 import {FlyControls} from "../../js/controls/FlyControls.js";
-import {ComplementShape} from "../../js/commons/shapes/complement/ComplementShape.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
 
@@ -54,6 +52,12 @@ const mat1 = new PhongMaterial({
 });
 const mat2 = new PhongMaterial({
     color: new Color(1, 0, 0),
+    specular: 0.1,
+    shininess: 1,
+    lights: lights
+});
+const mat3 = new PhongMaterial({
+    color: new Color(1, 1, 0),
     specular: 0.1,
     shininess: 1,
     lights: lights
@@ -98,9 +102,21 @@ const ball4 = new BallShape(
 const intersectionShape = new IntersectionShape(ball3, ball4);
 const intersectionSolid = new Solid(intersectionShape, mat2);
 
+const ball5 = new BallShape(
+    new Point(0, 0, -1),
+    0.1
+)
+
+const ball6 = new BallShape(
+    new Point(0,0,-1),
+    0.5
+);
+
+const wrapShape = new WrapShape(ball6, ball5);
+const wrapSolid = new Solid(wrapShape, mat3);
 
 // adding the solid to the scene
-scene.add(unionSolid, intersectionSolid, complementSolid);
+scene.add(unionSolid, intersectionSolid, complementSolid, wrapSolid);
 
 // building there renderer
 renderer.build();
@@ -117,4 +133,5 @@ function animate() {
 }
 
 renderer.setAnimationLoop(animate);
+renderer.checkShader();
 

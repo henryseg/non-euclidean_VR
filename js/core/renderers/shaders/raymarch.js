@@ -39,44 +39,43 @@ int raymarch(inout RelVector v, out int objId){
     int hit = 0;
 
 
-    // local scene
-    for (int i = 0; i < camera.maxSteps; i++){
-        // start by teleporting eventually the vector
-        if (teleport(localV)){
-            // if a teleport was needed, update the starting point of the local raymarching
-            localV0 = localV;
-            /** @warning if minDist is not zero... this line may produce some jumps */
-            marchingStep = camera.minDist;
-        }
-        else {
-            // if no teleport was needed, then march
-            if (localDepth > camera.maxDist) {
-                break;
+        // local scene
+        for (int i = 0; i < camera.maxSteps; i++){
+            // start by teleporting eventually the vector
+            if (teleport(localV)){
+                // if a teleport was needed, update the starting point of the local raymarching
+                localV0 = localV;
+                /** @warning if minDist is not zero... this line may produce some jumps */
+                marchingStep = camera.minDist;
             }
-            dist = localSceneSDF(localV, auxHit, auxId);
-            dist = min(dist, 0.1); // cheep creeping
-            if (auxHit == HIT_SOLID) {
-                // we hit an object
-                hit = auxHit;
-                objId = auxId;
-                res = localV;
-                break;
+            else {
+                // if no teleport was needed, then march
+                if (localDepth > camera.maxDist) {
+                    break;
+                }
+                dist = localSceneSDF(localV, auxHit, auxId);
+                dist = min(dist, 0.1); // cheep creeping
+                if (auxHit == HIT_SOLID) {
+                    // we hit an object
+                    hit = auxHit;
+                    objId = auxId;
+                    res = localV;
+                    break;
+                }
+                marchingStep = marchingStep + dist;
+                localDepth  = localDepth + dist;
+                localV = flow(localV0, marchingStep);
             }
-            marchingStep = marchingStep + dist;
-            localDepth  = localDepth + dist;
-            localV = flow(localV0, marchingStep);
         }
-    }
-
 
     //global scene
     for (int i=0; i < camera.maxSteps; i++){
+
         if (globalDepth > localDepth || globalDepth > camera.maxDist){
             // we reached the maximal distance
             break;
         }
         dist = globalSceneSDF(globalV, auxHit, auxId);
-
         if (auxHit == HIT_SOLID) {
             // we hit an object
             hit = auxHit;

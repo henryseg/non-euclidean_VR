@@ -1,7 +1,7 @@
 // language=Mustache + GLSL
 export default `//
 /**
- * SDF for the union of two shapes
+ * SDF for the intersection of two shapes
  */
 float {{name}}_sdf(RelVector v){
     float dist1 = {{shape1.name}}_sdf(v);
