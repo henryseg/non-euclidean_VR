@@ -16,12 +16,13 @@ export default `//
  **********************************************************************************************************************/
 struct Isometry{
     mat4 matrix;
+    bool isInNil;
 };
 
 /**
  * Identity isometry
  */
-const Isometry IDENTITY = Isometry(mat4(1.)); /**< Identity isometry */
+const Isometry IDENTITY = Isometry(mat4(1.), true); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
@@ -35,7 +36,7 @@ Isometry reduceError(Isometry isom){
  * Multiply the two given isometries.
  */
 Isometry multiply(Isometry isom1, Isometry isom2) {
-    return Isometry(isom1.matrix * isom2.matrix);
+    return Isometry(isom1.matrix * isom2.matrix, isom1.isInNil && isom2.isInNil);
 }
 
 /**
@@ -43,7 +44,7 @@ Isometry multiply(Isometry isom1, Isometry isom2) {
  */
 Isometry geomInverse(Isometry isom) {
     mat4 inv = inverse(isom.matrix);
-    return Isometry(inv);
+    return Isometry(inv, isom.isInNil);
 }
 
 /***********************************************************************************************************************
@@ -88,7 +89,7 @@ Isometry makeTranslation(Point p) {
     0., 0., 1., 0,
     c.x, c.y, c.z, 1.
     );
-    return Isometry(matrix);
+    return Isometry(matrix, true);
 }
 
 /**
@@ -103,7 +104,7 @@ Isometry makeInvTranslation(Point p) {
     0., 0., 1., 0,
     -c.x, -c.y, -c.z, 1.
     );
-    return Isometry(matrix);
+    return Isometry(matrix, true);
 }
 
 /***********************************************************************************************************************
@@ -113,18 +114,11 @@ Isometry makeInvTranslation(Point p) {
  * For computation of gradient, one needs to fix for each geometry, a section of the frame bundle.
  * In this description,
  * - pos is the underlying position of the vector (nothing fancy here)
- * - isom is an isometry
- * - dir is the **pullback** at the origin of the vector by isom. (The fourth coordinate of dir is always zero.)
- *
- * pos and isom contains redundant information.
- * Indeed pos is the image of the origin by isom.
- * It the the job of the developper to keep these constistant.
- * Having pos available, should reduces the number of computations, when we call all the SDFs, hopefully.
+ * - dir is the **pullback** at the origin of the vector by the element of Nil sending the origin to pos
  *
  **********************************************************************************************************************/
 struct Vector{
     Point pos;///< Underlying point
-    Isometry isom;///< An isometry moving the origin to pos
     vec4 dir;///< Direction of the vector
 };
 
@@ -140,7 +134,7 @@ Vector reduceError(Vector v){
  * @return @f$ v_1 + v_2 @f$
  */
 Vector add(Vector v1, Vector v2){
-    return Vector(v1.pos, v1.isom, v1.dir + v2.dir);
+    return Vector(v1.pos, v1.dir + v2.dir);
 }
 
 /**
@@ -148,7 +142,7 @@ Vector add(Vector v1, Vector v2){
  * @return @f$ v_1 - v_2 @f$
  */
 Vector sub(Vector v1, Vector v2){
-    return Vector(v1.pos, v1.isom, v1.dir - v2.dir);
+    return Vector(v1.pos, v1.dir - v2.dir);
 }
 
 /**
@@ -157,7 +151,7 @@ Vector sub(Vector v1, Vector v2){
  * @return @f$ s v @f$
  */
 Vector multiplyScalar(float s, Vector v){
-    return Vector(v.pos, v.isom, s * v.dir);
+    return Vector(v.pos, s * v.dir);
 }
 
 
@@ -174,9 +168,15 @@ float geomDot(Vector v1, Vector v2) {
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-    Isometry isometry = multiply(isom, v.isom);
-    Point pos = applyIsometry(isometry, ORIGIN);
-    return Vector(pos, isometry, v.dir);
+    Point pos = applyIsometry(isom, v.pos);
+    if(isom.isInNil) {
+        return Vector(pos, v.dir);
+    } else {
+        Isometry push = makeTranslation(v.pos);
+        Isometry pull = makeInvTranslation(pos);
+        vec4 dir = pull.matrix * isom.matrix * push.matrix * v.dir;
+        return Vector(pos, v.dir);
+    }
 }
 
 
@@ -186,6 +186,6 @@ Vector applyIsometry(Isometry isom, Vector v) {
  * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
-    return Vector(v.pos, v.isom, m * v.dir);
+    return Vector(v.pos, m * v.dir);
 }
 `;

@@ -1,42 +1,42 @@
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {mustache} from "../../../../lib/mustache.mjs";
 
+import fakeDistance from "../../imports/fakeDistance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
-
 
 /**
  * @class
  *
  * @classdesc
- * Fake ball using the euclidean SDF (!)
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
  */
-export class VeryFakeBallShape extends BasicShape{
+export class LocalFakeBallShape extends BasicShape {
 
+
+    /**
+     * Constructor.
+     * @param {Point} center - the center of the ball
+     * @param {number} radius - the radius of the ball
+     */
     constructor(center, radius) {
         super();
+        this.addImport(fakeDistance);
         this.center = center;
         this.radius = radius;
     }
 
-    /**
-     * Says that the object inherits from `Ball`
-     * @type {boolean}
-     */
-    get isVeryFakeBallShape() {
-        return true;
+    get isGlobal() {
+        return false;
     }
 
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
+    get isLocalFakeBallShape() {
         return true;
     }
 
     get uniformType() {
-        return 'VeryFakeBallShape';
+        return 'LocalFakeBallShape';
     }
 
     static glslClass() {

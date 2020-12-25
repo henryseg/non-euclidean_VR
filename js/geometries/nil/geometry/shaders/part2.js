@@ -17,10 +17,9 @@ export default `//
  * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] f){
-    Isometry isom = makeTranslation(p);
-    f[0] = Vector(p, isom, vec4(1, 0, 0, 0));
-    f[1] = Vector(p, isom, vec4(0, 1, 0, 0));
-    f[2] = Vector(p, isom, vec4(0, 0, 1, 0));
+    f[0] = Vector(p, vec4(1, 0, 0, 0));
+    f[1] = Vector(p, vec4(0, 1, 0, 0));
+    f[2] = Vector(p, vec4(0, 0, 1, 0));
 }
 
 /**
@@ -35,10 +34,8 @@ Point smallShift(Point p, vec3 dp){
 }
 
 Vector smallShift(Vector v, vec3 dp){
-    Point auxPoint = Point(vec4(dp, 1));
-    Isometry auxIsom = makeTranslation(auxPoint);
-    Isometry isom = multiply(v.isom,auxIsom);
-    return Vector(applyIsometry(isom, ORIGIN), isom, v.dir);
+    Point pos = smallShift(v.pos, dp);
+    return Vector(pos, v.dir);
 }
 
 
@@ -67,12 +64,12 @@ Vector flow(Vector v, float t){
         1
         );
     }
-    Point target = Point(coords);
-    Isometry aux = makeTranslation(target);
-    Isometry isom = multiply(v.isom, aux);
-    Point pos = applyIsometry(isom, ORIGIN);
+
+    Point targetFromOrigin = Point(coords);
+    Isometry shift = makeTranslation(v.pos);
+    Point target = applyIsometry(shift, targetFromOrigin);
 
     vec4 dir = vec4(a * cos(c * t + alpha), a * sin(c * t + alpha), c, 0);
 
-    return Vector(pos, isom, dir);
+    return Vector(target, dir);
 }`;

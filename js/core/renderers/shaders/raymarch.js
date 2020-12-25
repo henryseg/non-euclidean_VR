@@ -54,7 +54,6 @@ int raymarch(inout RelVector v, out int objId){
                     break;
                 }
                 dist = localSceneSDF(localV, auxHit, auxId);
-                dist = min(dist, 0.1); // cheep creeping
                 if (auxHit == HIT_SOLID) {
                     // we hit an object
                     hit = auxHit;
@@ -70,7 +69,6 @@ int raymarch(inout RelVector v, out int objId){
 
     //global scene
     for (int i=0; i < camera.maxSteps; i++){
-
         if (globalDepth > localDepth || globalDepth > camera.maxDist){
             // we reached the maximal distance
             break;

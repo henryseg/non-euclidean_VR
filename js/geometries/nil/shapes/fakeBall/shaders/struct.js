@@ -5,7 +5,7 @@ export default `//
  * Very fake ball (using euclidean SDF after a pull back at the origin)
  **********************************************************************************************************************/
 
-struct VeryFakeBallShape {
+struct FakeBallShape {
     int id;
     Point center;
     float radius;
@@ -14,13 +14,8 @@ struct VeryFakeBallShape {
 /**
  * Distance function for a global euclidean ball
  */
-float sdf(VeryFakeBallShape ball, RelVector v) {
-    Vector aux = applyIsometry(v.cellBoost, v.local);
-    Isometry inv = makeInvTranslation(ball.center);
-    aux = applyIsometry(inv, aux);
-//    debugColor = aux.pos.coords.xyz;
-//    debugColor = vec3(0,ball.radius,0);
-    
-    return length(aux.pos.coords.xyz) - ball.radius;
+float sdf(FakeBallShape ball, RelVector v) {
+    Point center = applyIsometry(v.invCellBoost, ball.center);
+    return fakeDistance(v.local.pos, center) - ball.radius;
 }
 `;
