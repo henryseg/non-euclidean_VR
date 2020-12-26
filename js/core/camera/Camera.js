@@ -78,11 +78,20 @@ export class Camera {
     }
 
     /**
+     * Shortcut to access the field of view of the underlying Three.js camera
+     * @type {number}
+     */
+    get fov() {
+        return this._threeCamera.fov;
+    }
+
+    /**
      * Shortcut to reset the field of view of the underlying Three.js camera
      * @param {number} value
      */
     set fov(value) {
         this._threeCamera.fov = value;
+        this._threeCamera.updateProjectionMatrix();
     }
 
     /**

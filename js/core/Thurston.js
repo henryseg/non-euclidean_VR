@@ -100,19 +100,18 @@ export class Thurston {
         this.clock = new Clock();
 
         /**
-         * The performance stats
+         * The performance stats.
+         * Setup when the renderer is built.
          * @type {Stats}
          */
         this.stats = undefined;
-        this.initStats();
-
 
         /**
-         * The graphical user interface
+         * The graphical user interface.
+         * Setup when the renderer is built.
          * @type {GUI}
          */
         this.gui = undefined;
-        this.initGUI();
     }
 
     /**
@@ -141,12 +140,22 @@ export class Thurston {
                 window.open('https://github.com/henryseg/non-euclidean_VR');
             }
         }, 'help').name("Help/About");
-        const keyboardController = this.gui.add(this.flyControls, 'keyboard', {
-            QWERTY: 'us',
-            AZERTY: 'fr'
-        }).name("Keyboard");
+        this.gui.add(
+            this.flyControls,
+            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
+        ).name("Keyboard");
 
-        keyboardController.onChange = bind(this.flyControls, this.flyControls.setKeyboard)
+        // controls for the camera
+        const cameraGUI = this.gui.addFolder('Camera');
+        cameraGUI.add(this.camera, 'fov', 45, 120)
+            .name('Field of view');
+        cameraGUI.add(this.camera, 'maxDist', 0, 100, 1)
+            .name('Max distance');
+        cameraGUI.add(this.camera, 'maxSteps', 20, 500, 1)
+            .name('Max steps');
+        cameraGUI.add(this.camera, 'threshold')
+            .name('Threshold');
+
         return this;
     }
 
@@ -185,11 +194,10 @@ export class Thurston {
      */
     animate() {
         const delta = this.clock.getDelta();
-        if(this.callback !== undefined){
+        if (this.callback !== undefined) {
             this.callback();
         }
         this.flyControls.update(delta);
-
         this.renderer.render();
         this.stats.update();
     }
@@ -199,7 +207,8 @@ export class Thurston {
      * Build the renderer and run the animation.
      */
     run() {
-        // building there renderer
+        this.initStats();
+        this.initGUI();
         this.renderer.build();
         const _animate = bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
