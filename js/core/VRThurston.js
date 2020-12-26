@@ -1,5 +1,5 @@
 import {AbstractThurston} from "./AbstractThurston.js";
-import {BasicCamera, BasicRenderer} from "./General.js";
+import {StereoCamera, VRRenderer} from "./General.js";
 
 
 /**
@@ -9,7 +9,7 @@ import {BasicCamera, BasicRenderer} from "./General.js";
  * @classdesc
  * A combination of all main parts of the API. It can be used to quickly create scenes
  */
-export class Thurston extends AbstractThurston {
+export class VRThurston extends AbstractThurston {
 
     /**
      * Constructor.
@@ -19,6 +19,6 @@ export class Thurston extends AbstractThurston {
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
     constructor(geom, subgroup, params = {}) {
-        super(geom, subgroup, BasicCamera, BasicRenderer, params);
+        super(geom, subgroup, StereoCamera, VRRenderer, params);
     }
 }

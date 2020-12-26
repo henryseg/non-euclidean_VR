@@ -33,7 +33,7 @@ Position.prototype.flowFromOrigin = function (v) {
     // point reached after flowing
     const target = new Point();
     if (c === 0) {
-        target.set(v.x, v.z, v.z);
+        target.set(v.x, v.y, v.z);
     } else {
         target.set(
             2 * (a / c) * Math.sin(0.5 * c * t) * Math.cos(0.5 * c * t + alpha),

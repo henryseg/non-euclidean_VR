@@ -1,6 +1,6 @@
 import {Color} from "../../js/lib/three.module.js";
 
-import {Thurston} from "../../js/core/Thurston.js";
+import {VRThurston} from "../../js/core/VRThurston.js";
 
 import * as geom from "../../js/geometries/nil/geometry/General.js";
 import heisenberg from "../../js/geometries/nil/subgroups/heisenberg.js";
@@ -11,10 +11,10 @@ import {PhongMaterial} from "../../js/commons/material/all.js";
 import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
 import {FakeBall, LocalFakeBall, LocalPotato, Solid} from "../../js/geometries/nil/solids/all.js";
 import {complement, LocalFakeBallShape, LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
-import {InfoControls} from "../../js/controls/InfoControls.js";
 
 
-const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
+
+const thurston = new VRThurston(geom, heisenberg, {keyboard: 'fr'});
 
 thurston.camera.maxDist = 20;
 thurston.camera.maxSteps = 200;
@@ -52,12 +52,7 @@ const lattice = new Solid(latticeShape, mat);
 
 thurston.add(lattice);
 thurston.run();
-// thurston.renderer.checkShader();
-
-const infoControls = new InfoControls()
-infoControls.action = function() {
-    console.log(thurston.renderer.camera.position.point.coords.toLog());
-}
+thurston.renderer.checkShader();
 
 
 
