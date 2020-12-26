@@ -5,7 +5,7 @@ which is in turn based on the full [simulation](https://github.com/mtwoodard/hyp
 
 This version is as independent of the underlying geometry as possible.
 It comes with an API to
-- build scene in a given geometry
+- build and animate scenes in a given geometry
 - define objects, lights, materials, etc
 - implement new geometries (or new models of existing geometries)
 
