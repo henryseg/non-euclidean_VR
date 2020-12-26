@@ -4,6 +4,7 @@ import {BasicCamera} from "../basic/BasicCamera.js";
 import struct from "./shaders/struct.js";
 import mapping from "./shaders/mapping.js";
 import {LEFT, RIGHT} from "../../../constants.js";
+import {Vector3} from "../../../lib/three.module.js";
 
 
 /**
@@ -102,21 +103,40 @@ export class StereoCamera extends BasicCamera {
      * We move the observer by following the geodesic in this direction.
      * The method also update the left and right eyes positions.
      * The method should be called at each frame.
+     *
      * @return{Function}
      */
     get chaseThreeCamera() {
         if (this._chaseThreeCamera === undefined) {
-            const newThreePosition = new Vector();
             const oldThreePosition = new Vector();
 
-            this._chaseThreeCamera = function () {
-                newThreePosition.setFromMatrixPosition(this.matrix);
+            /**
+             * @param {WebXRManager} webXRManager - the WebXRManager used by Three.js
+             * @private
+             */
+            this._chaseThreeCamera = function (webXRManager) {
+                // declare the new positions of the left and right cameras
+                const newThreePositionL = new Vector3();
+                const newThreePositionR = new Vector3();
+
+                if (this.isStereoOn) {
+                    // if XR is enable, we get the position of the left and right camera
+                    const camerasVR = webXRManager.getCamera(this.threeCamera).cameras;
+                    newThreePositionL.setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
+                    newThreePositionR.setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
+                } else {
+                    // if XR is off, both positions coincide with the one of the camera
+                    newThreePositionL.setFromMatrixPosition(this.matrix);
+                    newThreePositionR.setFromMatrixPosition(this.matrix);
+                }
+                // center each horizon sphere at the appropriate point
+                // compute the old and new position (midpoint between the left and right cameras)
+                const newThreePosition = new Vector().lerpVectors(newThreePositionL, newThreePositionR, 0.5);
                 const deltaPosition = new Vector().subVectors(newThreePosition, oldThreePosition);
                 this.position.flow(deltaPosition);
                 this.updateFakeCamerasPosition();
                 oldThreePosition.copy(newThreePosition);
 
-                return this;
             };
         }
         return this._chaseThreeCamera;

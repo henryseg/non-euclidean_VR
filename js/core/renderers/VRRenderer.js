@@ -114,7 +114,7 @@ export class VRRenderer extends Renderer {
     }
 
     render(){
-        this.camera.chaseThreeCamera();
+        this.camera.chaseThreeCamera(this.threeRenderer.xr);
         super.render();
     }
 }
