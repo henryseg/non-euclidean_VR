@@ -7,7 +7,7 @@ import {Camera, Renderer, Scene} from "../../js/core/General.js";
 import {Mono} from "../../js/commons/stereos/mono/Mono.js";
 
 import {Point} from "../../js/core/geometry/Point.js";
-import {Ball, HalfSpace, Solid} from "../../js/geometries/euc/solids/all.js";
+import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
 import {SingleColorMaterial, NormalMaterial, PhongMaterial, phongWrap} from "../../js/commons/material/all.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
 import {CheckerboardMaterial} from "../../js/geometries/euc/materials/checkerboard/CheckerboardMaterial.js";
