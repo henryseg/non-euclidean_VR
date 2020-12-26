@@ -46,7 +46,7 @@ On Windows, you can set up a server in the Control Panel Administrative Tools, i
 - `.glsl` files -> `text/plain` (probably no more needed).
 - `.mjs` files -> `text/javascript` 
 
-## Done or in progress
+## Done or in progress (on this branch)
 S^3, E^3, H^3, Nil
 
 ## License
