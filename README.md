@@ -38,7 +38,7 @@ This can be done in Python 3 by running the command
 python -m http.server
 ```
 
-To run the VR examples you may need a more advance settings as an HTTPS protocole is required.
+To run the VR examples you may need a more advance settings as an HTTPS protocol is required.
 
 On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first). 
 
