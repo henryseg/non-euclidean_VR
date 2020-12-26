@@ -8,7 +8,8 @@ import trivial from "../../js/commons/subgroups/trivial.js";
 import {Point} from "../../js/core/geometry/Point.js";
 import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
 import {VerticalHalfSpace} from "../../js/geometries/nil/solids/all.js";
-import {CheckerboardMaterial} from "../../js/geometries/nil/materials/all.js";
+import {CheckerboardMaterial, SingleColorMaterial} from "../../js/geometries/nil/materials/all.js";
+import {phongWrap, PhongWrapMaterial} from "../../js/commons/material/all.js";
 
 
 const thurston = new Thurston(geom, trivial, {keyboard: 'fr'});
@@ -41,7 +42,8 @@ const dir2 = new Vector4(0, 0, 1, 0);
 const color1 = new Color(1, 1, 1);
 const color2 = new Color(0, 0, 0);
 
-const material = new CheckerboardMaterial(dir1, dir2, color1, color2, {lights: lights});
+const checkerboard = new CheckerboardMaterial(dir1, dir2, color1, color2);
+const material = phongWrap(checkerboard,{lights:lights});
 
 const halfSpace = new VerticalHalfSpace(new Point(-1, 0, 0), new Vector4(1, 0, 0, 0), material);
 thurston.add(halfSpace);

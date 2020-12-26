@@ -13,6 +13,8 @@ import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/
 
 const thurston = new Thurston(geom, hypercube, {keyboard: 'fr'});
 
+thurston.camera.maxDist = 2 * Math.PI;
+
 // lights for the Phong material
 
 //  yellow light

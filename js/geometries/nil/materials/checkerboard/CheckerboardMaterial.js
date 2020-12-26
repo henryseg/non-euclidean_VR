@@ -7,6 +7,13 @@ import render from "./shaders/render.js";
 import struct from "./shaders/struct.js";
 
 
+/**
+ * @class
+ *
+ * @classdesc
+ * A checker board material.
+ * It can be combined with PhongWrapMaterial for lights effects
+ */
 export class CheckerboardMaterial extends Material {
 
     /**
@@ -14,15 +21,9 @@ export class CheckerboardMaterial extends Material {
      * @param {Vector4} dir1 - first direction of the checkerboard
      * @param {Vector4} dir2 - second direction of the checkerboard
      * @param {Color} color1 - first color
-     * @param {Color} color2 - second color
-     * @param {Object} params - the parameters of the material:
-     * - {number} ambient - the ambient reflection constant
-     * - {number} diffuse - the diffuse reflection constant
-     * - {number} specular - the specular reflection constant
-     * - {number} shininess - the shininess reflection constant
-     * - {Light[]} lights - the lights affecting the material
+     * @param {Color} color2 - second color-
      */
-    constructor(dir1, dir2, color1, color2, params) {
+    constructor(dir1, dir2, color1, color2) {
         super();
         /**
          * first direction of the checkerboard
@@ -44,32 +45,6 @@ export class CheckerboardMaterial extends Material {
          * @type {Color}
          */
         this.color2 = color2;
-
-        /**
-         * ambient reflection constant
-         * @type {number}
-         */
-        this.ambient = params.ambient !== undefined ? params.ambient : 0.5;
-        /**
-         * diffuse reflection constant
-         * @type {number}
-         */
-        this.diffuse = params.diffuse !== undefined ? params.diffuse : 0.5;
-        /**
-         * specular reflection constant
-         * @type {number}
-         */
-        this.specular = params.specular !== undefined ? params.specular : 0.5;
-        /**
-         * shininess reflection constant
-         * @type {number}
-         */
-        this.shininess = params.shininess !== undefined ? params.shininess : 10;
-        /**
-         * lights affecting the material
-         * @type {Light[]}
-         */
-        this.lights = params.lights;
     }
 
     get isCheckerboardMaterial() {
@@ -86,12 +61,5 @@ export class CheckerboardMaterial extends Material {
 
     glslRender() {
         return mustache.render(render, this);
-    }
-
-    shader(shaderBuilder) {
-        for (const light of this.lights) {
-            light.shader(shaderBuilder);
-        }
-        super.shader(shaderBuilder);
     }
 }
