@@ -1,16 +1,29 @@
-import {PerspectiveCamera} from "../../lib/three.module.js";
-import {RelPosition} from "../geometry/General.js";
-import trivial from "../../commons/subgroups/trivial.js";
+import {PerspectiveCamera} from "../../../lib/three.module.js";
+import {RelPosition} from "../../geometry/General.js";
+
+import trivial from "../../../commons/subgroups/trivial.js";
 import struct from "./shaders/struct.js";
+import mapping from "./shaders/mapping.js";
 
 /**
  * @class
  *
  * @classdesc
  * Camera in the non-euclidean scene.
- * It should not be confused with the Three.js camera in the virtual euclidean scene
+ * It should not be confused with the Three.js camera in the virtual euclidean scene.
+ * The minimal GLSL struct should contains
+ * - fov
+ * - minDist
+ * - maxDist
+ * - maxSteps
+ * - threshold
+ * - position
+ * - matrix
+ * The GLSL code needs to contains (after the declaration) a function `mapping`.
+ * The role of this function is to map a point on the horizon sphere
+ * to the initial direction to follow during the ray-marching.
  */
-export class Camera {
+export class BasicCamera {
 
     /**
      * Constructor.
@@ -28,17 +41,15 @@ export class Camera {
         /**
          * The underlying Three.js camera
          * @type {PerspectiveCamera}
-         * @private
          */
-        this._threeCamera = new PerspectiveCamera(
+        this.threeCamera = new PerspectiveCamera(
             parameters.fov !== undefined ? parameters.fov : 70,
             window.innerWidth / window.innerHeight,
             0.01,
             2000
         );
-        this._threeCamera.position.set(0, 0, 0);
-        this._threeCamera.lookAt(0, 0, -1);
-        this._threeCamera.layers.enable(1);
+        this.threeCamera.position.set(0, 0, 0);
+        this.threeCamera.lookAt(0, 0, -1);
 
         /**
          * Minimal distance we ray-march
@@ -74,7 +85,7 @@ export class Camera {
      * @param {number} value
      */
     set aspect(value) {
-        this._threeCamera.aspect = value;
+        this.threeCamera.aspect = value;
     }
 
     /**
@@ -82,7 +93,7 @@ export class Camera {
      * @type {number}
      */
     get fov() {
-        return this._threeCamera.fov;
+        return this.threeCamera.fov;
     }
 
     /**
@@ -90,8 +101,8 @@ export class Camera {
      * @param {number} value
      */
     set fov(value) {
-        this._threeCamera.fov = value;
-        this._threeCamera.updateProjectionMatrix();
+        this.threeCamera.fov = value;
+        this.threeCamera.updateProjectionMatrix();
     }
 
     /**
@@ -99,22 +110,24 @@ export class Camera {
      * @type {Matrix4}
      */
     get matrix() {
-        return this._threeCamera.matrixWorld;
+        return this.threeCamera.matrixWorld;
     }
 
     /**
      * Shortcut to update the projection matrix of the underlying Three.js camera
      */
     updateProjectionMatrix() {
-        this._threeCamera.updateProjectionMatrix();
+        this.threeCamera.updateProjectionMatrix();
     }
+
 
     /**
      * build the GLSL code needed to declare the camera
-     * @param {ShaderBuilder} shaderBuilder
+     * @param {ShaderBuilder} shaderBuilder - the shader builder
      */
     shader(shaderBuilder) {
         shaderBuilder.addClass('Camera', struct);
         shaderBuilder.addUniform('camera', 'Camera', this);
+        shaderBuilder.addChunk(mapping);
     }
 }

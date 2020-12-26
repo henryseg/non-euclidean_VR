@@ -1,20 +1,19 @@
 import * as geom from "../../js/geometries/euc/geometry/General.js";
-import torus from "../../js/geometries/euc/subgroups/torus.js";
+import trivial from "../../js/commons/subgroups/trivial.js";
 
-import {Camera, Renderer, Scene} from "../../js/core/General.js";
-import {Mono} from "../../js/commons/stereos/mono/Mono.js";
+import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
 
 import {Point} from "../../js/core/geometry/Point.js";
 import {Ball} from "../../js/geometries/euc/solids/Ball.js";
 import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
 
 
-// initial setup
-const camera = new Camera({subgroup: torus});
-const scene = new Scene();
-const stereo = new Mono();
 
-const renderer = new Renderer(geom, torus, camera, scene, stereo, {
+// initial setup
+const camera = new BasicCamera({subgroup: trivial});
+const scene = new Scene();
+
+const renderer = new BasicRenderer(geom, trivial, camera, scene, {
     logarithmicDepthBuffer: true
 });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -52,10 +51,11 @@ function onWindowResize(event) {
 window.addEventListener("resize", onWindowResize, false);
 
 
-
 // rendering the scene
 function animate() {
     renderer.render();
 }
+
 renderer.setAnimationLoop(animate);
+renderer.checkShader();
 

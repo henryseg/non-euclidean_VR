@@ -72,16 +72,13 @@ class FlyControls extends EventDispatcher {
     /**
      * Constructor
      * (and not the one of the three.js camera in the virtual euclidean space).
-     * @param {Camera} camera - the non-euclidean camera
+     * @param {BasicCamera} camera - the non-euclidean camera
      * (needed to get the orientation of the observer when using both VR and keyboard).
-     * @param {HTMLElement} domElement - The HTML element used for event listeners.
      * @param {string} keyboard - the keyboard type (us, fr, etc)
      */
-    constructor(camera, domElement, keyboard = 'us') {
+    constructor(camera,  keyboard = 'us') {
         super();
         this.camera = camera;
-        this.domElement = domElement;
-        if (domElement) this.domElement.setAttribute('tabindex', "- 1");
 
         this.keyboard = keyboard;
 
@@ -107,11 +104,11 @@ class FlyControls extends EventDispatcher {
         this._moveVector = new Vector(0, 0, 0);
         this._rotationVector = new Vector(0, 0, 0);
 
-        const _keydown = bind(this, this.onKeyDown);
-        const _keyup = bind(this, this.onKeyUp);
+        const _onKeyDown = bind(this, this.onKeyDown);
+        const _onKeyUp = bind(this, this.onKeyUp);
 
-        window.addEventListener('keydown', _keydown, false);
-        window.addEventListener('keyup', _keyup, false);
+        window.addEventListener('keydown', _onKeyDown, false);
+        window.addEventListener('keyup', _onKeyUp, false);
     }
 
     /**

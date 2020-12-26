@@ -3,7 +3,7 @@ import {Color} from "../../js/lib/three.module.js";
 import {Thurston} from "../../js/core/Thurston.js";
 
 import * as geom from "../../js/geometries/nil/geometry/General.js";
-import heisenberg from "../../js/geometries/nil/subgroup/heisenberg.js";
+import heisenberg from "../../js/geometries/nil/subgroups/heisenberg.js";
 import trivial from "../../js/commons/subgroups/trivial.js";
 
 import {Point} from "../../js/core/geometry/Point.js";

@@ -5,8 +5,7 @@ import {Clock, Color} from "../lib/three.module.js";
 
 import {bind} from "../utils.js";
 
-import {Camera, Renderer, Scene} from "./General.js";
-import {Mono} from "../commons/stereos/mono/Mono.js";
+import {BasicCamera, BasicRenderer, Scene} from "./General.js";
 
 
 /**
@@ -17,8 +16,6 @@ import {Mono} from "../commons/stereos/mono/Mono.js";
  * A combination of all main parts of the API. It can be used to quickly create scenes
  */
 export class Thurston {
-    subgroup;
-    params = {};
 
     /**
      * Constructor.
@@ -53,24 +50,19 @@ export class Thurston {
 
         /**
          * The non-euclidean camera
-         * @type {Camera}
+         * @type {BasicCamera}
          */
-        this.camera = new Camera({subgroup: this.subgroup});
+        this.camera = new BasicCamera({subgroup: this.subgroup});
         /**
          * The non-euclidean scene
          * @type {Scene}
          */
         this.scene = new Scene();
         /**
-         * The stereo mode (here mono)
-         * @type {Mono}
-         */
-        this.stereo = new Mono();
-        /**d
          * The non-euclidean renderer
-         * @type {Renderer}
+         * @type {BasicRenderer}
          */
-        this.renderer = new Renderer(this.geom, this.subgroup, this.camera, this.scene, this.stereo);
+        this.renderer = new BasicRenderer(this.geom, this.subgroup, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
@@ -81,6 +73,8 @@ export class Thurston {
         const _onWindowResize = bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
+
+
         /**
          * The keyboard controls
          * @type {FlyControls}
@@ -88,8 +82,7 @@ export class Thurston {
          */
         this.flyControls = new FlyControls(
             this.camera,
-            this.renderer.domElement,
-            this.params.keyboard
+            params.keyboard !== undefined ? params.keyboard : 'us'
         );
 
         /**
@@ -120,11 +113,6 @@ export class Thurston {
      * @param {Object} params - the parameters
      */
     setParams(params) {
-        /**
-         * The keyboard used by FlyControls
-         * @type {string}
-         */
-        this.params.keyboard = params.keyboard !== undefined ? params.keyboard : 'us';
     }
 
 

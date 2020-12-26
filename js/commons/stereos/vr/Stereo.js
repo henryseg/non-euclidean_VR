@@ -1,24 +1,27 @@
+import {Stereo as AbstractStereo} from "../../../core/geometry/Stereo.js";
 import {Vector} from "./Vector.js";
 import stereo from "./shaders/stereo.js";
 
 /**
- * Class to add eventually some "distortion" to the stereo
- * Typically used in H3 (tourist vs native view)
+ * Basic stereo mode: just offset the eyes by the interpupillary distance, using parallel transport
  */
-
-class Stereo {
+export class Stereo extends AbstractStereo {
     /**
      * Constructor
      * @param {number} ipDist - **half** the interpupillary distance
      */
     constructor(ipDist = undefined) {
-
+        super();
         /**
          * True if stereo is on
          * @type {boolean}
          */
         this.on = false;
-        this.ipDist = ipDist;
+        /**
+         * **Half** the interpupillary distance
+         * @return {number}
+         */
+        this.ipDist = ipDist !== undefined ? ipDist : 0.03200000151991844;
     }
 
     /**
@@ -38,22 +41,6 @@ class Stereo {
 
 
     /**
-     * **Half** the interpupillary distance
-     * @return {number}
-     */
-    get ipDist() {
-        return this._ipDist;
-    }
-
-    set ipDist(value) {
-        if (value === undefined) {
-            this._ipDist = 0.03200000151991844;
-        } else {
-            this._ipDist = value;
-        }
-    }
-
-    /**
      * Return the two positions corresponding to the left and right eye.
      * The method just offset the eyes using parallel transport.
      * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
@@ -67,7 +54,7 @@ class Stereo {
         const rightEye = position.clone();
         const leftEye = position.clone();
 
-        if(this.on) {
+        if (this.on) {
             // if we are in VR mode we offset the position of the left and right eyes
             // to that end, we flow the position along the left / right direction
             // we have to be careful that left and right are meant in the point of view of the camera.
@@ -84,5 +71,3 @@ class Stereo {
     }
 
 }
-
-export {Stereo};

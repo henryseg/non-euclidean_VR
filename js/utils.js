@@ -135,13 +135,8 @@ Matrix4.prototype.add = function (matrix) {
  * @param {function} fn - the method to call
  * @return {function(): *}
  */
-function bind(scope, fn) {
+export function bind(scope, fn) {
     return function () {
         return fn.apply(scope, arguments);
     };
-}
-
-
-export {
-    bind
 }

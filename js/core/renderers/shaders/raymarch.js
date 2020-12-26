@@ -69,6 +69,7 @@ int raymarch(inout RelVector v, out int objId){
 
     //global scene
     for (int i=0; i < camera.maxSteps; i++){
+        
         if (globalDepth > localDepth || globalDepth > camera.maxDist){
             // we reached the maximal distance
             break;
@@ -109,7 +110,8 @@ void main() {
     vec3 color;
     int objId;
 
-    RelVector v = rayDir(spherePosition);
+    RelVector v = mapping(spherePosition);
+    
     int hit = raymarch(v, objId);
 
     switch (hit) {

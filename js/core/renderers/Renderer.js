@@ -1,27 +1,18 @@
 import {
     Color,
-    Mesh,
     Scene as ThreeScene,
-    ShaderMaterial,
-    SphereBufferGeometry,
     WebGLRenderer
 } from "../../lib/three.module.js";
 
-import {ShaderBuilder} from "../ShaderBuilder.js";
-
-import vertex from "./shaders/vertex.js";
-import constants from "./shaders/constants.js";
-import commons1 from "../geometry/shaders/commons1.js";
-import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/raymarch.js";
-
 /**
  * @class
+ * @abstract
  *
  * @classdesc
  * Non-euclidean renderer.
  * Takes as input the non-euclidean camera and scene and makes some magic.
  * It should not be confused with the Three.js WebGLRenderer it relies on.
+ * Abstract class with the code common to all renderers.
  */
 export class Renderer {
 
@@ -29,12 +20,11 @@ export class Renderer {
      * Constructor.
      * @param {Object} geom - the underlying geometry
      * @param {Subgroup} subgroup - the underlying subgroup
-     * @param {Camera} camera - the camera
+     * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
-     * @param {Stereo} stereo - the stereo mode
      * @param {Object} params - parameters for the underlying Three.js renderer
      */
-    constructor(geom, subgroup, camera, scene, stereo, params = {}) {
+    constructor(geom, subgroup, camera, scene, params = {}) {
         /**
          * The underlying geometry.
          * @type{Object}
@@ -47,7 +37,7 @@ export class Renderer {
         this.subgroup = subgroup;
         /**
          * Non-euclidean camera
-         * @type {Camera}
+         * @type {BasicCamera}
          */
         this.camera = camera;
         /**
@@ -55,37 +45,20 @@ export class Renderer {
          * @type {Scene}
          */
         this.scene = scene;
-        /**
-         * Stereo mode
-         * @type {Stereo}
-         */
-        this.stereo = stereo;
 
         /**
          * The underlying Three.js renderer
          * @type {WebGLRenderer}
-         * @private
+         * @protected
          */
-        this._threeRenderer = new WebGLRenderer(params);
+        this.threeRenderer = new WebGLRenderer(params);
         /**
          * The underlying Three.js scene
          * Not to be confused with the non-euclidean scene.
          * @type {ThreeScene}
-         * @private
+         * @protected
          */
-        this._threeScene = new ThreeScene();
-        /**
-         * The horizon sphere on which is drawn the non-euclidean geometry.
-         * @type {Mesh}
-         * @private
-         */
-        this._horizon = undefined;
-        /**
-         * Builder for the fragment shader.
-         * @type {ShaderBuilder}
-         * @private
-         */
-        this._fragmentBuilder = new ShaderBuilder();
+        this.threeScene = new ThreeScene();
     }
 
     /**
@@ -94,7 +67,7 @@ export class Renderer {
      * @param {number} value
      */
     setPixelRatio(value) {
-        this._threeRenderer.setPixelRatio(value);
+        this.threeRenderer.setPixelRatio(value);
     }
 
     /**
@@ -105,7 +78,7 @@ export class Renderer {
      * @param {boolean} updateStyle
      */
     setSize(width, height, updateStyle = true) {
-        this._threeRenderer.setSize(width, height, updateStyle);
+        this.threeRenderer.setSize(width, height, updateStyle);
     }
 
     /**
@@ -115,7 +88,7 @@ export class Renderer {
      * @param {number} alpha
      */
     setClearColor(color, alpha) {
-        this._threeRenderer.setClearColor(color, alpha);
+        this.threeRenderer.setClearColor(color, alpha);
     }
 
     /**
@@ -124,7 +97,7 @@ export class Renderer {
      * @param {Function} callback
      */
     setAnimationLoop(callback) {
-        this._threeRenderer.setAnimationLoop(callback);
+        this.threeRenderer.setAnimationLoop(callback);
     }
 
     /**
@@ -133,70 +106,15 @@ export class Renderer {
      * @return {HTMLCanvasElement}
      */
     get domElement() {
-        return this._threeRenderer.domElement;
-    }
-
-    /**
-     * Build the vertex shader
-     */
-    vertexShader() {
-        return vertex;
-    }
-
-    /**
-     * Build the fragment shader
-     */
-    buildFragmentShader() {
-
-        // constants
-        this._fragmentBuilder.addChunk(constants);
-        // geometry
-        this._fragmentBuilder.addChunk(this.geom.shader1);
-        this._fragmentBuilder.addChunk(commons1);
-        this._fragmentBuilder.addChunk(this.geom.shader2);
-        this._fragmentBuilder.addChunk(commons2);
-
-        // subgroup/quotient orbifold
-        this.subgroup.shader(this._fragmentBuilder);
-
-        // camera
-        this.camera.shader(this._fragmentBuilder)
-
-        // scene
-        this.scene.shader(this._fragmentBuilder);
-
-        // stereo mode
-        this.stereo.shader(this._fragmentBuilder);
-
-        // ray-march and main
-        this._fragmentBuilder.addChunk(raymarch);
+        return this.threeRenderer.domElement;
     }
 
     /**
      * Build the Three.js scene with the non-euclidean shader.
+     * @abstract
      */
     build() {
-        // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
-        // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
-        // sphere eversion !
-        geometry.scale(1, 1, -1);
-
-        this.buildFragmentShader();
-        const material = new ShaderMaterial({
-            uniforms: this._fragmentBuilder.uniforms,
-            vertexShader: this.vertexShader(),
-            fragmentShader: this._fragmentBuilder.code,
-        });
-        this._horizon = new Mesh(geometry, material);
-        this._horizon.layers.set(1);
-        this._threeScene.add(this._horizon);
-
-        return this;
-    }
-
-    checkShader() {
-        console.log(this._fragmentBuilder.code);
+        throw new Error('AbstractRenderer: this method is not implemented')
     }
 
     /**
@@ -204,7 +122,6 @@ export class Renderer {
      * The method `build` should be called before.
      */
     render() {
-        this._threeRenderer.render(this._threeScene, this.camera['_threeCamera']);
+        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
-
 }
