@@ -58,13 +58,13 @@ Released under the terms of the GNU [General Public License](https://www.gnu.org
 
 (alphabetic order)
 
-- **Rémi Coulon** (@remi-coulon)
+- **Rémi Coulon** [@remi-coulon](https://github.com/remi-coulon)
   
   Rémi Coulon is partially supported by the the *Centre Henri Lebesgue* ANR-11-LABX-0020-01 
   and the Agence Nationale de la Recherche under Grant *Dagger* ANR-16-CE40- 0006-01
-- **Sabetta Matsumoto** @sabetta
-- **Henry Segerman** @henryseg
+- **Sabetta Matsumoto** [@sabetta](https://github.com/sabetta)
+- **Henry Segerman** [@henryseg](https://github.com/henryseg)
   
   Henry Segerman is partially supported by NSF grant DMS-1708239.
   Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
-- **Steve Trettel** @stevejtrettel
+- **Steve Trettel** [@stevejtrettel](https://github.com/stevejtrettel)
