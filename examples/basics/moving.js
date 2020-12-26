@@ -38,6 +38,16 @@ scene.add(ball);
 // building there renderer
 renderer.build();
 
+// event controller on windows resize
+function onWindowResize(event) {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix();
+}
+
+window.addEventListener("resize", onWindowResize, false);
+
+
 
 const clock = new Clock();
 function move(time) {
