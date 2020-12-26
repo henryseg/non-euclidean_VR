@@ -17,12 +17,12 @@ The default controls in the example pages are the following.
 
 Command | QWERTY keyboard | AZERTY keyboard
 --- | --- | ---
-yaw left|`a`|`q`
-yaw right|`d`|`d`
-pitch up|`w`|`z`
-pitch down|`s`|`s`
-roll left|`q`|`a`
-roll right|`e`|`e`
+Yaw left|`a`|`q`
+Yaw right|`d`|`d`
+Pitch up|`w`|`z`
+Pitch down|`s`|`s`
+Roll left|`q`|`a`
+Roll right|`e`|`e`
 Move forward|`arrow up`|`arrow up`
 Move backward|`arrow down`|`arrow down`
 Move to the left|`arrow left`|`arrow left`
@@ -58,7 +58,7 @@ Released under the terms of the GNU [General Public License](https://www.gnu.org
 
 (alphabetic order)
 
-- **Rémi Coulon** @remi-coulon
+- **Rémi Coulon** [@remi-coulon]
   
   Rémi Coulon is partially supported by the the *Centre Henri Lebesgue* ANR-11-LABX-0020-01 
   and the Agence Nationale de la Recherche under Grant *Dagger* ANR-16-CE40- 0006-01
