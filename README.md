@@ -9,7 +9,7 @@ It comes with an API to
 - define objects, lights, materials, etc
 - implement new geometries (or new models of existing geometries)
 
-This project started at the Illustrating Mathematics semester program at [ICERM](https://icerm.brown.edu). 
+This project started at the *Illustrating Mathematics* semester program at [ICERM](https://icerm.brown.edu). 
 
 ## Controls
 
