@@ -28,4 +28,14 @@ RelVector gradient(BallShape ball, RelVector v){
     local = geomNormalize(local);
     return RelVector(local, v.cellBoost, v.invCellBoost);
 }
+
+vec2 uvMap(BallShape ball, RelVector v){
+    Point center = applyIsometry(v.invCellBoost, ball.center);
+    vec4 dir = normalize(v.local.pos.coords - center.coords);
+    float sinPhi = sqrt(dir.x * dir.x + dir.y * dir.y);
+    float cosPhi = dir.z;
+    float uCoord = atan(dir.y, dir.x);
+    float vCoord = atan(sinPhi, cosPhi);
+    return vec2(uCoord,vCoord);
+}
 `;

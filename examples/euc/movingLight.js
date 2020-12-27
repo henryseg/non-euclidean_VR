@@ -1,4 +1,4 @@
-import {Clock, Color, Matrix4} from "../../js/lib/three.module.js";
+import {Clock, Color, Matrix4, Vector2} from "../../js/lib/three.module.js";
 
 import {Thurston} from "../../js/commons/Thurston.js";
 
@@ -10,7 +10,7 @@ import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.j
 
 import {LocalBallShape, ComplementShape, union} from "../../js/geometries/euc/shapes/all.js";
 import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
-import {SingleColorMaterial, PhongMaterial} from "../../js/commons/material/all.js";
+import {SingleColorMaterial, PhongMaterial, CheckerboardMaterial, phongWrap} from "../../js/commons/material/all.js";
 
 
 const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
@@ -31,7 +31,6 @@ const latticeMat = new PhongMaterial({
     shininess: 5,
     lights: [light]
 });
-
 
 // Complement of a local ball
 const center = new LocalBallShape(

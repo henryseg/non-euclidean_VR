@@ -5,6 +5,7 @@ import distance from "../../imports/distance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
+import uv from "./shaders/uv.js";
 
 /**
  * @class
@@ -46,6 +47,15 @@ export class BallShape extends BasicShape {
         return 'BallShape';
     }
 
+    /**
+     * The UV coordinates corresponds to the spherical coordinates on the sphere...
+     * Not sure if that is the smartest choice
+     * @return {boolean}
+     */
+    get hasUVMap(){
+        return true;
+    }
+
     static glslClass() {
         return struct;
     }
@@ -56,6 +66,10 @@ export class BallShape extends BasicShape {
 
     glslGradient() {
         return mustache.render(gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache.render(uv, this);
     }
 
 }

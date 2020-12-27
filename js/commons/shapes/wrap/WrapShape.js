@@ -1,7 +1,9 @@
-import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 import {mustache} from "../../../lib/mustache.mjs";
+import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
+
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
+import uv from "./shaders/uv.js";
 
 /**
  * @class
@@ -33,6 +35,10 @@ export class WrapShape extends AdvancedShape {
         return this.shape.isGlobal;
     }
 
+    get hasUVMap(){
+        return this.shape.hasUVMap;
+    }
+
     static glslClass() {
         return '';
     }
@@ -43,6 +49,10 @@ export class WrapShape extends AdvancedShape {
 
     glslGradient() {
         return mustache.render(gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache.render(uv, this);
     }
 
     shader(shaderBuilder) {

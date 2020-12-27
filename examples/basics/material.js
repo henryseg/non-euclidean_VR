@@ -33,7 +33,7 @@ document.body.appendChild(renderer.domElement);
 // single color material
 const singleColorMaterial = new SingleColorMaterial(new Color(0.7, 0.1, 0.2));
 const ball0 = new Ball(
-    new Point(-1, 0, -2),
+    new Point(-1, 0.5, -2),
     0.3,
     singleColorMaterial
 );
@@ -42,23 +42,37 @@ const ball0 = new Ball(
 const normalMaterial = new NormalMaterial();
 // defining solids with this material
 const ball1 = new Ball(
-    new Point(0, 0, -2),
+    new Point(0, 0.5, -2),
     0.3,
     normalMaterial
 );
 
+const checkerboardRaw = new CheckerboardMaterial(
+    new Vector2(Math.PI, 0),
+    new Vector2(0, Math.PI),
+    new Color(0.3, 0.5, 1),
+    new Color(1, 1, 0.2)
+)
+
+
+const ball2 = new Ball(
+    new Point(1, 0.5, -2),
+    0.3,
+    checkerboardRaw
+);
+
 // lights for the Phong material
 const light1 = new PointLight(
-    new Point(2, 2, -2),
+    new Point(2, 1, -2),
     new Color(1, 1, 0),
 )
 const light2 = new PointLight(
-    new Point(1, -0.8, -1.2),
+    new Point(1, 0.2, -0.5),
     new Color(1, 0, 1),
 )
 
 const light3 = new PointLight(
-    new Point(-1, 0.5, -2),
+    new Point(-1, 1, -2),
     new Color(0, 1, 1),
 )
 
@@ -66,43 +80,41 @@ const lights = [light1, light2, light3];
 
 // Phong shading material
 const phongMaterial = new PhongMaterial({shininess: 10, lights: lights});
-const ball2 = new Ball(
-    new Point(1, 0, -2),
+const ball3 = new Ball(
+    new Point(-1, -0.5, -2),
     0.3,
     phongMaterial
 )
 
 
-const checkerboardWall = new CheckerboardMaterial(
-    new Vector2(1, 0),
-    new Vector2(0, 1),
-    new Color(0.3, 0.5, 1),
-    new Color(1, 1, 0.2)
-)
 
-const checkerboardPlane = new CheckerboardMaterial(
-    new Vector2(1, 1),
-    new Vector2(-1, 1),
+const normalPhong = phongWrap(normalMaterial, {lights: lights});
+
+const ball4 = new Ball(
+    new Point(0, -0.5, -2),
+    0.3,
+    normalPhong
+);
+
+
+const checkerboardBase = new CheckerboardMaterial(
+    new Vector2(2, 2),
+    new Vector2(-2, 2),
     new Color(1, 1, 1),
     new Color(0, 0, 0)
 )
 
-const checkerboardPhong = phongWrap(checkerboardPlane, {lights: lights});
+const checkerboardPhong = phongWrap(checkerboardBase, {lights: lights});
 
-const wall = new HalfSpace(
-    new Point(-3, 0, 0),
-    new Vector3(1, 0, 0),
-    checkerboardWall
-)
 
-const plane = new HalfSpace(
-    new Point(0, -1, 0),
-    new Vector3(0, 1, 0),
+const ball5 = new Ball(
+    new Point(1,-0.5,-2),
+    0.3,
     checkerboardPhong
-)
+);
 
 // adding the solid to the scene
-scene.add(light1, light2, ball0, ball1, ball2, plane, wall);
+scene.add(light1, light2, ball0, ball1, ball2, ball3, ball4, ball5);
 
 // building there renderer
 renderer.build();
