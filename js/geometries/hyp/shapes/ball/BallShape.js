@@ -4,9 +4,12 @@ import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.js";
 import direction from "../../imports/direction.js";
+import normalFrame from "../../imports/normalFrame.js";
+
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
+import uv from "./shaders/uv.js";
 
 
 /**
@@ -26,7 +29,7 @@ export class BallShape extends BasicShape {
      */
     constructor(center, radius) {
         super();
-        this.addImport(distance, direction);
+        this.addImport(distance, direction, normalFrame);
         if (center.isPoint) {
             this.center = center;
         } else if (center.isVector) {
@@ -54,6 +57,10 @@ export class BallShape extends BasicShape {
         return true;
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     get uniformType() {
         return 'BallShape';
     }
@@ -68,6 +75,10 @@ export class BallShape extends BasicShape {
 
     glslGradient() {
         return mustache.render(gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache.render(uv, this);
     }
 
 }
