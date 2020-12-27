@@ -82,16 +82,6 @@ class Point {
     copy(point) {
         throw new Error("This method need be overloaded.");
     }
-
-    /**
-     * Return a line of GLSL code creating the same point.
-     * Used when dynamically building shaders.
-     * @abstract
-     * @return {string} the equivalent GLSL code
-     */
-    toGLSL() {
-        throw new Error("This method need be overloaded.");
-    }
 }
 
 

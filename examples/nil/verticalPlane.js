@@ -1,4 +1,4 @@
-import {Clock, Color, Vector4} from "../../js/lib/three.module.js";
+import {Clock, Color, Vector2, Vector4} from "../../js/lib/three.module.js";
 
 import {Thurston} from "../../js/commons/Thurston.js";
 
@@ -8,8 +8,7 @@ import trivial from "../../js/commons/subgroups/trivial.js";
 import {Point} from "../../js/core/geometry/Point.js";
 import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
 import {VerticalHalfSpace} from "../../js/geometries/nil/solids/all.js";
-import {CheckerboardMaterial, SingleColorMaterial} from "../../js/geometries/nil/materials/all.js";
-import {phongWrap, PhongWrapMaterial} from "../../js/commons/material/all.js";
+import {CheckerboardMaterial, phongWrap, PhongWrapMaterial} from "../../js/commons/material/all.js";
 
 
 const thurston = new Thurston(geom, trivial, {keyboard: 'fr'});
@@ -37,8 +36,8 @@ const light3 = new FakePointLight(
 
 const lights = [light1, light2, light3];
 
-const dir1 = new Vector4(0, 1, 0, 0);
-const dir2 = new Vector4(0, 0, 1, 0);
+const dir1 = new Vector2(1,0);
+const dir2 = new Vector2(0,1);
 const color1 = new Color(1, 1, 1);
 const color2 = new Color(0, 0, 0);
 
@@ -59,8 +58,8 @@ function animate() {
     const sin = Math.sin(0.5 * speed * time);
     color2.setRGB(coeffColor, coeffColor, coeffColor);
 
-    dir1.set(0, cos, -sin, 0);
-    dir2.set(0, sin, cos, 0);
+    dir1.set(cos, -sin);
+    dir2.set(sin, cos);
 }
 
 thurston.callback = animate;

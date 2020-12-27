@@ -77,9 +77,6 @@ Isometry.prototype.copy = function (isom) {
     return this;
 };
 
-Isometry.prototype.toGLSL = function () {
-    return `Isometry(${this.matrix.toGLSL()})`;
-}
 
 export {
     Isometry

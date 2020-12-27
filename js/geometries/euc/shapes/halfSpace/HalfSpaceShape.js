@@ -23,14 +23,14 @@ export class HalfSpaceShape extends BasicShape {
      * Constructor.
      * @param {Point} pos - a point on the boundary of the half space
      * @param {Vector3} normal - the normal to the half space.
-     * @param {Vector3} uDir - the direction of the u coordinates
-     * @param {Vector3} vDir - the direction of the v coordinates
      *
-     * If uDir and vDir are not provided they are computed as follows.
+     * The UV directions are computed as follows.
      * One first compute "the" rotation R sending e_z to normal.
      * Then uDir = Re_x and vDir = Re_y.
+     *
+     * @todo If the normal gets updated (for instance during an animation), then the UV directions will not follow.
      */
-    constructor(pos, normal, uDir = undefined, vDir = undefined) {
+    constructor(pos, normal) {
         super();
         /**
          * Point on the boundary of the half space
@@ -43,20 +43,10 @@ export class HalfSpaceShape extends BasicShape {
          */
         this.normal = normal.normalize();
 
-        const q = new Quaternion();
-        if (uDir === undefined || vDir === undefined) {
-            q.setFromUnitVectors(ez, this.normal);
-        }
-        if (uDir !== undefined) {
-            this.uDir = uDir;
-        } else {
-            this.uDir = ex.clone().applyQuaternion(q);
-        }
-        if (vDir !== undefined) {
-            this.vDir = vDir;
-        } else {
-            this.vDir = ey.clone().applyQuaternion(q);
-        }
+        const q = new Quaternion().setFromUnitVectors(ez, this.normal);
+        this.uDir = ex.clone().applyQuaternion(q);
+        this.vDir = ey.clone().applyQuaternion(q);
+
     }
 
     get isGlobal() {

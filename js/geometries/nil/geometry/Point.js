@@ -39,10 +39,6 @@ Point.prototype.copy = function (point) {
     return this;
 };
 
-Point.prototype.toGLSL = function () {
-    return `Point(${this.coords.toGLSL()})`;
-}
-
 
 export {
     Point

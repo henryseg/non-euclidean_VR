@@ -229,19 +229,6 @@ class RelPosition {
         this.invCellBoost.copy(position.invCellBoost);
         this.local.copy(position.local);
     }
-
-    /**
-     * Return a line of GLSL code creating the same position.
-     * Used when dynamically building shaders.
-     * @return {string} the equivalent GLSL code
-     */
-    toGLSL() {
-        return `RelPosition(
-            ${this.local.toGLSL()},
-            ${this.cellBoost.toGLSL()},
-            ${this.invCellBoost.toGLSL()}
-        )`;
-    }
 }
 
 export {

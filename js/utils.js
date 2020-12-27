@@ -74,47 +74,6 @@ Matrix4.prototype.toLog = function () {
     return res;
 }
 
-
-/**
- * Add a method to numbers.
- * Convert the number to a string, with an additional dot, to be considered as float by GLSL.
- * @return {string} the converted number
- */
-Number.prototype.toGLSL = function () {
-    let res = this.toString();
-    if (Number.isInteger(this)) {
-        res = res + '.';
-    }
-    return res;
-};
-
-/**
- * Add a method to Three.js Vector3.
- * Return a block of GLSL code recreating the same vector as a vec3
- * @return {string}
- */
-Vector3.prototype.toGLSL = function () {
-    return `vec3(${this.toArray()})`;
-}
-
-/**
- * Add a method to Three.js Vector4.
- * Return a block of GLSL code recreating the same vector as a vec4
- * @return {string}
- */
-Vector4.prototype.toGLSL = function () {
-    return `vec4(${this.toArray()})`;
-}
-
-/**
- * Add a method to Three.js Matrix4.
- * Return a block of GLSL code recreating the same vector as a mat4
- * @return {string}
- */
-Matrix4.prototype.toGLSL = function () {
-    return `mat4(${this.toArray()})`;
-};
-
 /**
  * A a method to Three.js Matrix4
  * Addition of matrices

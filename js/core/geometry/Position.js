@@ -215,18 +215,6 @@ class Position {
         this.boost.copy(position.boost);
         this.quaternion.copy(position.quaternion);
     }
-
-    /**
-     * Return a line of GLSL code creating the same position.
-     * Used when dynamically building shaders.
-     * @return {string} the equivalent GLSL code
-     */
-    toGLSL() {
-        return `Position(
-            ${this.boost.toGLSL()},
-            ${this.facing.toGLSL()}
-        )`;
-    }
 }
 
 export {

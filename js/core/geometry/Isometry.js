@@ -137,16 +137,6 @@ class Isometry {
         throw new Error("This method need be overloaded.");
     }
 
-
-    /**
-     * Return a block of GLSL code creating the same isometry
-     * Used when dynamically building shaders.
-     * @abstract
-     * @return {string} the equivalent GLSL code
-     */
-    toGLSL() {
-        throw new Error("This method need be overloaded.");
-    }
 }
 
 export {
