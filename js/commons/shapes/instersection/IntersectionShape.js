@@ -3,6 +3,7 @@ import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
+import uv from "./shaders/uv.js";
 
 /**
  * @class
@@ -31,6 +32,10 @@ export class IntersectionShape extends AdvancedShape {
         return this.shape1.isGlobal;
     }
 
+    get hasUVMap(){
+        return this.shape1.hasUVMap && this.shape2.hasUVMap;
+    }
+
     static glslClass(){
         return '';
     }
@@ -41,6 +46,10 @@ export class IntersectionShape extends AdvancedShape {
 
     glslGradient() {
         return mustache.render(gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache.render(uv, this);
     }
 
     shader(shaderBuilder) {

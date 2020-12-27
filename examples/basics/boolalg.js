@@ -29,6 +29,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 
+
 // magenta light
 const light = new PointLight(
     new Point(0, 0.2, 0),
