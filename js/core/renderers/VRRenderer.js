@@ -3,7 +3,6 @@ import {VRButton as VRButtonLib} from "../../lib/VRButton.js";
 
 import {bind} from "../../utils.js";
 
-import {StereoCamera} from "../camera/stereo/StereoCamera.js";
 import {ShaderBuilder} from "../ShaderBuilder.js";
 import {Renderer} from "./Renderer.js";
 
@@ -32,7 +31,7 @@ export class VRRenderer extends Renderer {
      * Constructor.
      * @param {Object} geom - the underlying geometry
      * @param {Subgroup} subgroup - the underlying subgroup
-     * @param {StereoCamera} camera - the camera
+     * @param {VRCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
      */
@@ -57,6 +56,14 @@ export class VRRenderer extends Renderer {
          * @private
          */
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
+    }
+
+    /**
+     * Shortcut to access the Three.js WebXRManager
+     * @return {WebXRManager}
+     */
+    get xr(){
+        return this.threeRenderer.xr;
     }
 
     buildFragmentShader() {

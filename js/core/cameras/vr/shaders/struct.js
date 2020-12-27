@@ -5,7 +5,7 @@ export default `//
  * Camera.
  * Mostly used to carry all informations linked to the camera (minDist, maxDist, maxSteps, etc)
  **********************************************************************************************************************/
-struct StereoCamera {
+struct VRCamera {
     float fov;/**< field of view */
     float minDist;/**< minimal distance we ray-march */
     float maxDist;/**< maximal distance we ray-march */

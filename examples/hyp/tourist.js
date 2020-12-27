@@ -1,6 +1,6 @@
 import {Color} from "../../js/lib/three.module.js";
 
-import {VRThurston} from "../../js/core/VRThurston.js";
+import {VRThurston} from "../../js/commons/VRThurston.js";
 
 import * as geom from "../../js/geometries/hyp/geometry/General.js";
 import cube from "../../js/geometries/hyp/subgroups/cube.js";

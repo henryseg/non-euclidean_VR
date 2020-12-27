@@ -1,6 +1,6 @@
 import {Color} from "../../js/lib/three.module.js";
 
-import {Thurston} from "../../js/core/Thurston.js";
+import {Thurston} from "../../js/commons/Thurston.js";
 
 import * as geom from "../../js/geometries/sph/geometry/General.js";
 import hypercube from "../../js/geometries/sph/subgroups/cube.js";

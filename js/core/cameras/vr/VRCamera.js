@@ -15,7 +15,7 @@ import {Vector3} from "../../../lib/three.module.js";
  * Used for VR.
  * The position of the camera corresponds to the midpoint between the two eyes.
  */
-export class StereoCamera extends BasicCamera {
+export class VRCamera extends BasicCamera {
 
     /**
      * Constructor.
@@ -52,7 +52,7 @@ export class StereoCamera extends BasicCamera {
                 minDist: this.minDist,
                 maxDist: this.maxDist,
                 maxSteps: this.maxSteps,
-                threshold:this.threshold,
+                threshold: this.threshold,
                 position: this.position.clone(),
                 matrix: this.matrix,
             }
@@ -115,28 +115,24 @@ export class StereoCamera extends BasicCamera {
              * @private
              */
             this._chaseThreeCamera = function (webXRManager) {
-                // declare the new positions of the left and right cameras
-                const newThreePositionL = new Vector3();
-                const newThreePositionR = new Vector3();
-
+                const newThreePosition = new Vector()
                 if (this.isStereoOn) {
-                    // if XR is enable, we get the position of the left and right camera
+                    // If XR is enable, we get the position of the left and right camera.
+                    // Note that when XR is on, then main Three.js Camera is shifted to coincide with the right eye.
+                    // Do its position is NOT the midpoint between the eyes of the observer.
+                    // Thus we take here the midpoint between the two VR cameras.
+                    // Those can only be accessed using the WebXRManager.
                     const camerasVR = webXRManager.getCamera(this.threeCamera).cameras;
-                    newThreePositionL.setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
-                    newThreePositionR.setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
+                    const newThreePositionL = new Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
+                    const newThreePositionR = new Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
+                    newThreePosition.lerpVectors(newThreePositionL, newThreePositionR, 0.5);
                 } else {
-                    // if XR is off, both positions coincide with the one of the camera
-                    newThreePositionL.setFromMatrixPosition(this.matrix);
-                    newThreePositionR.setFromMatrixPosition(this.matrix);
+                    newThreePosition.setFromMatrixPosition(this.matrix);
                 }
-                // center each horizon sphere at the appropriate point
-                // compute the old and new position (midpoint between the left and right cameras)
-                const newThreePosition = new Vector().lerpVectors(newThreePositionL, newThreePositionR, 0.5);
                 const deltaPosition = new Vector().subVectors(newThreePosition, oldThreePosition);
                 this.position.flow(deltaPosition);
                 this.updateFakeCamerasPosition();
                 oldThreePosition.copy(newThreePosition);
-
             };
         }
         return this._chaseThreeCamera;
@@ -152,8 +148,8 @@ export class StereoCamera extends BasicCamera {
      * @param {number} side - the side (left of right) (used for stereographic camera)
      */
     sidedShader(shaderBuilder, side) {
-        shaderBuilder.addClass('StereoCamera', struct);
-        shaderBuilder.addUniform('camera', 'StereoCamera', this.fakeCameras[side]);
+        shaderBuilder.addClass('VRCamera', struct);
+        shaderBuilder.addUniform('camera', 'VRCamera', this.fakeCameras[side]);
         shaderBuilder.addChunk(mapping);
     }
 

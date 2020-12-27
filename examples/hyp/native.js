@@ -1,73 +1,73 @@
-import {
-    Color,
-    Vector3
-} from "../../js/lib/three.module.js";
+import {Color} from "../../js/lib/three.module.js";
 
-import {
-    Thurston,
-} from "../../js/Thurston.js";
+import {NativeThurston} from "../../js/geometries/hyp/NativeThurston.js";
 
-import {
-    PhongMaterial
-} from "../../js/commons/material/phong/PhongMaterial.js";
+import * as geom from "../../js/geometries/hyp/geometry/General.js";
+import cube from "../../js/geometries/hyp/subgroups/cube.js";
 
-
-import * as geom from "../../js/geometry/hyp/General.js";
-import {
-    Ball,
-    PointLight,
-    BallComplement
-} from "../../js/objects/hyp/Library.js";
-
-import {
-    cube
-} from "../../js/geometry/hyp/subgroups/cube.js";
-import {NativeStereo} from "../../js/geometry/hyp/stereo/NativeStereo.js";
+import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
+import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
+import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
+import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
+import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
 
 
-const thurston = new Thurston(geom, cube, {
-        keyboard: 'fr',
-        stereoMode: 'native',
-    },
-    new NativeStereo()
-);
+const thurston = new NativeThurston(geom, cube, {keyboard: 'fr'});
 
-const ball0 = new Ball(
-    new Vector3(0, 0, 0),
-    0.1,
-    new PhongMaterial({
-        color: new Color(1, 0.2, 0.2)
-    }),
-    false
-);
 
-const ball1 = new BallComplement(
-    new Vector3(0, 0, 0),
-    1.05,
-    new PhongMaterial({
-        color: new Color(0, 0, 1)
-    }),
-    false
-);
+// lights for the Phong material
 
 //  yellow light
 const light0 = new PointLight(
-    new Vector3(1, 0, -3),
+    new Vector(1, 0, 0),
     new Color(1, 1, 0),
-    true
 );
 
 // cyan light
 const light1 = new PointLight(
-    new Vector3(3, 1, 0),
+    new Vector(0, 1, -1),
     new Color(0, 1, 1)
 );
 
 // magenta light
 const light2 = new PointLight(
-    new Vector3(-1, -1, 1),
+    new Vector(-1, -1, 1),
     new Color(1, 0, 1)
 );
+const lights = [light0, light1, light2];
 
-thurston.addItems([ball1, light0, light1, light2]);
+// Phong shading material
+const mat0 = new PhongMaterial({
+    color: new Color(1, 0.2, 0.2),
+    shininess: 5,
+    lights: lights
+});
+
+// Complement of a local ball
+const ball0 = new LocalBallShape(
+    new Point(),
+    1.02,
+);
+const latticeShape = complement(ball0);
+const lattice = new Solid(latticeShape, mat0);
+
+
+// Phong shading material
+const mat1 = new PhongMaterial({
+    color: new Color(0, 0, 1),
+    shininess: 10,
+    lights: lights
+});
+
+const ball1 = new Ball(
+    new Vector(0, 0, -0.5),
+    0.2,
+    mat1
+);
+
+thurston.add(lattice, ball1, light0, light1, light2);
 thurston.run();
+
+
+
+

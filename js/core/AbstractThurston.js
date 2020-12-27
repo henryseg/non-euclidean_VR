@@ -79,7 +79,7 @@ export class AbstractThurston {
         /**
          * The keyboard controls
          * @type {FlyControls}
-         * @private
+         * @protected
          */
         this.flyControls = new FlyControls(
             this.camera,
@@ -89,7 +89,7 @@ export class AbstractThurston {
         /**
          * A clock to measure the time between two call of animate
          * @type {Clock}
-         * @private
+         * @protected
          */
         this.clock = new Clock();
 

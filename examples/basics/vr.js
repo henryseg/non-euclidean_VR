@@ -2,7 +2,7 @@ import * as geom from "../../js/geometries/euc/geometry/General.js";
 import torus from "../../js/geometries/euc/subgroups/torus.js";
 import trivial from "../../js/commons/subgroups/trivial.js";
 
-import {StereoCamera, VRRenderer, Scene} from "../../js/core/General.js";
+import {VRRenderer, Scene, VRCamera} from "../../js/core/General.js";
 
 import {Point} from "../../js/core/geometry/Point.js";
 import {Ball} from "../../js/geometries/euc/solids/Ball.js";
@@ -15,9 +15,8 @@ import {InfoControls} from "../../js/controls/InfoControls.js";
 
 
 // initial setup
-const camera = new StereoCamera({subgroup: torus});
+const camera = new VRCamera({subgroup: torus});
 const scene = new Scene();
-
 const renderer = new VRRenderer(geom, trivial, camera, scene, {
     logarithmicDepthBuffer: true
 });
@@ -73,9 +72,9 @@ function onWindowResize(event) {
 
 window.addEventListener("resize", onWindowResize, false);
 
-
 const clock = new Clock();
 const flyControls = new FlyControls(camera, 'fr');
+
 const infoControls = new InfoControls();
 infoControls.action = function() {
     console.log(renderer._fragmentBuilder[0].uniforms);

@@ -1,6 +1,6 @@
 import {Color} from "../../js/lib/three.module.js";
 
-import {Thurston} from "../../js/core/Thurston.js";
+import {Thurston} from "../../js/commons/Thurston.js";
 
 import * as geom from "../../js/geometries/nil/geometry/General.js";
 import heisenberg from "../../js/geometries/nil/subgroups/heisenberg.js";

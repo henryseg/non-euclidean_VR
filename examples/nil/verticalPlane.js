@@ -1,6 +1,6 @@
 import {Clock, Color, Vector4} from "../../js/lib/three.module.js";
 
-import {Thurston} from "../../js/core/Thurston.js";
+import {Thurston} from "../../js/commons/Thurston.js";
 
 import * as geom from "../../js/geometries/nil/geometry/General.js";
 import trivial from "../../js/commons/subgroups/trivial.js";

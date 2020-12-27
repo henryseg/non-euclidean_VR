@@ -1,6 +1,6 @@
 import {Clock, Color, Matrix4} from "../../js/lib/three.module.js";
 
-import {Thurston} from "../../js/core/Thurston.js";
+import {Thurston} from "../../js/commons/Thurston.js";
 
 import * as geom from "../../js/geometries/euc/geometry/General.js";
 import torus from "../../js/geometries/euc/subgroups/torus.js";

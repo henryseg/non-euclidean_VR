@@ -56,7 +56,6 @@ export class Renderer {
          * The underlying Three.js scene
          * Not to be confused with the non-euclidean scene.
          * @type {ThreeScene}
-         * @protected
          */
         this.threeScene = new ThreeScene();
     }
