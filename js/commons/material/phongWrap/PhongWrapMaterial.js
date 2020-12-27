@@ -4,6 +4,9 @@ import {Material} from "../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.js";
 import render from "./shaders/render.js";
+import renderNormal from "./shaders/renderNormal.js";
+import renderUV from "./shaders/renderUV.js";
+import renderNormalUV from "./shaders/renderNormalUV.js";
 
 /**
  * @class
@@ -12,7 +15,7 @@ import render from "./shaders/render.js";
  * Add a "Phong layer" to a given material.
  * The material passed in the constructor is used as the ambient color of the Phong shading model
  */
-export class PhongWrapMaterial extends Material{
+export class PhongWrapMaterial extends Material {
 
     /**
      * Constructor.
@@ -24,7 +27,7 @@ export class PhongWrapMaterial extends Material{
      * - {number} shininess - the shininess reflection constant
      * - {Light[]} lights - light affecting the material
      */
-    constructor(material, params){
+    constructor(material, params) {
         super();
         /**
          * material defining the base color
@@ -66,8 +69,28 @@ export class PhongWrapMaterial extends Material{
         return struct;
     }
 
+    get usesNormal() {
+        return true;
+    }
+
+    get usesUVMap() {
+        return this.material.usesUVMap;
+    }
+
     glslRender() {
-        return mustache.render(render, this);
+        if (this.material.usesNormal) {
+            if (this.material.usesUVMap) {
+                return mustache.render(renderNormalUV, this);
+            } else {
+                return mustache.render(renderNormal, this);
+            }
+        } else {
+            if (this.material.usesUVMap) {
+                return mustache.render(renderUV, this);
+            } else {
+                return mustache.render(render, this);
+            }
+        }
     }
 
     shader(shaderBuilder) {
@@ -80,6 +103,6 @@ export class PhongWrapMaterial extends Material{
 }
 
 
-export function phongWrap(material, params){
+export function phongWrap(material, params) {
     return new PhongWrapMaterial(material, params);
 }

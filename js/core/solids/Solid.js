@@ -1,5 +1,6 @@
 import {Generic} from "../Generic.js";
 
+
 /**
  * @class
  *
@@ -17,6 +18,9 @@ export class Solid extends Generic {
      * @param {Material} material - the material of the solid
      */
     constructor(shape, material) {
+        if(material.usesUVMap && !shape.hasUVMap) {
+            throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+        }
         super();
         /**
          * The shape of the solids
@@ -60,11 +64,29 @@ export class Solid extends Generic {
     }
 
     /**
-     * Compile all the function directly related to the object (e.g. sdf, gradient, direction field, etc).
+     * Return a chunk of GLSL code used to compute the color of the solid.
+     * This computation may involve normal and/or UV coordinates.
+     * This is automatically determined from the properties of the material.
      * @return {string}
      */
     glslInstance() {
         return '';
+        // if(this.material.usesNormal) {
+        //     if(this.material.usesUVMap){
+        //         return mustache.render(colorNormalUV, this);
+        //     }
+        //     else{
+        //         return mustache.render(colorNormal, this);
+        //     }
+        // }
+        // else {
+        //     if(this.material.usesUVMap){
+        //         return mustache.render(colorUV, this);
+        //     }
+        //     else{
+        //         return mustache.render(color, this);
+        //     }
+        // }
     }
 
     shader(shaderBuilder) {

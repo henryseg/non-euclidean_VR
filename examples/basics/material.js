@@ -1,4 +1,4 @@
-import {Color, Vector4} from "../../js/lib/three.module.js";
+import {Color, Vector2, Vector3, Vector4} from "../../js/lib/three.module.js";
 
 import * as geom from "../../js/geometries/euc/geometry/General.js";
 import torus from "../../js/geometries/euc/subgroups/torus.js";
@@ -6,11 +6,15 @@ import torus from "../../js/geometries/euc/subgroups/torus.js";
 import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
 
 import {Point} from "../../js/core/geometry/Point.js";
-import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
-import {SingleColorMaterial, NormalMaterial, PhongMaterial, phongWrap} from "../../js/commons/material/all.js";
+import {Ball, HalfSpace} from "../../js/geometries/euc/solids/all.js";
+import {
+    SingleColorMaterial,
+    NormalMaterial,
+    PhongMaterial,
+    phongWrap,
+    CheckerboardMaterial
+} from "../../js/commons/material/all.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-import {CheckerboardMaterial} from "../../js/geometries/euc/materials/checkerboard/CheckerboardMaterial.js";
-import {complement, HalfSpaceShape, intersection} from "../../js/geometries/euc/shapes/all.js";
 
 
 // initial setup
@@ -69,31 +73,36 @@ const ball2 = new Ball(
 )
 
 
-const checkerboard = new CheckerboardMaterial(
-    new Vector4(1, 0, 1, 0),
-    new Vector4(-1, 0, 1, 0),
+const checkerboardWall = new CheckerboardMaterial(
+    new Vector2(1, 0),
+    new Vector2(0, 1),
+    new Color(0.3, 0.5, 1),
+    new Color(1, 1, 0.2)
+)
+
+const checkerboardPlane = new CheckerboardMaterial(
+    new Vector2(1, 1),
+    new Vector2(-1, 1),
     new Color(1, 1, 1),
     new Color(0, 0, 0)
 )
 
-const checkerboardPhong = phongWrap(checkerboard, {lights: lights});
+const checkerboardPhong = phongWrap(checkerboardPlane, {lights: lights});
 
-
-const crop = new HalfSpaceShape(
-    new Point(1, 0, 0),
-    new Vector4(1, 0, 0, 0)
+const wall = new HalfSpace(
+    new Point(-3, 0, 0),
+    new Vector3(1, 0, 0),
+    checkerboardWall
 )
-const plane = new HalfSpaceShape(
+
+const plane = new HalfSpace(
     new Point(0, -1, 0),
-    new Vector4(0, 1, 0, 0)
+    new Vector3(0, 1, 0),
+    checkerboardPhong
 )
-const leftPlaneShape = intersection(crop, plane);
-const leftPlane = new Solid(leftPlaneShape, checkerboard);
-const rightPlaneShape = intersection(complement(crop), plane);
-const rightPlane = new Solid(rightPlaneShape, checkerboardPhong);
 
 // adding the solid to the scene
-scene.add(light1, light2, ball0, ball1, ball2, leftPlane, rightPlane);
+scene.add(light1, light2, ball0, ball1, ball2, plane, wall);
 
 // building there renderer
 renderer.build();
@@ -115,4 +124,5 @@ function animate() {
 }
 
 renderer.setAnimationLoop(animate);
+renderer.checkShader();
 

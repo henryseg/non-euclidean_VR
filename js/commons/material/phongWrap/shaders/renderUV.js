@@ -1,12 +1,12 @@
 // language=Mustache + GLSL
 export default `//
-vec3 {{name}}_render(RelVector v, RelVector normal) {
+vec3 {{name}}_render(RelVector v, RelVector normal, vec2 uv) {
     RelVector[1] dirs;
     float[1] intensities;
     int k;
 
     PhongWrapMaterial material = {{name}};
-    vec3 baseColor = {{material.name}}_render(v);
+    vec3 baseColor = {{material.name}}_render(v, uv);
     vec3 color = vec3(0);
 
     {{#lights}}

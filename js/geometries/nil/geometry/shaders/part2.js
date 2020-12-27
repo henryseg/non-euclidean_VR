@@ -45,7 +45,8 @@ Vector smallShift(Vector v, vec3 dp){
  * New version, without computing the angle alpha.
  * Indeed one only needs to **rotate** by an angle alpha.
  * Thus we should not go back and forth between the angle alpha and its sine/cosine.
- @todo implement numerical approximation when ct is very small
+ * @todo implement numerical approximation when ct is very small.
+ * The noise is only visible when the camera's threshold is very small. 
  */
 Vector flow(Vector v, float t){
     // cylindrical coordinates of v

@@ -29,6 +29,10 @@ export class SingleColorMaterial extends Material {
         return 'SingleColorMaterial';
     }
 
+    get usesNormal(){
+        return false;
+    }
+
     static glslClass() {
         return struct;
     }

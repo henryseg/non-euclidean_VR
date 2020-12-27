@@ -49,7 +49,20 @@ export class Shape extends Generic {
     }
 
     /**
+     * Says whether the shape comes with a UV map.
+     * Default is false
+     * If true, the shape should implement the method glslUVMap.
+     */
+    get hasUVMap() {
+        return false;
+    }
+
+    /**
      * Return the chunk of GLSL code corresponding to the signed distance function.
+     * The SDF on the GLSL side should have the following signature
+     * `float {{name}}_sdf(RelVector v)`
+     * It takes a vector, corresponding the position and direction of the geodesic we are following
+     * and return an under-estimation of the distance from this position to the shape along this geodesic.
      * @abstract
      * @return {string}
      */
@@ -61,6 +74,9 @@ export class Shape extends Generic {
      * Return the chunk of GLSL code corresponding to the gradient field.
      * The default computation approximates numerically the gradient.
      * This function can be overwritten for an explicit computation.
+     * If so, the gradient function on the GLSL side should have the following signature
+     * `RelVector {{name}}_gradient(RelVector v)`
+     * It takes the vector obtained when we hit the shape and render the normal to the shape at this point.
      * @return {string}
      */
     glslGradient() {
@@ -68,11 +84,25 @@ export class Shape extends Generic {
     }
 
     /**
+     * Return the chunk of GLSL code corresponding to the UV map
+     * The UV map on the GLSL side should have the signature
+     * `vec2 {{name}}_uvMap(RelVector v)`
+     * It takes the vector obtained when we hit the shape and render the UV coordinates at this point.
+     */
+    glslUVMap() {
+        throw new Error('Shape: this method should be implemented');
+    }
+
+    /**
      * Compile all the function directly related to the object (e.g. sdf, gradient, etc).
      * @return {string}
      */
     glslInstance() {
-        return this.glslSDF() + "\r\n" + this.glslGradient();
+        let res = this.glslSDF() + "\r\n" + this.glslGradient();
+        if (this.hasUVMap) {
+            res = res + "\r\n" + this.glslUVMap();
+        }
+        return res;
     }
 }
 

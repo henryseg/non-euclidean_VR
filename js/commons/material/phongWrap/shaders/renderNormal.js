@@ -6,7 +6,7 @@ vec3 {{name}}_render(RelVector v, RelVector normal) {
     int k;
 
     PhongWrapMaterial material = {{name}};
-    vec3 baseColor = {{material.name}}_render(v);
+    vec3 baseColor = {{material.name}}_render(v, normal);
     vec3 color = vec3(0);
 
     {{#lights}}

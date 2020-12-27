@@ -68,12 +68,34 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
  */
 vec3 solidColor(RelVector v, int objId) {
     RelVector normal;
+    vec2 uv;
 
     switch(objId){
         {{#_solids}}
+            
             case {{id}}:
-                normal = {{shape.name}}_gradient(v);
-                return {{material.name}}_render(v, normal);
+                {{^material.usesNormal}}                    
+                    {{^material.usesUVMap}}                        
+                        return {{material.name}}_render(v);                                                
+                    {{/material.usesUVMap}}
+                    {{#material.usesUVMap}}
+                        uv = {{shape.name}}_uvMap(v);
+                        return {{material.name}}_render(v, uv);
+                    {{/material.usesUVMap}}    
+                {{/material.usesNormal}}
+                            
+                {{#material.usesNormal}}
+                    {{^material.usesUVMap}}                        
+                        normal = {{shape.name}}_gradient(v);
+                        return {{material.name}}_render(v, normal);
+                    {{/material.usesUVMap}}
+                    {{#material.usesUVMap}}
+                        normal = {{shape.name}}_gradient(v);
+                        uv = {{shape.name}}_uvMap(v);
+                        return {{material.name}}_render(v, normal, uv);
+                    {{/material.usesUVMap}}                    
+                {{/material.usesNormal}}
+            
         {{/_solids}}
     }
     
