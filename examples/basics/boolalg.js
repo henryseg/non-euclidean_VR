@@ -1,4 +1,4 @@
-import {Clock, Color, Vector2} from "../../js/lib/three.module.js";
+import {Clock, Color} from "../../js/lib/three.module.js";
 
 import * as geom from "../../js/geometries/euc/geometry/General.js";
 import torus from "../../js/geometries/euc/subgroups/torus.js";
@@ -14,7 +14,6 @@ import {Solid} from "../../js/core/solids/Solid.js";
 import {FlyControls} from "../../js/controls/FlyControls.js";
 import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-import {CheckerboardMaterial} from "../../js/commons/material/checkerboard/CheckerboardMaterial.js";
 
 
 // initial setup
