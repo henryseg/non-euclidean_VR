@@ -22,7 +22,8 @@
         "readme": "./jsdoc.md",
         "recurse": true,
         "private": true,
-        "template": "./node_modules/foodoc/template"
+        "template": "./node_modules/foodoc/template",
+        "tutorials": "./tutorials"
     },
 
     "templates": {
