@@ -12,5 +12,154 @@
 <body>
 <a id="source" href="https://github.com/henryseg/non-euclidean_VR/blob/cleanCode/examples/basics/boolalg.js"></a>
 </body>
-<script src="boolalg.js" type="module" id="main"></script>
+<script type="module" id="main">
+    import {Clock, Color} from "../../js/lib/three.module.js";
+
+    import * as geom from "../../js/geometries/euc/geometry/General.js";
+    import torus from "../../js/geometries/euc/subgroups/torus.js";
+
+    import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
+
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {BallShape} from "../../js/geometries/euc/shapes/ball/BallShape.js";
+    import {LocalBallShape} from "../../js/geometries/euc/shapes/localBall/LocalBallShape.js";
+    import {UnionShape, IntersectionShape, ComplementShape, WrapShape} from "../../js/commons/shapes/all.js";
+    import {Solid} from "../../js/core/solids/Solid.js";
+
+    import {FlyControls} from "../../js/controls/FlyControls.js";
+    import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
+    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+
+
+    // initial setup
+    const camera = new BasicCamera({subgroup: torus});
+    const scene = new Scene();
+
+    const renderer = new BasicRenderer(geom, torus, camera, scene, {
+        logarithmicDepthBuffer: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+    // magenta light
+    const light = new PointLight(
+        new Point(0, 0.2, 0),
+        new Color(1, 1, 1)
+    );
+    const lights = [light];
+
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(0, 0, 1),
+        specular: 0.1,
+        shininess: 1,
+        lights: lights
+    });
+    const mat1 = new PhongMaterial({
+        color: new Color(0, 1, 0),
+        specular: 0.1,
+        shininess: 1,
+        lights: lights
+    });
+    const mat2 = new PhongMaterial({
+        color: new Color(1, 0, 0),
+        specular: 0.1,
+        shininess: 1,
+        lights: lights
+    });
+    const mat3 = new PhongMaterial({
+        color: new Color(1, 1, 0),
+        specular: 0.1,
+        shininess: 1,
+        lights: lights
+    });
+
+    // Complement of a local ball
+    const ball0 = new LocalBallShape(
+        new Point(0, 0, 0),
+        1.07,
+    );
+
+    const complementShape = new ComplementShape(ball0);
+    const complementSolid = new Solid(complementShape, mat0);
+
+
+    // Union of two balls
+    const ball1 = new BallShape(
+        new Point(-0.5, -0.08, 0),
+        0.15
+    );
+
+    const ball2 = new BallShape(
+        new Point(-0.5, 0.08, 0),
+        0.15
+    );
+
+    const unionShape = new UnionShape(ball1, ball2);
+    const unionSolid = new Solid(unionShape, mat1);
+
+
+    // Intersection of two balls
+    const ball3 = new BallShape(
+        new Point(0.5, -0.08, 0),
+        0.15
+    );
+
+    const ball4 = new BallShape(
+        new Point(0.5, 0.08, 0),
+        0.15
+    );
+
+    const intersectionShape = new IntersectionShape(ball3, ball4);
+    const intersectionSolid = new Solid(intersectionShape, mat2);
+
+
+    // Wrap of a ball by another ball
+    const ball5 = new BallShape(
+        new Point(0, 0, -1),
+        0.1
+    )
+
+    const ball6 = new BallShape(
+        new Point(0, 0, -1),
+        0.5
+    );
+
+    const wrapShape = new WrapShape(ball6, ball5);
+    const wrapSolid = new Solid(wrapShape, mat3);
+
+    // adding the solid to the scene
+    scene.add(unionSolid, intersectionSolid, complementSolid, wrapSolid);
+
+    // building there renderer
+    renderer.build();
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+    const clock = new Clock();
+    const flyControls = new FlyControls(camera, 'fr');
+
+
+    // rendering the scene
+    function animate() {
+        const delta = clock.getDelta();
+        flyControls.update(delta);
+        renderer.render();
+    }
+
+    renderer.setAnimationLoop(animate);
+    renderer.checkShader();
+
+
+</script>
 </html>
