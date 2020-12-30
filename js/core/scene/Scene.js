@@ -17,21 +17,18 @@ export class Scene {
         /**
          * List of all the lights in the scene.
          * @type {Light[]}
-         * @private
          */
-        this._lights = [];
+        this.lights = [];
         /**
          * List of all the solids in the scene.
          * @type {Solid[]}
-         * @private
          */
-        this._solids = [];
+        this.solids = [];
         /**
          * Next available ID in the scene.
          * @type {number}
-         * @private
          */
-        this._nextId = 0;
+        this.nextId = 0;
     }
 
     /**
@@ -41,13 +38,15 @@ export class Scene {
      */
     _add(obj) {
         // setup the id for the object
-        this._nextId = obj.setId(this._nextId);
+        obj.setId(this);
+        // run the callback
+        obj.onAdd(this);
         // add the object to the appropriate list
         if (obj.isLight) {
-            this._lights.push(obj);
+            this.lights.push(obj);
         }
         if (obj.isSolid) {
-            this._solids.push(obj);
+            this.solids.push(obj);
         }
         return this;
     }
@@ -71,10 +70,10 @@ export class Scene {
     shader(shaderBuilder) {
         shaderBuilder.addChunk(header);
         // run through all the objects in the scene and combine the relevant chunks of GLSL code.
-        for (const light of this._lights) {
+        for (const light of this.lights) {
             light.shader(shaderBuilder);
         }
-        for (const solid of this._solids) {
+        for (const solid of this.solids) {
             solid.shader(shaderBuilder);
         }
         shaderBuilder.addChunk(mustache.render(scenes, this));

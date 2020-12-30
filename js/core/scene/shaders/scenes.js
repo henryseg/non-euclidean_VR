@@ -19,7 +19,7 @@ float localSceneSDF(RelVector v, out int hit, out int objId){
     float res = camera.maxDist;
     float dist;
     
-    {{#_solids}}
+    {{#solids}}
         {{#isLocal}}
             dist = {{shape.name}}_sdf(v);
             if(abs(dist) < camera.threshold) {
@@ -29,7 +29,7 @@ float localSceneSDF(RelVector v, out int hit, out int objId){
             }
             res = min(res, dist);
         {{/isLocal}}
-    {{/_solids}}
+    {{/solids}}
     
     return res;
 }
@@ -46,7 +46,7 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
     float res = camera.maxDist;
     float dist;
     
-    {{#_solids}}
+    {{#solids}}
         {{#isGlobal}}
             dist = {{shape.name}}_sdf(v);
             if(abs(dist) < camera.threshold) {
@@ -56,7 +56,7 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
             }
             res = min(res, dist);
         {{/isGlobal}}
-    {{/_solids}}
+    {{/solids}}
     
     return res;
 }
@@ -71,7 +71,7 @@ vec3 solidColor(RelVector v, int objId) {
     vec2 uv;
 
     switch(objId){
-        {{#_solids}}
+        {{#solids}}
             
             case {{id}}:
                 {{^material.usesNormal}}                    
@@ -96,7 +96,7 @@ vec3 solidColor(RelVector v, int objId) {
                     {{/material.usesUVMap}}                    
                 {{/material.usesNormal}}
             
-        {{/_solids}}
+        {{/solids}}
     }
     
     // this line should never be achieved

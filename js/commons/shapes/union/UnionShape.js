@@ -52,6 +52,28 @@ export class UnionShape extends AdvancedShape {
         return mustache.render(uv, this);
     }
 
+    /**
+     * Set the ID of the shape.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.shape1.setId(scene);
+        this.shape2.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.shape1.onAdd(scene);
+        this.shape2.onAdd(scene);
+        super.onAdd(scene);
+    }
+
     shader(shaderBuilder) {
         this.shape1.shader(shaderBuilder);
         this.shape2.shader(shaderBuilder);

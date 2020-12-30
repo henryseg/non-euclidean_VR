@@ -18,7 +18,7 @@ export class Solid extends Generic {
      * @param {Material} material - the material of the solid
      */
     constructor(shape, material) {
-        if(material.usesUVMap && !shape.hasUVMap) {
+        if (material.usesUVMap && !shape.hasUVMap) {
             throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
         }
         super();
@@ -47,16 +47,25 @@ export class Solid extends Generic {
     }
 
     /**
-     * Set the ID of the shape and material
-     * @param {number} id - the first available ID
-     * @return {number} the next available id after all IDs have been assigned
+     * Set the ID of the shape.
+     * Propagate the process if needed.
+     * @param {Scene} scene - the scene to which the object is added.
      */
-    setId(id) {
-        let res = id;
-        res = this.shape.setId(res);
-        res = this.material.setId(res);
-        res = super.setId(res);
-        return res;
+    setId(scene) {
+        this.shape.setId(scene);
+        this.material.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * By default, propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.shape.onAdd(scene);
+        this.material.onAdd(scene);
+        super.onAdd(scene);
     }
 
     static glslClass() {

@@ -62,6 +62,10 @@ export class PhongMaterial extends Material {
         return 'PhongMaterial';
     }
 
+    get usesLight(){
+        return true;
+    }
+
     static glslClass() {
         return struct;
     }

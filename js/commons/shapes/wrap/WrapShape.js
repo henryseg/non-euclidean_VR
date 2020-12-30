@@ -35,7 +35,7 @@ export class WrapShape extends AdvancedShape {
         return this.shape.isGlobal;
     }
 
-    get hasUVMap(){
+    get hasUVMap() {
         return this.shape.hasUVMap;
     }
 
@@ -53,6 +53,28 @@ export class WrapShape extends AdvancedShape {
 
     glslUVMap() {
         return mustache.render(uv, this);
+    }
+
+    /**
+     * Set the ID of the shape.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.wrap.setId(scene);
+        this.shape.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.wrap.onAdd(scene);
+        this.shape.onAdd(scene);
+        super.onAdd(scene);
     }
 
     shader(shaderBuilder) {

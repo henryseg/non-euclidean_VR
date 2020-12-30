@@ -15,6 +15,8 @@ struct PointLight {
 /***********************************************************************************************************************
  * @struct
  * Structure to store auxiliary light computations
+ * For the moment, it is really a cheap trick.
+ * One could improve this later (e.g. having one PointLightComputations object for each instance of PointLight).
  **********************************************************************************************************************/
 
 struct PointLightComputations{

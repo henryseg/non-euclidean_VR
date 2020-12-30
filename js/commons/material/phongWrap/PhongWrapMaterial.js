@@ -27,7 +27,7 @@ export class PhongWrapMaterial extends Material {
      * - {number} shininess - the shininess reflection constant
      * - {Light[]} lights - light affecting the material
      */
-    constructor(material, params) {
+    constructor(material, params = {}) {
         super();
         /**
          * material defining the base color
@@ -77,6 +77,10 @@ export class PhongWrapMaterial extends Material {
         return this.material.usesUVMap;
     }
 
+    get usesLight() {
+        return true;
+    }
+
     glslRender() {
         if (this.material.usesNormal) {
             if (this.material.usesUVMap) {
@@ -91,6 +95,26 @@ export class PhongWrapMaterial extends Material {
                 return mustache.render(render, this);
             }
         }
+    }
+
+    /**
+     * Set the ID of the shape.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.material.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.material.onAdd(scene);
+        super.onAdd(scene);
     }
 
     shader(shaderBuilder) {

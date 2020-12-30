@@ -76,10 +76,9 @@ const light3 = new PointLight(
     new Color(0, 1, 1),
 )
 
-const lights = [light1, light2, light3];
 
 // Phong shading material
-const phongMaterial = new PhongMaterial({shininess: 10, lights: lights});
+const phongMaterial = new PhongMaterial({shininess: 10});
 const ball3 = new Ball(
     new Point(-1, -0.5, -2),
     0.3,
@@ -87,8 +86,7 @@ const ball3 = new Ball(
 )
 
 
-
-const normalPhong = phongWrap(normalMaterial, {lights: lights});
+const normalPhong = phongWrap(normalMaterial);
 
 const ball4 = new Ball(
     new Point(0, -0.5, -2),
@@ -104,17 +102,17 @@ const checkerboardBase = new CheckerboardMaterial(
     new Color(0, 0, 0)
 )
 
-const checkerboardPhong = phongWrap(checkerboardBase, {lights: lights});
+const checkerboardPhong = phongWrap(checkerboardBase);
 
 
 const ball5 = new Ball(
-    new Point(1,-0.5,-2),
+    new Point(1, -0.5, -2),
     0.3,
     checkerboardPhong
 );
 
 // adding the solid to the scene
-scene.add(light1, light2, ball0, ball1, ball2, ball3, ball4, ball5);
+scene.add(light1, light2, light3, ball0, ball1, ball2, ball3, ball4, ball5);
 
 // building there renderer
 renderer.build();

@@ -46,6 +46,26 @@ export class ComplementShape extends AdvancedShape {
         return mustache.render(uv, this);
     }
 
+    /**
+     * Set the ID of the shape.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.shape.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.shape.onAdd(scene);
+        super.onAdd(scene);
+    }
+
     shader(shaderBuilder) {
         this.shape.shader(shaderBuilder);
         super.shader(shaderBuilder);

@@ -87,14 +87,21 @@ export class Generic {
     /**
      * Set the ID of the shape.
      * Propagate the process if needed
-     * @param {number} id - the first available ID
-     * @return {number} - the next available id after all IDs have been assigned
+     * @param {Scene} scene - the scene to which the object is added.
      */
-    setId(id) {
-        this.id = id;
-        return id + 1;
+    setId(scene) {
+        this.id = scene.nextId;
+        scene.nextId = scene.nextId + 1;
     }
 
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * By default, do nothing.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+
+    }
 
     /**
      * Extend the list of imports

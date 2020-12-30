@@ -46,7 +46,7 @@ export class Material extends Generic {
      * Default is true.
      * @return {boolean}
      */
-    get usesNormal(){
+    get usesNormal() {
         return true;
     }
 
@@ -55,8 +55,34 @@ export class Material extends Generic {
      * Default is false.
      * @return {boolean}
      */
-    get usesUVMap(){
+    get usesUVMap() {
         return false;
+    }
+
+    /**
+     * Says whether the material reacts to (certain) lights in the scene.
+     * Default is false.
+     * @return {boolean}
+     */
+    get usesLight() {
+        return false;
+    }
+
+    /**
+     * Says whether the material is reflecting
+     * Default is false.
+     * @return {boolean}
+     */
+    get isReflecting() {
+        return false;
+    }
+
+    onAdd(scene) {
+        if (this.usesLight) {
+            if (!this.hasOwnProperty('lights') || this['lights'] === undefined) {
+                this.lights = scene.lights;
+            }
+        }
     }
 
     /**
