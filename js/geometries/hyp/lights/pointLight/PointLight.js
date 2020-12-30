@@ -27,7 +27,7 @@ export class PointLight extends Light {
      * @param {Color} color - the color of the light
      */
     constructor(position, color) {
-        super();
+        super(1);
         /**
          * The position of the light.
          * @type {Point}

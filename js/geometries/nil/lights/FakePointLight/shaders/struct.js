@@ -9,9 +9,13 @@ struct FakePointLight {
     int id;
     Point position;
     vec3 color;
+    int maxDirs;
 };
 
-int directions(FakePointLight light, RelVector v, out RelVector dir, out float intensity) {
+bool directions(FakePointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+    if(i!=0){
+        return false;
+    }
     Point position = applyIsometry(v.invCellBoost, light.position);
     
     float fakeDistance = fakeDistance(position, v.local.pos);
@@ -23,6 +27,6 @@ int directions(FakePointLight light, RelVector v, out RelVector dir, out float i
     Vector local = Vector(v.local.pos, aux);
     local = geomNormalize(local);
     dir = RelVector(local, v.cellBoost, v.invCellBoost);
-    return 1;
+    return true;
 }
 `;

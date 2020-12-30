@@ -11,10 +11,15 @@ export class Light extends Generic {
 
     /**
      * Constructor.
-     * The constructor takes no argument.
-     */
-    constructor() {
+     * @param {number} maxDirs - the maximum number of directions computed for this light.
+      */
+    constructor(maxDirs) {
         super();
+        /**
+         * Maximum number of directions computed for this light.
+         * @type {number}
+         */
+        this.maxDirs = maxDirs
     }
 
     /**
@@ -27,6 +32,14 @@ export class Light extends Generic {
 
     /**
      * Return the chunk of GLSL code corresponding to the direction field.
+     * The GLSL direction function should have the following signature
+     * `bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity)`
+     * where
+     * - `v` gives the position at which we compute the direction
+     * - `i` means that we are computed the i-th direction (the index start at i = 0)
+     * The function returns true if the i-th direction exists and false otherwise.
+     * If the i-th direction exists, then it populates dir with the direction
+     * and intensity with the light intensity (in this direction).
      * @abstract
      * @return {string}
      */

@@ -14,7 +14,7 @@ export class FakePointLight extends Light {
      * @param {Color} color - color of the light
      */
     constructor(position, color) {
-        super();
+        super(1);
         this.addImport(fakeDistance);
         this.position = position;
         this.color = color;

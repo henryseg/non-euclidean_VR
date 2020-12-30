@@ -50,8 +50,8 @@ const ball1 = new Ball(
 const checkerboardRaw = new CheckerboardMaterial(
     new Vector2(Math.PI, 0),
     new Vector2(0, Math.PI),
-    new Color(0.3, 0.5, 1),
-    new Color(1, 1, 0.2)
+    new Color(1, 1, 1),
+    new Color(0, 0, 0)
 )
 
 
@@ -98,8 +98,8 @@ const ball4 = new Ball(
 
 
 const checkerboardBase = new CheckerboardMaterial(
-    new Vector2(2, 2),
-    new Vector2(-2, 2),
+    new Vector2(Math.PI, 0),
+    new Vector2(0, Math.PI),
     new Color(1, 1, 1),
     new Color(0, 0, 0)
 )

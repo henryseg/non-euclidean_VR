@@ -1,11 +1,6 @@
 // language=Mustache + GLSL
 export default `
-int {{name}}_directions(RelVector v, out RelVector[1] dirs, out float[1] intensities) {
-    RelVector dir;
-    float intensity;
-    int res = directions({{name}}, v, dir, intensity);
-    dirs[0] = dir;
-    intensities[0] = intensity;
-    return res;
+bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
+    return directions({{name}}, v, i, dir, intensity);
 }
 `;
