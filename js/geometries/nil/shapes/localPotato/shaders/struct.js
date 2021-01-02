@@ -17,7 +17,7 @@ struct LocalPotatoShape {
 /**
  * Distance function for a global euclidean ball
  */
-float sdf(LocalPotatoShape potato, RelVector v) {
+float sdf(LocalPotatoShape potato, ExtVector v) {
     Isometry pull = makeInvTranslation(potato.center);
     Point p = applyIsometry(pull, v.local.pos);
     float x = p.coords.x;

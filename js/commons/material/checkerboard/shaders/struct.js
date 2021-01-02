@@ -11,7 +11,7 @@ struct CheckerboardMaterial {
     vec3 color2;
 };
 
-vec3 render(CheckerboardMaterial material, RelVector v, vec2 uv) {
+vec3 render(CheckerboardMaterial material, ExtVector v, vec2 uv) {
     float x1 = mod(dot(uv, material.dir1), 2.);
     float x2 = mod(dot(uv, material.dir2), 2.);
     if (x1 < 1. && x2 < 1.){

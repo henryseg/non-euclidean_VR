@@ -14,7 +14,7 @@ struct BallShape {
 /**
  * Distance function for a global hyperbolic ball
  */
-float sdf(BallShape ball, RelVector v) {
+float sdf(BallShape ball, ExtVector v) {
     Point center = applyIsometry(v.invCellBoost, ball.center);
     return dist(v.local.pos, center) - ball.radius;
 }
@@ -22,13 +22,13 @@ float sdf(BallShape ball, RelVector v) {
 /**
  * Gradient field for a global hyperbolic ball
  */
-RelVector gradient(BallShape ball, RelVector v){
+ExtVector gradient(BallShape ball, ExtVector v){
     Point center = applyIsometry(v.invCellBoost, ball.center);
     Vector local = direction(v.local.pos, center);
-    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
+    return ExtVector(negate(local), v.cellBoost, v.invCellBoost);
 }
 
-vec2 uvMap(BallShape ball, RelVector v){
+vec2 uvMap(BallShape ball, ExtVector v){
     Point center = applyIsometry(v.invCellBoost, ball.center);
     Vector radius = direction(center, v.local.pos);
     Vector[3] f;

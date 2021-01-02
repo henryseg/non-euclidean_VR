@@ -20,13 +20,13 @@ struct PointLight {
  **********************************************************************************************************************/
 
 struct PointLightComputations{
-    RelVector dir;
+    ExtVector dir;
     float dist;
 };
 
 PointLightComputations pointLightComputations;
 
-bool directions(PointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+bool directions(PointLight light, ExtVector v, int i, out ExtVector dir, out float intensity) {
     if (i>1){
         return false;
     }
@@ -35,7 +35,7 @@ bool directions(PointLight light, RelVector v, int i, out RelVector dir, out flo
         float dist = dist(v.local.pos, position);
         intensity = lightIntensity(dist);
         Vector local = direction(v.local.pos, position);
-        dir = RelVector(local, v.cellBoost, v.invCellBoost);
+        dir = ExtVector(local, v.cellBoost, v.invCellBoost);
         pointLightComputations = PointLightComputations(dir,dist);
     }
     if (i==1){

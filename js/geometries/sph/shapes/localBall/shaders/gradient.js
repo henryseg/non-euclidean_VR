@@ -1,6 +1,6 @@
 // language=Mustache + GLSL
 export default `//
-RelVector {{name}}_gradient(RelVector v){
+ExtVector {{name}}_gradient(ExtVector v){
     return gradient({{name}},v);
 }
 `;

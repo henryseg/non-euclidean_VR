@@ -8,7 +8,7 @@ export default `//
 * @param[inout] v the relative vector to teleport.
 * @return true if the vector has been teleported and false otherwise
 */
-bool teleport(inout RelVector v){
+bool teleport(inout ExtVector v){
 {{#teleports}}
     if({{name}}(v.local.pos)){
         v.local = applyIsometry({{name}}Isom, v.local);

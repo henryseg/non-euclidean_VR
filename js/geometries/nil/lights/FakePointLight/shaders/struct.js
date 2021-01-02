@@ -12,7 +12,7 @@ struct FakePointLight {
     int maxDirs;
 };
 
-bool directions(FakePointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+bool directions(FakePointLight light, ExtVector v, int i, out ExtVector dir, out float intensity) {
     if(i!=0){
         return false;
     }
@@ -26,7 +26,7 @@ bool directions(FakePointLight light, RelVector v, int i, out RelVector dir, out
     aux = pull.matrix * aux;
     Vector local = Vector(v.local.pos, aux);
     local = geomNormalize(local);
-    dir = RelVector(local, v.cellBoost, v.invCellBoost);
+    dir = ExtVector(local, v.cellBoost, v.invCellBoost);
     return true;
 }
 `;

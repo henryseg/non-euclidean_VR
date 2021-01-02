@@ -14,7 +14,7 @@ struct FakeBallShape {
 /**
  * Distance function for a global euclidean ball
  */
-float sdf(FakeBallShape ball, RelVector v) {
+float sdf(FakeBallShape ball, ExtVector v) {
     Point center = applyIsometry(v.invCellBoost, ball.center);
     return fakeDistance(v.local.pos, center) - ball.radius;
 }

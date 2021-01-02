@@ -3,7 +3,7 @@ export default `//
 /**
  * UV Map for the intersection of two shapes
  */
-vec2 {{name}}_uvMap(RelVector v){
+vec2 {{name}}_uvMap(ExtVector v){
     float dist1 = {{shape1.name}}_sdf(v);
     float dist2 = {{shape2.name}}_sdf(v);
     if(dist1 < dist2){

@@ -14,20 +14,20 @@ struct LocalBallShape {
 /**
  * Distance function for a global euclidean ball
  */
-float sdf(LocalBallShape ball, RelVector v) {
+float sdf(LocalBallShape ball, ExtVector v) {
     return dist(v.local.pos, ball.center) - ball.radius;
 }
 
 /**
  * Gradient field for a global euclidean ball
  */
-RelVector gradient(LocalBallShape ball, RelVector v){
+ExtVector gradient(LocalBallShape ball, ExtVector v){
     Vector local = Vector(v.local.pos, v.local.pos.coords - ball.center.coords);
     local = geomNormalize(local);
-    return RelVector(local, v.cellBoost, v.invCellBoost);
+    return ExtVector(local, v.cellBoost, v.invCellBoost);
 }
 
-vec2 uvMap(LocalBallShape ball, RelVector v){
+vec2 uvMap(LocalBallShape ball, ExtVector v){
     vec4 dir = normalize(v.local.pos.coords - ball.center.coords);
     float sinPhi = sqrt(dir.x * dir.x + dir.y * dir.y);
     float cosPhi = dir.z;

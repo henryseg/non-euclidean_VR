@@ -68,12 +68,16 @@ document.body.appendChild(renderer.domElement);
 # Step 3 Populating the scene
 
 The scene is made of objects which are either solids or lights. Before defining those object, we need to extends our
-list of imports with the relevant libraries
+list of imports with the relevant classes.
+In our examples we will also use {@link Point} and `Color` to create the objects.
 
 ```javascript
 import {PointLight} from "./js/geometries/euc/lights/pointLight/PointLight.js";
 import {PhongMaterial} from "./js/commons/material/all.js";
 import {Ball} from "./js/geometries/euc/solids/all.js";
+
+import {Color} from "./js/lib/three.module.js";
+import {Point} from "./js/core/geometry/Point.js";
 ```
 
 Then we define all the objects in the scene. Here a single point light, and a ball with a phong material.
@@ -84,8 +88,10 @@ const light = new PointLight(
     new Point(-1, 1, -2),
     new Color(0, 1, 1),
 );
+
 // Phong shading material
 const mat = new PhongMaterial({shininess: 10});
+
 // A ball
 const ball = new Ball(
     new Point(-1, -0.5, -2),
@@ -158,11 +164,14 @@ The complete `index.html` file is
 <body>
 </body>
 <script type="module" id="main">
+  import {Color} from "./js/lib/three.module.js";
+  
   import * as geom from "./js/geometries/euc/geometry/General.js";
   import trivial from "./js/commons/subgroups/trivial.js";
 
   import {BasicCamera, BasicRenderer, Scene} from "./js/core/General.js";
 
+  import {Point} from "./js/core/geometry/Point.js";
   import {PointLight} from "./js/geometries/euc/lights/pointLight/PointLight.js";
   import {PhongMaterial} from "./js/commons/material/all.js";
   import {Ball} from "./js/geometries/euc/solids/all.js";

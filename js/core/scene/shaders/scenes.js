@@ -14,7 +14,7 @@ export default `//
  * @param[out] hit say if we hit an object (1), nothing (0) or if there is a bug (-1)
  * @param[out] objId the ID of the solid we hit.
  */
-float localSceneSDF(RelVector v, out int hit, out int objId){
+float localSceneSDF(ExtVector v, out int hit, out int objId){
     hit = HIT_NOTHING;
     float res = camera.maxDist;
     float dist;
@@ -41,7 +41,7 @@ float localSceneSDF(RelVector v, out int hit, out int objId){
  * @param[out] hit say if we hit an object (1), nothing (0) or if there is a bug (-1)
  * @param[out] objID the ID of the solid we hit.
  */
-float globalSceneSDF(RelVector v, out int hit, out int objId){
+float globalSceneSDF(ExtVector v, out int hit, out int objId){
     hit = HIT_NOTHING;
     float res = camera.maxDist;
     float dist;
@@ -66,8 +66,8 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
  * @param[in] v the vector at which we hit the object
  * @param[in] objId the id of the object that we hit
  */
-vec3 solidColor(RelVector v, int objId) {
-    RelVector normal;
+vec3 solidColor(ExtVector v, int objId) {
+    ExtVector normal;
     vec2 uv;
 
     switch(objId){

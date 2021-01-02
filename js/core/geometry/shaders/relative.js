@@ -12,7 +12,7 @@ export default `//
 
 /***********************************************************************************************************************
  *
- * @struct RelVector
+ * @struct ExtVector
  * Structure for a generalized vector
  * Such a vector is a triple (local, cellBoost, invCellBoost) where
  * - local is a Vector
@@ -23,7 +23,7 @@ export default `//
  *
  **********************************************************************************************************************/
 
-struct RelVector {
+struct ExtVector {
     Vector local;
     Isometry cellBoost;
     Isometry invCellBoost;
@@ -33,7 +33,7 @@ struct RelVector {
 /**
  * Normalize the given vector.
  */
-RelVector geomNormalize(RelVector v){
+ExtVector geomNormalize(ExtVector v){
     v.local = geomNormalize(v.local);
     return v;
 }
@@ -41,7 +41,7 @@ RelVector geomNormalize(RelVector v){
 /**
  * Return the opposition of the given vector
  */
-RelVector negate(RelVector v){
+ExtVector negate(ExtVector v){
     v.local = negate(v.local);
     return v;
 }
@@ -51,7 +51,7 @@ RelVector negate(RelVector v){
  * This method does apply any teleportation.
  * Hence the local part of the vector, may leaves the fundamental domain.
  */
-RelVector flow(RelVector v, float t) {
+ExtVector flow(ExtVector v, float t) {
     v.local = flow(v.local, t);
     return v;
 }
@@ -63,9 +63,9 @@ RelVector flow(RelVector v, float t) {
  * @param[in] v initial vector.
  * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
  */
-RelVector smallShift(RelVector v, vec3 dp){
+ExtVector smallShift(ExtVector v, vec3 dp){
     Vector local = smallShift(v.local, dp);
-    return RelVector(local, v.cellBoost, v.invCellBoost);
+    return ExtVector(local, v.cellBoost, v.invCellBoost);
 }
 
 
@@ -73,9 +73,9 @@ RelVector smallShift(RelVector v, vec3 dp){
  * Compute the vector at the same point as v whose coordinates are given by the section of the frame bundle.
  * Overload of createVector
  */
-RelVector createVector(RelVector v, vec3 coords){
+ExtVector createVector(ExtVector v, vec3 coords){
     Vector local = createVector(v.local.pos, coords);
-    return RelVector(local, v.cellBoost, v.invCellBoost);
+    return ExtVector(local, v.cellBoost, v.invCellBoost);
 }
  
 
@@ -104,7 +104,7 @@ struct RelPosition {
  * @param[in] p a position
  * @param[in] v a vector **at the origin**.
  */
-RelVector applyPosition(RelPosition position, Vector v) {
+ExtVector applyPosition(RelPosition position, Vector v) {
     Vector local = applyPosition(position.local, v);
-    return RelVector(local, position.cellBoost, position.invCellBoost);
+    return ExtVector(local, position.cellBoost, position.invCellBoost);
 }`;

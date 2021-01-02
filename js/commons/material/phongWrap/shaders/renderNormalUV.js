@@ -1,8 +1,8 @@
 // language=Mustache + GLSL
 export default `//
-vec3 {{name}}_render(RelVector v, RelVector normal, vec2 uv) {
+vec3 {{name}}_render(ExtVector v, ExtVector normal, vec2 uv) {
     bool check;
-    RelVector dir;
+    ExtVector dir;
     float intensity;
     int k;
 

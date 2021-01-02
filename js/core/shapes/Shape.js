@@ -60,7 +60,7 @@ export class Shape extends Generic {
     /**
      * Return the chunk of GLSL code corresponding to the signed distance function.
      * The SDF on the GLSL side should have the following signature
-     * `float {{name}}_sdf(RelVector v)`
+     * `float {{name}}_sdf(ExtVector v)`
      * It takes a vector, corresponding the position and direction of the geodesic we are following
      * and return an under-estimation of the distance from this position to the shape along this geodesic.
      * @abstract
@@ -75,7 +75,7 @@ export class Shape extends Generic {
      * The default computation approximates numerically the gradient.
      * This function can be overwritten for an explicit computation.
      * If so, the gradient function on the GLSL side should have the following signature
-     * `RelVector {{name}}_gradient(RelVector v)`
+     * `ExtVector {{name}}_gradient(ExtVector v)`
      * It takes the vector obtained when we hit the shape and render the normal to the shape at this point.
      * @return {string}
      */
@@ -86,7 +86,7 @@ export class Shape extends Generic {
     /**
      * Return the chunk of GLSL code corresponding to the UV map
      * The UV map on the GLSL side should have the signature
-     * `vec2 {{name}}_uvMap(RelVector v)`
+     * `vec2 {{name}}_uvMap(ExtVector v)`
      * It takes the vector obtained when we hit the shape and render the UV coordinates at this point.
      */
     glslUVMap() {

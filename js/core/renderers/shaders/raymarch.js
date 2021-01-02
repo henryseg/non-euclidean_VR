@@ -24,12 +24,12 @@ export default `//
  * - the telportations accumulate numerical errors, but the coordinates of the local vector, will remain bounded.
  * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
-int raymarch(inout RelVector v, out int objId){
-    RelVector globalV0 = v;
-    RelVector globalV = globalV0;
-    RelVector localV0 = v;
-    RelVector localV = localV0;
-    RelVector res = v;
+int raymarch(inout ExtVector v, out int objId){
+    ExtVector globalV0 = v;
+    ExtVector globalV = globalV0;
+    ExtVector localV0 = v;
+    ExtVector localV = localV0;
+    ExtVector res = v;
     int auxId;
     int auxHit;
     float marchingStep = camera.minDist;
@@ -110,7 +110,7 @@ void main() {
     vec3 color;
     int objId;
 
-    RelVector v = mapping(spherePosition);
+    ExtVector v = mapping(spherePosition);
     
     int hit = raymarch(v, objId);
 
