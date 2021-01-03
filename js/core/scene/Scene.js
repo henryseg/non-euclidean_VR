@@ -13,7 +13,7 @@ import header from "./shaders/header.js";
  */
 export class Scene {
 
-    constructor() {
+    constructor(fog=undefined) {
         /**
          * List of all the lights in the scene.
          * @type {Light[]}
@@ -29,6 +29,11 @@ export class Scene {
          * @type {number}
          */
         this.nextId = 0;
+        /**
+         * Fog in the scene
+         * @type{Fog}
+         */
+        this.fog = fog
     }
 
     /**
@@ -75,6 +80,9 @@ export class Scene {
         }
         for (const solid of this.solids) {
             solid.shader(shaderBuilder);
+        }
+        if(this.fog !== undefined){
+            this.fog.shader(shaderBuilder);
         }
         shaderBuilder.addChunk(mustache.render(scenes, this));
     }

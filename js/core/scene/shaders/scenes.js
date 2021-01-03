@@ -66,9 +66,10 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
  * @param[in] v the vector at which we hit the object
  * @param[in] objId the id of the object that we hit
  */
-vec3 solidColor(RelVector v, int objId) {
+vec3 solidColor(RelVector v, float travelledDist, int objId) {
     RelVector normal;
     vec2 uv;
+    vec3 res;
 
     switch(objId){
         {{#solids}}
@@ -76,30 +77,40 @@ vec3 solidColor(RelVector v, int objId) {
             case {{id}}:
                 {{^material.usesNormal}}                    
                     {{^material.usesUVMap}}                        
-                        return {{material.name}}_render(v);                                                
+                        res =  {{material.name}}_render(v);
+                        break;                                                
                     {{/material.usesUVMap}}
                     {{#material.usesUVMap}}
                         uv = {{shape.name}}_uvMap(v);
-                        return {{material.name}}_render(v, uv);
+                        res = {{material.name}}_render(v, uv);
+                        break;
                     {{/material.usesUVMap}}    
                 {{/material.usesNormal}}
                             
                 {{#material.usesNormal}}
                     {{^material.usesUVMap}}                        
                         normal = {{shape.name}}_gradient(v);
-                        return {{material.name}}_render(v, normal);
+                        res = {{material.name}}_render(v, normal);
+                        break;
                     {{/material.usesUVMap}}
                     {{#material.usesUVMap}}
                         normal = {{shape.name}}_gradient(v);
                         uv = {{shape.name}}_uvMap(v);
-                        return {{material.name}}_render(v, normal, uv);
+                        res = {{material.name}}_render(v, normal, uv);
+                        break;
                     {{/material.usesUVMap}}                    
                 {{/material.usesNormal}}
             
         {{/solids}}
+        
+        default:
+            // this line should never be achieved
+            res = vec3(0,0,0);
     }
-    
-    // this line should never be achieved
-    return vec3(0,0,0);
+
+    {{#fog}}
+        res = applyFog(res, travelledDist);
+    {{/fog}}
+    return res;
 }
 `;

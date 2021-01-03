@@ -24,7 +24,7 @@ export default `//
  * - the telportations accumulate numerical errors, but the coordinates of the local vector, will remain bounded.
  * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
-int raymarch(inout RelVector v, out int objId){
+int raymarch(inout RelVector v, out float travelledDist, out int objId){
     RelVector globalV0 = v;
     RelVector globalV = globalV0;
     RelVector localV0 = v;
@@ -58,7 +58,8 @@ int raymarch(inout RelVector v, out int objId){
                 // we hit an object
                 hit = auxHit;
                 objId = auxId;
-                res = localV;
+                v = localV;
+                travelledDist = localDepth;
                 break;
             }
             localDepth = localDepth + dist;
@@ -80,7 +81,8 @@ int raymarch(inout RelVector v, out int objId){
             // we hit an object
             hit = auxHit;
             objId = auxId;
-            res = globalV;
+            v = globalV;
+            travelledDist = globalDepth;
             break;
         }
         globalDepth = globalDepth + dist;
@@ -88,7 +90,6 @@ int raymarch(inout RelVector v, out int objId){
         globalV = flow(globalV0, marchingStep);
     }
 
-    v = res;
     return hit;
 }
 
@@ -110,11 +111,12 @@ varying vec3 spherePosition;
  */
 void main() {
     vec3 color;
+    float travelledDist;
     int objId;
 
     RelVector v = mapping(spherePosition);
 
-    int hit = raymarch(v, objId);
+    int hit = raymarch(v, travelledDist, objId);
 
     switch (hit) {
         case HIT_DEBUG:
@@ -124,7 +126,7 @@ void main() {
         color = vec3(0.1, 0.1, 0.1);
         break;
         case HIT_SOLID :
-        color = solidColor(v, objId);
+        color = solidColor(v, travelledDist, objId);
         break;
         default :
         // there is a problem if we reached that point (hence the red color)!
