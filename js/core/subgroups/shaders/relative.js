@@ -98,56 +98,13 @@ RelVector createVector(RelVector v, vec3 coords){
     return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
-/***********************************************************************************************************************
- *
- * @struct ExtVector
- * Structure for an extended vector
- * An extended vector is a relative vector with additional decorations used during ray-marching
- *
- **********************************************************************************************************************/
-
-struct ExtVector {
-    RelVector vector; /**< the underlying relative vector */
-    float travelledDist; /**< the distance travelled during raymarching */
-};
-
-/**
- * Normalize the given vector.
- */
-ExtVector geomNormalize(ExtVector v){
-    v.vector = geomNormalize(v.vector);
-    return v;
-}
-
-/**
- * Return the opposition of the given vector
- */
-ExtVector negate(ExtVector v){
-    v.vector = negate(v.vector);
-    return v;
-}
-
-/**
- * Flow the given vector.
- * This method does apply any teleportation.
- * Hence the local part of the vector, may leaves the fundamental domain.
- */
-ExtVector flow(ExtVector v, float t) {
-    v.vector = flow(v.vector, t);
-    v.travelledDist = v.travelledDist + t;
-    return v;
-}
-
 /**
  * Apply the given position (including the cellBoost) to a vector.
  * @param[in] p a position
  * @param[in] v a vector **at the origin**.
  */
-ExtVector applyPosition(RelPosition position, Vector v) {
+RelVector applyPosition(RelPosition position, Vector v) {
     Vector local = applyPosition(position.local, v);
-    RelVector vector = RelVector(local, position.cellBoost, position.invCellBoost);
-    return ExtVector(vector, 0.);
+    return RelVector(local, position.cellBoost, position.invCellBoost);
 }
-
-
 `;

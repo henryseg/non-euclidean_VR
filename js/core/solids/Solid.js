@@ -1,5 +1,6 @@
 import {Generic} from "../Generic.js";
 
+import struct from "./shaders/struct.js";
 
 /**
  * @class
@@ -32,6 +33,15 @@ export class Solid extends Generic {
          * @type {Material}
          */
         this.material = material;
+        /**
+         * Says whether the solid should be rendered or not.
+         * The property can be used to define solids that will appear later in the scene
+         * (because of some animation, game event, etc) without having to rebuild the shader.
+         * Default is true.
+         * @type{boolean}
+         */
+        this.isRendered = true;
+        this.addImport(struct)
     }
 
     /**
@@ -44,6 +54,10 @@ export class Solid extends Generic {
 
     get isGlobal() {
         return this.shape.isGlobal;
+    }
+
+    get uniformType(){
+        return 'Solid';
     }
 
     /**
@@ -70,6 +84,7 @@ export class Solid extends Generic {
 
     static glslClass() {
         return '';
+        // return struct;
     }
 
     /**
@@ -80,22 +95,6 @@ export class Solid extends Generic {
      */
     glslInstance() {
         return '';
-        // if(this.material.usesNormal) {
-        //     if(this.material.usesUVMap){
-        //         return mustache.render(colorNormalUV, this);
-        //     }
-        //     else{
-        //         return mustache.render(colorNormal, this);
-        //     }
-        // }
-        // else {
-        //     if(this.material.usesUVMap){
-        //         return mustache.render(colorUV, this);
-        //     }
-        //     else{
-        //         return mustache.render(color, this);
-        //     }
-        // }
     }
 
     shader(shaderBuilder) {

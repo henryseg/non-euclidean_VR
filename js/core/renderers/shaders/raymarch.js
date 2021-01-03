@@ -24,53 +24,54 @@ export default `//
  * - the telportations accumulate numerical errors, but the coordinates of the local vector, will remain bounded.
  * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
-int raymarch(inout ExtVector v, out int objId){
-    ExtVector globalV0 = v;
-    ExtVector globalV = globalV0;
-    ExtVector localV0 = v;
-    ExtVector localV = localV0;
-    ExtVector res = v;
+int raymarch(inout RelVector v, out int objId){
+    RelVector globalV0 = v;
+    RelVector globalV = globalV0;
+    RelVector localV0 = v;
+    RelVector localV = localV0;
+    RelVector res = v;
     int auxId;
     int auxHit;
     float marchingStep = camera.minDist;
-    float globalDepth = camera.minDist;
-    float localDepth = camera.minDist;
+    float localDepth = 0.;
+    float globalDepth = 0.;
     float dist;
     int hit = 0;
 
 
-        // local scene
-        for (int i = 0; i < camera.maxSteps; i++){
-            // start by teleporting eventually the vector
-            if (teleport(localV)){
-                // if a teleport was needed, update the starting point of the local raymarching
-                localV0 = localV;
-                /** @warning if minDist is not zero... this line may produce some jumps */
-                marchingStep = camera.minDist;
-            }
-            else {
-                // if no teleport was needed, then march
-                if (localDepth > camera.maxDist) {
-                    break;
-                }
-                dist = localSceneSDF(localV, auxHit, auxId);
-                if (auxHit == HIT_SOLID) {
-                    // we hit an object
-                    hit = auxHit;
-                    objId = auxId;
-                    res = localV;
-                    break;
-                }
-                marchingStep = marchingStep + dist;
-                localDepth  = localDepth + dist;
-                localV = flow(localV0, marchingStep);
-            }
+    // local scene
+    for (int i = 0; i < camera.maxSteps; i++){
+        // start by teleporting eventually the vector
+        if (teleport(localV)){
+            // if a teleport was needed, update the starting point of the local raymarching
+            localV0 = localV;
+            /** @warning if minDist is not zero... this line may produce some jumps */
+            marchingStep = camera.minDist;
         }
+        else {
+            // if no teleport was needed, then march
+            if (localDepth > camera.maxDist) {
+                break;
+            }
+            dist = localSceneSDF(localV, auxHit, auxId);
+            if (auxHit == HIT_SOLID) {
+                // we hit an object
+                hit = auxHit;
+                objId = auxId;
+                res = localV;
+                break;
+            }
+            localDepth = localDepth + dist;
+            marchingStep = marchingStep + dist;
+            localV = flow(localV0, marchingStep);
+        }
+    }
 
     //global scene
+    marchingStep = camera.minDist;
     for (int i=0; i < camera.maxSteps; i++){
-        
-        if (globalDepth > localDepth || globalDepth > camera.maxDist){
+
+        if (globalDepth> localDepth || globalDepth > camera.maxDist){
             // we reached the maximal distance
             break;
         }
@@ -83,7 +84,8 @@ int raymarch(inout ExtVector v, out int objId){
             break;
         }
         globalDepth = globalDepth + dist;
-        globalV = flow(globalV0, globalDepth);
+        marchingStep = marchingStep + dist;
+        globalV = flow(globalV0, marchingStep);
     }
 
     v = res;
@@ -110,8 +112,8 @@ void main() {
     vec3 color;
     int objId;
 
-    ExtVector v = mapping(spherePosition);
-    
+    RelVector v = mapping(spherePosition);
+
     int hit = raymarch(v, objId);
 
     switch (hit) {
