@@ -1,5 +1,12 @@
 {
-  "getstarted": {
+  "gettingStarted": {
     "title": "Getting started!"
+  },
+  "extendingGeometry": {
+    "title": "Adding / Extending geometries",
+    "children": ["shape"]
+  },
+  "shape": {
+    "title": "Custom shape"
   }
 }

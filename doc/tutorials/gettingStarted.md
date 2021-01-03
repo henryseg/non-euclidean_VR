@@ -1,4 +1,4 @@
-This tutorial explains how to build a basic scene with the *Thurston* module. The basics are very similar
+This tutorial explains how to build a simple scene with the *Thurston* module. The basics are very similar
 to [Three.js](https://threejs.org/). There are some differences though that we will highlight along the way.
 
 Let's start with a basic HTML file `index.html`
@@ -109,7 +109,7 @@ Finally one adds those objects to the scene
 scene.add(light, ball);
 ```
 
-# Step 4 Render the scene.
+# Step 4 Rendering the scene.
 
 Before rendering the scene, we need to build the underlying shader. This is done as follows
 
