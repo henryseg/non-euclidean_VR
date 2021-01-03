@@ -9,16 +9,37 @@ export default `//
  ***********************************************************************************************************************
  **********************************************************************************************************************/
 
+/***********************************************************************************************************************
+ *
+ * @struct RelPosition
+ * Structure for a generalized position in the geometry.
+ * Such a position is a triple (local, cellBoost, invCellBoost) where
+ * - local is a Position
+ * - cellBoost is an Isometry representing an element of a discrete subgroups
+ * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
+ * Such a generalized position represent the position local translated by cellBoost
+ * It is meant to track easily teleportation when raymarching in quotient manifolds.
+ * This structure is essentially meant to receive data from the JS part
+ *
+ **********************************************************************************************************************/
+
+struct RelPosition {
+    Position local;
+    Isometry cellBoost;
+    Isometry invCellBoost;
+};
+
 
 /***********************************************************************************************************************
  *
  * @struct ExtVector
- * Structure for a generalized vector
- * Such a vector is a triple (local, cellBoost, invCellBoost) where
+ * Structure for an extended vector
+ * Such a vector is a tuple (local, cellBoost, invCellBoost, ...) where
  * - local is a Vector
  * - cellBoost is an Isometry representing an element of a discrete subgroups
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
- * Such a generalized vector represent the vector local translated by cellBoost
+ * - ... (more to come to handle fogs, reflexions, etc)
+ * Such an extended vector represent the vector local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.
  *
  **********************************************************************************************************************/
@@ -27,7 +48,6 @@ struct ExtVector {
     Vector local;
     Isometry cellBoost;
     Isometry invCellBoost;
-
 };
 
 /**
@@ -77,27 +97,6 @@ ExtVector createVector(ExtVector v, vec3 coords){
     Vector local = createVector(v.local.pos, coords);
     return ExtVector(local, v.cellBoost, v.invCellBoost);
 }
- 
-
-/***********************************************************************************************************************
- *
- * @struct RelPosition
- * Structure for a generalized position in the geometry.
- * Such a position is a triple (local, cellBoost, invCellBoost) where
- * - local is a Position
- * - cellBoost is an Isometry representing an element of a discrete subgroups
- * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
- * Such a generalized position represent the position local translated by cellBoost
- * It is meant to track easily teleportation when raymarching in quotient manifolds.
- * This structure is essentially meant to receive data from the JS part
- *
- **********************************************************************************************************************/
-
-struct RelPosition {
-    Position local;
-    Isometry cellBoost;
-    Isometry invCellBoost;
-};
 
 /**
  * Apply the given position (including the cellBoost) to a vector.

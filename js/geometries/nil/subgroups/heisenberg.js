@@ -1,8 +1,5 @@
 import {Isometry, Point, Teleport, Subgroup} from "../../../core/geometry/General.js";
 
-/**
- * Subgroup corresponding to the integer Heisenberg group
- */
 
 
 function testXp(p) {
@@ -85,6 +82,10 @@ const teleportYn = new Teleport(testYn, glslTestYn, shiftYn, shiftYp);
 const teleportZp = new Teleport(testZp, glslTestZp, shiftZp, shiftZn);
 const teleportZn = new Teleport(testZn, glslTestZn, shiftZn, shiftZp);
 
+
+/**
+ * Subgroup corresponding to the integer Heisenberg group
+ */
 export default new Subgroup([
     teleportXp,
     teleportXn,

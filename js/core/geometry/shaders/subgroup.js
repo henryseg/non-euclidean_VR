@@ -10,7 +10,7 @@ export default `//
 */
 bool teleport(inout ExtVector v){
 {{#teleports}}
-    if({{name}}(v.local.pos)){
+    if({{glslTestName}}(v.local.pos)){
         v.local = applyIsometry({{name}}Isom, v.local);
         v.cellBoost = multiply(v.cellBoost,{{name}}Inv);
         v.invCellBoost = multiply({{name}}Isom, v.invCellBoost);

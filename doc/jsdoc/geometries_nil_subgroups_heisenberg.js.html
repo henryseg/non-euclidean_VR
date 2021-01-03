@@ -44,7 +44,6 @@
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
-											<li><a href="global.html#testXp">testXp</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
 									</ul>
@@ -159,9 +158,6 @@
 			<article></article>
 			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {Isometry, Point, Teleport, Subgroup} from "../../../core/geometry/General.js";
 
-/**
- * Subgroup corresponding to the integer Heisenberg group
- */
 
 
 function testXp(p) {
@@ -244,6 +240,10 @@ const teleportYn = new Teleport(testYn, glslTestYn, shiftYn, shiftYp);
 const teleportZp = new Teleport(testZp, glslTestZp, shiftZp, shiftZn);
 const teleportZn = new Teleport(testZn, glslTestZn, shiftZn, shiftZp);
 
+
+/**
+ * Subgroup corresponding to the integer Heisenberg group
+ */
 export default new Subgroup([
     teleportXp,
     teleportXn,

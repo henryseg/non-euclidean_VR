@@ -1,5 +1,8 @@
 import {Isometry} from "./Isometry.js";
 
+
+const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
+
 /**
  * @class
  *
@@ -16,8 +19,7 @@ export class Teleport {
      * @param {Function} jsTest - A JS test saying if a teleportation is needed.
      * The test is a function with the signature Point -> boolean.
      * @param {string} glslTest - a chunk of GLSL performing the same test.
-     * The test should be encapsulated in a function with signature Point -> bool,
-     * whose name matches the one of the JS test.
+     * The test should be encapsulated in a function with signature Point -> bool
      * @param {Isometry} isom - the isometry to apply when teleporting
      * @param {Isometry} inv - the inverse of the isometry (optional)
      * If the inverse is not passed as an argument, it is computed automatically.
@@ -30,17 +32,33 @@ export class Teleport {
          * @type {Function}
          */
         this.jsTest = jsTest;
+
         /**
          * A GLSL test saying if a teleportation is needed
          * The test returns true if a teleportation is needed and false otherwise.
          * @type {string}
          */
         this.glslTest = glslTest;
+
+        /**
+         * Name of the GLSL function performing the test.
+         * Computed with a regular expression
+         * @type {string}
+         */
+        this.glslTestName = undefined;
+        const aux = glslTest.match(regexpTest);
+        if (!aux) {
+            throw new Error('Teleport: unable to find the name of the GLSL test');
+        } else {
+            this.glslTestName = aux[1];
+        }
+
         /**
          * The isometry to apply when teleporting
          * @type {Isometry}
          */
         this.isom = isom;
+
         /**
          * The inverse of the  teleporting isometry
          * @type {Isometry}

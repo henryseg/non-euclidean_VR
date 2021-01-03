@@ -1,13 +1,11 @@
-const a = true;
-const b = false;
+const regexp = /bool\s*(\w+)\(Point.*\)/m;
 
-switch([a,b]) {
-    case [true, true]:
-        console.log('t,t');
-        break;
-    case [true, false]:
-        console.log('t,f');
-        break;
-    default:
-        console.log('d', [a,b]);
+
+const cubeHalfWidth = 0.8;
+const test = `//
+bool testYp(Point p){
+    return p.coords.y > ${cubeHalfWidth};
 }
+`;
+
+console.log(test.match(regexp));
