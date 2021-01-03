@@ -22,17 +22,12 @@
     import {LocalBall} from "../../js/geometries/euc/solids/LocalBall.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
     import {ExpFog} from "../../js/commons/scenes/expFog/ExpFog.js";
-    import {LinFog} from "../../js/commons/scenes/linFog/LinFog.js";
 
 
     const expFog = new ExpFog(
-        new Color(0, 0, 0),
-        0.05
+        new Color(0, 0, 0.2),
+        0.07
     );
-    // const linFog = new LinFog(
-    //     new Color(0, 0, 0),
-    //     30
-    // );
 
     // initial setup
     const camera = new BasicCamera({subgroup: torus});
