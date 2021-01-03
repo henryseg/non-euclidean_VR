@@ -33,7 +33,7 @@ export class Light extends Generic {
     /**
      * Return the chunk of GLSL code corresponding to the direction field.
      * The GLSL direction function should have the following signature
-     * `bool {{name}}_directions(ExtVector v, int i, out ExtVector dir, out float intensity)`
+     * `bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity)`
      * where
      * - `v` gives the position at which we compute the direction
      * - `i` means that we are computed the i-th direction (the index start at i = 0)

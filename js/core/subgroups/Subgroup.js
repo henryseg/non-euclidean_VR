@@ -1,6 +1,7 @@
 import {mustache} from "../../lib/mustache.mjs";
 import subgroup from "./shaders/subgroup.js";
 import relative from "./shaders/relative.js";
+import overloads from "./shaders/overloads.js";
 
 /**
  * @class
@@ -58,6 +59,7 @@ class Subgroup {
         }
         shaderBuilder.addChunk(relative);
         shaderBuilder.addChunk(mustache.render(subgroup, this));
+        shaderBuilder.addChunk(overloads);
     }
 
 }

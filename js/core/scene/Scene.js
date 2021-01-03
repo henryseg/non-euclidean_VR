@@ -2,6 +2,7 @@ import {mustache} from "../../lib/mustache.mjs";
 
 import scenes from "./shaders/scenes.js";
 import header from "./shaders/header.js";
+import overloads from "./shaders/overloads.js";
 
 
 /**
@@ -77,5 +78,6 @@ export class Scene {
             solid.shader(shaderBuilder);
         }
         shaderBuilder.addChunk(mustache.render(scenes, this));
+        shaderBuilder.addChunk(overloads);
     }
 }

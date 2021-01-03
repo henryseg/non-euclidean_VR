@@ -3,7 +3,7 @@ export default `//
 /**
  * Gradient for the union of two shapes
  */
-ExtVector {{name}}_gradient(ExtVector v){
+RelVector {{name}}_gradient(RelVector v){
     float dist1 = {{shape1.name}}_sdf(v);
     float dist2 = {{shape2.name}}_sdf(v);
     if(dist1 < dist2){

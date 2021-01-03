@@ -3,6 +3,6 @@ export default `//
 /**
  * Gradient for the complement of a shape
  */
-ExtVector {{name}}_gradient(ExtVector v){
+RelVector {{name}}_gradient(RelVector v){
     return negate({{shape.name}}_gradient(v));
 }`;

@@ -1,4 +1,4 @@
-import {Isometry} from "./Isometry.js";
+import {Isometry} from "../geometry/Isometry.js";
 
 
 const regexpTest = /bool\s*(\w+)\(Point.*\)/m;

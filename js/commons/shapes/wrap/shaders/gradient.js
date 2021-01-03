@@ -3,6 +3,6 @@ export default `//
 /**
  * Gradient for a wrapping
  */
-ExtVector {{name}}_gradient(ExtVector v){
+RelVector {{name}}_gradient(RelVector v){
     return {{shape.name}}_gradient(v);
 }`;

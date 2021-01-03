@@ -6,7 +6,7 @@ export default `//
  * However there is a function, to factorize the code
  **********************************************************************************************************************/
 
-vec3 normalMaterialRender(ExtVector v, ExtVector normal) {
+vec3 normalMaterialRender(RelVector v, RelVector normal) {
     Vector[3] f;
     frame(v.local.pos, f);
     float r =  geomDot(normal.local, f[0]);

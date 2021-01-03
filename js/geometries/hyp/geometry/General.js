@@ -4,7 +4,7 @@ export {Isometry} from "./Isometry.js";
 export {Point} from "./Point.js";
 export {Vector} from "../../../core/geometry/Vector.js";
 export {Position} from "./Position.js";
-export {Teleport} from "../../../core/geometry/Teleport.js";
-export {Subgroup} from "../../../core/geometry/Subgroup.js";
+export {Teleport} from "../../../core/subgroups/Teleport.js";
+export {Subgroup} from "../../../core/subgroups/Subgroup.js";
 export {RelPosition} from "../../../core/geometry/RelPosition.js";
 

@@ -14,14 +14,14 @@ struct LocalBallShape {
 /**
  * Distance function for a global hyperbolic ball
  */
-float sdf(LocalBallShape ball, ExtVector v) {
+float sdf(LocalBallShape ball, RelVector v) {
     return dist(v.local.pos, ball.center) - ball.radius;
 }
 
 /**
  * Gradient field for a global hyperbolic ball
  */
-ExtVector gradient(LocalBallShape ball, ExtVector v){
+RelVector gradient(LocalBallShape ball, RelVector v){
     Vector local = direction(v.local.pos, ball.center);
-    return ExtVector(negate(local), v.cellBoost, v.invCellBoost);
+    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
 }`;

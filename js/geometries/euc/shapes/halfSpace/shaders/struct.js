@@ -12,19 +12,19 @@ struct HalfSpaceShape {
     vec3 vDir; /**< Direction of the v-coordinates */
 };
 
-float sdf(HalfSpaceShape halfspace, ExtVector v){
+float sdf(HalfSpaceShape halfspace, RelVector v){
     Point pos = applyIsometry(v.invCellBoost, halfspace.pos);
     vec4 normal = v.invCellBoost.matrix * vec4(halfspace.normal, 0);
     return dot(v.local.pos.coords - pos.coords, normal);
 }
 
-ExtVector gradient(HalfSpaceShape halfspace, ExtVector v){
+RelVector gradient(HalfSpaceShape halfspace, RelVector v){
     vec4 normal = v.invCellBoost.matrix * vec4(halfspace.normal, 0);
     Vector local = Vector(v.local.pos, normal);
-    return ExtVector(local, v.cellBoost, v.invCellBoost);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
-vec2 uvMap(HalfSpaceShape halfspace, ExtVector v){
+vec2 uvMap(HalfSpaceShape halfspace, RelVector v){
     Point pos = applyIsometry(v.invCellBoost, halfspace.pos);
     vec4 uDir = v.invCellBoost.matrix * vec4(halfspace.uDir, 0);
     vec4 vDir = v.invCellBoost.matrix * vec4(halfspace.vDir, 0);

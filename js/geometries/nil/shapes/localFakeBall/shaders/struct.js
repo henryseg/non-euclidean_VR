@@ -14,7 +14,7 @@ struct LocalFakeBallShape {
 /**
  * Distance function for a global euclidean ball
  */
-float sdf(LocalFakeBallShape ball, ExtVector v) {
+float sdf(LocalFakeBallShape ball, RelVector v) {
     return fakeDistance(v.local.pos, ball.center) - ball.radius;
 }
 `;

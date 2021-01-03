@@ -4,7 +4,7 @@ export default `//
  * Compute the initial direction for the ray-marching
  * @param[in] coords the coordinates of the point on the sphere
  */
-ExtVector mapping(vec3 coords){
+RelVector mapping(vec3 coords){
     vec4 dir = vec4(coords, 0);
     dir = normalize(dir);
     float c = cosh(camera.ipDist);

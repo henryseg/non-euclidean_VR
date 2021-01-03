@@ -32,7 +32,7 @@ struct RelPosition {
 
 /***********************************************************************************************************************
  *
- * @struct ExtVector
+ * @struct RelVector
  * Structure for an extended vector
  * Such a vector is a tuple (local, cellBoost, invCellBoost, ...) where
  * - local is a Vector
@@ -44,7 +44,7 @@ struct RelPosition {
  *
  **********************************************************************************************************************/
 
-struct ExtVector {
+struct RelVector {
     Vector local;
     Isometry cellBoost;
     Isometry invCellBoost;
@@ -53,7 +53,7 @@ struct ExtVector {
 /**
  * Normalize the given vector.
  */
-ExtVector geomNormalize(ExtVector v){
+RelVector geomNormalize(RelVector v){
     v.local = geomNormalize(v.local);
     return v;
 }
@@ -61,7 +61,7 @@ ExtVector geomNormalize(ExtVector v){
 /**
  * Return the opposition of the given vector
  */
-ExtVector negate(ExtVector v){
+RelVector negate(RelVector v){
     v.local = negate(v.local);
     return v;
 }
@@ -71,7 +71,7 @@ ExtVector negate(ExtVector v){
  * This method does apply any teleportation.
  * Hence the local part of the vector, may leaves the fundamental domain.
  */
-ExtVector flow(ExtVector v, float t) {
+RelVector flow(RelVector v, float t) {
     v.local = flow(v.local, t);
     return v;
 }
@@ -83,9 +83,9 @@ ExtVector flow(ExtVector v, float t) {
  * @param[in] v initial vector.
  * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
  */
-ExtVector smallShift(ExtVector v, vec3 dp){
+RelVector smallShift(RelVector v, vec3 dp){
     Vector local = smallShift(v.local, dp);
-    return ExtVector(local, v.cellBoost, v.invCellBoost);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
 
@@ -93,9 +93,49 @@ ExtVector smallShift(ExtVector v, vec3 dp){
  * Compute the vector at the same point as v whose coordinates are given by the section of the frame bundle.
  * Overload of createVector
  */
-ExtVector createVector(ExtVector v, vec3 coords){
+RelVector createVector(RelVector v, vec3 coords){
     Vector local = createVector(v.local.pos, coords);
-    return ExtVector(local, v.cellBoost, v.invCellBoost);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+/***********************************************************************************************************************
+ *
+ * @struct ExtVector
+ * Structure for an extended vector
+ * An extended vector is a relative vector with additional decorations used during ray-marching
+ *
+ **********************************************************************************************************************/
+
+struct ExtVector {
+    RelVector vector; /**< the underlying relative vector */
+    float travelledDist; /**< the distance travelled during raymarching */
+};
+
+/**
+ * Normalize the given vector.
+ */
+ExtVector geomNormalize(ExtVector v){
+    v.vector = geomNormalize(v.vector);
+    return v;
+}
+
+/**
+ * Return the opposition of the given vector
+ */
+ExtVector negate(ExtVector v){
+    v.vector = negate(v.vector);
+    return v;
+}
+
+/**
+ * Flow the given vector.
+ * This method does apply any teleportation.
+ * Hence the local part of the vector, may leaves the fundamental domain.
+ */
+ExtVector flow(ExtVector v, float t) {
+    v.vector = flow(v.vector, t);
+    v.travelledDist = v.travelledDist + t;
+    return v;
 }
 
 /**
@@ -105,5 +145,9 @@ ExtVector createVector(ExtVector v, vec3 coords){
  */
 ExtVector applyPosition(RelPosition position, Vector v) {
     Vector local = applyPosition(position.local, v);
-    return ExtVector(local, position.cellBoost, position.invCellBoost);
-}`;
+    RelVector vector = RelVector(local, position.cellBoost, position.invCellBoost);
+    return ExtVector(vector, 0.);
+}
+
+
+`;
