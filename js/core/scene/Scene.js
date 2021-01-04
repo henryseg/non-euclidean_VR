@@ -13,27 +13,36 @@ import header from "./shaders/header.js";
  */
 export class Scene {
 
-    constructor(fog=undefined) {
+    constructor(fog = undefined) {
         /**
          * List of all the lights in the scene.
          * @type {Light[]}
          */
         this.lights = [];
+
         /**
          * List of all the solids in the scene.
          * @type {Solid[]}
          */
         this.solids = [];
+
         /**
          * Next available ID in the scene.
          * @type {number}
          */
         this.nextId = 0;
+
         /**
          * Fog in the scene
          * @type{Fog}
          */
         this.fog = fog
+
+        /**
+         * Maximal number of bounces
+         * @type {number}
+         */
+        this.maxBounces = 0;
     }
 
     /**
@@ -81,7 +90,7 @@ export class Scene {
         for (const solid of this.solids) {
             solid.shader(shaderBuilder);
         }
-        if(this.fog !== undefined){
+        if (this.fog !== undefined) {
             this.fog.shader(shaderBuilder);
         }
         shaderBuilder.addChunk(mustache.render(scenes, this));

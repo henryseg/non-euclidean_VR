@@ -6,6 +6,7 @@ import {Clock, Color} from "../lib/three.module.js";
 import {bind} from "../utils.js";
 
 import {BasicCamera, Scene} from "./General.js";
+import {ExpFog} from "../commons/scenes/expFog/ExpFog.js";
 
 
 /**
@@ -55,11 +56,14 @@ export class AbstractThurston {
          * @type {BasicCamera}
          */
         this.camera = new cameraType({subgroup: this.subgroup});
+
+        const fog = new ExpFog(new Color(0,0,0), 0.05);
         /**
          * The non-euclidean scene
          * @type {Scene}
          */
-        this.scene = new Scene();
+        this.scene = new Scene(fog);
+
         /**
          * The non-euclidean renderer
          * @type {Renderer}

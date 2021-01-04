@@ -6,9 +6,11 @@
  * Defines a fog to be used in the scene.
  */
 export class Fog {
-
+    /**
+     * Constructor.
+     * The constructor takes no argument.
+     */
     constructor() {
-
     }
 
     /**

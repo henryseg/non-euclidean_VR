@@ -84,7 +84,6 @@ export class Solid extends Generic {
 
     static glslClass() {
         return '';
-        // return struct;
     }
 
     /**

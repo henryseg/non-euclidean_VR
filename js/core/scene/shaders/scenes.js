@@ -103,9 +103,9 @@ vec3 solidColor(RelVector v, float travelledDist, int objId) {
             
         {{/solids}}
         
-        default:
-            // this line should never be achieved
-            res = vec3(0,0,0);
+            default:
+                // this line should never be achieved
+                res = vec3(0,0,0);
     }
 
     {{#fog}}
