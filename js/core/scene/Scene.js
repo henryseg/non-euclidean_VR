@@ -2,6 +2,7 @@ import {mustache} from "../../lib/mustache.mjs";
 
 import scenes from "./shaders/scenes.js";
 import header from "./shaders/header.js";
+import {Color} from "../../lib/three.module.js";
 
 
 /**
@@ -49,6 +50,12 @@ export class Scene {
          * @type {number}
          */
         this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
+
+        /**
+         * Background color
+         * @type{Color}
+         */
+        this.background = params.background !== undefined ? params.background : new Color(0.1, 0.1, 0.1);
     }
 
     /**
@@ -89,7 +96,7 @@ export class Scene {
      */
     shader(shaderBuilder) {
         shaderBuilder.addChunk(header);
-        shaderBuilder.addUniform('maxBounces', 'int', this.maxBounces);
+        shaderBuilder.addUniform('scene', 'Scene', this);
         // run through all the objects in the scene and combine the relevant chunks of GLSL code.
         for (const light of this.lights) {
             light.shader(shaderBuilder);

@@ -103,17 +103,17 @@ vec3 getColor(RelVector v){
     int hit;
     bool stop;
 
-    for (int k=0; k <= maxBounces; k++){
+    for (int k=0; k <= scene.maxBounces; k++){
         hit = raymarch(v, travelledDist, objId);
         if (hit == HIT_DEBUG) {
             return debugColor;
         }
         if (hit == HIT_NOTHING) {
-            return color + reflect * vec3(0.1, 0.1, 0.1);
+            return color + reflect * scene.background;
         }
         if (hit == HIT_SOLID) {
             data = getSolidColorData(v, travelledDist, objId);
-            stop = k == maxBounces || !data.isReflecting || length(data.reflectivity) == 0.;
+            stop = k == scene.maxBounces || !data.isReflecting || length(data.reflectivity) == 0.;
             if (stop){
                 return color + reflect * data.color;
             }
