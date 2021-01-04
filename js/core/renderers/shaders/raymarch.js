@@ -93,6 +93,38 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
     return hit;
 }
 
+vec3 getColor(RelVector v){
+    vec3 color = vec3(0);
+    vec3 reflect = vec3(1);// the ratio of light involved during the iteration
+    ColorData data;
+    vec3 coeff;
+    float travelledDist;
+    int objId;
+    int hit;
+    bool stop;
+
+    for (int k=0; k <= maxBounces; k++){
+        hit = raymarch(v, travelledDist, objId);
+        if (hit == HIT_DEBUG) {
+            return debugColor;
+        }
+        if (hit == HIT_NOTHING) {
+            return color + reflect * vec3(0.1, 0.1, 0.1);
+        }
+        if (hit == HIT_SOLID) {
+            data = getSolidColorData(v, travelledDist, objId);
+            stop = k == maxBounces || !data.isReflecting || length(data.reflectivity) == 0.;
+            if (stop){
+                return color + reflect * data.color;
+            }
+            coeff = reflect * (vec3(1) - data.reflectivity);
+            color = color + coeff * data.color;
+            reflect = reflect * data.reflectivity;
+        }
+    }
+    // we should never reach this point.
+    return color;
+}
 
 
 /**
@@ -110,29 +142,12 @@ varying vec3 spherePosition;
  * - If we hit an object compute the corresponding color.
  */
 void main() {
-    vec3 color;
-    float travelledDist;
-    int objId;
+
 
     RelVector v = mapping(spherePosition);
-
-    int hit = raymarch(v, travelledDist, objId);
-
-    switch (hit) {
-        case HIT_DEBUG:
-        color = debugColor;
-        break;
-        case HIT_NOTHING:
-        color = vec3(0.1, 0.1, 0.1);
-        break;
-        case HIT_SOLID :
-        color = solidColor(v, travelledDist, objId);
-        break;
-        default :
-        // there is a problem if we reached that point (hence the red color)!
-        color = vec3(1, 0, 0);
-    }
-
+    vec3 color = getColor(v);
     gl_FragColor = vec4(color, 1);
+
+
 }
 `;

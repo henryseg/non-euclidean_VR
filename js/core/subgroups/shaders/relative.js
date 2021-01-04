@@ -67,6 +67,15 @@ RelVector negate(RelVector v){
 }
 
 /**
+ * Reflect the vector accrosse the plane defined by the given normal.
+ * We assume that v and normal have the same cellBoost.
+ */
+RelVector geomReflect(RelVector v, RelVector normal){
+    v.local = geomReflect(v.local, normal.local);
+    return v;
+}
+
+/**
  * Flow the given vector.
  * This method does apply any teleportation.
  * Hence the local part of the vector, may leaves the fundamental domain.

@@ -10,6 +10,7 @@ struct PhongMaterial {
     float diffuse;
     float specular;
     float shininess;
+    vec3 reflectivity;
 };
 
 /**

@@ -13,7 +13,13 @@ import header from "./shaders/header.js";
  */
 export class Scene {
 
-    constructor(fog = undefined) {
+    /**
+     * Constructor.
+     * @param {Object} params - parameters of the scene including
+     * - {Fog} fog - the fog in the scene
+     * - {number} maxBounces - the maximal number of times the light bounces on reflecting materials.
+     */
+    constructor(params = {}) {
         /**
          * List of all the lights in the scene.
          * @type {Light[]}
@@ -36,13 +42,13 @@ export class Scene {
          * Fog in the scene
          * @type{Fog}
          */
-        this.fog = fog
+        this.fog = params.fog;
 
         /**
          * Maximal number of bounces
          * @type {number}
          */
-        this.maxBounces = 0;
+        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
     }
 
     /**
@@ -83,6 +89,7 @@ export class Scene {
      */
     shader(shaderBuilder) {
         shaderBuilder.addChunk(header);
+        shaderBuilder.addUniform('maxBounces', 'int', this.maxBounces);
         // run through all the objects in the scene and combine the relevant chunks of GLSL code.
         for (const light of this.lights) {
             light.shader(shaderBuilder);
