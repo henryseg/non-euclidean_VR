@@ -7,6 +7,7 @@ import render from "./shaders/render.js";
 import renderNormal from "./shaders/renderNormal.js";
 import renderUV from "./shaders/renderUV.js";
 import renderNormalUV from "./shaders/renderNormalUV.js";
+import {Vector3} from "../../../lib/three.module.js";
 
 /**
  * @class
@@ -55,6 +56,11 @@ export class PhongWrapMaterial extends Material {
          */
         this.shininess = params.shininess !== undefined ? params.shininess : 10;
         /**
+         * Reflectivity of the material
+         * @type {Color}
+         */
+        this.reflectivity = params.reflectivity !== undefined ? params.reflectivity : new Vector3(0, 0, 0);
+        /**
          * lights affecting the material
          * @type {Light[]}
          */
@@ -78,6 +84,10 @@ export class PhongWrapMaterial extends Material {
     }
 
     get usesLight() {
+        return true;
+    }
+
+    get isReflecting() {
         return true;
     }
 
