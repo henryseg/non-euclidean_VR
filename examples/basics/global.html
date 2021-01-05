@@ -13,7 +13,7 @@
 </body>
 <script type="module" id="main">
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import trivial from "../../js/commons/subgroups/trivial.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
 
     import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
 
@@ -23,7 +23,7 @@
 
 
     // initial setup
-    const camera = new BasicCamera({subgroup: trivial});
+    const camera = new BasicCamera({set: trivial});
     const scene = new Scene();
 
     const renderer = new BasicRenderer(geom, trivial, camera, scene, {

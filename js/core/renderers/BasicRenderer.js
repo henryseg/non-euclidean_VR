@@ -23,13 +23,13 @@ export class BasicRenderer extends Renderer {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the underlying subgroup
+     * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
      */
-    constructor(geom, subgroup, camera, scene, params = {}) {
-        super(geom, subgroup, camera, scene, params);
+    constructor(geom, set, camera, scene, params = {}) {
+        super(geom, set, camera, scene, params);
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -52,7 +52,7 @@ export class BasicRenderer extends Renderer {
         this._fragmentBuilder.addChunk(commons2);
 
         // subgroup/quotient orbifold
-        this.subgroup.shader(this._fragmentBuilder);
+        this.set.shader(this._fragmentBuilder);
 
         // camera
         this.camera.shader(this._fragmentBuilder)

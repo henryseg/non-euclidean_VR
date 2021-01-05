@@ -26,7 +26,7 @@ export class VRCamera extends BasicCamera {
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
      * - {number} threshold - the threshold to stop the ray-marching
-     * - {Subgroup} subgroup - the underlying subgroup of the geometry (to create the position)
+     * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
      * - {number} ipDist - the interpupillary distance
      */
     constructor(parameters) {

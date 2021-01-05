@@ -9,13 +9,39 @@ export default `//
  ***********************************************************************************************************************
  **********************************************************************************************************************/
 
+/**
+ * @deprecated
+ * Use applyGroupElement instead
+ */
+Point applyIsometry(GroupElement elt, Point p){
+    return applyIsometry(toIsometry(elt), p);
+}
+
+Point applyGroupElement(GroupElement elt, Point p){
+    return applyIsometry(toIsometry(elt), p);
+}
+
+/**
+ * @deprecated
+ * Use applyGroupElement instead
+ */
+Vector applyIsometry(GroupElement elt, Vector v){
+    return applyIsometry(toIsometry(elt), v);
+}
+
+Vector applyGroupElement(GroupElement elt, Vector v){
+    return applyIsometry(toIsometry(elt), v);
+}
+
+
+
 /***********************************************************************************************************************
  *
  * @struct RelPosition
  * Structure for a generalized position in the geometry.
  * Such a position is a triple (local, cellBoost, invCellBoost) where
  * - local is a Position
- * - cellBoost is an Isometry representing an element of a discrete subgroups
+ * - cellBoost is an GroupElement representing an element of a discrete subgroups
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
  * Such a generalized position represent the position local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.
@@ -25,8 +51,8 @@ export default `//
 
 struct RelPosition {
     Position local;
-    Isometry cellBoost;
-    Isometry invCellBoost;
+    GroupElement cellBoost;
+    GroupElement invCellBoost;
 };
 
 
@@ -36,7 +62,7 @@ struct RelPosition {
  * Structure for an extended vector
  * Such a vector is a tuple (local, cellBoost, invCellBoost, ...) where
  * - local is a Vector
- * - cellBoost is an Isometry representing an element of a discrete subgroups
+ * - cellBoost is an GroupElement representing an element of a discrete subgroups
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
  * - ... (more to come to handle fogs, reflexions, etc)
  * Such an extended vector represent the vector local translated by cellBoost
@@ -46,8 +72,8 @@ struct RelPosition {
 
 struct RelVector {
     Vector local;
-    Isometry cellBoost;
-    Isometry invCellBoost;
+    GroupElement cellBoost;
+    GroupElement invCellBoost;
 };
 
 /**
@@ -93,8 +119,10 @@ RelVector flow(RelVector v, float t) {
  * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
  */
 RelVector smallShift(RelVector v, vec3 dp){
-    Vector local = smallShift(v.local, dp);
-    return RelVector(local, v.cellBoost, v.invCellBoost);
+    v.local = smallShift(v.local, dp);
+    return v;
+    //    Vector local = smallShift(v.local, dp);
+    //    return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
 
@@ -103,8 +131,10 @@ RelVector smallShift(RelVector v, vec3 dp){
  * Overload of createVector
  */
 RelVector createVector(RelVector v, vec3 coords){
-    Vector local = createVector(v.local.pos, coords);
-    return RelVector(local, v.cellBoost, v.invCellBoost);
+    v.local =  createVector(v.local.pos, coords);
+    return v;
+    //    Vector local = createVector(v.local.pos, coords);
+    //    return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
 /**

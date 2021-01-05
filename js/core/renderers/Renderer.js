@@ -19,12 +19,12 @@ export class Renderer {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the underlying subgroup
+     * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
      */
-    constructor(geom, subgroup, camera, scene, params = {}) {
+    constructor(geom, set, camera, scene, params = {}) {
         /**
          * The underlying geometry.
          * @type{Object}
@@ -32,9 +32,9 @@ export class Renderer {
         this.geom = geom;
         /**
          * The underlying subgroup
-         * @type {Subgroup}
+         * @type {TeleportationSet}
          */
-        this.subgroup = subgroup;
+        this.set = set;
         /**
          * Non-euclidean camera
          * @type {BasicCamera}

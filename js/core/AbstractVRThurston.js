@@ -16,14 +16,14 @@ export class AbstractVRThurston extends AbstractThurston {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the discrete subgroup
+     * @param {TeleportationSet} set - the teleportation set
      * @param {Function} cameraType - camera constructor
      * @param {Function} rendererType - renderer constructor
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, subgroup, cameraType, rendererType, params = {}) {
-        super(geom, subgroup, cameraType, rendererType, params);
+    constructor(geom, set, cameraType, rendererType, params = {}) {
+        super(geom, set, cameraType, rendererType, params);
 
         const controllerModelFactory = new XRControllerModelFactory();
 

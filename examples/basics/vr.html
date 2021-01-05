@@ -13,8 +13,7 @@
 </body>
 <script type="module" id="main">
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/subgroups/torus.js";
-    import trivial from "../../js/commons/subgroups/trivial.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
 
     import {VRRenderer, Scene, VRCamera} from "../../js/core/General.js";
 
@@ -28,7 +27,7 @@
 
 
     // initial setup
-    const camera = new VRCamera({subgroup: torus});
+    const camera = new VRCamera({set: trivial});
     const scene = new Scene();
     const renderer = new VRRenderer(geom, trivial, camera, scene, {
         logarithmicDepthBuffer: true

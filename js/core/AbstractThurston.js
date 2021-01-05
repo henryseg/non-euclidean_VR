@@ -21,13 +21,13 @@ export class AbstractThurston {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the discrete subgroup
+     * @param {TeleportationSet} set - the teleportation set
      * @param {Function} cameraType - camera constructor
      * @param {Function} rendererType - renderer constructor
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, subgroup, cameraType, rendererType, params = {}) {
+    constructor(geom, set, cameraType, rendererType, params = {}) {
         /**
          * The underlying geometry
          * @type {Object}
@@ -35,9 +35,9 @@ export class AbstractThurston {
         this.geom = geom;
         /**
          * The underlying subgroup
-         * @type {Subgroup}
+         * @type {TeleportationSet}
          */
-        this.subgroup = subgroup;
+        this.set = set;
         /**
          * Parameters of the Thurston object
          * @type {Object}
@@ -55,7 +55,7 @@ export class AbstractThurston {
          * The non-euclidean camera
          * @type {BasicCamera}
          */
-        this.camera = new cameraType({subgroup: this.subgroup});
+        this.camera = new cameraType({set: this.set});
 
         const fog = new ExpFog(new Color(0, 0, 0), 0.05);
         /**
@@ -68,7 +68,7 @@ export class AbstractThurston {
          * The non-euclidean renderer
          * @type {Renderer}
          */
-        this.renderer = new rendererType(this.geom, this.subgroup, this.camera, this.scene);
+        this.renderer = new rendererType(this.geom, this.set, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);

@@ -9,13 +9,13 @@ export default `//
 * @return true if the vector has been teleported and false otherwise
 */
 bool teleport(inout RelVector v){
-{{#teleports}}
+{{#teleportations}}
     if({{glslTestName}}(v.local.pos)){
-        v.local = applyIsometry({{name}}Isom, v.local);
-        v.cellBoost = multiply(v.cellBoost,{{name}}Inv);
-        v.invCellBoost = multiply({{name}}Isom, v.invCellBoost);
+        v.local = applyGroupElement({{name}}_elt, v.local);
+        v.cellBoost = multiply(v.cellBoost,{{name}}_inv);
+        v.invCellBoost = multiply({{name}}_elt, v.invCellBoost);
         return true;
     }
-{{/teleports}}
+{{/teleportations}}
 return false;
 }`;

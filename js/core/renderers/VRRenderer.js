@@ -30,15 +30,15 @@ export class VRRenderer extends Renderer {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the underlying subgroup
+     * @param {TeleportationSet} set - the underlying teleportation set
      * @param {VRCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
      */
-    constructor(geom, subgroup, camera, scene, params = {}) {
+    constructor(geom, set, camera, scene, params = {}) {
         // loading the polyfill if WebXR is not supported
         new WebXRPolyfill.default();
-        super(geom, subgroup, camera, scene, params);
+        super(geom, set, camera, scene, params);
 
         this.threeRenderer.xr.enabled = true;
         this.threeRenderer.xr.setReferenceSpaceType('local');
@@ -77,7 +77,7 @@ export class VRRenderer extends Renderer {
             this._fragmentBuilder[side].addChunk(commons2);
 
             // subgroup/quotient orbifold
-            this.subgroup.shader(this._fragmentBuilder[side]);
+            this.set.shader(this._fragmentBuilder[side]);
 
             // camera
             this.camera.sidedShader(this._fragmentBuilder[side], side);

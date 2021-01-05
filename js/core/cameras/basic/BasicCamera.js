@@ -1,7 +1,6 @@
 import {PerspectiveCamera} from "../../../lib/three.module.js";
 import {RelPosition} from "../../geometry/General.js";
 
-import trivial from "../../../commons/subgroups/trivial.js";
 import struct from "./shaders/struct.js";
 import mapping from "./shaders/mapping.js";
 
@@ -34,7 +33,7 @@ export class BasicCamera {
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
      * - {number} threshold - the threshold to stop the ray-marching
-     * - {Subgroup} subgroup - the underlying subgroup of the geometry (to create the position)
+     * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
      */
     constructor(parameters) {
 
@@ -75,9 +74,7 @@ export class BasicCamera {
          * Position of the camera
          * @type {RelPosition}
          */
-        this.position = new RelPosition(
-            parameters.subgroup !== undefined ? parameters.subgroup : trivial
-        );
+        this.position = new RelPosition(parameters.set);
     }
 
     /**

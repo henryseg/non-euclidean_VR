@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/three.module.js";
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/subgroups/torus.js";
+    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
     import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
 
@@ -30,7 +30,7 @@
     );
 
     // initial setup
-    const camera = new BasicCamera({subgroup: torus});
+    const camera = new BasicCamera({set: torus});
     const scene = new Scene({fog: expFog});
 
     const renderer = new BasicRenderer(geom, torus, camera, scene, {

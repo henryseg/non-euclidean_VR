@@ -1,5 +1,6 @@
-import {Isometry} from "./Isometry.js";
-import {Position} from "./Position.js";
+import {Isometry} from "../geometry/Isometry.js";
+import {Position} from "../geometry/Position.js";
+import {GroupElement} from "./GroupElement.js";
 
 
 /**
@@ -8,7 +9,7 @@ import {Position} from "./Position.js";
  * @classdesc
  * Relative position.
  * A general position is represented as a pair (h,p) where
- * - h (cellBoost) is an Isometry representing an element of a discrete subgroups
+ * - h (cellBoost) is an GroupElement representing an element of a discrete subgroups
  * - p (local) is a Position
  * The frame represented by the relative position is the image by h of the frame represented by the position p
  *
@@ -17,8 +18,6 @@ import {Position} from "./Position.js";
  * This will keep the coordinates of g in a bounded range.
  *
  * For simplicity we also keep track of the inverse of the cellBoost.
- *
- * @todo Allow a more combinatorial way to represent discrete subgroups, to avoid numerical error in the cellBoost.
  */
 class RelPosition {
 
@@ -26,9 +25,9 @@ class RelPosition {
      * Constructor.
      * Return the position corresponding to the origin with the reference frame.
      *
-     * @param {Subgroup} sbgp - the underlying discrete subgroups.
+     * @param {TeleportationSet} set - the underlying discrete subgroups.
      */
-    constructor(sbgp) {
+    constructor(set) {
         /**
          * the local position
          * @type {Position}
@@ -36,19 +35,19 @@ class RelPosition {
         this.local = new Position();
         /**
          * the "discrete" component of the isometry par of the boost
-         * @type {Isometry}
+         * @type {GroupElement}
          */
-        this.cellBoost = new Isometry();
+        this.cellBoost = new GroupElement();
         /**
          * the inverse of cellBoost
-         * @type {Isometry}
+         * @type {GroupElement}
          */
-        this.invCellBoost = new Isometry();
+        this.invCellBoost = new GroupElement();
         /**
          * the isometry component of the position inside the fundamental domain
-         * @type {Subgroup}
+         * @type {TeleportationSet}
          */
-        this.sbgp = sbgp;
+        this.set = set;
     }
 
     /**
@@ -80,15 +79,15 @@ class RelPosition {
         return this;
     }
 
-    /**
-     * Reduce the eventual numerical error of the current boost.
-     * @return {RelPosition} the current relative position
-     */
-    reduceErrorCellBoost() {
-        this.cellBoost.reduceError();
-        this.invCellBoost.reduceError();
-        return this;
-    }
+    // /**
+    //  * Reduce the eventual numerical error of the current boost.
+    //  * @return {RelPosition} the current relative position
+    //  */
+    // reduceErrorCellBoost() {
+    //     this.cellBoost.reduceError();
+    //     this.invCellBoost.reduceError();
+    //     return this;
+    // }
 
     /**
      * Reduce the eventual numerical error of the current position.
@@ -96,7 +95,7 @@ class RelPosition {
      */
     reduceError() {
         this.reduceErrorLocal();
-        this.reduceErrorCellBoost();
+        // this.reduceErrorCellBoost();
         return this;
     }
 
@@ -114,7 +113,7 @@ class RelPosition {
      * @type {Point}
      */
     get point() {
-        return this.local.point.applyIsometry(this.cellBoost);
+        return this.local.point.applyIsometry(this.cellBoost.toIsometry());
     }
 
     /**
@@ -138,15 +137,15 @@ class RelPosition {
             // compute the location of the local part of the position
             localPoint = this.localPoint;
             inside = true;
-            for (const teleport of this.sbgp.teleports) {
-                inside = inside && !teleport.jsTest(localPoint);
+            for (const teleportation of this.set.teleportations) {
+                inside = inside && !teleportation.jsTest(localPoint);
                 // if we failed the test, a teleportation is needed.
                 // we perform the teleportation and exit the loop
                 // (to restart the checks from the beginning).
                 if (!inside) {
-                    this.local.applyIsometry(teleport.isom);
-                    this.cellBoost.multiply(teleport.inv);
-                    this.invCellBoost.premultiply(teleport.isom);
+                    this.local.applyIsometry(teleportation.elt.toIsometry());
+                    this.cellBoost.multiply(teleportation.inv);
+                    this.invCellBoost.premultiply(teleportation.elt);
                     break;
                 }
             }
@@ -171,28 +170,28 @@ class RelPosition {
         return this;
     }
 
-    /**
-     * Return the two positions corresponding to the left and right eye.
-     * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
-     * @param {number} ipDist - the interpupillary distance
-     * @param {string} stereoMode - a mode (defining a correction at the facing level)
-     * @return {RelPosition[]} - the position of the left and right eye
-     */
-    eyes(cameraMatrix, ipDist, stereoMode = undefined) {
-        const locals = this.local.eyes(cameraMatrix, ipDist, stereoMode);
-
-        const leftEye = new RelPosition(this.sbgp);
-        leftEye.local.copy(locals[0]);
-        leftEye.cellBoost.copy(this.cellBoost);
-        leftEye.invCellBoost.copy(this.invCellBoost)
-
-        const rightEye = new RelPosition(this.sbgp);
-        rightEye.local.copy(locals[1]);
-        rightEye.cellBoost.copy(this.cellBoost);
-        rightEye.invCellBoost.copy(this.invCellBoost);
-
-        return [leftEye, rightEye];
-    }
+    // /**
+    //  * Return the two positions corresponding to the left and right eye.
+    //  * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
+    //  * @param {number} ipDist - the interpupillary distance
+    //  * @param {string} stereoMode - a mode (defining a correction at the facing level)
+    //  * @return {RelPosition[]} - the position of the left and right eye
+    //  */
+    // eyes(cameraMatrix, ipDist, stereoMode = undefined) {
+    //     const locals = this.local.eyes(cameraMatrix, ipDist, stereoMode);
+    //
+    //     const leftEye = new RelPosition(this.set);
+    //     leftEye.local.copy(locals[0]);
+    //     leftEye.cellBoost.copy(this.cellBoost);
+    //     leftEye.invCellBoost.copy(this.invCellBoost)
+    //
+    //     const rightEye = new RelPosition(this.set);
+    //     rightEye.local.copy(locals[1]);
+    //     rightEye.cellBoost.copy(this.cellBoost);
+    //     rightEye.invCellBoost.copy(this.invCellBoost);
+    //
+    //     return [leftEye, rightEye];
+    // }
 
     /**
      * Check if the current position and `position ` are the same.
@@ -212,7 +211,7 @@ class RelPosition {
      * @return {RelPosition} the clone of the current relative position
      */
     clone() {
-        let res = new RelPosition(this.sbgp);
+        let res = new RelPosition(this.set);
         res.cellBoost.copy(this.cellBoost);
         res.invCellBoost.copy(this.invCellBoost);
         res.local.copy(this.local);

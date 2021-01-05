@@ -15,8 +15,8 @@ class Isometry {
      * so that it manipulate the right classes.
      *
      */
-    constructor(...args) {
-        this.build(...args);
+    constructor() {
+        this.build(...arguments);
     }
 
     /**
@@ -68,7 +68,7 @@ class Isometry {
 
     /**
      * Invert the current isometry
-     *
+     * @return {Isometry} The current isometry
      */
     invert() {
         this.matrix.invert();
