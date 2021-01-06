@@ -14,11 +14,11 @@ export class Thurston extends AbstractThurston {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the discrete subgroup
+     * @param {TeleportationSet} set - the teleportation set
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, subgroup, params = {}) {
-        super(geom, subgroup, BasicCamera, BasicRenderer, params);
+    constructor(geom, set, params = {}) {
+        super(geom, set, BasicCamera, BasicRenderer, params);
     }
 }

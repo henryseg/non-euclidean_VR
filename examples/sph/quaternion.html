@@ -17,15 +17,16 @@
     import {Thurston} from "../../js/commons/Thurston.js";
 
     import * as geom from "../../js/geometries/sph/geometry/General.js";
-    import hypercube from "../../js/geometries/sph/groups/cube.js";
+    import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
 
     import {Point, Vector} from "../../js/geometries/sph/geometry/General.js";
     import {PointLight} from "../../js/geometries/sph/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
     import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
+    //import cube from "../../js/geometries/sph/groups/cube.js";
 
-    const thurston = new Thurston(geom, hypercube, {keyboard: 'fr'});
+    const thurston = new Thurston(geom, quaternion, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 2 * Math.PI;
 

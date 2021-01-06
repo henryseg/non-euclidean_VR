@@ -14,8 +14,9 @@ struct VerticalHalfSpaceShape {
 };
 
 float sdf(VerticalHalfSpaceShape halfSpace, RelVector v) {
-    Point pos = applyIsometry(v.invCellBoost, halfSpace.pos);
-    vec4 normal = v.invCellBoost.matrix * vec4(halfSpace.normal, 0);
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, halfSpace.pos);
+    vec4 normal = invCellBoost.matrix * vec4(halfSpace.normal, 0);
     vec4 diff = v.local.pos.coords - pos.coords;
     return dot(diff, normal);
 }
@@ -26,9 +27,10 @@ RelVector gradient(VerticalHalfSpaceShape halfSpace, RelVector v) {
 }
 
 vec2 uvMap(VerticalHalfSpaceShape halfSpace, RelVector v) {
-    Point pos = applyIsometry(v.invCellBoost, halfSpace.pos);
-    vec4 uDir = v.invCellBoost.matrix * vec4(halfSpace.uDir, 0);
-    vec4 vDir = v.invCellBoost.matrix * vec4(halfSpace.vDir, 0);
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, halfSpace.pos);
+    vec4 uDir = invCellBoost.matrix * vec4(halfSpace.uDir, 0);
+    vec4 vDir = invCellBoost.matrix * vec4(halfSpace.vDir, 0);
     float uCoord = dot(v.local.pos.coords - pos.coords, uDir);
     float vCoord = dot(v.local.pos.coords - pos.coords, vDir);
     return vec2(uCoord, vCoord);

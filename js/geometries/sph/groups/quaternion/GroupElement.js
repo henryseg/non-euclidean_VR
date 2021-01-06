@@ -1,73 +1,73 @@
 import {GroupElement} from "../../../../core/groups/GroupElement.js";
 import {Isometry} from "../../geometry/Isometry.js";
-import {Vector3} from "../../../../lib/three.module.js";
+import {Quaternion} from "../../../../lib/three.module.js";
 
 /**
- * Free abelian group
- * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side)
+ * Unit integer quaternions, represented
+ * - as a integer Quaternion on a the JS side
+ * - as an integer vec4 on the GLSL side
  */
 
-export const cubeHalfWidth = 0.8;
 
 GroupElement.prototype.build = function () {
     if (arguments.length === 0) {
-        this.coords = new Vector3(0, 0, 0);
+        this.quaternion = new Quaternion(0, 0, 0, 1);
     } else {
-        this.coords = new Vector3(...arguments);
+        this.quaternion = new Quaternion(...arguments);
     }
 }
 
 // the only way to pass an integer vector to the shader is as an array and not a Vector3
 Object.defineProperty(GroupElement.prototype, 'icoords', {
     get: function () {
-        return this.coords.toArray();
+        return this.quaternion.toArray();
     }
 })
 
 GroupElement.prototype.identity = function () {
-    this.coords.set(0, 0, 0);
+    this.quaternion.identity();
     return this;
 }
 
 GroupElement.prototype.multiply = function (elt) {
-    this.coords.add(elt.coords);
+    this.quaternion.multiply(elt.quaternion);
     return this;
 }
 
 GroupElement.prototype.premultiply = function (elt) {
-    this.coords.add(elt.coords);
+    this.quaternion.premultiply(elt.quaternion);
     return this;
 }
 
 GroupElement.prototype.invert = function () {
-    this.coords.negate();
+    this.quaternion.conjugate();
     return this;
 }
 
 GroupElement.prototype.toIsometry = function () {
-    const [a, b, c] = this.coords.toArray();
+    const [x, y, z, w] = this.quaternion.toArray();
     const res = new Isometry();
     res.matrix.set(
-        1, 0, 0, 2 * a * cubeHalfWidth,
-        0, 1, 0, 2 * b * cubeHalfWidth,
-        0, 0, 1, 2 * c * cubeHalfWidth,
-        0, 0, 0, 1
+        w, -z, -y, -x,
+        z, w, x, -y,
+        y, -x, w, z,
+        x, y, -z, w
     );
     return res;
 }
 
 GroupElement.prototype.equals = function (elt) {
-    return this.coords.equals(elt.coords);
+    return this.quaternion.equals(elt.quaternion);
 }
 
 GroupElement.prototype.clone = function () {
     const res = new GroupElement();
-    res.coords.copy(this.coords);
+    res.quaternion.copy(this.quaternion);
     return res;
 }
 
 GroupElement.prototype.copy = function (elt) {
-    this.coords.copy(elt.coords);
+    this.quaternion.copy(elt.quaternion);
     return this;
 }
 

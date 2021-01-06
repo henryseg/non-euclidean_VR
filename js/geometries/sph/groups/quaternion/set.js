@@ -1,8 +1,8 @@
-import {Matrix4, Vector4} from "../../../lib/three.module.js";
-import {Teleportation} from "../../../core/groups/Teleportation.js";
-import {TeleportationSet} from "../../../core/groups/TeleportationSet.js";
-import {GroupElement} from "../../../commons/groups/isometry/GroupElement.js";
-import element from "../../../commons/groups/isometry/shaders/element.js";
+import {Vector4} from "../../../../lib/three.module.js";
+import {GroupElement} from "./GroupElement.js";
+import {Teleportation} from "../../../../core/groups/Teleportation.js";
+import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import element from "./shaders/element.js";
 
 
 const normalXp = new Vector4(1, 0, 0, -1);
@@ -85,63 +85,19 @@ bool testZn(Point p){
 }
 `;
 
-const shiftXp = new GroupElement();
-shiftXp.isom.matrix.set(
-    0, 0, 0, -1,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    1, 0, 0, 0
-);
-const shiftXn = new GroupElement();
-shiftXn.isom.matrix.set(
-    0, 0, 0, 1,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    -1, 0, 0, 0
-);
-const shiftYp = new GroupElement();
-shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 0, 0, -1,
-    0, 0, 1, 0,
-    0, 1, 0, 0
-);
 
-const shiftYn = new GroupElement();
-shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 0, 0, 1,
-    0, 0, 1, 0,
-    0, -1, 0, 0
-);
-const shiftZp = new GroupElement();
-shiftZp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 0, -1,
-    0, 0, 1, 0
-);
-const shiftZn = new GroupElement();
-shiftZn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 1,
-    0, 0, -1, 0
-);
-
-
-//ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
-shiftXp.isom.matrix.multiply(new Matrix4().makeRotationX(Math.PI / 2).transpose());
-shiftXn.isom.matrix.multiply(new Matrix4().makeRotationX(-Math.PI / 2).transpose());
-shiftYp.isom.matrix.multiply(new Matrix4().makeRotationY(Math.PI / 2).transpose());
-shiftYn.isom.matrix.multiply(new Matrix4().makeRotationY(-Math.PI / 2).transpose());
-shiftZp.isom.matrix.multiply(new Matrix4().makeRotationZ(Math.PI / 2).transpose());
-shiftZn.isom.matrix.multiply(new Matrix4().makeRotationZ(-Math.PI / 2).transpose());
-
-
-console.log("Isom X", shiftXp.isom.matrix.toLog());
-console.log("Isom Y", shiftYp.isom.matrix.toLog());
-console.log("Isom Z", shiftZp.isom.matrix.toLog());
+const shiftXp = new GroupElement(1, 0, 0, 0);
+console.log("Quat X", shiftXp.toIsometry().matrix.toLog());
+const shiftXn = new GroupElement(-1, 0, 0, 0);
+// console.log("Quat", shiftXn.toIsometry().matrix.toLog());
+const shiftYp = new GroupElement(0, 1, 0, 0);
+console.log("Quat Y", shiftYp.toIsometry().matrix.toLog());
+const shiftYn = new GroupElement(0, -1, 0, 0);
+// console.log("Quat", shiftYn.toIsometry().matrix.toLog());
+const shiftZp = new GroupElement(0, 0, -1, 0);
+console.log("Quat Z", shiftZp.toIsometry().matrix.toLog());
+const shiftZn = new GroupElement(0, 0, 1, 0);
+// console.log("Quat", shiftZn.toIsometry().matrix.toLog());
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
