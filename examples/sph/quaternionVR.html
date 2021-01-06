@@ -17,7 +17,7 @@
     import {VRThurston} from "../../js/commons/VRThurston.js";
 
     import * as geom from "../../js/geometries/sph/geometry/General.js";
-    import hypercube from "../../js/geometries/sph/groups/cube.js";
+    import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
 
     import {Point, Vector} from "../../js/geometries/sph/geometry/General.js";
     import {PointLight} from "../../js/geometries/sph/lights/pointLight/PointLight.js";
@@ -26,7 +26,7 @@
     import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
 
 
-    const thurston = new VRThurston(geom, hypercube, {keyboard: 'fr'});
+    const thurston = new VRThurston(geom, quaternion, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 2 * Math.PI;
 

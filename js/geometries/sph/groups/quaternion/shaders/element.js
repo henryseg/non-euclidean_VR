@@ -23,16 +23,15 @@ const GroupElement GROUP_IDENTITY = GroupElement(ivec4(0, 0, 0, 1));
 GroupElement multiply(GroupElement elt1, GroupElement elt2){
     // there is no integer matrix in GLSL.
     // so we must goe back and forth between integer coordinates and float coordinates
-    vec4 c1 = vec4(elt1.icoords);
-    vec4 c2 = vec4(elt2.icoords);
-    mat4 matrix =  mat4(
-    c1.w, c1.x, c1.y, c1.z,
-    -c1.x, c1.w, c1.z, -c1.y,
-    -c1.y, -c1.z, c1.w, c1.x,
-    -c1.z, c1.y, -c1.x, c1.w
+    ivec4 c1 = elt1.icoords;
+    ivec4 c2 = elt2.icoords;
+    ivec4 c = ivec4(
+    c1.x * c2.w + c1.w * c2.x + c1.y * c2.z - c1.z * c2.y,
+    c1.y * c2.w + c1.w * c2.y + c1.z * c2.x - c1.x * c2.z,
+    c1.z * c2.w + c1.w * c2.z + c1.x * c2.y - c1.y * c2.x,
+    c1.w * c2.w - c1.x * c2.x - c1.y * c2.y - c1.z * c2.z
     );
-    vec4 c = matrix * c2;
-    return GroupElement(ivec4(c));
+    return GroupElement(c);
 }
 
 GroupElement groupInverse(GroupElement elt){
