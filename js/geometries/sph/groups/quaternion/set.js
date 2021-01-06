@@ -87,17 +87,11 @@ bool testZn(Point p){
 
 
 const shiftXp = new GroupElement(1, 0, 0, 0);
-console.log("Quat X", shiftXp.toIsometry().matrix.toLog());
 const shiftXn = new GroupElement(-1, 0, 0, 0);
-// console.log("Quat", shiftXn.toIsometry().matrix.toLog());
 const shiftYp = new GroupElement(0, 1, 0, 0);
-console.log("Quat Y", shiftYp.toIsometry().matrix.toLog());
 const shiftYn = new GroupElement(0, -1, 0, 0);
-// console.log("Quat", shiftYn.toIsometry().matrix.toLog());
 const shiftZp = new GroupElement(0, 0, -1, 0);
-console.log("Quat Z", shiftZp.toIsometry().matrix.toLog());
 const shiftZn = new GroupElement(0, 0, 1, 0);
-// console.log("Quat", shiftZn.toIsometry().matrix.toLog());
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);

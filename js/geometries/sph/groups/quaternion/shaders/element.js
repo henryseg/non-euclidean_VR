@@ -21,8 +21,6 @@ struct GroupElement {
 const GroupElement GROUP_IDENTITY = GroupElement(ivec4(0, 0, 0, 1));
 
 GroupElement multiply(GroupElement elt1, GroupElement elt2){
-    // there is no integer matrix in GLSL.
-    // so we must goe back and forth between integer coordinates and float coordinates
     ivec4 c1 = elt1.icoords;
     ivec4 c2 = elt2.icoords;
     ivec4 c = ivec4(
