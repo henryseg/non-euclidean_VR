@@ -11,33 +11,23 @@ export default `//
 
 /***********************************************************************************************************************
  * @struct
- * Integral Heisenberg group
+ * Translation group whose fundamental domain is an ideal cube in H3
  **********************************************************************************************************************/
 
 struct GroupElement {
-    ivec3 icoords; /**< integer coordinates of the element */
+    qmat4 matrix; /**< tha matrix written in a quadratic field */
 };
 
-const GroupElement GROUP_IDENTITY = GroupElement(ivec3(0));
+const GroupElement GROUP_IDENTITY = GroupElement(QUAD_FIELD_IDENTITY);
 
 GroupElement multiply(GroupElement elt1, GroupElement elt2){
-    ivec3 c1 = elt1.icoords;
-    ivec3 c2 = elt2.icoords;
-    return GroupElement(ivec3(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z + c1.x * c2.y));
+    return GroupElement(multiply(elt1.matrix, elt2.matrix));
 }
 
 //GroupElement groupInverse(GroupElement elt){
-//    ivec3 c = elt.icoords;
-//    return GroupElement(ivec3(-c.x, -c.y, -c.z + c.x * c.y));
+//    return GroupElement(-elt.icoords);
 //}
 
 Isometry toIsometry(GroupElement elt) {
-    vec3 c = vec3(elt.icoords);
-    mat4 matrix =  mat4(
-    1, 0, -0.5 * c.y, 0,
-    0, 1, 0.5 * c.x, 0,
-    0, 0, 1, 0,
-    c.x, c.y, c.z-0.5 * c.x * c.y, 1
-    );
-    return Isometry(matrix,true);
+    return Isometry(toMat4(elt.matrix));
 }`;

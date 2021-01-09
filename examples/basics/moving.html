@@ -15,7 +15,7 @@
     import {Clock} from "../../js/lib/three.module.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
 
     import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
 
@@ -24,10 +24,10 @@
     import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
 
     // initial setup
-    const camera = new BasicCamera({set: torus});
+    const camera = new BasicCamera({set: trivial});
     const scene = new Scene();
 
-    const renderer = new BasicRenderer(geom, torus, camera, scene, {
+    const renderer = new BasicRenderer(geom, trivial, camera, scene, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

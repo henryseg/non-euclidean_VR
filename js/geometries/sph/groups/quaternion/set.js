@@ -2,8 +2,9 @@ import {Vector4} from "../../../../lib/three.module.js";
 import {GroupElement} from "./GroupElement.js";
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
-import element from "./shaders/element.js";
+import {Group} from "./Group.js";
 
+const group = new Group()
 
 const normalXp = new Vector4(1, 0, 0, -1);
 const normalXn = new Vector4(-1, 0, 0, -1);
@@ -86,12 +87,12 @@ bool testZn(Point p){
 `;
 
 
-const shiftXp = new GroupElement(1, 0, 0, 0);
-const shiftXn = new GroupElement(-1, 0, 0, 0);
-const shiftYp = new GroupElement(0, 1, 0, 0);
-const shiftYn = new GroupElement(0, -1, 0, 0);
-const shiftZp = new GroupElement(0, 0, -1, 0);
-const shiftZn = new GroupElement(0, 0, 1, 0);
+const shiftXp = group.element(1, 0, 0, 0);
+const shiftXn = group.element(-1, 0, 0, 0);
+const shiftYp = group.element(0, 1, 0, 0);
+const shiftYn = group.element(0, -1, 0, 0);
+const shiftZp = group.element(0, 0, -1, 0);
+const shiftZn = group.element(0, 0, 1, 0);
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
@@ -100,12 +101,13 @@ const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
 const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
 const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
 
-export default new TeleportationSet([
-        teleportXp,
-        teleportXn,
-        teleportYp,
-        teleportYn,
-        teleportZp,
-        teleportZn
-    ],
-    element);
+const teleportations = [
+    teleportXp,
+    teleportXn,
+    teleportYp,
+    teleportYn,
+    teleportZp,
+    teleportZn
+];
+
+export default new TeleportationSet(teleportations);

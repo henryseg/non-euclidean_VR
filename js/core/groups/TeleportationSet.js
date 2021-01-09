@@ -1,6 +1,7 @@
 import relative from "./shaders/relative.js";
 import {mustache} from "../../lib/mustache.mjs";
 import teleport from "./shaders/teleport.js";
+import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 
 /**
  * @class
@@ -15,17 +16,27 @@ export class TeleportationSet {
     /**
      * Constructor
      * @param {Teleportation[]} teleportations - the list of teleportations.
-     * @param {string} eltStruct - chunk of GLSL code
      * defining the structure of the group element and the related functions
      */
-    constructor(teleportations, eltStruct) {
+    constructor(teleportations = []) {
         /**
          * The list of teleports "generating" the subgroups.
          * The order matters (see the class description).
          * @type {Teleportation[]}
          */
         this.teleportations = teleportations;
-        this.eltStruct = eltStruct;
+        /**
+         * Shortcut to the underlying group.
+         * If the list of teleportations is empty, use the trivial group.
+         * @type {Group}
+         */
+        this.group = undefined
+        if (teleportations.length !== 0) {
+            this.group = teleportations[0].elt.group;
+        } else {
+            this.group = new TrivialGroup();
+        }
+
     }
 
     /**
@@ -34,7 +45,7 @@ export class TeleportationSet {
      * @param {ShaderBuilder} shaderBuilder
      */
     shader(shaderBuilder) {
-        shaderBuilder.addChunk(this.eltStruct);
+        this.group.shader(shaderBuilder);
         for (const teleportation of this.teleportations) {
             teleportation.shader(shaderBuilder);
         }

@@ -1,4 +1,3 @@
-import {Isometry} from "../geometry/Isometry.js";
 import {Position} from "../geometry/Position.js";
 import {GroupElement} from "./GroupElement.js";
 
@@ -34,20 +33,21 @@ class RelPosition {
          */
         this.local = new Position();
         /**
-         * the "discrete" component of the isometry par of the boost
-         * @type {GroupElement}
-         */
-        this.cellBoost = new GroupElement();
-        /**
-         * the inverse of cellBoost
-         * @type {GroupElement}
-         */
-        this.invCellBoost = new GroupElement();
-        /**
          * the isometry component of the position inside the fundamental domain
          * @type {TeleportationSet}
          */
         this.set = set;
+        /**
+         * the "discrete" component of the isometry par of the boost
+         * @type {GroupElement}
+         */
+        this.cellBoost = this.set.group.element();
+        /**
+         * the inverse of cellBoost
+         * @type {GroupElement}
+         */
+        this.invCellBoost = this.set.group.element();
+
     }
 
     /**

@@ -1,13 +1,14 @@
 import {Vector} from "../../geometry/General.js";
 import {Matrix4} from "../../../../lib/three.module.js";
-import {GroupElement} from "../../../../commons/groups/isometry/GroupElement.js";
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
-import element from "../../../../commons/groups/isometry/shaders/element.js";
+import {Group} from "../../../../commons/groups/isometry/Group.js";
 
 
 const cubeHalfWidth = 0.6584789485;
 const modelHalfCube = 0.5773502692;
+
+const group = new Group();
 
 function testXp(p) {
     return p.coords.x > modelHalfCube * p.coords.w;
@@ -76,12 +77,12 @@ bool testZn(Point p){
 `;
 
 
-const shiftXp = new GroupElement();
-const shiftXn = new GroupElement();
-const shiftYp = new GroupElement();
-const shiftYn = new GroupElement();
-const shiftZp = new GroupElement();
-const shiftZn = new GroupElement();
+const shiftXp = group.element();
+const shiftXn = group.element();
+const shiftYp = group.element();
+const shiftYn = group.element();
+const shiftZp = group.element();
+const shiftZn = group.element();
 
 shiftXp.isom.makeTranslationFromDir(new Vector(-2 * cubeHalfWidth, 0, 0));
 shiftXn.isom.makeTranslationFromDir(new Vector(2 * cubeHalfWidth, 0, 0));
@@ -98,7 +99,14 @@ shiftYn.isom.matrix.multiply(new Matrix4().makeRotationY(-Math.PI / 2).transpose
 shiftZp.isom.matrix.multiply(new Matrix4().makeRotationZ(Math.PI / 2).transpose());
 shiftZn.isom.matrix.multiply(new Matrix4().makeRotationZ(-Math.PI / 2).transpose());
 
-// console.log(shiftXp.isom.matrix.toLog());
+
+console.log(shiftXp.isom.matrix.toLog());
+console.log(shiftXn.isom.matrix.toLog());
+console.log(shiftYp.isom.matrix.toLog());
+console.log(shiftYn.isom.matrix.toLog());
+console.log(shiftZp.isom.matrix.toLog());
+console.log(shiftZn.isom.matrix.toLog());
+
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
@@ -107,12 +115,13 @@ const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
 const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
 const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
 
-export default new TeleportationSet([
-        teleportXp,
-        teleportXn,
-        teleportYp,
-        teleportYn,
-        teleportZp,
-        teleportZn
-    ],
-    element);
+const teleportations = [
+    teleportXp,
+    teleportXn,
+    teleportYp,
+    teleportYn,
+    teleportZp,
+    teleportZn
+];
+
+export default new TeleportationSet(teleportations);

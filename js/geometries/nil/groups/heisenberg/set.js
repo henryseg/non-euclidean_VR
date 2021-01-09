@@ -1,8 +1,8 @@
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
-import element from "./shaders/element.js";
-import {GroupElement} from "./GroupElement.js";
+import {Group} from "./Group.js";
 
+const group = new Group();
 
 function testXp(p) {
     return p.coords.x > 0.5;
@@ -70,12 +70,13 @@ bool testZn(Point p){
 }
 `;
 
-const shiftXp = new GroupElement(-1, 0, 0);
-const shiftXn = new GroupElement(1, 0, 0);
-const shiftYp = new GroupElement(0, -1, 0);
-const shiftYn = new GroupElement(0, 1, 0);
-const shiftZp = new GroupElement(0, 0, -1);
-const shiftZn = new GroupElement(0, 0, 1);
+const shiftXp = group.element(-1, 0, 0);
+const shiftXn = group.element(1, 0, 0);
+const shiftYp = group.element(0, -1, 0);
+const shiftYn = group.element(0, 1, 0);
+const shiftZp = group.element(0, 0, -1);
+const shiftZn = group.element(0, 0, 1);
+
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
@@ -84,17 +85,17 @@ const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
 const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
 const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
 
+const teleportations = [
+    teleportXp,
+    teleportXn,
+    teleportYp,
+    teleportYn,
+    teleportZp,
+    teleportZn
+];
 
 /**
  * Subgroup corresponding to the integer Heisenberg group
  */
-export default new TeleportationSet([
-        teleportXp,
-        teleportXn,
-        teleportYp,
-        teleportYn,
-        teleportZp,
-        teleportZn
-    ],
-    element);
+export default new TeleportationSet(teleportations);
 

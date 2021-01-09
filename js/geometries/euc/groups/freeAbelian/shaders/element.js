@@ -25,9 +25,9 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2){
     return GroupElement(elt1.icoords + elt2.icoords);
 }
 
-GroupElement groupInverse(GroupElement elt){
-    return GroupElement(-elt.icoords);
-}
+//GroupElement groupInverse(GroupElement elt){
+//    return GroupElement(-elt.icoords);
+//}
 
 Isometry toIsometry(GroupElement elt) {
     vec3 c = 2. * cubeHalfWidth * vec3(elt.icoords);

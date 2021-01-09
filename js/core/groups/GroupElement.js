@@ -3,24 +3,18 @@
  *
  * @classdesc
  * Group element.
- * This class allows to define a symbolic representation for element of a discrete subgroups os isometries.
- * There is no class for the group itself. The group is the collection of all its elements.
+ * This class allows to define a symbolic representation for element of a discrete subgroup of isometries.
  */
 export class GroupElement {
 
     /**
      * Constructor.
+     * The constructor should not be called directly.
+     * Use instead the `element` method of the class `Group`
+     * @param {Group} group - the underlying group
      */
-    constructor() {
-        this.build(...arguments);
-    }
-
-    /**
-     * Fake constructor.
-     * If no argument is provided set the element to the identity.
-     */
-    build() {
-        throw new Error("GroupElement: This method need be overloaded.");
+    constructor(group) {
+        this.group = group;
     }
 
     /**

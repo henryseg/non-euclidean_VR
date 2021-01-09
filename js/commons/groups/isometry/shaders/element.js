@@ -24,9 +24,9 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2){
     return GroupElement(multiply(elt1.isom, elt2.isom));
 }
 
-GroupElement groupInverse(GroupElement elt){
-    return GroupElement(geomInverse(elt.isom));
-}
+//GroupElement groupInverse(GroupElement elt){
+//    return GroupElement(geomInverse(elt.isom));
+//}
 
 Isometry toIsometry(GroupElement elt) {
     return elt.isom;

@@ -1,74 +1,75 @@
-import {GroupElement} from "../../../../core/groups/GroupElement.js";
+import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
 import {Isometry} from "../../geometry/Isometry.js";
 import {Vector3} from "../../../../lib/three.module.js";
 
 /**
- * Free abelian group
- * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side)
+ * @class
+ *
+ * @classdesc
+ * Element in a free abelian group
+ * Elements are represented as Vector3 with integer coordinates (both on the JS and the GLSL side)
  */
 
-export const cubeHalfWidth = 0.8;
+export class GroupElement extends AbstractGroupElement {
 
-GroupElement.prototype.build = function () {
-    if (arguments.length === 0) {
-        this.coords = new Vector3(0, 0, 0);
-    } else {
-        this.coords = new Vector3(...arguments);
+    constructor(group, x = 0, y = 0, z = 0) {
+        super(group);
+        this.coords = new Vector3(x, y, z);
     }
-}
 
-// the only way to pass an integer vector to the shader is as an array and not a Vector3
-Object.defineProperty(GroupElement.prototype, 'icoords', {
-    get: function () {
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @type{number[]}
+     */
+    get icoords() {
         return this.coords.toArray();
     }
-})
 
-GroupElement.prototype.identity = function () {
-    this.coords.set(0, 0, 0);
-    return this;
+
+    identity() {
+        this.coords.set(0, 0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        this.coords.add(elt.coords);
+        return this;
+    }
+
+    premultiply(elt) {
+        this.coords.add(elt.coords);
+        return this;
+    }
+
+    invert() {
+        this.coords.negate();
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b, c] = this.coords.toArray();
+        const res = new Isometry();
+        res.matrix.set(
+            1, 0, 0, 2 * a * this.group.cubeHalfWidth,
+            0, 1, 0, 2 * b * this.group.cubeHalfWidth,
+            0, 0, 1, 2 * c * this.group.cubeHalfWidth,
+            0, 0, 0, 1
+        );
+        return res;
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new GroupElement();
+        res.coords.copy(this.coords);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        return this;
+    }
 }
-
-GroupElement.prototype.multiply = function (elt) {
-    this.coords.add(elt.coords);
-    return this;
-}
-
-GroupElement.prototype.premultiply = function (elt) {
-    this.coords.add(elt.coords);
-    return this;
-}
-
-GroupElement.prototype.invert = function () {
-    this.coords.negate();
-    return this;
-}
-
-GroupElement.prototype.toIsometry = function () {
-    const [a, b, c] = this.coords.toArray();
-    const res = new Isometry();
-    res.matrix.set(
-        1, 0, 0, 2 * a * cubeHalfWidth,
-        0, 1, 0, 2 * b * cubeHalfWidth,
-        0, 0, 1, 2 * c * cubeHalfWidth,
-        0, 0, 0, 1
-    );
-    return res;
-}
-
-GroupElement.prototype.equals = function (elt) {
-    return this.coords.equals(elt.coords);
-}
-
-GroupElement.prototype.clone = function () {
-    const res = new GroupElement();
-    res.coords.copy(this.coords);
-    return res;
-}
-
-GroupElement.prototype.copy = function (elt) {
-    this.coords.copy(elt.coords);
-    return this;
-}
-
-export {GroupElement};

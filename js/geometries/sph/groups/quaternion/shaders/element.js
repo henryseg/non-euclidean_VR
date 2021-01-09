@@ -32,9 +32,9 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2){
     return GroupElement(c);
 }
 
-GroupElement groupInverse(GroupElement elt){
-    return GroupElement(ivec4(-elt.icoords.x, -elt.icoords.y, -elt.icoords.z, elt.icoords.w));
-}
+//GroupElement groupInverse(GroupElement elt){
+//    return GroupElement(ivec4(-elt.icoords.x, -elt.icoords.y, -elt.icoords.z, elt.icoords.w));
+//}
 
 Isometry toIsometry(GroupElement elt) {
     vec4 c = vec4(elt.icoords);
