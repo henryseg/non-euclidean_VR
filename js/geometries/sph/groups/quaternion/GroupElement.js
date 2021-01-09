@@ -63,7 +63,7 @@ export class GroupElement extends AbstractGroupElement {
     }
 
     clone() {
-        const res = new GroupElement();
+        const res = new GroupElement(this.group);
         res.quaternion.copy(this.quaternion);
         return res;
     }

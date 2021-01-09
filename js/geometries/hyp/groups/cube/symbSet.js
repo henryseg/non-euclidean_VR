@@ -1,16 +1,18 @@
-import {GroupElement} from "./GroupElement.js";
-import {D as QUAD_FIELD_D, QuadFieldElt, zero, one} from "../../../../utils/QuadFieldElt.js";
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
-import element from "./shaders/element.js";
+import {Group, QUAD_RING} from "./Group.js";
 
-QUAD_FIELD_D = 3; // probably not needed, just for safety
+
+const group = new Group();
+
+const zero = QUAD_RING.zero;
+const one = QUAD_RING.one;
+const mOne = QUAD_RING.element(-1);
+const two = QUAD_RING.element(2);
+const sqrt3 = QUAD_RING.element(0, 1);
+const mSqrt3 = QUAD_RING.element(0, -1);
 
 const modelHalfCube = 1 / Math.sqrt(3);
-const sqrt3 = new QuadFieldElt(0, 1);
-const mSqrt3 = new QuadFieldElt(0, -1);
-const two = new QuadFieldElt(2);
-const mOne = new QuadFieldElt(-1);
 
 function testXp(p) {
     return p.coords.x > modelHalfCube * p.coords.w;
@@ -78,13 +80,12 @@ bool testZn(Point p){
 }
 `;
 
-
-const shiftXp = new GroupElement();
-const shiftXn = new GroupElement();
-const shiftYp = new GroupElement();
-const shiftYn = new GroupElement();
-const shiftZp = new GroupElement();
-const shiftZn = new GroupElement();
+const shiftXp = group.element();
+const shiftXn = group.element();
+const shiftYp = group.element();
+const shiftYn = group.element();
+const shiftZp = group.element();
+const shiftZn = group.element();
 
 shiftXp.matrix.set(
     two, zero, zero, mSqrt3,
@@ -124,11 +125,6 @@ shiftZn.matrix.set(
 );
 
 console.log(shiftXp.matrix.toLog());
-console.log(shiftXn.matrix.toLog());
-console.log(shiftYp.matrix.toLog());
-console.log(shiftYn.matrix.toLog());
-console.log(shiftZp.matrix.toLog());
-console.log(shiftZn.matrix.toLog());
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
@@ -137,12 +133,13 @@ const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
 const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
 const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
 
-export default new TeleportationSet([
-        teleportXp,
-        teleportXn,
-        teleportYp,
-        teleportYn,
-        teleportZp,
-        teleportZn
-    ],
-    element);
+const teleportations = [
+    teleportXp,
+    teleportXn,
+    teleportYp,
+    teleportYn,
+    teleportZp,
+    teleportZn
+];
+
+export default new TeleportationSet(teleportations);

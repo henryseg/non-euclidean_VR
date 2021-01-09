@@ -3,7 +3,7 @@ import {VRButton as VRButtonLib} from "../../lib/VRButton.js";
 
 import {bind} from "../../utils.js";
 
-import {ShaderBuilder} from "../ShaderBuilder.js";
+import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {Renderer} from "./Renderer.js";
 
 import {LEFT, RIGHT} from "../../constants.js";

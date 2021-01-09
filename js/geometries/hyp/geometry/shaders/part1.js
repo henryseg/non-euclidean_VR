@@ -47,10 +47,15 @@ const Isometry IDENTITY = Isometry(mat4(1.)); /**< Identity isometry */
  * Reduce the eventual numerical errors of the given isometry.
  */
 Isometry reduceError(Isometry isom){
-    vec4 col0 = isom.matrix * vec4(1, 0, 0, 0);
-    vec4 col1 = isom.matrix * vec4(0, 1, 0, 0);
-    vec4 col2 = isom.matrix * vec4(0, 0, 1, 0);
-    vec4 col3 = isom.matrix * vec4(0, 0, 0, 1);
+    vec4 col0 = isom.matrix[0];
+    vec4 col1 = isom.matrix[1];
+    vec4 col2 = isom.matrix[2];
+    vec4 col3 = isom.matrix[3];
+    
+    //    vec4 col0 = isom.matrix * vec4(1, 0, 0, 0);
+    //    vec4 col1 = isom.matrix * vec4(0, 1, 0, 0);
+    //    vec4 col2 = isom.matrix * vec4(0, 0, 1, 0);
+    //    vec4 col3 = isom.matrix * vec4(0, 0, 0, 1);
 
     col0 = hypNormalize(col0);
 
@@ -66,12 +71,7 @@ Isometry reduceError(Isometry isom){
     col3 = col3 - hypDot(col2, col3) * col2;
     col3= hypNormalize(col3);
 
-    return Isometry(mat4(
-    col0.x, col0.y, col0.z, col0.w,
-    col1.x, col1.y, col1.z, col1.w,
-    col2.x, col2.y, col2.z, col2.w,
-    col3.x, col3.y, col3.z, col3.w
-    ));
+    return Isometry(mat4(col0, col1, col2, col3));
 }
 
 /**
@@ -149,8 +149,8 @@ Isometry makeTranslation(Point p) {
     );
 
     matrix = matrix + c1 * m + c2 * m * m;
-
-    return Isometry(matrix);
+    Isometry res = Isometry(matrix);
+    return reduceError(res);
 }
 
 /**
@@ -215,7 +215,7 @@ Vector multiplyScalar(float s, Vector v){
  * Previouly tangDot.
  */
 float geomDot(Vector v1, Vector v2) {
-    mat4 g=mat4(
+    mat4 g = mat4(
     1, 0, 0, 0,
     0, 1, 0, 0,
     0, 0, 1, 0,
@@ -230,8 +230,10 @@ float geomDot(Vector v1, Vector v2) {
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-    Point p = applyIsometry(isom, v.pos);
-    return Vector(p, isom.matrix * v.dir);
+    vec4 coords = isom.matrix * v.pos.coords;
+    Point pos = Point(coords);
+    Vector res = Vector(pos, isom.matrix * v.dir);
+    return reduceError(res);
 }
 
 

@@ -1,7 +1,7 @@
 import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/three.module.js";
 
 import {Renderer} from "./Renderer.js";
-import {ShaderBuilder} from "../ShaderBuilder.js";
+import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
 import vertexShader from "./shaders/vertex.js";
 import constants from "./shaders/constants.js";

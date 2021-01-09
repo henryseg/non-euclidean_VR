@@ -15,10 +15,10 @@ export default `//
  **********************************************************************************************************************/
 
 struct GroupElement {
-    qmat4 matrix; /**< tha matrix written in a quadratic field */
+    QuadRingMatrix matrix; /**< tha matrix written in a quadratic field */
 };
 
-const GroupElement GROUP_IDENTITY = GroupElement(QUAD_FIELD_IDENTITY);
+const GroupElement GROUP_IDENTITY = GroupElement(QUAD_RING_IDENTITY);
 
 GroupElement multiply(GroupElement elt1, GroupElement elt2){
     return GroupElement(multiply(elt1.matrix, elt2.matrix));

@@ -26,6 +26,11 @@ export class ShaderBuilder {
          */
         this.includedClasses = [];
         /**
+         * List of names of constants already included
+         * @type {string[]}
+         */
+        this.includedConstants = [];
+        /**
          * List of names of uniforms already included
          * @type {string[]}
          */
@@ -75,6 +80,21 @@ export class ShaderBuilder {
         if (!this.includedClasses.includes(name)) {
             this.includedClasses.push(name);
             this.code = this.code + "\r\n\r\n" + code;
+        }
+        return this;
+    }
+
+    /**
+     * Add a constant to the shader code.
+     * @param {string} name - the name of the constant
+     * @param {string} type - the GLSL type of the constant
+     * @param {*} value - the JS value of the constant
+     * @return {ShaderBuilder} - the current shader builder
+     */
+    addConstant(name, type, value) {
+        if (!this.includedConstants.includes(name)) {
+            this.includedConstants.push(name);
+            this.code = this.code + "\r\n\r\n" + `const ${type} ${name} = ${value};`;
         }
         return this;
     }

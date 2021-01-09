@@ -56,7 +56,6 @@ Vector smallShift(Vector v, vec3 dp){
  * The vector v is assume to be a **unit** vector
  */
 Vector flow(Vector v, float t){
-
     vec4 coords = cosh(t) * v.pos.coords + sinh(t) * v.dir;
     Point pos = Point(coords);
     vec4 dir = sinh(t) * v.pos.coords + cosh(t) * v.dir;
