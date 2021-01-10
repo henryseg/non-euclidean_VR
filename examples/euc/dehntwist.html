@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Three-torus (with variable size)</title>
+    <title>Dehn twist</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
@@ -27,6 +27,7 @@
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
 
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    thurston.scene.usesNearestNeighbors = true;
 
     // lights for the Phong material
 
@@ -58,18 +59,19 @@
     // Complement of a local ball
     const centerBall = new LocalBallShape(
         new Point(0, 0, 0),
-        1.3,
+        0.2,
     );
 
-    const latticeShape = complement(centerBall);
-    const lattice = new Solid(latticeShape, mat0);
+    // const latticeShape = complement(centerBall);
+    // const lattice = new Solid(latticeShape, mat0);
+    const lattice = new Solid(centerBall, mat0);
 
 
     // Phong shading material
     const mat1 = new PhongMaterial({
         color: new Color(0, 0, 1),
         shininess: 10,
-        reflectivity: new Vector3(0.2, 0.2, 0.2)
+        //reflectivity: new Vector3(0.2, 0.2, 0.2)
     });
 
     const ball1 = new Ball(
@@ -85,11 +87,9 @@
 
     function animate() {
         const time = clock.getElapsedTime();
-        const c = Math.cos(0.2 * time);
-        const s = Math.sin(0.2 * time);
-        torus.group.halfTranslationA = new Vector4(c, s, 0, 0,);
-        torus.group.halfTranslationB = new Vector4(-s, c, 0, 0,);
-        torus.group.halfTranslationC = new Vector4(0, 0, 1 + 0.1 * c, 0);
+        torus.group.halfTranslationA = new Vector4(1, 0, 0, 0);
+        torus.group.halfTranslationB = new Vector4(0, 1, 0, 0);
+        torus.group.halfTranslationC = new Vector4(0, 0.2 * time % 1, 1, 0);
     }
 
     thurston.callback = animate;

@@ -114,7 +114,24 @@ const neighbors = [
     {elt:shiftYp, inv:shiftYn},
     {elt:shiftYn, inv:shiftYp},
     {elt:shiftZp, inv:shiftZn},
-    {elt:shiftZn, inv:shiftZp}
+    {elt:shiftZn, inv:shiftZp},
+
+    {elt:shiftXp.clone().multiply(shiftYp), inv:shiftYn.clone().multiply(shiftXn)},
+    {elt:shiftXp.clone().multiply(shiftYn), inv:shiftYp.clone().multiply(shiftXn)},
+    {elt:shiftXn.clone().multiply(shiftYp), inv:shiftYn.clone().multiply(shiftXp)},
+    {elt:shiftXn.clone().multiply(shiftYn), inv:shiftYp.clone().multiply(shiftXp)},
+
+    {elt:shiftXp.clone().multiply(shiftZp), inv:shiftZn.clone().multiply(shiftXn)},
+    {elt:shiftXp.clone().multiply(shiftZn), inv:shiftZp.clone().multiply(shiftXn)},
+    {elt:shiftXn.clone().multiply(shiftZp), inv:shiftZn.clone().multiply(shiftXp)},
+    {elt:shiftXn.clone().multiply(shiftZn), inv:shiftZp.clone().multiply(shiftXp)},
+
+    {elt:shiftYp.clone().multiply(shiftZp), inv:shiftZn.clone().multiply(shiftYn)},
+    {elt:shiftYp.clone().multiply(shiftZn), inv:shiftZp.clone().multiply(shiftYn)},
+    {elt:shiftYn.clone().multiply(shiftZp), inv:shiftZn.clone().multiply(shiftYp)},
+    {elt:shiftYn.clone().multiply(shiftZn), inv:shiftZp.clone().multiply(shiftYp)},
+    
+    
 ]
 
 export default new TeleportationSet(teleportations, neighbors);
