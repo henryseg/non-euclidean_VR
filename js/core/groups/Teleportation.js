@@ -88,7 +88,7 @@ export class Teleportation {
      */
     shader(shaderBuilder){
         shaderBuilder.addChunk(this.glslTest);
-        shaderBuilder.addUniform(`${this.name}_elt`, 'GroupElement', this.elt);
-        shaderBuilder.addUniform(`${this.name}_inv`, 'GroupElement', this.inv);
+        shaderBuilder.addUniform(this.elt.name, 'GroupElement', this.elt);
+        shaderBuilder.addUniform(this.elt.name, 'GroupElement', this.inv);
     }
 }

@@ -54,6 +54,10 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
                 break;
             }
             dist = localSceneSDF(localV, auxHit, auxId);
+            if (auxHit == HIT_DEBUG){
+                hit = HIT_DEBUG;
+                break;
+            }
             if (auxHit == HIT_SOLID) {
                 // we hit an object
                 hit = auxHit;
@@ -77,6 +81,10 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
             break;
         }
         dist = globalSceneSDF(globalV, auxHit, auxId);
+        if (auxHit == HIT_DEBUG){
+            hit = HIT_DEBUG;
+            break;
+        }
         if (auxHit == HIT_SOLID) {
             // we hit an object
             hit = auxHit;

@@ -11,9 +11,9 @@ export default `//
 bool teleport(inout RelVector v){
 {{#teleportations}}
     if({{glslTestName}}(v.local.pos)){
-        v.local = applyGroupElement({{name}}_elt, v.local);
-        v.cellBoost = multiply(v.cellBoost,{{name}}_inv);
-        v.invCellBoost = multiply({{name}}_elt, v.invCellBoost);
+        v.local = applyGroupElement({{elt.name}}, v.local);
+        v.cellBoost = multiply(v.cellBoost,{{inv.name}});
+        v.invCellBoost = multiply({{elt.name}}, v.invCellBoost);
         return true;
     }
 {{/teleportations}}

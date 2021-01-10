@@ -1,3 +1,5 @@
+import {MathUtils} from "../../lib/three.module.js";
+
 /**
  * @class
  *
@@ -15,6 +17,25 @@ export class GroupElement {
      */
     constructor(group) {
         this.group = group;
+        /**
+         * Universal unique ID.
+         * The dashes are replaced by underscored to avoid problems in the shaders
+         * @type {string}
+         * @readonly
+         */
+        this.uuid = MathUtils.generateUUID().replaceAll('-', '_');
+    }
+
+    /**
+     * The name of the item.
+     * This name is computed (from the uuid) the first time the getter is called.
+     * @type {string}
+     */
+    get name() {
+        if (this._name === undefined) {
+            this._name = `groupElement_${this.uuid}`;
+        }
+        return this._name;
     }
 
     /**

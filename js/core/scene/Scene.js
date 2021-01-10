@@ -1,6 +1,6 @@
 import {mustache} from "../../lib/mustache.mjs";
 
-import scenes from "./shaders/scenes.js";
+import scenes from "../renderers/shaders/scenes.js";
 import header from "./shaders/header.js";
 import {Color} from "../../lib/three.module.js";
 
@@ -56,6 +56,12 @@ export class Scene {
          * @type{Color}
          */
         this.background = params.background !== undefined ? params.background : new Color(0.1, 0.1, 0.1);
+
+        /**
+         * Flag : uses nearest neighbor or not
+         * @type{boolean}
+         */
+        this.usesNearestNeighbors = params.usesNearestNeighbors !== undefined ? params.usesNearestNeighbors : false;
     }
 
     /**
@@ -91,7 +97,11 @@ export class Scene {
     }
 
     /**
-     * build the shader relative to the scene
+     * Build the shader relative to the scene.
+     * Only the dependencies (solids, shapes, materials, lights, etc) are loaded here.
+     * The scenes SDF (local and global) are built at the Renderer level.
+     * Indeed these chunk need to know what is the teleportation set to implement nearest neighbors
+     * Another strategy would be to link the scene to the teleportation set (in the constructor for instance)
      * @param {ShaderBuilder} shaderBuilder
      */
     shader(shaderBuilder) {
@@ -107,6 +117,5 @@ export class Scene {
         if (this.fog !== undefined) {
             this.fog.shader(shaderBuilder);
         }
-        shaderBuilder.addChunk(mustache.render(scenes, this));
     }
 }

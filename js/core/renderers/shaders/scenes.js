@@ -14,12 +14,12 @@ export default `//
  * @param[out] hit say if we hit an object (1), nothing (0) or if there is a bug (-1)
  * @param[out] objId the ID of the solid we hit.
  */
-float localSceneSDF(RelVector v, out int hit, out int objId){
+float _localSceneSDF(RelVector v, out int hit, out int objId){
     hit = HIT_NOTHING;
     float res = camera.maxDist;
     float dist;
     
-    {{#solids}}
+    {{#scene.solids}}
         {{#isLocal}}
             dist = {{shape.name}}_sdf(v);
             if(abs(dist) < camera.threshold) {
@@ -29,9 +29,47 @@ float localSceneSDF(RelVector v, out int hit, out int objId){
             }
             res = min(res, dist);
         {{/isLocal}}
-    {{/solids}}
+    {{/scene.solids}}
     
     return res;
+}
+
+/**
+* Distance along the geodesic directed by \`v\` to the closest object in the local scene
+* @param[in] v the direction to follows
+* @param[out] hit say if we hit an object (1), nothing (0) or if there is a bug (-1)
+* @param[out] objId the ID of the solid we hit.
+*/
+float localSceneSDF(inout RelVector v, out int hit, out int objId){
+    float res, dist;
+    dist = _localSceneSDF(v, hit, objId);
+    if(hit == HIT_SOLID) {
+        return dist;
+    }
+    res = dist;
+    
+    {{#scene.usesNearestNeighbors}}
+        RelVector aux = v;
+        
+        {{#set.neighbors}}
+                aux.local = applyGroupElement({{elt.name}}, v.local);
+                aux.cellBoost = multiply(v.cellBoost, {{inv.name}});
+                aux.invCellBoost = multiply({{elt.name}},  v.invCellBoost);
+                dist = _localSceneSDF(aux, hit, objId);
+                if(hit == HIT_SOLID) {
+                    v = aux;
+                    return dist;
+                }
+                res = min(res, dist);
+                
+        {{/set.neighbors}}
+        
+        return res;
+    {{/scene.usesNearestNeighbors}}
+
+    {{^scene.usesNearestNeighbors}}
+        return res;
+    {{/scene.usesNearestNeighbors}}
 }
 
 
@@ -46,7 +84,7 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
     float res = camera.maxDist;
     float dist;
     
-    {{#solids}}
+    {{#scene.solids}}
         {{#isGlobal}}
             dist = {{shape.name}}_sdf(v);
             if(abs(dist) < camera.threshold) {
@@ -56,7 +94,7 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
             }
             res = min(res, dist);
         {{/isGlobal}}
-    {{/solids}}
+    {{/scene.solids}}
     
     return res;
 }
@@ -75,7 +113,7 @@ ColorData getSolidColorData(inout RelVector v, float travelledDist, int objId) {
     vec3 reflectivity = vec3(0);
 
     switch(objId){
-        {{#solids}}
+        {{#scene.solids}}
             
             case {{id}}:
                 {{#material.isReflecting}}
@@ -134,16 +172,16 @@ ColorData getSolidColorData(inout RelVector v, float travelledDist, int objId) {
             
                 break;
             
-        {{/solids}}
+        {{/scene.solids}}
         
             default:
                 // this line should never be achieved
                 color = vec3(0,0,0);
     }
 
-    {{#fog}}
+    {{#scene.fog}}
         color = applyFog(color, travelledDist);
-    {{/fog}}
+    {{/scene.fog}}
 
     return ColorData(color, isReflecting, reflectivity);
 }

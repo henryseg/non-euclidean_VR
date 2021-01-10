@@ -8,6 +8,8 @@ import constants from "./shaders/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
 import raymarch from "./shaders/raymarch.js";
+import {mustache} from "../../lib/mustache.mjs";
+import scenes from "./shaders/scenes.js";
 
 
 /**
@@ -59,6 +61,7 @@ export class BasicRenderer extends Renderer {
 
         // scene
         this.scene.shader(this._fragmentBuilder);
+        this._fragmentBuilder.addChunk(mustache.render(scenes, this));
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);

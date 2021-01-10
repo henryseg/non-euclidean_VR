@@ -16,9 +16,11 @@ export class TeleportationSet {
     /**
      * Constructor
      * @param {Teleportation[]} teleportations - the list of teleportations.
+     * @param {{elt:GroupElement, inv:GroupElement}[]} neighbors - the list of neighbors when using nearest neighbors.
+     * The elements come by pair : an element and its inverse.
      * defining the structure of the group element and the related functions
      */
-    constructor(teleportations = []) {
+    constructor(teleportations = [], neighbors = []) {
         /**
          * The list of teleports "generating" the subgroups.
          * The order matters (see the class description).
@@ -36,7 +38,11 @@ export class TeleportationSet {
         } else {
             this.group = new TrivialGroup();
         }
-
+        /**
+         * The list of neighbors when using nearest neighbors.
+         * @type{{elt:GroupElement, inv:GroupElement}[]}
+         */
+        this.neighbors = neighbors;
     }
 
     /**
@@ -48,6 +54,10 @@ export class TeleportationSet {
         this.group.shader(shaderBuilder);
         for (const teleportation of this.teleportations) {
             teleportation.shader(shaderBuilder);
+        }
+        for (const pair of this.neighbors) {
+            shaderBuilder.addUniform(pair.elt.name, 'GroupElement', pair.elt);
+            shaderBuilder.addUniform(pair.inv.name, 'GroupElement', pair.inv);
         }
         shaderBuilder.addChunk(relative);
         shaderBuilder.addChunk(mustache.render(teleport, this));
