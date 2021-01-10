@@ -36,6 +36,9 @@ float _localSceneSDF(RelVector v, out int hit, out int objId){
 
 /**
 * Distance along the geodesic directed by \`v\` to the closest object in the local scene
+* When nearest neighbor is on, the representatiion of v can be updated 
+* so that the local vector is in a neighbor of the fundamental domain.
+* This is used to compute correctly the normal / uv map of a local object.
 * @param[in] v the direction to follows
 * @param[out] hit say if we hit an object (1), nothing (0) or if there is a bug (-1)
 * @param[out] objId the ID of the solid we hit.
