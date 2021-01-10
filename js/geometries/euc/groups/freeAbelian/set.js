@@ -108,7 +108,16 @@ const teleportations = [
     teleportZn
 ];
 
-const neighbors = [
+const neighborsLite = [
+    {elt:shiftXp, inv:shiftXn},
+    {elt:shiftXn, inv:shiftXp},
+    {elt:shiftYp, inv:shiftYn},
+    {elt:shiftYn, inv:shiftYp},
+    {elt:shiftZp, inv:shiftZn},
+    {elt:shiftZn, inv:shiftZp}
+];
+
+const neighborsFull = [
     {elt:shiftXp, inv:shiftXn},
     {elt:shiftXn, inv:shiftXp},
     {elt:shiftYp, inv:shiftYn},
@@ -130,8 +139,7 @@ const neighbors = [
     {elt:shiftYp.clone().multiply(shiftZn), inv:shiftZp.clone().multiply(shiftYn)},
     {elt:shiftYn.clone().multiply(shiftZp), inv:shiftZn.clone().multiply(shiftYp)},
     {elt:shiftYn.clone().multiply(shiftZn), inv:shiftZp.clone().multiply(shiftYp)},
-    
-    
-]
+];
 
-export default new TeleportationSet(teleportations, neighbors);
+export default new TeleportationSet(teleportations, neighborsLite);
+export const fullTorus = new TeleportationSet(teleportations, neighborsFull);
