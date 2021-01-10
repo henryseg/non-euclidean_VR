@@ -15,10 +15,10 @@ struct HoroballShape {
  * Distance function for a global hyperbolic horoball
  */
 float sdf(HoroballShape horoball, RelVector v) {
-    vec4 aux = vec4(horoball.center, 1);
-    aux = v.invCellBoost.matrix * aux;
+    vec4 center = vec4(horoball.center, 1);
+    center = v.invCellBoost.matrix * center;
     vec4 coords = v.local.pos.coords;
-    return log(-hypDot(coords, aux)) + horoball.offset;
+    return log(-hypDot(coords, center)) + horoball.offset;
 }
 
 /**

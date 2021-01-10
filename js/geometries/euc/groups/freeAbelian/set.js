@@ -3,71 +3,83 @@ import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 
 
-const group = new Group(0.8);
+const group = new Group();
 
 function testXp(p) {
-    return p.coords.x > group.cubeHalfWidth;
+    return p.coords.dot(group.halfTranslationA) > group.halfLengthSqA;
+    // return p.coords.x > group.cubeHalfWidth;
 }
 
 // language=GLSL
 const glslTestXp = `//
 bool testXp(Point p){
-    return p.coords.x > group.cubeHalfWidth;
+    return dot(p.coords, group.halfTranslationA) > group.halfLengthSqA;
+    //    return p.coords.x > group.cubeHalfWidth;
 }
 `;
 
 function testXn(p) {
-    return p.coords.x < -group.cubeHalfWidth;
+    return p.coords.dot(group.halfTranslationA) < -group.halfLengthSqA;
+    // return p.coords.x < -group.cubeHalfWidth;
 }
 
 // language=GLSL
 const glslTestXn = `//
 bool testXn(Point p){
-    return p.coords.x < -group.cubeHalfWidth;
+    return dot(p.coords, group.halfTranslationA) < -group.halfLengthSqA;
+    //    return p.coords.x < -group.cubeHalfWidth;
 }
 `;
 
 function testYp(p) {
-    return p.coords.y > group.cubeHalfWidth;
+    return p.coords.dot(group.halfTranslationB) > group.halfLengthSqB;
+    // return p.coords.y > group.cubeHalfWidth;
 }
 
 // language=GLSL
 const glslTestYp = `//
 bool testYp(Point p){
-    return p.coords.y > group.cubeHalfWidth;
+    return dot(p.coords, group.halfTranslationB) > group.halfLengthSqB;
+    //    return p.coords.y > group.cubeHalfWidth;
 }
 `;
 
 function testYn(p) {
-    return p.coords.y < -group.cubeHalfWidth;
+    return p.coords.dot(group.halfTranslationB) < -group.halfLengthSqB;
+    // return p.coords.y < -group.cubeHalfWidth;
 }
 
 // language=GLSL
 const glslTestYn = `//
 bool testYn(Point p){
-    return p.coords.y < -group.cubeHalfWidth;
+    return dot(p.coords, group.halfTranslationB) < -group.halfLengthSqB;
+    //    return p.coords.y < -group.cubeHalfWidth;
 }
 `;
 
 function testZp(p) {
-    return p.coords.z > group.cubeHalfWidth;
+    return p.coords.dot(group.halfTranslationC) > group.halfLengthSqC;
+    // return p.coords.z > group.cubeHalfWidth;
 }
 
 // language=GLSL
 const glslTestZp = `//
 bool testZp(Point p){
-    return p.coords.z > group.cubeHalfWidth;
+    return dot(p.coords, group.halfTranslationC) > group.halfLengthSqC;
+    //    return p.coords.z > group.cubeHalfWidth;
 }
 `;
 
 function testZn(p) {
-    return p.coords.z < -group.cubeHalfWidth;
+    return p.coords.dot(group.halfTranslationC) < -group.halfLengthSqC;
+    // return p.coords.z < -group.cubeHalfWidth;
 }
 
 // language=GLSL
 const glslTestZn = `//
 bool testZn(Point p){
-    return p.coords.z < -group.cubeHalfWidth;
+    return dot(p.coords, group.halfTranslationC) < -group.halfLengthSqC;
+    //    return p.coords.z < -group.cubeHalfWidth;
 }
 `;
 

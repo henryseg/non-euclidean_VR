@@ -48,11 +48,15 @@ export class GroupElement extends AbstractGroupElement {
 
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
+        const translation = new Vector3()
+            .add(this.group.halfTranslationA.clone().multiplyScalar(2 * a))
+            .add(this.group.halfTranslationB.clone().multiplyScalar(2 * b))
+            .add(this.group.halfTranslationC.clone().multiplyScalar(2 * c));
         const res = new Isometry();
         res.matrix.set(
-            1, 0, 0, 2 * a * this.group.cubeHalfWidth,
-            0, 1, 0, 2 * b * this.group.cubeHalfWidth,
-            0, 0, 1, 2 * c * this.group.cubeHalfWidth,
+            1, 0, 0, translation.x,
+            0, 1, 0, translation.y,
+            0, 0, 1, translation.z,
             0, 0, 0, 1
         );
         return res;

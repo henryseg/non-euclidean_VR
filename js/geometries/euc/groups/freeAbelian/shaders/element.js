@@ -18,7 +18,6 @@ struct GroupElement {
     ivec3 icoords; /**< integer coordinates of the element */
 };
 
-const float cubeHalfWidth = 0.8;
 const GroupElement GROUP_IDENTITY = GroupElement(ivec3(0));
 
 GroupElement multiply(GroupElement elt1, GroupElement elt2){
@@ -30,12 +29,13 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2){
 //}
 
 Isometry toIsometry(GroupElement elt) {
-    vec3 c = 2. * cubeHalfWidth * vec3(elt.icoords);
+    vec3 c = vec3(elt.icoords);
+    vec4 t = 2. * (c.x * group.halfTranslationA + c.y * group.halfTranslationB + c.z * group.halfTranslationC);
     mat4 matrix =  mat4(
     1, 0, 0, 0,
     0, 1, 0, 0,
     0, 0, 1, 0,
-    c.x, c.y, c.z, 1
+    t.x, t.y, t.z, 1
     );
     return Isometry(matrix);
 }`;

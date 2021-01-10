@@ -6,6 +6,11 @@ export default `//
  * Group data for a free abelian group
  **********************************************************************************************************************/
 
-struct GroupData {
-    float cubeHalfWidth;
+struct Group {
+    vec4 halfTranslationA;
+    vec4 halfTranslationB;
+    vec4 halfTranslationC;
+    float halfLengthSqA;
+    float halfLengthSqB;
+    float halfLengthSqC;
 };`;
