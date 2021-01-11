@@ -51,7 +51,7 @@ float localSceneSDF(inout RelVector v, out int hit, out int objId){
     }
     res = dist;
     
-    {{#scene.usesNearestNeighbors}}
+    {{#set.usesNearestNeighbors}}
         RelVector aux = v;
         
         {{#set.neighbors}}
@@ -68,11 +68,11 @@ float localSceneSDF(inout RelVector v, out int hit, out int objId){
         {{/set.neighbors}}
         
         return res;
-    {{/scene.usesNearestNeighbors}}
+    {{/set.usesNearestNeighbors}}
 
-    {{^scene.usesNearestNeighbors}}
+    {{^set.usesNearestNeighbors}}
         return res;
-    {{/scene.usesNearestNeighbors}}
+    {{/set.usesNearestNeighbors}}
 }
 
 

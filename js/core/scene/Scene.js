@@ -56,12 +56,6 @@ export class Scene {
          * @type{Color}
          */
         this.background = params.background !== undefined ? params.background : new Color(0.1, 0.1, 0.1);
-
-        /**
-         * Flag : uses nearest neighbor or not
-         * @type{boolean}
-         */
-        this.usesNearestNeighbors = params.usesNearestNeighbors !== undefined ? params.usesNearestNeighbors : false;
     }
 
     /**

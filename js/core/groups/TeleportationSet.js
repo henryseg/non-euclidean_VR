@@ -19,8 +19,13 @@ export class TeleportationSet {
      * @param {{elt:GroupElement, inv:GroupElement}[]} neighbors - the list of neighbors when using nearest neighbors.
      * The elements come by pair : an element and its inverse.
      * defining the structure of the group element and the related functions
+     * @param {boolean} usesNearestNeighbors
      */
-    constructor(teleportations = [], neighbors = []) {
+    constructor(
+        teleportations = [],
+        neighbors = [],
+        usesNearestNeighbors = false
+    ) {
         /**
          * The list of teleports "generating" the subgroups.
          * The order matters (see the class description).
@@ -43,6 +48,11 @@ export class TeleportationSet {
          * @type{{elt:GroupElement, inv:GroupElement}[]}
          */
         this.neighbors = neighbors;
+        /**
+         * Flag : uses nearest neighbor or not (for local ray marching)
+         * @type{boolean}
+         */
+        this.usesNearestNeighbors = usesNearestNeighbors;
     }
 
     /**
