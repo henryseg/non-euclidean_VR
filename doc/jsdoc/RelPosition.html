@@ -42,6 +42,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -64,11 +65,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -77,6 +92,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -100,6 +116,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -107,8 +126,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -161,14 +180,14 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">RelPosition</span><span class="signature-params">( <span class="signature-param">sbgp</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">RelPosition</span><span class="signature-params">( <span class="signature-param">set</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Relative position.
 			A general position is represented as a pair (h,p) where</p>
 			<ul>
-			<li>h (cellBoost) is an Isometry representing an element of a discrete subgroups</li>
+			<li>h (cellBoost) is an GroupElement representing an element of a discrete subgroups</li>
 			<li>p (local) is a Position
 			The frame represented by the relative position is the image by h of the frame represented by the position p</li>
 			</ul>
@@ -188,8 +207,8 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>sbgp</code></td>
-							<td><span class="param-type"><a href="Subgroup.html">Subgroup</a></span></td>
+								<td><code>set</code></td>
+							<td><span class="param-type"><a href="TeleportationSet.html">TeleportationSet</a></span></td>
 							<td class="last">
 									<p>the underlying discrete subgroups.</p>
 							</td>
@@ -217,19 +236,12 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-23">line 23</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-21">line 21</a></p>
 								</div>
 							</div>
 			
 			
 			
-							<!-- todo -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">To Do</label>
-								<div class="col-sm-9">
-										<p class="form-control-static">&lt;p&gt;Allow a more combinatorial way to represent discrete subgroups, to avoid numerical error in the cellBoost.&lt;/p&gt;</p>
-								</div>
-							</div>
 			
 					</form>
 			</div>	</div>
@@ -272,7 +284,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-36">line 36</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-34">line 34</a></p>
 								</div>
 							</div>
 			
@@ -284,95 +296,7 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="cellBoost" class="member public"><span class="name">cellBoost</span><span class="signature-type"> :<a href="Isometry.html">Isometry</a></span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>the &quot;discrete&quot; component of the isometry par of the boost</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type"><a href="Isometry.html">Isometry</a></span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-41">line 41</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="invCellBoost" class="member public"><span class="name">invCellBoost</span><span class="signature-type"> :<a href="Isometry.html">Isometry</a></span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>the inverse of cellBoost</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type"><a href="Isometry.html">Isometry</a></span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-46">line 46</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="sbgp" class="member public"><span class="name">sbgp</span><span class="signature-type"> :<a href="Subgroup.html">Subgroup</a></span></h4>
+			<h4 id="set" class="member public"><span class="name">set</span><span class="signature-type"> :<a href="TeleportationSet.html">TeleportationSet</a></span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
@@ -383,7 +307,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Type</label>
 								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type"><a href="Subgroup.html">Subgroup</a></span></div>
+									<div class="form-control-static type-names"><span class="param-type"><a href="TeleportationSet.html">TeleportationSet</a></span></div>
 								</div>
 							</div>
 			
@@ -404,7 +328,95 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-51">line 51</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-39">line 39</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="cellBoost" class="member public"><span class="name">cellBoost</span><span class="signature-type"> :<a href="GroupElement.html">GroupElement</a></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>the &quot;discrete&quot; component of the isometry par of the boost</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="GroupElement.html">GroupElement</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-44">line 44</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="invCellBoost" class="member public"><span class="name">invCellBoost</span><span class="signature-type"> :<a href="GroupElement.html">GroupElement</a></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>the inverse of cellBoost</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="GroupElement.html">GroupElement</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-49">line 49</a></p>
 								</div>
 							</div>
 			
@@ -448,7 +460,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-108">line 108</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-107">line 107</a></p>
 								</div>
 							</div>
 			
@@ -492,7 +504,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-116">line 116</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-115">line 115</a></p>
 								</div>
 							</div>
 			
@@ -540,7 +552,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-58">line 58</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-57">line 57</a></p>
 								</div>
 							</div>
 			
@@ -585,7 +597,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-68">line 68</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-67">line 67</a></p>
 								</div>
 							</div>
 			
@@ -637,7 +649,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-78">line 78</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-77">line 77</a></p>
 								</div>
 							</div>
 			
@@ -650,51 +662,6 @@
 										<p class="form-control-static">&lt;p&gt;To be completed&lt;/p&gt;</p>
 								</div>
 							</div>
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="reduceErrorCellBoost" class="function public"><span class="name">reduceErrorCellBoost</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{<a href="RelPosition.html">RelPosition</a>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Reduce the eventual numerical error of the current boost.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="RelPosition.html">RelPosition</a></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><p>the current relative position</p></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-87">line 87</a></p>
-								</div>
-							</div>
-			
-			
-			
 			
 					</form>
 			</div>	</div>
@@ -734,7 +701,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-97">line 97</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-96">line 96</a></p>
 								</div>
 							</div>
 			
@@ -800,7 +767,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-125">line 125</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-124">line 124</a></p>
 								</div>
 							</div>
 			
@@ -845,7 +812,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-134">line 134</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-133">line 133</a></p>
 								</div>
 							</div>
 			
@@ -914,89 +881,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-168">line 168</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="eyes" class="function public"><span class="name">eyes</span><span class="signature-params">( <span class="signature-param">cameraMatrix</span>, <span class="signature-param">ipDist</span>, <span class="signature-param">stereoMode</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;<a href="RelPosition.html">RelPosition</a>>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the two positions corresponding to the left and right eye.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>cameraMatrix</code></td>
-							<td><span class="param-type"><a href="Matrix4.html">Matrix4</a></span></td>
-							<td class="last">
-									<p>a matrix representing the orientation of the camera.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>ipDist</code></td>
-							<td><span class="param-type">number</span></td>
-							<td class="last">
-									<p>the interpupillary distance</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>stereoMode</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>a mode (defining a correction at the facing level)</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Array.&lt;<a href="RelPosition.html">RelPosition</a>></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>the position of the left and right eye</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-181">line 181</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-167">line 167</a></p>
 								</div>
 							</div>
 			
@@ -1062,7 +947,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-203">line 203</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-202">line 202</a></p>
 								</div>
 							</div>
 			
@@ -1107,7 +992,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-214">line 214</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-213">line 213</a></p>
 								</div>
 							</div>
 			
@@ -1173,7 +1058,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_geometry_RelPosition.js.html">core/geometry/RelPosition.js</a>, <a href="core_geometry_RelPosition.js.html#line-227">line 227</a></p>
+									<p class="form-control-static"><a href="core_groups_RelPosition.js.html">core/groups/RelPosition.js</a>, <a href="core_groups_RelPosition.js.html#line-226">line 226</a></p>
 								</div>
 							</div>
 			
@@ -1194,7 +1079,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

@@ -55,9 +55,7 @@ float localSceneSDF(inout RelVector v, out int hit, out int objId){
         RelVector aux = v;
         
         {{#set.neighbors}}
-                aux.local = applyGroupElement({{elt.name}}, v.local);
-                aux.cellBoost = multiply(v.cellBoost, {{inv.name}});
-                aux.invCellBoost = multiply({{elt.name}},  v.invCellBoost);
+                aux = rewrite(v, {{elt.name}}, {{inv.name}});
                 dist = _localSceneSDF(aux, hit, objId);
                 if(hit == HIT_SOLID) {
                     v = aux;
@@ -108,7 +106,7 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
  * @param[in] v the vector at which we hit the object
  * @param[in] objId the id of the object that we hit
  */
-ColorData getSolidColorData(inout RelVector v, float travelledDist, int objId) {
+ColorData getSolidColorData(inout ExtVector v, int objId) {
     RelVector normal;
     vec2 uv;
     vec3 color;
@@ -122,29 +120,30 @@ ColorData getSolidColorData(inout RelVector v, float travelledDist, int objId) {
                 {{#material.isReflecting}}
                     isReflecting = true;
                     reflectivity = {{material.name}}.reflectivity;
-                    normal = {{shape.name}}_gradient(v);
+                    normal = {{shape.name}}_gradient(v.vector);
                     
                     {{^material.usesNormal}}                    
                         {{^material.usesUVMap}}
-                            color =  {{material.name}}_render(v);               
+                            color =  {{material.name}}_render(v.vector);               
                         {{/material.usesUVMap}}
                         {{#material.usesUVMap}}
-                            uv = {{shape.name}}_uvMap(v);
-                            color = {{material.name}}_render(v, uv);
+                            uv = {{shape.name}}_uvMap(v.vector);
+                            color = {{material.name}}_render(v.vector, uv);
                         {{/material.usesUVMap}}    
                     {{/material.usesNormal}}
                                 
                     {{#material.usesNormal}}
                         {{^material.usesUVMap}}                    
-                            color = {{material.name}}_render(v, normal);
+                            color = {{material.name}}_render(v.vector, normal);
                         {{/material.usesUVMap}}
                         {{#material.usesUVMap}}
-                            uv = {{shape.name}}_uvMap(v);
-                            color = {{material.name}}_render(v, normal, uv);
+                            uv = {{shape.name}}_uvMap(v.vector);
+                            color = {{material.name}}_render(v.vector, normal, uv);
                         {{/material.usesUVMap}}                    
                     {{/material.usesNormal}}
                     
-                    v = geomReflect(v,normal);
+                    v.vector = geomReflect(v.vector,normal);
+                    v.travelledDist = 0.;
                     v = flow(v, 1.2 * camera.threshold);
                     
                 {{/material.isReflecting}}     
@@ -152,23 +151,23 @@ ColorData getSolidColorData(inout RelVector v, float travelledDist, int objId) {
                 {{^material.isReflecting}}
                     {{^material.usesNormal}}                    
                         {{^material.usesUVMap}}
-                            color =  {{material.name}}_render(v);             
+                            color =  {{material.name}}_render(v.vector);             
                         {{/material.usesUVMap}}
                         {{#material.usesUVMap}}
-                            uv = {{shape.name}}_uvMap(v);
-                            color = {{material.name}}_render(v, uv);
+                            uv = {{shape.name}}_uvMap(v.vector);
+                            color = {{material.name}}_render(v.vector, uv);
                         {{/material.usesUVMap}}    
                     {{/material.usesNormal}}
                                 
                     {{#material.usesNormal}}
                         {{^material.usesUVMap}}                        
-                            normal = {{shape.name}}_gradient(v);
-                            color = {{material.name}}_render(v, normal);
+                            normal = {{shape.name}}_gradient(v.vector);
+                            color = {{material.name}}_render(v.vector, normal);
                         {{/material.usesUVMap}}
                         {{#material.usesUVMap}}
-                            normal = {{shape.name}}_gradient(v);
-                            uv = {{shape.name}}_uvMap(v);
-                            color = {{material.name}}_render(v, normal, uv);
+                            normal = {{shape.name}}_gradient(v.vector);
+                            uv = {{shape.name}}_uvMap(v.vector);
+                            color = {{material.name}}_render(v.vector, normal, uv);
                         {{/material.usesUVMap}}                    
                     {{/material.usesNormal}}
                 {{/material.isReflecting}}         
@@ -183,7 +182,7 @@ ColorData getSolidColorData(inout RelVector v, float travelledDist, int objId) {
     }
 
     {{#scene.fog}}
-        color = applyFog(color, travelledDist);
+        color = applyFog(color, v.travelledDist);
     {{/scene.fog}}
 
     return ColorData(color, isReflecting, reflectivity);

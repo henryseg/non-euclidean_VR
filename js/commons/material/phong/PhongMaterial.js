@@ -1,4 +1,4 @@
-import {Color, Vector3} from '../../../lib/three.module.js';
+import {Color} from '../../../lib/three.module.js';
 import {Material} from "../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.js";
@@ -55,7 +55,7 @@ export class PhongMaterial extends Material {
          * Reflectivity of the material
          * @type {Color}
          */
-        this.reflectivity = params.reflectivity !== undefined ? params.reflectivity : new Vector3(0, 0, 0);
+        this.reflectivity = params.reflectivity !== undefined ? params.reflectivity : new Color(0, 0, 0);
         /**
          * lights affecting the material
          * @type {Light[]}

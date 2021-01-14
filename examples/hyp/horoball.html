@@ -20,16 +20,16 @@
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
     import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
-    import {ComplementShape} from "../../js/commons/shapes/complement/ComplementShape.js";
     import {Solid} from "../../js/core/solids/Solid.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Ball} from "../../js/geometries/hyp/solids/Ball.js";
     import {Horoball} from "../../js/geometries/hyp/solids/Horoball.js";
     import {LocalHoroball} from "../../js/geometries/hyp/solids/LocalHoroball.js";
+    import {LocalBall} from "../../js/geometries/hyp/solids/all.js";
 
 
     const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+    thurston.set.usesNearestNeighbors = true;
 
 
     // lights for the Phong material
@@ -60,15 +60,6 @@
         lights: lights
     });
 
-    // // Complement of a local ball
-    // const ball0 = new LocalBallShape(
-    //     new Point(),
-    //     1.02,
-    // );
-    // const latticeShape = new ComplementShape(ball0);
-    // const lattice = new Solid(latticeShape, mat0);
-
-
     // Phong shading material
     const mat1 = new PhongMaterial({
         color: new Color(0, 0, 1),
@@ -76,15 +67,21 @@
         lights: lights
     });
 
+    const ball = new LocalBall(
+        new Point(),
+        0.2,
+        mat0
+    )
+
     const modelHalfCube = 0.5773502692;
     const horoball1 = new LocalHoroball(
-        // new Vector(modelHalfCube, modelHalfCube, modelHalfCube),
-        new Vector(0, 0, -1),
-        0.98,
+        new Vector(modelHalfCube, modelHalfCube, modelHalfCube),
+        // new Vector(0, 0, -1),
+        0.2,
         mat1
     );
 
-    thurston.add(horoball1, light0, light1, light2);
+    thurston.add(ball, horoball1, light0, light1, light2);
     thurston.run();
 
     thurston.renderer.checkShader();

@@ -24,17 +24,15 @@ export default `//
  * - the telportations accumulate numerical errors, but the coordinates of the local vector, will remain bounded.
  * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
-int raymarch(inout RelVector v, out float travelledDist, out int objId){
-    RelVector globalV0 = v;
-    RelVector globalV = globalV0;
-    RelVector localV0 = v;
-    RelVector localV = localV0;
-    RelVector res = v;
+int raymarch(inout ExtVector v, out int objId){
+    ExtVector globalV0 = v;
+    ExtVector globalV = globalV0;
+    ExtVector localV0 = v;
+    ExtVector localV = localV0;
+    ExtVector res = v;
     int auxId;
     int auxHit;
     float marchingStep = camera.minDist;
-    float localDepth = 0.;
-    float globalDepth = 0.;
     float dist;
     int hit = 0;
 
@@ -42,7 +40,8 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
     // local scene
     for (int i = 0; i < camera.maxSteps; i++){
         // start by teleporting eventually the vector
-        if (teleport(localV)){
+        localV = teleport(localV);
+        if (localV.isTeleported){
             // if a teleport was needed, update the starting point of the local raymarching
             localV0 = localV;
             /** @warning if minDist is not zero... this line may produce some jumps */
@@ -50,10 +49,10 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
         }
         else {
             // if no teleport was needed, then march
-            if (localDepth > camera.maxDist) {
+            if (localV.travelledDist > camera.maxDist) {
                 break;
             }
-            dist = localSceneSDF(localV, auxHit, auxId);
+            dist = localSceneSDF(localV.vector, auxHit, auxId);
             if (auxHit == HIT_DEBUG){
                 hit = HIT_DEBUG;
                 break;
@@ -63,12 +62,10 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
                 hit = auxHit;
                 objId = auxId;
                 v = localV;
-                travelledDist = localDepth;
                 break;
             }
-            localDepth = localDepth + dist;
             marchingStep = marchingStep + dist;
-            localV = flow(localV0, marchingStep);
+            localV = creepingFlow(localV0, marchingStep, camera.threshold);
         }
     }
 
@@ -76,11 +73,11 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
     marchingStep = camera.minDist;
     for (int i=0; i < camera.maxSteps; i++){
 
-        if (globalDepth> localDepth || globalDepth > camera.maxDist){
+        if (globalV.travelledDist > localV.travelledDist || globalV.travelledDist > camera.maxDist){
             // we reached the maximal distance
             break;
         }
-        dist = globalSceneSDF(globalV, auxHit, auxId);
+        dist = globalSceneSDF(globalV.vector, auxHit, auxId);
         if (auxHit == HIT_DEBUG){
             hit = HIT_DEBUG;
             break;
@@ -90,10 +87,8 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
             hit = auxHit;
             objId = auxId;
             v = globalV;
-            travelledDist = globalDepth;
             break;
         }
-        globalDepth = globalDepth + dist;
         marchingStep = marchingStep + dist;
         globalV = flow(globalV0, marchingStep);
     }
@@ -101,18 +96,17 @@ int raymarch(inout RelVector v, out float travelledDist, out int objId){
     return hit;
 }
 
-vec3 getColor(RelVector v){
+vec3 getColor(ExtVector v){
     vec3 color = vec3(0);
     vec3 reflect = vec3(1);// the ratio of light involved during the iteration
     ColorData data;
     vec3 coeff;
-    float travelledDist;
     int objId;
     int hit;
     bool stop;
 
     for (int k=0; k <= scene.maxBounces; k++){
-        hit = raymarch(v, travelledDist, objId);
+        hit = raymarch(v, objId);
         if (hit == HIT_DEBUG) {
             return debugColor;
         }
@@ -120,7 +114,7 @@ vec3 getColor(RelVector v){
             return color + reflect * scene.background;
         }
         if (hit == HIT_SOLID) {
-            data = getSolidColorData(v, travelledDist, objId);
+            data = getSolidColorData(v, objId);
             stop = k == scene.maxBounces || !data.isReflecting || length(data.reflectivity) == 0.;
             if (stop){
                 return color + reflect * data.color;
@@ -152,7 +146,8 @@ varying vec3 spherePosition;
 void main() {
 
 
-    RelVector v = mapping(spherePosition);
+    RelVector vector = mapping(spherePosition);
+    ExtVector v = ExtVector(vector, 0., 0., false);
     vec3 color = getColor(v);
     gl_FragColor = vec4(color, 1);
 

@@ -42,6 +42,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -64,11 +65,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -77,6 +92,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -100,6 +116,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -107,8 +126,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -161,13 +180,38 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Scene</span><span class="signature-params">()</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Scene</span><span class="signature-params">( <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Non-euclidean scene.
 			All the objects added to the scene should belong to the same geometry</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>params</code></td>
+							<td><span class="param-type">Object</span></td>
+							<td class="last">
+									<p>parameters of the scene including</p>
+			<ul>
+			<li>{Fog} fog - the fog in the scene</li>
+			<li>{number} maxBounces - the maximal number of times the light bounces on reflecting materials.</li>
+			</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
 			
@@ -187,7 +231,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-14">line 14</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-15">line 15</a></p>
 								</div>
 							</div>
 			
@@ -203,7 +247,7 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title class public">
-			<h4 id="Scene" class="class public"><a href="Scene.html"><span class="signature-new">new&nbsp;</span><span class="name">Scene</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+			<h4 id="Scene" class="class public"><a href="Scene.html"><span class="signature-new">new&nbsp;</span><span class="name">Scene</span><span class="signature-params">( <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
 		</dt>
 <dd class="symbol-details class public">
 	<div class="symbol-details-inner">
@@ -246,7 +290,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-21">line 21</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-28">line 28</a></p>
 								</div>
 							</div>
 			
@@ -290,7 +334,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-26">line 26</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-34">line 34</a></p>
 								</div>
 							</div>
 			
@@ -334,7 +378,125 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-31">line 31</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-40">line 40</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="fog" class="member public"><span class="name">fog</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Fog in the scene</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-46">line 46</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="maxBounces" class="member public"><span class="name">maxBounces</span><span class="signature-type"> :number</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Maximal number of bounces</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">number</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-52">line 52</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="background" class="member public"><span class="name">background</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Background color</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-58">line 58</a></p>
 								</div>
 							</div>
 			
@@ -403,7 +565,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-39">line 39</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-66">line 66</a></p>
 								</div>
 							</div>
 			
@@ -471,7 +633,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-59">line 59</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-86">line 86</a></p>
 								</div>
 							</div>
 			
@@ -487,7 +649,11 @@
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>build the shader relative to the scene</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Build the shader relative to the scene.
+			Only the dependencies (solids, shapes, materials, lights, etc) are loaded here.
+			The scenes SDF (local and global) are built at the Renderer level.
+			Indeed these chunk need to know what is the teleportation set to implement nearest neighbors
+			Another strategy would be to link the scene to the teleportation set (in the constructor for instance)</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -528,7 +694,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-70">line 70</a></p>
+									<p class="form-control-static"><a href="core_scene_Scene.js.html">core/scene/Scene.js</a>, <a href="core_scene_Scene.js.html#line-101">line 101</a></p>
 								</div>
 							</div>
 			
@@ -549,7 +715,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

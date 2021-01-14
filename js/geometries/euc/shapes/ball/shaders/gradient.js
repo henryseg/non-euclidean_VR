@@ -1,5 +1,5 @@
 // language=Mustache + GLSL
-export default `
+export default `//
 RelVector {{name}}_gradient(RelVector v){
     return gradient({{name}},v);
 }

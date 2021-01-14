@@ -1,5 +1,5 @@
 // language=Mustache + GLSL
-export default `        
+export default `//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }

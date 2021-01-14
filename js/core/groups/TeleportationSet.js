@@ -12,19 +12,20 @@ import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
  */
 export class TeleportationSet {
 
-
     /**
      * Constructor
      * @param {Teleportation[]} teleportations - the list of teleportations.
-     * @param {{elt:GroupElement, inv:GroupElement}[]} neighbors - the list of neighbors when using nearest neighbors.
+     * @param {Array.<{elt:GroupElement, inv:GroupElement}>} neighbors - the list of neighbors when using nearest neighbors.
      * The elements come by pair : an element and its inverse.
      * defining the structure of the group element and the related functions
      * @param {boolean} usesNearestNeighbors
+     * @param {boolean} usesCreeping
      */
     constructor(
         teleportations = [],
         neighbors = [],
-        usesNearestNeighbors = false
+        usesNearestNeighbors = false,
+        usesCreeping = false
     ) {
         /**
          * The list of teleports "generating" the subgroups.
@@ -49,10 +50,17 @@ export class TeleportationSet {
          */
         this.neighbors = neighbors;
         /**
-         * Flag : uses nearest neighbor or not (for local ray marching)
+         * Flag : uses nearest neighbor or not (for local SDF)
+         * Default is false.
          * @type{boolean}
          */
         this.usesNearestNeighbors = usesNearestNeighbors;
+        /**
+         * Flag : uses creeping or not (for local ray-marching)
+         * Default is false.
+         * @type{boolean}
+         */
+        this.usesCreeping = usesCreeping;
     }
 
     /**
@@ -62,14 +70,14 @@ export class TeleportationSet {
      */
     shader(shaderBuilder) {
         this.group.shader(shaderBuilder);
+        shaderBuilder.addChunk(relative);
         for (const teleportation of this.teleportations) {
-            teleportation.shader(shaderBuilder);
+            teleportation.shader(shaderBuilder, this.usesCreeping);
         }
         for (const pair of this.neighbors) {
             shaderBuilder.addUniform(pair.elt.name, 'GroupElement', pair.elt);
             shaderBuilder.addUniform(pair.inv.name, 'GroupElement', pair.inv);
         }
-        shaderBuilder.addChunk(relative);
         shaderBuilder.addChunk(mustache.render(teleport, this));
     }
 

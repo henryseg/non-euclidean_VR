@@ -59,21 +59,7 @@ export class Generic {
         return this._name;
     }
 
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        throw new Error('Generic: this method should be implemented');
-    }
 
-    /**
-     * Says whether the shape is local. True if local, false otherwise
-     * @type {boolean}
-     */
-    get isLocal() {
-        return !this.isGlobal;
-    }
 
     /**
      * Return the type under which the data is passed as uniform.

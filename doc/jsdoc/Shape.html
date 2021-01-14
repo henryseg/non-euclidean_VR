@@ -42,6 +42,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -64,11 +65,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -77,6 +92,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -100,6 +116,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -107,8 +126,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -349,15 +368,20 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="hasUVMap" class="member public"><span class="name">hasUVMap</span><span class="signature-type"></span></h4>
+			<h4 id="isGlobal" class="member public"><span class="name">isGlobal</span><span class="signature-type"> :boolean</span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape comes with a UV map.
-			Default is false
-			If true, the shape should implement the method glslUVMap.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape is global. True if global, false otherwise.</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
+								</div>
+							</div>
 			
 			
 			
@@ -376,7 +400,97 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-56">line 56</a></p>
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-55">line 55</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="isLocal" class="member public"><span class="name">isLocal</span><span class="signature-type"> :boolean</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape is local. True if local, false otherwise</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-63">line 63</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="hasUVMap" class="member public"><span class="name">hasUVMap</span><span class="signature-type"> :boolean</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape comes with a UV map.
+			Default is false
+			If true, the shape should implement the method glslUVMap.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-73">line 73</a></p>
 								</div>
 							</div>
 			
@@ -397,7 +511,7 @@
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the chunk of GLSL code corresponding to the signed distance function.
 			The SDF on the GLSL side should have the following signature
-			<code>float {{name}}_sdf(ExtVector v)</code>
+			<code>float {{name}}_sdf(RelVector v)</code>
 			It takes a vector, corresponding the position and direction of the geodesic we are following
 			and return an under-estimation of the distance from this position to the shape along this geodesic.</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
@@ -428,7 +542,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-69">line 69</a></p>
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-86">line 86</a></p>
 								</div>
 							</div>
 			
@@ -448,7 +562,7 @@
 			The default computation approximates numerically the gradient.
 			This function can be overwritten for an explicit computation.
 			If so, the gradient function on the GLSL side should have the following signature
-			<code>ExtVector {{name}}_gradient(ExtVector v)</code>
+			<code>RelVector {{name}}_gradient(RelVector v)</code>
 			It takes the vector obtained when we hit the shape and render the normal to the shape at this point.</p></div>
 			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
@@ -478,7 +592,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-82">line 82</a></p>
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-99">line 99</a></p>
 								</div>
 							</div>
 			
@@ -496,7 +610,7 @@
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the chunk of GLSL code corresponding to the UV map
 			The UV map on the GLSL side should have the signature
-			<code>vec2 {{name}}_uvMap(ExtVector v)</code>
+			<code>vec2 {{name}}_uvMap(RelVector v)</code>
 			It takes the vector obtained when we hit the shape and render the UV coordinates at this point.</p></div>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
@@ -518,7 +632,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-92">line 92</a></p>
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-109">line 109</a></p>
 								</div>
 							</div>
 			
@@ -563,7 +677,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-100">line 100</a></p>
+									<p class="form-control-static"><a href="core_shapes_Shape.js.html">core/shapes/Shape.js</a>, <a href="core_shapes_Shape.js.html#line-117">line 117</a></p>
 								</div>
 							</div>
 			
@@ -584,7 +698,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

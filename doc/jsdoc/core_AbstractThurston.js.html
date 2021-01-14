@@ -43,6 +43,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -65,11 +66,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -78,6 +93,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -101,6 +117,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -108,8 +127,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -164,6 +183,7 @@ import {Clock, Color} from "../lib/three.module.js";
 import {bind} from "../utils.js";
 
 import {BasicCamera, Scene} from "./General.js";
+import {ExpFog} from "../commons/scenes/expFog/ExpFog.js";
 
 
 /**
@@ -178,13 +198,13 @@ export class AbstractThurston {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the discrete subgroup
+     * @param {TeleportationSet} set - the teleportation set
      * @param {Function} cameraType - camera constructor
      * @param {Function} rendererType - renderer constructor
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, subgroup, cameraType, rendererType, params = {}) {
+    constructor(geom, set, cameraType, rendererType, params = {}) {
         /**
          * The underlying geometry
          * @type {Object}
@@ -192,9 +212,9 @@ export class AbstractThurston {
         this.geom = geom;
         /**
          * The underlying subgroup
-         * @type {Subgroup}
+         * @type {TeleportationSet}
          */
-        this.subgroup = subgroup;
+        this.set = set;
         /**
          * Parameters of the Thurston object
          * @type {Object}
@@ -212,17 +232,20 @@ export class AbstractThurston {
          * The non-euclidean camera
          * @type {BasicCamera}
          */
-        this.camera = new cameraType({subgroup: this.subgroup});
+        this.camera = new cameraType({set: this.set});
+
+        const fog = new ExpFog(new Color(0, 0, 0), 0.05);
         /**
          * The non-euclidean scene
          * @type {Scene}
          */
-        this.scene = new Scene();
+        this.scene = new Scene({fog: fog, maxBounces: params.maxBounces, background: params.background});
+
         /**
          * The non-euclidean renderer
          * @type {Renderer}
          */
-        this.renderer = new rendererType(this.geom, this.subgroup, this.camera, this.scene);
+        this.renderer = new rendererType(this.geom, this.set, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
@@ -367,7 +390,7 @@ export class AbstractThurston {
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

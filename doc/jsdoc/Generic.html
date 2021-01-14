@@ -42,6 +42,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -64,11 +65,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -77,6 +92,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -100,6 +116,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -107,8 +126,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -434,94 +453,6 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="isGlobal" class="member public"><span class="name">isGlobal</span><span class="signature-type"> :boolean</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape is global. True if global, false otherwise.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-66">line 66</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
-			<h4 id="isLocal" class="member public"><span class="name">isLocal</span><span class="signature-type"> :boolean</span></h4>
-		</dt>
-<dd class="symbol-details member public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Says whether the shape is local. True if local, false otherwise</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-74">line 74</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title member public collapsible-symbol">
 			<h4 id="uniformType" class="member public"><span class="name">uniformType</span><span class="signature-type"></span></h4>
 		</dt>
 <dd class="symbol-details member public  collapsible-symbol">
@@ -556,7 +487,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-83">line 83</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-69">line 69</a></p>
 								</div>
 							</div>
 			
@@ -618,7 +549,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-92">line 92</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-78">line 78</a></p>
 								</div>
 							</div>
 			
@@ -677,7 +608,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-102">line 102</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-88">line 88</a></p>
 								</div>
 							</div>
 			
@@ -737,7 +668,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-110">line 110</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-96">line 96</a></p>
 								</div>
 							</div>
 			
@@ -783,7 +714,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-122">line 122</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-108">line 108</a></p>
 								</div>
 							</div>
 			
@@ -828,7 +759,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-130">line 130</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-116">line 116</a></p>
 								</div>
 							</div>
 			
@@ -886,7 +817,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-138">line 138</a></p>
+									<p class="form-control-static"><a href="core_Generic.js.html">core/Generic.js</a>, <a href="core_Generic.js.html#line-124">line 124</a></p>
 								</div>
 							</div>
 			
@@ -907,7 +838,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

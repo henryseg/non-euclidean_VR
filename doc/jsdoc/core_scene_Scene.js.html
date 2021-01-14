@@ -43,6 +43,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -65,11 +66,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -78,6 +93,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -101,6 +117,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -108,8 +127,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -158,8 +177,9 @@
 			<article></article>
 			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {mustache} from "../../lib/mustache.mjs";
 
-import scenes from "./shaders/scenes.js";
+import scenes from "../renderers/shaders/scenes.js";
 import header from "./shaders/header.js";
+import {Color} from "../../lib/three.module.js";
 
 
 /**
@@ -171,22 +191,48 @@ import header from "./shaders/header.js";
  */
 export class Scene {
 
-    constructor() {
+    /**
+     * Constructor.
+     * @param {Object} params - parameters of the scene including
+     * - {Fog} fog - the fog in the scene
+     * - {number} maxBounces - the maximal number of times the light bounces on reflecting materials.
+     */
+    constructor(params = {}) {
         /**
          * List of all the lights in the scene.
          * @type {Light[]}
          */
         this.lights = [];
+
         /**
          * List of all the solids in the scene.
          * @type {Solid[]}
          */
         this.solids = [];
+
         /**
          * Next available ID in the scene.
          * @type {number}
          */
         this.nextId = 0;
+
+        /**
+         * Fog in the scene
+         * @type{Fog}
+         */
+        this.fog = params.fog;
+
+        /**
+         * Maximal number of bounces
+         * @type {number}
+         */
+        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
+
+        /**
+         * Background color
+         * @type{Color}
+         */
+        this.background = params.background !== undefined ? params.background : new Color(0.1, 0.1, 0.1);
     }
 
     /**
@@ -222,11 +268,16 @@ export class Scene {
     }
 
     /**
-     * build the shader relative to the scene
+     * Build the shader relative to the scene.
+     * Only the dependencies (solids, shapes, materials, lights, etc) are loaded here.
+     * The scenes SDF (local and global) are built at the Renderer level.
+     * Indeed these chunk need to know what is the teleportation set to implement nearest neighbors
+     * Another strategy would be to link the scene to the teleportation set (in the constructor for instance)
      * @param {ShaderBuilder} shaderBuilder
      */
     shader(shaderBuilder) {
         shaderBuilder.addChunk(header);
+        shaderBuilder.addUniform('scene', 'Scene', this);
         // run through all the objects in the scene and combine the relevant chunks of GLSL code.
         for (const light of this.lights) {
             light.shader(shaderBuilder);
@@ -234,7 +285,9 @@ export class Scene {
         for (const solid of this.solids) {
             solid.shader(shaderBuilder);
         }
-        shaderBuilder.addChunk(mustache.render(scenes, this));
+        if (this.fog !== undefined) {
+            this.fog.shader(shaderBuilder);
+        }
     }
 }</code></pre>
 		</section>
@@ -243,7 +296,7 @@ export class Scene {
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

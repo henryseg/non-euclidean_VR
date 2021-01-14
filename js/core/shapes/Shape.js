@@ -49,9 +49,26 @@ export class Shape extends Generic {
     }
 
     /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        throw new Error('Generic: this method should be implemented');
+    }
+
+    /**
+     * Says whether the shape is local. True if local, false otherwise
+     * @type {boolean}
+     */
+    get isLocal() {
+        return !this.isGlobal;
+    }
+
+    /**
      * Says whether the shape comes with a UV map.
      * Default is false
      * If true, the shape should implement the method glslUVMap.
+     * @type {boolean}
      */
     get hasUVMap() {
         return false;

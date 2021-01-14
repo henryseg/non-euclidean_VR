@@ -42,6 +42,7 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
@@ -64,11 +65,25 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
@@ -77,6 +92,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -100,6 +116,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -107,8 +126,8 @@
 											<li><a href="Shape.html">Shape</a></li>
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Subgroup.html">Subgroup</a></li>
-											<li><a href="Teleport.html">Teleport</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -171,7 +190,7 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">VRRenderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">subgroup</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">VRRenderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
@@ -198,10 +217,10 @@
 							</td>
 						</tr>
 						<tr>
-								<td><code>subgroup</code></td>
-							<td><span class="param-type"><a href="Subgroup.html">Subgroup</a></span></td>
+								<td><code>set</code></td>
+							<td><span class="param-type"><a href="TeleportationSet.html">TeleportationSet</a></span></td>
 							<td class="last">
-									<p>the underlying subgroup</p>
+									<p>the underlying teleportation set</p>
 							</td>
 						</tr>
 						<tr>
@@ -248,7 +267,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_renderers_VRRenderer.js.html">core/renderers/VRRenderer.js</a>, <a href="core_renderers_VRRenderer.js.html#line-28">line 28</a></p>
+									<p class="form-control-static"><a href="core_renderers_VRRenderer.js.html">core/renderers/VRRenderer.js</a>, <a href="core_renderers_VRRenderer.js.html#line-30">line 30</a></p>
 								</div>
 							</div>
 			
@@ -264,7 +283,7 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title class public">
-			<h4 id="VRRenderer" class="class public"><a href="VRRenderer.html"><span class="signature-new">new&nbsp;</span><span class="name">VRRenderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">subgroup</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+			<h4 id="VRRenderer" class="class public"><a href="VRRenderer.html"><span class="signature-new">new&nbsp;</span><span class="name">VRRenderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
 		</dt>
 <dd class="symbol-details class public">
 	<div class="symbol-details-inner">
@@ -308,7 +327,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_renderers_VRRenderer.js.html">core/renderers/VRRenderer.js</a>, <a href="core_renderers_VRRenderer.js.html#line-58">line 58</a></p>
+									<p class="form-control-static"><a href="core_renderers_VRRenderer.js.html">core/renderers/VRRenderer.js</a>, <a href="core_renderers_VRRenderer.js.html#line-60">line 60</a></p>
 								</div>
 							</div>
 			
@@ -353,7 +372,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="core_renderers_VRRenderer.js.html">core/renderers/VRRenderer.js</a>, <a href="core_renderers_VRRenderer.js.html#line-65">line 65</a></p>
+									<p class="form-control-static"><a href="core_renderers_VRRenderer.js.html">core/renderers/VRRenderer.js</a>, <a href="core_renderers_VRRenderer.js.html#line-67">line 67</a></p>
 								</div>
 							</div>
 			
@@ -374,7 +393,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 3rd Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

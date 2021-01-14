@@ -46,7 +46,6 @@ Vector applyGroupElement(GroupElement elt, Vector v){
  * Such a generalized position represent the position local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.
  * This structure is essentially meant to receive data from the JS part
- *
  **********************************************************************************************************************/
 
 struct RelPosition {
@@ -59,15 +58,13 @@ struct RelPosition {
 /***********************************************************************************************************************
  *
  * @struct RelVector
- * Structure for an extended vector
+ * Structure for a relative vector
  * Such a vector is a tuple (local, cellBoost, invCellBoost, ...) where
  * - local is a Vector
  * - cellBoost is an GroupElement representing an element of a discrete subgroups
  * - invCellBoost is the inverse of cellBoost (to avoind unnecessary computation)
- * - ... (more to come to handle fogs, reflexions, etc)
- * Such an extended vector represent the vector local translated by cellBoost
+ * Such a relative vector represent the vector local translated by cellBoost
  * It is meant to track easily teleportation when raymarching in quotient manifolds.
- *
  **********************************************************************************************************************/
 
 struct RelVector {
@@ -146,4 +143,44 @@ RelVector applyPosition(RelPosition position, Vector v) {
     Vector local = applyPosition(position.local, v);
     return RelVector(local, position.cellBoost, position.invCellBoost);
 }
-`;
+
+/**
+ * Return the "same" vector whose decomposition (cellBost, local) has been changed to (cellBoost * inv, elt * local)
+ */
+RelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){
+    v.local = applyGroupElement(elt, v.local);
+    v.cellBoost = multiply(v.cellBoost, inv);
+    v.invCellBoost = multiply(elt, v.invCellBoost);
+    return v;
+}
+
+
+/***********************************************************************************************************************
+ *
+ * @struct ExtVector
+ * Structure for an extended vector.
+ * This structure is meant to follow vector during the ray-marching procedure.
+ * It consists of 
+ * - vector : the position and direction of the vector
+ * - travelledDist : the distance travelled during the raymarching
+ * - lastFlowTime : the time flowed during the last step
+ * - isTeleported : a flag, boolean flag that is true, if the vector has been teleported in the last loop
+ * - probably more to come
+ *
+ **********************************************************************************************************************/
+
+struct ExtVector {
+    RelVector vector;
+    float lastFlowTime;
+    float travelledDist;
+    bool isTeleported;
+};
+
+ExtVector flow(ExtVector v, float t) {
+    v.vector = flow(v.vector, t);
+    v.lastFlowTime = t;
+    v.travelledDist = v.travelledDist + t;
+    return v;
+}`;
+
+

@@ -56,6 +56,10 @@ export class Solid extends Generic {
         return this.shape.isGlobal;
     }
 
+    get isLocal() {
+        return this.shape.isLocal;
+    }
+
     get uniformType(){
         return 'Solid';
     }

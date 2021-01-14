@@ -136,7 +136,12 @@ export class PhongWrapMaterial extends Material {
     }
 }
 
-
+/**
+ * Wrap the material into another material handling the Phong model
+ * @param {Material} material - the material defining the ambient color of the Phong model
+ * @param {Object} params - the parameters of the Phong model
+ * @return {PhongWrapMaterial} - the wrapped material.
+ */
 export function phongWrap(material, params) {
     return new PhongWrapMaterial(material, params);
 }

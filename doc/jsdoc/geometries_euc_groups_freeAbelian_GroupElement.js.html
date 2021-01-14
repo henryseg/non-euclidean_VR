@@ -43,8 +43,8 @@
 											<li><a href="global.html#intersection">intersection</a></li>
 											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
 											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
 											<li><a href="global.html#RIGHT">RIGHT</a></li>
-											<li><a href="global.html#testXp">testXp</a></li>
 											<li><a href="global.html#union">union</a></li>
 											<li><a href="global.html#wrap">wrap</a></li>
 									</ul>
@@ -66,11 +66,24 @@
 											<li><a href="BasicShape.html">BasicShape</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
 											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
 											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
 											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
@@ -80,6 +93,7 @@
 											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
 											<li><a href="Isometry.html">Isometry</a></li>
 											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
 											<li><a href="LocalBall.html">LocalBall</a></li>
@@ -103,6 +117,9 @@
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="PointLight.html">PointLight</a></li>
 											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
 											<li><a href="RelPosition.html">RelPosition</a></li>
 											<li><a href="Renderer.html">Renderer</a></li>
 											<li><a href="Scene.html">Scene</a></li>
@@ -111,7 +128,7 @@
 											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
 											<li><a href="Solid.html">Solid</a></li>
 											<li><a href="Teleportation.html">Teleportation</a></li>
-											<li><a href="TeleportationSystem.html">TeleportationSystem</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
@@ -123,6 +140,13 @@
 											<li><a href="VRRenderer.html">VRRenderer</a></li>
 											<li><a href="VRThurston.html">VRThurston</a></li>
 											<li><a href="WrapShape.html">WrapShape</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
 									</ul>
 								</li>
 				</ul>
@@ -151,78 +175,93 @@
 			<div class="col-md-12 main-content">
 		<section class="source-section">
 			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {Vector3} from "../../../../lib/three.module.js";
-
-import {GroupElement} from "../../../../core/geometry/GroupElement.js";
-import {Isometry} from "../../../../core/geometry/Isometry.js";
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
+import {Isometry} from "../../geometry/Isometry.js";
+import {Vector3} from "../../../../lib/three.module.js";
 
 /**
- * Free Abelian group of rank three in the euclidean space.
+ * @class
+ *
+ * @classdesc
+ * Element in a free abelian group
+ * Elements are represented as Vector3 with integer coordinates (both on the JS and the GLSL side)
  */
 
-GroupElement.prototype.build = function () {
-    if (arguments.length === 0) {
-        this.coords = new Vector3(0, 0, 0);
-    } else {
-        this.coords = new Vector3(...arguments);
+export class GroupElement extends AbstractGroupElement {
+
+    constructor(group, x = 0, y = 0, z = 0) {
+        super(group);
+        this.coords = new Vector3(x, y, z);
+    }
+
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @type{number[]}
+     */
+    get icoords() {
+        return this.coords.toArray();
+    }
+
+
+    identity() {
+        this.coords.set(0, 0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        this.coords.add(elt.coords);
+        return this;
+    }
+
+    premultiply(elt) {
+        this.coords.add(elt.coords);
+        return this;
+    }
+
+    invert() {
+        this.coords.negate();
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b, c] = this.coords.toArray();
+        const translation = new Vector3()
+            .add(this.group.halfTranslationA.clone().multiplyScalar(2 * a))
+            .add(this.group.halfTranslationB.clone().multiplyScalar(2 * b))
+            .add(this.group.halfTranslationC.clone().multiplyScalar(2 * c));
+        const res = new Isometry();
+        res.matrix.set(
+            1, 0, 0, translation.x,
+            0, 1, 0, translation.y,
+            0, 0, 1, translation.z,
+            0, 0, 0, 1
+        );
+        return res;
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new GroupElement(this.group);
+        res.coords.copy(this.coords);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        return this;
     }
 }
-
-GroupElement.prototype.identity = function () {
-    this.coords.set(0, 0, 0);
-    return this;
-}
-
-GroupElement.prototype.multiply = function (elt) {
-    this.coords.add(elt.coords);
-    return this;
-}
-
-GroupElement.prototype.premultiply = function (elt) {
-    // the group is abelian!
-    return this.multiply(elt);
-}
-
-GroupElement.prototype.invert = function () {
-    this.coords.negate();
-    return this;
-}
-
-GroupElement.prototype.toIsometry = function () {
-    const [a, b, c] = this.coords.toArray();
-    const res = new Isometry();
-    res.matrix.set(
-        1, 0, 0, a,
-        0, 1, 0, b,
-        0, 0, 1, c,
-        0, 0, 0, 1
-    )
-    return res;
-}
-
-GroupElement.prototype.equals = function (elt) {
-    return this.coords.equals(elt.coords);
-}
-
-GroupElement.prototype.clone = function () {
-    const res = new GroupElement();
-    res.coords.copy(this.coords);
-    return res;
-}
-
-GroupElement.prototype.copy = function (elt) {
-    this.coords.copy(elt.coords);
-    return this;
-}
-
-export {GroupElement}</code></pre>
+</code></pre>
 		</section>
 			</div>
 		</div>
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 30th Dec 2020 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

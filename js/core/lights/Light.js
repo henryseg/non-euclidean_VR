@@ -31,6 +31,22 @@ export class Light extends Generic {
     }
 
     /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        throw new Error('Generic: this method should be implemented');
+    }
+
+    /**
+     * Says whether the shape is local. True if local, false otherwise
+     * @type {boolean}
+     */
+    get isLocal() {
+        return !this.isGlobal;
+    }
+
+    /**
      * Return the chunk of GLSL code corresponding to the direction field.
      * The GLSL direction function should have the following signature
      * `bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity)`

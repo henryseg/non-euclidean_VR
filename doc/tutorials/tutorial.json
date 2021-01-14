@@ -4,9 +4,15 @@
   },
   "extendingGeometry": {
     "title": "Adding / Extending geometries",
-    "children": ["shape"]
+    "children": ["shape", "material", "solid"]
   },
   "shape": {
     "title": "Custom shape"
+  },
+  "material": {
+    "title": "Custom material"
+  },
+  "solid": {
+    "title": "Custom solid"
   }
 }

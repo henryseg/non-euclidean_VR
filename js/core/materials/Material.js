@@ -14,6 +14,21 @@ export class Material extends Generic {
      */
     constructor() {
         super();
+        /**
+         * The light eventually affecting the material.
+         * If `lights` is not set up when the solid carrying the material is added to the scene,
+         * then `lights` is set up to the list of lights in the scene.
+         * @type{Light[]}
+         */
+        this.lights = undefined;
+        /**
+         * Reflectivity of the material.
+         * Each channel (red, blue, green), interpreted as number between 0 and 1,
+         * is the reflectivity coefficient of the corresponding color
+         * (0 = no reflectivity, 1 = all light is reflected).
+         * @type {Color}
+         */
+        this.reflectivity = undefined;
     }
 
     /**
@@ -22,23 +37,6 @@ export class Material extends Generic {
      */
     get isMaterial() {
         return true;
-    }
-
-    /**
-     * Says whether the shape is global.
-     * This property does not make sense for material.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        throw new Error('Material: isGlobal has no meaning for materials');
-    }
-
-    /**
-     * Says whether the shape is local. True if local, false otherwise
-     * @type {boolean}
-     */
-    get isLocal() {
-        throw new Error('Material: isLocal has no meaning for materials');
     }
 
     /**
@@ -94,7 +92,7 @@ export class Material extends Generic {
      * - `vec3 {{name}}_render(RelVector v, RelVector normal, vec2 uv)`
      * The exact signature depends whether the material requires a normal or UV coordinates.
      * Here v is the vector obtained when we hit the shape.
-     * It should return the color as a vec3
+     * It should return the color as a vec3 of the material at the given point, without taking into account reflections.
      * @abstract
      * @return {string}
      */
