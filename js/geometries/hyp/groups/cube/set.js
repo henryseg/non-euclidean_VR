@@ -99,6 +99,9 @@ shiftYn.isom.matrix.multiply(new Matrix4().makeRotationY(-Math.PI / 2).transpose
 shiftZp.isom.matrix.multiply(new Matrix4().makeRotationZ(Math.PI / 2).transpose());
 shiftZn.isom.matrix.multiply(new Matrix4().makeRotationZ(-Math.PI / 2).transpose());
 
+console.log(shiftXn.isom.matrix.toLog());
+console.log(shiftYn.isom.matrix.toLog());
+
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
 const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn);

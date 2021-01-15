@@ -28,7 +28,7 @@ export class BallShape extends BasicShape {
     }
 
     /**
-     * Says that the object inherits from `Ball`
+     * Says that the object inherits from `BallShape`
      * @type {boolean}
      */
     get isBallShape() {
@@ -71,5 +71,4 @@ export class BallShape extends BasicShape {
     glslUVMap() {
         return mustache.render(uv, this);
     }
-
 }

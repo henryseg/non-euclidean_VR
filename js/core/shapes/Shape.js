@@ -53,11 +53,11 @@ export class Shape extends Generic {
      * @type {boolean}
      */
     get isGlobal() {
-        throw new Error('Generic: this method should be implemented');
+        throw new Error('Shape: this method should be implemented');
     }
 
     /**
-     * Says whether the shape is local. True if local, false otherwise
+     * Says whether the shape is local. True if local, false otherwise.
      * @type {boolean}
      */
     get isLocal() {

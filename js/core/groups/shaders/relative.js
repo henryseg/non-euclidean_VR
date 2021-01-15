@@ -35,6 +35,7 @@ Vector applyGroupElement(GroupElement elt, Vector v){
 
 
 
+
 /***********************************************************************************************************************
  *
  * @struct RelPosition

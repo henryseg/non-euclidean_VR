@@ -57,7 +57,7 @@ export class BasicRenderer extends Renderer {
         this.set.shader(this._fragmentBuilder);
 
         // camera
-        this.camera.shader(this._fragmentBuilder)
+        this.camera.shader(this._fragmentBuilder);
 
         // scene
         this.scene.shader(this._fragmentBuilder);

@@ -115,7 +115,7 @@ ColorData getSolidColorData(inout ExtVector v, int objId) {
 
     switch(objId){
         {{#scene.solids}}
-            
+        
             case {{id}}:
                 {{#material.isReflecting}}
                     isReflecting = true;

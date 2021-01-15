@@ -19,6 +19,7 @@ ExtVector teleport(ExtVector v){
     return v;
 }
 
+
 /**
  * Does one of the two following transformation: 
  * flow the vector by the given time, if the vector escape the fundamental domain, 
