@@ -1,6 +1,5 @@
-import {Point} from "../../../../../js/geometry/euc/Point.js";
+import {Point, Isometry} from "../../../../../js/geometries/euc/geometry/General.js";
 import {Vector4} from "../../../../../js/lib/three.module.js";
-import {Isometry} from "../../../../../js/geometry/euc/Isometry.js";
 
 let assert = chai.assert;
 

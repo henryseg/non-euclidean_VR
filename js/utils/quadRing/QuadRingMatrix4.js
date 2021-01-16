@@ -126,17 +126,17 @@ export class QuadRingMatrix4 {
     }
 
     /**
-     * Set the matrix to the product a * b
-     * @param {QuadRingMatrix4} a
-     * @param {QuadRingMatrix4} b
+     * Set the matrix to the product m1 * m2
+     * @param {QuadRingMatrix4} m1
+     * @param {QuadRingMatrix4} m2
      * @return {QuadRingMatrix4}
      */
-    multiplyMatrices(a, b) {
+    multiplyMatrices(m1, m2) {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 this.setEntry(i, j, this.ring.zero);
                 for (let k = 0; k < 4; k++) {
-                    this.getEntry(i, j).addProduct(a.getEntry(i, k), b.getEntry(k, j));
+                    this.getEntry(i, j).addProduct(m1.getEntry(i, k), m2.getEntry(k, j));
                 }
             }
         }
@@ -149,7 +149,7 @@ export class QuadRingMatrix4 {
      * @return {QuadRingMatrix4}
      */
     multiply(m) {
-        return this.multiplyMatrices(this, m);
+        return this.multiplyMatrices(this.clone(), m);
     }
 
     /**
@@ -158,7 +158,7 @@ export class QuadRingMatrix4 {
      * @return {QuadRingMatrix4}
      */
     premultiply(m) {
-        return this.multiplyMatrices(m, this);
+        return this.multiplyMatrices(m, this.clone());
     }
 
     /**

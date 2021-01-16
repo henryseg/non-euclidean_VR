@@ -16,7 +16,8 @@ bool directions(PointLight light, RelVector v, int i, out RelVector dir, out flo
     if(i!=0){
         return false;
     }
-    Point position = applyIsometry(v.invCellBoost, light.position);
+    
+    Point position = applyGroupElement(v.invCellBoost, light.position);
     float dist = dist(v.local.pos, position);
     intensity = lightIntensity(dist);
     Vector local = direction(v.local.pos, position);

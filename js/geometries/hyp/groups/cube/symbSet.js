@@ -124,7 +124,12 @@ shiftZn.matrix.set(
     zero, zero, sqrt3, two
 );
 
-console.log(shiftXp.matrix.toLog());
+// console.log(shiftXp.matrix.toLog());
+// console.log(shiftXn.matrix.toLog());
+// console.log(shiftYp.matrix.toLog());
+// console.log(shiftYn.matrix.toLog());
+// console.log(shiftZp.matrix.toLog());
+// console.log(shiftZn.matrix.toLog());
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);

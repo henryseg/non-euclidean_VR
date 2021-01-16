@@ -10,13 +10,14 @@ vec3 {{name}}_render(RelVector v, RelVector normal) {
     {{#lights}}
         check = {{name}}_directions(v, 0, dir, intensity);
         if(check) {
-            color = abs(v.local.dir.xyz);
-            //color = vec3(intensity,0, 0);
+            color = abs(dir.local.dir.xyz);
+            //color = 50.*vec3(intensity,0, 0);
         } else {
             color = debugColor;
         }
     {{/lights}}
-    //return color;
-    return 0.2*color;
+    return debugColor;
+//    return color;
+   
 }
 `;

@@ -1,7 +1,7 @@
 import {
     Isometry as IsometryEuc,
     Position as PositionEuc
-} from "../../../../../js/geometry/euc/General.js";
+} from "../../../../../js/geometries/euc/geometry/General.js";
 import {Matrix4, Quaternion} from "../../../../../js/lib/three.module.js";
 
 let assert = chai.assert;
@@ -23,5 +23,5 @@ export function test() {
             assert.isOk(pos.facing.equals(check));
         })
 
-    })
+    });
 }

@@ -13,7 +13,7 @@ import {mustache} from "../../../lib/mustache.mjs";
  *
  * @see Further information on the {@link https://en.wikipedia.org/wiki/Phong_reflection_model|Phong lighting model}
  */
-export class DebugLightMaterial extends Material {
+export class DebugMaterial extends Material {
     /**
      * Constructor. Build a new material from the given data
      * @param {Light} light - the light whose parameters are used in the material.

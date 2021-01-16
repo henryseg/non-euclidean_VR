@@ -167,4 +167,8 @@ export class QuadRingElement {
         this.b = elt.b;
         return this;
     }
+
+    toLog(){
+        return `${this.a} + ${this.b} _rD`;
+    }
 }

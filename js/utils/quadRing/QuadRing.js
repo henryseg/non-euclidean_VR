@@ -1,5 +1,6 @@
 import {QuadRingElement} from "./QuadRingElement.js";
 import quadRing from "./shader/quadRing.js";
+import {QuadRingMatrix4} from "./QuadRingMatrix4.js";
 
 /**
  * @class
@@ -20,13 +21,21 @@ export class QuadRing {
     }
 
     /**
-     * Return the element (a + b sqrt(d))/c in the quadratic field.
+     * Return the element a + b sqrt(d) in the quadratic ring.
      * `a` and `b` should be integers
      * @param {number} a
      * @param {number} b
      */
     element(a = 0, b = 0) {
         return new QuadRingElement(this, a, b);
+    }
+
+    /**
+     * Return a matrix on this quadratic rign
+     * @return {QuadRingMatrix4}
+     */
+    matrix4(){
+        return new QuadRingMatrix4(this);
     }
 
     get one() {

@@ -8,5 +8,7 @@ export default `//
 */
 float lightIntensity(float len){
     return 1./(len);
+    //return 1. / (len * len);
+    //return 1./ sinh(len);
 }
 `;

@@ -45,33 +45,34 @@ const Isometry IDENTITY = Isometry(mat4(1.)); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
+ * @todo : Think of the best way to do this.
+ * When the coordinates of the boost are too big, reduceError makes everything worse
+ * Indeed the hypDot takes squares and then compute a difference...
  */
 Isometry reduceError(Isometry isom){
-    vec4 col0 = isom.matrix[0];
-    vec4 col1 = isom.matrix[1];
-    vec4 col2 = isom.matrix[2];
-    vec4 col3 = isom.matrix[3];
-    
-    //    vec4 col0 = isom.matrix * vec4(1, 0, 0, 0);
-    //    vec4 col1 = isom.matrix * vec4(0, 1, 0, 0);
-    //    vec4 col2 = isom.matrix * vec4(0, 0, 1, 0);
-    //    vec4 col3 = isom.matrix * vec4(0, 0, 0, 1);
+//    vec4 col0 = isom.matrix[0];
+//    vec4 col1 = isom.matrix[1];
+//    vec4 col2 = isom.matrix[2];
+//    vec4 col3 = isom.matrix[3];
+//
+//    col0 = hypNormalize(col0);
+//
+//    col1 = col1 - hypDot(col0, col1) * col0;
+//    col1 = hypNormalize(col1);
+//
+//    col2 = col2 - hypDot(col0, col2) * col0;
+//    col2 = col2 - hypDot(col1, col2) * col1;
+//    col2 = hypNormalize(col2);
+//
+//    col3 = col3 - hypDot(col0, col3) * col0;
+//    col3 = col3 - hypDot(col1, col3) * col1;
+//    col3 = col3 - hypDot(col2, col3) * col2;
+//    col3= hypNormalize(col3);
+//
+//    return Isometry(mat4(col0, col1, col2, col3));
 
-    col0 = hypNormalize(col0);
 
-    col1 = col1 - hypDot(col0, col1) * col0;
-    col1 = hypNormalize(col1);
-
-    col2 = col2 - hypDot(col0, col2) * col0;
-    col2 = col2 - hypDot(col1, col2) * col1;
-    col2 = hypNormalize(col2);
-
-    col3 = col3 - hypDot(col0, col3) * col0;
-    col3 = col3 - hypDot(col1, col3) * col1;
-    col3 = col3 - hypDot(col2, col3) * col2;
-    col3= hypNormalize(col3);
-
-    return Isometry(mat4(col0, col1, col2, col3));
+    return isom;
 }
 
 /**
