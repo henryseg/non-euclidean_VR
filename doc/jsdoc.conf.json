@@ -28,7 +28,7 @@
 
     "templates": {
         "systemName"            : "Non-euclidean VR",
-        "systemSummary"         : "First person exploration of Thurston's geoemtries",
+        "systemSummary"         : "First person exploration of Thurston's geometries",
         "includeDate"           : "true"
     }
 }

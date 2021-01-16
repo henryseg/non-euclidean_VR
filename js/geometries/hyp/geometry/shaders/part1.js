@@ -180,9 +180,9 @@ struct Vector{
  * Reduce the eventual numerical errors of the given vector.
  */
 Vector reduceError(Vector v){
-    Point pos = reduceError(v.pos);
-    vec4 dir = v.dir - hypDot(pos.coords, v.dir) * pos.coords;
-    return Vector(pos, dir);
+    v.pos = reduceError(v.pos);
+    v.dir = v.dir + hypDot(v.pos.coords, v.dir) * v.pos.coords;
+    return v;
 }
 
 /**

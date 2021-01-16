@@ -145,6 +145,8 @@ class RelPosition {
                 if (!inside) {
                     this.local.applyIsometry(teleportation.elt.toIsometry());
                     this.cellBoost.multiply(teleportation.inv);
+                    console.log("Elt (inv)", teleportation.inv.toIsometry().matrix.toLog())
+                    console.log("Boost", this.cellBoost.toIsometry().matrix.toLog())
                     this.invCellBoost.premultiply(teleportation.elt);
                     break;
                 }
@@ -170,28 +172,6 @@ class RelPosition {
         return this;
     }
 
-    // /**
-    //  * Return the two positions corresponding to the left and right eye.
-    //  * @param {Matrix4} cameraMatrix - a matrix representing the orientation of the camera.
-    //  * @param {number} ipDist - the interpupillary distance
-    //  * @param {string} stereoMode - a mode (defining a correction at the facing level)
-    //  * @return {RelPosition[]} - the position of the left and right eye
-    //  */
-    // eyes(cameraMatrix, ipDist, stereoMode = undefined) {
-    //     const locals = this.local.eyes(cameraMatrix, ipDist, stereoMode);
-    //
-    //     const leftEye = new RelPosition(this.set);
-    //     leftEye.local.copy(locals[0]);
-    //     leftEye.cellBoost.copy(this.cellBoost);
-    //     leftEye.invCellBoost.copy(this.invCellBoost)
-    //
-    //     const rightEye = new RelPosition(this.set);
-    //     rightEye.local.copy(locals[1]);
-    //     rightEye.cellBoost.copy(this.cellBoost);
-    //     rightEye.invCellBoost.copy(this.invCellBoost);
-    //
-    //     return [leftEye, rightEye];
-    // }
 
     /**
      * Check if the current position and `position ` are the same.

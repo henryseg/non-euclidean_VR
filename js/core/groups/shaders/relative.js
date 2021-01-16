@@ -150,6 +150,8 @@ RelVector applyPosition(RelPosition position, Vector v) {
  */
 RelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){
     v.local = applyGroupElement(elt, v.local);
+    //v.local = reduceError(v.local);
+    //v.local = geomNormalize(v.local);
     v.cellBoost = multiply(v.cellBoost, inv);
     v.invCellBoost = multiply(elt, v.invCellBoost);
     return v;
