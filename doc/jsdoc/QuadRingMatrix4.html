@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>QuadRingMatrix4</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Non-euclidean VR
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
+											<li><a href="global.html#complement">complement</a></li>
+											<li><a href="global.html#intersection">intersection</a></li>
+											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
+											<li><a href="global.html#RIGHT">RIGHT</a></li>
+											<li><a href="global.html#union">union</a></li>
+											<li><a href="global.html#wrap">wrap</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="AbstractThurston.html">AbstractThurston</a></li>
+											<li><a href="AbstractVRThurston.html">AbstractVRThurston</a></li>
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicCamera.html">BasicCamera</a></li>
+											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
+											<li><a href="FakeBall.html">FakeBall</a></li>
+											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
+											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
+											<li><a href="Horoball.html">Horoball</a></li>
+											<li><a href="HoroballShape.html">HoroballShape</a></li>
+											<li><a href="InfoControls_InfoControls.html">InfoControls#InfoControls</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
+											<li><a href="Isometry.html">Isometry</a></li>
+											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalFakeBall.html">LocalFakeBall</a></li>
+											<li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li>
+											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
+											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
+											<li><a href="LocalPotato.html">LocalPotato</a></li>
+											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="Material.html">Material</a></li>
+											<li><a href="NativeCamera.html">NativeCamera</a></li>
+											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
+											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
+											<li><a href="Thurston.html">Thurston</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
+											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
+											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
+											<li><a href="VRCamera.html">VRCamera</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
+											<li><a href="VRRenderer.html">VRRenderer</a></li>
+											<li><a href="VRThurston.html">VRThurston</a></li>
+											<li><a href="WrapShape.html">WrapShape</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">class</span>
+				<h1><span class="name">QuadRingMatrix4</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_class.html">Classes</a></li>
+							<li class="active">QuadRingMatrix4</li>
+						</ol>
+					<section>
+							<dl class="symbol primary">
+								<dt class="symbol-title class collapsible-symbol expanded">
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">QuadRingMatrix4</span><span class="signature-params">()</span><span class="signature-type"></span></h2>
+</dt>
+<dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>4x4 matrix over a quadratic field <strong>with determinant 1</strong> (o make inversion easier).</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- author -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Author</label>
+								<div class="col-sm-9">
+										<p class="form-control-static">Mostly borrowed from Three.js</p>
+								</div>
+							</div>
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-12">line 12</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+							</dl>
+							<article class="secondary">
+									<h3>Classes</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title class public">
+			<h4 id="QuadRingMatrix4" class="class public"><a href="QuadRingMatrix4.html"><span class="signature-new">new&nbsp;</span><span class="name">QuadRingMatrix4</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+		</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+									</dl>
+									<h3>Members</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="ring" class="member public"><span class="name">ring</span><span class="signature-type"> :<a href="QuadRing.html">QuadRing</a></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The underlying quadratic ring</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="QuadRing.html">QuadRing</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-19">line 19</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="elements" class="member public"><span class="name">elements</span><span class="signature-type"> :Array.&lt;<a href="QuadRingElement.html">QuadRingElement</a>></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The elements of the matrix, in a  column-major order</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Array.&lt;<a href="QuadRingElement.html">QuadRingElement</a>></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-24">line 24</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="isQuadRingMatrix4" class="member public"><span class="name">isQuadRingMatrix4</span><span class="signature-type"> :boolean</span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Flag to precise the type of the object</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">boolean</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-36">line 36</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="a" class="member public"><span class="name">a</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The 4x4 matrix with all the a-parts.
+			This data is need for the shader</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-45">line 45</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public collapsible-symbol">
+			<h4 id="b" class="member public"><span class="name">b</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The 4x4 matrix with all the b-parts.
+			This data is need for the shader</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-55">line 55</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+									</dl>
+									<h3>Methods</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getEntry" class="function public"><span class="name">getEntry</span><span class="signature-params">( <span class="signature-param">i</span>, <span class="signature-param">j</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingElement.html">QuadRingElement</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the ij-entry</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>i</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>the row index</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>j</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>the column index</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-66">line 66</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="setEntry" class="function public"><span class="name">setEntry</span><span class="signature-params">( <span class="signature-param">i</span>, <span class="signature-param">j</span>, <span class="signature-param">value</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the value of the ij-entry</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>i</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>the row index</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>j</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>the column index</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>value</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-77">line 77</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="set" class="function public"><span class="name">set</span><span class="signature-params">( <span class="signature-param">n11</span>, <span class="signature-param">n12</span>, <span class="signature-param">n13</span>, <span class="signature-param">n14</span>, <span class="signature-param">n21</span>, <span class="signature-param">n22</span>, <span class="signature-param">n23</span>, <span class="signature-param">n24</span>, <span class="signature-param">n31</span>, <span class="signature-param">n32</span>, <span class="signature-param">n33</span>, <span class="signature-param">n34</span>, <span class="signature-param">n41</span>, <span class="signature-param">n42</span>, <span class="signature-param">n43</span>, <span class="signature-param">n44</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the elements of this matrix to the supplied row-major values n11, n12, ... n44.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>n11</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n12</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n13</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n14</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n21</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n22</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n23</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n24</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n31</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n32</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n33</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n34</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n41</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n42</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n43</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>n44</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-102">line 102</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="identity" class="function public"><span class="name">identity</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the current matrix to the identity</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-118">line 118</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="multiplyMatrices" class="function public"><span class="name">multiplyMatrices</span><span class="signature-params">( <span class="signature-param">a</span>, <span class="signature-param">b</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the matrix to the product a * b</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>a</code></td>
+							<td><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>b</code></td>
+							<td><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-134">line 134</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="multiply" class="function public"><span class="name">multiply</span><span class="signature-params">( <span class="signature-param">m</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Matrix multiplication</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>m</code></td>
+							<td><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-151">line 151</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="premultiply" class="function public"><span class="name">premultiply</span><span class="signature-params">( <span class="signature-param">m</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Matrix pre-multiplication</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>m</code></td>
+							<td><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-160">line 160</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="multiplyScalar" class="function public"><span class="name">multiplyScalar</span><span class="signature-params">( <span class="signature-param">s</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Multiply the matrix by a scalar</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>s</code></td>
+							<td><span class="param-type"><a href="QuadRingElement.html">QuadRingElement</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-169">line 169</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="transpose" class="function public"><span class="name">transpose</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the matrix to its transpose</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-180">line 180</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="invert" class="function public"><span class="name">invert</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the matrix to its inverse.
+			We recall that the determinant of the matrix is assumed to be one.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-217">line 217</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="equals" class="function public"><span class="name">equals</span><span class="signature-params">( <span class="signature-param">matrix</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{boolean}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Check if the two matrices are equal</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>matrix</code></td>
+							<td><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">boolean</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-352">line 352</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="fromArray" class="function public"><span class="name">fromArray</span><span class="signature-params">( <span class="signature-param">array</span>, <span class="signature-param">offset</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the coefficient from an array</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Default</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>array</code></td>
+							<td><span class="param-type">Array.&lt;<a href="QuadRingElement.html">QuadRingElement</a>></span></td>
+								<td></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>offset</code></td>
+							<td><span class="param-type">number</span></td>
+								<td>0</td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-366">line 366</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="toArray" class="function public"><span class="name">toArray</span><span class="signature-params">( <span class="signature-param">array</span>, <span class="signature-param">offset</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;<a href="QuadRingElement.html">QuadRingElement</a>>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the elements of the matrix as an array</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Default</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>array</code></td>
+							<td><span class="param-type">Array.&lt;<a href="QuadRingElement.html">QuadRingElement</a>></span></td>
+								<td></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>offset</code></td>
+							<td><span class="param-type">number</span></td>
+								<td>0</td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Array.&lt;<a href="QuadRingElement.html">QuadRingElement</a>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-379">line 379</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="toMatrix4" class="function public"><span class="name">toMatrix4</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{<a href="Matrix4.html">Matrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Convert the matrix to a Matrix4 (with number type entries)</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="Matrix4.html">Matrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-392">line 392</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="clone" class="function public"><span class="name">clone</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return a copy of the current matrix.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-402">line 402</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="copy" class="function public"><span class="name">copy</span><span class="signature-params">( <span class="signature-param">m</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="QuadRingMatrix4.html">QuadRingMatrix4</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Set the current matrix to m</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>m</code></td>
+							<td><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="utils_quadRing_QuadRingMatrix4.js.html">utils/quadRing/QuadRingMatrix4.js</a>, <a href="utils_quadRing_QuadRingMatrix4.js.html#line-411">line 411</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+									</dl>
+							</article>
+					</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
