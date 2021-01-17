@@ -7,6 +7,6 @@ export default `//
 * @return intensity of the light
 */
 float lightIntensity(float len){
-    return 1./(len);
+    return 1./(len * len);
 }
 `;
