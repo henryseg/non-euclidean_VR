@@ -158,4 +158,13 @@ const teleportations = [
     teleportZn
 ];
 
-export default new TeleportationSet(teleportations);
+const neighbors = [
+    {elt: shiftXp, inv: shiftXn},
+    {elt: shiftXn, inv: shiftXp},
+    {elt: shiftYp, inv: shiftYn},
+    {elt: shiftYn, inv: shiftYp},
+    {elt: shiftZp, inv: shiftZn},
+    {elt: shiftZn, inv: shiftZp}
+];
+
+export default new TeleportationSet(teleportations, neighbors);

@@ -127,6 +127,8 @@ RelVector smallShift(RelVector v, vec3 dp){
 /**
  * Compute the vector at the same point as v whose coordinates are given by the section of the frame bundle.
  * Overload of createVector
+ * We have to be careful, when using this function,
+ * that the section of the frame bundle given by \`frame\` is NOT invariant under isometries.
  */
 RelVector createVector(RelVector v, vec3 coords){
     v.local =  createVector(v.local.pos, coords);

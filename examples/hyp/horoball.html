@@ -20,16 +20,14 @@
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
     import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Horoball} from "../../js/geometries/hyp/solids/Horoball.js";
     import {LocalHoroball} from "../../js/geometries/hyp/solids/LocalHoroball.js";
     import {LocalBall} from "../../js/geometries/hyp/solids/all.js";
 
 
     const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
-    thurston.set.usesNearestNeighbors = true;
+    thurston.set.usesCreeping = false;
 
 
     // lights for the Phong material
@@ -53,6 +51,7 @@
     );
     const lights = [light0, light1, light2];
 
+
     // Phong shading material
     const mat0 = new PhongMaterial({
         color: new Color(1, 0.2, 0.2),
@@ -67,21 +66,29 @@
         lights: lights
     });
 
+
     const ball = new LocalBall(
         new Point(),
         0.2,
         mat0
     )
 
-    const modelHalfCube = 0.5773502692;
-    const horoball1 = new LocalHoroball(
-        new Vector(modelHalfCube, modelHalfCube, modelHalfCube),
-        // new Vector(0, 0, -1),
-        0.2,
-        mat1
-    );
+    const modelHalfCube = 1 / Math.sqrt(3);
 
-    thurston.add(ball, horoball1, light0, light1, light2);
+    const horoballs = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        horoballs[i] = new LocalHoroball(
+            new Vector((2 * i0 - 1) * modelHalfCube, (2 * i1 - 1) * modelHalfCube, (2 * i2 - 1) * modelHalfCube),
+            1.2,
+            mat1
+        );
+    }
+
+    thurston.add(...horoballs);
+    thurston.add(ball, light0, light1, light2);
     thurston.run();
 
     thurston.renderer.checkShader();

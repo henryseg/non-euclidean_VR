@@ -50,7 +50,7 @@ export class LocalHoroballShape extends BasicShape {
      * @type {boolean}
      */
     get isGlobal() {
-        return true;
+        return false;
     }
 
     get uniformType() {
@@ -65,8 +65,8 @@ export class LocalHoroballShape extends BasicShape {
         return mustache.render(sdf, this);
     }
 
-    // glslGradient() {
-    //     return mustache.render(gradient, this);
-    // }
+    glslGradient() {
+        return mustache.render(gradient, this);
+    }
 
 }
