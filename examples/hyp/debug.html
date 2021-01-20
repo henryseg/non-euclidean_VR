@@ -19,18 +19,17 @@
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
-    import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
+    import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid} from "../../js/core/solids/Solid.js";
     import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
     import {NormalMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
     import {DebugMaterial} from "../../js/commons/material/debug/DebugMaterial.js";
-    import {Ball} from "../../js/geometries/hyp/solids/all.js";
+    import {Ball, Cylinder} from "../../js/geometries/hyp/solids/all.js";
 
 
     const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
-    thurston.scene.fog = undefined;
 
 
     // lights for the Phong material
@@ -59,35 +58,15 @@
 
     const matNormal = new NormalMaterial();
 
-    const matDebug = new DebugMaterial(
-        light0
-    )
-
     // Phong shading material
     const matPhong = new PhongMaterial({
         color: new Color(1, 0.2, 0.2),
         shininess: 5,
     });
 
-    // Complement of a local ball
-    const ball0 = new LocalBallShape(
-        new Point(),
-        1.02,
-    );
+    const cyl = new Cylinder(0.1, new Isometry(), matPhong);
 
-    const ball = new Ball(
-        new Vector(0,0,-8),
-        6,
-        matColor
-    )
-
-
-    const latticeShape = complement(ball0);
-    const lattice = new Solid(latticeShape, matPhong);
-
-
-
-    thurston.add(lattice, light0, light1, light2);
+    thurston.add(cyl, light0, light1, light2);
     thurston.run();
 
 

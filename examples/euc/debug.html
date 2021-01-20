@@ -31,8 +31,8 @@
     torus.group.halfTranslationC = new Vector4(0, 1, 1, 0);
 
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
-    thurston.set.usesNearestNeighbors = true;
-    thurston.set.usesCreeping = false;
+    thurston.set.usesNearestNeighbors = false;
+    thurston.set.usesCreeping = true;
 
 
     // lights for the Phong material

@@ -40,12 +40,8 @@ export class Group extends AbstractGroup {
     set halfTranslationA(value) {
         this._halfTranslationA = value !== undefined ? value : new Vector4(1, 0, 0, 0);
         this.updateDotMatrix();
-        // this._halfLengthSqA = this._halfTranslationA.lengthSq();
     }
 
-    // get halfLengthSqA() {
-    //     return this._halfLengthSqA;
-    // }
 
     get halfTranslationB() {
         return this._halfTranslationB;
@@ -54,12 +50,7 @@ export class Group extends AbstractGroup {
     set halfTranslationB(value) {
         this._halfTranslationB = value !== undefined ? value : new Vector4(0, 1, 0, 0);
         this.updateDotMatrix();
-        // this._halfLengthSqB = this._halfTranslationB.lengthSq();
     }
-
-    // get halfLengthSqB() {
-    //     return this._halfLengthSqB;
-    // }
 
 
     get halfTranslationC() {
@@ -69,12 +60,7 @@ export class Group extends AbstractGroup {
     set halfTranslationC(value) {
         this._halfTranslationC = value !== undefined ? value : new Vector4(0, 0, 1, 0);
         this.updateDotMatrix();
-        // this._halfLengthSqC = this._halfTranslationC.lengthSq();
     }
-
-    // get halfLengthSqC() {
-    //     return this._halfLengthSqC;
-    // }
 
     updateDotMatrix() {
         if (this._dotMatrix === undefined) {
