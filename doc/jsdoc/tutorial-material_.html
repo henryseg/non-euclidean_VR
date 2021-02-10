@@ -1,0 +1,318 @@
+<!-- start:readme.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>Custom material</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Non-euclidean VR
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
+											<li><a href="global.html#complement">complement</a></li>
+											<li><a href="global.html#intersection">intersection</a></li>
+											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
+											<li><a href="global.html#RIGHT">RIGHT</a></li>
+											<li><a href="global.html#union">union</a></li>
+											<li><a href="global.html#wrap">wrap</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="AbstractThurston.html">AbstractThurston</a></li>
+											<li><a href="AbstractVRThurston.html">AbstractVRThurston</a></li>
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicCamera.html">BasicCamera</a></li>
+											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
+											<li><a href="FakeBall.html">FakeBall</a></li>
+											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
+											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
+											<li><a href="Horoball.html">Horoball</a></li>
+											<li><a href="HoroballShape.html">HoroballShape</a></li>
+											<li><a href="InfoControls_InfoControls.html">InfoControls#InfoControls</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
+											<li><a href="Isometry.html">Isometry</a></li>
+											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalFakeBall.html">LocalFakeBall</a></li>
+											<li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li>
+											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
+											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
+											<li><a href="LocalPotato.html">LocalPotato</a></li>
+											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="Material.html">Material</a></li>
+											<li><a href="NativeCamera.html">NativeCamera</a></li>
+											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
+											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
+											<li><a href="Thurston.html">Thurston</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
+											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
+											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
+											<li><a href="VRCamera.html">VRCamera</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
+											<li><a href="VRRenderer.html">VRRenderer</a></li>
+											<li><a href="VRThurston.html">VRThurston</a></li>
+											<li><a href="WrapShape.html">WrapShape</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">tutorial</span>
+				<h1><span class="title">Custom material</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_tutorial.html">Tutorials</a></li>
+							<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+							<li class="active">Custom material</li>
+						</ol>
+		<section class="tutorial-section">
+			<article><p>We explain here the requirements to define a new material.
+For examples, we refer the reader to</p>
+<ul>
+<li>the definition of the Phong material in <code>js/commons/material/phong</code>;</li>
+<li>the definition of the Checkerboard material in <code>js/commons/material/checkerboard</code>.</li>
+</ul>
+<h1>Class inheritance</h1>
+<p>A material is a JS class.
+It should extend the class <a href="Material.html">Material</a>.
+Note that <a href="Material.html">Material</a> inherits from <a href="Generic.html">Generic</a>,
+which defines methods various method to assign a UUID, a name, a scene ID, to the material.</p>
+<p>The constructor of <a href="Material.html">Material</a> does not take any argument.</p>
+<h1>Properties and methods</h1>
+<p>Any class defining a custom material should implement several methods/properties.
+Some of them are inherited by default from <a href="Material.html">Material</a> but can be overwritten.</p>
+<ul>
+<li>
+<p><a href="Generic.html#uniformType">uniformType</a> : string(getter):</p>
+<p>It says what is the GLSL type used to represent this material.</p>
+<ul>
+<li>If <code>uniformType</code> is non-empty, the data relative to the instance of this material are passed to the shader as uniform (as the given type).</li>
+<li>If <code>uniformType</code> is the empty string, no data is passed to the shader for the instances of this material.</li>
+</ul>
+<p>If the getter is not implemented, the class will inherit from the one of <a href="Generic.html">Generic</a> which always return the empty string.</p>
+<p>The GLSL type of a material can be a custom structure.
+In this case the structure should be defined in the code return by <code>glslClass()</code> (see below).</p>
+</li>
+<li>
+<p><a href="Material.html#usesNormal">usesNormal</a> : boolean (getter)</p>
+<p>The property should be true, if the normal to the shape is needed to compute its color with this material.</p>
+<p>In this case, the <a href="Renderer.html">Renderer</a> will make sure that the normal is computed,
+before calling the color function of the material</p>
+</li>
+<li>
+<p><a href="Material.html#usesUVMap">usesUVMap</a> : boolean (getter)</p>
+<p>The property should be true, if the UV coordinates of the shape are needed to compute its color with this material.</p>
+<p>In this case, the <a href="Renderer.html">Renderer</a> will make sure that the UV coordinates are computed,
+before calling the color function of the material.
+In addition, the <a href="Solid.html">Solid</a> constructor throw an error if
+the shape on which the material is applied does not implement UV coordinates.</p>
+</li>
+<li>
+<p><a href="Material.html#usesLight">usesLight</a> : boolean (getter)</p>
+<p>The property should be true, if the material is sensitive to the lights in the scene.</p>
+<p>In this case, the property <a href="Material.html#lights">lights</a> is an array with all the lights that affect the material.
+If <code>lights</code> is not set up when the solid carrying the material is added to the scene,
+then <code>lights</code> is set up to the list of lights in the scene.</p>
+</li>
+<li>
+<p><a href="Material.html#isReflecting">isReflecting</a> : boolean (getter)</p>
+<p>The property should be true if the material is reflexive.</p>
+<p>In this case, the reflectivity should be set up in the variable <a href="Material.html#reflectivity">reflectivity</a>.
+This property is a Three.js Color.
+Each channel (red, blue, green), interpreted as number between 0 and 1, is the reflectivity coefficient of the corresponding color
+(0 = no reflectivity, 1 = all light is reflected).</p>
+</li>
+<li>
+<p><a href="Generic.html#.glslClass">glslClass</a>() -&gt; {string} (static function):</p>
+<p>It returns the chunk of GLSL code that is common to all instances of this material.
+If <code>uniformType</code> return a custom GLSL type, then this GLSL code should define the corresponding structure.
+To each property used in the GLSL structure, should correspond a property of the JS class with the same name.
+Indeed, when the instance of this material is passed to the shader, the JS sends the instance as a whole.</p>
+<p>If this function is not implemented, the class will inherit from the one of <a href="Generic.html">Generic</a> which throws an error.</p>
+<p>If several instances of the same material are added to the scene,
+the <a href="ShaderBuilder.html">ShaderBuilder</a> makes sure that this code is inserted only once in the shader.</p>
+</li>
+<li>
+<p><a href="Material.html#glslRender">glslRender</a>() -&gt; {string} (method)</p>
+<p>It returns the chunk of GLSL code used to compute the color of <strong>this instance</strong> of the material.
+The GLSL should contain a function with one of the following signatures.</p>
+<pre class="prettyprint source"><code>vec3 NAME_render(RelVector v)
+</code></pre>
+<pre class="prettyprint source"><code>vec3 NAME_render(RelVector v, RelVector normal)
+</code></pre>
+<pre class="prettyprint source"><code>vec3 NAME_render(RelVector v, vec2 uv)
+</code></pre>
+<pre class="prettyprint source"><code>vec3 NAME_render(RelVector v, RelVector normal, vec2 uv)
+</code></pre>
+<p>where <code>NAME</code> is the name of the instance of the object, computed by the getter <code>name</code> (inherited from <a href="Generic.html">Generic</a>).
+The exact signature depends on whether the material requires a normal or UV coordinates.
+Here <code>v</code> is the vector obtained when we hit the shape.
+It should return the color as a vec3 of the material at the given point,
+without taking into account the possible reflections.
+Reflections are automatically computed somewhere else in the shader.</p>
+</li>
+</ul>
+<h1>Wrapping material.</h1>
+<p>Defining a material that is affected by the lights can be strenuous,
+as one needs to rebuild each time the functions handling interactions with lights.
+To avoid this process one can proceed as follows.</p>
+<ol>
+<li>Build a material <code>base</code> whose only job is to return the <em>intrinsic</em> color of the object</li>
+<li>Wrap this material into another material with the command</li>
+</ol>
+<pre class="prettyprint source lang-javascript"><code>const material = phongWrap(base, params);
+</code></pre>
+<p>The <a href="global.html#phongWrap">phongWrap</a> function takes a material and return a material.
+The material <code>base</code> passed in argument define the ambient color of the Phong model for the output material.
+The parameters of the Phong model are passed in the object <code>params</code>.</p></article>
+		</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:readme.hbs -->

@@ -1,23 +1,71 @@
-# non-euclidean_VR
+# Ray-marching in Thurston geometries
 
-Non-euclidean VR
+This project started from the ray marching hyperbolic virtual reality [simulation](https://github.com/mtwoodard/hypVR-Ray_m) (for mobile devices) by Henry Segerman and Michael Woodard,
+which is in turn based on the full [simulation](https://github.com/mtwoodard/hypVR-Ray).
 
-Based on the ray marching hyperbolic virtual reality simulation (for mobile devices) by Henry Segerman and Michael Woodard at https://github.com/mtwoodard/hypVR-Ray_m,
-which is in turn based on the full simulation at https://github.com/mtwoodard/hypVR-Ray. 
+This version is as independent of the underlying geometry as possible.
+It comes with an API to
+- build and animate scenes in a given geometry
+- define objects, lights, materials, etc
+- implement new geometries (or new models of existing geometries)
 
-The intention is that this version is as independent of the underlying geometry as possible. Different branches of this project will simulate different geometries, e.g. the other eight Thurston geometries.
+This project started at the *Illustrating Mathematics* semester program at [ICERM](https://icerm.brown.edu). 
 
-This project started at the Illustrating Mathematics semester program at ICERM (https://icerm.brown.edu). Henry Segerman is partially supported by NSF grant DMS-1708239. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+## Controls
 
-# Controls
-Use arrow keys to move and "wasd" to rotate the camera. "q" and "e" roll the camera. 
+The default controls in the example pages are the following.
 
-# Running Locally
-Running this locally requires a simple web server (to source the shader files at runtime), with the root at the same level as index.html. This can be done in python 3 by running the command "python -m http.server". On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first). NOTE: The server will need to have a MIME type configuration for .glsl files set to "text/plain".
+Command | QWERTY keyboard | AZERTY keyboard
+--- | --- | ---
+Yaw left|`a`|`q`
+Yaw right|`d`|`d`
+Pitch up|`w`|`z`
+Pitch down|`s`|`s`
+Roll left|`q`|`a`
+Roll right|`e`|`e`
+Move forward|`arrow up`|`arrow up`
+Move backward|`arrow down`|`arrow down`
+Move to the left|`arrow left`|`arrow left`
+Move the the right|`arrow right`|`arrow right`
+Move upwards|`'`|`ù`
+Move downwards|`/`|`=`
 
-# Done or in progress
-S^3, E^3, H^3, S^2 x R, H^2 x R, Nil, Sol, and SL(2,R)
+## Running Locally
+Running this locally requires a simple web server (to allow CORS requests).
+This can be done in Python 3 by running the command 
 
-# License
+```(zsh)
+python -m http.server
+```
+
+To run the VR examples you may need a more advance settings as an HTTPS protocol is required.
+
+On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first). 
+
+**Note**: The server will need to have a MIME type configuration:
+- `.glsl` files -> `text/plain` (probably no more needed).
+- `.mjs` files -> `text/javascript` 
+
+## Done or in progress (on this branch)
+S^3, E^3, H^3, Nil
+
+## License
 
 Released under the terms of the GNU [General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html), version 3 or later.
+
+
+## Main contributors
+
+(alphabetic order)
+
+- **Rémi Coulon** [@remi-coulon](https://github.com/remi-coulon)
+  
+  Rémi Coulon is partially supported by the the *Centre Henri Lebesgue* ANR-11-LABX-0020-01 
+  and the Agence Nationale de la Recherche under Grant *Dagger* ANR-16-CE40- 0006-01.
+- **Sabetta Matsumoto** [@sabetta](https://github.com/sabetta)
+- **Henry Segerman** [@henryseg](https://github.com/henryseg)
+  
+  Henry Segerman is partially supported by NSF grant DMS-1708239.
+  Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+- **Steve Trettel** [@stevejtrettel](https://github.com/stevejtrettel)
+

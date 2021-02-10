@@ -1,0 +1,337 @@
+<!-- start:readme.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>Custom shape</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Non-euclidean VR
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
+											<li><a href="global.html#complement">complement</a></li>
+											<li><a href="global.html#intersection">intersection</a></li>
+											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
+											<li><a href="global.html#RIGHT">RIGHT</a></li>
+											<li><a href="global.html#union">union</a></li>
+											<li><a href="global.html#wrap">wrap</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="AbstractThurston.html">AbstractThurston</a></li>
+											<li><a href="AbstractVRThurston.html">AbstractVRThurston</a></li>
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicCamera.html">BasicCamera</a></li>
+											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
+											<li><a href="FakeBall.html">FakeBall</a></li>
+											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
+											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
+											<li><a href="Horoball.html">Horoball</a></li>
+											<li><a href="HoroballShape.html">HoroballShape</a></li>
+											<li><a href="InfoControls_InfoControls.html">InfoControls#InfoControls</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
+											<li><a href="Isometry.html">Isometry</a></li>
+											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalFakeBall.html">LocalFakeBall</a></li>
+											<li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li>
+											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
+											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
+											<li><a href="LocalPotato.html">LocalPotato</a></li>
+											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="Material.html">Material</a></li>
+											<li><a href="NativeCamera.html">NativeCamera</a></li>
+											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
+											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
+											<li><a href="Thurston.html">Thurston</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
+											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
+											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
+											<li><a href="VRCamera.html">VRCamera</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
+											<li><a href="VRRenderer.html">VRRenderer</a></li>
+											<li><a href="VRThurston.html">VRThurston</a></li>
+											<li><a href="WrapShape.html">WrapShape</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">tutorial</span>
+				<h1><span class="title">Custom shape</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_tutorial.html">Tutorials</a></li>
+							<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+							<li class="active">Custom shape</li>
+						</ol>
+		<section class="tutorial-section">
+			<article><p>We explain here the requirement to define a new shape in a given geometry.
+For an example, we refer the reader to</p>
+<ul>
+<li>the definition of balls in <code>js/geometries/euc/shapes/ball</code> for a BasicShape.</li>
+<li>the union of shapes in <code>js/commons/shapes/union</code> for an AdvancedShape</li>
+</ul>
+<h1>Class inheritance</h1>
+<p>A shape is defined by a JS class.</p>
+<ul>
+<li>If the shape is a basic shape (i.e. it is a stand-alone shape),
+then it should extend the class <a href="BasicShape.html">BasicShape</a>.</li>
+<li>If the shape is an advanced shape (i.e. it relies on other shapes, as for boolean operations),
+then it should extend the class <a href="AdvancedShape.html">AdvancedShape</a>.</li>
+</ul>
+<p>Those two classes inherits from abstract class <a href="Shape.html">Shape</a> which itself inherits from <a href="Generic.html">Generic</a>,
+which defines methods various method to assign a UUID, a name, a scene ID, to the shape.</p>
+<p>The constructors of both <a href="BasicShape.html">BasicShape</a> and <a href="AdvancedShape.html">AdvancedShape</a> take no argument.
+The class will inherit the method <a href="Generic.html#addImport">addImport</a> from <a href="Generic.html">Generic</a>.
+This method can be called in the constructor.
+Its purpose is to register chunk of GLSL code which are common to several classes (Shapes, Materials, Solids, Lights, etc).
+The <a href="ShaderBuilder.html">ShaderBuilder</a> makes sure that each import is inserted only once in the shader.</p>
+<p><strong>Remark</strong>. For the moment, there is actually no main difference between <a href="BasicShape.html">BasicShape</a> and <a href="AdvancedShape.html">AdvancedShape</a>,
+but this could change in the future.</p>
+<p><strong>Remark</strong>.
+A shape is meant to work in a specific geometry (e.g. a half-space in Nil cannot be used in Sol).
+However, there is no check that the shape is used correctly.
+It is the duty of the person writing a scene to make sure that they are not mixing shapes from different geometries.</p>
+<h1>Properties and methods</h1>
+<p>Any class defining a shape needs to implement several methods/properties.
+Some of them are inherited by default from the class <a href="Shape.html">Shape</a> but can be overwritten.</p>
+<ul>
+<li>
+<p><a href="Shape.html#isGlobal">isGlobal</a> : boolean (getter):</p>
+<p>If true, the shape is global, that is it lives in the universal cover.
+If false the shape is local, that is it lives in the quotient manifold.
+If the getter is not implemented, the class will inherit from the one of <a href="Shape.html">Shape</a> which always return true.</p>
+</li>
+<li>
+<p><a href="Generic.html#uniformType">uniformType</a> : string(getter):</p>
+<p>It says what is the GLSL type used to represent this object.</p>
+<ul>
+<li>If <code>uniformType</code> is non-empty, the data relative to the instance of this shape are passed to the shader as uniform (as the given type).</li>
+<li>If <code>uniformType</code> is the empty string, no data is passed to the shader for the instances of this shape.</li>
+</ul>
+<p>If the getter is not implemented, the class will inherit from the one of <a href="Generic.html">Generic</a> which always return the empty string.</p>
+<p>The GLSL type of a shape can be a custom structure.
+In this case the structure should be defined in the code return by <code>glslClass()</code> (see below).</p>
+</li>
+<li>
+<p><a href="Shape.html#hasUVMap">hasUVMap</a> : boolean (getter):</p>
+<p>It says whether the shape comes with a UV map or not (e.g. for applying textures).
+If true, the class should implement the method <code>glslUVMap()</code> (see below).</p>
+<p>If the getter is not implemented, the class will inherit from the one of <a href="Shape.html">Shape</a> which always return false.</p>
+</li>
+<li>
+<p><a href="Generic.html#.glslClass">glslClass</a>() -&gt; {string} (static function):</p>
+<p>It returns the chunk of GLSL code that is common to all instances of this shape.
+If <code>uniformType</code> return a custom GLSL type, then this GLSL code should define the corresponding structure.
+To each property used in the GLSL structure, should correspond a property of the JS class with the same name.
+Indeed, when the instance of this shape is passed to the shader, the JS sends the instance as a whole.</p>
+<p>If this function is not implemented, the class will inherit from the one of <a href="Generic.html">Generic</a> which throws an error.</p>
+<p>If several instances of the same shape are added to the scene,
+the <a href="ShaderBuilder.html">ShaderBuilder</a> makes sure that this code is inserted only once in the shader.</p>
+</li>
+<li>
+<p><a href="Shape.html#glslSDF">glslSDF</a>() -&gt; {string} (method):</p>
+<p>It returns the chunk of GLSL code corresponding to the signed distance function of <strong>this</strong> instance of the shape.
+The signature of this GLSL function should be</p>
+<pre class="prettyprint source lang-glsl"><code>float NAME_sdf(RelVector v)
+</code></pre>
+<p>where <code>NAME</code> is the name of the instance of the object, computed by the getter <code>name</code> (inherited from <a href="Generic.html">Generic</a>).</p>
+<p>If this method is not implemented, the class will inherit from the one of <a href="Shape.html">Shape</a> which throws an error.</p>
+</li>
+<li>
+<p><a href="Shape.html#glslGradient">glslGradient</a>() -&gt; {string} (method):</p>
+<p>It returns the chunk of GLSL code corresponding to the gradient of the signed distance function of <strong>this</strong> instance of the shape.
+The signature of this GLSL function should be</p>
+<pre class="prettyprint source lang-glsl"><code>RelVector NAME_gradient(RelVector v)
+</code></pre>
+<p>where <code>NAME</code> is the name of the instance of the object, computed by the getter <code>name</code> (inherited from <a href="Generic.html">Generic</a>).</p>
+<p>If this method is not implemented, the class will inherit from the one of <a href="Shape.html">Shape</a>.
+This inherited method will return a chunk of code that estimates numerically the gradient (using the SDF).</p>
+</li>
+<li>
+<p><a href="Shape.html#glslUVMap">glslUVMap</a>() -&gt; {string} (method):</p>
+<p>It returns the chunk of GLSL code corresponding to the UV map of <strong>this</strong> instance of the shape.
+It is mandatory only if the getter <code>hasUVMap</code> returns true.
+The signature of this GLSL function should be</p>
+<pre class="prettyprint source lang-glsl"><code>vec2 NAME_uvMap(RelVector v)
+</code></pre>
+<p>where <code>NAME</code> is the name of the instance of the object, computed by the getter <code>name</code> (inherited from <a href="Generic.html">Generic</a>).</p>
+<p>If this method is not implemented, the class will inherit from the one of <a href="Shape.html">Shape</a> which throws an error.</p>
+</li>
+<li>
+<p><a href="Generic.html#setId">setId</a>(scene: Scene) -&gt; {void}:</p>
+<p>It set the id of the shape in the scene.
+This method is called when the a solid using this shape is added to the scene.
+For a basic shape the method inherited from <a href="Generic.html">Generic</a> should do the job.
+For advanced shape, the method should propagate <code>setId</code> to the shapes it is built on.</p>
+</li>
+<li>
+<p><a href="Generic.html#onAdd">onAdd</a>(scene: Scene) -&gt; {void}:</p>
+<p>It performs custom actions when the solid using this shape is added to the scene.
+By default, the method inherited from <a href="Generic.html">Generic</a> does nothing.</p>
+</li>
+<li>
+<p><a href="Generic.html#shader">shader</a>(shaderBuilder: ShaderBuilder) -&gt; {void}</p>
+<p>It builds the chunk of GLSL code required to handle this instance of the shape.
+By default, the method inherited from <a href="Generic.html">Generic</a> load first the imports and the code from <code>glslClass()</code>,
+then eventually declare the shape as a uniform,
+and finally load the code from <code>glslSDF()</code>, <code>glslGradient</code> and eventually <code>glslUVMap()</code>.
+For basic shape, this should do the job.
+For an advance shape the method should propagate <code>shader</code> to the shapes it is built on.</p>
+</li>
+</ul>
+<p>In order to produce the GLSL functions <code>NAME_sdf</code>, <code>NAME_gradient</code>, and <code>NAME_uvMap</code>,
+one can use a template engine, such as <a href="https://github.com/janl/mustache.js/">mustache.js</a>
+that will dynamically generate the code, with the appropriate name.</p></article>
+		</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:readme.hbs -->

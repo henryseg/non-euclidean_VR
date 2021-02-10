@@ -1,0 +1,15 @@
+# Apple file system
+*.DS_Store
+
+# Python Virtual Environment
+__pycache__/**
+**/__pycache__/**
+
+# Workspace of Webstorm
+.idea/**
+**/.idea/**
+
+/doc/package.json
+/doc/package-lock.json
+/doc/node_modules/**
+/z_old_code/

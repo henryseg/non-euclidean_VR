@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: property.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: property.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Properties
+ *
+ * @description
+ * Module used to simplify the use of static and dynamic properties
+ */
+
+
+const SHADER_PASS = {
+    NONE: 0,
+    CONSTANT: 1,
+    UNIFORM: 2,
+}
+
+/**
+ * @class
+ * @abstract
+ *
+ * @classdesc Abstract class to handle a generic property.
+ *
+ * @property {boolean} shaderCst - true if this property should be passed to the shader as a constant
+ * @property {boolean} shaderUni - true if this property should be passed to the shader as a uniform
+ * @property {string} shaderType - the type of the property on the shader side (when needed)
+ */
+class AbstractProp {
+
+    /**
+     * Constructor
+     * @param {Object} options - the argument passed as an object
+     */
+    constructor(options = {}) {
+        const defaultOptions = this.defaultOptions();
+        for (const property in defaultOptions) {
+            if (options.hasOwnProperty(property)) {
+                this[property] = options[property];
+            } else {
+                this[property] = defaultOptions[property];
+            }
+        }
+    }
+
+    /**
+     * Return the default value of the available options
+     * @returns {{shaderType: undefined, shaderUniform: boolean, shaderConstant: boolean}}
+     */
+    defaultOptions() {
+        return {
+            shaderPass: undefined,
+            shaderType: undefined
+        }
+    }
+
+    /**
+     * Return the value of the property
+     */
+    value() {
+        throw new Error("This method should be implemented");
+    }
+
+    get isStatic() {
+        throw new Error("This method should be implemented");
+    }
+
+    get isDynamic() {
+        throw new Error("This method should be implemented");
+    }
+}
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Class for a constant property
+ * It can be changed manually though.
+ */
+class StaticProp extends AbstractProp {
+
+    constructor(value, options = {}) {
+        super(options);
+        /** @protected */
+        this._value = value
+    }
+
+    /**
+     * Set the value of the property.
+     * @param value
+     */
+    set(value) {
+        this._value = value;
+    }
+
+    /**
+     * Return the value of the property.
+     * @return {*}
+     */
+    value() {
+        return this._value;
+    }
+
+    /**
+     * Return the value of the property.
+     * @return {*}
+     */
+    shaderValue() {
+        return this._value;
+    }
+
+    get isStatic() {
+        return true;
+    }
+
+    get isDynamic() {
+        return false;
+    }
+
+}
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Class for a dynamical property.
+ * Its value is given by a callback.
+ */
+class DynamicProp extends AbstractProp {
+
+    constructor(callback, options = {}) {
+        super(options);
+        /** @protected */
+        this._callback = callback
+    }
+
+    /**
+     * Set the callback of the property.
+     * @param callback
+     */
+    set(callback) {
+        this._callback = callback;
+    }
+
+    /**
+     * Return the value of the property.
+     * The arguments are the ones passed to the callback function.
+     * @param args
+     * @return {*}
+     */
+    value(args) {
+        return this._callback(args);
+    }
+
+    get isStatic() {
+        return false;
+    }
+
+    get isDynamic() {
+        return true;
+    }
+}
+
+
+function addShaderPass(arg, shaderPass, shaderType) {
+    switch (typeof (arg)) {
+        case "object":
+            if(arg.hasOwnProperty('shaderPass')){
+                throw new Error('The property shaderPass is already defined for this object');
+            }
+            if(arg.hasOwnProperty('shaderType')){
+                throw new Error('The property shaderType is already defined for this object');
+            }
+            arg.shaderPass = shaderPass;
+            arg.shaderType = shaderType;
+            arg.shaderValue = function () {
+                return this;
+            };
+            return arg;
+        case "number":
+        case "boolean":
+            return new StaticProp(arg, {shaderPass: shaderPass, shaderType: shaderType});
+        default:
+            throw new Error("This type of data is not covered");
+    }
+}
+
+function getShaderPass(arg) {
+    if (typeof (arg) !== 'object') {
+        return SHADER_PASS.NONE;
+    }
+    if (arg.shaderPass === undefined) {
+        return SHADER_PASS.NONE;
+    }
+    return arg.shaderPass;
+}
+
+function addShaderCst(arg, shaderType = undefined) {
+    return addShaderPass(arg, SHADER_PASS.CONSTANT, shaderType);
+}
+
+function addShaderUni(arg, shaderType) {
+    return addShaderPass(arg, SHADER_PASS.UNIFORM, shaderType);
+}
+
+function isShaderCst(arg) {
+    return getShaderPass(arg) === SHADER_PASS.CONSTANT;
+}
+
+function isShaderUni(arg) {
+    return getShaderPass(arg) === SHADER_PASS.UNIFORM;
+}
+
+
+export {
+    SHADER_PASS,
+    StaticProp,
+    DynamicProp,
+    getShaderPass,
+    addShaderPass,
+    isShaderCst,
+    isShaderUni,
+    addShaderCst,
+    addShaderUni,
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-Properties.html">Properties</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Euclidean%2520items.html">Thurston Euclidean items</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li></ul><h3>Classes</h3><ul><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Properties-AbstractProp.html">AbstractProp</a></li><li><a href="module-Properties-DynamicProp.html">DynamicProp</a></li><li><a href="module-Properties-StaticProp.html">StaticProp</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Nov 23 2020 20:32:40 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

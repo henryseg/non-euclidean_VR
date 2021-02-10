@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: events.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: events.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module events
+ *
+ * @description
+ * Handling events for interactions
+ *
+ * @todo Add the events related to the VR set? Check how to do that.
+ * Look at {@link https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API |WebXR} ?
+ * @todo Merge with controls?
+ */
+
+import{
+  renderer
+} from "./thurston.js";
+
+
+
+/**
+ * Action when the window is resized
+ * @param {Event} event
+ * @todo update the screen resolution passed to the shader
+ */
+function onResize(event) {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+
+/**
+ * Move up
+ */
+function actionMoveUp(){
+
+}
+/**
+ * Move down
+ */
+function actionMoveDown(){
+
+}
+/**
+ * Move left
+ */
+function actionMoveLeft(){
+
+}
+/**
+ * Move right
+ */
+function actionMoveRight(){
+
+}
+/**
+ * Move forward
+ */
+function actionMoveForward(){
+
+}
+/**
+ * Move backward
+ */
+function actionMoveBackward(){
+
+}
+
+/**
+ * Keyboard commands.
+ * Each main entry correspond to a keyboard type (American, French, etc).
+ * @type {{'fr': {}, 'us': {}}}
+ */
+const keyboard = {
+    'us': {
+        65: {
+            index: 1,
+            sign: 1,
+            active: 0
+        }, // a
+        68: {
+            index: 1,
+            sign: -1,
+            active: 0
+        }, // d
+        87: {
+            index: 0,
+            sign: 1,
+            active: 0
+        }, // w
+        83: {
+            index: 0,
+            sign: -1,
+            active: 0
+        }, // s
+        81: {
+            index: 2,
+            sign: -1,
+            active: 0
+        }, // q
+        69: {
+            index: 2,
+            sign: 1,
+            active: 0
+        }, // e
+        38: {
+            index: 3,
+            sign: 1,
+            active: 0
+        }, // up
+        40: {
+            index: 3,
+            sign: -1,
+            active: 0
+        }, // down
+        37: {
+            index: 4,
+            sign: -1,
+            active: 0
+        }, // left
+        39: {
+            index: 4,
+            sign: 1,
+            active: 0
+        }, // right
+        222: {
+            index: 5,
+            sign: 1,
+            active: 0
+        }, // single quote
+        191: {
+            index: 5,
+            sign: -1,
+            active: 0
+        }, // fwd slash
+    },
+    'fr': {
+        81: {
+            index: 1,
+            sign: 1,
+            active: 0
+        }, // q
+        68: {
+            index: 1,
+            sign: -1,
+            active: 0
+        }, // d
+        90: {
+            index: 0,
+            sign: 1,
+            active: 0
+        }, // z
+        83: {
+            index: 0,
+            sign: -1,
+            active: 0
+        }, // s
+        65: {
+            index: 2,
+            sign: -1,
+            active: 0
+        }, // a
+        69: {
+            index: 2,
+            sign: 1,
+            active: 0
+        }, // e
+        38: {
+            index: 3,
+            sign: 1,
+            active: 0
+        }, // up
+        40: {
+            index: 3,
+            sign: -1,
+            active: 0
+        }, // down
+        37: {
+            index: 4,
+            sign: -1,
+            active: 0
+        }, // left
+        39: {
+            index: 4,
+            sign: 1,
+            active: 0
+        }, // right
+        165: {
+            index: 5,
+            sign: 1,
+            active: 0
+        }, // ù
+        61: {
+            index: 5,
+            sign: -1,
+            active: 0
+        }, // =
+    }
+};
+
+
+
+/**
+ * Action when a key is pressed
+ * @param {Event} event
+ */
+function onKey(event) {
+  event.preventDefault();
+  //console.log(event);
+}
+
+
+/**
+ * Action for taps on a phone
+ * @param {Event} event
+ */
+function onTap(event) {}
+
+
+/**
+ * Action when a click is detected
+ * @param {Event} event
+ */
+function onClick(event) {}
+
+/**
+ * Init the events.
+ * Add all necessary event listeners.
+ */
+function addListeners() {
+  window.addEventListener("resize", onResize, false);
+  document.addEventListener('keydown', onKey, false);
+}
+
+export{
+    addListeners
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Abstract%2520geometry.html">Abstract geometry</a></li><li><a href="module-Euclidean%2520geometry.html">Euclidean geometry</a></li><li><a href="module-events.html">events</a></li><li><a href="module-Thruston%2520Euclidean%2520items.html">Thruston Euclidean items</a></li><li><a href="module-Thurston.html">Thurston</a></li><li><a href="module-Thurston%2520Items.html">Thurston Items</a></li><li><a href="module-User%2520Interface.html">User Interface</a></li></ul><h3>Classes</h3><ul><li><a href="Controls.html">Controls</a></li><li><a href="Material.html">Material</a></li><li><a href="module-Abstract%2520geometry-Isometry.html">Isometry</a></li><li><a href="module-Abstract%2520geometry-Point.html">Point</a></li><li><a href="module-Abstract%2520geometry-Position.html">Position</a></li><li><a href="module-Abstract%2520geometry-Vector.html">Vector</a></li><li><a href="module-Thurston%2520Items-Item.html">Item</a></li><li><a href="module-Thurston%2520Items-Light.html">Light</a></li><li><a href="module-Thurston%2520Items-Solid.html">Solid</a></li><li><a href="module-Thurston-Thurston.html">Thurston</a></li></ul><h3>Global</h3><ul><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#materialDefault">materialDefault</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 18 2020 17:23:02 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

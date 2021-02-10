@@ -1,0 +1,630 @@
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>utils/quadRing/QuadRingMatrix4.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Non-euclidean VR
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
+											<li><a href="global.html#complement">complement</a></li>
+											<li><a href="global.html#intersection">intersection</a></li>
+											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
+											<li><a href="global.html#RIGHT">RIGHT</a></li>
+											<li><a href="global.html#union">union</a></li>
+											<li><a href="global.html#wrap">wrap</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="AbstractThurston.html">AbstractThurston</a></li>
+											<li><a href="AbstractVRThurston.html">AbstractVRThurston</a></li>
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicCamera.html">BasicCamera</a></li>
+											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
+											<li><a href="FakeBall.html">FakeBall</a></li>
+											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
+											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
+											<li><a href="Horoball.html">Horoball</a></li>
+											<li><a href="HoroballShape.html">HoroballShape</a></li>
+											<li><a href="InfoControls_InfoControls.html">InfoControls#InfoControls</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
+											<li><a href="Isometry.html">Isometry</a></li>
+											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalFakeBall.html">LocalFakeBall</a></li>
+											<li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li>
+											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
+											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
+											<li><a href="LocalPotato.html">LocalPotato</a></li>
+											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="Material.html">Material</a></li>
+											<li><a href="NativeCamera.html">NativeCamera</a></li>
+											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
+											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
+											<li><a href="Thurston.html">Thurston</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
+											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
+											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
+											<li><a href="VRCamera.html">VRCamera</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
+											<li><a href="VRRenderer.html">VRRenderer</a></li>
+											<li><a href="VRThurston.html">VRThurston</a></li>
+											<li><a href="WrapShape.html">WrapShape</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">utils/quadRing/QuadRingMatrix4.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import {QuadRingElement} from "./QuadRingElement.js";
+import {Matrix4} from "../../lib/three.module.js";
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * 4x4 matrix over a quadratic field **with determinant 1** (o make inversion easier).
+ * @author Mostly borrowed from Three.js
+ */
+export class QuadRingMatrix4 {
+
+    constructor(ring) {
+        /**
+         * The underlying quadratic ring
+         * @type {QuadRing}
+         */
+        this.ring = ring;
+        /**
+         * The elements of the matrix, in a  column-major order
+         * @type {QuadRingElement[]}
+         */
+        this.elements = [
+            this.ring.one.clone(), this.ring.zero.clone(), this.ring.zero.clone(), this.ring.zero.clone(),
+            this.ring.zero.clone(), this.ring.one.clone(), this.ring.zero.clone(), this.ring.zero.clone(),
+            this.ring.zero.clone(), this.ring.zero.clone(), this.ring.one.clone(), this.ring.zero.clone(),
+            this.ring.zero.clone(), this.ring.zero.clone(), this.ring.zero.clone(), this.ring.one.clone()
+        ];
+    }
+
+    /**
+     * Flag to precise the type of the object
+     * @type {boolean}
+     */
+    get isQuadRingMatrix4() {
+        return true;
+    }
+
+    /**
+     * The 4x4 matrix with all the a-parts.
+     * This data is need for the shader
+     * @type{Matrix4}
+     */
+    get a() {
+        const entries = this.toArray().map(x => x.a);
+        return new Matrix4().fromArray(entries);
+    }
+
+    /**
+     * The 4x4 matrix with all the b-parts.
+     * This data is need for the shader
+     * @type{Matrix4}
+     */
+    get b() {
+        const entries = this.toArray().map(x => x.b);
+        return new Matrix4().fromArray(entries);
+    }
+
+    /**
+     * Return the ij-entry
+     * @param {number} i - the row index
+     * @param {number} j - the column index
+     * @return {QuadRingElement}
+     */
+    getEntry(i, j) {
+        return this.elements[4 * j + i];
+    }
+
+    /**
+     * Set the value of the ij-entry
+     * @param {number} i - the row index
+     * @param {number} j - the column index
+     * @param {QuadRingElement} value
+     * @return {QuadRingMatrix4}
+     */
+    setEntry(i, j, value) {
+        this.elements[4 * j + i].copy(value);
+        return this;
+    }
+
+    /**
+     * Set the elements of this matrix to the supplied row-major values n11, n12, ... n44.
+     * @param {QuadRingElement} n11
+     * @param {QuadRingElement} n12
+     * @param {QuadRingElement} n13
+     * @param {QuadRingElement} n14
+     * @param {QuadRingElement} n21
+     * @param {QuadRingElement} n22
+     * @param {QuadRingElement} n23
+     * @param {QuadRingElement} n24
+     * @param {QuadRingElement} n31
+     * @param {QuadRingElement} n32
+     * @param {QuadRingElement} n33
+     * @param {QuadRingElement} n34
+     * @param {QuadRingElement} n41
+     * @param {QuadRingElement} n42
+     * @param {QuadRingElement} n43
+     * @param {QuadRingElement} n44
+     * @return {QuadRingMatrix4}
+     */
+    set(n11, n12, n13, n14,
+        n21, n22, n23, n24,
+        n31, n32, n33, n34,
+        n41, n42, n43, n44) {
+        for (let i = 0; i &lt; 4; i++) {
+            for (let j = 0; j &lt; 4; j++) {
+                this.setEntry(i, j, arguments[4 * i + j]);
+            }
+        }
+        return this;
+
+    }
+
+    /**
+     * Set the current matrix to the identity
+     */
+    identity() {
+        this.elements = [
+            this.ring.one.clone(), this.ring.zero.clone(), this.ring.zero.clone(), this.ring.zero.clone(),
+            this.ring.zero.clone(), this.ring.one.clone(), this.ring.zero.clone(), this.ring.zero.clone(),
+            this.ring.zero.clone(), this.ring.zero.clone(), this.ring.one.clone(), this.ring.zero.clone(),
+            this.ring.zero.clone(), this.ring.zero.clone(), this.ring.zero.clone(), this.ring.one.clone()
+        ];
+        return this;
+    }
+
+    /**
+     * Set the matrix to the product a * b
+     * @param {QuadRingMatrix4} a
+     * @param {QuadRingMatrix4} b
+     * @return {QuadRingMatrix4}
+     */
+    multiplyMatrices(a, b) {
+        for (let i = 0; i &lt; 4; i++) {
+            for (let j = 0; j &lt; 4; j++) {
+                this.setEntry(i, j, this.ring.zero);
+                for (let k = 0; k &lt; 4; k++) {
+                    this.getEntry(i, j).addProduct(a.getEntry(i, k), b.getEntry(k, j));
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Matrix multiplication
+     * @param {QuadRingMatrix4} m
+     * @return {QuadRingMatrix4}
+     */
+    multiply(m) {
+        return this.multiplyMatrices(this, m);
+    }
+
+    /**
+     * Matrix pre-multiplication
+     * @param {QuadRingMatrix4} m
+     * @return {QuadRingMatrix4}
+     */
+    premultiply(m) {
+        return this.multiplyMatrices(m, this);
+    }
+
+    /**
+     * Multiply the matrix by a scalar
+     * @param {QuadRingElement} s
+     * @return {QuadRingMatrix4}
+     */
+    multiplyScalar(s) {
+        for (let i = 0; i &lt; 16; i++) {
+            this.elements[i].multiply(s);
+        }
+        return this;
+    }
+
+    /**
+     * Set the matrix to its transpose
+     * @return {QuadRingMatrix4}
+     */
+    transpose() {
+
+        const te = this.elements;
+        let tmp = this.ring.element();
+
+        tmp.copy(te[1]);
+        te[1].copy(te[4]);
+        te[4].copy(tmp);
+
+        tmp.copy(te[2]);
+        te[2].copy(te[8]);
+        te[8].copy(tmp);
+
+        tmp.copy(te[6]);
+        te[6].copy(te[9]);
+        te[9].copy(tmp);
+
+        tmp.copy(te[3]);
+        te[3].copy(te[12]);
+        te[12].copy(tmp);
+
+        tmp.copy(te[7]);
+        te[7].copy(te[13]);
+        te[13].copy(tmp);
+
+        tmp.copy(te[11]);
+        te[11].copy(te[14]);
+        te[14].copy(tmp);
+
+        return this;
+    }
+
+    /**
+     * Set the matrix to its inverse.
+     * We recall that the determinant of the matrix is assumed to be one.
+     * @return {QuadRingMatrix4}
+     */
+    invert() {
+
+        // based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
+        const te = this.elements,
+
+            n11 = te[0], n21 = te[1], n31 = te[2], n41 = te[3],
+            n12 = te[4], n22 = te[5], n32 = te[6], n42 = te[7],
+            n13 = te[8], n23 = te[9], n33 = te[10], n43 = te[11],
+            n14 = te[12], n24 = te[13], n34 = te[14], n44 = te[15];
+
+        te[0] = this.ring.element()
+            .addProduct(n23, n34, n42)
+            .subProduct(n24, n33, n42)
+            .addProduct(n24, n32, n43)
+            .subProduct(n22, n34, n43)
+            .subProduct(n23, n32, n44)
+            .addProduct(n22, n33, n44);
+        te[1] = this.ring.element()
+            .addProduct(n24, n33, n41)
+            .subProduct(n23, n34, n41)
+            .subProduct(n24, n31, n43)
+            .addProduct(n21, n34, n43)
+            .addProduct(n23, n31, n44)
+            .subProduct(n21, n33, n44);
+        te[2] = this.ring.element()
+            .addProduct(n22, n34, n41)
+            .subProduct(n24, n32, n41)
+            .addProduct(n24, n31, n42)
+            .subProduct(n21, n34, n42)
+            .subProduct(n22, n31, n44)
+            .addProduct(n21, n32, n44);
+        te[3] = this.ring.element()
+            .addProduct(n23, n32, n41)
+            .subProduct(n22, n33, n41)
+            .subProduct(n23, n31, n42)
+            .addProduct(n21, n33, n42)
+            .addProduct(n22, n31, n43)
+            .subProduct(n21, n32, n43);
+
+
+        te[4] = this.ring.element()
+            .addProduct(n14, n33, n42)
+            .subProduct(n13, n34, n42)
+            .subProduct(n14, n32, n43)
+            .addProduct(n12, n34, n43)
+            .addProduct(n13, n32, n44)
+            .subProduct(n12, n33, n44);
+        te[5] = this.ring.element()
+            .addProduct(n13, n34, n41)
+            .subProduct(n14, n33, n41)
+            .addProduct(n14, n31, n43)
+            .subProduct(n11, n34, n43)
+            .subProduct(n13, n31, n44)
+            .addProduct(n11, n33, n44);
+        te[6] = this.ring.element()
+            .addProduct(n14, n32, n41)
+            .subProduct(n12, n34, n41)
+            .subProduct(n14, n31, n42)
+            .addProduct(n11, n34, n42)
+            .addProduct(n12, n31, n44)
+            .subProduct(n11, n32, n44);
+        te[7] = this.ring.element()
+            .addProduct(n12, n33, n41)
+            .subProduct(n13, n32, n41)
+            .addProduct(n13, n31, n42)
+            .subProduct(n11, n33, n42)
+            .subProduct(n12, n31, n43)
+            .addProduct(n11, n32, n43);
+
+        te[8] = this.ring.element()
+            .addProduct(n13, n24, n42)
+            .subProduct(n14, n23, n42)
+            .addProduct(n14, n22, n43)
+            .subProduct(n12, n24, n43)
+            .subProduct(n13, n22, n44)
+            .addProduct(n12, n23, n44);
+        te[9] = this.ring.element()
+            .addProduct(n14, n23, n41)
+            .subProduct(n13, n24, n41)
+            .subProduct(n14, n21, n43)
+            .addProduct(n11, n24, n43)
+            .addProduct(n13, n21, n44)
+            .subProduct(n11, n23, n44);
+        te[10] = this.ring.element()
+            .addProduct(n12, n24, n41)
+            .subProduct(n14, n22, n41)
+            .addProduct(n14, n21, n42)
+            .subProduct(n11, n24, n42)
+            .subProduct(n12, n21, n44)
+            .addProduct(n11, n22, n44);
+        te[11] = this.ring.element()
+            .addProduct(n13, n22, n41)
+            .subProduct(n12, n23, n41)
+            .subProduct(n13, n21, n42)
+            .addProduct(n11, n23, n42)
+            .addProduct(n12, n21, n43)
+            .subProduct(n11, n22, n43);
+
+        te[12] = this.ring.element()
+            .addProduct(n14, n23, n32)
+            .subProduct(n13, n24, n32)
+            .subProduct(n14, n22, n33)
+            .addProduct(n12, n24, n33)
+            .addProduct(n13, n22, n34)
+            .subProduct(n12, n23, n34);
+        te[13] = this.ring.element()
+            .addProduct(n13, n24, n31)
+            .subProduct(n14, n23, n31)
+            .addProduct(n14, n21, n33)
+            .subProduct(n11, n24, n33)
+            .subProduct(n13, n21, n34)
+            .addProduct(n11, n23, n34);
+        te[14] = this.ring.element()
+            .addProduct(n14, n22, n31)
+            .subProduct(n12, n24, n31)
+            .subProduct(n14, n21, n32)
+            .addProduct(n11, n24, n32)
+            .addProduct(n12, n21, n34)
+            .subProduct(n11, n22, n34);
+        te[15] = this.ring.element()
+            .addProduct(n12, n23, n31)
+            .subProduct(n13, n22, n31)
+            .addProduct(n13, n21, n32)
+            .subProduct(n11, n23, n32)
+            .subProduct(n12, n21, n33)
+            .addProduct(n11, n22, n33);
+
+        return this;
+    }
+
+    /**
+     * Check if the two matrices are equal
+     * @param {QuadRingMatrix4} matrix
+     * @return {boolean}
+     */
+    equals(matrix) {
+        for (let i = 0; i &lt; 16; i++) {
+            if (!this.elements[i].equals(matrix.elements[i])) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Set the coefficient from an array
+     * @param {QuadRingElement[]} array
+     * @param {number} offset
+     * @return {QuadRingMatrix4}
+     */
+    fromArray(array, offset = 0) {
+        for (let i = 0; i &lt; 16; i++) {
+            this.elements[i].copy(array[i + offset]);
+        }
+        return this;
+    }
+
+    /**
+     * Return the elements of the matrix as an array
+     * @param {QuadRingElement[]} array
+     * @param {number} offset
+     * @return {QuadRingElement[]}
+     */
+    toArray(array = [], offset = 0) {
+        const te = this.elements;
+
+        for (let i = 0; i &lt; 16; i++) {
+            array[offset + i] = te[i].clone();
+        }
+        return array;
+    }
+
+    /**
+     * Convert the matrix to a Matrix4 (with number type entries)
+     * @return {Matrix4}
+     */
+    toMatrix4() {
+        const entries = this.toArray().map(x => x.toNumber());
+        return new Matrix4().fromArray(entries);
+    }
+
+
+    /**
+     * Return a copy of the current matrix.
+     * @return {QuadRingMatrix4}
+     */
+    clone() {
+        return new QuadRingMatrix4(this.ring).fromArray(this.elements);
+    }
+
+    /**
+     * Set the current matrix to m
+     * @param {QuadRingMatrix4} m
+     * @return {QuadRingMatrix4}
+     */
+    copy(m) {
+        return this.fromArray(m.elements);
+
+    }
+
+    toLog() {
+        return this.toMatrix4().toLog();
+    }
+}</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->

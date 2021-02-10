@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>Classes</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Non-euclidean VR
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#bind">bind</a></li>
+											<li><a href="global.html#complement">complement</a></li>
+											<li><a href="global.html#intersection">intersection</a></li>
+											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
+											<li><a href="global.html#LEFT">LEFT</a></li>
+											<li><a href="global.html#phongWrap">phongWrap</a></li>
+											<li><a href="global.html#RIGHT">RIGHT</a></li>
+											<li><a href="global.html#union">union</a></li>
+											<li><a href="global.html#wrap">wrap</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="AbstractThurston.html">AbstractThurston</a></li>
+											<li><a href="AbstractVRThurston.html">AbstractVRThurston</a></li>
+											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="Ball.html">Ball</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BallShape.html">BallShape</a></li>
+											<li><a href="BasicCamera.html">BasicCamera</a></li>
+											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
+											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
+											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="ExpFog.html">ExpFog</a></li>
+											<li><a href="FakeBall.html">FakeBall</a></li>
+											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
+											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
+											<li><a href="FlyControls.html">FlyControls</a></li>
+											<li><a href="Fog.html">Fog</a></li>
+											<li><a href="Generic.html">Generic</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group.html">Group</a></li>
+											<li><a href="Group_Group.html">Group#Group</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="GroupElement.html">GroupElement</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
+											<li><a href="Horoball.html">Horoball</a></li>
+											<li><a href="HoroballShape.html">HoroballShape</a></li>
+											<li><a href="InfoControls_InfoControls.html">InfoControls#InfoControls</a></li>
+											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
+											<li><a href="Isometry.html">Isometry</a></li>
+											<li><a href="Light.html">Light</a></li>
+											<li><a href="LinFog.html">LinFog</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBall.html">LocalBall</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
+											<li><a href="LocalFakeBall.html">LocalFakeBall</a></li>
+											<li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li>
+											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
+											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
+											<li><a href="LocalPotato.html">LocalPotato</a></li>
+											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="Material.html">Material</a></li>
+											<li><a href="NativeCamera.html">NativeCamera</a></li>
+											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
+											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
+											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
+											<li><a href="Point.html">Point</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="PointLight.html">PointLight</a></li>
+											<li><a href="Position.html">Position</a></li>
+											<li><a href="QuadRing.html">QuadRing</a></li>
+											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
+											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
+											<li><a href="RelPosition.html">RelPosition</a></li>
+											<li><a href="Renderer.html">Renderer</a></li>
+											<li><a href="Scene.html">Scene</a></li>
+											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
+											<li><a href="Shape.html">Shape</a></li>
+											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
+											<li><a href="Solid.html">Solid</a></li>
+											<li><a href="Teleportation.html">Teleportation</a></li>
+											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
+											<li><a href="Thurston.html">Thurston</a></li>
+											<li><a href="UnionShape.html">UnionShape</a></li>
+											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
+											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
+											<li><a href="VRCamera.html">VRCamera</a></li>
+											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
+											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
+											<li><a href="VRRenderer.html">VRRenderer</a></li>
+											<li><a href="VRThurston.html">VRThurston</a></li>
+											<li><a href="WrapShape.html">WrapShape</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
+											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">list</span>
+				<h1><span class="name">Classes</span></h1>
+				<div class="summary"><p>All documented classes.</p></div>			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li class="active">Classes</li>
+						</ol>
+					<section>
+		<h2><span class="name">Classes</span></h2>
+		<article class="secondary">
+				<dl class="symbol">
+						
+						<dt class="symbol-title class public">
+			<h4 id="AbstractThurston" class="class public"><a href="AbstractThurston.html"><span class="signature-new">new&nbsp;</span><span class="name">AbstractThurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">cameraType</span>, <span class="signature-param">rendererType</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="AbstractVRThurston" class="class public"><a href="AbstractVRThurston.html"><span class="signature-new">new&nbsp;</span><span class="name">AbstractVRThurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">cameraType</span>, <span class="signature-param">rendererType</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="AdvancedShape" class="class public"><a href="AdvancedShape.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">AdvancedShape</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Ball" class="class public"><a href="Ball.html"><span class="signature-new">new&nbsp;</span><span class="name">Ball</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Ball" class="class public"><a href="Ball.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">Ball</span><span class="name">Ball</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Ball" class="class public"><a href="Ball.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">Ball</span><span class="name">Ball</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="BallShape" class="class public"><a href="BallShape.html"><span class="signature-new">new&nbsp;</span><span class="name">BallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="BallShape" class="class public"><a href="BallShape.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">BallShape</span><span class="name">BallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="BallShape" class="class public"><a href="BallShape.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">BallShape</span><span class="name">BallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="BasicCamera" class="class public"><a href="BasicCamera.html"><span class="signature-new">new&nbsp;</span><span class="name">BasicCamera</span><span class="signature-params">( <span class="signature-param">parameters</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="BasicRenderer" class="class public"><a href="BasicRenderer.html"><span class="signature-new">new&nbsp;</span><span class="name">BasicRenderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="BasicShape" class="class public"><a href="BasicShape.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">BasicShape</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="CheckerboardMaterial" class="class public"><a href="CheckerboardMaterial.html"><span class="signature-new">new&nbsp;</span><span class="name">CheckerboardMaterial</span><span class="signature-params">( <span class="signature-param">dir1</span>, <span class="signature-param">dir2</span>, <span class="signature-param">color1</span>, <span class="signature-param">color2</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="ComplementShape" class="class public"><a href="ComplementShape.html"><span class="signature-new">new&nbsp;</span><span class="name">ComplementShape</span><span class="signature-params">( <span class="signature-param">shape</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="ExpFog" class="class public"><a href="ExpFog.html"><span class="signature-new">new&nbsp;</span><span class="name">ExpFog</span><span class="signature-params">( <span class="signature-param">color</span>, <span class="signature-param">scattering</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="FakeBall" class="class public"><a href="FakeBall.html"><span class="signature-new">new&nbsp;</span><span class="name">FakeBall</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="FakeBallShape" class="class public"><a href="FakeBallShape.html"><span class="signature-new">new&nbsp;</span><span class="name">FakeBallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="FakePointLight" class="class public"><a href="FakePointLight_FakePointLight.html"><span class="signature-new">new&nbsp;</span><span class="name">FakePointLight</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">color</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="FlyControls" class="class public"><a href="FlyControls.html"><span class="signature-new">new&nbsp;</span><span class="name">FlyControls</span><span class="signature-params">( <span class="signature-param">camera</span>, <span class="signature-param">keyboard</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Fog" class="class public"><a href="Fog.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Fog</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Generic" class="class public"><a href="Generic.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Generic</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Group" class="class public"><a href="Group.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">Group</span><span class="name">Group</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Group" class="class public"><a href="Group.html"><span class="signature-new">new&nbsp;</span><span class="name">Group</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Group" class="class public"><a href="Group.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">Group</span><span class="name">Group</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Group" class="class public"><a href="Group.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">Group</span><span class="name">Group</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Group" class="class public"><a href="Group_Group.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">Group#</span><span class="name">Group</span><span class="signature-params">( <span class="signature-param">halfTranslationA</span>, <span class="signature-param">halfTranslationB</span>, <span class="signature-param">halfTranslationC</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="name">GroupElement</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">GroupElement</span><span class="name">GroupElement</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">GroupElement</span><span class="name">GroupElement</span><span class="signature-params">( <span class="signature-param">group</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">GroupElement</span><span class="name">GroupElement</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">GroupElement</span><span class="name">GroupElement</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">GroupElement</span><span class="name">GroupElement</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="GroupElement" class="class public"><a href="GroupElement.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">GroupElement</span><span class="name">GroupElement</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="HalfSpace" class="class public"><a href="HalfSpace.html"><span class="signature-new">new&nbsp;</span><span class="name">HalfSpace</span><span class="signature-params">( <span class="signature-param">pos</span>, <span class="signature-param">normal</span>, <span class="signature-param">uDir</span>, <span class="signature-param">vDir</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="HalfSpaceShape" class="class public"><a href="HalfSpaceShape.html"><span class="signature-new">new&nbsp;</span><span class="name">HalfSpaceShape</span><span class="signature-params">( <span class="signature-param">pos</span>, <span class="signature-param">normal</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Horoball" class="class public"><a href="Horoball.html"><span class="signature-new">new&nbsp;</span><span class="name">Horoball</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">offset</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="HoroballShape" class="class public"><a href="HoroballShape.html"><span class="signature-new">new&nbsp;</span><span class="name">HoroballShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">offset</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="InfoControls" class="class public"><a href="InfoControls_InfoControls.html"><span class="signature-new">new&nbsp;</span><span class="name">InfoControls</span><span class="signature-params">( <span class="signature-param">key</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="IntersectionShape" class="class public"><a href="IntersectionShape.html"><span class="signature-new">new&nbsp;</span><span class="name">IntersectionShape</span><span class="signature-params">( <span class="signature-param">shape1</span>, <span class="signature-param">shape2</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Isometry" class="class public"><a href="Isometry.html"><span class="signature-new">new&nbsp;</span><span class="name">Isometry</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Light" class="class public"><a href="Light.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Light</span><span class="signature-params">( <span class="signature-param">maxDirs</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LinFog" class="class public"><a href="LinFog.html"><span class="signature-new">new&nbsp;</span><span class="name">LinFog</span><span class="signature-params">( <span class="signature-param">color</span>, <span class="signature-param">scattering</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalBall" class="class public"><a href="LocalBall.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalBall</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalBall" class="class public"><a href="LocalBall.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">LocalBall</span><span class="name">LocalBall</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalBall" class="class public"><a href="LocalBall.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">LocalBall</span><span class="name">LocalBall</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalBallShape" class="class public"><a href="LocalBallShape.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalBallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalBallShape" class="class public"><a href="LocalBallShape.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">LocalBallShape</span><span class="name">LocalBallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalBallShape" class="class public"><a href="LocalBallShape.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">LocalBallShape</span><span class="name">LocalBallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalFakeBall" class="class public"><a href="LocalFakeBall.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalFakeBall</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalFakeBallShape" class="class public"><a href="LocalFakeBallShape.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalFakeBallShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalHoroball" class="class public"><a href="LocalHoroball.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalHoroball</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">offset</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalHoroballShape" class="class public"><a href="LocalHoroballShape.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalHoroballShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">offset</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalPotato" class="class public"><a href="LocalPotato.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalPotato</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">coeff1</span>, <span class="signature-param">coeff2</span>, <span class="signature-param">exp</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="LocalPotatoShape" class="class public"><a href="LocalPotatoShape.html"><span class="signature-new">new&nbsp;</span><span class="name">LocalPotatoShape</span><span class="signature-params">( <span class="signature-param">center</span>, <span class="signature-param">radius</span>, <span class="signature-param">coeff1</span>, <span class="signature-param">coeff2</span>, <span class="signature-param">exp</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Material" class="class public"><a href="Material.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Material</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="NativeCamera" class="class public"><a href="NativeCamera.html"><span class="signature-new">new&nbsp;</span><span class="name">NativeCamera</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="NativeThurston" class="class public"><a href="NativeThurston.html"><span class="signature-new">new&nbsp;</span><span class="name">NativeThurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">subgroup</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="NormalMaterial" class="class public"><a href="NormalMaterial.html"><span class="signature-new">new&nbsp;</span><span class="name">NormalMaterial</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="PhongMaterial" class="class public"><a href="PhongMaterial.html"><span class="signature-new">new&nbsp;</span><span class="name">PhongMaterial</span><span class="signature-params">( <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="PhongWrapMaterial" class="class public"><a href="PhongWrapMaterial.html"><span class="signature-new">new&nbsp;</span><span class="name">PhongWrapMaterial</span><span class="signature-params">( <span class="signature-param">material</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Point" class="class public"><a href="Point.html"><span class="signature-new">new&nbsp;</span><span class="name">Point</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="PointLight" class="class public"><a href="PointLight.html"><span class="signature-new">new&nbsp;</span><span class="name">PointLight</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">color</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="PointLight" class="class public"><a href="PointLight.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">PointLight</span><span class="name">PointLight</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">color</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="PointLight" class="class public"><a href="PointLight.html"><span class="signature-new">new&nbsp;</span><span class="ancestors">PointLight</span><span class="name">PointLight</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">color</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Position" class="class public"><a href="Position.html"><span class="signature-new">new&nbsp;</span><span class="name">Position</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="QuadRing" class="class public"><a href="QuadRing.html"><span class="signature-new">new&nbsp;</span><span class="name">QuadRing</span><span class="signature-params">( <span class="signature-param">d</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="QuadRingElement" class="class public"><a href="QuadRingElement.html"><span class="signature-new">new&nbsp;</span><span class="name">QuadRingElement</span><span class="signature-params">( <span class="signature-param">ring</span>, <span class="signature-param">a</span>, <span class="signature-param">b</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="QuadRingMatrix4" class="class public"><a href="QuadRingMatrix4.html"><span class="signature-new">new&nbsp;</span><span class="name">QuadRingMatrix4</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="RelPosition" class="class public"><a href="RelPosition.html"><span class="signature-new">new&nbsp;</span><span class="name">RelPosition</span><span class="signature-params">( <span class="signature-param">set</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Renderer" class="class public"><a href="Renderer.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Renderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Scene" class="class public"><a href="Scene.html"><span class="signature-new">new&nbsp;</span><span class="name">Scene</span><span class="signature-params">( <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="ShaderBuilder" class="class public"><a href="ShaderBuilder.html"><span class="signature-new">new&nbsp;</span><span class="name">ShaderBuilder</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Shape" class="class public"><a href="Shape.html"><span class="signature-new">new&nbsp;</span><span class="signature-attribs">&lt;abstract> </span><span class="name">Shape</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="SingleColorMaterial" class="class public"><a href="SingleColorMaterial.html"><span class="signature-new">new&nbsp;</span><span class="name">SingleColorMaterial</span><span class="signature-params">( <span class="signature-param">color</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Solid" class="class public"><a href="Solid.html"><span class="signature-new">new&nbsp;</span><span class="name">Solid</span><span class="signature-params">( <span class="signature-param">shape</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Teleportation" class="class public"><a href="Teleportation.html"><span class="signature-new">new&nbsp;</span><span class="name">Teleportation</span><span class="signature-params">( <span class="signature-param">jsTest</span>, <span class="signature-param">glslTest</span>, <span class="signature-param">elt</span>, <span class="signature-param">inv</span>, <span class="signature-param">glslCreep</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="TeleportationSet" class="class public"><a href="TeleportationSet.html"><span class="signature-new">new&nbsp;</span><span class="name">TeleportationSet</span><span class="signature-params">( <span class="signature-param">teleportations</span>, <span class="signature-param">neighbors</span>, <span class="signature-param">usesNearestNeighbors</span>, <span class="signature-param">usesCreeping</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Thurston" class="class public"><a href="Thurston.html"><span class="signature-new">new&nbsp;</span><span class="name">Thurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="UnionShape" class="class public"><a href="UnionShape.html"><span class="signature-new">new&nbsp;</span><span class="name">UnionShape</span><span class="signature-params">( <span class="signature-param">shape1</span>, <span class="signature-param">shape2</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="Vector" class="class public"><a href="Vector.html"><span class="signature-new">new&nbsp;</span><span class="name">Vector</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VerticalHalfSpace" class="class public"><a href="VerticalHalfSpace.html"><span class="signature-new">new&nbsp;</span><span class="name">VerticalHalfSpace</span><span class="signature-params">( <span class="signature-param">pos</span>, <span class="signature-param">normal</span>, <span class="signature-param">material</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VerticalHalfSpaceShape" class="class public"><a href="VerticalHalfSpaceShape.html"><span class="signature-new">new&nbsp;</span><span class="name">VerticalHalfSpaceShape</span><span class="signature-params">( <span class="signature-param">pos</span>, <span class="signature-param">normal</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VRCamera" class="class public"><a href="VRCamera.html"><span class="signature-new">new&nbsp;</span><span class="name">VRCamera</span><span class="signature-params">( <span class="signature-param">parameters</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VRControlsDrag" class="class public"><a href="VRControlsDrag.html"><span class="signature-new">new&nbsp;</span><span class="name">VRControlsDrag</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">controller</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VRControlsMove" class="class public"><a href="VRControlsMove.html"><span class="signature-new">new&nbsp;</span><span class="name">VRControlsMove</span><span class="signature-params">( <span class="signature-param">position</span>, <span class="signature-param">controller</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VRRenderer" class="class public"><a href="VRRenderer.html"><span class="signature-new">new&nbsp;</span><span class="name">VRRenderer</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">camera</span>, <span class="signature-param">scene</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="VRThurston" class="class public"><a href="VRThurston.html"><span class="signature-new">new&nbsp;</span><span class="name">VRThurston</span><span class="signature-params">( <span class="signature-param">geom</span>, <span class="signature-param">set</span>, <span class="signature-param">params</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="WrapShape" class="class public"><a href="WrapShape.html"><span class="signature-new">new&nbsp;</span><span class="name">WrapShape</span><span class="signature-params">( <span class="signature-param">wrap</span>, <span class="signature-param">shape</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+				</dl>
+		</article>
+					</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>

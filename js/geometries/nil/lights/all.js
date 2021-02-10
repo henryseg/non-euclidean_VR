@@ -1,0 +1,1 @@
+export {FakePointLight} from "./FakePointLight/FakePointLight.js";
