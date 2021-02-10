@@ -13,6 +13,7 @@ struct PhongMaterial {
     vec3 reflectivity;
 };
 
+
 /**
  * Compute the contribution of one direction to the illumination
  * @param[in] v incidence vector

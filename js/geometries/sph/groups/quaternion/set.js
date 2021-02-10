@@ -1,5 +1,4 @@
 import {Vector4} from "../../../../lib/three.module.js";
-import {GroupElement} from "./GroupElement.js";
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group} from "./Group.js";
@@ -93,6 +92,14 @@ const shiftYp = group.element(0, 1, 0, 0);
 const shiftYn = group.element(0, -1, 0, 0);
 const shiftZp = group.element(0, 0, -1, 0);
 const shiftZn = group.element(0, 0, 1, 0);
+
+
+console.log(shiftXp.toIsometry().matrix.toLog());
+console.log(shiftXn.toIsometry().matrix.toLog());
+console.log(shiftYp.toIsometry().matrix.toLog());
+console.log(shiftYn.toIsometry().matrix.toLog());
+console.log(shiftZp.toIsometry().matrix.toLog());
+console.log(shiftZn.toIsometry().matrix.toLog());
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);

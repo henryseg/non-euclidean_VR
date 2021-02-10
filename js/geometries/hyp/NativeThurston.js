@@ -14,11 +14,11 @@ export class NativeThurston extends AbstractVRThurston {
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
-     * @param {Subgroup} subgroup - the discrete subgroup
+     * @param {TeleportationSet} set - the discrete subgroup
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, subgroup, params = {}) {
-        super(geom, subgroup, NativeCamera, VRRenderer, params);
+    constructor(geom, set, params = {}) {
+        super(geom, set, NativeCamera, VRRenderer, params);
     }
 }
