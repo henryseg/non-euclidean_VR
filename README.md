@@ -46,6 +46,16 @@ On Windows, you can set up a server in the Control Panel Administrative Tools, i
 - `.glsl` files -> `text/plain` (probably no more needed).
 - `.mjs` files -> `text/javascript` 
 
+
+## Examples
+
+A list of examples can be found in `examples/index.html`
+It contains scenes in the various geometries and demonstrates the features of the API.
+
+The examples tagged with *VR* are made for virtual reality. They should work with any VR headset supported by the three.js library.
+When loaded, those examples have a button *Enter VR* at the bottom on the screen.
+A click on it should launch the simulation in the VR headset (you may have to allow first your browser to interact with the VR set).
+
 ## Done or in progress (on this branch)
 S^3, E^3, H^3, Nil
 
