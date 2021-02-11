@@ -38,7 +38,7 @@ This can be done in Python 3 by running the command
 python -m http.server
 ```
 
-To run the VR examples you may need a more advance settings as an HTTPS protocol is required.
+To run the VR examples you may need a more advanced server as an HTTPS protocol is required.
 
 On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first). 
 
@@ -54,7 +54,7 @@ It contains scenes in the various geometries and demonstrates the features of th
 
 The examples tagged with *VR* are made for virtual reality. They should work with any VR headset supported by the three.js library.
 When loaded, those examples have a button *Enter VR* at the bottom on the screen.
-A click on it should launch the simulation in the VR headset (you may have to allow first your browser to interact with the VR set).
+A click on it should launch the simulation in the VR headset (you may need to first allow your browser to interact with the VR system).
 
 ## Done or in progress (on this branch)
 S^3, E^3, H^3, Nil
@@ -66,16 +66,20 @@ Released under the terms of the GNU [General Public License](https://www.gnu.org
 
 ## Main contributors
 
-(alphabetic order)
+(alphabetical order)
 
 - **Rémi Coulon** [@remi-coulon](https://github.com/remi-coulon)
   
   Rémi Coulon is partially supported by the the *Centre Henri Lebesgue* ANR-11-LABX-0020-01 
   and the Agence Nationale de la Recherche under Grant *Dagger* ANR-16-CE40- 0006-01.
 - **Sabetta Matsumoto** [@sabetta](https://github.com/sabetta)
+
+  Sabetta Matsumoto is partially supported by NSF grant DMR-1847172 and the Research Corporation for Scientific Advancement.
+
 - **Henry Segerman** [@henryseg](https://github.com/henryseg)
   
   Henry Segerman is partially supported by NSF grant DMS-1708239.
-  Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+
 - **Steve Trettel** [@stevejtrettel](https://github.com/stevejtrettel)
 
+  Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
