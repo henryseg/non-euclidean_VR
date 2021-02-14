@@ -1,7 +1,8 @@
-import {Vector3, Vector4} from "../lib/three.module.js";
+import {Vector3} from "../lib/three.module.js";
 import {Vector} from "../core/geometry/Vector.js";
 import {LEFT, RIGHT} from "../constants.js";
-import {Position} from "../core/geometry/General.js";
+import {Isometry} from "../core/geometry/General.js";
+import {bind} from "../utils.js";
 
 /**
  * @class
@@ -23,12 +24,57 @@ export class ChaseControls {
         this.controller = controller;
         this.camera = camera;
         this.solid = solid;
+
+        this._isSelecting = false;
+        this._isSqueezing = false;
+
+        const _onSelectStart = bind(this, this.onSelectStart);
+        const _onSelectEnd = bind(this, this.onSelectEnd);
+        const _onSqueezeStart = bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+
+
+        this.controller.addEventListener('selectstart', _onSelectStart);
+        this.controller.addEventListener('selectend', _onSelectEnd);
+        this.controller.addEventListener('squeezestart', _onSqueezeStart);
+        this.controller.addEventListener('squeezeend', _onSqueezeEnd);
     }
+
+    /**
+     * Event handler when the user starts selecting
+     */
+    onSelectStart() {
+        this._isSelecting = true;
+    }
+
+    /**
+     * Event handler when the user stops selecting
+     */
+    onSelectEnd() {
+        this._isSelecting = false;
+    }
+
+    /**
+     * Event handler when the user starts squeezing
+     */
+    onSqueezeStart() {
+        this._isSqueezing = true;
+    }
+
+    /**
+     * Event handler when the user stops squeezing
+     */
+    onSqueezeEnd() {
+        this._isSqueezing = false;
+    }
+
 
     /**
      * @param {WebXRManager} webXRManager - the WebXRManager used by Three.js
      */
     chase(webXRManager) {
+        this.solid.isRendered = this._isSelecting;
+
         const controllerPosition = new Vector().setFromMatrixPosition(this.controller.matrixWorld);
         let cameraPosition = new Vector();
         if (this.camera.isStereoOn) {
@@ -44,8 +90,9 @@ export class ChaseControls {
         } else {
             cameraPosition.setFromMatrixPosition(this.camera.matrix);
         }
-        const direction = new Vector().subVectors(controllerPosition, cameraPosition);
-        const position = this.camera.position.clone().flow(direction);
-        this.solid.shape.isom.copy(position.cellBoost.toIsometry().multiply(position.local.boost));
+        const relativeControllerPosition = controllerPosition.clone().sub(cameraPosition);
+        const relativeControllerMatrixWorld = this.controller.matrixWorld.clone().setPosition(relativeControllerPosition);
+        const isom = new Isometry().diffExpMap(relativeControllerMatrixWorld);
+        this.solid.shape.isom.copy(this.camera.position.globalBoost.multiply(isom));
     }
 }

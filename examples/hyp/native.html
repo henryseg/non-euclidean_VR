@@ -23,7 +23,7 @@
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
+    import {LocalBallShape, complement, LocalHoroballShape, union} from "../../js/geometries/hyp/shapes/all.js";
 
 
     const thurston = new NativeThurston(geom, cube, {keyboard: 'fr'});
@@ -58,11 +58,25 @@
     });
 
     // Complement of a local ball
-    const ball0 = new LocalBallShape(
+    const centerBall = new LocalBallShape(
         new Point(),
         1.02,
     );
-    const latticeShape = complement(ball0);
+
+    const modelHalfCube = 1 / Math.sqrt(3);
+    const horoballs = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        horoballs[i] = new LocalHoroballShape(
+            new Vector((2 * i0 - 1) * modelHalfCube, (2 * i1 - 1) * modelHalfCube, (2 * i2 - 1) * modelHalfCube),
+            0.98
+        );
+    }
+
+    const unionShape = union(centerBall, ...horoballs);
+    const latticeShape = complement(unionShape);
     const lattice = new Solid(latticeShape, mat0);
 
 

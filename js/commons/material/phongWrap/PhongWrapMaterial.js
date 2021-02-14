@@ -142,6 +142,6 @@ export class PhongWrapMaterial extends Material {
  * @param {Object} params - the parameters of the Phong model
  * @return {PhongWrapMaterial} - the wrapped material.
  */
-export function phongWrap(material, params) {
+export function phongWrap(material, params = {}) {
     return new PhongWrapMaterial(material, params);
 }

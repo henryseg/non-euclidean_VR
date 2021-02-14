@@ -6,8 +6,7 @@ import {
     Vector3,
     Vector4
 } from "../../../lib/three.module.js";
-
-import * as Utils from "./Utils.js";
+import {Vector} from "../../../core/geometry/Vector.js";
 
 
 Isometry.prototype.build = function () {
@@ -139,6 +138,15 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
 
     return this;
 };
+
+
+Isometry.prototype.diffExpMap = function (m) {
+    const tangentPosition = new Vector().setFromMatrixPosition(m);
+    const aux = m.clone().setPosition(0, 0, 0);
+    this.makeTranslationFromDir(tangentPosition);
+    this.matrix.multiply(aux);
+    return this;
+}
 
 
 Isometry.prototype.equals = function (isom) {

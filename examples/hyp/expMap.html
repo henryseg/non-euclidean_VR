@@ -24,7 +24,7 @@
     import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Solid} from "../../js/geometries/hyp/solids/all.js";
+    import {Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
     import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
 
 
@@ -32,6 +32,7 @@
     import {NewBall} from "../../js/geometries/hyp/solids/NewBall.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
     import {ChaseControls} from "../../js/controls/ChaseControls.js";
+    import {SingleColorMaterial} from "../../js/commons/material/all.js";
 
 
     // initial setup
@@ -110,11 +111,16 @@
         shininess: 10
     });
 
+    const beamerMat = new SingleColorMaterial(new Color(0.8, 0.8, 1));
+
+
     const isom1 = new Isometry().makeTranslationFromDir(new Vector(0, 0, -0.5));
-    const ball1 = new NewBall(isom1, 0.05, mat1);
+    const cyl = new Cylinder(0.01, isom1, beamerMat);
+    cyl.isRendered = false;
+    //const ball1 = new NewBall(isom1, 0.05, mat1);
 
     // adding the solid to the scene
-    scene.add(lattice, ball1, light0, light1, light2, light3);
+    scene.add(lattice, cyl, light0, light1, light2, light3);
 
     // building there renderer
     renderer.build();
@@ -135,7 +141,7 @@
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
     }
-    const chaseControls = new ChaseControls(controller0, camera, ball1);
+    const chaseControls = new ChaseControls(controller0, camera, cyl);
 
 
     // rendering the scene

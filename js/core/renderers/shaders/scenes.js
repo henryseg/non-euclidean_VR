@@ -87,13 +87,15 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
     
     {{#scene.solids}}
         {{#isGlobal}}
-            dist = {{shape.name}}_sdf(v);
-            if(abs(dist) < camera.threshold) {
-            hit = HIT_SOLID;
-            objId = {{id}};
-            return dist;
+            if({{name}}.isRendered){
+                dist = {{shape.name}}_sdf(v);
+                if(abs(dist) < camera.threshold) {
+                hit = HIT_SOLID;
+                objId = {{id}};
+                return dist;
+                }
+                res = min(res, dist);
             }
-            res = min(res, dist);
         {{/isGlobal}}
     {{/scene.solids}}
     

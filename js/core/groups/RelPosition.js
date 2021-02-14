@@ -117,6 +117,14 @@ class RelPosition {
     }
 
     /**
+     * Return the global isometry (cellBoost * local boost) of the current position
+     * @return {Isometry}
+     */
+    get globalBoost() {
+        return this.cellBoost.toIsometry().multiply(this.local.boost);
+    }
+
+    /**
      * Rotate the facing by `m` (right action of O(3) in the set of positions).
      * @param {Quaternion} quaternion - An isometry of the tangent space at the origin, i.e. a matrix in O(3).
      * @return {RelPosition} the updated version of the current Position

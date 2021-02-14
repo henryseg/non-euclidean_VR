@@ -51,13 +51,11 @@
         new Vector(-1, -1, 1),
         new Color(1, 0, 1)
     );
-    const lights = [light0, light1, light2];
 
     // Phong shading material
     const mat0 = new PhongMaterial({
         color: new Color(1, 0.2, 0.2),
         shininess: 5,
-        lights: lights
     });
 
     // Complement of a local ball
@@ -89,7 +87,7 @@
         new Color(1, 1, 1),
         new Color(0, 0, 1)
     )
-    const mat1 = phongWrap(checkerboard, {lights: lights});
+    const mat1 = phongWrap(checkerboard);
 
 
     const ball1 = new Ball(

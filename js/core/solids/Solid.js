@@ -41,7 +41,7 @@ export class Solid extends Generic {
          * @type{boolean}
          */
         this.isRendered = true;
-        this.addImport(struct)
+        this.addImport(struct);
     }
 
     /**

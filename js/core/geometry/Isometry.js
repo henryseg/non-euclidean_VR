@@ -108,6 +108,19 @@ class Isometry {
     }
 
     /**
+     * Take as input a Matrix4 m, seen as an isometry of the tangent space at the origin (in the reference frame)
+     * and set the current isometry so that its differential is dexp * dm, where
+     * - dexp is the differential of the exponential map
+     * - dm is the differential of m
+     * @todo turn it into an abstract method, when implemented in all geometries
+     * @param {Matrix4} m - an isometry of the tangent space
+     * @return {Isometry} The current isometry
+     */
+    diffExpMap(m){
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
      * Check if the current isometry and `isom` are the same.
      * Mainly for debugging purposes.
      * @abstract
