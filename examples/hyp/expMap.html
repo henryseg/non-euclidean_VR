@@ -135,8 +135,8 @@
     window.addEventListener("resize", onWindowResize, false);
 
     const clock = new Clock();
-    const flyControls = new FlyControls(camera, 'fr');
 
+    const flyControls = new FlyControls(camera, 'fr');
     const infoControls = new InfoControls();
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
