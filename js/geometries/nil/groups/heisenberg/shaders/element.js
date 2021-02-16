@@ -33,11 +33,19 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2){
 
 Isometry toIsometry(GroupElement elt) {
     vec3 c = vec3(elt.icoords);
+    vec4 aux = c.x * group.translationA + c.y * group.translationB;
+    float det = group.translationC.z;
+//    mat4 matrix =  mat4(
+//    1, 0, -0.5 * aux.y, 0,
+//    0, 1, 0.5 * aux.x, 0,
+//    0, 0, 1, 0,
+//    aux.x, aux.y, c.z-0.5 * c.x * c.y, 1
+//    );
     mat4 matrix =  mat4(
-    1, 0, -0.5 * c.y, 0,
-    0, 1, 0.5 * c.x, 0,
+    1, 0, -0.5 * aux.y, 0,
+    0, 1, 0.5 * aux.x, 0,
     0, 0, 1, 0,
-    c.x, c.y, c.z-0.5 * c.x * c.y, 1
+    aux.x, aux.y, aux.z -0.5 * (c.x * c.y - 2. * c.z) * det, 1
     );
-    return Isometry(matrix,true);
+    return Isometry(matrix, true);
 }`;

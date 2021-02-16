@@ -1,4 +1,4 @@
-import {Vector3} from "../../../../lib/three.module.js";
+import {Vector3, Vector4} from "../../../../lib/three.module.js";
 import {Isometry} from "../../geometry/Isometry.js";
 import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
 
@@ -54,11 +54,16 @@ export class GroupElement extends AbstractGroupElement {
 
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
+        const aux = new Vector4()
+            .add(this.group.translationA.clone().multiplyScalar(a))
+            .add(this.group.translationB.clone().multiplyScalar(b));
+        const [x, y, z, _] = aux.toArray();
+        const det = this.group.translationC.z
         const res = new Isometry();
         res.matrix.set(
-            1, 0, 0, a,
-            0, 1, 0, b,
-            -0.5 * b, 0.5 * a, 1, c - 0.5 * a * b,
+            1, 0, 0, x,
+            0, 1, 0, y,
+            -0.5 * y, 0.5 * x, 1, z - 0.5 * (a * b - 2 * c) * det,
             0, 0, 0, 1
         );
         return res;

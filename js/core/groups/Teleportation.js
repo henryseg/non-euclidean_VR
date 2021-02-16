@@ -130,7 +130,10 @@ export class Teleportation {
         if (usesCreeping) {
             shaderBuilder.addChunk(this.glslCreep);
         }
+        //shaderBuilder.addChunk("//pre elt");
         shaderBuilder.addUniform(this.elt.name, 'GroupElement', this.elt);
+        //shaderBuilder.addChunk("//interlude");
         shaderBuilder.addUniform(this.elt.name, 'GroupElement', this.inv);
+        //shaderBuilder.addChunk("//post inv");
     }
 }

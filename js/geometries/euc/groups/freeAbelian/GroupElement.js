@@ -49,9 +49,9 @@ export class GroupElement extends AbstractGroupElement {
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
         const translation = new Vector3()
-            .add(this.group.halfTranslationA.clone().multiplyScalar(2 * a))
-            .add(this.group.halfTranslationB.clone().multiplyScalar(2 * b))
-            .add(this.group.halfTranslationC.clone().multiplyScalar(2 * c));
+            .add(this.group.translationA.clone().multiplyScalar(2 * a))
+            .add(this.group.translationB.clone().multiplyScalar(2 * b))
+            .add(this.group.translationC.clone().multiplyScalar(2 * c));
         const res = new Isometry();
         res.matrix.set(
             1, 0, 0, translation.x,
