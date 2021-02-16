@@ -46,7 +46,7 @@ Vector smallShift(Vector v, vec3 dp){
  * Indeed one only needs to **rotate** by an angle alpha.
  * Thus we should not go back and forth between the angle alpha and its sine/cosine.
  * @todo implement numerical approximation when ct is very small.
- * The noise is only visible when the camera's threshold is very small. 
+ * The noise is only visible when the camera's threshold is very small.
  */
 Vector flow(Vector v, float t){
     // cylindrical coordinates of v
@@ -54,7 +54,7 @@ Vector flow(Vector v, float t){
     float tolerance = 0.1;
     float c = v.dir.z;
     float a = sqrt(1. - c * c);
-    
+
     vec4 coords;
     float ct = c * t;
     // matrix rotating by an angle alpha  and scaling by a.
@@ -65,17 +65,19 @@ Vector flow(Vector v, float t){
 
     if (abs(ct) < tolerance){
         // use an asymptotic expansion (computed with SageMath)
+        // expansion at order 1 seems to be enough for VR
+        // use order 2 just to be safe.
         float a2t2 = a * a * t * t;
         coords = vec4(t, 0, 0, 1);
         coords = coords + vec4(0, t / 2., a2t2 / 12. + 1., 0) * ct;
         float ct2 = ct * ct;
         coords = coords + (1. / 2.) * vec4(- t / 3., 0, 0, 0) * ct2;
-        float ct3 = ct2 * ct;
-        coords = coords + (1. / 6.) * vec4(0, - t / 4., - a2t2 / 40., 0) * ct3;
-        float ct4 = ct3 * ct;
-        coords = coords + (1. / 24.) * vec4(t / 5., 0, 0, 0) * ct4;
-        float ct5 = ct4 * ct;
-        coords = coords + (1. / 120.) * vec4(0, t / 6., a2t2 / 84., 0) * ct5;
+        //float ct3 = ct2 * ct;
+        //coords = coords + (1. / 6.) * vec4(0, - t / 4., - a2t2 / 40., 0) * ct3;
+        //float ct4 = ct3 * ct;
+        //coords = coords + (1. / 24.) * vec4(t / 5., 0, 0, 0) * ct4;
+        //float ct5 = ct4 * ct;
+        //coords = coords + (1. / 120.) * vec4(0, t / 6., a2t2 / 84., 0) * ct5;
     } else {
         coords = vec4(
         (2. / c) * sin(0.5 * c * t) * cos(0.5 * c * t),
