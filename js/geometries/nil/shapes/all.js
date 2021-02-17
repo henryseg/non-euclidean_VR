@@ -6,3 +6,5 @@ export {FakeBallShape} from "./fakeBall/FakeBallShape.js";
 export {LocalFakeBallShape} from "./localFakeBall/LocalFakeBallShape.js";
 export {LocalPotatoShape} from "./localPotato/LocalPotatoShape.js";
 export {VerticalHalfSpaceShape} from "./verticalHalfSpace/VerticalHalfSpaceShape.js";
+export {VerticalCylinderShape} from "./verticalCylinder/VerticalCylinderShape.js";
+export {LocalVerticalCylinderShape} from "./localVerticalCylinder/LocalVerticalCylinderShape.js";

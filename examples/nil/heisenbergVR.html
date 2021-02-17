@@ -19,15 +19,28 @@
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
+    import {Point, Isometry} from "../../js/core/geometry/General.js";
     import {PhongMaterial} from "../../js/commons/material/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {FakeBall, LocalFakeBall, LocalPotato, Solid} from "../../js/geometries/nil/solids/all.js";
-    import {complement, LocalFakeBallShape, LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
+    import {
+        FakeBall,
+        LocalFakeBall,
+        LocalPotato,
+        Solid
+    } from "../../js/geometries/nil/solids/all.js";
+    import {
+        complement,
+        FakeBallShape,
+        LocalFakeBallShape,
+        LocalPotatoShape
+    } from "../../js/geometries/nil/shapes/all.js";
+    import {LocalVerticalCylinderShape} from "../../js/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
+    import {union} from "../../js/commons/shapes/all.js";
 
 
-    heisenberg.group.translationA = new Vector4(1, 0, 0, 0);
-    heisenberg.group.translationB = new Vector4(0, 1, 0, 0);
+
+    heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
+    heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
 
     const thurston = new VRThurston(geom, heisenberg, {keyboard: 'fr'});
 
@@ -61,8 +74,10 @@
         lights: lights
     });
 
-    const center = new LocalPotatoShape(new Point(), 0.55, 0.9, 1, 4);
-    const latticeShape = complement(center)
+    const cyl = new LocalVerticalCylinderShape(0.5, new Isometry());
+    const center = new LocalFakeBallShape(new Point(), 0.8);
+    const unionShape = union(cyl, center)
+    const latticeShape = complement(unionShape)
     const lattice = new Solid(latticeShape, mat);
 
     thurston.add(lattice);

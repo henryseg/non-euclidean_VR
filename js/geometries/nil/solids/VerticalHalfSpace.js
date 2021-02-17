@@ -5,7 +5,7 @@ import {VerticalHalfSpaceShape} from "../shapes/verticalHalfSpace/VerticalHalfSp
  * @class
  *
  * @classdesc
- * Local potato shape in Nil.
+ * Vertical half space in Nil
  */
 export class VerticalHalfSpace extends Solid {
     /**
