@@ -13,7 +13,7 @@
 		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geometries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
 			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
@@ -64,8 +64,12 @@
 											<li><a href="BasicCamera.html">BasicCamera</a></li>
 											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
 											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="ChaseControls.html">ChaseControls</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="Cylinder.html">Cylinder</a></li>
+											<li><a href="CylinderShape_CylinderShape.html">CylinderShape#CylinderShape</a></li>
+											<li><a href="DebugMaterial.html">DebugMaterial</a></li>
 											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
@@ -86,6 +90,8 @@
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
 											<li><a href="HoroballShape.html">HoroballShape</a></li>
@@ -106,9 +112,13 @@
 											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
 											<li><a href="LocalPotato.html">LocalPotato</a></li>
 											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li>
+											<li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="NativeCamera.html">NativeCamera</a></li>
 											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NewBall.html">NewBall</a></li>
+											<li><a href="NewBallShape.html">NewBallShape</a></li>
 											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
 											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
@@ -132,6 +142,8 @@
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalCylinder.html">VerticalCylinder</a></li>
+											<li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li>
 											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
 											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
 											<li><a href="VRCamera.html">VRCamera</a></li>
@@ -182,70 +194,123 @@ import {Group} from "./Group.js";
 const group = new Group();
 
 function testXp(p) {
-    return p.coords.x > 0.5;
+    const aux = group.translationA.clone().applyMatrix4(group.dotMatrix);
+    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) > 0.5;
 }
 
 // language=GLSL
 const glslTestXp = `//
 bool testXp(Point p){
-    return p.coords.x > 0.5;
+    return dot(p.coords, group.dotMatrix * group.translationA) > 0.5;
 }
 `;
 
+// // language=GLSL
+// const glslTestXp = `//
+// bool testXp(Point p){
+//     return p.coords.x > 0.5;
+// }
+// `;
+
 function testXn(p) {
-    return p.coords.x &lt; -0.5;
+    const aux = group.translationA.clone().applyMatrix4(group.dotMatrix);
+    //console.log("aux Xn", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) &lt; -0.5;
 }
 
 // language=GLSL
 const glslTestXn = `//
 bool testXn(Point p){
-    return p.coords.x &lt; -0.5;
+    return dot(p.coords, group.dotMatrix * group.translationA) &lt; -0.5;
 }
 `;
 
+// // language=GLSL
+// const glslTestXn = `//
+// bool testXn(Point p){
+//     return p.coords.x &lt; -0.5;
+// }
+// `;
+
 function testYp(p) {
-    return p.coords.y > 0.5;
+    const aux = group.translationB.clone().applyMatrix4(group.dotMatrix);
+    return p.coords.dot(aux) > 0.5;
 }
 
 // language=GLSL
 const glslTestYp = `//
 bool testYp(Point p){
-    return p.coords.y > 0.5;
+    return dot(p.coords, group.dotMatrix * group.translationB) > 0.5;
 }
 `;
 
+// // language=GLSL
+// const glslTestYp = `//
+// bool testYp(Point p){
+//     return p.coords.y > 0.5;
+// }
+// `;
+
 function testYn(p) {
-    return p.coords.y &lt; -0.5;
+    const aux = group.translationB.clone().applyMatrix4(group.dotMatrix);
+    return p.coords.dot(aux) &lt; -0.5;
 }
 
 // language=GLSL
 const glslTestYn = `//
 bool testYn(Point p){
-    return p.coords.y &lt; -0.5;
+    return dot(p.coords, group.dotMatrix * group.translationB) &lt; -0.5;
 }
 `;
 
+// // language=GLSL
+// const glslTestYn = `//
+// bool testYn(Point p){
+//     return p.coords.y &lt; -0.5;
+// }
+// `;
+
 function testZp(p) {
-    return p.coords.z > 0.5;
+    const aux = group.translationC.clone().applyMatrix4(group.dotMatrix);
+    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) > 0.5;
 }
 
 // language=GLSL
 const glslTestZp = `//
 bool testZp(Point p){
-    return p.coords.z > 0.5;
+    return dot(p.coords, group.dotMatrix * group.translationC) > 0.5;
 }
 `;
 
+// // language=GLSL
+// const glslTestZp = `//
+// bool testZp(Point p){
+//     return p.coords.z > 0.5;
+// }
+// `;
+
+
 function testZn(p) {
-    return p.coords.z &lt; -0.5;
+    const aux = group.translationC.clone().applyMatrix4(group.dotMatrix);
+    return p.coords.dot(aux) &lt; -0.5;
 }
 
 // language=GLSL
 const glslTestZn = `//
 bool testZn(Point p){
-    return p.coords.z &lt; -0.5;
+    return dot(p.coords, group.dotMatrix * group.translationC) &lt; -0.5;
 }
 `;
+
+// // language=GLSL
+// const glslTestZn = `//
+// bool testZn(Point p){
+//     return p.coords.z &lt; -0.5;
+// }
+// `;
+
 
 const shiftXp = group.element(-1, 0, 0);
 const shiftXn = group.element(1, 0, 0);
@@ -253,6 +318,10 @@ const shiftYp = group.element(0, -1, 0);
 const shiftYn = group.element(0, 1, 0);
 const shiftZp = group.element(0, 0, -1);
 const shiftZn = group.element(0, 0, 1);
+
+console.log("Xp", shiftXp.toIsometry().matrix.toLog());
+console.log("Yp", shiftYp.toIsometry().matrix.toLog());
+console.log("Zp", shiftZp.toIsometry().matrix.toLog());
 
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
@@ -283,7 +352,7 @@ export default new TeleportationSet(teleportations);
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 18th Feb 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

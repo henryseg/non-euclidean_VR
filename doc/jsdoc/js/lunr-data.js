@@ -43,7 +43,7 @@ window.lunrData = {
           "euclidean",
           "explor",
           "first",
-          "geoemtri",
+          "geometri",
           "index",
           "non",
           "person",
@@ -197,6 +197,29 @@ window.lunrData = {
           "send",
           "v",
           "vec"
+        ],
+        "Isometry.html#diffExpMap": [
+          "current",
+          "dexp",
+          "differenti",
+          "diffexpmap",
+          "dm",
+          "exponenti",
+          "frame",
+          "function",
+          "input",
+          "isometri",
+          "isometry#diffexpmap",
+          "m",
+          "map",
+          "matrix4",
+          "origin",
+          "refer",
+          "seen",
+          "set",
+          "space",
+          "take",
+          "tangent"
         ],
         "Isometry.html#equals": [
           "boolean",
@@ -832,34 +855,66 @@ window.lunrData = {
           "class",
           "group",
           "groupgroup",
-          "isometri"
+          "heisenberg"
         ],
-        "Group.html#halfTranslationA": [
+        "Group.html#_halfTranslationA": [
+          "_halftranslationa",
           "first",
           "gener",
-          "group#halftranslationa",
-          "halftranslationa",
+          "group#_halftranslationa",
           "member",
           "translat",
           "vector4"
         ],
-        "Group.html#halfTranslationB": [
+        "Group.html#_halfTranslationB": [
+          "_halftranslationb",
           "gener",
-          "group#halftranslationb",
-          "halftranslationb",
+          "group#_halftranslationb",
           "member",
           "second",
           "translat",
           "vector4"
         ],
-        "Group.html#halfTranslationC": [
+        "Group.html#_translationA": [
+          "_translationa",
+          "first",
           "gener",
-          "group#halftranslationc",
-          "halftranslationc",
+          "group#_translationa",
+          "member",
+          "translat",
+          "vector4"
+        ],
+        "Group.html#_halfTranslationC": [
+          "_halftranslationc",
+          "gener",
+          "group#_halftranslationc",
           "member",
           "third",
           "translat",
           "vector4"
+        ],
+        "Group.html#_translationB": [
+          "_translationb",
+          "gener",
+          "group#_translationb",
+          "member",
+          "second",
+          "translat",
+          "vector4"
+        ],
+        "Group.html#dotMatrix": [
+          "definit",
+          "dotmatrix",
+          "famili",
+          "group#dotmatrix",
+          "matrix",
+          "member",
+          "orthonorm",
+          "posit",
+          "return",
+          "translationa",
+          "translationb",
+          "translationc"
         ],
         "Group.html#element": [
           "creat",
@@ -1146,9 +1201,10 @@ window.lunrData = {
         ],
         "HalfSpace.html": [
           "class",
-          "euclidean",
           "half",
           "halfspac",
+          "halfspacehalfspac",
+          "hyperbol",
           "space"
         ],
         "LocalBall.html": [
@@ -1157,6 +1213,12 @@ window.lunrData = {
           "hyperbol",
           "localbal",
           "localballlocalbal"
+        ],
+        "Cylinder.html": [
+          "ball",
+          "class",
+          "cylind",
+          "hyperbol"
         ],
         "Horoball.html": [
           "class",
@@ -1169,6 +1231,12 @@ window.lunrData = {
           "hyperbol",
           "local",
           "localhorobal"
+        ],
+        "NewBall.html": [
+          "ball",
+          "class",
+          "hyperbol",
+          "newbal"
         ],
         "FakeBall.html": [
           "ball",
@@ -1194,10 +1262,10 @@ window.lunrData = {
         ],
         "VerticalHalfSpace.html": [
           "class",
-          "local",
+          "half",
           "nil",
-          "potato",
-          "shape",
+          "space",
+          "vertic",
           "verticalhalfspac"
         ],
         "Generic.html": [
@@ -1372,37 +1440,19 @@ window.lunrData = {
           "shader",
           "shaderbuild"
         ],
-        "QuadRing.html": [
-          "adjoin",
+        "LocalVerticalCylinder.html": [
           "class",
-          "field",
-          "mostli",
-          "quadr",
-          "quadrat",
-          "root",
-          "squar",
-          "store",
-          "structur"
+          "cylind",
+          "localverticalcylind",
+          "nil",
+          "vertic"
         ],
-        "QuadRing.html#element": [
-          "b",
-          "element",
-          "field",
-          "function",
-          "integ",
-          "quadrat",
-          "quadring#el",
-          "return",
-          "sqrt(d))/c"
-        ],
-        "QuadRing.html#shader": [
-          "build",
-          "correspond",
-          "function",
-          "part",
-          "quadring#shad",
-          "shader",
-          "shaderbuild"
+        "VerticalCylinder.html": [
+          "class",
+          "cylind",
+          "nil",
+          "vertic",
+          "verticalcylind"
         ],
         "Thurston.html": [
           "api",
@@ -1439,6 +1489,48 @@ window.lunrData = {
           "quickli",
           "scene",
           "us"
+        ],
+        "QuadRing.html": [
+          "adjoin",
+          "class",
+          "field",
+          "mostli",
+          "quadr",
+          "quadrat",
+          "root",
+          "squar",
+          "store",
+          "structur"
+        ],
+        "QuadRing.html#element": [
+          "b",
+          "element",
+          "function",
+          "integ",
+          "quadrat",
+          "quadring#el",
+          "return",
+          "ring",
+          "sqrt(d"
+        ],
+        "QuadRing.html#matrix4": [
+          "function",
+          "matrix",
+          "matrix4",
+          "quadrat",
+          "quadring#matrix4",
+          "quadringmatrix4",
+          "return",
+          "rign"
+        ],
+        "QuadRing.html#shader": [
+          "build",
+          "correspond",
+          "function",
+          "part",
+          "quadring#shad",
+          "shader",
+          "shaderbuild"
         ],
         "QuadRingMatrix4.html": [
           "1",
@@ -1562,8 +1654,9 @@ window.lunrData = {
           "set"
         ],
         "QuadRingMatrix4.html#multiplyMatrices": [
-          "b",
           "function",
+          "m1",
+          "m2",
           "matrix",
           "multiplymatric",
           "product",
@@ -1999,6 +2092,15 @@ window.lunrData = {
           "two",
           "union"
         ],
+        "ComplementShape.html#isom": [
+          "complementshape#isom",
+          "isom",
+          "isometri",
+          "member",
+          "propag",
+          "setter",
+          "setup"
+        ],
         "ComplementShape.html#setId": [
           "call",
           "complementshape#setid",
@@ -2030,6 +2132,15 @@ window.lunrData = {
           "shape",
           "two"
         ],
+        "IntersectionShape.html#isom": [
+          "intersectionshape#isom",
+          "isom",
+          "isometri",
+          "member",
+          "propag",
+          "setter",
+          "setup"
+        ],
         "IntersectionShape.html#setId": [
           "call",
           "function",
@@ -2060,6 +2171,15 @@ window.lunrData = {
           "two",
           "union",
           "unionshap"
+        ],
+        "UnionShape.html#isom": [
+          "isom",
+          "isometri",
+          "member",
+          "propag",
+          "setter",
+          "setup",
+          "unionshape#isom"
         ],
         "UnionShape.html#setId": [
           "call",
@@ -2095,6 +2215,15 @@ window.lunrData = {
           "wrap",
           "wrapshap"
         ],
+        "WrapShape.html#isom": [
+          "isom",
+          "isometri",
+          "member",
+          "propag",
+          "setter",
+          "setup",
+          "wrapshape#isom"
+        ],
         "WrapShape.html#setId": [
           "call",
           "function",
@@ -2118,6 +2247,71 @@ window.lunrData = {
           "propag",
           "scene",
           "wrapshape#onadd"
+        ],
+        "ChaseControls.html": [
+          "chasecontrol",
+          "class",
+          "control",
+          "follow",
+          "geometri",
+          "given",
+          "isometri",
+          "live",
+          "make",
+          "posit",
+          "shape",
+          "solid",
+          "space",
+          "sure",
+          "tangent",
+          "underli",
+          "vr"
+        ],
+        "ChaseControls.html#onSelectStart": [
+          "chasecontrols#onselectstart",
+          "event",
+          "function",
+          "handler",
+          "onselectstart",
+          "select",
+          "start",
+          "user"
+        ],
+        "ChaseControls.html#onSelectEnd": [
+          "chasecontrols#onselectend",
+          "event",
+          "function",
+          "handler",
+          "onselectend",
+          "select",
+          "stop",
+          "user"
+        ],
+        "ChaseControls.html#onSqueezeStart": [
+          "chasecontrols#onsqueezestart",
+          "event",
+          "function",
+          "handler",
+          "onsqueezestart",
+          "squeez",
+          "start",
+          "user"
+        ],
+        "ChaseControls.html#onSqueezeEnd": [
+          "chasecontrols#onsqueezeend",
+          "event",
+          "function",
+          "handler",
+          "onsqueezeend",
+          "squeez",
+          "stop",
+          "user"
+        ],
+        "ChaseControls.html#chase": [
+          "chase",
+          "chasecontrols#chas",
+          "function",
+          "webxrmanag"
         ],
         "AbstractVRThurston.html": [
           "abstractvrthurston",
@@ -3226,8 +3420,8 @@ window.lunrData = {
           "sdf"
         ],
         "HoroballShape.html#isHoroballShape": [
-          "ball",
           "boolean",
+          "horoballshap",
           "horoballshape#ishoroballshap",
           "inherit",
           "ishoroballshap",
@@ -3365,6 +3559,15 @@ window.lunrData = {
           "solid",
           "up"
         ],
+        "CheckerboardMaterial.html#dir1": [
+          "checkerboard",
+          "checkerboardmaterial#dir1",
+          "dir1",
+          "direct",
+          "first",
+          "member",
+          "vector2"
+        ],
         "CheckerboardMaterial.html#reflectivity": [
           "0",
           "1",
@@ -3384,15 +3587,6 @@ window.lunrData = {
           "number",
           "red",
           "reflect"
-        ],
-        "CheckerboardMaterial.html#dir1": [
-          "checkerboard",
-          "checkerboardmaterial#dir1",
-          "dir1",
-          "direct",
-          "first",
-          "member",
-          "vector2"
         ],
         "CheckerboardMaterial.html#dir2": [
           "checkerboard",
@@ -3529,6 +3723,21 @@ window.lunrData = {
           "relat",
           "render",
           "string"
+        ],
+        "DebugMaterial.html": [
+          "class",
+          "debugmateri",
+          "materi",
+          "object",
+          "scene"
+        ],
+        "DebugMaterial.html#lights": [
+          "affect",
+          "array.&lt;light&gt",
+          "debugmaterial#light",
+          "light",
+          "materi",
+          "member"
         ],
         "PhongMaterial.html": [
           "class",
@@ -4018,6 +4227,50 @@ window.lunrData = {
           "renderer#rend",
           "scene"
         ],
+        "HalfSpaceShape.html": [
+          "class",
+          "euclidean",
+          "half",
+          "halfspaceshap",
+          "halfspaceshapehalfspaceshap",
+          "space"
+        ],
+        "HalfSpaceShape.html#pos": [
+          "boundari",
+          "half",
+          "halfspaceshape#po",
+          "member",
+          "po",
+          "point",
+          "space"
+        ],
+        "HalfSpaceShape.html#isGlobal": [
+          "boolean",
+          "fals",
+          "global",
+          "halfspaceshape#isglob",
+          "isglob",
+          "member",
+          "otherwis",
+          "shape",
+          "true",
+          "whether"
+        ],
+        "HalfSpaceShape.html#normal": [
+          "comput",
+          "consist",
+          "direct",
+          "half",
+          "halfspaceshape#norm",
+          "member",
+          "normal",
+          "pass",
+          "point",
+          "shader",
+          "space",
+          "underli",
+          "vector"
+        ],
         "VRCamera.html": [
           "between",
           "camera",
@@ -4147,6 +4400,34 @@ window.lunrData = {
           "side",
           "sidedshad",
           "vrcamera#sidedshad"
+        ],
+        "LocalVerticalCylinderShape.html": [
+          "class",
+          "cylind",
+          "localverticalcylindershap",
+          "vertic"
+        ],
+        "LocalVerticalCylinderShape.html#pos": [
+          "center",
+          "cylind",
+          "localverticalcylindershape#po",
+          "member",
+          "po",
+          "point"
+        ],
+        "VerticalCylinderShape.html": [
+          "class",
+          "cylind",
+          "vertic",
+          "verticalcylindershap"
+        ],
+        "VerticalCylinderShape.html#pos": [
+          "center",
+          "cylind",
+          "member",
+          "po",
+          "point",
+          "verticalcylindershape#po"
         ],
         "PhongWrapMaterial.html": [
           "add",
@@ -4411,30 +4692,6 @@ window.lunrData = {
           "render",
           "run"
         ],
-        "HalfSpaceShape.html": [
-          "class",
-          "euclidean",
-          "half",
-          "halfspaceshap",
-          "space"
-        ],
-        "HalfSpaceShape.html#pos": [
-          "boundari",
-          "half",
-          "halfspaceshape#po",
-          "member",
-          "po",
-          "point",
-          "space"
-        ],
-        "HalfSpaceShape.html#normal": [
-          "half",
-          "halfspaceshape#norm",
-          "member",
-          "normal",
-          "space",
-          "vector3"
-        ],
         "Vector.html": [
           "algebra",
           "avail",
@@ -4614,6 +4871,19 @@ window.lunrData = {
           "take",
           "underli"
         ],
+        "RelPosition.html#globalBoost": [
+          "boost",
+          "cellboost",
+          "current",
+          "global",
+          "globalboost",
+          "isometri",
+          "local",
+          "member",
+          "posit",
+          "relposition#globalboost",
+          "return"
+        ],
         "RelPosition.html#reduceErrorBoost": [
           "boost",
           "current",
@@ -4747,6 +5017,12 @@ window.lunrData = {
           "relposition#copi",
           "set"
         ],
+        "CylinderShape_CylinderShape.html": [
+          "class",
+          "constructor",
+          "cylindershap",
+          "cylindershape#cylindershap"
+        ],
         "VerticalHalfSpaceShape.html": [
           "class",
           "half",
@@ -4800,6 +5076,60 @@ window.lunrData = {
           "scene",
           "shader",
           "three.j"
+        ],
+        "NewBallShape.html": [
+          "ball",
+          "center",
+          "class",
+          "data",
+          "fashion",
+          "given",
+          "hyperbol",
+          "imag",
+          "isometri",
+          "new",
+          "newballshap",
+          "object",
+          "old",
+          "on",
+          "origin",
+          "radiu",
+          "repres",
+          "shader",
+          "shape",
+          "store",
+          "version",
+          "way"
+        ],
+        "NewBallShape.html#isBallShape": [
+          "ball",
+          "boolean",
+          "inherit",
+          "isballshap",
+          "member",
+          "newballshape#isballshap",
+          "object"
+        ],
+        "NewBallShape.html#isGlobal": [
+          "boolean",
+          "fals",
+          "global",
+          "isglob",
+          "member",
+          "newballshape#isglob",
+          "otherwis",
+          "shape",
+          "true",
+          "whether"
+        ],
+        "NewBallShape.html#center": [
+          "ball",
+          "center",
+          "comput",
+          "member",
+          "newballshape#cent",
+          "pass",
+          "shader"
         ],
         "VRControlsDrag.html": [
           "button",
@@ -5268,7 +5598,7 @@ window.lunrData = {
           "written"
         ]
       },
-      "length": 430
+      "length": 462
     },
     "tokenStore": {
       "root": {
@@ -5604,6 +5934,10 @@ window.lunrData = {
                               "ref": "Isometry.html#makeTranslationFromDir",
                               "tf": 5.555555555555555
                             },
+                            "Isometry.html#diffExpMap": {
+                              "ref": "Isometry.html#diffExpMap",
+                              "tf": 2.083333333333333
+                            },
                             "ExpFog.html": {
                               "ref": "ExpFog.html",
                               "tf": 25
@@ -5898,6 +6232,22 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
+                    "ChaseControls.html#onSelectStart": {
+                      "ref": "ChaseControls.html#onSelectStart",
+                      "tf": 10
+                    },
+                    "ChaseControls.html#onSelectEnd": {
+                      "ref": "ChaseControls.html#onSelectEnd",
+                      "tf": 10
+                    },
+                    "ChaseControls.html#onSqueezeStart": {
+                      "ref": "ChaseControls.html#onSqueezeStart",
+                      "tf": 10
+                    },
+                    "ChaseControls.html#onSqueezeEnd": {
+                      "ref": "ChaseControls.html#onSqueezeEnd",
+                      "tf": 10
+                    },
                     "Solid.html#isRendered": {
                       "ref": "Solid.html#isRendered",
                       "tf": 2.5
@@ -6543,8 +6893,12 @@ window.lunrData = {
                       "ref": "GroupElement.html#name",
                       "tf": 5.555555555555555
                     },
-                    "Group.html#halfTranslationA": {
-                      "ref": "Group.html#halfTranslationA",
+                    "Group.html#_halfTranslationA": {
+                      "ref": "Group.html#_halfTranslationA",
+                      "tf": 16.666666666666664
+                    },
+                    "Group.html#_translationA": {
+                      "ref": "Group.html#_translationA",
                       "tf": 16.666666666666664
                     },
                     "Generic.html#name": {
@@ -6595,10 +6949,6 @@ window.lunrData = {
                     },
                     "QuadRing.html": {
                       "ref": "QuadRing.html",
-                      "tf": 6.25
-                    },
-                    "QuadRing.html#element": {
-                      "ref": "QuadRing.html#element",
                       "tf": 6.25
                     },
                     "QuadRingMatrix4.html": {
@@ -6805,6 +7155,23 @@ window.lunrData = {
                 }
               }
             },
+            "m": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "i": {
+                    "docs": {
+                      "Group.html#dotMatrix": {
+                        "ref": "Group.html#dotMatrix",
+                        "tf": 5.555555555555555
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "l": {
               "docs": {},
               "s": {
@@ -6920,6 +7287,14 @@ window.lunrData = {
                   "LocalBallShape.html#isGlobal": {
                     "ref": "LocalBallShape.html#isGlobal",
                     "tf": 7.142857142857142
+                  },
+                  "HalfSpaceShape.html#isGlobal": {
+                    "ref": "HalfSpaceShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
+                  "NewBallShape.html#isGlobal": {
+                    "ref": "NewBallShape.html#isGlobal",
+                    "tf": 7.142857142857142
                   }
                 }
               }
@@ -6989,6 +7364,26 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "s": {
+              "docs": {},
+              "h": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "n": {
+                      "docs": {
+                        "NewBallShape.html": {
+                          "ref": "NewBallShape.html",
+                          "tf": 2.083333333333333
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "u": {
@@ -7039,6 +7434,10 @@ window.lunrData = {
                           },
                           "Isometry.html#makeTranslationFromDir": {
                             "ref": "Isometry.html#makeTranslationFromDir",
+                            "tf": 110
+                          },
+                          "Isometry.html#diffExpMap": {
+                            "ref": "Isometry.html#diffExpMap",
                             "tf": 110
                           },
                           "Isometry.html#equals": {
@@ -7253,6 +7652,10 @@ window.lunrData = {
                             "ref": "QuadRing.html#element",
                             "tf": 110
                           },
+                          "QuadRing.html#matrix4": {
+                            "ref": "QuadRing.html#matrix4",
+                            "tf": 110
+                          },
                           "QuadRing.html#shader": {
                             "ref": "QuadRing.html#shader",
                             "tf": 110
@@ -7371,6 +7774,26 @@ window.lunrData = {
                           },
                           "WrapShape.html#onAdd": {
                             "ref": "WrapShape.html#onAdd",
+                            "tf": 110
+                          },
+                          "ChaseControls.html#onSelectStart": {
+                            "ref": "ChaseControls.html#onSelectStart",
+                            "tf": 110
+                          },
+                          "ChaseControls.html#onSelectEnd": {
+                            "ref": "ChaseControls.html#onSelectEnd",
+                            "tf": 110
+                          },
+                          "ChaseControls.html#onSqueezeStart": {
+                            "ref": "ChaseControls.html#onSqueezeStart",
+                            "tf": 110
+                          },
+                          "ChaseControls.html#onSqueezeEnd": {
+                            "ref": "ChaseControls.html#onSqueezeEnd",
+                            "tf": 110
+                          },
+                          "ChaseControls.html#chase": {
+                            "ref": "ChaseControls.html#chase",
                             "tf": 110
                           },
                           "AbstractVRThurston.html#animate": {
@@ -7796,6 +8219,120 @@ window.lunrData = {
               }
             }
           },
+          "r": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "m": {
+                "docs": {},
+                "e": {
+                  "docs": {
+                    "Isometry.html#diffExpMap": {
+                      "ref": "Isometry.html#diffExpMap",
+                      "tf": 2.083333333333333
+                    },
+                    "Position.html#flowFromOrigin": {
+                      "ref": "Position.html#flowFromOrigin",
+                      "tf": 3.3333333333333335
+                    },
+                    "Position.html#flow": {
+                      "ref": "Position.html#flow",
+                      "tf": 1.9801980198019802
+                    },
+                    "VRCamera.html#chaseThreeCamera": {
+                      "ref": "VRCamera.html#chaseThreeCamera",
+                      "tf": 1.282051282051282
+                    },
+                    "AbstractThurston.html#callback": {
+                      "ref": "AbstractThurston.html#callback",
+                      "tf": 12.5
+                    },
+                    "Vector.html": {
+                      "ref": "Vector.html",
+                      "tf": 3.8461538461538463
+                    },
+                    "Vector.html#applyFacing": {
+                      "ref": "Vector.html#applyFacing",
+                      "tf": 5.263157894736842
+                    },
+                    "RelPosition.html": {
+                      "ref": "RelPosition.html",
+                      "tf": 1.9230769230769231
+                    },
+                    "FlyControls.html#update": {
+                      "ref": "FlyControls.html#update",
+                      "tf": 1.8518518518518516
+                    }
+                  }
+                }
+              },
+              "g": {
+                "docs": {},
+                "m": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "BasicRenderer.html#_fragmentBuilder": {
+                            "ref": "BasicRenderer.html#_fragmentBuilder",
+                            "tf": 16.666666666666664
+                          },
+                          "BasicRenderer.html#buildFragmentShader": {
+                            "ref": "BasicRenderer.html#buildFragmentShader",
+                            "tf": 16.666666666666664
+                          },
+                          "VRRenderer.html#_fragmentBuilder": {
+                            "ref": "VRRenderer.html#_fragmentBuilder",
+                            "tf": 4.166666666666666
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "o": {
+              "docs": {},
+              "m": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "y": {
+                          "docs": {
+                            "QuadRingMatrix4.html#fromArray": {
+                              "ref": "QuadRingMatrix4.html#fromArray",
+                              "tf": 675
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "e": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "GroupElement.html": {
+                    "ref": "GroupElement.html",
+                    "tf": 3.8461538461538463
+                  }
+                }
+              }
+            }
+          },
           "o": {
             "docs": {},
             "r": {
@@ -7876,6 +8413,10 @@ window.lunrData = {
                       "Light.html#glslDirections": {
                         "ref": "Light.html#glslDirections",
                         "tf": 0.9615384615384616
+                      },
+                      "ChaseControls.html": {
+                        "ref": "ChaseControls.html",
+                        "tf": 2.941176470588235
                       },
                       "Position.html#flow": {
                         "ref": "Position.html#flow",
@@ -8270,116 +8811,6 @@ window.lunrData = {
                 }
               }
             }
-          },
-          "r": {
-            "docs": {},
-            "o": {
-              "docs": {},
-              "m": {
-                "docs": {},
-                "a": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "r": {
-                      "docs": {},
-                      "a": {
-                        "docs": {},
-                        "y": {
-                          "docs": {
-                            "QuadRingMatrix4.html#fromArray": {
-                              "ref": "QuadRingMatrix4.html#fromArray",
-                              "tf": 675
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "e": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "GroupElement.html": {
-                    "ref": "GroupElement.html",
-                    "tf": 3.8461538461538463
-                  }
-                }
-              }
-            },
-            "a": {
-              "docs": {},
-              "m": {
-                "docs": {},
-                "e": {
-                  "docs": {
-                    "Position.html#flowFromOrigin": {
-                      "ref": "Position.html#flowFromOrigin",
-                      "tf": 3.3333333333333335
-                    },
-                    "Position.html#flow": {
-                      "ref": "Position.html#flow",
-                      "tf": 1.9801980198019802
-                    },
-                    "VRCamera.html#chaseThreeCamera": {
-                      "ref": "VRCamera.html#chaseThreeCamera",
-                      "tf": 1.282051282051282
-                    },
-                    "AbstractThurston.html#callback": {
-                      "ref": "AbstractThurston.html#callback",
-                      "tf": 12.5
-                    },
-                    "Vector.html": {
-                      "ref": "Vector.html",
-                      "tf": 3.8461538461538463
-                    },
-                    "Vector.html#applyFacing": {
-                      "ref": "Vector.html#applyFacing",
-                      "tf": 5.263157894736842
-                    },
-                    "RelPosition.html": {
-                      "ref": "RelPosition.html",
-                      "tf": 1.9230769230769231
-                    },
-                    "FlyControls.html#update": {
-                      "ref": "FlyControls.html#update",
-                      "tf": 1.8518518518518516
-                    }
-                  }
-                }
-              },
-              "g": {
-                "docs": {},
-                "m": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "n": {
-                      "docs": {},
-                      "t": {
-                        "docs": {
-                          "BasicRenderer.html#_fragmentBuilder": {
-                            "ref": "BasicRenderer.html#_fragmentBuilder",
-                            "tf": 16.666666666666664
-                          },
-                          "BasicRenderer.html#buildFragmentShader": {
-                            "ref": "BasicRenderer.html#buildFragmentShader",
-                            "tf": 16.666666666666664
-                          },
-                          "VRRenderer.html#_fragmentBuilder": {
-                            "ref": "VRRenderer.html#_fragmentBuilder",
-                            "tf": 4.166666666666666
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "g": {
@@ -8443,26 +8874,6 @@ window.lunrData = {
             "docs": {},
             "o": {
               "docs": {},
-              "e": {
-                "docs": {},
-                "m": {
-                  "docs": {},
-                  "t": {
-                    "docs": {},
-                    "r": {
-                      "docs": {},
-                      "i": {
-                        "docs": {
-                          "index.html": {
-                            "ref": "index.html",
-                            "tf": 14
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
               "m": {
                 "docs": {
                   "Renderer.html#geom": {
@@ -8487,6 +8898,10 @@ window.lunrData = {
                       },
                       "i": {
                         "docs": {
+                          "index.html": {
+                            "ref": "index.html",
+                            "tf": 14
+                          },
                           "undefined": {
                             "tf": 33.33333333333333
                           },
@@ -8497,6 +8912,10 @@ window.lunrData = {
                           "Point.html": {
                             "ref": "Point.html",
                             "tf": 25
+                          },
+                          "ChaseControls.html": {
+                            "ref": "ChaseControls.html",
+                            "tf": 5.88235294117647
                           },
                           "Scene.html": {
                             "ref": "Scene.html",
@@ -8638,16 +9057,24 @@ window.lunrData = {
                 "docs": {},
                 "r": {
                   "docs": {
-                    "Group.html#halfTranslationA": {
-                      "ref": "Group.html#halfTranslationA",
+                    "Group.html#_halfTranslationA": {
+                      "ref": "Group.html#_halfTranslationA",
                       "tf": 16.666666666666664
                     },
-                    "Group.html#halfTranslationB": {
-                      "ref": "Group.html#halfTranslationB",
+                    "Group.html#_halfTranslationB": {
+                      "ref": "Group.html#_halfTranslationB",
                       "tf": 16.666666666666664
                     },
-                    "Group.html#halfTranslationC": {
-                      "ref": "Group.html#halfTranslationC",
+                    "Group.html#_translationA": {
+                      "ref": "Group.html#_translationA",
+                      "tf": 16.666666666666664
+                    },
+                    "Group.html#_halfTranslationC": {
+                      "ref": "Group.html#_halfTranslationC",
+                      "tf": 16.666666666666664
+                    },
+                    "Group.html#_translationB": {
+                      "ref": "Group.html#_translationB",
                       "tf": 16.666666666666664
                     },
                     "Generic.html": {
@@ -9002,6 +9429,38 @@ window.lunrData = {
                       "LocalBallShape.html#isGlobal": {
                         "ref": "LocalBallShape.html#isGlobal",
                         "tf": 14.285714285714285
+                      },
+                      "HalfSpaceShape.html#isGlobal": {
+                        "ref": "HalfSpaceShape.html#isGlobal",
+                        "tf": 14.285714285714285
+                      },
+                      "RelPosition.html#globalBoost": {
+                        "ref": "RelPosition.html#globalBoost",
+                        "tf": 6.25
+                      },
+                      "NewBallShape.html#isGlobal": {
+                        "ref": "NewBallShape.html#isGlobal",
+                        "tf": 14.285714285714285
+                      }
+                    },
+                    "b": {
+                      "docs": {},
+                      "o": {
+                        "docs": {},
+                        "o": {
+                          "docs": {},
+                          "s": {
+                            "docs": {},
+                            "t": {
+                              "docs": {
+                                "RelPosition.html#globalBoost": {
+                                  "ref": "RelPosition.html#globalBoost",
+                                  "tf": 750
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -9840,57 +10299,60 @@ window.lunrData = {
                   },
                   "#": {
                     "docs": {},
-                    "h": {
+                    "_": {
                       "docs": {},
-                      "a": {
+                      "h": {
                         "docs": {},
-                        "l": {
+                        "a": {
                           "docs": {},
-                          "f": {
+                          "l": {
                             "docs": {},
-                            "t": {
+                            "f": {
                               "docs": {},
-                              "r": {
+                              "t": {
                                 "docs": {},
-                                "a": {
+                                "r": {
                                   "docs": {},
-                                  "n": {
+                                  "a": {
                                     "docs": {},
-                                    "s": {
+                                    "n": {
                                       "docs": {},
-                                      "l": {
+                                      "s": {
                                         "docs": {},
-                                        "a": {
+                                        "l": {
                                           "docs": {},
-                                          "t": {
+                                          "a": {
                                             "docs": {},
-                                            "i": {
+                                            "t": {
                                               "docs": {},
-                                              "o": {
+                                              "i": {
                                                 "docs": {},
-                                                "n": {
+                                                "o": {
                                                   "docs": {},
-                                                  "a": {
-                                                    "docs": {
-                                                      "Group.html#halfTranslationA": {
-                                                        "ref": "Group.html#halfTranslationA",
-                                                        "tf": 1150
+                                                  "n": {
+                                                    "docs": {},
+                                                    "a": {
+                                                      "docs": {
+                                                        "Group.html#_halfTranslationA": {
+                                                          "ref": "Group.html#_halfTranslationA",
+                                                          "tf": 1150
+                                                        }
                                                       }
-                                                    }
-                                                  },
-                                                  "b": {
-                                                    "docs": {
-                                                      "Group.html#halfTranslationB": {
-                                                        "ref": "Group.html#halfTranslationB",
-                                                        "tf": 1150
+                                                    },
+                                                    "b": {
+                                                      "docs": {
+                                                        "Group.html#_halfTranslationB": {
+                                                          "ref": "Group.html#_halfTranslationB",
+                                                          "tf": 1150
+                                                        }
                                                       }
-                                                    }
-                                                  },
-                                                  "c": {
-                                                    "docs": {
-                                                      "Group.html#halfTranslationC": {
-                                                        "ref": "Group.html#halfTranslationC",
-                                                        "tf": 1150
+                                                    },
+                                                    "c": {
+                                                      "docs": {
+                                                        "Group.html#_halfTranslationC": {
+                                                          "ref": "Group.html#_halfTranslationC",
+                                                          "tf": 1150
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -9898,6 +10360,87 @@ window.lunrData = {
                                               }
                                             }
                                           }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "t": {
+                        "docs": {},
+                        "r": {
+                          "docs": {},
+                          "a": {
+                            "docs": {},
+                            "n": {
+                              "docs": {},
+                              "s": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "a": {
+                                    "docs": {},
+                                    "t": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {},
+                                        "o": {
+                                          "docs": {},
+                                          "n": {
+                                            "docs": {},
+                                            "a": {
+                                              "docs": {
+                                                "Group.html#_translationA": {
+                                                  "ref": "Group.html#_translationA",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            },
+                                            "b": {
+                                              "docs": {
+                                                "Group.html#_translationB": {
+                                                  "ref": "Group.html#_translationB",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "d": {
+                      "docs": {},
+                      "o": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "m": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "t": {
+                                "docs": {},
+                                "r": {
+                                  "docs": {},
+                                  "i": {
+                                    "docs": {},
+                                    "x": {
+                                      "docs": {
+                                        "Group.html#dotMatrix": {
+                                          "ref": "Group.html#dotMatrix",
+                                          "tf": 1150
                                         }
                                       }
                                     }
@@ -10113,6 +10656,10 @@ window.lunrData = {
                       "ref": "LinFog.html#shader",
                       "tf": 10
                     },
+                    "ChaseControls.html": {
+                      "ref": "ChaseControls.html",
+                      "tf": 5.88235294117647
+                    },
                     "Position.html#multiply": {
                       "ref": "Position.html#multiply",
                       "tf": 3.571428571428571
@@ -10152,6 +10699,10 @@ window.lunrData = {
                     "RelPosition.html#copy": {
                       "ref": "RelPosition.html#copy",
                       "tf": 10
+                    },
+                    "NewBallShape.html": {
+                      "ref": "NewBallShape.html",
+                      "tf": 2.083333333333333
                     },
                     "FlyControls.html#update": {
                       "ref": "FlyControls.html#update",
@@ -10449,6 +11000,28 @@ window.lunrData = {
                           }
                         }
                       }
+                    }
+                  }
+                }
+              }
+            },
+            "p": {
+              "docs": {},
+              "u": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "Isometry.html#diffExpMap": {
+                      "ref": "Isometry.html#diffExpMap",
+                      "tf": 2.083333333333333
+                    },
+                    "Renderer.html": {
+                      "ref": "Renderer.html",
+                      "tf": 2.5
+                    },
+                    "BasicRenderer.html": {
+                      "ref": "BasicRenderer.html",
+                      "tf": 3.3333333333333335
                     }
                   }
                 }
@@ -10846,6 +11419,23 @@ window.lunrData = {
                                           "docs": {},
                                           "#": {
                                             "docs": {},
+                                            "i": {
+                                              "docs": {},
+                                              "s": {
+                                                "docs": {},
+                                                "o": {
+                                                  "docs": {},
+                                                  "m": {
+                                                    "docs": {
+                                                      "IntersectionShape.html#isom": {
+                                                        "ref": "IntersectionShape.html#isom",
+                                                        "tf": 1150
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
                                             "s": {
                                               "docs": {},
                                               "e": {
@@ -10968,6 +11558,10 @@ window.lunrData = {
                         },
                         "LocalBallShape.html#isLocalBallShape": {
                           "ref": "LocalBallShape.html#isLocalBallShape",
+                          "tf": 16.666666666666664
+                        },
+                        "NewBallShape.html#isBallShape": {
+                          "ref": "NewBallShape.html#isBallShape",
                           "tf": 16.666666666666664
                         }
                       }
@@ -11123,24 +11717,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "p": {
-              "docs": {},
-              "u": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "Renderer.html": {
-                      "ref": "Renderer.html",
-                      "tf": 2.5
-                    },
-                    "BasicRenderer.html": {
-                      "ref": "BasicRenderer.html",
-                      "tf": 3.3333333333333335
-                    }
-                  }
-                }
-              }
             }
           },
           "s": {
@@ -11172,6 +11748,22 @@ window.lunrData = {
                   "GroupElement.html#equals": {
                     "ref": "GroupElement.html#equals",
                     "tf": 6.25
+                  },
+                  "ComplementShape.html#isom": {
+                    "ref": "ComplementShape.html#isom",
+                    "tf": 750
+                  },
+                  "IntersectionShape.html#isom": {
+                    "ref": "IntersectionShape.html#isom",
+                    "tf": 750
+                  },
+                  "UnionShape.html#isom": {
+                    "ref": "UnionShape.html#isom",
+                    "tf": 750
+                  },
+                  "WrapShape.html#isom": {
+                    "ref": "WrapShape.html#isom",
+                    "tf": 750
                   },
                   "Position.html#setBoost": {
                     "ref": "Position.html#setBoost",
@@ -11226,6 +11818,10 @@ window.lunrData = {
                             "ref": "Isometry.html#makeTranslationFromDir",
                             "tf": 30.555555555555557
                           },
+                          "Isometry.html#diffExpMap": {
+                            "ref": "Isometry.html#diffExpMap",
+                            "tf": 37.49999999999999
+                          },
                           "Isometry.html#equals": {
                             "ref": "Isometry.html#equals",
                             "tf": 6.25
@@ -11254,6 +11850,26 @@ window.lunrData = {
                             "ref": "Group.html",
                             "tf": 25
                           },
+                          "ComplementShape.html#isom": {
+                            "ref": "ComplementShape.html#isom",
+                            "tf": 12.5
+                          },
+                          "IntersectionShape.html#isom": {
+                            "ref": "IntersectionShape.html#isom",
+                            "tf": 12.5
+                          },
+                          "UnionShape.html#isom": {
+                            "ref": "UnionShape.html#isom",
+                            "tf": 12.5
+                          },
+                          "WrapShape.html#isom": {
+                            "ref": "WrapShape.html#isom",
+                            "tf": 12.5
+                          },
+                          "ChaseControls.html": {
+                            "ref": "ChaseControls.html",
+                            "tf": 2.941176470588235
+                          },
                           "Position.html#boost": {
                             "ref": "Position.html#boost",
                             "tf": 66.66666666666666
@@ -11273,6 +11889,14 @@ window.lunrData = {
                           "RelPosition.html#cellBoost": {
                             "ref": "RelPosition.html#cellBoost",
                             "tf": 10
+                          },
+                          "RelPosition.html#globalBoost": {
+                            "ref": "RelPosition.html#globalBoost",
+                            "tf": 6.25
+                          },
+                          "NewBallShape.html": {
+                            "ref": "NewBallShape.html",
+                            "tf": 4.166666666666666
                           }
                         }
                       },
@@ -11550,6 +12174,41 @@ window.lunrData = {
                               }
                             }
                           },
+                          "d": {
+                            "docs": {},
+                            "i": {
+                              "docs": {},
+                              "f": {
+                                "docs": {},
+                                "f": {
+                                  "docs": {},
+                                  "e": {
+                                    "docs": {},
+                                    "x": {
+                                      "docs": {},
+                                      "p": {
+                                        "docs": {},
+                                        "m": {
+                                          "docs": {},
+                                          "a": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {
+                                                "Isometry.html#diffExpMap": {
+                                                  "ref": "Isometry.html#diffExpMap",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
                           "e": {
                             "docs": {},
                             "q": {
@@ -11769,6 +12428,14 @@ window.lunrData = {
                       "LocalBallShape.html#isGlobal": {
                         "ref": "LocalBallShape.html#isGlobal",
                         "tf": 700
+                      },
+                      "HalfSpaceShape.html#isGlobal": {
+                        "ref": "HalfSpaceShape.html#isGlobal",
+                        "tf": 700
+                      },
+                      "NewBallShape.html#isGlobal": {
+                        "ref": "NewBallShape.html#isGlobal",
+                        "tf": 700
                       }
                     }
                   }
@@ -11961,6 +12628,10 @@ window.lunrData = {
                             "docs": {
                               "BallShape.html#isBallShape": {
                                 "ref": "BallShape.html#isBallShape",
+                                "tf": 700
+                              },
+                              "NewBallShape.html#isBallShape": {
+                                "ref": "NewBallShape.html#isBallShape",
                                 "tf": 700
                               }
                             }
@@ -12315,6 +12986,10 @@ window.lunrData = {
                   "RelPosition.html": {
                     "ref": "RelPosition.html",
                     "tf": 0.9615384615384616
+                  },
+                  "NewBallShape.html": {
+                    "ref": "NewBallShape.html",
+                    "tf": 2.083333333333333
                   }
                 }
               }
@@ -12819,7 +13494,7 @@ window.lunrData = {
                       },
                       "HalfSpaceShape.html#normal": {
                         "ref": "HalfSpaceShape.html#normal",
-                        "tf": 716.6666666666666
+                        "tf": 757.6923076923077
                       }
                     },
                     "m": {
@@ -13274,6 +13949,14 @@ window.lunrData = {
                   "ref": "VerticalHalfSpace.html",
                   "tf": 12.5
                 },
+                "LocalVerticalCylinder.html": {
+                  "ref": "LocalVerticalCylinder.html",
+                  "tf": 16.666666666666664
+                },
+                "VerticalCylinder.html": {
+                  "ref": "VerticalCylinder.html",
+                  "tf": 16.666666666666664
+                },
                 "GroupElement.html": {
                   "ref": "GroupElement.html",
                   "tf": 1.9230769230769231
@@ -13324,6 +14007,119 @@ window.lunrData = {
                 "RelPosition.html#clone": {
                   "ref": "RelPosition.html#clone",
                   "tf": 10
+                },
+                "NewBallShape.html": {
+                  "ref": "NewBallShape.html",
+                  "tf": 2.083333333333333
+                }
+              },
+              "b": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "l": {
+                    "docs": {
+                      "NewBall.html": {
+                        "ref": "NewBall.html",
+                        "tf": 1900
+                      }
+                    },
+                    "l": {
+                      "docs": {},
+                      "s": {
+                        "docs": {},
+                        "h": {
+                          "docs": {},
+                          "a": {
+                            "docs": {},
+                            "p": {
+                              "docs": {
+                                "NewBallShape.html": {
+                                  "ref": "NewBallShape.html",
+                                  "tf": 1900
+                                }
+                              },
+                              "e": {
+                                "docs": {},
+                                "#": {
+                                  "docs": {},
+                                  "i": {
+                                    "docs": {},
+                                    "s": {
+                                      "docs": {},
+                                      "b": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {},
+                                              "s": {
+                                                "docs": {},
+                                                "h": {
+                                                  "docs": {},
+                                                  "a": {
+                                                    "docs": {},
+                                                    "p": {
+                                                      "docs": {
+                                                        "NewBallShape.html#isBallShape": {
+                                                          "ref": "NewBallShape.html#isBallShape",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "g": {
+                                        "docs": {},
+                                        "l": {
+                                          "docs": {},
+                                          "o": {
+                                            "docs": {},
+                                            "b": {
+                                              "docs": {
+                                                "NewBallShape.html#isGlobal": {
+                                                  "ref": "NewBallShape.html#isGlobal",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "c": {
+                                    "docs": {},
+                                    "e": {
+                                      "docs": {},
+                                      "n": {
+                                        "docs": {},
+                                        "t": {
+                                          "docs": {
+                                            "NewBallShape.html#center": {
+                                              "ref": "NewBallShape.html#center",
+                                              "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -14140,6 +14936,10 @@ window.lunrData = {
                     "ref": "BasicShape.html",
                     "tf": 1.8518518518518516
                   },
+                  "HalfSpaceShape.html#normal": {
+                    "ref": "HalfSpaceShape.html#normal",
+                    "tf": 3.8461538461538463
+                  },
                   "VRCamera.html#fakeCameras": {
                     "ref": "VRCamera.html#fakeCameras",
                     "tf": 6.25
@@ -14147,6 +14947,10 @@ window.lunrData = {
                   "PhongWrapMaterial.html": {
                     "ref": "PhongWrapMaterial.html",
                     "tf": 3.571428571428571
+                  },
+                  "NewBallShape.html#center": {
+                    "ref": "NewBallShape.html#center",
+                    "tf": 10
                   }
                 }
               }
@@ -14160,10 +14964,6 @@ window.lunrData = {
               },
               "t": {
                 "docs": {
-                  "QuadRing.html#shader": {
-                    "ref": "QuadRing.html#shader",
-                    "tf": 12.5
-                  },
                   "Thurston.html": {
                     "ref": "Thurston.html",
                     "tf": 6.25
@@ -14175,6 +14975,10 @@ window.lunrData = {
                   "NativeThurston.html": {
                     "ref": "NativeThurston.html",
                     "tf": 6.25
+                  },
+                  "QuadRing.html#shader": {
+                    "ref": "QuadRing.html#shader",
+                    "tf": 12.5
                   },
                   "QuadRingMatrix4.html#a": {
                     "ref": "QuadRingMatrix4.html#a",
@@ -14459,7 +15263,7 @@ window.lunrData = {
                         },
                         "QuadRingMatrix4.html#multiplyMatrices": {
                           "ref": "QuadRingMatrix4.html#multiplyMatrices",
-                          "tf": 12.5
+                          "tf": 10
                         }
                       }
                     }
@@ -14536,6 +15340,10 @@ window.lunrData = {
                         "ref": "Generic.html#setId",
                         "tf": 8.333333333333332
                       },
+                      "ComplementShape.html#isom": {
+                        "ref": "ComplementShape.html#isom",
+                        "tf": 12.5
+                      },
                       "ComplementShape.html#setId": {
                         "ref": "ComplementShape.html#setId",
                         "tf": 10
@@ -14543,6 +15351,10 @@ window.lunrData = {
                       "ComplementShape.html#onAdd": {
                         "ref": "ComplementShape.html#onAdd",
                         "tf": 6.25
+                      },
+                      "IntersectionShape.html#isom": {
+                        "ref": "IntersectionShape.html#isom",
+                        "tf": 12.5
                       },
                       "IntersectionShape.html#setId": {
                         "ref": "IntersectionShape.html#setId",
@@ -14552,6 +15364,10 @@ window.lunrData = {
                         "ref": "IntersectionShape.html#onAdd",
                         "tf": 6.25
                       },
+                      "UnionShape.html#isom": {
+                        "ref": "UnionShape.html#isom",
+                        "tf": 12.5
+                      },
                       "UnionShape.html#setId": {
                         "ref": "UnionShape.html#setId",
                         "tf": 10
@@ -14559,6 +15375,10 @@ window.lunrData = {
                       "UnionShape.html#onAdd": {
                         "ref": "UnionShape.html#onAdd",
                         "tf": 6.25
+                      },
+                      "WrapShape.html#isom": {
+                        "ref": "WrapShape.html#isom",
+                        "tf": 12.5
                       },
                       "WrapShape.html#setId": {
                         "ref": "WrapShape.html#setId",
@@ -14659,6 +15479,14 @@ window.lunrData = {
               "HalfSpaceShape.html#pos": {
                 "ref": "HalfSpaceShape.html#pos",
                 "tf": 700
+              },
+              "LocalVerticalCylinderShape.html#pos": {
+                "ref": "LocalVerticalCylinderShape.html#pos",
+                "tf": 700
+              },
+              "VerticalCylinderShape.html#pos": {
+                "ref": "VerticalCylinderShape.html#pos",
+                "tf": 700
               }
             },
             "i": {
@@ -14754,6 +15582,18 @@ window.lunrData = {
                     "HalfSpaceShape.html#pos": {
                       "ref": "HalfSpaceShape.html#pos",
                       "tf": 62.5
+                    },
+                    "HalfSpaceShape.html#normal": {
+                      "ref": "HalfSpaceShape.html#normal",
+                      "tf": 3.8461538461538463
+                    },
+                    "LocalVerticalCylinderShape.html#pos": {
+                      "ref": "LocalVerticalCylinderShape.html#pos",
+                      "tf": 66.66666666666666
+                    },
+                    "VerticalCylinderShape.html#pos": {
+                      "ref": "VerticalCylinderShape.html#pos",
+                      "tf": 66.66666666666666
                     },
                     "Vector.html#applyMatrix4": {
                       "ref": "Vector.html#applyMatrix4",
@@ -15132,9 +15972,17 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
+                    "Group.html#dotMatrix": {
+                      "ref": "Group.html#dotMatrix",
+                      "tf": 5.555555555555555
+                    },
                     "Light.html#glslDirections": {
                       "ref": "Light.html#glslDirections",
                       "tf": 0.9615384615384616
+                    },
+                    "ChaseControls.html": {
+                      "ref": "ChaseControls.html",
+                      "tf": 2.941176470588235
                     },
                     "Position.html": {
                       "ref": "Position.html",
@@ -15247,6 +16095,10 @@ window.lunrData = {
                     "RelPosition.html#set": {
                       "ref": "RelPosition.html#set",
                       "tf": 8.333333333333332
+                    },
+                    "RelPosition.html#globalBoost": {
+                      "ref": "RelPosition.html#globalBoost",
+                      "tf": 6.25
                     },
                     "RelPosition.html#reduceError": {
                       "ref": "RelPosition.html#reduceError",
@@ -15838,10 +16690,6 @@ window.lunrData = {
                     "docs": {
                       "LocalPotato.html": {
                         "ref": "LocalPotato.html",
-                        "tf": 12.5
-                      },
-                      "VerticalHalfSpace.html": {
-                        "ref": "VerticalHalfSpace.html",
                         "tf": 12.5
                       }
                     }
@@ -16532,6 +17380,10 @@ window.lunrData = {
                         "ref": "GroupElement.html#clone",
                         "tf": 10
                       },
+                      "Group.html#dotMatrix": {
+                        "ref": "Group.html#dotMatrix",
+                        "tf": 5.555555555555555
+                      },
                       "Light.html#glslDirections": {
                         "ref": "Light.html#glslDirections",
                         "tf": 1.9230769230769231
@@ -16551,6 +17403,10 @@ window.lunrData = {
                       "QuadRing.html#element": {
                         "ref": "QuadRing.html#element",
                         "tf": 6.25
+                      },
+                      "QuadRing.html#matrix4": {
+                        "ref": "QuadRing.html#matrix4",
+                        "tf": 12.5
                       },
                       "QuadRingMatrix4.html#getEntry": {
                         "ref": "QuadRingMatrix4.html#getEntry",
@@ -16623,6 +17479,10 @@ window.lunrData = {
                       "Vector.html#toLog": {
                         "ref": "Vector.html#toLog",
                         "tf": 4.545454545454546
+                      },
+                      "RelPosition.html#globalBoost": {
+                        "ref": "RelPosition.html#globalBoost",
+                        "tf": 6.25
                       },
                       "RelPosition.html#clone": {
                         "ref": "RelPosition.html#clone",
@@ -16903,6 +17763,10 @@ window.lunrData = {
                         "ref": "RelPosition.html",
                         "tf": 3.8461538461538463
                       },
+                      "NewBallShape.html": {
+                        "ref": "NewBallShape.html",
+                        "tf": 2.083333333333333
+                      },
                       "FlyControls.html#update": {
                         "ref": "FlyControls.html#update",
                         "tf": 0.4629629629629629
@@ -16931,6 +17795,141 @@ window.lunrData = {
                               "tf": 3.8461538461538463
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "f": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {
+                    "Isometry.html#diffExpMap": {
+                      "ref": "Isometry.html#diffExpMap",
+                      "tf": 2.083333333333333
+                    },
+                    "Position.html#flowFromOrigin": {
+                      "ref": "Position.html#flowFromOrigin",
+                      "tf": 3.3333333333333335
+                    },
+                    "Position.html#flow": {
+                      "ref": "Position.html#flow",
+                      "tf": 0.49504950495049505
+                    },
+                    "Vector.html": {
+                      "ref": "Vector.html",
+                      "tf": 3.8461538461538463
+                    },
+                    "Vector.html#applyFacing": {
+                      "ref": "Vector.html#applyFacing",
+                      "tf": 5.263157894736842
+                    },
+                    "FlyControls.html#update": {
+                      "ref": "FlyControls.html#update",
+                      "tf": 0.4629629629629629
+                    }
+                  }
+                }
+              },
+              "l": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "c": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "Material.html#reflectivity": {
+                          "ref": "Material.html#reflectivity",
+                          "tf": 709.5238095238095
+                        },
+                        "Material.html#isReflecting": {
+                          "ref": "Material.html#isReflecting",
+                          "tf": 10
+                        },
+                        "Material.html#glslRender": {
+                          "ref": "Material.html#glslRender",
+                          "tf": 0.819672131147541
+                        },
+                        "NormalMaterial.html#reflectivity": {
+                          "ref": "NormalMaterial.html#reflectivity",
+                          "tf": 709.5238095238095
+                        },
+                        "NormalMaterial.html#isReflecting": {
+                          "ref": "NormalMaterial.html#isReflecting",
+                          "tf": 10
+                        },
+                        "NormalMaterial.html#glslRender": {
+                          "ref": "NormalMaterial.html#glslRender",
+                          "tf": 0.819672131147541
+                        },
+                        "CheckerboardMaterial.html#reflectivity": {
+                          "ref": "CheckerboardMaterial.html#reflectivity",
+                          "tf": 709.5238095238095
+                        },
+                        "CheckerboardMaterial.html#isReflecting": {
+                          "ref": "CheckerboardMaterial.html#isReflecting",
+                          "tf": 10
+                        },
+                        "CheckerboardMaterial.html#glslRender": {
+                          "ref": "CheckerboardMaterial.html#glslRender",
+                          "tf": 0.819672131147541
+                        },
+                        "PhongMaterial.html#ambient": {
+                          "ref": "PhongMaterial.html#ambient",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongMaterial.html#diffuse": {
+                          "ref": "PhongMaterial.html#diffuse",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongMaterial.html#specular": {
+                          "ref": "PhongMaterial.html#specular",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongMaterial.html#shininess": {
+                          "ref": "PhongMaterial.html#shininess",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongMaterial.html#reflectivity": {
+                          "ref": "PhongMaterial.html#reflectivity",
+                          "tf": 725
+                        },
+                        "SingleColorMaterial.html#reflectivity": {
+                          "ref": "SingleColorMaterial.html#reflectivity",
+                          "tf": 709.5238095238095
+                        },
+                        "SingleColorMaterial.html#isReflecting": {
+                          "ref": "SingleColorMaterial.html#isReflecting",
+                          "tf": 10
+                        },
+                        "SingleColorMaterial.html#glslRender": {
+                          "ref": "SingleColorMaterial.html#glslRender",
+                          "tf": 0.819672131147541
+                        },
+                        "PhongWrapMaterial.html#ambient": {
+                          "ref": "PhongWrapMaterial.html#ambient",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongWrapMaterial.html#diffuse": {
+                          "ref": "PhongWrapMaterial.html#diffuse",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongWrapMaterial.html#specular": {
+                          "ref": "PhongWrapMaterial.html#specular",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongWrapMaterial.html#shininess": {
+                          "ref": "PhongWrapMaterial.html#shininess",
+                          "tf": 16.666666666666664
+                        },
+                        "PhongWrapMaterial.html#reflectivity": {
+                          "ref": "PhongWrapMaterial.html#reflectivity",
+                          "tf": 725
                         }
                       }
                     }
@@ -17296,6 +18295,44 @@ window.lunrData = {
                                     }
                                   }
                                 },
+                                "g": {
+                                  "docs": {},
+                                  "l": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {},
+                                      "b": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "b": {
+                                              "docs": {},
+                                              "o": {
+                                                "docs": {},
+                                                "o": {
+                                                  "docs": {},
+                                                  "s": {
+                                                    "docs": {},
+                                                    "t": {
+                                                      "docs": {
+                                                        "RelPosition.html#globalBoost": {
+                                                          "ref": "RelPosition.html#globalBoost",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
                                 "r": {
                                   "docs": {},
                                   "e": {
@@ -17525,137 +18562,6 @@ window.lunrData = {
                     "QuadRingMatrix4.html#invert": {
                       "ref": "QuadRingMatrix4.html#invert",
                       "tf": 6.25
-                    }
-                  }
-                }
-              }
-            },
-            "f": {
-              "docs": {},
-              "l": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "c": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "Material.html#reflectivity": {
-                          "ref": "Material.html#reflectivity",
-                          "tf": 709.5238095238095
-                        },
-                        "Material.html#isReflecting": {
-                          "ref": "Material.html#isReflecting",
-                          "tf": 10
-                        },
-                        "Material.html#glslRender": {
-                          "ref": "Material.html#glslRender",
-                          "tf": 0.819672131147541
-                        },
-                        "NormalMaterial.html#reflectivity": {
-                          "ref": "NormalMaterial.html#reflectivity",
-                          "tf": 709.5238095238095
-                        },
-                        "NormalMaterial.html#isReflecting": {
-                          "ref": "NormalMaterial.html#isReflecting",
-                          "tf": 10
-                        },
-                        "NormalMaterial.html#glslRender": {
-                          "ref": "NormalMaterial.html#glslRender",
-                          "tf": 0.819672131147541
-                        },
-                        "CheckerboardMaterial.html#reflectivity": {
-                          "ref": "CheckerboardMaterial.html#reflectivity",
-                          "tf": 709.5238095238095
-                        },
-                        "CheckerboardMaterial.html#isReflecting": {
-                          "ref": "CheckerboardMaterial.html#isReflecting",
-                          "tf": 10
-                        },
-                        "CheckerboardMaterial.html#glslRender": {
-                          "ref": "CheckerboardMaterial.html#glslRender",
-                          "tf": 0.819672131147541
-                        },
-                        "PhongMaterial.html#ambient": {
-                          "ref": "PhongMaterial.html#ambient",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongMaterial.html#diffuse": {
-                          "ref": "PhongMaterial.html#diffuse",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongMaterial.html#specular": {
-                          "ref": "PhongMaterial.html#specular",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongMaterial.html#shininess": {
-                          "ref": "PhongMaterial.html#shininess",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongMaterial.html#reflectivity": {
-                          "ref": "PhongMaterial.html#reflectivity",
-                          "tf": 725
-                        },
-                        "SingleColorMaterial.html#reflectivity": {
-                          "ref": "SingleColorMaterial.html#reflectivity",
-                          "tf": 709.5238095238095
-                        },
-                        "SingleColorMaterial.html#isReflecting": {
-                          "ref": "SingleColorMaterial.html#isReflecting",
-                          "tf": 10
-                        },
-                        "SingleColorMaterial.html#glslRender": {
-                          "ref": "SingleColorMaterial.html#glslRender",
-                          "tf": 0.819672131147541
-                        },
-                        "PhongWrapMaterial.html#ambient": {
-                          "ref": "PhongWrapMaterial.html#ambient",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongWrapMaterial.html#diffuse": {
-                          "ref": "PhongWrapMaterial.html#diffuse",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongWrapMaterial.html#specular": {
-                          "ref": "PhongWrapMaterial.html#specular",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongWrapMaterial.html#shininess": {
-                          "ref": "PhongWrapMaterial.html#shininess",
-                          "tf": 16.666666666666664
-                        },
-                        "PhongWrapMaterial.html#reflectivity": {
-                          "ref": "PhongWrapMaterial.html#reflectivity",
-                          "tf": 725
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "r": {
-                  "docs": {
-                    "Position.html#flowFromOrigin": {
-                      "ref": "Position.html#flowFromOrigin",
-                      "tf": 3.3333333333333335
-                    },
-                    "Position.html#flow": {
-                      "ref": "Position.html#flow",
-                      "tf": 0.49504950495049505
-                    },
-                    "Vector.html": {
-                      "ref": "Vector.html",
-                      "tf": 3.8461538461538463
-                    },
-                    "Vector.html#applyFacing": {
-                      "ref": "Vector.html#applyFacing",
-                      "tf": 5.263157894736842
-                    },
-                    "FlyControls.html#update": {
-                      "ref": "FlyControls.html#update",
-                      "tf": 0.4629629629629629
                     }
                   }
                 }
@@ -18277,6 +19183,14 @@ window.lunrData = {
                     }
                   }
                 }
+              },
+              "n": {
+                "docs": {
+                  "QuadRing.html#matrix4": {
+                    "ref": "QuadRing.html#matrix4",
+                    "tf": 12.5
+                  }
+                }
               }
             },
             "n": {
@@ -18286,6 +19200,10 @@ window.lunrData = {
                   "QuadRingElement.html#ring": {
                     "ref": "QuadRingElement.html#ring",
                     "tf": 716.6666666666666
+                  },
+                  "QuadRing.html#element": {
+                    "ref": "QuadRing.html#element",
+                    "tf": 6.25
                   },
                   "QuadRingMatrix4.html#ring": {
                     "ref": "QuadRingMatrix4.html#ring",
@@ -18440,6 +19358,20 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "d": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "u": {
+                  "docs": {
+                    "NewBallShape.html": {
+                      "ref": "NewBallShape.html",
+                      "tf": 4.166666666666666
+                    }
+                  }
+                }
+              }
             }
           },
           "g": {
@@ -18539,8 +19471,8 @@ window.lunrData = {
                 "docs": {},
                 "d": {
                   "docs": {
-                    "Group.html#halfTranslationC": {
-                      "ref": "Group.html#halfTranslationC",
+                    "Group.html#_halfTranslationC": {
+                      "ref": "Group.html#_halfTranslationC",
                       "tf": 16.666666666666664
                     }
                   }
@@ -18893,6 +19825,108 @@ window.lunrData = {
               }
             }
           },
+          "a": {
+            "docs": {},
+            "k": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "Isometry.html#diffExpMap": {
+                    "ref": "Isometry.html#diffExpMap",
+                    "tf": 2.083333333333333
+                  },
+                  "Material.html#glslRender": {
+                    "ref": "Material.html#glslRender",
+                    "tf": 0.819672131147541
+                  },
+                  "NormalMaterial.html#glslRender": {
+                    "ref": "NormalMaterial.html#glslRender",
+                    "tf": 0.819672131147541
+                  },
+                  "Shape.html#glslSDF": {
+                    "ref": "Shape.html#glslSDF",
+                    "tf": 1.6129032258064515
+                  },
+                  "Shape.html#glslGradient": {
+                    "ref": "Shape.html#glslGradient",
+                    "tf": 1.4705882352941175
+                  },
+                  "Shape.html#glslUVMap": {
+                    "ref": "Shape.html#glslUVMap",
+                    "tf": 2.083333333333333
+                  },
+                  "CheckerboardMaterial.html#glslRender": {
+                    "ref": "CheckerboardMaterial.html#glslRender",
+                    "tf": 0.819672131147541
+                  },
+                  "SingleColorMaterial.html#glslRender": {
+                    "ref": "SingleColorMaterial.html#glslRender",
+                    "tf": 0.819672131147541
+                  },
+                  "Renderer.html": {
+                    "ref": "Renderer.html",
+                    "tf": 2.5
+                  },
+                  "RelPosition.html#point": {
+                    "ref": "RelPosition.html#point",
+                    "tf": 8.333333333333332
+                  },
+                  "BasicRenderer.html": {
+                    "ref": "BasicRenderer.html",
+                    "tf": 3.3333333333333335
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {},
+              "g": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "n": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "Isometry.html#diffExpMap": {
+                          "ref": "Isometry.html#diffExpMap",
+                          "tf": 2.083333333333333
+                        },
+                        "ChaseControls.html": {
+                          "ref": "ChaseControls.html",
+                          "tf": 2.941176470588235
+                        },
+                        "Position.html#flow": {
+                          "ref": "Position.html#flow",
+                          "tf": 0.49504950495049505
+                        },
+                        "HoroballShape.html#center": {
+                          "ref": "HoroballShape.html#center",
+                          "tf": 5.555555555555555
+                        },
+                        "LocalHoroballShape.html#center": {
+                          "ref": "LocalHoroballShape.html#center",
+                          "tf": 5.555555555555555
+                        },
+                        "VRCamera.html#chaseThreeCamera": {
+                          "ref": "VRCamera.html#chaseThreeCamera",
+                          "tf": 1.282051282051282
+                        },
+                        "Vector.html": {
+                          "ref": "Vector.html",
+                          "tf": 3.8461538461538463
+                        },
+                        "FlyControls.html#update": {
+                          "ref": "FlyControls.html#update",
+                          "tf": 0.4629629629629629
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "r": {
             "docs": {},
             "a": {
@@ -18911,16 +19945,24 @@ window.lunrData = {
                             "ref": "Point.html#applyIsometry",
                             "tf": 10
                           },
-                          "Group.html#halfTranslationA": {
-                            "ref": "Group.html#halfTranslationA",
+                          "Group.html#_halfTranslationA": {
+                            "ref": "Group.html#_halfTranslationA",
                             "tf": 16.666666666666664
                           },
-                          "Group.html#halfTranslationB": {
-                            "ref": "Group.html#halfTranslationB",
+                          "Group.html#_halfTranslationB": {
+                            "ref": "Group.html#_halfTranslationB",
                             "tf": 16.666666666666664
                           },
-                          "Group.html#halfTranslationC": {
-                            "ref": "Group.html#halfTranslationC",
+                          "Group.html#_translationA": {
+                            "ref": "Group.html#_translationA",
+                            "tf": 16.666666666666664
+                          },
+                          "Group.html#_halfTranslationC": {
+                            "ref": "Group.html#_halfTranslationC",
+                            "tf": 16.666666666666664
+                          },
+                          "Group.html#_translationB": {
+                            "ref": "Group.html#_translationB",
                             "tf": 16.666666666666664
                           },
                           "Position.html#applyIsometry": {
@@ -18930,6 +19972,39 @@ window.lunrData = {
                           "GroupElement.html": {
                             "ref": "GroupElement.html",
                             "tf": 6.25
+                          }
+                        },
+                        "i": {
+                          "docs": {},
+                          "o": {
+                            "docs": {},
+                            "n": {
+                              "docs": {},
+                              "a": {
+                                "docs": {
+                                  "Group.html#dotMatrix": {
+                                    "ref": "Group.html#dotMatrix",
+                                    "tf": 5.555555555555555
+                                  }
+                                }
+                              },
+                              "b": {
+                                "docs": {
+                                  "Group.html#dotMatrix": {
+                                    "ref": "Group.html#dotMatrix",
+                                    "tf": 5.555555555555555
+                                  }
+                                }
+                              },
+                              "c": {
+                                "docs": {
+                                  "Group.html#dotMatrix": {
+                                    "ref": "Group.html#dotMatrix",
+                                    "tf": 5.555555555555555
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -19078,6 +20153,10 @@ window.lunrData = {
                     "ref": "LocalBallShape.html#isGlobal",
                     "tf": 7.142857142857142
                   },
+                  "HalfSpaceShape.html#isGlobal": {
+                    "ref": "HalfSpaceShape.html#isGlobal",
+                    "tf": 7.142857142857142
+                  },
                   "VRCamera.html#isStereoOn": {
                     "ref": "VRCamera.html#isStereoOn",
                     "tf": 25
@@ -19085,6 +20164,10 @@ window.lunrData = {
                   "VRCamera.html#isStereoOff": {
                     "ref": "VRCamera.html#isStereoOff",
                     "tf": 25
+                  },
+                  "NewBallShape.html#isGlobal": {
+                    "ref": "NewBallShape.html#isGlobal",
+                    "tf": 7.142857142857142
                   }
                 }
               }
@@ -19870,96 +20953,6 @@ window.lunrData = {
                 }
               }
             }
-          },
-          "a": {
-            "docs": {},
-            "k": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "Material.html#glslRender": {
-                    "ref": "Material.html#glslRender",
-                    "tf": 0.819672131147541
-                  },
-                  "NormalMaterial.html#glslRender": {
-                    "ref": "NormalMaterial.html#glslRender",
-                    "tf": 0.819672131147541
-                  },
-                  "Shape.html#glslSDF": {
-                    "ref": "Shape.html#glslSDF",
-                    "tf": 1.6129032258064515
-                  },
-                  "Shape.html#glslGradient": {
-                    "ref": "Shape.html#glslGradient",
-                    "tf": 1.4705882352941175
-                  },
-                  "Shape.html#glslUVMap": {
-                    "ref": "Shape.html#glslUVMap",
-                    "tf": 2.083333333333333
-                  },
-                  "CheckerboardMaterial.html#glslRender": {
-                    "ref": "CheckerboardMaterial.html#glslRender",
-                    "tf": 0.819672131147541
-                  },
-                  "SingleColorMaterial.html#glslRender": {
-                    "ref": "SingleColorMaterial.html#glslRender",
-                    "tf": 0.819672131147541
-                  },
-                  "Renderer.html": {
-                    "ref": "Renderer.html",
-                    "tf": 2.5
-                  },
-                  "RelPosition.html#point": {
-                    "ref": "RelPosition.html#point",
-                    "tf": 8.333333333333332
-                  },
-                  "BasicRenderer.html": {
-                    "ref": "BasicRenderer.html",
-                    "tf": 3.3333333333333335
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "g": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "n": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "Position.html#flow": {
-                          "ref": "Position.html#flow",
-                          "tf": 0.49504950495049505
-                        },
-                        "HoroballShape.html#center": {
-                          "ref": "HoroballShape.html#center",
-                          "tf": 5.555555555555555
-                        },
-                        "LocalHoroballShape.html#center": {
-                          "ref": "LocalHoroballShape.html#center",
-                          "tf": 5.555555555555555
-                        },
-                        "VRCamera.html#chaseThreeCamera": {
-                          "ref": "VRCamera.html#chaseThreeCamera",
-                          "tf": 1.282051282051282
-                        },
-                        "Vector.html": {
-                          "ref": "Vector.html",
-                          "tf": 3.8461538461538463
-                        },
-                        "FlyControls.html#update": {
-                          "ref": "FlyControls.html#update",
-                          "tf": 0.4629629629629629
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "v": {
@@ -20081,6 +21074,10 @@ window.lunrData = {
               "index.html": {
                 "ref": "index.html",
                 "tf": 200
+              },
+              "ChaseControls.html": {
+                "ref": "ChaseControls.html",
+                "tf": 2.941176470588235
               },
               "AbstractVRThurston.html#VRControlsMove": {
                 "ref": "AbstractVRThurston.html#VRControlsMove",
@@ -21029,16 +22026,24 @@ window.lunrData = {
                     },
                     "4": {
                       "docs": {
-                        "Group.html#halfTranslationA": {
-                          "ref": "Group.html#halfTranslationA",
+                        "Group.html#_halfTranslationA": {
+                          "ref": "Group.html#_halfTranslationA",
                           "tf": 50
                         },
-                        "Group.html#halfTranslationB": {
-                          "ref": "Group.html#halfTranslationB",
+                        "Group.html#_halfTranslationB": {
+                          "ref": "Group.html#_halfTranslationB",
                           "tf": 50
                         },
-                        "Group.html#halfTranslationC": {
-                          "ref": "Group.html#halfTranslationC",
+                        "Group.html#_translationA": {
+                          "ref": "Group.html#_translationA",
+                          "tf": 50
+                        },
+                        "Group.html#_halfTranslationC": {
+                          "ref": "Group.html#_halfTranslationC",
+                          "tf": 50
+                        },
+                        "Group.html#_translationB": {
+                          "ref": "Group.html#_translationB",
                           "tf": 50
                         }
                       }
@@ -21091,6 +22096,10 @@ window.lunrData = {
                       "SingleColorMaterial.html#glslRender": {
                         "ref": "SingleColorMaterial.html#glslRender",
                         "tf": 0.819672131147541
+                      },
+                      "HalfSpaceShape.html#normal": {
+                        "ref": "HalfSpaceShape.html#normal",
+                        "tf": 7.6923076923076925
                       },
                       "VRCamera.html#chaseThreeCamera": {
                         "ref": "VRCamera.html#chaseThreeCamera",
@@ -21215,6 +22224,26 @@ window.lunrData = {
                   "docs": {},
                   "c": {
                     "docs": {
+                      "VerticalHalfSpace.html": {
+                        "ref": "VerticalHalfSpace.html",
+                        "tf": 12.5
+                      },
+                      "LocalVerticalCylinder.html": {
+                        "ref": "LocalVerticalCylinder.html",
+                        "tf": 16.666666666666664
+                      },
+                      "VerticalCylinder.html": {
+                        "ref": "VerticalCylinder.html",
+                        "tf": 16.666666666666664
+                      },
+                      "LocalVerticalCylinderShape.html": {
+                        "ref": "LocalVerticalCylinderShape.html",
+                        "tf": 25
+                      },
+                      "VerticalCylinderShape.html": {
+                        "ref": "VerticalCylinderShape.html",
+                        "tf": 25
+                      },
                       "VerticalHalfSpaceShape.html": {
                         "ref": "VerticalHalfSpaceShape.html",
                         "tf": 10
@@ -21272,6 +22301,69 @@ window.lunrData = {
                               }
                             }
                           }
+                        },
+                        "c": {
+                          "docs": {},
+                          "y": {
+                            "docs": {},
+                            "l": {
+                              "docs": {},
+                              "i": {
+                                "docs": {},
+                                "n": {
+                                  "docs": {},
+                                  "d": {
+                                    "docs": {
+                                      "VerticalCylinder.html": {
+                                        "ref": "VerticalCylinder.html",
+                                        "tf": 1900
+                                      }
+                                    },
+                                    "e": {
+                                      "docs": {},
+                                      "r": {
+                                        "docs": {},
+                                        "s": {
+                                          "docs": {},
+                                          "h": {
+                                            "docs": {},
+                                            "a": {
+                                              "docs": {},
+                                              "p": {
+                                                "docs": {
+                                                  "VerticalCylinderShape.html": {
+                                                    "ref": "VerticalCylinderShape.html",
+                                                    "tf": 1900
+                                                  }
+                                                },
+                                                "e": {
+                                                  "docs": {},
+                                                  "#": {
+                                                    "docs": {},
+                                                    "p": {
+                                                      "docs": {},
+                                                      "o": {
+                                                        "docs": {
+                                                          "VerticalCylinderShape.html#pos": {
+                                                            "ref": "VerticalCylinderShape.html#pos",
+                                                            "tf": 1150
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -21289,6 +22381,10 @@ window.lunrData = {
                         "Vector.html#toLog": {
                           "ref": "Vector.html#toLog",
                           "tf": 4.545454545454546
+                        },
+                        "NewBallShape.html": {
+                          "ref": "NewBallShape.html",
+                          "tf": 2.083333333333333
                         }
                       }
                     }
@@ -21464,6 +22560,32 @@ window.lunrData = {
                 }
               }
             },
+            "t": {
+              "docs": {},
+              "m": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "t": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "i": {
+                        "docs": {},
+                        "x": {
+                          "docs": {
+                            "Group.html#dotMatrix": {
+                              "ref": "Group.html#dotMatrix",
+                              "tf": 750
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "m": {
               "docs": {
                 "Renderer.html#domElement": {
@@ -21524,6 +22646,17 @@ window.lunrData = {
           },
           "e": {
             "docs": {},
+            "x": {
+              "docs": {},
+              "p": {
+                "docs": {
+                  "Isometry.html#diffExpMap": {
+                    "ref": "Isometry.html#diffExpMap",
+                    "tf": 4.166666666666666
+                  }
+                }
+              }
+            },
             "b": {
               "docs": {},
               "u": {
@@ -21549,6 +22682,58 @@ window.lunrData = {
                     "RelPosition.html#equals": {
                       "ref": "RelPosition.html#equals",
                       "tf": 6.25
+                    }
+                  },
+                  "m": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "t": {
+                        "docs": {},
+                        "e": {
+                          "docs": {},
+                          "r": {
+                            "docs": {},
+                            "i": {
+                              "docs": {
+                                "DebugMaterial.html": {
+                                  "ref": "DebugMaterial.html",
+                                  "tf": 1900
+                                }
+                              },
+                              "a": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "#": {
+                                    "docs": {},
+                                    "l": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {},
+                                        "g": {
+                                          "docs": {},
+                                          "h": {
+                                            "docs": {},
+                                            "t": {
+                                              "docs": {
+                                                "DebugMaterial.html#lights": {
+                                                  "ref": "DebugMaterial.html#lights",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -21648,6 +22833,17 @@ window.lunrData = {
                     "PhongWrapMaterial.html#material": {
                       "ref": "PhongWrapMaterial.html#material",
                       "tf": 12.5
+                    }
+                  },
+                  "i": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "Group.html#dotMatrix": {
+                          "ref": "Group.html#dotMatrix",
+                          "tf": 5.555555555555555
+                        }
+                      }
                     }
                   }
                 }
@@ -21895,6 +23091,70 @@ window.lunrData = {
           },
           "i": {
             "docs": {},
+            "f": {
+              "docs": {},
+              "f": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "e": {
+                      "docs": {},
+                      "n": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "i": {
+                            "docs": {
+                              "Isometry.html#diffExpMap": {
+                                "ref": "Isometry.html#diffExpMap",
+                                "tf": 6.25
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "x": {
+                    "docs": {},
+                    "p": {
+                      "docs": {},
+                      "m": {
+                        "docs": {},
+                        "a": {
+                          "docs": {},
+                          "p": {
+                            "docs": {
+                              "Isometry.html#diffExpMap": {
+                                "ref": "Isometry.html#diffExpMap",
+                                "tf": 683.3333333333334
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "u": {
+                  "docs": {},
+                  "s": {
+                    "docs": {
+                      "PhongMaterial.html#diffuse": {
+                        "ref": "PhongMaterial.html#diffuse",
+                        "tf": 716.6666666666666
+                      },
+                      "PhongWrapMaterial.html#diffuse": {
+                        "ref": "PhongWrapMaterial.html#diffuse",
+                        "tf": 716.6666666666666
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "r": {
               "1": {
                 "docs": {
@@ -21959,6 +23219,10 @@ window.lunrData = {
                       "CheckerboardMaterial.html#dir2": {
                         "ref": "CheckerboardMaterial.html#dir2",
                         "tf": 16.666666666666664
+                      },
+                      "HalfSpaceShape.html#normal": {
+                        "ref": "HalfSpaceShape.html#normal",
+                        "tf": 3.8461538461538463
                       },
                       "VRCamera.html#chaseThreeCamera": {
                         "ref": "VRCamera.html#chaseThreeCamera",
@@ -22163,27 +23427,6 @@ window.lunrData = {
                 }
               }
             },
-            "f": {
-              "docs": {},
-              "f": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "s": {
-                    "docs": {
-                      "PhongMaterial.html#diffuse": {
-                        "ref": "PhongMaterial.html#diffuse",
-                        "tf": 716.6666666666666
-                      },
-                      "PhongWrapMaterial.html#diffuse": {
-                        "ref": "PhongWrapMaterial.html#diffuse",
-                        "tf": 716.6666666666666
-                      }
-                    }
-                  }
-                }
-              }
-            },
             "m": {
               "docs": {},
               "e": {
@@ -22213,6 +23456,14 @@ window.lunrData = {
                     }
                   }
                 }
+              }
+            }
+          },
+          "m": {
+            "docs": {
+              "Isometry.html#diffExpMap": {
+                "ref": "Isometry.html#diffExpMap",
+                "tf": 4.166666666666666
               }
             }
           },
@@ -22276,6 +23527,10 @@ window.lunrData = {
                   "Vector.html#applyMatrix4": {
                     "ref": "Vector.html#applyMatrix4",
                     "tf": 1.8518518518518516
+                  },
+                  "NewBallShape.html": {
+                    "ref": "NewBallShape.html",
+                    "tf": 2.083333333333333
                   }
                 }
               }
@@ -23141,6 +24396,10 @@ window.lunrData = {
                                             "docs": {
                                               "Scene.html#lights": {
                                                 "ref": "Scene.html#lights",
+                                                "tf": 50
+                                              },
+                                              "DebugMaterial.html#lights": {
+                                                "ref": "DebugMaterial.html#lights",
                                                 "tf": 50
                                               },
                                               "PhongMaterial.html#lights": {
@@ -24192,6 +25451,10 @@ window.lunrData = {
                         "ref": "CheckerboardMaterial.html#lights",
                         "tf": 2.7777777777777777
                       },
+                      "DebugMaterial.html#lights": {
+                        "ref": "DebugMaterial.html#lights",
+                        "tf": 16.666666666666664
+                      },
                       "PhongMaterial.html#lights": {
                         "ref": "PhongMaterial.html#lights",
                         "tf": 16.666666666666664
@@ -24590,6 +25853,10 @@ window.lunrData = {
                           "ref": "Isometry.html#invert",
                           "tf": 16.666666666666664
                         },
+                        "Isometry.html#diffExpMap": {
+                          "ref": "Isometry.html#diffExpMap",
+                          "tf": 2.083333333333333
+                        },
                         "Isometry.html#equals": {
                           "ref": "Isometry.html#equals",
                           "tf": 6.25
@@ -24734,6 +26001,10 @@ window.lunrData = {
                           "ref": "Vector.html#applyFacing",
                           "tf": 2.631578947368421
                         },
+                        "RelPosition.html#globalBoost": {
+                          "ref": "RelPosition.html#globalBoost",
+                          "tf": 6.25
+                        },
                         "RelPosition.html#reduceErrorBoost": {
                           "ref": "RelPosition.html#reduceErrorBoost",
                           "tf": 8.333333333333332
@@ -24856,12 +26127,20 @@ window.lunrData = {
                       "ref": "LocalBall.html",
                       "tf": 110
                     },
+                    "Cylinder.html": {
+                      "ref": "Cylinder.html",
+                      "tf": 110
+                    },
                     "Horoball.html": {
                       "ref": "Horoball.html",
                       "tf": 110
                     },
                     "LocalHoroball.html": {
                       "ref": "LocalHoroball.html",
+                      "tf": 110
+                    },
+                    "NewBall.html": {
+                      "ref": "NewBall.html",
                       "tf": 110
                     },
                     "FakeBall.html": {
@@ -24892,8 +26171,12 @@ window.lunrData = {
                       "ref": "Generic.html#glslInstance",
                       "tf": 4.166666666666666
                     },
-                    "QuadRing.html": {
-                      "ref": "QuadRing.html",
+                    "LocalVerticalCylinder.html": {
+                      "ref": "LocalVerticalCylinder.html",
+                      "tf": 110
+                    },
+                    "VerticalCylinder.html": {
+                      "ref": "VerticalCylinder.html",
                       "tf": 110
                     },
                     "Thurston.html": {
@@ -24906,6 +26189,10 @@ window.lunrData = {
                     },
                     "NativeThurston.html": {
                       "ref": "NativeThurston.html",
+                      "tf": 110
+                    },
+                    "QuadRing.html": {
+                      "ref": "QuadRing.html",
                       "tf": 110
                     },
                     "QuadRingMatrix4.html": {
@@ -24946,6 +26233,10 @@ window.lunrData = {
                     },
                     "WrapShape.html": {
                       "ref": "WrapShape.html",
+                      "tf": 110
+                    },
+                    "ChaseControls.html": {
+                      "ref": "ChaseControls.html",
                       "tf": 110
                     },
                     "AbstractVRThurston.html": {
@@ -25012,6 +26303,10 @@ window.lunrData = {
                       "ref": "CheckerboardMaterial.html",
                       "tf": 110
                     },
+                    "DebugMaterial.html": {
+                      "ref": "DebugMaterial.html",
+                      "tf": 110
+                    },
                     "PhongMaterial.html": {
                       "ref": "PhongMaterial.html",
                       "tf": 110
@@ -25044,8 +26339,20 @@ window.lunrData = {
                       "ref": "Renderer.html",
                       "tf": 112.5
                     },
+                    "HalfSpaceShape.html": {
+                      "ref": "HalfSpaceShape.html",
+                      "tf": 110
+                    },
                     "VRCamera.html": {
                       "ref": "VRCamera.html",
+                      "tf": 110
+                    },
+                    "LocalVerticalCylinderShape.html": {
+                      "ref": "LocalVerticalCylinderShape.html",
+                      "tf": 110
+                    },
+                    "VerticalCylinderShape.html": {
+                      "ref": "VerticalCylinderShape.html",
                       "tf": 110
                     },
                     "PhongWrapMaterial.html": {
@@ -25056,10 +26363,6 @@ window.lunrData = {
                       "ref": "AbstractThurston.html",
                       "tf": 110
                     },
-                    "HalfSpaceShape.html": {
-                      "ref": "HalfSpaceShape.html",
-                      "tf": 110
-                    },
                     "Vector.html": {
                       "ref": "Vector.html",
                       "tf": 110
@@ -25068,12 +26371,20 @@ window.lunrData = {
                       "ref": "RelPosition.html",
                       "tf": 110
                     },
+                    "CylinderShape_CylinderShape.html": {
+                      "ref": "CylinderShape_CylinderShape.html",
+                      "tf": 110
+                    },
                     "VerticalHalfSpaceShape.html": {
                       "ref": "VerticalHalfSpaceShape.html",
                       "tf": 110
                     },
                     "BasicRenderer.html": {
                       "ref": "BasicRenderer.html",
+                      "tf": 110
+                    },
+                    "NewBallShape.html": {
+                      "ref": "NewBallShape.html",
                       "tf": 110
                     },
                     "VRControlsDrag.html": {
@@ -25229,6 +26540,10 @@ window.lunrData = {
                                 "AbstractThurston.html#setParams": {
                                   "ref": "AbstractThurston.html#setParams",
                                   "tf": 10
+                                },
+                                "CylinderShape_CylinderShape.html": {
+                                  "ref": "CylinderShape_CylinderShape.html",
+                                  "tf": 50
                                 }
                               }
                             }
@@ -25311,6 +26626,10 @@ window.lunrData = {
                         "Teleportation.html": {
                           "ref": "Teleportation.html",
                           "tf": 2.5
+                        },
+                        "HalfSpaceShape.html#normal": {
+                          "ref": "HalfSpaceShape.html#normal",
+                          "tf": 3.8461538461538463
                         }
                       }
                     }
@@ -25391,6 +26710,10 @@ window.lunrData = {
                         "LinFog.html#scattering": {
                           "ref": "LinFog.html#scattering",
                           "tf": 12.5
+                        },
+                        "ChaseControls.html": {
+                          "ref": "ChaseControls.html",
+                          "tf": 2.941176470588235
                         },
                         "AbstractVRThurston.html#VRControlsMove": {
                           "ref": "AbstractVRThurston.html#VRControlsMove",
@@ -25839,6 +27162,14 @@ window.lunrData = {
                       "SingleColorMaterial.html#glslRender": {
                         "ref": "SingleColorMaterial.html#glslRender",
                         "tf": 0.819672131147541
+                      },
+                      "HalfSpaceShape.html#normal": {
+                        "ref": "HalfSpaceShape.html#normal",
+                        "tf": 3.8461538461538463
+                      },
+                      "NewBallShape.html#center": {
+                        "ref": "NewBallShape.html#center",
+                        "tf": 10
                       }
                     }
                   }
@@ -25907,6 +27238,23 @@ window.lunrData = {
                                       "docs": {},
                                       "#": {
                                         "docs": {},
+                                        "i": {
+                                          "docs": {},
+                                          "s": {
+                                            "docs": {},
+                                            "o": {
+                                              "docs": {},
+                                              "m": {
+                                                "docs": {
+                                                  "ComplementShape.html#isom": {
+                                                    "ref": "ComplementShape.html#isom",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
                                         "s": {
                                           "docs": {},
                                           "e": {
@@ -26458,6 +27806,31 @@ window.lunrData = {
                                                       }
                                                     }
                                                   },
+                                                  "d": {
+                                                    "docs": {},
+                                                    "i": {
+                                                      "docs": {},
+                                                      "r": {
+                                                        "1": {
+                                                          "docs": {
+                                                            "CheckerboardMaterial.html#dir1": {
+                                                              "ref": "CheckerboardMaterial.html#dir1",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        },
+                                                        "2": {
+                                                          "docs": {
+                                                            "CheckerboardMaterial.html#dir2": {
+                                                              "ref": "CheckerboardMaterial.html#dir2",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        },
+                                                        "docs": {}
+                                                      }
+                                                    }
+                                                  },
                                                   "r": {
                                                     "docs": {},
                                                     "e": {
@@ -26481,31 +27854,6 @@ window.lunrData = {
                                                             }
                                                           }
                                                         }
-                                                      }
-                                                    }
-                                                  },
-                                                  "d": {
-                                                    "docs": {},
-                                                    "i": {
-                                                      "docs": {},
-                                                      "r": {
-                                                        "1": {
-                                                          "docs": {
-                                                            "CheckerboardMaterial.html#dir1": {
-                                                              "ref": "CheckerboardMaterial.html#dir1",
-                                                              "tf": 1150
-                                                            }
-                                                          }
-                                                        },
-                                                        "2": {
-                                                          "docs": {
-                                                            "CheckerboardMaterial.html#dir2": {
-                                                              "ref": "CheckerboardMaterial.html#dir2",
-                                                              "tf": 1150
-                                                            }
-                                                          }
-                                                        },
-                                                        "docs": {}
                                                       }
                                                     }
                                                   },
@@ -26849,7 +28197,171 @@ window.lunrData = {
               "s": {
                 "docs": {},
                 "e": {
-                  "docs": {},
+                  "docs": {
+                    "ChaseControls.html#chase": {
+                      "ref": "ChaseControls.html#chase",
+                      "tf": 700
+                    }
+                  },
+                  "c": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "n": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "r": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "l": {
+                                "docs": {
+                                  "ChaseControls.html": {
+                                    "ref": "ChaseControls.html",
+                                    "tf": 1900
+                                  }
+                                },
+                                "s": {
+                                  "docs": {},
+                                  "#": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {},
+                                      "n": {
+                                        "docs": {},
+                                        "s": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "c": {
+                                                  "docs": {},
+                                                  "t": {
+                                                    "docs": {},
+                                                    "s": {
+                                                      "docs": {},
+                                                      "t": {
+                                                        "docs": {},
+                                                        "a": {
+                                                          "docs": {},
+                                                          "r": {
+                                                            "docs": {},
+                                                            "t": {
+                                                              "docs": {
+                                                                "ChaseControls.html#onSelectStart": {
+                                                                  "ref": "ChaseControls.html#onSelectStart",
+                                                                  "tf": 1150
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "e": {
+                                                      "docs": {},
+                                                      "n": {
+                                                        "docs": {},
+                                                        "d": {
+                                                          "docs": {
+                                                            "ChaseControls.html#onSelectEnd": {
+                                                              "ref": "ChaseControls.html#onSelectEnd",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "q": {
+                                            "docs": {},
+                                            "u": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "e": {
+                                                  "docs": {},
+                                                  "z": {
+                                                    "docs": {},
+                                                    "e": {
+                                                      "docs": {},
+                                                      "s": {
+                                                        "docs": {},
+                                                        "t": {
+                                                          "docs": {},
+                                                          "a": {
+                                                            "docs": {},
+                                                            "r": {
+                                                              "docs": {},
+                                                              "t": {
+                                                                "docs": {
+                                                                  "ChaseControls.html#onSqueezeStart": {
+                                                                    "ref": "ChaseControls.html#onSqueezeStart",
+                                                                    "tf": 1150
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "e": {
+                                                        "docs": {},
+                                                        "n": {
+                                                          "docs": {},
+                                                          "d": {
+                                                            "docs": {
+                                                              "ChaseControls.html#onSqueezeEnd": {
+                                                                "ref": "ChaseControls.html#onSqueezeEnd",
+                                                                "tf": 1150
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "c": {
+                                      "docs": {},
+                                      "h": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "s": {
+                                            "docs": {
+                                              "ChaseControls.html#chase": {
+                                                "ref": "ChaseControls.html#chase",
+                                                "tf": 1150
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "t": {
                     "docs": {},
                     "h": {
@@ -27251,6 +28763,22 @@ window.lunrData = {
                       "LocalHoroballShape.html#center": {
                         "ref": "LocalHoroballShape.html#center",
                         "tf": 705.5555555555555
+                      },
+                      "LocalVerticalCylinderShape.html#pos": {
+                        "ref": "LocalVerticalCylinderShape.html#pos",
+                        "tf": 16.666666666666664
+                      },
+                      "VerticalCylinderShape.html#pos": {
+                        "ref": "VerticalCylinderShape.html#pos",
+                        "tf": 16.666666666666664
+                      },
+                      "NewBallShape.html": {
+                        "ref": "NewBallShape.html",
+                        "tf": 4.166666666666666
+                      },
+                      "NewBallShape.html#center": {
+                        "ref": "NewBallShape.html#center",
+                        "tf": 760
                       }
                     }
                   }
@@ -27291,6 +28819,124 @@ window.lunrData = {
                             "RelPosition.html#invCellBoost": {
                               "ref": "RelPosition.html#invCellBoost",
                               "tf": 25
+                            },
+                            "RelPosition.html#globalBoost": {
+                              "ref": "RelPosition.html#globalBoost",
+                              "tf": 6.25
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "y": {
+            "docs": {},
+            "l": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "Cylinder.html": {
+                        "ref": "Cylinder.html",
+                        "tf": 1900
+                      },
+                      "LocalVerticalCylinder.html": {
+                        "ref": "LocalVerticalCylinder.html",
+                        "tf": 16.666666666666664
+                      },
+                      "VerticalCylinder.html": {
+                        "ref": "VerticalCylinder.html",
+                        "tf": 16.666666666666664
+                      },
+                      "LocalVerticalCylinderShape.html": {
+                        "ref": "LocalVerticalCylinderShape.html",
+                        "tf": 25
+                      },
+                      "LocalVerticalCylinderShape.html#pos": {
+                        "ref": "LocalVerticalCylinderShape.html#pos",
+                        "tf": 16.666666666666664
+                      },
+                      "VerticalCylinderShape.html": {
+                        "ref": "VerticalCylinderShape.html",
+                        "tf": 25
+                      },
+                      "VerticalCylinderShape.html#pos": {
+                        "ref": "VerticalCylinderShape.html#pos",
+                        "tf": 16.666666666666664
+                      }
+                    },
+                    "e": {
+                      "docs": {},
+                      "r": {
+                        "docs": {},
+                        "s": {
+                          "docs": {},
+                          "h": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "p": {
+                                "docs": {
+                                  "CylinderShape_CylinderShape.html": {
+                                    "ref": "CylinderShape_CylinderShape.html",
+                                    "tf": 750
+                                  }
+                                },
+                                "e": {
+                                  "docs": {},
+                                  "#": {
+                                    "docs": {},
+                                    "c": {
+                                      "docs": {},
+                                      "y": {
+                                        "docs": {},
+                                        "l": {
+                                          "docs": {},
+                                          "i": {
+                                            "docs": {},
+                                            "n": {
+                                              "docs": {},
+                                              "d": {
+                                                "docs": {},
+                                                "e": {
+                                                  "docs": {},
+                                                  "r": {
+                                                    "docs": {},
+                                                    "s": {
+                                                      "docs": {},
+                                                      "h": {
+                                                        "docs": {},
+                                                        "a": {
+                                                          "docs": {},
+                                                          "p": {
+                                                            "docs": {
+                                                              "CylinderShape_CylinderShape.html": {
+                                                                "ref": "CylinderShape_CylinderShape.html",
+                                                                "tf": 1150
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                             }
                           }
                         }
@@ -27342,10 +28988,6 @@ window.lunrData = {
                     },
                     "LocalPotato.html": {
                       "ref": "LocalPotato.html",
-                      "tf": 12.5
-                    },
-                    "VerticalHalfSpace.html": {
-                      "ref": "VerticalHalfSpace.html",
                       "tf": 12.5
                     },
                     "Generic.html": {
@@ -27403,6 +29045,10 @@ window.lunrData = {
                     "WrapShape.html#setId": {
                       "ref": "WrapShape.html#setId",
                       "tf": 10
+                    },
+                    "ChaseControls.html": {
+                      "ref": "ChaseControls.html",
+                      "tf": 2.941176470588235
                     },
                     "AdvancedShape.html": {
                       "ref": "AdvancedShape.html",
@@ -27540,6 +29186,10 @@ window.lunrData = {
                       "ref": "LocalBallShape.html#isGlobal",
                       "tf": 7.142857142857142
                     },
+                    "HalfSpaceShape.html#isGlobal": {
+                      "ref": "HalfSpaceShape.html#isGlobal",
+                      "tf": 7.142857142857142
+                    },
                     "PhongWrapMaterial.html#setId": {
                       "ref": "PhongWrapMaterial.html#setId",
                       "tf": 10
@@ -27547,6 +29197,14 @@ window.lunrData = {
                     "VerticalHalfSpaceShape.html": {
                       "ref": "VerticalHalfSpaceShape.html",
                       "tf": 10
+                    },
+                    "NewBallShape.html": {
+                      "ref": "NewBallShape.html",
+                      "tf": 2.083333333333333
+                    },
+                    "NewBallShape.html#isGlobal": {
+                      "ref": "NewBallShape.html#isGlobal",
+                      "tf": 7.142857142857142
                     }
                   },
                   "#": {
@@ -27912,6 +29570,10 @@ window.lunrData = {
                         "ref": "Renderer.html#build",
                         "tf": 8.333333333333332
                       },
+                      "HalfSpaceShape.html#normal": {
+                        "ref": "HalfSpaceShape.html#normal",
+                        "tf": 3.8461538461538463
+                      },
                       "VRCamera.html#fakeCameras": {
                         "ref": "VRCamera.html#fakeCameras",
                         "tf": 6.25
@@ -27927,6 +29589,14 @@ window.lunrData = {
                       "BasicRenderer.html#build": {
                         "ref": "BasicRenderer.html#build",
                         "tf": 8.333333333333332
+                      },
+                      "NewBallShape.html": {
+                        "ref": "NewBallShape.html",
+                        "tf": 2.083333333333333
+                      },
+                      "NewBallShape.html#center": {
+                        "ref": "NewBallShape.html#center",
+                        "tf": 10
                       },
                       "BasicCamera.html#shader": {
                         "ref": "BasicCamera.html#shader",
@@ -28506,6 +30176,10 @@ window.lunrData = {
                       "ref": "NormalMaterial.html#lights",
                       "tf": 2.7777777777777777
                     },
+                    "ChaseControls.html": {
+                      "ref": "ChaseControls.html",
+                      "tf": 2.941176470588235
+                    },
                     "Solid.html": {
                       "ref": "Solid.html",
                       "tf": 1906.5217391304348
@@ -28740,6 +30414,14 @@ window.lunrData = {
                     "Light.html#glslDirections": {
                       "ref": "Light.html#glslDirections",
                       "tf": 0.9615384615384616
+                    },
+                    "ChaseControls.html#onSelectStart": {
+                      "ref": "ChaseControls.html#onSelectStart",
+                      "tf": 10
+                    },
+                    "ChaseControls.html#onSqueezeStart": {
+                      "ref": "ChaseControls.html#onSqueezeStart",
+                      "tf": 10
                     },
                     "VRControlsDrag.html#onSelectStart": {
                       "ref": "VRControlsDrag.html#onSelectStart",
@@ -29026,12 +30708,24 @@ window.lunrData = {
                     "QuadRing.html": {
                       "ref": "QuadRing.html",
                       "tf": 6.25
+                    },
+                    "NewBallShape.html": {
+                      "ref": "NewBallShape.html",
+                      "tf": 2.083333333333333
                     }
                   }
                 }
               },
               "p": {
                 "docs": {
+                  "ChaseControls.html#onSelectEnd": {
+                    "ref": "ChaseControls.html#onSelectEnd",
+                    "tf": 10
+                  },
+                  "ChaseControls.html#onSqueezeEnd": {
+                    "ref": "ChaseControls.html#onSqueezeEnd",
+                    "tf": 10
+                  },
                   "VRControlsDrag.html#onSelectEnd": {
                     "ref": "VRControlsDrag.html#onSelectEnd",
                     "tf": 10
@@ -29117,6 +30811,10 @@ window.lunrData = {
                   "ref": "Isometry.html#identity",
                   "tf": 12.5
                 },
+                "Isometry.html#diffExpMap": {
+                  "ref": "Isometry.html#diffExpMap",
+                  "tf": 2.083333333333333
+                },
                 "Isometry.html#copy": {
                   "ref": "Isometry.html#copy",
                   "tf": 10
@@ -29171,7 +30869,7 @@ window.lunrData = {
                 },
                 "QuadRingMatrix4.html#multiplyMatrices": {
                   "ref": "QuadRingMatrix4.html#multiplyMatrices",
-                  "tf": 12.5
+                  "tf": 10
                 },
                 "QuadRingMatrix4.html#transpose": {
                   "ref": "QuadRingMatrix4.html#transpose",
@@ -29353,6 +31051,67 @@ window.lunrData = {
                           }
                         }
                       }
+                    }
+                  }
+                }
+              },
+              "t": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "ComplementShape.html#isom": {
+                        "ref": "ComplementShape.html#isom",
+                        "tf": 12.5
+                      },
+                      "IntersectionShape.html#isom": {
+                        "ref": "IntersectionShape.html#isom",
+                        "tf": 12.5
+                      },
+                      "UnionShape.html#isom": {
+                        "ref": "UnionShape.html#isom",
+                        "tf": 12.5
+                      },
+                      "WrapShape.html#isom": {
+                        "ref": "WrapShape.html#isom",
+                        "tf": 12.5
+                      },
+                      "FlyControls.html#setKeyboard": {
+                        "ref": "FlyControls.html#setKeyboard",
+                        "tf": 5
+                      }
+                    }
+                  }
+                }
+              },
+              "u": {
+                "docs": {},
+                "p": {
+                  "docs": {
+                    "ComplementShape.html#isom": {
+                      "ref": "ComplementShape.html#isom",
+                      "tf": 12.5
+                    },
+                    "IntersectionShape.html#isom": {
+                      "ref": "IntersectionShape.html#isom",
+                      "tf": 12.5
+                    },
+                    "UnionShape.html#isom": {
+                      "ref": "UnionShape.html#isom",
+                      "tf": 12.5
+                    },
+                    "WrapShape.html#isom": {
+                      "ref": "WrapShape.html#isom",
+                      "tf": 12.5
+                    },
+                    "AbstractThurston.html#stats": {
+                      "ref": "AbstractThurston.html#stats",
+                      "tf": 10
+                    },
+                    "AbstractThurston.html#gui": {
+                      "ref": "AbstractThurston.html#gui",
+                      "tf": 8.333333333333332
                     }
                   }
                 }
@@ -29557,21 +31316,6 @@ window.lunrData = {
                   }
                 }
               },
-              "u": {
-                "docs": {},
-                "p": {
-                  "docs": {
-                    "AbstractThurston.html#stats": {
-                      "ref": "AbstractThurston.html#stats",
-                      "tf": 10
-                    },
-                    "AbstractThurston.html#gui": {
-                      "ref": "AbstractThurston.html#gui",
-                      "tf": 8.333333333333332
-                    }
-                  }
-                }
-              },
               "k": {
                 "docs": {},
                 "e": {
@@ -29596,20 +31340,6 @@ window.lunrData = {
                             }
                           }
                         }
-                      }
-                    }
-                  }
-                }
-              },
-              "t": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "FlyControls.html#setKeyboard": {
-                        "ref": "FlyControls.html#setKeyboard",
-                        "tf": 5
                       }
                     }
                   }
@@ -29647,35 +31377,6 @@ window.lunrData = {
                 }
               }
             },
-            "c": {
-              "docs": {},
-              "o": {
-                "docs": {},
-                "n": {
-                  "docs": {},
-                  "d": {
-                    "docs": {
-                      "Group.html#halfTranslationB": {
-                        "ref": "Group.html#halfTranslationB",
-                        "tf": 16.666666666666664
-                      },
-                      "CheckerboardMaterial.html#dir2": {
-                        "ref": "CheckerboardMaterial.html#dir2",
-                        "tf": 16.666666666666664
-                      },
-                      "CheckerboardMaterial.html#color2": {
-                        "ref": "CheckerboardMaterial.html#color2",
-                        "tf": 25
-                      },
-                      "VRRenderer.html#_fragmentBuilder": {
-                        "ref": "VRRenderer.html#_fragmentBuilder",
-                        "tf": 4.166666666666666
-                      }
-                    }
-                  }
-                }
-              }
-            },
             "e": {
               "docs": {
                 "TeleportationSet.html#teleportations": {
@@ -29705,9 +31406,46 @@ window.lunrData = {
               },
               "n": {
                 "docs": {
+                  "Isometry.html#diffExpMap": {
+                    "ref": "Isometry.html#diffExpMap",
+                    "tf": 2.083333333333333
+                  },
                   "VRRenderer.html": {
                     "ref": "VRRenderer.html",
                     "tf": 2.083333333333333
+                  }
+                }
+              }
+            },
+            "c": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "Group.html#_halfTranslationB": {
+                        "ref": "Group.html#_halfTranslationB",
+                        "tf": 16.666666666666664
+                      },
+                      "Group.html#_translationB": {
+                        "ref": "Group.html#_translationB",
+                        "tf": 16.666666666666664
+                      },
+                      "CheckerboardMaterial.html#dir2": {
+                        "ref": "CheckerboardMaterial.html#dir2",
+                        "tf": 16.666666666666664
+                      },
+                      "CheckerboardMaterial.html#color2": {
+                        "ref": "CheckerboardMaterial.html#color2",
+                        "tf": 25
+                      },
+                      "VRRenderer.html#_fragmentBuilder": {
+                        "ref": "VRRenderer.html#_fragmentBuilder",
+                        "tf": 4.166666666666666
+                      }
+                    }
                   }
                 }
               }
@@ -29720,6 +31458,14 @@ window.lunrData = {
                   "docs": {},
                   "t": {
                     "docs": {
+                      "ChaseControls.html#onSelectStart": {
+                        "ref": "ChaseControls.html#onSelectStart",
+                        "tf": 10
+                      },
+                      "ChaseControls.html#onSelectEnd": {
+                        "ref": "ChaseControls.html#onSelectEnd",
+                        "tf": 10
+                      },
                       "VRControlsDrag.html": {
                         "ref": "VRControlsDrag.html",
                         "tf": 2.272727272727273
@@ -29917,6 +31663,10 @@ window.lunrData = {
                     "CheckerboardMaterial.html#usesLight": {
                       "ref": "CheckerboardMaterial.html#usesLight",
                       "tf": 6.25
+                    },
+                    "DebugMaterial.html": {
+                      "ref": "DebugMaterial.html",
+                      "tf": 16.666666666666664
                     },
                     "PhongMaterial.html": {
                       "ref": "PhongMaterial.html",
@@ -30265,60 +32015,6 @@ window.lunrData = {
             },
             "docs": {}
           },
-          "a": {
-            "docs": {},
-            "m": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "Isometry.html#equals": {
-                    "ref": "Isometry.html#equals",
-                    "tf": 6.25
-                  },
-                  "Point.html#equals": {
-                    "ref": "Point.html#equals",
-                    "tf": 6.25
-                  },
-                  "GroupElement.html#equals": {
-                    "ref": "GroupElement.html#equals",
-                    "tf": 6.25
-                  },
-                  "Position.html#equals": {
-                    "ref": "Position.html#equals",
-                    "tf": 10
-                  },
-                  "Teleportation.html#glslCreepCustom": {
-                    "ref": "Teleportation.html#glslCreepCustom",
-                    "tf": 5
-                  },
-                  "Scene.html": {
-                    "ref": "Scene.html",
-                    "tf": 5.555555555555555
-                  },
-                  "NativeCamera.html": {
-                    "ref": "NativeCamera.html",
-                    "tf": 2.5
-                  },
-                  "RelPosition.html#equals": {
-                    "ref": "RelPosition.html#equals",
-                    "tf": 6.25
-                  }
-                }
-              }
-            },
-            "y": {
-              "docs": {
-                "Teleportation.html#jsTest": {
-                  "ref": "Teleportation.html#jsTest",
-                  "tf": 2.7777777777777777
-                },
-                "Teleportation.html#glslTest": {
-                  "ref": "Teleportation.html#glslTest",
-                  "tf": 4.166666666666666
-                }
-              }
-            }
-          },
           "p": {
             "docs": {},
             "a": {
@@ -30327,6 +32023,10 @@ window.lunrData = {
                 "docs": {},
                 "e": {
                   "docs": {
+                    "Isometry.html#diffExpMap": {
+                      "ref": "Isometry.html#diffExpMap",
+                      "tf": 2.083333333333333
+                    },
                     "Point.html#build": {
                       "ref": "Point.html#build",
                       "tf": 7.142857142857142
@@ -30334,6 +32034,14 @@ window.lunrData = {
                     "HalfSpace.html": {
                       "ref": "HalfSpace.html",
                       "tf": 16.666666666666664
+                    },
+                    "VerticalHalfSpace.html": {
+                      "ref": "VerticalHalfSpace.html",
+                      "tf": 12.5
+                    },
+                    "ChaseControls.html": {
+                      "ref": "ChaseControls.html",
+                      "tf": 2.941176470588235
                     },
                     "Position.html#flow": {
                       "ref": "Position.html#flow",
@@ -30361,7 +32069,7 @@ window.lunrData = {
                     },
                     "HalfSpaceShape.html#normal": {
                       "ref": "HalfSpaceShape.html#normal",
-                      "tf": 16.666666666666664
+                      "tf": 3.8461538461538463
                     },
                     "VerticalHalfSpaceShape.html": {
                       "ref": "VerticalHalfSpaceShape.html",
@@ -30492,6 +32200,60 @@ window.lunrData = {
               }
             }
           },
+          "a": {
+            "docs": {},
+            "m": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "Isometry.html#equals": {
+                    "ref": "Isometry.html#equals",
+                    "tf": 6.25
+                  },
+                  "Point.html#equals": {
+                    "ref": "Point.html#equals",
+                    "tf": 6.25
+                  },
+                  "GroupElement.html#equals": {
+                    "ref": "GroupElement.html#equals",
+                    "tf": 6.25
+                  },
+                  "Position.html#equals": {
+                    "ref": "Position.html#equals",
+                    "tf": 10
+                  },
+                  "Teleportation.html#glslCreepCustom": {
+                    "ref": "Teleportation.html#glslCreepCustom",
+                    "tf": 5
+                  },
+                  "Scene.html": {
+                    "ref": "Scene.html",
+                    "tf": 5.555555555555555
+                  },
+                  "NativeCamera.html": {
+                    "ref": "NativeCamera.html",
+                    "tf": 2.5
+                  },
+                  "RelPosition.html#equals": {
+                    "ref": "RelPosition.html#equals",
+                    "tf": 6.25
+                  }
+                }
+              }
+            },
+            "y": {
+              "docs": {
+                "Teleportation.html#jsTest": {
+                  "ref": "Teleportation.html#jsTest",
+                  "tf": 2.7777777777777777
+                },
+                "Teleportation.html#glslTest": {
+                  "ref": "Teleportation.html#glslTest",
+                  "tf": 4.166666666666666
+                }
+              }
+            }
+          },
           "q": {
             "docs": {},
             "r": {
@@ -30505,23 +32267,10 @@ window.lunrData = {
                       "QuadRingElement.html": {
                         "ref": "QuadRingElement.html",
                         "tf": 6.25
-                      }
-                    },
-                    ")": {
-                      "docs": {},
-                      ")": {
-                        "docs": {},
-                        "/": {
-                          "docs": {},
-                          "c": {
-                            "docs": {
-                              "QuadRing.html#element": {
-                                "ref": "QuadRing.html#element",
-                                "tf": 6.25
-                              }
-                            }
-                          }
-                        }
+                      },
+                      "QuadRing.html#element": {
+                        "ref": "QuadRing.html#element",
+                        "tf": 6.25
                       }
                     }
                   }
@@ -30547,6 +32296,14 @@ window.lunrData = {
                   "docs": {},
                   "z": {
                     "docs": {
+                      "ChaseControls.html#onSqueezeStart": {
+                        "ref": "ChaseControls.html#onSqueezeStart",
+                        "tf": 10
+                      },
+                      "ChaseControls.html#onSqueezeEnd": {
+                        "ref": "ChaseControls.html#onSqueezeEnd",
+                        "tf": 10
+                      },
                       "VRControlsDrag.html": {
                         "ref": "VRControlsDrag.html",
                         "tf": 2.272727272727273
@@ -30710,21 +32467,14 @@ window.lunrData = {
                 }
               }
             },
-            "c": {
-              "docs": {},
-              "h": {
-                "docs": {
-                  "NativeCamera.html": {
-                    "ref": "NativeCamera.html",
-                    "tf": 2.5
-                  }
-                }
-              }
-            },
             "r": {
               "docs": {},
               "e": {
                 "docs": {
+                  "ChaseControls.html": {
+                    "ref": "ChaseControls.html",
+                    "tf": 2.941176470588235
+                  },
                   "BallShape.html#hasUVMap": {
                     "ref": "BallShape.html#hasUVMap",
                     "tf": 5.555555555555555
@@ -30736,6 +32486,17 @@ window.lunrData = {
                   "RelPosition.html#flow": {
                     "ref": "RelPosition.html#flow",
                     "tf": 2.380952380952381
+                  }
+                }
+              }
+            },
+            "c": {
+              "docs": {},
+              "h": {
+                "docs": {
+                  "NativeCamera.html": {
+                    "ref": "NativeCamera.html",
+                    "tf": 2.5
                   }
                 }
               }
@@ -31367,7 +33128,27 @@ window.lunrData = {
               }
             }
           },
+          "1": {
+            "docs": {
+              "QuadRingMatrix4.html#multiplyMatrices": {
+                "ref": "QuadRingMatrix4.html#multiplyMatrices",
+                "tf": 35
+              }
+            }
+          },
+          "2": {
+            "docs": {
+              "QuadRingMatrix4.html#multiplyMatrices": {
+                "ref": "QuadRingMatrix4.html#multiplyMatrices",
+                "tf": 35
+              }
+            }
+          },
           "docs": {
+            "Isometry.html#diffExpMap": {
+              "ref": "Isometry.html#diffExpMap",
+              "tf": 37.49999999999999
+            },
             "QuadRingMatrix4.html#multiply": {
               "ref": "QuadRingMatrix4.html#multiply",
               "tf": 33.33333333333333
@@ -31549,6 +33330,14 @@ window.lunrData = {
                       "CheckerboardMaterial.html#glslRender": {
                         "ref": "CheckerboardMaterial.html#glslRender",
                         "tf": 2.459016393442623
+                      },
+                      "DebugMaterial.html": {
+                        "ref": "DebugMaterial.html",
+                        "tf": 16.666666666666664
+                      },
+                      "DebugMaterial.html#lights": {
+                        "ref": "DebugMaterial.html#lights",
+                        "tf": 16.666666666666664
                       },
                       "PhongMaterial.html": {
                         "ref": "PhongMaterial.html",
@@ -31847,26 +33636,6 @@ window.lunrData = {
                   }
                 }
               },
-              "h": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "m": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "t": {
-                        "docs": {
-                          "Group.html": {
-                            "ref": "Group.html",
-                            "tf": 4.545454545454546
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
               "r": {
                 "docs": {},
                 "i": {
@@ -31874,6 +33643,14 @@ window.lunrData = {
                   "x": {
                     "4": {
                       "docs": {
+                        "Isometry.html#diffExpMap": {
+                          "ref": "Isometry.html#diffExpMap",
+                          "tf": 2.083333333333333
+                        },
+                        "QuadRing.html#matrix4": {
+                          "ref": "QuadRing.html#matrix4",
+                          "tf": 700
+                        },
                         "QuadRingMatrix4.html#toMatrix4": {
                           "ref": "QuadRingMatrix4.html#toMatrix4",
                           "tf": 58.33333333333333
@@ -31893,6 +33670,14 @@ window.lunrData = {
                       }
                     },
                     "docs": {
+                      "Group.html#dotMatrix": {
+                        "ref": "Group.html#dotMatrix",
+                        "tf": 5.555555555555555
+                      },
+                      "QuadRing.html#matrix4": {
+                        "ref": "QuadRing.html#matrix4",
+                        "tf": 12.5
+                      },
                       "QuadRingMatrix4.html": {
                         "ref": "QuadRingMatrix4.html",
                         "tf": 4.545454545454546
@@ -31919,7 +33704,7 @@ window.lunrData = {
                       },
                       "QuadRingMatrix4.html#multiplyMatrices": {
                         "ref": "QuadRingMatrix4.html#multiplyMatrices",
-                        "tf": 12.5
+                        "tf": 10
                       },
                       "QuadRingMatrix4.html#multiply": {
                         "ref": "QuadRingMatrix4.html#multiply",
@@ -31985,6 +33770,26 @@ window.lunrData = {
                   }
                 }
               },
+              "h": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "m": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "Group.html": {
+                            "ref": "Group.html",
+                            "tf": 4.545454545454546
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "t": {
                 "docs": {},
                 "e": {
@@ -32011,6 +33816,10 @@ window.lunrData = {
                   "QuadRingMatrix4.html": {
                     "ref": "QuadRingMatrix4.html",
                     "tf": 4.545454545454546
+                  },
+                  "ChaseControls.html": {
+                    "ref": "ChaseControls.html",
+                    "tf": 2.941176470588235
                   },
                   "Position.html#reduceErrorQuaternion": {
                     "ref": "Position.html#reduceErrorQuaternion",
@@ -32132,6 +33941,10 @@ window.lunrData = {
                 "Isometry.html#makeTranslationFromDir": {
                   "ref": "Isometry.html#makeTranslationFromDir",
                   "tf": 5.555555555555555
+                },
+                "Isometry.html#diffExpMap": {
+                  "ref": "Isometry.html#diffExpMap",
+                  "tf": 2.083333333333333
                 },
                 "Material.html#usesUVMap": {
                   "ref": "Material.html#usesUVMap",
@@ -32513,7 +34326,7 @@ window.lunrData = {
                                     "docs": {
                                       "QuadRingMatrix4.html#multiplyMatrices": {
                                         "ref": "QuadRingMatrix4.html#multiplyMatrices",
-                                        "tf": 683.3333333333334
+                                        "tf": 675
                                       }
                                     }
                                   }
@@ -32606,16 +34419,28 @@ window.lunrData = {
                         "ref": "GroupElement.html#name",
                         "tf": 110
                       },
-                      "Group.html#halfTranslationA": {
-                        "ref": "Group.html#halfTranslationA",
+                      "Group.html#_halfTranslationA": {
+                        "ref": "Group.html#_halfTranslationA",
                         "tf": 110
                       },
-                      "Group.html#halfTranslationB": {
-                        "ref": "Group.html#halfTranslationB",
+                      "Group.html#_halfTranslationB": {
+                        "ref": "Group.html#_halfTranslationB",
                         "tf": 110
                       },
-                      "Group.html#halfTranslationC": {
-                        "ref": "Group.html#halfTranslationC",
+                      "Group.html#_translationA": {
+                        "ref": "Group.html#_translationA",
+                        "tf": 110
+                      },
+                      "Group.html#_halfTranslationC": {
+                        "ref": "Group.html#_halfTranslationC",
+                        "tf": 110
+                      },
+                      "Group.html#_translationB": {
+                        "ref": "Group.html#_translationB",
+                        "tf": 110
+                      },
+                      "Group.html#dotMatrix": {
+                        "ref": "Group.html#dotMatrix",
                         "tf": 110
                       },
                       "Light.html#maxDirs": {
@@ -32768,6 +34593,22 @@ window.lunrData = {
                       },
                       "LinFog.html#scattering": {
                         "ref": "LinFog.html#scattering",
+                        "tf": 110
+                      },
+                      "ComplementShape.html#isom": {
+                        "ref": "ComplementShape.html#isom",
+                        "tf": 110
+                      },
+                      "IntersectionShape.html#isom": {
+                        "ref": "IntersectionShape.html#isom",
+                        "tf": 110
+                      },
+                      "UnionShape.html#isom": {
+                        "ref": "UnionShape.html#isom",
+                        "tf": 110
+                      },
+                      "WrapShape.html#isom": {
+                        "ref": "WrapShape.html#isom",
                         "tf": 110
                       },
                       "AbstractVRThurston.html#VRControlsMove": {
@@ -32958,12 +34799,12 @@ window.lunrData = {
                         "ref": "CheckerboardMaterial.html#lights",
                         "tf": 110
                       },
-                      "CheckerboardMaterial.html#reflectivity": {
-                        "ref": "CheckerboardMaterial.html#reflectivity",
-                        "tf": 110
-                      },
                       "CheckerboardMaterial.html#dir1": {
                         "ref": "CheckerboardMaterial.html#dir1",
+                        "tf": 110
+                      },
+                      "CheckerboardMaterial.html#reflectivity": {
+                        "ref": "CheckerboardMaterial.html#reflectivity",
                         "tf": 110
                       },
                       "CheckerboardMaterial.html#dir2": {
@@ -32996,6 +34837,10 @@ window.lunrData = {
                       },
                       "CheckerboardMaterial.html#isReflecting": {
                         "ref": "CheckerboardMaterial.html#isReflecting",
+                        "tf": 110
+                      },
+                      "DebugMaterial.html#lights": {
+                        "ref": "DebugMaterial.html#lights",
                         "tf": 110
                       },
                       "PhongMaterial.html#color": {
@@ -33106,6 +34951,18 @@ window.lunrData = {
                         "ref": "Renderer.html#domElement",
                         "tf": 110
                       },
+                      "HalfSpaceShape.html#pos": {
+                        "ref": "HalfSpaceShape.html#pos",
+                        "tf": 110
+                      },
+                      "HalfSpaceShape.html#isGlobal": {
+                        "ref": "HalfSpaceShape.html#isGlobal",
+                        "tf": 110
+                      },
+                      "HalfSpaceShape.html#normal": {
+                        "ref": "HalfSpaceShape.html#normal",
+                        "tf": 110
+                      },
                       "VRCamera.html#isStereoOn": {
                         "ref": "VRCamera.html#isStereoOn",
                         "tf": 110
@@ -33124,6 +34981,14 @@ window.lunrData = {
                       },
                       "VRCamera.html#chaseThreeCamera": {
                         "ref": "VRCamera.html#chaseThreeCamera",
+                        "tf": 110
+                      },
+                      "LocalVerticalCylinderShape.html#pos": {
+                        "ref": "LocalVerticalCylinderShape.html#pos",
+                        "tf": 110
+                      },
+                      "VerticalCylinderShape.html#pos": {
+                        "ref": "VerticalCylinderShape.html#pos",
                         "tf": 110
                       },
                       "PhongWrapMaterial.html#material": {
@@ -33198,14 +35063,6 @@ window.lunrData = {
                         "ref": "AbstractThurston.html#gui",
                         "tf": 110
                       },
-                      "HalfSpaceShape.html#pos": {
-                        "ref": "HalfSpaceShape.html#pos",
-                        "tf": 110
-                      },
-                      "HalfSpaceShape.html#normal": {
-                        "ref": "HalfSpaceShape.html#normal",
-                        "tf": 110
-                      },
                       "RelPosition.html#local": {
                         "ref": "RelPosition.html#local",
                         "tf": 110
@@ -33230,8 +35087,24 @@ window.lunrData = {
                         "ref": "RelPosition.html#point",
                         "tf": 110
                       },
+                      "RelPosition.html#globalBoost": {
+                        "ref": "RelPosition.html#globalBoost",
+                        "tf": 110
+                      },
                       "BasicRenderer.html#_fragmentBuilder": {
                         "ref": "BasicRenderer.html#_fragmentBuilder",
+                        "tf": 110
+                      },
+                      "NewBallShape.html#isBallShape": {
+                        "ref": "NewBallShape.html#isBallShape",
+                        "tf": 110
+                      },
+                      "NewBallShape.html#isGlobal": {
+                        "ref": "NewBallShape.html#isGlobal",
+                        "tf": 110
+                      },
+                      "NewBallShape.html#center": {
+                        "ref": "NewBallShape.html#center",
                         "tf": 110
                       },
                       "VRControlsDrag.html#update": {
@@ -33764,6 +35637,10 @@ window.lunrData = {
                       "ref": "CheckerboardMaterial.html#usesLight",
                       "tf": 6.25
                     },
+                    "DebugMaterial.html#lights": {
+                      "ref": "DebugMaterial.html#lights",
+                      "tf": 716.6666666666666
+                    },
                     "PhongMaterial.html#lights": {
                       "ref": "PhongMaterial.html#lights",
                       "tf": 716.6666666666666
@@ -34016,6 +35893,17 @@ window.lunrData = {
                   "Scene.html#shader": {
                     "ref": "Scene.html#shader",
                     "tf": 1.3888888888888888
+                  }
+                }
+              }
+            },
+            "v": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "ChaseControls.html": {
+                    "ref": "ChaseControls.html",
+                    "tf": 2.941176470588235
                   }
                 }
               }
@@ -34479,10 +36367,6 @@ window.lunrData = {
                       "ref": "LocalPotato.html",
                       "tf": 12.5
                     },
-                    "VerticalHalfSpace.html": {
-                      "ref": "VerticalHalfSpace.html",
-                      "tf": 12.5
-                    },
                     "TeleportationSet.html#usesNearestNeighbors": {
                       "ref": "TeleportationSet.html#usesNearestNeighbors",
                       "tf": 6.25
@@ -34522,6 +36406,10 @@ window.lunrData = {
                     "RelPosition.html#localPoint": {
                       "ref": "RelPosition.html#localPoint",
                       "tf": 7.142857142857142
+                    },
+                    "RelPosition.html#globalBoost": {
+                      "ref": "RelPosition.html#globalBoost",
+                      "tf": 6.25
                     },
                     "RelPosition.html#teleport": {
                       "ref": "RelPosition.html#teleport",
@@ -35011,6 +36899,93 @@ window.lunrData = {
                         }
                       }
                     }
+                  },
+                  "v": {
+                    "docs": {},
+                    "e": {
+                      "docs": {},
+                      "r": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "i": {
+                            "docs": {},
+                            "c": {
+                              "docs": {},
+                              "a": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "c": {
+                                    "docs": {},
+                                    "y": {
+                                      "docs": {},
+                                      "l": {
+                                        "docs": {},
+                                        "i": {
+                                          "docs": {},
+                                          "n": {
+                                            "docs": {},
+                                            "d": {
+                                              "docs": {
+                                                "LocalVerticalCylinder.html": {
+                                                  "ref": "LocalVerticalCylinder.html",
+                                                  "tf": 1900
+                                                }
+                                              },
+                                              "e": {
+                                                "docs": {},
+                                                "r": {
+                                                  "docs": {},
+                                                  "s": {
+                                                    "docs": {},
+                                                    "h": {
+                                                      "docs": {},
+                                                      "a": {
+                                                        "docs": {},
+                                                        "p": {
+                                                          "docs": {
+                                                            "LocalVerticalCylinderShape.html": {
+                                                              "ref": "LocalVerticalCylinderShape.html",
+                                                              "tf": 1900
+                                                            }
+                                                          },
+                                                          "e": {
+                                                            "docs": {},
+                                                            "#": {
+                                                              "docs": {},
+                                                              "p": {
+                                                                "docs": {},
+                                                                "o": {
+                                                                  "docs": {
+                                                                    "LocalVerticalCylinderShape.html#pos": {
+                                                                      "ref": "LocalVerticalCylinderShape.html#pos",
+                                                                      "tf": 1150
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 },
                 "t": {
@@ -35136,10 +37111,6 @@ window.lunrData = {
             "QuadRingMatrix4.html#b": {
               "ref": "QuadRingMatrix4.html#b",
               "tf": 757.1428571428571
-            },
-            "QuadRingMatrix4.html#multiplyMatrices": {
-              "ref": "QuadRingMatrix4.html#multiplyMatrices",
-              "tf": 45.83333333333333
             }
           },
           "u": {
@@ -35547,6 +37518,10 @@ window.lunrData = {
                           "ref": "LocalBallShape.html#isGlobal",
                           "tf": 50
                         },
+                        "HalfSpaceShape.html#isGlobal": {
+                          "ref": "HalfSpaceShape.html#isGlobal",
+                          "tf": 50
+                        },
                         "VRCamera.html#isStereoOn": {
                           "ref": "VRCamera.html#isStereoOn",
                           "tf": 50
@@ -35558,6 +37533,14 @@ window.lunrData = {
                         "RelPosition.html#equals": {
                           "ref": "RelPosition.html#equals",
                           "tf": 33.33333333333333
+                        },
+                        "NewBallShape.html#isBallShape": {
+                          "ref": "NewBallShape.html#isBallShape",
+                          "tf": 50
+                        },
+                        "NewBallShape.html#isGlobal": {
+                          "ref": "NewBallShape.html#isGlobal",
+                          "tf": 50
                         }
                       }
                     }
@@ -35595,6 +37578,10 @@ window.lunrData = {
                     "RelPosition.html#point": {
                       "ref": "RelPosition.html#point",
                       "tf": 8.333333333333332
+                    },
+                    "RelPosition.html#globalBoost": {
+                      "ref": "RelPosition.html#globalBoost",
+                      "tf": 6.25
                     },
                     "RelPosition.html#reduceErrorBoost": {
                       "ref": "RelPosition.html#reduceErrorBoost",
@@ -35790,16 +37777,20 @@ window.lunrData = {
                     "ref": "LocalBall.html",
                     "tf": 25
                   },
+                  "Cylinder.html": {
+                    "ref": "Cylinder.html",
+                    "tf": 25
+                  },
+                  "NewBall.html": {
+                    "ref": "NewBall.html",
+                    "tf": 25
+                  },
                   "FakeBall.html": {
                     "ref": "FakeBall.html",
                     "tf": 16.666666666666664
                   },
                   "LocalFakeBall.html": {
                     "ref": "LocalFakeBall.html",
-                    "tf": 16.666666666666664
-                  },
-                  "HoroballShape.html#isHoroballShape": {
-                    "ref": "HoroballShape.html#isHoroballShape",
                     "tf": 16.666666666666664
                   },
                   "LocalHoroballShape.html#isLocalHoroballShape": {
@@ -35833,6 +37824,18 @@ window.lunrData = {
                   "LocalBallShape.html#isLocalBallShape": {
                     "ref": "LocalBallShape.html#isLocalBallShape",
                     "tf": 16.666666666666664
+                  },
+                  "NewBallShape.html": {
+                    "ref": "NewBallShape.html",
+                    "tf": 4.166666666666666
+                  },
+                  "NewBallShape.html#isBallShape": {
+                    "ref": "NewBallShape.html#isBallShape",
+                    "tf": 16.666666666666664
+                  },
+                  "NewBallShape.html#center": {
+                    "ref": "NewBallShape.html#center",
+                    "tf": 10
                   }
                 },
                 "b": {
@@ -35860,6 +37863,10 @@ window.lunrData = {
                           "BallShape.html": {
                             "ref": "BallShape.html",
                             "tf": 1800
+                          },
+                          "BallShape.html#isBallShape": {
+                            "ref": "BallShape.html#isBallShape",
+                            "tf": 16.666666666666664
                           }
                         },
                         "e": {
@@ -36649,6 +38656,10 @@ window.lunrData = {
                         "ref": "Isometry.html#makeTranslationFromDir",
                         "tf": 5.555555555555555
                       },
+                      "Isometry.html#diffExpMap": {
+                        "ref": "Isometry.html#diffExpMap",
+                        "tf": 2.083333333333333
+                      },
                       "Point.html#build": {
                         "ref": "Point.html#build",
                         "tf": 7.142857142857142
@@ -36681,6 +38692,10 @@ window.lunrData = {
                         "ref": "RelPosition.html#flow",
                         "tf": 2.380952380952381
                       },
+                      "NewBallShape.html": {
+                        "ref": "NewBallShape.html",
+                        "tf": 2.083333333333333
+                      },
                       "FlyControls.html#update": {
                         "ref": "FlyControls.html#update",
                         "tf": 0.4629629629629629
@@ -36698,6 +38713,32 @@ window.lunrData = {
                       "FlyControls.html#update": {
                         "ref": "FlyControls.html#update",
                         "tf": 0.9259259259259258
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "h": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "n": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "r": {
+                        "docs": {},
+                        "m": {
+                          "docs": {
+                            "Group.html#dotMatrix": {
+                              "ref": "Group.html#dotMatrix",
+                              "tf": 5.555555555555555
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -36850,6 +38891,10 @@ window.lunrData = {
                         "ref": "CheckerboardMaterial.html#glslInstance",
                         "tf": 7.142857142857142
                       },
+                      "DebugMaterial.html": {
+                        "ref": "DebugMaterial.html",
+                        "tf": 16.666666666666664
+                      },
                       "PhongMaterial.html": {
                         "ref": "PhongMaterial.html",
                         "tf": 16.666666666666664
@@ -36885,6 +38930,14 @@ window.lunrData = {
                       "AbstractThurston.html#add": {
                         "ref": "AbstractThurston.html#add",
                         "tf": 12.5
+                      },
+                      "NewBallShape.html": {
+                        "ref": "NewBallShape.html",
+                        "tf": 2.083333333333333
+                      },
+                      "NewBallShape.html#isBallShape": {
+                        "ref": "NewBallShape.html#isBallShape",
+                        "tf": 16.666666666666664
                       }
                     }
                   }
@@ -37060,6 +39113,10 @@ window.lunrData = {
                 "ref": "SingleColorMaterial.html#glslRender",
                 "tf": 0.819672131147541
               },
+              "NewBallShape.html": {
+                "ref": "NewBallShape.html",
+                "tf": 2.083333333333333
+              },
               "VRRenderer.html": {
                 "ref": "VRRenderer.html",
                 "tf": 2.083333333333333
@@ -37107,38 +39164,6 @@ window.lunrData = {
                 }
               }
             },
-            "w": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "n": {
-                  "docs": {},
-                  "d": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "w": {
-                        "docs": {},
-                        "r": {
-                          "docs": {},
-                          "e": {
-                            "docs": {},
-                            "s": {
-                              "docs": {
-                                "AbstractThurston.html#onWindowResize": {
-                                  "ref": "AbstractThurston.html#onWindowResize",
-                                  "tf": 700
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
             "s": {
               "docs": {},
               "e": {
@@ -37161,6 +39186,10 @@ window.lunrData = {
                                 "docs": {},
                                 "t": {
                                   "docs": {
+                                    "ChaseControls.html#onSelectStart": {
+                                      "ref": "ChaseControls.html#onSelectStart",
+                                      "tf": 750
+                                    },
                                     "VRControlsDrag.html#onSelectStart": {
                                       "ref": "VRControlsDrag.html#onSelectStart",
                                       "tf": 750
@@ -37181,6 +39210,10 @@ window.lunrData = {
                             "docs": {},
                             "d": {
                               "docs": {
+                                "ChaseControls.html#onSelectEnd": {
+                                  "ref": "ChaseControls.html#onSelectEnd",
+                                  "tf": 750
+                                },
                                 "VRControlsDrag.html#onSelectEnd": {
                                   "ref": "VRControlsDrag.html#onSelectEnd",
                                   "tf": 750
@@ -37220,6 +39253,10 @@ window.lunrData = {
                                   "docs": {},
                                   "t": {
                                     "docs": {
+                                      "ChaseControls.html#onSqueezeStart": {
+                                        "ref": "ChaseControls.html#onSqueezeStart",
+                                        "tf": 750
+                                      },
                                       "VRControlsDrag.html#onSqueezeStart": {
                                         "ref": "VRControlsDrag.html#onSqueezeStart",
                                         "tf": 750
@@ -37240,6 +39277,10 @@ window.lunrData = {
                               "docs": {},
                               "d": {
                                 "docs": {
+                                  "ChaseControls.html#onSqueezeEnd": {
+                                    "ref": "ChaseControls.html#onSqueezeEnd",
+                                    "tf": 750
+                                  },
                                   "VRControlsDrag.html#onSqueezeEnd": {
                                     "ref": "VRControlsDrag.html#onSqueezeEnd",
                                     "tf": 750
@@ -37248,6 +39289,38 @@ window.lunrData = {
                                     "ref": "VRControlsMove.html#onSqueezeEnd",
                                     "tf": 750
                                   }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "w": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "d": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "w": {
+                        "docs": {},
+                        "r": {
+                          "docs": {},
+                          "e": {
+                            "docs": {},
+                            "s": {
+                              "docs": {
+                                "AbstractThurston.html#onWindowResize": {
+                                  "ref": "AbstractThurston.html#onWindowResize",
+                                  "tf": 700
                                 }
                               }
                             }
@@ -37361,6 +39434,14 @@ window.lunrData = {
                           },
                           "LocalBallShape.html#isGlobal": {
                             "ref": "LocalBallShape.html#isGlobal",
+                            "tf": 7.142857142857142
+                          },
+                          "HalfSpaceShape.html#isGlobal": {
+                            "ref": "HalfSpaceShape.html#isGlobal",
+                            "tf": 7.142857142857142
+                          },
+                          "NewBallShape.html#isGlobal": {
+                            "ref": "NewBallShape.html#isGlobal",
                             "tf": 7.142857142857142
                           }
                         }
@@ -37515,6 +39596,17 @@ window.lunrData = {
               }
             },
             "docs": {}
+          },
+          "l": {
+            "docs": {},
+            "d": {
+              "docs": {
+                "NewBallShape.html": {
+                  "ref": "NewBallShape.html",
+                  "tf": 2.083333333333333
+                }
+              }
+            }
           }
         },
         "w": {
@@ -37617,6 +39709,10 @@ window.lunrData = {
                 "NativeCamera.html": {
                   "ref": "NativeCamera.html",
                   "tf": 2.5
+                },
+                "NewBallShape.html": {
+                  "ref": "NewBallShape.html",
+                  "tf": 2.083333333333333
                 }
               }
             },
@@ -37787,6 +39883,14 @@ window.lunrData = {
                         "LocalBallShape.html#isGlobal": {
                           "ref": "LocalBallShape.html#isGlobal",
                           "tf": 7.142857142857142
+                        },
+                        "HalfSpaceShape.html#isGlobal": {
+                          "ref": "HalfSpaceShape.html#isGlobal",
+                          "tf": 7.142857142857142
+                        },
+                        "NewBallShape.html#isGlobal": {
+                          "ref": "NewBallShape.html#isGlobal",
+                          "tf": 7.142857142857142
                         }
                       }
                     }
@@ -37841,6 +39945,23 @@ window.lunrData = {
                           "docs": {},
                           "#": {
                             "docs": {},
+                            "i": {
+                              "docs": {},
+                              "s": {
+                                "docs": {},
+                                "o": {
+                                  "docs": {},
+                                  "m": {
+                                    "docs": {
+                                      "WrapShape.html#isom": {
+                                        "ref": "WrapShape.html#isom",
+                                        "tf": 1150
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
                             "s": {
                               "docs": {},
                               "e": {
@@ -37918,6 +40039,45 @@ window.lunrData = {
             "docs": {},
             "b": {
               "docs": {},
+              "x": {
+                "docs": {},
+                "r": {
+                  "docs": {
+                    "VRRenderer.html": {
+                      "ref": "VRRenderer.html",
+                      "tf": 2.083333333333333
+                    }
+                  },
+                  "m": {
+                    "docs": {},
+                    "a": {
+                      "docs": {},
+                      "n": {
+                        "docs": {},
+                        "a": {
+                          "docs": {},
+                          "g": {
+                            "docs": {
+                              "ChaseControls.html#chase": {
+                                "ref": "ChaseControls.html#chase",
+                                "tf": 50
+                              },
+                              "VRCamera.html#_chaseThreeCamera": {
+                                "ref": "VRCamera.html#_chaseThreeCamera",
+                                "tf": 33.33333333333333
+                              },
+                              "VRRenderer.html#xr": {
+                                "ref": "VRRenderer.html#xr",
+                                "tf": 12.5
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "g": {
                 "docs": {},
                 "l": {
@@ -37946,41 +40106,6 @@ window.lunrData = {
                                   "ref": "BasicRenderer.html",
                                   "tf": 3.3333333333333335
                                 }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "x": {
-                "docs": {},
-                "r": {
-                  "docs": {
-                    "VRRenderer.html": {
-                      "ref": "VRRenderer.html",
-                      "tf": 2.083333333333333
-                    }
-                  },
-                  "m": {
-                    "docs": {},
-                    "a": {
-                      "docs": {},
-                      "n": {
-                        "docs": {},
-                        "a": {
-                          "docs": {},
-                          "g": {
-                            "docs": {
-                              "VRCamera.html#_chaseThreeCamera": {
-                                "ref": "VRCamera.html#_chaseThreeCamera",
-                                "tf": 33.33333333333333
-                              },
-                              "VRRenderer.html#xr": {
-                                "ref": "VRRenderer.html#xr",
-                                "tf": 12.5
                               }
                             }
                           }
@@ -38210,6 +40335,23 @@ window.lunrData = {
                             "docs": {},
                             "#": {
                               "docs": {},
+                              "i": {
+                                "docs": {},
+                                "s": {
+                                  "docs": {},
+                                  "o": {
+                                    "docs": {},
+                                    "m": {
+                                      "docs": {
+                                        "UnionShape.html#isom": {
+                                          "ref": "UnionShape.html#isom",
+                                          "tf": 1150
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
                               "s": {
                                 "docs": {},
                                 "e": {
@@ -38302,6 +40444,10 @@ window.lunrData = {
                           "ref": "TeleportationSet.html#group",
                           "tf": 5.555555555555555
                         },
+                        "ChaseControls.html": {
+                          "ref": "ChaseControls.html",
+                          "tf": 2.941176470588235
+                        },
                         "Position.html#point": {
                           "ref": "Position.html#point",
                           "tf": 16.666666666666664
@@ -38341,6 +40487,10 @@ window.lunrData = {
                         "Renderer.html#setAnimationLoop": {
                           "ref": "Renderer.html#setAnimationLoop",
                           "tf": 5
+                        },
+                        "HalfSpaceShape.html#normal": {
+                          "ref": "HalfSpaceShape.html#normal",
+                          "tf": 3.8461538461538463
                         },
                         "AbstractThurston.html#geom": {
                           "ref": "AbstractThurston.html#geom",
@@ -39051,6 +41201,22 @@ window.lunrData = {
               },
               "r": {
                 "docs": {
+                  "ChaseControls.html#onSelectStart": {
+                    "ref": "ChaseControls.html#onSelectStart",
+                    "tf": 10
+                  },
+                  "ChaseControls.html#onSelectEnd": {
+                    "ref": "ChaseControls.html#onSelectEnd",
+                    "tf": 10
+                  },
+                  "ChaseControls.html#onSqueezeStart": {
+                    "ref": "ChaseControls.html#onSqueezeStart",
+                    "tf": 10
+                  },
+                  "ChaseControls.html#onSqueezeEnd": {
+                    "ref": "ChaseControls.html#onSqueezeEnd",
+                    "tf": 10
+                  },
                   "AbstractThurston.html#gui": {
                     "ref": "AbstractThurston.html#gui",
                     "tf": 8.333333333333332
@@ -39586,6 +41752,32 @@ window.lunrData = {
                               }
                             }
                           },
+                          "m": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "t": {
+                                "docs": {},
+                                "r": {
+                                  "docs": {},
+                                  "i": {
+                                    "docs": {},
+                                    "x": {
+                                      "4": {
+                                        "docs": {
+                                          "QuadRing.html#matrix4": {
+                                            "ref": "QuadRing.html#matrix4",
+                                            "tf": 1150
+                                          }
+                                        }
+                                      },
+                                      "docs": {}
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
                           "s": {
                             "docs": {},
                             "h": {
@@ -39617,6 +41809,10 @@ window.lunrData = {
                                   "x": {
                                     "4": {
                                       "docs": {
+                                        "QuadRing.html#matrix4": {
+                                          "ref": "QuadRing.html#matrix4",
+                                          "tf": 50
+                                        },
                                         "QuadRingMatrix4.html": {
                                           "ref": "QuadRingMatrix4.html",
                                           "tf": 1900
@@ -39631,7 +41827,7 @@ window.lunrData = {
                                         },
                                         "QuadRingMatrix4.html#multiplyMatrices": {
                                           "ref": "QuadRingMatrix4.html#multiplyMatrices",
-                                          "tf": 33.33333333333333
+                                          "tf": 25
                                         },
                                         "QuadRingMatrix4.html#multiply": {
                                           "ref": "QuadRingMatrix4.html#multiply",
@@ -40155,6 +42351,10 @@ window.lunrData = {
                           "ref": "QuadRing.html#element",
                           "tf": 6.25
                         },
+                        "QuadRing.html#matrix4": {
+                          "ref": "QuadRing.html#matrix4",
+                          "tf": 12.5
+                        },
                         "QuadRingMatrix4.html": {
                           "ref": "QuadRingMatrix4.html",
                           "tf": 4.545454545454546
@@ -40278,6 +42478,242 @@ window.lunrData = {
             }
           }
         },
+        "_": {
+          "docs": {},
+          "h": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "l": {
+                "docs": {},
+                "f": {
+                  "docs": {},
+                  "t": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "n": {
+                          "docs": {},
+                          "s": {
+                            "docs": {},
+                            "l": {
+                              "docs": {},
+                              "a": {
+                                "docs": {},
+                                "t": {
+                                  "docs": {},
+                                  "i": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {},
+                                      "n": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {
+                                            "Group.html#_halfTranslationA": {
+                                              "ref": "Group.html#_halfTranslationA",
+                                              "tf": 700
+                                            }
+                                          }
+                                        },
+                                        "b": {
+                                          "docs": {
+                                            "Group.html#_halfTranslationB": {
+                                              "ref": "Group.html#_halfTranslationB",
+                                              "tf": 700
+                                            }
+                                          }
+                                        },
+                                        "c": {
+                                          "docs": {
+                                            "Group.html#_halfTranslationC": {
+                                              "ref": "Group.html#_halfTranslationC",
+                                              "tf": 700
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "t": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "s": {
+                    "docs": {},
+                    "l": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "i": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "n": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {
+                                    "Group.html#_translationA": {
+                                      "ref": "Group.html#_translationA",
+                                      "tf": 700
+                                    }
+                                  }
+                                },
+                                "b": {
+                                  "docs": {
+                                    "Group.html#_translationB": {
+                                      "ref": "Group.html#_translationB",
+                                      "tf": 700
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {},
+            "d": {
+              "docs": {},
+              "d": {
+                "docs": {
+                  "Scene.html#_add": {
+                    "ref": "Scene.html#_add",
+                    "tf": 683.3333333333334
+                  }
+                }
+              }
+            }
+          },
+          "c": {
+            "docs": {},
+            "h": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "s": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "t": {
+                      "docs": {},
+                      "h": {
+                        "docs": {},
+                        "r": {
+                          "docs": {},
+                          "e": {
+                            "docs": {},
+                            "e": {
+                              "docs": {},
+                              "c": {
+                                "docs": {},
+                                "a": {
+                                  "docs": {},
+                                  "m": {
+                                    "docs": {},
+                                    "e": {
+                                      "docs": {},
+                                      "r": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {
+                                            "VRCamera.html#_chaseThreeCamera": {
+                                              "ref": "VRCamera.html#_chaseThreeCamera",
+                                              "tf": 683.3333333333334
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "f": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "g": {
+                  "docs": {},
+                  "m": {
+                    "docs": {},
+                    "e": {
+                      "docs": {},
+                      "n": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "b": {
+                            "docs": {},
+                            "u": {
+                              "docs": {},
+                              "i": {
+                                "docs": {},
+                                "l": {
+                                  "docs": {},
+                                  "d": {
+                                    "docs": {
+                                      "BasicRenderer.html#_fragmentBuilder": {
+                                        "ref": "BasicRenderer.html#_fragmentBuilder",
+                                        "tf": 683.3333333333334
+                                      },
+                                      "VRRenderer.html#_fragmentBuilder": {
+                                        "ref": "VRRenderer.html#_fragmentBuilder",
+                                        "tf": 683.3333333333334
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "h": {
           "3": {
             "docs": {
@@ -40307,9 +42743,9 @@ window.lunrData = {
                     "ref": "HalfSpace.html",
                     "tf": 16.666666666666664
                   },
-                  "VRCamera.html#ipDist": {
-                    "ref": "VRCamera.html#ipDist",
-                    "tf": 16.666666666666664
+                  "VerticalHalfSpace.html": {
+                    "ref": "VerticalHalfSpace.html",
+                    "tf": 12.5
                   },
                   "HalfSpaceShape.html": {
                     "ref": "HalfSpaceShape.html",
@@ -40321,6 +42757,10 @@ window.lunrData = {
                   },
                   "HalfSpaceShape.html#normal": {
                     "ref": "HalfSpaceShape.html#normal",
+                    "tf": 3.8461538461538463
+                  },
+                  "VRCamera.html#ipDist": {
+                    "ref": "VRCamera.html#ipDist",
                     "tf": 16.666666666666664
                   },
                   "VerticalHalfSpaceShape.html": {
@@ -40352,25 +42792,25 @@ window.lunrData = {
                                       "docs": {},
                                       "a": {
                                         "docs": {
-                                          "Group.html#halfTranslationA": {
-                                            "ref": "Group.html#halfTranslationA",
-                                            "tf": 700
+                                          "Group.html#dotMatrix": {
+                                            "ref": "Group.html#dotMatrix",
+                                            "tf": 5.555555555555555
                                           }
                                         }
                                       },
                                       "b": {
                                         "docs": {
-                                          "Group.html#halfTranslationB": {
-                                            "ref": "Group.html#halfTranslationB",
-                                            "tf": 700
+                                          "Group.html#dotMatrix": {
+                                            "ref": "Group.html#dotMatrix",
+                                            "tf": 5.555555555555555
                                           }
                                         }
                                       },
                                       "c": {
                                         "docs": {
-                                          "Group.html#halfTranslationC": {
-                                            "ref": "Group.html#halfTranslationC",
-                                            "tf": 700
+                                          "Group.html#dotMatrix": {
+                                            "ref": "Group.html#dotMatrix",
+                                            "tf": 5.555555555555555
                                           }
                                         }
                                       }
@@ -40395,11 +42835,40 @@ window.lunrData = {
                         "docs": {
                           "HalfSpace.html": {
                             "ref": "HalfSpace.html",
-                            "tf": 1900
+                            "tf": 1800
                           }
                         },
                         "e": {
                           "docs": {},
+                          "h": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "l": {
+                                "docs": {},
+                                "f": {
+                                  "docs": {},
+                                  "s": {
+                                    "docs": {},
+                                    "p": {
+                                      "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "c": {
+                                          "docs": {
+                                            "HalfSpace.html": {
+                                              "ref": "HalfSpace.html",
+                                              "tf": 100
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
                           "s": {
                             "docs": {},
                             "h": {
@@ -40410,7 +42879,7 @@ window.lunrData = {
                                   "docs": {
                                     "HalfSpaceShape.html": {
                                       "ref": "HalfSpaceShape.html",
-                                      "tf": 1900
+                                      "tf": 1800
                                     }
                                   },
                                   "e": {
@@ -40424,6 +42893,29 @@ window.lunrData = {
                                             "HalfSpaceShape.html#pos": {
                                               "ref": "HalfSpaceShape.html#pos",
                                               "tf": 1150
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "i": {
+                                        "docs": {},
+                                        "s": {
+                                          "docs": {},
+                                          "g": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {},
+                                              "o": {
+                                                "docs": {},
+                                                "b": {
+                                                  "docs": {
+                                                    "HalfSpaceShape.html#isGlobal": {
+                                                      "ref": "HalfSpaceShape.html#isGlobal",
+                                                      "tf": 1150
+                                                    }
+                                                  }
+                                                }
+                                              }
                                             }
                                           }
                                         }
@@ -40445,12 +42937,128 @@ window.lunrData = {
                                           }
                                         }
                                       }
+                                    },
+                                    "h": {
+                                      "docs": {},
+                                      "a": {
+                                        "docs": {},
+                                        "l": {
+                                          "docs": {},
+                                          "f": {
+                                            "docs": {},
+                                            "s": {
+                                              "docs": {},
+                                              "p": {
+                                                "docs": {},
+                                                "a": {
+                                                  "docs": {},
+                                                  "c": {
+                                                    "docs": {},
+                                                    "e": {
+                                                      "docs": {},
+                                                      "s": {
+                                                        "docs": {},
+                                                        "h": {
+                                                          "docs": {},
+                                                          "a": {
+                                                            "docs": {},
+                                                            "p": {
+                                                              "docs": {
+                                                                "HalfSpaceShape.html": {
+                                                                  "ref": "HalfSpaceShape.html",
+                                                                  "tf": 100
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   }
                                 }
                               }
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "ChaseControls.html#onSelectStart": {
+                          "ref": "ChaseControls.html#onSelectStart",
+                          "tf": 10
+                        },
+                        "ChaseControls.html#onSelectEnd": {
+                          "ref": "ChaseControls.html#onSelectEnd",
+                          "tf": 10
+                        },
+                        "ChaseControls.html#onSqueezeStart": {
+                          "ref": "ChaseControls.html#onSqueezeStart",
+                          "tf": 10
+                        },
+                        "ChaseControls.html#onSqueezeEnd": {
+                          "ref": "ChaseControls.html#onSqueezeEnd",
+                          "tf": 10
+                        },
+                        "VRControlsDrag.html#onSelectStart": {
+                          "ref": "VRControlsDrag.html#onSelectStart",
+                          "tf": 10
+                        },
+                        "VRControlsDrag.html#onSelectEnd": {
+                          "ref": "VRControlsDrag.html#onSelectEnd",
+                          "tf": 10
+                        },
+                        "VRControlsDrag.html#onSqueezeStart": {
+                          "ref": "VRControlsDrag.html#onSqueezeStart",
+                          "tf": 10
+                        },
+                        "VRControlsDrag.html#onSqueezeEnd": {
+                          "ref": "VRControlsDrag.html#onSqueezeEnd",
+                          "tf": 10
+                        },
+                        "VRControlsMove.html#onSelectStart": {
+                          "ref": "VRControlsMove.html#onSelectStart",
+                          "tf": 10
+                        },
+                        "VRControlsMove.html#onSelectEnd": {
+                          "ref": "VRControlsMove.html#onSelectEnd",
+                          "tf": 10
+                        },
+                        "VRControlsMove.html#onSqueezeStart": {
+                          "ref": "VRControlsMove.html#onSqueezeStart",
+                          "tf": 10
+                        },
+                        "VRControlsMove.html#onSqueezeEnd": {
+                          "ref": "VRControlsMove.html#onSqueezeEnd",
+                          "tf": 10
+                        },
+                        "FlyControls.html#onKeyDown": {
+                          "ref": "FlyControls.html#onKeyDown",
+                          "tf": 12.5
+                        },
+                        "FlyControls.html#onKeyUp": {
+                          "ref": "FlyControls.html#onKeyUp",
+                          "tf": 12.5
                         }
                       }
                     }
@@ -40499,62 +43107,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "n": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "r": {
-                      "docs": {
-                        "VRControlsDrag.html#onSelectStart": {
-                          "ref": "VRControlsDrag.html#onSelectStart",
-                          "tf": 10
-                        },
-                        "VRControlsDrag.html#onSelectEnd": {
-                          "ref": "VRControlsDrag.html#onSelectEnd",
-                          "tf": 10
-                        },
-                        "VRControlsDrag.html#onSqueezeStart": {
-                          "ref": "VRControlsDrag.html#onSqueezeStart",
-                          "tf": 10
-                        },
-                        "VRControlsDrag.html#onSqueezeEnd": {
-                          "ref": "VRControlsDrag.html#onSqueezeEnd",
-                          "tf": 10
-                        },
-                        "VRControlsMove.html#onSelectStart": {
-                          "ref": "VRControlsMove.html#onSelectStart",
-                          "tf": 10
-                        },
-                        "VRControlsMove.html#onSelectEnd": {
-                          "ref": "VRControlsMove.html#onSelectEnd",
-                          "tf": 10
-                        },
-                        "VRControlsMove.html#onSqueezeStart": {
-                          "ref": "VRControlsMove.html#onSqueezeStart",
-                          "tf": 10
-                        },
-                        "VRControlsMove.html#onSqueezeEnd": {
-                          "ref": "VRControlsMove.html#onSqueezeEnd",
-                          "tf": 10
-                        },
-                        "FlyControls.html#onKeyDown": {
-                          "ref": "FlyControls.html#onKeyDown",
-                          "tf": 12.5
-                        },
-                        "FlyControls.html#onKeyUp": {
-                          "ref": "FlyControls.html#onKeyUp",
-                          "tf": 12.5
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "e": {
@@ -40590,6 +43142,17 @@ window.lunrData = {
                 }
               }
             },
+            "n": {
+              "docs": {},
+              "c": {
+                "docs": {
+                  "Position.html#flow": {
+                    "ref": "Position.html#flow",
+                    "tf": 0.49504950495049505
+                  }
+                }
+              }
+            },
             "i": {
               "docs": {},
               "s": {
@@ -40606,13 +43169,13 @@ window.lunrData = {
                           "docs": {},
                           "g": {
                             "docs": {
-                              "Group.html": {
-                                "ref": "Group.html",
-                                "tf": 25
-                              },
                               "GroupElement.html": {
                                 "ref": "GroupElement.html",
                                 "tf": 3.8461538461538463
+                              },
+                              "Group.html": {
+                                "ref": "Group.html",
+                                "tf": 25
                               }
                             }
                           }
@@ -40633,17 +43196,6 @@ window.lunrData = {
                         "tf": 25
                       }
                     }
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "c": {
-                "docs": {
-                  "Position.html#flow": {
-                    "ref": "Position.html#flow",
-                    "tf": 0.49504950495049505
                   }
                 }
               }
@@ -40718,6 +43270,14 @@ window.lunrData = {
                             "ref": "Ball.html",
                             "tf": 25
                           },
+                          "Cylinder.html": {
+                            "ref": "Cylinder.html",
+                            "tf": 25
+                          },
+                          "HalfSpace.html": {
+                            "ref": "HalfSpace.html",
+                            "tf": 16.666666666666664
+                          },
                           "Horoball.html": {
                             "ref": "Horoball.html",
                             "tf": 25
@@ -40729,6 +43289,10 @@ window.lunrData = {
                           "LocalHoroball.html": {
                             "ref": "LocalHoroball.html",
                             "tf": 16.666666666666664
+                          },
+                          "NewBall.html": {
+                            "ref": "NewBall.html",
+                            "tf": 25
                           },
                           "NativeCamera.html": {
                             "ref": "NativeCamera.html",
@@ -40742,6 +43306,10 @@ window.lunrData = {
                             "ref": "LocalHoroballShape.html",
                             "tf": 12.5
                           },
+                          "HalfSpaceShape.html": {
+                            "ref": "HalfSpaceShape.html",
+                            "tf": 12.5
+                          },
                           "BallShape.html": {
                             "ref": "BallShape.html",
                             "tf": 16.666666666666664
@@ -40749,6 +43317,10 @@ window.lunrData = {
                           "LocalBallShape.html": {
                             "ref": "LocalBallShape.html",
                             "tf": 12.5
+                          },
+                          "NewBallShape.html": {
+                            "ref": "NewBallShape.html",
+                            "tf": 2.083333333333333
                           }
                         }
                       }
@@ -40816,6 +43388,10 @@ window.lunrData = {
                                   "HoroballShape.html": {
                                     "ref": "HoroballShape.html",
                                     "tf": 1900
+                                  },
+                                  "HoroballShape.html#isHoroballShape": {
+                                    "ref": "HoroballShape.html#isHoroballShape",
+                                    "tf": 16.666666666666664
                                   }
                                 },
                                 "e": {
@@ -41117,124 +43693,6 @@ window.lunrData = {
             }
           }
         },
-        "_": {
-          "docs": {},
-          "a": {
-            "docs": {},
-            "d": {
-              "docs": {},
-              "d": {
-                "docs": {
-                  "Scene.html#_add": {
-                    "ref": "Scene.html#_add",
-                    "tf": 683.3333333333334
-                  }
-                }
-              }
-            }
-          },
-          "c": {
-            "docs": {},
-            "h": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "s": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "t": {
-                      "docs": {},
-                      "h": {
-                        "docs": {},
-                        "r": {
-                          "docs": {},
-                          "e": {
-                            "docs": {},
-                            "e": {
-                              "docs": {},
-                              "c": {
-                                "docs": {},
-                                "a": {
-                                  "docs": {},
-                                  "m": {
-                                    "docs": {},
-                                    "e": {
-                                      "docs": {},
-                                      "r": {
-                                        "docs": {},
-                                        "a": {
-                                          "docs": {
-                                            "VRCamera.html#_chaseThreeCamera": {
-                                              "ref": "VRCamera.html#_chaseThreeCamera",
-                                              "tf": 683.3333333333334
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "f": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "g": {
-                  "docs": {},
-                  "m": {
-                    "docs": {},
-                    "e": {
-                      "docs": {},
-                      "n": {
-                        "docs": {},
-                        "t": {
-                          "docs": {},
-                          "b": {
-                            "docs": {},
-                            "u": {
-                              "docs": {},
-                              "i": {
-                                "docs": {},
-                                "l": {
-                                  "docs": {},
-                                  "d": {
-                                    "docs": {
-                                      "BasicRenderer.html#_fragmentBuilder": {
-                                        "ref": "BasicRenderer.html#_fragmentBuilder",
-                                        "tf": 683.3333333333334
-                                      },
-                                      "VRRenderer.html#_fragmentBuilder": {
-                                        "ref": "VRRenderer.html#_fragmentBuilder",
-                                        "tf": 683.3333333333334
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
         "x": {
           "docs": {},
           "r": {
@@ -41247,7 +43705,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 6116
+      "length": 6560
     },
     "corpusTokens": [
       "0",
@@ -41258,6 +43716,11 @@ window.lunrData = {
       "_add",
       "_chasethreecamera",
       "_fragmentbuild",
+      "_halftranslationa",
+      "_halftranslationb",
+      "_halftranslationc",
+      "_translationa",
+      "_translationb",
       "abelian",
       "abstract",
       "abstractthurston",
@@ -41399,6 +43862,13 @@ window.lunrData = {
       "certain",
       "chang",
       "channel",
+      "chase",
+      "chasecontrol",
+      "chasecontrols#chas",
+      "chasecontrols#onselectend",
+      "chasecontrols#onselectstart",
+      "chasecontrols#onsqueezeend",
+      "chasecontrols#onsqueezestart",
       "chasethreecamera",
       "check",
       "checkerboard",
@@ -41435,6 +43905,7 @@ window.lunrData = {
       "common",
       "compil",
       "complementshap",
+      "complementshape#isom",
       "complementshape#onadd",
       "complementshape#setid",
       "complic",
@@ -41460,21 +43931,30 @@ window.lunrData = {
       "cube",
       "current",
       "custom",
+      "cylind",
+      "cylindershap",
+      "cylindershape#cylindershap",
       "d",
       "d_o",
       "d_og",
       "dash",
       "data",
       "debug",
+      "debugmateri",
+      "debugmaterial#light",
       "decid",
       "declar",
       "default",
       "defin",
+      "definit",
       "delta",
       "denot",
       "depend",
       "descript",
       "determin",
+      "dexp",
+      "differenti",
+      "diffexpmap",
       "diffus",
       "dimens",
       "dir",
@@ -41488,11 +43968,13 @@ window.lunrData = {
       "distanc",
       "distinct",
       "divid",
+      "dm",
       "doc",
       "document",
       "dom",
       "domain",
       "domel",
+      "dotmatrix",
       "drag",
       "dure",
       "e",
@@ -41543,6 +44025,8 @@ window.lunrData = {
       "fakepointlight",
       "fakepointlight#fakepointlight",
       "fals",
+      "famili",
+      "fashion",
       "field",
       "first",
       "flag",
@@ -41589,7 +44073,6 @@ window.lunrData = {
       "generic#uuid",
       "generic.glslclass",
       "geodes",
-      "geoemtri",
       "geom",
       "geometr",
       "geometri",
@@ -41601,6 +44084,7 @@ window.lunrData = {
       "give",
       "given",
       "global",
+      "globalboost",
       "glsl",
       "glslclass",
       "glslcreep",
@@ -41621,11 +44105,14 @@ window.lunrData = {
       "graphic",
       "green",
       "group",
+      "group#_halftranslationa",
+      "group#_halftranslationb",
+      "group#_halftranslationc",
+      "group#_translationa",
+      "group#_translationb",
+      "group#dotmatrix",
       "group#el",
       "group#group",
-      "group#halftranslationa",
-      "group#halftranslationb",
-      "group#halftranslationc",
       "group#shad",
       "groupel",
       "groupelement#clon",
@@ -41648,9 +44135,12 @@ window.lunrData = {
       "h3",
       "half",
       "halfspac",
+      "halfspacehalfspac",
       "halfspaceshap",
+      "halfspaceshape#isglob",
       "halfspaceshape#norm",
       "halfspaceshape#po",
+      "halfspaceshapehalfspaceshap",
       "halftranslationa",
       "halftranslationb",
       "halftranslationc",
@@ -41718,6 +44208,7 @@ window.lunrData = {
       "interpupillari",
       "intersect",
       "intersectionshap",
+      "intersectionshape#isom",
       "intersectionshape#onadd",
       "intersectionshape#setid",
       "inv",
@@ -41741,6 +44232,7 @@ window.lunrData = {
       "isometry#build",
       "isometry#clon",
       "isometry#copi",
+      "isometry#diffexpmap",
       "isometry#equ",
       "isometry#ident",
       "isometry#invert",
@@ -41789,6 +44281,7 @@ window.lunrData = {
       "list",
       "list:class",
       "list:tutori",
+      "live",
       "load",
       "local",
       "localbal",
@@ -41809,6 +44302,9 @@ window.lunrData = {
       "localpoint",
       "localpotato",
       "localpotatoshap",
+      "localverticalcylind",
+      "localverticalcylindershap",
+      "localverticalcylindershape#po",
       "locat",
       "look",
       "loop",
@@ -41820,6 +44316,8 @@ window.lunrData = {
       "m",
       "m'm",
       "m0",
+      "m1",
+      "m2",
       "made",
       "magic",
       "main",
@@ -41902,6 +44400,11 @@ window.lunrData = {
       "negat",
       "neighbor",
       "new",
+      "newbal",
+      "newballshap",
+      "newballshape#cent",
+      "newballshape#isballshap",
+      "newballshape#isglob",
       "next",
       "nextid",
       "nil",
@@ -41930,6 +44433,7 @@ window.lunrData = {
       "observ",
       "obtain",
       "offset",
+      "old",
       "on",
       "onadd",
       "onkeydown",
@@ -41944,6 +44448,7 @@ window.lunrData = {
       "order",
       "orient",
       "origin",
+      "orthonorm",
       "otherwis",
       "out",
       "outsid",
@@ -42046,6 +44551,7 @@ window.lunrData = {
       "quadr",
       "quadrat",
       "quadring#el",
+      "quadring#matrix4",
       "quadring#shad",
       "quadringel",
       "quadringelement#add",
@@ -42088,6 +44594,7 @@ window.lunrData = {
       "quaternion",
       "quickli",
       "r^3",
+      "radiu",
       "rang",
       "rate",
       "ratio",
@@ -42121,6 +44628,7 @@ window.lunrData = {
       "relposition#copi",
       "relposition#equ",
       "relposition#flow",
+      "relposition#globalboost",
       "relposition#invcellboost",
       "relposition#loc",
       "relposition#localpoint",
@@ -42156,6 +44664,7 @@ window.lunrData = {
       "reus",
       "rgb",
       "right",
+      "rign",
       "ring",
       "role",
       "root",
@@ -42268,7 +44777,6 @@ window.lunrData = {
       "spheric",
       "split",
       "sqrt(d",
-      "sqrt(d))/c",
       "squar",
       "squeez",
       "start",
@@ -42339,6 +44847,9 @@ window.lunrData = {
       "top",
       "track",
       "translat",
+      "translationa",
+      "translationb",
+      "translationc",
       "transport",
       "transpos",
       "trivial",
@@ -42360,6 +44871,7 @@ window.lunrData = {
       "uniformtyp",
       "union",
       "unionshap",
+      "unionshape#isom",
       "unionshape#onadd",
       "unionshape#setid",
       "uniqu",
@@ -42404,6 +44916,9 @@ window.lunrData = {
       "vector4",
       "version",
       "vertic",
+      "verticalcylind",
+      "verticalcylindershap",
+      "verticalcylindershape#po",
       "verticalhalfspac",
       "verticalhalfspaceshap",
       "view",
@@ -42451,6 +44966,7 @@ window.lunrData = {
       "work",
       "wrap",
       "wrapshap",
+      "wrapshape#isom",
       "wrapshape#onadd",
       "wrapshape#setid",
       "written",
@@ -42471,7 +44987,7 @@ window.lunrData = {
       "longname": "index",
       "name": "Non-euclidean VR",
       "tags": "index",
-      "summary": "First person exploration of Thurston's geoemtries",
+      "summary": "First person exploration of Thurston's geometries",
       "description": "",
       "body": ""
     },
@@ -42618,6 +45134,16 @@ window.lunrData = {
       "tags": "Isometry#makeTranslationFromDir makeTranslationFromDir",
       "summary": "",
       "description": "Return a preferred isometry sending the origin to the image of v by the exponential map."
+    },
+    "Isometry.html#diffExpMap": {
+      "id": "Isometry.html#diffExpMap",
+      "kind": "function",
+      "title": "diffExpMap( m ) → {Isometry}",
+      "longname": "Isometry#diffExpMap",
+      "name": "diffExpMap",
+      "tags": "Isometry#diffExpMap diffExpMap",
+      "summary": "",
+      "description": "Take as input a Matrix4 m, seen as an isometry of the tangent space at the origin (in the reference frame) and set the current isometry so that its differential is dexp * dm, where dexp is the differential of the exponential map dm is the differential of m"
     },
     "Isometry.html#equals": {
       "id": "Isometry.html#equals",
@@ -43192,38 +45718,68 @@ window.lunrData = {
       "name": "Group",
       "tags": "Group",
       "summary": "",
-      "description": "Group of isometries",
+      "description": "Heisenberg group",
       "body": ""
     },
-    "Group.html#halfTranslationA": {
-      "id": "Group.html#halfTranslationA",
+    "Group.html#_halfTranslationA": {
+      "id": "Group.html#_halfTranslationA",
       "kind": "member",
-      "title": "halfTranslationA :Vector4",
-      "longname": "Group#halfTranslationA",
-      "name": "halfTranslationA",
-      "tags": "Group#halfTranslationA halfTranslationA",
+      "title": "_halfTranslationA :Vector4",
+      "longname": "Group#_halfTranslationA",
+      "name": "_halfTranslationA",
+      "tags": "Group#_halfTranslationA _halfTranslationA",
       "summary": "",
       "description": "Translation of the first generator"
     },
-    "Group.html#halfTranslationB": {
-      "id": "Group.html#halfTranslationB",
+    "Group.html#_halfTranslationB": {
+      "id": "Group.html#_halfTranslationB",
       "kind": "member",
-      "title": "halfTranslationB :Vector4",
-      "longname": "Group#halfTranslationB",
-      "name": "halfTranslationB",
-      "tags": "Group#halfTranslationB halfTranslationB",
+      "title": "_halfTranslationB :Vector4",
+      "longname": "Group#_halfTranslationB",
+      "name": "_halfTranslationB",
+      "tags": "Group#_halfTranslationB _halfTranslationB",
       "summary": "",
       "description": "Translation of the second generator"
     },
-    "Group.html#halfTranslationC": {
-      "id": "Group.html#halfTranslationC",
+    "Group.html#_translationA": {
+      "id": "Group.html#_translationA",
       "kind": "member",
-      "title": "halfTranslationC :Vector4",
-      "longname": "Group#halfTranslationC",
-      "name": "halfTranslationC",
-      "tags": "Group#halfTranslationC halfTranslationC",
+      "title": "_translationA :Vector4",
+      "longname": "Group#_translationA",
+      "name": "_translationA",
+      "tags": "Group#_translationA _translationA",
+      "summary": "",
+      "description": "Translation of the first generator"
+    },
+    "Group.html#_halfTranslationC": {
+      "id": "Group.html#_halfTranslationC",
+      "kind": "member",
+      "title": "_halfTranslationC :Vector4",
+      "longname": "Group#_halfTranslationC",
+      "name": "_halfTranslationC",
+      "tags": "Group#_halfTranslationC _halfTranslationC",
       "summary": "",
       "description": "Translation of the third generator"
+    },
+    "Group.html#_translationB": {
+      "id": "Group.html#_translationB",
+      "kind": "member",
+      "title": "_translationB :Vector4",
+      "longname": "Group#_translationB",
+      "name": "_translationB",
+      "tags": "Group#_translationB _translationB",
+      "summary": "",
+      "description": "Translation of the second generator"
+    },
+    "Group.html#dotMatrix": {
+      "id": "Group.html#dotMatrix",
+      "kind": "member",
+      "title": "dotMatrix",
+      "longname": "Group#dotMatrix",
+      "name": "dotMatrix",
+      "tags": "Group#dotMatrix dotMatrix",
+      "summary": "",
+      "description": "Return a positive definite matrix for which the family translationA, translationB, translationC is orthonormal."
     },
     "Group.html#element": {
       "id": "Group.html#element",
@@ -43431,12 +45987,12 @@ window.lunrData = {
     "HalfSpace.html": {
       "id": "HalfSpace.html",
       "kind": "class",
-      "title": "HalfSpace",
+      "title": "HalfSpaceHalfSpace",
       "longname": "HalfSpace",
       "name": "HalfSpace",
       "tags": "HalfSpace",
       "summary": "",
-      "description": "Euclidean Half space",
+      "description": "Hyperbolic half space",
       "body": ""
     },
     "LocalBall.html": {
@@ -43446,6 +46002,17 @@ window.lunrData = {
       "longname": "LocalBall",
       "name": "LocalBall",
       "tags": "LocalBall",
+      "summary": "",
+      "description": "Hyperbolic ball",
+      "body": ""
+    },
+    "Cylinder.html": {
+      "id": "Cylinder.html",
+      "kind": "class",
+      "title": "Cylinder",
+      "longname": "Cylinder",
+      "name": "Cylinder",
+      "tags": "Cylinder",
       "summary": "",
       "description": "Hyperbolic ball",
       "body": ""
@@ -43470,6 +46037,17 @@ window.lunrData = {
       "tags": "LocalHoroball",
       "summary": "",
       "description": "Hyperbolic local horoball",
+      "body": ""
+    },
+    "NewBall.html": {
+      "id": "NewBall.html",
+      "kind": "class",
+      "title": "NewBall",
+      "longname": "NewBall",
+      "name": "NewBall",
+      "tags": "NewBall",
+      "summary": "",
+      "description": "Hyperbolic ball",
       "body": ""
     },
     "FakeBall.html": {
@@ -43513,7 +46091,7 @@ window.lunrData = {
       "name": "VerticalHalfSpace",
       "tags": "VerticalHalfSpace",
       "summary": "",
-      "description": "Local potato shape in Nil.",
+      "description": "Vertical half space in Nil",
       "body": ""
     },
     "Generic.html": {
@@ -43647,36 +46225,27 @@ window.lunrData = {
       "summary": "",
       "description": "Extend the given shader with the appropriate code"
     },
-    "QuadRing.html": {
-      "id": "QuadRing.html",
+    "LocalVerticalCylinder.html": {
+      "id": "LocalVerticalCylinder.html",
       "kind": "class",
-      "title": "QuadRing",
-      "longname": "QuadRing",
-      "name": "QuadRing",
-      "tags": "QuadRing",
+      "title": "LocalVerticalCylinder",
+      "longname": "LocalVerticalCylinder",
+      "name": "LocalVerticalCylinder",
+      "tags": "LocalVerticalCylinder",
       "summary": "",
-      "description": "Quadratic field. Mostly a structure to store the square of the adjoined root",
+      "description": "Vertical cylinder in Nil",
       "body": ""
     },
-    "QuadRing.html#element": {
-      "id": "QuadRing.html#element",
-      "kind": "function",
-      "title": "element( a, b )",
-      "longname": "QuadRing#element",
-      "name": "element",
-      "tags": "QuadRing#element element",
+    "VerticalCylinder.html": {
+      "id": "VerticalCylinder.html",
+      "kind": "class",
+      "title": "VerticalCylinder",
+      "longname": "VerticalCylinder",
+      "name": "VerticalCylinder",
+      "tags": "VerticalCylinder",
       "summary": "",
-      "description": "Return the element (a + b sqrt(d))/c in the quadratic field. a and b should be integers"
-    },
-    "QuadRing.html#shader": {
-      "id": "QuadRing.html#shader",
-      "kind": "function",
-      "title": "shader( shaderBuilder )",
-      "longname": "QuadRing#shader",
-      "name": "shader",
-      "tags": "QuadRing#shader shader",
-      "summary": "",
-      "description": "build the corresponding part of the shader"
+      "description": "Vertical cylinder in Nil",
+      "body": ""
     },
     "Thurston.html": {
       "id": "Thurston.html",
@@ -43710,6 +46279,47 @@ window.lunrData = {
       "summary": "",
       "description": "A combination of all main parts of the API. It can be used to quickly create scenes",
       "body": ""
+    },
+    "QuadRing.html": {
+      "id": "QuadRing.html",
+      "kind": "class",
+      "title": "QuadRing",
+      "longname": "QuadRing",
+      "name": "QuadRing",
+      "tags": "QuadRing",
+      "summary": "",
+      "description": "Quadratic field. Mostly a structure to store the square of the adjoined root",
+      "body": ""
+    },
+    "QuadRing.html#element": {
+      "id": "QuadRing.html#element",
+      "kind": "function",
+      "title": "element( a, b )",
+      "longname": "QuadRing#element",
+      "name": "element",
+      "tags": "QuadRing#element element",
+      "summary": "",
+      "description": "Return the element a + b sqrt(d) in the quadratic ring. a and b should be integers"
+    },
+    "QuadRing.html#matrix4": {
+      "id": "QuadRing.html#matrix4",
+      "kind": "function",
+      "title": "matrix4() → {QuadRingMatrix4}",
+      "longname": "QuadRing#matrix4",
+      "name": "matrix4",
+      "tags": "QuadRing#matrix4 matrix4",
+      "summary": "",
+      "description": "Return a matrix on this quadratic rign"
+    },
+    "QuadRing.html#shader": {
+      "id": "QuadRing.html#shader",
+      "kind": "function",
+      "title": "shader( shaderBuilder )",
+      "longname": "QuadRing#shader",
+      "name": "shader",
+      "tags": "QuadRing#shader shader",
+      "summary": "",
+      "description": "build the corresponding part of the shader"
     },
     "QuadRingMatrix4.html": {
       "id": "QuadRingMatrix4.html",
@@ -43815,12 +46425,12 @@ window.lunrData = {
     "QuadRingMatrix4.html#multiplyMatrices": {
       "id": "QuadRingMatrix4.html#multiplyMatrices",
       "kind": "function",
-      "title": "multiplyMatrices( a, b ) → {QuadRingMatrix4}",
+      "title": "multiplyMatrices( m1, m2 ) → {QuadRingMatrix4}",
       "longname": "QuadRingMatrix4#multiplyMatrices",
       "name": "multiplyMatrices",
       "tags": "QuadRingMatrix4#multiplyMatrices multiplyMatrices",
       "summary": "",
-      "description": "Set the matrix to the product a * b"
+      "description": "Set the matrix to the product m1 * m2"
     },
     "QuadRingMatrix4.html#multiply": {
       "id": "QuadRingMatrix4.html#multiply",
@@ -44197,6 +46807,16 @@ window.lunrData = {
       "description": "Union of two shapes",
       "body": ""
     },
+    "ComplementShape.html#isom": {
+      "id": "ComplementShape.html#isom",
+      "kind": "member",
+      "title": "isom",
+      "longname": "ComplementShape#isom",
+      "name": "isom",
+      "tags": "ComplementShape#isom isom",
+      "summary": "",
+      "description": "Setter for isometry. Propagate the setup"
+    },
     "ComplementShape.html#setId": {
       "id": "ComplementShape.html#setId",
       "kind": "function",
@@ -44227,6 +46847,16 @@ window.lunrData = {
       "summary": "",
       "description": "Intersection of two shapes",
       "body": ""
+    },
+    "IntersectionShape.html#isom": {
+      "id": "IntersectionShape.html#isom",
+      "kind": "member",
+      "title": "isom",
+      "longname": "IntersectionShape#isom",
+      "name": "isom",
+      "tags": "IntersectionShape#isom isom",
+      "summary": "",
+      "description": "Setter for isometry. Propagate the setup"
     },
     "IntersectionShape.html#setId": {
       "id": "IntersectionShape.html#setId",
@@ -44259,6 +46889,16 @@ window.lunrData = {
       "description": "Union of two shapes",
       "body": ""
     },
+    "UnionShape.html#isom": {
+      "id": "UnionShape.html#isom",
+      "kind": "member",
+      "title": "isom",
+      "longname": "UnionShape#isom",
+      "name": "isom",
+      "tags": "UnionShape#isom isom",
+      "summary": "",
+      "description": "Setter for isometry. Propagate the setup"
+    },
     "UnionShape.html#setId": {
       "id": "UnionShape.html#setId",
       "kind": "function",
@@ -44290,6 +46930,16 @@ window.lunrData = {
       "description": "Wrap a complicated shape inside a simpler one.",
       "body": ""
     },
+    "WrapShape.html#isom": {
+      "id": "WrapShape.html#isom",
+      "kind": "member",
+      "title": "isom",
+      "longname": "WrapShape#isom",
+      "name": "isom",
+      "tags": "WrapShape#isom isom",
+      "summary": "",
+      "description": "Setter for isometry. Propagate the setup"
+    },
     "WrapShape.html#setId": {
       "id": "WrapShape.html#setId",
       "kind": "function",
@@ -44309,6 +46959,67 @@ window.lunrData = {
       "tags": "WrapShape#onAdd onAdd",
       "summary": "",
       "description": "Additional actions to perform when the object is added to the scene. Propagate the call."
+    },
+    "ChaseControls.html": {
+      "id": "ChaseControls.html",
+      "kind": "class",
+      "title": "ChaseControls",
+      "longname": "ChaseControls",
+      "name": "ChaseControls",
+      "tags": "ChaseControls",
+      "summary": "",
+      "description": "Makes sure that an given solid in the geometry follows a VR controller (living in the tangent space). The position of the underlying shape should be given by an isometry of the geometry",
+      "body": ""
+    },
+    "ChaseControls.html#onSelectStart": {
+      "id": "ChaseControls.html#onSelectStart",
+      "kind": "function",
+      "title": "onSelectStart()",
+      "longname": "ChaseControls#onSelectStart",
+      "name": "onSelectStart",
+      "tags": "ChaseControls#onSelectStart onSelectStart",
+      "summary": "",
+      "description": "Event handler when the user starts selecting"
+    },
+    "ChaseControls.html#onSelectEnd": {
+      "id": "ChaseControls.html#onSelectEnd",
+      "kind": "function",
+      "title": "onSelectEnd()",
+      "longname": "ChaseControls#onSelectEnd",
+      "name": "onSelectEnd",
+      "tags": "ChaseControls#onSelectEnd onSelectEnd",
+      "summary": "",
+      "description": "Event handler when the user stops selecting"
+    },
+    "ChaseControls.html#onSqueezeStart": {
+      "id": "ChaseControls.html#onSqueezeStart",
+      "kind": "function",
+      "title": "onSqueezeStart()",
+      "longname": "ChaseControls#onSqueezeStart",
+      "name": "onSqueezeStart",
+      "tags": "ChaseControls#onSqueezeStart onSqueezeStart",
+      "summary": "",
+      "description": "Event handler when the user starts squeezing"
+    },
+    "ChaseControls.html#onSqueezeEnd": {
+      "id": "ChaseControls.html#onSqueezeEnd",
+      "kind": "function",
+      "title": "onSqueezeEnd()",
+      "longname": "ChaseControls#onSqueezeEnd",
+      "name": "onSqueezeEnd",
+      "tags": "ChaseControls#onSqueezeEnd onSqueezeEnd",
+      "summary": "",
+      "description": "Event handler when the user stops squeezing"
+    },
+    "ChaseControls.html#chase": {
+      "id": "ChaseControls.html#chase",
+      "kind": "function",
+      "title": "chase( webXRManager )",
+      "longname": "ChaseControls#chase",
+      "name": "chase",
+      "tags": "ChaseControls#chase chase",
+      "summary": "",
+      "description": ""
     },
     "AbstractVRThurston.html": {
       "id": "AbstractVRThurston.html",
@@ -44956,7 +47667,7 @@ window.lunrData = {
       "name": "isLocal",
       "tags": "Shape#isLocal isLocal",
       "summary": "",
-      "description": "Says whether the shape is local. True if local, false otherwise"
+      "description": "Says whether the shape is local. True if local, false otherwise."
     },
     "Shape.html#hasUVMap": {
       "id": "Shape.html#hasUVMap",
@@ -45129,7 +47840,7 @@ window.lunrData = {
       "name": "isHoroballShape",
       "tags": "HoroballShape#isHoroballShape isHoroballShape",
       "summary": "",
-      "description": "Says that the object inherits from Ball"
+      "description": "Says that the object inherits from HoroballShape"
     },
     "HoroballShape.html#isGlobal": {
       "id": "HoroballShape.html#isGlobal",
@@ -45246,16 +47957,6 @@ window.lunrData = {
       "summary": "",
       "description": "The light eventually affecting the material. If lights is not set up when the solid carrying the material is added to the scene, then lights is set up to the list of lights in the scene."
     },
-    "CheckerboardMaterial.html#reflectivity": {
-      "id": "CheckerboardMaterial.html#reflectivity",
-      "kind": "member",
-      "title": "reflectivity :Color",
-      "longname": "CheckerboardMaterial#reflectivity",
-      "name": "reflectivity",
-      "tags": "CheckerboardMaterial#reflectivity reflectivity",
-      "summary": "",
-      "description": "Reflectivity of the material. Each channel (red, blue, green), interpreted as number between 0 and 1, is the reflectivity coefficient of the corresponding color (0 = no reflectivity, 1 = all light is reflected)."
-    },
     "CheckerboardMaterial.html#dir1": {
       "id": "CheckerboardMaterial.html#dir1",
       "kind": "member",
@@ -45265,6 +47966,16 @@ window.lunrData = {
       "tags": "CheckerboardMaterial#dir1 dir1",
       "summary": "",
       "description": "first direction of the checkerboard"
+    },
+    "CheckerboardMaterial.html#reflectivity": {
+      "id": "CheckerboardMaterial.html#reflectivity",
+      "kind": "member",
+      "title": "reflectivity :Color",
+      "longname": "CheckerboardMaterial#reflectivity",
+      "name": "reflectivity",
+      "tags": "CheckerboardMaterial#reflectivity reflectivity",
+      "summary": "",
+      "description": "Reflectivity of the material. Each channel (red, blue, green), interpreted as number between 0 and 1, is the reflectivity coefficient of the corresponding color (0 = no reflectivity, 1 = all light is reflected)."
     },
     "CheckerboardMaterial.html#dir2": {
       "id": "CheckerboardMaterial.html#dir2",
@@ -45365,6 +48076,27 @@ window.lunrData = {
       "tags": "CheckerboardMaterial#glslInstance glslInstance",
       "summary": "",
       "description": "Compile all the function directly related to the object (e.g. render)."
+    },
+    "DebugMaterial.html": {
+      "id": "DebugMaterial.html",
+      "kind": "class",
+      "title": "DebugMaterial",
+      "longname": "DebugMaterial",
+      "name": "DebugMaterial",
+      "tags": "DebugMaterial",
+      "summary": "",
+      "description": "Material for objects in the scene",
+      "body": ""
+    },
+    "DebugMaterial.html#lights": {
+      "id": "DebugMaterial.html#lights",
+      "kind": "member",
+      "title": "lights :Array.&lt;Light&gt;",
+      "longname": "DebugMaterial#lights",
+      "name": "lights",
+      "tags": "DebugMaterial#lights lights",
+      "summary": "",
+      "description": "lights affecting the material"
     },
     "PhongMaterial.html": {
       "id": "PhongMaterial.html",
@@ -45804,6 +48536,47 @@ window.lunrData = {
       "summary": "",
       "description": "Render the non-euclidean scene. The method build should be called before."
     },
+    "HalfSpaceShape.html": {
+      "id": "HalfSpaceShape.html",
+      "kind": "class",
+      "title": "HalfSpaceShapeHalfSpaceShape",
+      "longname": "HalfSpaceShape",
+      "name": "HalfSpaceShape",
+      "tags": "HalfSpaceShape",
+      "summary": "",
+      "description": "Euclidean half space",
+      "body": ""
+    },
+    "HalfSpaceShape.html#pos": {
+      "id": "HalfSpaceShape.html#pos",
+      "kind": "member",
+      "title": "pos :Point",
+      "longname": "HalfSpaceShape#pos",
+      "name": "pos",
+      "tags": "HalfSpaceShape#pos pos",
+      "summary": "",
+      "description": "Point on the boundary of the half space"
+    },
+    "HalfSpaceShape.html#isGlobal": {
+      "id": "HalfSpaceShape.html#isGlobal",
+      "kind": "member",
+      "title": "isGlobal :boolean",
+      "longname": "HalfSpaceShape#isGlobal",
+      "name": "isGlobal",
+      "tags": "HalfSpaceShape#isGlobal isGlobal",
+      "summary": "",
+      "description": "Says whether the shape is global. True if global, false otherwise."
+    },
+    "HalfSpaceShape.html#normal": {
+      "id": "HalfSpaceShape.html#normal",
+      "kind": "member",
+      "title": "normal",
+      "longname": "HalfSpaceShape#normal",
+      "name": "normal",
+      "tags": "HalfSpaceShape#normal normal",
+      "summary": "",
+      "description": "Compute the normal vector to the half space, so that it can be passed to the shader. The normal vector consists of the underlying point and the direction."
+    },
     "VRCamera.html": {
       "id": "VRCamera.html",
       "kind": "class",
@@ -45904,6 +48677,48 @@ window.lunrData = {
       "tags": "VRCamera#sidedShader sidedShader",
       "summary": "",
       "description": "build the GLSL code needed to declare the camera"
+    },
+    "LocalVerticalCylinderShape.html": {
+      "id": "LocalVerticalCylinderShape.html",
+      "kind": "class",
+      "title": "LocalVerticalCylinderShape",
+      "longname": "LocalVerticalCylinderShape",
+      "name": "LocalVerticalCylinderShape",
+      "tags": "LocalVerticalCylinderShape",
+      "summary": "",
+      "description": "Vertical cylinder",
+      "body": ""
+    },
+    "LocalVerticalCylinderShape.html#pos": {
+      "id": "LocalVerticalCylinderShape.html#pos",
+      "kind": "member",
+      "title": "pos :Point",
+      "longname": "LocalVerticalCylinderShape#pos",
+      "name": "pos",
+      "tags": "LocalVerticalCylinderShape#pos pos",
+      "summary": "",
+      "description": "point on the center of the cylinder"
+    },
+    "VerticalCylinderShape.html": {
+      "id": "VerticalCylinderShape.html",
+      "kind": "class",
+      "title": "VerticalCylinderShape",
+      "longname": "VerticalCylinderShape",
+      "name": "VerticalCylinderShape",
+      "tags": "VerticalCylinderShape",
+      "summary": "",
+      "description": "Vertical cylinder",
+      "body": ""
+    },
+    "VerticalCylinderShape.html#pos": {
+      "id": "VerticalCylinderShape.html#pos",
+      "kind": "member",
+      "title": "pos :Point",
+      "longname": "VerticalCylinderShape#pos",
+      "name": "pos",
+      "tags": "VerticalCylinderShape#pos pos",
+      "summary": "",
+      "description": "point on the center of the cylinder"
     },
     "PhongWrapMaterial.html": {
       "id": "PhongWrapMaterial.html",
@@ -46197,37 +49012,6 @@ window.lunrData = {
       "summary": "",
       "description": "Build the renderer and run the animation."
     },
-    "HalfSpaceShape.html": {
-      "id": "HalfSpaceShape.html",
-      "kind": "class",
-      "title": "HalfSpaceShape",
-      "longname": "HalfSpaceShape",
-      "name": "HalfSpaceShape",
-      "tags": "HalfSpaceShape",
-      "summary": "",
-      "description": "Euclidean half space",
-      "body": ""
-    },
-    "HalfSpaceShape.html#pos": {
-      "id": "HalfSpaceShape.html#pos",
-      "kind": "member",
-      "title": "pos :Point",
-      "longname": "HalfSpaceShape#pos",
-      "name": "pos",
-      "tags": "HalfSpaceShape#pos pos",
-      "summary": "",
-      "description": "Point on the boundary of the half space"
-    },
-    "HalfSpaceShape.html#normal": {
-      "id": "HalfSpaceShape.html#normal",
-      "kind": "member",
-      "title": "normal :Vector3",
-      "longname": "HalfSpaceShape#normal",
-      "name": "normal",
-      "tags": "HalfSpaceShape#normal normal",
-      "summary": "",
-      "description": "Normal to the half space"
-    },
     "Vector.html": {
       "id": "Vector.html",
       "kind": "class",
@@ -46340,6 +49124,16 @@ window.lunrData = {
       "summary": "",
       "description": "The underlying point (taking into account the cell boost)"
     },
+    "RelPosition.html#globalBoost": {
+      "id": "RelPosition.html#globalBoost",
+      "kind": "member",
+      "title": "globalBoost",
+      "longname": "RelPosition#globalBoost",
+      "name": "globalBoost",
+      "tags": "RelPosition#globalBoost globalBoost",
+      "summary": "",
+      "description": "Return the global isometry (cellBoost * local boost) of the current position"
+    },
     "RelPosition.html#reduceErrorBoost": {
       "id": "RelPosition.html#reduceErrorBoost",
       "kind": "function",
@@ -46440,6 +49234,17 @@ window.lunrData = {
       "summary": "",
       "description": "Set the current position with the given position."
     },
+    "CylinderShape_CylinderShape.html": {
+      "id": "CylinderShape_CylinderShape.html",
+      "kind": "class",
+      "title": "CylinderShape",
+      "longname": "CylinderShape#CylinderShape",
+      "name": "CylinderShape",
+      "tags": "CylinderShape#CylinderShape CylinderShape",
+      "summary": "",
+      "description": "Constructor",
+      "body": ""
+    },
     "VerticalHalfSpaceShape.html": {
       "id": "VerticalHalfSpaceShape.html",
       "kind": "class",
@@ -46491,6 +49296,47 @@ window.lunrData = {
       "tags": "BasicRenderer#build build",
       "summary": "",
       "description": "Build the Three.js scene with the non-euclidean shader."
+    },
+    "NewBallShape.html": {
+      "id": "NewBallShape.html",
+      "kind": "class",
+      "title": "NewBallShape",
+      "longname": "NewBallShape",
+      "name": "NewBallShape",
+      "tags": "NewBallShape",
+      "summary": "",
+      "description": "New version for the the shape of a hyperbolic ball The data stored are an isometry and a radius The ball is the one centered at the image of the origin by the given isometry The shader represent the object in the old-fashioned way: center and radius.",
+      "body": ""
+    },
+    "NewBallShape.html#isBallShape": {
+      "id": "NewBallShape.html#isBallShape",
+      "kind": "member",
+      "title": "isBallShape :boolean",
+      "longname": "NewBallShape#isBallShape",
+      "name": "isBallShape",
+      "tags": "NewBallShape#isBallShape isBallShape",
+      "summary": "",
+      "description": "Says that the object inherits from Ball"
+    },
+    "NewBallShape.html#isGlobal": {
+      "id": "NewBallShape.html#isGlobal",
+      "kind": "member",
+      "title": "isGlobal :boolean",
+      "longname": "NewBallShape#isGlobal",
+      "name": "isGlobal",
+      "tags": "NewBallShape#isGlobal isGlobal",
+      "summary": "",
+      "description": "Says whether the shape is global. True if global, false otherwise."
+    },
+    "NewBallShape.html#center": {
+      "id": "NewBallShape.html#center",
+      "kind": "member",
+      "title": "center",
+      "longname": "NewBallShape#center",
+      "name": "center",
+      "tags": "NewBallShape#center center",
+      "summary": "",
+      "description": "Compute the center of the ball (to be passed to the shader)"
     },
     "VRControlsDrag.html": {
       "id": "VRControlsDrag.html",

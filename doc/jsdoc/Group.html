@@ -12,7 +12,7 @@
 		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geometries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
 			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
@@ -63,8 +63,12 @@
 											<li><a href="BasicCamera.html">BasicCamera</a></li>
 											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
 											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="ChaseControls.html">ChaseControls</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="Cylinder.html">Cylinder</a></li>
+											<li><a href="CylinderShape_CylinderShape.html">CylinderShape#CylinderShape</a></li>
+											<li><a href="DebugMaterial.html">DebugMaterial</a></li>
 											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
@@ -85,6 +89,8 @@
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
 											<li><a href="HoroballShape.html">HoroballShape</a></li>
@@ -105,9 +111,13 @@
 											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
 											<li><a href="LocalPotato.html">LocalPotato</a></li>
 											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li>
+											<li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="NativeCamera.html">NativeCamera</a></li>
 											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NewBall.html">NewBall</a></li>
+											<li><a href="NewBallShape.html">NewBallShape</a></li>
 											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
 											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
@@ -131,6 +141,8 @@
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalCylinder.html">VerticalCylinder</a></li>
+											<li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li>
 											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
 											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
 											<li><a href="VRCamera.html">VRCamera</a></li>
@@ -180,12 +192,38 @@
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Group</span><span class="signature-params">()</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Group</span><span class="signature-params">( <span class="signature-param">translationA</span>, <span class="signature-param">translationB</span>&nbsp;)</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Group of isometries</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Heisenberg group</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>translationA</code></td>
+							<td><span class="param-type"><a href="Vector4.html">Vector4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+						<tr>
+								<td><code>translationB</code></td>
+							<td><span class="param-type"><a href="Vector4.html">Vector4</a></span></td>
+							<td class="last">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
 			
@@ -205,7 +243,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="commons_groups_isometry_Group.js.html">commons/groups/isometry/Group.js</a>, <a href="commons_groups_isometry_Group.js.html#line-13">line 13</a></p>
+									<p class="form-control-static"><a href="geometries_nil_groups_heisenberg_Group.js.html">geometries/nil/groups/heisenberg/Group.js</a>, <a href="geometries_nil_groups_heisenberg_Group.js.html#line-15">line 15</a></p>
 								</div>
 							</div>
 			
@@ -245,7 +283,7 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title class public">
-			<h4 id="Group" class="class public"><a href="Group.html"><span class="signature-new">new&nbsp;</span><span class="name">Group</span><span class="signature-params">()</span><span class="signature-type"></span></a></h4>
+			<h4 id="Group" class="class public"><a href="Group.html"><span class="signature-new">new&nbsp;</span><span class="name">Group</span><span class="signature-params">( <span class="signature-param">translationA</span>, <span class="signature-param">translationB</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
 		</dt>
 <dd class="symbol-details class public">
 	<div class="symbol-details-inner">
@@ -264,7 +302,7 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title member public">
-			<h4 id="halfTranslationA" class="member public"><span class="name">halfTranslationA</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
+			<h4 id="_halfTranslationA" class="member public"><span class="name">_halfTranslationA</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
 		</dt>
 <dd class="symbol-details member public">
 	<div class="symbol-details-inner">
@@ -308,7 +346,7 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public">
-			<h4 id="halfTranslationB" class="member public"><span class="name">halfTranslationB</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
+			<h4 id="_halfTranslationB" class="member public"><span class="name">_halfTranslationB</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
 		</dt>
 <dd class="symbol-details member public">
 	<div class="symbol-details-inner">
@@ -352,7 +390,51 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title member public">
-			<h4 id="halfTranslationC" class="member public"><span class="name">halfTranslationC</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
+			<h4 id="_translationA" class="member public"><span class="name">_translationA</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Translation of the first generator</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="Vector4.html">Vector4</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometries_nil_groups_heisenberg_Group.js.html">geometries/nil/groups/heisenberg/Group.js</a>, <a href="geometries_nil_groups_heisenberg_Group.js.html#line-30">line 30</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
+			<h4 id="_halfTranslationC" class="member public"><span class="name">_halfTranslationC</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
 		</dt>
 <dd class="symbol-details member public">
 	<div class="symbol-details-inner">
@@ -385,6 +467,128 @@
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
 									<p class="form-control-static"><a href="geometries_euc_groups_freeAbelian_Group.js.html">geometries/euc/groups/freeAbelian/Group.js</a>, <a href="geometries_euc_groups_freeAbelian_Group.js.html#line-32">line 32</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
+			<h4 id="_translationB" class="member public"><span class="name">_translationB</span><span class="signature-type"> :<a href="Vector4.html">Vector4</a></span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Translation of the second generator</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type"><a href="Vector4.html">Vector4</a></span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometries_nil_groups_heisenberg_Group.js.html">geometries/nil/groups/heisenberg/Group.js</a>, <a href="geometries_nil_groups_heisenberg_Group.js.html#line-35">line 35</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
+			<h4 id="dotMatrix" class="member public"><span class="name">dotMatrix</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return a positive definite matrix for which the family
+			halfTranslationA, halfTranslationB, halfTranslationC
+			is orthonormal.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometries_euc_groups_freeAbelian_Group.js.html">geometries/euc/groups/freeAbelian/Group.js</a>, <a href="geometries_euc_groups_freeAbelian_Group.js.html#line-85">line 85</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title member public">
+			<h4 id="dotMatrix" class="member public"><span class="name">dotMatrix</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details member public">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return a positive definite matrix for which the family
+			translationA, translationB, translationC
+			is orthonormal.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="geometries_nil_groups_heisenberg_Group.js.html">geometries/nil/groups/heisenberg/Group.js</a>, <a href="geometries_nil_groups_heisenberg_Group.js.html#line-93">line 93</a></p>
 								</div>
 							</div>
 			
@@ -511,7 +715,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 18th Feb 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
