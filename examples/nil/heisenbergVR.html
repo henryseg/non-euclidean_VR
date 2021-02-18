@@ -74,8 +74,8 @@
         lights: lights
     });
 
-    const cyl = new LocalVerticalCylinderShape(0.5, new Isometry());
-    const center = new LocalFakeBallShape(new Point(), 0.8);
+    const cyl = new LocalVerticalCylinderShape(0.8, new Isometry());
+    const center = new LocalFakeBallShape(new Point(), 0.9);
     const unionShape = union(cyl, center)
     const latticeShape = complement(unionShape)
     const lattice = new Solid(latticeShape, mat);
