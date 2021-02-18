@@ -93,6 +93,6 @@ export class ChaseControls {
         const relativeControllerPosition = controllerPosition.clone().sub(cameraPosition);
         const relativeControllerMatrixWorld = this.controller.matrixWorld.clone().setPosition(relativeControllerPosition);
         const isom = new Isometry().diffExpMap(relativeControllerMatrixWorld);
-        this.solid.shape.isom.copy(this.camera.position.globalBoost.multiply(isom));
+        this.solid.shape.isom = this.camera.position.globalBoost.clone().multiply(isom);
     }
 }

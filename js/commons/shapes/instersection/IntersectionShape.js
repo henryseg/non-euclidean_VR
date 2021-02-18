@@ -36,6 +36,17 @@ export class IntersectionShape extends AdvancedShape {
         return this.shape1.hasUVMap && this.shape2.hasUVMap;
     }
 
+    /**
+     * Setter for isometry.
+     * Propagate the setup
+     * @param value
+     */
+    set isom(value){
+        this.shape1.isom = value;
+        this.shape2.isom = value;
+    }
+
+
     static glslClass(){
         return '';
     }

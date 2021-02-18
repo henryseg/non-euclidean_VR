@@ -30,6 +30,15 @@ export class ComplementShape extends AdvancedShape {
         return this.shape.hasUVMap;
     }
 
+    /**
+     * Setter for isometry.
+     * Propagate the setup
+     * @param value
+     */
+    set isom(value){
+        this.shape.isom = value;
+    }
+
     static glslClass(){
         return '';
     }

@@ -25,7 +25,7 @@
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
+    import {LocalBallShape, complement, HalfSpaceShape} from "../../js/geometries/hyp/shapes/all.js";
 
 
     import {FlyControls} from "../../js/controls/FlyControls.js";
@@ -33,6 +33,8 @@
     import {InfoControls} from "../../js/controls/InfoControls.js";
     import {ChaseControls} from "../../js/controls/ChaseControls.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {CylinderShape} from "../../js/geometries/hyp/shapes/cylinder/CylinderShape.js";
+    import {intersection} from "../../js/commons/shapes/all.js";
 
 
     // initial setup
@@ -112,16 +114,19 @@
         shininess: 10
     });
 
-    const beamerMat = new SingleColorMaterial(new Color(0.8, 0.8, 1));
+    const beamMat = new SingleColorMaterial(new Color(0.8, 0.8, 1));
 
 
     const isom1 = new Isometry().makeTranslationFromDir(new Vector(0, 0, -0.5));
-    const cyl = new Cylinder(0.01, isom1, beamerMat);
-    cyl.isRendered = false;
+    const cylShape = new CylinderShape(0.01, isom1);
+    const halfspaceShape = new HalfSpaceShape(isom1);
+    const beamShape = intersection(cylShape, halfspaceShape);
+    const beam = new Solid(beamShape, beamMat);
+    beam.isRendered = false;
     //const ball1 = new NewBall(isom1, 0.05, mat1);
 
     // adding the solid to the scene
-    scene.add(lattice, cyl, light0, light1, light2, light3);
+    scene.add(lattice, beam, light0, light1, light2, light3);
 
     // building there renderer
     renderer.build();
@@ -142,7 +147,7 @@
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
     }
-    const chaseControls = new ChaseControls(controller0, camera, cyl);
+    const chaseControls = new ChaseControls(controller0, camera, beam);
 
 
     // rendering the scene
