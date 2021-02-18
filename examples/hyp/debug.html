@@ -23,10 +23,12 @@
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid} from "../../js/core/solids/Solid.js";
-    import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
+    import {LocalBallShape, complement, HalfSpaceShape} from "../../js/geometries/hyp/shapes/all.js";
     import {NormalMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
     import {DebugMaterial} from "../../js/commons/material/debug/DebugMaterial.js";
-    import {Ball, Cylinder} from "../../js/geometries/hyp/solids/all.js";
+    import {Ball, Cylinder, HalfSpace} from "../../js/geometries/hyp/solids/all.js";
+    import {CylinderShape} from "../../js/geometries/hyp/shapes/cylinder/CylinderShape.js";
+    import {intersection} from "../../js/commons/shapes/all.js";
 
 
     const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
@@ -64,9 +66,14 @@
         shininess: 5,
     });
 
-    const cyl = new Cylinder(0.1, new Isometry(), matPhong);
+    //const cyl = new Cylinder(0.1, new Isometry(), matPhong);
+    const halfspace = new HalfSpace(new Isometry(), matPhong);
+    const cylShape = new CylinderShape(0.1, new Isometry());
+    const halfspaceShape = new HalfSpaceShape(new Isometry());
+    const beamShape = intersection(cylShape, halfspaceShape);
+    const beam = new Solid(beamShape, matPhong);
 
-    thurston.add(cyl, light0, light1, light2);
+    thurston.add(beam, light0, light1, light2);
     thurston.run();
 
 

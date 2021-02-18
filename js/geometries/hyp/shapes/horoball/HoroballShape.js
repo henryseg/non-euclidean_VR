@@ -38,7 +38,7 @@ export class HoroballShape extends BasicShape {
     }
 
     /**
-     * Says that the object inherits from `Ball`
+     * Says that the object inherits from `HoroballShape`
      * @type {boolean}
      */
     get isHoroballShape() {
