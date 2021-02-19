@@ -208,24 +208,6 @@ shiftZn.isom.matrix.set(
     0, 0, sqrt3, 2
 )
 
-// shiftXp.isom.makeTranslationFromDir(new Vector(-2 * cubeHalfWidth, 0, 0));
-// shiftXn.isom.makeTranslationFromDir(new Vector(2 * cubeHalfWidth, 0, 0));
-// shiftYp.isom.makeTranslationFromDir(new Vector(0, -2 * cubeHalfWidth, 0));
-// shiftYn.isom.makeTranslationFromDir(new Vector(0, 2 * cubeHalfWidth, 0));
-// shiftZp.isom.makeTranslationFromDir(new Vector(0, 0, -2 * cubeHalfWidth));
-// shiftZn.isom.makeTranslationFromDir(new Vector(0, 0, 2 * cubeHalfWidth));
-//
-// //ADD ROTATIONS TO THE SIDE IDENTIFICATIONS TO MAKE INTO A MANIFOLD
-// shiftXp.isom.matrix.multiply(new Matrix4().makeRotationX(Math.PI / 2).transpose());
-// shiftXn.isom.matrix.multiply(new Matrix4().makeRotationX(-Math.PI / 2).transpose());
-// shiftYp.isom.matrix.multiply(new Matrix4().makeRotationY(Math.PI / 2).transpose());
-// shiftYn.isom.matrix.multiply(new Matrix4().makeRotationY(-Math.PI / 2).transpose());
-// shiftZp.isom.matrix.multiply(new Matrix4().makeRotationZ(Math.PI / 2).transpose());
-// shiftZn.isom.matrix.multiply(new Matrix4().makeRotationZ(-Math.PI / 2).transpose());
-
-// console.log(shiftXn.isom.matrix.toLog());
-// console.log(shiftYn.isom.matrix.toLog());
-// console.log(shiftZn.isom.matrix.toLog());
 
 const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp);
 const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn);
