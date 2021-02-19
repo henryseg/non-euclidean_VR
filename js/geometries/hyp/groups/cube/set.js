@@ -1,6 +1,7 @@
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group} from "../../../../commons/groups/isometry/Group.js";
+import {Vector4} from "../../../../lib/three.module.js";
 
 
 const sqrt3 = Math.sqrt(3);
@@ -8,69 +9,153 @@ const modelHalfCube = 1 / sqrt3;
 
 const group = new Group();
 
+const normalXp = new Vector4(1, 0, 0, -modelHalfCube);
+
 function testXp(p) {
-    return p.coords.x > modelHalfCube * p.coords.w;
+    return p.coords.dot(normalXp) > 0;
 }
 
 // language=GLSL
 const glslTestXp = `//
 bool testXp(Point p){
-    return p.coords.x > ${modelHalfCube} * p.coords.w;
+    vec4 normal = vec4(1, 0, 0, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
 }
 `;
 
+// language=GLSL
+const glslCreepXp = `//
+ExtVector creepXp(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(1, 0, 0, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    float t = atanh(aux) + offset;
+    return flow(v, t);
+}
+`;
+
+const normalXn = new Vector4(-1, 0, 0, -modelHalfCube);
+
 function testXn(p) {
-    return p.coords.x < -modelHalfCube * p.coords.w;
+    return p.coords.dot(normalXn) > 0;
 }
 
 // language=GLSL
 const glslTestXn = `//
 bool testXn(Point p){
-    return p.coords.x < -${modelHalfCube} * p.coords.w;
+    vec4 normal = vec4(-1, 0, 0, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
 }
 `;
 
+// language=GLSL
+const glslCreepXn = `//
+ExtVector creepXn(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(-1, 0, 0, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    float t = atanh(aux) + offset;
+    return flow(v, t);
+}
+`;
+
+const normalYp = new Vector4(0, 1, 0, -modelHalfCube);
+
 function testYp(p) {
-    return p.coords.y > modelHalfCube * p.coords.w;
+    return p.coords.dot(normalYp) > 0;
 }
 
 // language=GLSL
 const glslTestYp = `//
 bool testYp(Point p){
-    return p.coords.y > ${modelHalfCube} * p.coords.w;
+    vec4 normal = vec4(0, 1, 0, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
 }
 `;
 
+// language=GLSL
+const glslCreepYp = `//
+ExtVector creepYp(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(0, 1, 0, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    float t = atanh(aux) + offset;
+    return flow(v, t);
+}
+`;
+
+const normalYn = new Vector4(0, -1, 0, -modelHalfCube);
+
 function testYn(p) {
-    return p.coords.y < -modelHalfCube * p.coords.w;
+    return p.coords.dot(normalYn) > 0;
 }
 
 // language=GLSL
 const glslTestYn = `//
 bool testYn(Point p){
-    return p.coords.y < -${modelHalfCube} * p.coords.w;
+    vec4 normal = vec4(0, -1, 0, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
 }
 `;
 
+// language=GLSL
+const glslCreepYn = `//
+ExtVector creepYn(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(0, -1, 0, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    float t = atanh(aux) + offset;
+    return flow(v, t);
+}
+`;
+
+const normalZp = new Vector4(0, 0, 1, -modelHalfCube);
+
 function testZp(p) {
-    return p.coords.z > modelHalfCube * p.coords.w;
+    return p.coords.dot(normalZp) > 0;
 }
 
 // language=GLSL
 const glslTestZp = `//
 bool testZp(Point p){
-    return p.coords.z > ${modelHalfCube} * p.coords.w;
+    vec4 normal = vec4(0, 0, 1, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
 }
 `;
 
+// language=GLSL
+const glslCreepZp = `//
+ExtVector creepZp(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(0, 0, 1, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    float t = atanh(aux) + offset;
+    return flow(v, t);
+}
+`;
+
+const normalZn = new Vector4(0, 0, -1, -modelHalfCube);
+
 function testZn(p) {
-    return p.coords.z < -modelHalfCube * p.coords.w;
+    return p.coords.dot(normalZn) > 0;
 }
 
 // language=GLSL
 const glslTestZn = `//
 bool testZn(Point p){
-    return p.coords.z < -${modelHalfCube} * p.coords.w;
+    vec4 normal = vec4(0, 0, -1, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
+}
+`;
+
+// language=GLSL
+const glslCreepZn = `//
+ExtVector creepZn(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(0, 0, -1, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    float t = atanh(aux) + offset;
+    return flow(v, t);
 }
 `;
 
@@ -142,12 +227,12 @@ shiftZn.isom.matrix.set(
 // console.log(shiftYn.isom.matrix.toLog());
 // console.log(shiftZn.isom.matrix.toLog());
 
-const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
-const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
-const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn);
-const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
-const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
-const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
+const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp);
+const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn);
+const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp);
+const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn);
+const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp);
+const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
 
 const teleportations = [
     teleportXp,
