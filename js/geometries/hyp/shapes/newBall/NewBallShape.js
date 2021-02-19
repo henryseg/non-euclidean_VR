@@ -63,8 +63,10 @@ export class NewBallShape extends BasicShape {
      * Compute the center of the ball (to be passed to the shader)
      * @type{Point}
      */
-    get center(){
-        return new Point().applyIsometry(this.isom);
+    get center() {
+        const center = new Point().applyIsometry(this.isom);
+        //console.log(center.coords.toLog())
+        return center;
     }
 
     static glslClass() {
