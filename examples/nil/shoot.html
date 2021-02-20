@@ -1,48 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <title>Shooting in Nil (Virtual reality)</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
-
-    <title>Virtual Reality (Relation between tagent space and geoemtry)</title>
 </head>
+
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color} from "../../js/lib/three.module.js";
+    import * as utils from "../../js/utils.js";
+    import {Clock, Color, Vector4} from "../../js/lib/three.module.js";
+
+    import * as geom from "../../js/geometries/nil/geometry/General.js";
+    import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
+
+    import {Point, Isometry} from "../../js/core/geometry/General.js";
+    import {PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
+    import {
+        FakeBall,
+        LocalFakeBall,
+        LocalPotato, NewFakeBall,
+        Solid
+    } from "../../js/geometries/nil/solids/all.js";
+    import {
+        complement,
+        FakeBallShape,
+        LocalFakeBallShape,
+        LocalPotatoShape
+    } from "../../js/geometries/nil/shapes/all.js";
+    import {LocalVerticalCylinderShape} from "../../js/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
+    import {union} from "../../js/commons/shapes/all.js";
+    import {VRCamera} from "../../js/core/cameras/vr/VRCamera.js";
+    import {Scene, VRRenderer} from "../../js/core/General.js";
     import {XRControllerModelFactory} from "../../js/lib/XRControllerModelFactory.js";
-
-    import * as geom from "../../js/geometries/hyp/geometry/General.js";
-    import cube from "../../js/geometries/hyp/groups/cube/set.js";
-
-    import {VRRenderer, Scene, VRCamera} from "../../js/core/General.js";
-    import {NativeCamera} from "../../js/geometries/hyp/cameras/native/NativeCamera.js";
-
-    import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, HalfSpaceShape} from "../../js/geometries/hyp/shapes/all.js";
-
-
     import {FlyControls} from "../../js/controls/FlyControls.js";
-    import {NewBall} from "../../js/geometries/hyp/solids/NewBall.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {ChaseControls} from "../../js/controls/ChaseControls.js";
-    import {SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {CylinderShape} from "../../js/geometries/hyp/shapes/cylinder/CylinderShape.js";
-    import {intersection} from "../../js/commons/shapes/all.js";
     import {ShootControls} from "../../js/controls/ShootControls.js";
 
 
+
+    heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
+    heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
+
     // initial setup
-    const camera = new VRCamera({set: cube});
+    const camera = new VRCamera({set: heisenberg});
     camera.maxSteps = 300;
     const scene = new Scene();
-    const renderer = new VRRenderer(geom, cube, camera, scene, {
+    const renderer = new VRRenderer(geom, heisenberg, camera, scene, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -67,56 +76,40 @@
     const controller1 = renderer.xr.getController(1);
     renderer.threeScene.add(controller1);
 
-    // lights for the Phong material
+    // light colors
+    const lightColor1 = new Color(68 / 256, 197 / 256, 203 / 256, 1);
+    const lightColor2 = new Color(252 / 256, 227 / 256, 21 / 256, 1);
+    const lightColor3 = new Color(245 / 256, 61 / 256, 82 / 256, 1);
 
-    //  yellow light
-    const light0 = new PointLight(
-        new Vector(1, 0, 0),
-        new Color(1, 1, 0),
+    const light1 = new FakePointLight(
+        new Point(1, 0, 0),
+        lightColor1
+    );
+    const light2 = new FakePointLight(
+        new Point(0, 1., 1),
+        lightColor2
+    );
+    const light3 = new FakePointLight(
+        new Point(-1, 0, 2),
+        lightColor3
     );
 
-    // cyan light
-    const light1 = new PointLight(
-        new Vector(0, 1, -1),
-        new Color(0, 1, 1)
-    );
-
-    // magenta light
-    const light2 = new PointLight(
-        new Vector(-1, -1, 1),
-        new Color(1, 0, 1)
-    );
-
-    //  yellow light
-    const light3 = new PointLight(
-        new Vector(0, 0, -1.5),
-        new Color(1, 1, 1),
-    );
-
+    const lights = [light1, light2, light3];
 
     // Phong shading material
-    const mat0 = new PhongMaterial({
-        color: new Color(1, 0.2, 0.2),
-        shininess: 5
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1),
+        shininess: 5,
+        lights: lights
     });
 
-    // Complement of a local ball
-    const ball0 = new LocalBallShape(
-        new Point(),
-        1.02,
-    );
-    const latticeShape = complement(ball0);
-    const lattice = new Solid(latticeShape, mat0);
+    const cyl = new LocalVerticalCylinderShape(0.8, new Isometry());
+    const center = new LocalFakeBallShape(new Point(), 0.9);
+    const unionShape = union(cyl, center)
+    const latticeShape = complement(unionShape)
+    const lattice = new Solid(latticeShape, mat);
 
-
-    // Phong shading material
-    const mat1 = new PhongMaterial({
-        color: new Color(0, 0, 1),
-        shininess: 10
-    });
-
-    //const bulletMat = new SingleColorMaterial(new Color(0.8, 0.8, 1));
-
+    scene.add(lattice);
 
     const isom = new Isometry();
     const bullets = [];
@@ -126,15 +119,13 @@
         bulletMat = new SingleColorMaterial(
             new Color().setHSL(Math.random(), 1, 0.5)
         );
-        bullet = new NewBall(isom, 0.05, bulletMat);
+        bullet = new NewFakeBall(isom, 0.05, bulletMat);
         bullet.isRendered = false;
         bullets.push(bullet);
     }
     //const bullet = new NewBall(isom, 0.05, bulletMat);
     scene.add(...bullets);
 
-    // adding the solid to the scene
-    scene.add(lattice, light0, light1, light2, light3);
 
     // building there renderer
     renderer.build();
@@ -170,5 +161,7 @@
     renderer.checkShader();
 
 
+
 </script>
+
 </html>

@@ -35,6 +35,7 @@ export class Group extends AbstractGroup {
         this._translationB = translationB !== undefined ? translationB : new Vector4(0, 1, 0, 0);
         this.updateTranslationC();
         this.updateDotMatrix();
+        console.log("Dot matrix", this.dotMatrix);
         console.log("Dot matrix", this.dotMatrix.toLog());
     }
 
