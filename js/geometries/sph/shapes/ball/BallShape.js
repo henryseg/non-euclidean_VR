@@ -45,7 +45,7 @@ export class BallShape extends BasicShape {
      * @type {Point}
      */
     get center() {
-        return new Point().applyIsometry(this.isom);
+        return new Point().applyIsometry(this.absoluteIsom);
     }
 
     /**

@@ -51,8 +51,8 @@ export class HalfSpaceShape extends BasicShape {
      * @type{{pos:Point, dir:Vector4}}
      */
     get normal() {
-        const pos = new Point().applyIsometry(this.isom);
-        const dir = new Vector4(0,0,1,0).applyMatrix4(this.isom.matrix);
+        const pos = new Point().applyIsometry(this.absoluteIsom);
+        const dir = new Vector4(0,0,1,0).applyMatrix4(this.absoluteIsom.matrix);
         return {pos: pos, dir: dir};
     }
 

@@ -32,7 +32,7 @@ export class VerticalHalfSpaceShape extends BasicShape {
      * A point on the boundary of the half space
      */
     get pos() {
-        const res = new Point().applyIsometry(this.isom);
+        const res = new Point().applyIsometry(this.absoluteIsom);
         res.coords.setZ(0);
         return res;
     }
@@ -41,14 +41,14 @@ export class VerticalHalfSpaceShape extends BasicShape {
      * The normal to the half space
      */
     get normal() {
-        const res = new Vector(1, 0, 0).applyMatrix4(this.isom.matrix);
+        const res = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
         res.setZ(0);
         res.normalize();
         return res;
     }
 
     get uDir() {
-        const res = new Vector(0, 1, 0).applyMatrix4(this.isom.matrix);
+        const res = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
         res.setZ(0);
         res.normalize();
         return res;

@@ -26,6 +26,8 @@ export class IntersectionShape extends AdvancedShape {
         super();
         this.shape1 = shape1;
         this.shape2 = shape2;
+        this.shape1.parent = this;
+        this.shape2.parent = this;
     }
 
     get isGlobal() {

@@ -22,7 +22,29 @@ export class Shape extends Generic {
      */
     constructor(isom = undefined) {
         super();
+        /**
+         * Isometry defining the position of the shape
+         * @type {Isometry}
+         */
         this.isom = isom !== undefined ? isom : new Isometry();
+        /**
+         * Parent of the shape (if this shape is part of an advanced shape)
+         * @type {Shape}
+         */
+        this.parent = undefined;
+    }
+
+    /**
+     * If the shape is part of an advanced shape, the underlying isometry is a position relative to the parent shape.
+     * absoluteIsom, on the contrary return the isometry encoding the absolute position
+     * @type {Isometry}
+     */
+    get absoluteIsom() {
+        const res = this.isom.clone();
+        if (this.parent !== undefined) {
+            res.premultiply(this.parent.absoluteIsom);
+        }
+        return res;
     }
 
     /**

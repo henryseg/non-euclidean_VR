@@ -42,7 +42,7 @@ export class LocalPotatoShape extends BasicShape {
     }
 
     get center() {
-        return new Point().applyIsometry(this.isom);
+        return new Point().applyIsometry(this.absoluteIsom);
     }
 
     get isGlobal() {

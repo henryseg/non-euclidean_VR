@@ -20,6 +20,7 @@ export class ComplementShape extends AdvancedShape {
     constructor(shape) {
         super();
         this.shape = shape;
+        this.shape.parent = this;
     }
 
     get isGlobal() {

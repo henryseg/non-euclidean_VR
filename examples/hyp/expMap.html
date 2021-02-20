@@ -116,11 +116,11 @@
     const beamMat = new SingleColorMaterial(new Color(0.8, 0.8, 1));
 
 
-    const isom1 = new Isometry().makeTranslationFromDir(new Vector(0, 0, -0.5));
+    const isom1 = new Isometry();
     const cylShape = new CylinderShape(isom1, 0.01);
-    // const halfspaceShape = new HalfSpaceShape(isom1);
-    // const beamShape = intersection(cylShape, halfspaceShape);
-    const beam = new Solid(cylShape, beamMat);
+    const halfspaceShape = new HalfSpaceShape(isom1);
+    const beamShape = intersection(cylShape, halfspaceShape);
+    const beam = new Solid(beamShape, beamMat);
     beam.isRendered = false;
     //const ball1 = new NewBall(isom1, 0.05, mat1);
 

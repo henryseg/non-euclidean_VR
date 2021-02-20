@@ -26,6 +26,8 @@ export class WrapShape extends AdvancedShape {
         super();
         this.wrap = wrap;
         this.shape = shape;
+        this.shape.parent = this;
+        this.wrap.parent = this;
     }
 
     get isWrapShape() {

@@ -38,7 +38,7 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Point}
      */
     get pos() {
-        const res = new Point().applyIsometry(this.isom);
+        const res = new Point().applyIsometry(this.absoluteIsom);
         console.log(res.coords.toLog());
         return res;
     }
@@ -48,7 +48,7 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Vector}
      */
     get normal() {
-        const res = new Vector(0, 0, 1).applyMatrix4(this.isom.matrix);
+        const res = new Vector(0, 0, 1).applyMatrix4(this.absoluteIsom.matrix);
         //console.log(res.toLog());
         return res;
     }
@@ -58,7 +58,7 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Vector}
      */
     get uDir() {
-        return new Vector(1, 0, 0).applyMatrix4(this.isom.matrix);
+        return new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     /**
@@ -66,7 +66,7 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Vector}
      */
     get vDir() {
-        return new Vector(0, 1, 0).applyMatrix4(this.isom.matrix);
+        return new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     get isGlobal() {

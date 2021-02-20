@@ -50,7 +50,7 @@ export class LocalBallShape extends BasicShape {
      * @type {Point}
      */
     get center() {
-        return new Point().applyIsometry(this.isom);
+        return new Point().applyIsometry(this.absoluteIsom);
     }
 
     /**

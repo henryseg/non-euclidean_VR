@@ -45,7 +45,7 @@ export class VerticalCylinderShape extends BasicShape {
      * @type {Point}
      */
     get pos() {
-        return new Point().applyIsometry(this.isom);
+        return new Point().applyIsometry(this.absoluteIsom);
     }
 
     static glslClass() {

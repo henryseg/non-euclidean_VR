@@ -51,7 +51,7 @@ export class LocalHoroballShape extends BasicShape {
      * @type{Vector4}
      */
     get center() {
-        return new Vector4(0, 0, 1, 1).applyMatrix4(this.isom.matrix)
+        return new Vector4(0, 0, 1, 1).applyMatrix4(this.absoluteIsom.matrix)
     }
 
     /**

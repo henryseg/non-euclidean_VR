@@ -41,7 +41,7 @@ export class CylinderShape extends BasicShape {
      * @type {Point}
      */
     get point() {
-        return new Point().applyIsometry(this.isom);
+        return new Point().applyIsometry(this.absoluteIsom);
     }
 
     /**
@@ -49,7 +49,7 @@ export class CylinderShape extends BasicShape {
      * @tyoe {Vector4}
      */
     get dir() {
-        return new Vector4(0, 0, 1, 0).applyMatrix4(this.isom.matrix);
+        return new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     static glslClass() {
