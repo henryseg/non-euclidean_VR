@@ -75,15 +75,16 @@ export class ShootControls {
 
     /**
      * Shoot the next bullet
-     * @param {Isometry} isom - initial position of the bullet
+     * @param {Position} position - initial position of the bullet
      */
-    shoot(isom) {
+    shoot(position) {
         const bullet = this.solids[this._nextBullet];
+
         bullet.bulletData = {
             time: this._clock.getElapsedTime(),
-            isom: isom
+            position: position
         }
-        bullet.shape.isom = isom;
+        bullet.shape.isom = position.boost;
         bullet.isRendered = true;
         this._nextBullet = (this._nextBullet + 1) % this.solids.length;
     }
@@ -97,8 +98,8 @@ export class ShootControls {
         // no bulletData means the bullet has not been shot yet
         if (bullet.hasOwnProperty('bulletData')) {
             const delta = this._clock.getElapsedTime() - bullet.bulletData.time;
-            const aux = new Position().flowFromOrigin(new Vector(0, 0, -this.speed * delta));
-            bullet.shape.isom = aux.boost.premultiply(bullet.bulletData.isom);
+            const aux = bullet.bulletData.position.clone().flow(new Vector(0, 0, -this.speed * delta));
+            bullet.shape.isom = aux.boost;
             //console.log('update', this._clock.getElapsedTime(), bullet.isom.matrix.toLog());
             console.log('update', this._clock.getElapsedTime(), bullet.shape.center.coords.toLog());
         }
@@ -137,9 +138,8 @@ export class ShootControls {
             }
             const relativeControllerPosition = controllerPosition.clone().sub(cameraPosition);
             const relativeControllerMatrixWorld = this.controller.matrixWorld.clone().setPosition(relativeControllerPosition);
-            const isom = new Isometry().diffExpMap(relativeControllerMatrixWorld);
-
-            this.shoot(isom);
+            const position = this.camera.position.clone().fakeDiffExpMap(relativeControllerMatrixWorld);
+            this.shoot(position.globalPosition);
             this._status = STATUS_REST;
         }
         this.updateAllBullets();

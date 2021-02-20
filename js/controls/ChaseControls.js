@@ -92,7 +92,9 @@ export class ChaseControls {
         }
         const relativeControllerPosition = controllerPosition.clone().sub(cameraPosition);
         const relativeControllerMatrixWorld = this.controller.matrixWorld.clone().setPosition(relativeControllerPosition);
-        const isom = new Isometry().diffExpMap(relativeControllerMatrixWorld);
-        this.solid.shape.isom = this.camera.position.globalBoost.clone().multiply(isom);
+        const position = this.camera.position.clone().fakeDiffExpMap(relativeControllerMatrixWorld);
+        const isom = position.globalBoost.clone();
+        isom.matrix.multiply(position.facing); // this line only works for isotropic geometry
+        this.solid.shape.isom = isom;
     }
 }
