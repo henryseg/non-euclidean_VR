@@ -6,6 +6,8 @@ import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
+import {Isometry} from "../../../../core/geometry/Isometry.js";
+import {Point} from "../../../../core/geometry/Point.js";
 
 /**
  * @class
@@ -17,13 +19,22 @@ export class LocalBallShape extends BasicShape {
 
     /**
      * Construction
-     * @param {Point} center - the center of the ball
+     * @param {Isometry|Point} location - Either an isometry, or a point representing the center of the ball
      * @param {number} radius - the radius od the ball
      */
-    constructor(center, radius) {
-        super();
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(isom);
+        }
+        else if (location.isPoint) {
+            isom.makeTranslation(location);
+        }
+        else {
+            throw new Error('LocalBallShape: this type of location is not allowed');
+        }
+        super(isom);
         this.addImport(distance);
-        this.center = center;
         this.radius = radius;
     }
 
@@ -33,6 +44,14 @@ export class LocalBallShape extends BasicShape {
      */
     get isLocalBallShape() {
         return true;
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        return new Point().applyIsometry(this.isom);
     }
 
     /**
@@ -52,7 +71,7 @@ export class LocalBallShape extends BasicShape {
      * Not sure if that is the smartest choice
      * @return {boolean}
      */
-    get hasUVMap(){
+    get hasUVMap() {
         return true;
     }
 

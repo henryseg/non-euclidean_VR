@@ -31,6 +31,10 @@ class Position {
         this.quaternion = new Quaternion();
     }
 
+    get isPosition(){
+        return true;
+    }
+
     /**
      * The facing as a Matrix4, representing an element of O(3).
      * This is the data that is actually passed to the shader

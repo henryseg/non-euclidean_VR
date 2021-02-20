@@ -11,12 +11,12 @@ export class LocalBall extends Solid {
 
     /**
      * Constructor
-     * @param {Point|Vector} center - the center of the ball
+     * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
      * @param {Material} material - the material of the ball
      */
-    constructor(center, radius, material) {
-        const shape = new LocalBallShape(center, radius);
+    constructor(location, radius, material) {
+        const shape = new LocalBallShape(location, radius);
         super(shape, material);
     }
 }

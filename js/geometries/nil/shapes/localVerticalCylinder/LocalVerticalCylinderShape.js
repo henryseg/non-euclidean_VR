@@ -19,13 +19,13 @@ export class LocalVerticalCylinderShape extends BasicShape {
 
     /**
      * The cylinder is the image by `isom` of the vertical cylinder (i.e. around the z-axis) going through the origin
-     * @param {number} radius - radius of the cylinder
      * @param {Isometry} isom - isometry used to locate the cylinder
+     * @param {number} radius - radius of the cylinder
      */
-    constructor(radius, isom=undefined){
+    constructor(isom, radius) {
         super();
         this.radius = radius;
-        this.isom = isom !== undefined ? isom : new Isometry();
+        this.isom = isom;
     }
 
     get isGlobal() {
@@ -44,7 +44,7 @@ export class LocalVerticalCylinderShape extends BasicShape {
      * point on the center of the cylinder
      * @type {Point}
      */
-    get pos(){
+    get pos() {
         return new Point().applyIsometry(this.isom);
     }
 

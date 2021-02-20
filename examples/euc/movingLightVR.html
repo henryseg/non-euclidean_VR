@@ -92,6 +92,7 @@
         const position = new Point(0.8, 0, 0);
         lightPosition.copy(position).applyIsometry(isometry);
         lightPosition.applyIsometry(translation);
+        lightBall.isom.makeTranslation(lightPosition);
         lightColor.setHSL(Math.cos(0.103 * speed * time), 1, 0.5);
     }
 

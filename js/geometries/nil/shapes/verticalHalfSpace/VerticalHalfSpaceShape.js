@@ -1,6 +1,6 @@
 import {mustache} from "../../../../lib/mustache.mjs";
-import {Quaternion, Vector2, Vector3, Vector4} from "../../../../lib/three.module.js";
 
+import {Point, Vector} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import struct from "./shaders/struct.js";
@@ -8,10 +8,6 @@ import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
 
-
-const ex = new Vector3(1, 0, 0);
-const ey = new Vector3(0, 1, 0);
-const ez = new Vector3(0, 0, 1);
 
 /**
  * @class
@@ -22,22 +18,46 @@ export class VerticalHalfSpaceShape extends BasicShape {
 
     /**
      * Constructor.
-     * The normal (in the extrinsic model)
-     * @param {Point} pos - a point on the boundary of the half space
-     * @param {Vector3} normal - the normal to the boundary of the half space (pointing outwards),
-     * computed in the projective model.
+     * The half space is the image by the given isometry of the half space {x < 0}
+     * The UV directions are the images of e_y, e_z
+     * @param {Isometry} isom - the location of the half space
      *
      * @todo If the normal gets updated (for instance during an animation), then the UV directions will not follow.
      */
-    constructor(pos, normal) {
-        super();
-        this.pos = pos;
-        this.normal = normal.normalize();
-
-        const q = new Quaternion().setFromUnitVectors(ez, this.normal);
-        this.uDir = ex.clone().applyQuaternion(q);
-        this.vDir = ey.clone().applyQuaternion(q);
+    constructor(isom) {
+        super(isom);
     }
+
+    /**
+     * A point on the boundary of the half space
+     */
+    get pos() {
+        const res = new Point().applyIsometry(this.isom);
+        res.coords.setZ(0);
+        return res;
+    }
+
+    /**
+     * The normal to the half space
+     */
+    get normal() {
+        const res = new Vector(1, 0, 0).applyMatrix4(this.isom.matrix);
+        res.setZ(0);
+        res.normalize();
+        return res;
+    }
+
+    get uDir() {
+        const res = new Vector(0, 1, 0).applyMatrix4(this.isom.matrix);
+        res.setZ(0);
+        res.normalize();
+        return res;
+    }
+
+    get vDir() {
+        return new Vector(0, 0, 1);
+    }
+
 
     get isGlobal() {
         return true;
@@ -47,7 +67,7 @@ export class VerticalHalfSpaceShape extends BasicShape {
         return true;
     }
 
-    get hasUVMap(){
+    get hasUVMap() {
         return true;
     }
 
@@ -68,7 +88,7 @@ export class VerticalHalfSpaceShape extends BasicShape {
     }
 
     glslUVMap() {
-        return mustache.render(uv,this);
+        return mustache.render(uv, this);
     }
 
 }

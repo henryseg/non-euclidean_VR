@@ -38,7 +38,6 @@
     import {union} from "../../js/commons/shapes/all.js";
 
 
-
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
     heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
 
@@ -74,7 +73,7 @@
         lights: lights
     });
 
-    const cyl = new LocalVerticalCylinderShape(0.8, new Isometry());
+    const cyl = new LocalVerticalCylinderShape(new Isometry(), 0.8);
     const center = new LocalFakeBallShape(new Point(), 0.9);
     const unionShape = union(cyl, center)
     const latticeShape = complement(unionShape)

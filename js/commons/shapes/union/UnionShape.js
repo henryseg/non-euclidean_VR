@@ -5,6 +5,7 @@ import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
 
+
 /**
  * @class
  *
@@ -34,16 +35,6 @@ export class UnionShape extends AdvancedShape {
 
     get hasUVMap(){
         return this.shape1.hasUVMap && this.shape2.hasUVMap;
-    }
-
-    /**
-     * Setter for isometry.
-     * Propagate the setup
-     * @param value
-     */
-    set isom(value){
-        this.shape1.isom = value;
-        this.shape2.isom = value;
     }
 
     static glslClass() {

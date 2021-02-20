@@ -11,12 +11,12 @@ export class LocalHoroball extends Solid {
 
     /**
      * Constructor
-     * @param {Vector} center - the center of the horoball
+     * @param {Isometry|Vector3} location - the location of the horoball
      * @param {number} offset - the offset of the horoball
      * @param {Material} material - the material of the ball
      */
-    constructor(center, offset, material) {
-        const shape = new LocalHoroballShape(center, offset);
+    constructor(location, offset, material) {
+        const shape = new LocalHoroballShape(location, offset);
         super(shape, material);
     }
 }

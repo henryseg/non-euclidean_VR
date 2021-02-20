@@ -1,7 +1,9 @@
 import {mustache} from "../../lib/mustache.mjs";
 import {Generic} from "../Generic.js";
+import {Isometry} from "../geometry/Isometry.js";
 
 import gradient from "./shaders/gradient.js";
+
 
 /**
  * @class
@@ -16,10 +18,11 @@ export class Shape extends Generic {
 
     /**
      * Constructor.
-     * The constructor takes no argument.
+     * @param {Isometry} isom - the position of the shape
      */
-    constructor() {
+    constructor(isom = undefined) {
         super();
+        this.isom = isom !== undefined ? isom : new Isometry();
     }
 
     /**

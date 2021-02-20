@@ -5,18 +5,18 @@ import {CylinderShape} from "../shapes/cylinder/CylinderShape.js";
  * @class
  *
  * @classdesc
- * Hyperbolic ball
+ * Hyperbolic cylinder
  */
 export class Cylinder extends Solid {
 
     /**
      * Constructor
-     * @param {Isometry} isom - the center of the ball
-     * @param {number} radius - the radius of the ball
-     * @param {Material} material - the material of the ball
+     * @param {Isometry} isom - the location of the cylinder
+     * @param {number} radius - the radius of the cylinder
+     * @param {Material} material - the material of the cylinder
      */
-    constructor(radius, isom, material) {
-        const shape = new CylinderShape(radius, isom);
+    constructor(isom, radius, material) {
+        const shape = new CylinderShape(isom, radius);
         super(shape, material);
     }
 }

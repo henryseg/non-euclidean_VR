@@ -18,11 +18,10 @@ export class CylinderShape extends BasicShape {
      * @param {Isometry} isom - the isometry defining the position of the cylinder.
      * The cylinder is the image by isom of the cylinder going through the origin and directed by the vector (0,0,1)
      */
-    constructor(radius, isom = undefined) {
-        super();
+    constructor(isom, radius) {
+        super(isom);
         this.addImport(direction);
         this.radius = radius;
-        this.isom = isom;
     }
 
     get isGlobal() {

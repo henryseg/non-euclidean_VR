@@ -11,12 +11,12 @@ import {LocalVerticalCylinderShape} from "../shapes/localVerticalCylinder/LocalV
 export class LocalVerticalCylinder extends Solid {
     /**
      * Constructor.
-     * @param {number} radius - the radius of the cylinder
      * @param {Isometry} isom - the isometry locating the cylinder
+     * @param {number} radius - the radius of the cylinder
      * @param {Material} material - the material of the ball
      */
-    constructor(radius, isom, material) {
-        const shape = new LocalVerticalCylinderShape(radius, isom);
+    constructor(isom, radius, material) {
+        const shape = new LocalVerticalCylinderShape(isom, radius);
         super(shape, material);
     }
 }

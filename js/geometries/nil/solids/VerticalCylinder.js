@@ -11,12 +11,12 @@ import {VerticalCylinderShape} from "../shapes/verticalCylinder/VerticalCylinder
 export class VerticalCylinder extends Solid {
     /**
      * Constructor.
-     * @param {number} radius - the radius of the cylinder
      * @param {Isometry} isom - the isometry locating the cylinder
+     * @param {number} radius - the radius of the cylinder
      * @param {Material} material - the material of the ball
      */
-    constructor(radius, isom, material) {
-        const shape = new VerticalCylinderShape(radius, isom);
+    constructor(isom, radius, material) {
+        const shape = new VerticalCylinderShape(isom, radius);
         super(shape, material);
     }
 }

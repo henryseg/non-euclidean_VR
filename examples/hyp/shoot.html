@@ -24,12 +24,11 @@
     import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
+    import {Ball, Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
     import {LocalBallShape, complement, HalfSpaceShape} from "../../js/geometries/hyp/shapes/all.js";
 
 
     import {FlyControls} from "../../js/controls/FlyControls.js";
-    import {NewBall} from "../../js/geometries/hyp/solids/NewBall.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
     import {ChaseControls} from "../../js/controls/ChaseControls.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
@@ -126,7 +125,7 @@
         bulletMat = new SingleColorMaterial(
             new Color().setHSL(Math.random(), 1, 0.5)
         );
-        bullet = new NewBall(isom, 0.05, bulletMat);
+        bullet = new Ball(isom, 0.05, bulletMat);
         bullet.isRendered = false;
         bullets.push(bullet);
     }

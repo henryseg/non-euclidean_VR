@@ -5,6 +5,7 @@ import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
 
+
 /**
  * @class
  *
@@ -37,16 +38,6 @@ export class WrapShape extends AdvancedShape {
 
     get hasUVMap() {
         return this.shape.hasUVMap;
-    }
-
-    /**
-     * Setter for isometry.
-     * Propagate the setup
-     * @param value
-     */
-    set isom(value){
-        this.wrap.isom = value;
-        this.shape.isom = value;
     }
 
     static glslClass() {

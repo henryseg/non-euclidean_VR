@@ -1,11 +1,14 @@
 import {mustache} from "../../../../lib/mustache.mjs";
-import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Quaternion, Vector3} from "../../../../lib/three.module.js";
+
+import {Point, Vector} from "../../geometry/General.js";
+import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
+
 
 const ex = new Vector3(1, 0, 0);
 const ey = new Vector3(0, 1, 0);
@@ -21,32 +24,49 @@ export class HalfSpaceShape extends BasicShape {
 
     /**
      * Constructor.
-     * @param {Point} pos - a point on the boundary of the half space
-     * @param {Vector3} normal - the normal to the half space.
+     * @param {Isometry} isom - the location of the half space
      *
-     * The UV directions are computed as follows.
-     * One first compute "the" rotation R sending e_z to normal.
-     * Then uDir = Re_x and vDir = Re_y.
-     *
-     * @todo If the normal gets updated (for instance during an animation), then the UV directions will not follow.
+     * The half space is the image by isom of the half space {z < 0}
+     * The UV directions are the images by isom of e_x and e_y
      */
-    constructor(pos, normal) {
-        super();
-        /**
-         * Point on the boundary of the half space
-         * @type {Point}
-         */
-        this.pos = pos;
-        /**
-         * Normal to the half space
-         * @type {Vector3}
-         */
-        this.normal = normal.normalize();
+    constructor(isom) {
+        super(isom);
+    }
 
-        const q = new Quaternion().setFromUnitVectors(ez, this.normal);
-        this.uDir = ex.clone().applyQuaternion(q);
-        this.vDir = ey.clone().applyQuaternion(q);
+    /**
+     * A point on the boundary of the half space
+     * @type {Point}
+     */
+    get pos() {
+        const res = new Point().applyIsometry(this.isom);
+        console.log(res.coords.toLog());
+        return res;
+    }
 
+    /**
+     * The coordinates of the normal vector to the half space
+     * @type {Vector}
+     */
+    get normal() {
+        const res = new Vector(0, 0, 1).applyMatrix4(this.isom.matrix);
+        //console.log(res.toLog());
+        return res;
+    }
+
+    /**
+     * U-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get uDir() {
+        return new Vector(1, 0, 0).applyMatrix4(this.isom.matrix);
+    }
+
+    /**
+     * V-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get vDir() {
+        return new Vector(0, 1, 0).applyMatrix4(this.isom.matrix);
     }
 
     get isGlobal() {

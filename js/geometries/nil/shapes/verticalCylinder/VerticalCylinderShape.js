@@ -22,10 +22,10 @@ export class VerticalCylinderShape extends BasicShape {
      * @param {number} radius - radius of the cylinder
      * @param {Isometry} isom - isometry used to locate the cylinder
      */
-    constructor(radius, isom=undefined){
+    constructor(isom, radius) {
         super();
         this.radius = radius;
-        this.isom = isom !== undefined ? isom : new Isometry();
+        this.isom = isom;
     }
 
     get isGlobal() {
@@ -44,7 +44,7 @@ export class VerticalCylinderShape extends BasicShape {
      * point on the center of the cylinder
      * @type {Point}
      */
-    get pos(){
+    get pos() {
         return new Point().applyIsometry(this.isom);
     }
 

@@ -26,20 +26,11 @@ export class ComplementShape extends AdvancedShape {
         return this.shape.isGlobal;
     }
 
-    get hasUVMap(){
+    get hasUVMap() {
         return this.shape.hasUVMap;
     }
 
-    /**
-     * Setter for isometry.
-     * Propagate the setup
-     * @param value
-     */
-    set isom(value){
-        this.shape.isom = value;
-    }
-
-    static glslClass(){
+    static glslClass() {
         return '';
     }
 
@@ -87,6 +78,6 @@ export class ComplementShape extends AdvancedShape {
  * @param {Shape} shape - the shape to invert
  * @return {ComplementShape} the complement of the given shape.
  */
-export function complement(shape){
+export function complement(shape) {
     return new ComplementShape(shape);
 }

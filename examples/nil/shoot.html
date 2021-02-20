@@ -43,7 +43,6 @@
     import {ShootControls} from "../../js/controls/ShootControls.js";
 
 
-
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
     heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
 
@@ -103,7 +102,7 @@
         lights: lights
     });
 
-    const cyl = new LocalVerticalCylinderShape(0.8, new Isometry());
+    const cyl = new LocalVerticalCylinderShape(new Isometry(), 0.8);
     const center = new LocalFakeBallShape(new Point(), 0.9);
     const unionShape = union(cyl, center)
     const latticeShape = complement(unionShape)
@@ -119,7 +118,7 @@
         bulletMat = new SingleColorMaterial(
             new Color().setHSL(Math.random(), 1, 0.5)
         );
-        bullet = new NewFakeBall(isom, 0.05, bulletMat);
+        bullet = new FakeBall(isom, 0.02, bulletMat);
         bullet.isRendered = false;
         bullets.push(bullet);
     }
@@ -159,7 +158,6 @@
 
     renderer.setAnimationLoop(animate);
     renderer.checkShader();
-
 
 
 </script>

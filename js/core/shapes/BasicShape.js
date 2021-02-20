@@ -15,10 +15,10 @@ export class BasicShape extends Shape {
 
     /**
      * Constructor.
-     * The constructor takes no argument.
+     * @param {Isometry} isom - the position of the shape
      */
-    constructor() {
-        super();
+    constructor(isom = undefined) {
+        super(isom);
     }
 
     /**

@@ -19,6 +19,10 @@ class Isometry {
         this.build(...arguments);
     }
 
+    get isIsometry() {
+        return true;
+    }
+
     /**
      * Fake constructor
      * If no argument is passed, return the identity.
@@ -116,7 +120,7 @@ class Isometry {
      * @param {Matrix4} m - an isometry of the tangent space
      * @return {Isometry} The current isometry
      */
-    diffExpMap(m){
+    diffExpMap(m) {
         throw new Error("This method need be overloaded.");
     }
 
