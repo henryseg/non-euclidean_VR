@@ -22,6 +22,25 @@ export class CylinderShape extends BasicShape {
         super(isom);
         this.addImport(direction);
         this.radius = radius;
+        this._vector = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        const pos = new Point().applyIsometry(this.absoluteIsom);
+        const dir = new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._vector = {pos: pos, dir: dir};
+    }
+
+    /**
+     * Return the vector (point + direction) orienting the geodesic
+     * Mainly used to pass data to the shader
+     */
+    get vector() {
+        if (this._vector === undefined) {
+            this.updateData();
+        }
+        return this._vector;
     }
 
     get isGlobal() {
@@ -34,22 +53,6 @@ export class CylinderShape extends BasicShape {
 
     get uniformType() {
         return 'CylinderShape';
-    }
-
-    /**
-     * A point the cylinder goes through
-     * @type {Point}
-     */
-    get point() {
-        return new Point().applyIsometry(this.absoluteIsom);
-    }
-
-    /**
-     * Return the vector at `point` directing the cylinder
-     * @tyoe {Vector4}
-     */
-    get dir() {
-        return new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     static glslClass() {

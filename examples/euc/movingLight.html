@@ -97,6 +97,7 @@
         lightPosition.copy(position).applyIsometry(isometry);
         lightPosition.applyIsometry(translation);
         lightBall.isom.makeTranslation(lightPosition);
+        lightBall.updateData();
         lightColor.setHSL(Math.cos(0.103 * speed * time), 1, 0.5);
     }
 

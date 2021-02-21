@@ -17,7 +17,7 @@
     import {Thurston} from "../../js/commons/Thurston.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
@@ -25,13 +25,10 @@
 
     import {HalfSpace, LocalBall} from "../../js/geometries/euc/solids/all.js";
     import {CheckerboardMaterial, phongWrap, SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
+    import {Isometry} from "../../js/core/geometry/Isometry.js";
 
-    torus.group.halfTranslationA = new Vector4(1, 0, 0, 0);
-    torus.group.halfTranslationB = new Vector4(0, 1, 0, 0);
-    torus.group.halfTranslationC = new Vector4(0, 1, 1, 0);
 
-    const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
     thurston.set.usesNearestNeighbors = false;
     thurston.set.usesCreeping = true;
 
@@ -57,8 +54,8 @@
     );
 
     const checkerboardMaterial = new CheckerboardMaterial(
-        new Vector2(1,0),
-        new Vector2(0,1),
+        new Vector2(2, 0),
+        new Vector2(0, 2),
         new Color(0, 0, 0),
         new Color(1, 1, 0)
     )
@@ -68,7 +65,7 @@
         {shininess: 5}
     )
 
-    const matrix = new Matrix4().makeRotationY(-1.5).setPosition(1,0,0);
+    const matrix = new Matrix4().makeRotationY(-1.5).setPosition(1, 0, 0);
     const isom = new Isometry()
     isom.matrix.copy(matrix);
     const halfspace = new HalfSpace(isom, mat);

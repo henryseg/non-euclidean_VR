@@ -38,11 +38,23 @@ export class LocalPotatoShape extends BasicShape {
         this.radius = radius;
         this.coeff1 = coeff1;
         this.coeff2 = coeff2;
-        this.exp = exp;
+        this.exp = exp;this._center = undefined;
     }
 
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
     get center() {
-        return new Point().applyIsometry(this.absoluteIsom);
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
     }
 
     get isGlobal() {

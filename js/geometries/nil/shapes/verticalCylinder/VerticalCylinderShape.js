@@ -26,6 +26,24 @@ export class VerticalCylinderShape extends BasicShape {
         super();
         this.radius = radius;
         this.isom = isom;
+        this._pos = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._pos = new Point().applyIsometry(this.absoluteIsom);
+        this._pos.coords.setZ(0);
+    }
+
+    /**
+     * point on the center of the cylinder
+     * @type {Point}
+     */
+    get pos() {
+        if (this._pos === undefined) {
+            this.updateData();
+        }
+        return this._pos;
     }
 
     get isGlobal() {
@@ -38,14 +56,6 @@ export class VerticalCylinderShape extends BasicShape {
 
     get uniformType() {
         return 'VerticalCylinderShape';
-    }
-
-    /**
-     * point on the center of the cylinder
-     * @type {Point}
-     */
-    get pos() {
-        return new Point().applyIsometry(this.absoluteIsom);
     }
 
     static glslClass() {

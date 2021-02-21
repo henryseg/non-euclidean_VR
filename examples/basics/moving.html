@@ -64,7 +64,9 @@
 
     function move(time) {
         const speed = 0.8;
-        ball.shape.center.set(Math.cos(speed * time), Math.sin(speed * time), -2);
+        const center = new Point(Math.cos(speed * time), Math.sin(speed * time), -2);
+        ball.shape.isom.makeTranslation(center);
+        ball.shape.updateData();
     }
 
     // rendering the scene

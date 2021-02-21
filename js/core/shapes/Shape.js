@@ -23,7 +23,7 @@ export class Shape extends Generic {
     constructor(isom = undefined) {
         super();
         /**
-         * Isometry defining the position of the shape
+         * Isometry defining the position of the shape (relative to any potential parent)
          * @type {Isometry}
          */
         this.isom = isom !== undefined ? isom : new Isometry();
@@ -32,6 +32,39 @@ export class Shape extends Generic {
          * @type {Shape}
          */
         this.parent = undefined;
+        /**
+         * Isometry defining the absolute position of the shape (taking into account the position of the parent)
+         * The actual value is computed the first time `absoluteIsom` is called.
+         * If the object is moving, the updates should be made by the developer.
+         * @type {Isometry}
+         */
+        this._absoluteIsom = undefined;
+    }
+
+    /**
+     * Recompute the absolute isometry from the current data
+     * The update is "descending", updating a shape will updates the children but not the parents.
+     * @todo include an ascending / bidirectional mode ?
+     * The descending update should be done individually in each advanced shape.
+     * @todo factorize the code at the level of AdvancedShape ? How to not have two copies of the children
+     * (one at the level of AdvancedShape, one at the level of UnionShape, for instance)?
+     */
+    updateAbsoluteIsom() {
+        if(this._absoluteIsom === undefined){
+            this._absoluteIsom = new Isometry();
+        }
+        this._absoluteIsom.copy(this.isom);
+        if(this.parent !== undefined){
+            this._absoluteIsom.premultiply(this.parent.absoluteIsom);
+        }
+    }
+
+    /**
+     * The shape may contains data which depends on the isometry (like the center of a ball)
+     * This method can be overlaoded to update all these data when needed
+     */
+    updateData() {
+        this.updateAbsoluteIsom();
     }
 
     /**
@@ -40,11 +73,10 @@ export class Shape extends Generic {
      * @type {Isometry}
      */
     get absoluteIsom() {
-        const res = this.isom.clone();
-        if (this.parent !== undefined) {
-            res.premultiply(this.parent.absoluteIsom);
+        if (this._absoluteIsom === undefined) {
+            this.updateAbsoluteIsom();
         }
-        return res;
+        return this._absoluteIsom;
     }
 
     /**

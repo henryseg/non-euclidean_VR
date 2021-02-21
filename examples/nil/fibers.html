@@ -78,7 +78,7 @@
     });
 
     const isom = new Isometry().makeTranslation(new Point(0, 0, 0));
-    const cyl = new LocalVerticalCylinder(0.2, isom, mat);
+    const cyl = new LocalVerticalCylinder(isom, 0.2, mat);
 
 
     thurston.add(cyl);

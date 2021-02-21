@@ -23,6 +23,16 @@ export class ComplementShape extends AdvancedShape {
         this.shape.parent = this;
     }
 
+    updateAbsoluteIsom() {
+        super.updateAbsoluteIsom();
+        this.shape.updateAbsoluteIsom();
+    }
+
+    updateData() {
+        super.updateData();
+        this.shape.updateData();
+    }
+
     get isGlobal() {
         return this.shape.isGlobal;
     }

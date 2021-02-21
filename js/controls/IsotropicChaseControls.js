@@ -11,7 +11,7 @@ import {bind} from "../utils.js";
  * Makes sure that an given solid in the geometry follows a VR controller (living in the tangent space).
  * The position of the underlying shape should be given by an isometry of the geometry
  */
-export class ChaseControls {
+export class IsotropicChaseControls {
 
     /**
      * Constructor
@@ -93,8 +93,8 @@ export class ChaseControls {
         const relativeControllerPosition = controllerPosition.clone().sub(cameraPosition);
         const relativeControllerMatrixWorld = this.controller.matrixWorld.clone().setPosition(relativeControllerPosition);
         const position = this.camera.position.clone().fakeDiffExpMap(relativeControllerMatrixWorld);
-        const isom = position.globalBoost.clone();
-        isom.matrix.multiply(position.facing); // this line only works for isotropic geometry
-        this.solid.shape.isom = isom;
+        this.solid.isom.copy(position.globalBoost);
+        this.solid.isom.matrix.multiply(position.facing);
+        this.solid.updateData();
     }
 }

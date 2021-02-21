@@ -33,7 +33,7 @@ export class HoroballShape extends BasicShape {
             const u = location.clone().normalize();
             const q = new Quaternion().setFromUnitVectors(new Vector3(0, 0, 1), u);
             isom.matrix.makeRotationFromQuaternion(q);
-        } else{
+        } else {
             throw new Error("HoroballShape: this type of location is not implemented");
         }
         super(isom);
@@ -45,6 +45,12 @@ export class HoroballShape extends BasicShape {
          * @type {number}
          */
         this.offset = offset;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Vector4(0, 0, 1, 1).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     /**
@@ -52,7 +58,10 @@ export class HoroballShape extends BasicShape {
      * @type{Vector4}
      */
     get center() {
-        return new Vector4(0, 0, 1, 1).applyMatrix4(this.absoluteIsom.matrix)
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
     }
 
     /**

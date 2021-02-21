@@ -31,6 +31,18 @@ export class UnionShape extends AdvancedShape {
         this.shape2.parent = this;
     }
 
+    updateAbsoluteIsom() {
+        super.updateAbsoluteIsom();
+        this.shape1.updateAbsoluteIsom();
+        this.shape2.updateAbsoluteIsom();
+    }
+
+    updateData() {
+        super.updateData();
+        this.shape1.updateData();
+        this.shape2.updateData();
+    }
+
     get isGlobal() {
         return this.shape1.isGlobal;
     }

@@ -36,6 +36,7 @@ export class LocalBallShape extends BasicShape {
         super(isom);
         this.addImport(distance);
         this.radius = radius;
+        this._center = undefined;
     }
 
     /**
@@ -46,12 +47,20 @@ export class LocalBallShape extends BasicShape {
         return true;
     }
 
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
     /**
      * Center of the ball
      * @type {Point}
      */
     get center() {
-        return new Point().applyIsometry(this.absoluteIsom);
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
     }
 
     /**

@@ -134,7 +134,7 @@ Some of them are inherited by default from the class {@link Shape} but can be ov
 - isom : Isometry (setter)
   
   Some parts of the code, may try to manipulate objects, regardless of the kind of shapes they have.
-  See for instance {@link ChaseControls}.
+  See for instance {@link IsotropicChaseControls}.
   To do so the shape class uses a property called `isom`.
   It has the following meaning : the shape is the image by `isom` of the shape in its default position.
   If the primary description of the shape location is not via an isometry, 

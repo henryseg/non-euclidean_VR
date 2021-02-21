@@ -31,6 +31,18 @@ export class HalfSpaceShape extends BasicShape {
      */
     constructor(isom) {
         super(isom);
+        this._pos = undefined;
+        this._normal = undefined;
+        this._uDir = undefined;
+        this._vDir = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._pos = new Point().applyIsometry(this.absoluteIsom);
+        this._normal = new Vector(0, 0, 1).applyMatrix4(this.absoluteIsom.matrix);
+        this._uDir = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._vDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     /**
@@ -38,9 +50,10 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Point}
      */
     get pos() {
-        const res = new Point().applyIsometry(this.absoluteIsom);
-        console.log(res.coords.toLog());
-        return res;
+        if (this._pos === undefined) {
+            this.updateData();
+        }
+        return this._pos;
     }
 
     /**
@@ -48,9 +61,10 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Vector}
      */
     get normal() {
-        const res = new Vector(0, 0, 1).applyMatrix4(this.absoluteIsom.matrix);
-        //console.log(res.toLog());
-        return res;
+        if (this._normal === undefined) {
+            this.updateData();
+        }
+        return this._normal;
     }
 
     /**
@@ -58,7 +72,10 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Vector}
      */
     get uDir() {
-        return new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
     }
 
     /**
@@ -66,7 +83,10 @@ export class HalfSpaceShape extends BasicShape {
      * @type {Vector}
      */
     get vDir() {
-        return new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        if (this._vDir === undefined) {
+            this.updateData();
+        }
+        return this._vDir;
     }
 
     get isGlobal() {

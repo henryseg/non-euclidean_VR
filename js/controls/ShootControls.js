@@ -84,7 +84,6 @@ export class ShootControls {
             time: this._clock.getElapsedTime(),
             position: position
         }
-        bullet.shape.isom = position.boost;
         bullet.isRendered = true;
         this._nextBullet = (this._nextBullet + 1) % this.solids.length;
     }
@@ -99,9 +98,8 @@ export class ShootControls {
         if (bullet.hasOwnProperty('bulletData')) {
             const delta = this._clock.getElapsedTime() - bullet.bulletData.time;
             const aux = bullet.bulletData.position.clone().flow(new Vector(0, 0, -this.speed * delta));
-            bullet.shape.isom = aux.boost;
-            //console.log('update', this._clock.getElapsedTime(), bullet.isom.matrix.toLog());
-            console.log('update', this._clock.getElapsedTime(), bullet.shape.center.coords.toLog());
+            bullet.isom.copy(aux.boost);
+            bullet.updateData();
         }
     }
 
@@ -140,6 +138,7 @@ export class ShootControls {
             const relativeControllerMatrixWorld = this.controller.matrixWorld.clone().setPosition(relativeControllerPosition);
             const position = this.camera.position.clone().fakeDiffExpMap(relativeControllerMatrixWorld);
             this.shoot(position.globalPosition);
+
             this._status = STATUS_REST;
         }
         this.updateAllBullets();

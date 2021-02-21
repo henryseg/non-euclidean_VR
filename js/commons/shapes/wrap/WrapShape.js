@@ -30,6 +30,18 @@ export class WrapShape extends AdvancedShape {
         this.wrap.parent = this;
     }
 
+    updateAbsoluteIsom() {
+        super.updateAbsoluteIsom();
+        this.shape.updateAbsoluteIsom();
+        this.wrap.updateAbsoluteIsom();
+    }
+
+    updateData() {
+        super.updateData();
+        this.shape.updateData();
+        this.wrap.updateData();
+    }
+
     get isWrapShape() {
         return true;
     }

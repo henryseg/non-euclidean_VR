@@ -44,6 +44,12 @@ export class LocalHoroballShape extends BasicShape {
          * @type {number}
          */
         this.offset = offset;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Vector4(0, 0, 1, 1).applyMatrix4(this.absoluteIsom.matrix);
     }
 
     /**
@@ -51,7 +57,10 @@ export class LocalHoroballShape extends BasicShape {
      * @type{Vector4}
      */
     get center() {
-        return new Vector4(0, 0, 1, 1).applyMatrix4(this.absoluteIsom.matrix)
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
     }
 
     /**

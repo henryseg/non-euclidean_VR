@@ -7,8 +7,7 @@ export default `//
 
 struct CylinderShape {
     int id;
-    Point point;
-    vec4 dir;
+    Vector vector;
     float radius;
 };
 
@@ -16,8 +15,8 @@ struct CylinderShape {
  * Distance function for a global hyperbolic ball
  */
 float sdf(CylinderShape cylinder, RelVector v) {
-    Point point = applyIsometry(v.invCellBoost, cylinder.point);
-    vec4 dir = toIsometry(v.invCellBoost).matrix * cylinder.dir;
+    Point point = applyIsometry(v.invCellBoost, cylinder.vector.pos);
+    vec4 dir = toIsometry(v.invCellBoost).matrix * cylinder.vector.dir;
     float aux0 = hypDot(v.local.pos.coords, point.coords);
     float aux1 = hypDot(v.local.pos.coords, dir);
     return acosh(sqrt(aux0 * aux0 - aux1 * aux1)) - cylinder.radius;
@@ -27,8 +26,8 @@ float sdf(CylinderShape cylinder, RelVector v) {
  * Gradient field for a global hyperbolic ball
  */
 RelVector gradient(CylinderShape cylinder, RelVector v){
-    Point point = applyIsometry(v.invCellBoost, cylinder.point);
-    vec4 dir = toIsometry(v.invCellBoost).matrix * cylinder.dir;
+    Point point = applyIsometry(v.invCellBoost, cylinder.vector.pos);
+    vec4 dir = toIsometry(v.invCellBoost).matrix * cylinder.vector.dir;
     float aux0 = hypDot(v.local.pos.coords, point.coords);
     float aux1 = hypDot(v.local.pos.coords, dir);
     float den = sqrt(aux0 * aux0 - aux1 * aux1);

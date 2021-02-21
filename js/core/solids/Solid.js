@@ -56,6 +56,10 @@ export class Solid extends Generic {
         return this.shape.isom;
     }
 
+    get absoluteIsom(){
+        return this.shape.absoluteIsom;
+    }
+
     get isGlobal() {
         return this.shape.isGlobal;
     }
@@ -66,6 +70,14 @@ export class Solid extends Generic {
 
     get uniformType() {
         return 'Solid';
+    }
+
+    /**
+     * Update the data of the underlying shape.
+     * It should also update the data of all itd children.
+     */
+    updateData() {
+        this.shape.updateData();
     }
 
     /**

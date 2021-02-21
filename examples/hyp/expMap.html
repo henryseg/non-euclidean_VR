@@ -30,7 +30,7 @@
 
     import {FlyControls} from "../../js/controls/FlyControls.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {ChaseControls} from "../../js/controls/ChaseControls.js";
+    import {IsotropicChaseControls} from "../../js/controls/IsotropicChaseControls.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
     import {CylinderShape} from "../../js/geometries/hyp/shapes/cylinder/CylinderShape.js";
     import {intersection} from "../../js/commons/shapes/all.js";
@@ -146,7 +146,7 @@
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
     }
-    const chaseControls = new ChaseControls(controller0, camera, beam);
+    const chaseControls = new IsotropicChaseControls(controller0, camera, beam);
 
 
     // rendering the scene

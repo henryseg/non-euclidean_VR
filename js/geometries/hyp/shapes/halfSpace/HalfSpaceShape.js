@@ -24,8 +24,28 @@ export class HalfSpaceShape extends BasicShape {
      * @param {Isometry} isom - the isometry defining the position and orientation of the half space
      */
     constructor(isom = undefined) {
-        super();
-        this.isom = isom !== undefined ? isom : new Isometry();
+        super(isom);
+        this._normal = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        const pos = new Point().applyIsometry(this.absoluteIsom);
+        const dir = new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._normal = {pos: pos, dir: dir};
+    }
+
+    /**
+     * Compute the normal vector to the half space,
+     * so that it can be passed to the shader.
+     * The normal vector consists of the underlying point and the direction.
+     * @type{{pos:Point, dir:Vector4}}
+     */
+    get normal() {
+        if (this._normal === undefined) {
+            this.updateData();
+        }
+        return this._normal;
     }
 
     get isHalfSpaceShape() {
@@ -42,18 +62,6 @@ export class HalfSpaceShape extends BasicShape {
 
     get uniformType() {
         return 'HalfSpaceShape';
-    }
-
-    /**
-     * Compute the normal vector to the half space,
-     * so that it can be passed to the shader.
-     * The normal vector consists of the underlying point and the direction.
-     * @type{{pos:Point, dir:Vector4}}
-     */
-    get normal() {
-        const pos = new Point().applyIsometry(this.absoluteIsom);
-        const dir = new Vector4(0,0,1,0).applyMatrix4(this.absoluteIsom.matrix);
-        return {pos: pos, dir: dir};
     }
 
     static glslClass() {
