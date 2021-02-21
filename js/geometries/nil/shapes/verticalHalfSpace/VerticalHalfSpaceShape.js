@@ -21,8 +21,6 @@ export class VerticalHalfSpaceShape extends BasicShape {
      * The half space is the image by the given isometry of the half space {x < 0}
      * The UV directions are the images of e_y, e_z
      * @param {Isometry} isom - the location of the half space
-     *
-     * @todo If the normal gets updated (for instance during an animation), then the UV directions will not follow.
      */
     constructor(isom) {
         super(isom);
