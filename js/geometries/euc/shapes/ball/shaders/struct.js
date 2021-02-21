@@ -16,7 +16,8 @@ struct BallShape {
  */
 float sdf(BallShape ball, RelVector v) {
     Point center = applyGroupElement(v.invCellBoost, ball.center);
-    return dist(v.local.pos, center) - ball.radius;
+    vec4 w = center.coords - v.local.pos.coords;
+    return length(w) - ball.radius;
 }
 
 /**
@@ -36,6 +37,6 @@ vec2 uvMap(BallShape ball, RelVector v){
     float cosPhi = dir.z;
     float uCoord = atan(dir.y, dir.x);
     float vCoord = atan(sinPhi, cosPhi);
-    return vec2(uCoord,vCoord);
+    return vec2(uCoord, vCoord);
 }
 `;

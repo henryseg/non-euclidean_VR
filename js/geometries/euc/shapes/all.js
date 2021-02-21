@@ -4,4 +4,5 @@ export {IntersectionShape, intersection} from "../../../commons/shapes/instersec
 
 export {BallShape} from "./ball/BallShape.js";
 export {LocalBallShape} from "./localBall/LocalBallShape.js";
+export {LocalDirectedBallShape} from "./localDirectedBall/LocalDirectedBallShape.js";
 export {HalfSpaceShape} from "./halfSpace/HalfSpaceShape.js";
