@@ -1,5 +1,5 @@
 import {mustache} from "../../../../lib/mustache.mjs";
-import {Quaternion, Vector3} from "../../../../lib/three.module.js";
+import {Quaternion, Vector3, Vector4} from "../../../../lib/three.module.js";
 
 import {Point, Vector} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
@@ -39,21 +39,11 @@ export class HalfSpaceShape extends BasicShape {
 
     updateData() {
         super.updateData();
-        this._pos = new Point().applyIsometry(this.absoluteIsom);
-        this._normal = new Vector(0, 0, 1).applyMatrix4(this.absoluteIsom.matrix);
+        const pos = new Point().applyIsometry(this.absoluteIsom);
+        const dir = new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._normal = {pos: pos, dir: dir};
         this._uDir = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
         this._vDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
-    }
-
-    /**
-     * A point on the boundary of the half space
-     * @type {Point}
-     */
-    get pos() {
-        if (this._pos === undefined) {
-            this.updateData();
-        }
-        return this._pos;
     }
 
     /**
