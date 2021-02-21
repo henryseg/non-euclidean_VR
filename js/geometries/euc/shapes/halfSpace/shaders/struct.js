@@ -11,14 +11,18 @@ struct HalfSpaceShape {
     vec3 vDir; /**< Direction of the v-coordinates */
 };
 
+// one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
 float sdf(HalfSpaceShape halfspace, RelVector v){
     Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);
-    float dot1 = dot(v.local.dir, normal.dir);
-    if (dot1 >= 0.){
-        return camera.maxDist;
+    float dotp = dot(v.local.pos.coords - normal.pos.coords, normal.dir);
+    if (abs(dotp) < camera.threshold){
+        return dotp;
     }
-    float dot2 = dot(v.local.pos.coords - normal.pos.coords, normal.dir);
-    return - dot2 / dot1;
+    float dotv = dot(v.local.dir, normal.dir);
+    if (dotv * dotp >= 0.){
+        return sign(dotp) * camera.maxDist;
+    }
+    return - abs(dotp) / dotv;
 }
 
 RelVector gradient(HalfSpaceShape halfspace, RelVector v){
