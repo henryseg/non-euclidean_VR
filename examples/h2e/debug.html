@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Three-torus</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Thurston} from "../../js/commons/Thurston.js";
+
+
+    const thurston = new Thurston(geom, group, {keyboard: 'fr', maxBounces: 1});
+
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>
