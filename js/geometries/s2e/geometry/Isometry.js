@@ -57,12 +57,12 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
 
         const dx = vec.x / len;
         const dy = vec.y / len;
-        const m = new THREE.Matrix4().set(
+        const m = new Matrix4().set(
             0, 0, dx, 0,
             0, 0, dy, 0,
             -dx, -dy, 0, 0,
             0, 0, 0, 0.0);
-        const m2 = new THREE.Matrix4().copy(m).multiply(m);
+        const m2 = m.clone().multiply(m);
         m.multiplyScalar(c1);
         m2.multiplyScalar(c2);
         this.matrix.add(m);
@@ -92,13 +92,13 @@ Isometry.prototype.makeTranslation = function (point) {
     const c2 = 1 - w;
     u.normalize();
 
-    const m = new THREE.Matrix4().set(
+    const m = new Matrix4().set(
         0, 0, u.x, 0,
         0, 0, u.y, 0,
         -u.x, -u.y, 0, 0,
         0, 0, 0, 0.0);
 
-    const m2 = new THREE.Matrix4().copy(m).multiply(m);
+    const m2 = new Matrix4().copy(m).multiply(m);
     m.multiplyScalar(c1);
     m2.multiplyScalar(c2);
     this.matrix.add(m);

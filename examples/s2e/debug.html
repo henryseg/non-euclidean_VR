@@ -16,14 +16,16 @@
 
     import * as geom from "../../js/geometries/s2e/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
-    
+    import lattice from "../../js/geometries/s2e/groups/lattice/set.js";
     import {ESun} from "../../js/geometries/s2e/lights/esun/ESun.js";
     import {Color} from "../../js/lib/three.module.js";
     import {PhongMaterial} from "../../js/commons/material/all.js";
     import {Point} from "../../js/core/geometry/Point.js";
     import {Ball} from "../../js/geometries/s2e/solids/Ball.js";
+    import {LocalBall} from "../../js/geometries/s2e/solids/LocalBall.js";
   
-    const thurston = new Thurston(geom, trivial, {keyboard: 'us', maxBounces: 1});
+    lattice.usesCreeping=true;
+    const thurston = new Thurston(geom, lattice, {keyboard: 'us', maxBounces: 1});
 
 
     const light=new ESun(new Color(1,1,0));
@@ -33,8 +35,8 @@
     });
     
     
-    const point = new Point(0,0,1,-1);
-    const ball=new Ball(point,0.2,mat);
+    const point = new Point(0,0,1,0);
+    const ball=new LocalBall(point,0.2,mat);
     
     thurston.add(ball, light);
     
