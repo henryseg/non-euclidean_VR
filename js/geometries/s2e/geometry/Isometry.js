@@ -1,5 +1,5 @@
 import {
-    Matrix4
+    Matrix4,Vector2
 } from "../../../lib/three.module.js";
 
 import {

@@ -51,7 +51,7 @@ Vector flow(Vector v, float t){
     u=normalize(u);
 
     vec3 coords = cos(lambda*t) * v.pos.coords.xyz+ sin(lambda*t) * u;
-    Point pos = Point(vec4(coords,p.coords.w+t*v.dir.w));
+    Point pos = Point(vec4(coords,v.pos.coords.w+t*v.dir.w));
                       
     vec3 dir = -sin(lambda*t) * v.pos.coords.xyz + cos(lambda*t) * v.dir.xyz;
     Vector res=Vector(pos,vec4(lambda*dir,v.dir.w));

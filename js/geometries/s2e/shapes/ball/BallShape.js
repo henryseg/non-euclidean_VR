@@ -1,5 +1,4 @@
 import {mustache} from "../../../../lib/mustache.mjs";
-
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Isometry, Point} from "../../geometry/General.js";
 
@@ -18,7 +17,7 @@ export class BallShape extends BasicShape{
      */
     constructor(location,radius){
         
-        const isom=neww Isometrty();
+        const isom=new Isometry();
         if(location.isIsometry){
             isom.copy(location);
         }
@@ -35,10 +34,19 @@ export class BallShape extends BasicShape{
         super(isom);
         this.addImport(distance);
         this.radius=radius;
+        this._center=undefined;
+    }
+    
+    updateData(){
+        super.updateData();
+        this._center= new Point().applyIsometry(this.absoluteIsom);
     }
     
     get center(){
-        return new Point().applyIsometry(this.isom);
+        if(this._center===undefined){
+            this.updateData();
+        }
+        return this._center;
     }
     
         /**

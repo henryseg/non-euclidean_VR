@@ -49,7 +49,7 @@ Isometry multiply(Isometry isom1, Isometry isom2) {
 Isometry geomInverse(Isometry isom) {
     mat4 inv=inverse(isom.matrix);
     float shift=-isom.matrix[3][3]*isom.shift;
-    Isometry res=Isometry(matrix,shift);
+    Isometry res=Isometry(inv,shift);
     return reduceError(res);
 }
 
@@ -92,7 +92,7 @@ Point applyIsometry(Isometry isom, Point p) {
 Isometry makeTranslation(Point p) {
     mat4 matrix = mat4(1.);
     float shift=p.coords.w;
-    vec3 u = p.coords.xy;
+    vec2 u = p.coords.xy;
     float c1 = length(u);
     if (c1 == 0.) {
         return Isometry(matrix,shift);
@@ -101,8 +101,8 @@ Isometry makeTranslation(Point p) {
     float c2 = 1. - p.coords.w;
     u = normalize(u);
     mat4 m = mat4(
-    0, 0, -u.x,0
-    0, 0, -u.y,0
+    0, 0, -u.x,0,
+    0, 0, -u.y,0,
     u.x, u.y, 0, 0,
     0,0,0,0
     );
