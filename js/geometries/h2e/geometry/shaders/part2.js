@@ -13,7 +13,6 @@ void frame(Point p, out Vector[3] f){
     float x = p.coords.x;
     float y = p.coords.y;
     float z = p.coords.z;
-    float w = p.coords.w;
 
     vec4 dir0 = vec4(z, 0, x, 0);
     vec4 dir1 = vec4(0, z, y, 0);

@@ -149,6 +149,7 @@ void main() {
     RelVector vector = mapping(spherePosition);
     ExtVector v = ExtVector(vector, 0., 0., false);
     vec3 color = getColor(v);
+//    vec3 color = abs(vector.local.dir.xyw);
     gl_FragColor = vec4(color, 1);
 
 

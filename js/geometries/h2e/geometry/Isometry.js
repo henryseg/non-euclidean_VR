@@ -1,6 +1,7 @@
-import {Matrix4, Vector2} from "../../../lib/three.module.js";
+import {Matrix4, Vector2, Vector4} from "../../../lib/three.module.js";
 
 import {Isometry} from "../../../core/geometry/Isometry.js";
+import * as Utils from "./Utils.js";
 
 Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
@@ -14,19 +15,41 @@ Isometry.prototype.identity = function () {
 }
 
 Isometry.prototype.reduceError = function () {
+    // Hyperbolic Gram-Schmidt
+    const col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.matrix);
+    const col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.matrix);
+    const col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.matrix);
+    const col3 = new Vector4(0, 0, 0, 1).applyMatrix4(this.matrix);
+
+    col0.hypNormalize();
+
+    const aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
+    col1.sub(aux10).hypNormalize();
+
+    const aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
+    const aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
+    col2.sub(aux20).sub(aux21).hypNormalize();
+
+    col3.normalize();
+    this.matrix.set(
+        col0.x, col1.x, col2.x, col3.x,
+        col0.y, col1.y, col2.y, col3.y,
+        col0.z, col1.z, col2.z, col3.z,
+        col0.w, col1.w, col2.w, col3.w
+    );
     return this;
 }
 
 Isometry.prototype.multiply = function (isom) {
-    this.matrix.multiply(isom.matrix);
     const coeff = this.matrix.elements[this.matrix.elements.length - 1];
+    this.matrix.multiply(isom.matrix);
     this.shift = this.shift + coeff * isom.shift;
     return this;
 }
 
 Isometry.prototype.premultiply = function (isom) {
-    this.matrix.premultiply(isom.matrix);
     const coeff = isom.matrix.elements[isom.matrix.elements.length - 1];
+    this.matrix.premultiply(isom.matrix);
     this.shift = isom.shift + coeff * this.shift;
     return this;
 }
@@ -73,27 +96,34 @@ Isometry.prototype.makeInvTranslation = function (point) {
 }
 
 Isometry.prototype.makeTranslationFromDir = function (vec) {
-    const len = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
-    const shift = vec.z;
+    const [x, y, z] = vec.toArray();
     this.matrix.identity();
-    if (len !== 0) {
-        const c1 = Math.sinh(len);
-        const c2 = Math.cosh(len) - 1;
-        const dx = vec.x / len;
-        const dy = vec.y / len;
+    this.shift = z;
+    const u = new Vector2(x, y);
+    const s = u.length();
 
-        const m = new Matrix4().set(
-            0, 0, dx, 0,
-            0, 0, dy, 0,
-            dx, dy, 0, 0,
-            0, 0, 0, 0.);
-        const m2 = m.clone().multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        this.matrix.add(m);
-        this.matrix.add(m2);
+    if (s === 0) {
+        return this;
     }
-    this.shift = shift;
+
+    const c1 = Math.sinh(s);
+    const c2 = Math.cosh(s) - 1;
+    u.normalize();
+
+    const m = new Matrix4().set(
+        0, 0, u.x, 0,
+        0, 0, u.y, 0,
+        u.x, u.y, 0, 0,
+        0, 0, 0, 0
+    );
+    const m2 = m.clone().multiply(m);
+
+    m.multiplyScalar(c1);
+    this.matrix.add(m);
+
+    m2.multiplyScalar(c2);
+    this.matrix.add(m2);
+
     return this;
 }
 
@@ -111,6 +141,7 @@ Isometry.prototype.clone = function () {
 Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);
     this.shift = isom.shift;
+    return this;
 }
 
 export {

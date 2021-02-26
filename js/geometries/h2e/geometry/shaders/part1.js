@@ -27,6 +27,25 @@ vec3 hypNormalize(vec3 v) {
     return v / hypLength(v);
 }
 
+// Same with vec4 (ignoring the last coordinates)
+
+float hypDot(vec4 v1, vec4 v2){
+    return hypDot(v1.xyz, v2.xyz);
+}
+
+float hypLengthSq(vec4 v) {
+    return abs(hypDot(v, v));
+}
+
+float hypLength(vec4 v) {
+    return sqrt(hypLengthSq(v));
+}
+
+vec4 hypNormalize(vec4 v) {
+    float len = hypLength(v);
+    return vec4(v.xyz / len, v.w);
+}
+
 /***********************************************************************************************************************
  *
  * @struct Isometry
@@ -50,7 +69,26 @@ const Isometry IDENTITY = Isometry(mat4(1.), 0.); /**< Identity isometry */
  * Indeed the hypDot takes squares and then compute a difference...
  */
 Isometry reduceError(Isometry isom){
-    return isom;
+    vec4 col0 = isom.matrix[0];
+    vec4 col1 = isom.matrix[1];
+    vec4 col2 = isom.matrix[2];
+    vec4 col3 = isom.matrix[3];
+
+    col0 = hypNormalize(col0);
+
+    col1 = col1 - hypDot(col0, col1) * col0;
+    col1 = hypNormalize(col1);
+
+    col2 = col2 - hypDot(col0, col2) * col0;
+    col2 = col2 - hypDot(col1, col2) * col1;
+    col2 = hypNormalize(col2);
+
+    col3 = normalize(col3);
+    mat4 matrix = mat4(col0, col1, col2, col3);
+    return Isometry(matrix, isom.shift);
+
+
+    //    return isom;
 }
 
 /**
@@ -102,7 +140,7 @@ Point reduceError(Point p){
 Point applyIsometry(Isometry isom, Point p) {
     vec4 coords = isom.matrix * p.coords;
     coords.w = coords.w + isom.shift;
-    Point res= Point(coords);
+    Point res = Point(coords);
     return reduceError(res);
 }
 
@@ -206,7 +244,7 @@ float geomDot(Vector v1, Vector v2) {
     0, 0, 0, 1
     );
 
-    return dot(v1.dir, g*v2.dir);
+    return dot(v1.dir, g * v2.dir);
 }
 
 
