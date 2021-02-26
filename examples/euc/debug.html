@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Three-torus</title>
+    <title>Dehn twist</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
@@ -12,29 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Matrix4, Vector2, Vector4} from "../../js/lib/three.module.js";
+    import {Clock, Color, Vector4} from "../../js/lib/three.module.js";
 
     import {Thurston} from "../../js/commons/Thurston.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import {default as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 
-    import {HalfSpace, LocalBall} from "../../js/geometries/euc/solids/all.js";
-    import {CheckerboardMaterial, phongWrap, SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
+    import {LocalBallShape, LocalDirectedBallShape} from "../../js/geometries/euc/shapes/all.js";
+    import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
+    import {LocalDirectedBall} from "../../js/geometries/euc/solids/LocalDirectedBall.js";
+    import {SingleColorMaterial} from "../../js/commons/material/all.js";
 
-    torus.group.halfTranslationA = new Vector4(1, 0, 0, 0);
-    torus.group.halfTranslationB = new Vector4(0, 1, 0, 0);
-    torus.group.halfTranslationC = new Vector4(0, 1, 1, 0);
-
+    torus.usesCreeping = true;
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
-    thurston.set.usesNearestNeighbors = false;
-    thurston.set.usesCreeping = true;
-
 
     // lights for the Phong material
 
@@ -56,27 +51,32 @@
         new Color(1, 0, 1)
     );
 
-    const checkerboardMaterial = new CheckerboardMaterial(
-        new Vector2(1,0),
-        new Vector2(0,1),
-        new Color(0, 0, 0),
-        new Color(1, 1, 0)
-    )
+    const mat0 = new SingleColorMaterial(new Color(1, 0.2, 0.2));
 
-    const mat = phongWrap(
-        checkerboardMaterial,
-        {shininess: 5}
-    )
 
-    const matrix = new Matrix4().makeRotationY(-1.5).setPosition(1,0,0);
-    const isom = new Isometry()
-    isom.matrix.copy(matrix);
-    const halfspace = new HalfSpace(isom, mat);
+    // Phong shading material
+    const mat1 = new PhongMaterial({
+        color: new Color(1, 0.2, 0.2),
+        shininess: 5
+    });
 
-    thurston.add(halfspace, light0, light1, light2);
+
+    // Complement of a local ball
+    const centerBall = new LocalDirectedBallShape(
+        new Point(0, 0, 0),
+        0.3,
+    );
+
+    // const latticeShape = complement(centerBall);
+    // const lattice = new Solid(latticeShape, mat0);
+    const lattice = new Solid(centerBall, mat1);
+
+    thurston.add(lattice, light0, light1, light2);
+
 
     thurston.run();
     thurston.renderer.checkShader();
+    // console.log(thurston.scene.fog);
 
 
 </script>

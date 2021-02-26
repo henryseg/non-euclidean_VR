@@ -116,6 +116,7 @@ ColorData getSolidColorData(inout ExtVector v, int objId) {
     vec3 color;
     bool isReflecting = false;
     vec3 reflectivity = vec3(0);
+    float travelledSoFar = v.travelledDist;
 
     switch(objId){
         {{#scene.solids}}
@@ -186,7 +187,7 @@ ColorData getSolidColorData(inout ExtVector v, int objId) {
     }
 
     {{#scene.fog}}
-        color = applyFog(color, v.travelledDist);
+        color = applyFog(color, travelledSoFar);
     {{/scene.fog}}
 
     return ColorData(color, isReflecting, reflectivity);

@@ -57,7 +57,7 @@ export class AbstractThurston {
          */
         this.camera = new cameraType({set: this.set});
 
-        const fog = new ExpFog(new Color(0, 0, 0), 0.05);
+        const fog = new ExpFog(new Color(0, 0, 0), 0.07);
         /**
          * The non-euclidean scene
          * @type {Scene}
