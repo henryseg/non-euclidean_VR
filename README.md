@@ -39,6 +39,7 @@ python -m http.server
 ```
 
 To run the VR examples you may need a more advance settings as an HTTPS protocol is required.
+(https://localhost:4443/)
 
 On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first). 
 
