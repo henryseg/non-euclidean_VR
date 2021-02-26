@@ -1,37 +1,26 @@
 import {mustache} from "../../../../lib/mustache.mjs";
 import {Color} from "../../../../lib/three.module.js";
+
 import {Light} from "../../../../core/lights/Light.js";
+
 import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";
-import lightIntensity from "../../imports/lightIntensity.js";
-
 
 /**
  * @class
  *
  * @classdesc
- * Point light
+ * Light at infinity in the positive E-direction
  */
-export class PointLight extends Light {
+export class ESun extends Light {
 
     /**
-     * Constructor
-     * @param {Point} position - the position of the light
+     * Constructor.
      * @param {Color} color - the color of the light
      */
-    constructor(position, color) {
+    constructor(color) {
         super(1);
-        /**
-         * The position of the light.
-         * @type {Point}
-         */
-        this.position = position;
-        /**
-         * The color or the light.
-         * @type {Color}
-         */
         this.color = color;
-        this.addImport(lightIntensity);
     }
 
     /**
@@ -43,7 +32,7 @@ export class PointLight extends Light {
     }
 
     get uniformType(){
-        return 'PointLight';
+        return 'ESun';
     }
 
     /**

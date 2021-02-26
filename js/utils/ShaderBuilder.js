@@ -3,6 +3,7 @@
  *
  * @classdesc
  * Tool to build shaders without redundancies in the imported chunks of code
+ *
  */
 export class ShaderBuilder {
     /**

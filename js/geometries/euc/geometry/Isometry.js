@@ -1,6 +1,6 @@
-import {Isometry} from "../../../core/geometry/Isometry.js";
 import {Matrix4} from "../../../lib/three.module.js";
 
+import {Isometry} from "../../../core/geometry/Isometry.js";
 
 Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
@@ -8,6 +8,7 @@ Isometry.prototype.build = function () {
 
 Isometry.prototype.identity = function () {
     this.matrix.identity();
+    return this;
 }
 
 Isometry.prototype.reduceError = function () {
