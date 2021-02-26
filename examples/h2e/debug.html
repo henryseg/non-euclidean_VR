@@ -14,9 +14,32 @@
 <script type="module" id="main">
     import {Thurston} from "../../js/commons/Thurston.js";
 
+    import * as geom from "../../js/geometries/h2e/geometry/General.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
+    import lattice from "../../js/geometries/h2e/groups/lattice/set.js";
+    import {ESun} from "../../js/geometries/h2e/lights/esun/ESun.js";
+    import {Color} from "../../js/lib/three.module.js";
+    import {NormalMaterial, PhongMaterial} from "../../js/commons/material/all.js";
+    import {Ball} from "../../js/geometries/h2e/solids/Ball.js";
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {LocalBall} from "../../js/geometries/h2e/solids/LocalBall.js";
 
-    const thurston = new Thurston(geom, group, {keyboard: 'fr', maxBounces: 1});
+    lattice.usesCreeping = true;
+    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
 
+    const light = new ESun(new Color(1, 1, 0));
+
+    // defining a material
+    const matNormal = new NormalMaterial();
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+    const point = new Point(0, 0, 1, 0);
+    const ball = new Ball(point, 0.2, matNormal);
+
+    thurston.add(ball, light);
 
     thurston.run();
     thurston.renderer.checkShader();

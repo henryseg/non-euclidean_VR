@@ -9,5 +9,6 @@ RelVector mapping(vec3 coords){
     dir = camera.matrix * dir;
     dir = normalize(dir);
     Vector v = createVector(ORIGIN, dir.xyz);
-    return applyPosition(camera.position, v);
+    RelVector res = applyPosition(camera.position, v);
+    return geomNormalize(res);
 }`;

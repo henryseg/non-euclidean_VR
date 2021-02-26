@@ -8,6 +8,7 @@ export default `//
  ***********************************************************************************************************************
  **********************************************************************************************************************/
 
+
 /**
  * Ray-marching.
  * @param[inout] v The initial vector for raymarching.
@@ -144,11 +145,11 @@ varying vec3 spherePosition;
  * - If we hit an object compute the corresponding color.
  */
 void main() {
-
-
+    
     RelVector vector = mapping(spherePosition);
     ExtVector v = ExtVector(vector, 0., 0., false);
     vec3 color = getColor(v);
+    //vec3 color = abs(normalize(vector.local.dir.xyw));
     gl_FragColor = vec4(color, 1);
 
 

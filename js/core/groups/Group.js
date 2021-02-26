@@ -30,6 +30,6 @@ export class Group {
      * @param {ShaderBuilder} shaderBuilder
      */
     shader(shaderBuilder) {
-        throw new Error('Group: this method should be implemented')
+        throw new Error('Group: this method should be implemented');
     }
 }
