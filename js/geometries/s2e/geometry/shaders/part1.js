@@ -24,7 +24,7 @@ struct Isometry{
 /**
  * Identity isometry
  */
-const Isometry IDENTITY = Isometry(mat4(1.),0.); /**< Identity isometry */
+const Isometry IDENTITY = Isometry(mat4(1.), 0.); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
@@ -49,7 +49,7 @@ Isometry multiply(Isometry isom1, Isometry isom2) {
 Isometry geomInverse(Isometry isom) {
     mat4 inv=inverse(isom.matrix);
     float shift=-isom.matrix[3][3]*isom.shift;
-    Isometry res=Isometry(inv,shift);
+    Isometry res=Isometry(inv, shift);
     return reduceError(res);
 }
 
@@ -64,14 +64,14 @@ struct Point{
 };
 
 
-const Point ORIGIN = Point(vec4(0, 0, 1,0)); /**< Origin of the geometry */
+const Point ORIGIN = Point(vec4(0, 0, 1, 0)); /**< Origin of the geometry */
 
 /**
  * Reduce the eventual numerical errors of the given point.
  */
 Point reduceError(Point p){
     vec3 aux=normalize(p.coords.xyz);
-    return Point(vec4(aux,p.coords.w));
+    return Point(vec4(aux, p.coords.w));
 }
 
 /**
@@ -95,19 +95,19 @@ Isometry makeTranslation(Point p) {
     vec2 u = p.coords.xy;
     float c1 = length(u);
     if (c1 == 0.) {
-        return Isometry(matrix,shift);
+        return Isometry(matrix, shift);
     }
 
     float c2 = 1. - p.coords.w;
     u = normalize(u);
     mat4 m = mat4(
-    0, 0, -u.x,0,
-    0, 0, -u.y,0,
+    0, 0, -u.x, 0,
+    0, 0, -u.y, 0,
     u.x, u.y, 0, 0,
-    0,0,0,0
+    0, 0, 0, 0
     );
     matrix = matrix + c1 * m + c2 * m * m;
-    return Isometry(matrix,shift);
+    return Isometry(matrix, shift);
 }
 
 /**
@@ -178,9 +178,7 @@ float geomDot(Vector v1, Vector v2) {
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-
     Point p = applyIsometry(isom, v.pos);
-    
     return Vector(p, isom.matrix * v.dir);
 }
 
@@ -191,7 +189,7 @@ Vector applyIsometry(Isometry isom, Vector v) {
  * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
-    vec4 aux=m*vec4(v.dir.xy,v.dir.w,0.);
-    return Vector(v.pos, m * vec4(aux.xy,0,aux.z));
+    vec4 aux = m * vec4(v.dir.xy, v.dir.w, 0.);
+    return Vector(v.pos, vec4(aux.xy, 0, aux.z));
 }
 `;
