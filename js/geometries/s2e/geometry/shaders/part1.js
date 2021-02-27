@@ -137,7 +137,7 @@ struct Vector{
  */
 Vector reduceError(Vector v){
     v.pos = reduceError(v.pos);
-    v.dir.xyz = v.dir.xyz + dot(v.pos.coords.xyz, v.dir.xyz) * v.pos.coords.xyz;
+    v.dir.xyz = v.dir.xyz - dot(v.pos.coords.xyz, v.dir.xyz) * v.pos.coords.xyz;
     return v;
 }
 
