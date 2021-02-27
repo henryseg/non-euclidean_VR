@@ -130,8 +130,8 @@ const Point ORIGIN = Point(vec4(0, 0, 1, 0)); /**< Origin of the geometry */
  * Reduce the eventual numerical errors of the given point.
  */
 Point reduceError(Point p){
-    vec3 aux = hypNormalize(p.coords.xyz);
-    return Point(vec4(aux, p.coords.w));
+    vec4 coords = hypNormalize(p.coords);
+    return Point(coords);
 }
 
 /**
@@ -202,9 +202,9 @@ struct Vector{
  * Reduce the eventual numerical errors of the given vector.
  */
 Vector reduceError(Vector v){
-    Point pos = reduceError(v.pos);
-    vec3 aux = v.dir.xyz + hypDot(pos.coords.xyz, v.dir.xyz) * pos.coords.xyz;
-    return Vector(pos, vec4(aux, v.dir.w));
+    v.pos = reduceError(v.pos);
+    v.dir.xyz = v.dir.xyz + hypDot(v.pos.coords.xyz, v.dir.xyz) * v.pos.coords.xyz;
+    return v;
 }
 
 /**
@@ -267,6 +267,8 @@ Vector applyIsometry(Isometry isom, Vector v) {
  */
 Vector applyFacing(mat4 m, Vector v) {
     vec4 aux = m * vec4(v.dir.xy, v.dir.w, 0.);
-    return Vector(v.pos, vec4(aux.xy, 0., aux.z));
+    Vector res = Vector(v.pos, vec4(aux.xy, 0., aux.z));
+    return res;
+    //    return reduceError(res);
 }
 `;

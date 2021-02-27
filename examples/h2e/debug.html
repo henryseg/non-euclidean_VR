@@ -25,9 +25,8 @@
     import {Isometry, Vector, Point} from "../../js/geometries/h2e/geometry/General.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
 
-    lattice.usesCreeping = true;
-    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
-
+    // lattice.usesCreeping = true;
+    const thurston = new Thurston(geom, lattice, {keyboard: 'fr', maxBounces: 1});
     const light = new ESun(new Color(1, 1, 0));
 
     // defining a material
@@ -38,29 +37,14 @@
     });
 
 
-    //0.757956212133535, 0, 1.2547898706603515, 1.8999999999999961
-    const point = new Point(-0.757956212133535, 0, 1.2547898706603515, -1.8999999999999961);
-    // const point = new Point();
+    const point = new Point(0, 0, 1, 0);
     const ball = new LocalBall(point, 0.2, mat);
 
     thurston.add(ball, light);
 
     const infoControls = new InfoControls();
-    const J = new Matrix4().set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, -1, 0,
-        0, 0, 0, 1
-    );
     infoControls.action = function () {
-        const m = thurston.camera.position.globalBoost.matrix;
-        const check = new Matrix4()
-            .multiply(m.transpose())
-            .multiply(J)
-            .multiply(m);
-        console.log('check', check.toLog());
-        console.log("point", thurston.camera.position.point.coords.toLog());
-        console.log("facing", thurston.camera.position.facing.toLog());
+
     }
 
     thurston.run();

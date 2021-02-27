@@ -18,11 +18,11 @@ void frame(Point p, out Vector[3] f){
     vec4 dir1 = vec4(0, z, y, 0);
     vec4 dir2 = vec4(0, 0, 0, 1);
 
-    float l0 = sqrt(abs(z*z-x*x));
-    float l1 = sqrt(abs(z*z-y*y));
+    dir0 = hypNormalize(dir0);
+    dir1 = hypNormalize(dir1);
 
-    f[0] = Vector(p, dir0/l0);
-    f[1] = Vector(p, dir1/l1);
+    f[0] = Vector(p, dir0);
+    f[1] = Vector(p, dir1);
     f[2] = Vector(p, dir2);
 }
 
@@ -53,15 +53,15 @@ Vector smallShift(Vector v, vec3 dp){
  */
 Vector flow(Vector v, float t){
     vec3 u = v.dir.xyz;
-    float lambda = length(u);
-    u = normalize(u);
+    float lambda = hypLength(u);
+    u = hypNormalize(u);
     vec3 coords = cosh(lambda * t) * v.pos.coords.xyz + sinh(lambda * t) * u;
     Point pos = Point(vec4(coords, v.pos.coords.w + t * v.dir.w));
 
     vec3 dir = sinh(lambda * t) * v.pos.coords.xyz + cosh(lambda * t) * u;
     Vector res = Vector(pos, vec4(lambda * dir, v.dir.w));
     res = reduceError(res);
-    res =  geomNormalize(res);
+    res = geomNormalize(res);
     return res;
 }
 
