@@ -37,8 +37,8 @@ Isometry reduceError(Isometry isom){
  * Multiply the two given isometries.
  */
 Isometry multiply(Isometry isom1, Isometry isom2) {
-    mat4 matrix=isom1.matrix*isom2.matrix;
-    float shift=isom1.shift+isom1.matrix[3][3]*isom2.shift;
+    mat4 matrix = isom1.matrix * isom2.matrix;
+    float shift = isom1.shift + isom1.matrix[3][3] * isom2.shift;
     Isometry res= Isometry(matrix, shift);
     return reduceError(res);
 }
@@ -47,8 +47,8 @@ Isometry multiply(Isometry isom1, Isometry isom2) {
  * Return the inverse of the given isometry.
  */
 Isometry geomInverse(Isometry isom) {
-    mat4 inv=inverse(isom.matrix);
-    float shift=-isom.matrix[3][3]*isom.shift;
+    mat4 inv = inverse(isom.matrix);
+    float shift = -isom.matrix[3][3] * isom.shift;
     Isometry res=Isometry(inv, shift);
     return reduceError(res);
 }
@@ -70,7 +70,7 @@ const Point ORIGIN = Point(vec4(0, 0, 1, 0)); /**< Origin of the geometry */
  * Reduce the eventual numerical errors of the given point.
  */
 Point reduceError(Point p){
-    vec3 aux=normalize(p.coords.xyz);
+    vec3 aux = normalize(p.coords.xyz);
     return Point(vec4(aux, p.coords.w));
 }
 
@@ -79,7 +79,7 @@ Point reduceError(Point p){
  */
 Point applyIsometry(Isometry isom, Point p) {
     vec4 coords = isom.matrix * p.coords;
-    coords.w+=isom.shift;
+    coords.w += isom.shift;
     Point res = Point(coords);
     return reduceError(res);
 }
@@ -98,7 +98,7 @@ Isometry makeTranslation(Point p) {
         return Isometry(matrix, shift);
     }
 
-    float c2 = 1. - p.coords.w;
+    float c2 = 1. - p.coords.z;
     u = normalize(u);
     mat4 m = mat4(
     0, 0, -u.x, 0,
