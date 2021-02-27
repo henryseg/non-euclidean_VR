@@ -24,10 +24,14 @@
     import {LocalBall} from "../../js/geometries/h2e/solids/LocalBall.js";
     import {Isometry, Vector, Point} from "../../js/geometries/h2e/geometry/General.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {LocalBallShape} from "../../js/geometries/h2e/shapes/localBall/LocalBallShape.js";
+    import {complement} from "../../js/commons/shapes/all.js";
+    import {Solid} from "../../js/core/solids/Solid.js";
 
     // lattice.usesCreeping = true;
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
-    const light = new ESun(new Color(1, 1, 0));
+    const lightUp = new ESun(new Color(1, 1, 0));
+    const lightDown = new ESun(new Color(0, 1, 1), -1);
 
     // defining a material
     const matNormal = new NormalMaterial();
@@ -38,9 +42,12 @@
 
 
     const point = new Point(0, 0, 1, 0);
-    const ball = new LocalBall(point, 0.2, mat);
+    const ballShape = new LocalBallShape(point, 1);
+    const latticeShape = complement(ballShape);
+    const lattice = new Solid(latticeShape, mat);
 
-    thurston.add(ball, light);
+
+    thurston.add(lattice, lightUp, lightDown);
 
     const infoControls = new InfoControls();
     infoControls.action = function () {
