@@ -16,7 +16,7 @@
 
     import * as geom from "../../js/geometries/h2e/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
-    import zLLop from "../../js/geometries/h2e/groups/zLoop/set.js";
+    import cuspedTorus from "../../js/geometries/h2e/groups/cuspedTorus/set.js";
     import {ESun} from "../../js/geometries/h2e/lights/esun/ESun.js";
     import {Color, Matrix4} from "../../js/lib/three.module.js";
     import {NormalMaterial, PhongMaterial} from "../../js/commons/material/all.js";
@@ -24,10 +24,14 @@
     import {LocalBall} from "../../js/geometries/h2e/solids/LocalBall.js";
     import {Isometry, Vector, Point} from "../../js/geometries/h2e/geometry/General.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {LocalBallShape} from "../../js/geometries/h2e/shapes/localBall/LocalBallShape.js";
+    import {complement} from "../../js/commons/shapes/all.js";
+    import {Solid} from "../../js/core/solids/Solid.js";
 
     // lattice.usesCreeping = true;
-    const thurston = new Thurston(geom, zLLop, {keyboard: 'fr', maxBounces: 1});
-    const light = new ESun(new Color(1, 1, 0));
+    const thurston = new Thurston(geom, cuspedTorus, {keyboard: 'fr', maxBounces: 1});
+    const lightUp = new ESun(new Color(1, 1, 0));
+    const lightDown = new ESun(new Color(0, 1, 1), -1);
 
     // defining a material
     const matNormal = new NormalMaterial();
@@ -38,9 +42,12 @@
 
 
     const point = new Point(0, 0, 1, 0);
-    const ball = new LocalBall(point, 0.2, mat);
+    const ballShape = new LocalBallShape(point, 1.1);
+    const latticeShape = complement(ballShape);
+    const lattice = new Solid(latticeShape, mat);
 
-    thurston.add(ball, light);
+
+    thurston.add(lattice, lightUp, lightDown);
 
     const infoControls = new InfoControls();
     infoControls.action = function () {

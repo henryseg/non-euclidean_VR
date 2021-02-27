@@ -6,6 +6,10 @@ import {Light} from "../../../../core/lights/Light.js";
 import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";
 
+
+const DIR_UP = 1;
+const DIR_DOWN = -1;
+
 /**
  * @class
  *
@@ -18,9 +22,10 @@ export class ESun extends Light {
      * Constructor.
      * @param {Color} color - the color of the light
      */
-    constructor(color) {
+    constructor(color, direction = DIR_UP) {
         super(1);
         this.color = color;
+        this.direction = direction;
     }
 
     /**
@@ -31,7 +36,7 @@ export class ESun extends Light {
         return true;
     }
 
-    get uniformType(){
+    get uniformType() {
         return 'ESun';
     }
 
