@@ -44,6 +44,7 @@ You can launch a local server with the command
 ```(zsh)
 python server.py
 ```
+
 The password needed is `thurston`.
 The server is serving at `https://localhost:4443`.
 
@@ -61,7 +62,7 @@ It contains scenes in the various geometries and demonstrates the features of th
 
 The examples tagged with *VR* are made for virtual reality. They should work with any VR headset supported by the three.js library.
 When loaded, those examples have a button *Enter VR* at the bottom on the screen.
-A click on it should launch the simulation in the VR headset (you may have to allow first your browser to interact with the VR set).
+Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
 
 ## Done or in progress (on this branch)
 <img src="https://render.githubusercontent.com/render/math?math=S^3">,
@@ -78,16 +79,20 @@ Released under the terms of the GNU [General Public License](https://www.gnu.org
 
 ## Main contributors
 
-(alphabetic order)
+(alphabetical order)
 
 - **Rémi Coulon** [@remi-coulon](https://github.com/remi-coulon)
 
   Rémi Coulon is partially supported by the the *Centre Henri Lebesgue* ANR-11-LABX-0020-01
   and the Agence Nationale de la Recherche under Grant *Dagger* ANR-16-CE40- 0006-01.
 - **Sabetta Matsumoto** [@sabetta](https://github.com/sabetta)
+
+  Sabetta Matsumoto is partially supported by NSF grant DMR-1847172 and the Research Corporation for Scientific Advancement.
+
 - **Henry Segerman** [@henryseg](https://github.com/henryseg)
 
   Henry Segerman is partially supported by NSF grant DMS-1708239.
-  Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+
 - **Steve Trettel** [@stevejtrettel](https://github.com/stevejtrettel)
 
+Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
