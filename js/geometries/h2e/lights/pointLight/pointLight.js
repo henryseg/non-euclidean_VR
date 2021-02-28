@@ -3,12 +3,14 @@ import {Color} from "../../../../lib/three.module.js";
 
 import {Light} from "../../../../core/lights/Light.js";
 
+import direction from "../../imports/direction.js";
+import distance from "../../imports/distance.js";
+import lightIntensity from "../../imports/lightIntensity.js";
+
 import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";
 
 
-const DIR_UP = 1;
-const DIR_DOWN = -1;
 
 /**
  * @class
@@ -16,19 +18,18 @@ const DIR_DOWN = -1;
  * @classdesc
  * Light at infinity in the positive E-direction
  */
-export class ESun extends Light {
+export class PointLight extends Light {
 
     /**
-     * Constructor.
+     * Constructor
      * @param {Color} color - the color of the light
-     * @param {number} direction - the direction of the light. It should be on of the following values:
-     * - -1 (light coming from the negative direction)
-     * - +1 (light coming from the positive direction)
+     * @param {Point} position - the position of the light
      */
-    constructor(color, direction = DIR_UP) {
+    constructor(color, position) {
         super(1);
         this.color = color;
-        this.direction = direction;
+        this.position = position;
+        this.addImport(distance, direction, lightIntensity);
     }
 
     /**
@@ -40,7 +41,7 @@ export class ESun extends Light {
     }
 
     get uniformType() {
-        return 'ESun';
+        return 'PointLight';
     }
 
     /**

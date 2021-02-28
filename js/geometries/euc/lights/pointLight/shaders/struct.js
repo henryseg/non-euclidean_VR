@@ -16,7 +16,7 @@ bool directions(PointLight light, RelVector v, int i, out RelVector dir, out flo
     if(i!=0){
         return false;
     }
-    Point position = applyIsometry(v.invCellBoost, light.position);
+    Point position = applyGroupElement(v.invCellBoost, light.position);
     vec4 aux = position.coords - v.local.pos.coords;
     intensity = lightIntensity(length(aux));
     aux = normalize(aux);
