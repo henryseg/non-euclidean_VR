@@ -64,7 +64,7 @@ When loaded, those examples have a button *Enter VR* at the bottom on the screen
 A click on it should launch the simulation in the VR headset (you may have to allow first your browser to interact with the VR set).
 
 ## Done or in progress (on this branch)
-S^3, E^3, H^3, Nil
+S^3, E^3, H^3, S2xE, H2xE, Nil
 
 ## License
 
