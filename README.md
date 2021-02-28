@@ -64,7 +64,12 @@ When loaded, those examples have a button *Enter VR* at the bottom on the screen
 A click on it should launch the simulation in the VR headset (you may have to allow first your browser to interact with the VR set).
 
 ## Done or in progress (on this branch)
-S^3, E^3, H^3, S2xE, H2xE, Nil
+<img src="https://render.githubusercontent.com/render/math?math=S^3">,
+<img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb E^3">,
+<img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb H^3">,
+<img src="https://render.githubusercontent.com/render/math?math=S^2 %5Ctimes %5Cmathbb E">,
+<img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb H^2 %5Ctimes %5Cmathbb E">,
+Nil
 
 ## License
 
