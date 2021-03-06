@@ -12,14 +12,14 @@ struct LocalBallShape {
 };
 
 /**
- * Distance function for a global ball
+ * Distance function for a local ball
  */
 float sdf(LocalBallShape ball, RelVector v) {
     return dist(v.local.pos, ball.center) - ball.radius;
 }
 
 /**
- * Gradient field for a global ball
+ * Gradient field for a local ball
  */
 RelVector gradient(LocalBallShape ball, RelVector v){
     Vector local = direction(v.local.pos, ball.center);

@@ -3,8 +3,12 @@ import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Isometry, Point} from "../../geometry/General.js";
 
 import distance from "../../imports/distance.js";
+import direction from "../../imports/direction.js";
+
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
+import gradient from "./shaders/gradient.js";
+
 
 export class LocalBallShape extends BasicShape{
     
@@ -32,7 +36,7 @@ export class LocalBallShape extends BasicShape{
         }
         
         super(isom);
-        this.addImport(distance);
+        this.addImport(distance, direction);
         this.radius=radius;
         this._center=undefined;
     }
@@ -80,6 +84,10 @@ export class LocalBallShape extends BasicShape{
 
     static glslClass() {
         return struct;
+    }
+
+    glslGradient() {
+        return mustache.render(gradient, this);
     }
 
     glslSDF() {
