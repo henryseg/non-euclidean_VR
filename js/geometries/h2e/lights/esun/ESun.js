@@ -6,7 +6,6 @@ import {Light} from "../../../../core/lights/Light.js";
 import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";
 
-
 const DIR_UP = 1;
 const DIR_DOWN = -1;
 
@@ -14,7 +13,7 @@ const DIR_DOWN = -1;
  * @class
  *
  * @classdesc
- * Light at infinity in the positive E-direction
+ * Light at infinity in the E-direction
  */
 export class ESun extends Light {
 

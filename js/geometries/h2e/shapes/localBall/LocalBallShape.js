@@ -7,6 +7,7 @@ import direction from "../../imports/direction.js";
 import distance from "../../imports/distance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
+import gradient from "./shaders/gradient.js";
 
 
 export class LocalBallShape extends BasicShape {
@@ -80,5 +81,9 @@ export class LocalBallShape extends BasicShape {
 
     glslSDF() {
         return mustache.render(sdf, this);
+    }
+
+    glslGradient() {
+        return mustache.render(gradient, this);
     }
 }
