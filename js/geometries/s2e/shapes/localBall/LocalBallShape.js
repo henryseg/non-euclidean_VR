@@ -10,59 +10,54 @@ import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 
 
-export class LocalBallShape extends BasicShape{
-    
-    
+export class LocalBallShape extends BasicShape {
+
 
     /**
      * Construction
      * @param {Isometry|Point|Vector} location - data for the center of the ball
      * @param {number} radius - the radius od the ball
      */
-    constructor(location,radius){
-        
-        const isom=new Isometry();
-        if(location.isIsometry){
+    constructor(location, radius) {
+
+        const isom = new Isometry();
+        if (location.isIsometry) {
             isom.copy(location);
-        }
-        else if(location.isPoint){
+        } else if (location.isPoint) {
             isom.makeTranslation(location);
-        }
-        else if(location.isVector){
+        } else if (location.isVector) {
             isom.makeTranslationFromDir(location);
-        }
-        else{
+        } else {
             throw new Error("BallShape: this type of location is not implemented");
         }
-        
+
         super(isom);
         this.addImport(distance, direction);
-        this.radius=radius;
-        this._center=undefined;
+        this.radius = radius;
+        this._center = undefined;
     }
-    
-    updateData(){
+
+    updateData() {
         super.updateData();
-        this._center= new Point().applyIsometry(this.absoluteIsom);
+        this._center = new Point().applyIsometry(this.absoluteIsom);
     }
-    
-    get center(){
-        if(this._center===undefined){
+
+    get center() {
+        if (this._center === undefined) {
             this.updateData();
         }
         return this._center;
     }
-    
-        /**
+
+    /**
      * Says that the object inherits from `Ball`
      * @type {boolean}
      */
     get isLocalBallShape() {
         return true;
     }
-    
-    
-    
+
+
     /**
      * Says whether the shape is global. True if global, false otherwise.
      * @type {boolean}
@@ -70,14 +65,13 @@ export class LocalBallShape extends BasicShape{
     get isGlobal() {
         return false;
     }
-    
-    
-    
+
+
     get hasUVMap() {
         return false;
     }
 
-    
+
     get uniformType() {
         return 'LocalBallShape';
     }
@@ -94,5 +88,5 @@ export class LocalBallShape extends BasicShape{
         return mustache.render(sdf, this);
     }
 
-    
+
 }
