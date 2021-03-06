@@ -28,7 +28,7 @@ export class LocalBallShape extends BasicShape{
         else if(location.isPoint){
             isom.makeTranslation(location);
         }
-        else if(location.isVecdtor){
+        else if(location.isVector){
             isom.makeTranslationFromDir(location);
         }
         else{
