@@ -35,7 +35,7 @@ Position.prototype.flowFromOrigin = function (v) {
         // it satisfies the formula dq/dt = (1/2) * omega * q
         // where omega = u_y i + u_x j is the angular velocity vector
         q_aux.set(u.y, u.x, 0, 0)
-            .multiply(this.facing)
+            .multiply(this.quaternion)
             .multiplyScalar(0.5 * EULER_STEP);
         this.quaternion.add(q_aux).normalize();
 

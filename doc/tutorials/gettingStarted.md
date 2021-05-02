@@ -39,7 +39,7 @@ quotient manifold/orbifold we are working in. In this tutorial we will only work
 just the trivial group. It is loaded as follows
 
 ```javascript
-import trivial from "./js/commons/groups/set.js";
+import trivial from "./js/commons/groups/symbSet.js";
 ```
 
 # Step 2. Defining a scene, a camera and a renderer.
@@ -167,7 +167,7 @@ The complete `index.html` file is
   import {Color} from "./js/lib/three.module.js";
   
   import * as geom from "./js/geometries/euc/geometry/General.js";
-  import trivial from "./js/commons/groups/set.js";
+  import trivial from "./js/commons/groups/symbSet.js";
 
   import {BasicCamera, BasicRenderer, Scene} from "./js/core/General.js";
 

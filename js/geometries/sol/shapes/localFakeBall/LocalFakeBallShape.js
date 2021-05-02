@@ -4,20 +4,18 @@ import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import fakeDistance from "../../imports/fakeDistance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
-
+import gradient from "./shaders/gradient.js";
 
 
 /**
  * @class
  *
  * @classdesc
- * Fake ball in Nil.
- * The distance under-estimator is only correct at large scale
+ * Fake ball in Sol.
  */
-export class FakeBallShape extends BasicShape {
+export class LocalFakeBallShape extends BasicShape {
 
 
     /**
@@ -35,8 +33,8 @@ export class FakeBallShape extends BasicShape {
             throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
-        this.addImport(fakeDistance);
-        this.radius = radius;this._center = undefined;
+        this.radius = radius;
+        this._center = undefined;
     }
 
     updateData() {
@@ -49,14 +47,14 @@ export class FakeBallShape extends BasicShape {
      * @type {Point}
      */
     get center() {
-        if(this._center === undefined) {
+        if (this._center === undefined) {
             this.updateData();
         }
         return this._center;
     }
 
     get isGlobal() {
-        return true;
+        return false;
     }
 
     get isFakeBallShape() {
@@ -64,7 +62,7 @@ export class FakeBallShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'FakeBallShape';
+        return 'LocalFakeBallShape';
     }
 
     static glslClass() {
@@ -73,5 +71,9 @@ export class FakeBallShape extends BasicShape {
 
     glslSDF() {
         return mustache.render(sdf, this);
+    }
+
+    glslGradient() {
+        return mustache.render(gradient, this);
     }
 }

@@ -9,7 +9,6 @@ import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 
 
-
 /**
  * @class
  *
@@ -33,8 +32,9 @@ export class FakeBallShape extends BasicShape {
         } else {
             throw new Error("FakeBallShape: the type of location is not implemented");
         }
-        super();
-        this.radius = radius;this._center = undefined;
+        super(isom);
+        this.radius = radius;
+        this._center = undefined;
     }
 
     updateData() {
@@ -47,7 +47,7 @@ export class FakeBallShape extends BasicShape {
      * @type {Point}
      */
     get center() {
-        if(this._center === undefined) {
+        if (this._center === undefined) {
             this.updateData();
         }
         return this._center;

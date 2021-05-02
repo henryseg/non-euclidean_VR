@@ -16,13 +16,16 @@
 
     import * as geom from "../../js/geometries/sol/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
+    import zLoop from "../../js/geometries/sol/groups/zLoop/set.js"
+    import mappingTorus from "../../js/geometries/sol/groups/mappingTorus/set.js"
     import {ZSun} from "../../js/geometries/sol/lights/zSun/ZSun.js";
     import {Color} from "../../js/lib/three.module.js";
     import {PhongMaterial} from "../../js/commons/material/all.js";
     import {Point} from "../../js/core/geometry/Point.js";
-    import {FakeBall} from "../../js/geometries/sol/solids/all.js";
+    import {FakeBall, LocalFakeBall} from "../../js/geometries/sol/solids/all.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
 
-    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new Thurston(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
 
 
     const lightUp = new ZSun(new Color(1, 1, 0), 1);
@@ -33,13 +36,19 @@
     });
 
 
-    const point = new Point(0, 0, -2, 1);
-    const ball = new FakeBall(point, 0.3, mat);
+    const point = new Point(0, 0, 0, 1);
+    const ball = new LocalFakeBall(point, 0.1, mat);
 
     thurston.add(ball, lightUp, lightDown);
 
+    function info(){
+        console.log("cellBoost", thurston.camera.position.cellBoost.coords.toLog());
+    }
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
     thurston.run();
-    thurston.renderer.checkShader();
+    //thurston.renderer.checkShader();
 </script>
 
 </html>

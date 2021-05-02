@@ -8,16 +8,6 @@ import {
 
 
 /**
- * Add a method to Three.js Quaternion.
- * Return a human-readable version of the vector (for debugging purpose)
- * @return {string}
- */
-Quaternion.prototype.toLog = function () {
-    return `[${this.x}, ${this.y}, ${this.z}, ${this.w}]`
-}
-
-
-/**
  * Add a method to Three.js Vector3.
  * Return a human-readable version of the vector (for debugging purpose)
  * @return {string}
@@ -55,6 +45,32 @@ Matrix3.prototype.toLog = function () {
     return res;
 }
 
+
+/**
+ * Return the given power of the current matrix
+ * @param {number} n - the exponent. It should be an integer (non necessarily positive)
+ * @return {Matrix3} - the power of the matrix
+ */
+Matrix3.prototype.power = function (n) {
+    if (n < 0) {
+        return this.invert().power(-n);
+    }
+    if (n === 0) {
+        return this.identity();
+    }
+    if (n === 1) {
+        return this;
+    }
+    if (n % 2 === 0) {
+        this.power(n / 2);
+        return this.multiply(this);
+    } else {
+        const aux = this.clone();
+        this.power(n - 1);
+        return this.multiply(aux);
+    }
+}
+
 /**
  * Add a method to Three.js Matrix4.
  * Return a human-readable version of the matrix (for debugging purpose)
@@ -88,17 +104,16 @@ Matrix4.prototype.add = function (matrix) {
     return this;
 };
 
+
 /**
- * Transform a method attached to an object into a function.
- * @param {Object} scope - the object on which the method is called
- * @param {function} fn - the method to call
- * @return {function(): *}
+ * Add a method to Three.js Quaternion.
+ * Return a human-readable version of the vector (for debugging purpose)
+ * @return {string}
  */
-export function bind(scope, fn) {
-    return function () {
-        return fn.apply(scope, arguments);
-    };
+Quaternion.prototype.toLog = function () {
+    return `[${this.x}, ${this.y}, ${this.z}, ${this.w}]`
 }
+
 
 /**
  * Multiply a quaternion by the given scalar
@@ -118,4 +133,16 @@ Quaternion.prototype.multiplyScalar = function (c) {
 Quaternion.prototype.add = function (q) {
     this.set(this.x + q.x, this.y + q.y, this.z + q.z, this.w + q.w);
     return this;
+}
+
+/**
+ * Transform a method attached to an object into a function.
+ * @param {Object} scope - the object on which the method is called
+ * @param {function} fn - the method to call
+ * @return {function(): *}
+ */
+export function bind(scope, fn) {
+    return function () {
+        return fn.apply(scope, arguments);
+    };
 }
