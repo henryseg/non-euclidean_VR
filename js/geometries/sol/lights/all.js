@@ -1,1 +1,2 @@
-export {ZSunLight} from "./zSun/ZSun.js";
+export {ZSun} from "./zSun/ZSun.js";
+export {ConstDirLight} from "./constDirLight/ConstDirLight.js";
