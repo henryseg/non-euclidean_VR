@@ -192,4 +192,7 @@ Vector applyFacing(mat4 m, Vector v) {
     vec4 aux = m * vec4(v.dir.xy, v.dir.w, 0.);
     return Vector(v.pos, vec4(aux.xy, 0, aux.z));
 }
+
+void initFlow(Vector v){
+}
 `;

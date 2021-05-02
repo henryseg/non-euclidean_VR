@@ -177,4 +177,7 @@ Vector applyIsometry(Isometry isom, Vector v) {
 Vector applyFacing(mat4 m, Vector v) {
     return Vector(v.pos, m * v.dir);
 }
+
+void initFlow(Vector v){
+}
 `;

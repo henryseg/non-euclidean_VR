@@ -2,7 +2,6 @@ import {Vector4} from "../../../lib/three.module.js";
 import {Point} from "../../../core/geometry/Point.js";
 
 
-
 Point.prototype.build = function () {
     if (arguments.length === 0) {
         this.coords = new Vector4(0, 0, 0, 1);

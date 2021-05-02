@@ -102,40 +102,4 @@ Vector flow(Vector v, float t){
     vec4 dir = vec4(rotationCt * v.dir.xy, v.dir.zw);
 
     return Vector(target, dir);
-}
-
-
-/**
- * Flow the vector v for a time t.
- * The vector v is assume to be a **unit** vector
- @todo implement numerical approximation when ct is very small
- */
-//Vector flow(Vector v, float t){
-//    // cylindrical coordinates of v
-//    float c = v.dir.z;
-//    float a = sqrt(1. - c * c);
-//    float alpha = 0.;
-//    if (a != 0.){
-//        alpha = atan(v.dir.y, v.dir.x);
-//    }
-//
-//    vec4 coords;
-//    if (c == 0.){
-//        coords = vec4(t * v.dir.x, t * v.dir.y, t * v.dir.z, 1);
-//    } else {
-//        coords = vec4(
-//        2. * (a / c) * sin(0.5 * c * t) * cos(0.5 * c * t + alpha),
-//        2. * (a / c) * sin(0.5 * c * t) * sin(0.5 * c * t + alpha),
-//        c * t + 0.5 * (a / c) * (a / c) * (c * t - sin(c * t)),
-//        1
-//        );
-//    }
-//
-//    Point targetFromOrigin = Point(coords);
-//    Isometry shift = makeTranslation(v.pos);
-//    Point target = applyIsometry(shift, targetFromOrigin);
-//
-//    vec4 dir = vec4(a * cos(c * t + alpha), a * sin(c * t + alpha), c, 0);
-//
-//    return Vector(target, dir);
-//}`;
+}`;

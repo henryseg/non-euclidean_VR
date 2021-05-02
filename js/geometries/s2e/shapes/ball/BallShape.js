@@ -12,7 +12,6 @@ import gradient from "./shaders/gradient.js";
 
 export class BallShape extends BasicShape {
 
-
     /**
      * Construction
      * @param {Isometry|Point|Vector} location - data for the center of the ball
@@ -86,6 +85,4 @@ export class BallShape extends BasicShape {
     glslGradient() {
         return mustache.render(gradient, this);
     }
-
-
 }

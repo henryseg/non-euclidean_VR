@@ -26,6 +26,7 @@ export default `//
  * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
 int raymarch(inout ExtVector v, out int objId){
+    initFlow(v.vector.local); // initialize some data before marching. Mostly used for Sol only
     ExtVector globalV0 = v;
     ExtVector globalV = globalV0;
     ExtVector localV0 = v;

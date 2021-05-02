@@ -99,3 +99,23 @@ export function bind(scope, fn) {
         return fn.apply(scope, arguments);
     };
 }
+
+/**
+ * Multiply a quaternion by the given scalar
+ * @param {number} c - a scalar
+ * @return {Quaternion} - the current quaternion
+ */
+Quaternion.prototype.multiplyScalar = function (c) {
+    this.set(c * this.x, c * this.y, c * this.z, c * this.w);
+    return this;
+}
+
+/**
+ * Add two quaternions
+ * @param {Quaternion} q - the quaternion to add
+ * @return {Quaternion} - the current quaternion
+ */
+Quaternion.prototype.add = function (q) {
+    this.set(this.x + q.x, this.y + q.y, this.z + q.z, this.w + q.w);
+    return this;
+}

@@ -271,4 +271,7 @@ Vector applyFacing(mat4 m, Vector v) {
     return res;
     //    return reduceError(res);
 }
+
+void initFlow(Vector v){
+}
 `;
