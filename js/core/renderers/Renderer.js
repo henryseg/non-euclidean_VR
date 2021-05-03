@@ -22,9 +22,11 @@ export class Renderer {
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
-     * @param {Object} params - parameters for the underlying Three.js renderer
+     * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
+     * @param {Object} thurstonParams - parameters for the Thurston part of the render. For the moment includes
+     * - {boolean} postprocess - Gamma and Tone correction
      */
-    constructor(geom, set, camera, scene, params = {}) {
+    constructor(geom, set, camera, scene, threeJSParams = {}, thurstonParams = {}) {
         /**
          * The underlying geometry.
          * @type{Object}
@@ -51,7 +53,16 @@ export class Renderer {
          * @type {WebGLRenderer}
          * @protected
          */
-        this.threeRenderer = new WebGLRenderer(params);
+        this.threeRenderer = new WebGLRenderer(threeJSParams);
+
+        /**
+         * Paramerters for the Thurston part of the render
+         * @type {Object}
+         */
+        this.thurstonParams = thurstonParams;
+        if (thurstonParams.postprocess === undefined) {
+            this.thurstonParams.postprocess = false;
+        }
         /**
          * The underlying Three.js scene
          * Not to be confused with the non-euclidean scene.

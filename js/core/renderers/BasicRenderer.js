@@ -28,10 +28,11 @@ export class BasicRenderer extends Renderer {
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
-     * @param {Object} params - parameters for the underlying Three.js renderer
+     * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
+     * @param {Object} thurstonParams - parameters for the Thurston part of the renderer
      */
-    constructor(geom, set, camera, scene, params = {}) {
-        super(geom, set, camera, scene, params);
+    constructor(geom, set, camera, scene, threeJSParams = {}, thurstonParams = {}) {
+        super(geom, set, camera, scene, threeJSParams, thurstonParams);
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -64,7 +65,7 @@ export class BasicRenderer extends Renderer {
         this._fragmentBuilder.addChunk(mustache.render(scenes, this));
 
         // ray-march and main
-        this._fragmentBuilder.addChunk(raymarch);
+        this._fragmentBuilder.addChunk(mustache.render(raymarch, {postprocess: this.thurstonParams.postprocess}));
     }
 
     /**

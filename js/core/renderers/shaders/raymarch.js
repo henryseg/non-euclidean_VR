@@ -1,4 +1,4 @@
-// language=GLSL
+// language=Mustache + GLSL
 export default `//
 /***********************************************************************************************************************
  ***********************************************************************************************************************
@@ -26,7 +26,7 @@ export default `//
  * - if we go in this directiion, maybe we should merge the local and global raymarching.
  */
 int raymarch(inout ExtVector v, out int objId){
-    initFlow(v.vector.local); // initialize some data before marching. Mostly used for Sol only
+    initFlow(v.vector.local);// initialize some data before marching. Mostly used for Sol only
     ExtVector globalV0 = v;
     ExtVector globalV = globalV0;
     ExtVector localV0 = v;
@@ -74,13 +74,13 @@ int raymarch(inout ExtVector v, out int objId){
     //global scene
     marchingStep = camera.minDist;
     for (int i=0; i < camera.maxSteps; i++){
-        
+
         if (globalV.travelledDist > localV.travelledDist || globalV.travelledDist > camera.maxDist){
             // we reached the maximal distance
             break;
         }
         dist = globalSceneSDF(globalV.vector, auxHit, auxId);
-       
+
         if (auxHit == HIT_DEBUG){
             hit = HIT_DEBUG;
             break;
@@ -131,11 +131,55 @@ vec3 getColor(ExtVector v){
     return color;
 }
 
+vec3 LessThan(vec3 f, float value)
+{
+    return vec3(
+    (f.x < value) ? 1.0f : 0.0f,
+    (f.y < value) ? 1.0f : 0.0f,
+    (f.z < value) ? 1.0f : 0.0f);
+}
+
+//GAMMA CORRECTION
+vec3 LinearToSRGB(vec3 rgb)
+{
+    rgb = clamp(rgb, 0.0f, 1.0f);
+
+    return mix(
+    pow(rgb, vec3(1.0f / 2.4f)) * 1.055f - 0.055f,
+    rgb * 12.92f,
+    LessThan(rgb, 0.0031308f)
+    );
+}
+//TONE MAPPING
+vec3 ACESFilm(vec3 x)
+{
+    float a = 2.51f;
+    float b = 0.03f;
+    float c = 2.43f;
+    float d = 0.59f;
+    float e = 0.14f;
+    return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0f, 1.0f);
+}
+
+vec3 postProcess(vec3 pixelColor){
+
+    //set the exposure 
+    float exposure = 0.8;
+    pixelColor *= exposure;
+
+    //correct tones
+    pixelColor = ACESFilm(pixelColor);
+    pixelColor = LinearToSRGB(pixelColor);
+
+    return pixelColor;
+}
+
 
 /**
  * Position on the sphere.
  */
 varying vec3 spherePosition;
+
 
 
 
@@ -147,10 +191,13 @@ varying vec3 spherePosition;
  * - If we hit an object compute the corresponding color.
  */
 void main() {
-    
+
     RelVector vector = mapping(spherePosition);
     ExtVector v = ExtVector(vector, 0., 0., false);
     vec3 color = getColor(v);
+    {{#postprocess}}
+        color = postProcess(color);
+    {{/postprocess}}
     gl_FragColor = vec4(color, 1);
 
 
