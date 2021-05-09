@@ -1,4 +1,4 @@
-// language=Mustache + GLSL
+// language=GLSL
 export default `//
 /***********************************************************************************************************************
  ***********************************************************************************************************************
@@ -75,12 +75,13 @@ int raymarch(inout ExtVector v, out int objId){
     marchingStep = camera.minDist;
     for (int i=0; i < camera.maxSteps; i++){
 
+
         if (globalV.travelledDist > localV.travelledDist || globalV.travelledDist > camera.maxDist){
             // we reached the maximal distance
             break;
         }
         dist = globalSceneSDF(globalV.vector, auxHit, auxId);
-
+        
         if (auxHit == HIT_DEBUG){
             hit = HIT_DEBUG;
             break;
@@ -172,34 +173,5 @@ vec3 postProcess(vec3 pixelColor){
     pixelColor = LinearToSRGB(pixelColor);
 
     return pixelColor;
-}
-
-
-/**
- * Position on the sphere.
- */
-varying vec3 spherePosition;
-
-
-
-
-/**
- * Main function. Wrap everything together:
- * - setup all the data
- * - Compute the direction where to start the ray-marching.
- * - Ray-march in this direction.
- * - If we hit an object compute the corresponding color.
- */
-void main() {
-
-    RelVector vector = mapping(spherePosition);
-    ExtVector v = ExtVector(vector, 0., 0., false);
-    vec3 color = getColor(v);
-    {{#postprocess}}
-        color = postProcess(color);
-    {{/postprocess}}
-    gl_FragColor = vec4(color, 1);
-
-
 }
 `;

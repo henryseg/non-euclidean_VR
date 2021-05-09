@@ -16,6 +16,7 @@ import commons2 from "../geometry/shaders/commons2.js";
 import raymarch from "./shaders/raymarch.js";
 import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
+import main from "./shaders/main.js";
 
 
 /**
@@ -91,6 +92,7 @@ export class VRRenderer extends Renderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
+            this._fragmentBuilder.addChunk(mustache.render(main, {postprocess: this.thurstonParams.postprocess}));
         }
     }
 

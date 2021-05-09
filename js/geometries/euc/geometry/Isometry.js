@@ -68,7 +68,7 @@ Isometry.prototype.equals = function (isom) {
 };
 
 Isometry.prototype.clone = function () {
-    let res = new Isometry();
+    const res = new Isometry();
     res.matrix.copy(this.matrix);
     return res;
 };

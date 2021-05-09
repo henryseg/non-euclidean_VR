@@ -9,12 +9,11 @@ import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 
 
-
 /**
  * @class
  *
  * @classdesc
- * Fake ball in Nil.
+ * Fake ball in SL(2,R).
  * The distance under-estimator is only correct at large scale
  */
 export class FakeBallShape extends BasicShape {

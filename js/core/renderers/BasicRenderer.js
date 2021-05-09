@@ -8,6 +8,7 @@ import constants from "./shaders/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
 import raymarch from "./shaders/raymarch.js";
+import main from "./shaders/main.js";
 import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
 
@@ -65,7 +66,8 @@ export class BasicRenderer extends Renderer {
         this._fragmentBuilder.addChunk(mustache.render(scenes, this));
 
         // ray-march and main
-        this._fragmentBuilder.addChunk(mustache.render(raymarch, {postprocess: this.thurstonParams.postprocess}));
+        this._fragmentBuilder.addChunk(raymarch);
+        this._fragmentBuilder.addChunk(mustache.render(main, {postprocess: this.thurstonParams.postprocess}));
     }
 
     /**
