@@ -16,14 +16,17 @@
 
     import * as geom from "../../js/geometries/sl2/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
+    import fiberLoop from "../../js/geometries/sl2/groups/fiberLoop/set.js";
+    import orbiTorus from "../../js/geometries/sl2/groups/orbiTorus/set.js";
     import {ConstDirLight} from "../../js/geometries/sl2/lights/all.js";
     import {Color, Vector3} from "../../js/lib/three.module.js";
     import {PhongMaterial} from "../../js/commons/material/all.js";
     import {Point, Vector} from "../../js/core/geometry/General.js";
-    import {FakeBall} from "../../js/geometries/sl2/solids/all.js";
+    import {FakeBall, LocalFakeBall} from "../../js/geometries/sl2/solids/all.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
 
-    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    orbiTorus.usesCreeping = false;
+    const thurston = new Thurston(geom, orbiTorus, {keyboard: 'fr', maxBounces: 1});
 
     const lightUp = new ConstDirLight(new Color(1, 1, 0), new Vector3(0, 0, 1));
     const lightDown = new ConstDirLight(new Color(1, 0, 1), new Vector3(0, 0, -1));
@@ -37,7 +40,7 @@
     // point.set(-1, 0, 0, 0);
     // point.fiber = -2 * Math.PI;
     const dir = new Vector(0,0,-8 * Math.PI);
-    const ball = new FakeBall(dir, 0.1, mat);
+    const ball = new LocalFakeBall(point, 0.1, mat);
 
     thurston.add(ball, lightUp, lightDown);
 

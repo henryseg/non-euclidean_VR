@@ -198,6 +198,21 @@ vec4 toVec4(Point p) {
 }
 
 
+
+/**
+ * change of model
+ * the output is a vector (x,y,1,w) representing a point p where
+ * - (x,y) is the projection of p in H^2 in the **Klein** model
+ * - w is the fiber coordinate
+ */
+vec4 toKlein(Point p){
+    // toVec4 already reduces the error, no need to do it again after
+    vec4 res = toVec4(p);
+    res.xyz = res.xyz / res.z;
+    return res;
+}
+
+
 /***********************************************************************************************************************
  *
  * @struct Isometry

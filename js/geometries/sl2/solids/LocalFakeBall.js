@@ -1,5 +1,5 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {FakeBallShape} from "../shapes/fakeBall/FakeBallShape.js";
+import {LocalFakeBallShape} from "../shapes/localfakeBall/LocalFakeBallShape.js";
 
 /**
  * @class
@@ -7,7 +7,7 @@ import {FakeBallShape} from "../shapes/fakeBall/FakeBallShape.js";
  * @classdesc
  * Fake ball in SL(2,R).
  */
-export class FakeBall extends Solid {
+export class LocalFakeBall extends Solid {
     /**
      * Constructor.
      * @param {Isometry|Point|Vector} location - the location of the ball
@@ -15,7 +15,7 @@ export class FakeBall extends Solid {
      * @param {Material} material - the material of the ball
      */
     constructor(location, radius, material) {
-        const shape = new FakeBallShape(location, radius);
+        const shape = new LocalFakeBallShape(location, radius);
         super(shape, material);
     }
 }

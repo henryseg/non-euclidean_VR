@@ -1,7 +1,7 @@
 // language=GLSL
 export default `//
 
-float _fakeDistanceToOrigin(Point p) {
+float _fakeDistanceFromOrigin(Point p) {
 //    return abs(p.fiber);
     
     vec4 aux = toVec4(p);
@@ -25,10 +25,8 @@ float _fakeDistanceToOrigin(Point p) {
 
 // fake distance between two points
 float fakeDistance(Point p1, Point p2){
-    
-    
     Isometry shift = makeInvTranslation(p1);
-    return _fakeDistanceToOrigin(applyIsometry(shift, p2));
+    return _fakeDistanceFromOrigin(applyIsometry(shift, p2));
 }
 
 // overload of the previous function in case we work with tangent vectors

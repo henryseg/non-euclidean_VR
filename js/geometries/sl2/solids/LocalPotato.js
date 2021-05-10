@@ -1,5 +1,5 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {FakeBallShape} from "../shapes/fakeBall/FakeBallShape.js";
+import {LocalPotatoShape} from "../shapes/localPotato/localPotatoShape.js";
 
 /**
  * @class
@@ -7,15 +7,16 @@ import {FakeBallShape} from "../shapes/fakeBall/FakeBallShape.js";
  * @classdesc
  * Fake ball in SL(2,R).
  */
-export class FakeBall extends Solid {
+export class LocalPotato extends Solid {
     /**
      * Constructor.
      * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
+     * @param {number} wRescale - rescaling coeff on the fiber coordinate
      * @param {Material} material - the material of the ball
      */
-    constructor(location, radius, material) {
-        const shape = new FakeBallShape(location, radius);
+    constructor(location, radius, wRescale, material) {
+        const shape = new LocalPotatoShape(location, radius, wRescale);
         super(shape, material);
     }
 }

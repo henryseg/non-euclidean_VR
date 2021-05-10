@@ -142,11 +142,10 @@ export class SL2 extends Vector4 {
 
     /**
      * Set the current element to the inverse of the given element.
-     * @param {SL2} elt - the isometry to inverse
      * @returns {SL2} - the current element
      */
-    invert(elt) {
-        this.set(elt.x, -elt.y, -elt.z, -elt.w);
+    invert() {
+        this.set(this.x, -this.y, -this.z, -this.w);
         return this;
     }
 

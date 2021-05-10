@@ -20,7 +20,6 @@ Point.prototype.set = function (x, y, z, w, fiber) {
     return this;
 }
 
-
 /**
  * For the explanation how the isometry acts, see the Jupyter notebook
  * @param {Isometry} isom - the isometry to apply
@@ -33,6 +32,34 @@ Point.prototype.applyIsometry = function (isom) {
     aux.translateFiberBy(-isom.fiber - dir * this.fiber);
     this.fiber = isom.fiber + dir * this.fiber + 2 * Math.atan2(aux.y, aux.x);
     return this;
+}
+
+/**
+ * Return the current point as an element (x,y,z,w) of H^2 x R, where
+ * - (x,y,z) are th coordinates of a point of H^2 with the hyperboloid model
+ * - w is the fiber component
+ * @returns {Vector4}
+ */
+Point.prototype.toVector4 = function () {
+    let aux = this.proj.toH2();
+    return new Vector4(aux.x, aux.y, aux.z, this.fiber);
+
+}
+
+/**
+ * Return the current point as an element (x,y,1,w) of H^2 x R, where
+ * - (x,y,1) are th coordinates of a point of H^2 with the Klein model
+ * - w is the fiber component
+ * @returns {Vector4}
+ */
+Point.prototype.toKlein = function () {
+    let aux = this.toVector4();
+    return new Vector4(
+        aux.x / aux.z,
+        aux.y / aux.z,
+        1,
+        aux.w
+    );
 }
 
 

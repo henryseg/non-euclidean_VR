@@ -4,7 +4,6 @@ import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import fakeDistance from "../../imports/fakeDistance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 
@@ -16,15 +15,16 @@ import sdf from "./shaders/sdf.js";
  * Local fake ball in SL(2,R).
  * The distance under-estimator is only correct at large scale
  */
-export class LocalFakeBallShape extends BasicShape {
+export class LocalPotatoShape extends BasicShape {
 
 
     /**
      * Constructor.
      * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
+     * @param {number} wRescale - rescaling coeff on the fiber coordinate
      */
-    constructor(location, radius) {
+    constructor(location, radius, wRescale) {
         const isom = new Isometry();
         if (location.isIsometry) {
             isom.copy(location);
@@ -36,8 +36,8 @@ export class LocalFakeBallShape extends BasicShape {
             throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
-        this.addImport(fakeDistance);
         this.radius = radius;
+        this.wRescale = wRescale;
         this._center = undefined;
     }
 
@@ -61,12 +61,12 @@ export class LocalFakeBallShape extends BasicShape {
         return false;
     }
 
-    get isLocalFakeBallShape() {
+    get isLocalPotatoShape() {
         return true;
     }
 
     get uniformType() {
-        return 'LocalFakeBallShape';
+        return 'LocalPotatoShape';
     }
 
     static glslClass() {

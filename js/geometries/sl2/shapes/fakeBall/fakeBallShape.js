@@ -21,7 +21,7 @@ export class FakeBallShape extends BasicShape {
 
     /**
      * Constructor.
-     * @param {Isometry|Point} location - the location of the ball
+     * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
      */
     constructor(location, radius) {
@@ -30,6 +30,8 @@ export class FakeBallShape extends BasicShape {
             isom.copy(location);
         } else if (location.isPoint) {
             isom.makeTranslation(location);
+        } else if (location.isVector) {
+            isom.makeTranslationFromDir(location)
         } else {
             throw new Error("FakeBallShape: the type of location is not implemented");
         }
@@ -49,7 +51,7 @@ export class FakeBallShape extends BasicShape {
      * @type {Point}
      */
     get center() {
-        if(this._center === undefined) {
+        if (this._center === undefined) {
             this.updateData();
         }
         return this._center;
