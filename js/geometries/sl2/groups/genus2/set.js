@@ -18,7 +18,6 @@ const nd1 = new Vector4(0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
 const nd2 = new Vector4(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
 
 
-
 function testSideHP(p) {
     const klein = p.toKlein();
     return klein.dot(nh) > threshold;
@@ -190,28 +189,14 @@ shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
 shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
 
 
-const teleportSideHP = new Teleportation(testSideHP, glslTestSideHP, shiftA1Inv, shiftA1);
-const teleportSideHN = new Teleportation(testSideHN, glslTestSideHN, shiftA2Inv, shiftA2);
-const teleportSideVP = new Teleportation(testSideVP, glslTestSideVP, shiftA1, shiftA1Inv);
-const teleportSideVN = new Teleportation(testSideVN, glslTestSideVN, shiftA2, shiftA2Inv);
-const teleportSideD1P = new Teleportation(testSideD1P, glslTestSideD1P, shiftB1Inv, shiftB1);
-const teleportSideD1N = new Teleportation(testSideD1N, glslTestSideD1N, shiftB2Inv, shiftB2);
-const teleportSideD2P = new Teleportation(testSideD2P, glslTestSideD2P, shiftB1, shiftB1Inv);
-const teleportSideD2N = new Teleportation(testSideD2N, glslTestSideD2N, shiftB2, shiftB2Inv);
-const teleportWp = new Teleportation(testWp, glslTestWp, shiftWp, shiftWn);
-const teleportWn = new Teleportation(testWn, glslTestWn, shiftWn, shiftWp);
-
-const teleportations = [
-    teleportSideHP,
-    teleportSideHN,
-    teleportSideVP,
-    teleportSideVN,
-    teleportSideD1P,
-    teleportSideD1N,
-    teleportSideD2P,
-    teleportSideD2N,
-    teleportWp,
-    teleportWn
-];
-
-export default new TeleportationSet(teleportations);
+export default new TeleportationSet()
+    .add(testSideHP, glslTestSideHP, shiftA1Inv, shiftA1)
+    .add(testSideHN, glslTestSideHN, shiftA2Inv, shiftA2)
+    .add(testSideVP, glslTestSideVP, shiftA1, shiftA1Inv)
+    .add(testSideVN, glslTestSideVN, shiftA2, shiftA2Inv)
+    .add(testSideD1P, glslTestSideD1P, shiftB1Inv, shiftB1)
+    .add(testSideD1N, glslTestSideD1N, shiftB2Inv, shiftB2)
+    .add(testSideD2P, glslTestSideD2P, shiftB1, shiftB1Inv)
+    .add(testSideD2N, glslTestSideD2N, shiftB2, shiftB2Inv)
+    .add(testWp, glslTestWp, shiftWp, shiftWn)
+    .add(testWn, glslTestWn, shiftWn, shiftWp);

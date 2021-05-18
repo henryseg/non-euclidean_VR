@@ -152,22 +152,6 @@ const shiftZp = group.element(0, 0, -1);
 const shiftZn = group.element(0, 0, 1);
 
 
-const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp);
-const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn);
-const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp);
-const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn);
-const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp);
-const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
-
-const teleportations = [
-    teleportXp,
-    teleportXn,
-    teleportYp,
-    teleportYn,
-    teleportZp,
-    teleportZn
-];
-
 const neighborsLite = [
     {elt: shiftXp, inv: shiftXn},
     {elt: shiftXn, inv: shiftXp},
@@ -201,5 +185,20 @@ const neighborsFull = [
     {elt: shiftYn.clone().multiply(shiftZn), inv: shiftZp.clone().multiply(shiftYp)},
 ];
 
-export default new TeleportationSet(teleportations, neighborsLite);
-export const fullTorus = new TeleportationSet(teleportations, neighborsFull);
+const torus = new TeleportationSet(neighborsLite)
+    .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
+    .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
+    .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
+    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+    .add(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp)
+    .add(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
+const fullTorus = new TeleportationSet(neighborsFull)
+    .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
+    .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
+    .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
+    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+    .add(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp)
+    .add(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
+
+export default torus;
+export {fullTorus};

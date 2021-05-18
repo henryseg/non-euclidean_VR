@@ -46,12 +46,6 @@ shiftZn.isom.matrix.set(
 )
 
 
-const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
-const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
-
-const teleportations = [
-    teleportZp,
-    teleportZn
-];
-
-export default new TeleportationSet(teleportations);
+export default new TeleportationSet()
+    .add(testZp, glslTestZp, shiftZp, shiftZn)
+    .add(testZn, glslTestZn, shiftZn, shiftZp);

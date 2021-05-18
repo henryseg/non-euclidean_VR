@@ -33,12 +33,7 @@ const shiftWn = group.element();
 shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2));
 shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
 
-const teleportWp = new Teleportation(testWp, glslTestWp, shiftWp, shiftWn);
-const teleportWn = new Teleportation(testWn, glslTestWn, shiftWn, shiftWp);
 
-const teleportations = [
-    teleportWp,
-    teleportWn
-];
-
-export default new TeleportationSet(teleportations);
+export default new TeleportationSet()
+    .add(testWp, glslTestWp, shiftWp, shiftWn)
+    .add(testWn, glslTestWn, shiftWn, shiftWp)

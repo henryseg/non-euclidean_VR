@@ -208,23 +208,6 @@ shiftZn.isom.matrix.set(
     0, 0, sqrt3, 2
 )
 
-
-const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp);
-const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn);
-const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp);
-const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn);
-const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp);
-const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
-
-const teleportations = [
-    teleportXp,
-    teleportXn,
-    teleportYp,
-    teleportYn,
-    teleportZp,
-    teleportZn
-];
-
 const neighbors = [
     {elt: shiftXp, inv: shiftXn},
     {elt: shiftXn, inv: shiftXp},
@@ -234,4 +217,15 @@ const neighbors = [
     {elt: shiftZn, inv: shiftZp}
 ];
 
-export default new TeleportationSet(teleportations, neighbors);
+export default new TeleportationSet(neighbors)
+    .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
+    .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
+    .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
+    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+    .add(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp)
+    .add(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
+
+
+
+
+

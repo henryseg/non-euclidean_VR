@@ -114,20 +114,11 @@ shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
 shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
 
 
-const teleportSide1P = new Teleportation(testSide1P, glslTestSide1P, sinftAInv, shiftA);
-const teleportSide1N = new Teleportation(testSide1N, glslTestSide1N, shiftBInv, shiftB);
-const teleportSide2P = new Teleportation(testSide2P, glslTestSide2P, shiftA, sinftAInv);
-const teleportSide2N = new Teleportation(testSide2N, glslTestSide2N, shiftB, shiftBInv);
-const teleportWp = new Teleportation(testWp, glslTestWp, shiftWp, shiftWn);
-const teleportWn = new Teleportation(testWn, glslTestWn, shiftWn, shiftWp);
+export default new TeleportationSet()
+    .add(testSide1P, glslTestSide1P, sinftAInv, shiftA)
+    .add(testSide1N, glslTestSide1N, shiftBInv, shiftB)
+    .add(testSide2P, glslTestSide2P, shiftA, sinftAInv)
+    .add(testSide2N, glslTestSide2N, shiftB, shiftBInv)
+    .add(testWp, glslTestWp, shiftWp, shiftWn)
+    .add(testWn, glslTestWn, shiftWn, shiftWp);
 
-const teleportations = [
-    teleportSide1P,
-    teleportSide1N,
-    teleportSide2P,
-    teleportSide2N,
-    teleportWp,
-    teleportWn
-];
-
-export default new TeleportationSet(teleportations);
