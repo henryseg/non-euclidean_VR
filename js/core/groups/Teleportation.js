@@ -1,6 +1,7 @@
 import {MathUtils} from "../../lib/three.module.js";
 import {mustache} from "../../lib/mustache.mjs";
 import creeping from "./shaders/creeping.js";
+import {CREEPING_OFF, CREEPING_STRICT, CREEPING_FULL} from "./TeleportationSet.js";
 
 const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
 const regexpCreep = /ExtVector\s*(\w+)\(ExtVector.*\)/m;
@@ -16,6 +17,8 @@ export class Teleportation {
 
     /**
      * Constructor
+     * Use instead the `add` method of the class `TeleportationSet`
+     * @param {TeleportationSet} set - The set the teleportation belongs to
      * @param {Function} jsTest - A JS test saying if a teleportation is needed.
      * The test is a function with the signature Point -> boolean.
      * @param {string} glslTest - a chunk of GLSL performing the same test.
@@ -25,7 +28,12 @@ export class Teleportation {
      * If the inverse is not passed as an argument, it is computed automatically.
      * @param {string} glslCreep -  a chunk of GLSL to move to the boundary defined by the test
      */
-    constructor(jsTest, glslTest, elt, inv = undefined, glslCreep = undefined) {
+    constructor(set, jsTest, glslTest, elt, inv = undefined, glslCreep = undefined) {
+        /**
+         * The set the teleportation belongs to.
+         * @type {TeleportationSet}
+         */
+        this.set = set;
         let aux;
         /**
          * Universal unique ID.
@@ -121,13 +129,32 @@ export class Teleportation {
     }
 
     /**
+     * Return true if the following conditions are satisfies
+     * - the teleportation set uses creeping (strict or full)
+     * - the a custom creeping function exists
+     * @type {boolean}
+     */
+    get usesCreepingCustom() {
+        return this.set.usesCreeping && this.glslCreepCustom;
+    }
+
+    /**
+     * Return true if the following conditions are satisfies
+     * - the teleportation set uses full creeping
+     * - no custom creeping function exists
+     * @type {boolean}
+     */
+    get usesCreepingBinary() {
+        return this.set.creepingType === CREEPING_FULL && !this.glslCreepCustom;
+    }
+
+    /**
      * Build the GLSL code performing the associated test.
      * @param {ShaderBuilder} shaderBuilder
-     * @param {boolean} usesCreeping
      */
-    shader(shaderBuilder,  usesCreeping) {
+    shader(shaderBuilder) {
         shaderBuilder.addChunk(this.glslTest);
-        if (usesCreeping) {
+        if (this.set.usesCreeping) {
             shaderBuilder.addChunk(this.glslCreep);
         }
         //shaderBuilder.addChunk("//pre elt");

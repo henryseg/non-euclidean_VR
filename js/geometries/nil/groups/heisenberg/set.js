@@ -135,24 +135,18 @@ console.log("Yp", shiftYp.toIsometry().matrix.toLog());
 console.log("Zp", shiftZp.toIsometry().matrix.toLog());
 
 
-const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
-const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
-const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn);
-const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
-const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
-const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
-
-const teleportations = [
-    teleportXp,
-    teleportXn,
-    teleportYp,
-    teleportYn,
-    teleportZp,
-    teleportZn
-];
-
 /**
  * Subgroup corresponding to the integer Heisenberg group
  */
-export default new TeleportationSet(teleportations);
+export default new TeleportationSet()
+    .add(testXp, glslTestXp, shiftXp, shiftXn)
+    .add(testXn, glslTestXn, shiftXn, shiftXp)
+    .add(testYp, glslTestYp, shiftYp, shiftYn)
+    .add(testYn, glslTestYn, shiftYn, shiftYp)
+    .add(testZp, glslTestZp, shiftZp, shiftZn)
+    .add(testZn, glslTestZn, shiftZn, shiftZp);
+
+
+
+
 

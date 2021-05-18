@@ -25,11 +25,11 @@
 
     import {LocalBall} from "../../js/geometries/euc/solids/all.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {CREEPING_FULL, CREEPING_OFF, CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
 
 
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
-    thurston.set.usesCreeping = true;
-
+    torus.creepingType = CREEPING_STRICT;
 
     // lights for the Phong material
 

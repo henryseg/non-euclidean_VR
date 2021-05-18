@@ -92,7 +92,7 @@ export class VRRenderer extends Renderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
-            this._fragmentBuilder.addChunk(mustache.render(main, {postprocess: this.thurstonParams.postprocess}));
+            this._fragmentBuilder[side].addChunk(mustache.render(main, {postprocess: this.thurstonParams.postprocess}));
         }
     }
 

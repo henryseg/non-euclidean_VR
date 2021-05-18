@@ -108,16 +108,12 @@ shiftYn.isom.matrix.set(
     0, 0, 0, 1
 );
 
-const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
-const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
-const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn);
-const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
+export default new TeleportationSet()
+    .add(testXp, glslTestXp, shiftXp, shiftXn)
+    .add(testXn, glslTestXn, shiftXn, shiftXp)
+    .add(testYp, glslTestYp, shiftYp, shiftYn)
+    .add(testYn, glslTestYn, shiftYn, shiftYp);
 
-const teleportations = [
-    teleportXp,
-    teleportXn,
-    teleportYp,
-    teleportYn
-];
 
-export default new TeleportationSet(teleportations);
+
+
