@@ -56,7 +56,7 @@ export class Renderer {
         this.threeRenderer = new WebGLRenderer(threeJSParams);
 
         /**
-         * Paramerters for the Thurston part of the render
+         * Parameters for the Thurston part of the render
          * @type {Object}
          */
         this.thurstonParams = thurstonParams;
