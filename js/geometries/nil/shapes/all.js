@@ -8,3 +8,4 @@ export {LocalPotatoShape} from "./localPotato/LocalPotatoShape.js";
 export {VerticalHalfSpaceShape} from "./verticalHalfSpace/VerticalHalfSpaceShape.js";
 export {VerticalCylinderShape} from "./verticalCylinder/VerticalCylinderShape.js";
 export {LocalVerticalCylinderShape} from "./localVerticalCylinder/LocalVerticalCylinderShape.js";
+export {DirectedVerticalHalfSpaceShape} from "./directedVerticalHalfSpace/DirectedVerticalHalfSpaceShape.js";
