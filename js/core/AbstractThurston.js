@@ -1,7 +1,7 @@
 import {GUI} from "../lib/dat.gui.module.js";
 import Stats from "../lib/stats.module.js";
 import {FlyControls} from "../controls/FlyControls.js";
-import {Clock, Color} from "../lib/three.module.js";
+import {Clock, Color} from "../lib/threejs/build/three.module.js";
 
 import {bind} from "../utils.js";
 
@@ -66,7 +66,7 @@ export class AbstractThurston {
 
         /**
          * The non-euclidean renderer
-         * @type {Renderer}
+         * @type {AbstractRenderer}
          */
         this.renderer = new rendererType(this.geom, this.set, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);

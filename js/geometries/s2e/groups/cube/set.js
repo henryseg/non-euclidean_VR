@@ -1,4 +1,4 @@
-import {Vector4} from "../../../../lib/three.module.js";
+import {Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";

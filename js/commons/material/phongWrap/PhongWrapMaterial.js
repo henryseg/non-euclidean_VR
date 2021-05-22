@@ -7,7 +7,7 @@ import render from "./shaders/render.js";
 import renderNormal from "./shaders/renderNormal.js";
 import renderUV from "./shaders/renderUV.js";
 import renderNormalUV from "./shaders/renderNormalUV.js";
-import {Vector3} from "../../../lib/three.module.js";
+import {Vector3} from "../../../lib/threejs/build/three.module.js";
 
 /**
  * @class

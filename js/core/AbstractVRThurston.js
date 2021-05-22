@@ -1,4 +1,4 @@
-import {XRControllerModelFactory} from "../lib/XRControllerModelFactory.js";
+import {XRControllerModelFactory} from "../lib/threejs/examples/jsm/webxr/XRControllerModelFactory.js";
 import {AbstractThurston} from "./AbstractThurston.js";
 import {VRControlsMove} from "../controls/VRControlsMove.js";
 import {VRControlsDrag} from "../controls/VRControlsDrag.js";

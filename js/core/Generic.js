@@ -1,4 +1,4 @@
-import {MathUtils} from "../lib/three.module.js";
+import {MathUtils} from "../lib/threejs/build/three.module.js";
 
 /**
  * @class

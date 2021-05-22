@@ -17,6 +17,16 @@ bool testXp(Point p){
 }
 `;
 
+// language=GLSL
+const glslCreepXp = `//
+ExtVector creepXp(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 uAux = group.dotMatrix * group.translationA;
+    float t = (0.5 - dot(local.pos.coords.xy, uAux.xy)) / length(uAux.xy) + offset;
+    return flow(v, t);
+}
+`;
+
 // // language=GLSL
 // const glslTestXp = `//
 // bool testXp(Point p){

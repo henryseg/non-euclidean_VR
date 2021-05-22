@@ -1,5 +1,5 @@
 import {mustache} from "../../../../lib/mustache.mjs";
-import {Quaternion, Vector3, Vector4} from "../../../../lib/three.module.js";
+import {Quaternion, Vector3, Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 

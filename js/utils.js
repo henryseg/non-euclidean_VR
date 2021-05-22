@@ -4,7 +4,7 @@ import {
     Matrix3,
     Matrix4,
     Quaternion
-} from "./lib/three.module.js";
+} from "./lib/threejs/build/three.module.js";
 
 
 /**

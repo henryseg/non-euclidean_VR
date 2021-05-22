@@ -33,14 +33,14 @@ Some of them are inherited by default from {@link Material} but can be overwritt
     
   The property should be true, if the normal to the shape is needed to compute its color with this material.
   
-  In this case, the {@link Renderer} will make sure that the normal is computed, 
+  In this case, the {@link AbstractRenderer} will make sure that the normal is computed, 
   before calling the color function of the material
 
 - [usesUVMap]{@link Material#usesUVMap} : boolean (getter)
   
   The property should be true, if the UV coordinates of the shape are needed to compute its color with this material.
     
-  In this case, the {@link Renderer} will make sure that the UV coordinates are computed,
+  In this case, the {@link AbstractRenderer} will make sure that the UV coordinates are computed,
   before calling the color function of the material.
   In addition, the {@link Solid} constructor throw an error if 
   the shape on which the material is applied does not implement UV coordinates.

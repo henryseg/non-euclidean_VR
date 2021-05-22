@@ -40,7 +40,7 @@ ExtVector creepingFlow(ExtVector v, float t, float offset){
 
         {{#usesCreepingBinary}}
         if({{glslTestName}}(try.vector.local.pos)){
-            try = {{glslCreepName}}(v, offset);
+            try = {{glslCreepName}}(v, try, offset);
         }
         {{/usesCreepingBinary}}
         

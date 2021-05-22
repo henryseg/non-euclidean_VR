@@ -1,4 +1,4 @@
-import {Matrix4, Quaternion, Vector3} from "../../../lib/three.module.js";
+import {Matrix4, Quaternion, Vector3} from "../../../lib/threejs/build/three.module.js";
 
 import {SL2} from "./Utils.js";
 import {Point} from "./Point.js";

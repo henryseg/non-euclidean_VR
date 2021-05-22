@@ -3,7 +3,7 @@ import {
 } from "../../../core/geometry/Point.js";
 import {
     Vector4
-} from "../../../lib/three.module.js";
+} from "../../../lib/threejs/build/three.module.js";
 
 
 Point.prototype.build = function () {

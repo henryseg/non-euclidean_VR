@@ -1,4 +1,4 @@
-import {Color} from '../../../lib/three.module.js';
+import {Color} from '../../../lib/threejs/build/three.module.js';
 import {Material} from "../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.js";

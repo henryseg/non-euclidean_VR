@@ -1,6 +1,9 @@
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/three.module.js";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
+import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "../../lib/threejs/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPass.js";
 
-import {Renderer} from "./Renderer.js";
+import {AbstractRenderer} from "./AbstractRenderer.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
 import vertexShader from "./shaders/vertex.js";
@@ -12,6 +15,8 @@ import main from "./shaders/main.js";
 import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
 
+import SteveShader from "../../postProcess/steve/shader.js";
+
 
 /**
  * @class
@@ -21,7 +26,7 @@ import scenes from "./shaders/scenes.js";
  * Takes as input the non-euclidean camera and scene and makes some magic.
  * It should not be confused with the Three.js WebGLRenderer it relies on.
  */
-export class BasicRenderer extends Renderer {
+export class BasicRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
@@ -40,6 +45,11 @@ export class BasicRenderer extends Renderer {
          * @private
          */
         this._fragmentBuilder = new ShaderBuilder();
+        /**
+         * Effect composer for postprocessing
+         * @type {EffectComposer}
+         */
+        this.composer = new EffectComposer(this.threeRenderer);
     }
 
     /**
@@ -67,11 +77,11 @@ export class BasicRenderer extends Renderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);
-        this._fragmentBuilder.addChunk(mustache.render(main, {postprocess: this.thurstonParams.postprocess}));
     }
 
     /**
      * Build the Three.js scene with the non-euclidean shader.
+     * @return {BasicRenderer}
      */
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
@@ -89,11 +99,24 @@ export class BasicRenderer extends Renderer {
         const horizonSphere = new Mesh(geometry, material);
         this.threeScene.add(horizonSphere);
 
+        // add the render to the passes of the effect composer
+        this.composer.addPass(new RenderPass(this.threeScene, this.camera.threeCamera));
+
+        if (this.thurstonParams.hasOwnProperty('postProcess') && this.thurstonParams.postProcess) {
+            const effect = new ShaderPass(SteveShader);
+            this.composer.addPass(effect);
+        }
+
+
         return this;
     }
 
     checkShader() {
         console.log(this._fragmentBuilder.code);
+    }
+
+    render() {
+        this.composer.render();
     }
 
 

@@ -1,5 +1,5 @@
 import {mustache} from "../../../../lib/mustache.mjs";
-import {Color} from "../../../../lib/three.module.js";
+import {Color} from "../../../../lib/threejs/build/three.module.js";
 import {Light} from "../../../../core/lights/Light.js";
 import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";

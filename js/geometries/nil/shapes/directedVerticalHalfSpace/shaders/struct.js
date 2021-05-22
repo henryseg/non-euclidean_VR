@@ -55,27 +55,28 @@ float sdf(VerticalHalfSpaceShape halfSpace, RelVector v) {
         n = -n;
         sign = -1.;
     }
-    if (abs(c) <= 0.1){
+    if (abs(c) <= 0.){
         // horizontal geodesic
-        return - sign * dotp;
-//        float dotv = dot(u, n);
-//        if (dotv <= 0.){
-//            // the geodesic never enter/exit the half space
-//            return - sign * camera.maxDist;
-//        }
-//        return - sign * dotp / dotv;
+//        return - sign * dotp;
+        float dotv = dot(u, n);
+        if (dotv <= 0.){
+            // the geodesic never enter/exit the half space
+            return - sign * camera.maxDist;
+        }
+        return - sign * dotp / dotv;
     }
 
     float aCosPhi = n.y * u.x - n.x * u.y;
     if (aCosPhi + a  < c * dotp) {
         // the geodesic stays in the half space
+//        return - sign * dotp;
         return - sign * camera.maxDist;
     }
 
     // general case
     float aSinPhi = dot(u, n);
     float phi = atan(aSinPhi, aCosPhi);
-    float psi = acos((aCosPhi - c * dotp) / a);
+    float psi = acos(max((aCosPhi - c * dotp) / a, -1.));
 //    return - sign * dotp;
     return - sign * (psi - phi) / c;
 
