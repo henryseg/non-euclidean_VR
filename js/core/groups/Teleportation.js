@@ -1,4 +1,4 @@
-import {MathUtils} from "../../lib/three.module.js";
+import {MathUtils} from "../../lib/threejs/build/three.module.js";
 import {mustache} from "../../lib/mustache.mjs";
 import creeping from "./shaders/creeping.js";
 import {CREEPING_OFF, CREEPING_STRICT, CREEPING_FULL} from "./TeleportationSet.js";

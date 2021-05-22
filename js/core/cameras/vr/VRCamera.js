@@ -4,7 +4,7 @@ import {BasicCamera} from "../basic/BasicCamera.js";
 import struct from "./shaders/struct.js";
 import mapping from "./shaders/mapping.js";
 import {LEFT, RIGHT} from "../../../constants.js";
-import {Vector3} from "../../../lib/three.module.js";
+import {Vector3} from "../../../lib/threejs/build/three.module.js";
 
 
 /**

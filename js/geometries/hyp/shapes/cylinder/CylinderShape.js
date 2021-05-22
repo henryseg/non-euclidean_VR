@@ -2,7 +2,7 @@ import {mustache} from "../../../../lib/mustache.mjs";
 
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Point} from "../../geometry/General.js";
-import {Vector4} from "../../../../lib/three.module.js";
+import {Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 import direction from "../../imports/direction.js";
 import struct from "./shaders/struct.js";

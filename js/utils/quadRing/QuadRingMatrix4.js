@@ -1,5 +1,5 @@
 import {QuadRingElement} from "./QuadRingElement.js";
-import {Matrix4} from "../../lib/three.module.js";
+import {Matrix4} from "../../lib/threejs/build/three.module.js";
 
 
 /**

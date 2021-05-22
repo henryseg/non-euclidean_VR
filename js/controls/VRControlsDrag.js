@@ -1,7 +1,7 @@
 import {
     EventDispatcher,
     Quaternion,
-} from "../lib/three.module.js";
+} from "../lib/threejs/build/three.module.js";
 
 import {
     Vector,

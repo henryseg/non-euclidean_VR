@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Vector2, Vector3, Vector4} from "../../js/lib/three.module.js";
+    import {Clock, Color, Vector2, Vector3, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
     import {Thurston} from "../../js/commons/Thurston.js";
 
@@ -56,8 +56,8 @@
     const color2 = new Color(0, 0, 0);
 
     const checkerboard = new CheckerboardMaterial(dir1, dir2, color1, color2);
-    const material = phongWrap(checkerboard, {reflectivity: new Vector3(0.2, 0.2, 0.2)});
-    // const material = phongWrap(checkerboard);
+    // const material = phongWrap(checkerboard, {reflectivity: new Vector3(0.2, 0.2, 0.2)});
+    const material = phongWrap(checkerboard);
 
     const isom = new Isometry().makeTranslation(new Point(-1, 0, 0));
     const halfSpace = new DirectedVerticalHalfSpace(isom, material);

@@ -2,7 +2,7 @@ import {mustache} from "../../lib/mustache.mjs";
 
 import scenes from "../renderers/shaders/scenes.js";
 import header from "./shaders/header.js";
-import {Color} from "../../lib/three.module.js";
+import {Color} from "../../lib/threejs/build/three.module.js";
 
 
 /**

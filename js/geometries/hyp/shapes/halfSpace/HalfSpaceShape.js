@@ -5,7 +5,7 @@ import {Isometry, Point} from "../../geometry/General.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
-import {Vector4} from "../../../../lib/three.module.js";
+import {Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 
 /**

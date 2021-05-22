@@ -1,15 +1,15 @@
 import * as WebXRPolyfill from "../../lib/webxr-polyfill.module.js";
-import {VRButton as VRButtonLib} from "../../lib/VRButton.js";
+import {VRButton as VRButtonLib} from "../../lib/threejs/examples/jsm/webxr/VRButton.js";
 
 import {bind} from "../../utils.js";
 
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
-import {Renderer} from "./Renderer.js";
+import {AbstractRenderer} from "./AbstractRenderer.js";
 
 import {LEFT, RIGHT} from "../../constants.js";
 
 import vertexShader from "./shaders/vertex.js";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/three.module.js";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
 import constants from "./shaders/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
@@ -28,7 +28,7 @@ import main from "./shaders/main.js";
  * We place in distinct layer of the Three.js scene two horizon spheres.
  * Each sphere will render the picture seen by one eye.
  */
-export class VRRenderer extends Renderer {
+export class VRRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
@@ -65,7 +65,7 @@ export class VRRenderer extends Renderer {
      * Shortcut to access the Three.js WebXRManager
      * @return {WebXRManager}
      */
-    get xr(){
+    get xr() {
         return this.threeRenderer.xr;
     }
 
@@ -121,12 +121,12 @@ export class VRRenderer extends Renderer {
         this.threeScene.add(leftHorizonSphere, rightHorizonSphere);
     }
 
-    checkShader(side=LEFT) {
+    checkShader(side = LEFT) {
         console.log(this._fragmentBuilder[side].code);
     }
 
-    render(){
+    render() {
         this.camera.chaseThreeCamera(this.threeRenderer.xr);
-        super.render();
+        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }

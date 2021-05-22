@@ -1,7 +1,7 @@
 import {Position} from "../geometry/Position.js";
 import {GroupElement} from "./GroupElement.js";
 import {Vector} from "../geometry/Vector.js";
-import {Quaternion} from "../../lib/three.module.js";
+import {Quaternion} from "../../lib/threejs/build/three.module.js";
 
 
 /**

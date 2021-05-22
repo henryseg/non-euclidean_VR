@@ -2,7 +2,7 @@ import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 import element from "./shaders/element.js";
 import struct from "./shaders/struct.js";
-import {Matrix4, Vector4} from "../../../../lib/three.module.js";
+import {Matrix4, Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 
 export class Group extends AbstractGroup {
