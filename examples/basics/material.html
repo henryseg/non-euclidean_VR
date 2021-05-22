@@ -29,6 +29,7 @@
         CheckerboardMaterial
     } from "../../js/commons/material/all.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {EarthTexture} from "../../js/commons/material/earth/EarthTexture.js";
 
 
     // initial setup
@@ -47,7 +48,7 @@
     // single color material
     const singleColorMaterial = new SingleColorMaterial(new Color(0.7, 0.1, 0.2));
     const ball0 = new Ball(
-        new Point(-1, 0.5, -2),
+        new Point(-1, 1, -2.5),
         0.3,
         singleColorMaterial
     );
@@ -56,7 +57,7 @@
     const normalMaterial = new NormalMaterial();
     // defining solids with this material
     const ball1 = new Ball(
-        new Point(0, 0.5, -2),
+        new Point(0, 1, -2.5),
         0.3,
         normalMaterial
     );
@@ -70,14 +71,14 @@
 
 
     const ball2 = new Ball(
-        new Point(1, 0.5, -2),
+        new Point(1, 1, -2.5),
         0.3,
         checkerboardRaw
     );
 
     // lights for the Phong material
     const light1 = new PointLight(
-        new Point(2, 1, -2),
+        new Point(2, 1, -2.5),
         new Color(1, 1, 0),
     )
     const light2 = new PointLight(
@@ -86,7 +87,7 @@
     )
 
     const light3 = new PointLight(
-        new Point(-1, 1, -2),
+        new Point(-1, 1, -2.5),
         new Color(0, 1, 1),
     )
 
@@ -94,7 +95,7 @@
     // Phong shading material
     const phongMaterial = new PhongMaterial({shininess: 10});
     const ball3 = new Ball(
-        new Point(-1, -0.5, -2),
+        new Point(-1, 0, -2.5),
         0.3,
         phongMaterial
     )
@@ -103,7 +104,7 @@
     const normalPhong = phongWrap(normalMaterial);
 
     const ball4 = new Ball(
-        new Point(0, -0.5, -2),
+        new Point(0, 0, -2.5),
         0.3,
         normalPhong
     );
@@ -120,13 +121,21 @@
 
 
     const ball5 = new Ball(
-        new Point(1, -0.5, -2),
+        new Point(1, 0, -2.5),
         0.3,
         checkerboardPhong
     );
 
+    const earth = new EarthTexture('../../js');
+
+    const ball6 = new Ball(
+        new Point(-1, -1, -2.5),
+        0.3,
+        earth
+    )
+
     // adding the solid to the scene
-    scene.add(light1, light2, light3, ball0, ball1, ball2, ball3, ball4, ball5);
+    scene.add(light1, light2, light3, ball0, ball1, ball2, ball3, ball4, ball5, ball6);
 
     // building there renderer
     renderer.build();
