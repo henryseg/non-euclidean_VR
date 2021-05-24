@@ -1,31 +1,18 @@
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
-import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
-import {RenderPass} from "../../lib/threejs/examples/jsm/postprocessing/RenderPass.js";
-import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPass.js";
+import {mustache} from "../../lib/mustache.mjs";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
+
 
 import vertexShader from "./shaders/vertex.js";
 import constants from "./shaders/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/raymarch.js";
-import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
+import raymarch from "./shaders/raymarch.js";
 
-import SteveShader from "../../postProcess/steve/shader.js";
-
-
-/**
- * @class
- *
- * @classdesc
- * Non-euclidean renderer.
- * Takes as input the non-euclidean camera and scene and makes some magic.
- * It should not be confused with the Three.js WebGLRenderer it relies on.
- */
-export class BasicRenderer extends AbstractRenderer {
+export class PathTracerRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
@@ -44,18 +31,12 @@ export class BasicRenderer extends AbstractRenderer {
          * @private
          */
         this._fragmentBuilder = new ShaderBuilder();
-        /**
-         * Effect composer for postprocessing
-         * @type {EffectComposer}
-         */
-        this.composer = new EffectComposer(this.threeRenderer);
     }
 
     /**
      * Build the fragment shader
      */
     buildFragmentShader() {
-
         // constants
         this._fragmentBuilder.addChunk(constants);
         // geometry
@@ -70,6 +51,7 @@ export class BasicRenderer extends AbstractRenderer {
         // camera
         this.camera.shader(this._fragmentBuilder);
 
+        // WE ARE HERE !!!
         // scene
         this.scene.shader(this._fragmentBuilder);
         this._fragmentBuilder.addChunk(mustache.render(scenes, this));
@@ -80,7 +62,7 @@ export class BasicRenderer extends AbstractRenderer {
 
     /**
      * Build the Three.js scene with the non-euclidean shader.
-     * @return {BasicRenderer}
+     * @return {PathTracerRenderer}
      */
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
@@ -98,14 +80,6 @@ export class BasicRenderer extends AbstractRenderer {
         const horizonSphere = new Mesh(geometry, material);
         this.threeScene.add(horizonSphere);
 
-        // add the render to the passes of the effect composer
-        this.composer.addPass(new RenderPass(this.threeScene, this.camera.threeCamera));
-
-        if (this.thurstonParams.hasOwnProperty('postProcess') && this.thurstonParams.postProcess) {
-            const effect = new ShaderPass(SteveShader);
-            this.composer.addPass(effect);
-        }
-
         return this;
     }
 
@@ -114,7 +88,7 @@ export class BasicRenderer extends AbstractRenderer {
     }
 
     render() {
-        this.composer.render();
+        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 
 
