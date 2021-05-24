@@ -28,6 +28,11 @@ export class Shape extends Generic {
          */
         this.isom = isom !== undefined ? isom : new Isometry();
         /**
+         * Inverse of the isometry
+         * @type {Isometry}
+         */
+        this.isomInv = this.isom.clone().invert();
+        /**
          * Parent of the shape (if this shape is part of an advanced shape)
          * @type {Shape}
          */
@@ -39,6 +44,11 @@ export class Shape extends Generic {
          * @type {Isometry}
          */
         this._absoluteIsom = undefined;
+        /**
+         * Inverse of the absolute isometry
+         * @type {Isometry}
+         */
+        this._absoluteIsomInv = undefined;
     }
 
     /**
@@ -50,12 +60,18 @@ export class Shape extends Generic {
      * (one at the level of AdvancedShape, one at the level of UnionShape, for instance)?
      */
     updateAbsoluteIsom() {
-        if(this._absoluteIsom === undefined){
+        if (this._absoluteIsom === undefined) {
             this._absoluteIsom = new Isometry();
+            this._absoluteIsomInv = new Isometry();
         }
+
+        this.isomInv = this.isom.clone().invert();
         this._absoluteIsom.copy(this.isom);
-        if(this.parent !== undefined){
+        this._absoluteIsomInv.copy(this.isomInv);
+        if (this.parent !== undefined) {
             this._absoluteIsom.premultiply(this.parent.absoluteIsom);
+            this._absoluteIsomInv.multiply(this.parent.absoluteIsomInv)
+
         }
     }
 
@@ -77,6 +93,19 @@ export class Shape extends Generic {
             this.updateAbsoluteIsom();
         }
         return this._absoluteIsom;
+    }
+
+    /**
+     * Return the inverse of absoluteIsom
+     * @type {Isometry}
+     */
+    get absoluteIsomInv() {
+        if (this._absoluteIsomInv === undefined) {
+            this.updateAbsoluteIsom();
+
+        }
+        // console.log(this._absoluteIsom.matrix.toLog());
+        return this._absoluteIsomInv;
     }
 
     /**

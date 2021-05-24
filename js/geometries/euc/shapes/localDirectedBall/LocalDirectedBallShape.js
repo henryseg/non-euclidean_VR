@@ -27,7 +27,7 @@ export class LocalDirectedBallShape extends BasicShape {
     constructor(location, radius) {
         const isom = new Isometry();
         if (location.isIsometry) {
-            isom.copy(isom);
+            isom.copy(location);
         }
         else if (location.isPoint) {
             isom.makeTranslation(location);

@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Dehn twist</title>
+    <title>Single earth texture sphere</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Vector4} from "../../js/lib/threejs/build/three.module.js";
+    import {Clock, Color, Matrix4, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
     import {Thurston} from "../../js/commons/Thurston.js";
 
@@ -28,6 +28,8 @@
     import {LocalDirectedBall} from "../../js/geometries/euc/solids/LocalDirectedBall.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
     import {EarthTexture} from "../../js/commons/material/earth/EarthTexture.js";
+    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
 
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
 
@@ -51,18 +53,36 @@
 
     const earth = new EarthTexture('../../js');
 
-    const ball6 = new Ball(
-        new Point(0, 0, -1),
-        0.5,
-        earth
-    )
+    const isom = new Isometry().makeTranslation(new Point(0, 0, -1));
+    isom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
+    const ball6 = new Ball(isom, 0.5, earth);
 
     thurston.add(ball6, light3, light1, light2);
+
+    const clock = new Clock();
+    const speed = 0.5;
+
+    function animate() {
+        const time = clock.getDelta();
+        const update = new Matrix4().makeRotationZ(speed * time);
+        ball6.isom.matrix.multiply(update);
+        ball6.updateData();
+    }
+
+    thurston.callback = animate;
+
 
 
     thurston.run();
     thurston.renderer.checkShader();
     // console.log(thurston.scene.fog);
+
+    function info() {
+        console.log("mat", ball6.absoluteIsomInv);
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
 
 
 </script>

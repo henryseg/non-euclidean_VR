@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector2, Vector3} from "../../js/lib/threejs/build/three.module.js";
+    import {Color, Matrix4, Vector2, Vector3} from "../../js/lib/threejs/build/three.module.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
@@ -29,7 +29,8 @@
         CheckerboardMaterial
     } from "../../js/commons/material/all.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-    import {EarthTexture} from "../../js/commons/material/earth/EarthTexture.js";
+    import {EarthTexture} from "../../js/commons/material/astronomy/earth/EarthTexture.js";
+    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
 
 
     // initial setup
@@ -127,9 +128,11 @@
     );
 
     const earth = new EarthTexture('../../js');
+    const isom = new Isometry().makeTranslation(new Point(-1, -1, -2.5));
+    isom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
 
     const ball6 = new Ball(
-        new Point(-1, -1, -2.5),
+        isom,
         0.3,
         earth
     )

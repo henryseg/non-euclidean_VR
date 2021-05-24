@@ -20,7 +20,7 @@
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
 
     import {Point} from "../../js/core/geometry/Point.js";
-    import {PhongMaterial} from "../../js/commons/material/all.js";
+    import {NormalMaterial, PhongMaterial} from "../../js/commons/material/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
     import {FakeBall, LocalFakeBall, LocalPotato, Solid} from "../../js/geometries/nil/solids/all.js";
     import {complement, LocalFakeBallShape, LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
@@ -63,9 +63,10 @@
         lights: lights
     });
 
+    const normalMat = new NormalMaterial()
     const center = new LocalPotatoShape(new Point(), 0.55, 0.9, 1, 4);
     const latticeShape = complement(center)
-    const lattice = new Solid(latticeShape, mat);
+    const lattice = new Solid(latticeShape, normalMat);
 
     thurston.add(lattice);
     thurston.run();
