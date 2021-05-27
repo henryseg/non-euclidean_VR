@@ -17,7 +17,7 @@
     import * as geom from "../../js/geometries/h2e/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
     import cuspedTorus from "../../js/geometries/h2e/groups/cuspedTorus/set.js";
-    import {ESun} from "../../js/geometries/h2e/lights/esun/ESun.js";
+    import {DIR_DOWN, DIR_UP, ESun} from "../../js/geometries/h2e/lights/esun/ESun.js";
     import {Color, Matrix4} from "../../js/lib/threejs/build/three.module.js";
     import {NormalMaterial, PhongMaterial} from "../../js/commons/material/all.js";
     import {Ball} from "../../js/geometries/h2e/solids/Ball.js";
@@ -29,8 +29,8 @@
     import {Solid} from "../../js/core/solids/Solid.js";
 
     const thurston = new Thurston(geom, cuspedTorus, {keyboard: 'fr', maxBounces: 1});
-    const lightUp = new ESun(new Color(1, 1, 0));
-    const lightDown = new ESun(new Color(0, 1, 1), -1);
+    const lightUp = new ESun(new Color(1, 1, 0), 0.5, DIR_UP);
+    const lightDown = new ESun(new Color(0, 1, 1), 0.5, DIR_DOWN);
 
     // defining a material
     const matNormal = new NormalMaterial();

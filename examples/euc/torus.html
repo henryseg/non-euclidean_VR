@@ -28,6 +28,7 @@
 
 
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    thurston.scene.background = new Color(0,0,0);
     thurston.renderer.thurstonParams.postProcess = true;
 
     // lights for the Phong material
@@ -36,24 +37,27 @@
     const light0 = new PointLight(
         new Point(1, 0, 0),
         new Color(1, 1, 0),
+        0.3
     );
 
     // cyan light
     const light1 = new PointLight(
         new Point(0, 1, -1),
-        new Color(0, 1, 1)
+        new Color(0, 1, 1),
+        0.3
     );
 
     // magenta light
     const light2 = new PointLight(
         new Point(-1, -1, 1),
-        new Color(1, 0, 1)
+        new Color(1, 0, 1),
+        0.3
     );
     const lights = [light0, light1, light2];
 
     // Phong shading material
     const mat0 = new PhongMaterial({
-        color: new Color(1, 0.6, 0.6),
+        color: new Color(1, 0.8, 0.6),
         shininess: 5,
         lights: lights
     });

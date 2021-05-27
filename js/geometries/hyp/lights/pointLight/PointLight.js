@@ -25,8 +25,9 @@ export class PointLight extends Light {
      * - If the input in a Point, then the position is that point.
      * - If the input is a Vector, then the position is the image of this vector by the exponential map at the origin.
      * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
      */
-    constructor(position, color) {
+    constructor(position, color, intensity = 1) {
         super(1);
         /**
          * The position of the light.
@@ -44,10 +45,15 @@ export class PointLight extends Light {
 
 
         /**
-         * The color or the light.
+         * The color of the light.
          * @type {Color}
          */
         this.color = color;
+        /**
+         * The intensity of the light.
+         * @type {number}
+         */
+        this.intensity = intensity;
         this.addImport(distance, direction, lightIntensity);
     }
 

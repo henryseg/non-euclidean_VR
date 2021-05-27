@@ -17,7 +17,7 @@
     import * as geom from "../../js/geometries/s2e/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
     import cube from "../../js/geometries/s2e/groups/cube/set.js";
-    import {ESun} from "../../js/geometries/s2e/lights/esun/ESun.js";
+    import {DIR_DOWN, DIR_UP, ESun} from "../../js/geometries/s2e/lights/esun/ESun.js";
     import {Color} from "../../js/lib/threejs/build/three.module.js";
     import {PhongMaterial} from "../../js/commons/material/all.js";
     import {Point} from "../../js/core/geometry/Point.js";
@@ -30,8 +30,8 @@
     const thurston = new Thurston(geom, cube, {keyboard: 'fr', maxBounces: 1});
 
 
-    const lightUp = new ESun(new Color(1, 1, 0), 1);
-    const lightDown = new ESun(new Color(1, 0, 1), -1);
+    const lightUp = new ESun(new Color(1, 1, 0), 0.5, DIR_UP);
+    const lightDown = new ESun(new Color(1, 0, 1), 0.5, DIR_DOWN);
 
     const mat = new PhongMaterial({
         color: new Color(1, 1, 1)

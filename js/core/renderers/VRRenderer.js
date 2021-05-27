@@ -16,7 +16,7 @@ import commons2 from "../geometry/shaders/commons2.js";
 import raymarch from "./shaders/raymarch.js";
 import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
-import main from "./shaders/main.js";
+import basicVectorData from "./shaders/vectorData/basicVectorData.js";
 
 
 /**
@@ -79,6 +79,8 @@ export class VRRenderer extends AbstractRenderer {
             this._fragmentBuilder[side].addChunk(this.geom.shader2);
             this._fragmentBuilder[side].addChunk(commons2);
 
+            // data carried with RelVector
+            this._fragmentBuilder[side].addChunk(basicVectorData);
             // subgroup/quotient orbifold
             this.set.shader(this._fragmentBuilder[side]);
 
@@ -92,7 +94,6 @@ export class VRRenderer extends AbstractRenderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
-            this._fragmentBuilder[side].addChunk(mustache.render(main, {postprocess: this.thurstonParams.postprocess}));
         }
     }
 

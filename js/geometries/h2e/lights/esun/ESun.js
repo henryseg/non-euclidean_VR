@@ -6,8 +6,8 @@ import {Light} from "../../../../core/lights/Light.js";
 import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";
 
-const DIR_UP = 1;
-const DIR_DOWN = -1;
+export const DIR_UP = 1;
+export const DIR_DOWN = -1;
 
 /**
  * @class
@@ -20,13 +20,15 @@ export class ESun extends Light {
     /**
      * Constructor.
      * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
      * @param {number} direction - the direction of the light. It should be on of the following values:
      * - -1 (light coming from the negative direction)
      * - +1 (light coming from the positive direction)
      */
-    constructor(color, direction = DIR_UP) {
+    constructor(color, intensity = 1, direction = DIR_UP) {
         super(1);
         this.color = color;
+        this.intensity = intensity;
         this.direction = direction;
     }
 

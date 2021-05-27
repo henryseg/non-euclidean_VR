@@ -119,7 +119,7 @@ export class TeleportationSet {
         this.group.shader(shaderBuilder);
         shaderBuilder.addChunk(relative);
         for (const teleportation of this.teleportations) {
-            teleportation.shader(shaderBuilder, this.usesCreeping);
+            teleportation.shader(shaderBuilder);
         }
         for (const pair of this.neighbors) {
             shaderBuilder.addUniform(pair.elt.name, 'GroupElement', pair.elt);

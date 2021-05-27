@@ -32,18 +32,21 @@
     const point1 = new Point().applyIsometry(new Isometry().makeTranslationFromDir(new Vector(Math.PI, 0, 0)));
     const light1 = new PointLight(
         new Color(1, 1, 0),
+        0.6,
         point1
     );
 
     const point2 = new Point().applyIsometry(new Isometry().makeTranslationFromDir(new Vector(0, Math.PI, 0)));
     const light2 = new PointLight(
         new Color(0, 1, 1),
+        0.6,
         point2
     );
 
     const point3 = new Point().applyIsometry(new Isometry().makeTranslationFromDir(new Vector(0, 0, -Math.PI)));
     const light3 = new PointLight(
         new Color(1, 0, 1),
+        0.6,
         point3
     );
     
