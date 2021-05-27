@@ -18,8 +18,9 @@ export class PointLight extends Light {
      * Constructor
      * @param {Point} position - the position of the light
      * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
      */
-    constructor(position, color) {
+    constructor(position, color, intensity = 1) {
         super(1);
         /**
          * The position of the light.
@@ -27,10 +28,15 @@ export class PointLight extends Light {
          */
         this.position = position;
         /**
-         * The color or the light.
+         * The color of the light.
          * @type {Color}
          */
         this.color = color;
+        /**
+         * The intensity of the light.
+         * @type {number}
+         */
+        this.intensity = intensity;
         this.addImport(lightIntensity);
     }
 
@@ -42,7 +48,7 @@ export class PointLight extends Light {
         return true;
     }
 
-    get uniformType(){
+    get uniformType() {
         return 'PointLight';
     }
 

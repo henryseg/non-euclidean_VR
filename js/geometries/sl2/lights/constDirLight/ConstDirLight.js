@@ -18,11 +18,13 @@ export class ConstDirLight extends Light {
     /**
      * Constructor.
      * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
      * @param {Vector3} direction - the direction of the light.
      */
-    constructor(color, direction) {
+    constructor(color, intensity, direction) {
         super(1);
         this.color = color;
+        this.intensity = intensity;
         this.direction = direction;
     }
 

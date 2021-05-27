@@ -39,9 +39,9 @@
     const lightPos2 = new Point(0, 1., 1);
     const lightPos3 = new Point(-1, 0, 2);
 
-    const light1 = new FakePointLight(lightPos1, lightColor1);
-    const light2 = new FakePointLight(lightPos2, lightColor2);
-    const light3 = new FakePointLight(lightPos3, lightColor3);
+    const light1 = new FakePointLight(lightPos1, lightColor1, 0.5);
+    const light2 = new FakePointLight(lightPos2, lightColor2, 0.5);
+    const light3 = new FakePointLight(lightPos3, lightColor3, 0.5);
 
     thurston.add(light1, light2, light3);
 

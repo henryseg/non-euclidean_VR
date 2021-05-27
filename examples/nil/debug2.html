@@ -12,8 +12,8 @@
 <body>
 </body>
 <script type="module" id="main">
-
-    import {VRThurston} from "../../js/commons/VRThurston.js";
+    import {Color} from "../../js/lib/threejs/build/three.module.js";
+    import {Thurston} from "../../js/commons/Thurston.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import {Isometry, Point} from "../../js/geometries/nil/geometry/General.js";
@@ -23,37 +23,31 @@
     import {NormalMaterial, PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
     import {FakeBall, LocalVerticalCylinder, VerticalCylinder} from "../../js/geometries/nil/solids/all.js";
-    import {LocalPotatoShape, PotatoShape} from "../../js/geometries/nil/shapes/all.js";
+    import {LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
     import {complement, intersection, union} from "../../js/commons/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
+    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
 
 
-    const thurston = new VRThurston(geom, trivial, {keyboard: 'fr'});
+    const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
+    heisenberg.creepingType = CREEPING_FULL;
+    // heisenberg.usesNearestNeighbors = true;
+    thurston.scene.fog.scattering = 0.5;
+    thurston.scene.background = new Color(0, 0, 0.3);
 
 
     // Ball
-    const mat = new NormalMaterial();
+    const matNormal = new NormalMaterial();
+    const matConstant = new SingleColorMaterial(new Color(1, 0, 0));
+    const ball = new LocalPotatoShape(new Point(), 0.55, 0.9, 1, 4);
+    const shape = complement(ball);
 
-    let aux = [];
-    aux.push(new PotatoShape(new Point(), 0.55, 0.9, 1, 4));
-    aux.push(new PotatoShape(new Point(1, 0, 0), 0.55, 0.9, 1, 4));
-    aux.push(new PotatoShape(new Point(-1, 0, 0), 0.55, 0.9, 1, 4));
-    aux.push(new PotatoShape(new Point(0, 1, 0), 0.55, 0.9, 1, 4));
-    aux.push(new PotatoShape(new Point(0, -1, 0), 0.55, 0.9, 1, 4));
-
-    let cAux = [];
-    for(const ball of aux) {
-        cAux.push(complement(ball));
-    }
-    const shape = intersection(...cAux);
-
-    const solid = new Solid(shape, mat);
+    const solid = new Solid(shape, matConstant);
 
     thurston.add(solid);
 
     thurston.run();
     thurston.renderer.checkShader();
-
 
 </script>
 

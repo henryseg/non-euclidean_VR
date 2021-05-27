@@ -8,11 +8,11 @@ export default `//
 * @param[in] v the relative vector to teleport.
 */
 ExtVector teleport(ExtVector v){
-    v.isTeleported = false;
+    v.data.isTeleported = false;
     {{#teleportations}}
         if({{glslTestName}}(v.vector.local.pos)){
             v.vector = rewrite(v.vector, {{elt.name}}, {{inv.name}});
-            v.isTeleported = true;
+            v.data.isTeleported = true;
             return v;
         }
     {{/teleportations}}

@@ -11,7 +11,6 @@ import struct from "./shaders/struct.js";
 import directions from "./shaders/directions.js";
 
 
-
 /**
  * @class
  *
@@ -23,11 +22,14 @@ export class PointLight extends Light {
     /**
      * Constructor
      * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
      * @param {Point} position - the position of the light
+     *
      */
-    constructor(color, position) {
+    constructor(color, intensity = 1, position) {
         super(1);
         this.color = color;
+        this.intensity = intensity;
         this.position = position;
         this.addImport(distance, direction, lightIntensity);
     }

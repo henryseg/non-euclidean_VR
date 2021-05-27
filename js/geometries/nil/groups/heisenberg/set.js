@@ -140,15 +140,24 @@ const shiftYn = group.element(0, 1, 0);
 const shiftZp = group.element(0, 0, -1);
 const shiftZn = group.element(0, 0, 1);
 
-console.log("Xp", shiftXp.toIsometry().matrix.toLog());
-console.log("Yp", shiftYp.toIsometry().matrix.toLog());
-console.log("Zp", shiftZp.toIsometry().matrix.toLog());
+// console.log("Xp", shiftXp.toIsometry().matrix.toLog());
+// console.log("Yp", shiftYp.toIsometry().matrix.toLog());
+// console.log("Zp", shiftZp.toIsometry().matrix.toLog());
 
+
+const neighborsLite = [
+    {elt: shiftXp, inv: shiftXn},
+    {elt: shiftXn, inv: shiftXp},
+    {elt: shiftYp, inv: shiftYn},
+    {elt: shiftYn, inv: shiftYp},
+    {elt: shiftZp, inv: shiftZn},
+    {elt: shiftZn, inv: shiftZp}
+];
 
 /**
  * Subgroup corresponding to the integer Heisenberg group
  */
-export default new TeleportationSet()
+export default new TeleportationSet(neighborsLite)
     .add(testXp, glslTestXp, shiftXp, shiftXn)
     .add(testXn, glslTestXn, shiftXn, shiftXp)
     .add(testYp, glslTestYp, shiftYp, shiftYn)

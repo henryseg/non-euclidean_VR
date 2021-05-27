@@ -43,7 +43,7 @@ int raymarch(inout ExtVector v, out int objId){
     for (int i = 0; i < camera.maxSteps; i++){
         // start by teleporting eventually the vector
         localV = teleport(localV);
-        if (localV.isTeleported){
+        if (localV.data.isTeleported){
             // if a teleport was needed, update the starting point of the local raymarching
             localV0 = localV;
             /** @warning if minDist is not zero... this line may produce some jumps */
@@ -51,7 +51,7 @@ int raymarch(inout ExtVector v, out int objId){
         }
         else {
             // if no teleport was needed, then march
-            if (localV.travelledDist > camera.maxDist) {
+            if (localV.data.travelledDist > camera.maxDist) {
                 break;
             }
             dist = localSceneSDF(localV.vector, auxHit, auxId);
@@ -76,7 +76,7 @@ int raymarch(inout ExtVector v, out int objId){
     for (int i=0; i < camera.maxSteps; i++){
 
 
-        if (globalV.travelledDist > localV.travelledDist || globalV.travelledDist > camera.maxDist){
+        if (globalV.data.travelledDist > localV.data.travelledDist || globalV.data.travelledDist > camera.maxDist){
             // we reached the maximal distance
             break;
         }
@@ -149,7 +149,7 @@ varying vec3 spherePosition;
 void main() {
 
     RelVector vector = mapping(spherePosition);
-    ExtVector v = ExtVector(vector, 0., 0., false);
+    ExtVector v = ExtVector(vector, initVectorData());
     vec3 color = getColor(v);
     gl_FragColor = vec4(color, 1);
 }

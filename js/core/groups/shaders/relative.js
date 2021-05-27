@@ -175,15 +175,14 @@ RelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){
 
 struct ExtVector {
     RelVector vector;
-    float lastFlowTime;
-    float travelledDist;
-    bool isTeleported;
+    VectorData data;
 };
 
 ExtVector flow(ExtVector v, float t) {
     v.vector = flow(v.vector, t);
-    v.lastFlowTime = t;
-    v.travelledDist = v.travelledDist + t;
+    v.data.lastFlowTime = t;
+    v.data.travelledDist = v.data.travelledDist + t;
+    v.data.totalTravelDist  = v.data.totalTravelDist + t;
     return v;
 }`;
 

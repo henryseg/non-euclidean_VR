@@ -9,7 +9,7 @@ export default `//
 ExtVector {{glslCreepName}}(ExtVector v, ExtVector outside,  float offset){
     ExtVector try = outside;
     float sIn = 0.;
-    float sOut = try.lastFlowTime;
+    float sOut = try.data.lastFlowTime;
     float s;
     for(int i=0; i < 100; i++){
         if(sOut - sIn < offset){

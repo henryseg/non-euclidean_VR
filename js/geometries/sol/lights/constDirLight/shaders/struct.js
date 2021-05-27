@@ -8,6 +8,7 @@ export default `//
 struct ConstDirLight {
     int id;
     vec3 color;
+    float intensity;
     vec3 direction;
     int maxDirs;
 };
@@ -16,7 +17,7 @@ bool directions(ConstDirLight light, RelVector v, int i, out RelVector dir, out 
     if (i!=0){
         return false;
     }
-    intensity = 0.5;
+    intensity = light.intensity;
     //    Isometry invCellBoost = toIsometry(v.invCellBoost);
     //    vec4 coords = invCellBoost.matrix * vec4(light.direction, 0.);
     vec4 coords = vec4(light.direction, 0.);

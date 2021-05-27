@@ -116,7 +116,7 @@ ColorData getSolidColorData(inout ExtVector v, int objId) {
     vec3 color;
     bool isReflecting = false;
     vec3 reflectivity = vec3(0);
-    float travelledSoFar = v.travelledDist;
+    float travelledSoFar = v.data.travelledDist;
 
     switch(objId){
         {{#scene.solids}}
@@ -148,7 +148,7 @@ ColorData getSolidColorData(inout ExtVector v, int objId) {
                     {{/material.usesNormal}}
                     
                     v.vector = geomReflect(v.vector,normal);
-                    v.travelledDist = 0.;
+                    v.data.travelledDist = 0.;
                     v = flow(v, 1.2 * camera.threshold);
                     
                 {{/material.isReflecting}}     

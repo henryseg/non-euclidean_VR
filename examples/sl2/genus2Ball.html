@@ -25,8 +25,8 @@
 
     const thurston = new Thurston(geom, genus2, {keyboard: 'fr', maxBounces: 1});
 
-    const lightUp = new ConstDirLight(new Color(1, 1, 0), new Vector3(0, 0, 1));
-    const lightDown = new ConstDirLight(new Color(1, 0, 1), new Vector3(0, 0, -1));
+    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
 
     const mat = new PhongMaterial({
         color: new Color(1, 1, 1)
