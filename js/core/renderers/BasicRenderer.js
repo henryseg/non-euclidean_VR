@@ -15,7 +15,7 @@ import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
 
 import SteveShader from "../../postProcess/steve/shader.js";
-import basicVectorData from "./shaders/vectorData/basicVectorData.js";
+import vectorDataStruct from "./shaders/basicVectorData/struct.js";
 
 
 /**
@@ -65,8 +65,8 @@ export class BasicRenderer extends AbstractRenderer {
         this._fragmentBuilder.addChunk(this.geom.shader2);
         this._fragmentBuilder.addChunk(commons2);
 
-        // data carried with RelVector
-        this._fragmentBuilder.addChunk(basicVectorData);
+        // data carried by ExtVector
+        this._fragmentBuilder.addChunk(vectorDataStruct);
         // subgroup/quotient orbifold
         this.set.shader(this._fragmentBuilder);
 
