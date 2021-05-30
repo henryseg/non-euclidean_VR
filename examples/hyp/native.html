@@ -75,8 +75,10 @@
         );
     }
 
-    const unionShape = union(centerBall, ...horoballs);
-    const latticeShape = complement(unionShape);
+    // const unionShape = union(centerBall, ...horoballs);
+    // const latticeShape = complement(unionShape);
+
+    const latticeShape = complement(centerBall);
     const lattice = new Solid(latticeShape, mat0);
 
 
