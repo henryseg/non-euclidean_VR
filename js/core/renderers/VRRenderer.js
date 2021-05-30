@@ -17,6 +17,7 @@ import raymarch from "./shaders/raymarch.js";
 import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
 import basicVectorData from "./shaders/basicVectorData/struct.js";
+import updateVectorData from "./shaders/basicVectorData/update.js";
 
 
 /**
@@ -90,6 +91,7 @@ export class VRRenderer extends AbstractRenderer {
             // scene
             this.scene.shader(this._fragmentBuilder[side]);
             this._fragmentBuilder[side].addChunk(mustache.render(scenes, this));
+            this._fragmentBuilder[side].addChunk(mustache.render(updateVectorData, this));
 
 
             // ray-march and main

@@ -101,35 +101,16 @@ int raymarch(inout ExtVector v, out int objId){
 }
 
 vec3 getColor(ExtVector v){
-    vec3 color = vec3(0);
-    vec3 reflect = vec3(1);// the ratio of light involved during the iteration
-    ColorData data;
-    vec3 coeff;
     int objId;
     int hit;
-    bool stop;
-
     for (int k=0; k <= scene.maxBounces; k++){
+        if (v.data.stop){
+            break;
+        }
         hit = raymarch(v, objId);
-        if (hit == HIT_DEBUG) {
-            return debugColor;
-        }
-        if (hit == HIT_NOTHING) {
-            return color + reflect * scene.background;
-        }
-        if (hit == HIT_SOLID) {
-            data = getSolidColorData(v, objId);
-            stop = k == scene.maxBounces || !data.isReflecting || length(data.reflectivity) == 0.;
-            if (stop){
-                return color + reflect * data.color;
-            }
-            coeff = reflect * (vec3(1) - data.reflectivity);
-            color = color + coeff * data.color;
-            reflect = reflect * data.reflectivity;
-        }
+        updateVectorData(v, hit, objId);
     }
-    // we should never reach this point.
-    return color;
+    return v.data.accColor;
 }
 
 
