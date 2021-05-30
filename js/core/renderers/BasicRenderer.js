@@ -1,3 +1,4 @@
+import {mustache} from "../../lib/mustache.mjs";
 import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
 import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
 import {RenderPass} from "../../lib/threejs/examples/jsm/postprocessing/RenderPass.js";
@@ -11,11 +12,10 @@ import constants from "./shaders/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
 import raymarch from "./shaders/raymarch.js";
-import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/scenes.js";
-
+import structVectorData from "./shaders/basicVectorData/struct.js";
+import updateVectorData from "./shaders/basicVectorData/update.js";
 import SteveShader from "../../postProcess/steve/shader.js";
-import vectorDataStruct from "./shaders/basicVectorData/struct.js";
 
 
 /**
@@ -66,7 +66,7 @@ export class BasicRenderer extends AbstractRenderer {
         this._fragmentBuilder.addChunk(commons2);
 
         // data carried by ExtVector
-        this._fragmentBuilder.addChunk(vectorDataStruct);
+        this._fragmentBuilder.addChunk(structVectorData);
         // subgroup/quotient orbifold
         this.set.shader(this._fragmentBuilder);
 
@@ -76,6 +76,7 @@ export class BasicRenderer extends AbstractRenderer {
         // scene
         this.scene.shader(this._fragmentBuilder);
         this._fragmentBuilder.addChunk(mustache.render(scenes, this));
+        this._fragmentBuilder.addChunk(mustache.render(updateVectorData, this));
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);

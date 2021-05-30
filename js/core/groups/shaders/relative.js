@@ -166,10 +166,7 @@ RelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){
  * This structure is meant to follow vector during the ray-marching procedure.
  * It consists of 
  * - vector : the position and direction of the vector
- * - travelledDist : the distance travelled during the raymarching
- * - lastFlowTime : the time flowed during the last step
- * - isTeleported : a flag, boolean flag that is true, if the vector has been teleported in the last loop
- * - probably more to come
+ * - data : additional data (such as the accumulated color) carried along the raymarching
  *
  **********************************************************************************************************************/
 
