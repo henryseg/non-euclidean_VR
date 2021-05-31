@@ -2,6 +2,7 @@ import {XRControllerModelFactory} from "../lib/threejs/examples/jsm/webxr/XRCont
 import {AbstractThurston} from "./AbstractThurston.js";
 import {VRControlsMove} from "../controls/VRControlsMove.js";
 import {VRControlsDrag} from "../controls/VRControlsDrag.js";
+import {VRControlsReset} from "../controls/VRControlsReset.js";
 
 
 /**
@@ -51,9 +52,9 @@ export class AbstractVRThurston extends AbstractThurston {
         /**
          * Rotating the scene with the VR controller
          * @protected
-         * @type {VRControlsDrag}
+         * @type {VRControlsReset}
          */
-        this.VRControlsDrag = new VRControlsDrag(this.camera.position, controller1);
+        this.VRControlsDrag = new VRControlsReset(this.camera.position, controller1);
     }
 
     /**

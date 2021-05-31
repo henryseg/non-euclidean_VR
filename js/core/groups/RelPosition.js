@@ -53,6 +53,19 @@ class RelPosition {
     }
 
     /**
+     * Reset the relative position to its default value, i.e.
+     * - cellBoost (and invCellBoost) = identity
+     * - reset the local position
+     * @return {RelPosition}
+     */
+    reset(){
+        this.cellBoost.identity();
+        this.invCellBoost.identity();
+        this.local.reset();
+        return this;
+    }
+
+    /**
      * Reduce the eventual numerical error of the current boost.
      * @return {RelPosition} the current relative position
      */

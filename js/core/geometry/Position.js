@@ -65,6 +65,18 @@ class Position {
     }
 
     /**
+     * Reset the position to its original one, i.e.
+     * - boost = identity
+     * - quaternion = identity
+     * @return {Position}
+     */
+    reset(){
+        this.boost.identity();
+        this.quaternion.identity();
+        return this;
+    }
+
+    /**
      * Reduce the eventual numerical error of the current boost.
      * @return {Position} The current position
      */
