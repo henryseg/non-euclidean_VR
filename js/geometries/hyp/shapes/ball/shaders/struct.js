@@ -15,7 +15,7 @@ struct BallShape {
  * Distance function for a global hyperbolic ball
  */
 float sdf(BallShape ball, RelVector v) {
-    Point center = applyIsometry(v.invCellBoost, ball.center);
+    Point center = applyGroupElement(v.invCellBoost, ball.center);
     return dist(v.local.pos, center) - ball.radius;
 }
 
@@ -23,7 +23,7 @@ float sdf(BallShape ball, RelVector v) {
  * Gradient field for a global hyperbolic ball
  */
 RelVector gradient(BallShape ball, RelVector v){
-    Point center = applyIsometry(v.invCellBoost, ball.center);
+    Point center = applyGroupElement(v.invCellBoost, ball.center);
     Vector local = direction(v.local.pos, center);
     return RelVector(negate(local), v.cellBoost, v.invCellBoost);
 }
@@ -42,7 +42,7 @@ vec2 uvMap(BallShape ball, RelVector v){
     f[0] = applyGroupElement(v.invCellBoost, f[0]);
     f[1] = applyGroupElement(v.invCellBoost, f[1]);
     f[2] = applyGroupElement(v.invCellBoost, f[2]);
-    Point center = applyIsometry(v.invCellBoost, ball.center);
+    Point center = applyGroupElement(v.invCellBoost, ball.center);
     
     Vector radius = direction(center, v.local.pos);
 

@@ -29,6 +29,7 @@
 
 
     const thurston = new VRThurston(geom, torus, {keyboard: 'fr'});
+    thurston.scene.background = new Color(0,0,0);
 
 
     // lights for the Phong material
@@ -54,7 +55,7 @@
 
     // Phong shading material
     const mat0 = new PhongMaterial({
-        color: new Color(1, 0.2, 0.2),
+        color: new Color(1, 0.5, 0.5),
         shininess: 5,
         lights: lights
     });

@@ -19,7 +19,7 @@
     import * as geom from "../../js/geometries/sph/geometry/General.js";
     import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
 
-    import {Point, Vector} from "../../js/geometries/sph/geometry/General.js";
+    import {Isometry, Point, Vector} from "../../js/geometries/sph/geometry/General.js";
     import {PointLight} from "../../js/geometries/sph/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
@@ -37,21 +37,21 @@
     const light0 = new PointLight(
         new Vector(1, 0, 0),
         new Color(1, 1, 0),
-        0.5
+        0.3
     );
 
     // cyan light
     const light1 = new PointLight(
         new Vector(0, 1, -1),
         new Color(0, 1, 1),
-        0.5
+        0.3
     );
 
     // magenta light
     const light2 = new PointLight(
         new Vector(-1, -1, 1),
         new Color(1, 0, 1),
-        0.5
+        0.3
     );
     const lights = [light0, light1, light2];
 
@@ -101,6 +101,10 @@
         0.1,
         mat1
     );
+    const rot = new Isometry();
+    rot.matrix.makeRotationX(0.5 * Math.PI);
+    ball1.shape.isom.multiply(rot);
+    ball1.shape.updateData();
 
     thurston.add(lattice, ball1, light0, light1, light2);
     thurston.run();

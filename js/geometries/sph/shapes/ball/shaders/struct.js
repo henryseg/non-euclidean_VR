@@ -30,10 +30,10 @@ RelVector gradient(BallShape ball, RelVector v){
 }
 
 vec2 uvMap(BallShape ball, RelVector v){
-    Point center = applyGroupElement(v.invCellBoost, ball.center);
-    Vector direction = direction(center, v.local.pos);
-    vec4 dir = ball.absoluteIsomInv.matrix * direction.dir;
-    dir = normalize(dir);
+    Point pos = applyGroupElement(v.cellBoost, v.local.pos);
+    Vector direction = direction(ball.center, pos);
+    direction = applyIsometry(ball.absoluteIsomInv, direction);
+    vec4 dir = normalize(direction.dir);
     float sinPhi = length(dir.xy);
     float cosPhi = dir.z;
     float uCoord = -atan(dir.y, dir.x);
