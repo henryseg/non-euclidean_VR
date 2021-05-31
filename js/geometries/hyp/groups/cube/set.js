@@ -199,14 +199,14 @@ shiftZp.isom.matrix.set(
     -1, 0, 0, 0,
     0, 0, 2, -sqrt3,
     0, 0, -sqrt3, 2
-)
+);
 
 shiftZn.isom.matrix.set(
     0, -1, 0, 0,
     1, 0, 0, 0,
     0, 0, 2, sqrt3,
     0, 0, sqrt3, 2
-)
+);
 
 const neighbors = [
     {elt: shiftXp, inv: shiftXn},

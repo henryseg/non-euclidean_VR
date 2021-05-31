@@ -24,10 +24,11 @@
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
     import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
+    import {EarthTexture} from "../../js/commons/material/all.js";
 
 
     const thurston = new VRThurston(geom, quaternion, {keyboard: 'fr'});
-
+    thurston.scene.background = new Color(0,0,0);
     thurston.camera.maxDist = 2 * Math.PI;
 
     // lights for the Phong material
@@ -36,24 +37,27 @@
     const light0 = new PointLight(
         new Vector(1, 0, 0),
         new Color(1, 1, 0),
+        0.5
     );
 
     // cyan light
     const light1 = new PointLight(
         new Vector(0, 1, -1),
-        new Color(0, 1, 1)
+        new Color(0, 1, 1),
+        0.5
     );
 
     // magenta light
     const light2 = new PointLight(
         new Vector(-1, -1, 1),
-        new Color(1, 0, 1)
+        new Color(1, 0, 1),
+        0.5
     );
     const lights = [light0, light1, light2];
 
     // Phong shading material
     const mat0 = new PhongMaterial({
-        color: new Color(1, 0.2, 0.2),
+        color: new Color(1, 0.9, 0.9),
         shininess: 5,
         lights: lights
     });
@@ -89,12 +93,8 @@
     const lattice = new Solid(latticeShape, mat0);
 
 
-    // Phong shading material
-    const mat1 = new PhongMaterial({
-        color: new Color(0, 0, 1),
-        shininess: 10,
-        lights: lights
-    });
+    // Earth texture
+    const mat1 = new EarthTexture('../../js');
 
     const ball1 = new Ball(
         new Vector(0, 0, -0.5),

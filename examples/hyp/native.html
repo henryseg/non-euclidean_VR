@@ -19,42 +19,87 @@
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
-    import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
+    import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
     import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
     import {LocalBallShape, complement, LocalHoroballShape, union} from "../../js/geometries/hyp/shapes/all.js";
+    import {SingleColorMaterial} from "../../js/commons/material/all.js";
+
 
 
     const thurston = new NativeThurston(geom, cube, {keyboard: 'fr'});
+    thurston.scene.background = new Color(0, 0, 0);
+
+    const colorWhite = new Color(1,1,1);
+    const colorRed = new Color(1,0,0);
+    const colorGreen = new Color(0,1,0);
+    const colorBlue = new Color(0,0,1);
+    const colorYellow = new Color(1,1,0);
+    const colorMagenta = new Color(1,0,1);
+    const colorCyan = new Color(0,1,1);
+
+
+    const shiftXp = new Isometry();
+    const shiftXn = new Isometry();
+    const shiftYp = new Isometry();
+    const shiftYn = new Isometry();
+    const shiftZp = new Isometry();
+    const shiftZn = new Isometry();
+
+    const sqrt3 = Math.sqrt(3);
+    shiftXp.matrix.set(
+        2, 0, 0, -sqrt3,
+        0, 0, 1, 0,
+        0, -1, 0, 0,
+        -sqrt3, 0, 0, 2
+    );
+    shiftXn.matrix.set(
+        2, 0, 0, sqrt3,
+        0, 0, -1, 0,
+        0, 1, 0, 0,
+        sqrt3, 0, 0, 2
+    )
+
+    shiftYp.matrix.set(
+        0, 0, -1, 0,
+        0, 2, 0, -sqrt3,
+        1, 0, 0, 0,
+        0, -sqrt3, 0, 2
+    );
+
+    shiftYn.matrix.set(
+        0, 0, 1, 0,
+        0, 2, 0, sqrt3,
+        -1, 0, 0, 0,
+        0, sqrt3, 0, 2
+    );
+
+    shiftZp.matrix.set(
+        0, 1, 0, 0,
+        -1, 0, 0, 0,
+        0, 0, 2, -sqrt3,
+        0, 0, -sqrt3, 2
+    );
+
+    shiftZn.matrix.set(
+        0, -1, 0, 0,
+        1, 0, 0, 0,
+        0, 0, 2, sqrt3,
+        0, 0, sqrt3, 2
+    );
 
 
     // lights for the Phong material
 
-    //  yellow light
-    const light0 = new PointLight(
-        new Vector(1, 0, 0),
-        new Color(1, 1, 0),
-    );
 
-    // cyan light
-    const light1 = new PointLight(
-        new Vector(0, 1, -1),
-        new Color(0, 1, 1)
-    );
 
-    // magenta light
-    const light2 = new PointLight(
-        new Vector(-1, -1, 1),
-        new Color(1, 0, 1)
-    );
-    const lights = [light0, light1, light2];
+
 
     // Phong shading material
     const mat0 = new PhongMaterial({
-        color: new Color(1, 0.2, 0.2),
+        color: new Color(1, 1, 1),
         shininess: 5,
-        lights: lights
     });
 
     // Complement of a local ball
@@ -85,17 +130,118 @@
     // Phong shading material
     const mat1 = new PhongMaterial({
         color: new Color(0, 0, 1),
-        shininess: 10,
-        lights: lights
+        shininess: 10
     });
 
-    const ball1 = new Ball(
-        new Vector(0, 0, -0.5),
-        0.2,
-        mat1
+    const matWhite = new SingleColorMaterial(colorWhite);
+    const matRed = new SingleColorMaterial(colorRed);
+    const matGreen = new SingleColorMaterial(colorGreen);
+    const matBlue = new SingleColorMaterial(colorBlue);
+    const matYellow = new SingleColorMaterial(colorYellow);
+    const matMagenta = new SingleColorMaterial(colorMagenta);
+    const matCyan = new SingleColorMaterial(colorCyan);
+
+    const delta = 0.3;
+    const ballCyan = new Ball(
+        new Vector(-delta, delta,-delta),
+        0.1,
+        matCyan
+    );
+    const lightCyan = new PointLight(
+        new Vector(-delta,delta,-delta),
+        colorCyan,
+        0.5
     );
 
-    thurston.add(lattice, ball1, light0, light1, light2);
+    const ballBlue = new Ball(
+        new Vector(-delta, delta,-delta),
+        0.1,
+        matBlue
+    );
+    ballBlue.shape.isom.premultiply(shiftZp);
+    ballBlue.shape.updateData();
+    const lightBlue = new PointLight(
+        new Point().applyIsometry(ballBlue.shape.absoluteIsom),
+        colorBlue,
+        0.5
+    );
+
+    const ballMagenta = new Ball(
+        new Vector(-0.4, 0.4,-0.4),
+        0.1,
+        matMagenta
+    );
+    ballMagenta.shape.isom
+        .premultiply(shiftYn)
+        .premultiply(shiftZp);
+    ballMagenta.shape.updateData();
+    const lightMagenta = new PointLight(
+        new Point().applyIsometry(ballMagenta.shape.absoluteIsom),
+        colorMagenta,
+        0.5
+    );
+
+
+
+    const ballRed = new Ball(
+        new Vector(-0.4, 0.4,-0.4),
+        0.1,
+        matRed
+    );
+    ballRed.shape.isom
+        .premultiply(shiftXp)
+        .premultiply(shiftYn)
+        .premultiply(shiftZp);
+    ballRed.shape.updateData();
+    const lightRed = new PointLight(
+        new Point().applyIsometry(ballRed.shape.absoluteIsom),
+        colorRed
+    );
+
+    const ballYellow = new Ball(
+        new Vector(-0.4, 0.4,-0.4),
+        0.1,
+        matYellow
+    );
+    ballYellow.shape.isom
+        .premultiply(shiftZp)
+        .premultiply(shiftXp)
+        .premultiply(shiftYn)
+        .premultiply(shiftZp);
+    ballYellow.shape.updateData();
+    const lightYellow = new PointLight(
+        new Point().applyIsometry(ballYellow.shape.absoluteIsom),
+        colorYellow
+    );
+
+
+    const ballGreen = new Ball(
+        new Vector(-0.4, 0.4,-0.4),
+        0.1,
+        matGreen
+    );
+    ballGreen.shape.isom
+        .premultiply(shiftYn)
+        .premultiply(shiftZp)
+        .premultiply(shiftXp)
+        .premultiply(shiftYn)
+        .premultiply(shiftZp);
+    ballGreen.shape.updateData();
+    const lightGreen = new PointLight(
+        new Point().applyIsometry(ballGreen.shape.absoluteIsom),
+        colorGreen
+    );
+
+
+
+
+
+
+
+
+
+    thurston.add(lattice, ballCyan, ballBlue, ballMagenta, ballRed, ballYellow, ballGreen)
+    thurston.add(lightCyan, lightBlue, lightMagenta, lightRed,lightYellow, lightGreen);
     thurston.run();
 
 
