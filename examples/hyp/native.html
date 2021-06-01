@@ -25,10 +25,13 @@
     import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
     import {LocalBallShape, complement, LocalHoroballShape, union} from "../../js/geometries/hyp/shapes/all.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {LocalDirectedHoroballShape} from "../../js/geometries/hyp/shapes/localDirectedHoroball/LocalDirectedHoroballShape.js";
+    import {CREEPING_OFF} from "../../js/core/groups/TeleportationSet.js";
 
 
 
     const thurston = new NativeThurston(geom, cube, {keyboard: 'fr'});
+    cube.creepingType = CREEPING_OFF;
     thurston.scene.background = new Color(0, 0, 0);
 
     const colorWhite = new Color(1,1,1);
@@ -120,10 +123,10 @@
         );
     }
 
-    // const unionShape = union(centerBall, ...horoballs);
-    // const latticeShape = complement(unionShape);
+    const unionShape = union(centerBall, ...horoballs);
+    const latticeShape = complement(unionShape);
 
-    const latticeShape = complement(centerBall);
+    // const latticeShape = complement(centerBall);
     const lattice = new Solid(latticeShape, mat0);
 
 
