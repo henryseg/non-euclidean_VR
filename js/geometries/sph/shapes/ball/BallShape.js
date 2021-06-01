@@ -6,6 +6,7 @@ import distance from "../../imports/distance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
+import uv from "./shaders/uv.js";
 
 
 /**
@@ -73,6 +74,10 @@ export class BallShape extends BasicShape {
         return true;
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     get uniformType() {
         return 'BallShape';
     }
@@ -87,6 +92,10 @@ export class BallShape extends BasicShape {
 
     glslGradient() {
         return mustache.render(gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache.render(uv, this);
     }
 
 }
