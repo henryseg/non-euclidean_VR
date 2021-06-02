@@ -45,7 +45,7 @@ export class TeleportationSet {
     constructor(
         neighbors = [],
         usesNearestNeighbors = false,
-        creepingType = CREEPING_STRICT
+        creepingType = CREEPING_OFF
     ) {
         /**
          * The list of teleports "generating" the subgroups.
@@ -66,7 +66,7 @@ export class TeleportationSet {
         this.usesNearestNeighbors = usesNearestNeighbors;
         /**
          * Flag : type of creeping used
-         * Default is CREEPING_STRICT.
+         * Default is CREEPING_OFF.
          * @type{number}
          */
         this.creepingType = creepingType;

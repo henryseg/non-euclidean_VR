@@ -26,11 +26,11 @@
     import {LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
     import {complement, intersection, union} from "../../js/commons/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
-    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
+    import {CREEPING_FULL, CREEPING_OFF} from "../../js/core/groups/TeleportationSet.js";
 
 
     const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
-    heisenberg.creepingType = CREEPING_FULL;
+    heisenberg.creepingType = CREEPING_OFF;
     // heisenberg.usesNearestNeighbors = true;
     thurston.scene.fog.scattering = 0.5;
     thurston.scene.background = new Color(0, 0, 0.3);
