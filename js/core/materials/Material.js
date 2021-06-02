@@ -85,7 +85,7 @@ export class Material extends Generic {
 
     /**
      * Return the chunk of GLSL code used to compute the color of the material at the given point
-     * The render function on the GLSL side should have one of the signatures
+     * The render function on the GLSL side should have one of the following signatures
      * - `vec3 {{name}}_render(ExtVector v)`
      * - `vec3 {{name}}_render(ExtVector v, RelVector normal)`
      * - `vec3 {{name}}_render(ExtVector v, vec2 uv)`
