@@ -80,16 +80,16 @@ Some of them are inherited by default from {@link Material} but can be overwritt
   It returns the chunk of GLSL code used to compute the color of **this instance** of the material.
   The GLSL should contain a function with one of the following signatures.
   ```
-  vec3 NAME_render(RelVector v)
+  vec3 NAME_render(ExtVector v)
   ```
   ```
-  vec3 NAME_render(RelVector v, RelVector normal)
+  vec3 NAME_render(ExtVector v, RelVector normal)
   ```
   ```
-  vec3 NAME_render(RelVector v, vec2 uv)
+  vec3 NAME_render(ExtVector v, vec2 uv)
   ```
   ```
-  vec3 NAME_render(RelVector v, RelVector normal, vec2 uv)
+  vec3 NAME_render(ExtVector v, RelVector normal, vec2 uv)
   ```
   where `NAME` is the name of the instance of the object, computed by the getter `name` (inherited from {@link Generic}). 
   The exact signature depends on whether the material requires a normal or UV coordinates.
