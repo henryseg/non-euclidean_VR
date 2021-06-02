@@ -26,8 +26,11 @@
     import {LocalBallShape, LocalDirectedBallShape} from "../../js/geometries/euc/shapes/all.js";
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
     import {LocalDirectedBall} from "../../js/geometries/euc/solids/LocalDirectedBall.js";
+    import {CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
 
+    torus.creepingType = CREEPING_STRICT;
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+
 
     // lights for the Phong material
 
