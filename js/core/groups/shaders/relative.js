@@ -177,10 +177,11 @@ struct ExtVector {
 
 ExtVector flow(ExtVector v, float t) {
     v.vector = flow(v.vector, t);
-    v.data.lastFlowTime = t;
-    v.data.travelledDist = v.data.travelledDist + t;
-    v.data.totalTravelDist  = v.data.totalTravelDist + t;
+    v.data.lastFlowDist = t;
+    v.data.lastBounceDist = v.data.lastBounceDist + t;
+    v.data.totalDist  = v.data.totalDist + t;
     return v;
 }`;
+
 
 

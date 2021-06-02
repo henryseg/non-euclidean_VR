@@ -1,16 +1,25 @@
 // language=Mustache + GLSL
 export default `//
 
-void updateVectorDataFromObj(inout ExtVector v, int objId){
+void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector normal;
     vec2 uv;
     vec3 color;
+    vec3 reflectivity;
     
     switch(objId){
     {{#scene.solids}}
     
         case {{id}}:
         {{#material.isReflecting}}
+            
+            if(v.data.iBounce == scene.maxBounces){
+                reflectivity = vec3(0);
+            } 
+            else {
+                reflectivity = {{material.name}}.reflectivity;
+            }
+            
             normal = {{shape.name}}_gradient(v.vector);
     
             {{^material.usesNormal}}
@@ -34,19 +43,20 @@ void updateVectorDataFromObj(inout ExtVector v, int objId){
             {{/material.usesNormal}}
 
             {{#scene.fog}}
-                color = applyFog(color, v.data.travelledDist);
+                color = applyFog(color, v.data.lastBounceDist);
             {{/scene.fog}}
 
-            if(length({{material.name}}.reflectivity) == 0.) {
+            if(length(reflectivity) == 0.) {
                 v.data.stop = true;
             }
             else{
                 v.data.stop = false;
             }
-            v.data.accColor = v.data.accColor + v.data.leftToComputeColor * (vec3(1) - {{material.name}}.reflectivity) * color;
-            v.data.leftToComputeColor = v.data.leftToComputeColor *  {{material.name}}.reflectivity;
+            v.data.accColor = v.data.accColor + v.data.leftToComputeColor * (vec3(1) - reflectivity) * color;
+            v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;
             v.vector = geomReflect(v.vector,normal);
-            v.data.travelledDist = 0.;
+            v.data.lastBounceDist = 0.;
+            v.data.iBounce = v.data.iBounce + 1;
             v = flow(v, 1.2 * camera.threshold);
     
         {{/material.isReflecting}}
@@ -75,7 +85,7 @@ void updateVectorDataFromObj(inout ExtVector v, int objId){
             {{/material.usesNormal}}
 
             {{#scene.fog}}
-                color = applyFog(color, v.data.travelledDist);
+                color = applyFog(color, v.data.lastBounceDist);
             {{/scene.fog}}
             v.data.accColor = v.data.accColor + v.data.leftToComputeColor * color;
             v.data.leftToComputeColor = vec3(0);
@@ -102,7 +112,7 @@ void updateVectorData(inout ExtVector v, int hit, int objId){
         return;
     }
     if(hit == HIT_SOLID) {
-        updateVectorDataFromObj(v, objId);
+        updateVectorDataFromSolid(v, objId);
         return;
     }
 }

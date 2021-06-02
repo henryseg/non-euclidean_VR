@@ -41,6 +41,11 @@ int raymarch(inout ExtVector v, out int objId){
 
     // local scene
     for (int i = 0; i < camera.maxSteps; i++){
+        // debugging stuff
+        localV.data.iMarch = i;
+        
+        
+        
         // start by teleporting eventually the vector
         localV = teleport(localV);
         if (localV.data.isTeleported){
@@ -51,7 +56,7 @@ int raymarch(inout ExtVector v, out int objId){
         }
         else {
             // if no teleport was needed, then march
-            if (localV.data.travelledDist > camera.maxDist) {
+            if (localV.data.totalDist > camera.maxDist) {
                 break;
             }
             dist = localSceneSDF(localV.vector, auxHit, auxId);
@@ -74,9 +79,10 @@ int raymarch(inout ExtVector v, out int objId){
     //global scene
     marchingStep = camera.minDist;
     for (int i=0; i < camera.maxSteps; i++){
+        // debugging stuff
+        globalV.data.iMarch = i;
 
-
-        if (globalV.data.travelledDist > localV.data.travelledDist || globalV.data.travelledDist > camera.maxDist){
+        if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){
             // we reached the maximal distance
             break;
         }
@@ -103,7 +109,7 @@ int raymarch(inout ExtVector v, out int objId){
 vec3 getColor(ExtVector v){
     int objId;
     int hit;
-    for (int k=0; k <= scene.maxBounces; k++){
+    for (int i = 0; i <= scene.maxBounces; i++){
         if (v.data.stop){
             break;
         }
