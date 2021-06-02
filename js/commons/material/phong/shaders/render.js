@@ -1,6 +1,6 @@
 // language=Mustache + GLSL
 export default `//
-vec3 {{name}}_render(RelVector v, RelVector normal) {
+vec3 {{name}}_render(ExtVector v, RelVector normal) {
     bool check;
     RelVector dir;
     float intensity;
@@ -12,9 +12,9 @@ vec3 {{name}}_render(RelVector v, RelVector normal) {
     {{#lights}}
         k = {{name}}.maxDirs;
         for(int j=0; j < k; j++){
-            check = {{name}}_directions(v, j, dir, intensity);
+            check = {{name}}_directions(v.vector, j, dir, intensity);
             if(check) {
-                color = color + lightComputation(v.local, normal.local, dir.local, material, {{name}}.color, intensity);
+                color = color + lightComputation(v.vector.local, normal.local, dir.local, material, {{name}}.color, intensity);
             }
         }
     {{/lights}}

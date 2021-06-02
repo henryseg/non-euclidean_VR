@@ -1,6 +1,6 @@
 // language=Mustache + GLSL
 export default `//
-vec3 {{name}}_render(RelVector v) {
+vec3 {{name}}_render(ExtVector v) {
     return render({{name}});
 }
 `;

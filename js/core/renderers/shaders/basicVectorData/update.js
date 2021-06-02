@@ -24,7 +24,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     
             {{^material.usesNormal}}
                 {{^material.usesUVMap}}
-                    color =  {{material.name}}_render(v.vector);
+                    color =  {{material.name}}_render(v);
                 {{/material.usesUVMap}}
                 {{#material.usesUVMap}}
                     uv = {{shape.name}}_uvMap(v.vector);
@@ -34,11 +34,11 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     
             {{#material.usesNormal}}
                 {{^material.usesUVMap}}
-                    color = {{material.name}}_render(v.vector, normal);
+                    color = {{material.name}}_render(v, normal);
                 {{/material.usesUVMap}}
                 {{#material.usesUVMap}}
                     uv = {{shape.name}}_uvMap(v.vector);
-                    color = {{material.name}}_render(v.vector, normal, uv);
+                    color = {{material.name}}_render(v, normal, uv);
                 {{/material.usesUVMap}}
             {{/material.usesNormal}}
 
@@ -64,23 +64,23 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
         {{^material.isReflecting}}
             {{^material.usesNormal}}
                 {{^material.usesUVMap}}
-                    color =  {{material.name}}_render(v.vector);
+                    color =  {{material.name}}_render(v);
                 {{/material.usesUVMap}}
                 {{#material.usesUVMap}}
                     uv = {{shape.name}}_uvMap(v.vector);
-                    color = {{material.name}}_render(v.vector, uv);
+                    color = {{material.name}}_render(v, uv);
                 {{/material.usesUVMap}}
             {{/material.usesNormal}}
     
             {{#material.usesNormal}}
                 {{^material.usesUVMap}}
                     normal = {{shape.name}}_gradient(v.vector);
-                    color = {{material.name}}_render(v.vector, normal);
+                    color = {{material.name}}_render(v, normal);
                 {{/material.usesUVMap}}
                 {{#material.usesUVMap}}
                     normal = {{shape.name}}_gradient(v.vector);
                     uv = {{shape.name}}_uvMap(v.vector);
-                    color = {{material.name}}_render(v.vector, normal, uv);
+                    color = {{material.name}}_render(v, normal, uv);
                 {{/material.usesUVMap}}
             {{/material.usesNormal}}
 
@@ -106,7 +106,7 @@ void updateVectorData(inout ExtVector v, int hit, int objId){
         return;
     }
     if (hit == HIT_NOTHING) {
-        vec3 color = {{scene.background.name}}_render(v.vector);
+        vec3 color = {{scene.background.name}}_render(v);
         v.data.accColor = v.data.accColor + v.data.leftToComputeColor * color;
         v.data.leftToComputeColor = vec3(0);
         v.data.stop = true;

@@ -15,7 +15,7 @@ struct BasicPTMaterial {
     float diffuseChance;
 };
 
-vec3 render(BasicPTMaterial material, RelVector v, RelVector n) {
+vec3 render(BasicPTMaterial material, ExtVector v, RelVector n) {
    return material.diffuse;
 }
 `;
