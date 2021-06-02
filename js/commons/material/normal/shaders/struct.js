@@ -6,14 +6,14 @@ export default `//
  * However there is a function, to factorize the code
  **********************************************************************************************************************/
 
-vec3 normalMaterialRender(RelVector v, RelVector normal) {
+vec3 normalMaterialRender(ExtVector v, RelVector normal) {
     Vector[3] f;
-    Point pos = applyGroupElement(v.cellBoost, v.local.pos);
+    Point pos = applyGroupElement(v.vector.cellBoost, v.vector.local.pos);
     frame(pos, f);
 
-    f[0] = applyGroupElement(v.invCellBoost, f[0]);
-    f[1] = applyGroupElement(v.invCellBoost, f[1]);
-    f[2] = applyGroupElement(v.invCellBoost, f[2]);
+    f[0] = applyGroupElement(v.vector.invCellBoost, f[0]);
+    f[1] = applyGroupElement(v.vector.invCellBoost, f[1]);
+    f[2] = applyGroupElement(v.vector.invCellBoost, f[2]);
     
 //    Vector[3] f;
 //    frame(v.local.pos, f);
