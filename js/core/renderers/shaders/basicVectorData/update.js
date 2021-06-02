@@ -106,7 +106,8 @@ void updateVectorData(inout ExtVector v, int hit, int objId){
         return;
     }
     if (hit == HIT_NOTHING) {
-        v.data.accColor = v.data.accColor + v.data.leftToComputeColor * scene.background;
+        vec3 color = {{scene.background.name}}_render(v.vector);
+        v.data.accColor = v.data.accColor + v.data.leftToComputeColor * color;
         v.data.leftToComputeColor = vec3(0);
         v.data.stop = true;
         return;

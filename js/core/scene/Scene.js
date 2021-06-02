@@ -1,8 +1,8 @@
 import {mustache} from "../../lib/mustache.mjs";
 
-import scenes from "../renderers/shaders/scenes.js";
 import header from "./shaders/header.js";
 import {Color} from "../../lib/threejs/build/three.module.js";
+import {SingleColorMaterial} from "../../commons/material/singleColor/SingleColorMaterial.js";
 
 
 /**
@@ -53,9 +53,9 @@ export class Scene {
 
         /**
          * Background color
-         * @type{Color}
+         * @type{Material}
          */
-        this.background = params.background !== undefined ? params.background : new Color(0.1, 0.1, 0.1);
+        this.background = params.background !== undefined ? params.background : new SingleColorMaterial(new Color(0, 0, 0));
     }
 
     /**
@@ -101,6 +101,8 @@ export class Scene {
     shader(shaderBuilder) {
         shaderBuilder.addChunk(header);
         shaderBuilder.addUniform('scene', 'Scene', this);
+        // background material
+        this.background.shader(shaderBuilder);
         // run through all the objects in the scene and combine the relevant chunks of GLSL code.
         for (const light of this.lights) {
             light.shader(shaderBuilder);

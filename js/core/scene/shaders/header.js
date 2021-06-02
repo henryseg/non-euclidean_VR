@@ -17,7 +17,7 @@ export default `//
 
 struct Scene {
     int maxBounces; /**< maximal number of bounces (for reflective material) */
-    vec3 background; /**< background color */
+//    vec3 background; /**< background color */
 };
 
 

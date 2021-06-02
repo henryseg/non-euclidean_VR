@@ -27,8 +27,9 @@
     import {CheckerboardMaterial} from "../../js/commons/material/checkerboard/CheckerboardMaterial.js";
     import {phongWrap} from "../../js/commons/material/phongWrap/PhongWrapMaterial.js";
     import {union} from "../../js/commons/shapes/all.js";
-    import {CREEPING_OFF} from "../../js/core/groups/TeleportationSet.js";
+    import {CREEPING_OFF, CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
 
+    cube.creepingType = CREEPING_STRICT;
     const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
 
 
