@@ -13,10 +13,20 @@ export default `//
  * The section at the origin, should coincide with the reference frame.
  * @param[in] p point on the geometry
  * @param[out] frame computed frame at the given point
- * @todo Not completely convinced by this - and the function createVector() and smallShift().
- * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] f){
+    f[0] = Vector(p, vec4(1, 0, 0, 0));
+    f[1] = Vector(p, vec4(0, 1, 0, 0));
+    f[2] = Vector(p, vec4(0, 0, 1, 0));
+}
+
+/**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
+void orthoFrame(Point p, out Vector[3] f){
     f[0] = Vector(p, vec4(1, 0, 0, 0));
     f[1] = Vector(p, vec4(0, 1, 0, 0));
     f[2] = Vector(p, vec4(0, 0, 1, 0));

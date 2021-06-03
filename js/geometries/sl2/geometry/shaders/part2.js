@@ -23,6 +23,18 @@ void frame(Point p, out Vector[3] f){
 }
 
 /**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
+void orthoFrame(Point p, out Vector[3] f){
+    f[0] = Vector(p, vec3(1, 0, 0));
+    f[1] = Vector(p, vec3(0, 1, 0));
+    f[2] = Vector(p, vec3(0, 0, 1));
+}
+
+/**
  * Compute (an approximation of) the point obtained from p by moving the given direction.
  * @param[in] p initial point.
  * @param[in] dp the coordinate of the direction with respect to the frame provided by frame()

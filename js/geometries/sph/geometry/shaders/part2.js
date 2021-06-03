@@ -5,8 +5,6 @@ export default `//
  * The section at the origin, should coincide with the reference frame.
  * @param[in] p point on the geometry
  * @param[out] frame computed frame at the given point
- * @todo Not completely convinced by this - and the function createVector() and smallShift().
- * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] f){
     vec4 dir0 = vec4(p.coords.w, 0, 0, -p.coords.x);
@@ -15,6 +13,29 @@ void frame(Point p, out Vector[3] f){
     dir0 = normalize(dir0);
     dir1 = normalize(dir1);
     dir2 = normalize(dir2);
+    f[0] = Vector(p, dir0);
+    f[1] = Vector(p, dir1);
+    f[2] = Vector(p, dir2);
+}
+
+/**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * Image of the canonical frame at the origin the "makeTranslation(p)"
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
+void frame(Point p, out Vector[3] f){
+    float x = p.coords.x;
+    float y = p.coords.y;
+    float z = p.coords.z;
+    float w = p.coords.w;
+
+    float den = 1. + w;
+    vec4 dir0 = (1. / den) * vec4(-x * x + w + 1., -x * y, -x * z, -x * den);
+    vec4 dir1 = (1. / den) * vec4(-x * y, -y * y + w + 1., -y * z, -y * den);
+    vec4 dir2 = (1. / den) * vec4(-x * z, -y * z, -z * z + w + 1., -z * den);
+
     f[0] = Vector(p, dir0);
     f[1] = Vector(p, dir1);
     f[2] = Vector(p, dir2);
@@ -37,7 +58,7 @@ Point smallShift(Point p, vec3 dp){
 
 Vector smallShift(Vector v, vec3 dp){
     Point pos = smallShift(v.pos, dp);
-    return Vector(pos,v.dir);
+    return Vector(pos, v.dir);
 }
 
 

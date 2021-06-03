@@ -51,7 +51,7 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
 
     this.matrix.identity();
 
-    if (len != 0) {
+    if (len !== 0) {
         const c1 = Math.sin(len);
         const c2 = 1 - Math.cos(len);
 
@@ -89,7 +89,7 @@ Isometry.prototype.makeTranslation = function (point) {
         return this;
     }
 
-    const c2 = 1 - w;
+    const c2 = 1 - z;
     u.normalize();
 
     const m = new Matrix4().set(

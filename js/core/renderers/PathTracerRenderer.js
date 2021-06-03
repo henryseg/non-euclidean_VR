@@ -11,8 +11,9 @@ import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
 import scenes from "./shaders/scenes.js";
 import raymarch from "./shaders/raymarch.js";
-import structVectorData from "./shaders/PTVectorData/struct.js";
 import random from "./shaders/random.js";
+import structVectorData from "./shaders/PTVectorData/struct.js";
+import updateVectorData from "./shaders/PTVectorData/update.js";
 
 export class PathTracerRenderer extends AbstractRenderer {
 
@@ -49,16 +50,17 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         this._fragmentBuilder.addChunk(random);
         this._fragmentBuilder.addChunk(structVectorData);
+
         // subgroup/quotient orbifold
         this.set.shader(this._fragmentBuilder);
 
         // camera
         this.camera.shader(this._fragmentBuilder);
 
-        // WE ARE HERE !!!
         // scene
         this.scene.shader(this._fragmentBuilder);
         this._fragmentBuilder.addChunk(mustache.render(scenes, this));
+        this._fragmentBuilder.addChunk(mustache.render(updateVectorData, this));
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);

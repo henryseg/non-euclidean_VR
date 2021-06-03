@@ -10,29 +10,36 @@ export default `//
  **********************************************************************************************************************/
 
 /**
+ * Compute the vector at p whose coordinates are given in the given frame
+ * See frame().
+ */
+Vector createVector(Point p, vec3 coords, Vector[3] frame){
+    Vector c0 = multiplyScalar(coords[0], frame[0]);
+    Vector c1 = multiplyScalar(coords[1], frame[1]);
+    Vector c2 = multiplyScalar(coords[2], frame[2]);
+    return add(c0, add(c1, c2));
+}
+
+
+
+/**
  * Compute the vector at p whose coordinates are given by the section of the frame bundle.
  * See frame().
  */
 Vector createVector(Point p, vec3 coords){
     Vector[3] f;
     frame(p, f);
-    Vector c0 = multiplyScalar(coords[0], f[0]);
-    Vector c1 = multiplyScalar(coords[1], f[1]);
-    Vector c2 = multiplyScalar(coords[2], f[2]);
-    return add(c0, add(c1, c2));
+    return createVector(p, f);
 }
 
 /**
- * Compute the vector at p whose coordinates are given by the section of the orthonormal frame bundle.
+ * Compute the vector at p whose coordinates are given by the section of the frame bundle.
  * See frame().
  */
-Vector createVectorFromOrthoFrame(Point p, vec3 coords){
+Vector createVectorOrtho(Point p, vec3 coords){
     Vector[3] f;
     orthoFrame(p, f);
-    Vector c0 = multiplyScalar(coords[0], f[0]);
-    Vector c1 = multiplyScalar(coords[1], f[1]);
-    Vector c2 = multiplyScalar(coords[2], f[2]);
-    return add(c0, add(c1, c2));
+    return createVector(p, f);
 }
 
 

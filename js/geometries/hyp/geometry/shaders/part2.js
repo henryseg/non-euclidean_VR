@@ -10,22 +10,45 @@ export default `//
  * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] f){
-    float x=p.coords.x;
-    float y=p.coords.y;
-    float z=p.coords.z;
-    float w=p.coords.w;
+    float x = p.coords.x;
+    float y = p.coords.y;
+    float z = p.coords.z;
+    float w = p.coords.w;
 
-    vec4 dir0=vec4(w, 0, 0, x);
-    vec4 dir1=vec4(0, w, 0, y);
-    vec4 dir2=vec4(0, 0, w, z);
+    vec4 dir0 = vec4(w, 0, 0, x);
+    vec4 dir1 = vec4(0, w, 0, y);
+    vec4 dir2 = vec4(0, 0, w, z);
 
-    float l0=sqrt(abs(w*w-x*x));
-    float l1=sqrt(abs(w*w-y*y));
-    float l2=sqrt(abs(w*w-z*z));
+    float l0 = sqrt(abs(w * w - x * x));
+    float l1 = sqrt(abs(w * w - y * y));
+    float l2 = sqrt(abs(w * w - z * z));
 
-    f[0] = Vector(p, dir0/l0);
-    f[1] = Vector(p, dir1/l1);
-    f[2] = Vector(p, dir2/l2);
+    f[0] = Vector(p, dir0 / l0);
+    f[1] = Vector(p, dir1 / l1);
+    f[2] = Vector(p, dir2 / l2);
+}
+
+
+/**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
+void orthoFrame(Point p, out Vector[3] f){
+    float x = p.coords.x;
+    float y = p.coords.y;
+    float z = p.coords.z;
+    float w = p.coords.w;
+
+    float den = 1. + w;
+    vec4 dir0 = (1. / den) * vec4(x * x + w + 1., x * y, x * z, x * den);
+    vec4 dir1 = (1. / den) * vec4(x * y, y * y + w + 1., y * z, y * den);
+    vec4 dir2 = (1. / den) * vec4(x * z, y * z, z * z + w + 1., z * den);
+
+    f[0] = Vector(p, dir0);
+    f[1] = Vector(p, dir1);
+    f[2] = Vector(p, dir2);
 }
 
 
@@ -47,7 +70,7 @@ Point smallShift(Point p, vec3 dp){
 
 Vector smallShift(Vector v, vec3 dp){
     Point pos = smallShift(v.pos, dp);
-    return Vector(pos,v.dir);
+    return Vector(pos, v.dir);
 }
 
 
