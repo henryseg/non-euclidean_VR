@@ -198,6 +198,7 @@ struct Vector{
 };
 
 
+
 /**
  * Reduce the eventual numerical errors of the given vector.
  */
