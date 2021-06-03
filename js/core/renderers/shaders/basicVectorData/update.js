@@ -52,7 +52,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             else{
                 v.data.stop = false;
             }
-            v.data.accColor = v.data.accColor + v.data.leftToComputeColor * (vec3(1) - reflectivity) * color;
+            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec3(1) - reflectivity) * color;
             v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;
             v.vector = geomReflect(v.vector,normal);
             v.data.lastBounceDist = 0.;
@@ -87,7 +87,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             {{#scene.fog}}
                 color = applyFog(color, v.data.lastBounceDist);
             {{/scene.fog}}
-            v.data.accColor = v.data.accColor + v.data.leftToComputeColor * color;
+            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;
             v.data.leftToComputeColor = vec3(0);
             v.data.stop = true;
         {{/material.isReflecting}}
@@ -100,14 +100,14 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
 void updateVectorData(inout ExtVector v, int hit, int objId){
     if (hit == HIT_DEBUG) {
-        v.data.accColor = debugColor;
+        v.data.pixel = debugColor;
         v.data.leftToComputeColor = vec3(0);
         v.data.stop = true;
         return;
     }
     if (hit == HIT_NOTHING) {
         vec3 color = {{scene.background.name}}_render(v);
-        v.data.accColor = v.data.accColor + v.data.leftToComputeColor * color;
+        v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;
         v.data.leftToComputeColor = vec3(0);
         v.data.stop = true;
         return;
