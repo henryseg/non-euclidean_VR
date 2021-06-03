@@ -120,7 +120,7 @@ vec3 getColor(ExtVector v){
         hit = raymarch(v, objId);
         updateVectorData(v, hit, objId);
     }
-    return v.data.accColor;
+    return v.data.pixel;
 }
 
 
