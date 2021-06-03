@@ -22,6 +22,19 @@ Vector createVector(Point p, vec3 coords){
     return add(c0, add(c1, c2));
 }
 
+/**
+ * Compute the vector at p whose coordinates are given by the section of the orthonormal frame bundle.
+ * See frame().
+ */
+Vector createVectorFromOrthoFrame(Point p, vec3 coords){
+    Vector[3] f;
+    orthoFrame(p, f);
+    Vector c0 = multiplyScalar(coords[0], f[0]);
+    Vector c1 = multiplyScalar(coords[1], f[1]);
+    Vector c2 = multiplyScalar(coords[2], f[2]);
+    return add(c0, add(c1, c2));
+}
+
 
 /***********************************************************************************************************************
  *

@@ -98,6 +98,16 @@ RelVector geomReflect(RelVector v, RelVector normal){
     return v;
 }
 
+
+/**
+ * Refract the vector accrosse the plane defined by the given normal.
+ * We assume that v and normal have the same cellBoost.
+ */
+RelVector geomRefract(RelVector v, RelVector normal){
+    v.local = geomRefract(v.local, normal.local);
+    return v;
+}
+
 /**
  * Flow the given vector.
  * This method does apply any teleportation.
@@ -174,6 +184,7 @@ struct ExtVector {
     RelVector vector;
     VectorData data;
 };
+
 
 ExtVector flow(ExtVector v, float t) {
     v.vector = flow(v.vector, t);
