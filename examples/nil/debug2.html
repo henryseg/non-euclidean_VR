@@ -18,12 +18,17 @@
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import {Isometry, Point} from "../../js/geometries/nil/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
-    import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
+    import heisenberg from "../../js/geometries/nil/groups/basicHeisenberg/set.js";
 
-    import {NormalMaterial, PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {DebugMaterial, NormalMaterial, PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {FakeBall, LocalVerticalCylinder, VerticalCylinder} from "../../js/geometries/nil/solids/all.js";
-    import {LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
+    import {
+        FakeBall,
+        LocalFakeBall,
+        LocalVerticalCylinder,
+        VerticalCylinder
+    } from "../../js/geometries/nil/solids/all.js";
+    import {LocalFakeBallShape, LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
     import {complement, intersection, union} from "../../js/commons/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
     import {CREEPING_FULL, CREEPING_OFF} from "../../js/core/groups/TeleportationSet.js";
@@ -33,6 +38,7 @@
     heisenberg.creepingType = CREEPING_OFF;
     // heisenberg.usesNearestNeighbors = true;
     thurston.scene.fog.scattering = 0.5;
+    thurston.scene.background = new DebugMaterial();
 
 
     // Ball

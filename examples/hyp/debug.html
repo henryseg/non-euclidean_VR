@@ -12,19 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Matrix4, Vector3} from "../../js/lib/threejs/build/three.module.js";
+    import {Color, Vector2} from "../../js/lib/threejs/build/three.module.js";
 
     import {Thurston} from "../../js/commons/Thurston.js";
 
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
-    import {Isometry, Vector} from "../../js/geometries/hyp/geometry/General.js";
+    import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Horoball, LocalBall} from "../../js/geometries/hyp/solids/all.js";
+    import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
+    import {LocalBallShape, complement, LocalHoroballShape} from "../../js/geometries/hyp/shapes/all.js";
+    import {CheckerboardMaterial} from "../../js/commons/material/checkerboard/CheckerboardMaterial.js";
+    import {phongWrap} from "../../js/commons/material/phongWrap/PhongWrapMaterial.js";
+    import {union} from "../../js/commons/shapes/all.js";
 
-
+    // cube.usesNearestNeighbors = true;
     const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
 
 
@@ -54,18 +58,18 @@
         shininess: 5,
     });
 
-    const matrix = new Matrix4().makeRotationY(Math.PI);
-    const isom = new Isometry()
-    isom.matrix.copy(matrix);
-    isom.premultiply(new Isometry().makeTranslationFromDir(new Vector(0, 0, -1)));
-    const ball = new Horoball(
-        new Vector3(1, 1, -1),
-        1,
-        mat0
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(),
+        1.02,
     );
 
 
-    thurston.add(ball, light0, light1, light2);
+    const latticeShape = complement(centerBall);
+    const lattice = new Solid(latticeShape, mat0);
+
+
+    thurston.add(lattice, light0, light1, light2);
     thurston.run();
 
 
