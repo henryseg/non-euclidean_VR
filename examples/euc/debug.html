@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Single earth texture sphere</title>
+    <title>Three-torus</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
@@ -12,77 +12,108 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Matrix4, Vector4} from "../../js/lib/threejs/build/three.module.js";
+    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
 
     import {Thurston} from "../../js/commons/Thurston.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import {default as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
     import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
 
-    import {LocalBallShape, LocalDirectedBallShape} from "../../js/geometries/euc/shapes/all.js";
+    import {LocalBallShape, complement, union} from "../../js/geometries/euc/shapes/all.js";
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
-    import {LocalDirectedBall} from "../../js/geometries/euc/solids/LocalDirectedBall.js";
-    import {SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {EarthTexture} from "../../js/commons/material/astronomy/earth/EarthTexture.js";
-    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {DebugMaterial} from "../../js/commons/material/all.js";
+
 
     const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    thurston.renderer.thurstonParams.postProcess = true;
+    thurston.scene.background = new DebugMaterial();
 
     // lights for the Phong material
 
-
-    // lights for the Phong material
-    const light1 = new PointLight(
-        new Point(2, 1, -2.5),
+    //  yellow light
+    const light0 = new PointLight(
+        new Point(1, 0, 0),
         new Color(1, 1, 0),
-    )
-    const light2 = new PointLight(
-        new Point(1, 0.2, -0.5),
-        new Color(1, 0, 1),
-    )
+        0.3
+    );
 
-    const light3 = new PointLight(
-        new Point(-1, 1, -2.5),
+    // cyan light
+    const light1 = new PointLight(
+        new Point(0, 1, -1),
         new Color(0, 1, 1),
-    )
+        0.3
+    );
 
-    const earth = new EarthTexture('../../js');
+    // magenta light
+    const light2 = new PointLight(
+        new Point(-1, -1, 1),
+        new Color(1, 0, 1),
+        0.3
+    );
+    const lights = [light0, light1, light2];
 
-    const isom = new Isometry().makeTranslation(new Point(0, 0, -1));
-    isom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
-    const ball6 = new Ball(isom, 0.5, earth);
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(1, 0.8, 0.6),
+        shininess: 5,
+        lights: lights
+    });
 
-    thurston.add(ball6, light3, light1, light2);
 
-    const clock = new Clock();
-    const speed = 0.5;
-
-    function animate() {
-        const time = clock.getDelta();
-        const update = new Matrix4().makeRotationZ(speed * time);
-        ball6.isom.matrix.multiply(update);
-        ball6.updateData();
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(0, 0, 0),
+        1.3,
+    );
+    const vertices = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        vertices[i] = new LocalBallShape(
+            new Point(2 * i0 - 1, 2 * i1 - 1, 2 * i2 - 1),
+            0.5
+        );
     }
 
-    thurston.callback = animate;
+    const unionShape = union(
+        centerBall,
+        vertices[0],
+        vertices[1],
+        vertices[2],
+        vertices[3],
+        vertices[4],
+        vertices[5],
+        vertices[6],
+        vertices[7],
+    );
+    const latticeShape = complement(unionShape);
+    const lattice = new Solid(latticeShape, mat0);
 
 
+    // Phong shading material
+    const mat1 = new PhongMaterial({
+        color: new Color(0, 0, 1),
+        shininess: 10,
+        reflectivity: new Vector3(0.2, 0.2, 0.2),
+        lights: lights
+    });
+
+    const ball1 = new Ball(
+        new Point(0, 0, -.5),
+        0.2,
+        mat1
+    );
+
+    console.log(torus.group);
+    thurston.add(lattice, ball1, light0, light1, light2);
 
     thurston.run();
     thurston.renderer.checkShader();
-    // console.log(thurston.scene.fog);
-
-    function info() {
-        console.log("mat", ball6.absoluteIsomInv);
-    }
-
-    const infoControls = new InfoControls()
-    infoControls.action = info;
 
 
 </script>

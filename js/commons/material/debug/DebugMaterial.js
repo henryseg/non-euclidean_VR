@@ -9,31 +9,40 @@ import {mustache} from "../../../lib/mustache.mjs";
  * @class
  *
  * @classdesc
- * Material for objects in the scene
- *
- * @see Further information on the {@link https://en.wikipedia.org/wiki/Phong_reflection_model|Phong lighting model}
+ * Debug material
  */
 export class DebugMaterial extends Material {
     /**
      * Constructor. Build a new material from the given data
-     * @param {Light} light - the light whose parameters are used in the material.
-     * @param {Object} params - the parameters of the material:
      */
-    constructor(light, params = {}) {
+    constructor() {
         super();
-        /**
-         * lights affecting the material
-         * @type {Light[]}
-         */
-        this.lights = [light];
     }
 
     get uniformType() {
         return '';
     }
 
+    /**
+     * Says whether the material requires the normal to the shape for its computation.
+     * Default is true.
+     * @return {boolean}
+     */
+    get usesNormal() {
+        return false;
+    }
+
+    /**
+     * Says whether the material requires a UV map on the shape for its computation.
+     * Default is false.
+     * @return {boolean}
+     */
+    get usesUVMap() {
+        return false;
+    }
+
     get usesLight() {
-        return true;
+        return false;
     }
 
     get isReflecting() {
@@ -49,9 +58,6 @@ export class DebugMaterial extends Material {
     }
 
     shader(shaderBuilder) {
-        for (const light of this.lights) {
-            light.shader(shaderBuilder);
-        }
         super.shader(shaderBuilder);
     }
 }
