@@ -11,6 +11,8 @@ import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
 import scenes from "./shaders/scenes.js";
 import raymarch from "./shaders/raymarch.js";
+import structVectorData from "./shaders/PTVectorData/struct.js";
+import random from "./shaders/random.js";
 
 export class PathTracerRenderer extends AbstractRenderer {
 
@@ -45,6 +47,8 @@ export class PathTracerRenderer extends AbstractRenderer {
         this._fragmentBuilder.addChunk(this.geom.shader2);
         this._fragmentBuilder.addChunk(commons2);
 
+        this._fragmentBuilder.addChunk(random);
+        this._fragmentBuilder.addChunk(structVectorData);
         // subgroup/quotient orbifold
         this.set.shader(this._fragmentBuilder);
 

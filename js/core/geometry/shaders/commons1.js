@@ -58,6 +58,22 @@ Vector geomReflect(Vector v, Vector n){
 }
 
 /**
+ * Refract the vector v through the surface with normal vector n, and ratio of indices IOR=current/entering
+ */
+Vector geomRefract(Vector incident, Vector normal, float n){
+
+    float cosX=-dot(normal,incident);
+    float sinT2=n*n* (1.0 - cosX * cosX);
+
+    if(sinT2>1.){return Vector(incident.pos,vec3(0.,0.,0.));}//TIR  
+    //if we are not in this case, then refraction actually occurs
+
+    float cosT=sqrt(1.0 - sinT2);
+    vec3 dir=n*incident.dir+(n * cosX - cosT) * normal.dir;
+    return Vector(incident.pos, dir);
+}
+
+/**
  * Return a preferred isometry sending the origin to the underlying point.
  * Overlaod the function makeTranslation().
  */

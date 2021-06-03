@@ -28,7 +28,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 {{/material.usesUVMap}}
                 {{#material.usesUVMap}}
                     uv = {{shape.name}}_uvMap(v.vector);
-                    color = {{material.name}}_render(v.vector, uv);
+                    color = {{material.name}}_render(v, uv);
                 {{/material.usesUVMap}}
             {{/material.usesNormal}}
     
