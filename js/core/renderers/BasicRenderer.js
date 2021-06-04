@@ -16,6 +16,7 @@ import scenes from "./shaders/scenes.js";
 import structVectorData from "./shaders/basicVectorData/struct.js";
 import updateVectorData from "./shaders/basicVectorData/update.js";
 import SteveShader from "../../postProcess/steve/shader.js";
+import basicMain from "./shaders/basicMain.js";
 
 
 /**
@@ -80,6 +81,7 @@ export class BasicRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);
+        this._fragmentBuilder.addChunk(basicMain);
     }
 
     /**

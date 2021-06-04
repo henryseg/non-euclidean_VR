@@ -57,21 +57,42 @@ Vector geomReflect(Vector v, Vector n){
     return sub(v, multiplyScalar(2. * geomDot(v, n), n));
 }
 
+
+/**
+ * Refract the vector v through a surface
+ * @param[in] v the vector to refract (v is assumed to be a unit vector)
+ * @param[in] n the normal vector to the surface (n is assumed to be a unit vector)
+ * @param[in] r ratio of IOR: current/entering
+ */
+Vector geomRefract(Vector v, Vector n, float r){
+    float cosTheta1 = -geomDot(n, v);
+    float sinTheta2Sq = r * r * (1. - cosTheta1 * cosTheta1);
+
+    if (sinTheta2Sq > 1.){
+        //TIR  
+        return zeroVector(v.pos);
+    }
+    //if we are not in this case, then refraction actually occurs
+    float cosTheta2 = sqrt(1. - sinTheta2Sq);
+    float aux = r * cosTheta1 - cosTheta2;
+    return add(multiplyScalar(r, v), multiplyScalar(aux, n));
+}
+
 /**
  * Refract the vector v through the surface with normal vector n, and ratio of indices IOR=current/entering
  */
-Vector geomRefract(Vector incident, Vector normal, float n){
-
-    float cosX=-dot(normal,incident);
-    float sinT2=n*n* (1.0 - cosX * cosX);
-
-    if(sinT2>1.){return Vector(incident.pos,vec3(0.,0.,0.));}//TIR  
-    //if we are not in this case, then refraction actually occurs
-
-    float cosT=sqrt(1.0 - sinT2);
-    vec3 dir=n*incident.dir+(n * cosX - cosT) * normal.dir;
-    return Vector(incident.pos, dir);
-}
+//Vector geomRefract(Vector incident, Vector normal, float n){
+//
+//    float cosX=-dot(normal,incident);
+//    float sinT2=n*n* (1.0 - cosX * cosX);
+//
+//    if(sinT2>1.){return Vector(incident.pos,vec3(0.,0.,0.));}//TIR  
+//    //if we are not in this case, then refraction actually occurs
+//
+//    float cosT=sqrt(1.0 - sinT2);
+//    vec3 dir=n*incident.dir+(n * cosX - cosT) * normal.dir;
+//    return Vector(incident.pos, dir);
+//}
 
 /**
  * Return a preferred isometry sending the origin to the underlying point.

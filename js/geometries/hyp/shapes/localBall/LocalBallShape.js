@@ -4,7 +4,6 @@ import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.js";
 import direction from "../../imports/direction.js";
-import normalFrame from "../../imports/normalFrame.js";
 
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
@@ -41,7 +40,7 @@ export class LocalBallShape extends BasicShape {
             throw new Error('BallShape: this type of location is not allowed');
         }
         super(isom);
-        this.addImport(distance, direction, normalFrame);
+        this.addImport(distance, direction);
         this.radius = radius;
         this._center = undefined;
     }

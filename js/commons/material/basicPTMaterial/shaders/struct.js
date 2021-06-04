@@ -24,11 +24,11 @@ RayType setRayType(BasicPTMaterial material, ExtVector v, RelVector n) {
         res.diffuse = true;
         res.chance = material.diffuseChance;
     } else if (random < material.diffuseChance + material.reflectionChance){
-        res.reflection = true;
+        res.reflect = true;
         res.chance = material.reflectionChance;
     }
     else {
-        res.refraction = true;
+        res.refract = true;
         res.chance = material.refractionChance;
     }
     return res;

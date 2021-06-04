@@ -14,6 +14,7 @@ import raymarch from "./shaders/raymarch.js";
 import random from "./shaders/random.js";
 import structVectorData from "./shaders/PTVectorData/struct.js";
 import updateVectorData from "./shaders/PTVectorData/update.js";
+import PTMain from "./shaders/PTMain.js";
 
 export class PathTracerRenderer extends AbstractRenderer {
 
@@ -36,6 +37,11 @@ export class PathTracerRenderer extends AbstractRenderer {
         this._fragmentBuilder = new ShaderBuilder();
     }
 
+    updateFrameSeed() {
+        const seed = Math.floor(10000 * Math.random())
+        this._fragmentBuilder.updateUniform('frameSeed', seed);
+    }
+
     /**
      * Build the fragment shader
      */
@@ -48,6 +54,7 @@ export class PathTracerRenderer extends AbstractRenderer {
         this._fragmentBuilder.addChunk(this.geom.shader2);
         this._fragmentBuilder.addChunk(commons2);
 
+        this._fragmentBuilder.addUniform('frameSeed', 'uint', Math.floor(1000 * Math.random()));
         this._fragmentBuilder.addChunk(random);
         this._fragmentBuilder.addChunk(structVectorData);
 
@@ -64,6 +71,7 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);
+        this._fragmentBuilder.addChunk(PTMain);
     }
 
     /**

@@ -39,7 +39,7 @@ struct VectorData {
 };
 
 VectorData initVectorData(){
-    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), vec(0));
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), vec3(0));
 }
 
 `;

@@ -53,7 +53,7 @@ export class Scene {
 
         /**
          * Background color
-         * @type{Material}
+         * @type{Material|PTMaterial}
          */
         this.background = params.background !== undefined ? params.background : new SingleColorMaterial(new Color(0, 0, 0));
     }

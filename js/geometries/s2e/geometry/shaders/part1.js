@@ -131,6 +131,12 @@ struct Vector{
     vec4 dir; /**< direction of the vector */
 };
 
+/**
+ * Return the zero vector at pos
+ */
+Vector zeroVector(Point pos){
+    return Vector(pos, vec4(0));
+}
 
 /**
  * Reduce the eventual numerical errors of the given vector.

@@ -197,6 +197,12 @@ struct Vector{
     vec4 dir;
 };
 
+/**
+ * Return the zero vector at pos
+ */
+Vector zeroVector(Point pos){
+    return Vector(pos, vec4(0));
+}
 
 
 /**

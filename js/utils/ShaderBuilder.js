@@ -124,7 +124,7 @@ export class ShaderBuilder {
      * @return {ShaderBuilder} - the current shader builder
      */
     updateUniform(name, value) {
-        this.uniforms[name] = value;
+        this.uniforms[name].value = value;
         return this;
     }
 
