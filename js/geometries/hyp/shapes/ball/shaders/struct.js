@@ -37,7 +37,7 @@ RelVector gradient(BallShape ball, RelVector v){
 vec2 uvMap(BallShape ball, RelVector v){
     Vector[3] f;
     Point pos = applyGroupElement(v.cellBoost, v.local.pos);
-    normalFrame(pos, f);
+    orthoFrame(pos, f);
 
     f[0] = applyGroupElement(v.invCellBoost, f[0]);
     f[1] = applyGroupElement(v.invCellBoost, f[1]);

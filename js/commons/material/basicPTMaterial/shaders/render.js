@@ -1,7 +1,7 @@
 // language=Mustache + GLSL
 export default `//
 
-vec3 {{name}}_setRayType(ExtVector v, RelVector n) {
+RayType {{name}}_setRayType(ExtVector v, RelVector n) {
     return setRayType({{name}}, v, n);
 }
 

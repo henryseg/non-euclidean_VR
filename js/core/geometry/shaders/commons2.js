@@ -29,7 +29,7 @@ Vector createVector(Point p, vec3 coords, Vector[3] frame){
 Vector createVector(Point p, vec3 coords){
     Vector[3] f;
     frame(p, f);
-    return createVector(p, f);
+    return createVector(p, coords, f);
 }
 
 /**
@@ -39,7 +39,7 @@ Vector createVector(Point p, vec3 coords){
 Vector createVectorOrtho(Point p, vec3 coords){
     Vector[3] f;
     orthoFrame(p, f);
-    return createVector(p, f);
+    return createVector(p, coords, f);
 }
 
 

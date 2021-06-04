@@ -16,7 +16,7 @@ export class Solid extends Generic {
     /**
      *
      * @param {Shape} shape - the shape of the solid
-     * @param {Material} material - the material of the solid
+     * @param {Material|PTMaterial} material - the material of the solid
      */
     constructor(shape, material) {
         if (material.usesUVMap && !shape.hasUVMap) {
@@ -56,7 +56,7 @@ export class Solid extends Generic {
         return this.shape.isom;
     }
 
-    get absoluteIsom(){
+    get absoluteIsom() {
         return this.shape.absoluteIsom;
     }
 

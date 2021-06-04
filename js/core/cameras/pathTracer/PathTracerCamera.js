@@ -29,7 +29,7 @@ export class PathTracerCamera extends BasicCamera {
      */
     shader(shaderBuilder) {
         shaderBuilder.addClass('Camera', struct);
-        shaderBuilder.addUniform('camera', 'Camera', this);
+        shaderBuilder.addUniform('camera', 'PathTracerCamera', this);
         shaderBuilder.addChunk(mapping);
     }
 }

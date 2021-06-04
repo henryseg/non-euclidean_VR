@@ -85,6 +85,11 @@ struct Vector{
 // Define here the other fields of the structure
 };
 
+/**
+ * Return the zero vector at p
+ */
+Vector zeroVector(Point p){ }
+
 
 /**
  * Reduce the eventual numerical errors of the given vector.

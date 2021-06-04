@@ -7,7 +7,7 @@ void roulette(inout ExtVector v){
     
     float p = max(v.data.light.r, max(v.data.light.g, v.data.light.b));
     if (RandomFloat01() > p){
-        v.stop = true;
+        v.data.stop = true;
     }
     // Add the energy we 'lose' by randomly terminating paths
     v.data.light = v.data.light / p;
@@ -21,6 +21,17 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     vec2 uv;
     vec3 color;
     vec3 reflectivity;
+
+    RelVector diffuseDir;
+    RelVector reflectDir;
+    RelVector refractDir;
+
+    //----- get a uniformly distributed vector on the sphere ----------
+    Vector localRandom = createVectorOrtho(v.vector.local.pos, RandomUnitVector());
+    RelVector random = RelVector(localRandom, v.vector.cellBoost, v.vector.invCellBoost);
+
+
+    
     
     switch(objId){
     {{#scene.solids}}
@@ -40,37 +51,34 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
         
             v.data.pixel = v.data.pixel + v.data.light * {{material.name}}.emission;
             v.data.light = v.data.light * color / rayType.chance;
-
-            //----- get a uniformly distributed vector on the sphere ----------
-            Vector localRandom = createVectorFromOrthoFrame(v.vector.local.pos, RandomUnitVector());
-            RelVector random = RelVector(localRandom, v.vector.cellBoost, v.vector.invCellBoost);
         
             //----- update the ray direction ----------
             // Diffuse uses a normal oriented cosine weighted hemisphere sample.
-            RelVector diffuseDir= geomNormalize(add(normal, random));
+            diffuseDir= geomNormalize(add(normal, random));
         
             if(rayType.diffuse){
-                v = diffuseDir;
+                v.vector = diffuseDir;
                 break;
             }
         
             if(rayType.reflect){
                 // Perfectly smooth specular uses the reflection ray.
-                RelVector reflectDir = geomReflect(v.vector, normal);
+                reflectDir = geomReflect(v.vector, normal);
         
                 // Rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
-                v = reflectDir;
+                // reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
+                v.vector = reflectDir;
                 break;
             }
         
             if(rayType.refract){
                 // Perfectly smooth specular uses the reflection ray.
-                RelVector refractDir = geomRefract(v.vector, normal);
+                // Todo : compute correctly the ratio of IOR
+                refractDir = geomRefract(v.vector, normal, 1.);
         
                 // Rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
-                v = refractDir;
+                // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
+                v.vector = refractDir;
                 break;
             }
         
