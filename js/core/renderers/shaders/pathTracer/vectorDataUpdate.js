@@ -40,16 +40,18 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 color = {{material.name}}_render(v, uv, rayType);
             {{/material.usesUVMap}}
         
+            //if(length({{material.name}}.emission) > 0.){
+            //    v.data.stop = true;
+            //}
             v.data.pixel = v.data.pixel + v.data.light * {{material.name}}.emission;
             v.data.light = v.data.light * color / rayType.chance;
         
             // update the ray direction
             // diffuse uses a normal oriented cosine weighted hemisphere sample.
-            diffuseDir= geomNormalize(add(normal, random));
+            diffuseDir = geomNormalize(add(normal, random));
         
             if(rayType.diffuse){
                 v.vector = diffuseDir;
-                break;
             }
         
             if(rayType.reflect){
@@ -59,7 +61,6 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                 // reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
                 v.vector = reflectDir;
-                break;
             }
         
             if(rayType.refract){
@@ -70,7 +71,6 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                 // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
                 v.vector = refractDir;
-                break;
             }
         
             // normally we never reach this point
@@ -81,7 +81,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
     v.data.lastBounceDist = 0.;
     v.data.iBounce = v.data.iBounce + 1;
-    v = flow(v, 1.2 * camera.threshold);
+    v = flow(v, 10. * camera.threshold);
    
     
 }
