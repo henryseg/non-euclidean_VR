@@ -130,6 +130,15 @@ RelVector geomNormalize(RelVector v){
 }
 
 /**
+ * Mix version for relative vectors
+ * We assume that the vectors have the same cellBoost.  
+ */
+RelVector geomMix(RelVector v1, RelVector v2, float a) {
+    v1.local = geomMix(v1.local, v2.local, a);
+    return v1;
+}
+
+/**
  * Return the opposition of the given vector
  */
 RelVector negate(RelVector v){
