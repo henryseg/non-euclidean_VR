@@ -28,6 +28,8 @@ import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
 import main from "./shaders/pathTracer/main.js";
 
 import SteveShader from "../../postProcess/steve/shader.js";
+import {HorizontalBlurShader} from "../../lib/threejs/examples/jsm/shaders/HorizontalBlurShader.js";
+import {VerticalBlurShader} from "../../lib/threejs/examples/jsm/shaders/VerticalBlurShader.js";
 
 
 const accumulateMat = new ShaderMaterial({
@@ -173,6 +175,13 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         this.displayComposer.addPass(new TexturePass(this.accReadTarget.texture));
         this.displayComposer.addPass(new ShaderPass(SteveShader));
+
+        const effectHBlur = new ShaderPass( HorizontalBlurShader );
+        const effectVBlur = new ShaderPass( VerticalBlurShader );
+        effectHBlur.uniforms[ 'h' ].value = 0.5 / (window.innerWidth);
+        effectVBlur.uniforms[ 'v' ].value = 0.5 / (window.innerHeight);
+        this.displayComposer.addPass(effectHBlur);
+        this.displayComposer.addPass(effectVBlur);
 
         return this;
     }
