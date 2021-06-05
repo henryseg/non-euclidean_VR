@@ -15,7 +15,7 @@ varying vec3 spherePosition;
  * - If we hit an object compute the corresponding color.
  */
 void main() {
-    seed = randomSeed(gl_FragCoord.xy, frameSeed);
+    initSeed(gl_FragCoord.xy, frameSeed);
     RelVector vector = mapping(spherePosition);
     ExtVector v = ExtVector(vector, initVectorData());
     vec3 color = getColor(v);

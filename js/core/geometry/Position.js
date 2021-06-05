@@ -2,7 +2,6 @@ import {Matrix4, Quaternion} from "../../lib/threejs/build/three.module.js";
 import {Isometry} from "./Isometry.js";
 import {Point} from "./Point.js";
 import {Vector} from "./Vector.js";
-import raymarch from "../renderers/shaders/raymarch.js";
 
 /**
  * @class

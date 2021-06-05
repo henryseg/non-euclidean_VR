@@ -8,17 +8,17 @@ import {AbstractRenderer} from "./AbstractRenderer.js";
 
 import {LEFT, RIGHT} from "../../constants.js";
 
-import vertexShader from "./shaders/vertex.js";
+import vertexShader from "./shaders/common/vertex.js";
 import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
-import constants from "./shaders/constants.js";
+import constants from "./shaders/common/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/raymarch.js";
+import raymarch from "./shaders/common/raymarch.js";
 import {mustache} from "../../lib/mustache.mjs";
-import scenes from "./shaders/scenes.js";
-import basicVectorData from "./shaders/basicVectorData/struct.js";
-import updateVectorData from "./shaders/basicVectorData/update.js";
-import basicMain from "./shaders/basicMain.js";
+import scenes from "./shaders/common/scenes.js";
+import structVectorData from "./shaders/basic/vectorDataStruct.js";
+import updateVectorData from "./shaders/basic/vectorDataUpdate.js";
+import main from "./shaders/basic/main.js";
 
 
 /**
@@ -82,7 +82,7 @@ export class VRRenderer extends AbstractRenderer {
             this._fragmentBuilder[side].addChunk(commons2);
 
             // data carried with RelVector
-            this._fragmentBuilder[side].addChunk(basicVectorData);
+            this._fragmentBuilder[side].addChunk(structVectorData);
             // subgroup/quotient orbifold
             this.set.shader(this._fragmentBuilder[side]);
 
@@ -97,7 +97,7 @@ export class VRRenderer extends AbstractRenderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
-            this._fragmentBuilder[side].addChunk(basicMain);
+            this._fragmentBuilder[side].addChunk(main);
         }
     }
 
