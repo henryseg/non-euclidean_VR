@@ -56,7 +56,7 @@
         0.3,
     )
 
-    const backPoint = new Point(0, -0.3, -2);
+    const backPoint = new Point(0, -0.3, -1.4);
     const backIsom = new Isometry().makeTranslation(backPoint);
     const backShape = new HalfSpaceShape(backIsom);
 
@@ -70,7 +70,7 @@
     rightIsom.matrix.multiply(new Matrix4().makeRotationY(-0.5 * Math.PI));
     const rightShape = new HalfSpaceShape(rightIsom);
 
-    const bottomPoint = new Point(0, -1, 0);
+    const bottomPoint = new Point(0, -0.3, 0);
     const bottomIsom = new Isometry().makeTranslation(bottomPoint);
     bottomIsom.matrix.multiply(new Matrix4().makeRotationX(-0.5 * Math.PI));
     const bottomShape = new HalfSpaceShape(bottomIsom);

@@ -9,6 +9,7 @@ void roulette(inout ExtVector v){
     }
     // add the energy we 'lose' by randomly terminating paths
     v.data.light = v.data.light / p;
+    
 }
 
 void updateVectorDataFromSolid(inout ExtVector v, int objId){
@@ -40,11 +41,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 color = {{material.name}}_render(v, uv, rayType);
             {{/material.usesUVMap}}
         
-            //if(length({{material.name}}.emission) > 0.){
-            //    v.data.stop = true;
-            //}
             v.data.pixel = v.data.pixel + v.data.light * {{material.name}}.emission;
-            v.data.light = v.data.light * color / rayType.chance;
+            v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
         
             // update the ray direction
             // diffuse uses a normal oriented cosine weighted hemisphere sample.
@@ -81,6 +79,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
     v.data.lastBounceDist = 0.;
     v.data.iBounce = v.data.iBounce + 1;
+    // be carefull, v is not normal to the surface
+    // if the time we flow is too small, we are still below the camera threshold
     v = flow(v, 10. * camera.threshold);
    
     
