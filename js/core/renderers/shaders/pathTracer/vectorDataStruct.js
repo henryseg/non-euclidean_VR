@@ -35,7 +35,6 @@ struct VectorData {
     vec3 pixel; /**<  */
     vec3 light; /**<  */
     vec3 absorb; /**< */
-    
 };
 
 VectorData initVectorData(){

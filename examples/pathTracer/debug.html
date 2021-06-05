@@ -17,14 +17,11 @@
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
 
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
+    import {PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
 
-    import {PhongMaterial} from "../../js/commons/material/all.js";
-    import {PointLight} from "../../js/geometries/euc/lights/all.js";
     import {BallShape, HalfSpaceShape} from "../../js/geometries/euc/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
     import {Isometry, Point} from "../../js/geometries/euc/geometry/General.js";
-    import {PTMaterial} from "../../js/core/materials/PTMaterial.js";
     import {BasicPTMaterial} from "../../js/commons/material/basicPTMaterial/BasicPTMaterial.js";
     import Stats from "../../js/lib/stats.module.js";
 
@@ -32,7 +29,7 @@
     // General setup
     //------------------------------------------------------------------------------------------------------------------
     const scene = new Scene({
-        maxBounces: 1000,
+        maxBounces: 50,
         background: new BasicPTMaterial({
             diffuse: new Color(0, 0, 0),
             specular: new Color(0, 0, 0),
@@ -46,6 +43,7 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
 
     const stats = new Stats();
     stats.showPanel(0);
@@ -84,7 +82,7 @@
 
     // light
     const lightShape = new BallShape(
-        new Point(0, 1, -0.5),
+        new Point(0, 0.6, -0.5),
         0.2
     )
     const lightMat = new BasicPTMaterial({
@@ -152,7 +150,7 @@
     }
 
     renderer.setAnimationLoop(animate);
-    renderer.checkShader();
+    // renderer.checkShader();
 
 
 </script>
