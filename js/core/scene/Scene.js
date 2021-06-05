@@ -52,10 +52,15 @@ export class Scene {
         this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
 
         /**
-         * Background color
+         * Background material
          * @type{Material|PTMaterial}
          */
         this.background = params.background !== undefined ? params.background : new SingleColorMaterial(new Color(0, 0, 0));
+        /**
+         * Background material (for path tracing)
+         * @type{PTMaterial}
+         */
+        this.PTbackground = params.PTbackground;
     }
 
     /**

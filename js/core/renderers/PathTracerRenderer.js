@@ -176,12 +176,12 @@ export class PathTracerRenderer extends AbstractRenderer {
         this.displayComposer.addPass(new TexturePass(this.accReadTarget.texture));
         this.displayComposer.addPass(new ShaderPass(SteveShader));
 
-        const effectHBlur = new ShaderPass( HorizontalBlurShader );
-        const effectVBlur = new ShaderPass( VerticalBlurShader );
-        effectHBlur.uniforms[ 'h' ].value = 0.5 / (window.innerWidth);
-        effectVBlur.uniforms[ 'v' ].value = 0.5 / (window.innerHeight);
-        this.displayComposer.addPass(effectHBlur);
-        this.displayComposer.addPass(effectVBlur);
+        // const effectHBlur = new ShaderPass( HorizontalBlurShader );
+        // const effectVBlur = new ShaderPass( VerticalBlurShader );
+        // effectHBlur.uniforms[ 'h' ].value = 0.5 / (window.innerWidth);
+        // effectVBlur.uniforms[ 'v' ].value = 0.5 / (window.innerHeight);
+        // this.displayComposer.addPass(effectHBlur);
+        // this.displayComposer.addPass(effectVBlur);
 
         return this;
     }

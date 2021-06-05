@@ -10,32 +10,62 @@ struct BasicPTMaterial {
     vec3 specular;
     vec3 absorb;
     float ior;
+    float roughness;
     float diffuseChance;
     float reflectionChance;
     float refractionChance;
 };
 
+/**
+ * @param[in] r ration of indices of refraction current/entering
+ */
+float fresnelReflectAmount(RelVector incident, RelVector normal, float r, float reflecAt0, float relfectAt90) {
+    // Schlick aproximation
+    float r0 = (r - 1.) / (r + 1.);
+    r0 = r0 * r0;
+    float cosX = -geomDot(normal, incident);
+    if (r > 1.)
+    {
+        float sinT2 = r * r * (1. - cosX * cosX);
+        // Total internal reflection
+        if (sinT2 > 1.){
+            return relfectAt90;
+        }
+        cosX = sqrt(1. - sinT2);
+    }
+    float x = 1.- cosX;
+    float ret = clamp(r0 + (1. - r0) * x * x * x * x * x, 0., 1.);
+
+    // adjust reflect multiplier for object reflectivity
+    //return mix(f0, f90, ret);
+    return reflecAt0 + (relfectAt90 - reflecAt0) * ret;
+}
 
 RayType setRayType(BasicPTMaterial material, ExtVector v, RelVector n) {
     RayType res = RayType(false, false, false, 0.);
     float random = randomFloat();
-    
-    if (random < material.diffuseChance){
+
+    float reflectionChance = fresnelReflectAmount(v.vector, n, 0.8, material.reflectionChance, 1.0);
+    float chanceMultiplier = (1. - reflectionChance) / (1. - material.reflectionChance);
+    float refractionChance = chanceMultiplier * material.refractionChance;
+    float diffuseChance = 1. - refractionChance - reflectionChance;
+
+    if (random < diffuseChance){
         res.diffuse = true;
-        res.chance = material.diffuseChance;
-    } else if (random < material.diffuseChance + material.reflectionChance){
+        res.chance = diffuseChance;
+    } else if (random < diffuseChance + reflectionChance){
         res.reflect = true;
-        res.chance = material.reflectionChance;
+        res.chance = reflectionChance;
     }
     else {
         res.refract = true;
-        res.chance = material.refractionChance;
+        res.chance = refractionChance;
     }
     return res;
 }
 
 vec3 render(BasicPTMaterial material, ExtVector v, RayType rayType) {
-    if(rayType.reflect){
+    if (rayType.reflect){
         return material.specular;
     }
     return material.diffuse;

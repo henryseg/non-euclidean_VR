@@ -35,7 +35,7 @@
             specular: new Color(0, 0, 0),
         })
     });
-    const camera = new PathTracerCamera({set: trivial});
+    const camera = new PathTracerCamera({set: trivial, maxSteps:500});
     const renderer = new PathTracerRenderer(geom, trivial, camera, scene, {
         logarithmicDepthBuffer: true
     });
@@ -56,7 +56,7 @@
         0.3,
     )
 
-    const backPoint = new Point(0, -0.3, -1.4);
+    const backPoint = new Point(0, 0, -1.4);
     const backIsom = new Isometry().makeTranslation(backPoint);
     const backShape = new HalfSpaceShape(backIsom);
 
@@ -75,6 +75,11 @@
     bottomIsom.matrix.multiply(new Matrix4().makeRotationX(-0.5 * Math.PI));
     const bottomShape = new HalfSpaceShape(bottomIsom);
 
+    const topPoint = new Point(0, 4, 0);
+    const topIsom = new Isometry().makeTranslation(topPoint);
+    topIsom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
+    const topShape = new HalfSpaceShape(topIsom);
+
 
     // light
     const lightShape = new BallShape(
@@ -84,16 +89,17 @@
     const lightMat = new BasicPTMaterial({
         emission: new Color(1, 1, 1),
     })
-    const ptLight = new Solid(lightShape, lightMat);
+    const ptLight = new Solid(topShape, lightMat);
     scene.add(ptLight);
 
     // ball
     const ballMat = new BasicPTMaterial({
         diffuse: new Color(1, 1, 1),
         specular: new Color(1, 1, 1),
-        reflectionChance: 0,
+        roughness:0.,
+        reflectionChance: 0.01,
         refractionChance: 0,
-        diffuseChance:1
+        diffuseChance:0.99
     });
     const ball = new Solid(ballShape, ballMat);
     scene.add(ball);
@@ -101,7 +107,10 @@
     // back wall
     const backMat = new BasicPTMaterial({
         diffuse: new Color(1, 0, 0),
-        specular: new Color(1, 0, 0)
+        specular: new Color(1, 0, 0),
+        diffuseChance:1,
+        reflectionChance:0,
+        refractionChance:0
     });
     const back = new Solid(backShape, backMat);
     scene.add(back);
@@ -125,7 +134,7 @@
     // bottom wall
     const bottomMat = new BasicPTMaterial({
         diffuse: new Color(1, 1, 1),
-        specular: new Color(1, 1, 1)
+        specular: new Color(1, 1, 1),
     });
     const bottom = new Solid(bottomShape, bottomMat);
     scene.add(bottom);
@@ -144,7 +153,6 @@
         renderer.updateFrameSeed();
         renderer.render();
         stats.update();
-
     }
 
 

@@ -9,6 +9,10 @@ export default `//
  **********************************************************************************************************************/
 
 
+Vector geomMix(Vector v1, Vector v2, float a){
+    return add(multiplyScalar(1.-a, v1), multiplyScalar(a, v2));
+}
+
 /**
  * Return the opposite of the given vector.
  * Previously turnAround.

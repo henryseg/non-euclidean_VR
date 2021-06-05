@@ -57,7 +57,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 reflectDir = geomReflect(v.vector, normal);
         
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                // reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
+                reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
                 v.vector = reflectDir;
             }
         

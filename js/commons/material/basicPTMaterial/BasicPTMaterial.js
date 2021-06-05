@@ -40,6 +40,11 @@ export class BasicPTMaterial extends PTMaterial {
          */
         this.ior = params.ior !== undefined ? params.ior : 1;
         /**
+         * Roughness of the material
+         * @type {number}
+         */
+        this.roughness = params.roughness !== undefined ? params.roughness : 0.2;
+        /**
          * Reflection chance
          * Chance of reflection.
          * Between 0 and 1

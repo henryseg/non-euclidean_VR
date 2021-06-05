@@ -17,8 +17,9 @@ export class Solid extends Generic {
      *
      * @param {Shape} shape - the shape of the solid
      * @param {Material|PTMaterial} material - the material of the solid
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(shape, material) {
+    constructor(shape, material, ptMaterial= undefined) {
         if (material.usesUVMap && !shape.hasUVMap) {
             throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
         }
@@ -33,6 +34,12 @@ export class Solid extends Generic {
          * @type {Material}
          */
         this.material = material;
+        /**
+         * The material of the solid for path tracing
+         * @type {PTMaterial}
+         */
+        this.ptMaterial = ptMaterial;
+
         /**
          * Says whether the solid should be rendered or not.
          * The property can be used to define solids that will appear later in the scene
