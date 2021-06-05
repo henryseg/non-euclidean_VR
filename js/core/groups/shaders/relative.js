@@ -108,7 +108,7 @@ RelVector sub(RelVector v1, RelVector v2){
  * @return @f$ s v @f$
  */
 RelVector multiplyScalar(float s, RelVector v){
-    v.local = multiplyScalar(s,v.local);
+    v.local = multiplyScalar(s, v.local);
     return v;
 }
 

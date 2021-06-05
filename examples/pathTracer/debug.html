@@ -29,7 +29,7 @@
     // General setup
     //------------------------------------------------------------------------------------------------------------------
     const scene = new Scene({
-        maxBounces: 50,
+        maxBounces: 10,
         background: new BasicPTMaterial({
             diffuse: new Color(0, 0, 0),
             specular: new Color(0, 0, 0),
@@ -40,9 +40,7 @@
         logarithmicDepthBuffer: true
     });
 
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+
 
 
     const stats = new Stats();
@@ -58,7 +56,7 @@
         0.3,
     )
 
-    const backPoint = new Point(0, 0, -2);
+    const backPoint = new Point(0, -0.3, -2);
     const backIsom = new Isometry().makeTranslation(backPoint);
     const backShape = new HalfSpaceShape(backIsom);
 
@@ -78,16 +76,13 @@
     const bottomShape = new HalfSpaceShape(bottomIsom);
 
 
-
-
     // light
     const lightShape = new BallShape(
-        new Point(0, 0.6, -0.5),
+        new Point(0, 0.3, -0.5),
         0.2
     )
     const lightMat = new BasicPTMaterial({
         emission: new Color(1, 1, 1),
-
     })
     const ptLight = new Solid(lightShape, lightMat);
     scene.add(ptLight);
@@ -95,7 +90,10 @@
     // ball
     const ballMat = new BasicPTMaterial({
         diffuse: new Color(1, 1, 1),
-        specular: new Color(1, 1, 1)
+        specular: new Color(1, 1, 1),
+        reflectionChance: 0,
+        refractionChance: 0,
+        diffuseChance:1
     });
     const ball = new Solid(ballShape, ballMat);
     scene.add(ball);
@@ -148,6 +146,11 @@
         stats.update();
 
     }
+
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
     renderer.setAnimationLoop(animate);
     // renderer.checkShader();

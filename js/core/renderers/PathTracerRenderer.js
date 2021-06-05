@@ -2,7 +2,7 @@ import {mustache} from "../../lib/mustache.mjs";
 import {
     FloatType,
     LinearFilter,
-    Mesh, RGBAFormat, RGBFormat,
+    Mesh, NearestFilter, RGBAFormat, RGBFormat,
     ShaderMaterial,
     SphereBufferGeometry, Uniform, UniformsUtils,
     WebGLRenderTarget
@@ -57,8 +57,8 @@ const accumulateMat = new ShaderMaterial({
 const accumulateQuad = new FullScreenQuad(accumulateMat);
 
 const rtParameters = {
-    minFilter: LinearFilter,
-    magFilter: LinearFilter,
+    minFilter: NearestFilter,
+    magFilter: NearestFilter,
     format: RGBAFormat,
     type: FloatType,
 };
@@ -96,13 +96,16 @@ export class PathTracerRenderer extends AbstractRenderer {
 
     setPixelRatio(value) {
         super.setPixelRatio(value);
-        this.displayComposer.setPixelRatio(window.devicePixelRatio);
+        this.displayComposer.setPixelRatio(value);
 
     }
 
     setSize(width, height, updateStyle = true) {
         super.setSize(width, height, updateStyle);
-        this.displayComposer.setSize(window.innerWidth, window.innerHeight);
+        this.sceneTarget.setSize(width, height);
+        this.accReadTarget.setSize(width, height);
+        this.accWriteTarget.setSize(width, height);
+        this.displayComposer.setSize(width, height);
     }
 
     updateFrameSeed() {
@@ -193,7 +196,7 @@ export class PathTracerRenderer extends AbstractRenderer {
         accTmpTarget = this.accReadTarget;
         this.accReadTarget = this.accWriteTarget;
         this.accWriteTarget = accTmpTarget;
-
+        //
         this.threeRenderer.setRenderTarget(null);
         this.displayComposer.render();
         this.iFrame = this.iFrame + 1;
