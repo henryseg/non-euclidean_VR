@@ -1,9 +1,19 @@
 import {mustache} from "../../lib/mustache.mjs";
+import {
+    FloatType,
+    LinearFilter,
+    Mesh, RGBAFormat, RGBFormat,
+    ShaderMaterial,
+    SphereBufferGeometry, Uniform, UniformsUtils,
+    WebGLRenderTarget
+} from "../../lib/threejs/build/three.module.js";
+import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
+import {TexturePass} from "../../lib/threejs/examples/jsm/postprocessing/TexturePass.js";
+import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPass.js";
+import {FullScreenQuad} from "../../lib/threejs/examples/jsm/postprocessing/Pass.js";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
-
 
 import vertexShader from "./shaders/common/vertex.js";
 import constants from "./shaders/common/constants.js";
@@ -16,6 +26,42 @@ import random2 from "./shaders/pathTracer/random2.js";
 import structVectorData from "./shaders/pathTracer/vectorDataStruct.js";
 import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
 import main from "./shaders/pathTracer/main.js";
+
+import SteveShader from "../../postProcess/steve/shader.js";
+
+
+const accumulateMat = new ShaderMaterial({
+    uniforms: {
+        accTex: new Uniform(null),
+        newTex: new Uniform(null),
+        iFrame: new Uniform(0)
+    },
+    // language=GLSL
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+    // language=GLSL
+    fragmentShader: `
+        varying vec2 vUv;
+        uniform sampler2D accTex;
+        uniform sampler2D newTex;
+        uniform float iFrame;
+        void main() {
+            float den = 1./ (1. + iFrame);
+            gl_FragColor = den * (iFrame *  texture2D(accTex, vUv) + texture2D(newTex, vUv));
+        }`
+});
+const accumulateQuad = new FullScreenQuad(accumulateMat);
+
+const rtParameters = {
+    minFilter: LinearFilter,
+    magFilter: LinearFilter,
+    format: RGBAFormat,
+    type: FloatType,
+};
 
 export class PathTracerRenderer extends AbstractRenderer {
 
@@ -36,6 +82,27 @@ export class PathTracerRenderer extends AbstractRenderer {
          * @private
          */
         this._fragmentBuilder = new ShaderBuilder();
+
+        this.sceneTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
+        this.accReadTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
+        this.accWriteTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
+        /**
+         * Index of the frame (used to average the picture in the accumulation)
+         * @type {number}
+         */
+        this.iFrame = 0;
+        this.displayComposer = new EffectComposer(this.threeRenderer);
+    }
+
+    setPixelRatio(value) {
+        super.setPixelRatio(value);
+        this.displayComposer.setPixelRatio(window.devicePixelRatio);
+
+    }
+
+    setSize(width, height, updateStyle = true) {
+        super.setSize(width, height, updateStyle);
+        this.displayComposer.setSize(window.innerWidth, window.innerHeight);
     }
 
     updateFrameSeed() {
@@ -89,7 +156,7 @@ export class PathTracerRenderer extends AbstractRenderer {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
         const geometry = new SphereBufferGeometry(1000, 60, 40);
-        // sphere eversion !
+        // flip the sphere inside out
         geometry.scale(1, 1, -1);
 
         this.buildFragmentShader();
@@ -101,6 +168,9 @@ export class PathTracerRenderer extends AbstractRenderer {
         const horizonSphere = new Mesh(geometry, material);
         this.threeScene.add(horizonSphere);
 
+        this.displayComposer.addPass(new TexturePass(this.accReadTarget.texture));
+        this.displayComposer.addPass(new ShaderPass(SteveShader));
+
         return this;
     }
 
@@ -109,8 +179,23 @@ export class PathTracerRenderer extends AbstractRenderer {
     }
 
     render() {
+        let accTmpTarget;
+
+        this.threeRenderer.setRenderTarget(this.sceneTarget);
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
+
+        this.threeRenderer.setRenderTarget(this.accWriteTarget);
+        accumulateMat.uniforms['accTex'].value = this.accReadTarget.texture;
+        accumulateMat.uniforms['newTex'].value = this.sceneTarget.texture;
+        accumulateMat.uniforms['iFrame'].value = this.iFrame;
+        accumulateQuad.render(this.threeRenderer);
+
+        accTmpTarget = this.accReadTarget;
+        this.accReadTarget = this.accWriteTarget;
+        this.accWriteTarget = accTmpTarget;
+
+        this.threeRenderer.setRenderTarget(null);
+        this.displayComposer.render();
+        this.iFrame = this.iFrame + 1;
     }
-
-
 }

@@ -55,7 +55,6 @@ composer.addPass(new RenderPass(scene, camera));
 
 const effect2 = new ShaderPass( RGBShiftShader );
 effect2.uniforms[ 'amount' ].value = 0.0015;
-// composer.addPass( effect2 );
 
 function animate() {
     requestAnimationFrame(animate);

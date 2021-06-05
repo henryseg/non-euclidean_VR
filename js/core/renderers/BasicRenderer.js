@@ -53,6 +53,17 @@ export class BasicRenderer extends AbstractRenderer {
         this.composer = new EffectComposer(this.threeRenderer);
     }
 
+    setPixelRatio(value) {
+        super.setPixelRatio(value);
+        this.composer.setPixelRatio(window.devicePixelRatio);
+
+    }
+
+    setSize(width, height, updateStyle = true) {
+        super.setSize(width, height, updateStyle);
+        this.composer.setSize(window.innerWidth, window.innerHeight);
+    }
+
     /**
      * Build the fragment shader
      */
