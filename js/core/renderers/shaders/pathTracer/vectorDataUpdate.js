@@ -1,19 +1,15 @@
 // language=Mustache + GLSL
 export default `//
 void roulette(inout ExtVector v){
-
-    // As the light left gets smaller, the ray is more likely to get terminated early.
-    // Survivors have their value boosted to make up for fewer samples being in the average.
-    
+    // as the light left gets smaller, the ray is more likely to get terminated early.
+    // survivors have their value boosted to make up for fewer samples being in the average.
     float p = max(v.data.light.r, max(v.data.light.g, v.data.light.b));
-    if (RandomFloat01() > p){
+    if (randomFloat() > p){
         v.data.stop = true;
     }
-    // Add the energy we 'lose' by randomly terminating paths
+    // add the energy we 'lose' by randomly terminating paths
     v.data.light = v.data.light / p;
-
 }
-
 
 void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector normal;
@@ -26,12 +22,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector reflectDir;
     RelVector refractDir;
 
-    //----- get a uniformly distributed vector on the sphere ----------
-    Vector localRandom = createVectorOrtho(v.vector.local.pos, RandomUnitVector());
-    RelVector random = RelVector(localRandom, v.vector.cellBoost, v.vector.invCellBoost);
-
-
-    
+    // get a uniformly distributed vector on the sphere
+    RelVector random = randomVector(v.vector);
     
     switch(objId){
     {{#scene.solids}}
@@ -48,12 +40,11 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 color = {{material.name}}_render(v, uv, rayType);
             {{/material.usesUVMap}}
         
-        
             v.data.pixel = v.data.pixel + v.data.light * {{material.name}}.emission;
             v.data.light = v.data.light * color / rayType.chance;
         
-            //----- update the ray direction ----------
-            // Diffuse uses a normal oriented cosine weighted hemisphere sample.
+            // update the ray direction
+            // diffuse uses a normal oriented cosine weighted hemisphere sample.
             diffuseDir= geomNormalize(add(normal, random));
         
             if(rayType.diffuse){
@@ -62,26 +53,27 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             }
         
             if(rayType.reflect){
-                // Perfectly smooth specular uses the reflection ray.
+                // perfectly smooth specular uses the reflection ray.
                 reflectDir = geomReflect(v.vector, normal);
         
-                // Rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
+                // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                 // reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
                 v.vector = reflectDir;
                 break;
             }
         
             if(rayType.refract){
-                // Perfectly smooth specular uses the reflection ray.
-                // Todo : compute correctly the ratio of IOR
+                // perfectly smooth specular uses the reflection ray.
+                // todo : compute correctly the ratio of IOR
                 refractDir = geomRefract(v.vector, normal, 1.);
         
-                // Rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
+                // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                 // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
                 v.vector = refractDir;
                 break;
             }
         
+            // normally we never reach this point
             break;
     
     {{/scene.solids}}
@@ -101,8 +93,8 @@ void updateVectorData(inout ExtVector v, int hit, int objId){
         return;
     }
     if (hit == HIT_NOTHING) {
-        vec3 skyColor = {{scene.background.name}}.diffuse;
-        v.data.pixel = v.data.pixel + v.data.light * skyColor;
+        vec3 bgColor = {{scene.background.name}}.diffuse;
+        v.data.pixel = v.data.pixel + v.data.light * bgColor;
         v.data.stop = true;
         return;
     }

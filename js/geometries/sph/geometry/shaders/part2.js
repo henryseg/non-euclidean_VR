@@ -25,7 +25,7 @@ void frame(Point p, out Vector[3] f){
  * @param[in] p point on the geometry
  * @param[out] frame computed frame at the given point
  */
-void frame(Point p, out Vector[3] f){
+void orthoFrame(Point p, out Vector[3] f){
     float x = p.coords.x;
     float y = p.coords.y;
     float z = p.coords.z;

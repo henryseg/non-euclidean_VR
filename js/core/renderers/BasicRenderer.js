@@ -7,16 +7,16 @@ import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPa
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
-import vertexShader from "./shaders/vertex.js";
-import constants from "./shaders/constants.js";
+import vertexShader from "./shaders/common/vertex.js";
+import constants from "./shaders/common/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/raymarch.js";
-import scenes from "./shaders/scenes.js";
-import structVectorData from "./shaders/basicVectorData/struct.js";
-import updateVectorData from "./shaders/basicVectorData/update.js";
+import raymarch from "./shaders/common/raymarch.js";
+import scenes from "./shaders/common/scenes.js";
+import structVectorData from "./shaders/basic/vectorDataStruct.js";
+import updateVectorData from "./shaders/basic/vectorDataUpdate.js";
 import SteveShader from "../../postProcess/steve/shader.js";
-import basicMain from "./shaders/basicMain.js";
+import main from "./shaders/basic/main.js";
 
 
 /**
@@ -81,7 +81,7 @@ export class BasicRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);
-        this._fragmentBuilder.addChunk(basicMain);
+        this._fragmentBuilder.addChunk(main);
     }
 
     /**

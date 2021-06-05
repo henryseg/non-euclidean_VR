@@ -18,7 +18,7 @@ struct BasicPTMaterial {
 
 RayType setRayType(BasicPTMaterial material, ExtVector v, RelVector n) {
     RayType res = RayType(false, false, false, 0.);
-    float random = RandomFloat01();
+    float random = randomFloat();
     
     if (random < material.diffuseChance){
         res.diffuse = true;

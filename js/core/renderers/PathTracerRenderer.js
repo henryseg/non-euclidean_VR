@@ -5,16 +5,17 @@ import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
 
 
-import vertexShader from "./shaders/vertex.js";
-import constants from "./shaders/constants.js";
+import vertexShader from "./shaders/common/vertex.js";
+import constants from "./shaders/common/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
-import scenes from "./shaders/scenes.js";
-import raymarch from "./shaders/raymarch.js";
-import random from "./shaders/random.js";
-import structVectorData from "./shaders/PTVectorData/struct.js";
-import updateVectorData from "./shaders/PTVectorData/update.js";
-import PTMain from "./shaders/PTMain.js";
+import scenes from "./shaders/common/scenes.js";
+import raymarch from "./shaders/common/raymarch.js";
+import random1 from "./shaders/pathTracer/random1.js";
+import random2 from "./shaders/pathTracer/random2.js";
+import structVectorData from "./shaders/pathTracer/vectorDataStruct.js";
+import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
+import main from "./shaders/pathTracer/main.js";
 
 export class PathTracerRenderer extends AbstractRenderer {
 
@@ -54,12 +55,18 @@ export class PathTracerRenderer extends AbstractRenderer {
         this._fragmentBuilder.addChunk(this.geom.shader2);
         this._fragmentBuilder.addChunk(commons2);
 
-        this._fragmentBuilder.addUniform('frameSeed', 'uint', Math.floor(1000 * Math.random()));
-        this._fragmentBuilder.addChunk(random);
+        // methods for random data
+        this._fragmentBuilder.addUniform('frameSeed', 'uint', Math.floor(10000 * Math.random()));
+        this._fragmentBuilder.addChunk(random1);
+
+        // vector data structure (for later use in ExtVector)
         this._fragmentBuilder.addChunk(structVectorData);
 
         // subgroup/quotient orbifold
         this.set.shader(this._fragmentBuilder);
+
+        // complement of methods for random data
+        this._fragmentBuilder.addChunk(random2);
 
         // camera
         this.camera.shader(this._fragmentBuilder);
@@ -71,7 +78,7 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);
-        this._fragmentBuilder.addChunk(PTMain);
+        this._fragmentBuilder.addChunk(main);
     }
 
     /**
