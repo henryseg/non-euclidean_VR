@@ -32,6 +32,7 @@
     import Stats from "../../js/lib/stats.module.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
     import {FlyControls} from "../../js/controls/FlyControls.js";
+    import {CREEPING_FULL, CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -48,6 +49,8 @@
     const RENDER_BASIC = 0;
     const RENDER_PT = 1;
 
+    heisenberg.creepingType = CREEPING_FULL;
+
     //------------------------------------------------------------------------------------------------------------------
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
@@ -58,7 +61,7 @@
         ptBackground: new BasicPTMaterial({
             diffuse: bgColor,
             specular: bgColor,
-            absorb: new Color(0.3, 0.3, 0.3)
+            absorb: new Color(0.5, 0.5, 0.5)
         })
     });
 
@@ -96,8 +99,8 @@
     const ptLatticeMat = new BasicPTMaterial({
         diffuse: latticeColor,
         specular: new Color(1, 1, 1),
-        diffuseChance: 1,
-        reflectionChance: 0,
+        diffuseChance: 0.905,
+        reflectionChance: 0.005,
         refractionChance: 0
     });
 
@@ -109,12 +112,12 @@
 
 
     // Local light (for path tracer only)
-    const lightColor = new Color(20, 20, 20);
+    const lightColor = new Color(90, 50, 50);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
-        emission: lightColor
+        emission: lightColor,
     });
-    const light = new LocalFakeBall(new Point(-0.2, 0.2, -0.2), 0.05, lightMat, ptLightMat);
+    const light = new LocalFakeBall(new Point(-0.2, 0.2, -0.2), 0.02, lightMat, ptLightMat);
     scene.add(light);
 
     //------------------------------------------------------------------------------------------------------------------
@@ -129,7 +132,7 @@
     // Basic renderer
     //------------------------------------------------------------------------------------------------------------------
 
-    const camera = new BasicCamera({set: heisenberg, maxSteps: 500});
+    const camera = new BasicCamera({set: heisenberg, maxSteps: 500, fov: 120});
     const renderer = new BasicRenderer(geom, heisenberg, camera, scene, {}, threeRenderer);
 
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -142,7 +145,7 @@
     // Path tracer renderer
     //------------------------------------------------------------------------------------------------------------------
 
-    const ptCamera = new PathTracerCamera({set: heisenberg, maxSteps: 500});
+    const ptCamera = new PathTracerCamera({set: heisenberg, maxSteps: 500, fov: 120});
     const ptRenderer = new PathTracerRenderer(geom, heisenberg, ptCamera, scene, {}, threeRenderer);
 
     ptRenderer.setPixelRatio(window.devicePixelRatio);

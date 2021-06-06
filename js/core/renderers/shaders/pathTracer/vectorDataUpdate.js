@@ -24,6 +24,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     vec2 uv;
     vec3 color;
     vec3 reflectivity;
+    float hackCoeff = 1.;
 
     RelVector diffuseDir;
     RelVector reflectDir;
@@ -49,7 +50,11 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
             // apply fog
             v.data.light = v.data.light * exp( -v.data.absorb * v.data.lastBounceDist);
-            v.data.pixel = v.data.pixel + v.data.light * {{ptMaterial.name}}.emission;
+            // hack to make sure that lights are not too bright
+            if(v.data.iBounce == 0){
+                hackCoeff = 0.01;
+            }
+            v.data.pixel = v.data.pixel + hackCoeff * v.data.light * {{ptMaterial.name}}.emission;
             v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
             
         
@@ -91,7 +96,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     v.data.iBounce = v.data.iBounce + 1;
     // be carefull, v is not normal to the surface
     // if the time we flow is too small, we are still below the camera threshold
-    v = flow(v, 10. * camera.threshold);
+    v = flow(v, 50. * camera.threshold);
    
     
 }
