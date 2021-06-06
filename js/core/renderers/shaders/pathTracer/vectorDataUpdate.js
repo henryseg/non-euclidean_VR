@@ -46,11 +46,12 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 uv = {{shape.name}}_uvMap(v.vector);
                 color = {{ptMaterial.name}}_render(v, uv, rayType);
             {{/ptMaterial.usesUVMap}}
-        
-            v.data.pixel = v.data.pixel + v.data.light * {{ptMaterial.name}}.emission;
-            v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
+
             // apply fog
             v.data.light = v.data.light * exp( -v.data.absorb * v.data.lastBounceDist);
+            v.data.pixel = v.data.pixel + v.data.light * {{ptMaterial.name}}.emission;
+            v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
+            
         
             // update the ray direction
             // diffuse uses a normal oriented cosine weighted hemisphere sample.

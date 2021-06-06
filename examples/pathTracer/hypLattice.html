@@ -57,6 +57,7 @@
         ptBackground: new BasicPTMaterial({
             diffuse: bgColor,
             specular: bgColor,
+            absorb: new Color(0.3, 0.3, 0.3)
         })
     });
 
@@ -114,7 +115,7 @@
 
 
     // Local light (for path tracer only)
-    const lightColor = new Color(0.3, 0.3, 0.3);
+    const lightColor = new Color(1, 1, 1);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor
