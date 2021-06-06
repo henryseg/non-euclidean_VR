@@ -1,6 +1,11 @@
 // language=Mustache + GLSL
 export default `//
 
+VectorData initVectorData(){
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1));
+}
+
+
 void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector normal;
     vec2 uv;
