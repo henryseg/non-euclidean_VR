@@ -41,7 +41,7 @@
     const camera = new VRCamera({set: cube});
     camera.maxSteps = 300;
     const scene = new Scene();
-    const renderer = new VRRenderer(geom, cube, camera, scene, {
+    const renderer = new VRRenderer(geom, cube, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

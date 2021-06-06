@@ -23,11 +23,11 @@ export class AbstractRenderer {
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
-     * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
      * @param {Object} params - parameters for the Thurston part of the render. For the moment includes
+     * @param {WebGLRenderer|Object} threeRenderer - either a Three.js renderer or the parameters to build it
      * - {boolean} postprocess - Gamma and Tone correction
      */
-    constructor(geom, set, camera, scene, threeJSParams = {}, params = {}) {
+    constructor(geom, set, camera, scene, params = {}, threeRenderer = {}) {
         /**
          * The underlying geometry.
          * @type{Object}
@@ -51,10 +51,11 @@ export class AbstractRenderer {
 
         /**
          * The underlying Three.js renderer
+         * If the passed argument is already a WebGLRenderer, we directly use it,
+         * otherwise, we build a WebGLRenderer from the passed parameters.
          * @type {WebGLRenderer}
-         * @protected
          */
-        this.threeRenderer = new WebGLRenderer(threeJSParams);
+        this.threeRenderer = threeRenderer.constructor.name === 'WebGLRenderer' ? threeRenderer : new WebGLRenderer(threeRenderer);
 
         /**
          * Number of time the light rays bounce

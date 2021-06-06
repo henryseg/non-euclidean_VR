@@ -29,7 +29,7 @@
     // initial setup
     const camera = new VRCamera({set: trivial});
     const scene = new Scene();
-    const renderer = new VRRenderer(geom, trivial, camera, scene, {
+    const renderer = new VRRenderer(geom, trivial, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

@@ -73,11 +73,11 @@ export class PathTracerRenderer extends AbstractRenderer {
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
-     * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
      * @param {Object} params - parameters for the Thurston part of the renderer
+     * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(geom, set, camera, scene, threeJSParams = {}, params = {}) {
-        super(geom, set, camera, scene, threeJSParams, params);
+    constructor(geom, set, camera, scene, params = {}, threeRenderer = {}) {
+        super(geom, set, camera, scene, params, threeRenderer);
         // different default value for the number of time we bounce
         this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 50;
 
@@ -102,7 +102,6 @@ export class PathTracerRenderer extends AbstractRenderer {
     setPixelRatio(value) {
         super.setPixelRatio(value);
         this.displayComposer.setPixelRatio(value);
-
     }
 
     setSize(width, height, updateStyle = true) {
@@ -179,13 +178,6 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         this.displayComposer.addPass(new TexturePass(this.accReadTarget.texture));
         this.displayComposer.addPass(new ShaderPass(SteveShader));
-
-        // const effectHBlur = new ShaderPass( HorizontalBlurShader );
-        // const effectVBlur = new ShaderPass( VerticalBlurShader );
-        // effectHBlur.uniforms[ 'h' ].value = 0.5 / (window.innerWidth);
-        // effectVBlur.uniforms[ 'v' ].value = 0.5 / (window.innerHeight);
-        // this.displayComposer.addPass(effectHBlur);
-        // this.displayComposer.addPass(effectVBlur);
 
         return this;
     }

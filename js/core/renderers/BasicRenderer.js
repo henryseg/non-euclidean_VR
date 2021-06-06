@@ -35,11 +35,11 @@ export class BasicRenderer extends AbstractRenderer {
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
-     * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
      * @param {Object} params - parameters for the Thurston part of the renderer
+     * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(geom, set, camera, scene, threeJSParams = {}, params = {}) {
-        super(geom, set, camera, scene, threeJSParams, params);
+    constructor(geom, set, camera, scene, params = {}, threeRenderer = {}) {
+        super(geom, set, camera, scene, params, threeRenderer);
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -56,7 +56,6 @@ export class BasicRenderer extends AbstractRenderer {
     setPixelRatio(value) {
         super.setPixelRatio(value);
         this.composer.setPixelRatio(window.devicePixelRatio);
-
     }
 
     setSize(width, height, updateStyle = true) {
@@ -117,11 +116,14 @@ export class BasicRenderer extends AbstractRenderer {
         this.threeScene.add(horizonSphere);
 
         // add the render to the passes of the effect composer
-        this.composer.addPass(new RenderPass(this.threeScene, this.camera.threeCamera));
+        const renderPass = new RenderPass(this.threeScene, this.camera.threeCamera);
+        renderPass.clear = false;
+        this.composer.addPass(renderPass);
 
         if (this.postProcess) {
-            const effect = new ShaderPass(SteveShader);
-            this.composer.addPass(effect);
+            const effectPass = new ShaderPass(SteveShader);
+            effectPass.clear = false;
+            this.composer.addPass(effectPass);
         }
 
         return this;

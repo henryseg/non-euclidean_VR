@@ -50,7 +50,7 @@
     const camera = new VRCamera({set: heisenberg});
     camera.maxSteps = 300;
     const scene = new Scene();
-    const renderer = new VRRenderer(geom, heisenberg, camera, scene, {
+    const renderer = new VRRenderer(geom, heisenberg, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

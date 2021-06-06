@@ -39,7 +39,7 @@
     const scene = new Scene({maxBounces: 1});
 
 
-    const renderer = new BasicRenderer(geom, trivial, camera, scene, {
+    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

@@ -33,7 +33,7 @@
     const camera = new BasicCamera({set: torus});
     const scene = new Scene({fog: expFog});
 
-    const renderer = new BasicRenderer(geom, torus, camera, scene, {
+    const renderer = new BasicRenderer(geom, torus, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

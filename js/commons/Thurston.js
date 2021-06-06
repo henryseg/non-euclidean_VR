@@ -20,13 +20,13 @@ export class Thurston extends AbstractThurston {
      */
     constructor(geom, set, params = {}) {
         super(geom, set, BasicCamera, BasicRenderer, params);
-        this.renderer.composer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.composer.setSize(window.innerWidth, window.innerHeight);
+        // this.renderer.composer.setPixelRatio(window.devicePixelRatio);
+        // this.renderer.composer.setSize(window.innerWidth, window.innerHeight);
     }
 
     onWindowResize(event) {
         super.onWindowResize(event);
-        this.renderer.composer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.composer.setSize(window.innerWidth, window.innerHeight);
+        // this.renderer.composer.setPixelRatio(window.devicePixelRatio);
+        // this.renderer.composer.setSize(window.innerWidth, window.innerHeight);
     }
 }
