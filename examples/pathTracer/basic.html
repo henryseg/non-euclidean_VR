@@ -12,20 +12,18 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
+    import {Color} from "../../js/lib/threejs/build/three.module.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
 
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
-
+    import {PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
 
     import {Isometry, Point} from "../../js/geometries/euc/geometry/General.js";
     import {BasicPTMaterial} from "../../js/commons/material/basicPTMaterial/BasicPTMaterial.js";
     import Stats from "../../js/lib/stats.module.js";
-    import {PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {SingleColorMaterial} from "../../js/commons/material/all.js";
     import {Ball, HalfSpace} from "../../js/geometries/euc/solids/all.js";
-    import {ConstDirLight} from "../../js/geometries/euc/lights/all.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
@@ -39,9 +37,13 @@
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
 
+    // every solid need to have a material for basic rendering
+    // since we are not using the basic renderer here, we use a placeholder everywhere
+    const placeholderMat = new SingleColorMaterial(new Color(0,0,0));
+
     const bgColor = new Color(0, 0, 0);
     const scene = new Scene({
-        background: new SingleColorMaterial(bgColor),
+        background: placeholderMat,
         ptBackground: new BasicPTMaterial({
             diffuse: bgColor,
             specular: bgColor,
@@ -50,7 +52,6 @@
 
     // main ball
     const ballColor = new Color(1, 1, 1);
-    const ballMat = new PhongMaterial({color: ballColor});
     const ptBallMat = new BasicPTMaterial({
         diffuse: ballColor,
         specular: ballColor,
@@ -59,14 +60,13 @@
         refractionChance: 0,
         diffuseChance: 0.99
     });
-    const ball = new Ball(new Point(0, 0, -1), 0.3, ballMat, ptBallMat);
+    const ball = new Ball(new Point(0, 0, -1), 0.3, placeholderMat, ptBallMat);
     scene.add(ball);
 
     // back wall
     const backColor = new Color(1, 0, 0);
     const backPoint = new Point(0, 0, -1.4);
     const backIsom = new Isometry().makeTranslation(backPoint);
-    const backMat = new PhongMaterial({color: backColor});
     const ptBackMat = new BasicPTMaterial({
         diffuse: backColor,
         specular: backColor,
@@ -74,12 +74,11 @@
         reflectionChance: 0,
         refractionChance: 0
     });
-    const back = new HalfSpace(backIsom, backMat, ptBackMat);
+    const back = new HalfSpace(backIsom, placeholderMat, ptBackMat);
     scene.add(back);
 
     // left wall
     const leftColor = new Color(0, 1, 0);
-    const leftMat = new PhongMaterial({color: leftColor});
     const ptLeftMat = new BasicPTMaterial({
         diffuse: leftColor,
         specular: leftColor
@@ -87,12 +86,11 @@
     const leftPoint = new Point(-1, 0, 0);
     const leftIsom = new Isometry().makeTranslation(leftPoint);
     leftIsom.multiply(new Isometry().makeRotationY(0.5 * Math.PI));
-    const ptLeft = new HalfSpace(leftIsom, leftMat, ptLeftMat);
+    const ptLeft = new HalfSpace(leftIsom, placeholderMat, ptLeftMat);
     scene.add(ptLeft);
 
     // right wall
     const rightColor = new Color(0, 0, 1);
-    const rightMat = new PhongMaterial({color: rightColor});
     const ptRightMat = new BasicPTMaterial({
         diffuse: rightColor,
         specular: rightColor
@@ -100,12 +98,11 @@
     const rightPoint = new Point(1, 0, 0);
     const rightIsom = new Isometry().makeTranslation(rightPoint);
     rightIsom.multiply(new Isometry().makeRotationY(-0.5 * Math.PI));
-    const right = new HalfSpace(rightIsom, rightMat, ptRightMat);
+    const right = new HalfSpace(rightIsom, placeholderMat, ptRightMat);
     scene.add(right);
 
     // bottom wall
     const bottomColor = new Color(1, 1, 1);
-    const bottomMat = new PhongMaterial({color: bottomColor});
     const ptBottomMat = new BasicPTMaterial({
         diffuse: bottomColor,
         specular: bottomColor,
@@ -113,45 +110,19 @@
     const bottomPoint = new Point(0, -0.3, 0);
     const bottomIsom = new Isometry().makeTranslation(bottomPoint);
     bottomIsom.multiply(new Isometry().makeRotationX(-0.5 * Math.PI));
-    const bottom = new HalfSpace(bottomIsom, bottomMat, ptBottomMat);
+    const bottom = new HalfSpace(bottomIsom, placeholderMat, ptBottomMat);
     scene.add(bottom);
 
     // top wall
     const topColor = new Color(1, 1, 1);
-    const topMat = new SingleColorMaterial(topColor);
     const ptTopMat = new BasicPTMaterial({
         emission: topColor,
     })
     const topPoint = new Point(0, 4, 0);
     const topIsom = new Isometry().makeTranslation(topPoint);
     topIsom.multiply(new Isometry().makeRotationX(0.5 * Math.PI));
-    const top = new HalfSpace(topIsom, topMat, ptTopMat);
+    const top = new HalfSpace(topIsom, placeholderMat, ptTopMat);
     scene.add(top);
-
-    // light for the basic renderer
-    const light = new ConstDirLight(topColor, 0.5, new Vector3(0, 1, 0));
-    scene.add(light);
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Basic renderer
-    //------------------------------------------------------------------------------------------------------------------
-
-    const camera = new BasicCamera({set: trivial, maxSteps: 500});
-    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, {logarithmicDepthBuffer: true});
-
-    renderer.build();
-
-    // rendering the scene
-    function animate() {
-        renderer.render();
-        stats.update();
-    }
-
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    document.body.appendChild(renderer.domElement);
-    renderer.setAnimationLoop(animate);
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -159,16 +130,19 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, {logarithmicDepthBuffer: true});
+    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, {
+        logarithmicDepthBuffer: true
+    });
 
     // building there renderer
     ptRenderer.build();
 
 
     // rendering the scene
-    function ptAnimate() {
+    function animate() {
         ptRenderer.updateFrameSeed();
         ptRenderer.render();
+        stats.update();
     }
 
 
@@ -176,7 +150,7 @@
     ptRenderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(ptRenderer.domElement);
 
-    ptRenderer.setAnimationLoop(ptAnimate);
+    ptRenderer.setAnimationLoop(animate);
     // renderer.checkShader();
 
 

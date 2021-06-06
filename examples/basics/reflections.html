@@ -28,7 +28,7 @@
     const camera = new BasicCamera({set: torus});
     const scene = new Scene({maxBounces: 1});
 
-    const renderer = new BasicRenderer(geom, torus, camera, scene, {
+    const renderer = new BasicRenderer(geom, torus, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

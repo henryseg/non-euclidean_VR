@@ -7,18 +7,17 @@
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
 
-    <title>Path tracer, first attempt</title>
+    <title>Switch between renderers</title>
 </head>
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
+    import {Color, Vector3, WebGLRenderer} from "../../js/lib/threejs/build/three.module.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
 
     import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
-
 
     import {Isometry, Point} from "../../js/geometries/euc/geometry/General.js";
     import {BasicPTMaterial} from "../../js/commons/material/basicPTMaterial/BasicPTMaterial.js";
@@ -26,6 +25,7 @@
     import {PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
     import {Ball, HalfSpace} from "../../js/geometries/euc/solids/all.js";
     import {ConstDirLight} from "../../js/geometries/euc/lights/all.js";
+    import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
@@ -34,6 +34,13 @@
     const stats = new Stats();
     stats.showPanel(0);
     document.body.appendChild(stats.dom);
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+
+    const RENDER_BASIC = 0;
+    const RENDER_PT = 1;
 
     //------------------------------------------------------------------------------------------------------------------
     // Building the scene
@@ -133,51 +140,82 @@
     scene.add(light);
 
     //------------------------------------------------------------------------------------------------------------------
+    // Common Three.js renderer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const threeRenderer = new WebGLRenderer({logarithmicDepthBuffer: true});
+    threeRenderer.autoClear = false;
+    document.body.appendChild(threeRenderer.domElement);
+
+    //------------------------------------------------------------------------------------------------------------------
     // Basic renderer
     //------------------------------------------------------------------------------------------------------------------
 
     const camera = new BasicCamera({set: trivial, maxSteps: 500});
-    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, {logarithmicDepthBuffer: true});
-
-    renderer.build();
-
-    // rendering the scene
-    function animate() {
-        renderer.render();
-        stats.update();
-    }
+    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, threeRenderer);
 
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
 
-    document.body.appendChild(renderer.domElement);
-    renderer.setAnimationLoop(animate);
-
+    // building the renderer
+    renderer.build();
 
     //------------------------------------------------------------------------------------------------------------------
     // Path tracer renderer
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, {logarithmicDepthBuffer: true});
-
-    // building there renderer
-    ptRenderer.build();
-
-
-    // rendering the scene
-    function ptAnimate() {
-        ptRenderer.updateFrameSeed();
-        ptRenderer.render();
-    }
-
+    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, threeRenderer);
 
     ptRenderer.setPixelRatio(window.devicePixelRatio);
-    ptRenderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(ptRenderer.domElement);
+    ptRenderer.setSize(width, height);
 
-    ptRenderer.setAnimationLoop(ptAnimate);
-    // renderer.checkShader();
+    // building the renderer
+    ptRenderer.build();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Setting up the switch
+    //------------------------------------------------------------------------------------------------------------------
+
+    // constant keeping track of the render used
+    let current_render = RENDER_BASIC;
+    let justSwitched = false;
+
+    function actionKeyDown() {
+        current_render = (current_render + 1) % 2;
+        justSwitched = true;
+    }
+
+    function actionKeyUp() {
+    }
+
+    const controls = new KeyGenericControls('p');
+    controls.actionKeyDown = actionKeyDown;
+    controls.actionKeyUp = actionKeyUp;
+
+    function animate() {
+        if (justSwitched) {
+            if(current_render === RENDER_PT) {
+                ptRenderer.iFrame = 0;
+                threeRenderer.setRenderTarget(ptRenderer.accReadTarget);
+                threeRenderer.clear();
+            }
+            justSwitched = false;
+        }
+        switch (current_render) {
+            case RENDER_BASIC:
+                renderer.render();
+                break;
+            case RENDER_PT:
+                ptRenderer.updateFrameSeed();
+                ptRenderer.render();
+                break;
+            default:
+        }
+        stats.update();
+    }
+
+    threeRenderer.setAnimationLoop(animate);
 
 
 </script>
