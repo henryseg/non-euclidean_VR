@@ -13,7 +13,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
         case {{id}}:
         {{#material.isReflecting}}
             
-            if(v.data.iBounce == scene.maxBounces){
+            if(v.data.iBounce == maxBounces){
                 reflectivity = vec3(0);
             } 
             else {

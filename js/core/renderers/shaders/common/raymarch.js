@@ -113,7 +113,7 @@ int raymarch(inout ExtVector v, out int objId){
 vec3 getColor(ExtVector v){
     int objId;
     int hit;
-    for (int i = 0; i <= scene.maxBounces; i++){
+    for (int i = 0; i <= maxBounces; i++){
         if (v.data.stop){
             break;
         }

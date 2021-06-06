@@ -1,8 +1,8 @@
-import {mustache} from "../../lib/mustache.mjs";
-
-import header from "./shaders/header.js";
 import {Color} from "../../lib/threejs/build/three.module.js";
+
 import {SingleColorMaterial} from "../../commons/material/singleColor/SingleColorMaterial.js";
+import {PATHTRACER_RENDERER} from "../../utils/ShaderBuilder.js";
+
 
 
 /**
@@ -18,7 +18,6 @@ export class Scene {
      * Constructor.
      * @param {Object} params - parameters of the scene including
      * - {Fog} fog - the fog in the scene
-     * - {number} maxBounces - the maximal number of times the light bounces on reflecting materials.
      */
     constructor(params = {}) {
         /**
@@ -46,12 +45,6 @@ export class Scene {
         this.fog = params.fog;
 
         /**
-         * Maximal number of bounces
-         * @type {number}
-         */
-        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
-
-        /**
          * Background material
          * @type{Material|PTMaterial}
          */
@@ -60,7 +53,7 @@ export class Scene {
          * Background material (for path tracing)
          * @type{PTMaterial}
          */
-        this.PTbackground = params.PTbackground;
+        this.ptBackground = params.ptBackground;
     }
 
     /**
@@ -104,13 +97,18 @@ export class Scene {
      * @param {ShaderBuilder} shaderBuilder
      */
     shader(shaderBuilder) {
-        shaderBuilder.addChunk(header);
-        shaderBuilder.addUniform('scene', 'Scene', this);
         // background material
-        this.background.shader(shaderBuilder);
+        if (shaderBuilder.useCase === PATHTRACER_RENDERER) {
+            this.ptBackground.shader(shaderBuilder);
+        } else {
+            this.background.shader(shaderBuilder);
+        }
+
         // run through all the objects in the scene and combine the relevant chunks of GLSL code.
         for (const light of this.lights) {
-            light.shader(shaderBuilder);
+            if (shaderBuilder.useCase !== PATHTRACER_RENDERER) {
+                light.shader(shaderBuilder);
+            }
         }
         for (const solid of this.solids) {
             solid.shader(shaderBuilder);

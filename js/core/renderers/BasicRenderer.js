@@ -36,10 +36,10 @@ export class BasicRenderer extends AbstractRenderer {
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
-     * @param {Object} thurstonParams - parameters for the Thurston part of the renderer
+     * @param {Object} params - parameters for the Thurston part of the renderer
      */
-    constructor(geom, set, camera, scene, threeJSParams = {}, thurstonParams = {}) {
-        super(geom, set, camera, scene, threeJSParams, thurstonParams);
+    constructor(geom, set, camera, scene, threeJSParams = {}, params = {}) {
+        super(geom, set, camera, scene, threeJSParams, params);
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -71,6 +71,7 @@ export class BasicRenderer extends AbstractRenderer {
 
         // constants
         this._fragmentBuilder.addChunk(constants);
+        this._fragmentBuilder.addUniform('maxBounces', 'int', this.maxBounces);
         // geometry
         this._fragmentBuilder.addChunk(this.geom.shader1);
         this._fragmentBuilder.addChunk(commons1);
@@ -118,7 +119,7 @@ export class BasicRenderer extends AbstractRenderer {
         // add the render to the passes of the effect composer
         this.composer.addPass(new RenderPass(this.threeScene, this.camera.threeCamera));
 
-        if (this.thurstonParams.hasOwnProperty('postProcess') && this.thurstonParams.postProcess) {
+        if (this.postProcess) {
             const effect = new ShaderPass(SteveShader);
             this.composer.addPass(effect);
         }

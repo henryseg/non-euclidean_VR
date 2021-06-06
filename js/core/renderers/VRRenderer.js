@@ -75,6 +75,7 @@ export class VRRenderer extends AbstractRenderer {
         for (const side of [LEFT, RIGHT]) {
             // constants
             this._fragmentBuilder[side].addChunk(constants);
+            this._fragmentBuilder[side].addUniform('maxBounces', 'int', this.maxBounces);
             // geometry
             this._fragmentBuilder[side].addChunk(this.geom.shader1);
             this._fragmentBuilder[side].addChunk(commons1);

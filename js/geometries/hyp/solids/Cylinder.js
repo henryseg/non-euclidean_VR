@@ -14,9 +14,10 @@ export class Cylinder extends Solid {
      * @param {Isometry} isom - the location of the cylinder
      * @param {number} radius - the radius of the cylinder
      * @param {Material} material - the material of the cylinder
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(isom, radius, material) {
+    constructor(isom, radius, material, ptMaterial = undefined) {
         const shape = new CylinderShape(isom, radius);
-        super(shape, material);
+        super(shape, material, ptMaterial);
     }
 }

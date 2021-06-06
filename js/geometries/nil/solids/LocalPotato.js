@@ -16,9 +16,10 @@ export class LocalPotato extends Solid {
      * @param {number} coeff2 - the coefficient for the (fake) height component
      * @param {number} exp - the exponent
      * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(location, radius, coeff1, coeff2, exp, material) {
+    constructor(location, radius, coeff1, coeff2, exp, material, ptMaterial = undefined) {
         const shape = new LocalPotatoShape(location, radius, coeff1, coeff2, exp);
-        super(shape, material);
+        super(shape, material, ptMaterial);
     }
 }
