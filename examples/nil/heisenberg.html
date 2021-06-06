@@ -41,15 +41,18 @@
 
     const light1 = new FakePointLight(
         new Point(1, 0, 0),
-        lightColor1
+        lightColor1,
+        0.3
     );
     const light2 = new FakePointLight(
         new Point(0, 0, 1),
-        lightColor2
+        lightColor2,
+        0.3
     );
     const light3 = new FakePointLight(
         new Point(0, 1, 0),
-        lightColor3
+        lightColor3,
+        0.3
     );
 
     const lights = [light1, light2, light3];
@@ -64,9 +67,9 @@
     });
 
     const normalMat = new NormalMaterial()
-    const center = new LocalPotatoShape(new Point(), 0.55, 0.9, 1, 4);
+    const center = new LocalPotatoShape(new Point(), 0.64, 1.2, 2, 4);
     const latticeShape = complement(center)
-    const lattice = new Solid(latticeShape, normalMat);
+    const lattice = new Solid(latticeShape, mat);
 
     thurston.add(lattice);
     thurston.run();
