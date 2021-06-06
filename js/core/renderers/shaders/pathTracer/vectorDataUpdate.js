@@ -1,5 +1,11 @@
 // language=Mustache + GLSL
 export default `//
+VectorData initVectorData(){
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb);
+}
+
+
+
 void roulette(inout ExtVector v){
     // as the light left gets smaller, the ray is more likely to get terminated early.
     // survivors have their value boosted to make up for fewer samples being in the average.
@@ -43,6 +49,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
         
             v.data.pixel = v.data.pixel + v.data.light * {{ptMaterial.name}}.emission;
             v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
+            // apply fog
+            v.data.light = v.data.light * exp( -v.data.absorb * v.data.lastBounceDist);
         
             // update the ray direction
             // diffuse uses a normal oriented cosine weighted hemisphere sample.
@@ -69,6 +77,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                 // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
                 v.vector = refractDir;
+                // TODO update the following data for v : IOR, inside/outside flag,  absorb 
             }
         
             // normally we never reach this point

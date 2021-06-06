@@ -33,7 +33,7 @@ export class BasicPTMaterial extends PTMaterial {
          * Absorb color (if the material is transparent)
          * @type {Color}
          */
-        this.absorb = params.absorb !== undefined ? params.absorb : new Color(1, 1, 1);
+        this.absorb = params.absorb !== undefined ? params.absorb : new Color(0.1, 0.1, 0.1);
         /**
          * Index of refraction
          * @type {number}
