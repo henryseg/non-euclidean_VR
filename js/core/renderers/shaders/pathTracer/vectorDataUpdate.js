@@ -31,17 +31,17 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     
         case {{id}}:
             normal = {{shape.name}}_gradient(v.vector);
-            rayType = {{material.name}}_setRayType(v, normal);
+            rayType = {{ptMaterial.name}}_setRayType(v, normal);
         
-            {{^material.usesUVMap}}
-                color =  {{material.name}}_render(v, rayType);
-            {{/material.usesUVMap}}
-            {{#material.usesUVMap}}
+            {{^ptMaterial.usesUVMap}}
+                color =  {{ptMaterial.name}}_render(v, rayType);
+            {{/ptMaterial.usesUVMap}}
+            {{#ptMaterial.usesUVMap}}
                 uv = {{shape.name}}_uvMap(v.vector);
-                color = {{material.name}}_render(v, uv, rayType);
-            {{/material.usesUVMap}}
+                color = {{ptMaterial.name}}_render(v, uv, rayType);
+            {{/ptMaterial.usesUVMap}}
         
-            v.data.pixel = v.data.pixel + v.data.light * {{material.name}}.emission;
+            v.data.pixel = v.data.pixel + v.data.light * {{ptMaterial.name}}.emission;
             v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
         
             // update the ray direction
@@ -57,7 +57,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 reflectDir = geomReflect(v.vector, normal);
         
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
+                reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
                 v.vector = reflectDir;
             }
         
@@ -67,7 +67,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 refractDir = geomRefract(v.vector, normal, 1.);
         
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{material.name}}.roughness * {{material.name}}.roughness));
+                // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
                 v.vector = refractDir;
             }
         
@@ -93,7 +93,7 @@ void updateVectorData(inout ExtVector v, int hit, int objId){
         return;
     }
     if (hit == HIT_NOTHING) {
-        vec3 bgColor = {{scene.background.name}}.diffuse;
+        vec3 bgColor = {{scene.ptBackground.name}}.diffuse;
         v.data.pixel = v.data.pixel + v.data.light * bgColor;
         v.data.stop = true;
         return;

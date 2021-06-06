@@ -1,6 +1,7 @@
 import {Generic} from "../Generic.js";
 
 import struct from "./shaders/struct.js";
+import {PATHTRACER_RENDERER} from "../../utils/ShaderBuilder.js";
 
 /**
  * @class
@@ -16,12 +17,17 @@ export class Solid extends Generic {
     /**
      *
      * @param {Shape} shape - the shape of the solid
-     * @param {Material|PTMaterial} material - the material of the solid
+     * @param {Material} material - the material of the solid
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(shape, material, ptMaterial= undefined) {
-        if (material.usesUVMap && !shape.hasUVMap) {
-            throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+    constructor(shape, material, ptMaterial = undefined) {
+        if (!shape.hasUVMap) {
+            if (material.usesUVMap) {
+                throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+            }
+            if (ptMaterial !== undefined && ptMaterial.usesUVMap) {
+                throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+            }
         }
         super();
         /**
@@ -125,7 +131,11 @@ export class Solid extends Generic {
 
     shader(shaderBuilder) {
         this.shape.shader(shaderBuilder);
-        this.material.shader(shaderBuilder);
+        if (shaderBuilder.useCase === PATHTRACER_RENDERER) {
+            this.ptMaterial.shader(shaderBuilder);
+        } else {
+            this.material.shader(shaderBuilder);
+        }
         super.shader(shaderBuilder);
     }
 }

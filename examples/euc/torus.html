@@ -27,8 +27,9 @@
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
 
 
-    const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
-    thurston.renderer.thurstonParams.postProcess = true;
+    const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
+    thurston.renderer.postProcess = true;
+    thurston.renderer.maxBounces = 1;
 
     // lights for the Phong material
 

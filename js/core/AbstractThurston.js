@@ -62,7 +62,11 @@ export class AbstractThurston {
          * The non-euclidean scene
          * @type {Scene}
          */
-        this.scene = new Scene({fog: fog, maxBounces: params.maxBounces, background: params.background});
+        this.scene = new Scene({
+            fog: fog,
+            // maxBounces: params.maxBounces,
+            background: params.background}
+        );
 
         /**
          * The non-euclidean renderer

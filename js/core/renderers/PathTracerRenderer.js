@@ -13,7 +13,7 @@ import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPa
 import {FullScreenQuad} from "../../lib/threejs/examples/jsm/postprocessing/Pass.js";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
-import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
+import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
 import vertexShader from "./shaders/common/vertex.js";
 import constants from "./shaders/common/constants.js";
@@ -74,16 +74,19 @@ export class PathTracerRenderer extends AbstractRenderer {
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
-     * @param {Object} thurstonParams - parameters for the Thurston part of the renderer
+     * @param {Object} params - parameters for the Thurston part of the renderer
      */
-    constructor(geom, set, camera, scene, threeJSParams = {}, thurstonParams = {}) {
-        super(geom, set, camera, scene, threeJSParams, thurstonParams);
+    constructor(geom, set, camera, scene, threeJSParams = {}, params = {}) {
+        super(geom, set, camera, scene, threeJSParams, params);
+        // different default value for the number of time we bounce
+        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 50;
+
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
          * @private
          */
-        this._fragmentBuilder = new ShaderBuilder();
+        this._fragmentBuilder = new ShaderBuilder(PATHTRACER_RENDERER);
 
         this.sceneTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
         this.accReadTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
@@ -121,6 +124,7 @@ export class PathTracerRenderer extends AbstractRenderer {
     buildFragmentShader() {
         // constants
         this._fragmentBuilder.addChunk(constants);
+        this._fragmentBuilder.addUniform('maxBounces', 'int', this.maxBounces);
         // geometry
         this._fragmentBuilder.addChunk(this.geom.shader1);
         this._fragmentBuilder.addChunk(commons1);

@@ -4,6 +4,7 @@ import {
     WebGLRenderer
 } from "../../lib/threejs/build/three.module.js";
 
+
 /**
  * @class
  * @abstract
@@ -23,10 +24,10 @@ export class AbstractRenderer {
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} threeJSParams - parameters for the underlying Three.js renderer
-     * @param {Object} thurstonParams - parameters for the Thurston part of the render. For the moment includes
+     * @param {Object} params - parameters for the Thurston part of the render. For the moment includes
      * - {boolean} postprocess - Gamma and Tone correction
      */
-    constructor(geom, set, camera, scene, threeJSParams = {}, thurstonParams = {}) {
+    constructor(geom, set, camera, scene, threeJSParams = {}, params = {}) {
         /**
          * The underlying geometry.
          * @type{Object}
@@ -56,13 +57,16 @@ export class AbstractRenderer {
         this.threeRenderer = new WebGLRenderer(threeJSParams);
 
         /**
-         * Parameters for the Thurston part of the render
-         * @type {Object}
+         * Number of time the light rays bounce
+         * @type {number}
          */
-        this.thurstonParams = thurstonParams;
-        if (thurstonParams.postprocess === undefined) {
-            this.thurstonParams.postprocess = false;
-        }
+        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
+        /**
+         * Add post processing to the final output
+         * @type {Boolean}
+         */
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+
         /**
          * The underlying Three.js scene
          * Not to be confused with the non-euclidean scene.
