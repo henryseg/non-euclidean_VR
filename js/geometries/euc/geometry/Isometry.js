@@ -63,6 +63,33 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
     return this;
 }
 
+/**
+ * Set the current isometry with a rotation around the x-axis
+ * @param {number} theta - the rotation angle
+ */
+Isometry.prototype.makeRotationX = function (theta) {
+    this.matrix.makeRotationX(theta);
+    return this;
+}
+
+/**
+ * Set the current isometry with a rotation around the y-axis
+ * @param {number} theta - the rotation angle
+ */
+Isometry.prototype.makeRotationY = function (theta) {
+    this.matrix.makeRotationY(theta);
+    return this;
+}
+
+/**
+ * Set the current isometry with a rotation around the z-axis
+ * @param {number} theta - the rotation angle
+ */
+Isometry.prototype.makeRotationZ = function (theta) {
+    this.matrix.makeRotationZ(theta);
+    return this;
+}
+
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
