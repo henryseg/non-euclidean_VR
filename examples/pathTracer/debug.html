@@ -41,7 +41,6 @@
 
     const bgColor = new Color(0, 0, 0);
     const scene = new Scene({
-        ptMaxBounces: 10,
         background: new SingleColorMaterial(bgColor),
         ptBackground: new BasicPTMaterial({
             diffuse: bgColor,
@@ -63,7 +62,6 @@
     const ball = new Ball(new Point(0, 0, -1), 0.3, ballMat, ptBallMat);
     scene.add(ball);
 
-
     // back wall
     const backColor = new Color(1, 0, 0);
     const backPoint = new Point(0, 0, -1.4);
@@ -79,68 +77,58 @@
     const back = new HalfSpace(backIsom, backMat, ptBackMat);
     scene.add(back);
 
-
+    // left wall
+    const leftColor = new Color(0, 1, 0);
+    const leftMat = new PhongMaterial({color: leftColor});
+    const ptLeftMat = new BasicPTMaterial({
+        diffuse: leftColor,
+        specular: leftColor
+    });
     const leftPoint = new Point(-1, 0, 0);
     const leftIsom = new Isometry().makeTranslation(leftPoint);
-    leftIsom.matrix.multiply(new Matrix4().makeRotationY(0.5 * Math.PI));
-    const leftShape = new HalfSpaceShape(leftIsom);
-
-    const rightPoint = new Point(1, 0, 0);
-    const rightIsom = new Isometry().makeTranslation(rightPoint);
-    rightIsom.matrix.multiply(new Matrix4().makeRotationY(-0.5 * Math.PI));
-    const rightShape = new HalfSpaceShape(rightIsom);
-
-    const bottomPoint = new Point(0, -0.3, 0);
-    const bottomIsom = new Isometry().makeTranslation(bottomPoint);
-    bottomIsom.matrix.multiply(new Matrix4().makeRotationX(-0.5 * Math.PI));
-    const bottomShape = new HalfSpaceShape(bottomIsom);
-
-    const topPoint = new Point(0, 4, 0);
-    const topIsom = new Isometry().makeTranslation(topPoint);
-    topIsom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
-    const topShape = new HalfSpaceShape(topIsom);
-
-
-    // light
-    const lightShape = new BallShape(
-        new Point(0, 0.3, -0.5),
-        0.2
-    )
-    const lightMat = new BasicPTMaterial({
-        emission: new Color(1, 1, 1),
-    })
-    const ptLight = new Solid(topShape, lightMat, lightMat);
-    scene.add(ptLight);
-
-    // ball
-
-
-    // back wall
-
-
-    // left wall
-    const leftMat = new BasicPTMaterial({
-        diffuse: new Color(0, 1, 0),
-        specular: new Color(0, 1, 0)
-    });
-    const ptLeft = new Solid(leftShape, leftMat, leftMat);
+    leftIsom.multiply(new Isometry().makeRotationY(0.5 * Math.PI));
+    const ptLeft = new HalfSpace(leftIsom, leftMat, ptLeftMat);
     scene.add(ptLeft);
 
     // right wall
-    const rightMat = new BasicPTMaterial({
-        diffuse: new Color(0, 0, 1),
-        specular: new Color(0, 0, 1)
+    const rightColor = new Color(0, 0, 1);
+    const rightMat = new PhongMaterial({color: rightColor});
+    const ptRightMat = new BasicPTMaterial({
+        diffuse: rightColor,
+        specular: rightColor
     });
-    const right = new Solid(rightShape, rightMat, rightMat);
+    const rightPoint = new Point(1, 0, 0);
+    const rightIsom = new Isometry().makeTranslation(rightPoint);
+    rightIsom.multiply(new Isometry().makeRotationY(-0.5 * Math.PI));
+    const right = new HalfSpace(rightIsom, rightMat, ptRightMat);
     scene.add(right);
 
     // bottom wall
-    const bottomMat = new BasicPTMaterial({
-        diffuse: new Color(1, 1, 1),
-        specular: new Color(1, 1, 1),
+    const bottomColor = new Color(1, 1, 1);
+    const bottomMat = new PhongMaterial({color: bottomColor});
+    const ptBottomMat = new BasicPTMaterial({
+        diffuse: bottomColor,
+        specular: bottomColor,
     });
-    const bottom = new Solid(bottomShape, bottomMat, bottomMat);
+    const bottomPoint = new Point(0, -0.3, 0);
+    const bottomIsom = new Isometry().makeTranslation(bottomPoint);
+    bottomIsom.multiply(new Isometry().makeRotationX(-0.5 * Math.PI));
+    const bottom = new HalfSpace(bottomIsom, bottomMat, ptBottomMat);
     scene.add(bottom);
+
+    // top wall
+    const topColor = new Color(1, 1, 1);
+    const topMat = new SingleColorMaterial(topColor);
+    const ptTopMat = new BasicPTMaterial({
+        emission: topColor,
+    })
+    const topPoint = new Point(0, 4, 0);
+    const topIsom = new Isometry().makeTranslation(topPoint);
+    topIsom.multiply(new Isometry().makeRotationX(0.5 * Math.PI));
+    const topShape = new HalfSpaceShape(topIsom);
+    const top = new HalfSpace(topIsom, topMat, ptTopMat);
+    scene.add(top);
+
 
 
     //------------------------------------------------------------------------------------------------------------------
