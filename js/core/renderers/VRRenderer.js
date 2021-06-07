@@ -64,6 +64,10 @@ export class VRRenderer extends AbstractRenderer {
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
     }
 
+    get isVRRenderer() {
+        return true;
+    }
+
     /**
      * Shortcut to access the Three.js WebXRManager
      * @return {WebXRManager}
