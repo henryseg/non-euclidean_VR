@@ -76,7 +76,7 @@ class FlyControls extends EventDispatcher {
      * (needed to get the orientation of the observer when using both VR and keyboard).
      * @param {string} keyboard - the keyboard type (us, fr, etc)
      */
-    constructor(camera,  keyboard = 'us') {
+    constructor(camera, keyboard = 'us') {
         super();
         this.camera = camera;
 
@@ -104,11 +104,27 @@ class FlyControls extends EventDispatcher {
         this._moveVector = new Vector(0, 0, 0);
         this._rotationVector = new Vector(0, 0, 0);
 
-        const _onKeyDown = bind(this, this.onKeyDown);
-        const _onKeyUp = bind(this, this.onKeyUp);
+        this._onKeyDown = bind(this, this.onKeyDown);
+        this._onKeyUp = bind(this, this.onKeyUp);
 
-        window.addEventListener('keydown', _onKeyDown, false);
-        window.addEventListener('keyup', _onKeyUp, false);
+        window.addEventListener('keydown', this._onKeyDown, false);
+        window.addEventListener('keyup', this._onKeyUp, false);
+    }
+
+    /**
+     * Stop listening to the event
+     */
+    pause() {
+        window.removeEventListener('keydown', this._onKeyDown);
+        window.removeEventListener('keyup', this._onKeyUp);
+    }
+
+    /**
+     * Restor the event listener
+     */
+    restore() {
+        window.addEventListener('keydown', this._onKeyDown, false);
+        window.addEventListener('keyup', this._onKeyUp, false);
     }
 
     /**

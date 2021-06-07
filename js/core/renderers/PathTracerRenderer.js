@@ -99,6 +99,10 @@ export class PathTracerRenderer extends AbstractRenderer {
         this.displayComposer = new EffectComposer(this.threeRenderer);
     }
 
+    get isPathTracerRenderer() {
+        return true;
+    }
+
     setPixelRatio(value) {
         super.setPixelRatio(value);
         this.displayComposer.setPixelRatio(value);

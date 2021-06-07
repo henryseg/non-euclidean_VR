@@ -53,6 +53,10 @@ export class BasicRenderer extends AbstractRenderer {
         this.composer = new EffectComposer(this.threeRenderer);
     }
 
+    get isBasicRenderer() {
+        return true;
+    }
+
     setPixelRatio(value) {
         super.setPixelRatio(value);
         this.composer.setPixelRatio(window.devicePixelRatio);

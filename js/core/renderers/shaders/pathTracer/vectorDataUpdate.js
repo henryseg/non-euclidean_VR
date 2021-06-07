@@ -96,7 +96,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     v.data.iBounce = v.data.iBounce + 1;
     // be carefull, v is not normal to the surface
     // if the time we flow is too small, we are still below the camera threshold
-    v = flow(v, 50. * camera.threshold);
+    float t = 20. * camera.threshold / geomDot(v.vector, normal);
+    v = flow(v, t);
    
     
 }

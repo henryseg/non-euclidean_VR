@@ -37,30 +37,13 @@
     // General setup
     //------------------------------------------------------------------------------------------------------------------
 
-    const stats = new Stats();
-    stats.showPanel(0);
-    document.body.appendChild(stats.dom);
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    const RENDER_BASIC = 0;
-    const RENDER_PT = 1;
+    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
 
     //------------------------------------------------------------------------------------------------------------------
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
 
-    const bgColor = new Color(0, 0, 0);
-    const scene = new Scene({
-        background: new SingleColorMaterial(bgColor),
-        ptBackground: new BasicPTMaterial({
-            diffuse: bgColor,
-            specular: bgColor,
-            absorb: new Color(0.3, 0.3, 0.3)
-        })
-    });
-
+    thurston.scene.ptBackground.absorb = new Color(0.4, 0.4, 0.4);
 
     // lights for the Phong material (not used by the path tracer)
 
@@ -79,7 +62,7 @@
         new Vector(-1, -1, 1),
         new Color(1, 0, 1)
     );
-    scene.add(light0, light1, light2);
+    thurston.add(light0, light1, light2);
 
     // Phong shading material
     const latticeColor = new Color(1, 0.2, 0.2);
@@ -111,95 +94,19 @@
     const unionShape = union(centerBall, ...horoballs);
     const latticeShape = complement(unionShape);
     const lattice = new Solid(latticeShape, latticeMat, ptLatticeMat);
-    scene.add(lattice);
+    thurston.add(lattice);
 
 
     // Local light (for path tracer only)
-    const lightColor = new Color(1, 1, 1);
+    const lightColor = new Color(50,50,50);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor
     });
-    const light = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.1, lightMat, ptLightMat);
-    scene.add(light);
+    const light = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.05, lightMat, ptLightMat);
+    thurston.add(light);
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Common Three.js renderer
-    //------------------------------------------------------------------------------------------------------------------
-
-    const threeRenderer = new WebGLRenderer({logarithmicDepthBuffer: true});
-    threeRenderer.autoClear = false;
-    document.body.appendChild(threeRenderer.domElement);
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Basic renderer
-    //------------------------------------------------------------------------------------------------------------------
-
-    const camera = new BasicCamera({set: cube, maxSteps: 500});
-    const renderer = new BasicRenderer(geom, cube, camera, scene, {}, threeRenderer);
-
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(width, height);
-
-    // building the renderer
-    renderer.build();
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Path tracer renderer
-    //------------------------------------------------------------------------------------------------------------------
-
-    const ptCamera = new PathTracerCamera({set: cube, maxSteps: 500});
-    const ptRenderer = new PathTracerRenderer(geom, cube, ptCamera, scene, {}, threeRenderer);
-
-    ptRenderer.setPixelRatio(window.devicePixelRatio);
-    ptRenderer.setSize(width, height);
-
-    // building the renderer
-    ptRenderer.build();
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Setting up the switch
-    //------------------------------------------------------------------------------------------------------------------
-
-    // constant keeping track of the render used
-    let current_render = RENDER_BASIC;
-    let justSwitched = false;
-
-    function actionKeyDown() {
-        current_render = (current_render + 1) % 2;
-        justSwitched = true;
-    }
-
-    function actionKeyUp() {
-    }
-
-    const controls = new KeyGenericControls('p');
-    controls.actionKeyDown = actionKeyDown;
-    controls.actionKeyUp = actionKeyUp;
-
-    function animate() {
-        if (justSwitched) {
-            if (current_render === RENDER_PT) {
-                ptRenderer.iFrame = 0;
-                threeRenderer.setRenderTarget(ptRenderer.accReadTarget);
-                threeRenderer.clear();
-            }
-            justSwitched = false;
-        }
-        switch (current_render) {
-            case RENDER_BASIC:
-                renderer.render();
-                break;
-            case RENDER_PT:
-                ptRenderer.updateFrameSeed();
-                ptRenderer.render();
-                break;
-            default:
-        }
-        stats.update();
-    }
-
-    threeRenderer.setAnimationLoop(animate);
+    thurston.run();
 
 
 </script>

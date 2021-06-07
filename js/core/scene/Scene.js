@@ -2,6 +2,7 @@ import {Color} from "../../lib/threejs/build/three.module.js";
 
 import {SingleColorMaterial} from "../../commons/material/singleColor/SingleColorMaterial.js";
 import {PATHTRACER_RENDERER} from "../../utils/ShaderBuilder.js";
+import {BasicPTMaterial} from "../../commons/material/basicPTMaterial/BasicPTMaterial.js";
 
 
 
@@ -53,7 +54,11 @@ export class Scene {
          * Background material (for path tracing)
          * @type{PTMaterial}
          */
-        this.ptBackground = params.ptBackground;
+        this.ptBackground = params.ptBackground !== undefined ? params.ptBackground : new BasicPTMaterial({
+            diffuse: new Color(0, 0, 0),
+            specular: new Color(0, 0, 0),
+            absorb: new Color(0.25, 0.25, 0.25)
+        });
     }
 
     /**
