@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "../../js/lib/threejs/build/three.module.js";
+    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import cube from "../../js/geometries/euc/groups/freeAbelian/set.js";
@@ -23,11 +23,17 @@
     import {Solid, Ball, LocalBall} from "../../js/geometries/euc/solids/all.js";
     import {LocalBallShape, complement} from "../../js/geometries/euc/shapes/all.js";
     import {union} from "../../js/commons/shapes/all.js";
-    import {BasicPTMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {
+        BasicPTMaterial,
+        PathTracerWrapMaterial,
+        PhongWrapMaterial,
+        SingleColorMaterial
+    } from "../../js/commons/material/all.js";
     import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
     import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
     import Stats from "../../js/lib/stats.module.js";
     import {Thurston} from "../../js/commons/Thurston.js";
+    import {VaryingColorMaterial} from "../../js/geometries/euc/material/varyingColor/VaryingColorMaterial.js";
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -43,39 +49,40 @@
 
     // lights for the Phong material (not used by the path tracer)
 
-    //  yellow light
     const light0 = new PointLight(
         new Point(1, 0, 0),
-        new Color(1, 1, 0),
+        new Color(1, 1, 1),
         0.3
     );
 
-    // cyan light
     const light1 = new PointLight(
         new Point(0, 1, -1),
-        new Color(0, 1, 1),
+        new Color(1, 1, 1),
         0.3
     );
 
-    // magenta light
     const light2 = new PointLight(
         new Point(-1, -1, 1),
-        new Color(1, 0, 1),
+        new Color(1, 1, 1),
         0.3
     );
     thurston.add(light0, light1, light2);
 
     // Phong shading material
     const latticeColor = new Color(1, 0.2, 0.2);
-    const latticeMat = new PhongMaterial({
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Vector3(-0.5, 0.3, 0.3)
+    )
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
         color: latticeColor,
         shininess: 5,
     });
-    const ptLatticeMat = new BasicPTMaterial({
+    const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
         diffuse: latticeColor,
         specular: latticeColor,
-        diffuseChance: 0.5,
-        reflectionChance: 0.5,
+        diffuseChance: 0.98,
+        reflectionChance: 0.02,
         refractionChance: 0
     });
 

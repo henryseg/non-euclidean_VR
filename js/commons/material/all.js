@@ -14,3 +14,6 @@ export {PhongWrapMaterial, phongWrap} from "./phongWrap/PhongWrapMaterial.js";
 
 // Path tracer material
 export {BasicPTMaterial} from "./basicPTMaterial/BasicPTMaterial.js";
+
+// Composite tracer material
+export {PathTracerWrapMaterial} from "./pathTracerWrap/PathTracerWrapMaterial.js";

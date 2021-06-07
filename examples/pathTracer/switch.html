@@ -22,7 +22,12 @@
     import {Isometry, Point} from "../../js/geometries/euc/geometry/General.js";
     import {BasicPTMaterial} from "../../js/commons/material/basicPTMaterial/BasicPTMaterial.js";
     import Stats from "../../js/lib/stats.module.js";
-    import {PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {
+        EarthTexture,
+        PathTracerWrapMaterial,
+        PhongMaterial,
+        SingleColorMaterial
+    } from "../../js/commons/material/all.js";
     import {Ball, HalfSpace} from "../../js/geometries/euc/solids/all.js";
     import {ConstDirLight} from "../../js/geometries/euc/lights/all.js";
     import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
@@ -56,6 +61,21 @@
     });
 
     // main ball
+    const earthColor = new Color(1, 1, 1);
+    const earthMat = new EarthTexture('../../js');
+    const ptEarthMat = new PathTracerWrapMaterial(earthMat, {
+        specular: new Color(1, 1, 1),
+        roughness: 0.,
+        reflectionChance: 0.05,
+        refractionChance: 0,
+        diffuseChance: 0.95
+    });
+    const isom = new Isometry().makeTranslation(new Point(0, 0, -1));
+    isom.multiply(new Isometry().makeRotationX(0.5 * Math.PI));
+    const earth = new Ball(isom, 0.3, earthMat, ptEarthMat);
+    scene.add(earth);
+
+    // main ball
     const ballColor = new Color(1, 1, 1);
     const ballMat = new PhongMaterial({color: ballColor});
     const ptBallMat = new BasicPTMaterial({
@@ -66,7 +86,7 @@
         refractionChance: 0,
         diffuseChance: 0.99
     });
-    const ball = new Ball(new Point(0, 0, -1), 0.3, ballMat, ptBallMat);
+    const ball = new Ball(new Point(-0.35, -0.2, -0.85), 0.1, ballMat, ptBallMat);
     scene.add(ball);
 
     // back wall
@@ -124,7 +144,7 @@
     scene.add(bottom);
 
     // top wall
-    const topColor = new Color(1, 1, 1);
+    const topColor = new Color(3, 3, 3);
     const topMat = new SingleColorMaterial(topColor);
     const ptTopMat = new BasicPTMaterial({
         emission: topColor,
@@ -195,7 +215,7 @@
 
     function animate() {
         if (justSwitched) {
-            if(current_render === RENDER_PT) {
+            if (current_render === RENDER_PT) {
                 ptRenderer.iFrame = 0;
                 threeRenderer.setRenderTarget(ptRenderer.accReadTarget);
                 threeRenderer.clear();
