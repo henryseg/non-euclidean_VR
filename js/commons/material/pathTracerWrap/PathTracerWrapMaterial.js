@@ -4,27 +4,34 @@ import {Color} from "../../../lib/threejs/build/three.module.js";
 import {PTMaterial} from "../../../core/materials/PTMaterial.js";
 
 import struct from "./shaders/struct.js";
+import rayType from "./shaders/rayType.js";
 import render from "./shaders/render.js";
+import renderNormalUV from "./shaders/renderNormalUV.js";
+import renderNormal from "./shaders/renderNormal.js";
+import renderUV from "./shaders/renderUV.js";
 import fresnel from "../../imports/fresnelReflectAmount.js";
 
-export class BasicPTMaterial extends PTMaterial {
+export class PathTracerWrapMaterial extends PTMaterial {
 
     /**
      * Constructor
+     * @param {Material} material - the material giving the diffuse color.
      * @param {Object} params - all the parameters of the material.
      */
-    constructor(params) {
+    constructor(material, params) {
         super();
+        /**
+         * Base material
+         * This material should not uses light or be reflecting.
+         * Otherwise it will conflict with the path tracer
+         * @param {Material} material - the material giving the diffuse color
+         */
+        this.material = material;
         /**
          * Emission Color
          * @type {Color}
          */
         this.emission = params.emission !== undefined ? params.emission : new Color(0, 0, 0);
-        /**
-         * Diffuse color (basically the base color of the material)
-         * @type {Color}
-         */
-        this.diffuse = params.diffuse !== undefined ? params.diffuse : new Color(1, 1, 1);
         /**
          * Specular color
          * @type {Color}
@@ -77,14 +84,61 @@ export class BasicPTMaterial extends PTMaterial {
     }
 
     get uniformType() {
-        return 'BasicPTMaterial';
+        return 'PathTracerWrapMaterial';
     }
 
     static glslClass() {
         return struct;
     }
 
-    glslRender() {
-        return mustache.render(render, this);
+    get usesUVMap() {
+        return this.material.usesUVMap;
     }
+
+    glslRender() {
+        let res = "";
+        res = res + mustache.render(rayType, this);
+
+        if (this.material.usesNormal) {
+            if (this.material.usesUVMap) {
+                res = res + mustache.render(renderNormalUV, this);
+            } else {
+                res = res + mustache.render(renderNormal, this);
+            }
+        } else {
+            if (this.material.usesUVMap) {
+                res = res + mustache.render(renderUV, this);
+            } else {
+                res = res + mustache.render(render, this);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Set the ID of the shape.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.material.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the object is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.material.onAdd(scene);
+        super.onAdd(scene);
+    }
+
+    shader(shaderBuilder) {
+        this.material.shader(shaderBuilder);
+        super.shader(shaderBuilder);
+    }
+
+
 }

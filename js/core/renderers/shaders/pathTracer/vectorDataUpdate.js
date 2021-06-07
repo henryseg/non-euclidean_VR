@@ -41,11 +41,11 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             rayType = {{ptMaterial.name}}_setRayType(v, normal);
         
             {{^ptMaterial.usesUVMap}}
-                color =  {{ptMaterial.name}}_render(v, rayType);
+                color =  {{ptMaterial.name}}_render(v, normal, rayType);
             {{/ptMaterial.usesUVMap}}
             {{#ptMaterial.usesUVMap}}
                 uv = {{shape.name}}_uvMap(v.vector);
-                color = {{ptMaterial.name}}_render(v, uv, rayType);
+                color = {{ptMaterial.name}}_render(v, normal, uv, rayType);
             {{/ptMaterial.usesUVMap}}
 
             // apply fog

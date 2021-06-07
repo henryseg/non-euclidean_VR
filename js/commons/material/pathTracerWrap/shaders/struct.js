@@ -4,9 +4,8 @@ export default `//
  * @struct
  * Checkerboard material
  **********************************************************************************************************************/
-struct BasicPTMaterial {
+struct PathTracerWrapMaterial {
     vec3 emission;
-    vec3 diffuse;
     vec3 specular;
     vec3 absorb;
     float ior;
@@ -17,7 +16,7 @@ struct BasicPTMaterial {
 };
 
 
-RayType setRayType(BasicPTMaterial material, ExtVector v, RelVector n) {
+RayType setRayType(PathTracerWrapMaterial material, ExtVector v, RelVector n) {
     RayType res = RayType(false, false, false, 0.);
     float random = randomFloat();
 
@@ -38,13 +37,6 @@ RayType setRayType(BasicPTMaterial material, ExtVector v, RelVector n) {
         res.chance = refractionChance;
     }
     return res;
-}
-
-vec3 render(BasicPTMaterial material, ExtVector v, RayType rayType) {
-    if (rayType.reflect){
-        return material.specular;
-    }
-    return material.diffuse;
 }
 `;
 
