@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/sl2/geometry/General.js";
     import genus2 from "../../js/geometries/sl2/groups/genus2/set.js";
@@ -25,7 +25,7 @@
     import {LocalPotatoShape} from "../../js/geometries/sl2/shapes/all.js";
     import {complement} from "../../js/commons/shapes/all.js";
 
-    const thurston = new Thurston(geom, genus2, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, genus2, {keyboard: 'fr', maxBounces: 1});
 
     const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
     const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));

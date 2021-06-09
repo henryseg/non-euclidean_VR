@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Clock, Color, Vector2, Vector3, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
@@ -26,7 +26,7 @@
     import {Isometry} from "../../js/geometries/nil/geometry/General.js";
 
 
-    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
 
     thurston.camera.maxDist = 50;
     thurston.camera.maxSteps = 200;

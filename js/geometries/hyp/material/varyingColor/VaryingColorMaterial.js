@@ -19,7 +19,7 @@ export class VaryingColorMaterial extends Material {
      * Constructor.
      * The constructor takes no argument.
      * @param {Color} mainColor - the color of the material
-     * @param {Vector3} weight - amplitudes of the variations on each channel
+     * @param {Color} weight - amplitudes of the variations on each channel
      */
     constructor(mainColor, weight) {
         super();

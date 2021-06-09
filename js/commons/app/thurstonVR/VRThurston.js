@@ -1,5 +1,5 @@
-import {AbstractVRThurston} from "../core/AbstractVRThurston.js";
-import {VRCamera, VRRenderer} from "../core/General.js";
+import {AbstractVRThurston} from "../../../core/AbstractVRThurston.js";
+import {VRCamera, VRRenderer} from "../../../core/General.js";
 
 
 /**

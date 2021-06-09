@@ -7,14 +7,26 @@
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../js/commons/app/thurston/css/thurston.css">
 </head>
 
 <body>
+
+<div id="thurstonDialogBoxWrap">
+    <div id="thurstonDialogBox">
+        <form action="javascript:void(0);">
+            <label for="widthInput">Width :</label> <input id="widthInput" type="number"><br>
+            <label for="heightInput">Height:</label> <input id="heightInput" type="number"><br>
+            <input type="submit" value="Go!">
+        </form>
+    </div>
+</div>
+<a id="thurstonDownloadButton" href="#">Download</a>
+
 </body>
 <script type="module" id="main">
     import {Color, Vector3, WebGLRenderer} from "../../js/lib/threejs/build/three.module.js";
-
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {Thurston} from "../../js/commons/app/thurston/Thurston.js";
 
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
@@ -37,7 +49,6 @@
     import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
     import Stats from "../../js/lib/stats.module.js";
     import {VaryingColorMaterial} from "../../js/geometries/hyp/material/varyingColor/VaryingColorMaterial.js";
-
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -71,19 +82,18 @@
     );
     thurston.add(light0, light1, light2);
 
-    // Phong shading material
+    // Material
     const latticeColor = new Color(0.2, 0.5, 0.95);
     const latticeBaseMat = new VaryingColorMaterial(
         latticeColor,
-        new Vector3(0.2, 0.2, 0.2)
+        new Color(0.2, 0.2, 0.2)
     )
     const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
         color: latticeColor,
         shininess: 5,
     });
     const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
-        diffuse: latticeColor,
-        specular: latticeColor,
+        specular: new Color(1, 1, 1),
         roughness: 0.1,
         diffuseChance: 0.7,
         reflectionChance: 0.3,
@@ -110,7 +120,7 @@
 
 
     // Local light (for path tracer only)
-    const lightColor = new Color(50,50,50);
+    const lightColor = new Color(50, 50, 50);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor

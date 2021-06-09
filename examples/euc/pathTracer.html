@@ -7,9 +7,22 @@
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../js/commons/app/thurston/css/thurston.css">
 </head>
 
 <body>
+
+<div id="thurstonDialogBoxWrap">
+    <div id="thurstonDialogBox">
+        <form action="javascript:void(0);">
+            <label for="widthInput">Width :</label> <input id="widthInput" type="number"><br>
+            <label for="heightInput">Height:</label> <input id="heightInput" type="number"><br>
+            <input type="submit" value="Go!">
+        </form>
+    </div>
+</div>
+<a id="thurstonDownloadButton" href="#">Download</a>
+
 </body>
 <script type="module" id="main">
     import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
@@ -32,7 +45,7 @@
     import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
     import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
     import Stats from "../../js/lib/stats.module.js";
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {Thurston} from "../../js/commons/app/thurston/Thurston.js";
     import {VaryingColorMaterial} from "../../js/geometries/euc/material/varyingColor/VaryingColorMaterial.js";
 
 
@@ -72,7 +85,7 @@
     const latticeColor = new Color(1, 0.2, 0.2);
     const latticeBaseMat = new VaryingColorMaterial(
         latticeColor,
-        new Vector3(-0.5, 0.3, 0.3)
+        new Color(-0.5, 0.3, 0.3)
     )
     const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
         color: latticeColor,

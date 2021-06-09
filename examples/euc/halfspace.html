@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color, Matrix4, Vector2, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
@@ -28,7 +28,7 @@
     import {Isometry} from "../../js/core/geometry/Isometry.js";
 
 
-    const thurston = new Thurston(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
 
 
     // lights for the Phong material

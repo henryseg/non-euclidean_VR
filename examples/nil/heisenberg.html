@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
@@ -28,7 +28,7 @@
     import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
 
 
-    const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, heisenberg, {keyboard: 'fr'});
     heisenberg.creepingType = CREEPING_FULL;
 
     thurston.camera.maxDist = 20;

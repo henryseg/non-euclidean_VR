@@ -7,31 +7,40 @@
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../js/commons/app/thurston/css/thurston.css">
 </head>
 
 <body>
+<div id="thurstonDialogBoxWrap">
+    <div id="thurstonDialogBox">
+        <form action="javascript:void(0);">
+            <label for="widthInput">Width :</label> <input id="widthInput" type="number"><br>
+            <label for="heightInput">Height:</label> <input id="heightInput" type="number"><br>
+            <input type="submit" value="Go!">
+        </form>
+    </div>
+</div>
+<a id="thurstonDownloadButton" href="#">Download</a>
 </body>
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
-
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {Thurston} from "../../js/commons/app/thurston/Thurston.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
 
-    import {Point, Vector} from "../../js/geometries/nil/geometry/General.js";
-    import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
+    import {Point} from "../../js/geometries/nil/geometry/General.js";
     import {Solid, FakeBall, LocalFakeBall} from "../../js/geometries/nil/solids/all.js";
     import {complement, LocalPotatoShape,} from "../../js/geometries/nil/shapes/all.js";
-    import {CheckerboardMaterial} from "../../js/commons/material/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../js/commons/material/phongWrap/PhongWrapMaterial.js";
-    import {union} from "../../js/commons/shapes/all.js";
-    import {BasicPTMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
-    import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
+    import {
+        BasicPTMaterial,
+        PathTracerWrapMaterial,
+        PhongWrapMaterial,
+        SingleColorMaterial
+    } from "../../js/commons/material/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {FlyControls} from "../../js/controls/FlyControls.js";
     import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
+    import {VaryingColorMaterial} from "../../js/geometries/nil/material/varyingColor/VaryingColorMaterial.js";
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -54,37 +63,50 @@
     const lightColor1 = new Color(68 / 256, 197 / 256, 203 / 256, 1);
     const lightColor2 = new Color(252 / 256, 227 / 256, 21 / 256, 1);
     const lightColor3 = new Color(245 / 256, 61 / 256, 82 / 256, 1);
+    const white = new Color(1, 1, 1);
 
     const light1 = new FakePointLight(
         new Point(1, 0, 0),
-        lightColor1,
+        white,
         0.3
     );
     const light2 = new FakePointLight(
         new Point(0, 0, 1),
-        lightColor2,
+        white,
         0.3
     );
     const light3 = new FakePointLight(
         new Point(0, 1, 0),
-        lightColor3,
+        white,
         0.3
     );
     thurston.add(light1, light2, light3);
 
-    // Phong shading material
+    // Material
     const latticeColor = new Color(0.2, 0.5, 0.95);
-    const latticeMat = new PhongMaterial({
+    // const latticeBaseMat = new VaryingColorMaterial(
+    //     latticeColor,
+    //     new Color(0., 0., 0.)
+    // )
+    const latticeBaseMat = new SingleColorMaterial(latticeColor);
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
         color: latticeColor,
         shininess: 5,
     });
+
+    // const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
+    //     specular: new Color(1, 1, 1),
+    //     diffuseChance: 0.905,
+    //     reflectionChance: 0.005,
+    //     refractionChance: 0
+    // });
     const ptLatticeMat = new BasicPTMaterial({
         diffuse: latticeColor,
-        specular: new Color(1, 1, 1),
+        specular: latticeColor,
         diffuseChance: 0.905,
         reflectionChance: 0.005,
         refractionChance: 0
-    });
+    })
 
     // Lattice
     const center = new LocalPotatoShape(new Point(), 0.64, 1.2, 2, 4);
@@ -94,7 +116,7 @@
 
 
     // Local light (for path tracer only)
-    const lightColor = new Color(90, 50, 50);
+    const lightColor = new Color(50, 50, 50);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor,

@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/h2e/geometry/General.js";
     import torus from "../../js/geometries/h2e/groups/orbiTorus/set.js";
@@ -26,7 +26,7 @@
     import {Solid} from "../../js/core/solids/Solid.js";
     import {PointLight} from "../../js/geometries/h2e/lights/pointLight/pointLight.js";
 
-    const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
 
     const sqrt2 = Math.sqrt(2);
     const aux = Math.pow(2, 0.25);
