@@ -6,9 +6,14 @@ import {Clock, Color, WebGLRenderer} from "../../../lib/threejs/build/three.modu
 import {bind} from "../../../utils.js";
 
 
+
+
 import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
-import {PathTracerUI, STATE_TRACING} from "./PathTracerUI.js";
+import {PathTracerUI} from "./PathTracerUI.js";
+
+import dialogBox from "./html/dialogBox.js";
+import downloadButton from "./html/downloadButton.js";
 
 
 /**
@@ -135,6 +140,14 @@ export class Thurston {
          * @type {PathTracerUI}
          */
         this.pathTracerUI = undefined;
+
+        this.onLoad();
+    }
+
+
+    onLoad() {
+        document.body.insertAdjacentHTML('beforeend', dialogBox);
+        document.body.insertAdjacentHTML('beforeend', downloadButton);
     }
 
     setPixelRatio(value) {
@@ -211,6 +224,7 @@ export class Thurston {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
     }
+
 
     /**
      * Switch between the two renderer

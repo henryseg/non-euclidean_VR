@@ -22,7 +22,9 @@
     import {Point} from "../../js/core/geometry/Point.js";
     import {LocalFakeBall} from "../../js/geometries/sol/solids/all.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
 
+    mappingTorus.creepingType = CREEPING_FULL;
     const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
     thurston.renderer.postProcess = false;
 
