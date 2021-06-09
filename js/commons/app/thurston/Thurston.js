@@ -87,7 +87,7 @@ export class Thurston {
         this.currentRenderer = this.renderer;
 
         // set the renderer size
-        this.setPixelRatio(window.devicePixelRatio);
+        // this.setPixelRatio(window.devicePixelRatio);
         this.setSize(window.innerWidth, window.innerHeight);
         // event listener
         this._onWindowResize = bind(this, this.onWindowResize);
