@@ -84,29 +84,29 @@
 
     // Material
     const latticeColor = new Color(0.2, 0.5, 0.95);
-    // const latticeBaseMat = new VaryingColorMaterial(
-    //     latticeColor,
-    //     new Color(0., 0., 0.)
-    // )
-    const latticeBaseMat = new SingleColorMaterial(latticeColor);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(0.2, 0.2, 0.2)
+    )
+    // const latticeBaseMat = new SingleColorMaterial(latticeColor);
     const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
         color: latticeColor,
         shininess: 5,
     });
 
-    // const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
-    //     specular: new Color(1, 1, 1),
-    //     diffuseChance: 0.905,
-    //     reflectionChance: 0.005,
-    //     refractionChance: 0
-    // });
-    const ptLatticeMat = new BasicPTMaterial({
-        diffuse: latticeColor,
-        specular: latticeColor,
+    const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
+        specular: new Color(1, 1, 1),
         diffuseChance: 0.905,
         reflectionChance: 0.005,
         refractionChance: 0
-    })
+    });
+    // const ptLatticeMat = new BasicPTMaterial({
+    //     diffuse: latticeColor,
+    //     specular: latticeColor,
+    //     diffuseChance: 0.905,
+    //     reflectionChance: 0.005,
+    //     refractionChance: 0
+    // })
 
     // Lattice
     const center = new LocalPotatoShape(new Point(), 0.64, 1.2, 2, 4);
