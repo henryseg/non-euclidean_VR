@@ -1,19 +1,13 @@
-import {GUI} from "../lib/dat.gui.module.js";
-import Stats from "../lib/stats.module.js";
-import {FlyControls} from "../controls/FlyControls.js";
-import {Clock, Color, WebGLRenderer} from "../lib/threejs/build/three.module.js";
+import {GUI} from "../../../lib/dat.gui.module.js";
+import Stats from "../../../lib/stats.module.js";
+import {FlyControls} from "../../../controls/FlyControls.js";
+import {Clock, Color, WebGLRenderer} from "../../../lib/threejs/build/three.module.js";
 
-import {bind} from "../utils.js";
-
-
-import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../core/General.js";
-import {ExpFog} from "./scenes/expFog/ExpFog.js";
-import {BasicPTMaterial, SingleColorMaterial} from "./material/all.js";
-import {SwitchControls} from "../controls/SwitchControls.js";
+import {bind} from "../../../utils.js";
 
 
-const RENDER_BASIC = 0;
-const RENDER_PT = 1;
+import {BasicCamera, BasicRenderer, Scene} from "../../../core/General.js";
+import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 
 /**
  * @class
@@ -22,7 +16,7 @@ const RENDER_PT = 1;
  * @classdesc
  * A combination of all main parts of the API. It can be used to quickly create scenes
  */
-export class Thurston {
+export class ThurstonLite {
 
     /**
      * Constructor.
@@ -61,42 +55,26 @@ export class Thurston {
          * @type {BasicCamera}
          */
         this.camera = new BasicCamera({set: this.set});
-        /**
-         * The non-euclidean camera for the path tracer
-         * @type {PathTracerCamera}
-         */
-        this.ptCamera = new PathTracerCamera({set: this.set});
-        /**
-         * Three.js renderer
-         * @type {WebGLRenderer}
-         */
-        this.threeRenderer = new WebGLRenderer();
-        this.threeRenderer.setClearColor(new Color(0, 0, 0.2), 1);
-        document.body.appendChild(this.threeRenderer.domElement);
 
         /**
          * Non-euclidean renderer for basic renderer
          * @type {BasicRenderer}
          */
-        this.renderer = new BasicRenderer(this.geom, this.set, this.camera, this.scene, {}, this.threeRenderer);
-        /**
-         * Non-euclidean renderer for path tracer
-         * @type {PathTracerRenderer}
-         */
-        this.ptRenderer = new PathTracerRenderer(this.geom, this.set, this.ptCamera, this.scene, {}, this.threeRenderer);
-
-        // set the renderer size
+        this.renderer = new BasicRenderer(this.geom, this.set, this.camera, this.scene, {});
         this.setPixelRatio(window.devicePixelRatio);
         this.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
+        document.body.appendChild(this.renderer.domElement);
+
         // event listener
         const _onWindowResize = bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
-        /**
-         * Keyboard controls to switch the renderer
-         * @type {SwitchControls}
-         */
-        this.swicthRendererControl = new SwitchControls('p', 2, RENDER_BASIC);
+        // /**
+        //  * Keyboard controls to switch the renderer
+        //  * @type {SwitchControls}
+        //  */
+        // this.swicthRendererControl = new SwitchControls('p', 2, RENDER_BASIC);
 
         /**
          * The keyboard controls to fly in the scene
@@ -132,12 +110,10 @@ export class Thurston {
 
     setPixelRatio(value) {
         this.renderer.setPixelRatio(value);
-        this.ptRenderer.setPixelRatio(value);
     }
 
     setSize(width, height) {
         this.renderer.setSize(width, height);
-        this.ptRenderer.setSize(width, height);
     }
 
 
@@ -199,9 +175,6 @@ export class Thurston {
         this.setSize(window.innerWidth, window.innerHeight);
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
-        this.ptCamera.aspect = window.innerWidth / window.innerHeight;
-        this.ptCamera.updateProjectionMatrix();
-
     }
 
 
@@ -214,29 +187,8 @@ export class Thurston {
             this.callback();
         }
         this.flyControls.update(delta);
+        this.renderer.render();
 
-        if (this.swicthRendererControl.justChanged) {
-            if (this.swicthRendererControl.state === RENDER_PT) {
-                this.flyControls.pause();
-                this.ptCamera.position.copy(this.camera.position);
-                this.ptRenderer.iFrame = 0;
-                this.threeRenderer.setRenderTarget(this.ptRenderer.accReadTarget);
-                this.threeRenderer.clear();
-            } else {
-                this.flyControls.restore();
-            }
-            this.swicthRendererControl.justChanged = false;
-        }
-        switch (this.swicthRendererControl.state) {
-            case RENDER_BASIC:
-                this.renderer.render();
-                break;
-            case RENDER_PT:
-                this.ptRenderer.updateFrameSeed();
-                this.ptRenderer.render();
-                break;
-            default:
-        }
         this.stats.update();
     }
 
@@ -247,8 +199,7 @@ export class Thurston {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        this.ptRenderer.build();
         const _animate = bind(this, this.animate);
-        this.threeRenderer.setAnimationLoop(_animate);
+        this.renderer.threeRenderer.setAnimationLoop(_animate);
     }
 }

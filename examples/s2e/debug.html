@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/s2e/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
@@ -27,7 +27,7 @@
     import {complement} from "../../js/commons/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
 
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr', maxBounces: 1});
 
 
     const lightUp = new ESun(new Color(1, 1, 0), 1);

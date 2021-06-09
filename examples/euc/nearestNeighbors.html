@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
@@ -27,7 +27,7 @@
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
 
 
-    const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
     thurston.set.usesNearestNeighbors = true;
 
 

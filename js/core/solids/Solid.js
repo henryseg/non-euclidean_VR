@@ -131,7 +131,7 @@ export class Solid extends Generic {
 
     shader(shaderBuilder) {
         this.shape.shader(shaderBuilder);
-        if (shaderBuilder.useCase === PATHTRACER_RENDERER) {
+        if (shaderBuilder.useCase === PATHTRACER_RENDERER && this.ptMaterial !== undefined) {
             this.ptMaterial.shader(shaderBuilder);
         } else {
             this.material.shader(shaderBuilder);

@@ -12,9 +12,11 @@
 <body>
 </body>
 <script type="module" id="main">
+
+
     import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
@@ -27,7 +29,7 @@
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
 
 
-    const thurston = new Thurston(geom, torus, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr'});
     thurston.renderer.postProcess = true;
     thurston.renderer.maxBounces = 1;
 

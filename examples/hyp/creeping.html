@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color, Vector2} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
@@ -30,7 +30,7 @@
     import {CREEPING_OFF, CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
 
     cube.creepingType = CREEPING_STRICT;
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr'});
 
 
     // lights for the Phong material

@@ -28,8 +28,6 @@ import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
 import main from "./shaders/pathTracer/main.js";
 
 import SteveShader from "../../postProcess/steve/shader.js";
-import {HorizontalBlurShader} from "../../lib/threejs/examples/jsm/shaders/HorizontalBlurShader.js";
-import {VerticalBlurShader} from "../../lib/threejs/examples/jsm/shaders/VerticalBlurShader.js";
 
 
 const accumulateMat = new ShaderMaterial({
@@ -190,8 +188,18 @@ export class PathTracerRenderer extends AbstractRenderer {
         console.log(this._fragmentBuilder.code);
     }
 
+    /**
+     * Render the accumulated target
+     * (for display or download purposes)
+     */
+    renderAccTarget(){
+        this.threeRenderer.setRenderTarget(null);
+        this.displayComposer.render();
+    }
+
     render() {
         let accTmpTarget;
+        this.updateFrameSeed();
 
         this.threeRenderer.setRenderTarget(this.sceneTarget);
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
@@ -205,9 +213,8 @@ export class PathTracerRenderer extends AbstractRenderer {
         accTmpTarget = this.accReadTarget;
         this.accReadTarget = this.accWriteTarget;
         this.accWriteTarget = accTmpTarget;
-        //
-        this.threeRenderer.setRenderTarget(null);
-        this.displayComposer.render();
+
+        this.renderAccTarget();
         this.iFrame = this.iFrame + 1;
     }
 }

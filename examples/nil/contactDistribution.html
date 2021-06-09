@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
@@ -29,7 +29,7 @@
 
 
 
-    const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, heisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 10;
     thurston.camera.maxSteps = 100;

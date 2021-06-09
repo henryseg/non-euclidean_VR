@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
@@ -26,7 +26,7 @@
     import {LocalBall} from "../../js/geometries/hyp/solids/all.js";
 
 
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr'});
 
 
     // lights for the Phong material

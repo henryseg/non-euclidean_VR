@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/sph/geometry/General.js";
     import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
@@ -27,7 +27,7 @@
     import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
 
 
-    const thurston = new Thurston(geom, quaternion, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, quaternion, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 2 * Math.PI;
 

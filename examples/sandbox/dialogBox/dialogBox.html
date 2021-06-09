@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <title>Dialog Box</title>
     <link type="text/css" rel="stylesheet" href="dialogBox.css">
+    <script src="dialogBox.js" type="module" id="main"></script>
 </head>
 <body>
-<script src="dialogBox.js" type="module" id="main"></script>
+
 
 <div id="dialogBoxWrap">
     <div id="dialogBox">
-        <p>Hello world</p>
+        <form action="javascript:void(0);">
+            <label for="widthInput">Width :</label> <input id="widthInput" type="number"><br>
+            <label for="heightInput">Height:</label> <input id="heightInput" type="number"><br>
+            <input id="submit" type="submit" value="Go!">
+        </form>
     </div>
 </div>
 
