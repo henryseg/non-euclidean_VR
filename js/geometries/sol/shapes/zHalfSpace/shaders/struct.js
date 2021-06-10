@@ -14,9 +14,9 @@ struct ZHalfSpaceShape {
 
 // one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
 float sdf(ZHalfSpaceShape halfspace, RelVector v){
-    Isom aux = toIsometry(v.cellBoost);
+    Isometry aux = toIsometry(v.cellBoost);
     vec4 test = transpose(aux.matrix) * halfspace.test;
-    return dot(v.local.coords, test);
+    return dot(v.local.pos.coords, test);
 }
 
 RelVector gradient(ZHalfSpaceShape halfspace, RelVector v){
@@ -27,7 +27,7 @@ RelVector gradient(ZHalfSpaceShape halfspace, RelVector v){
 }
 
 vec2 uvMap(ZHalfSpaceShape halfspace, RelVector v){
-    Point pos = applyGroupElement(v.invCellBoost, origin);
+    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);
     Isometry isom = toIsometry(v.invCellBoost);
     vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);
     vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);

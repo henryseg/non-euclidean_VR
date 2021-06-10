@@ -52,6 +52,37 @@ Isometry.prototype.makeInvTranslation = function (point) {
     return this;
 };
 
+Isometry.prototype.makeFlip = function () {
+    this.matrix.set(
+        0, 1, 0, 0,
+        1, 0, 0, 0,
+        0, 0, -1, 0,
+        0, 0, 0, 1
+    );
+    return this;
+}
+
+Isometry.prototype.makeReflectX = function () {
+    this.matrix.set(
+        -1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    return this;
+}
+
+Isometry.prototype.makeReflectY = function () {
+    this.matrix.set(
+        1, 0, 0, 0,
+        0, -1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    return this;
+}
+
+
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
