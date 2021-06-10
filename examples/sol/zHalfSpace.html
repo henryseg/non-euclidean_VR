@@ -12,36 +12,49 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
+    import {Color, Vector2, Vector3} from "../../js/lib/threejs/build/three.module.js";
 
     import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/sol/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
     import {ZSun, ConstDirLight} from "../../js/geometries/sol/lights/all.js";
-    import {PhongMaterial} from "../../js/commons/materials/all.js";
+    import {CheckerboardMaterial, PhongMaterial, phongWrap} from "../../js/commons/materials/all.js";
     import {Point} from "../../js/core/geometry/Point.js";
-    import {FakeBall, LocalFakeBall} from "../../js/geometries/sol/solids/all.js";
+    import {FakeBall, LocalFakeBall, ZHalfSpace} from "../../js/geometries/sol/solids/all.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {Isometry} from "../../js/geometries/sol/geometry/General.js";
 
     const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
 
 
-    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
-    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+    const lightUp = new ConstDirLight(new Color(1, 1, 1), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 1, 1), 0.5, new Vector3(0, 0, -1));
 
-    const mat = new PhongMaterial({
-        color: new Color(1, 1, 1)
-    });
+    const checkerboard1 = new CheckerboardMaterial(
+        new Vector2(Math.exp(1), 0),
+        new Vector2(0, Math.exp(-1)),
+        new Color(0, 0, 0),
+        new Color(1, 1, 0)
+    );
+    const mat1 = phongWrap(checkerboard1);
+    const isom1 = new Isometry().makeTranslation(new Point(0, 0, -1));
+    const zHalfSpace1 = new ZHalfSpace(isom1, mat1);
 
+    const checkerboard2 = new CheckerboardMaterial(
+        new Vector2(Math.exp(1), 0),
+        new Vector2(0, Math.exp(-1)),
+        new Color(0, 0, 0),
+        new Color(0, 1, 1)
+    );
+    const mat2 = phongWrap(checkerboard2);
+    const isom2 = new Isometry().makeTranslation(new Point(0, 0, 1));
+    isom2.multiply(new Isometry().makeFlip());
+    const zHalfSpace2 = new ZHalfSpace(isom2, mat2);
 
-    const point = new Point(0, 0, 0, 1);
-    const ball = new LocalFakeBall(point, 0.1, mat);
-
-    thurston.add(ball, lightUp, lightDown);
+    thurston.add(zHalfSpace1, zHalfSpace2, lightUp, lightDown);
 
     function info() {
-        console.log("cellBoost", thurston.camera.position.cellBoost.coords.toLog());
     }
 
     const infoControls = new InfoControls()

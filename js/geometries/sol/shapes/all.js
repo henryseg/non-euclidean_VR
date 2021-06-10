@@ -4,3 +4,4 @@ export {IntersectionShape, intersection} from "../../../commons/shapes/instersec
 
 export {FakeBallShape} from "./fakeBall/FakeBallShape.js";
 export {LocalFakeBallShape} from "./localFakeBall/LocalFakeBallShape.js";
+export {ZHalfSpaceShape} from "./zHalfSpace/ZHalfSpaceShape.js";
