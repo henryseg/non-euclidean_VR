@@ -62,7 +62,7 @@ Isometry.prototype.makeFlip = function () {
     return this;
 }
 
-Isometry.prototype.makeReflectX = function () {
+Isometry.prototype.makeReflectionX = function () {
     this.matrix.set(
         -1, 0, 0, 0,
         0, 1, 0, 0,
@@ -72,7 +72,7 @@ Isometry.prototype.makeReflectX = function () {
     return this;
 }
 
-Isometry.prototype.makeReflectY = function () {
+Isometry.prototype.makeReflectionY = function () {
     this.matrix.set(
         1, 0, 0, 0,
         0, -1, 0, 0,
