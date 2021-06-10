@@ -12,8 +12,8 @@ import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene}
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 import {PathTracerUI} from "./PathTracerUI.js";
 
-import dialogBox from "./html/dialogBox.js";
-import downloadButton from "./html/downloadButton.js";
+import dialogBox from "./html/dialogBoxHTML.js";
+import downloadButton from "./html/downloadButtonHTML.js";
 import thurstonCSS from "./css/thurstonCSS.js";
 
 
