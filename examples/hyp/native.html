@@ -25,7 +25,6 @@
     import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
     import {LocalBallShape, complement, LocalHoroballShape, union} from "../../js/geometries/hyp/shapes/all.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {LocalDirectedHoroballShape} from "../../js/geometries/hyp/shapes/localDirectedHoroball/LocalDirectedHoroballShape.js";
     import {CREEPING_OFF} from "../../js/core/groups/TeleportationSet.js";
 
 
@@ -124,8 +123,8 @@
 
     const unionShape = union(centerBall, ...horoballs);
     const latticeShape = complement(unionShape);
-
     // const latticeShape = complement(centerBall);
+
     const lattice = new Solid(latticeShape, mat0);
 
 
@@ -236,13 +235,6 @@
         colorGreen,
         0.5
     );
-
-
-
-
-
-
-
 
 
     thurston.add(lattice, ballCyan, ballBlue, ballMagenta, ballRed, ballYellow, ballGreen)

@@ -14,6 +14,7 @@ import {PathTracerUI} from "./PathTracerUI.js";
 
 import dialogBox from "./html/dialogBox.js";
 import downloadButton from "./html/downloadButton.js";
+import thurstonCSS from "./css/thurstonCSS.js";
 
 
 /**
@@ -146,6 +147,10 @@ export class Thurston {
 
 
     onLoad() {
+        const thurstonStyle = document.createElement('style');
+        thurstonStyle.setAttribute('type', 'text/css');
+        thurstonStyle.textContent = thurstonCSS.trim();
+        document.head.appendChild(thurstonStyle);
         document.body.insertAdjacentHTML('beforeend', dialogBox);
         document.body.insertAdjacentHTML('beforeend', downloadButton);
     }
