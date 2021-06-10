@@ -14,8 +14,6 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {NativeThurston} from "../../js/geometries/hyp/NativeThurston.js";
-
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
@@ -26,10 +24,13 @@
     import {LocalBallShape, complement, LocalHoroballShape, union} from "../../js/geometries/hyp/shapes/all.js";
     import {SingleColorMaterial} from "../../js/commons/material/all.js";
     import {CREEPING_OFF} from "../../js/core/groups/TeleportationSet.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
+    import {NativeCamera} from "../../js/geometries/hyp/cameras/native/NativeCamera.js";
 
 
+    const camera = new NativeCamera({set: cube});
+    const thurston = new ThurstonVR(geom, cube, {keyboard: 'fr', camera: camera});
 
-    const thurston = new NativeThurston(geom, cube, {keyboard: 'fr'});
     cube.creepingType = CREEPING_OFF;
 
     const colorWhite = new Color(1,1,1);

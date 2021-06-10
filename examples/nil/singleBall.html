@@ -14,8 +14,6 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
-
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
 
@@ -23,9 +21,10 @@
     import {PhongMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
     import {FakeBall} from "../../js/geometries/nil/solids/all.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
 
-    const thurston = new VRThurston(geom, trivial, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(geom, trivial, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;

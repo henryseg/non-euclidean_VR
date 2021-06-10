@@ -14,7 +14,6 @@
 <script type="module" id="main">
     import {Color, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
@@ -36,12 +35,13 @@
     } from "../../js/geometries/nil/shapes/all.js";
     import {LocalVerticalCylinderShape} from "../../js/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
     import {union} from "../../js/commons/shapes/all.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
 
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
     heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
 
-    const thurston = new VRThurston(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(geom, heisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;

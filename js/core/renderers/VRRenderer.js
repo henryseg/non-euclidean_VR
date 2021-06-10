@@ -41,7 +41,7 @@ export class VRRenderer extends AbstractRenderer {
      * @param {Object} params - parameters for the underlying Three.js renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(geom, set, camera, scene, params = {}, threeRenderer) {
+    constructor(geom, set, camera, scene, params = {}, threeRenderer = {}) {
         // loading the polyfill if WebXR is not supported
         new WebXRPolyfill.default();
         super(geom, set, camera, scene, params, threeRenderer);

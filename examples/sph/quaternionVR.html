@@ -14,7 +14,6 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
 
     import * as geom from "../../js/geometries/sph/geometry/General.js";
     import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
@@ -25,9 +24,10 @@
     import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
     import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
     import {EarthTexture} from "../../js/commons/material/all.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
 
-    const thurston = new VRThurston(geom, quaternion, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(geom, quaternion, {keyboard: 'fr'});
     thurston.camera.maxDist = 2 * Math.PI;
 
     // lights for the Phong material

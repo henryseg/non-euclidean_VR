@@ -13,7 +13,6 @@
 </body>
 <script type="module" id="main">
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
 
 
     import * as geom from "../../js/geometries/h2e/geometry/General.js";
@@ -27,8 +26,9 @@
     import {complement, union} from "../../js/commons/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
     import {PointLight} from "../../js/geometries/h2e/lights/pointLight/pointLight.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
-    const thurston = new VRThurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonVR(geom, torus, {keyboard: 'fr', maxBounces: 1});
 
     const sqrt2 = Math.sqrt(2);
     const aux = Math.pow(2, 0.25);

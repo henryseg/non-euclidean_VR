@@ -13,7 +13,6 @@
 </body>
 <script type="module" id="main">
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import {Isometry, Point} from "../../js/geometries/nil/geometry/General.js";
@@ -26,9 +25,10 @@
     import {LocalPotatoShape, PotatoShape} from "../../js/geometries/nil/shapes/all.js";
     import {complement, intersection, union} from "../../js/commons/shapes/all.js";
     import {Solid} from "../../js/core/solids/Solid.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
 
-    const thurston = new VRThurston(geom, trivial, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(geom, trivial, {keyboard: 'fr'});
 
 
     // Ball
