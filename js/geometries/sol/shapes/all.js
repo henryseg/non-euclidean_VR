@@ -6,3 +6,6 @@ export {FakeBallShape} from "./fakeBall/FakeBallShape.js";
 export {LocalFakeBallShape} from "./localFakeBall/LocalFakeBallShape.js";
 export {ZHalfSpaceShape} from "./zHalfSpace/ZHalfSpaceShape.js";
 export {XYHalfSpaceShape} from "./xyHalfSpace/XYHalfSpaceShape.js";
+export {LocalZHalfSpaceShape} from "./localZHalfSpace/LocalZHalfSpaceShape.js";
+export {LocalXYHalfSpaceShape} from "./localXYHalfSpace/LocalXYHalfSpaceShape.js";
+export {localCubeShape} from "./localCube/localCubeShape.js";
