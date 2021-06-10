@@ -1,12 +1,15 @@
-import {GUI} from "../lib/dat.gui.module.js";
-import Stats from "../lib/stats.module.js";
-import {FlyControls} from "../controls/FlyControls.js";
-import {Clock, Color} from "../lib/threejs/build/three.module.js";
+import Stats from "../../../lib/stats.module.js";
+import {GUI} from "../../../lib/dat.gui.module.js";
+import {Clock, Color} from "../../../lib/threejs/build/three.module.js";
+import {XRControllerModelFactory} from "../../../lib/threejs/examples/jsm/webxr/XRControllerModelFactory.js";
 
-import {bind} from "../utils.js";
+import {bind} from "../../../utils.js";
 
-import {BasicCamera, Scene} from "./General.js";
-import {ExpFog} from "../commons/scenes/expFog/ExpFog.js";
+import {Scene, VRCamera, VRRenderer} from "../../../core/General.js";
+import {VRControlsMove} from "../../../controls/VRControlsMove.js";
+import {VRControlsDrag} from "../../../controls/VRControlsDrag.js";
+import {ExpFog} from "../../scenes/expFog/ExpFog.js";
+import {FlyControls} from "../../../controls/FlyControls.js";
 
 
 /**
@@ -16,18 +19,16 @@ import {ExpFog} from "../commons/scenes/expFog/ExpFog.js";
  * @classdesc
  * A combination of all main parts of the API. It can be used to quickly create scenes
  */
-export class AbstractThurston {
+export class ThurstonVR {
 
     /**
      * Constructor.
      * @param {Object} geom - the underlying geometry
      * @param {TeleportationSet} set - the teleportation set
-     * @param {Function} cameraType - camera constructor
-     * @param {Function} rendererType - renderer constructor
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, set, cameraType, rendererType, params = {}) {
+    constructor(geom, set, params = {}) {
         /**
          * The underlying geometry
          * @type {Object}
@@ -38,12 +39,6 @@ export class AbstractThurston {
          * @type {TeleportationSet}
          */
         this.set = set;
-        /**
-         * Parameters of the Thurston object
-         * @type {Object}
-         */
-        this.params = {}
-        this.setParams(params);
 
         /**
          * A callback called at each frame
@@ -53,26 +48,22 @@ export class AbstractThurston {
 
         /**
          * The non-euclidean camera
-         * @type {BasicCamera}
+         * @type {VRCamera}
          */
-        this.camera = new cameraType({set: this.set});
+        this.camera = params.camera !== undefined ? params.camera : new VRCamera({set: this.set});
 
         const fog = new ExpFog(new Color(0, 0, 0), 0.07);
         /**
          * The non-euclidean scene
          * @type {Scene}
          */
-        this.scene = new Scene({
-            fog: fog,
-            // maxBounces: params.maxBounces,
-            background: params.background}
-        );
+        this.scene = new Scene({fog: fog});
 
         /**
          * The non-euclidean renderer
-         * @type {AbstractRenderer}
+         * @type {VRRenderer}
          */
-        this.renderer = new rendererType(this.geom, this.set, this.camera, this.scene);
+        this.renderer = new VRRenderer(this.geom, this.set, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
@@ -114,14 +105,37 @@ export class AbstractThurston {
          * @type {GUI}
          */
         this.gui = undefined;
-    }
 
-    /**
-     * Set the value of the parameters.
-     * To be used in the constructor.
-     * @param {Object} params - the parameters
-     */
-    setParams(params) {
+
+        const controllerModelFactory = new XRControllerModelFactory();
+
+        const controllerGrip0 = this.renderer.xr.getControllerGrip(0);
+        const model0 = controllerModelFactory.createControllerModel(controllerGrip0);
+        controllerGrip0.add(model0);
+        this.renderer.threeScene.add(controllerGrip0);
+
+        const controllerGrip1 = this.renderer.xr.getControllerGrip(1);
+        const model1 = controllerModelFactory.createControllerModel(controllerGrip1);
+        controllerGrip1.add(model1);
+        this.renderer.threeScene.add(controllerGrip1);
+
+        const controller0 = this.renderer.xr.getController(0);
+        this.renderer.threeScene.add(controller0);
+        const controller1 = this.renderer.xr.getController(1);
+        this.renderer.threeScene.add(controller1);
+
+        /**
+         * Moving in the scene with the VR controller
+         * @protected
+         * @type {VRControlsMove}
+         */
+        this.VRControlsMove = new VRControlsMove(this.camera.position, controller0);
+        /**
+         * Rotating the scene with the VR controller
+         * @protected
+         * @type {VRControlsDrag}
+         */
+        this.VRControlsDrag = new VRControlsDrag(this.camera.position, controller1);
     }
 
 
@@ -195,6 +209,9 @@ export class AbstractThurston {
             this.callback();
         }
         this.flyControls.update(delta);
+        this.VRControlsMove.update(delta);
+        this.VRControlsDrag.update(delta);
+
         this.renderer.render();
         this.stats.update();
     }

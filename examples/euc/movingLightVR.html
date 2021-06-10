@@ -14,8 +14,6 @@
 <script type="module" id="main">
     import {Clock, Color, Matrix4} from "../../js/lib/threejs/build/three.module.js";
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
-
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
@@ -25,8 +23,9 @@
     import {LocalBallShape, ComplementShape, union} from "../../js/geometries/euc/shapes/all.js";
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
     import {SingleColorMaterial, PhongMaterial} from "../../js/commons/material/all.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
-    const thurston = new VRThurston(geom, torus, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(geom, torus, {keyboard: 'fr'});
     thurston.camera.maxSteps = 500;
 
 

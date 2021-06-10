@@ -14,7 +14,7 @@
 <script type="module" id="main">
     import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {VRThurston} from "../../js/commons/app/thurstonVR/VRThurston.js";
+    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
@@ -28,7 +28,7 @@
     import {InfoControls} from "../../js/controls/InfoControls.js";
 
 
-    const thurston = new VRThurston(geom, torus, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(geom, torus, {keyboard: 'fr'});
 
 
     // lights for the Phong material
