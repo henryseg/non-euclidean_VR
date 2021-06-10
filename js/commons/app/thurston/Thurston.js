@@ -5,9 +5,6 @@ import {Clock, Color, WebGLRenderer} from "../../../lib/threejs/build/three.modu
 
 import {bind} from "../../../utils.js";
 
-
-
-
 import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 import {PathTracerUI} from "./PathTracerUI.js";
@@ -93,17 +90,10 @@ export class Thurston {
         this.currentRenderer = this.renderer;
 
         // set the renderer size
-        // this.setPixelRatio(window.devicePixelRatio);
         this.setSize(window.innerWidth, window.innerHeight);
         // event listener
         this._onWindowResize = bind(this, this.onWindowResize);
         window.addEventListener('resize', this._onWindowResize, false);
-
-        // /**
-        //  * Keyboard controls to switch the renderer
-        //  * @type {SwitchControls}
-        //  */
-        // this.swicthRendererControl = new SwitchControls('p', 2, RENDER_BASIC);
 
         /**
          * The keyboard controls to fly in the scene
@@ -263,7 +253,6 @@ export class Thurston {
         }
         this.flyControls.update(delta);
         this.currentRenderer.render();
-
         this.stats.update();
     }
 
