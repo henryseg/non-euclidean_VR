@@ -237,6 +237,8 @@ export class Thurston {
             this.flyControls.restore();
             window.addEventListener('resize', this._onWindowResize);
             this.setSize(window.innerWidth, window.innerHeight);
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
             this.currentRenderer = this.renderer;
         }
     }
