@@ -13,7 +13,7 @@ import {
     PathTracerWrapMaterial,
     PhongWrapMaterial,
     SingleColorMaterial
-} from "../../../js/commons/material/all.js";
+} from "../../../js/commons/materials/all.js";
 import {Thurston} from "../../../js/commons/app/thurston/Thurston.js";
 import {VaryingColorMaterial} from "../../../js/geometries/euc/material/varyingColor/VaryingColorMaterial.js";
 

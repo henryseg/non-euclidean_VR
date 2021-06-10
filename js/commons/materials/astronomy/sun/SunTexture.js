@@ -8,14 +8,13 @@ import {SimpleTextureMaterial} from "../../simpleTexture/SimpleTextureMaterial.j
  * @extends SimpleTextureMaterial
  *
  * @classdesc
- * Texture of Mars
+ * Texture of the sun
  * Image from https://www.solarsystemscope.com/textures/
- *
  */
-export class MarsTexture extends SimpleTextureMaterial {
+export class SunTexture extends SimpleTextureMaterial {
 
     constructor(thurstonJSPath) {
-        super(thurstonJSPath + '/commons/material/astronomy/mars/img/2k_mars.jpg', {
+        super(thurstonJSPath + '/commons/materials/astronomy/sun/img/2k_sun.jpg', {
             start: new Vector2(-Math.PI, 0),
             scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
