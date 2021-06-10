@@ -1,7 +1,8 @@
 // language=GLSL
 export default `//
 /**
- * Compute the initial direction for the ray-marching
+ * Compute the initial direction for the ray-marching from the coordinates on the sphere "screen"
+ * Not used with path tracer renderer (easier to work with coordinates on a flat screen)
  * @param[in] coords the coordinates of the point on the sphere
  */
 RelVector mapping(vec3 coords){
@@ -13,6 +14,10 @@ RelVector mapping(vec3 coords){
     return geomNormalize(res);
 }
 
+/**
+ * Compute the initial direction for the ray-marching from the coordinates on a "flat" screen
+ * @param[in] coords the coordinates of the point on the screen
+ */
 RelVector mappingFromFlatScreen(vec2 coords) {
     // calculate subpixel camera jitter for anti aliasing
     vec2 jitter = vec2(randomFloat(), randomFloat()) - 0.5;
