@@ -10,10 +10,6 @@ import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
 
 
-const ex = new Vector3(1, 0, 0);
-const ey = new Vector3(0, 1, 0);
-const ez = new Vector3(0, 0, 1);
-
 /**
  * @class
  *
