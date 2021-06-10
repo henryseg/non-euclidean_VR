@@ -4,7 +4,7 @@ import {
     LinearFilter,
     Mesh, NearestFilter, RGBAFormat, RGBFormat,
     ShaderMaterial,
-    SphereBufferGeometry, Uniform, UniformsUtils,
+    SphereBufferGeometry, Uniform, UniformsUtils, Vector2,
     WebGLRenderTarget
 } from "../../lib/threejs/build/three.module.js";
 import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
@@ -125,6 +125,8 @@ export class PathTracerRenderer extends AbstractRenderer {
     buildFragmentShader() {
         // constants
         this._fragmentBuilder.addChunk(constants);
+        const res = new Vector2(this.accWriteTarget.width, this.accWriteTarget.height);
+        this._fragmentBuilder.addUniform('resolution', 'vec2', res)
         this._fragmentBuilder.addUniform('maxBounces', 'int', this.maxBounces);
         // geometry
         this._fragmentBuilder.addChunk(this.geom.shader1);
@@ -192,7 +194,7 @@ export class PathTracerRenderer extends AbstractRenderer {
      * Render the accumulated target
      * (for display or download purposes)
      */
-    renderAccTarget(){
+    renderAccTarget() {
         this.threeRenderer.setRenderTarget(null);
         this.displayComposer.render();
     }
@@ -200,6 +202,8 @@ export class PathTracerRenderer extends AbstractRenderer {
     render() {
         let accTmpTarget;
         this.updateFrameSeed();
+        const res = new Vector2(this.accWriteTarget.width, this.accWriteTarget.height);
+        this._fragmentBuilder.updateUniform('resolution', res);
 
         this.threeRenderer.setRenderTarget(this.sceneTarget);
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
