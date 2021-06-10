@@ -16,7 +16,7 @@ varying vec3 spherePosition;
  */
 void main() {
     initSeed(gl_FragCoord.xy, frameSeed);
-    RelVector vector = mapping(spherePosition);
+    RelVector vector = mappingFromFlatScreen(gl_FragCoord.xy);
     ExtVector v = ExtVector(vector, initVectorData());
     vec3 color = getColor(v);
     gl_FragColor = vec4(color, 1);
