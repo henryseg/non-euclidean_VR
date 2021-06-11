@@ -1,6 +1,7 @@
 import {AdvancedShape} from "../../../../core/shapes/AdvancedShape.js";
 import {mustache} from "../../../../lib/mustache.mjs";
 import sdf from "./shaders/sdf.js";
+import gradient from "./shaders/gradient.js";
 
 /**
  * @class
@@ -44,6 +45,10 @@ export class DisplacementShape extends AdvancedShape {
 
     glslSDF() {
         return mustache.render(sdf, this);
+    }
+
+    glslGradient() {
+        return mustache.render(gradient, this);
     }
 
     /**

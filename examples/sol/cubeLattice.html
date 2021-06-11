@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sol Example (coordinate half space)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/sol/geometry/General.js";
+    import mappingTorus from "../../js/geometries/sol/groups/mappingTorus/set.js";
+    import {ConstDirLight} from "../../js/geometries/sol/lights/all.js";
+    import {PhongMaterial} from "../../js/commons/materials/all.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {Isometry} from "../../js/geometries/sol/geometry/General.js";
+    import {LocalCube} from "../../js/geometries/sol/solids/LocalCube.js";
+    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
+
+    // mappingTorus.creepingType = CREEPING_FULL;
+    const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
+    thurston.camera.fov = 120;
+
+
+    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+    const solid = new LocalCube(new Isometry(), 0.1, mat);
+
+    thurston.add(solid, lightUp, lightDown);
+
+    function info() {
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>
