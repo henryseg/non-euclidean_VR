@@ -5,4 +5,6 @@ export default `//
  */
 float {{name}}_sdf(RelVector v){
     return - {{shape.name}}_sdf(v);
-}`;
+}
+
+`;
