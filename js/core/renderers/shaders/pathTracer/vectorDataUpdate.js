@@ -38,6 +38,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     
         case {{id}}:
             normal = {{shape.name}}_gradient(v.vector);
+            normal = geomNormalize(normal);
             rayType = {{ptMaterial.name}}_setRayType(v, normal);
         
             {{^ptMaterial.usesUVMap}}
