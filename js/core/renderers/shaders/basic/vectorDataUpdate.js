@@ -26,6 +26,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             }
             
             normal = {{shape.name}}_gradient(v.vector);
+            // in general the gradient is not necessarily a unit vector
+            normal = geomNormalize(normal);
     
             {{^material.usesNormal}}
                 {{^material.usesUVMap}}

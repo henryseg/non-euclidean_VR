@@ -10,7 +10,7 @@ import {Point} from "../../geometry/Point.js";
  * @classdesc
  * Element in the suspension of Z^2 by Z, where Z acts on Z^2 ast the matrix A from Group.js
  * The first two coordinates (a,b) correspond to the Z^2 factor
- * The last coordinates c the the Z factor
+ * The last coordinates c correspond to the Z factor
  */
 export class GroupElement extends AbstractGroupElement {
 
