@@ -133,16 +133,24 @@ export class UnionShape extends AdvancedShape {
 
 /**
  * The union of an arbitrary number of shapes
+ * The function takes a bunch of shapes
+ * The last argument (if not a shape) are the parameters of the union
  */
 export function union() {
     let res;
+    let params = {};
     const n = arguments.length;
     if (n === 0) {
         throw new Error('union: the function expect at least one argument');
     }
+    if (!arguments[n - 1].isShape) {
+        params = arguments[n - 1];
+    }
     res = arguments[0];
     for (let i = 1; i < n; i++) {
-        res = new UnionShape(res, arguments[i]);
+        if (arguments[i].isShape) {
+            res = new UnionShape(res, arguments[i], params);
+        }
     }
     return res;
 }
