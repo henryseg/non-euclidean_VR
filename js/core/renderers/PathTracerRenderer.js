@@ -19,8 +19,8 @@ import vertexShader from "./shaders/common/vertex.js";
 import constants from "./shaders/common/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
-import scenes from "./shaders/common/scenes.js";
-import raymarch from "./shaders/common/raymarch.js";
+import scenes from "./shaders/pathTracer/scenes.js";
+import raymarch from "./shaders/pathTracer/raymarch.js";
 import random1 from "./shaders/pathTracer/random1.js";
 import random2 from "./shaders/pathTracer/random2.js";
 import structVectorData from "./shaders/pathTracer/vectorDataStruct.js";
@@ -28,6 +28,7 @@ import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
 import main from "./shaders/pathTracer/main.js";
 
 import SteveShader from "../../postProcess/steve/shader.js";
+import nextObject from "./shaders/pathTracer/nextObject.js";
 
 
 const accumulateMat = new ShaderMaterial({
@@ -153,6 +154,7 @@ export class PathTracerRenderer extends AbstractRenderer {
         // scene
         this.scene.shader(this._fragmentBuilder);
         this._fragmentBuilder.addChunk(mustache.render(scenes, this));
+        this._fragmentBuilder.addChunk(mustache.render(nextObject, this));
         this._fragmentBuilder.addChunk(mustache.render(updateVectorData, this));
 
         // ray-march and main
