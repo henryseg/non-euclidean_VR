@@ -29,6 +29,7 @@
     import {FlyControls} from "../../js/controls/FlyControls.js";
     import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {SMOOTH_MIN_POLY} from "../../js/commons/shapes/union/UnionShape.js";
 
 
     // initial setup
@@ -46,7 +47,8 @@
     // magenta light
     const light = new PointLight(
         new Point(0, 0.2, 0),
-        new Color(1, 1, 1)
+        new Color(1, 1, 1),
+        0.5
     );
     const lights = [light];
 
@@ -97,7 +99,7 @@
         0.15
     );
 
-    const unionShape = new UnionShape(ball1, ball2);
+    const unionShape = new UnionShape(ball1, ball2, {minType:SMOOTH_MIN_POLY, minCoeff:0.01});
     const unionSolid = new Solid(unionShape, mat1);
 
 
