@@ -64,14 +64,6 @@ The examples tagged with *VR* are made for virtual reality. They should work wit
 When loaded, those examples have a button *Enter VR* at the bottom on the screen.
 Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
 
-## Done or in progress (on this branch)
-<img src="https://render.githubusercontent.com/render/math?math=S^3">,
-<img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb E^3">,
-<img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb H^3">,
-<img src="https://render.githubusercontent.com/render/math?math=S^2 %5Ctimes %5Cmathbb E">,
-<img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb H^2 %5Ctimes %5Cmathbb E">,
-Nil
-
 ## License
 
 Released under the terms of the GNU [General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html), version 3 or later.
