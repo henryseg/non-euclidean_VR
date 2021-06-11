@@ -69,7 +69,7 @@ int raymarch(inout ExtVector v, out int objId){
                 v = localV;
                 break;
             }
-            marchingStep = marchingStep + dist;
+            marchingStep = marchingStep + abs(dist);
             localV = creepingFlow(localV0, marchingStep, camera.threshold);
         }
     }
@@ -100,7 +100,7 @@ int raymarch(inout ExtVector v, out int objId){
             v = globalV;
             break;
         }
-        marchingStep = marchingStep + dist;
+        marchingStep = marchingStep + abs(dist);
         globalV = flow(globalV0, marchingStep);
     }
 

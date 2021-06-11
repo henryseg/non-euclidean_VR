@@ -1,7 +1,7 @@
 // language=Mustache + GLSL
 export default `//
 VectorData initVectorData(){
-    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb);
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb, {{scene.ptBackground.name}}.ior, false);
 }
 
 
@@ -15,8 +15,9 @@ void roulette(inout ExtVector v){
     }
     // add the energy we 'lose' by randomly terminating paths
     v.data.light = v.data.light / p;
-    
 }
+
+
 
 void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector normal;
@@ -25,6 +26,10 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     vec3 color;
     vec3 reflectivity;
     float hackCoeff = 1.;
+    float r; /** ratio of IOR */
+    float nextIOR; /** IOR of the neighbor solid */
+    vec3 nextAbsorb; /** absorb of the neighbor solid */
+    bool nextIsInside;
 
     RelVector diffuseDir;
     RelVector reflectDir;
@@ -50,7 +55,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             {{/ptMaterial.usesUVMap}}
 
             // apply fog
-            v.data.light = v.data.light * exp( -v.data.absorb * v.data.lastBounceDist);
+            v.data.light = v.data.light * exp( -v.data.currentAbsorb * v.data.lastBounceDist);
             // hack to make sure that lights are not too bright
             if(v.data.iBounce == 0){
                 hackCoeff = 0.01;
@@ -77,17 +82,33 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             }
         
             if(rayType.refract){
-                // perfectly smooth specular uses the reflection ray.
-                // todo : compute correctly the ratio of IOR
-                refractDir = geomRefract(v.vector, normal, 1.);
-        
-                // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
+                //v.data.pixel = v.data.pixel + 0.4 * debugColor;
+                if(v.data.isInside){
+                    //v.data.pixel = v.data.pixel + 0.4 * debugColor;
+                    //nextObjectProperties(normal, nextIOR, nextAbsorb, nextIsInside);
+                    //r = {{ptMaterial.name}}.ior / nextIOR;
+                    //v.data.currentIOR = nextIOR;
+                    //v.data.currentAbsorb = nextAbsorb;
+                    //v.data.isInside = nextIsInside;
+                    r = {{ptMaterial.name}}.ior / {{scene.ptBackground.name}}.ior;
+                    v.data.currentIOR = {{scene.ptBackground.name}}.ior;
+                    v.data.currentAbsorb = {{scene.ptBackground.name}}.absorb;
+                    v.data.isInside = false;
+                    refractDir = geomRefract(v.vector, negate(normal), r);
+                    // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
+                    // refractDir = geomNormalize(geomMix(refractDir, negate(diffuseDir), {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
+                }
+                else {
+                    r = {{scene.ptBackground.name}}.ior / {{ptMaterial.name}}.ior;
+                    v.data.currentIOR = {{ptMaterial.name}}.ior;
+                    v.data.currentAbsorb = {{ptMaterial.name}}.absorb;
+                    v.data.isInside = true;
+                    refractDir = geomRefract(v.vector, normal, r);
+                    // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
+                    // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
+                }
                 v.vector = refractDir;
-                // TODO update the following data for v : IOR, inside/outside flag,  absorb 
             }
-        
-            // normally we never reach this point
             break;
     
     {{/scene.solids}}
@@ -97,10 +118,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     v.data.iBounce = v.data.iBounce + 1;
     // be carefull, v is not normal to the surface
     // if the time we flow is too small, we are still below the camera threshold
-    float t = 20. * camera.threshold / geomDot(v.vector, normal);
+    float t = 20. * camera.threshold / abs(geomDot(v.vector, normal));
     v = flow(v, t);
-   
-    
 }
 
 void updateVectorData(inout ExtVector v, int hit, int objId){

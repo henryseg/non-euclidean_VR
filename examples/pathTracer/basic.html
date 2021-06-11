@@ -56,16 +56,17 @@
         diffuse: ballColor,
         specular: ballColor,
         roughness: 0.,
-        reflectionChance: 0.01,
-        refractionChance: 0,
-        diffuseChance: 0.99
+        ior: 1.5,
+        reflectionChance: 0.02,
+        refractionChance: 0.98,
+        diffuseChance: 0.,
     });
     const ball = new Ball(new Point(0, 0, -1), 0.3, placeholderMat, ptBallMat);
     scene.add(ball);
 
     // back wall
     const backColor = new Color(1, 0, 0);
-    const backPoint = new Point(0, 0, -1.4);
+    const backPoint = new Point(0, 0, -3);
     const backIsom = new Isometry().makeTranslation(backPoint);
     const ptBackMat = new BasicPTMaterial({
         diffuse: backColor,
@@ -114,7 +115,7 @@
     scene.add(bottom);
 
     // top wall
-    const topColor = new Color(1, 1, 1);
+    const topColor = new Color(3, 3, 3);
     const ptTopMat = new BasicPTMaterial({
         emission: topColor,
     })

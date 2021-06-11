@@ -34,7 +34,10 @@ struct VectorData {
     bool stop; /**< do we stop bouncing ? */
     vec3 pixel; /**<  */
     vec3 light; /**<  */
-    vec3 absorb; /**< */
+    vec3 currentAbsorb; /**< absorbtion of the solid we are currently in */
+    float currentIOR; /**< index of refraction of the material we are currently in */
+    bool isInside; /**< true if we are not in the air */
+//    int currentId; /**< Id of the solid we are currently in, air = -1 */
 };
 
 
