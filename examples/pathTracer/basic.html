@@ -56,9 +56,10 @@
         diffuse: ballColor,
         specular: ballColor,
         roughness: 0.,
-        ior: 1.5,
-        reflectionChance: 0.02,
-        refractionChance: 0.98,
+        ior: 1.6,
+        //absorb:new Color(5,1,3),
+        reflectionChance: 0.01,
+        refractionChance: 0.99,
         diffuseChance: 0.,
     });
     const ball = new Ball(new Point(0, 0, -1), 0.3, placeholderMat, ptBallMat);

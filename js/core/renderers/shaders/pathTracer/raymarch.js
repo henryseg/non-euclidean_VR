@@ -76,7 +76,6 @@ int raymarch(inout ExtVector v, out int objId){
     if(hit == HIT_NOTHING) {
         v = localV;
     }
-
     //global scene
     marchingStep = camera.minDist;
     for (int i=0; i < camera.maxSteps; i++){

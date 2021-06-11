@@ -44,7 +44,21 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
         case {{id}}:
             normal = {{shape.name}}_gradient(v.vector);
             normal = geomNormalize(normal);
-            rayType = {{ptMaterial.name}}_setRayType(v, normal);
+
+            
+            //get info and reset normal based on which side we are on.
+            //starting assumption: in the air
+            r = {{scene.ptBackground.name}}.ior / {{ptMaterial.name}}.ior;
+            nextAbsorb={{ptMaterial.name}}.absorb;
+            if(v.data.isInside){
+                //things to change if we are inside a material instead:
+                // r = {{ptMaterial.name}}.ior / {{scene.ptBackground.name}}.ior;
+                nextObjectProperties(normal, nextIOR, nextAbsorb, nextIsInside);
+                r = {{ptMaterial.name}}.ior / nextIOR;
+                normal=negate(normal);
+            }
+        
+            rayType = {{ptMaterial.name}}_setRayType(v, normal,r);
         
             {{^ptMaterial.usesUVMap}}
                 color =  {{ptMaterial.name}}_render(v, normal, rayType);
@@ -62,6 +76,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             }
             v.data.pixel = v.data.pixel + hackCoeff * v.data.light * {{ptMaterial.name}}.emission;
             v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
+        
+
             
         
             // update the ray direction
@@ -82,32 +98,12 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             }
         
             if(rayType.refract){
-                //v.data.pixel = v.data.pixel + 0.4 * debugColor;
-                if(v.data.isInside){
-                    //v.data.pixel = v.data.pixel + 0.4 * debugColor;
-                    //nextObjectProperties(normal, nextIOR, nextAbsorb, nextIsInside);
-                    //r = {{ptMaterial.name}}.ior / nextIOR;
-                    //v.data.currentIOR = nextIOR;
-                    //v.data.currentAbsorb = nextAbsorb;
-                    //v.data.isInside = nextIsInside;
-                    r = {{ptMaterial.name}}.ior / {{scene.ptBackground.name}}.ior;
-                    v.data.currentIOR = {{scene.ptBackground.name}}.ior;
-                    v.data.currentAbsorb = {{scene.ptBackground.name}}.absorb;
-                    v.data.isInside = false;
-                    refractDir = geomRefract(v.vector, negate(normal), r);
+                    refractDir = geomRefract(v.vector,normal, r);
                     // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                    // refractDir = geomNormalize(geomMix(refractDir, negate(diffuseDir), {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
-                }
-                else {
-                    r = {{scene.ptBackground.name}}.ior / {{ptMaterial.name}}.ior;
-                    v.data.currentIOR = {{ptMaterial.name}}.ior;
-                    v.data.currentAbsorb = {{ptMaterial.name}}.absorb;
-                    v.data.isInside = true;
-                    refractDir = geomRefract(v.vector, normal, r);
-                    // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                    // refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
-                }
-                v.vector = refractDir;
+                    refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
+                    v.data.isInside=!v.data.isInside;
+                    v.data.currentAbsorb=nextAbsorb;
+                    v.vector = refractDir;
             }
             break;
     
