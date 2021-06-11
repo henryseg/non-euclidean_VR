@@ -33,7 +33,7 @@ float sdf(VerticalHalfSpaceShape halfSpace, RelVector v) {
         // the currrent point is already close to the boundary of the half space
         return - dotp;
     }
-
+    
     float c = v.local.dir.z;
     vec2 u = v.local.dir.xy;
     float a = length(u);
