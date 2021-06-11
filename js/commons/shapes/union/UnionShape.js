@@ -1,10 +1,19 @@
 import {mustache} from "../../../lib/mustache.mjs";
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
-import uv from "./shaders/uv.js";
+import smoothMinPoly from "../../imports/smoothMinPoly.js";
 
+import sdfRegular from "./shaders/sdfRegular.js";
+import gradientRegular from "./shaders/gradientRegular.js";
+import uv from "./shaders/uv.js";
+import sdfPoly from "./shaders/sdfPoly.js";
+import struct from "./shaders/struct.js";
+import gradientPoly from "./shaders/gradientPoly.js";
+
+export const REGULAR_MIN = 0;
+export const SMOOTH_MIN_POLY = 1;
+export const SMOOTH_MIN_EXP = 2;
+export const SMOOTH_MIN_POWER = 3;
 
 /**
  * @class
@@ -19,8 +28,9 @@ export class UnionShape extends AdvancedShape {
      * The two shapes should be both local or both global.
      * @param {Shape} shape1 - the first shape
      * @param {Shape} shape2 - the second shape
+     * @param {Object} params - parameters (basically which kind of min is used)
      */
-    constructor(shape1, shape2) {
+    constructor(shape1, shape2, params = {}) {
         if (shape1.isGlobal !== shape2.isGlobal) {
             throw new Error('UnionShape: the two shapes should be both local or both global');
         }
@@ -29,6 +39,15 @@ export class UnionShape extends AdvancedShape {
         this.shape2 = shape2;
         this.shape1.parent = this;
         this.shape2.parent = this;
+
+        this.minType = params.minType !== undefined ? params.minType : REGULAR_MIN;
+        this.minCoeff = 0;
+        switch (this.minType) {
+            case SMOOTH_MIN_POLY:
+                this.addImport(smoothMinPoly);
+                this.minCoeff = params.minCoeff !== undefined ? params.minCoeff : 0.1;
+                break;
+        }
     }
 
     updateAbsoluteIsom() {
@@ -43,24 +62,40 @@ export class UnionShape extends AdvancedShape {
         this.shape2.updateData();
     }
 
+    get uniformType() {
+        return 'UnionShape';
+    }
+
+    static glslClass() {
+        return struct;
+    }
+
     get isGlobal() {
         return this.shape1.isGlobal;
     }
 
-    get hasUVMap(){
+    get hasUVMap() {
         return this.shape1.hasUVMap && this.shape2.hasUVMap;
     }
 
-    static glslClass() {
-        return '';
-    }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        switch (this.minType) {
+            case SMOOTH_MIN_POLY:
+                return mustache.render(sdfPoly, this);
+            default:
+                return mustache.render(sdfRegular, this);
+        }
+
     }
 
     glslGradient() {
-        return mustache.render(gradient, this);
+        switch (this.minType) {
+            case SMOOTH_MIN_POLY:
+                return mustache.render(gradientPoly, this);
+            default:
+                return mustache.render(gradientRegular, this);
+        }
     }
 
     glslUVMap() {
