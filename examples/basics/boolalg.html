@@ -30,6 +30,7 @@
     import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
     import {SMOOTH_MIN_POLY} from "../../js/commons/shapes/union/UnionShape.js";
+    import {SMOOTH_MAX_POLY} from "../../js/commons/shapes/instersection/IntersectionShape.js";
 
 
     // initial setup
@@ -114,7 +115,7 @@
         0.15
     );
 
-    const intersectionShape = new IntersectionShape(ball3, ball4);
+    const intersectionShape = new IntersectionShape(ball3, ball4, {maxType:SMOOTH_MAX_POLY, maxCoeff:0.01});
     const intersectionSolid = new Solid(intersectionShape, mat2);
 
 

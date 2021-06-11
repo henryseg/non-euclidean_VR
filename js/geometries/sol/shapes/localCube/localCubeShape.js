@@ -1,6 +1,7 @@
 import {intersection, LocalXYHalfSpaceShape, LocalZHalfSpaceShape} from "../all.js";
 import {Isometry} from "../../geometry/General.js";
 import {Point} from "../../geometry/General.js";
+import {SMOOTH_MAX_POLY} from "../../../../commons/shapes/instersection/IntersectionShape.js";
 
 export function localCubeShape(isom, halfWidth) {
     const front = new LocalZHalfSpaceShape(
@@ -27,7 +28,7 @@ export function localCubeShape(isom, halfWidth) {
             .multiply(new Isometry().makeFlip())
     );
 
-    const shape = intersection(top, bottom, front, back, left, right);
+    const shape = intersection(top, bottom, front, back, left, right, {maxType: SMOOTH_MAX_POLY, maxCoeff: 0.01});
     shape.isom = isom;
     return shape;
 }
