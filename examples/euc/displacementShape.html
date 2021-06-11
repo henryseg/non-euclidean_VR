@@ -74,19 +74,13 @@
     });
 
     const baseShape = new BallShape(new Point(), 0.2);
-    const wrapShape = new DisplacementShape(new Isometry(), baseShape);
+    const wrapShape = new DisplacementShape(new Isometry().makeTranslation(new Point(0, 0, -0.5)), baseShape);
     wrapShape.updateData();
     const solid = new Solid(wrapShape, mat1);
-    // const ball1 = new Ball(
-    //     new Point(0, 0, -.5),
-    //     0.2,
-    //     mat1
-    // );
 
     thurston.add(solid, light0, light1, light2);
 
     thurston.run();
-    thurston.renderer.checkShader();
 
 
 </script>
