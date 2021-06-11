@@ -99,10 +99,10 @@ shiftZp.isom.makeTranslation(new Point(0, 0, -TAU, 1));
 shiftZn.isom.makeTranslation(new Point(0, 0, TAU, 1));
 
 export default new TeleportationSet()
+    .add(testZp, glslTestZp, shiftZp, shiftZn)
+    .add(testZn, glslTestZn, shiftZn, shiftZp)
     .add(testXp, glslTestXp, shiftXp, shiftXn)
     .add(testXn, glslTestXn, shiftXn, shiftXp)
     .add(testYp, glslTestYp, shiftYp, shiftYn)
-    .add(testYn, glslTestYn, shiftYn, shiftYp)
-    .add(testZp, glslTestZp, shiftZp, shiftZn)
-    .add(testZn, glslTestZn, shiftZn, shiftZp);
+    .add(testYn, glslTestYn, shiftYn, shiftYp);
 
