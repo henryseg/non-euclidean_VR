@@ -7,7 +7,9 @@ import gradient from "./shaders/gradient.js";
  * @class
  *
  * @classdesc
- * A displacement operator on a shape
+ * A displacement modifier on a shape
+ * After Inigo Quilez
+ * https://iquilezles.org/www/articles/distfunctions/distfunctions.htm
  */
 export class DisplacementShape extends AdvancedShape {
 
