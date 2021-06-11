@@ -21,6 +21,7 @@ export class DisplacementShape extends AdvancedShape {
     constructor(isom, shape) {
         super(isom);
         this.shape = shape;
+        this.shape.parent = this;
     }
 
     updateAbsoluteIsom() {

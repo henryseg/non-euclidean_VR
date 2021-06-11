@@ -19,27 +19,37 @@
     import * as geom from "../../js/geometries/sol/geometry/General.js";
     import mappingTorus from "../../js/geometries/sol/groups/mappingTorus/set.js";
     import {ConstDirLight} from "../../js/geometries/sol/lights/all.js";
-    import {PhongMaterial} from "../../js/commons/materials/all.js";
+    import {PhongMaterial, phongWrap} from "../../js/commons/materials/all.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
     import {Isometry} from "../../js/geometries/sol/geometry/General.js";
     import {LocalCube} from "../../js/geometries/sol/solids/LocalCube.js";
     import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
+    import {Point} from "../../js/geometries/sol/geometry/Point.js";
+    import {VaryingColorMaterial} from "../../js/geometries/sol/material/varyingColor/VaryingColorMaterial.js";
 
     // mappingTorus.creepingType = CREEPING_FULL;
     const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
     thurston.camera.fov = 120;
 
 
-    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
-    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+    const lightUp = new ConstDirLight(new Color(1, 1, 1), 0.7, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 1, 1), 0.7, new Vector3(0, 0, -1));
 
-    const mat = new PhongMaterial({
-        color: new Color(1, 1, 1)
-    });
+    const baseMat1 = new VaryingColorMaterial(
+        new Color(0.1,0.2,0.35),
+        new Color(0.2, 0.2, 0.2)
+    )
+    const mat1 = phongWrap(baseMat1);
+    const baseMat2 = new VaryingColorMaterial(
+        new Color(0.15,0.1,0.2),
+        new Color(0.2, 0.2, 0.2)
+    )
+    const mat2 = phongWrap(baseMat2);
 
-    const solid = new LocalCube(new Isometry(), 0.1, mat);
+    const cube1 = new LocalCube(new Isometry().makeTranslation(new Point(0.1,0.05,-0.25)), 0.1, mat1);
+    const cube2 = new LocalCube(new Isometry().makeTranslation(new Point(0.05,-0.1,0.15)), 0.1, mat2);
 
-    thurston.add(solid, lightUp, lightDown);
+    thurston.add(cube1, cube2, lightUp, lightDown);
 
     function info() {
     }
