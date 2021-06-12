@@ -11,6 +11,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     vec2 uv;
     vec3 color;
     vec3 reflectivity;
+    float t;
     
     switch(objId){
     {{#scene.solids}}
@@ -64,7 +65,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             v.vector = geomReflect(v.vector,normal);
             v.data.lastBounceDist = 0.;
             v.data.iBounce = v.data.iBounce + 1;
-            v = flow(v, 1.2 * camera.threshold);
+            t = 20. * camera.threshold / abs(geomDot(v.vector, normal));
+            v = flow(v, t);
     
         {{/material.isReflecting}}
     
