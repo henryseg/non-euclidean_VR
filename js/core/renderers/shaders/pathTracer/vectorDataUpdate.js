@@ -40,10 +40,10 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector random = randomVector(v.vector);
 
 
-    
+    //get volumetric coloring
     v.data.light = v.data.light * exp((-v.data.currentAbsorb) * v.data.lastBounceDist);
     v.data.light = v.data.light * (vec3(1.)+v.data.currentEmission * v.data.lastBounceDist);
-    v.data.pixel = v.data.pixel + v.data.light*v.data.currentEmission/100.;
+    v.data.pixel = v.data.pixel + v.data.light*v.data.currentEmission;
 
 
 switch(objId){
@@ -85,7 +85,9 @@ switch(objId){
         
             //apply surface effects
             v.data.pixel = v.data.pixel + hackCoeff * v.data.light * {{ptMaterial.name}}.emission;
-            v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
+            if(!rayType.refract){
+                v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
+             }
         
             // update the ray direction
             // diffuse uses a normal oriented cosine weighted hemisphere sample.
