@@ -6,6 +6,7 @@ export default `//
  **********************************************************************************************************************/
 struct BasicPTMaterial {
     vec3 emission;
+    vec3 volumeEmission;
     vec3 diffuse;
     vec3 specular;
     vec3 absorb;
@@ -46,6 +47,10 @@ vec3 render(BasicPTMaterial material, ExtVector v, RayType rayType) {
     if (rayType.reflect){
         return material.specular;
     }
+//    else if(rayType.refract){
+//        //does this color get used anywhere?
+//        //if so here's a spot to do it.
+//    }
     return material.diffuse;
 }
 `;

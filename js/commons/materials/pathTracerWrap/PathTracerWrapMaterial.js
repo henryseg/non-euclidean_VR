@@ -28,10 +28,15 @@ export class PathTracerWrapMaterial extends PTMaterial {
          */
         this.material = material;
         /**
-         * Emission Color
+         * Surface Emission Color
          * @type {Color}
          */
         this.emission = params.emission !== undefined ? params.emission : new Color(0, 0, 0);
+        /**
+         * Volumetric Emission Color
+         * @type {Color}
+         */
+        this.volumeEmission = params.volumeEmission !== undefined ? params.volumeEmission : new Color(0, 0, 0);
         /**
          * Specular color
          * @type {Color}

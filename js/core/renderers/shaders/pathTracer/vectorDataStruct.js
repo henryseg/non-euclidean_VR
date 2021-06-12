@@ -35,6 +35,7 @@ struct VectorData {
     vec3 pixel; /**<  */
     vec3 light; /**<  */
     vec3 currentAbsorb; /**< absorbtion of the solid we are currently in */
+    vec3 currentEmission; /**< volumetric emission of the solid we are currently in */
     bool isInside; /**< true if we are not in the "air" */
 };
 

@@ -6,6 +6,7 @@ export default `//
  **********************************************************************************************************************/
 struct PathTracerWrapMaterial {
     vec3 emission;
+    vec3 volumeEmission;
     vec3 specular;
     vec3 absorb;
     float ior;

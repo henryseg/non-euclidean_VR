@@ -16,10 +16,15 @@ export class BasicPTMaterial extends PTMaterial {
     constructor(params) {
         super();
         /**
-         * Emission Color
+         * Surface Emission Color
          * @type {Color}
          */
         this.emission = params.emission !== undefined ? params.emission : new Color(0, 0, 0);
+        /**
+         * Volumetric Emission Color
+         * @type {Color}
+         */
+        this.volumeEmission = params.volumeEmission !== undefined ? params.volumeEmission : new Color(0, 0, 0);
         /**
          * Diffuse color (basically the base color of the material)
          * @type {Color}

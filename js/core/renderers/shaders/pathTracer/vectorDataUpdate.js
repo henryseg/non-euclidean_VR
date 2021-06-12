@@ -1,7 +1,7 @@
 // language=Mustache + GLSL
 export default `//
 VectorData initVectorData(){
-    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb, false);
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb,vec3(0), false);
 }
 
 
@@ -29,6 +29,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     float r; /** ratio of IOR */
     float nextIOR; /** IOR of the neighbor solid */
     vec3 nextAbsorb; /** absorb of the neighbor solid */
+    vec3 nextEmission;/** volumetric emission of the neighbor solid */
     bool nextIsInside = true;
 
     RelVector diffuseDir;
@@ -37,8 +38,14 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
     // get a uniformly distributed vector on the sphere
     RelVector random = randomVector(v.vector);
+
+
     
-    switch(objId){
+    v.data.light = v.data.light * exp((v.data.currentEmission-v.data.currentAbsorb) * v.data.lastBounceDist);
+   // v.data.light = v.data.light * (vec3(1.)+vec3(1,0,0) * v.data.lastBounceDist);
+
+
+switch(objId){
     {{#scene.solids}}
     
         case {{id}}:
@@ -50,10 +57,11 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             // starting assumption: in the "air"
             r = {{scene.ptBackground.name}}.ior / {{ptMaterial.name}}.ior;
             nextAbsorb = {{ptMaterial.name}}.absorb;
+            nextEmission = {{ptMaterial.name}}.volumeEmission;
         
             if(v.data.isInside){
                 //things to change if we are inside a material instead:
-                nextObjectProperties(normal, nextIOR, nextAbsorb, nextIsInside);
+                nextObjectProperties(normal, nextIOR, nextAbsorb,nextEmission, nextIsInside);
                 r = {{ptMaterial.name}}.ior / nextIOR;
                 normal = negate(normal);
             }
@@ -67,13 +75,14 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 uv = {{shape.name}}_uvMap(v.vector);
                 color = {{ptMaterial.name}}_render(v, normal, uv, rayType);
             {{/ptMaterial.usesUVMap}}
-
-            // apply fog
-            v.data.light = v.data.light * exp( -v.data.currentAbsorb * v.data.lastBounceDist);
-            // hack to make sure that lights are not too bright
+        
+        
+        // hack to make sure that lights are not too bright
             if(v.data.iBounce == 0){
                 hackCoeff = 0.01;
             }
+        
+            //apply surface effects
             v.data.pixel = v.data.pixel + hackCoeff * v.data.light * {{ptMaterial.name}}.emission;
             v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
         
@@ -98,9 +107,9 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                     refractDir = geomRefract(v.vector,normal, r);
                     // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                     refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
-                    // v.data.isInside = !v.data.isInside;
                     v.data.isInside = nextIsInside;
                     v.data.currentAbsorb = nextAbsorb;
+                    v.data.currentEmission = nextEmission;
                     v.vector = refractDir;
             }
             break;
