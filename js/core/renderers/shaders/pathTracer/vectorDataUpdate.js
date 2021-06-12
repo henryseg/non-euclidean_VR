@@ -1,7 +1,7 @@
 // language=Mustache + GLSL
 export default `//
 VectorData initVectorData(){
-    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb, {{scene.ptBackground.name}}.ior, false);
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb, false);
 }
 
 
@@ -46,13 +46,13 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             normal = geomNormalize(normal);
 
             
-            //get info and reset normal based on which side we are on.
-            //starting assumption: in the air
+            // get info and reset normal based on which side we are on.
+            // starting assumption: in the "air"
             r = {{scene.ptBackground.name}}.ior / {{ptMaterial.name}}.ior;
-            nextAbsorb={{ptMaterial.name}}.absorb;
+            nextAbsorb = {{ptMaterial.name}}.absorb;
+        
             if(v.data.isInside){
                 //things to change if we are inside a material instead:
-                // r = {{ptMaterial.name}}.ior / {{scene.ptBackground.name}}.ior;
                 nextObjectProperties(normal, nextIOR, nextAbsorb, nextIsInside);
                 r = {{ptMaterial.name}}.ior / nextIOR;
                 normal = negate(normal);
@@ -76,9 +76,6 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
             }
             v.data.pixel = v.data.pixel + hackCoeff * v.data.light * {{ptMaterial.name}}.emission;
             v.data.light = v.data.light * color / max(rayType.chance, 0.0001);
-        
-
-            
         
             // update the ray direction
             // diffuse uses a normal oriented cosine weighted hemisphere sample.
