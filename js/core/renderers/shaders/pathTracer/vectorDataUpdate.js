@@ -101,8 +101,9 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                     refractDir = geomRefract(v.vector,normal, r);
                     // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                     refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
-                    v.data.isInside=!v.data.isInside;
-                    v.data.currentAbsorb=nextAbsorb;
+                    //v.data.isInside = !v.data.isInside;
+                    v.data.isInside = nextIsInside
+                    v.data.currentAbsorb = nextAbsorb;
                     v.vector = refractDir;
             }
             break;
