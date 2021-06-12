@@ -29,7 +29,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     float r; /** ratio of IOR */
     float nextIOR; /** IOR of the neighbor solid */
     vec3 nextAbsorb; /** absorb of the neighbor solid */
-    bool nextIsInside;
+    bool nextIsInside = true;
 
     RelVector diffuseDir;
     RelVector reflectDir;
@@ -55,7 +55,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                 // r = {{ptMaterial.name}}.ior / {{scene.ptBackground.name}}.ior;
                 nextObjectProperties(normal, nextIOR, nextAbsorb, nextIsInside);
                 r = {{ptMaterial.name}}.ior / nextIOR;
-                normal=negate(normal);
+                normal = negate(normal);
             }
         
             rayType = {{ptMaterial.name}}_setRayType(v, normal,r);
@@ -101,8 +101,8 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                     refractDir = geomRefract(v.vector,normal, r);
                     // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
                     refractDir = geomNormalize(geomMix(refractDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
-                    //v.data.isInside = !v.data.isInside;
-                    v.data.isInside = nextIsInside
+                    // v.data.isInside = !v.data.isInside;
+                    v.data.isInside = nextIsInside;
                     v.data.currentAbsorb = nextAbsorb;
                     v.vector = refractDir;
             }
