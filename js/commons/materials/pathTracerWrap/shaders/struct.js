@@ -16,11 +16,11 @@ struct PathTracerWrapMaterial {
 };
 
 
-RayType setRayType(PathTracerWrapMaterial material, ExtVector v, RelVector n) {
+RayType setRayType(PathTracerWrapMaterial material, ExtVector v, RelVector n,float r) {
     RayType res = RayType(false, false, false, 0.);
     float random = randomFloat();
 
-    float reflectionChance = fresnelReflectAmount(v.vector, n, 0.8, material.reflectionChance, 1.0);
+    float reflectionChance = fresnelReflectAmount(v.vector, n, r, material.reflectionChance, 1.0);
     float chanceMultiplier = (1. - reflectionChance) / (1. - material.reflectionChance);
     float refractionChance = chanceMultiplier * material.refractionChance;
     float diffuseChance = 1. - refractionChance - reflectionChance;
