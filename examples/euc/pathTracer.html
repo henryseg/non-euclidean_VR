@@ -95,12 +95,12 @@
         diffuse: new Color(1,1,1),
         specular: new Color(1,1,1),
         ior:1.5,
-        diffuseChance: 0.,
-        reflectionChance: 0.05,
-        refractionChance: 0.95,
-        absorb: new Color(5,1,3),
-        emission:new Color(0.1,0.1,0.1),
-        volumeEmission:new Color(0.1,0.6,1.),
+        diffuseChance: 0.02,
+        reflectionChance: 0.08,
+        refractionChance: 0.9,
+        absorb: new Color(2,1,2),
+       //emission:new Color(0.1,0.1,0.1),
+         volumeEmission:new Color(1,6,10),
         roughness:0.1,
     });
 
@@ -127,13 +127,13 @@
     thurston.add(lattice);
 
     // Local light (for path tracer only)
-    const lightColor = new Color(20,20,20);
+    const lightColor = new Color(5,5,5);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
-        //emission: lightColor
+        emission: lightColor
     });
     const light = new LocalBall(new Point(-0.2, 0.2, -0.2), 0.1, lightMat, ptLightMat);
-    //thurston.add(light);
+    thurston.add(light);
 
 
     thurston.run();

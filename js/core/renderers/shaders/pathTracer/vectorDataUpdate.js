@@ -41,8 +41,9 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
 
     
-    v.data.light = v.data.light * exp((v.data.currentEmission-v.data.currentAbsorb) * v.data.lastBounceDist);
-   // v.data.light = v.data.light * (vec3(1.)+vec3(1,0,0) * v.data.lastBounceDist);
+    v.data.light = v.data.light * exp((-v.data.currentAbsorb) * v.data.lastBounceDist);
+    v.data.light = v.data.light * (vec3(1.)+v.data.currentEmission * v.data.lastBounceDist);
+    v.data.pixel = v.data.pixel + v.data.light*v.data.currentEmission/100.;
 
 
 switch(objId){
@@ -79,7 +80,7 @@ switch(objId){
         
         // hack to make sure that lights are not too bright
             if(v.data.iBounce == 0){
-                hackCoeff = 0.01;
+                hackCoeff = 0.2;
             }
         
             //apply surface effects
@@ -99,7 +100,7 @@ switch(objId){
                 reflectDir = geomReflect(v.vector, normal);
         
                 // rough (glossy) specular lerps from the smooth specular to the rough diffuse by the material roughness squared
-                reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
+               // reflectDir = geomNormalize(geomMix(reflectDir, diffuseDir, {{ptMaterial.name}}.roughness * {{ptMaterial.name}}.roughness));
                 v.vector = reflectDir;
             }
         
