@@ -25,7 +25,8 @@
     import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
 
     mappingTorus.creepingType = CREEPING_FULL;
-    const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr'});
+    thurston.renderer.maxBounces = 1;
     thurston.renderer.postProcess = false;
 
     const sqrt2 = Math.sqrt(2);

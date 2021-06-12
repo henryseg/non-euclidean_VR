@@ -23,13 +23,13 @@ float sdf(VerticalHalfSpaceShape halfSpace, RelVector v) {
     pos = applyIsometry(shift, pos);
     vec2 p = pos.coords.xy;
     // the normal vector need not be translated by shift
-    // indeed shift induces an translation of E^2, that does not affect the tanget vector.
+    // indeed shift induces an translation of E^2, that does not affect the tangent vector.
     vec4 normal = invCellBoost.matrix * vec4(halfSpace.normal, 0);
     vec2 n = normalize(normal.xy);
 
 
     float dotp = dot(p, n);
-    if (abs(dotp) < camera.threshold){
+    if (abs(dotp) < 2. * camera.threshold){
         // the currrent point is already close to the boundary of the half space
         return - dotp;
     }

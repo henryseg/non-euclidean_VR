@@ -26,8 +26,8 @@
     import {Isometry} from "../../js/geometries/nil/geometry/General.js";
 
 
-    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
-
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr'});
+    thurston.renderer.maxBounces = 1;
     thurston.camera.maxDist = 50;
     thurston.camera.maxSteps = 200;
 

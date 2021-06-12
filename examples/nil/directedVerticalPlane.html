@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Vertical half space</title>
+    <title>Vertical half space (with directed SDF)</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <!-- Style sheets -->
@@ -26,8 +26,8 @@
     import {Isometry} from "../../js/geometries/nil/geometry/General.js";
 
 
-    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
-
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr'});
+    thurston.renderer.maxBounces = 1;
     thurston.camera.maxDist = 50;
     thurston.camera.maxSteps = 200;
 
@@ -56,8 +56,8 @@
     const color2 = new Color(0, 0, 0);
 
     const checkerboard = new CheckerboardMaterial(dir1, dir2, color1, color2);
-    // const material = phongWrap(checkerboard, {reflectivity: new Vector3(0.2, 0.2, 0.2)});
-    const material = phongWrap(checkerboard);
+    const material = phongWrap(checkerboard, {reflectivity: new Vector3(0.2, 0.2, 0.2)});
+    // const material = phongWrap(checkerboard);
 
     const isom = new Isometry().makeTranslation(new Point(-1, 0, 0));
     const halfSpace = new DirectedVerticalHalfSpace(isom, material);
@@ -69,10 +69,10 @@
 
     function animate() {
         const time = clock.getElapsedTime();
-        const coeffColor = 0.5 + 0.4 * Math.cos(speed * time);
+        // const coeffColor = 0.5 + 0.4 * Math.cos(speed * time);
         const cos = Math.cos(0.7 * speed * time);
         const sin = Math.sin(0.5 * speed * time);
-        color2.setRGB(coeffColor, coeffColor, coeffColor);
+        // color2.setRGB(coeffColor, coeffColor, coeffColor);
 
         dir1.set(cos, -sin);
         dir2.set(sin, cos);
