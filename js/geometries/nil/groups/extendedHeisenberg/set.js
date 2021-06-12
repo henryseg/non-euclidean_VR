@@ -130,9 +130,9 @@ const shiftYn = group.element(0, 1, 0);
 const shiftZp = group.element(0, 0, -1);
 const shiftZn = group.element(0, 0, 1);
 
-console.log("Xp", shiftXp.toIsometry().matrix.toLog());
-console.log("Yp", shiftYp.toIsometry().matrix.toLog());
-console.log("Zp", shiftZp.toIsometry().matrix.toLog());
+//console.log("Xp", shiftXp.toIsometry().matrix.toLog());
+//console.log("Yp", shiftYp.toIsometry().matrix.toLog());
+//console.log("Zp", shiftZp.toIsometry().matrix.toLog());
 
 
 /**

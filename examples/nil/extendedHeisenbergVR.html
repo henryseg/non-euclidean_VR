@@ -34,12 +34,14 @@
         LocalPotatoShape
     } from "../../js/geometries/nil/shapes/all.js";
     import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
+    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
 
 
     extendedHeisenberg.group.translationA = new Vector4(2, 0, 0, 0);
     extendedHeisenberg.group.translationB = new Vector4(0, 2, 0, 0);
     extendedHeisenberg.group.root = 2;
 
+    extendedHeisenberg.creepingType = CREEPING_FULL;
     const thurston = new ThurstonVR(geom, extendedHeisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
@@ -52,15 +54,15 @@
 
     const light1 = new FakePointLight(
         new Point(1, 0, 0),
-        lightColor1
-    );
+        lightColor1,
+        0.5);
     const light2 = new FakePointLight(
         new Point(0, 1., 1),
-        lightColor2
+        lightColor2, 0.5
     );
     const light3 = new FakePointLight(
         new Point(-1, 0, 2),
-        lightColor3
+        lightColor3, 0.5
     );
 
     const lights = [light1, light2, light3];
