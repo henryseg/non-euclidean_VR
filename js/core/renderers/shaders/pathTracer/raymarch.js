@@ -152,7 +152,7 @@ void scatterRay(inout ExtVector v){
     
     //depending on the type of scattering, either
     //replace v with this vector (random scatter);
-    v.vector=w;
+    //v.vector=w;
     //or add and normalize (forward scatter);
     v.vector=geomNormalize(geomMix(v.vector,w,0.5));
 }

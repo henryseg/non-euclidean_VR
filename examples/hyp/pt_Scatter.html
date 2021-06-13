@@ -49,7 +49,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     thurston.scene.ptBackground.absorb = new Color(0.2,0.2,0.2);
-     thurston.scene.ptBackground.opticalDepth =1;
+     thurston.scene.ptBackground.opticalDepth =1.1;
 
 
     // lights for the Phong material (not used by the path tracer)
@@ -85,15 +85,15 @@
     const ptLatticeMat = new BasicPTMaterial({
         diffuse: new Color(1,1,1),
         specular: new Color(1,1,1),
-        ior:1.5,
+        ior:1.2,
         diffuseChance: 0.,
         reflectionChance: 0.01,
         refractionChance: 0.99,
-        absorb: new Color(3,2,1),
+        absorb: new Color(9,6,5),
        //volumeEmission:new Color(0.5,0.75,2),
         //volumeEmission:new Color(2,0.5,0.25),
-        opticalDepth:0.03,
-        roughness:0,
+        opticalDepth:0.1,
+        roughness:0.1,
         //emission:new Color(0.02,0.05,0.02),
     });
 
@@ -108,17 +108,18 @@
         const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
         horoballs[i] = new LocalHoroballShape(
             new Vector((2 * i0 - 1) * modelHalfCube, (2 * i1 - 1) * modelHalfCube, (2 * i2 - 1) * modelHalfCube),
-            0.98
+            1.08//0.98
         );
     }
     const unionShape = union(centerBall, ...horoballs);
     const latticeShape = complement(unionShape);
+    //const latticeShape = complement(centerBall);
     const lattice = new Solid(latticeShape, latticeMat, ptLatticeMat);
     thurston.add(lattice);
 
 
     // Local light (for path tracer only)
-    const lightColor = new Color(7,7,7);
+    const lightColor = new Color(10,10,10);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor,
