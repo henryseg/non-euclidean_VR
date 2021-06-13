@@ -83,12 +83,12 @@
         shininess: 5,
     });
 
-    const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
-        specular: new Color(1, 1, 1),
-        diffuseChance: 0.905,
-        reflectionChance: 0.005,
-        refractionChance: 0
-    });
+    // const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
+    //     specular: new Color(1, 1, 1),
+    //     diffuseChance: 0.905,
+    //     reflectionChance: 0.005,
+    //     refractionChance: 0
+    // });
     // const ptLatticeMat = new BasicPTMaterial({
     //     diffuse: latticeColor,
     //     specular: latticeColor,
@@ -96,6 +96,22 @@
     //     reflectionChance: 0.005,
     //     refractionChance: 0
     // })
+
+
+    const ptLatticeMat = new BasicPTMaterial({
+        diffuse: new Color(0.2,0.1,0.5),
+        specular: new Color(1,1,1),
+        ior:1.5,
+        diffuseChance: 0.95,
+        reflectionChance: 0.05,
+        refractionChance: 0.0,
+        // absorb: new Color(0.5,1,0),
+        // emission:new Color(0.15,0.05,0.25),
+        // volumeEmission:new Color(0.05,0.005,0.05),
+        roughness:0.2,
+    });
+
+
 
     // Lattice
     const center = new LocalPotatoShape(new Point(), 0.64, 1.2, 2, 4);

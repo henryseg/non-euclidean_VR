@@ -48,7 +48,7 @@
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
 
-    thurston.scene.ptBackground.absorb = new Color(1,1,1);
+    thurston.scene.ptBackground.absorb = new Color(0.4,0.4,0.4);
 
     // lights for the Phong material (not used by the path tracer)
 
@@ -85,11 +85,12 @@
         specular: new Color(1,1,1),
         ior:1.2,
         diffuseChance: 0.,
-        reflectionChance: 0.1,
-        refractionChance: 0.9,
-        absorb: new Color(0,0,0),
-        volumeEmission:new Color(2,0.25,0.05),
-        emission:new Color(0.1,0.1,0),
+        reflectionChance: 0.2,
+        refractionChance: 0.8,
+        absorb: new Color(2,1,2),
+        volumeEmission:new Color(0.5,0.75,2),
+       // volumeEmission:new Color(2,0.5,0.25),
+        emission:new Color(0.02,0.05,0.02),
     });
 
 

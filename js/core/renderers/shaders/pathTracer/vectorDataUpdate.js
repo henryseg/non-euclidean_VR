@@ -40,10 +40,26 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     RelVector random = randomVector(v.vector);
 
 
-    //get volumetric coloring
-    v.data.light = v.data.light * exp((-v.data.currentAbsorb) * v.data.lastBounceDist);
-    v.data.light = v.data.light * (vec3(1.)+v.data.currentEmission * v.data.lastBounceDist);
-    v.data.pixel = v.data.pixel + v.data.light*v.data.currentEmission;
+
+
+
+    //get volumetric coloring:
+    //portion of light is absorbed.
+   vec3 volAbsorb = exp((-v.data.currentAbsorb) * v.data.lastBounceDist);
+    
+    //light is emitted along the journey (linear or expoenential pickup)
+    vec3 volEmit = v.data.currentEmission * v.data.lastBounceDist;
+    //vec3 volEmit = exp(v.data.currentEmission * v.data.lastBounceDist)-vec3(1);
+
+    //use these quantities to update pixel and light:
+    v.data.light = v.data.light * volAbsorb;
+    v.data.pixel = v.data.pixel + v.data.light*volEmit;
+    v.data.light = v.data.light + volEmit;//the absorbtion doesn't distort the light output
+
+
+
+
+
 
 
 switch(objId){
