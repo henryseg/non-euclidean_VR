@@ -7,6 +7,7 @@ export default `//
 struct BasicPTMaterial {
     vec3 emission;
     vec3 volumeEmission;
+    float opticalDepth;
     vec3 diffuse;
     vec3 specular;
     vec3 absorb;

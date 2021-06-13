@@ -1,7 +1,7 @@
 // language=Mustache + GLSL
 export default `//
 VectorData initVectorData(){
-    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb,vec3(0), false);
+    return VectorData(0., 0., 0., false, 0, 0, false, vec3(0), vec3(1), {{scene.ptBackground.name}}.absorb, {{scene.ptBackground.name}}.volumeEmission, {{scene.ptBackground.name}}.opticalDepth, false);
 }
 
 
@@ -30,6 +30,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     float nextIOR; /** IOR of the neighbor solid */
     vec3 nextAbsorb; /** absorb of the neighbor solid */
     vec3 nextEmission;/** volumetric emission of the neighbor solid */
+    float nextOpticalDepth;/** optical depth of the neighbor solid */
     bool nextIsInside = true;
 
     RelVector diffuseDir;
@@ -45,7 +46,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
     //get volumetric coloring:
     //portion of light is absorbed.
-   vec3 volAbsorb = exp((-v.data.currentAbsorb) * v.data.lastBounceDist);
+    vec3 volAbsorb = exp((-v.data.currentAbsorb) * v.data.lastBounceDist);
     
     //light is emitted along the journey (linear or expoenential pickup)
     vec3 volEmit = v.data.currentEmission * v.data.lastBounceDist;
@@ -55,7 +56,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     v.data.light = v.data.light * volAbsorb;
     v.data.pixel = v.data.pixel + v.data.light*volEmit;
     v.data.light = v.data.light + volEmit;//the absorbtion doesn't distort the light output
-
+    
 
 
 
@@ -75,10 +76,11 @@ switch(objId){
             r = {{scene.ptBackground.name}}.ior / {{ptMaterial.name}}.ior;
             nextAbsorb = {{ptMaterial.name}}.absorb;
             nextEmission = {{ptMaterial.name}}.volumeEmission;
+            nextOpticalDepth = {{ptMaterial.name}}.opticalDepth;
         
             if(v.data.isInside){
                 //things to change if we are inside a material instead:
-                nextObjectProperties(normal, nextIOR, nextAbsorb,nextEmission, nextIsInside);
+                nextObjectProperties(normal, nextIOR, nextAbsorb,nextEmission, nextOpticalDepth,nextIsInside);
                 r = {{ptMaterial.name}}.ior / nextIOR;
                 normal = negate(normal);
             }
@@ -129,6 +131,7 @@ switch(objId){
                     v.data.isInside = nextIsInside;
                     v.data.currentAbsorb = nextAbsorb;
                     v.data.currentEmission = nextEmission;
+                    v.data.currentOpticalDepth = nextOpticalDepth;
                     v.vector = refractDir;
             }
             break;

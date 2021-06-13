@@ -38,6 +38,11 @@ export class PathTracerWrapMaterial extends PTMaterial {
          */
         this.volumeEmission = params.volumeEmission !== undefined ? params.volumeEmission : new Color(0, 0, 0);
         /**
+         * Optical Depth (Probability of scattering inside a material)
+         * @type {number}
+         */
+        this.opticalDepth = params.opticalDepth !== undefined ? params.opticalDepth : 0;
+        /**
          * Specular color
          * @type {Color}
          */
