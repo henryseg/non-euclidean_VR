@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Single earth texture sphere</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Clock, Color, Matrix4, Vector3, Vector4} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/euc/geometry/General.js";
+    import {default as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
+
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {Ball, Box} from "../../js/geometries/euc/solids/all.js";
+    import {EarthTexture} from "../../js/commons/materials/astronomy/earth/EarthTexture.js";
+    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {MoonTexture} from "../../js/commons/materials/astronomy/moon/MoonTexture.js";
+    import {SunTexture} from "../../js/commons/materials/astronomy/sun/SunTexture.js";
+    import {MarsTexture} from "../../js/commons/materials/astronomy/mars/MarsTexture.js";
+    import {PhongMaterial} from "../../js/commons/materials/all.js";
+
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+
+    // lights for the Phong material
+
+
+    // lights for the Phong material
+    const light1 = new PointLight(
+        new Point(2, 1, -2.5),
+        new Color(1, 1, 0),
+    )
+    const light2 = new PointLight(
+        new Point(1, 0.2, -0.5),
+        new Color(1, 0, 1),
+    )
+
+    const light3 = new PointLight(
+        new Point(-1, 1, -2.5),
+        new Color(0, 1, 1),
+    )
+
+    const mat = new PhongMaterial({
+        color: new Color(0.5, 0, 0)
+    });
+
+    const box = new Box(new Point(), new Vector3(0.2, 0.2, 0.2), 0.01, mat);
+
+    thurston.add(box, light3, light1, light2);
+
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+    // console.log(thurston.scene.fog);
+
+    function info() {
+        console.log("mat", ball6.absoluteIsomInv);
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+
+</script>
+
+</html>

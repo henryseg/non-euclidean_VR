@@ -13,7 +13,7 @@ export class Box extends Solid {
      * Constructor
      * @param {Isometry|Point} location - the location of the ball
      * @param {Vector3} sides - the side lengths of the box
-     *  @param {float} rounded - the if the box is rounded
+     * @param {number} rounded - the if the box is rounded
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */

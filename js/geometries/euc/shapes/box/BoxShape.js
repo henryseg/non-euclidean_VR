@@ -22,7 +22,7 @@ export class BoxShape extends BasicShape {
      * Construction
      * @param {Isometry|Point} location - Either an isometry, or a point representing the center of the ball
      * @param {Vector3} sides - the side lengths of the box
-     * * @param {float} rounded - if the box is rounded
+     * @param {number} rounded - if the box is rounded
      */
     constructor(location, sides, rounded) {
         const isom = new Isometry();
@@ -31,7 +31,7 @@ export class BoxShape extends BasicShape {
         } else if (location.isPoint) {
             isom.makeTranslation(location);
         } else {
-            throw new Error('BallShape: this type of location is not allowed');
+            throw new Error('BoxShape: this type of location is not allowed');
         }
         super(isom);
         this.addImport(distance);
@@ -42,11 +42,10 @@ export class BoxShape extends BasicShape {
     }
 
     /**
-     * Says that the object inherits from `BallShape`
-     * *STEVE: I DONT KNOW IF I SHOULD KEEP THIS?
+     * Says that the object inherits from `BoxShape`
      * @type {boolean}
      */
-    get isBallShape() {
+    get isBoxShape() {
         return true;
     }
 
@@ -56,7 +55,7 @@ export class BoxShape extends BasicShape {
     }
 
     /**
-     * Center of the ball
+     * Center of the box
      * @type {Point}
      */
     get center() {

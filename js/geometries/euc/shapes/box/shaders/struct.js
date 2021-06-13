@@ -10,7 +10,6 @@ struct BoxShape {
     Point center;
     vec3 sides;
     float rounded;
-    Isometry absoluteIsomInv;
 };
 
 /**
@@ -20,7 +19,7 @@ float sdf(BoxShape box, RelVector v) {
     Point center = applyGroupElement(v.invCellBoost, box.center);
     vec4 w = center.coords - v.local.pos.coords;
     //w is our relative position from the center
-    vec3 q = w.xyz - box.sides;
+    vec3 q = abs(w.xyz) - box.sides;
     //from iq
     return length(max(q, 0.)) + min(max(q.x, max(q.y, q.z)), 0.) - box.rounded;
 }
