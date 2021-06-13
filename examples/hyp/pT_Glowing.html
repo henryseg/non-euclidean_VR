@@ -80,17 +80,19 @@
         shininess: 5,
     });
 
-
-
-
-
-    const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
-        specular: new Color(1, 1, 1),
-        roughness: 0.1,
-        diffuseChance: 0.7,
-        reflectionChance: 0.3,
-        refractionChance: 0
+    const ptLatticeMat = new BasicPTMaterial({
+        diffuse: new Color(1,1,1),
+        specular: new Color(1,1,1),
+        ior:1.2,
+        diffuseChance: 0.,
+        reflectionChance: 0.2,
+        refractionChance: 0.8,
+        absorb: new Color(1,1,2),
+       // volumeEmission:new Color(0.5,0.75,2),
+        volumeEmission:new Color(2,0.5,0.25),
+        emission:new Color(0.02,0.05,0.02),
     });
+
 
     // Lattice
     const centerBall = new LocalBallShape(new Point(), 1.02);
@@ -110,15 +112,15 @@
     const lattice = new Solid(latticeShape, latticeMat, ptLatticeMat);
     thurston.add(lattice);
 
-
-    // Local light (for path tracer only)
-    const lightColor = new Color(20,20,20);
-    const lightMat = new SingleColorMaterial(lightColor);
-    const ptLightMat = new BasicPTMaterial({
-        emission: lightColor,
-    });
-    const light = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.08, lightMat, ptLightMat);
-   thurston.add(light);
+    //
+    // // Local light (for path tracer only)
+    // const lightColor = new Color(5,5,5);
+    // const lightMat = new SingleColorMaterial(lightColor);
+    // const ptLightMat = new BasicPTMaterial({
+    //     emission: lightColor,
+    // });
+    // const light = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.08, lightMat, ptLightMat);
+   //thurston.add(light);
 
     thurston.run();
 

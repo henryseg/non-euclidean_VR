@@ -47,7 +47,7 @@
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
 
-    thurston.scene.ptBackground.absorb = new Color(0.2,0.2,0.2);
+    thurston.scene.ptBackground.absorb = new Color(0.4,0.4,0.4);
     // lights for the Phong material (not used by the path tracer)
 
     const light0 = new PointLight(
@@ -96,9 +96,12 @@
         diffuse: new Color(0.3,0.4,0.5),
         specular: new Color(1,1,1),
         ior:1.5,
-        diffuseChance: 0.95,
+        diffuseChance: 0.0,
         reflectionChance: 0.05,
-        refractionChance: 0.0,
+        refractionChance: 0.95,
+        absorb: new Color(2,1,2),
+        emission:new Color(0,0,0),
+        volumeEmission:new Color(0.5,0.75,2),
         roughness:0.2,
     });
 
@@ -125,13 +128,13 @@
     thurston.add(lattice);
 
     // Local light (for path tracer only)
-    const lightColor = new Color(50,50,50);
+    const lightColor = new Color(5,5,5);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor
     });
     const light = new LocalBall(new Point(-0.2, 0.2, -0.2), 0.1, lightMat, ptLightMat);
-   thurston.add(light);
+   // thurston.add(light);
 
 
     thurston.run();
