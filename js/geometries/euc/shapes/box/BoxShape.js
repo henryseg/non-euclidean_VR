@@ -24,21 +24,19 @@ export class BoxShape extends BasicShape {
      * @param {Vector3} sides - the side lengths of the box
      * * @param {float} rounded - if the box is rounded
      */
-    constructor(location, sides,rounded) {
+    constructor(location, sides, rounded) {
         const isom = new Isometry();
         if (location.isIsometry) {
             isom.copy(location);
-        }
-        else if (location.isPoint) {
+        } else if (location.isPoint) {
             isom.makeTranslation(location);
-        }
-        else {
+        } else {
             throw new Error('BallShape: this type of location is not allowed');
         }
         super(isom);
         this.addImport(distance);
         this.sides = sides;
-        this.rounded=rounded;
+        this.rounded = rounded;
         this._center = undefined;
         this.updateData();
     }
@@ -62,7 +60,7 @@ export class BoxShape extends BasicShape {
      * @type {Point}
      */
     get center() {
-        if(this._center === undefined) {
+        if (this._center === undefined) {
             this.updateData();
         }
         return this._center;
