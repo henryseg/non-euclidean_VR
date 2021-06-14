@@ -30,40 +30,36 @@ Move the the right|`arrow right`|`arrow right`
 Move upwards|`'`|`ù`
 Move downwards|`/`|`=`
 
-## Running Locally
-Running this locally requires a simple web server (to allow CORS requests).
-This can be done in Python 3 by running the command
+## Install and run
+This version requires [npm](https://www.npmjs.com/) and [parcel](https://parceljs.org/).
+You must firt install these tools following the instructions for your operating system.
+(On Mac one can use [homebrew](https://brew.sh/) to install npm, and then install parcel with npm.)
+### Installation
+
+- clone the git repository of `non-euclidean-vr`
+- install the dependencies with the command
+  ```(zsh)
+  npm install
+  ```
+
+### Run
+  
+Now you can use parcel to emulate a local server by running the command
 
 ```(zsh)
-python -m http.server
+parcel index.html
 ```
-
-To run the VR examples you may need a more advance settings as an HTTPS protocol is required.
-You can launch a local server with the command
-
-```(zsh)
-python server.py
-```
-
-The password needed is `thurston`.
-The server is serving at `https://localhost:4443`.
-
-On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first).
-
-**Note**: The server will need to have a MIME type configuration:
-- `.glsl` files -> `text/plain` (probably no more needed).
-- `.mjs` files -> `text/javascript`
-
 
 ## Examples
 
-A list of examples can be found in `examples/index.html`
+A list of examples can be found in the directory `examples`
 It contains scenes in the various geometries and demonstrates the features of the API.
 
 The examples tagged with *VR* are made for virtual reality. They should work with any VR headset supported by the three.js library.
 When loaded, those examples have a button *Enter VR* at the bottom on the screen.
 Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
 
+Items flagged with *PR* incorporate a path tracer. Hit `p` to launch the path tracer.
 ## License
 
 Released under the terms of the GNU [General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html), version 3 or later.
