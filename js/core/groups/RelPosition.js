@@ -83,23 +83,12 @@ class RelPosition {
         return this;
     }
 
-    // /**
-    //  * Reduce the eventual numerical error of the current boost.
-    //  * @return {RelPosition} the current relative position
-    //  */
-    // reduceErrorCellBoost() {
-    //     this.cellBoost.reduceError();
-    //     this.invCellBoost.reduceError();
-    //     return this;
-    // }
-
     /**
      * Reduce the eventual numerical error of the current position.
      * @return {RelPosition} the current relative position
      */
     reduceError() {
         this.reduceErrorLocal();
-        // this.reduceErrorCellBoost();
         return this;
     }
 

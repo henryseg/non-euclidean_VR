@@ -14,6 +14,7 @@
 <script type="module" id="main">
     import * as utils from "../../js/utils.js";
     import {Clock, Color, Vector4} from "three";
+    import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
@@ -23,21 +24,16 @@
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
     import {
         FakeBall,
-        LocalFakeBall,
-        LocalPotato,
         Solid
     } from "../../js/geometries/nil/solids/all.js";
     import {
         complement,
-        FakeBallShape,
         LocalFakeBallShape,
-        LocalPotatoShape
     } from "../../js/geometries/nil/shapes/all.js";
     import {LocalVerticalCylinderShape} from "../../js/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
     import {union} from "../../js/commons/shapes/all.js";
     import {VRCamera} from "../../js/core/cameras/vr/VRCamera.js";
     import {Scene, VRRenderer} from "../../js/core/General.js";
-    import {XRControllerModelFactory} from "../../js/lib/threejs/examples/jsm/webxr/XRControllerModelFactory.js";
     import {FlyControls} from "../../js/controls/FlyControls.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
     import {ShootControls} from "../../js/controls/ShootControls.js";
