@@ -1,10 +1,13 @@
+import {Vector3} from "three";
+
 import {Vector} from "../../geometry/General.js";
 import {BasicCamera} from "../basic/BasicCamera.js";
+import {LEFT, RIGHT} from "../../../constants.js";
 
 import struct from "./shaders/struct.js";
 import mapping from "./shaders/mapping.js";
-import {LEFT, RIGHT} from "../../../constants.js";
-import {Vector3} from "../../../lib/threejs/build/three.module.js";
+
+
 
 
 /**

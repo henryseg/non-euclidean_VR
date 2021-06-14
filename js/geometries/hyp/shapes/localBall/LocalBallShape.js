@@ -1,10 +1,10 @@
-import {mustache} from "../../../../lib/mustache.mjs";
+import * as mustache from "mustache/mustache.js";
+
 import {Isometry, Point} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.js";
 import direction from "../../imports/direction.js";
-
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";

@@ -1,10 +1,9 @@
+import {Clock, Color, WebGLRenderer} from "three";
 import {GUI} from "../../../lib/dat.gui.module.js";
 import Stats from "../../../lib/stats.module.js";
+
 import {FlyControls} from "../../../controls/FlyControls.js";
-import {Clock, Color, WebGLRenderer} from "../../../lib/threejs/build/three.module.js";
-
 import {bind} from "../../../utils.js";
-
 import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 import {PathTracerUI} from "./PathTracerUI.js";

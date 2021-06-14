@@ -1,9 +1,8 @@
-import {Color} from "../../lib/threejs/build/three.module.js";
+import {Color} from "three";
 
 import {SingleColorMaterial} from "../../commons/materials/singleColor/SingleColorMaterial.js";
 import {PATHTRACER_RENDERER} from "../../utils/ShaderBuilder.js";
 import {BasicPTMaterial} from "../../commons/materials/basicPTMaterial/BasicPTMaterial.js";
-
 
 
 /**

@@ -1,7 +1,8 @@
-import {Clock, Vector3} from "../lib/threejs/build/three.module.js";
+import {Clock, Vector3} from "three";
+
 import {Vector} from "../core/geometry/Vector.js";
 import {LEFT, RIGHT} from "../constants.js";
-import {Isometry, Position} from "../core/geometry/General.js";
+import {Position} from "../core/geometry/General.js";
 import {bind} from "../utils.js";
 
 const STATUS_REST = 0;

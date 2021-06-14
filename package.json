@@ -1,0 +1,30 @@
+{
+  "name": "non-euclidean_vr",
+  "version": "1.0.0",
+  "description": "This project aims to visualize the Thruston's geometries with various techniques (virtual reality, photorealistic pictures, etc)",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henryseg/non-euclidean_VR.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henryseg/non-euclidean_VR/issues"
+  },
+  "homepage": "https://github.com/henryseg/non-euclidean_VR#readme",
+  "dependencies": {
+    "mustache": "^4.2.0",
+    "three": "^0.129.0",
+    "webxr-polyfill": "^2.0.3"
+  }
+}

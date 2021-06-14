@@ -1,5 +1,5 @@
-import {Color} from "../../../../lib/threejs/build/three.module.js";
-import {mustache} from "../../../../lib/mustache.mjs";
+import {Color} from "three";
+import * as mustache from "mustache/mustache.js";
 import {Light} from "../../../../core/lights/Light.js";
 
 import fakeDistance from "../../imports/fakeDistance.js";

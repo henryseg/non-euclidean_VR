@@ -1,5 +1,5 @@
-import {mustache} from "../../../lib/mustache.mjs";
-import {Color} from "../../../lib/threejs/build/three.module.js";
+import * as mustache from "mustache";
+import {Color} from "three";
 
 import {PTMaterial} from "../../../core/materials/PTMaterial.js";
 

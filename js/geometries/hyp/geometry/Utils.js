@@ -1,4 +1,4 @@
-import {Vector4} from "../../../lib/threejs/build/three.module.js";
+import {Vector4} from "three";
 
 /**
  * Lorentzian inner product in R^4

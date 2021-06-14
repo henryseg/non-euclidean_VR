@@ -1,4 +1,4 @@
-import {Vector3, Vector4} from "../../../../lib/threejs/build/three.module.js";
+import {Vector3, Vector4} from "three";
 import {Isometry} from "../../geometry/Isometry.js";
 import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
 import {Point} from "../../geometry/General.js";

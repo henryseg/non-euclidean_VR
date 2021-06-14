@@ -1,20 +1,18 @@
-import * as WebXRPolyfill from "../../lib/webxr-polyfill.module.js";
-import {VRButton as VRButtonLib} from "../../lib/threejs/examples/jsm/webxr/VRButton.js";
+import * as mustache from "mustache";
+import * as WebXRPolyfill from "webxr-polyfill";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
+import {VRButton as VRButtonLib} from "three/examples/jsm/webxr/VRButton.js";
 
 import {bind} from "../../utils.js";
-
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {AbstractRenderer} from "./AbstractRenderer.js";
-
 import {LEFT, RIGHT} from "../../constants.js";
 
 import vertexShader from "./shaders/common/vertex.js";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
 import constants from "./shaders/common/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
 import raymarch from "./shaders/common/raymarch.js";
-import {mustache} from "../../lib/mustache.mjs";
 import scenes from "./shaders/common/scenes.js";
 import structVectorData from "./shaders/basic/vectorDataStruct.js";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.js";

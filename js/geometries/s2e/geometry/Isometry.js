@@ -1,6 +1,6 @@
 import {
     Matrix4,Vector2
-} from "../../../lib/threejs/build/three.module.js";
+} from "three";
 
 import {
     Isometry

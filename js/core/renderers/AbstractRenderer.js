@@ -2,7 +2,7 @@ import {
     Color,
     Scene as ThreeScene,
     WebGLRenderer
-} from "../../lib/threejs/build/three.module.js";
+} from "three";
 
 
 /**

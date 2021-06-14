@@ -1,7 +1,8 @@
-import {MathUtils} from "../../lib/threejs/build/three.module.js";
-import {mustache} from "../../lib/mustache.mjs";
-import creeping from "./shaders/creeping.js";
+import {MathUtils} from "three";
+import * as mustache from "mustache";
+
 import {CREEPING_OFF, CREEPING_STRICT, CREEPING_FULL} from "./TeleportationSet.js";
+import creeping from "./shaders/creeping.js";
 
 const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
 const regexpCreep = /ExtVector\s*(\w+)\(ExtVector.*\)/m;

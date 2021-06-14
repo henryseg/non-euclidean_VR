@@ -1,4 +1,4 @@
-import {PerspectiveCamera} from "../../../lib/threejs/build/three.module.js";
+import {PerspectiveCamera, Matrix4} from "three";
 import {RelPosition} from "../../geometry/General.js";
 
 import struct from "./shaders/struct.js";

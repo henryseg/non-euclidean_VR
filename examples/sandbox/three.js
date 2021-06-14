@@ -1,4 +1,4 @@
-import * as THREE from "../../js/lib/threejs/build/three.module.js";
+import * as THREE from "three";
 import {EffectComposer} from "../../js/lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
 import {RenderPass} from "../../js/lib/threejs/examples/jsm/postprocessing/RenderPass.js";
 import {ShaderPass} from "../../js/lib/threejs/examples/jsm/postprocessing/ShaderPass.js";

@@ -1,7 +1,8 @@
 import {
     Vector3,
-    Vector4
-} from "../../lib/threejs/build/three.module.js";
+    Vector4,
+    Matrix4
+} from "three";
 
 /**
  * @class

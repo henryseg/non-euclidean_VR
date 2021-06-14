@@ -1,4 +1,4 @@
-import {Matrix4, Vector4} from "../../../../lib/threejs/build/three.module.js";
+import {Matrix4, Vector4} from "three";
 
 import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";

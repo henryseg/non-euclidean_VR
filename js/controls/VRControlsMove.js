@@ -1,6 +1,6 @@
 import {
     EventDispatcher,
-} from "../lib/threejs/build/three.module.js";
+} from "three";
 
 import {
     Vector,

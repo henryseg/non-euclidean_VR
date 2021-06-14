@@ -1,4 +1,5 @@
-import {mustache} from "../../../lib/mustache.mjs";
+import * as mustache from "mustache";
+
 import {Material} from "../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.js";

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ray-marching Thurston's geometries - Examples</title>
+
+    <!-- MathJax library -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']]
+            }
+        };
+    </script>
+</head>
+<body>
+<h1>Examples</h1>
+
+<p>
+    This page demonstrates a few examples of scenes in the Thurston geometries.
+    Items flagged with (VR) are working with virtual reality (just hit the <em>"Enter VR"</em> button).
+    Items flagged with (PR) incorporate a path tracer. Hit 'p' to launch the path tracer.
+</p>
+
+<h2>Basics</h2>
+
+<ul>
+    <li><a href="examples/basics/window.html">Automatic window resize</a></li>
+    <li><a href="examples/basics/global.html">Minimal global scene</a></li>
+    <li><a href="examples/basics/local.html">Minimal local scene</a></li>
+    <li><a href="examples/basics/material.html">Materials</a></li>
+    <li><a href="examples/basics/fog.html">Fog</a></li>
+    <li><a href="examples/basics/reflections.html">Reflections</a></li>
+    <li><a href="examples/basics/moving.html">Simple animated object</a></li>
+    <li><a href="examples/basics/fly.html">Fly controls (french keyboard)</a></li>
+    <li><a href="examples/basics/boolalg.html">Boolean algebra on shapes</a> (with fly controls)</li>
+    <li><a href="examples/basics/vr.html">Virtual Reality</a> (with fly controls)</li>
+</ul>
+
+<h2>Euclidean space $\mathbb E^3$</h2>
+
+<ul>
+    <li><a href="examples/euc/torus.html">Inside a three-torus</a></li>
+    <li><a href="examples/euc/torusVR.html">Inside a three-torus</a> (VR)</li>
+    <li><a href="examples/euc/movingLight.html">Animating a light</a></li>
+    <li><a href="examples/euc/movingLightVR.html">Animating a light</a> (VR)</li>
+    <li><a href="examples/euc/complementUV.html">Complement of a local ball with UV material</a></li>
+    <li><a href="examples/euc/nearestNeighbors.html">Nearest neighbors</a></li>
+    <li><a href="examples/euc/creeping.html">Creeping</a></li>
+    <li><a href="examples/euc/dehnTwist.html">Dehn twist</a></li>
+    <li><a href="examples/euc/halfspace.html">Half space</a></li>
+    <li><a href="examples/euc/ballLattice.html">Ball lattice</a> (with a directed SDF)</li>
+    <li><a href="examples/euc/shoot.html">Shooting</a> (VR)</li>
+    <li><a href="examples/euc/earth.html">Rotating earth</a></li>
+    <li><a href="examples/euc/pathTracer.html">Path tracer</a> (PT)</li>
+    <li><a href="examples/euc/pT_Translucent.html">Translucent Tiling</a> (PT)</li>
+    <li><a href="examples/euc/displacementShape.html">Displacement shape modifier</a> (for fun, nothing rigorous)</li>
+    <li><a href="examples/euc/box.html">Box shape</a></li>
+    <li><a href="examples/euc/debug.html">Debugging example</a></li>
+
+</ul>z
+
+<h2>Hyperbolic space $\mathbb H^3$</h2>
+
+<ul>
+    <li><a href="examples/hyp/basic.html">Basic scene</a></li>
+    <li><a href="examples/hyp/horoball.html">Horoballs</a></li>
+    <li><a href="examples/hyp/tourist.html">Tourist view</a> (VR)</li>
+    <li><a href="examples/hyp/native.html">Native view</a> (VR)</li>
+    <li><a href="examples/hyp/quadRing.html">Using a quadratic ring for the lattice</a></li>
+    <li><a href="examples/hyp/expMap.html">Exponential map</a> (VR) Light beam on the controller</li>
+    <li><a href="examples/hyp/shoot.html">Shooting</a> (VR)</li>
+    <li><a href="examples/hyp/creeping.html">Creeping</a></li>
+    <li><a href="examples/hyp/debug.html">Debugging example</a></li>
+    <li><a href="examples/hyp/pathTracer.html">Path tracer</a> (PT)</li>
+    <li><a href="examples/hyp/pT_Glowing.html">Translucent Tiling</a> (PT)</li>
+    <li><a href="hyp/pT_CloudyMaterial.html">Scattering Material</a> (PT)</li>
+    <li><a href="hyp/pT_Scatter.html">Realistic Fog (Scattering)</a> (PT)</li>
+    <li><a href="examples/hyp/pT_LensLattice.html">Fog and Spherical Lens</a> (PT)</li>
+</ul>
+
+<h2>Three-sphere $S^3$</h2>
+
+<ul>
+    <li><a href="examples/sph/quaternion.html">Quaternion group</a></li>
+    <li><a href="examples/sph/quaternionVR.html">Quaternion group</a> (VR)</li>
+    <li><a href="examples/sph/ballLattice.html">Quaternion group (ball version)</a></li>
+</ul>
+
+<h2>Product geometry $S^2 \times \mathbb E$</h2>
+
+<ul>
+    <li><a href="examples/s2e/zLoop.html">Line of balls along the $\mathbb E$-direction</a></li>
+    <li><a href="examples/s2e/cubeSpheres.html">Balls in a lattice</a></li>
+    <li><a href="examples/s2e/pointLight.html">Point Light (shortest ray only)</a></li>
+    <li><a href="examples/s2e/lattice.html">Lattice</a></li>
+    <li><a href="examples/s2e/debug.html">Debugging example</a></li>
+</ul>
+
+<h2>Product geometry $\mathbb H^2 \times \mathbb E$</h2>
+
+<ul>
+    <li><a href="examples/h2e/lattice.html">Lattice</a>: Cusped Torus $\times\ S^1$</li>
+    <li><a href="examples/h2e/uniformLattice.html">Lattice</a>: Orbi-Torus $\times\ S^1$ (cone point with angle $\pi$)</li>
+    <li><a href="examples/h2e/uniformLatticeBall.html">Lattice with balls</a>: Orbi-Torus $\times\ S^1$ (cone point with angle
+        $\pi$)
+    </li>
+    <li><a href="examples/h2e/pointLights.html">Point lights</a></li>
+    <li><a href="examples/h2e/debug.html">Debugging example</a></li>
+</ul>
+
+<h2>Nil</h2>
+
+<ul>
+    <li><a href="examples/nil/singleBall.html">Single ball</a> (VR)</li>
+    <li><a href="examples/nil/heisenberg.html">Mapping torus by a Dehn twist</a></li>
+    <li><a href="examples/nil/heisenbergVR.html">Mapping torus by a Dehn twist</a> (VR)</li>
+    <li><a href="examples/nil/extendedHeisenbergVR.html">Quotient of the mapping torus by a Dehn twist</a> (VR)</li>
+    <li><a href="examples/nil/contactDistribution.html">Contact distribution</a></li>
+    <li><a href="examples/nil/verticalPlane.html">Vertical plane</a> (with an animated reflecting checkerboard texture)</li>
+    <li><a href="examples/nil/directedVerticalPlane.html">Vertical plane</a> (with a directed SDF)</li>
+    <li><a href="examples/nil/fibers.html">Fibers of the projection to the euclidean space</a> (VR)</li>
+    <li><a href="examples/nil/shoot.html">Shooting</a> (VR)</li>
+    <li><a href="examples/nil/pathTracer.html">Path tracer</a> (PT)</li>
+    <li><a href="examples/nil/debug.html">Debugging in Nil</a></li>
+    <li><a href="examples/nil/debug2.html">Debugging in Nil (bis)</a></li>
+</ul>
+
+<h2>The universal cover of ${\rm SL}(2, \mathbb R)$</h2>
+
+<ul>
+    <li><a href="examples/sl2/orbiTorusBall.html">Lattice of balls (orbi-torus)</a></li>
+    <li><a href="examples/sl2/genus2Ball.html">Lattice of balls (genus 2 surface)</a></li>
+    <li><a href="examples/sl2/genus2.html">Lattice (genus 2 surface)</a></li>
+    <li><a href="examples/sl2/debug.html">Debugging example</a></li>
+</ul>
+
+<h2>Sol</h2>
+
+<ul>
+    <li><a href="examples/sol/balls.html">Balls!</a></li>
+    <li><a href="examples/sol/xyHalfSpace.html">X/Y-halfspaces</a></li>
+    <li><a href="examples/sol/zHalfSpace.html">Z-halfspace</a></li>
+    <li><a href="examples/sol/cube.html">A cube</a></li>
+    <li><a href="examples/sol/ballLattice.html">A lattice of balls</a></li>
+    <li><a href="examples/sol/cubeLattice.html">A lattice of cubes</a></li>
+    <li><a href="examples/sol/debug.html">Debugging example</a></li>
+</ul>
+
+
+<h2>PathTracer</h2>
+<ul>
+    <li><a href="examples/pathTracer/basic.html">First example</a></li>
+    <li><a href="examples/pathTracer/glow.html">Volumetric Light</a></li>
+    <li><a href="examples/pathTracer/switch.html">Switch between two renderers</a> (use the key 'p' to switch between the two renderers)</li>
+    <li><a href="examples/pathTracer/debug.html">Debugging example</a></li>
+</ul>
+
+
+<h2>Sandbox</h2>
+
+<ul>
+    <li><a href="examples/sandbox/test.html">A page for JS experimentation</a></li>
+    <li><a href="examples/sandbox/dialogBox/dialogBox.html">A dialogue box</a></li>
+    <li><a href="examples/sandbox/download/download.html">Downloading a canvas</a></li>
+    <li><a href="examples/sandbox/three.html">A page for Three.js experimentation</a></li>
+</ul>
+
+</body>
+</html>

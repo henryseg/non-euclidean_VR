@@ -1,4 +1,4 @@
-import {MathUtils} from "../lib/threejs/build/three.module.js";
+import {MathUtils} from "three";
 
 /**
  * @class
@@ -58,7 +58,6 @@ export class Generic {
         }
         return this._name;
     }
-
 
 
     /**

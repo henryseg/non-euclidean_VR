@@ -1,7 +1,8 @@
 import {Generic} from "../Generic.js";
 
-import struct from "./shaders/struct.js";
 import {PATHTRACER_RENDERER} from "../../utils/ShaderBuilder.js";
+import struct from "./shaders/struct.js";
+
 
 /**
  * @class

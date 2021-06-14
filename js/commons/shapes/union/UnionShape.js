@@ -1,8 +1,9 @@
-import {mustache} from "../../../lib/mustache.mjs";
+import * as mustache from "mustache/mustache.js";
+
+
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
 import smoothMinPoly from "../../imports/smoothMinPoly.js";
-
 import sdfRegular from "./shaders/sdfRegular.js";
 import gradientRegular from "./shaders/gradientRegular.js";
 import uv from "./shaders/uv.js";

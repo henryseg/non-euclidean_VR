@@ -1,11 +1,10 @@
-import {mustache} from "../../../lib/mustache.mjs";
+import * as mustache from "mustache/mustache.js";
 import {
-    LinearFilter, LinearMipmapNearestFilter,
-    NearestFilter, NearestMipmapLinearFilter,
+    LinearFilter,
     RepeatWrapping,
     TextureLoader,
     Vector2
-} from "../../../lib/threejs/build/three.module.js";
+} from "three";
 
 import {Material} from "../../../core/materials/Material.js";
 

@@ -1,4 +1,4 @@
-import {Color} from "../../../js/lib/threejs/build/three.module.js";
+import {Color} from "three";
 
 import * as geom from "../../../js/geometries/euc/geometry/General.js";
 import cube from "../../../js/geometries/euc/groups/freeAbelian/set.js";

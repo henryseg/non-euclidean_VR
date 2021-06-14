@@ -1,4 +1,3 @@
-import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group, QUAD_RING} from "./Group.js";
 

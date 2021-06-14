@@ -1,8 +1,11 @@
-import relative from "./shaders/relative.js";
-import {mustache} from "../../lib/mustache.mjs";
-import teleport from "./shaders/teleport.js";
+import * as mustache from "mustache";
+
 import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 import {Teleportation} from "./Teleportation.js";
+
+import relative from "./shaders/relative.js";
+import teleport from "./shaders/teleport.js";
+
 
 /**
  * Possible value for usesCreeping

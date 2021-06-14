@@ -1,10 +1,9 @@
 import {
     EventDispatcher,
     Quaternion,
-} from "../lib/threejs/build/three.module.js";
+} from "three";
 
 import {
-    RelPosition,
     Vector
 } from "../core/geometry/General.js";
 

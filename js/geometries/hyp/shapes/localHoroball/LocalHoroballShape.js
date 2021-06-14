@@ -1,11 +1,12 @@
-import {mustache} from "../../../../lib/mustache.mjs";
+import {Quaternion, Vector3, Vector4} from "three";
+import * as mustache from "mustache/mustache.js";
+
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import {Isometry} from "../../../../core/geometry/Isometry.js";
-import {Quaternion, Vector3, Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 
 /**

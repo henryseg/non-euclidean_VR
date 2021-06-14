@@ -1,4 +1,4 @@
-import {Vector2} from "../../../../lib/threejs/build/three.module.js";
+import {Vector2} from "three";
 
 import {SimpleTextureMaterial} from "../../simpleTexture/SimpleTextureMaterial.js";
 

@@ -5,7 +5,7 @@ import {
     Matrix4,
     Vector3,
     Vector4
-} from "../../../lib/threejs/build/three.module.js";
+} from "three";
 import {Vector} from "../../../core/geometry/Vector.js";
 
 

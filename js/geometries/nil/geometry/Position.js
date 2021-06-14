@@ -1,4 +1,4 @@
-import {Quaternion, Vector3} from "../../../lib/threejs/build/three.module.js";
+import {Quaternion, Vector3} from "three";
 
 import {Isometry} from "./Isometry.js";
 import {Point} from "./Point.js";

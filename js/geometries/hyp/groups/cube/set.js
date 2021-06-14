@@ -1,7 +1,7 @@
-import {Teleportation} from "../../../../core/groups/Teleportation.js";
+import {Vector4} from "three";
+
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group} from "../../../../commons/groups/isometry/Group.js";
-import {Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 
 const sqrt3 = Math.sqrt(3);

@@ -1,5 +1,5 @@
 import {Isometry} from "../../../core/geometry/Isometry.js";
-import {Matrix4, Vector3} from "../../../lib/threejs/build/three.module.js";
+import {Matrix4, Vector3} from "three";
 
 
 Isometry.prototype.build = function () {

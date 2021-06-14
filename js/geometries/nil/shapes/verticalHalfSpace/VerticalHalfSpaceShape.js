@@ -1,4 +1,4 @@
-import {mustache} from "../../../../lib/mustache.mjs";
+import * as mustache from "mustache/mustache.js";
 
 import {Point, Vector} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";

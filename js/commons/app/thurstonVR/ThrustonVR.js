@@ -1,7 +1,7 @@
 import Stats from "../../../lib/stats.module.js";
 import {GUI} from "../../../lib/dat.gui.module.js";
-import {Clock, Color} from "../../../lib/threejs/build/three.module.js";
-import {XRControllerModelFactory} from "../../../lib/threejs/examples/jsm/webxr/XRControllerModelFactory.js";
+import {Clock, Color} from "three";
+import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
 import {bind} from "../../../utils.js";
 

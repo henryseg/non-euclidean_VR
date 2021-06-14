@@ -1,16 +1,15 @@
-import {mustache} from "../../lib/mustache.mjs";
+import * as mustache from "mustache";
 import {
     FloatType,
-    LinearFilter,
-    Mesh, NearestFilter, RGBAFormat, RGBFormat,
+    Mesh, NearestFilter, RGBAFormat,
     ShaderMaterial,
-    SphereBufferGeometry, Uniform, UniformsUtils, Vector2,
+    SphereBufferGeometry, Uniform, Vector2,
     WebGLRenderTarget
-} from "../../lib/threejs/build/three.module.js";
-import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
-import {TexturePass} from "../../lib/threejs/examples/jsm/postprocessing/TexturePass.js";
-import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPass.js";
-import {FullScreenQuad} from "../../lib/threejs/examples/jsm/postprocessing/Pass.js";
+} from "three";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {TexturePass} from "three/examples/jsm/postprocessing/TexturePass.js";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
+import {FullScreenQuad} from "three/examples/jsm/postprocessing/EffectComposer.js";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";

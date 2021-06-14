@@ -1,8 +1,8 @@
-import {mustache} from "../../lib/mustache.mjs";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
-import {EffectComposer} from "../../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
-import {RenderPass} from "../../lib/threejs/examples/jsm/postprocessing/RenderPass.js";
-import {ShaderPass} from "../../lib/threejs/examples/jsm/postprocessing/ShaderPass.js";
+import * as mustache from "mustache";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";

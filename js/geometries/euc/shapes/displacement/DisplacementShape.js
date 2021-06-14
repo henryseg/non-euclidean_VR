@@ -1,5 +1,7 @@
+import * as mustache from "mustache/mustache.js";
+
 import {AdvancedShape} from "../../../../core/shapes/AdvancedShape.js";
-import {mustache} from "../../../../lib/mustache.mjs";
+
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 

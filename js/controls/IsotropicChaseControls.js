@@ -1,4 +1,5 @@
-import {Vector3} from "../lib/threejs/build/three.module.js";
+import {Vector3} from "three";
+
 import {Vector} from "../core/geometry/Vector.js";
 import {LEFT, RIGHT} from "../constants.js";
 import {Isometry} from "../core/geometry/General.js";

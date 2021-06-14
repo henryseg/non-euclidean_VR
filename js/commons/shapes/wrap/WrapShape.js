@@ -1,4 +1,5 @@
-import {mustache} from "../../../lib/mustache.mjs";
+import * as mustache from "mustache/mustache.js";
+
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
 import sdf from "./shaders/sdf.js";
