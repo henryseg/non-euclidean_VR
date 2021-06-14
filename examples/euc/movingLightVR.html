@@ -14,16 +14,16 @@
 <script type="module" id="main">
     import {Clock, Color, Matrix4} from "three";
 
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import torus from "../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {Point, Isometry} from "../../js/core/geometry/General.js";
-    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {Point, Isometry} from "../../src/core/geometry/General.js";
+    import {PointLight} from "../../src/geometries/euc/lights/pointLight/PointLight.js";
 
-    import {LocalBallShape, ComplementShape, union} from "../../js/geometries/euc/shapes/all.js";
-    import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
-    import {SingleColorMaterial, PhongMaterial} from "../../js/commons/materials/all.js";
-    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
+    import {LocalBallShape, ComplementShape, union} from "../../src/geometries/euc/shapes/all.js";
+    import {Ball, Solid} from "../../src/geometries/euc/solids/all.js";
+    import {SingleColorMaterial, PhongMaterial} from "../../src/commons/materials/all.js";
+    import {ThurstonVR} from "../../src/commons/app/thurstonVR/ThrustonVR.js";
 
     const thurston = new ThurstonVR(geom, torus, {keyboard: 'fr'});
     thurston.camera.maxSteps = 500;

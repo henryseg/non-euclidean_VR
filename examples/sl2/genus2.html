@@ -12,18 +12,18 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/sl2/geometry/General.js";
-    import genus2 from "../../js/geometries/sl2/groups/genus2/set.js";
-    import {ConstDirLight} from "../../js/geometries/sl2/lights/all.js";
+    import * as geom from "../../src/geometries/sl2/geometry/General.js";
+    import genus2 from "../../src/geometries/sl2/groups/genus2/set.js";
+    import {ConstDirLight} from "../../src/geometries/sl2/lights/all.js";
     import {Color, Vector3} from "three";
-    import {PhongMaterial} from "../../js/commons/materials/all.js";
-    import {Point, Vector} from "../../js/core/geometry/General.js";
-    import {FakeBall, LocalFakeBall, Solid} from "../../js/geometries/sl2/solids/all.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {LocalPotatoShape} from "../../js/geometries/sl2/shapes/all.js";
-    import {complement} from "../../js/commons/shapes/all.js";
+    import {PhongMaterial} from "../../src/commons/materials/all.js";
+    import {Point, Vector} from "../../src/core/geometry/General.js";
+    import {FakeBall, LocalFakeBall, Solid} from "../../src/geometries/sl2/solids/all.js";
+    import {InfoControls} from "../../src/controls/InfoControls.js";
+    import {LocalPotatoShape} from "../../src/geometries/sl2/shapes/all.js";
+    import {complement} from "../../src/commons/shapes/all.js";
 
     const thurston = new ThurstonLite(geom, genus2, {keyboard: 'fr', maxBounces: 1});
 

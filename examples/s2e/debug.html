@@ -12,20 +12,20 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/s2e/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
-    import cube from "../../js/geometries/s2e/groups/cube/set.js";
-    import {ESun} from "../../js/geometries/s2e/lights/esun/ESun.js";
+    import * as geom from "../../src/geometries/s2e/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
+    import cube from "../../src/geometries/s2e/groups/cube/set.js";
+    import {ESun} from "../../src/geometries/s2e/lights/esun/ESun.js";
     import {Color} from "three";
-    import {PhongMaterial} from "../../js/commons/materials/all.js";
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {Ball} from "../../js/geometries/s2e/solids/Ball.js";
-    import {LocalBall} from "../../js/geometries/s2e/solids/LocalBall.js";
-    import {LocalBallShape} from "../../js/geometries/s2e/shapes/localBall/LocalBallShape.js";
-    import {complement} from "../../js/commons/shapes/all.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
+    import {PhongMaterial} from "../../src/commons/materials/all.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {Ball} from "../../src/geometries/s2e/solids/Ball.js";
+    import {LocalBall} from "../../src/geometries/s2e/solids/LocalBall.js";
+    import {LocalBallShape} from "../../src/geometries/s2e/shapes/localBall/LocalBallShape.js";
+    import {complement} from "../../src/commons/shapes/all.js";
+    import {Solid} from "../../src/core/solids/Solid.js";
 
     const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr', maxBounces: 1});
 

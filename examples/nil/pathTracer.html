@@ -13,23 +13,23 @@
 </body>
 <script type="module" id="main">
     import {Color} from "three";
-    import {Thurston} from "../../js/commons/app/thurston/Thurston.js";
+    import {Thurston} from "../../src/commons/app/thurston/Thurston.js";
 
-    import * as geom from "../../js/geometries/nil/geometry/General.js";
-    import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
+    import * as geom from "../../src/geometries/nil/geometry/General.js";
+    import heisenberg from "../../src/geometries/nil/groups/heisenberg/set.js";
 
-    import {Point} from "../../js/geometries/nil/geometry/General.js";
-    import {Solid, FakeBall, LocalFakeBall} from "../../js/geometries/nil/solids/all.js";
-    import {complement, LocalPotatoShape,} from "../../js/geometries/nil/shapes/all.js";
+    import {Point} from "../../src/geometries/nil/geometry/General.js";
+    import {Solid, FakeBall, LocalFakeBall} from "../../src/geometries/nil/solids/all.js";
+    import {complement, LocalPotatoShape,} from "../../src/geometries/nil/shapes/all.js";
     import {
         BasicPTMaterial,
         PathTracerWrapMaterial,
         PhongWrapMaterial,
         SingleColorMaterial
-    } from "../../js/commons/materials/all.js";
-    import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
-    import {VaryingColorMaterial} from "../../js/geometries/nil/material/varyingColor/VaryingColorMaterial.js";
+    } from "../../src/commons/materials/all.js";
+    import {FakePointLight} from "../../src/geometries/nil/lights/all.js";
+    import {CREEPING_FULL} from "../../src/core/groups/TeleportationSet.js";
+    import {VaryingColorMaterial} from "../../src/geometries/nil/material/varyingColor/VaryingColorMaterial.js";
 
 
     //------------------------------------------------------------------------------------------------------------------

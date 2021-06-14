@@ -1,5 +1,5 @@
-import {SL2} from "../../../../../js/geometries/sl2/geometry/Utils.js";
-import {Vector4} from "../../../../../js/lib/three.module.js";
+import {SL2} from "../../../../../src/geometries/sl2/geometry/Utils.js";
+import {Vector4} from "../../../../../src/lib/three.module.js";
 
 let assert = chai.assert;
 

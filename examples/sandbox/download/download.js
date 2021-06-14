@@ -1,21 +1,21 @@
 import {Color} from "three";
 
-import * as geom from "../../../js/geometries/euc/geometry/General.js";
-import cube from "../../../js/geometries/euc/groups/freeAbelian/set.js";
+import * as geom from "../../../src/geometries/euc/geometry/General.js";
+import cube from "../../../src/geometries/euc/groups/freeAbelian/set.js";
 
-import {Point} from "../../../js/geometries/euc/geometry/General.js";
-import {PointLight} from "../../../js/geometries/euc/lights/pointLight/PointLight.js";
-import {Solid, LocalBall} from "../../../js/geometries/euc/solids/all.js";
-import {LocalBallShape, complement} from "../../../js/geometries/euc/shapes/all.js";
-import {union} from "../../../js/commons/shapes/all.js";
+import {Point} from "../../../src/geometries/euc/geometry/General.js";
+import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
+import {Solid, LocalBall} from "../../../src/geometries/euc/solids/all.js";
+import {LocalBallShape, complement} from "../../../src/geometries/euc/shapes/all.js";
+import {union} from "../../../src/commons/shapes/all.js";
 import {
     BasicPTMaterial,
     PathTracerWrapMaterial,
     PhongWrapMaterial,
     SingleColorMaterial
-} from "../../../js/commons/materials/all.js";
-import {Thurston} from "../../../js/commons/app/thurston/Thurston.js";
-import {VaryingColorMaterial} from "../../../js/geometries/euc/material/varyingColor/VaryingColorMaterial.js";
+} from "../../../src/commons/materials/all.js";
+import {Thurston} from "../../../src/commons/app/thurston/Thurston.js";
+import {VaryingColorMaterial} from "../../../src/geometries/euc/material/varyingColor/VaryingColorMaterial.js";
 
 
 //------------------------------------------------------------------------------------------------------------------

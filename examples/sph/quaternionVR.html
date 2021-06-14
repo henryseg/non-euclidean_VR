@@ -15,16 +15,16 @@
     import {Color} from "three";
 
 
-    import * as geom from "../../js/geometries/sph/geometry/General.js";
-    import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
+    import * as geom from "../../src/geometries/sph/geometry/General.js";
+    import quaternion from "../../src/geometries/sph/groups/quaternion/set.js";
 
-    import {Isometry, Point, Vector} from "../../js/geometries/sph/geometry/General.js";
-    import {PointLight} from "../../js/geometries/sph/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
-    import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
-    import {EarthTexture} from "../../js/commons/materials/all.js";
-    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
+    import {Isometry, Point, Vector} from "../../src/geometries/sph/geometry/General.js";
+    import {PointLight} from "../../src/geometries/sph/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../src/commons/materials/phong/PhongMaterial.js";
+    import {Solid, Ball} from "../../src/geometries/sph/solids/all.js";
+    import {LocalBallShape, union, complement} from "../../src/geometries/sph/shapes/all.js";
+    import {EarthTexture} from "../../src/commons/materials/all.js";
+    import {ThurstonVR} from "../../src/commons/app/thurstonVR/ThrustonVR.js";
 
 
     const thurston = new ThurstonVR(geom, quaternion, {keyboard: 'fr'});

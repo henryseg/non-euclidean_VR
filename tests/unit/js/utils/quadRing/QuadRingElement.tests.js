@@ -1,5 +1,5 @@
-import {QuadRing} from "../../../../../js/utils/quadRing/QuadRing.js";
-import {QuadRingElement} from "../../../../../js/utils/quadRing/QuadRingElement.js";
+import {QuadRing} from "../../../../../src/utils/quadRing/QuadRing.js";
+import {QuadRingElement} from "../../../../../src/utils/quadRing/QuadRingElement.js";
 
 let assert = chai.assert;
 

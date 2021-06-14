@@ -13,15 +13,15 @@
 </body>
 <script type="module" id="main">
     import {Color} from "three";
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import torus from "../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
+    import {BasicCamera, BasicRenderer, Scene} from "../../src/core/General.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {LocalBall} from "../../js/geometries/euc/solids/LocalBall.js";
-    import {SingleColorMaterial} from "../../js/commons/materials/all.js";
-    import {ExpFog} from "../../js/commons/scenes/expFog/ExpFog.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {LocalBall} from "../../src/geometries/euc/solids/LocalBall.js";
+    import {SingleColorMaterial} from "../../src/commons/materials/all.js";
+    import {ExpFog} from "../../src/commons/scenes/expFog/ExpFog.js";
 
 
     const expFog = new ExpFog(

@@ -12,21 +12,21 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/h2e/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
-    import cuspedTorus from "../../js/geometries/h2e/groups/cuspedTorus/set.js";
-    import {DIR_DOWN, DIR_UP, ESun} from "../../js/geometries/h2e/lights/esun/ESun.js";
+    import * as geom from "../../src/geometries/h2e/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
+    import cuspedTorus from "../../src/geometries/h2e/groups/cuspedTorus/set.js";
+    import {DIR_DOWN, DIR_UP, ESun} from "../../src/geometries/h2e/lights/esun/ESun.js";
     import {Color, Matrix4} from "three";
-    import {NormalMaterial, PhongMaterial} from "../../js/commons/materials/all.js";
-    import {Ball} from "../../js/geometries/h2e/solids/Ball.js";
-    import {LocalBall} from "../../js/geometries/h2e/solids/LocalBall.js";
-    import {Isometry, Vector, Point} from "../../js/geometries/h2e/geometry/General.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {LocalBallShape} from "../../js/geometries/h2e/shapes/localBall/LocalBallShape.js";
-    import {complement} from "../../js/commons/shapes/all.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
+    import {NormalMaterial, PhongMaterial} from "../../src/commons/materials/all.js";
+    import {Ball} from "../../src/geometries/h2e/solids/Ball.js";
+    import {LocalBall} from "../../src/geometries/h2e/solids/LocalBall.js";
+    import {Isometry, Vector, Point} from "../../src/geometries/h2e/geometry/General.js";
+    import {InfoControls} from "../../src/controls/InfoControls.js";
+    import {LocalBallShape} from "../../src/geometries/h2e/shapes/localBall/LocalBallShape.js";
+    import {complement} from "../../src/commons/shapes/all.js";
+    import {Solid} from "../../src/core/solids/Solid.js";
 
     const thurston = new ThurstonLite(geom, cuspedTorus, {keyboard: 'fr', maxBounces: 1});
     const lightUp = new ESun(new Color(1, 1, 0), 0.5, DIR_UP);

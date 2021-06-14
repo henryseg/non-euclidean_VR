@@ -14,18 +14,18 @@
 <script type="module" id="main">
     import {Color, Vector2} from "three";
 
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import torus from "../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {PointLight} from "../../src/geometries/euc/lights/pointLight/PointLight.js";
 
-    import {LocalBallShape, complement} from "../../js/geometries/euc/shapes/all.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
-    import {CheckerboardMaterial} from "../../js/commons/materials/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../js/commons/materials/phongWrap/PhongWrapMaterial.js";
+    import {LocalBallShape, complement} from "../../src/geometries/euc/shapes/all.js";
+    import {Solid} from "../../src/core/solids/Solid.js";
+    import {CheckerboardMaterial} from "../../src/commons/materials/checkerboard/CheckerboardMaterial.js";
+    import {phongWrap} from "../../src/commons/materials/phongWrap/PhongWrapMaterial.js";
 
 
     const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr'});

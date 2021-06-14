@@ -15,22 +15,22 @@
 <script type="module" id="main">
     import {Clock, Color} from "three";
 
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import torus from "../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
+    import {BasicCamera, BasicRenderer, Scene} from "../../src/core/General.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {BallShape} from "../../js/geometries/euc/shapes/ball/BallShape.js";
-    import {LocalBallShape} from "../../js/geometries/euc/shapes/localBall/LocalBallShape.js";
-    import {UnionShape, IntersectionShape, ComplementShape, WrapShape} from "../../js/commons/shapes/all.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {BallShape} from "../../src/geometries/euc/shapes/ball/BallShape.js";
+    import {LocalBallShape} from "../../src/geometries/euc/shapes/localBall/LocalBallShape.js";
+    import {UnionShape, IntersectionShape, ComplementShape, WrapShape} from "../../src/commons/shapes/all.js";
+    import {Solid} from "../../src/core/solids/Solid.js";
 
-    import {FlyControls} from "../../js/controls/FlyControls.js";
-    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
-    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-    import {SMOOTH_MIN_POLY} from "../../js/commons/shapes/union/UnionShape.js";
-    import {SMOOTH_MAX_POLY} from "../../js/commons/shapes/instersection/IntersectionShape.js";
+    import {FlyControls} from "../../src/controls/FlyControls.js";
+    import {PhongMaterial} from "../../src/commons/materials/phong/PhongMaterial.js";
+    import {PointLight} from "../../src/geometries/euc/lights/pointLight/PointLight.js";
+    import {SMOOTH_MIN_POLY} from "../../src/commons/shapes/union/UnionShape.js";
+    import {SMOOTH_MAX_POLY} from "../../src/commons/shapes/instersection/IntersectionShape.js";
 
 
     // initial setup

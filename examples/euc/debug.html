@@ -14,15 +14,15 @@
 <script type="module" id="main">
     import {Color, Vector3} from "three";
 
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
-    import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
+    import torus from "../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {PointLight} from "../../src/geometries/euc/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../src/commons/materials/phong/PhongMaterial.js";
 
     import {
         LocalBallShape,
@@ -30,10 +30,10 @@
         union,
         BallShape,
         DisplacementShape
-    } from "../../js/geometries/euc/shapes/all.js";
-    import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
-    import {DebugMaterial} from "../../js/commons/materials/all.js";
-    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
+    } from "../../src/geometries/euc/shapes/all.js";
+    import {Ball, Solid} from "../../src/geometries/euc/solids/all.js";
+    import {DebugMaterial} from "../../src/commons/materials/all.js";
+    import {Isometry} from "../../src/geometries/euc/geometry/General.js";
 
 
     const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});

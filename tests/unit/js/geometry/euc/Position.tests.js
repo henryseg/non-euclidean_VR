@@ -1,6 +1,6 @@
-import {Position} from "../../../../../js/geometries/euc/geometry/Position.js";
-import {Vector} from "../../../../../js/core/geometry/Vector.js";
-import {Matrix4, Quaternion} from "../../../../../js/lib/three.module.js";
+import {Position} from "../../../../../src/geometries/euc/geometry/Position.js";
+import {Vector} from "../../../../../src/core/geometry/Vector.js";
+import {Matrix4, Quaternion} from "../../../../../src/lib/three.module.js";
 
 let assert = chai.assert;
 

@@ -12,31 +12,31 @@
 <body>
 </body>
 <script type="module" id="main">
-    import * as utils from "../../js/utils.js";
+    import * as utils from "../../src/utils.js";
     import {Clock, Color, Vector4} from "three";
     import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
-    import * as geom from "../../js/geometries/nil/geometry/General.js";
-    import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
+    import * as geom from "../../src/geometries/nil/geometry/General.js";
+    import heisenberg from "../../src/geometries/nil/groups/heisenberg/set.js";
 
-    import {Point, Isometry} from "../../js/core/geometry/General.js";
-    import {PhongMaterial, SingleColorMaterial} from "../../js/commons/materials/all.js";
-    import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
+    import {Point, Isometry} from "../../src/core/geometry/General.js";
+    import {PhongMaterial, SingleColorMaterial} from "../../src/commons/materials/all.js";
+    import {FakePointLight} from "../../src/geometries/nil/lights/all.js";
     import {
         FakeBall,
         Solid
-    } from "../../js/geometries/nil/solids/all.js";
+    } from "../../src/geometries/nil/solids/all.js";
     import {
         complement,
         LocalFakeBallShape,
-    } from "../../js/geometries/nil/shapes/all.js";
-    import {LocalVerticalCylinderShape} from "../../js/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
-    import {union} from "../../js/commons/shapes/all.js";
-    import {VRCamera} from "../../js/core/cameras/vr/VRCamera.js";
-    import {Scene, VRRenderer} from "../../js/core/General.js";
-    import {FlyControls} from "../../js/controls/FlyControls.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {ShootControls} from "../../js/controls/ShootControls.js";
+    } from "../../src/geometries/nil/shapes/all.js";
+    import {LocalVerticalCylinderShape} from "../../src/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
+    import {union} from "../../src/commons/shapes/all.js";
+    import {VRCamera} from "../../src/core/cameras/vr/VRCamera.js";
+    import {Scene, VRRenderer} from "../../src/core/General.js";
+    import {FlyControls} from "../../src/controls/FlyControls.js";
+    import {InfoControls} from "../../src/controls/InfoControls.js";
+    import {ShootControls} from "../../src/controls/ShootControls.js";
 
 
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);

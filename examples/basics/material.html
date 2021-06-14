@@ -14,23 +14,23 @@
 <script type="module" id="main">
     import {Color, Matrix4, Vector2, Vector3} from "three";
 
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
 
-    import {BasicCamera, BasicRenderer, Scene} from "../../js/core/General.js";
+    import {BasicCamera, BasicRenderer, Scene} from "../../src/core/General.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {Ball} from "../../js/geometries/euc/solids/all.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {Ball} from "../../src/geometries/euc/solids/all.js";
     import {
         SingleColorMaterial,
         NormalMaterial,
         PhongMaterial,
         phongWrap,
         CheckerboardMaterial
-    } from "../../js/commons/materials/all.js";
-    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-    import {EarthTexture} from "../../js/commons/materials/astronomy/earth/EarthTexture.js";
-    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
+    } from "../../src/commons/materials/all.js";
+    import {PointLight} from "../../src/geometries/euc/lights/pointLight/PointLight.js";
+    import {EarthTexture} from "../../src/commons/materials/astronomy/earth/EarthTexture.js";
+    import {Isometry} from "../../src/geometries/euc/geometry/General.js";
 
 
     // initial setup

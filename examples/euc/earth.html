@@ -14,20 +14,20 @@
 <script type="module" id="main">
     import {Clock, Color, Matrix4, Vector4} from "three";
 
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import {default as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import * as geom from "../../src/geometries/euc/geometry/General.js";
+    import {default as torus} from "../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-    import {Ball} from "../../js/geometries/euc/solids/all.js";
-    import {EarthTexture} from "../../js/commons/materials/astronomy/earth/EarthTexture.js";
-    import {Isometry} from "../../js/geometries/euc/geometry/General.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {MoonTexture} from "../../js/commons/materials/astronomy/moon/MoonTexture.js";
-    import {SunTexture} from "../../js/commons/materials/astronomy/sun/SunTexture.js";
-    import {MarsTexture} from "../../js/commons/materials/astronomy/mars/MarsTexture.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {PointLight} from "../../src/geometries/euc/lights/pointLight/PointLight.js";
+    import {Ball} from "../../src/geometries/euc/solids/all.js";
+    import {EarthTexture} from "../../src/commons/materials/astronomy/earth/EarthTexture.js";
+    import {Isometry} from "../../src/geometries/euc/geometry/General.js";
+    import {InfoControls} from "../../src/controls/InfoControls.js";
+    import {MoonTexture} from "../../src/commons/materials/astronomy/moon/MoonTexture.js";
+    import {SunTexture} from "../../src/commons/materials/astronomy/sun/SunTexture.js";
+    import {MarsTexture} from "../../src/commons/materials/astronomy/mars/MarsTexture.js";
 
     const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
 

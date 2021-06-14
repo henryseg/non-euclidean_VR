@@ -14,14 +14,14 @@
 <script type="module" id="main">
     import {Color} from "three";
 
-    import * as geom from "../../js/geometries/nil/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
+    import * as geom from "../../src/geometries/nil/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {PhongMaterial, SingleColorMaterial} from "../../js/commons/materials/all.js";
-    import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {FakeBall} from "../../js/geometries/nil/solids/all.js";
-    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {PhongMaterial, SingleColorMaterial} from "../../src/commons/materials/all.js";
+    import {FakePointLight} from "../../src/geometries/nil/lights/all.js";
+    import {FakeBall} from "../../src/geometries/nil/solids/all.js";
+    import {ThurstonVR} from "../../src/commons/app/thurstonVR/ThrustonVR.js";
 
 
     const thurston = new ThurstonVR(geom, trivial, {keyboard: 'fr'});

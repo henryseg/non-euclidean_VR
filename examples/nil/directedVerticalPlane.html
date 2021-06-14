@@ -14,16 +14,16 @@
 <script type="module" id="main">
     import {Clock, Color, Vector2, Vector3, Vector4} from "three";
 
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/nil/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
+    import * as geom from "../../src/geometries/nil/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
 
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {DirectedVerticalHalfSpace, VerticalHalfSpace} from "../../js/geometries/nil/solids/all.js";
-    import {CheckerboardMaterial, phongWrap, PhongWrapMaterial} from "../../js/commons/materials/all.js";
-    import {Isometry} from "../../js/geometries/nil/geometry/General.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {FakePointLight} from "../../src/geometries/nil/lights/all.js";
+    import {DirectedVerticalHalfSpace, VerticalHalfSpace} from "../../src/geometries/nil/solids/all.js";
+    import {CheckerboardMaterial, phongWrap, PhongWrapMaterial} from "../../src/commons/materials/all.js";
+    import {Isometry} from "../../src/geometries/nil/geometry/General.js";
 
 
     const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr'});

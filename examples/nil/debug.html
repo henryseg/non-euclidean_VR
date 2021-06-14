@@ -14,18 +14,18 @@
 <script type="module" id="main">
 
 
-    import * as geom from "../../js/geometries/nil/geometry/General.js";
-    import {Isometry, Point} from "../../js/geometries/nil/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
-    import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
+    import * as geom from "../../src/geometries/nil/geometry/General.js";
+    import {Isometry, Point} from "../../src/geometries/nil/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
+    import heisenberg from "../../src/geometries/nil/groups/heisenberg/set.js";
 
-    import {NormalMaterial, PhongMaterial, SingleColorMaterial} from "../../js/commons/materials/all.js";
-    import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
-    import {FakeBall, LocalVerticalCylinder, VerticalCylinder} from "../../js/geometries/nil/solids/all.js";
-    import {LocalPotatoShape, PotatoShape} from "../../js/geometries/nil/shapes/all.js";
-    import {complement, intersection, union} from "../../js/commons/shapes/all.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
-    import {ThurstonVR} from "../../js/commons/app/thurstonVR/ThrustonVR.js";
+    import {NormalMaterial, PhongMaterial, SingleColorMaterial} from "../../src/commons/materials/all.js";
+    import {FakePointLight} from "../../src/geometries/nil/lights/all.js";
+    import {FakeBall, LocalVerticalCylinder, VerticalCylinder} from "../../src/geometries/nil/solids/all.js";
+    import {LocalPotatoShape, PotatoShape} from "../../src/geometries/nil/shapes/all.js";
+    import {complement, intersection, union} from "../../src/commons/shapes/all.js";
+    import {Solid} from "../../src/core/solids/Solid.js";
+    import {ThurstonVR} from "../../src/commons/app/thurstonVR/ThrustonVR.js";
 
 
     const thurston = new ThurstonVR(geom, trivial, {keyboard: 'fr'});

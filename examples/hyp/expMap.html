@@ -15,25 +15,25 @@
     import {Clock, Color} from "three";
     import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
-    import * as geom from "../../js/geometries/hyp/geometry/General.js";
-    import cube from "../../js/geometries/hyp/groups/cube/set.js";
+    import * as geom from "../../src/geometries/hyp/geometry/General.js";
+    import cube from "../../src/geometries/hyp/groups/cube/set.js";
 
-    import {VRRenderer, Scene, VRCamera} from "../../js/core/General.js";
-    import {NativeCamera} from "../../js/geometries/hyp/cameras/native/NativeCamera.js";
+    import {VRRenderer, Scene, VRCamera} from "../../src/core/General.js";
+    import {NativeCamera} from "../../src/geometries/hyp/cameras/native/NativeCamera.js";
 
-    import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
-    import {Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, HalfSpaceShape} from "../../js/geometries/hyp/shapes/all.js";
+    import {Isometry, Point, Vector} from "../../src/geometries/hyp/geometry/General.js";
+    import {PointLight} from "../../src/geometries/hyp/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../src/commons/materials/phong/PhongMaterial.js";
+    import {Cylinder, Solid} from "../../src/geometries/hyp/solids/all.js";
+    import {LocalBallShape, complement, HalfSpaceShape} from "../../src/geometries/hyp/shapes/all.js";
 
 
-    import {FlyControls} from "../../js/controls/FlyControls.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
-    import {IsotropicChaseControls} from "../../js/controls/IsotropicChaseControls.js";
-    import {SingleColorMaterial} from "../../js/commons/materials/all.js";
-    import {CylinderShape} from "../../js/geometries/hyp/shapes/cylinder/CylinderShape.js";
-    import {intersection} from "../../js/commons/shapes/all.js";
+    import {FlyControls} from "../../src/controls/FlyControls.js";
+    import {InfoControls} from "../../src/controls/InfoControls.js";
+    import {IsotropicChaseControls} from "../../src/controls/IsotropicChaseControls.js";
+    import {SingleColorMaterial} from "../../src/commons/materials/all.js";
+    import {CylinderShape} from "../../src/geometries/hyp/shapes/cylinder/CylinderShape.js";
+    import {intersection} from "../../src/commons/shapes/all.js";
 
 
     // initial setup

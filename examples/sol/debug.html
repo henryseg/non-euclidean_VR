@@ -12,18 +12,18 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+    import {ThurstonLite} from "../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../js/geometries/sol/geometry/General.js";
-    import trivial from "../../js/commons/groups/trivial/set.js";
-    import zLoop from "../../js/geometries/sol/groups/zLoop/set.js"
-    import mappingTorus from "../../js/geometries/sol/groups/mappingTorus/set.js"
-    import {ZSun, ConstDirLight} from "../../js/geometries/sol/lights/all.js";
+    import * as geom from "../../src/geometries/sol/geometry/General.js";
+    import trivial from "../../src/commons/groups/trivial/set.js";
+    import zLoop from "../../src/geometries/sol/groups/zLoop/set.js"
+    import mappingTorus from "../../src/geometries/sol/groups/mappingTorus/set.js"
+    import {ZSun, ConstDirLight} from "../../src/geometries/sol/lights/all.js";
     import {Color, Vector3} from "three";
-    import {PhongMaterial} from "../../js/commons/materials/all.js";
-    import {Point} from "../../js/core/geometry/Point.js";
-    import {FakeBall, LocalFakeBall} from "../../js/geometries/sol/solids/all.js";
-    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {PhongMaterial} from "../../src/commons/materials/all.js";
+    import {Point} from "../../src/core/geometry/Point.js";
+    import {FakeBall, LocalFakeBall} from "../../src/geometries/sol/solids/all.js";
+    import {InfoControls} from "../../src/controls/InfoControls.js";
 
     const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
 
