@@ -4,7 +4,7 @@
  * Following Three.js, elements are stored in a column major system
  */
 
-class Matrix2 {
+export class Matrix2 {
 
     /**
      * Constructor
