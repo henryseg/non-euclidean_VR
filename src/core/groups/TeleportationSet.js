@@ -1,4 +1,4 @@
-import * as mustache from "mustache";
+import mustache from "mustache/mustache.mjs";
 
 import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 import {Teleportation} from "./Teleportation.js";

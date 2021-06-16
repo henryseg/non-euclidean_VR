@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Reflection</title>
+</head>
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Vector3} from "three";
+
+    import * as geom from "../../geometries/euc/geometry/General.js";
+    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
+
+    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
+
+    import {Point} from "../../../src/core/geometry/Point.js";
+    import {LocalBall} from "../../../src/geometries/euc/solids/LocalBall.js";
+    import {PointLight} from "../../../src/geometries/euc/lights/all.js";
+    import {PhongMaterial} from "../../../src/commons/materials/all.js";
+
+
+    // initial setup
+    const camera = new BasicCamera({set: torus});
+    const scene = new Scene();
+
+    const renderer = new BasicRendererGeneric(geom, torus, camera, scene, {maxBounces: 1}, {logarithmicDepthBuffer: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Point(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Point(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Point(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    // Phong shading material
+    const mat = new PhongMaterial({
+        color: new Color(1, 0.2, 0.2),
+        shininess: 5,
+        reflectivity: new Vector3(0.5, 0.5, 0.5)
+    });
+
+
+    const ball1 = new LocalBall(
+        new Point(0, 0, -0.3),
+        0.15,
+        mat
+    );
+
+    // adding the solid to the scene
+    scene.add(ball1, light0, light1, light2);
+
+    // building there renderer
+    renderer.build();
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+    renderer.checkShader();
+
+    // rendering the scene
+    function animate() {
+        renderer.render();
+    }
+
+    renderer.setAnimationLoop(animate);
+
+
+</script>
+</html>

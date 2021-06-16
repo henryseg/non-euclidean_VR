@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Euclidean scene - moving sphere</title>
+</head>
+<body>
+</body>
+<script type="module" id="main">
+    import {Clock} from "three";
+
+    import * as geom from "../../geometries/euc/geometry/General.js";
+    import trivial from "../../../src/commons/groups/trivial/set.js";
+
+    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
+
+    import {Point} from "../../../src/core/geometry/Point.js";
+    import {Ball} from "../../../src/geometries/euc/solids/Ball.js";
+    import {NormalMaterial} from "../../../src/commons/materials/normal/NormalMaterial.js";
+
+    // initial setup
+    const camera = new BasicCamera({set: trivial});
+    const scene = new Scene();
+
+    const renderer = new BasicRendererGeneric(geom, trivial, camera, scene, {}, {
+        logarithmicDepthBuffer: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+    // defining a material
+    const mat = new NormalMaterial();
+    // defining a solid with this material
+    const ball = new Ball(
+        new Point(1, 0, -2),
+        0.3,
+        mat
+    );
+
+    // adding the solid to the scene
+    scene.add(ball);
+
+    // building there renderer
+    renderer.build();
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+    const clock = new Clock();
+
+    function move(time) {
+        const speed = 0.8;
+        const center = new Point(Math.cos(speed * time), Math.sin(speed * time), -2);
+        ball.shape.isom.makeTranslation(center);
+        ball.shape.updateData();
+    }
+
+    // rendering the scene
+    function animate() {
+        move(clock.getElapsedTime());
+        renderer.render();
+    }
+
+    renderer.setAnimationLoop(animate);
+
+
+</script>
+</html>

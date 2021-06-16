@@ -1,5 +1,5 @@
 import {Vector3} from "three";
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 
 import {Material} from "../../../core/materials/Material.js";
 

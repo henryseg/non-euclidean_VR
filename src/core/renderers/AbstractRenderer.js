@@ -19,7 +19,8 @@ export class AbstractRenderer {
 
     /**
      * Constructor.
-     * @param {Object} geom - the underlying geometry
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
@@ -27,12 +28,17 @@ export class AbstractRenderer {
      * @param {WebGLRenderer|Object} threeRenderer - either a Three.js renderer or the parameters to build it
      * - {boolean} postprocess - Gamma and Tone correction
      */
-    constructor(geom, set, camera, scene, params = {}, threeRenderer = {}) {
+    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
         /**
-         * The underlying geometry.
-         * @type{Object}
+         * The first part of the geometry dependent shader.
+         * @type{string}
          */
-        this.geom = geom;
+        this.shader1 = shader1;
+        /**
+         * The second part of the geometry dependent shader.
+         * @type{string}
+         */
+        this.shader2 = shader2;
         /**
          * The underlying subgroup
          * @type {TeleportationSet}

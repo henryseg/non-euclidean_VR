@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SL(2,R) Example</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../../src/geometries/sl2/geometry/General.js";
+    import trivial from "../../../src/commons/groups/trivial/set.js";
+    import fiberLoop from "../../../src/geometries/sl2/groups/fiberLoop/set.js";
+    import orbiTorus from "../../../src/geometries/sl2/groups/orbiTorus/set.js";
+    import {ConstDirLight} from "../../../src/geometries/sl2/lights/all.js";
+    import {Color, Vector3} from "three";
+    import {PhongMaterial} from "../../../src/commons/materials/all.js";
+    import {Point, Vector} from "../../../src/core/geometry/General.js";
+    import {FakeBall, LocalFakeBall} from "../../../src/geometries/sl2/solids/all.js";
+    import {InfoControls} from "../../../src/controls/InfoControls.js";
+
+    const thurston = new ThurstonLite(geom, orbiTorus, {keyboard: 'fr', maxBounces: 1});
+
+    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5,new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+
+    const point = new Point();
+    // point.set(-1, 0, 0, 0);
+    // point.fiber = -2 * Math.PI;
+    const dir = new Vector(0,0,-8 * Math.PI);
+    const ball = new LocalFakeBall(point, 0.1, mat);
+
+    thurston.add(ball, lightUp, lightDown);
+
+    function info() {
+        console.log("fiber", thurston.camera.position.local.point);
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>

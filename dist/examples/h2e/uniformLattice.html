@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>H2E</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../../src/geometries/h2e/geometry/General.js";
+    import torus from "../../../src/geometries/h2e/groups/orbiTorus/set.js";
+    import {DIR_DOWN, DIR_UP, ESun} from "../../../src/geometries/h2e/lights/esun/ESun.js";
+    import {Color} from "three";
+    import {NormalMaterial, PhongMaterial} from "../../../src/commons/materials/all.js";
+    import {Point} from "../../../src/geometries/h2e/geometry/General.js";
+    import {InfoControls} from "../../../src/controls/InfoControls.js";
+    import {LocalBallShape} from "../../../src/geometries/h2e/shapes/localBall/LocalBallShape.js";
+    import {complement, union} from "../../../src/commons/shapes/all.js";
+    import {Solid} from "../../../src/core/solids/Solid.js";
+
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const lightDown = new ESun(new Color(1, 0, 0), 0.5, DIR_UP);
+    const lightUp = new ESun(new Color(0, 1, 1), 0.5, DIR_DOWN);
+
+    // defining a material
+    const matNormal = new NormalMaterial();
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+    const sqrt2 = Math.sqrt(2);
+    const aux = Math.pow(2, 0.25);
+    const shB = 1 / aux;
+    const chB = Math.sqrt(1 + sqrt2) / aux;
+    const thB = shB / chB;
+    const lambda = 1 / Math.sqrt(1 - 2 * thB * thB);
+    const height = Math.asinh(shB);
+
+
+    // Complement of a local ball
+    const point = new Point(0, 0, 1, 0);
+    const centerBall = new LocalBallShape(point, 1);
+    const vertices = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        vertices[i] = new LocalBallShape(
+            new Point((2 * i0 - 1) * lambda * thB, (2 * i1 - 1) * lambda * thB, lambda, (2 * i2 - 1) * height),
+            0.75
+        );
+    }
+
+    const unionShape = union(
+        centerBall,
+        vertices[0],
+        vertices[1],
+        vertices[2],
+        vertices[3],
+        vertices[4],
+        vertices[5],
+        vertices[6],
+        vertices[7],
+    );
+    const latticeShape = complement(unionShape);
+    const lattice = new Solid(latticeShape, mat);
+
+    thurston.add(lattice, lightUp, lightDown);
+
+    const infoControls = new InfoControls();
+    infoControls.action = function () {
+
+    }
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

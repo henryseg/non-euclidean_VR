@@ -1,0 +1,91 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Single ball in Nil (Virtual reality)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Vector4} from "three";
+
+
+    import * as geom from "../../../src/geometries/nil/geometry/General.js";
+    import {Isometry, Point} from "../../../src/geometries/nil/geometry/General.js";
+    import trivial from "../../../src/commons/groups/trivial/set.js";
+    import heisenberg from "../../../src/geometries/nil/groups/heisenberg/set.js";
+
+    import {PhongMaterial, SingleColorMaterial} from "../../../src/commons/materials/all.js";
+    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
+    import {FakeBall, LocalVerticalCylinder, VerticalCylinder} from "../../../src/geometries/nil/solids/all.js";
+    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
+
+    heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
+    heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
+
+    const thurston = new ThurstonVR(geom, heisenberg, {keyboard: 'fr'});
+
+    thurston.camera.maxDist = 20;
+    thurston.camera.maxSteps = 200;
+
+    // light colors
+    const lightColor1 = new Color(1, 1, 0, 1); // yellow
+    const lightColor2 = new Color(1, 0, 1, 1); // magenta
+    const lightColor3 = new Color(0, 1, 1, 1); // cyan
+    const lightColor3bis = new Color(1, 1, 1, 1); // cyan
+
+    const lightPos1 = new Point(1, 0, 0);
+    const lightPos2 = new Point(0, 1, 0);
+    const lightPos3 = new Point(0, 0, -1);
+    const lightPos3bis = new Point(0, 0, 1);
+
+    const light1 = new FakePointLight(lightPos1, lightColor1, 0.4);
+    const light2 = new FakePointLight(lightPos2, lightColor2, 0.4);
+    const light3 = new FakePointLight(lightPos3, lightColor3, 0.4);
+    const light3bis = new FakePointLight(lightPos3bis, lightColor3bis, 0.4);
+
+    thurston.add(light1, light2, light3, light3bis);
+
+
+    const mat1 = new SingleColorMaterial(
+        lightColor1
+    );
+    const mat2 = new SingleColorMaterial(
+        lightColor2
+    );
+    const mat3 = new SingleColorMaterial(
+        lightColor3
+    );
+    const mat3bis = new SingleColorMaterial(
+        lightColor3bis
+    );
+    const lightBall1 = new FakeBall(lightPos1, 0.1, mat1);
+    const lightBall2 = new FakeBall(lightPos2, 0.1, mat2);
+    const lightBall3 = new FakeBall(lightPos3, 0.1, mat3);
+    const lightBall3bis = new FakeBall(lightPos3bis, 0.1, mat3bis);
+
+    thurston.add(lightBall1, lightBall2, lightBall3, lightBall3bis);
+
+    // Ball
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1),
+        shininess: 5
+    });
+
+    const isom = new Isometry().makeTranslation(new Point(0, 0, 0));
+    const cyl = new LocalVerticalCylinder(isom, 0.2, mat);
+
+
+    thurston.add(cyl);
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

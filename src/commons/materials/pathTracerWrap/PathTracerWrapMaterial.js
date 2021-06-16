@@ -1,4 +1,4 @@
-import * as mustache from "mustache";
+import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 
 import {PTMaterial} from "../../../core/materials/PTMaterial.js";

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Materials</title>
+</head>
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Matrix4, Vector2, Vector3} from "three";
+
+    import * as geom from "../../geometries/euc/geometry/General.js";
+    import trivial from "../../../src/commons/groups/trivial/set.js";
+
+    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
+
+    import {Point} from "../../../src/core/geometry/Point.js";
+    import {Ball} from "../../../src/geometries/euc/solids/all.js";
+    import {
+        SingleColorMaterial,
+        NormalMaterial,
+        PhongMaterial,
+        phongWrap,
+        CheckerboardMaterial
+    } from "../../../src/commons/materials/all.js";
+    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
+    import {EarthTexture} from "../../../src/commons/materials/astronomy/earth/EarthTexture.js";
+    import {Isometry} from "../../geometries/euc/geometry/General.js";
+
+
+    // initial setup
+    const camera = new BasicCamera({set: trivial});
+    camera.maxSteps = 400;
+    const scene = new Scene({maxBounces: 1});
+
+
+    const renderer = new BasicRendererGeneric(geom, trivial, camera, scene, {}, {
+        logarithmicDepthBuffer: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // single color material
+    const singleColorMaterial = new SingleColorMaterial(new Color(0.7, 0.1, 0.2));
+    const ball0 = new Ball(
+        new Point(-1, 1, -2.5),
+        0.3,
+        singleColorMaterial
+    );
+
+    // normal material
+    const normalMaterial = new NormalMaterial();
+    // defining solids with this material
+    const ball1 = new Ball(
+        new Point(0, 1, -2.5),
+        0.3,
+        normalMaterial
+    );
+
+    const checkerboardRaw = new CheckerboardMaterial(
+        new Vector2(Math.PI, 0),
+        new Vector2(0, Math.PI),
+        new Color(1, 1, 1),
+        new Color(0, 0, 0)
+    )
+
+
+    const ball2 = new Ball(
+        new Point(1, 1, -2.5),
+        0.3,
+        checkerboardRaw
+    );
+
+    // lights for the Phong material
+    const light1 = new PointLight(
+        new Point(2, 1, -2.5),
+        new Color(1, 1, 0),
+    )
+    const light2 = new PointLight(
+        new Point(1, 0.2, -0.5),
+        new Color(1, 0, 1),
+    )
+
+    const light3 = new PointLight(
+        new Point(-1, 1, -2.5),
+        new Color(0, 1, 1),
+    )
+
+
+    // Phong shading material
+    const phongMaterial = new PhongMaterial({shininess: 10});
+    const ball3 = new Ball(
+        new Point(-1, 0, -2.5),
+        0.3,
+        phongMaterial
+    )
+
+
+    const normalPhong = phongWrap(normalMaterial);
+
+    const ball4 = new Ball(
+        new Point(0, 0, -2.5),
+        0.3,
+        normalPhong
+    );
+
+
+    const checkerboardBase = new CheckerboardMaterial(
+        new Vector2(Math.PI, 0),
+        new Vector2(0, Math.PI),
+        new Color(1, 1, 1),
+        new Color(0, 0, 0)
+    )
+
+    const checkerboardPhong = phongWrap(checkerboardBase, {reflectivity: new Vector3(0.2, 0.2, 0.2)});
+
+
+    const ball5 = new Ball(
+        new Point(1, 0, -2.5),
+        0.3,
+        checkerboardPhong
+    );
+
+    const earth = new EarthTexture('../../js');
+    const isom = new Isometry().makeTranslation(new Point(-1, -1, -2.5));
+    isom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
+
+    const ball6 = new Ball(
+        isom,
+        0.3,
+        earth
+    )
+
+    // adding the solid to the scene
+    scene.add(light1, light2, light3, ball0, ball1, ball2, ball3, ball4, ball5, ball6);
+
+    // building there renderer
+    renderer.build();
+
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+    // rendering the scene
+    function animate() {
+        renderer.render();
+    }
+
+    renderer.setAnimationLoop(animate);
+    renderer.checkShader();
+
+
+</script>
+</html>

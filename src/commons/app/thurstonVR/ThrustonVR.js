@@ -5,7 +5,7 @@ import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerMod
 
 import {bind} from "../../../utils.js";
 
-import {Scene, VRCamera, VRRenderer} from "../../../core/General.js";
+import {Scene, VRCamera, VRRendererGeneric} from "../../../core/General.js";
 import {VRControlsMove} from "../../../controls/VRControlsMove.js";
 import {VRControlsDrag} from "../../../controls/VRControlsDrag.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
@@ -61,9 +61,9 @@ export class ThurstonVR {
 
         /**
          * The non-euclidean renderer
-         * @type {VRRenderer}
+         * @type {VRRendererGeneric}
          */
-        this.renderer = new VRRenderer(this.geom, this.set, this.camera, this.scene);
+        this.renderer = new VRRendererGeneric(this.geom, this.set, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);

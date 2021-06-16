@@ -1,5 +1,5 @@
 import {MathUtils} from "three";
-import * as mustache from "mustache";
+import mustache from "mustache/mustache.mjs";
 
 import {CREEPING_OFF, CREEPING_STRICT, CREEPING_FULL} from "./TeleportationSet.js";
 import creeping from "./shaders/creeping.js";

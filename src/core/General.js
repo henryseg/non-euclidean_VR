@@ -4,7 +4,7 @@ export {PathTracerCamera} from "./cameras/pathTracer/PathTracerCamera.js";
 
 export {Scene} from "./scene/Scene.js";
 
-export {BasicRenderer} from "./renderers/BasicRenderer.js";
-export {VRRenderer} from "./renderers/VRRenderer.js";
-export {PathTracerRenderer} from "./renderers/PathTracerRenderer.js";
+export {BasicRendererGeneric} from "./renderers/BasicRendererGeneric.js";
+export {VRRendererGeneric} from "./renderers/VRRendererGeneric.js";
+export {PathTracerRendererGeneric} from "./renderers/PathTracerRendererGeneric.js";
 

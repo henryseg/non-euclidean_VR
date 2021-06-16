@@ -1,4 +1,4 @@
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 import {Quaternion, Vector3, Vector4} from "three";
 
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";

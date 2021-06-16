@@ -1,7 +1,8 @@
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 import {Vector3, Vector4} from "three";
 
-import {Point, Vector} from "../../geometry/General.js";
+import {Isometry} from "../../geometry/Isometry.js";
+import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import struct from "./shaders/struct.js";

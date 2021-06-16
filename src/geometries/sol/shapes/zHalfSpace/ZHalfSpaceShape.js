@@ -1,4 +1,4 @@
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 import {Matrix4, Vector4} from "three";
 
 import {Point, Vector} from "../../geometry/General.js";

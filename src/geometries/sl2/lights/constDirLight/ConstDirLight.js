@@ -1,4 +1,4 @@
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 
 import {Light} from "../../../../core/lights/Light.js";

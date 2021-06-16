@@ -5,7 +5,7 @@ import Stats from "../../../lib/stats.module.js";
 
 import {FlyControls} from "../../../controls/FlyControls.js";
 import {bind} from "../../../utils.js";
-import {BasicCamera, BasicRenderer, Scene} from "../../../core/General.js";
+import {BasicCamera, BasicRendererGeneric, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 
 /**
@@ -57,9 +57,9 @@ export class ThurstonLite {
 
         /**
          * Non-euclidean renderer for basic renderer
-         * @type {BasicRenderer}
+         * @type {BasicRendererGeneric}
          */
-        this.renderer = new BasicRenderer(this.geom, this.set, this.camera, this.scene, {});
+        this.renderer = new BasicRendererGeneric(this.geom, this.set, this.camera, this.scene, {});
         this.setPixelRatio(window.devicePixelRatio);
         this.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);

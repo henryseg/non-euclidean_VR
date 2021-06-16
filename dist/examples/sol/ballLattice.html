@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sol Example</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../../src/geometries/sol/geometry/General.js";
+    import mappingTorus from "../../../src/geometries/sol/groups/mappingTorus/set.js"
+    import {ZSun, ConstDirLight} from "../../../src/geometries/sol/lights/all.js";
+    import {Color, Vector3} from "three";
+    import {PhongMaterial} from "../../../src/commons/materials/all.js";
+    import {Point} from "../../../src/core/geometry/Point.js";
+    import {FakeBall, LocalFakeBall} from "../../../src/geometries/sol/solids/all.js";
+    import {InfoControls} from "../../../src/controls/InfoControls.js";
+
+    const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
+
+
+    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+
+    const point = new Point(0, 0, 0, 1);
+    const ball = new LocalFakeBall(point, 0.1, mat);
+
+    thurston.add(ball, lightUp, lightDown);
+
+    function info() {
+        console.log("cellBoost", thurston.camera.position.cellBoost.coords.toLog());
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>

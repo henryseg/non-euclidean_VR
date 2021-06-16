@@ -1,4 +1,4 @@
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 

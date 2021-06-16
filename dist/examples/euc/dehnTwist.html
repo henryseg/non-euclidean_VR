@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Dehn twist</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Clock, Color, Vector4} from "three";
+
+    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../geometries/euc/geometry/General.js";
+    import {default as torus} from "../../../src/geometries/euc/groups/freeAbelian/set.js";
+
+    import {Point} from "../../../src/core/geometry/Point.js";
+    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
+
+    import {LocalBallShape} from "../../../src/geometries/euc/shapes/all.js";
+    import {Ball, Solid} from "../../../src/geometries/euc/solids/all.js";
+    import {CREEPING_STRICT} from "../../../src/core/groups/TeleportationSet.js";
+
+    torus.usesNearestNeighbors = false;
+    torus.creepingType = CREEPING_STRICT;
+
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Point(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Point(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Point(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(1, 0.2, 0.2),
+        shininess: 5
+    });
+
+
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(0, 0, 0),
+        0.2,
+    );
+
+    // const latticeShape = complement(centerBall);
+    // const lattice = new Solid(latticeShape, mat0);
+    const lattice = new Solid(centerBall, mat0);
+
+
+    // Phong shading material
+    const mat1 = new PhongMaterial({
+        color: new Color(0, 0, 1),
+        shininess: 10,
+        //reflectivity: new Vector3(0.2, 0.2, 0.2)
+    });
+
+    const ball1 = new Ball(
+        new Point(0, 0, -.5),
+        0.2,
+        mat1
+    );
+
+
+    thurston.add(lattice, ball1, light0, light1, light2);
+
+    const clock = new Clock();
+
+    function animate() {
+        const time = clock.getElapsedTime();
+        torus.group.halfTranslationA = new Vector4(1, 0, 0, 0);
+        torus.group.halfTranslationB = new Vector4(0, 1, 0, 0);
+        torus.group.halfTranslationC = new Vector4(0, 0.2 * time % 1, 1, 0);
+    }
+
+    thurston.callback = animate;
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

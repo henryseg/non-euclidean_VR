@@ -1,4 +1,4 @@
-import * as mustache from "mustache";
+import mustache from "mustache/mustache.mjs";
 
 import {Material} from "../../../core/materials/Material.js";
 

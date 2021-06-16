@@ -1,4 +1,4 @@
-import * as mustache from "mustache";
+import mustache from "mustache/mustache.mjs";
 import {Generic} from "../Generic.js";
 import {Isometry} from "../geometry/Isometry.js";
 

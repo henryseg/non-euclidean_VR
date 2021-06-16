@@ -1,5 +1,5 @@
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
 
 import fakeDistance from "../../imports/fakeDistance.js";
 import struct from "./shaders/struct.js";

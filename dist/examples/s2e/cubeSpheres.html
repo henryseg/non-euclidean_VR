@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>S2E Example</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../../src/geometries/s2e/geometry/General.js";
+    import trivial from "../../../src/commons/groups/trivial/set.js";
+    import lattice from "../../../src/geometries/s2e/groups/cube/set.js";
+    import {ESun} from "../../../src/geometries/s2e/lights/esun/ESun.js";
+    import {Color} from "three";
+    import {PhongMaterial} from "../../../src/commons/materials/all.js";
+    import {Point} from "../../../src/core/geometry/Point.js";
+    import {Ball} from "../../../src/geometries/s2e/solids/Ball.js";
+    import {LocalBall} from "../../../src/geometries/s2e/solids/LocalBall.js";
+
+    const thurston = new ThurstonLite(geom, lattice, {keyboard: 'fr', maxBounces: 1});
+
+
+    const light=new ESun(new Color(1,1,0));
+    
+    const mat=new PhongMaterial({
+        color: new Color(1,1,1)
+    });
+    
+    
+    const point = new Point(0,0,1,0);
+    const ball=new LocalBall(point,0.2,mat);
+    
+    thurston.add(ball, light);
+    
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+
+</script>
+
+</html>

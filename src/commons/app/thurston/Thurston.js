@@ -4,7 +4,7 @@ import Stats from "../../../lib/stats.module.js";
 
 import {FlyControls} from "../../../controls/FlyControls.js";
 import {bind} from "../../../utils.js";
-import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../core/General.js";
+import {BasicCamera, BasicRendererGeneric, PathTracerCamera, PathTracerRendererGeneric, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 import {PathTracerUI} from "./PathTracerUI.js";
 
@@ -74,17 +74,17 @@ export class Thurston {
 
         /**
          * Non-euclidean renderer for basic renderer
-         * @type {BasicRenderer}
+         * @type {BasicRendererGeneric}
          */
-        this.renderer = new BasicRenderer(this.geom, this.set, this.camera, this.scene, {}, this.threeRenderer);
+        this.renderer = new BasicRendererGeneric(this.geom, this.set, this.camera, this.scene, {}, this.threeRenderer);
         /**
          * Non-euclidean renderer for path tracer
-         * @type {PathTracerRenderer}
+         * @type {PathTracerRendererGeneric}
          */
-        this.ptRenderer = new PathTracerRenderer(this.geom, this.set, this.ptCamera, this.scene, {}, this.threeRenderer);
+        this.ptRenderer = new PathTracerRendererGeneric(this.geom, this.set, this.ptCamera, this.scene, {}, this.threeRenderer);
         /**
          * The renderer we are currently using
-         * @type {BasicRenderer|PathTracerRenderer}
+         * @type {BasicRendererGeneric|PathTracerRendererGeneric}
          */
         this.currentRenderer = this.renderer;
 

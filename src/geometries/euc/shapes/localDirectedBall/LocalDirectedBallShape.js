@@ -1,13 +1,14 @@
-import * as mustache from "mustache/mustache.js";
+import mustache from "mustache/mustache.mjs";
+
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
+import {Isometry} from "../../geometry/Isometry.js";
+import {Point} from "../../geometry/Point.js";
 
 import distance from "../../imports/distance.js";
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
-import {Isometry} from "../../../../core/geometry/Isometry.js";
-import {Point} from "../../../../core/geometry/Point.js";
 
 /**
  * @class
