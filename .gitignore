@@ -13,4 +13,3 @@ __pycache__/**
 /doc/package-lock.json
 /doc/node_modules/**
 /node_modules/
-/dist/build/

@@ -18,5 +18,5 @@ RelVector {{name}}_gradient(RelVector v){
         gradMax = grad1;
     }   
     float h = max(1. - abs(dist1 - dist2) / {{name}}.minCoeff, 0.);
-    return = add(multiplyScalar(1. - 0.5 * h, gradMin), multiplyScalar(0.5 * h, gradMax));
+    return add(multiplyScalar(1. - 0.5 * h, gradMin), multiplyScalar(0.5 * h, gradMax));
 }`;
