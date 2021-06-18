@@ -5,7 +5,7 @@ import Stats from "../../../lib/stats.module.js";
 
 import {FlyControls} from "../../../controls/FlyControls.js";
 import {bind} from "../../../utils.js";
-import {BasicCamera, BasicRendererGeneric, Scene} from "../../../core/General.js";
+import {BasicCamera, BasicRenderer, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 
 /**
@@ -19,17 +19,13 @@ export class ThurstonLite {
 
     /**
      * Constructor.
-     * @param {Object} geom - the underlying geometry
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the teleportation set
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, set, params = {}) {
-        /**
-         * The underlying geometry
-         * @type {Object}
-         */
-        this.geom = geom;
+    constructor(shader1, shader2, set, params = {}) {
         /**
          * The underlying subgroup
          * @type {TeleportationSet}
@@ -57,9 +53,9 @@ export class ThurstonLite {
 
         /**
          * Non-euclidean renderer for basic renderer
-         * @type {BasicRendererGeneric}
+         * @type {BasicRenderer}
          */
-        this.renderer = new BasicRendererGeneric(this.geom, this.set, this.camera, this.scene, {});
+        this.renderer = new BasicRenderer(shader1, shader2, this.set, this.camera, this.scene, {});
         this.setPixelRatio(window.devicePixelRatio);
         this.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);

@@ -12,22 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock} from "three";
+    import {
+        Clock,
+        BasicRenderer,
+        BasicCamera,
+        Scene,
+        trivialSet as trivial,
+        NormalMaterial,
+        Point,
+        Ball
+    } from "../../build/thurstonEuc.js";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-
-    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {Ball} from "../../../src/geometries/euc/solids/Ball.js";
-    import {NormalMaterial} from "../../../src/commons/materials/normal/NormalMaterial.js";
 
     // initial setup
     const camera = new BasicCamera({set: trivial});
     const scene = new Scene();
 
-    const renderer = new BasicRendererGeneric(geom, trivial, camera, scene, {}, {
+    const renderer = new BasicRenderer(trivial, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

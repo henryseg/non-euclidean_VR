@@ -63,7 +63,7 @@ const rtParameters = {
     type: FloatType,
 };
 
-export class PathTracerRendererGeneric extends AbstractRenderer {
+export class PathTracerRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
@@ -164,7 +164,7 @@ export class PathTracerRendererGeneric extends AbstractRenderer {
 
     /**
      * Build the Three.js scene with the non-euclidean shader.
-     * @return {PathTracerRendererGeneric}
+     * @return {PathTracerRenderer}
      */
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.

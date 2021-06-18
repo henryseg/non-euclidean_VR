@@ -1,8 +1,10 @@
 const path = require('path');
 
 module.exports = {
+    cache: false,
     experiments: {
         outputModule: true,
+        executeModule: true,
     },
     entry: {
         thurstonEuc: './src/thurstonEuc.js'
@@ -18,7 +20,7 @@ module.exports = {
     plugins: [],
     mode: 'development',
     devServer: {
-        contentBase: './dist',
+        contentBase: '/dist',
         hot: true
     }
 };

@@ -12,25 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Matrix4, Vector2, Vector3} from "three";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-
-    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {Ball} from "../../../src/geometries/euc/solids/all.js";
     import {
-        SingleColorMaterial,
+        Color, Matrix4, Vector2, Vector3,
+        BasicRenderer,
+        BasicCamera,
+        Scene,
+        trivialSet as trivial,
         NormalMaterial,
+        SingleColorMaterial,
         PhongMaterial,
         phongWrap,
-        CheckerboardMaterial
-    } from "../../../src/commons/materials/all.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    import {EarthTexture} from "../../../src/commons/materials/astronomy/earth/EarthTexture.js";
-    import {Isometry} from "../../geometries/euc/geometry/General.js";
+        CheckerboardMaterial,
+        EarthTexture,
+        Point,
+        Ball,
+        PointLight,
+        Isometry
+    } from "../../build/thurstonEuc.js";
 
 
     // initial setup
@@ -39,7 +38,7 @@
     const scene = new Scene({maxBounces: 1});
 
 
-    const renderer = new BasicRendererGeneric(geom, trivial, camera, scene, {}, {
+    const renderer = new BasicRenderer(trivial, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

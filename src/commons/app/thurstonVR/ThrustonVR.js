@@ -5,7 +5,7 @@ import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerMod
 
 import {bind} from "../../../utils.js";
 
-import {Scene, VRCamera, VRRendererGeneric} from "../../../core/General.js";
+import {Scene, VRCamera, VRRenderer} from "../../../core/General.js";
 import {VRControlsMove} from "../../../controls/VRControlsMove.js";
 import {VRControlsDrag} from "../../../controls/VRControlsDrag.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
@@ -23,17 +23,13 @@ export class ThurstonVR {
 
     /**
      * Constructor.
-     * @param {Object} geom - the underlying geometry
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the teleportation set
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, set, params = {}) {
-        /**
-         * The underlying geometry
-         * @type {Object}
-         */
-        this.geom = geom;
+    constructor(shader1, shader2, set, params = {}) {
         /**
          * The underlying subgroup
          * @type {TeleportationSet}
@@ -61,9 +57,9 @@ export class ThurstonVR {
 
         /**
          * The non-euclidean renderer
-         * @type {VRRendererGeneric}
+         * @type {VRRenderer}
          */
-        this.renderer = new VRRendererGeneric(this.geom, this.set, this.camera, this.scene);
+        this.renderer = new VRRenderer(shader1, shader2, this.set, this.camera, this.scene);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);

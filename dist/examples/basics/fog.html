@@ -12,17 +12,13 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {LocalBall} from "../../../src/geometries/euc/solids/LocalBall.js";
-    import {SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {ExpFog} from "../../../src/commons/scenes/expFog/ExpFog.js";
-
+    import {
+        Color,
+        freeAbelianSet as torus,
+        BasicCamera, BasicRenderer, Scene,
+        Point, LocalBall, SingleColorMaterial, ExpFog,
+    } from "../../build/thurstonEuc.js"
 
     const expFog = new ExpFog(
         new Color(0, 0, 0.2),
@@ -33,7 +29,7 @@
     const camera = new BasicCamera({set: torus});
     const scene = new Scene({fog: expFog});
 
-    const renderer = new BasicRendererGeneric(geom, torus, camera, scene, {}, {
+    const renderer = new BasicRenderer(torus, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

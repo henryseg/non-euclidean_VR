@@ -18,7 +18,7 @@
     import * as geom from "../../../src/geometries/hyp/geometry/General.js";
     import cube from "../../../src/geometries/hyp/groups/cube/set.js";
 
-    import {VRRendererGeneric, Scene, VRCamera} from "../../../src/core/General.js";
+    import {VRRenderer, Scene, VRCamera} from "../../../src/core/General.js";
     import {NativeCamera} from "../../../src/geometries/hyp/cameras/native/NativeCamera.js";
 
     import {Isometry, Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
@@ -40,7 +40,7 @@
     const camera = new VRCamera({set: cube});
     camera.maxSteps = 300;
     const scene = new Scene();
-    const renderer = new VRRendererGeneric(geom, cube, camera, scene, {}, {
+    const renderer = new VRRenderer(geom, cube, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

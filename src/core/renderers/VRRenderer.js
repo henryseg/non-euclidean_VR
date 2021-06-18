@@ -28,7 +28,7 @@ import main from "./shaders/basic/main.js";
  * We place in distinct layer of the Three.js scene two horizon spheres.
  * Each sphere will render the picture seen by one eye.
  */
-export class VRRendererGeneric extends AbstractRenderer {
+export class VRRenderer extends AbstractRenderer {
 
     /**
      * Constructor.

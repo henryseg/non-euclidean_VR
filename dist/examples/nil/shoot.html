@@ -33,7 +33,7 @@
     import {LocalVerticalCylinderShape} from "../../../src/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
     import {union} from "../../../src/commons/shapes/all.js";
     import {VRCamera} from "../../../src/core/cameras/vr/VRCamera.js";
-    import {Scene, VRRendererGeneric} from "../../../src/core/General.js";
+    import {Scene, VRRenderer} from "../../../src/core/General.js";
     import {FlyControls} from "../../../src/controls/FlyControls.js";
     import {InfoControls} from "../../../src/controls/InfoControls.js";
     import {ShootControls} from "../../../src/controls/ShootControls.js";
@@ -46,7 +46,7 @@
     const camera = new VRCamera({set: heisenberg});
     camera.maxSteps = 300;
     const scene = new Scene();
-    const renderer = new VRRendererGeneric(geom, heisenberg, camera, scene, {}, {
+    const renderer = new VRRenderer(geom, heisenberg, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

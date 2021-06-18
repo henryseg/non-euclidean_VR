@@ -27,7 +27,7 @@ import main from "./shaders/basic/main.js";
  * Takes as input the non-euclidean camera and scene and makes some magic.
  * It should not be confused with the Three.js WebGLRenderer it relies on.
  */
-export class BasicRendererGeneric extends AbstractRenderer {
+export class BasicRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
@@ -102,7 +102,7 @@ export class BasicRendererGeneric extends AbstractRenderer {
 
     /**
      * Build the Three.js scene with the non-euclidean shader.
-     * @return {BasicRendererGeneric}
+     * @return {BasicRenderer}
      */
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.

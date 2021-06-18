@@ -4,7 +4,7 @@ import Stats from "../../../lib/stats.module.js";
 
 import {FlyControls} from "../../../controls/FlyControls.js";
 import {bind} from "../../../utils.js";
-import {BasicCamera, BasicRendererGeneric, PathTracerCamera, PathTracerRendererGeneric, Scene} from "../../../core/General.js";
+import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 import {PathTracerUI} from "./PathTracerUI.js";
 
@@ -24,17 +24,13 @@ export class Thurston {
 
     /**
      * Constructor.
-     * @param {Object} geom - the underlying geometry
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the teleportation set
      * @param {Object} params - additional parameters including
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
-    constructor(geom, set, params = {}) {
-        /**
-         * The underlying geometry
-         * @type {Object}
-         */
-        this.geom = geom;
+    constructor(shader1, shader2, set, params = {}) {
         /**
          * The underlying subgroup
          * @type {TeleportationSet}
@@ -74,17 +70,17 @@ export class Thurston {
 
         /**
          * Non-euclidean renderer for basic renderer
-         * @type {BasicRendererGeneric}
+         * @type {BasicRenderer}
          */
-        this.renderer = new BasicRendererGeneric(this.geom, this.set, this.camera, this.scene, {}, this.threeRenderer);
+        this.renderer = new BasicRenderer(shader1, shader2, this.set, this.camera, this.scene, {}, this.threeRenderer);
         /**
          * Non-euclidean renderer for path tracer
-         * @type {PathTracerRendererGeneric}
+         * @type {PathTracerRenderer}
          */
-        this.ptRenderer = new PathTracerRendererGeneric(this.geom, this.set, this.ptCamera, this.scene, {}, this.threeRenderer);
+        this.ptRenderer = new PathTracerRenderer(shader1, shader2, this.set, this.ptCamera, this.scene, {}, this.threeRenderer);
         /**
          * The renderer we are currently using
-         * @type {BasicRendererGeneric|PathTracerRendererGeneric}
+         * @type {BasicRenderer|PathTracerRenderer}
          */
         this.currentRenderer = this.renderer;
 

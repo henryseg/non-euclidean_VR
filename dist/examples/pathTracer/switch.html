@@ -17,7 +17,7 @@
     import * as geom from "../../geometries/euc/geometry/General.js";
     import trivial from "../../../src/commons/groups/trivial/set.js";
 
-    import {BasicCamera, BasicRendererGeneric, PathTracerCamera, PathTracerRendererGeneric, Scene} from "../../../src/core/General.js";
+    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
 
     import {Isometry, Point} from "../../geometries/euc/geometry/General.js";
     import {BasicPTMaterial} from "../../../src/commons/materials/basicPTMaterial/BasicPTMaterial.js";
@@ -172,7 +172,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const camera = new BasicCamera({set: trivial, maxSteps: 500});
-    const renderer = new BasicRendererGeneric(geom, trivial, camera, scene, {}, threeRenderer);
+    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, threeRenderer);
 
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
@@ -185,7 +185,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRendererGeneric(geom, trivial, ptCamera, scene, {}, threeRenderer);
+    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, threeRenderer);
 
     ptRenderer.setPixelRatio(window.devicePixelRatio);
     ptRenderer.setSize(width, height);

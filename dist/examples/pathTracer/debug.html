@@ -17,7 +17,7 @@
     import * as geom from "../../geometries/euc/geometry/General.js";
     import trivial from "../../../src/commons/groups/trivial/set.js";
 
-    import {BasicCamera, BasicRendererGeneric, PathTracerCamera, PathTracerRendererGeneric, Scene} from "../../../src/core/General.js";
+    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
 
 
     import {Isometry, Point} from "../../geometries/euc/geometry/General.js";
@@ -137,7 +137,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const camera = new BasicCamera({set: trivial, maxSteps: 500});
-    const renderer = new BasicRendererGeneric(geom, trivial, camera, scene, {}, {logarithmicDepthBuffer: true});
+    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, {logarithmicDepthBuffer: true});
 
     renderer.build();
 
@@ -159,7 +159,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRendererGeneric(geom, trivial, ptCamera, scene, {}, {logarithmicDepthBuffer: true});
+    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, {logarithmicDepthBuffer: true});
 
     // building there renderer
     ptRenderer.build();

@@ -12,21 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {BasicCamera, BasicRendererGeneric, Scene} from "../../../src/core/General.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {LocalBall} from "../../../src/geometries/euc/solids/LocalBall.js";
-    import {NormalMaterial} from "../../../src/commons/materials/normal/NormalMaterial.js";
+    import {
+        BasicRenderer,
+        BasicCamera,
+        Scene,
+        freeAbelianSet as torus,
+        NormalMaterial,
+        Point,
+        LocalBall
+    } from "../../build/thurstonEuc.js";
 
 
     // initial setup
     const camera = new BasicCamera({set: torus});
     const scene = new Scene();
 
-    const renderer = new BasicRendererGeneric(geom, torus, camera, scene, {}, {
+    const renderer = new BasicRenderer(torus, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

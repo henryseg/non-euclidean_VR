@@ -17,7 +17,7 @@
     import * as geom from "../../geometries/euc/geometry/General.js";
     import trivial from "../../../src/commons/groups/trivial/set.js";
 
-    import {PathTracerCamera, PathTracerRendererGeneric, Scene} from "../../../src/core/General.js";
+    import {PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
 
     import {Isometry, Point} from "../../geometries/euc/geometry/General.js";
     import {BasicPTMaterial} from "../../../src/commons/materials/basicPTMaterial/BasicPTMaterial.js";
@@ -133,7 +133,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRendererGeneric(geom, trivial, ptCamera, scene, {}, {
+    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, {
         logarithmicDepthBuffer: true
     });
 
