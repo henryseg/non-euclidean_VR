@@ -146,3 +146,13 @@ export function bind(scope, fn) {
         return fn.apply(scope, arguments);
     };
 }
+
+
+/**
+ * Replace all the special characters in the string by 0
+ * @param {string} str
+ * @return {string}
+ */
+export function safeString(str) {
+    return str.replace(/\W/g, '0');
+}

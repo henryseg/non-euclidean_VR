@@ -1,4 +1,5 @@
 import {MathUtils} from "three";
+import {safeString} from "../utils.js";
 
 /**
  * @class
@@ -54,7 +55,7 @@ export class Generic {
      */
     get name() {
         if (this._name === undefined) {
-            this._name = `${this.className}_${this.uuid}`;
+            this._name = `${safeString(this.className)}_${this.uuid}`;
         }
         return this._name;
     }

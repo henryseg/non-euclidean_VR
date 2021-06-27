@@ -16,19 +16,21 @@
     import {
         Color,
         ThurstonLite,
-        cubeSet as cube,
+        trivialSet as group,
         Vector,
-        Point,
         PointLight,
-        PhongMaterial,
         LocalBallShape,
+        BallShape,
         complement,
-        Solid
+        Solid,
+        LocalBall,
+        Ball,
+        SingleColorMaterial
     } from "../../build/thurstonHyp.js";
 
 
     // cube.usesNearestNeighbors = true;
-    const thurston = new ThurstonLite(cube, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(group, {keyboard: 'fr'});
 
 
     // lights for the Phong material
@@ -52,24 +54,24 @@
     );
 
     // Phong shading material
-    const mat0 = new PhongMaterial({
-        color: new Color(1, 0.2, 0.2),
-        shininess: 5,
-    });
+    const mat0 = new SingleColorMaterial(new Color(1, 0.2, 0.2));
 
-    // Complement of a local ball
-    const centerBall = new LocalBallShape(
-        new Point(),
-        1.02,
+    const ballShape = new BallShape(
+        new Vector(0, 0, -0.5),
+        0.3
     );
 
-
-    const latticeShape = complement(centerBall);
-    const lattice = new Solid(latticeShape, mat0);
+    const ball = new Solid(ballShape, mat0);
 
 
-    thurston.add(lattice, light0, light1, light2);
+
+    // const latticeShape = complement(centerBall);
+    // const lattice = new Solid(latticeShape, mat0);
+
+
+    thurston.add(ball, light0, light1, light2);
     thurston.run();
+    thurston.renderer.checkShader();
 
 
 </script>

@@ -101,5 +101,4 @@ export class LocalBallShape extends BasicShape {
     glslUVMap() {
         return mustache.render(uv, this);
     }
-
 }

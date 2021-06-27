@@ -24,9 +24,9 @@ module.exports = {
             type: 'module',
         },
     },
-    optimization: {
-        minimize: false
-    },
+    // optimization: {
+    //     minimize: false
+    // },
     plugins: [],
     mode: 'development',
     devServer: {
