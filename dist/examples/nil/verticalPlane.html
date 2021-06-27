@@ -12,21 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Vector2, Vector3, Vector4} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Clock,
+        Vector2,
+        Vector3,
+        Color,
+        ThurstonLite,
+        trivialSet as trivial,
+        Point,
+        FakePointLight,
+        VerticalHalfSpace,
+        CheckerboardMaterial,
+        Isometry,
+        phongWrap
+    } from "../../build/thurstonNil.js";
 
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
 
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
-    import {VerticalHalfSpace} from "../../../src/geometries/nil/solids/all.js";
-    import {CheckerboardMaterial, phongWrap, PhongWrapMaterial} from "../../../src/commons/materials/all.js";
-    import {Isometry} from "../../../src/geometries/nil/geometry/General.js";
-
-
-    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(trivial, {keyboard: 'fr'});
     thurston.renderer.maxBounces = 1;
     thurston.camera.maxDist = 50;
     thurston.camera.maxSteps = 200;

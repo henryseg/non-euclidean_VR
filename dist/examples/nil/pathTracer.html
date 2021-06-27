@@ -12,24 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
-    import {Thurston} from "../../../src/commons/app/thurston/Thurston.js";
-
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import heisenberg from "../../../src/geometries/nil/groups/heisenberg/set.js";
-
-    import {Point} from "../../../src/geometries/nil/geometry/General.js";
-    import {Solid, FakeBall, LocalFakeBall} from "../../../src/geometries/nil/solids/all.js";
-    import {complement, LocalPotatoShape,} from "../../../src/geometries/nil/shapes/all.js";
     import {
+        Color,
+        Thurston,
+        heisenbergSet as heisenberg,
+        Point,
+        FakePointLight,
+        Solid,
+        complement,
+        CREEPING_FULL,
+        LocalPotatoShape,
+        LocalFakeBall,
         BasicPTMaterial,
-        PathTracerWrapMaterial,
         PhongWrapMaterial,
-        SingleColorMaterial
-    } from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
-    import {CREEPING_FULL} from "../../../src/core/groups/TeleportationSet.js";
-    import {VaryingColorMaterial} from "../../../src/geometries/nil/material/varyingColor/VaryingColorMaterial.js";
+        SingleColorMaterial,
+        VaryingColorMaterial
+
+    } from "../../build/thurstonNil.js";
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -37,7 +36,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     heisenberg.creepingType = CREEPING_FULL;
-    const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new Thurston(heisenberg, {keyboard: 'fr'});
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -99,18 +98,17 @@
 
 
     const ptLatticeMat = new BasicPTMaterial({
-        diffuse: new Color(0.2,0.1,0.5),
-        specular: new Color(1,1,1),
-        ior:1.5,
+        diffuse: new Color(0.2, 0.1, 0.5),
+        specular: new Color(1, 1, 1),
+        ior: 1.5,
         diffuseChance: 0.95,
         reflectionChance: 0.05,
         refractionChance: 0.0,
         // absorb: new Color(0.5,1,0),
         // emission:new Color(0.15,0.05,0.25),
         // volumeEmission:new Color(0.05,0.005,0.05),
-        roughness:0.2,
+        roughness: 0.2,
     });
-
 
 
     // Lattice

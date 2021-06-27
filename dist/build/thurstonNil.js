@@ -37,11 +37,9 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "ec": () => (/* reexport */ Ball),
-  "Yb": () => (/* reexport */ BallShape),
   "QU": () => (/* reexport */ BasicCamera),
   "ZH": () => (/* reexport */ BasicPTMaterial),
-  "K9": () => (/* binding */ thurstonS2E_BasicRenderer),
+  "K9": () => (/* binding */ thurstonNil_BasicRenderer),
   "cK": () => (/* reexport */ CREEPING_FULL),
   "_x": () => (/* reexport */ CREEPING_OFF),
   "kj": () => (/* reexport */ CREEPING_STRICT),
@@ -49,12 +47,14 @@ __webpack_require__.d(__webpack_exports__, {
   "SU": () => (/* reexport */ Clock),
   "Il": () => (/* reexport */ Color),
   "Iy": () => (/* reexport */ ComplementShape),
-  "ik": () => (/* reexport */ DIR_DOWN),
-  "fY": () => (/* reexport */ DIR_UP),
   "TB": () => (/* reexport */ DebugMaterial),
-  "Gj": () => (/* reexport */ ESun),
+  "F6": () => (/* reexport */ DirectedVerticalHalfSpace),
+  "Kd": () => (/* reexport */ DirectedVerticalHalfSpaceShape),
   "KO": () => (/* reexport */ EarthTexture),
   "c$": () => (/* reexport */ ExpFog),
+  "OZ": () => (/* reexport */ FakeBall),
+  "Ao": () => (/* reexport */ FakeBallShape),
+  "ET": () => (/* reexport */ FakePointLight),
   "mD": () => (/* reexport */ FlyControls),
   "yb": () => (/* reexport */ Fog_Fog),
   "ZA": () => (/* reexport */ Group_Group),
@@ -66,8 +66,12 @@ __webpack_require__.d(__webpack_exports__, {
   "Nh": () => (/* reexport */ KeyGenericControls),
   "RL": () => (/* reexport */ LEFT),
   "_k": () => (/* reexport */ Light_Light),
-  "jo": () => (/* reexport */ LocalBall),
-  "Q": () => (/* reexport */ LocalBallShape),
+  "oR": () => (/* reexport */ LocalFakeBall),
+  "lt": () => (/* reexport */ LocalFakeBallShape),
+  "tl": () => (/* reexport */ LocalPotato),
+  "HI": () => (/* reexport */ LocalPotatoShape),
+  "IJ": () => (/* reexport */ LocalVerticalCylinder),
+  "jD": () => (/* reexport */ LocalVerticalCylinderShape),
   "Qv": () => (/* reexport */ MarsTexture),
   "F5": () => (/* reexport */ Material_Material),
   "Uc": () => (/* reexport */ Matrix2),
@@ -77,14 +81,14 @@ __webpack_require__.d(__webpack_exports__, {
   "oB": () => (/* reexport */ NormalMaterial),
   "pJ": () => (/* reexport */ PTMaterial),
   "GW": () => (/* reexport */ PathTracerCamera),
-  "DZ": () => (/* binding */ thurstonS2E_PathTracerRenderer),
+  "DZ": () => (/* binding */ thurstonNil_PathTracerRenderer),
   "_K": () => (/* reexport */ PathTracerWrapMaterial),
   "JF": () => (/* reexport */ PhongMaterial),
   "Lv": () => (/* reexport */ PhongWrapMaterial),
   "E9": () => (/* reexport */ Point),
-  "ce": () => (/* reexport */ PointLight_PointLight),
   "Ly": () => (/* reexport */ Position),
-  "iv": () => (/* reexport */ QuadRing),
+  "Gx": () => (/* reexport */ PotatoShape),
+  "jo": () => (/* reexport */ QuadRing),
   "mH": () => (/* reexport */ QuadRingElement),
   "xd": () => (/* reexport */ QuadRingMatrix4),
   "_f": () => (/* reexport */ Quaternion),
@@ -99,30 +103,35 @@ __webpack_require__.d(__webpack_exports__, {
   "_D": () => (/* reexport */ SunTexture),
   "$p": () => (/* reexport */ SwitchControls),
   "xG": () => (/* reexport */ TeleportationSet),
-  "qC": () => (/* binding */ thurstonS2E_Thurston),
-  "N$": () => (/* binding */ thurstonS2E_ThurstonLite),
-  "TO": () => (/* binding */ thurstonS2E_ThurstonVR),
+  "qC": () => (/* binding */ thurstonNil_Thurston),
+  "N$": () => (/* binding */ thurstonNil_ThurstonLite),
+  "TO": () => (/* binding */ thurstonNil_ThurstonVR),
   "yI": () => (/* reexport */ UnionShape),
   "E6": () => (/* reexport */ VRCamera),
   "IZ": () => (/* reexport */ VRControlsDrag),
   "Ac": () => (/* reexport */ VRControlsMove),
-  "zO": () => (/* binding */ thurstonS2E_VRRenderer),
+  "zO": () => (/* binding */ thurstonNil_VRRenderer),
   "cB": () => (/* reexport */ VaryingColorMaterial),
   "OW": () => (/* reexport */ Vector),
   "FM": () => (/* reexport */ Vector2),
   "P": () => (/* reexport */ Vector3),
   "Lt": () => (/* reexport */ Vector4),
+  "DV": () => (/* reexport */ VerticalCylinder),
+  "bt": () => (/* reexport */ VerticalCylinderShape),
+  "Pq": () => (/* reexport */ VerticalHalfSpace),
+  "j5": () => (/* reexport */ VerticalHalfSpaceShape),
   "$9": () => (/* reexport */ WrapShape),
   "iR": () => (/* reexport */ XRControllerModelFactory),
+  "wJ": () => (/* reexport */ basicHeisenberg_set),
   "ak": () => (/* reexport */ bind),
   "Cy": () => (/* reexport */ complement),
-  "Rc": () => (/* reexport */ cube_set),
+  "Z": () => (/* reexport */ extendedHeisenberg_set),
+  "aG": () => (/* reexport */ heisenberg_set),
   "jV": () => (/* reexport */ intersection),
-  "IJ": () => (/* reexport */ phongWrap),
+  "WT": () => (/* reexport */ phongWrap),
   "dV": () => (/* reexport */ set),
   "G0": () => (/* reexport */ union),
-  "re": () => (/* reexport */ wrap),
-  "xS": () => (/* reexport */ zLoop_set)
+  "re": () => (/* reexport */ wrap)
 });
 
 ;// CONCATENATED MODULE: ./node_modules/three/build/three.module.js
@@ -49787,142 +49796,108 @@ class Isometry {
 }
 
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/geometry/Isometry.js
+;// CONCATENATED MODULE: ./src/geometries/nil/geometry/Isometry.js
+
 
 
 
 
 Isometry.prototype.build = function () {
+    /**
+     * Matrix of the isometry in the projective model
+     * @type {Matrix4}
+     */
     this.matrix = new Matrix4();
-    this.shift = 0;
+    /**
+     * Boolean flag
+     * True, if the isometry belongs to Nil
+     * False, means that one cannot decide
+     * (e.g. the conjugation of an element in Nil by another element that is not in Nil)
+     * @type {boolean}
+     */
+    this.isInNil = true;
 }
 
 Isometry.prototype.identity = function () {
     this.matrix.identity();
-    this.shift = 0;
+    this.isInNil = true;
     return this;
 }
 
-Isometry.prototype.reduceError = function () {}
+Isometry.prototype.reduceError = function () {
+    return this;
+};
 
 Isometry.prototype.multiply = function (isom) {
     this.matrix.multiply(isom.matrix);
-    const coeff = this.matrix.elements[this.matrix.elements.length - 1];
-    this.shift = this.shift + isom.shift;
+    this.isInNil = this.isInNil && isom.isInNil;
     return this;
-}
+};
 
 Isometry.prototype.premultiply = function (isom) {
     this.matrix.premultiply(isom.matrix);
-    const coeff = isom.matrix.elements[isom.matrix.elements.length - 1];
-    this.shift = isom.shift + coeff * this.shift;
+    this.isInNil = this.isInNil && isom.isInNil;
     return this;
-}
+};
 
 Isometry.prototype.invert = function () {
-    this.matrix.invert;
-    const coeff = this.matrix.elements[this.matrix.elements.length - 1];
-    this.shift = -coeff * this.shift;
-
+    this.matrix.invert();
     return this;
-}
-
-
-
-Isometry.prototype.makeTranslationFromDir = function (vec) {
-
-    var len = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
-
-    this.shift = vec.z;
-
-    this.matrix.identity();
-
-    if (len !== 0) {
-        const c1 = Math.sin(len);
-        const c2 = 1 - Math.cos(len);
-
-        const dx = vec.x / len;
-        const dy = vec.y / len;
-        const m = new Matrix4().set(
-            0, 0, dx, 0,
-            0, 0, dy, 0,
-            -dx, -dy, 0, 0,
-            0, 0, 0, 0.0);
-        const m2 = m.clone().multiply(m);
-        m.multiplyScalar(c1);
-        m2.multiplyScalar(c2);
-        this.matrix.add(m);
-        this.matrix.add(m2);
-
-    }
-
-    return this;
-}
-
-
-
+};
 
 Isometry.prototype.makeTranslation = function (point) {
-    const [x, y, z, w] = point.coords.toArray();
-
-    const u = new Vector2(x, y);
-    const c1 = u.length();
-
-    this.shift = w;
-    this.matrix.identity();
-
-    if (c1 === 0) {
-        return this;
-    }
-
-    const c2 = 1 - z;
-    u.normalize();
-
-    const m = new Matrix4().set(
-        0, 0, u.x, 0,
-        0, 0, u.y, 0,
-        -u.x, -u.y, 0, 0,
-        0, 0, 0, 0.0);
-
-    const m2 = new Matrix4().copy(m).multiply(m);
-    m.multiplyScalar(c1);
-    m2.multiplyScalar(c2);
-    this.matrix.add(m);
-    this.matrix.add(m2);
-
+    const [x, y, z,] = point.coords.toArray();
+    this.matrix.set(
+        1, 0, 0, x,
+        0, 1, 0, y,
+        -0.5 * y, 0.5 * x, 1, z,
+        0, 0, 0, 1,
+    )
+    this.isInNil = true;
     return this;
-}
-
-
-
+};
 
 Isometry.prototype.makeInvTranslation = function (point) {
-    this.makeTranslation(point);
-    this.invert();
+    const [x, y, z,] = point.coords.toArray();
+    this.matrix.set(
+        1, 0, 0, -x,
+        0, 1, 0, -y,
+        0.5 * y, -0.5 * x, 1, -z,
+        0, 0, 0, 1,
+    )
+    this.isInNil = true;
+    return this;
+};
+
+Isometry.prototype.makeTranslationFromDir = function (vec) {
+    console.warn('makeTranslationFromDir: not done yet');
+    const [x, y, z] = vec.toArray();
+    this.matrix.set(
+        1, 0, 0, x,
+        0, 1, 0, y,
+        0, 0, 1, z,
+        0, 0, 0, 1,
+    )
+    this.isInNil = true;
     return this;
 }
 
-
-
-
 Isometry.prototype.equals = function (isom) {
-    return this.matrix.equals(isom.matrix) && this.shift === isom.shift;
+    return this.matrix.equals(isom.matrix);
 };
 
 Isometry.prototype.clone = function () {
     let res = new Isometry();
     res.matrix.copy(this.matrix);
-    res.shift = this.shift;
+    res.isInNil = this.isInNil;
     return res;
 };
 
 Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);
-    this.shift = isom.shift;
+    this.isInNil = isom.isInNil;
     return this;
 };
-
-
 
 
 
@@ -50015,26 +49990,26 @@ class Point {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/geometry/Point.js
+;// CONCATENATED MODULE: ./src/geometries/nil/geometry/Point.js
+
 
 
 
 
 Point.prototype.build = function () {
     if (arguments.length === 0) {
-        this.coords = new Vector4(0, 0, 1, 0);
+        this.coords = new Vector4(0, 0, 0, 1);
     } else {
         this.coords = new Vector4(...arguments);
     }
 };
 
-Point.prototype.set = function () {
-    this.coords.set(...arguments);
+Point.prototype.set = function() {
+    this.coords.set(arguments[0], arguments[1], arguments[2], 1);
 }
 
 Point.prototype.applyIsometry = function (isom) {
-    this.coords.applyMatrix4(isom.matrix);
-    this.coords.setW(this.coords.w + isom.shift);
+    this.coords.applyMatrix4(isom.matrix)
     return this;
 };
 
@@ -50057,8 +50032,6 @@ Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
     return this;
 };
-
-
 
 
 
@@ -50373,29 +50346,93 @@ class Position {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/geometry/Position.js
+;// CONCATENATED MODULE: ./src/geometries/nil/geometry/Position.js
+
+
+
+
+
+
+const ex = new Vector3(1, 0, 0);
+const ey = new Vector3(0, 1, 0);
+const ez = new Vector3(0, 0, 1);
 
 
 Position.prototype.flowFromOrigin = function (v) {
-    this.boost.makeTranslationFromDir(v);
-    this.quaternion.identity();
+    // length of v
+    const t = v.length();
+
+    // if v is the zero vector, we are just not moving !
+    if (t === 0) {
+        this.boost.identity();
+        this.quaternion.identity();
+        return this;
+    }
+
+    // normalized version of v
+    const u = v.clone().normalize();
+    // cylindrical coordinates of u (without the angle alpha)
+    const c = u.z;
+    const a = Math.sqrt(1 - c * c);
+
+    // point reached after flowing
+    const target = new Point();
+    if (c === 0) {
+        target.set(v.x, v.y, v.z);
+    } else {
+        const rotation = new Isometry();
+        rotation.matrix.set(
+            u.x, -u.y, 0, 0,
+            u.y, u.x, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+        target.set(
+            (2 / c) * Math.sin(0.5 * c * t) * Math.cos(0.5 * c * t),
+            (2 / c) * Math.sin(0.5 * c * t) * Math.sin(0.5 * c * t),
+            c * t + 0.5 * (a / c) * (a / c) * (c * t - Math.sin(c * t))
+        )
+        target.applyIsometry(rotation);
+    }
+    // update the translation part of the position
+    this.boost.makeTranslation(target);
+
+    // parallel transport
+    // The quaternion corresponding to e^{ctU_1} in the paper
+    const q1 = new Quaternion().setFromAxisAngle(ez, c * t);
+    // The quaternion corresponding to e^{-(t/2)U2} in the paper
+    const q2 = new Quaternion().setFromAxisAngle(ex, -0.5 * t);
+    // The quaternion corresponding to R_alpha * P in the paper
+    // This is a matrix sending e_x to u
+    // Such a matrix is well-defined up to a rotation around e_x.
+    // However the formula in the paper shows that
+    // the parallel transport operator Q does not depend on this choice.
+    const qp = new Quaternion().setFromUnitVectors(ex, u);
+
+    // making the product
+    // note that (in the paper) R_alpha and e^{ctU_1} commutes
+    // thus the order is correct
+    this.quaternion.identity()
+        .multiply(q1)
+        .multiply(qp)
+        .multiply(q2)
+        .multiply(qp.conjugate());
+    this.reduceErrorQuaternion();
     return this;
 }
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/geometry/shaders/part1.js
-//language=GLSL
+;// CONCATENATED MODULE: ./src/geometries/nil/geometry/shaders/part1.js
+// language=GLSL
 /* harmony default export */ const part1 = (`//
-
 /***********************************************************************************************************************
- * @file
- * This file is a model to impletement other geometries.
- * The content of the structures can be customized.
- * The signatures and the roles of each method need to be implemented strictly.
+ ***********************************************************************************************************************
+ *
+ * Implementation of the Nil geometry (part 1)
+ *
+ ***********************************************************************************************************************
  **********************************************************************************************************************/
-
-
 
 /***********************************************************************************************************************
  *
@@ -50405,16 +50442,17 @@ Position.prototype.flowFromOrigin = function (v) {
  **********************************************************************************************************************/
 struct Isometry{
     mat4 matrix;
-    float shift;
+    bool isInNil;
 };
 
 /**
  * Identity isometry
  */
-const Isometry IDENTITY = Isometry(mat4(1.), 0.); /**< Identity isometry */
+const Isometry IDENTITY = Isometry(mat4(1.), true); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
+ * @todo to be written
  */
 Isometry reduceError(Isometry isom){
     return isom;
@@ -50424,10 +50462,7 @@ Isometry reduceError(Isometry isom){
  * Multiply the two given isometries.
  */
 Isometry multiply(Isometry isom1, Isometry isom2) {
-    mat4 matrix = isom1.matrix * isom2.matrix;
-    float shift = isom1.shift + isom1.matrix[3][3] * isom2.shift;
-    Isometry res= Isometry(matrix, shift);
-    return reduceError(res);
+    return Isometry(isom1.matrix * isom2.matrix, isom1.isInNil && isom2.isInNil);
 }
 
 /**
@@ -50435,9 +50470,7 @@ Isometry multiply(Isometry isom1, Isometry isom2) {
  */
 Isometry geomInverse(Isometry isom) {
     mat4 inv = inverse(isom.matrix);
-    float shift = -isom.matrix[3][3] * isom.shift;
-    Isometry res=Isometry(inv, shift);
-    return reduceError(res);
+    return Isometry(inv, isom.isInNil);
 }
 
 /***********************************************************************************************************************
@@ -50451,14 +50484,14 @@ struct Point{
 };
 
 
-const Point ORIGIN = Point(vec4(0, 0, 1, 0)); /**< Origin of the geometry */
+const Point ORIGIN = Point(vec4(0, 0, 0, 1));/**< Origin of the geometry */
+
 
 /**
  * Reduce the eventual numerical errors of the given point.
  */
 Point reduceError(Point p){
-    vec3 aux = normalize(p.coords.xyz);
-    return Point(vec4(aux, p.coords.w));
+    return p;
 }
 
 /**
@@ -50466,9 +50499,7 @@ Point reduceError(Point p){
  */
 Point applyIsometry(Isometry isom, Point p) {
     vec4 coords = isom.matrix * p.coords;
-    coords.w += isom.shift;
-    Point res = Point(coords);
-    return reduceError(res);
+    return Point(coords);
 }
 
 /**
@@ -50477,24 +50508,14 @@ Point applyIsometry(Isometry isom, Point p) {
  */
 
 Isometry makeTranslation(Point p) {
-    mat4 matrix = mat4(1.);
-    float shift=p.coords.w;
-    vec2 u = p.coords.xy;
-    float c1 = length(u);
-    if (c1 == 0.) {
-        return Isometry(matrix, shift);
-    }
-
-    float c2 = 1. - p.coords.z;
-    u = normalize(u);
-    mat4 m = mat4(
-    0, 0, -u.x, 0,
-    0, 0, -u.y, 0,
-    u.x, u.y, 0, 0,
-    0, 0, 0, 0
+    vec4 c = p.coords;
+    mat4 matrix =  mat4(
+    1, 0., -0.5 * c.y, 0.,
+    0., 1, 0.5 * c.x, 0.,
+    0., 0., 1., 0,
+    c.x, c.y, c.z, 1.
     );
-    matrix = matrix + c1 * m + c2 * m * m;
-    return Isometry(matrix, shift);
+    return Isometry(matrix, true);
 }
 
 /**
@@ -50502,8 +50523,14 @@ Isometry makeTranslation(Point p) {
  * Previously makeInvLeftTranslation.
  */
 Isometry makeInvTranslation(Point p) {
-    Isometry isom = makeTranslation(p);
-    return geomInverse(isom);
+    vec4 c = p.coords;
+    mat4 matrix =  mat4(
+    1, 0., 0.5 * c.y, 0.,
+    0., 1, -0.5 * c.x, 0.,
+    0., 0., 1., 0,
+    -c.x, -c.y, -c.z, 1.
+    );
+    return Isometry(matrix, true);
 }
 
 /***********************************************************************************************************************
@@ -50511,11 +50538,14 @@ Isometry makeInvTranslation(Point p) {
  * @struct Vector
  * Structure for vector in the tangent bundle of the geometry.
  * For computation of gradient, one needs to fix for each geometry, a section of the frame bundle.
+ * In this description,
+ * - pos is the underlying position of the vector (nothing fancy here)
+ * - dir is the **pullback** at the origin of the vector by the element of Nil sending the origin to pos
  *
  **********************************************************************************************************************/
 struct Vector{
-    Point pos; /**< Underlying point */
-    vec4 dir; /**< direction of the vector */
+    Point pos;///< Underlying point
+    vec4 dir;///< Direction of the vector
 };
 
 /**
@@ -50529,8 +50559,6 @@ Vector zeroVector(Point pos){
  * Reduce the eventual numerical errors of the given vector.
  */
 Vector reduceError(Vector v){
-    v.pos = reduceError(v.pos);
-    v.dir.xyz = v.dir.xyz - dot(v.pos.coords.xyz, v.dir.xyz) * v.pos.coords.xyz;
     return v;
 }
 
@@ -50559,6 +50587,7 @@ Vector multiplyScalar(float s, Vector v){
     return Vector(v.pos, s * v.dir);
 }
 
+
 /**
  * Return the dot product of the two vectors (with respect to the metric tensor).
  * Previouly tangDot.
@@ -50567,103 +50596,154 @@ float geomDot(Vector v1, Vector v2) {
     return dot(v1.dir, v2.dir);
 }
 
+
 /**
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-    Point p = applyIsometry(isom, v.pos);
-    return Vector(p, isom.matrix * v.dir);
+    Point pos = applyIsometry(isom, v.pos);
+    if(isom.isInNil) {
+        return Vector(pos, v.dir);
+    } else {
+        Isometry push = makeTranslation(v.pos);
+        Isometry pull = makeInvTranslation(pos);
+        vec4 dir = pull.matrix * isom.matrix * push.matrix * v.dir;
+        return Vector(pos, v.dir);
+    }
 }
 
 
 /**
- * Rotate the given vector by a matrix representing an element of O(3).
+ * Rotation the given vector by a matrix representing an element of O(3).
  * @param[in] m an isometry of the tangent space. The matrix is written in the reference frame at the orign
  * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
-    vec4 aux = m * vec4(v.dir.xy, v.dir.w, 0.);
-    return Vector(v.pos, vec4(aux.xy, 0, aux.z));
+    return Vector(v.pos, m * v.dir);
 }
 
 void initFlow(Vector v){
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/s2e/geometry/shaders/part2.js
+
+;// CONCATENATED MODULE: ./src/geometries/nil/geometry/shaders/part2.js
 // language=GLSL
 /* harmony default export */ const part2 = (`//
+/***********************************************************************************************************************
+ ***********************************************************************************************************************
+ *
+ * Implementation of the euclidean geometry (part 2)
+ *
+ ***********************************************************************************************************************
+ **********************************************************************************************************************/
+
 /**
  * Section of the frame bundle.
  * The section at the origin, should coincide with the reference frame.
  * @param[in] p point on the geometry
  * @param[out] frame computed frame at the given point
+ * @todo Not completely convinced by this - and the function createVector() and smallShift().
+ * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] f){
-    vec4 dir0 = vec4(p.coords.z, 0, -p.coords.x,0);
-    vec4 dir1 = vec4(0, p.coords.z, -p.coords.y,0);
-    vec4 dir2 = vec4(0, 0, 0, 1);
-    dir0 = normalize(dir0);
-    dir1 = normalize(dir1);
-    f[0] = Vector(p, dir0);
-    f[1] = Vector(p, dir1);
-    f[2] = Vector(p, dir2);
+    f[0] = Vector(p, vec4(1, 0, 0, 0));
+    f[1] = Vector(p, vec4(0, 1, 0, 0));
+    f[2] = Vector(p, vec4(0, 0, 1, 0));
 }
 
-
+/**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
 void orthoFrame(Point p, out Vector[3] f){
-    float x = p.coords.x;
-    float y = p.coords.y;
-    float z = p.coords.z;
-
-    float den = 1. + z;
-    vec4 dir0 = (1. / den) * vec4(-x * x + z + 1., -x * y, -x * den, 0.);
-    vec4 dir1 = (1. / den) * vec4(-x * y, -y * y + z + 1., -y * den, 0.);
-    vec4 dir2 = vec4(0, 0, 0, 1);
-
-    f[0] = Vector(p, dir0);
-    f[1] = Vector(p, dir1);
-    f[2] = Vector(p, dir2);
+    f[0] = Vector(p, vec4(1, 0, 0, 0));
+    f[1] = Vector(p, vec4(0, 1, 0, 0));
+    f[2] = Vector(p, vec4(0, 0, 1, 0));
 }
-
 
 /**
  * Compute (an approximation of) the point obtained from p by moving the given direction.
  * @param[in] p initial point.
- * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
+ * @param[in] dp the coordinate of the direction with respect to the frame provided by frame()
  */
 Point smallShift(Point p, vec3 dp){
-    Vector[3] f;
-    frame(p, f);
-    vec4 coords = p.coords + dp[0] * f[0].dir + dp[1] * f[1].dir + dp[2] * f[2].dir;
-    Point res = Point(coords);
-    return reduceError(res);
+    Point aux = Point(vec4(dp, 1));
+    Isometry isom = makeTranslation(p);
+    return applyIsometry(isom, aux);
 }
-
 
 Vector smallShift(Vector v, vec3 dp){
     Point pos = smallShift(v.pos, dp);
-    return Vector(pos,v.dir);
+    return Vector(pos, v.dir);
 }
 
 
 /**
  * Flow the vector v for a time t.
  * The vector v is assume to be a **unit** vector
+ * New version, without computing the angle alpha.
+ * Indeed one only needs to **rotate** by an angle alpha.
+ * Thus we should not go back and forth between the angle alpha and its sine/cosine.
+ * @todo implement numerical approximation when ct is very small.
+ * The noise is only visible when the camera's threshold is very small.
  */
 Vector flow(Vector v, float t){
-    vec3 u=v.dir.xyz;
-    float lambda=length(u);
-    u=normalize(u);
+    // cylindrical coordinates of v
+    // v = [a cos(alpha), a sin(alpha), c, 0]
+    float tolerance = 0.1;
+    float c = v.dir.z;
+    float a = sqrt(1. - c * c);
 
-    vec3 coords = cos(lambda*t) * v.pos.coords.xyz+ sin(lambda*t) * u;
-    Point pos = Point(vec4(coords,v.pos.coords.w+t*v.dir.w));
-                      
-    vec3 dir = -sin(lambda*t) * v.pos.coords.xyz + cos(lambda*t) * u;
-    Vector res=Vector(pos,vec4(lambda*dir,v.dir.w));
-    res=reduceError(res);
-    return geomNormalize(res);
-}
-`);
+    vec4 coords;
+    float ct = c * t;
+    // matrix rotating by an angle alpha  and scaling by a.
+    mat2 rotationAlpha = mat2(
+    v.dir.x, v.dir.y,
+    -v.dir.y, v.dir.x
+    );
+
+    if (abs(ct) < tolerance){
+        // use an asymptotic expansion (computed with SageMath)
+        // expansion at order 1 seems to be enough for VR
+        // use order 2 just to be safe.
+        float a2t2 = a * a * t * t;
+        coords = vec4(t, 0, 0, 1);
+        coords = coords + vec4(0, t / 2., a2t2 / 12. + 1., 0) * ct;
+        float ct2 = ct * ct;
+        coords = coords + (1. / 2.) * vec4(- t / 3., 0, 0, 0) * ct2;
+        //float ct3 = ct2 * ct;
+        //coords = coords + (1. / 6.) * vec4(0, - t / 4., - a2t2 / 40., 0) * ct3;
+        //float ct4 = ct3 * ct;
+        //coords = coords + (1. / 24.) * vec4(t / 5., 0, 0, 0) * ct4;
+        //float ct5 = ct4 * ct;
+        //coords = coords + (1. / 120.) * vec4(0, t / 6., a2t2 / 84., 0) * ct5;
+    } else {
+        coords = vec4(
+        (2. / c) * sin(0.5 * c * t) * cos(0.5 * c * t),
+        (2. / c) * sin(0.5 * c * t) * sin(0.5 * c * t),
+        c * t + 0.5 * (a / c) * (a / c) * (c * t - sin(c * t)),
+        1
+        );
+    }
+
+    coords = vec4(rotationAlpha * coords.xy, coords.zw);
+    Point targetFromOrigin = Point(coords);
+    Isometry shift = makeTranslation(v.pos);
+    Point target = applyIsometry(shift, targetFromOrigin);
+
+    // matrix rotating by an angle ct
+    float cosCt = cos(c * t);
+    float sinCt = sin(c * t);
+    mat2 rotationCt = mat2(
+    cosCt, sinCt,
+    -sinCt, cosCt
+    );
+    vec4 dir = vec4(rotationCt * v.dir.xy, v.dir.zw);
+
+    return Vector(target, dir);
+}`);
 
 ;// CONCATENATED MODULE: ./node_modules/mustache/mustache.mjs
 /*!
@@ -75769,7 +75849,19 @@ class Matrix2 {
 
 
 
-;// CONCATENATED MODULE: ./src/commons/groups/isometry/GroupElement.js
+;// CONCATENATED MODULE: ./src/geometries/nil/geometry/General.js
+
+
+
+
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/basicHeisenberg/GroupElement.js
+
+
 
 
 
@@ -75777,58 +75869,78 @@ class Matrix2 {
  * @class
  *
  * @classdesc
- * Default representation of a subgroup : just directly use the isometries.
+ * Integral Heisenberg group element
+ * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
+ * The coordinates of the group element correspond to the Heisenberg model of Nil (to keep integer coordinates).
+ * However the isometry is in the projective model.
  */
-class isometry_GroupElement_GroupElement extends GroupElement_GroupElement {
-    
-    constructor(group) {
+class basicHeisenberg_GroupElement_GroupElement extends GroupElement_GroupElement {
+
+    constructor(group, x = 0, y = 0, z = 0) {
         super(group);
-        this.isom = new Isometry();
+        this.coords = new Vector3(x, y, z);
     }
 
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @return {number[]}
+     */
+    get icoords() {
+        return this.coords.toArray();
+    }
+
+
     identity() {
-        this.isom.identity();
+        this.coords.set(0, 0, 0);
         return this;
     }
 
     multiply(elt) {
-        this.isom.multiply(elt.isom);
+        const [a1, b1, c1] = this.coords.toArray();
+        const [a2, b2, c2] = elt.coords.toArray();
+        this.coords.set(a1 + a2, b1 + b2, c1 + c2 + a1 * b2);
         return this;
     }
 
     premultiply(elt) {
-        this.isom.premultiply(elt.isom);
+        const [a1, b1, c1] = elt.coords.toArray();
+        const [a2, b2, c2] = this.coords.toArray();
+        this.coords.set(a1 + a2, b1 + b2, c1 + c2 + a1 * b2);
         return this;
     }
 
     invert() {
-        this.isom.invert();
+        const [a, b, c] = this.coords.toArray();
+        this.coords.set(-a, -b, -c + a * b);
         return this;
     }
 
     toIsometry() {
-        return this.isom.clone();
+        const [x, y, z] = this.coords.toArray();
+        const point = new Point(x, y, z - 0.5 * x * y, 1);
+        return new Isometry().makeTranslation(point);
     }
 
     equals(elt) {
-        return this.isom.equals(elt.isom);
+        return this.coords.equals(elt.coords);
     }
 
     clone() {
-        const res = new isometry_GroupElement_GroupElement();
-        res.isom.copy(this.isom);
+        const res = new basicHeisenberg_GroupElement_GroupElement(this.group);
+        res.coords.copy(this.coords);
         return res;
     }
 
     copy(elt) {
-        this.isom.copy(elt.isom);
+        this.coords.copy(elt.coords);
         return this;
     }
 }
 
-;// CONCATENATED MODULE: ./src/commons/groups/isometry/shaders/element.js
+
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/basicHeisenberg/shaders/element.js
 // language=GLSL
-/* harmony default export */ const isometry_shaders_element = (`//
+/* harmony default export */ const basicHeisenberg_shaders_element = (`//
 
 /***********************************************************************************************************************
  ***********************************************************************************************************************
@@ -75840,27 +75952,28 @@ class isometry_GroupElement_GroupElement extends GroupElement_GroupElement {
 
 /***********************************************************************************************************************
  * @struct
- * Group element based on isometries
+ * Integral Heisenberg group
  **********************************************************************************************************************/
 
 struct GroupElement {
-    Isometry isom; /**< The underlying isometry **/
+    ivec3 icoords; /**< integer coordinates of the element */
 };
 
-const GroupElement GROUP_IDENTITY = GroupElement(IDENTITY);
+const GroupElement GROUP_IDENTITY = GroupElement(ivec3(0));
 
 GroupElement multiply(GroupElement elt1, GroupElement elt2){
-    return GroupElement(multiply(elt1.isom, elt2.isom));
+    ivec3 c1 = elt1.icoords;
+    ivec3 c2 = elt2.icoords;
+    return GroupElement(ivec3(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z + c1.x * c2.y));
 }
 
-//GroupElement groupInverse(GroupElement elt){
-//    return GroupElement(geomInverse(elt.isom));
-//}
-
 Isometry toIsometry(GroupElement elt) {
-    return elt.isom;
+    vec3 c = vec3(elt.icoords);
+    Point point = Point(vec4(c.x, c.y, c.z -0.5 * c.x * c.y, 1));
+    return makeTranslation(point);
 }`);
-;// CONCATENATED MODULE: ./src/commons/groups/isometry/Group.js
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/basicHeisenberg/Group.js
+
 
 
 
@@ -75871,290 +75984,1124 @@ Isometry toIsometry(GroupElement elt) {
  * @class
  *
  * @classdesc
- * Group of isometries
+ * Basic version of the Heisenberg group
  */
-class isometry_Group_Group extends Group_Group {
+class basicHeisenberg_Group_Group extends Group_Group {
+
+    /**
+     * Constructor
+     */
     constructor() {
         super();
     }
 
     element() {
-        return new isometry_GroupElement_GroupElement(this);
+        const x = arguments.length > 0 ? arguments[0] : 0;
+        const y = arguments.length > 1 ? arguments[1] : 0;
+        const z = arguments.length > 2 ? arguments[2] : 0;
+        return new basicHeisenberg_GroupElement_GroupElement(this, x, y, z);
     }
 
     shader(shaderBuilder) {
-        shaderBuilder.addChunk(isometry_shaders_element);
+        shaderBuilder.addChunk(basicHeisenberg_shaders_element);
     }
+
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/geometry/General.js
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/basicHeisenberg/set.js
 
 
 
+const group = new basicHeisenberg_Group_Group();
 
 
+function testXpUp(p) {
+    return (p.coords.x > 0.5) && (-0.5 * p.coords.y + p.coords.z > 0.5);
+}
 
-
-
-
-
-;// CONCATENATED MODULE: ./src/geometries/s2e/groups/cube/set.js
-
-
-
-
-
-
-
-
-const group = new isometry_Group_Group();
-
-const normalXp = new Vector4(1, 0, -1, 0);
+// language=GLSL
+const glslTestXpUp = (/* unused pure expression or super */ null && (`//
+bool testXpUp(Point p){
+    return (p.coords.x > 0.5) && (-0.5 * p.coords.y + p.coords.z > 0.5);
+}
+`));
 
 function testXp(p) {
-    return p.coords.dot(normalXp) > 0;
+    return p.coords.x > 0.5;
 }
 
 // language=GLSL
 const glslTestXp = `//
-bool textXp(Point p){
-    vec4 normal = vec4(1, 0, -1, 0);
-    return dot(p.coords, normal) > 0.;
+bool testXp(Point p){
+    return p.coords.x > 0.5;
 }
 `;
 
-const normalXn = new Vector4(-1, 0, -1, 0);
-
 function testXn(p) {
-    return p.coords.dot(normalXn) > 0;
+    return p.coords.x < -0.5;
 }
 
 // language=GLSL
 const glslTestXn = `//
-bool textXn(Point p){
-    vec4 normal = vec4(-1, 0, -1, 0);
-    return dot(p.coords, normal) > 0.;
+bool testXn(Point p){
+    return p.coords.x < -0.5;
 }
 `;
 
-
-const normalYp = new Vector4(0, 1, -1, 0);
-
 function testYp(p) {
-    return p.coords.dot(normalYp) > 0;
+    return p.coords.y > 0.5;
 }
 
 // language=GLSL
 const glslTestYp = `//
-bool textYp(Point p){
-    vec4 normal = vec4(0, 1, -1, 0);
-    return dot(p.coords, normal) > 0.;
+bool testYp(Point p){
+    return p.coords.y > 0.5;
 }
 `;
 
-const normalYn = new Vector4(0, -1, -1, 0);
-
 function testYn(p) {
-    return p.coords.dot(normalYn) > 0;
+    return p.coords.y < -0.5;
 }
 
 // language=GLSL
 const glslTestYn = `//
-bool textYn(Point p){
-    vec4 normal = vec4(0, -1, -1, 0);
-    return dot(p.coords, normal) > 0.;
+bool testYn(Point p){
+    return p.coords.y < -0.5;
 }
 `;
 
-
-function testWp(p) {
-    return p.coords.w > 0.25 * Math.PI;
+function testZp(p) {
+    return p.coords.z > 0.5;
 }
 
-//language=GLSL
-const glslTestWp = `//
-
-bool testWp(Point p){
-    return p.coords.w > 0.25 * PI;
+// language=GLSL
+const glslTestZp = `//
+bool testZp(Point p){
+    return p.coords.z > 0.5;
 }
 `;
 
-function testWn(p) {
-    return p.coords.w < -0.25 * Math.PI
+function testZn(p) {
+    return p.coords.z < -0.5;
 }
 
-//language=GLSL
-const glslTestWn = `//
-
-bool testWn(Point p){
-    return p.coords.w < -0.25 * PI;
+// language=GLSL
+const glslTestZn = `//
+bool testZn(Point p){
+    return p.coords.z < -0.5;
 }
 `;
-const shiftXp = group.element();
-const shiftXn = group.element();
-const shiftYp = group.element();
-const shiftYn = group.element();
-const shiftWp = group.element();
-const shiftWn = group.element();
 
-shiftXp.isom.matrix.set(
-    0, 0, -1, 0,
-    0, 1, 0, 0,
-    1, 0, 0, 0,
-    0, 0, 0, 1
-);
+const shiftXpUp = group.element(-1, 0, -1);
+const shiftXp = group.element(-1, 0, 0);
+const shiftXn = group.element(1, 0, 0);
+const shiftYp = group.element(0, -1, 0);
+const shiftYn = group.element(0, 1, 0);
+const shiftZp = group.element(0, 0, -1);
+const shiftZn = group.element(0, 0, 1);
 
-shiftXn.isom.matrix.set(
-    0, 0, 1, 0,
-    0, 1, 0, 0,
-    -1, 0, 0, 0,
-    0, 0, 0, 1
-);
-
-shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 0, -1, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 1
-);
-
-shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 0, 1, 0,
-    0, -1, 0, 0,
-    0, 0, 0, 1
-);
-
-shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -0.5 * Math.PI));
-shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 0.5 * Math.PI));
+// console.log("Xp", shiftXp.toIsometry().matrix.toLog());
+// console.log("Yp", shiftYp.toIsometry().matrix.toLog());
+// console.log("Zp", shiftZp.toIsometry().matrix.toLog());
 
 
-/* harmony default export */ const cube_set = (new TeleportationSet()
+const neighborsLite = [
+    {elt: shiftXp, inv: shiftXn},
+    {elt: shiftXn, inv: shiftXp},
+    {elt: shiftYp, inv: shiftYn},
+    {elt: shiftYn, inv: shiftYp},
+    {elt: shiftZp, inv: shiftZn},
+    {elt: shiftZn, inv: shiftZp}
+];
+
+/**
+ * Subgroup corresponding to the integer Heisenberg group
+ */
+/* harmony default export */ const basicHeisenberg_set = (new TeleportationSet(neighborsLite)
+    // .add(testXpUp, glslTestXpUp, shiftXpUp)
     .add(testXp, glslTestXp, shiftXp, shiftXn)
     .add(testXn, glslTestXn, shiftXn, shiftXp)
     .add(testYp, glslTestYp, shiftYp, shiftYn)
     .add(testYn, glslTestYn, shiftYn, shiftYp)
-    .add(testWp, glslTestWp, shiftWp, shiftWn)
-    .add(testWn, glslTestWn, shiftWn, shiftWp));
-
-
-
-;// CONCATENATED MODULE: ./src/geometries/s2e/groups/zLoop/set.js
+    .add(testZp, glslTestZp, shiftZp, shiftZn)
+    .add(testZn, glslTestZn, shiftZn, shiftZp));
 
 
 
 
 
-const set_group = new isometry_Group_Group();
 
-function set_testWp(p) {
-    return p.coords.w > 1;
-}
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/heisenberg/GroupElement.js
 
-//language=GLSL
-const set_glslTestWp = `//
 
-bool testWp(Point p){
-    return p.coords.w>1.;
-}
-`;
 
-function set_testWn(p) {
-    return p.coords.w < -1;
-}
 
-//language=GLSL
-const set_glslTestWn = `//
-
-bool testWn(Point p){
-    return p.coords.w<-1.;
-}
-`;
-
-const set_shiftWp = set_group.element();
-const set_shiftWn = set_group.element();
-
-set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2));
-set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
-
-/* harmony default export */ const zLoop_set = (new TeleportationSet()
-    .add(set_testWp, set_glslTestWp, set_shiftWp, set_shiftWn)
-    .add(set_testWn, set_glslTestWn, set_shiftWn, set_shiftWp));
-
-;// CONCATENATED MODULE: ./src/geometries/s2e/imports/direction.js
-// language=GLSL
-/* harmony default export */ const direction = (`//
-Vector direction(Point p, Point q){
-    vec3 pAux = p.coords.xyz;
-    vec3 qAux = q.coords.xyz;
-    float c = dot(pAux, qAux);
-    float lenAux = acos(c);
-    vec3 dirAux = qAux - c * pAux;
-    dirAux = (lenAux / sqrt(1. - c * c )) * dirAux;
-    Vector res = Vector(p, vec4(dirAux, q.coords.w - p.coords.w));
-    return geomNormalize(res);
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/s2e/imports/distance.js
-// language=GLSL
-/* harmony default export */ const distance = (`//
 /**
- * Distance between two points
+ * @class
+ *
+ * @classdesc
+ * Integral Heisenberg group element
+ * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
+ * The coordinates of the group element correspond to the Heisenberg model of Nil (to keep integer coordinates).
+ * However the isometry is in the projective model.
  */
-float dist(Point p1, Point p2){
-    float aux1=acos(dot(p1.coords.xyz, p2.coords.xyz));
-    float aux2=p1.coords.w-p2.coords.w;
-    return sqrt(aux1*aux1+aux2*aux2);
+class heisenberg_GroupElement_GroupElement extends GroupElement_GroupElement {
+
+    constructor(group, x = 0, y = 0, z = 0) {
+        super(group);
+        this.coords = new Vector3(x, y, z);
+    }
+
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @return {number[]}
+     */
+    get icoords() {
+        return this.coords.toArray();
+    }
+
+
+    identity() {
+        this.coords.set(0, 0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        const [a1, b1, c1] = this.coords.toArray();
+        const [a2, b2, c2] = elt.coords.toArray();
+        this.coords.set(a1 + a2, b1 + b2, c1 + c2 + a1 * b2);
+        return this;
+    }
+
+    premultiply(elt) {
+        const [a1, b1, c1] = elt.coords.toArray();
+        const [a2, b2, c2] = this.coords.toArray();
+        this.coords.set(a1 + a2, b1 + b2, c1 + c2 + a1 * b2);
+        return this;
+    }
+
+    invert() {
+        const [a, b, c] = this.coords.toArray();
+        this.coords.set(-a, -b, -c + a * b);
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b, c] = this.coords.toArray();
+        const aux = new Vector4()
+            .add(this.group.translationA.clone().multiplyScalar(a))
+            .add(this.group.translationB.clone().multiplyScalar(b));
+        const [x, y, z, _] = aux.toArray();
+        const det = this.group.translationC.z
+        const res = new Isometry();
+        res.matrix.set(
+            1, 0, 0, x,
+            0, 1, 0, y,
+            -0.5 * y, 0.5 * x, 1, z - 0.5 * (a * b - 2 * c) * det,
+            0, 0, 0, 1
+        );
+        return res;
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new heisenberg_GroupElement_GroupElement(this.group);
+        res.coords.copy(this.coords);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        return this;
+    }
 }
-`);
-;// CONCATENATED MODULE: ./src/geometries/s2e/imports/lightIntensity.js
+
+
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/heisenberg/shaders/element.js
 // language=GLSL
-/* harmony default export */ const lightIntensity = (`//
-/**
-* Intensity of the light after travelling a length \`len\` in the direction \`dir\`
-* @param[in] dir unit vector at the light position
-* @param[in] len distance from the light
-* @return intensity of the light
-*/
-float lightIntensity(float len){
-    //return 1./(len * len);
-    return 1./ len;
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/pointLight/shaders/struct.js
-// language=GLSL
-/* harmony default export */ const pointLight_shaders_struct = (`//
+/* harmony default export */ const heisenberg_shaders_element = (`//
+
+/***********************************************************************************************************************
+ ***********************************************************************************************************************
+ *
+ * Subgroup managment
+ *
+ ***********************************************************************************************************************
+ **********************************************************************************************************************/
+
 /***********************************************************************************************************************
  * @struct
- * S2xE point light
+ * Integral Heisenberg group
  **********************************************************************************************************************/
-struct PointLight {
+
+struct GroupElement {
+    ivec3 icoords; /**< integer coordinates of the element */
+};
+
+const GroupElement GROUP_IDENTITY = GroupElement(ivec3(0));
+
+GroupElement multiply(GroupElement elt1, GroupElement elt2){
+    ivec3 c1 = elt1.icoords;
+    ivec3 c2 = elt2.icoords;
+    return GroupElement(ivec3(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z + c1.x * c2.y));
+}
+
+//GroupElement groupInverse(GroupElement elt){
+//    ivec3 c = elt.icoords;
+//    return GroupElement(ivec3(-c.x, -c.y, -c.z + c.x * c.y));
+//}
+
+Isometry toIsometry(GroupElement elt) {
+    vec3 c = vec3(elt.icoords);
+    vec4 aux = c.x * group.translationA + c.y * group.translationB;
+    float det = group.translationC.z;
+//    mat4 matrix =  mat4(
+//    1, 0, -0.5 * aux.y, 0,
+//    0, 1, 0.5 * aux.x, 0,
+//    0, 0, 1, 0,
+//    aux.x, aux.y, c.z-0.5 * c.x * c.y, 1
+//    );
+    mat4 matrix =  mat4(
+    1, 0, -0.5 * aux.y, 0,
+    0, 1, 0.5 * aux.x, 0,
+    0, 0, 1, 0,
+    aux.x, aux.y, aux.z -0.5 * (c.x * c.y - 2. * c.z) * det, 1
+    );
+    return Isometry(matrix, true);
+}`);
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/heisenberg/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const heisenberg_shaders_struct = (`//
+
+/***********************************************************************************************************************
+ * @struct
+ * Group data for a free abelian group
+ **********************************************************************************************************************/
+
+struct Group {
+    vec4 translationA;
+    vec4 translationB;
+    vec4 translationC;
+    mat4 dotMatrix;
+};`);
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/heisenberg/Group.js
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Heisenberg group
+ */
+class heisenberg_Group_Group extends Group_Group {
+
+    /**
+     * Constructor
+     * The two parameters are translation vectors in the xy plane
+     * The third vector will be automatically computed as the commutator (in Nil) of the first two
+     * @param {Vector4} translationA
+     * @param {Vector4} translationB
+     */
+    constructor(translationA = undefined, translationB = undefined) {
+        super();
+        /**
+         * Translation of the first generator
+         * @type {Vector4}
+         */
+        this._translationA = translationA !== undefined ? translationA : new Vector4(1, 0, 0, 0);
+        /**
+         * Translation of the second generator
+         * @type {Vector4}
+         */
+        this._translationB = translationB !== undefined ? translationB : new Vector4(0, 1, 0, 0);
+        this.updateTranslationC();
+        this.updateDotMatrix();
+        console.log("Dot matrix", this.dotMatrix);
+        console.log("Dot matrix", this.dotMatrix.toLog());
+    }
+
+
+    get translationA() {
+        return this._translationA;
+    }
+
+    set translationA(value) {
+        this._translationA = value !== undefined ? value : new Vector4(1, 0, 0, 0);
+        this.updateTranslationC();
+        this.updateDotMatrix();
+    }
+
+
+    get translationB() {
+        return this._translationB;
+    }
+
+    set translationB(value) {
+        this._translationB = value !== undefined ? value : new Vector4(0, 1, 0, 0);
+        this.updateTranslationC();
+        this.updateDotMatrix();
+    }
+
+    updateTranslationC() {
+        const [xa, ya, za, wa] = this._translationA.toArray();
+        const [xb, yb, zb, wb] = this._translationB.toArray();
+        this._halfTranslationC = new Vector4(0, 0, xa * yb - xb * ya, 0);
+    }
+
+    get translationC() {
+        return this._halfTranslationC;
+    }
+
+    updateDotMatrix() {
+        if (this._dotMatrix === undefined) {
+            this._dotMatrix = new Matrix4();
+        }
+        const aux = new Matrix4().set(
+            this.translationA.x, this.translationB.x, this.translationC.x, 0,
+            this.translationA.y, this.translationB.y, this.translationC.y, 0,
+            this.translationA.z, this.translationB.z, this.translationC.z, 0,
+            0, 0, 0, 1
+        ).invert();
+        this._dotMatrix.copy(aux).transpose().multiply(aux);
+
+    }
+
+    /**
+     * Return a positive definite matrix for which the family
+     * translationA, translationB, translationC
+     * is orthonormal.
+     * @type{Matrix4}
+     */
+    get dotMatrix() {
+        return this._dotMatrix;
+    }
+
+    element() {
+        const x = arguments.length > 0 ? arguments[0] : 0;
+        const y = arguments.length > 1 ? arguments[1] : 0;
+        const z = arguments.length > 2 ? arguments[2] : 0;
+        return new heisenberg_GroupElement_GroupElement(this, x, y, z);
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk(heisenberg_shaders_struct);
+        shaderBuilder.addUniform('group', 'Group', this);
+        shaderBuilder.addChunk(heisenberg_shaders_element);
+    }
+
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/heisenberg/set.js
+
+
+
+
+const set_group = new heisenberg_Group_Group();
+
+function set_testXp(p) {
+    const aux = set_group.translationA.clone().applyMatrix4(set_group.dotMatrix);
+    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) > 0.5;
+}
+
+// language=GLSL
+const set_glslTestXp = `//
+bool testXp(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationA) > 0.5;
+}
+`;
+
+// language=GLSL
+const glslCreepXp = (/* unused pure expression or super */ null && (`//
+ExtVector creepXp(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 uAux = group.dotMatrix * group.translationA;
+    float t = (0.5 - dot(local.pos.coords.xy, uAux.xy)) / length(uAux.xy) + offset;
+    return flow(v, t);
+}
+`));
+
+// // language=GLSL
+// const glslTestXp = `//
+// bool testXp(Point p){
+//     return p.coords.x > 0.5;
+// }
+// `;
+
+function set_testXn(p) {
+    const aux = set_group.translationA.clone().applyMatrix4(set_group.dotMatrix);
+    //console.log("aux Xn", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) < -0.5;
+}
+
+// language=GLSL
+const set_glslTestXn = `//
+bool testXn(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationA) < -0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestXn = `//
+// bool testXn(Point p){
+//     return p.coords.x < -0.5;
+// }
+// `;
+
+function set_testYp(p) {
+    const aux = set_group.translationB.clone().applyMatrix4(set_group.dotMatrix);
+    return p.coords.dot(aux) > 0.5;
+}
+
+// language=GLSL
+const set_glslTestYp = `//
+bool testYp(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationB) > 0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestYp = `//
+// bool testYp(Point p){
+//     return p.coords.y > 0.5;
+// }
+// `;
+
+function set_testYn(p) {
+    const aux = set_group.translationB.clone().applyMatrix4(set_group.dotMatrix);
+    return p.coords.dot(aux) < -0.5;
+}
+
+// language=GLSL
+const set_glslTestYn = `//
+bool testYn(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationB) < -0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestYn = `//
+// bool testYn(Point p){
+//     return p.coords.y < -0.5;
+// }
+// `;
+
+function set_testZp(p) {
+    const aux = set_group.translationC.clone().applyMatrix4(set_group.dotMatrix);
+    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) > 0.5;
+}
+
+// language=GLSL
+const set_glslTestZp = `//
+bool testZp(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationC) > 0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestZp = `//
+// bool testZp(Point p){
+//     return p.coords.z > 0.5;
+// }
+// `;
+
+
+function set_testZn(p) {
+    const aux = set_group.translationC.clone().applyMatrix4(set_group.dotMatrix);
+    return p.coords.dot(aux) < -0.5;
+}
+
+// language=GLSL
+const set_glslTestZn = `//
+bool testZn(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationC) < -0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestZn = `//
+// bool testZn(Point p){
+//     return p.coords.z < -0.5;
+// }
+// `;
+
+
+const set_shiftXp = set_group.element(-1, 0, 0);
+const set_shiftXn = set_group.element(1, 0, 0);
+const set_shiftYp = set_group.element(0, -1, 0);
+const set_shiftYn = set_group.element(0, 1, 0);
+const set_shiftZp = set_group.element(0, 0, -1);
+const set_shiftZn = set_group.element(0, 0, 1);
+
+// console.log("Xp", shiftXp.toIsometry().matrix.toLog());
+// console.log("Yp", shiftYp.toIsometry().matrix.toLog());
+// console.log("Zp", shiftZp.toIsometry().matrix.toLog());
+
+
+const set_neighborsLite = [
+    {elt: set_shiftXp, inv: set_shiftXn},
+    {elt: set_shiftXn, inv: set_shiftXp},
+    {elt: set_shiftYp, inv: set_shiftYn},
+    {elt: set_shiftYn, inv: set_shiftYp},
+    {elt: set_shiftZp, inv: set_shiftZn},
+    {elt: set_shiftZn, inv: set_shiftZp}
+];
+
+/**
+ * Subgroup corresponding to the integer Heisenberg group
+ */
+/* harmony default export */ const heisenberg_set = (new TeleportationSet(set_neighborsLite)
+    .add(set_testXp, set_glslTestXp, set_shiftXp, set_shiftXn)
+    .add(set_testXn, set_glslTestXn, set_shiftXn, set_shiftXp)
+    .add(set_testYp, set_glslTestYp, set_shiftYp, set_shiftYn)
+    .add(set_testYn, set_glslTestYn, set_shiftYn, set_shiftYp)
+    .add(set_testZp, set_glslTestZp, set_shiftZp, set_shiftZn)
+    .add(set_testZn, set_glslTestZn, set_shiftZn, set_shiftZp));
+
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/extendedHeisenberg/GroupElement.js
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Integral Heisenberg group element
+ * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
+ * The coordinates of the group element correspond to the Heisenberg model of Nil (to keep integer coordinates).
+ * However the isometry is in the projective model.
+ */
+class extendedHeisenberg_GroupElement_GroupElement extends GroupElement_GroupElement {
+
+    constructor(group, x = 0, y = 0, z = 0) {
+        super(group);
+        this.coords = new Vector3(x, y, z);
+    }
+
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @return {number[]}
+     */
+    get icoords() {
+        return this.coords.toArray();
+    }
+
+
+    identity() {
+        this.coords.set(0, 0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        const [a1, b1, c1] = this.coords.toArray();
+        const [a2, b2, c2] = elt.coords.toArray();
+        this.coords.set(a1 + a2, b1 + b2, c1 + c2 + this.group.root * a1 * b2);
+        return this;
+    }
+
+    premultiply(elt) {
+        const [a1, b1, c1] = elt.coords.toArray();
+        const [a2, b2, c2] = this.coords.toArray();
+        this.coords.set(a1 + a2, b1 + b2, c1 + c2 + this.group.root * a1 * b2);
+        return this;
+    }
+
+    invert() {
+        const [a, b, c] = this.coords.toArray();
+        this.coords.set(-a, -b, -c + this.group.root * a * b);
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b, c] = this.coords.toArray();
+        const aux = new Vector4()
+            .add(this.group.translationA.clone().multiplyScalar(a))
+            .add(this.group.translationB.clone().multiplyScalar(b));
+        const [x, y, z, _] = aux.toArray();
+        const root_det = this.group.translationC.z
+        const res = new Isometry();
+        res.matrix.set(
+            1, 0, 0, x,
+            0, 1, 0, y,
+            -0.5 * y, 0.5 * x, 1, z - 0.5 * (this.group.root * a * b - 2 * c) * root_det,
+            0, 0, 0, 1
+        );
+        return res;
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new extendedHeisenberg_GroupElement_GroupElement(this.group);
+        res.coords.copy(this.coords);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        return this;
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/extendedHeisenberg/shaders/element.js
+// language=GLSL
+/* harmony default export */ const extendedHeisenberg_shaders_element = (`//
+
+/***********************************************************************************************************************
+ ***********************************************************************************************************************
+ *
+ * Subgroup managment
+ *
+ ***********************************************************************************************************************
+ **********************************************************************************************************************/
+
+/***********************************************************************************************************************
+ * @struct
+ * Integral Heisenberg group
+ **********************************************************************************************************************/
+
+struct GroupElement {
+    ivec3 icoords; /**< integer coordinates of the element */
+};
+
+const GroupElement GROUP_IDENTITY = GroupElement(ivec3(0));
+
+GroupElement multiply(GroupElement elt1, GroupElement elt2){
+    ivec3 c1 = elt1.icoords;
+    ivec3 c2 = elt2.icoords;
+    return GroupElement(ivec3(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z + group.root * c1.x * c2.y));
+}
+
+//GroupElement groupInverse(GroupElement elt){
+//    ivec3 c = elt.icoords;
+//    return GroupElement(ivec3(-c.x, -c.y, -c.z + group.root * c.x * c.y));
+//}
+
+Isometry toIsometry(GroupElement elt) {
+    vec3 c = vec3(elt.icoords);
+    vec4 aux = c.x * group.translationA + c.y * group.translationB;
+    float root_det = group.translationC.z;
+    mat4 matrix =  mat4(
+    1, 0, -0.5 * aux.y, 0,
+    0, 1, 0.5 * aux.x, 0,
+    0, 0, 1, 0,
+    aux.x, aux.y, aux.z -0.5 * (float(group.root) * c.x * c.y - 2. * c.z) * root_det, 1
+    );
+    return Isometry(matrix, true);
+}`);
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/extendedHeisenberg/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const extendedHeisenberg_shaders_struct = (`//
+
+/***********************************************************************************************************************
+ * @struct
+ * Group data for a finite extension of the integral Heisenberg group
+ **********************************************************************************************************************/
+
+struct Group {
+    vec4 translationA;
+    vec4 translationB;
+    vec4 translationC;
+    int root;
+    mat4 dotMatrix;
+};`);
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/extendedHeisenberg/Group.js
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Finite extension of the integral Heisenberg group
+ * The group is given by the presentation
+ * G = < A, B, C | C^k = [A,B], [A,C] = [B, C] = 1 >
+ * If H stands for the usual integral Heisenberg group, then G/H is a cyclic group of order k
+ *
+ * We represents elements using Malc'ev coordinates.
+ * The triple [a,b,c] is associated to to the group element C^c B^b A^a
+ * With this representation, the group law becomes
+ * [a1, b1, c1] * [a2, b2, c2] = [a1 + a2, b1 + b2, c1 + c2 + k a1 * b2]
+ *
+ * Another point of view is the following.
+ * The triple [a,b,c] is represented by the upper triangular matrix
+ * [1, a * sqrt(k), c]
+ * [0, 1, b * sqrt(k)]
+ * [0, 0, 1]
+ * The group law is now given by matrix multiplication
+ */
+class extendedHeisenberg_Group_Group extends Group_Group {
+
+    /**
+     * Constructor
+     * The two parameters are translation vectors in the xy plane
+     * The third vector will be automatically computed as the k-th root of the commutator (in Nil) of the first two
+     * @param {Vector4} translationA
+     * @param {Vector4} translationB
+     * @param {number} root - order of the root of the commutator used in the group (see class description)
+     */
+    constructor(translationA = undefined, translationB = undefined, root = 1) {
+        super();
+        /**
+         * Order of the root of the commutator
+         * @type {number}
+         * @private
+         */
+        this._root = root;
+        /**
+         * Translation of the first generator
+         * @type {Vector4}
+         */
+        this._translationA = translationA !== undefined ? translationA : new Vector4(1, 0, 0, 0);
+        /**
+         * Translation of the second generator
+         * @type {Vector4}
+         */
+        this._translationB = translationB !== undefined ? translationB : new Vector4(0, 1, 0, 0);
+        this.updateTranslationC();
+        this.updateDotMatrix();
+    }
+
+    get root(){
+        return this._root;
+    }
+
+    set root(value){
+        this._root = value;
+        this.updateTranslationC();
+        this.updateDotMatrix();
+    }
+
+
+    get translationA() {
+        return this._translationA;
+    }
+
+    set translationA(value) {
+        this._translationA = value !== undefined ? value : new Vector4(1, 0, 0, 0);
+        this.updateTranslationC();
+        this.updateDotMatrix();
+    }
+
+
+    get translationB() {
+        return this._translationB;
+    }
+
+    set translationB(value) {
+        this._translationB = value !== undefined ? value : new Vector4(0, 1, 0, 0);
+        this.updateTranslationC();
+        this.updateDotMatrix();
+    }
+
+    updateTranslationC() {
+        const [xa, ya, za, wa] = this._translationA.toArray();
+        const [xb, yb, zb, wb] = this._translationB.toArray();
+        this._halfTranslationC = new Vector4(0, 0, (xa * yb - xb * ya) / this.root, 0);
+    }
+
+    get translationC() {
+        return this._halfTranslationC;
+    }
+
+    updateDotMatrix() {
+        if (this._dotMatrix === undefined) {
+            this._dotMatrix = new Matrix4();
+        }
+        const aux = new Matrix4().set(
+            this.translationA.x, this.translationB.x, this.translationC.x, 0,
+            this.translationA.y, this.translationB.y, this.translationC.y, 0,
+            this.translationA.z, this.translationB.z, this.translationC.z, 0,
+            0, 0, 0, 1
+        ).invert();
+        this._dotMatrix.copy(aux).transpose().multiply(aux);
+
+    }
+
+    /**
+     * Return a positive definite matrix for which the family
+     * translationA, translationB, translationC
+     * is orthonormal.
+     * @type{Matrix4}
+     */
+    get dotMatrix() {
+        return this._dotMatrix;
+    }
+
+    element() {
+        const x = arguments.length > 0 ? arguments[0] : 0;
+        const y = arguments.length > 1 ? arguments[1] : 0;
+        const z = arguments.length > 2 ? arguments[2] : 0;
+        return new extendedHeisenberg_GroupElement_GroupElement(this, x, y, z);
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk(extendedHeisenberg_shaders_struct);
+        shaderBuilder.addUniform('group', 'Group', this);
+        shaderBuilder.addChunk(extendedHeisenberg_shaders_element);
+    }
+
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/groups/extendedHeisenberg/set.js
+
+
+
+
+const extendedHeisenberg_set_group = new extendedHeisenberg_Group_Group();
+
+function extendedHeisenberg_set_testXp(p) {
+    const aux = extendedHeisenberg_set_group.translationA.clone().applyMatrix4(extendedHeisenberg_set_group.dotMatrix);
+    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) > 0.5;
+}
+
+// language=GLSL
+const extendedHeisenberg_set_glslTestXp = `//
+bool testXp(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationA) > 0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestXp = `//
+// bool testXp(Point p){
+//     return p.coords.x > 0.5;
+// }
+// `;
+
+function extendedHeisenberg_set_testXn(p) {
+    const aux = extendedHeisenberg_set_group.translationA.clone().applyMatrix4(extendedHeisenberg_set_group.dotMatrix);
+    //console.log("aux Xn", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) < -0.5;
+}
+
+// language=GLSL
+const extendedHeisenberg_set_glslTestXn = `//
+bool testXn(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationA) < -0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestXn = `//
+// bool testXn(Point p){
+//     return p.coords.x < -0.5;
+// }
+// `;
+
+function extendedHeisenberg_set_testYp(p) {
+    const aux = extendedHeisenberg_set_group.translationB.clone().applyMatrix4(extendedHeisenberg_set_group.dotMatrix);
+    return p.coords.dot(aux) > 0.5;
+}
+
+// language=GLSL
+const extendedHeisenberg_set_glslTestYp = `//
+bool testYp(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationB) > 0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestYp = `//
+// bool testYp(Point p){
+//     return p.coords.y > 0.5;
+// }
+// `;
+
+function extendedHeisenberg_set_testYn(p) {
+    const aux = extendedHeisenberg_set_group.translationB.clone().applyMatrix4(extendedHeisenberg_set_group.dotMatrix);
+    return p.coords.dot(aux) < -0.5;
+}
+
+// language=GLSL
+const extendedHeisenberg_set_glslTestYn = `//
+bool testYn(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationB) < -0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestYn = `//
+// bool testYn(Point p){
+//     return p.coords.y < -0.5;
+// }
+// `;
+
+function extendedHeisenberg_set_testZp(p) {
+    const aux = extendedHeisenberg_set_group.translationC.clone().applyMatrix4(extendedHeisenberg_set_group.dotMatrix);
+    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
+    return p.coords.dot(aux) > 0.5;
+}
+
+// language=GLSL
+const extendedHeisenberg_set_glslTestZp = `//
+bool testZp(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationC) > 0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestZp = `//
+// bool testZp(Point p){
+//     return p.coords.z > 0.5;
+// }
+// `;
+
+
+function extendedHeisenberg_set_testZn(p) {
+    const aux = extendedHeisenberg_set_group.translationC.clone().applyMatrix4(extendedHeisenberg_set_group.dotMatrix);
+    return p.coords.dot(aux) < -0.5;
+}
+
+// language=GLSL
+const extendedHeisenberg_set_glslTestZn = `//
+bool testZn(Point p){
+    return dot(p.coords, group.dotMatrix * group.translationC) < -0.5;
+}
+`;
+
+// // language=GLSL
+// const glslTestZn = `//
+// bool testZn(Point p){
+//     return p.coords.z < -0.5;
+// }
+// `;
+
+
+const extendedHeisenberg_set_shiftXp = extendedHeisenberg_set_group.element(-1, 0, 0);
+const extendedHeisenberg_set_shiftXn = extendedHeisenberg_set_group.element(1, 0, 0);
+const extendedHeisenberg_set_shiftYp = extendedHeisenberg_set_group.element(0, -1, 0);
+const extendedHeisenberg_set_shiftYn = extendedHeisenberg_set_group.element(0, 1, 0);
+const extendedHeisenberg_set_shiftZp = extendedHeisenberg_set_group.element(0, 0, -1);
+const extendedHeisenberg_set_shiftZn = extendedHeisenberg_set_group.element(0, 0, 1);
+
+//console.log("Xp", shiftXp.toIsometry().matrix.toLog());
+//console.log("Yp", shiftYp.toIsometry().matrix.toLog());
+//console.log("Zp", shiftZp.toIsometry().matrix.toLog());
+
+
+/**
+ * Subgroup corresponding to the integer Heisenberg group
+ */
+/* harmony default export */ const extendedHeisenberg_set = (new TeleportationSet()
+    .add(extendedHeisenberg_set_testXp, extendedHeisenberg_set_glslTestXp, extendedHeisenberg_set_shiftXp, extendedHeisenberg_set_shiftXn)
+    .add(extendedHeisenberg_set_testXn, extendedHeisenberg_set_glslTestXn, extendedHeisenberg_set_shiftXn, extendedHeisenberg_set_shiftXp)
+    .add(extendedHeisenberg_set_testYp, extendedHeisenberg_set_glslTestYp, extendedHeisenberg_set_shiftYp, extendedHeisenberg_set_shiftYn)
+    .add(extendedHeisenberg_set_testYn, extendedHeisenberg_set_glslTestYn, extendedHeisenberg_set_shiftYn, extendedHeisenberg_set_shiftYp)
+    .add(extendedHeisenberg_set_testZp, extendedHeisenberg_set_glslTestZp, extendedHeisenberg_set_shiftZp, extendedHeisenberg_set_shiftZn)
+    .add(extendedHeisenberg_set_testZn, extendedHeisenberg_set_glslTestZn, extendedHeisenberg_set_shiftZn, extendedHeisenberg_set_shiftZp));
+
+
+
+
+;// CONCATENATED MODULE: ./src/geometries/nil/imports/fakeDistance.js
+// language=GLSL
+/* harmony default export */ const fakeDistance = (`//
+/**
+ * Square of the fake height. 
+ * Fake height : bound on the height of the ball centered at the origin passing through p
+ */
+float fakeHeightSq(Point p) {
+    float z = abs(p.coords.z);
+
+    if (z < sqrt(6.)){
+        return z * z;
+    }
+    else if (z < 4. * sqrt(3.)){
+        return 12. * (pow(0.75 * z, 2. / 3.) - 1.);
+    }
+    else {
+        return 2. * sqrt(3.) * z;
+    }
+}
+
+/**
+ * Measure the distance between two points in the geometry.
+ * Fake version
+ */
+float fakeDistance(Point p, Point q){
+    Isometry shift = makeInvTranslation(p);
+    Point qOrigin = applyIsometry(shift, q);
+    // we now need the distance between the origin and p
+    float x = qOrigin.coords.x;
+    float y = qOrigin.coords.y;
+    float rhosq = x * x + y * y;
+    float hsq = fakeHeightSq(qOrigin);
+
+    return pow(0.2 * rhosq * rhosq + 0.8 * hsq * hsq, 0.25);
+}
+
+/** 
+ * Overload of the previous function in case we work with tangent vectors
+ */ 
+float fakeDistance(Vector u, Vector v){
+    return fakeDistance(u.pos, v.pos);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/nil/lights/FakePointLight/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const FakePointLight_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Nil fake point light
+ **********************************************************************************************************************/
+
+struct FakePointLight {
     int id;
+    Point position;
     vec3 color;
     float intensity;
-    Point position;
     int maxDirs;
 };
 
-bool directions(PointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+bool directions(FakePointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
     if (i!=0){
         return false;
     }
-    Point position = applyGroupElement(v.invCellBoost, light.position);
-    float dist = dist(v.local.pos, position);
-    intensity = lightIntensity(dist) * light.intensity;
-    Vector local = direction(v.local.pos, position);
+    Point position = applyIsometry(v.invCellBoost, light.position);
+
+    float fakeDistance = fakeDistance(position, v.local.pos);
+    intensity = (1. / fakeDistance) * light.intensity;
+
+    Isometry pull = makeInvTranslation(v.local.pos);
+    vec4 aux = position.coords - v.local.pos.coords;
+    aux = pull.matrix * aux;
+    Vector local = Vector(v.local.pos, aux);
+    local = geomNormalize(local);
     dir = RelVector(local, v.cellBoost, v.invCellBoost);
     return true;
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/pointLight/shaders/directions.js
+;// CONCATENATED MODULE: ./src/geometries/nil/lights/FakePointLight/shaders/directions.js
 // language=Mustache + GLSL
 /* harmony default export */ const directions = (`
 bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
     return directions({{name}}, v, i, dir, intensity);
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/pointLight/PointLight.js
+;// CONCATENATED MODULE: ./src/geometries/nil/lights/FakePointLight/FakePointLight.js
 
 
 
@@ -76163,44 +77110,28 @@ bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intens
 
 
 
-
-
-
-
-
-/**
- * @class
- *
- * @classdesc
- * Light at infinity in the positive E-direction
- */
-class PointLight_PointLight extends Light_Light {
+class FakePointLight extends Light_Light {
 
     /**
      * Constructor
-     * @param {Color} color - the color of the light
-     * @param {number} intensity - the intensity of the light
-     * @param {Point} position - the position of the light
-     *
+     * @param {Point} position - position of the light
+     * @param {Color} color - color of the light
+     * @param {number} intensity - intensity of the light
      */
-    constructor(color, intensity = 1, position) {
+    constructor(position, color, intensity = 1) {
         super(1);
+        this.addImport(fakeDistance);
+        this.position = position;
         this.color = color;
         this.intensity = intensity;
-        this.position = position;
-        this.addImport(distance, direction, lightIntensity);
     }
 
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
     get isGlobal() {
         return true;
     }
 
     get uniformType() {
-        return 'PointLight';
+        return 'FakePointLight';
     }
 
     /**
@@ -76209,112 +77140,17 @@ class PointLight_PointLight extends Light_Light {
      * @return {string}
      */
     static glslClass() {
-        return pointLight_shaders_struct;
+        return FakePointLight_shaders_struct;
     }
 
     glslDirections() {
         return mustache_mustache.render(directions, this);
     }
-}
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/esun/shaders/struct.js
-// language=GLSL
-/* harmony default export */ const esun_shaders_struct = (`//
-/***********************************************************************************************************************
- * @struct
- * Euclidean point light
- **********************************************************************************************************************/
-
-struct ESun {
-    int id;
-    vec3 color;
-    float intensity;
-    float direction;
-    int maxDirs;
-};
-
-bool directions(ESun light, RelVector v, int i, out RelVector dir, out float intensity) {
-    if (i!=0){
-        return false;
-    }
-    intensity = light.intensity;
-    Vector local=Vector(v.local.pos, vec4(0, 0, 0, light.direction));
-    dir = RelVector(local, v.cellBoost, v.invCellBoost);
-    return true;
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/esun/shaders/directions.js
-// language=Mustache + GLSL
-/* harmony default export */ const shaders_directions = (`
-bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
-    return directions({{name}}, v, i, dir, intensity);
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/esun/ESun.js
-
-
-
-
-
-
-
-
-const DIR_UP = 1;
-const DIR_DOWN = -1;
-
-/**
- * @class
- *
- * @classdesc
- * Light at infinity in the E-direction
- */
-class ESun extends Light_Light {
-
-    /**
-     * Constructor.
-     * @param {Color} color - the color of the light
-     * @param {number} intensity - the intensity of the light
-     * @param {number} direction - the direction of the light. It should be on of the following values:
-     * - -1 (light coming from the negative direction)
-     * - +1 (light coming from the positive direction)
-     */
-    constructor(color, intensity = 1, direction = DIR_UP) {
-        super(1);
-        this.color = color;
-        this.intensity = intensity;
-        this.direction = direction;
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        return true;
-    }
-
-    get uniformType() {
-        return 'ESun';
-    }
-
-    /**
-     * Return the chunk of GLSL code defining the corresponding structure.
-     * @abstract
-     * @return {string}
-     */
-    static glslClass() {
-        return esun_shaders_struct;
-    }
-
-    glslDirections() {
-        return mustache_mustache.render(shaders_directions, this);
-    }
-
 
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/lights/all.js
+;// CONCATENATED MODULE: ./src/geometries/nil/lights/all.js
 
-
-;// CONCATENATED MODULE: ./src/geometries/s2e/material/varyingColor/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/nil/material/varyingColor/shaders/struct.js
 // language=GLSL
 /* harmony default export */ const varyingColor_shaders_struct = (`//
 /***********************************************************************************************************************
@@ -76327,16 +77163,16 @@ struct VaryingColorMaterial {
 };
 
 vec3 render(VaryingColorMaterial material, ExtVector v) {
-    return material.mainColor + material.weight * v.vector.local.pos.coords.xyw;
+    return material.mainColor + material.weight * v.vector.local.pos.coords.xyz;
 }`);
-;// CONCATENATED MODULE: ./src/geometries/s2e/material/varyingColor/shaders/render.js
+;// CONCATENATED MODULE: ./src/geometries/nil/material/varyingColor/shaders/render.js
 // language=Mustache + GLSL
 /* harmony default export */ const varyingColor_shaders_render = (`//
 vec3 {{name}}_render(ExtVector v) {
     return render({{name}}, v);
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/s2e/material/varyingColor/VaryingColorMaterial.js
+;// CONCATENATED MODULE: ./src/geometries/nil/material/varyingColor/VaryingColorMaterial.js
 
 
 
@@ -76383,7 +77219,7 @@ class VaryingColorMaterial extends Material_Material {
     }
 
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/material/all.js
+;// CONCATENATED MODULE: ./src/geometries/nil/material/all.js
 
 ;// CONCATENATED MODULE: ./src/core/shapes/BasicShape.js
 
@@ -76418,45 +77254,524 @@ class BasicShape extends Shape_Shape {
         return true;
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/ball/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/fakeBall/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const ball_shaders_struct = (`//
+/* harmony default export */ const fakeBall_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
- * Shape of a ball in S2xE
+ * Fake ball in Nil
  **********************************************************************************************************************/
 
-struct BallShape {
+struct FakeBallShape {
     int id;
     Point center;
     float radius;
 };
 
 /**
- * Distance function for a global hyperbolic ball
+ * Distance function for a global euclidean ball
  */
-float sdf(BallShape ball, RelVector v) {
-    Point center = applyGroupElement(v.invCellBoost, ball.center);
-    return dist(v.local.pos, center) - ball.radius;
+float sdf(FakeBallShape ball, RelVector v) {
+    Point center = applyIsometry(v.invCellBoost, ball.center);
+    return fakeDistance(v.local.pos, center) - ball.radius;
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/fakeBall/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const fakeBall_shaders_sdf = (`//
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/fakeBall/FakeBallShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
+ */
+class FakeBallShape extends BasicShape {
+
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     */
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport(fakeDistance);
+        this.radius = radius;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isFakeBallShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'FakeBallShape';
+    }
+
+    static glslClass() {
+        return fakeBall_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(fakeBall_shaders_sdf, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localFakeBall/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localFakeBall_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Local fake ball
+ **********************************************************************************************************************/
+
+struct LocalFakeBallShape {
+    int id;
+    Point center;
+    float radius;
+};
+
+/**
+ * Distance function for a global euclidean ball
+ */
+float sdf(LocalFakeBallShape ball, RelVector v) {
+    return fakeDistance(v.local.pos, ball.center) - ball.radius;
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localFakeBall/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localFakeBall_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localFakeBall/LocalFakeBallShape.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
+ */
+class LocalFakeBallShape extends BasicShape {
+
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     */
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("LocalFakeBallShape: the type of location is not implemented");
+        }
+        super();
+        this.addImport(fakeDistance);
+        this.radius = radius;this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalFakeBallShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalFakeBallShape';
+    }
+
+    static glslClass() {
+        return localFakeBall_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localFakeBall_shaders_sdf, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/potato/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const potato_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Local potato shape
+ **********************************************************************************************************************/
+
+struct PotatoShape {
+    int id;
+    Point center;
+    float radius;
+    float coeff1;
+    float coeff2;
+    float exp;
+};
+
+/**
+ * Distance function for a global euclidean ball
+ */
+float sdf(PotatoShape potato, RelVector v) {
+    Point center = applyGroupElement(v.invCellBoost, potato.center);
+    Isometry pull = makeInvTranslation(center);
+    Point p = applyIsometry(pull, v.local.pos);
+    float x = p.coords.x;
+    float y = p.coords.y;
+    float rhosq = x * x + y * y;
+    float hsq = fakeHeightSq(p);
+    float aux = potato.coeff1 * pow(rhosq, 0.5 * potato.exp) + potato.coeff2 * pow(hsq, 0.5 * potato.exp);
+    return pow(aux, 1. / potato.exp) - potato.radius;
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/potato/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const potato_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/potato/PotatoShape.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
+ */
+class PotatoShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the potato
+     * @param {number} radius - the radius of the ball
+     * @param {number} coeff1 - the coefficient for the radial component
+     * @param {number} coeff2 - the coefficient for the (fake) height component
+     * @param {number} exp - the exponent
+     */
+    constructor(location, radius, coeff1, coeff2, exp) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport(fakeDistance);
+        this.radius = radius;
+        this.coeff1 = coeff1;
+        this.coeff2 = coeff2;
+        this.exp = exp;this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isLocalPotatoShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'PotatoShape';
+    }
+
+    static glslClass() {
+        return potato_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(potato_shaders_sdf, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localPotato/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localPotato_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Local potato shape
+ **********************************************************************************************************************/
+
+struct LocalPotatoShape {
+    int id;
+    Point center;
+    float radius;
+    float coeff1;
+    float coeff2;
+    float exp;
+};
+
+/**
+ * Distance function for a global euclidean ball
+ */
+float sdf(LocalPotatoShape potato, RelVector v) {
+    Isometry pull = makeInvTranslation(potato.center);
+    Point p = applyIsometry(pull, v.local.pos);
+    float x = p.coords.x;
+    float y = p.coords.y;
+    float rhosq = x * x + y * y;
+    float hsq = fakeHeightSq(p);
+    float aux = potato.coeff1 * pow(rhosq, 0.5 * potato.exp) + potato.coeff2 * pow(hsq, 0.5 * potato.exp);
+    return pow(aux, 1. / potato.exp) - potato.radius;
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localPotato/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localPotato_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localPotato/LocalPotatoShape.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
+ */
+class LocalPotatoShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the potato
+     * @param {number} radius - the radius of the ball
+     * @param {number} coeff1 - the coefficient for the radial component
+     * @param {number} coeff2 - the coefficient for the (fake) height component
+     * @param {number} exp - the exponent
+     */
+    constructor(location, radius, coeff1, coeff2, exp) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport(fakeDistance);
+        this.radius = radius;
+        this.coeff1 = coeff1;
+        this.coeff2 = coeff2;
+        this.exp = exp;this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalPotatoShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalPotatoShape';
+    }
+
+    static glslClass() {
+        return localPotato_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localPotato_shaders_sdf, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const verticalHalfSpace_shaders_struct = (`//
+
+/***********************************************************************************************************************
+ * @struct
+ * Vertical half space
+ **********************************************************************************************************************/
+
+struct VerticalHalfSpaceShape {
+    Point pos;
+    vec3 normal;
+    vec3 uDir;
+    vec3 vDir;
+};
+
+float sdf(VerticalHalfSpaceShape halfSpace, RelVector v) {
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, halfSpace.pos);
+    vec4 diff = v.local.pos.coords - pos.coords;
+    vec4 normal = invCellBoost.matrix * vec4(halfSpace.normal, 0);
+    return dot(diff.xy, normal.xy);
+}
+
+RelVector gradient(VerticalHalfSpaceShape halfSpace, RelVector v) {
+    Vector local = Vector(v.local.pos, vec4(halfSpace.normal, 0));
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+vec2 uvMap(VerticalHalfSpaceShape halfSpace, RelVector v) {
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, halfSpace.pos);
+    vec4 uDir = invCellBoost.matrix * vec4(halfSpace.uDir, 0);
+    vec4 vDir = invCellBoost.matrix * vec4(halfSpace.vDir, 0);
+    float uCoord = dot(v.local.pos.coords - pos.coords, uDir);
+    float vCoord = dot(v.local.pos.coords - pos.coords, vDir);
+    return vec2(uCoord, vCoord);
 }`);
-
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/ball/shaders/sdf.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/shaders/sdf.js
 // language=Mustache + GLSL
-/* harmony default export */ const ball_shaders_sdf = (`        
+/* harmony default export */ const verticalHalfSpace_shaders_sdf = (`//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/ball/shaders/gradient.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/shaders/gradient.js
 // language=Mustache + GLSL
-/* harmony default export */ const ball_shaders_gradient = (`
+/* harmony default export */ const verticalHalfSpace_shaders_gradient = (`
 RelVector {{name}}_gradient(RelVector v){
     return gradient({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/ball/BallShape.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/shaders/uv.js
+// language=Mustache + GLSL
+/* harmony default export */ const verticalHalfSpace_shaders_uv = (`//
+vec2 {{name}}_uvMap(RelVector v){
+    return uvMap({{name}}, v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/VerticalHalfSpaceShape.js
 
 
 
@@ -76468,131 +77783,158 @@ RelVector {{name}}_gradient(RelVector v){
 
 
 
-
-class BallShape extends BasicShape {
+/**
+ * @class
+ *
+ * Shape for a vertical half space in Nil
+ */
+class VerticalHalfSpaceShape extends BasicShape {
 
     /**
-     * Construction
-     * @param {Isometry|Point|Vector} location - data for the center of the ball
-     * @param {number} radius - the radius od the ball
+     * Constructor.
+     * The half space is the image by the given isometry of the half space {x < 0}
+     * The UV directions are the images of e_y, e_z
+     * @param {Isometry} isom - the location of the half space
      */
-    constructor(location, radius) {
-
-        const isom = new Isometry();
-        if (location.isIsometry) {
-            isom.copy(location);
-        } else if (location.isPoint) {
-            isom.makeTranslation(location);
-        } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
-        } else {
-            throw new Error("BallShape: this type of location is not implemented");
-        }
-
+    constructor(isom) {
         super(isom);
-        this.addImport(distance, direction);
-        this.radius = radius;
-        this._center = undefined;
+        this._pos = undefined;
+        this._normal = undefined;
+        this._uDir = undefined;
+        this._vDir = new Vector(0, 0, 1);
     }
 
     updateData() {
         super.updateData();
-        this._center = new Point().applyIsometry(this.absoluteIsom);
+
+        this._pos = new Point().applyIsometry(this.absoluteIsom);
+        this._pos.coords.setZ(0);
+
+        this._normal = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._normal.setZ(0);
+        this._normal.normalize();
+
+        this._uDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._uDir.setZ(0);
+        this._uDir.normalize();
     }
 
-    get center() {
-        if (this._center === undefined) {
+    /**
+     * A point on the boundary of the half space
+     */
+    get pos() {
+        if (this._pos === undefined) {
             this.updateData();
         }
-        return this._center;
+        return this._pos;
     }
 
     /**
-     * Says that the object inherits from `Ball`
-     * @type {boolean}
+     * The normal to the half space
      */
-    get isBallShape() {
-        return true;
+    get normal() {
+        if (this._normal === undefined) {
+            this.updateData();
+        }
+        return this._normal;
+    }
+
+    get uDir() {
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
+    }
+
+    get vDir() {
+        return this._vDir;
     }
 
 
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
     get isGlobal() {
         return true;
     }
 
-    get hasUVMap() {
-        return false;
+    get isVerticalHalfSpaceShape() {
+        return true;
     }
 
+    get hasUVMap() {
+        return true;
+    }
 
     get uniformType() {
-        return 'BallShape';
+        return 'VerticalHalfSpaceShape';
     }
 
     static glslClass() {
-        return ball_shaders_struct;
+        return verticalHalfSpace_shaders_struct;
     }
 
     glslSDF() {
-        return mustache_mustache.render(ball_shaders_sdf, this);
+        return mustache_mustache.render(verticalHalfSpace_shaders_sdf, this);
     }
 
     glslGradient() {
-        return mustache_mustache.render(ball_shaders_gradient, this);
+        return mustache_mustache.render(verticalHalfSpace_shaders_gradient, this);
     }
+
+    glslUVMap() {
+        return mustache_mustache.render(verticalHalfSpace_shaders_uv, this);
+    }
+
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/localBall/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalCylinder/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const localBall_shaders_struct = (`//
+/* harmony default export */ const verticalCylinder_shaders_struct = (`//
+
 /***********************************************************************************************************************
  * @struct
- * Shape of a ball in S2xE
+ * Vertical cylinder going through the given point
  **********************************************************************************************************************/
 
-struct LocalBallShape {
-    int id;
-    Point center;
+struct VerticalCylinderShape {
     float radius;
+    Point pos;
 };
 
-/**
- * Distance function for a global hyperbolic ball
- */
-float sdf(LocalBallShape ball, RelVector v) {
-    return dist(v.local.pos, ball.center) - ball.radius;
+float sdf(VerticalCylinderShape cyl, RelVector v) {
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, cyl.pos);
+    vec2 diff = v.local.pos.coords.xy - pos.coords.xy;
+    return length(diff) - cyl.radius;
 }
 
-/**
- * Gradient field for a local ball
- */
-RelVector gradient(LocalBallShape ball, RelVector v){
-    Vector local = direction(v.local.pos, ball.center);
-    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
+RelVector gradient(VerticalCylinderShape cyl, RelVector v) {
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, cyl.pos);
+    vec2 diff = v.local.pos.coords.xy - pos.coords.xy;
+    vec4 dir = vec4(diff, 0, 0);
+    Vector local = Vector(v.local.pos, dir);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+
 }
 
-`);
-
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/localBall/shaders/sdf.js
+vec2 uvMap(VerticalCylinderShape cyl, RelVector v) {
+    return vec2(0, 0);
+}`);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalCylinder/shaders/sdf.js
 // language=Mustache + GLSL
-/* harmony default export */ const localBall_shaders_sdf = (`        
+/* harmony default export */ const verticalCylinder_shaders_sdf = (`//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/localBall/shaders/gradient.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalCylinder/shaders/gradient.js
 // language=Mustache + GLSL
-/* harmony default export */ const localBall_shaders_gradient = (`
+/* harmony default export */ const verticalCylinder_shaders_gradient = (`
 RelVector {{name}}_gradient(RelVector v){
     return gradient({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/localBall/LocalBallShape.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalCylinder/VerticalCylinderShape.js
 
 
 
@@ -76602,90 +77944,436 @@ RelVector {{name}}_gradient(RelVector v){
 
 
 
-
-
-
-class LocalBallShape extends BasicShape {
-
+/**
+ * @class
+ *
+ * @classdesc
+ * Vertical cylinder
+ *
+ * @todo Implement UV maps
+ */
+class VerticalCylinderShape extends BasicShape {
 
     /**
-     * Construction
-     * @param {Isometry|Point|Vector} location - data for the center of the ball
-     * @param {number} radius - the radius od the ball
+     * The cylinder is the image by `isom` of the vertical cylinder (i.e. around the z-axis) going through the origin
+     * @param {number} radius - radius of the cylinder
+     * @param {Isometry} isom - isometry used to locate the cylinder
      */
-    constructor(location, radius) {
-
-        const isom = new Isometry();
-        if (location.isIsometry) {
-            isom.copy(location);
-        } else if (location.isPoint) {
-            isom.makeTranslation(location);
-        } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
-        } else {
-            throw new Error("BallShape: this type of location is not implemented");
-        }
-
-        super(isom);
-        this.addImport(distance, direction);
+    constructor(isom, radius) {
+        super();
         this.radius = radius;
-        this._center = undefined;
+        this.isom = isom;
+        this._pos = undefined;
     }
 
     updateData() {
         super.updateData();
-        this._center = new Point().applyIsometry(this.absoluteIsom);
+        this._pos = new Point().applyIsometry(this.absoluteIsom);
+        this._pos.coords.setZ(0);
     }
 
-    get center() {
-        if (this._center === undefined) {
+    /**
+     * point on the center of the cylinder
+     * @type {Point}
+     */
+    get pos() {
+        if (this._pos === undefined) {
             this.updateData();
         }
-        return this._center;
+        return this._pos;
     }
 
-    /**
-     * Says that the object inherits from `Ball`
-     * @type {boolean}
-     */
-    get isLocalBallShape() {
+    get isGlobal() {
         return true;
     }
-
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        return false;
-    }
-
 
     get hasUVMap() {
         return false;
     }
 
-
     get uniformType() {
-        return 'LocalBallShape';
+        return 'VerticalCylinderShape';
     }
 
     static glslClass() {
-        return localBall_shaders_struct;
-    }
-
-    glslGradient() {
-        return mustache_mustache.render(localBall_shaders_gradient, this);
+        return verticalCylinder_shaders_struct;
     }
 
     glslSDF() {
-        return mustache_mustache.render(localBall_shaders_sdf, this);
+        return mustache_mustache.render(verticalCylinder_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(verticalCylinder_shaders_gradient, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localVerticalCylinder/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localVerticalCylinder_shaders_struct = (`//
+
+/***********************************************************************************************************************
+ * @struct
+ * Vertical cylinder going through the given point
+ **********************************************************************************************************************/
+
+struct LocalVerticalCylinderShape {
+    float radius;
+    Point pos;
+};
+
+float sdf(LocalVerticalCylinderShape cyl, RelVector v) {
+    vec2 diff = v.local.pos.coords.xy - cyl.pos.coords.xy;
+    return length(diff) - cyl.radius;
+}
+
+RelVector gradient(LocalVerticalCylinderShape cyl, RelVector v) {
+    vec2 diff = v.local.pos.coords.xy - cyl.pos.coords.xy;
+    vec4 dir = vec4(diff, 0, 0);
+    Vector local = Vector(v.local.pos, dir);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+
+}
+
+vec2 uvMap(LocalVerticalCylinderShape cyl, RelVector v) {
+    return vec2(0, 0);
+}`);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localVerticalCylinder/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localVerticalCylinder_shaders_sdf = (`//
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localVerticalCylinder/shaders/gradient.js
+// language=Mustache + GLSL
+/* harmony default export */ const localVerticalCylinder_shaders_gradient = (`
+RelVector {{name}}_gradient(RelVector v){
+    return gradient({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Vertical cylinder
+ *
+ * @todo Implement UV maps
+ */
+class LocalVerticalCylinderShape extends BasicShape {
+
+    /**
+     * The cylinder is the image by `isom` of the vertical cylinder (i.e. around the z-axis) going through the origin
+     * @param {Isometry} isom - isometry used to locate the cylinder
+     * @param {number} radius - radius of the cylinder
+     */
+    constructor(isom, radius) {
+        super();
+        this.radius = radius;
+        this.isom = isom;
+        this._pos = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._pos = new Point().applyIsometry(this.absoluteIsom);
+        this._pos.coords.setZ(0);
+    }
+
+    /**
+     * point on the center of the cylinder
+     * @type {Point}
+     */
+    get pos() {
+        if (this._pos === undefined) {
+            this.updateData();
+        }
+        return this._pos;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get hasUVMap() {
+        return false;
+    }
+
+    get uniformType() {
+        return 'LocalVerticalCylinderShape';
     }
 
 
+    static glslClass() {
+        return localVerticalCylinder_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localVerticalCylinder_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(localVerticalCylinder_shaders_gradient, this);
+    }
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/all.js
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/directedVerticalHalfSpace/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const directedVerticalHalfSpace_shaders_struct = (`//
+
+/***********************************************************************************************************************
+ * @struct
+ * Vertical half space
+ **********************************************************************************************************************/
+
+struct VerticalHalfSpaceShape {
+    Point pos;
+    vec3 normal;
+    vec3 uDir;
+    vec3 vDir;
+};
+
+float sdf(VerticalHalfSpaceShape halfSpace, RelVector v) {
+    // pull back the data, so that the vector is at the origin
+    // and keep only the projection onto E^2
+    Point pos = halfSpace.pos;
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    pos = applyGroupElement(v.invCellBoost, pos);
+    Isometry shift = makeInvTranslation(v.local.pos);
+    pos = applyIsometry(shift, pos);
+    vec2 p = pos.coords.xy;
+    // the normal vector need not be translated by shift
+    // indeed shift induces an translation of E^2, that does not affect the tangent vector.
+    vec4 normal = invCellBoost.matrix * vec4(halfSpace.normal, 0);
+    vec2 n = normalize(normal.xy);
+
+
+    float dotp = dot(p, n);
+    if (abs(dotp) < 2. * camera.threshold){
+        // the currrent point is already close to the boundary of the half space
+        return - dotp;
+    }
+    
+    float c = v.local.dir.z;
+    vec2 u = v.local.dir.xy;
+    float a = length(u);
+
+    // flip the figure to make sure that c > 0
+    // this does not change the distances
+    mat2 flip = mat2(0, 1, 1, 0);
+    if (c < 0.){
+        c = -c;
+        u = flip * u;
+        n = flip * n;
+        p = flip * p;
+    }
+    
+    // flip the half space inside out, so that the origin belongs to the half space
+    float sign = 1.;
+    if (dotp < 0.) {
+        dotp = - dotp;
+        n = -n;
+        sign = -1.;
+    }
+    if (abs(c) <= 0.){
+        // horizontal geodesic
+//        return - sign * dotp;
+        float dotv = dot(u, n);
+        if (dotv <= 0.){
+            // the geodesic never enter/exit the half space
+            return - sign * camera.maxDist;
+        }
+        return - sign * dotp / dotv;
+    }
+
+    float aCosPhi = n.y * u.x - n.x * u.y;
+    if (aCosPhi + a  < c * dotp) {
+        // the geodesic stays in the half space
+//        return - sign * dotp;
+        return - sign * camera.maxDist;
+    }
+
+    // general case
+    float aSinPhi = dot(u, n);
+    float phi = atan(aSinPhi, aCosPhi);
+    float psi = acos(max((aCosPhi - c * dotp) / a, -1.));
+//    return - sign * dotp;
+    return - sign * (psi - phi) / c;
+
+
+}
+
+RelVector gradient(VerticalHalfSpaceShape halfSpace, RelVector v) {
+    Vector local = Vector(v.local.pos, vec4(halfSpace.normal, 0));
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+vec2 uvMap(VerticalHalfSpaceShape halfSpace, RelVector v) {
+    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    Point pos = applyGroupElement(v.invCellBoost, halfSpace.pos);
+    vec4 uDir = invCellBoost.matrix * vec4(halfSpace.uDir, 0);
+    vec4 vDir = invCellBoost.matrix * vec4(halfSpace.vDir, 0);
+    float uCoord = dot(v.local.pos.coords - pos.coords, uDir);
+    float vCoord = dot(v.local.pos.coords - pos.coords, vDir);
+    return vec2(uCoord, vCoord);
+}`);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/directedVerticalHalfSpace/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const directedVerticalHalfSpace_shaders_sdf = (`//
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/directedVerticalHalfSpace/shaders/gradient.js
+// language=Mustache + GLSL
+/* harmony default export */ const directedVerticalHalfSpace_shaders_gradient = (`
+RelVector {{name}}_gradient(RelVector v){
+    return gradient({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/directedVerticalHalfSpace/shaders/uv.js
+// language=Mustache + GLSL
+/* harmony default export */ const directedVerticalHalfSpace_shaders_uv = (`//
+vec2 {{name}}_uvMap(RelVector v){
+    return uvMap({{name}}, v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/directedVerticalHalfSpace/DirectedVerticalHalfSpaceShape.js
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * Shape for a vertical half space in Nil
+ */
+class DirectedVerticalHalfSpaceShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * The half space is the image by the given isometry of the half space {x < 0}
+     * The UV directions are the images of e_y, e_z
+     * @param {Isometry} isom - the location of the half space
+     */
+    constructor(isom) {
+        super(isom);
+        this._pos = undefined;
+        this._normal = undefined;
+        this._uDir = undefined;
+        this._vDir = new Vector(0, 0, 1);
+    }
+
+    updateData() {
+        super.updateData();
+
+        this._pos = new Point().applyIsometry(this.absoluteIsom);
+        this._pos.coords.setZ(0);
+
+        this._normal = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._normal.setZ(0);
+        this._normal.normalize();
+
+        this._uDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._uDir.setZ(0);
+        this._uDir.normalize();
+    }
+
+    /**
+     * A point on the boundary of the half space
+     */
+    get pos() {
+        if (this._pos === undefined) {
+            this.updateData();
+        }
+        return this._pos;
+    }
+
+    /**
+     * The normal to the half space
+     */
+    get normal() {
+        if (this._normal === undefined) {
+            this.updateData();
+        }
+        return this._normal;
+    }
+
+    get uDir() {
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
+    }
+
+    get vDir() {
+        return this._vDir;
+    }
+
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isVerticalHalfSpaceShape() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'VerticalHalfSpaceShape';
+    }
+
+    static glslClass() {
+        return directedVerticalHalfSpace_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(directedVerticalHalfSpace_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(directedVerticalHalfSpace_shaders_gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache_mustache.render(directedVerticalHalfSpace_shaders_uv, this);
+    }
+
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/all.js
+
+
+
+
+
+
+
+
+
+
 
 
 ;// CONCATENATED MODULE: ./src/core/solids/shaders/struct.js
@@ -76846,7 +78534,7 @@ class Solid extends Generic {
         super.shader(shaderBuilder);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/solids/Ball.js
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/FakeBall.js
 
 
 
@@ -76854,23 +78542,22 @@ class Solid extends Generic {
  * @class
  *
  * @classdesc
- * S2xE ball
+ * Fake ball in Nil.
  */
-class Ball extends Solid {
-
+class FakeBall extends Solid {
     /**
-     * Constructor
-     * @param {Isometry|Point|Vector} location - the location of the ball
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
      * @param {number} radius - the radius of the ball
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new BallShape(location, radius);
+        const shape = new FakeBallShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/solids/LocalBall.js
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/LocalFakeBall.js
 
 
 
@@ -76878,28 +78565,150 @@ class Ball extends Solid {
  * @class
  *
  * @classdesc
- * S2xE ball
+ * Fake ball in Nil.
  */
-class LocalBall extends Solid {
-
+class LocalFakeBall extends Solid {
     /**
-     * Constructor
-     * @param {Isometry|Point|Vector} location - the location of the ball
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
      * @param {number} radius - the radius of the ball
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new LocalBallShape(location, radius);
+        const shape = new LocalFakeBallShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/s2e/solids/all.js
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/LocalPotato.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Local potato shape in Nil.
+ */
+class LocalPotato extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the potato
+     * @param {number} radius - the radius of the ball
+     * @param {number} coeff1 - the coefficient for the radial component
+     * @param {number} coeff2 - the coefficient for the (fake) height component
+     * @param {number} exp - the exponent
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, radius, coeff1, coeff2, exp, material, ptMaterial = undefined) {
+        const shape = new LocalPotatoShape(location, radius, coeff1, coeff2, exp);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/VerticalHalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Vertical half space in Nil
+ */
+class VerticalHalfSpace extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry} isom - location of the half space
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new VerticalHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/VerticalCylinder.js
 
 
 
 
-;// CONCATENATED MODULE: ./src/thurstonS2E.js
+/**
+ * @class
+ *
+ * @classdesc
+ * Vertical cylinder in Nil
+ */
+class VerticalCylinder extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the isometry locating the cylinder
+     * @param {number} radius - the radius of the cylinder
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, radius, material, ptMaterial = undefined) {
+        const shape = new VerticalCylinderShape(isom, radius);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/LocalVerticalCylinder.js
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Vertical cylinder in Nil
+ */
+class LocalVerticalCylinder extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the isometry locating the cylinder
+     * @param {number} radius - the radius of the cylinder
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, radius, material, ptMaterial = undefined) {
+        const shape = new LocalVerticalCylinderShape(isom, radius);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/DirectedVerticalHalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Vertical half space in Nil
+ */
+class DirectedVerticalHalfSpace extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry} isom - location of the half space
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new DirectedVerticalHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/all.js
+
+
+
+
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/thurstonNil.js
 
 
 
@@ -76913,18 +78722,18 @@ class LocalBall extends Solid {
 
 
 
-const thurstonS2E_BasicRenderer = specifyRenderer(BasicRenderer, part1, part2);
-const thurstonS2E_PathTracerRenderer = specifyRenderer(PathTracerRenderer, part1, part2);
-const thurstonS2E_VRRenderer = specifyRenderer(VRRenderer, part1, part2);
+const thurstonNil_BasicRenderer = specifyRenderer(BasicRenderer, part1, part2);
+const thurstonNil_PathTracerRenderer = specifyRenderer(PathTracerRenderer, part1, part2);
+const thurstonNil_VRRenderer = specifyRenderer(VRRenderer, part1, part2);
 
 
 
 
 
 
-const thurstonS2E_Thurston = specifyThurston(Thurston, part1, part2);
-const thurstonS2E_ThurstonLite = specifyThurston(ThurstonLite, part1, part2);
-const thurstonS2E_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
+const thurstonNil_Thurston = specifyThurston(Thurston, part1, part2);
+const thurstonNil_ThurstonLite = specifyThurston(ThurstonLite, part1, part2);
+const thurstonNil_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
 
 
 
@@ -76935,8 +78744,7 @@ const thurstonS2E_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
 
 
 
-var __webpack_exports__Ball = __webpack_exports__.ec;
-var __webpack_exports__BallShape = __webpack_exports__.Yb;
+
 var __webpack_exports__BasicCamera = __webpack_exports__.QU;
 var __webpack_exports__BasicPTMaterial = __webpack_exports__.ZH;
 var __webpack_exports__BasicRenderer = __webpack_exports__.K9;
@@ -76947,12 +78755,14 @@ var __webpack_exports__CheckerboardMaterial = __webpack_exports__.Vz;
 var __webpack_exports__Clock = __webpack_exports__.SU;
 var __webpack_exports__Color = __webpack_exports__.Il;
 var __webpack_exports__ComplementShape = __webpack_exports__.Iy;
-var __webpack_exports__DIR_DOWN = __webpack_exports__.ik;
-var __webpack_exports__DIR_UP = __webpack_exports__.fY;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
-var __webpack_exports__ESun = __webpack_exports__.Gj;
+var __webpack_exports__DirectedVerticalHalfSpace = __webpack_exports__.F6;
+var __webpack_exports__DirectedVerticalHalfSpaceShape = __webpack_exports__.Kd;
 var __webpack_exports__EarthTexture = __webpack_exports__.KO;
 var __webpack_exports__ExpFog = __webpack_exports__.c$;
+var __webpack_exports__FakeBall = __webpack_exports__.OZ;
+var __webpack_exports__FakeBallShape = __webpack_exports__.Ao;
+var __webpack_exports__FakePointLight = __webpack_exports__.ET;
 var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
 var __webpack_exports__Group = __webpack_exports__.ZA;
@@ -76964,8 +78774,12 @@ var __webpack_exports__IsotropicChaseControls = __webpack_exports__.$m;
 var __webpack_exports__KeyGenericControls = __webpack_exports__.Nh;
 var __webpack_exports__LEFT = __webpack_exports__.RL;
 var __webpack_exports__Light = __webpack_exports__._k;
-var __webpack_exports__LocalBall = __webpack_exports__.jo;
-var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
+var __webpack_exports__LocalFakeBall = __webpack_exports__.oR;
+var __webpack_exports__LocalFakeBallShape = __webpack_exports__.lt;
+var __webpack_exports__LocalPotato = __webpack_exports__.tl;
+var __webpack_exports__LocalPotatoShape = __webpack_exports__.HI;
+var __webpack_exports__LocalVerticalCylinder = __webpack_exports__.IJ;
+var __webpack_exports__LocalVerticalCylinderShape = __webpack_exports__.jD;
 var __webpack_exports__MarsTexture = __webpack_exports__.Qv;
 var __webpack_exports__Material = __webpack_exports__.F5;
 var __webpack_exports__Matrix2 = __webpack_exports__.Uc;
@@ -76980,9 +78794,9 @@ var __webpack_exports__PathTracerWrapMaterial = __webpack_exports__._K;
 var __webpack_exports__PhongMaterial = __webpack_exports__.JF;
 var __webpack_exports__PhongWrapMaterial = __webpack_exports__.Lv;
 var __webpack_exports__Point = __webpack_exports__.E9;
-var __webpack_exports__PointLight = __webpack_exports__.ce;
 var __webpack_exports__Position = __webpack_exports__.Ly;
-var __webpack_exports__QuadRing = __webpack_exports__.iv;
+var __webpack_exports__PotatoShape = __webpack_exports__.Gx;
+var __webpack_exports__QuadRing = __webpack_exports__.jo;
 var __webpack_exports__QuadRingElement = __webpack_exports__.mH;
 var __webpack_exports__QuadRingMatrix4 = __webpack_exports__.xd;
 var __webpack_exports__Quaternion = __webpack_exports__._f;
@@ -77010,15 +78824,20 @@ var __webpack_exports__Vector = __webpack_exports__.OW;
 var __webpack_exports__Vector2 = __webpack_exports__.FM;
 var __webpack_exports__Vector3 = __webpack_exports__.P;
 var __webpack_exports__Vector4 = __webpack_exports__.Lt;
+var __webpack_exports__VerticalCylinder = __webpack_exports__.DV;
+var __webpack_exports__VerticalCylinderShape = __webpack_exports__.bt;
+var __webpack_exports__VerticalHalfSpace = __webpack_exports__.Pq;
+var __webpack_exports__VerticalHalfSpaceShape = __webpack_exports__.j5;
 var __webpack_exports__WrapShape = __webpack_exports__.$9;
 var __webpack_exports__XRControllerModelFactory = __webpack_exports__.iR;
+var __webpack_exports__basicHeisenbergSet = __webpack_exports__.wJ;
 var __webpack_exports__bind = __webpack_exports__.ak;
 var __webpack_exports__complement = __webpack_exports__.Cy;
-var __webpack_exports__cubeSet = __webpack_exports__.Rc;
+var __webpack_exports__extendedHeisenbergSet = __webpack_exports__.Z;
+var __webpack_exports__heisenbergSet = __webpack_exports__.aG;
 var __webpack_exports__intersection = __webpack_exports__.jV;
-var __webpack_exports__phongWrap = __webpack_exports__.IJ;
+var __webpack_exports__phongWrap = __webpack_exports__.WT;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Clock as Clock, __webpack_exports__Color as Color, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__ESun as ESun, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseControls as IsotropicChaseControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__Matrix3 as Matrix3, __webpack_exports__Matrix4 as Matrix4, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__Quaternion as Quaternion, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootControls as ShootControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRControlsDrag as VRControlsDrag, __webpack_exports__VRControlsMove as VRControlsMove, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__Vector2 as Vector2, __webpack_exports__Vector3 as Vector3, __webpack_exports__Vector4 as Vector4, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__intersection as intersection, __webpack_exports__phongWrap as phongWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Clock as Clock, __webpack_exports__Color as Color, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseControls as IsotropicChaseControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__Matrix3 as Matrix3, __webpack_exports__Matrix4 as Matrix4, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__Quaternion as Quaternion, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootControls as ShootControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRControlsDrag as VRControlsDrag, __webpack_exports__VRControlsMove as VRControlsMove, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__Vector2 as Vector2, __webpack_exports__Vector3 as Vector3, __webpack_exports__Vector4 as Vector4, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__intersection as intersection, __webpack_exports__phongWrap as phongWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };

@@ -12,23 +12,25 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector4} from "three";
+    import {
+        Color,
+        Vector4,
+        ThurstonVR,
+        heisenbergSet as heisenberg,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        FakeBall, LocalVerticalCylinder,
+        SingleColorMaterial,
+        Isometry
 
+    } from "../../build/thurstonNil.js";
 
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import {Isometry, Point} from "../../../src/geometries/nil/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import heisenberg from "../../../src/geometries/nil/groups/heisenberg/set.js";
-
-    import {PhongMaterial, SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
-    import {FakeBall, LocalVerticalCylinder, VerticalCylinder} from "../../../src/geometries/nil/solids/all.js";
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
 
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
     heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
 
-    const thurston = new ThurstonVR(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(heisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;

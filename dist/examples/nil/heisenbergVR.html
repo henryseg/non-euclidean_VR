@@ -12,36 +12,29 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector4} from "three";
 
-
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import heisenberg from "../../../src/geometries/nil/groups/heisenberg/set.js";
-
-    import {Point, Isometry} from "../../../src/core/geometry/General.js";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
     import {
-        FakeBall,
-        LocalFakeBall,
-        LocalPotato,
-        Solid
-    } from "../../../src/geometries/nil/solids/all.js";
-    import {
+        Color,
+        Vector4,
+        ThurstonVR,
+        heisenbergSet as heisenberg,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        Solid,
         complement,
-        FakeBallShape,
         LocalFakeBallShape,
-        LocalPotatoShape
-    } from "../../../src/geometries/nil/shapes/all.js";
-    import {LocalVerticalCylinderShape} from "../../../src/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
-    import {union} from "../../../src/commons/shapes/all.js";
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
+        LocalVerticalCylinderShape,
+        union,
+        Isometry
+
+    } from "../../build/thurstonNil.js";
 
 
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
     heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
 
-    const thurston = new ThurstonVR(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(heisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;

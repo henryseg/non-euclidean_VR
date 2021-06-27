@@ -71143,7 +71143,7 @@ class VRControlsDrag extends EventDispatcher {
 
 
 
-;// CONCATENATED MODULE: ./src/commons/app/thurstonVR/ThrustonVR.js
+;// CONCATENATED MODULE: ./src/commons/app/thurstonVR/ThurstonVR.js
 
 
 

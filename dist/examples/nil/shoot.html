@@ -12,31 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import * as utils from "../../../src/utils.js";
-    import {Clock, Color, Vector4} from "three";
-    import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import heisenberg from "../../../src/geometries/nil/groups/heisenberg/set.js";
 
-    import {Point, Isometry} from "../../../src/core/geometry/General.js";
-    import {PhongMaterial, SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
     import {
+        Clock,
+        Vector4,
+        XRControllerModelFactory,
+        Color,
+        heisenbergSet as heisenberg,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        Isometry,
+        SingleColorMaterial,
         FakeBall,
-        Solid
-    } from "../../../src/geometries/nil/solids/all.js";
-    import {
-        complement,
-        LocalFakeBallShape,
-    } from "../../../src/geometries/nil/shapes/all.js";
-    import {LocalVerticalCylinderShape} from "../../../src/geometries/nil/shapes/localVerticalCylinder/LocalVerticalCylinderShape.js";
-    import {union} from "../../../src/commons/shapes/all.js";
-    import {VRCamera} from "../../../src/core/cameras/vr/VRCamera.js";
-    import {Scene, VRRenderer} from "../../../src/core/General.js";
-    import {FlyControls} from "../../../src/controls/FlyControls.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-    import {ShootControls} from "../../../src/controls/ShootControls.js";
+        Solid,
+        complement, LocalFakeBallShape, LocalVerticalCylinderShape, union, VRCamera, Scene, VRRenderer,
+        FlyControls, InfoControls, ShootControls
+    } from "../../build/thurstonNil.js";
 
 
     heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
@@ -46,7 +39,7 @@
     const camera = new VRCamera({set: heisenberg});
     camera.maxSteps = 300;
     const scene = new Scene();
-    const renderer = new VRRenderer(geom, heisenberg, camera, scene, {}, {
+    const renderer = new VRRenderer(heisenberg, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

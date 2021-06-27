@@ -1,10 +1,10 @@
-export {Isometry} from "./geometries/euc/geometry/Isometry.js";
-export {Point} from "./geometries/euc/geometry/Point.js";
+export {Isometry} from "./geometries/nil/geometry/Isometry.js";
+export {Point} from "./geometries/nil/geometry/Point.js";
 export {Vector} from "./core/geometry/Vector.js";
-export {Position} from "./geometries/euc/geometry/Position.js";
+export {Position} from "./geometries/nil/geometry/Position.js";
 
-import shader1 from "./geometries/euc/geometry/shaders/part1.js";
-import shader2 from "./geometries/euc/geometry/shaders/part2.js";
+import shader1 from "./geometries/nil/geometry/shaders/part1.js";
+import shader2 from "./geometries/nil/geometry/shaders/part2.js";
 
 import {BasicRenderer as BasicRendererGeneric} from "./core/renderers/BasicRenderer.js";
 import {PathTracerRenderer as PathTracerRendererGeneric} from "./core/renderers/PathTracerRenderer.js";
@@ -26,8 +26,10 @@ export const ThurstonVR = specifyThurston(ThurstonVRGeneric, shader1, shader2);
 
 export * from "./core.js";
 
-export {default as freeAbelianSet} from "./geometries/euc/groups/freeAbelian/set.js";
-export * from './geometries/euc/lights/all.js';
-export * from './geometries/euc/material/all.js';
-export * from './geometries/euc/shapes/all.js';
-export * from './geometries/euc/solids/all.js';
+export {default as basicHeisenbergSet} from "./geometries/nil/groups/basicHeisenberg/set.js";
+export {default as heisenbergSet} from "./geometries/nil/groups/heisenberg/set.js";
+export {default as extendedHeisenbergSet} from "./geometries/nil/groups/extendedHeisenberg/set.js";
+export * from './geometries/nil/lights/all.js';
+export * from './geometries/nil/material/all.js';
+export * from './geometries/nil/shapes/all.js';
+export * from './geometries/nil/solids/all.js';

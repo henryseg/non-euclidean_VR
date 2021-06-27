@@ -12,29 +12,22 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import {Isometry, Point} from "../../../src/geometries/nil/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import heisenberg from "../../../src/geometries/nil/groups/basicHeisenberg/set.js";
-
-    import {DebugMaterial, NormalMaterial, PhongMaterial, SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
     import {
-        FakeBall,
-        LocalFakeBall,
-        LocalVerticalCylinder,
-        VerticalCylinder
-    } from "../../../src/geometries/nil/solids/all.js";
-    import {LocalFakeBallShape, LocalPotatoShape} from "../../../src/geometries/nil/shapes/all.js";
-    import {complement, intersection, union} from "../../../src/commons/shapes/all.js";
-    import {Solid} from "../../../src/core/solids/Solid.js";
-    import {CREEPING_FULL, CREEPING_OFF} from "../../../src/core/groups/TeleportationSet.js";
+        Color,
+        ThurstonLite,
+        heisenbergSet as heisenberg,
+        Point,
+        DebugMaterial,
+        NormalMaterial, SingleColorMaterial,
+        LocalPotatoShape,
+        complement,
+        Solid,
+        CREEPING_OFF
+    } from "../../build/thurstonNil.js";
 
 
-    const thurston = new ThurstonLite(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(heisenberg, {keyboard: 'fr'});
     heisenberg.creepingType = CREEPING_OFF;
     // heisenberg.usesNearestNeighbors = true;
     thurston.scene.fog.scattering = 0.5;

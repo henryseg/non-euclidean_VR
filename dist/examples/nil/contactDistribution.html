@@ -12,24 +12,19 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector4} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
-
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import heisenberg from "../../../src/geometries/nil/groups/heisenberg/set.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
-    import {FakeBall, LocalFakeBall, LocalPotato, Solid} from "../../../src/geometries/nil/solids/all.js";
-    import {complement, LocalFakeBallShape, LocalPotatoShape} from "../../../src/geometries/nil/shapes/all.js";
+    import {
+        Color,
+        ThurstonLite,
+        heisenbergSet as heisenberg,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        LocalPotato,
+    } from "../../build/thurstonNil.js";
 
 
-
-
-
-    const thurston = new ThurstonLite(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(heisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 10;
     thurston.camera.maxSteps = 100;

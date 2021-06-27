@@ -12,29 +12,21 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector4} from "three";
 
-
-    import * as geom from "../../../src/geometries/nil/geometry/General.js";
-    import extendedHeisenberg from "../../../src/geometries/nil/groups/extendedHeisenberg/set.js";
-
-    import {Point, Isometry} from "../../../src/core/geometry/General.js";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {FakePointLight} from "../../../src/geometries/nil/lights/all.js";
     import {
-        FakeBall,
-        LocalFakeBall,
-        LocalPotato,
-        Solid
-    } from "../../../src/geometries/nil/solids/all.js";
-    import {
+        Color,
+        Vector4,
+        ThurstonVR,
+        extendedHeisenbergSet as extendedHeisenberg,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        Solid,
+        LocalPotatoShape,
         complement,
-        FakeBallShape,
-        LocalFakeBallShape,
-        LocalPotatoShape
-    } from "../../../src/geometries/nil/shapes/all.js";
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
-    import {CREEPING_FULL} from "../../../src/core/groups/TeleportationSet.js";
+        CREEPING_FULL
+
+    } from "../../build/thurstonNil.js";
 
 
     extendedHeisenberg.group.translationA = new Vector4(2, 0, 0, 0);
@@ -42,7 +34,7 @@
     extendedHeisenberg.group.root = 2;
 
     extendedHeisenberg.creepingType = CREEPING_FULL;
-    const thurston = new ThurstonVR(geom, extendedHeisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(extendedHeisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;
