@@ -12,22 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
+
+    import {
+        Color,
+        ThurstonVR,
+        quaternionSet as quaternion,
+        Point,
+        Vector,
+        Isometry,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        EarthTexture,
+        complement, union,
+        Ball, Solid
+    } from "../../build/thurstonSph.js";
 
 
-    import * as geom from "../../../src/geometries/sph/geometry/General.js";
-    import quaternion from "../../../src/geometries/sph/groups/quaternion/set.js";
-
-    import {Isometry, Point, Vector} from "../../../src/geometries/sph/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/sph/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball} from "../../../src/geometries/sph/solids/all.js";
-    import {LocalBallShape, union, complement} from "../../../src/geometries/sph/shapes/all.js";
-    import {EarthTexture} from "../../../src/commons/materials/all.js";
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
-
-
-    const thurston = new ThurstonVR(geom, quaternion, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(quaternion, {keyboard: 'fr'});
     thurston.camera.maxDist = 2 * Math.PI;
 
     // lights for the Phong material

@@ -12,22 +12,22 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Color,
+        ThurstonLite,
+        quaternionSet as quaternion,
+        Point,
+        Vector,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement, union,
+        Ball, Solid
+    } from "../../build/thurstonSph.js";
 
-    import * as geom from "../../../src/geometries/sph/geometry/General.js";
-    import quaternion from "../../../src/geometries/sph/groups/quaternion/set.js";
 
-
-    import {Point, Vector} from "../../../src/geometries/sph/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/sph/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball} from "../../../src/geometries/sph/solids/all.js";
-    import {LocalBallShape, union, complement} from "../../../src/geometries/sph/shapes/all.js";
-
-
-    const thurston = new ThurstonLite(geom, quaternion, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(quaternion, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 2 * Math.PI;
 

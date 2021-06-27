@@ -9,6 +9,7 @@ module.exports = {
     entry: {
         thurstonEuc: './src/thurstonEuc.js',
         thurstonHyp: './src/thurstonHyp.js',
+        thurstonSph: './src/thurstonSph.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist/build'),
