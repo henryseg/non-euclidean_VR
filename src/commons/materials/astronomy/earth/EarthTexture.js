@@ -11,7 +11,6 @@ import texture from "./img/earthmap2k.png";
  * @classdesc
  * Texture of the earth
  *
- * @todo handle file path…
  */
 export class EarthTexture extends SimpleTextureMaterial {
 
