@@ -12,31 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3} from "three";
-
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
-
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
 
     import {
-        LocalBallShape,
-        complement,
-        union,
+        Color,
+        Vector3,
+        ThurstonLite,
+        Isometry,
+        trivialSet as trivial,
+        Point,
+        PointLight,
+        PhongMaterial,
         BallShape,
-        DisplacementShape
-    } from "../../../src/geometries/euc/shapes/all.js";
-    import {Ball, Solid} from "../../../src/geometries/euc/solids/all.js";
-    import {DebugMaterial} from "../../../src/commons/materials/all.js";
-    import {Isometry} from "../../geometries/euc/geometry/General.js";
+        DisplacementShape,
+        Solid
+    } from "../../build/thurstonEuc.js";
 
 
-    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(trivial, {keyboard: 'fr', maxBounces: 1});
 
 
     // lights for the Phong material
@@ -62,7 +54,6 @@
         0.7
     );
     const lights = [light0, light1, light2];
-
 
 
     // Phong shading material

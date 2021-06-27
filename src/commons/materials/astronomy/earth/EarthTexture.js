@@ -9,6 +9,8 @@ import {SimpleTextureMaterial} from "../../simpleTexture/SimpleTextureMaterial.j
  *
  * @classdesc
  * Texture of the earth
+ *
+ * @todo handle file path…
  */
 export class EarthTexture extends SimpleTextureMaterial {
 

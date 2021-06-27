@@ -12,23 +12,38 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Matrix4, Vector2, Vector4} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Color,
+        Matrix4,
+        Vector2,
+        ThurstonLite,
+        trivialSet as trivial,
+        Point,
+        PointLight,
+        HalfSpace,
+        CheckerboardMaterial,
+        phongWrap,
+        Isometry
+    } from "../../build/thurstonEuc.js";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
+    // import {Color, Matrix4, Vector2, Vector4} from "three";
+    //
+    // import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    //
+    // import * as geom from "../../geometries/euc/geometry/General.js";
+    // import trivial from "../../../src/commons/groups/trivial/set.js";
+    //
+    // import {Point} from "../../../src/core/geometry/Point.js";
+    // import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
+    // import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
+    //
+    // import {HalfSpace, LocalBall} from "../../../src/geometries/euc/solids/all.js";
+    // import {CheckerboardMaterial, phongWrap, SingleColorMaterial} from "../../../src/commons/materials/all.js";
+    // import {Isometry} from "../../../src/core/geometry/Isometry.js";
 
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
 
-    import {HalfSpace, LocalBall} from "../../../src/geometries/euc/solids/all.js";
-    import {CheckerboardMaterial, phongWrap, SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {Isometry} from "../../../src/core/geometry/Isometry.js";
-
-
-    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(trivial, {keyboard: 'fr', maxBounces: 1});
 
 
     // lights for the Phong material
@@ -71,7 +86,7 @@
     thurston.add(halfspace, light0, light1, light2);
 
     thurston.run();
-    thurston.renderer.checkShader();
+    // thurston.renderer.checkShader();
 
 
 </script>

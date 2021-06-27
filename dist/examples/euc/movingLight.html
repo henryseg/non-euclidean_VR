@@ -12,27 +12,26 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Matrix4, Vector2} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
-
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
-
-    import {Point, Isometry} from "../../../src/core/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-
-    import {LocalBallShape, ComplementShape, union} from "../../../src/geometries/euc/shapes/all.js";
-    import {Ball, Solid} from "../../../src/geometries/euc/solids/all.js";
     import {
-        SingleColorMaterial,
+        Clock,
+        Color,
+        Matrix4,
+        ThurstonLite,
+        freeAbelianSet as torus,
+        Point,
+        PointLight,
         PhongMaterial,
-        CheckerboardMaterial,
-        phongWrap
-    } from "../../../src/commons/materials/all.js";
+        LocalBallShape,
+        ComplementShape,
+        SingleColorMaterial,
+        union,
+        Ball, Solid,
+        Isometry
+    } from "../../build/thurstonEuc.js";
 
 
-    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(torus, {keyboard: 'fr'});
 
 
     // light

@@ -12,22 +12,20 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
-
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-
-    import {LocalBall} from "../../../src/geometries/euc/solids/all.js";
-    import {SingleColorMaterial} from "../../../src/commons/materials/all.js";
+    import {
+        Color,
+        ThurstonLite,
+        freeAbelianSet as torus,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalBall,
+        SingleColorMaterial
+    } from "../../build/thurstonEuc.js";
 
 
-    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(torus, {keyboard: 'fr', maxBounces: 1});
     thurston.set.usesNearestNeighbors = true;
 
 

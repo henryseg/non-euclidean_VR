@@ -9,6 +9,7 @@ export {
     Matrix4,
     Quaternion,
 } from "three";
+export {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
 export * from './constants.js';
 export * from './utils.js'
@@ -20,7 +21,7 @@ export {VRCamera} from "./core/cameras/vr/VRCamera.js";
 export {Group} from "./core/groups/Group.js";
 export {GroupElement} from "./core/groups/GroupElement.js";
 export {RelPosition} from "./core/geometry/General.js";
-export {TeleportationSet} from "./core/groups/TeleportationSet.js";
+export {TeleportationSet, CREEPING_FULL, CREEPING_STRICT, CREEPING_OFF} from "./core/groups/TeleportationSet.js";
 
 export {Light} from "./core/lights/Light.js";
 export {Material} from "./core/materials/Material.js";

@@ -17,6 +17,7 @@ import render from "./shaders/render.js";
  *
  * @classdesc
  * A material given by a image file
+ *
  */
 export class SimpleTextureMaterial extends Material {
 

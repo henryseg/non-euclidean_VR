@@ -12,24 +12,25 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Matrix4, Vector4} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Clock,
+        Color,
+        Matrix4,
+        ThurstonLite,
+        freeAbelianSet as torus,
+        Point,
+        PointLight,
+        EarthTexture,
+        MoonTexture,
+        SunTexture,
+        MarsTexture,
+        Isometry,
+        InfoControls,
+        Ball,
+    } from "../../build/thurstonEuc.js";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import {default as torus} from "../../../src/geometries/euc/groups/freeAbelian/set.js";
-
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    import {Ball} from "../../../src/geometries/euc/solids/all.js";
-    import {EarthTexture} from "../../../src/commons/materials/astronomy/earth/EarthTexture.js";
-    import {Isometry} from "../../geometries/euc/geometry/General.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-    import {MoonTexture} from "../../../src/commons/materials/astronomy/moon/MoonTexture.js";
-    import {SunTexture} from "../../../src/commons/materials/astronomy/sun/SunTexture.js";
-    import {MarsTexture} from "../../../src/commons/materials/astronomy/mars/MarsTexture.js";
-
-    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(torus, {keyboard: 'fr', maxBounces: 1});
 
     // lights for the Phong material
 
@@ -73,9 +74,9 @@
     thurston.callback = animate;
 
 
-
     thurston.run();
     thurston.renderer.checkShader();
+
     // console.log(thurston.scene.fog);
 
     function info() {

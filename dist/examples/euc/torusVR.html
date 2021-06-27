@@ -12,23 +12,22 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
 
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
+    import {
+        Color,
+        ThurstonVR,
+        freeAbelianSet as torus,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement, union,
+        Ball, Solid,
+        InfoControls
+    } from "../../build/thurstonEuc.js";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import torus from "../../../src/geometries/euc/groups/freeAbelian/set.js";
 
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-
-    import {LocalBallShape, complement, union} from "../../../src/geometries/euc/shapes/all.js";
-    import {Ball, Solid} from "../../../src/geometries/euc/solids/all.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-
-
-    const thurston = new ThurstonVR(geom, torus, {keyboard: 'fr'});
+    const thurston = new ThurstonVR(torus, {keyboard: 'fr'});
 
 
     // lights for the Phong material

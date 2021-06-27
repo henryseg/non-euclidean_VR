@@ -27,6 +27,8 @@ import main from "./shaders/basic/main.js";
  * Based on the tools provided by Three.js (which relies on WebXR).
  * We place in distinct layer of the Three.js scene two horizon spheres.
  * Each sphere will render the picture seen by one eye.
+ *
+ * @todo Check the impact of the pixel ratio (for the three.js camera)
  */
 export class VRRenderer extends AbstractRenderer {
 
