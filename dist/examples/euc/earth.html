@@ -50,10 +50,10 @@
         new Color(0, 1, 1),
     )
 
-    const earth = new EarthTexture('../../js');
-    const moon = new MoonTexture('../../js');
-    const sun = new SunTexture('../../js');
-    const mars = new MarsTexture('../../js');
+    const earth = new EarthTexture();
+    const moon = new MoonTexture();
+    const sun = new SunTexture();
+    const mars = new MarsTexture();
 
     const isom = new Isometry().makeTranslation(new Point(0, 0, -1));
     isom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));

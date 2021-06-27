@@ -126,7 +126,7 @@
         checkerboardPhong
     );
 
-    const earth = new EarthTexture('../../js');
+    const earth = new EarthTexture();
     const isom = new Isometry().makeTranslation(new Point(-1, -1, -2.5));
     isom.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
 

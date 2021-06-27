@@ -2,6 +2,7 @@ import {Vector2} from "three";
 
 import {SimpleTextureMaterial} from "../../simpleTexture/SimpleTextureMaterial.js";
 
+import texture from "./img/2k_mars.jpg";
 
 /**
  * @class
@@ -14,8 +15,8 @@ import {SimpleTextureMaterial} from "../../simpleTexture/SimpleTextureMaterial.j
  */
 export class MarsTexture extends SimpleTextureMaterial {
 
-    constructor(thurstonJSPath) {
-        super(thurstonJSPath + '/commons/materials/astronomy/mars/img/2k_mars.jpg', {
+    constructor() {
+        super(texture, {
             start: new Vector2(-Math.PI, 0),
             scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });

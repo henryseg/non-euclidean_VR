@@ -27,6 +27,13 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.(jpg|png)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'img/[hash][ext][query]'
+                }
+            },
+            {
                 test: /\.glsl$/,
                 loader: 'webpack-glsl-loader'
             }
