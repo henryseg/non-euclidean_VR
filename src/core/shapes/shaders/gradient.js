@@ -13,7 +13,7 @@ RelVector {{name}}_gradient(RelVector v){
     float vgx = {{name}}_sdf(shiftPX) - {{name}}_sdf(shiftMX);
     float vgy = {{name}}_sdf(shiftPY) - {{name}}_sdf(shiftMY);
     float vgz = {{name}}_sdf(shiftPZ) - {{name}}_sdf(shiftMZ);
-    RelVector n = createVector(v, vec3(vgx, vgy, vgz));
+    RelVector n = createRelVector(v, vec3(vgx, vgy, vgz));
     
     n = geomNormalize(n);
     return n;

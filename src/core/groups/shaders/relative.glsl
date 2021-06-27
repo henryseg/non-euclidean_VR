@@ -193,8 +193,21 @@ RelVector smallShift(RelVector v, vec3 dp){
  * Overload of createVector
  * We have to be careful, when using this function,
  * that the section of the frame bundle given by \`frame\` is NOT invariant under isometries.
+ * @deprecated use 'createRelVector' instead
  */
-RelVector createVector(RelVector v, vec3 coords){
+//RelVector createVector(RelVector v, vec3 coords){
+//    v.local =  createVector(v.local.pos, coords);
+//    return v;
+//    //    Vector local = createVector(v.local.pos, coords);
+//    //    return RelVector(local, v.cellBoost, v.invCellBoost);
+//}
+
+/**
+ * Compute the vector at the same point as v whose coordinates are given by the section of the frame bundle.
+ * We have to be careful, when using this function,
+ * that the section of the frame bundle given by \`frame\` is NOT invariant under isometries.
+ */
+RelVector createRelVector(RelVector v, vec3 coords){
     v.local =  createVector(v.local.pos, coords);
     return v;
     //    Vector local = createVector(v.local.pos, coords);
