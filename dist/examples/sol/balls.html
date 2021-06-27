@@ -12,20 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/sol/geometry/General.js";
-    import mappingTorus from "../../../src/geometries/sol/groups/mappingTorus/set.js"
-    import {ConstDirLight} from "../../../src/geometries/sol/lights/all.js";
-    import {Color, Vector3} from "three";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {LocalFakeBall} from "../../../src/geometries/sol/solids/all.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-    import {CREEPING_FULL} from "../../../src/core/groups/TeleportationSet.js";
+    import {
+        Color,
+        Vector3,
+        ThurstonLite,
+        mappingTorusSet as mappingTorus,
+        Point,
+        PhongMaterial,
+        ConstDirLight,
+        InfoControls,
+        LocalFakeBall,
+        CREEPING_FULL
+    } from "../../build/thurstonSol.js";
+
 
     mappingTorus.creepingType = CREEPING_FULL;
-    const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(mappingTorus, {keyboard: 'fr'});
     thurston.renderer.maxBounces = 1;
     thurston.renderer.postProcess = false;
 

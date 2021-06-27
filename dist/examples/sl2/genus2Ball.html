@@ -12,18 +12,22 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/sl2/geometry/General.js";
-    import genus2 from "../../../src/geometries/sl2/groups/genus2/set.js";
-    import {ConstDirLight} from "../../../src/geometries/sl2/lights/all.js";
-    import {Color, Vector3} from "three";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Point, Vector} from "../../../src/core/geometry/General.js";
-    import {FakeBall, LocalFakeBall} from "../../../src/geometries/sl2/solids/all.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
+    import {
+        Color,
+        Vector3,
+        Vector,
+        ThurstonLite,
+        genus2Set as genus2,
+        Point,
+        PhongMaterial,
+        ConstDirLight,
+        InfoControls,
+        LocalFakeBall,
+    } from "../../build/thurstonSL2.js";
 
-    const thurston = new ThurstonLite(geom, genus2, {keyboard: 'fr', maxBounces: 1});
+
+    const thurston = new ThurstonLite(genus2, {keyboard: 'fr', maxBounces: 1});
 
     const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
     const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
@@ -36,7 +40,7 @@
     const point = new Point();
     // point.set(-1, 0, 0, 0);
     // point.fiber = -2 * Math.PI;
-    const dir = new Vector(0,0,-8 * Math.PI);
+    const dir = new Vector(0, 0, -8 * Math.PI);
     const ball = new LocalFakeBall(point, 0.1, mat);
 
     thurston.add(ball, lightUp, lightDown);

@@ -13,6 +13,8 @@ module.exports = {
         thurstonS2E: './src/thurstonS2E.js',
         thurstonH2E: './src/thurstonH2E.js',
         thurstonNil: './src/thurstonNil.js',
+        thurstonSL2: './src/thurstonSL2.js',
+        thurstonSol: './src/thurstonSol.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist/build'),

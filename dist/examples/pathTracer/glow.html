@@ -12,18 +12,17 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
+    import {
+        Color,
+        trivialSet as trivial,
+        Point, Isometry,
+        BasicPTMaterial,
+        SingleColorMaterial,
+        PathTracerCamera, PathTracerRenderer, Scene,
+        Ball, HalfSpace,
+    } from "../../build/thurstonEuc.js";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-
-    import {PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
-
-    import {Isometry, Point} from "../../geometries/euc/geometry/General.js";
-    import {BasicPTMaterial} from "../../../src/commons/materials/basicPTMaterial/BasicPTMaterial.js";
     import Stats from "../../../src/lib/stats.module.js";
-    import {SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {Ball, HalfSpace} from "../../../src/geometries/euc/solids/all.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
@@ -39,7 +38,7 @@
 
     // every solid need to have a material for basic rendering
     // since we are not using the basic renderer here, we use a placeholder everywhere
-    const placeholderMat = new SingleColorMaterial(new Color(0,0,0));
+    const placeholderMat = new SingleColorMaterial(new Color(0, 0, 0));
 
     const bgColor = new Color(0, 0, 0);
     const scene = new Scene({
@@ -57,8 +56,8 @@
         specular: ballColor,
         roughness: 0.,
         ior: 1.6,
-        volumeEmission:new Color(1.,0.5,0.25),
-        absorb:new Color(0,0,0),
+        volumeEmission: new Color(1., 0.5, 0.25),
+        absorb: new Color(0, 0, 0),
         reflectionChance: 0.01,
         refractionChance: 0.99,
         diffuseChance: 0.,
@@ -117,9 +116,9 @@
     scene.add(bottom);
 
     // top wall
-    const topColor = new Color(1,1,1);
+    const topColor = new Color(1, 1, 1);
     const ptTopMat = new BasicPTMaterial({
-       emission: topColor,
+        emission: topColor,
     })
     const topPoint = new Point(0, 4, 0);
     const topIsom = new Isometry().makeTranslation(topPoint);
@@ -133,7 +132,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, {
+    const ptRenderer = new PathTracerRenderer(trivial, ptCamera, scene, {}, {
         logarithmicDepthBuffer: true
     });
 

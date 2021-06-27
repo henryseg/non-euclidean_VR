@@ -12,25 +12,25 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3, WebGLRenderer} from "three";
 
-    import * as geom from "../../geometries/euc/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
-
-    import {Isometry, Point} from "../../geometries/euc/geometry/General.js";
-    import {BasicPTMaterial} from "../../../src/commons/materials/basicPTMaterial/BasicPTMaterial.js";
-    import Stats from "../../../src/lib/stats.module.js";
     import {
+        Color,
+        WebGLRenderer,
+        trivialSet as trivial,
+        Vector3,
+        Point, Isometry,
+        BasicPTMaterial,
+        SingleColorMaterial,
+        PathTracerCamera, PathTracerRenderer, Scene, BasicCamera, BasicRenderer,
+        PhongMaterial,
+        Ball, HalfSpace,
+        ConstDirLight,
         EarthTexture,
         PathTracerWrapMaterial,
-        PhongMaterial,
-        SingleColorMaterial
-    } from "../../../src/commons/materials/all.js";
-    import {Ball, HalfSpace} from "../../../src/geometries/euc/solids/all.js";
-    import {ConstDirLight} from "../../../src/geometries/euc/lights/all.js";
-    import {KeyGenericControls} from "../../../src/controls/KeyGenericControls.js";
+        KeyGenericControls
+    } from "../../build/thurstonEuc.js";
+    import Stats from "../../../src/lib/stats.module.js";
+
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
@@ -172,7 +172,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const camera = new BasicCamera({set: trivial, maxSteps: 500});
-    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, threeRenderer);
+    const renderer = new BasicRenderer(trivial, camera, scene, {}, threeRenderer);
 
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
@@ -185,7 +185,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
-    const ptRenderer = new PathTracerRenderer(geom, trivial, ptCamera, scene, {}, threeRenderer);
+    const ptRenderer = new PathTracerRenderer(trivial, ptCamera, scene, {}, threeRenderer);
 
     ptRenderer.setPixelRatio(window.devicePixelRatio);
     ptRenderer.setSize(width, height);

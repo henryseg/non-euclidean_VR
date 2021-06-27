@@ -5,3 +5,4 @@ export {ZHalfSpace} from "./ZHalfSpace.js";
 export {XYHalfSpace} from "./XYHalfSpace.js";
 export {LocalZHalfSpace} from "./LocalZHalfSpace.js";
 export {LocalXYHalfSpace} from "./LocalXYHalfSpace.js";
+export {LocalCube} from "./LocalCube.js";

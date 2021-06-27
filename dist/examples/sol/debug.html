@@ -12,20 +12,21 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/sol/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import zLoop from "../../../src/geometries/sol/groups/zLoop/set.js"
-    import mappingTorus from "../../../src/geometries/sol/groups/mappingTorus/set.js"
-    import {ZSun, ConstDirLight} from "../../../src/geometries/sol/lights/all.js";
-    import {Color, Vector3} from "three";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {FakeBall, LocalFakeBall} from "../../../src/geometries/sol/solids/all.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
+    import {
+        Color,
+        Vector3,
+        ThurstonLite,
+        mappingTorusSet as mappingTorus,
+        Point,
+        PhongMaterial,
+        ConstDirLight,
+        InfoControls,
+        LocalFakeBall,
+    } from "../../build/thurstonSol.js";
 
-    const thurston = new ThurstonLite(geom, mappingTorus, {keyboard: 'fr', maxBounces: 1});
+
+    const thurston = new ThurstonLite(mappingTorus, {keyboard: 'fr', maxBounces: 1});
 
 
     const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));

@@ -37,11 +37,9 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "ec": () => (/* reexport */ Ball),
-  "Yb": () => (/* reexport */ BallShape),
   "QU": () => (/* reexport */ BasicCamera),
   "ZH": () => (/* reexport */ BasicPTMaterial),
-  "K9": () => (/* binding */ thurstonH2E_BasicRenderer),
+  "K9": () => (/* binding */ thurstonSL2_BasicRenderer),
   "cK": () => (/* reexport */ CREEPING_FULL),
   "_x": () => (/* reexport */ CREEPING_OFF),
   "kj": () => (/* reexport */ CREEPING_STRICT),
@@ -49,12 +47,12 @@ __webpack_require__.d(__webpack_exports__, {
   "SU": () => (/* reexport */ Clock),
   "Il": () => (/* reexport */ Color),
   "Iy": () => (/* reexport */ ComplementShape),
-  "ik": () => (/* reexport */ DIR_DOWN),
-  "fY": () => (/* reexport */ DIR_UP),
+  "Vf": () => (/* reexport */ ConstDirLight),
   "TB": () => (/* reexport */ DebugMaterial),
-  "Gj": () => (/* reexport */ ESun),
   "KO": () => (/* reexport */ EarthTexture),
   "c$": () => (/* reexport */ ExpFog),
+  "OZ": () => (/* reexport */ FakeBall),
+  "Ao": () => (/* reexport */ FakeBallShape),
   "mD": () => (/* reexport */ FlyControls),
   "yb": () => (/* reexport */ Fog_Fog),
   "ZA": () => (/* reexport */ Group_Group),
@@ -66,8 +64,10 @@ __webpack_require__.d(__webpack_exports__, {
   "Nh": () => (/* reexport */ KeyGenericControls),
   "RL": () => (/* reexport */ LEFT),
   "_k": () => (/* reexport */ Light_Light),
-  "jo": () => (/* reexport */ LocalBall),
-  "Q": () => (/* reexport */ LocalBallShape),
+  "oR": () => (/* reexport */ LocalFakeBall),
+  "lt": () => (/* reexport */ LocalFakeBallShape),
+  "tl": () => (/* reexport */ LocalPotato),
+  "HI": () => (/* reexport */ LocalPotatoShape),
   "Qv": () => (/* reexport */ MarsTexture),
   "F5": () => (/* reexport */ Material_Material),
   "Uc": () => (/* reexport */ Matrix2),
@@ -77,14 +77,13 @@ __webpack_require__.d(__webpack_exports__, {
   "oB": () => (/* reexport */ NormalMaterial),
   "pJ": () => (/* reexport */ PTMaterial),
   "GW": () => (/* reexport */ PathTracerCamera),
-  "DZ": () => (/* binding */ thurstonH2E_PathTracerRenderer),
+  "DZ": () => (/* binding */ thurstonSL2_PathTracerRenderer),
   "_K": () => (/* reexport */ PathTracerWrapMaterial),
   "JF": () => (/* reexport */ PhongMaterial),
   "Lv": () => (/* reexport */ PhongWrapMaterial),
   "E9": () => (/* reexport */ Point),
-  "ce": () => (/* reexport */ PointLight_PointLight),
   "Ly": () => (/* reexport */ Position),
-  "iv": () => (/* reexport */ QuadRing),
+  "jo": () => (/* reexport */ QuadRing),
   "mH": () => (/* reexport */ QuadRingElement),
   "xd": () => (/* reexport */ QuadRingMatrix4),
   "_f": () => (/* reexport */ Quaternion),
@@ -99,14 +98,14 @@ __webpack_require__.d(__webpack_exports__, {
   "_D": () => (/* reexport */ SunTexture),
   "$p": () => (/* reexport */ SwitchControls),
   "xG": () => (/* reexport */ TeleportationSet),
-  "qC": () => (/* binding */ thurstonH2E_Thurston),
-  "N$": () => (/* binding */ thurstonH2E_ThurstonLite),
-  "TO": () => (/* binding */ thurstonH2E_ThurstonVR),
+  "qC": () => (/* binding */ thurstonSL2_Thurston),
+  "N$": () => (/* binding */ thurstonSL2_ThurstonLite),
+  "TO": () => (/* binding */ thurstonSL2_ThurstonVR),
   "yI": () => (/* reexport */ UnionShape),
   "E6": () => (/* reexport */ VRCamera),
   "IZ": () => (/* reexport */ VRControlsDrag),
   "Ac": () => (/* reexport */ VRControlsMove),
-  "zO": () => (/* binding */ thurstonH2E_VRRenderer),
+  "zO": () => (/* binding */ thurstonSL2_VRRenderer),
   "cB": () => (/* reexport */ VaryingColorMaterial),
   "OW": () => (/* reexport */ Vector),
   "FM": () => (/* reexport */ Vector2),
@@ -117,15 +116,14 @@ __webpack_require__.d(__webpack_exports__, {
   "iR": () => (/* reexport */ XRControllerModelFactory),
   "ak": () => (/* reexport */ bind),
   "Cy": () => (/* reexport */ complement),
-  "Y7": () => (/* reexport */ cuspedTorus_set),
+  "tA": () => (/* reexport */ fiberLoop_set),
+  "Zk": () => (/* reexport */ genus2_set),
   "jV": () => (/* reexport */ intersection),
   "mm": () => (/* reexport */ orbiTorus_set),
   "IJ": () => (/* reexport */ phongWrap),
-  "cR": () => (/* reexport */ plane_set),
   "dV": () => (/* reexport */ set),
   "G0": () => (/* reexport */ union),
-  "re": () => (/* reexport */ wrap),
-  "xS": () => (/* reexport */ zLoop_set)
+  "re": () => (/* reexport */ wrap)
 });
 
 ;// CONCATENATED MODULE: ./node_modules/three/build/three.module.js
@@ -49790,198 +49788,168 @@ class Isometry {
 }
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Utils.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/Utils.js
 
 
 /**
- * Some Lorentzian geometry in R^3
- * We work with Vector4 though, ignoring the last coordinates
- * This is easier as the points in H2 x E are Vector4
+
+ * @class
+ * @classdesc
+ * The elements of SL(2,R) seen as vectors in the basis E = (E0,E1,E2,E3)
+ * The elements satisfy the relation - x^2 - y^2 + z^2 + w^2 = -1
  */
+class SL2 extends Vector4 {
 
-
-/**
- * Lorentzian inner product in R^3
- * @param {Vector4} v
- * @return {number}
- */
-Vector4.prototype.hypDot = function (v) {
-    return this.x * v.x + this.y * v.y - this.z * v.z;
-}
-
-/**
- * Lorentzian length squared in R^3
- * @return {number}
- */
-Vector4.prototype.hypLengthSq = function () {
-    return Math.abs(this.hypDot(this));
-}
-
-/**
- * Lorentzian length in R^3
- * @return {number}
- */
-Vector4.prototype.hypLength = function () {
-    return Math.sqrt(this.hypLengthSq());
-}
-
-/**
- * Normalize the first three coordinates of the vector for the Lorentzian length
- * @return {Vector4}
- */
-Vector4.prototype.hypNormalize = function () {
-    const [x, y, z, w] = this.toArray();
-    const len = this.hypLength();
-    this.set(x / len, y / len, z / len, w);
-    return this;
-}
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Isometry.js
-
-
-
-
-
-Isometry.prototype.build = function () {
-    this.matrix = new Matrix4();
-    this.shift = 0;
-}
-
-Isometry.prototype.identity = function () {
-    this.matrix.identity();
-    this.shift = 0;
-    return this;
-}
-
-Isometry.prototype.reduceError = function () {
-    // Hyperbolic Gram-Schmidt
-    const col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.matrix);
-    const col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.matrix);
-    const col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.matrix);
-    const col3 = new Vector4(0, 0, 0, 1).applyMatrix4(this.matrix);
-
-    col0.hypNormalize();
-
-    const aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
-    col1.sub(aux10).hypNormalize();
-
-    const aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
-    const aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
-    col2.sub(aux20).sub(aux21).hypNormalize();
-
-    col3.normalize();
-    this.matrix.set(
-        col0.x, col1.x, col2.x, col3.x,
-        col0.y, col1.y, col2.y, col3.y,
-        col0.z, col1.z, col2.z, col3.z,
-        col0.w, col1.w, col2.w, col3.w
-    );
-    return this;
-}
-
-Isometry.prototype.multiply = function (isom) {
-    const coeff = this.matrix.elements[this.matrix.elements.length - 1];
-    this.matrix.multiply(isom.matrix);
-    this.shift = this.shift + coeff * isom.shift;
-    return this;
-}
-
-Isometry.prototype.premultiply = function (isom) {
-    const coeff = isom.matrix.elements[isom.matrix.elements.length - 1];
-    this.matrix.premultiply(isom.matrix);
-    this.shift = isom.shift + coeff * this.shift;
-    return this;
-}
-
-Isometry.prototype.invert = function () {
-    this.matrix.invert();
-    const coeff = this.matrix.elements[this.matrix.elements.length - 1];
-    this.shift = -coeff * this.shift;
-    return this;
-}
-
-Isometry.prototype.makeTranslation = function (point) {
-    const [x, y, z, w] = point.coords.toArray();
-    this.matrix.identity();
-    this.shift = w;
-    const u = new Vector2(x, y);
-    const c1 = u.length();
-
-    if (c1 === 0) {
-        return this;
+    /**
+     * Overload the constructor to return the identity.
+     */
+    constructor() {
+        super(...arguments);
+        if (arguments.length === 0) {
+            this.set(1, 0, 0, 0);
+        }
     }
-    const c2 = z - 1;
-    u.normalize();
 
-    const m = new Matrix4().set(
-        0, 0, u.x, 0,
-        0, 0, u.y, 0,
-        u.x, u.y, 0, 0,
-        0, 0, 0, 0
-    );
-    const m2 = m.clone().multiply(m);
-    m.multiplyScalar(c1);
-    m2.multiplyScalar(c2);
-    this.matrix.add(m);
-    this.matrix.add(m2);
+    /**
+     * Projection from SL(2,R) to SO(2,1)
+     * @returns {Matrix3} - the image of the current element in SO(2,1)
+     */
+    toMatrix3() {
+        let aux1 = new Matrix4().set(
+            this.x, -this.y, this.z, -this.w,
+            this.y, this.x, this.w, this.z,
+            this.z, this.w, this.x, this.y,
+            0, 0, 0, 0
+        );
+        let aux2 = new Matrix4().set(
+            this.x, -this.y, this.z, 0,
+            this.y, this.x, this.w, 0,
+            this.z, this.w, this.x, 0,
+            this.w, -this.z, this.y, 0
+        );
+        let aux = aux1.multiply(aux2);
+        return new Matrix3().setFromMatrix4(aux);
+    }
 
-    return this;
-}
+    /**
+     * Projection onto H^2
+     * @returns {Vector3} - the image of the origin in H^2 by the given element of SL(2,R)
+     */
+    toH2() {
+        let m = this.toMatrix3();
+        let res = new Vector3().set(0, 0, 1);
+        res.applyMatrix3(m);
+        return res;
+    }
 
-Isometry.prototype.makeInvTranslation = function (point) {
-    this.makeTranslation(point);
-    this.invert();
-    return this;
-}
+    /**
+     * Return the 4x4 Matrix, corresponding to the current element, seen as an isometry of SL(2,R)
+     * @returns {Matrix4} - the current element of SL(2,R) as an isometry of SL(2,R)
+     */
+    toMatrix4() {
+        const [p0, p1, p2, p3] = this.toArray();
+        return new Matrix4().set(
+            p0, -p1, p2, p3,
+            p1, p0, p3, -p2,
+            p2, p3, p0, -p1,
+            p3, -p2, p1, p0
+        );
+    }
 
-Isometry.prototype.makeTranslationFromDir = function (vec) {
-    const [x, y, z] = vec.toArray();
-    this.matrix.identity();
-    this.shift = z;
-    const u = new Vector2(x, y);
-    const s = u.length();
-
-    if (s === 0) {
+    /**
+     * Multiply the element on the right by isom, i.e. elt * this
+     * @param {SL2} elt - the right element in the product
+     * @returns {SL2} - the current element
+     */
+    premultiply(elt) {
+        let m = elt.toMatrix4();
+        this.applyMatrix4(m);
+        this.reduceError();
         return this;
     }
 
-    const c1 = Math.sinh(s);
-    const c2 = Math.cosh(s) - 1;
-    u.normalize();
+    /**
+     * Multiply the element on the left by isom, i.e. this * elt
+     * @param {SL2} elt - the left element in the product
+     * @returns {SL2} - the current element
+     */
+    multiply(elt) {
+        let m = this.toMatrix4();
+        this.copy(elt.clone().applyMatrix4(m));
+        this.reduceError();
+        return this;
+    }
 
-    const m = new Matrix4().set(
-        0, 0, u.x, 0,
-        0, 0, u.y, 0,
-        u.x, u.y, 0, 0,
-        0, 0, 0, 0
-    );
-    const m2 = m.clone().multiply(m);
+    /**
+     * Apply the "rotation" of angle alpha centered at the origin
+     * @param {number} angle - the angle of the rotation
+     * @returns {SL2} - the current element
+     */
+    rotateBy(angle) {
+        let m = new Matrix4().set(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, Math.cos(angle), -Math.sin(angle),
+            0, 0, Math.sin(angle), Math.cos(angle),
+        );
+        this.applyMatrix4(m);
+        this.reduceError();
+        return this;
+    }
 
-    m.multiplyScalar(c1);
-    this.matrix.add(m);
+    /**
+     * Apply the "flip"
+     * @returns {SL2} - the current element
+     */
+    flip() {
+        let m = new Matrix4().set(
+            1, 0, 0, 0,
+            0, -1, 0, 0,
+            0, 0, 0, 1,
+            0, 0, 1, 0
+        );
+        this.applyMatrix4(m);
+        this.reduceError();
+        return this;
+    }
 
-    m2.multiplyScalar(c2);
-    this.matrix.add(m2);
+    /**
+     * Translate the element by an angle `phi` along the fiber
+     * @param {number} phi - the angle of translation
+     * @returns {SL2} - the current element
+     */
+    translateFiberBy(phi) {
+        let aux = 0.5 * phi
+        let m = new Matrix4().set(
+            Math.cos(aux), -Math.sin(aux), 0, 0,
+            Math.sin(aux), Math.cos(aux), 0, 0,
+            0, 0, Math.cos(aux), Math.sin(aux),
+            0, 0, -Math.sin(aux), Math.cos(aux)
+        );
+        this.applyMatrix4(m);
+        this.reduceError();
+        return this;
+    }
 
-    return this;
+    /**
+     * Set the current element to the inverse of the given element.
+     * @returns {SL2} - the current element
+     */
+    invert() {
+        this.set(this.x, -this.y, -this.z, -this.w);
+        return this;
+    }
+
+    /**
+     * Correct the error to make sure that the point lies on the "hyperboloid"
+     * @returns {SL2} - the current element
+     */
+    reduceError() {
+        let q = -Math.pow(this.x, 2) - Math.pow(this.y, 2) + Math.pow(this.z, 2) + Math.pow(this.w, 2);
+        this.multiplyScalar(1 / Math.sqrt(-q));
+        return this;
+    }
 }
-
-Isometry.prototype.equals = function (isom) {
-    return this.matrix.equals(isom.matrix) && this.shift === isom.shift;
-}
-
-Isometry.prototype.clone = function () {
-    const res = new Isometry();
-    res.matrix.copy(this.matrix);
-    res.shift = this.shift;
-    return res;
-}
-
-Isometry.prototype.copy = function (isom) {
-    this.matrix.copy(isom.matrix);
-    this.shift = isom.shift;
-    return this;
-}
-
 
 ;// CONCATENATED MODULE: ./src/core/geometry/Point.js
 /**
@@ -50072,49 +50040,309 @@ class Point {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Point.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/Point.js
+
+
 
 
 
 
 Point.prototype.build = function () {
     if (arguments.length === 0) {
-        this.coords = new Vector4(0, 0, 1, 0);
+        this.proj = new SL2();
+        this.fiber = 0;
     } else {
-        this.coords = new Vector4(...arguments);
+        this.proj = new SL2(...arguments);
+        this.fiber = arguments[4];
     }
-};
+}
 
-Point.prototype.set = function(){
-    this.coords.set(...arguments);
+Point.prototype.set = function (x, y, z, w, fiber) {
+    this.proj.set(x, y, z, w);
+    this.fiber = fiber;
     return this;
 }
 
+/**
+ * For the explanation how the isometry acts, see the Jupyter notebook
+ * @param {Isometry} isom - the isometry to apply
+ * @return {Point} the current point
+ */
 Point.prototype.applyIsometry = function (isom) {
-    this.coords.applyMatrix4(isom.matrix);
-    this.coords.setW(this.coords.w + isom.shift);
+    this.proj.applyMatrix4(isom.matrix);
+    const dir = isom.doesFlip() ? -1 : 1;
+    const aux = this.proj.clone();
+    aux.translateFiberBy(-isom.fiber - dir * this.fiber);
+    this.fiber = isom.fiber + dir * this.fiber + 2 * Math.atan2(aux.y, aux.x);
     return this;
-};
+}
 
+/**
+ * Return the current point as an element (x,y,z,w) of H^2 x R, where
+ * - (x,y,z) are th coordinates of a point of H^2 with the hyperboloid model
+ * - w is the fiber component
+ * @returns {Vector4}
+ */
+Point.prototype.toVector4 = function () {
+    let aux = this.proj.toH2();
+    return new Vector4(aux.x, aux.y, aux.z, this.fiber);
+
+}
+
+/**
+ * Return the current point as an element (x,y,1,w) of H^2 x R, where
+ * - (x,y,1) are th coordinates of a point of H^2 with the Klein model
+ * - w is the fiber component
+ * @returns {Vector4}
+ */
+Point.prototype.toKlein = function () {
+    let aux = this.toVector4();
+    return new Vector4(
+        aux.x / aux.z,
+        aux.y / aux.z,
+        1,
+        aux.w
+    );
+}
+
+
+Point.prototype.equals = function (point) {
+    return this.proj.equals(point.proj) && this.fiber === point.fiber;
+}
+
+/**
+ * @todo Complete the work so that the fiber match the matrix?
+ */
 Point.prototype.reduceError = function () {
+    this.proj.reduceError();
     return this;
 }
 
 Point.prototype.clone = function () {
-    let res = new Point();
-    res.coords.copy(this.coords);
+    const res = new Point();
+    res.proj.copy(this.proj);
+    res.fiber = this.fiber;
     return res;
-};
+}
 
 Point.prototype.copy = function (point) {
-    this.coords.copy(point.coords);
+    this.proj.copy(point.proj);
+    this.fiber = point.fiber;
+    return this;
+}
+
+
+
+
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/Isometry.js
+
+
+
+
+
+
+/**
+ * An Isometry in the universal cover X of SL(2,R) is made of two components :
+ * - A matrix, representing the induced isometry of SL(2,R)
+ * - A number, corresponding to the fiber component of the image of the origin
+ * These two data suffices to completely characterize the isometry.
+ * It has the advantage that the is compatible with our representation of point X
+ * (projection in SL(2,R) + fiber component).
+ */
+Isometry.prototype.build = function () {
+    this.matrix = new Matrix4();
+    this.fiber = 0;
+    /**
+     * Boolean flag
+     * True, if the isometry belongs to (the universal cover of) SL(2,R)
+     * False, means that one cannot decide
+     * @type {boolean}
+     */
+    this.isInSL = true;
+}
+
+Isometry.prototype.identity = function () {
+    this.matrix.identity();
+    this.fiber = 0;
+    this.isInSL = true;
+    return this;
+}
+
+Isometry.prototype.reduceError = function () {
     return this;
 };
 
+/**
+ * The isometry group of X maps onto Z/2, seen as the group flipping the fiber.
+ * Returns true is the current isometry flips the fiber and false otherwise.
+ * @return {boolean}
+ */
+Isometry.prototype.doesFlip = function () {
+    if (this.isInSL) {
+        return false;
+    } else {
+        const a00 = this.matrix.elements[0];
+        const a10 = this.matrix.elements[1];
+        const a01 = this.matrix.elements[4];
+        const a11 = this.matrix.elements[5];
+        return (a00 * a11 - a10 * a01) < 0;
+    }
+}
 
+/**
+ * Replace the current isometry with the product isom1 * isom2
+ * @param {Isometry} isom1 - the first isometry
+ * @param {Isometry} isom2 - the second isometry
+ * @return {Isometry} - the product
+ */
+Isometry.prototype.multiplyIsometries = function (isom1, isom2) {
+    // image of the origin by isom2
+    const aux2 = new Point();
+    aux2.proj.copy(new SL2().applyMatrix4(isom2.matrix));
+    aux2.fiber = isom2.fiber;
+    // image of the origin by the product isom1 * isom2
+    const aux = aux2.applyIsometry(isom1);
+    this.matrix.multiplyMatrices(isom1.matrix, isom2.matrix);
+    this.fiber = aux.fiber;
+    this.isInSL = isom1.isInSL && isom2.isInSL;
+    return this;
+}
 
+Isometry.prototype.multiply = function (isom) {
+    return this.multiplyIsometries(this, isom);
+}
 
+Isometry.prototype.premultiply = function (isom) {
+    return this.multiplyIsometries(isom, this);
+}
 
+Isometry.prototype.invert = function () {
+    this.fiber = this.doesFlip() ? this.fiber : -this.fiber;
+    this.matrix.invert();
+    return this;
+}
+
+Isometry.prototype.makeTranslation = function (point) {
+    this.matrix.copy(point.proj.toMatrix4());
+    this.fiber = point.fiber;
+    this.isInSL = true;
+    return this;
+}
+
+/**
+ * Return the element in (the universal cover of) SL(2,R) sending the origin to the image of t*u by the exponential map
+ * @param {Vector} u - a unit tangent vector
+ * @param {Number} t - a scale/time parameter
+ * @return {Isometry} - the corresponding isometry
+ */
+Isometry.prototype.makeTranslationFromUnitDir = function (u, t) {
+    // cylindrical coordinates of u (without the angle alpha)
+    const c = u.z;
+    const a = Math.sqrt(1 - c * c);
+
+    const target = new Point();
+    const spin = new SL2().set(Math.cos(c * t), Math.sin(c * t), 0, 0);
+    let w = 2 * c * t; // the angle in the fiber achieved by the geodesic (before final adjustment)
+    let omega;  // the "pulsatance" involved in the geodesic flow.
+    let tanPhi;
+
+    const absC = Math.abs(c);
+    if (a === absC) {
+        // parabolic trajectory
+        target.proj.set(
+            1,
+            -0.25 * Math.sqrt(2) * t,
+            0.5 * t,
+            0
+        );
+        tanPhi = -0.25 * Math.sqrt(2) * t;
+        target.fiber = w + 2 * Math.atan(tanPhi);
+    } else if (a > absC) {
+        // hyperbolic trajectory
+        omega = Math.sqrt(a * a - c * c);
+        target.proj.set(
+            Math.cosh(0.5 * omega * t),
+            -(c / omega) * Math.sinh(0.5 * omega * t),
+            (1 / omega) * Math.sinh(0.5 * omega * t),
+            0
+        );
+        tanPhi = -(c / omega) * Math.tanh(0.5 * omega * t);
+        target.fiber = w + 2 * Math.atan(tanPhi);
+
+    } else if (a < absC) {
+        // elliptic trajectory
+        omega = Math.sqrt(c * c - a * a);
+        target.proj.set(
+            Math.cos(0.5 * omega * t),
+            -(c / omega) * Math.sin(0.5 * omega * t),
+            (1 / omega) * Math.sin(0.5 * omega * t),
+            0
+        );
+        tanPhi = -(c / omega) * Math.tan(0.5 * omega * t);
+        let n = Math.floor(0.5 * omega * t / Math.PI + 0.5);
+        if (c < 0) {
+            n = -n;
+        }
+        target.fiber = w + 2 * Math.atan(tanPhi) - 2 * n * Math.PI;
+    }
+    target.proj.multiply(spin);
+    // note that the coefficient a is missing on the third coordinate in the translation part above.
+    // the reason is that it is implicitly in the rotation/scaling matrix below
+    const rotation = new Matrix4().set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, u.x, -u.y,
+        0, 0, u.y, u.x
+    );
+    target.proj.applyMatrix4(rotation);
+    this.makeTranslation(target);
+    return this;
+}
+
+/**
+ * Return the element in (the universal cover of) SL(2,R) sending the origin to the image of v by the exponential map
+ * @param {Vector} v - the vector
+ * @return {Isometry} - the corresponding isometry
+ */
+Isometry.prototype.makeTranslationFromDir = function (v) {
+    // length of v
+    const t = v.length();
+    // if v is the zero vector, we are just not moving !
+    if (t === 0) {
+        this.identity();
+        return this;
+    }
+    // normalized version of v
+    const u = v.clone().normalize();
+    return this.makeTranslationFromUnitDir(u, t);
+}
+
+Isometry.prototype.makeInvTranslation = function (point) {
+    const aux = point.proj.clone().invert();
+    this.matrix.copy(aux.toMatrix4());
+    this.fiber = -point.fiber;
+    this.isInSL = true;
+    return this;
+}
+
+Isometry.prototype.equals = function (isom) {
+    return this.matrix.equals(isom.matrix) && this.fiber === isom.fiber;
+}
+
+Isometry.prototype.clone = function () {
+    const res = new Isometry();
+    res.matrix.copy(this.matrix);
+    res.fiber = this.fiber;
+    res.isInSL = this.isInSL;
+    return res;
+}
+
+Isometry.prototype.copy = function (isom) {
+    this.matrix.copy(isom.matrix);
+    this.fiber = isom.fiber;
+    this.isInSL = isom.isInSL;
+    return this;
+}
 
 
 ;// CONCATENATED MODULE: ./src/core/geometry/Vector.js
@@ -50428,64 +50656,274 @@ class Position {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Position.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/Position.js
 
+
+
+
+
+
+
+const ex = new Vector3(1, 0, 0);
+const ew = new Vector3(0, 0, 1);
 
 Position.prototype.flowFromOrigin = function (v) {
-    this.boost.makeTranslationFromDir(v);
-    this.quaternion.identity();
+    // length of v
+    const t = v.length();
+
+    // if v is the zero vector, we are just not moving !
+    if (t === 0) {
+        this.boost.identity();
+        this.quaternion.identity();
+        return this;
+    }
+
+    // normalized version of v
+    const u = v.clone().normalize();
+    // cylindrical coordinates of u (without the angle alpha)
+    const c = u.z;
+    this.boost.makeTranslationFromUnitDir(u, t);
+
+    // parallel transport
+    // The quaternion corresponding to e^{-2ctU_1} in the paper
+    const q1 = new Quaternion().setFromAxisAngle(ew, -2 * c * t);
+    // The quaternion corresponding to e^{(t/2)U2} in the paper
+    const q2 = new Quaternion().setFromAxisAngle(ex, 0.5 * t);
+    // The quaternion corresponding to R_alpha * P in the paper
+    // This is a matrix sending e_x to u
+    // Such a matrix is well-defined up to a rotation around e_x.
+    // However the formula in the paper shows that
+    // the parallel transport operator Q does not depend on this choice.
+    const qp = new Quaternion().setFromUnitVectors(ex, u);
+
+    // making the product
+    // note that (in the paper) R_alpha and e^{ctU_1} commutes
+    // thus the order is correct
+    this.quaternion.identity()
+        .multiply(q1)
+        .multiply(qp)
+        .multiply(q2)
+        .multiply(qp.conjugate());
+    this.reduceErrorQuaternion();
     return this;
 }
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/shaders/part1.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/shaders/part1.js
 // language=GLSL
 /* harmony default export */ const part1 = (`//
-
 /***********************************************************************************************************************
- * @file
- * This file is a model to impletement other geometries.
- * The content of the structures can be customized.
- * The signatures and the roles of each method need to be implemented strictly.
+ ***********************************************************************************************************************
+ *
+ * Implementation of the geometry of SL(2,R) (part 1)
+ *
+ ***********************************************************************************************************************
  **********************************************************************************************************************/
 
+/***********************************************************************************************************************
+ *
+ * SL(2,R)
+ * The elements of SL(2,R) seen as vectors in the basis E = (E0,E1,E2,E3)
+ * The elements satisfy the relation - p0^2 - p1^2 + p2^2 + p3^2 = -1
+ *
+ **********************************************************************************************************************/
 
-// Auxiliary function : lorentzian geometry in R^3
+const vec4 SL_ORIGIN = vec4(1, 0, 0, 0);
 
-float hypDot(vec3 v1, vec3 v2){
-    return v1.x * v2.x + v1.y * v2.y - v1.z * v2.z;
+// Correct the error to make sure that the point lies on the "hyperboloid"
+vec4 SLreduceError(vec4 elt) {
+    //float q = - elt.x * elt.x - elt.y * elt.y + elt.z * elt.z + elt.w * elt.w;
+    mat4 J = mat4(
+    -1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+    );
+    float q = dot(elt, J * elt);
+    return elt / sqrt(-q);
 }
 
-float hypLengthSq(vec3 v) {
-    return abs(hypDot(v, v));
+// change of model
+// return the 2x2 matrix corresponding to elt
+mat2 SLtoMatrix2(vec4 elt) {
+    mat2 ex = mat2(
+    1, 0,
+    0, 1
+    );
+    mat2 ey = mat2(
+    0, -1,
+    1, 0
+    );
+    mat2 ez = mat2(
+    0, 1,
+    1, 0
+    );
+    mat2 ew = mat2(
+    1, 0,
+    0, -1
+    );
+    mat2 res = elt.x * ex + elt.y * ey + elt.z * ez + elt.w * ew;
+    // reducing the eventual error
+    res = res / sqrt(determinant(res));
+    return res;
 }
 
-float hypLength(vec3 v) {
-    return sqrt(hypLengthSq(v));
+// change of model
+// take a 2x2 matrix and return the corresponding element
+vec4 SLfromMatrix2(mat2 m) {
+    float a = m[0][0];
+    float b = m[1][0];
+    float c = m[0][1];
+    float d = m[1][1];
+    vec4 res = 0.5 * vec4(a + d, b - c, b + c, a - d);
+    return SLreduceError(res);
 }
 
-vec3 hypNormalize(vec3 v) {
-    return v / hypLength(v);
+// Projection from SL(2,R) to SO(2,1)
+mat3 SLtoMatrix3(vec4 elt){
+    mat4x3 aux1 = mat4x3(
+    elt.x, elt.y, elt.z,
+    -elt.y, elt.x, elt.w,
+    elt.z, elt.w, elt.x,
+    -elt.w, elt.z, elt.y
+    );
+    mat3x4 aux2 = mat3x4(
+    elt.x, elt.y, elt.z, elt.w,
+    -elt.y, elt.x, elt.w, -elt.z,
+    elt.z, elt.w, elt.x, elt.y
+    );
+    mat3 res = aux1 * aux2;
+    // TODO ? reduce errors to make sure the matrix belongs to SO(2,1) ?
+    return res;
 }
 
-// Same with vec4 (ignoring the last coordinates)
-
-float hypDot(vec4 v1, vec4 v2){
-    return hypDot(v1.xyz, v2.xyz);
+// Projection onto H^2
+vec3 SLtoH2(vec4 elt) {
+    mat3 m = SLtoMatrix3(elt);
+    vec3 res = vec3(0., 0., 1.);
+    res = m * res;
+    // reduce the potential error
+    // the point should be on a hyperboloid
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(res, J * res);
+    res = res / sqrt(-q);
+    return res;
 }
 
-float hypLengthSq(vec4 v) {
-    return abs(hypDot(v, v));
+// Return the inverse of the given element
+vec4 SLinvert(vec4 elt) {
+    vec4 res = vec4(elt.x, -elt.y, -elt.z, -elt.w);
+    return SLreduceError(res);
 }
 
-float hypLength(vec4 v) {
-    return sqrt(hypLengthSq(v));
+// Return the 4x4 Matrix, corresponding to the current element, seen as an isometry of SL(2,R)
+mat4 SLtoMatrix4(vec4 elt) {
+    mat4 res = mat4(
+    elt.x, elt.y, elt.z, elt.w,
+    -elt.y, elt.x, elt.w, -elt.z,
+    elt.z, elt.w, elt.x, elt.y,
+    elt.w, -elt.z, -elt.y, elt.x
+    );
+    return res;
 }
 
-vec4 hypNormalize(vec4 v) {
-    float len = hypLength(v);
-    return vec4(v.xyz / len, v.w);
+// Multiply two elements of SL2 in the following order: elt1 * elt2
+vec4 SLmultiply(vec4 elt1, vec4 elt2) {
+    mat4 L1 = SLtoMatrix4(elt1);
+    return SLreduceError(L1 * elt2);
 }
+
+// Translate the element by the given angle along the fiber
+vec4 SLtranslateFiberBy(vec4 elt, float angle) {
+    float aux = 0.5 * angle;
+    mat4 T = mat4(
+    cos(aux), sin(aux), 0., 0.,
+    -sin(aux), cos(aux), 0., 0.,
+    0., 0., cos(aux), -sin(aux),
+    0., 0., sin(aux), cos(aux)
+    );
+    return SLreduceError(T * elt);
+}
+
+// Rotate the element by an angle alpha (see Jupyter Notebook)
+vec4 SLrotateBy(vec4 elt, float angle) {
+    mat4 R = mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, cos(angle), sin(angle),
+    0, 0, -sin(angle), cos(angle)
+    );
+    return SLreduceError(R * elt);
+}
+
+// Flip the elemnt (see Jupyter Notebook)
+vec4 SLflip(vec4 elt) {
+    mat4 F = mat4(
+    1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1,
+    0, 0, 1, 0
+    );
+    return SLreduceError(F * elt);
+}
+
+
+/***********************************************************************************************************************
+ *
+ * @struct Point
+ * Structure for points in the geometry.
+ *
+ **********************************************************************************************************************/
+struct Point{
+    vec4 proj;
+    float fiber;
+};
+
+
+const Point ORIGIN = Point(vec4(1, 0, 0, 0), 0.);/**< Origin of the geometry */
+
+
+/**
+ * Reduce the eventual numerical errors of the given point.
+ */
+Point reduceError(Point p){
+    p.proj = SLreduceError(p.proj);
+    return p;
+}
+
+/**
+ * change of model
+ * the output is a vector (x,y,z,w) representing a point p where
+ * - (x,y,z) is the projection of p in H^2 in the **hyperboloid** model
+ * - w is the fiber coordinate
+ */
+vec4 toVec4(Point p) {
+    vec4 res;
+    // SLtoH2 already reduces the error, no need to do it again after
+    res.xyz = SLtoH2(p.proj);
+    res.w = p.fiber;
+    return res;
+}
+
+
+
+/**
+ * change of model
+ * the output is a vector (x,y,1,w) representing a point p where
+ * - (x,y) is the projection of p in H^2 in the **Klein** model
+ * - w is the fiber coordinate
+ */
+vec4 toKlein(Point p){
+    // toVec4 already reduces the error, no need to do it again after
+    vec4 res = toVec4(p);
+    res.xyz = res.xyz / res.z;
+    return res;
+}
+
 
 /***********************************************************************************************************************
  *
@@ -50495,94 +50933,52 @@ vec4 hypNormalize(vec4 v) {
  **********************************************************************************************************************/
 struct Isometry{
     mat4 matrix;
-    float shift;
+    float fiber;
+    bool isInSL;
 };
 
 /**
  * Identity isometry
  */
-const Isometry IDENTITY = Isometry(mat4(1.), 0.); /**< Identity isometry */
+const Isometry IDENTITY = Isometry(mat4(1.), 0., true); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
- * @todo : Think of the best way to do this.
- * When the coordinates of the boost are too big, reduceError makes everything worse
- * Indeed the hypDot takes squares and then compute a difference...
+ * @todo to be written
  */
 Isometry reduceError(Isometry isom){
-    vec4 col0 = isom.matrix[0];
-    vec4 col1 = isom.matrix[1];
-    vec4 col2 = isom.matrix[2];
-    vec4 col3 = isom.matrix[3];
-
-    col0 = hypNormalize(col0);
-
-    col1 = col1 - hypDot(col0, col1) * col0;
-    col1 = hypNormalize(col1);
-
-    col2 = col2 - hypDot(col0, col2) * col0;
-    col2 = col2 - hypDot(col1, col2) * col1;
-    col2 = hypNormalize(col2);
-
-    col3 = normalize(col3);
-    mat4 matrix = mat4(col0, col1, col2, col3);
-    return Isometry(matrix, isom.shift);
-
-
-    //    return isom;
+    return isom;
 }
 
 /**
- * Multiply the two given isometries.
+ * Check if the isometry flip the fiber direction (see Javascript counter part)
  */
-Isometry multiply(Isometry isom1, Isometry isom2) {
-    mat4 matrix = isom1.matrix * isom2.matrix;
-    float shift = isom1.shift + isom1.matrix[3][3] * isom2.shift;
-    Isometry res = Isometry(matrix, shift);
-    return reduceError(res);
-}
-
-/**
- * Return the inverse of the given isometry.
- */
-Isometry geomInverse(Isometry isom) {
-    mat4 matrix = inverse(isom.matrix);
-    float shift = - isom.matrix[3][3] * isom.shift;
-    Isometry res = Isometry(matrix, shift);
-    return reduceError(res);
-
-}
-
-/***********************************************************************************************************************
- *
- * @struct Point
- * Structure for points in the geometry.
- *
- **********************************************************************************************************************/
-struct Point{
-// Define here the fields of the structure
-    vec4 coords;
-};
-
-
-const Point ORIGIN = Point(vec4(0, 0, 1, 0)); /**< Origin of the geometry */
-
-/**
- * Reduce the eventual numerical errors of the given point.
- */
-Point reduceError(Point p){
-    vec4 coords = hypNormalize(p.coords);
-    return Point(coords);
+bool doesFlip(Isometry isom){
+    if (isom.isInSL){
+        return false;
+    } else {
+        float a00 = isom.matrix[0][0];
+        float a10 = isom.matrix[1][0];
+        float a01 = isom.matrix[0][1];
+        float a11 = isom.matrix[1][1];
+        return (a00 * a11 - a01 * a10) < 0.;
+    }
 }
 
 /**
  * Translate the point by the isometry.
  */
 Point applyIsometry(Isometry isom, Point p) {
-    vec4 coords = isom.matrix * p.coords;
-    coords.w = coords.w + isom.shift;
-    Point res = Point(coords);
-    return reduceError(res);
+    vec4 proj = isom.matrix * p.proj;
+    float dir;
+    if (doesFlip(isom)){
+        dir = -1.;
+    } else {
+        dir = 1.;
+    }
+    vec4 aux = SLtranslateFiberBy(proj, -isom.fiber - dir * p.fiber);
+    float fiber = isom.fiber + dir * p.fiber + 2. * atan(aux.y, aux.x);
+    return Point(proj, fiber);
 }
 
 /**
@@ -50591,30 +50987,8 @@ Point applyIsometry(Isometry isom, Point p) {
  */
 
 Isometry makeTranslation(Point p) {
-
-    mat4 matrix = mat4(1.);
-    float shift = p.coords.w;
-    vec2 u = p.coords.xy;
-    float c1 = length(u);
-
-    if (c1 == 0.){
-        return Isometry(matrix, shift);
-    }
-
-    float c2 = p.coords.z - 1.;
-    u = normalize(u);
-
-    mat4 m = mat4(
-    0., 0., u.x, 0.,
-    0., 0., u.y, 0.,
-    u.x, u.y, 0., 0.,
-    0., 0., 0., 0.
-
-    );
-
-    matrix = matrix + c1 * m + c2 * m * m;
-    Isometry res = Isometry(matrix, shift);
-    return reduceError(res);
+    mat4 matrix = SLtoMatrix4(p.proj);
+    return Isometry(matrix, p.fiber, true);
 }
 
 /**
@@ -50622,36 +50996,64 @@ Isometry makeTranslation(Point p) {
  * Previously makeInvLeftTranslation.
  */
 Isometry makeInvTranslation(Point p) {
-    Isometry isom = makeTranslation(p);
-    return geomInverse(isom);
+    mat4 matrix = SLtoMatrix4(SLinvert(p.proj));
+    return Isometry(matrix, -p.fiber, true);
 }
+
+/**
+ * Multiply the two given isometries.
+ */
+Isometry multiply(Isometry isom1, Isometry isom2) {
+    Point aux2 = Point(isom2.matrix * SL_ORIGIN, isom2.fiber);
+    Point aux = applyIsometry(isom1, aux2);
+    return Isometry(isom1.matrix * isom2.matrix, aux.fiber, isom1.isInSL && isom2.isInSL);
+}
+
+/**
+ * Return the inverse of the given isometry.
+ */
+Isometry geomInverse(Isometry isom) {
+    float fiber;
+    if (doesFlip(isom)){
+        fiber = isom.fiber;
+    } else {
+        fiber = -isom.fiber;
+    }
+    mat4 inv = inverse(isom.matrix);
+    return Isometry(inv, fiber, isom.isInSL);
+}
+
 
 /***********************************************************************************************************************
  *
  * @struct Vector
- * Structure for vector in the tangent bundle of the geometry.
- * For computation of gradient, one needs to fix for each geometry, a section of the frame bundle.
- *
+ * Data type for manipulating points in the tangent bundle
+ * A Vector is given by
+ * - pos : a point in the space
+ * - dir: a tangent vector at pos
+ * The direction is the pull back of the tangent vector at the origin - by the unique such element of SL(2,R)
+ * Local direction are written in the orthonormal basis (e_x, e_y, e_w) where
+ * . e_x is the direction of the x coordinate of H^2
+ * . e_y is the direction of the y coordinate in H^2
+ * . e_w is the direction of the fiber
  **********************************************************************************************************************/
 struct Vector{
-    Point pos; /**< Underlying point */
-    vec4 dir;
+    Point pos;//** Underlying point */
+    vec3 dir;//** Pull back of the tangent vector */
 };
 
 /**
  * Return the zero vector at pos
  */
 Vector zeroVector(Point pos){
-    return Vector(pos, vec4(0));
+    return Vector(pos, vec3(0));
 }
-
 
 /**
  * Reduce the eventual numerical errors of the given vector.
  */
 Vector reduceError(Vector v){
     v.pos = reduceError(v.pos);
-    v.dir.xyz = v.dir.xyz + hypDot(v.pos.coords.xyz, v.dir.xyz) * v.pos.coords.xyz;
     return v;
 }
 
@@ -50680,19 +51082,13 @@ Vector multiplyScalar(float s, Vector v){
     return Vector(v.pos, s * v.dir);
 }
 
+
 /**
  * Return the dot product of the two vectors (with respect to the metric tensor).
  * Previouly tangDot.
  */
 float geomDot(Vector v1, Vector v2) {
-    mat4 g = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, -1, 0,
-    0, 0, 0, 1
-    );
-
-    return dot(v1.dir, g * v2.dir);
+    return dot(v1.dir, v2.dir);
 }
 
 
@@ -50700,85 +51096,94 @@ float geomDot(Vector v1, Vector v2) {
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-    vec4 coords = isom.matrix * v.pos.coords;
-    coords.w = coords.w + isom.shift;
-    Point pos = Point(coords);
-    Vector res = Vector(pos, isom.matrix * v.dir);
-    return reduceError(res);
+    Point p = applyIsometry(isom, v.pos);
+    if (isom.isInSL) {
+        return Vector(p, v.dir);
+    } else {
+        vec4 aux = vec4(0, v.dir.zxy);
+        mat4 push = SLtoMatrix4(v.pos.proj);
+        mat4 pull = SLtoMatrix4(SLinvert(p.proj));
+        vec4 dir = pull * isom.matrix * push * aux;
+        return Vector(p, aux.zwy);
+    }
 }
 
 
 /**
- * Rotate the given vector by a matrix representing an element of O(3).
+ * Rotation the given vector by a matrix representing an element of O(3).
  * @param[in] m an isometry of the tangent space. The matrix is written in the reference frame at the orign
  * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
-    vec4 aux = m * vec4(v.dir.xy, v.dir.w, 0.);
-    Vector res = Vector(v.pos, vec4(aux.xy, 0., aux.z));
-    return res;
-    //    return reduceError(res);
+    // change of coordinates to write the tangent vector in the reference frame coordiates
+    // there is normally a scaling factor 2, that disapears in the conjugation.
+    vec4 aux = m * vec4(v.dir, 0);
+    return Vector(v.pos, aux.xyz);
 }
 
 void initFlow(Vector v){
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/shaders/part2.js
+
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/shaders/part2.js
 // language=GLSL
 /* harmony default export */ const part2 = (`//
+/***********************************************************************************************************************
+ ***********************************************************************************************************************
+ *
+ * Implementation of the geometry of SL(2,R) (part 2)
+ *
+ ***********************************************************************************************************************
+ **********************************************************************************************************************/
 
 /**
  * Section of the frame bundle.
  * The section at the origin, should coincide with the reference frame.
  * @param[in] p point on the geometry
  * @param[out] frame computed frame at the given point
+ * @todo Not completely convinced by this - and the function createVector() and smallShift().
+ * If you know a better way to do it…
  */
 void frame(Point p, out Vector[3] f){
-    float x = p.coords.x;
-    float y = p.coords.y;
-    float z = p.coords.z;
-
-    vec4 dir0 = vec4(z, 0, x, 0);
-    vec4 dir1 = vec4(0, z, y, 0);
-    vec4 dir2 = vec4(0, 0, 0, 1);
-
-    dir0 = hypNormalize(dir0);
-    dir1 = hypNormalize(dir1);
-
-    f[0] = Vector(p, dir0);
-    f[1] = Vector(p, dir1);
-    f[2] = Vector(p, dir2);
+    f[0] = Vector(p, vec3(1, 0, 0));
+    f[1] = Vector(p, vec3(0, 1, 0));
+    f[2] = Vector(p, vec3(0, 0, 1));
 }
 
+/**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
 void orthoFrame(Point p, out Vector[3] f){
-    float x = p.coords.x;
-    float y = p.coords.y;
-    float z = p.coords.z;
-
-    float den = 1. + z;
-    vec4 dir0 = (1. / den) * vec4(x * x + z + 1., x * y, x * den, 0.);
-    vec4 dir1 = (1. / den) * vec4(x * y, y * y + z + 1., y * den, 0.);
-    vec4 dir2 = vec4(0, 0, 0, 1);
-
-    f[0] = Vector(p, dir0);
-    f[1] = Vector(p, dir1);
-    f[2] = Vector(p, dir2);
+    f[0] = Vector(p, vec3(1, 0, 0));
+    f[1] = Vector(p, vec3(0, 1, 0));
+    f[2] = Vector(p, vec3(0, 0, 1));
 }
 
 /**
  * Compute (an approximation of) the point obtained from p by moving the given direction.
  * @param[in] p initial point.
- * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
+ * @param[in] dp the coordinate of the direction with respect to the frame provided by frame()
  */
 Point smallShift(Point p, vec3 dp){
-    Vector[3] f;
-    frame(p, f);
-    vec4 coords = p.coords + dp[0] * f[0].dir + dp[1] * f[1].dir + dp[2] * f[2].dir;
+    // direction dp pushed at the origin in SL(2,R)
+    vec4 SLdirAtOrigin = 0.5 * vec4(0, dp.z, dp.x, dp.y);
+    // direction dp pushed at p.proj in SL(2,R)
+    vec4 SLdirAtP =  SLtoMatrix4(p.proj) * SLdirAtOrigin;
 
-    Point res = Point(coords);
-    return reduceError(res);
+    // fiber component of the direction pushed at p
+    float den = p.proj.x * p.proj.x + p.proj.y * p.proj.y;
+    float coeffX = (p.proj.x * p.proj.w - p.proj.y * p.proj.z) / den;
+    float coeffY = -(p.proj.x * p.proj.z + p.proj.y * p.proj.w) / den;
+    float dfiberAtP = coeffX * dp.x + coeffY * dp.y + dp.z;
+
+    vec4 newProj = SLreduceError(p.proj + SLdirAtP);
+    float newFiber = p.fiber + dfiberAtP;
+
+    return Point(newProj, newFiber);
 }
-
 
 Vector smallShift(Vector v, vec3 dp){
     Point pos = smallShift(v.pos, dp);
@@ -50791,18 +51196,72 @@ Vector smallShift(Vector v, vec3 dp){
  * The vector v is assume to be a **unit** vector
  */
 Vector flow(Vector v, float t){
-    vec3 u = v.dir.xyz;
-    float lambda = hypLength(u);
-    u = hypNormalize(u);
-    vec3 coords = cosh(lambda * t) * v.pos.coords.xyz + sinh(lambda * t) * u;
-    Point pos = Point(vec4(coords, v.pos.coords.w + t * v.dir.w));
+    Vector res;
 
-    vec3 dir = sinh(lambda * t) * v.pos.coords.xyz + cosh(lambda * t) * u;
-    Vector res = Vector(pos, vec4(lambda * dir, v.dir.w));
-    res = reduceError(res);
-    res = geomNormalize(res);
+    float c = v.dir.z;
+    float a = sqrt(1. - c * c);
+    float absC = abs(c);
+
+    vec4 spin = vec4(cos(c * t), sin(c * t), 0, 0);
+    vec4 trans;
+    float omega, tanTheta;
+    res.pos.fiber = 2. * c * t;
+
+    if (a == absC){
+        trans = vec4(
+        1.,
+        -0.25 * sqrt(2.) * t,
+        0.5 * t,
+        0);
+        tanTheta = -0.25 * sqrt(2.) * t;
+        res.pos.fiber = res.pos.fiber + 2. * atan(tanTheta);
+    } else if (a > absC){
+        omega = sqrt(a * a - c * c);
+        trans = vec4(
+        cosh(0.5 * omega * t),
+        -(c / omega) * sinh(0.5 * omega * t),
+        (1. / omega) * sinh(0.5 * omega * t),
+        0);
+        tanTheta = - (c / omega) * tanh(0.5 * omega * t);
+        res.pos.fiber = res.pos.fiber + 2. * atan(tanTheta);
+    } else if (a < absC){
+        omega = sqrt(c * c - a * a);
+        trans = vec4(
+        cos(0.5 * omega * t),
+        -(c / omega) * sin(0.5 * omega * t),
+        (1. / omega) * sin(0.5 * omega *t),
+        0
+        );
+        tanTheta = - (c / omega) * tan(0.5 * omega *t);
+        float n = floor(0.5 * omega * t / PI + 0.5);
+        if (c < 0.){
+            n = -n;
+        }
+        res.pos.fiber = res.pos.fiber + 2. * atan(tanTheta) - 2. * n * PI;
+    }
+
+    res.pos.proj = SLmultiply(trans, spin);
+    mat2 rotation = mat2(
+    v.dir.x, v.dir.y,
+    -v.dir.y, v.dir.x
+    );
+    res.pos.proj.zw = rotation * res.pos.proj.zw;
+
+    // update the direction of the tangent vector
+    // recall that tangent vectors at the origin have the form (ux,uy,uw)
+    // so we work with 3x3 matrics applied to local_dir
+    mat3 S = mat3(
+    cos(2. * c * t), -sin(2. * c * t), 0.,
+    sin(2. * c * t), cos(2. * c * t), 0.,
+    0., 0., 1.
+    );
+    res.dir = S * v.dir;
+
+    Isometry isom = makeTranslation(v.pos);
+    res = applyIsometry(isom, res);
     return res;
 }
+
 
 `);
 
@@ -76027,7 +76486,7 @@ class isometry_Group_Group extends Group_Group {
         shaderBuilder.addChunk(isometry_shaders_element);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/General.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/geometry/General.js
 
 
 
@@ -76035,10 +76494,9 @@ class isometry_Group_Group extends Group_Group {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/cuspedTorus/set.js
 
 
-
+;// CONCATENATED MODULE: ./src/geometries/sl2/groups/fiberLoop/set.js
 
 
 
@@ -76046,136 +76504,42 @@ class isometry_Group_Group extends Group_Group {
 
 const group = new isometry_Group_Group();
 
-const sqrt2 = Math.sqrt(2);
-const modelHalfCube = 1 / sqrt2;
-
-const normalXp = new Vector4(1, 0, -modelHalfCube, 0);
-
-function testXp(p) {
-    return p.coords.dot(normalXp) > 0;
-}
-
-// language=GLSL
-const glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(1, 0, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const normalXn = new Vector4(-1, 0, -modelHalfCube, 0);
-
-function testXn(p) {
-    return p.coords.dot(normalXn) > 0;
-}
-
-// language=GLSL
-const glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(-1, 0, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const normalYp = new Vector4(0, 1, -modelHalfCube, 0);
-
-function testYp(p) {
-    return p.coords.dot(normalYp) > 0;
-}
-
-// language=GLSL
-const glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, 1, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const normalYn = new Vector4(0, -1, -modelHalfCube, 0);
-
-function testYn(p) {
-    return p.coords.dot(normalYn) > 0;
-}
-
-// language=GLSL
-const glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, -1, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
+const height = 2 * Math.PI;
 
 function testWp(p) {
-    return p.coords.w > 1;
+    return p.fiber > 0.5 * height;
 }
 
 // language=GLSL
 const glslTestWp = `//
 bool testWp(Point p){
-    return p.coords.w > 1.;
+    return p.fiber > ${0.5 * height};
 }
 `;
 
 function testWn(p) {
-    return p.coords.w < -1.;
+    return p.fiber < -0.5 * height;
 }
 
 // language=GLSL
 const glslTestWn = `//
 bool testWn(Point p){
-    return p.coords.w < -1.;
+    return p.fiber < -${0.5 * height};
 }
 `;
 
-const shiftXp = group.element();
-const shiftXn = group.element();
-const shiftYp = group.element();
-const shiftYn = group.element();
 const shiftWp = group.element();
 const shiftWn = group.element();
 
-const c = 2 * sqrt2;
-shiftXp.isom.matrix.set(
-    3, 0, -c, 0,
-    0, 1, 0, 0,
-    -c, 0, 3, 0,
-    0, 0, 0, 1
-);
-shiftXn.isom.matrix.set(
-    3, 0, c, 0,
-    0, 1, 0, 0,
-    c, 0, 3, 0,
-    0, 0, 0, 1
-);
-shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 3, -c, 0,
-    0, -c, 3, 0,
-    0, 0, 0, 1
-);
-shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 3, c, 0,
-    0, c, 3, 0,
-    0, 0, 0, 1
-);
-shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2));
-shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
+shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
+shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
 
-/* harmony default export */ const cuspedTorus_set = (new TeleportationSet()
-    .add(testXp, glslTestXp, shiftXp, shiftXn)
-    .add(testXn, glslTestXn, shiftXn, shiftXp)
-    .add(testYp, glslTestYp, shiftYp, shiftYn)
-    .add(testYn, glslTestYn, shiftYn, shiftYp)
+/* harmony default export */ const fiberLoop_set = (new TeleportationSet()
     .add(testWp, glslTestWp, shiftWp, shiftWn)
     .add(testWn, glslTestWn, shiftWn, shiftWp));
 
 
-
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/orbiTorus/set.js
-
-
+;// CONCATENATED MODULE: ./src/geometries/sl2/groups/genus2/set.js
 
 
 
@@ -76184,379 +76548,363 @@ shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
 
 const set_group = new isometry_Group_Group();
 
-const set_sqrt2 = Math.sqrt(2);
-const aux = Math.pow(2, 0.25);
-const shB = 1 / aux;
-const chB = Math.sqrt(1 + set_sqrt2) / aux;
-const height = Math.asinh(shB);
+const sqrt2 = Math.sqrt(2);
+const auxSurfaceP = Math.sqrt(sqrt2 + 1.);
+const auxSurfaceM = Math.sqrt(sqrt2 - 1.);
+const threshold = sqrt2 * auxSurfaceM;
+const set_height = 2 * Math.PI;
 
-const set_normalXp = new Vector4(chB, 0, -shB, 0);
+const nh = new Vector4(1, 0, 0, 0);
+const nv = new Vector4(0, 1, 0, 0);
+const nd1 = new Vector4(0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
+const nd2 = new Vector4(-0.5 * sqrt2, 0.5 * sqrt2, 0, 0);
 
-function set_testXp(p) {
-    return p.coords.dot(set_normalXp) > 0;
+
+function testSideHP(p) {
+    const klein = p.toKlein();
+    return klein.dot(nh) > threshold;
 }
 
 // language=GLSL
-const set_glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(${chB}, 0, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSideHP = `//
+bool testSideHP(Point p){
+    vec4 nh = vec4(1, 0, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nh) > ${threshold};
 }
 `;
 
-const set_normalXn = new Vector4(-chB, 0, -shB, 0);
-
-function set_testXn(p) {
-    return p.coords.dot(set_normalXn) > 0;
+function testSideHN(p) {
+    const klein = p.toKlein();
+    return klein.dot(nh) < -threshold;
 }
 
 // language=GLSL
-const set_glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(-${chB}, 0, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSideHN = `//
+bool testSideHN(Point p){
+    vec4 nh = vec4(1, 0, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nh) < -${threshold};
 }
 `;
 
-const set_normalYp = new Vector4(0, chB, -shB, 0);
-
-function set_testYp(p) {
-    return p.coords.dot(set_normalYp) > 0;
+function testSideVP(p) {
+    const klein = p.toKlein();
+    return klein.dot(nv) > threshold;
 }
 
 // language=GLSL
-const set_glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, ${chB}, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSideVP = `//
+bool testSideVP(Point p){
+    vec4 nv = vec4(0, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nv) > ${threshold};
 }
 `;
 
-const set_normalYn = new Vector4(0, -chB, -shB, 0);
-
-function set_testYn(p) {
-    return p.coords.dot(set_normalYn) > 0;
+function testSideVN(p) {
+    const klein = p.toKlein();
+    return klein.dot(nv) < -threshold;
 }
 
 // language=GLSL
-const set_glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, -${chB}, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSideVN = `//
+bool testSideVN(Point p){
+    vec4 nv = vec4(0, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nv) < -${threshold};
+}
+`;
+
+function testSideD1P(p) {
+    const klein = p.toKlein();
+    return klein.dot(nd1) > threshold;
+}
+
+// language=GLSL
+const glslTestSideD1P = `//
+bool testSideD1P(Point p){
+    vec4 nd1 = 0.5 * ${sqrt2} * vec4(1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nd1) > ${threshold};
+}
+`;
+
+function testSideD1N(p) {
+    const klein = p.toKlein();
+    return klein.dot(nd1) < -threshold;
+}
+
+// language=GLSL
+const glslTestSideD1N = `//
+bool testSideD1N(Point p){
+    vec4 nd1 = 0.5 * ${sqrt2} * vec4(1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nd1) < -${threshold};
+}
+`;
+
+
+function testSideD2P(p) {
+    const klein = p.toKlein();
+    return klein.dot(nd2) > threshold;
+}
+
+// language=GLSL
+const glslTestSideD2P = `//
+bool testSideD2P(Point p){
+    vec4 nd2 = 0.5 * ${sqrt2} * vec4(-1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nd2) > ${threshold};
+}
+`;
+
+function testSideD2N(p) {
+    const klein = p.toKlein();
+    return klein.dot(nd2) < -threshold;
+}
+
+// language=GLSL
+const glslTestSideD2N = `//
+bool testSideD2N(Point p){
+    vec4 nd2 = 0.5 * ${sqrt2} * vec4(-1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, nd2) < -${threshold};
 }
 `;
 
 function set_testWp(p) {
-    return p.coords.w > height;
+    return p.fiber > 0.5 * set_height;
 }
 
 // language=GLSL
 const set_glslTestWp = `//
 bool testWp(Point p){
-    return p.coords.w > ${height};
+    return p.fiber > ${0.5 * set_height};
 }
 `;
 
 function set_testWn(p) {
-    return p.coords.w < -height;
+    return p.fiber < -0.5 * set_height;
 }
 
 // language=GLSL
 const set_glslTestWn = `//
 bool testWn(Point p){
-    return p.coords.w < -${height};
+    return p.fiber < -${0.5 * set_height};
 }
 `;
-
-const set_shiftXp = set_group.element();
-const set_shiftXn = set_group.element();
-const set_shiftYp = set_group.element();
-const set_shiftYn = set_group.element();
+const shiftA1 = set_group.element();
+const shiftA1Inv = set_group.element();
+const shiftB1 = set_group.element();
+const shiftB1Inv = set_group.element();
+const shiftA2 = set_group.element();
+const shiftA2Inv = set_group.element();
+const shiftB2 = set_group.element();
+const shiftB2Inv = set_group.element();
 const set_shiftWp = set_group.element();
 const set_shiftWn = set_group.element();
 
-const sh2b = 2 * shB * chB;
-const ch2B = 2 * chB * chB - 1;
-
-set_shiftXp.isom.matrix.set(
-    ch2B, 0, -sh2b, 0,
-    0, 1, 0, 0,
-    -sh2b, 0, ch2B, 0,
-    0, 0, 0, 1
-);
-set_shiftXn.isom.matrix.set(
-    ch2B, 0, sh2b, 0,
-    0, 1, 0, 0,
-    sh2b, 0, ch2B, 0,
-    0, 0, 0, 1
-);
-set_shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, ch2B, -sh2b, 0,
-    0, -sh2b, ch2B, 0,
-    0, 0, 0, 1
-);
-set_shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, ch2B, sh2b, 0,
-    0, sh2b, ch2B, 0,
-    0, 0, 0, 1
-);
-set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2 * height));
-set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2 * height));
+const auxA1 = new Point();
+const auxB1 = new Point();
+const auxA2 = new Point();
+const auxB2 = new Point();
+auxA1.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., auxSurfaceP, -auxSurfaceP);
+auxA1.fiber = 0.5 * Math.PI;
+auxB1.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., sqrt2 * auxSurfaceP, 0);
+auxB1.fiber = 0.5 * Math.PI;
+auxA2.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -auxSurfaceP, auxSurfaceP);
+auxA2.fiber = 0.5 * Math.PI;
+auxB2.proj.set(0.5 * sqrt2 + 1., 0.5 * sqrt2 + 1., -sqrt2 * auxSurfaceP, 0);
+auxB2.fiber = 0.5 * Math.PI;
 
 
-/* harmony default export */ const orbiTorus_set = (new TeleportationSet()
-    .add(set_testXp, set_glslTestXp, set_shiftXp, set_shiftXn)
-    .add(set_testXn, set_glslTestXn, set_shiftXn, set_shiftXp)
-    .add(set_testYp, set_glslTestYp, set_shiftYp, set_shiftYn)
-    .add(set_testYn, set_glslTestYn, set_shiftYn, set_shiftYp)
+shiftA1.isom.makeTranslation(auxA1);
+shiftA1Inv.isom.makeInvTranslation(auxA1);
+shiftB1.isom.makeTranslation(auxB1);
+shiftB1Inv.isom.makeInvTranslation(auxB1);
+shiftA2.isom.makeTranslation(auxA2);
+shiftA2Inv.isom.makeInvTranslation(auxA2);
+shiftB2.isom.makeTranslation(auxB2);
+shiftB2Inv.isom.makeInvTranslation(auxB2);
+set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -set_height));
+set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, set_height));
+
+
+/* harmony default export */ const genus2_set = (new TeleportationSet()
+    .add(testSideHP, glslTestSideHP, shiftA1Inv, shiftA1)
+    .add(testSideHN, glslTestSideHN, shiftA2Inv, shiftA2)
+    .add(testSideVP, glslTestSideVP, shiftA1, shiftA1Inv)
+    .add(testSideVN, glslTestSideVN, shiftA2, shiftA2Inv)
+    .add(testSideD1P, glslTestSideD1P, shiftB1Inv, shiftB1)
+    .add(testSideD1N, glslTestSideD1N, shiftB2Inv, shiftB2)
+    .add(testSideD2P, glslTestSideD2P, shiftB1, shiftB1Inv)
+    .add(testSideD2N, glslTestSideD2N, shiftB2, shiftB2Inv)
     .add(set_testWp, set_glslTestWp, set_shiftWp, set_shiftWn)
     .add(set_testWn, set_glslTestWn, set_shiftWn, set_shiftWp));
 
-
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/plane/set.js
-
+;// CONCATENATED MODULE: ./src/geometries/sl2/groups/orbiTorus/set.js
 
 
 
 
 
 
-const plane_set_group = new isometry_Group_Group();
+const orbiTorus_set_group = new isometry_Group_Group();
 
-const plane_set_sqrt2 = Math.sqrt(2);
-const set_aux = Math.pow(2, 0.25);
-const set_shB = 1 / set_aux;
-const set_chB = Math.sqrt(1 + plane_set_sqrt2) / set_aux;
-const set_height = Math.asinh(set_shB);
+const set_sqrt2 = Math.sqrt(2);
+const sqrt3 = Math.sqrt(3);
+const orbiTorus_set_height = 2 * Math.PI;
+const set_threshold = set_sqrt2 / sqrt3;
+const n1 = new Vector4(1, 1, 0, 0);
+const n2 = new Vector4(-1, 1, 0, 0);
 
-const plane_set_normalXp = new Vector4(set_chB, 0, -set_shB, 0);
-
-function plane_set_testXp(p) {
-    return p.coords.dot(plane_set_normalXp) > 0;
+function testSide1P(p) {
+    const klein = p.toKlein();
+    return klein.dot(n1) > set_threshold;
 }
 
 // language=GLSL
-const plane_set_glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(${set_chB}, 0, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSide1P = `//
+bool testSide1P(Point p){
+    vec4 n1 = vec4(1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, n1) > ${set_threshold};
 }
 `;
 
-const plane_set_normalXn = new Vector4(-set_chB, 0, -set_shB, 0);
-
-function plane_set_testXn(p) {
-    return p.coords.dot(plane_set_normalXn) > 0;
+function testSide1N(p) {
+    const klein = p.toKlein();
+    return klein.dot(n1) < -set_threshold;
 }
 
 // language=GLSL
-const plane_set_glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(-${set_chB}, 0, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSide1N = `//
+bool testSide1N(Point p){
+    vec4 n1 = vec4(1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, n1) < -${set_threshold};
 }
 `;
 
-const plane_set_normalYp = new Vector4(0, set_chB, -set_shB, 0);
-
-function plane_set_testYp(p) {
-    return p.coords.dot(plane_set_normalYp) > 0;
+function testSide2P(p) {
+    const klein = p.toKlein();
+    return klein.dot(n2) > set_threshold;
 }
 
 // language=GLSL
-const plane_set_glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, ${set_chB}, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSide2P = `//
+bool testSide2P(Point p){
+    vec4 n2 = vec4(-1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, n2) > ${set_threshold};
 }
 `;
 
-const plane_set_normalYn = new Vector4(0, -set_chB, -set_shB, 0);
-
-function plane_set_testYn(p) {
-    return p.coords.dot(plane_set_normalYn) > 0;
+function testSide2N(p) {
+    const klein = p.toKlein();
+    return klein.dot(n2) < -set_threshold;
 }
 
 // language=GLSL
-const plane_set_glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, -${set_chB}, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
+const glslTestSide2N = `//
+bool testSide2N(Point p){
+    vec4 n2 = vec4(-1, 1, 0, 0);
+    vec4 klein = toKlein(p);
+    return dot(klein, n2) < -${set_threshold};
 }
 `;
 
-function plane_set_testWp(p) {
-    return p.coords.w > set_height;
-}
 
-
-const plane_set_shiftXp = plane_set_group.element();
-const plane_set_shiftXn = plane_set_group.element();
-const plane_set_shiftYp = plane_set_group.element();
-const plane_set_shiftYn = plane_set_group.element();
-
-const set_sh2b = 2 * set_shB * set_chB;
-const set_ch2B = 2 * set_chB * set_chB - 1;
-
-plane_set_shiftXp.isom.matrix.set(
-    set_ch2B, 0, -set_sh2b, 0,
-    0, 1, 0, 0,
-    -set_sh2b, 0, set_ch2B, 0,
-    0, 0, 0, 1
-);
-plane_set_shiftXn.isom.matrix.set(
-    set_ch2B, 0, set_sh2b, 0,
-    0, 1, 0, 0,
-    set_sh2b, 0, set_ch2B, 0,
-    0, 0, 0, 1
-);
-plane_set_shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, set_ch2B, -set_sh2b, 0,
-    0, -set_sh2b, set_ch2B, 0,
-    0, 0, 0, 1
-);
-plane_set_shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, set_ch2B, set_sh2b, 0,
-    0, set_sh2b, set_ch2B, 0,
-    0, 0, 0, 1
-);
-
-/* harmony default export */ const plane_set = (new TeleportationSet()
-    .add(plane_set_testXp, plane_set_glslTestXp, plane_set_shiftXp, plane_set_shiftXn)
-    .add(plane_set_testXn, plane_set_glslTestXn, plane_set_shiftXn, plane_set_shiftXp)
-    .add(plane_set_testYp, plane_set_glslTestYp, plane_set_shiftYp, plane_set_shiftYn)
-    .add(plane_set_testYn, plane_set_glslTestYn, plane_set_shiftYn, plane_set_shiftYp));
-
-
-
-
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/zLoop/set.js
-
-
-
-
-
-const zLoop_set_group = new isometry_Group_Group();
-
-function zLoop_set_testWp(p) {
-    return p.coords.w > 1;
+function orbiTorus_set_testWp(p) {
+    return p.fiber > 0.5 * orbiTorus_set_height;
 }
 
 // language=GLSL
-const zLoop_set_glslTestWp = `//
+const orbiTorus_set_glslTestWp = `//
 bool testWp(Point p){
-    return p.coords.w > 1.;
+    return p.fiber > ${0.5 * orbiTorus_set_height};
 }
 `;
 
-function zLoop_set_testWn(p) {
-    return p.coords.w < -1.;
+function orbiTorus_set_testWn(p) {
+    return p.fiber < -0.5 * orbiTorus_set_height;
 }
 
 // language=GLSL
-const zLoop_set_glslTestWn = `//
+const orbiTorus_set_glslTestWn = `//
 bool testWn(Point p){
-    return p.coords.w < -1.;
+    return p.fiber < -${0.5 * orbiTorus_set_height};
 }
 `;
+const shiftA = orbiTorus_set_group.element();
+const sinftAInv = orbiTorus_set_group.element();
+const shiftB = orbiTorus_set_group.element();
+const shiftBInv = orbiTorus_set_group.element();
+const orbiTorus_set_shiftWp = orbiTorus_set_group.element();
+const orbiTorus_set_shiftWn = orbiTorus_set_group.element();
 
-const zLoop_set_shiftWp = zLoop_set_group.element();
-const zLoop_set_shiftWn = zLoop_set_group.element();
+const auxA = new Point();
+const auxB = new Point();
+auxA.proj.set(0.5 * sqrt3, 0.5 * sqrt3, 0.5 * set_sqrt2, 0);
+auxA.fiber = 0.5 * Math.PI;
+auxB.proj.set(0.5 * sqrt3, 0.5 * sqrt3, -0.5 * set_sqrt2, 0);
+auxB.fiber = 0.5 * Math.PI;
 
-zLoop_set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2));
-zLoop_set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
+
+shiftA.isom.makeTranslation(auxA);
+sinftAInv.isom.makeInvTranslation(auxA);
+shiftB.isom.makeTranslation(auxB);
+shiftBInv.isom.makeInvTranslation(auxB);
+orbiTorus_set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -orbiTorus_set_height));
+orbiTorus_set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, orbiTorus_set_height));
 
 
-/* harmony default export */ const zLoop_set = (new TeleportationSet()
-    .add(zLoop_set_testWp, zLoop_set_glslTestWp, zLoop_set_shiftWp, zLoop_set_shiftWn)
-    .add(zLoop_set_testWn, zLoop_set_glslTestWn, zLoop_set_shiftWn, zLoop_set_shiftWp));
+/* harmony default export */ const orbiTorus_set = (new TeleportationSet()
+    .add(testSide1P, glslTestSide1P, sinftAInv, shiftA)
+    .add(testSide1N, glslTestSide1N, shiftBInv, shiftB)
+    .add(testSide2P, glslTestSide2P, shiftA, sinftAInv)
+    .add(testSide2N, glslTestSide2N, shiftB, shiftBInv)
+    .add(orbiTorus_set_testWp, orbiTorus_set_glslTestWp, orbiTorus_set_shiftWp, orbiTorus_set_shiftWn)
+    .add(orbiTorus_set_testWn, orbiTorus_set_glslTestWn, orbiTorus_set_shiftWn, orbiTorus_set_shiftWp));
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/imports/direction.js
+
+;// CONCATENATED MODULE: ./src/geometries/sl2/lights/constDirLight/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const direction = (`//
-Vector direction(Point p, Point q){
-    vec3 pAux = p.coords.xyz;
-    vec3 qAux = q.coords.xyz;
-    float c = hypDot(pAux, qAux);
-    float lenAux = acosh(-c);
-    vec3 dirAux = qAux + c * pAux;
-    dirAux = (lenAux / sqrt(c * c  - 1.)) * dirAux;
-    Vector res = Vector(p, vec4(dirAux, q.coords.w - p.coords.w));
-    return geomNormalize(res);
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/imports/distance.js
-// language=GLSL
-/* harmony default export */ const distance = (`//
-/**
- * Distance between two points
- */
-float dist(Point p1, Point p2){
-    float aux1 = acosh(-hypDot(p1.coords, p2.coords));
-    float aux2 = p1.coords.w - p2.coords.w;
-    return sqrt(aux1 * aux1 + aux2 * aux2);
-}
-
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/imports/lightIntensity.js
-// language=GLSL
-/* harmony default export */ const lightIntensity = (`//
-/**
-* Intensity of the light after travelling a length \`len\` in the direction \`dir\`
-* @param[in] dir unit vector at the light position
-* @param[in] len distance from the light
-* @return intensity of the light
-*/
-float lightIntensity(float len){
-    //return 1./(len * len);
-    return 1./ len;
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/pointLight/shaders/struct.js
-// language=GLSL
-/* harmony default export */ const pointLight_shaders_struct = (`//
+/* harmony default export */ const constDirLight_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
  * Euclidean point light
  **********************************************************************************************************************/
-struct PointLight {
+
+struct ConstDirLight {
     int id;
     vec3 color;
     float intensity;
-    Point position;
+    vec3 direction;
     int maxDirs;
 };
 
-bool directions(PointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+bool directions(ConstDirLight light, RelVector v, int i, out RelVector dir, out float intensity) {
     if (i!=0){
         return false;
     }
-    Point position = applyGroupElement(v.invCellBoost, light.position);
-    float dist = dist(v.local.pos, position);
-    intensity = lightIntensity(dist) * light.intensity;
-    Vector local = direction(v.local.pos, position);
+    intensity = light.intensity;
+    //    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    //    vec4 coords = invCellBoost.matrix * vec4(light.direction, 0.);
+    Vector local = Vector(v.local.pos, light.direction);
     dir = RelVector(local, v.cellBoost, v.invCellBoost);
     return true;
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/pointLight/shaders/directions.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/lights/constDirLight/shaders/directions.js
 // language=Mustache + GLSL
 /* harmony default export */ const directions = (`
 bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
     return directions({{name}}, v, i, dir, intensity);
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/pointLight/PointLight.js
-
-
-
-
+;// CONCATENATED MODULE: ./src/geometries/sl2/lights/constDirLight/ConstDirLight.js
 
 
 
@@ -76570,110 +76918,17 @@ bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intens
  * @class
  *
  * @classdesc
- * Light at infinity in the positive E-direction
+ * Constant local direction
  */
-class PointLight_PointLight extends Light_Light {
-
-    /**
-     * Constructor
-     * @param {Color} color - the color of the light
-     * @param {Point} position - the position of the light
-     * @param {number} intensity - the intensity of the light
-     */
-    constructor(color, position, intensity = 1) {
-        super(1);
-        this.color = color;
-        this.intensity = intensity;
-        this.position = position;
-        this.addImport(distance, direction, lightIntensity);
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        return true;
-    }
-
-    get uniformType() {
-        return 'PointLight';
-    }
-
-    /**
-     * Return the chunk of GLSL code defining the corresponding structure.
-     * @abstract
-     * @return {string}
-     */
-    static glslClass() {
-        return pointLight_shaders_struct;
-    }
-
-    glslDirections() {
-        return mustache_mustache.render(directions, this);
-    }
-}
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/esun/shaders/struct.js
-// language=GLSL
-/* harmony default export */ const esun_shaders_struct = (`//
-/***********************************************************************************************************************
- * @struct
- * Euclidean point light
- **********************************************************************************************************************/
-struct ESun {
-    int id;
-    vec3 color;
-    float intensity;
-    float direction;
-    int maxDirs;
-};
-
-bool directions(ESun light, RelVector v, int i, out RelVector dir, out float intensity) {
-    if (i != 0){
-        return false;
-    }
-    intensity = light.intensity;
-    Vector local = Vector(v.local.pos, vec4(0, 0, 0, light.direction));
-    dir = RelVector(local, v.cellBoost, v.invCellBoost);
-    return true;
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/esun/shaders/directions.js
-// language=Mustache + GLSL
-/* harmony default export */ const shaders_directions = (`
-bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
-    return directions({{name}}, v, i, dir, intensity);
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/esun/ESun.js
-
-
-
-
-
-
-
-
-const DIR_UP = 1;
-const DIR_DOWN = -1;
-
-/**
- * @class
- *
- * @classdesc
- * Light at infinity in the E-direction
- */
-class ESun extends Light_Light {
+class ConstDirLight extends Light_Light {
 
     /**
      * Constructor.
      * @param {Color} color - the color of the light
      * @param {number} intensity - the intensity of the light
-     * @param {number} direction - the direction of the light. It should be on of the following values:
-     * - -1 (light coming from the negative direction)
-     * - +1 (light coming from the positive direction)
+     * @param {Vector3} direction - the direction of the light.
      */
-    constructor(color, intensity = 1, direction = DIR_UP) {
+    constructor(color, intensity, direction) {
         super(1);
         this.color = color;
         this.intensity = intensity;
@@ -76689,7 +76944,7 @@ class ESun extends Light_Light {
     }
 
     get uniformType() {
-        return 'ESun';
+        return 'ConstDirLight';
     }
 
     /**
@@ -76698,17 +76953,18 @@ class ESun extends Light_Light {
      * @return {string}
      */
     static glslClass() {
-        return esun_shaders_struct;
+        return constDirLight_shaders_struct;
     }
 
     glslDirections() {
-        return mustache_mustache.render(shaders_directions, this);
+        return mustache_mustache.render(directions, this);
     }
+
+
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/all.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/lights/all.js
 
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/varyingColor/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/material/varyingColor/shaders/struct.js
 // language=GLSL
 /* harmony default export */ const varyingColor_shaders_struct = (`//
 /***********************************************************************************************************************
@@ -76721,16 +76977,16 @@ struct VaryingColorMaterial {
 };
 
 vec3 render(VaryingColorMaterial material, ExtVector v) {
-    return material.mainColor + material.weight * v.vector.local.pos.coords.xyw;
+    return material.mainColor + material.weight * v.vector.local.pos.proj.yzw;
 }`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/varyingColor/shaders/render.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/material/varyingColor/shaders/render.js
 // language=Mustache + GLSL
 /* harmony default export */ const varyingColor_shaders_render = (`//
 vec3 {{name}}_render(ExtVector v) {
     return render({{name}}, v);
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/varyingColor/VaryingColorMaterial.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/material/varyingColor/VaryingColorMaterial.js
 
 
 
@@ -76777,7 +77033,7 @@ class VaryingColorMaterial extends Material_Material {
     }
 
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/all.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/material/all.js
 
 ;// CONCATENATED MODULE: ./src/core/shapes/BasicShape.js
 
@@ -76812,56 +77068,76 @@ class BasicShape extends Shape_Shape {
         return true;
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/imports/fakeDistance.js
 // language=GLSL
-/* harmony default export */ const ball_shaders_struct = (`//
+/* harmony default export */ const fakeDistance = (`//
+
+float _fakeDistanceFromOrigin(Point p) {
+//    return abs(p.fiber);
+    
+    vec4 aux = toVec4(p);
+    vec3 oh = vec3(0, 0, 1);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux.xyz, J * oh);
+
+    // WARNING: DO NOT CHANGE THE 'IF ... THEN .. ELSE' STATEMENT BELOW
+    // This hack is intended to make sure that q < -1, so that acosh does not crash
+    // However when q is very large (long geodesics close to the horizontal component) the max causes numerical errors
+    // This seems to work...
+    // NB. Teleportation on the Javascript side does not fix the issue
+    float fix;
+    if (-q < 2.) fix = max(1., -q); else fix = -q;
+    return 0.5 * sqrt(pow(acosh(fix), 2.) + pow(aux.w, 2.));
+}
+
+// fake distance between two points
+float fakeDistance(Point p1, Point p2){
+    Isometry shift = makeInvTranslation(p1);
+    return _fakeDistanceFromOrigin(applyIsometry(shift, p2));
+}
+
+// overload of the previous function in case we work with tangent vectors
+float fakeDistance(Vector v1, Vector v2){
+    return fakeDistance(v1.pos, v2.pos);
+}
+
+`);
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/fakeBall/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const fakeBall_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
- * Shape of a ball in H2xE
+ * Fake ball in Nil
  **********************************************************************************************************************/
 
-struct BallShape {
+struct FakeBallShape {
     int id;
     Point center;
     float radius;
 };
 
 /**
- * Distance function for a global ball
+ * Distance function for a global euclidean ball
  */
-float sdf(BallShape ball, RelVector v) {
-    Point center = applyGroupElement(v.invCellBoost, ball.center);
-    return dist(v.local.pos, center) - ball.radius;
+float sdf(FakeBallShape ball, RelVector v) {
+    Point center = applyIsometry(v.invCellBoost, ball.center);
+    return fakeDistance(v.local.pos, center) - ball.radius;
 }
-
-/**
- * Gradient field for a global ball
- */
-RelVector gradient(BallShape ball, RelVector v){
-    Point center = applyGroupElement(v.invCellBoost, ball.center);
-    Vector local = direction(v.local.pos, center);
-    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
-}
-
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/shaders/sdf.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/fakeBall/shaders/sdf.js
 // language=Mustache + GLSL
-/* harmony default export */ const ball_shaders_sdf = (`        
+/* harmony default export */ const fakeBall_shaders_sdf = (`//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/shaders/gradient.js
-// language=Mustache + GLSL
-/* harmony default export */ const ball_shaders_gradient = (`
-RelVector {{name}}_gradient(RelVector v){
-    return gradient({{name}},v);
-}
-`);
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/BallShape.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/fakeBall/fakeBallShape.js
 
 
 
@@ -76873,12 +77149,19 @@ RelVector {{name}}_gradient(RelVector v){
 
 
 
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in SL(2,R).
+ * The distance under-estimator is only correct at large scale
+ */
+class FakeBallShape extends BasicShape {
 
-class BallShape extends BasicShape {
 
     /**
      * Constructor.
-     * @param {Isometry|Point|Vector} location - the location of the center of the ball
+     * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
      */
     constructor(location, radius) {
@@ -76888,14 +77171,14 @@ class BallShape extends BasicShape {
         } else if (location.isPoint) {
             isom.makeTranslation(location);
         } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
+            isom.makeTranslationFromDir(location)
         } else {
-            throw new Error("BallShape: this type of location is not implemented");
+            throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
+        this.addImport(fakeDistance);
         this.radius = radius;
         this._center = undefined;
-        this.addImport(distance, direction);
     }
 
     updateData() {
@@ -76903,6 +77186,10 @@ class BallShape extends BasicShape {
         this._center = new Point().applyIsometry(this.absoluteIsom);
     }
 
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
     get center() {
         if (this._center === undefined) {
             this.updateData();
@@ -76910,95 +77197,57 @@ class BallShape extends BasicShape {
         return this._center;
     }
 
-    /**
-     * Says that the object inherits from `BallShape`
-     * @type {boolean}
-     */
-    get isBallShape() {
-        return true;
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
     get isGlobal() {
         return true;
     }
 
-    get uniformType() {
-        return 'BallShape';
+    get isFakeBallShape() {
+        return true;
     }
 
-    /**
-     * The UV coordinates corresponds to the spherical coordinates on the sphere...
-     * Not sure if that is the smartest choice
-     * @return {boolean}
-     */
-    get hasUVMap() {
-        return false;
+    get uniformType() {
+        return 'FakeBallShape';
     }
 
     static glslClass() {
-        return ball_shaders_struct;
+        return fakeBall_shaders_struct;
     }
 
     glslSDF() {
-        return mustache_mustache.render(ball_shaders_sdf, this);
-    }
-
-    glslGradient() {
-        return mustache_mustache.render(ball_shaders_gradient, this);
+        return mustache_mustache.render(fakeBall_shaders_sdf, this);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localFakeBall/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const localBall_shaders_struct = (`//
+/* harmony default export */ const localFakeBall_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
- * Shape of a ball in H2xE
+ * Fake ball in Nil
  **********************************************************************************************************************/
 
-struct LocalBallShape {
+struct LocalFakeBallShape {
     int id;
     Point center;
     float radius;
 };
 
 /**
- * Distance function for a local ball
+ * Distance function for a global euclidean ball
  */
-float sdf(LocalBallShape ball, RelVector v) {
-    return dist(v.local.pos, ball.center) - ball.radius;
+float sdf(LocalFakeBallShape ball, RelVector v) {
+    return fakeDistance(v.local.pos, ball.center) - ball.radius;
 }
-
-/**
- * Gradient field for a local ball
- */
-RelVector gradient(LocalBallShape ball, RelVector v){
-    Vector local = direction(v.local.pos, ball.center);
-    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
-}
-
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/shaders/sdf.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localFakeBall/shaders/sdf.js
 // language=Mustache + GLSL
-/* harmony default export */ const localBall_shaders_sdf = (`        
+/* harmony default export */ const localFakeBall_shaders_sdf = (`//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/shaders/gradient.js
-// language=Mustache + GLSL
-/* harmony default export */ const localBall_shaders_gradient = (`
-RelVector {{name}}_gradient(RelVector v){
-    return gradient({{name}},v);
-}
-`);
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/LocalBallShape.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localFakeBall/localFakeBallShape.js
 
 
 
@@ -77010,12 +77259,19 @@ RelVector {{name}}_gradient(RelVector v){
 
 
 
+/**
+ * @class
+ *
+ * @classdesc
+ * Local fake ball in SL(2,R).
+ * The distance under-estimator is only correct at large scale
+ */
+class LocalFakeBallShape extends BasicShape {
 
-class LocalBallShape extends BasicShape {
 
     /**
      * Constructor.
-     * @param {Isometry|Point|Vector} location - the location of the center of the ball
+     * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
      */
     constructor(location, radius) {
@@ -77025,14 +77281,14 @@ class LocalBallShape extends BasicShape {
         } else if (location.isPoint) {
             isom.makeTranslation(location);
         } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
+            isom.makeTranslationFromDir(location)
         } else {
-            throw new Error("BallShape: this type of location is not implemented");
+            throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
+        this.addImport(fakeDistance);
         this.radius = radius;
         this._center = undefined;
-        this.addImport(distance, direction);
     }
 
     updateData() {
@@ -77040,6 +77296,10 @@ class LocalBallShape extends BasicShape {
         this._center = new Point().applyIsometry(this.absoluteIsom);
     }
 
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
     get center() {
         if (this._center === undefined) {
             this.updateData();
@@ -77047,48 +77307,167 @@ class LocalBallShape extends BasicShape {
         return this._center;
     }
 
-    /**
-     * Says that the object inherits from `LocalBallShape`
-     * @type {boolean}
-     */
-    get isLocalBallShape() {
-        return true;
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
     get isGlobal() {
         return false;
     }
 
-    get uniformType() {
-        return 'LocalBallShape';
+    get isLocalFakeBallShape() {
+        return true;
     }
 
-    /**
-     * The UV coordinates corresponds to the spherical coordinates on the sphere...
-     * Not sure if that is the smartest choice
-     * @return {boolean}
-     */
-    get hasUVMap() {
-        return false;
+    get uniformType() {
+        return 'LocalFakeBallShape';
     }
 
     static glslClass() {
-        return localBall_shaders_struct;
+        return localFakeBall_shaders_struct;
     }
 
     glslSDF() {
-        return mustache_mustache.render(localBall_shaders_sdf, this);
-    }
-
-    glslGradient() {
-        return mustache_mustache.render(localBall_shaders_gradient, this);
+        return mustache_mustache.render(localFakeBall_shaders_sdf, this);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/all.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localPotato/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localPotato_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Fake ball in Nil
+ **********************************************************************************************************************/
+
+struct LocalPotatoShape {
+    int id;
+    Point center;
+    float radius;
+    float wRescale;
+};
+
+
+float _potatoDistanceFromOrigin(Point p, float wRescale) {
+    vec4 aux = toVec4(p);
+    vec3 oh = vec3(0, 0, 1);
+    mat3 J = mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, -1
+    );
+    float q = dot(aux.xyz, J * oh);
+
+    // WARNING: DO NOT CHANGE THE 'IF ... THEN .. ELSE' STATEMENT BELOW
+    // This hack is intended to make sure that q < -1, so that acosh does not crash
+    // However when q is very large (long geodesics close to the horizontal component) the max causes numerical errors
+    // This seems to work...
+    // NB. Teleportation on the Javascript side does not fix the issue
+    float fix;
+    if (-q < 2.) fix = max(1., -q); else fix = -q;
+    return 0.5 * sqrt(pow(acosh(fix), 2.) + pow(aux.w / wRescale, 2.));
+}
+
+// fake distance between two points
+float _potatoDistance(Point p1, Point p2, float wRescale){
+    Isometry shift = makeInvTranslation(p1);
+    return _potatoDistanceFromOrigin(applyIsometry(shift, p2), wRescale);
+}
+
+
+/**
+ * Distance function for a global euclidean ball
+ */
+float sdf(LocalPotatoShape ball, RelVector v) {
+    return _potatoDistance(v.local.pos, ball.center, ball.wRescale) - ball.radius;
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localPotato/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localPotato_shaders_sdf = (`//
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localPotato/localPotatoShape.js
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Local fake ball in SL(2,R).
+ * The distance under-estimator is only correct at large scale
+ */
+class LocalPotatoShape extends BasicShape {
+
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point|Vector} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     * @param {number} wRescale - rescaling coeff on the fiber coordinate
+     */
+    constructor(location, radius, wRescale) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else if (location.isVector) {
+            isom.makeTranslationFromDir(location)
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.radius = radius;
+        this.wRescale = wRescale;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalPotatoShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalPotatoShape';
+    }
+
+    static glslClass() {
+        return localPotato_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localPotato_shaders_sdf, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/all.js
+
 
 
 ;// CONCATENATED MODULE: ./src/core/solids/shaders/struct.js
@@ -77249,7 +77628,15 @@ class Solid extends Generic {
         super.shader(shaderBuilder);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/solids/Ball.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/fakeBall/FakeBallShape.js
+
+
+
+
+
+
+
+
 
 
 
@@ -77257,23 +77644,71 @@ class Solid extends Generic {
  * @class
  *
  * @classdesc
- * Ball in H2 x E.
+ * Fake ball in SL(2,R).
+ * The distance under-estimator is only correct at large scale
  */
-class Ball extends Solid {
+class FakeBallShape_FakeBallShape extends BasicShape {
+
 
     /**
-     * Constructor
+     * Constructor.
      * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
-     * @param {Material} material - the material of the ball
-     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new BallShape(location, radius);
-        super(shape, material, ptMaterial);
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else if (location.isVector) {
+            isom.makeTranslationFromDir(location)
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport(fakeDistance);
+        this.radius = radius;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isFakeBallShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'FakeBallShape';
+    }
+
+    static glslClass() {
+        return fakeBall_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(fakeBall_shaders_sdf, this);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/solids/LocalBall.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/solids/FakeBall.js
 
 
 
@@ -77281,58 +77716,52 @@ class Ball extends Solid {
  * @class
  *
  * @classdesc
- * Ball in H2 x E.
+ * Fake ball in SL(2,R).
  */
-class LocalBall extends Solid {
-
+class FakeBall extends Solid {
     /**
-     * Constructor
+     * Constructor.
      * @param {Isometry|Point|Vector} location - the location of the ball
      * @param {number} radius - the radius of the ball
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new LocalBallShape(location, radius);
+        const shape = new FakeBallShape_FakeBallShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/solids/all.js
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localfakeBall/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localfakeBall_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Fake ball in Nil
+ **********************************************************************************************************************/
 
+struct LocalFakeBallShape {
+    int id;
+    Point center;
+    float radius;
+};
 
+/**
+ * Distance function for a global euclidean ball
+ */
+float sdf(LocalFakeBallShape ball, RelVector v) {
+    return fakeDistance(v.local.pos, ball.center) - ball.radius;
+}
+`);
 
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localfakeBall/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localfakeBall_shaders_sdf = (`//
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
 
-;// CONCATENATED MODULE: ./src/thurstonH2E.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-const thurstonH2E_BasicRenderer = specifyRenderer(BasicRenderer, part1, part2);
-const thurstonH2E_PathTracerRenderer = specifyRenderer(PathTracerRenderer, part1, part2);
-const thurstonH2E_VRRenderer = specifyRenderer(VRRenderer, part1, part2);
-
-
-
-
-
-
-const thurstonH2E_Thurston = specifyThurston(Thurston, part1, part2);
-const thurstonH2E_ThurstonLite = specifyThurston(ThurstonLite, part1, part2);
-const thurstonH2E_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
-
-
-
-
-
+;// CONCATENATED MODULE: ./src/geometries/sl2/shapes/localfakeBall/LocalFakeBallShape.js
 
 
 
@@ -77340,8 +77769,168 @@ const thurstonH2E_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
 
 
 
-var __webpack_exports__Ball = __webpack_exports__.ec;
-var __webpack_exports__BallShape = __webpack_exports__.Yb;
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Local fake ball in SL(2,R).
+ * The distance under-estimator is only correct at large scale
+ */
+class LocalFakeBallShape_LocalFakeBallShape extends BasicShape {
+
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point|Vector} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     */
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else if (location.isVector) {
+            isom.makeTranslationFromDir(location)
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport(fakeDistance);
+        this.radius = radius;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalFakeBallShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalFakeBallShape';
+    }
+
+    static glslClass() {
+        return localfakeBall_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localfakeBall_shaders_sdf, this);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sl2/solids/LocalFakeBall.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in SL(2,R).
+ */
+class LocalFakeBall extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry|Point|Vector} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, radius, material, ptMaterial = undefined) {
+        const shape = new LocalFakeBallShape_LocalFakeBallShape(location, radius);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sl2/solids/LocalPotato.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in SL(2,R).
+ */
+class LocalPotato extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry|Point|Vector} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     * @param {number} wRescale - rescaling coeff on the fiber coordinate
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, radius, wRescale, material, ptMaterial = undefined) {
+        const shape = new LocalPotatoShape(location, radius, wRescale);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sl2/solids/all.js
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/thurstonSL2.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+const thurstonSL2_BasicRenderer = specifyRenderer(BasicRenderer, part1, part2);
+const thurstonSL2_PathTracerRenderer = specifyRenderer(PathTracerRenderer, part1, part2);
+const thurstonSL2_VRRenderer = specifyRenderer(VRRenderer, part1, part2);
+
+
+
+
+
+
+const thurstonSL2_Thurston = specifyThurston(Thurston, part1, part2);
+const thurstonSL2_ThurstonLite = specifyThurston(ThurstonLite, part1, part2);
+const thurstonSL2_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
+
+
+
+
+
+
+
+
+
+
+
 var __webpack_exports__BasicCamera = __webpack_exports__.QU;
 var __webpack_exports__BasicPTMaterial = __webpack_exports__.ZH;
 var __webpack_exports__BasicRenderer = __webpack_exports__.K9;
@@ -77352,12 +77941,12 @@ var __webpack_exports__CheckerboardMaterial = __webpack_exports__.Vz;
 var __webpack_exports__Clock = __webpack_exports__.SU;
 var __webpack_exports__Color = __webpack_exports__.Il;
 var __webpack_exports__ComplementShape = __webpack_exports__.Iy;
-var __webpack_exports__DIR_DOWN = __webpack_exports__.ik;
-var __webpack_exports__DIR_UP = __webpack_exports__.fY;
+var __webpack_exports__ConstDirLight = __webpack_exports__.Vf;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
-var __webpack_exports__ESun = __webpack_exports__.Gj;
 var __webpack_exports__EarthTexture = __webpack_exports__.KO;
 var __webpack_exports__ExpFog = __webpack_exports__.c$;
+var __webpack_exports__FakeBall = __webpack_exports__.OZ;
+var __webpack_exports__FakeBallShape = __webpack_exports__.Ao;
 var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
 var __webpack_exports__Group = __webpack_exports__.ZA;
@@ -77369,8 +77958,10 @@ var __webpack_exports__IsotropicChaseControls = __webpack_exports__.$m;
 var __webpack_exports__KeyGenericControls = __webpack_exports__.Nh;
 var __webpack_exports__LEFT = __webpack_exports__.RL;
 var __webpack_exports__Light = __webpack_exports__._k;
-var __webpack_exports__LocalBall = __webpack_exports__.jo;
-var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
+var __webpack_exports__LocalFakeBall = __webpack_exports__.oR;
+var __webpack_exports__LocalFakeBallShape = __webpack_exports__.lt;
+var __webpack_exports__LocalPotato = __webpack_exports__.tl;
+var __webpack_exports__LocalPotatoShape = __webpack_exports__.HI;
 var __webpack_exports__MarsTexture = __webpack_exports__.Qv;
 var __webpack_exports__Material = __webpack_exports__.F5;
 var __webpack_exports__Matrix2 = __webpack_exports__.Uc;
@@ -77385,9 +77976,8 @@ var __webpack_exports__PathTracerWrapMaterial = __webpack_exports__._K;
 var __webpack_exports__PhongMaterial = __webpack_exports__.JF;
 var __webpack_exports__PhongWrapMaterial = __webpack_exports__.Lv;
 var __webpack_exports__Point = __webpack_exports__.E9;
-var __webpack_exports__PointLight = __webpack_exports__.ce;
 var __webpack_exports__Position = __webpack_exports__.Ly;
-var __webpack_exports__QuadRing = __webpack_exports__.iv;
+var __webpack_exports__QuadRing = __webpack_exports__.jo;
 var __webpack_exports__QuadRingElement = __webpack_exports__.mH;
 var __webpack_exports__QuadRingMatrix4 = __webpack_exports__.xd;
 var __webpack_exports__Quaternion = __webpack_exports__._f;
@@ -77420,13 +78010,12 @@ var __webpack_exports__WrapShape = __webpack_exports__.$9;
 var __webpack_exports__XRControllerModelFactory = __webpack_exports__.iR;
 var __webpack_exports__bind = __webpack_exports__.ak;
 var __webpack_exports__complement = __webpack_exports__.Cy;
-var __webpack_exports__cuspedTorusSet = __webpack_exports__.Y7;
+var __webpack_exports__fiberLoopSet = __webpack_exports__.tA;
+var __webpack_exports__genus2Set = __webpack_exports__.Zk;
 var __webpack_exports__intersection = __webpack_exports__.jV;
 var __webpack_exports__orbiTorusSet = __webpack_exports__.mm;
 var __webpack_exports__phongWrap = __webpack_exports__.IJ;
-var __webpack_exports__planeSet = __webpack_exports__.cR;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Clock as Clock, __webpack_exports__Color as Color, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__ESun as ESun, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseControls as IsotropicChaseControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__Matrix3 as Matrix3, __webpack_exports__Matrix4 as Matrix4, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__Quaternion as Quaternion, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootControls as ShootControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRControlsDrag as VRControlsDrag, __webpack_exports__VRControlsMove as VRControlsMove, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__Vector2 as Vector2, __webpack_exports__Vector3 as Vector3, __webpack_exports__Vector4 as Vector4, __webpack_exports__WebGLRenderer as WebGLRenderer, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__intersection as intersection, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Clock as Clock, __webpack_exports__Color as Color, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseControls as IsotropicChaseControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__Matrix3 as Matrix3, __webpack_exports__Matrix4 as Matrix4, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__Quaternion as Quaternion, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootControls as ShootControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRControlsDrag as VRControlsDrag, __webpack_exports__VRControlsMove as VRControlsMove, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__Vector2 as Vector2, __webpack_exports__Vector3 as Vector3, __webpack_exports__Vector4 as Vector4, __webpack_exports__WebGLRenderer as WebGLRenderer, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__fiberLoopSet as fiberLoopSet, __webpack_exports__genus2Set as genus2Set, __webpack_exports__intersection as intersection, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__phongWrap as phongWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };

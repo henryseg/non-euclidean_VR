@@ -37,11 +37,9 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "ec": () => (/* reexport */ Ball),
-  "Yb": () => (/* reexport */ BallShape),
   "QU": () => (/* reexport */ BasicCamera),
   "ZH": () => (/* reexport */ BasicPTMaterial),
-  "K9": () => (/* binding */ thurstonH2E_BasicRenderer),
+  "K9": () => (/* binding */ thurstonSol_BasicRenderer),
   "cK": () => (/* reexport */ CREEPING_FULL),
   "_x": () => (/* reexport */ CREEPING_OFF),
   "kj": () => (/* reexport */ CREEPING_STRICT),
@@ -49,25 +47,30 @@ __webpack_require__.d(__webpack_exports__, {
   "SU": () => (/* reexport */ Clock),
   "Il": () => (/* reexport */ Color),
   "Iy": () => (/* reexport */ ComplementShape),
-  "ik": () => (/* reexport */ DIR_DOWN),
-  "fY": () => (/* reexport */ DIR_UP),
+  "Vf": () => (/* reexport */ ConstDirLight),
   "TB": () => (/* reexport */ DebugMaterial),
-  "Gj": () => (/* reexport */ ESun),
   "KO": () => (/* reexport */ EarthTexture),
   "c$": () => (/* reexport */ ExpFog),
+  "OZ": () => (/* reexport */ FakeBall),
+  "Ao": () => (/* reexport */ FakeBallShape),
   "mD": () => (/* reexport */ FlyControls),
   "yb": () => (/* reexport */ Fog_Fog),
   "ZA": () => (/* reexport */ Group_Group),
   "Jz": () => (/* reexport */ GroupElement_GroupElement),
   "HZ": () => (/* reexport */ InfoControls),
   "TN": () => (/* reexport */ IntersectionShape),
-  "JV": () => (/* reexport */ Isometry),
+  "JV": () => (/* reexport */ Isometry_Isometry),
   "$m": () => (/* reexport */ IsotropicChaseControls),
   "Nh": () => (/* reexport */ KeyGenericControls),
   "RL": () => (/* reexport */ LEFT),
   "_k": () => (/* reexport */ Light_Light),
-  "jo": () => (/* reexport */ LocalBall),
-  "Q": () => (/* reexport */ LocalBallShape),
+  "EB": () => (/* reexport */ LocalCube),
+  "oR": () => (/* reexport */ LocalFakeBall),
+  "lt": () => (/* reexport */ LocalFakeBallShape),
+  "mU": () => (/* reexport */ LocalXYHalfSpace),
+  "Vh": () => (/* reexport */ LocalXYHalfSpaceShape),
+  "Qc": () => (/* reexport */ LocalZHalfSpace),
+  "Q9": () => (/* reexport */ LocalZHalfSpaceShape),
   "Qv": () => (/* reexport */ MarsTexture),
   "F5": () => (/* reexport */ Material_Material),
   "Uc": () => (/* reexport */ Matrix2),
@@ -77,14 +80,13 @@ __webpack_require__.d(__webpack_exports__, {
   "oB": () => (/* reexport */ NormalMaterial),
   "pJ": () => (/* reexport */ PTMaterial),
   "GW": () => (/* reexport */ PathTracerCamera),
-  "DZ": () => (/* binding */ thurstonH2E_PathTracerRenderer),
+  "DZ": () => (/* binding */ thurstonSol_PathTracerRenderer),
   "_K": () => (/* reexport */ PathTracerWrapMaterial),
   "JF": () => (/* reexport */ PhongMaterial),
   "Lv": () => (/* reexport */ PhongWrapMaterial),
-  "E9": () => (/* reexport */ Point),
-  "ce": () => (/* reexport */ PointLight_PointLight),
+  "E9": () => (/* reexport */ Point_Point),
   "Ly": () => (/* reexport */ Position),
-  "iv": () => (/* reexport */ QuadRing),
+  "jo": () => (/* reexport */ QuadRing),
   "mH": () => (/* reexport */ QuadRingElement),
   "xd": () => (/* reexport */ QuadRingMatrix4),
   "_f": () => (/* reexport */ Quaternion),
@@ -99,29 +101,33 @@ __webpack_require__.d(__webpack_exports__, {
   "_D": () => (/* reexport */ SunTexture),
   "$p": () => (/* reexport */ SwitchControls),
   "xG": () => (/* reexport */ TeleportationSet),
-  "qC": () => (/* binding */ thurstonH2E_Thurston),
-  "N$": () => (/* binding */ thurstonH2E_ThurstonLite),
-  "TO": () => (/* binding */ thurstonH2E_ThurstonVR),
+  "qC": () => (/* binding */ thurstonSol_Thurston),
+  "N$": () => (/* binding */ thurstonSol_ThurstonLite),
+  "TO": () => (/* binding */ thurstonSol_ThurstonVR),
   "yI": () => (/* reexport */ UnionShape),
   "E6": () => (/* reexport */ VRCamera),
   "IZ": () => (/* reexport */ VRControlsDrag),
   "Ac": () => (/* reexport */ VRControlsMove),
-  "zO": () => (/* binding */ thurstonH2E_VRRenderer),
+  "zO": () => (/* binding */ thurstonSol_VRRenderer),
   "cB": () => (/* reexport */ VaryingColorMaterial),
   "OW": () => (/* reexport */ Vector),
   "FM": () => (/* reexport */ Vector2),
-  "P": () => (/* reexport */ Vector3),
+  "P": () => (/* reexport */ three_module_Vector3),
   "Lt": () => (/* reexport */ Vector4),
   "CP": () => (/* reexport */ WebGLRenderer),
   "$9": () => (/* reexport */ WrapShape),
   "iR": () => (/* reexport */ XRControllerModelFactory),
+  "Y2": () => (/* reexport */ XYHalfSpace),
+  "ot": () => (/* reexport */ XYHalfSpaceShape),
+  "JX": () => (/* reexport */ ZHalfSpace),
+  "fr": () => (/* reexport */ ZHalfSpaceShape),
+  "t2": () => (/* reexport */ ZSun),
   "ak": () => (/* reexport */ bind),
   "Cy": () => (/* reexport */ complement),
-  "Y7": () => (/* reexport */ cuspedTorus_set),
   "jV": () => (/* reexport */ intersection),
-  "mm": () => (/* reexport */ orbiTorus_set),
+  "sU": () => (/* reexport */ localCubeShape),
+  "jS": () => (/* reexport */ mappingTorus_set),
   "IJ": () => (/* reexport */ phongWrap),
-  "cR": () => (/* reexport */ plane_set),
   "dV": () => (/* reexport */ set),
   "G0": () => (/* reexport */ union),
   "re": () => (/* reexport */ wrap),
@@ -3428,7 +3434,7 @@ class Quaternion {
 
 Quaternion.prototype.isQuaternion = true;
 
-class Vector3 {
+class three_module_Vector3 {
 
 	constructor( x = 0, y = 0, z = 0 ) {
 
@@ -4140,14 +4146,14 @@ class Vector3 {
 
 }
 
-Vector3.prototype.isVector3 = true;
+three_module_Vector3.prototype.isVector3 = true;
 
-const _vector$c = /*@__PURE__*/ new Vector3();
+const _vector$c = /*@__PURE__*/ new three_module_Vector3();
 const _quaternion$4 = /*@__PURE__*/ new Quaternion();
 
 class Box3 {
 
-	constructor( min = new Vector3( + Infinity, + Infinity, + Infinity ), max = new Vector3( - Infinity, - Infinity, - Infinity ) ) {
+	constructor( min = new three_module_Vector3( + Infinity, + Infinity, + Infinity ), max = new three_module_Vector3( - Infinity, - Infinity, - Infinity ) ) {
 
 		this.min = min;
 		this.max = max;
@@ -4299,7 +4305,7 @@ class Box3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Box3: .getCenter() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -4312,7 +4318,7 @@ class Box3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Box3: .getSize() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -4407,7 +4413,7 @@ class Box3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Box3: .getParameter() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -4543,7 +4549,7 @@ class Box3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Box3: .clampPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -4638,36 +4644,36 @@ class Box3 {
 Box3.prototype.isBox3 = true;
 
 const _points = [
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3(),
-	/*@__PURE__*/ new Vector3()
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3(),
+	/*@__PURE__*/ new three_module_Vector3()
 ];
 
-const _vector$b = /*@__PURE__*/ new Vector3();
+const _vector$b = /*@__PURE__*/ new three_module_Vector3();
 
 const _box$3 = /*@__PURE__*/ new Box3();
 
 // triangle centered vertices
 
-const _v0$2 = /*@__PURE__*/ new Vector3();
-const _v1$7 = /*@__PURE__*/ new Vector3();
-const _v2$3 = /*@__PURE__*/ new Vector3();
+const _v0$2 = /*@__PURE__*/ new three_module_Vector3();
+const _v1$7 = /*@__PURE__*/ new three_module_Vector3();
+const _v2$3 = /*@__PURE__*/ new three_module_Vector3();
 
 // triangle edge vectors
 
-const _f0 = /*@__PURE__*/ new Vector3();
-const _f1 = /*@__PURE__*/ new Vector3();
-const _f2 = /*@__PURE__*/ new Vector3();
+const _f0 = /*@__PURE__*/ new three_module_Vector3();
+const _f1 = /*@__PURE__*/ new three_module_Vector3();
+const _f2 = /*@__PURE__*/ new three_module_Vector3();
 
-const _center = /*@__PURE__*/ new Vector3();
-const _extents = /*@__PURE__*/ new Vector3();
-const _triangleNormal = /*@__PURE__*/ new Vector3();
-const _testAxis = /*@__PURE__*/ new Vector3();
+const _center = /*@__PURE__*/ new three_module_Vector3();
+const _extents = /*@__PURE__*/ new three_module_Vector3();
+const _triangleNormal = /*@__PURE__*/ new three_module_Vector3();
+const _testAxis = /*@__PURE__*/ new three_module_Vector3();
 
 function satForAxes( axes, v0, v1, v2, extents ) {
 
@@ -4696,13 +4702,13 @@ function satForAxes( axes, v0, v1, v2, extents ) {
 }
 
 const _box$2 = /*@__PURE__*/ new Box3();
-const _v1$6 = /*@__PURE__*/ new Vector3();
-const _toFarthestPoint = /*@__PURE__*/ new Vector3();
-const _toPoint = /*@__PURE__*/ new Vector3();
+const _v1$6 = /*@__PURE__*/ new three_module_Vector3();
+const _toFarthestPoint = /*@__PURE__*/ new three_module_Vector3();
+const _toPoint = /*@__PURE__*/ new three_module_Vector3();
 
 class Sphere {
 
-	constructor( center = new Vector3(), radius = - 1 ) {
+	constructor( center = new three_module_Vector3(), radius = - 1 ) {
 
 		this.center = center;
 		this.radius = radius;
@@ -4809,7 +4815,7 @@ class Sphere {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Sphere: .clampPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -4924,18 +4930,18 @@ class Sphere {
 
 }
 
-const _vector$a = /*@__PURE__*/ new Vector3();
-const _segCenter = /*@__PURE__*/ new Vector3();
-const _segDir = /*@__PURE__*/ new Vector3();
-const _diff = /*@__PURE__*/ new Vector3();
+const _vector$a = /*@__PURE__*/ new three_module_Vector3();
+const _segCenter = /*@__PURE__*/ new three_module_Vector3();
+const _segDir = /*@__PURE__*/ new three_module_Vector3();
+const _diff = /*@__PURE__*/ new three_module_Vector3();
 
-const _edge1 = /*@__PURE__*/ new Vector3();
-const _edge2 = /*@__PURE__*/ new Vector3();
-const _normal$1 = /*@__PURE__*/ new Vector3();
+const _edge1 = /*@__PURE__*/ new three_module_Vector3();
+const _edge2 = /*@__PURE__*/ new three_module_Vector3();
+const _normal$1 = /*@__PURE__*/ new three_module_Vector3();
 
 class Ray {
 
-	constructor( origin = new Vector3(), direction = new Vector3( 0, 0, - 1 ) ) {
+	constructor( origin = new three_module_Vector3(), direction = new three_module_Vector3( 0, 0, - 1 ) ) {
 
 		this.origin = origin;
 		this.direction = direction;
@@ -4965,7 +4971,7 @@ class Ray {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Ray: .at() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -4994,7 +5000,7 @@ class Ray {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Ray: .closestPointToPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -6305,13 +6311,13 @@ class Matrix4 {
 
 Matrix4.prototype.isMatrix4 = true;
 
-const _v1$5 = /*@__PURE__*/ new Vector3();
+const _v1$5 = /*@__PURE__*/ new three_module_Vector3();
 const _m1$2 = /*@__PURE__*/ new Matrix4();
-const _zero = /*@__PURE__*/ new Vector3( 0, 0, 0 );
-const _one = /*@__PURE__*/ new Vector3( 1, 1, 1 );
-const _x = /*@__PURE__*/ new Vector3();
-const _y = /*@__PURE__*/ new Vector3();
-const _z = /*@__PURE__*/ new Vector3();
+const _zero = /*@__PURE__*/ new three_module_Vector3( 0, 0, 0 );
+const _one = /*@__PURE__*/ new three_module_Vector3( 1, 1, 1 );
+const _x = /*@__PURE__*/ new three_module_Vector3();
+const _y = /*@__PURE__*/ new three_module_Vector3();
+const _z = /*@__PURE__*/ new three_module_Vector3();
 
 const _matrix$1 = /*@__PURE__*/ new Matrix4();
 const _quaternion$3 = /*@__PURE__*/ new Quaternion();
@@ -6608,7 +6614,7 @@ class Euler {
 
 		} else {
 
-			return new Vector3( this._x, this._y, this._z );
+			return new three_module_Vector3( this._x, this._y, this._z );
 
 		}
 
@@ -6685,18 +6691,18 @@ class Layers {
 
 let _object3DId = 0;
 
-const _v1$4 = /*@__PURE__*/ new Vector3();
+const _v1$4 = /*@__PURE__*/ new three_module_Vector3();
 const _q1 = /*@__PURE__*/ new Quaternion();
 const _m1$1 = /*@__PURE__*/ new Matrix4();
-const _target = /*@__PURE__*/ new Vector3();
+const _target = /*@__PURE__*/ new three_module_Vector3();
 
-const _position$3 = /*@__PURE__*/ new Vector3();
-const _scale$2 = /*@__PURE__*/ new Vector3();
+const _position$3 = /*@__PURE__*/ new three_module_Vector3();
+const _scale$2 = /*@__PURE__*/ new three_module_Vector3();
 const _quaternion$2 = /*@__PURE__*/ new Quaternion();
 
-const _xAxis = /*@__PURE__*/ new Vector3( 1, 0, 0 );
-const _yAxis = /*@__PURE__*/ new Vector3( 0, 1, 0 );
-const _zAxis = /*@__PURE__*/ new Vector3( 0, 0, 1 );
+const _xAxis = /*@__PURE__*/ new three_module_Vector3( 1, 0, 0 );
+const _yAxis = /*@__PURE__*/ new three_module_Vector3( 0, 1, 0 );
+const _zAxis = /*@__PURE__*/ new three_module_Vector3( 0, 0, 1 );
 
 const _addedEvent = { type: 'added' };
 const _removedEvent = { type: 'removed' };
@@ -6719,10 +6725,10 @@ class Object3D extends EventDispatcher {
 
 		this.up = Object3D.DefaultUp.clone();
 
-		const position = new Vector3();
+		const position = new three_module_Vector3();
 		const rotation = new Euler();
 		const quaternion = new Quaternion();
-		const scale = new Vector3( 1, 1, 1 );
+		const scale = new three_module_Vector3( 1, 1, 1 );
 
 		function onRotationChange() {
 
@@ -7140,7 +7146,7 @@ class Object3D extends EventDispatcher {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Object3D: .getWorldPosition() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7172,7 +7178,7 @@ class Object3D extends EventDispatcher {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Object3D: .getWorldScale() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7189,7 +7195,7 @@ class Object3D extends EventDispatcher {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Object3D: .getWorldDirection() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7595,18 +7601,18 @@ class Object3D extends EventDispatcher {
 
 }
 
-Object3D.DefaultUp = new Vector3( 0, 1, 0 );
+Object3D.DefaultUp = new three_module_Vector3( 0, 1, 0 );
 Object3D.DefaultMatrixAutoUpdate = true;
 
 Object3D.prototype.isObject3D = true;
 
-const _vector1 = /*@__PURE__*/ new Vector3();
-const _vector2$1 = /*@__PURE__*/ new Vector3();
+const _vector1 = /*@__PURE__*/ new three_module_Vector3();
+const _vector2$1 = /*@__PURE__*/ new three_module_Vector3();
 const _normalMatrix = /*@__PURE__*/ new Matrix3();
 
 class Plane {
 
-	constructor( normal = new Vector3( 1, 0, 0 ), constant = 0 ) {
+	constructor( normal = new three_module_Vector3( 1, 0, 0 ), constant = 0 ) {
 
 		// normal is assumed to be normalized
 
@@ -7701,7 +7707,7 @@ class Plane {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Plane: .projectPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7714,7 +7720,7 @@ class Plane {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Plane: .intersectLine() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7776,7 +7782,7 @@ class Plane {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Plane: .coplanarPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7822,21 +7828,21 @@ class Plane {
 
 Plane.prototype.isPlane = true;
 
-const _v0$1 = /*@__PURE__*/ new Vector3();
-const _v1$3 = /*@__PURE__*/ new Vector3();
-const _v2$2 = /*@__PURE__*/ new Vector3();
-const _v3$1 = /*@__PURE__*/ new Vector3();
+const _v0$1 = /*@__PURE__*/ new three_module_Vector3();
+const _v1$3 = /*@__PURE__*/ new three_module_Vector3();
+const _v2$2 = /*@__PURE__*/ new three_module_Vector3();
+const _v3$1 = /*@__PURE__*/ new three_module_Vector3();
 
-const _vab = /*@__PURE__*/ new Vector3();
-const _vac = /*@__PURE__*/ new Vector3();
-const _vbc = /*@__PURE__*/ new Vector3();
-const _vap = /*@__PURE__*/ new Vector3();
-const _vbp = /*@__PURE__*/ new Vector3();
-const _vcp = /*@__PURE__*/ new Vector3();
+const _vab = /*@__PURE__*/ new three_module_Vector3();
+const _vac = /*@__PURE__*/ new three_module_Vector3();
+const _vbc = /*@__PURE__*/ new three_module_Vector3();
+const _vap = /*@__PURE__*/ new three_module_Vector3();
+const _vbp = /*@__PURE__*/ new three_module_Vector3();
+const _vcp = /*@__PURE__*/ new three_module_Vector3();
 
 class Triangle {
 
-	constructor( a = new Vector3(), b = new Vector3(), c = new Vector3() ) {
+	constructor( a = new three_module_Vector3(), b = new three_module_Vector3(), c = new three_module_Vector3() ) {
 
 		this.a = a;
 		this.b = b;
@@ -7849,7 +7855,7 @@ class Triangle {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Triangle: .getNormal() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7887,7 +7893,7 @@ class Triangle {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Triangle: .getBarycoord() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -7990,7 +7996,7 @@ class Triangle {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Triangle: .getMidpoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -8052,7 +8058,7 @@ class Triangle {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Triangle: .closestPointToPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -9317,7 +9323,7 @@ class MeshBasicMaterial extends Material {
 
 MeshBasicMaterial.prototype.isMeshBasicMaterial = true;
 
-const _vector$9 = /*@__PURE__*/ new Vector3();
+const _vector$9 = /*@__PURE__*/ new three_module_Vector3();
 const _vector2 = /*@__PURE__*/ new Vector2();
 
 class BufferAttribute {
@@ -9460,7 +9466,7 @@ class BufferAttribute {
 			if ( vector === undefined ) {
 
 				console.warn( 'THREE.BufferAttribute.copyVector3sArray(): vector is undefined', i );
-				vector = new Vector3();
+				vector = new three_module_Vector3();
 
 			}
 
@@ -9862,10 +9868,10 @@ let _id = 0;
 
 const _m1 = /*@__PURE__*/ new Matrix4();
 const _obj = /*@__PURE__*/ new Object3D();
-const _offset = /*@__PURE__*/ new Vector3();
+const _offset = /*@__PURE__*/ new three_module_Vector3();
 const _box$1 = /*@__PURE__*/ new Box3();
 const _boxMorphTargets = /*@__PURE__*/ new Box3();
-const _vector$8 = /*@__PURE__*/ new Vector3();
+const _vector$8 = /*@__PURE__*/ new three_module_Vector3();
 
 class BufferGeometry extends EventDispatcher {
 
@@ -10149,8 +10155,8 @@ class BufferGeometry extends EventDispatcher {
 			console.error( 'THREE.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false".', this );
 
 			this.boundingBox.set(
-				new Vector3( - Infinity, - Infinity, - Infinity ),
-				new Vector3( + Infinity, + Infinity, + Infinity )
+				new three_module_Vector3( - Infinity, - Infinity, - Infinity ),
+				new three_module_Vector3( + Infinity, + Infinity, + Infinity )
 			);
 
 			return;
@@ -10218,7 +10224,7 @@ class BufferGeometry extends EventDispatcher {
 
 			console.error( 'THREE.BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere. Alternatively set "mesh.frustumCulled" to "false".', this );
 
-			this.boundingSphere.set( new Vector3(), Infinity );
+			this.boundingSphere.set( new three_module_Vector3(), Infinity );
 
 			return;
 
@@ -10358,21 +10364,21 @@ class BufferGeometry extends EventDispatcher {
 
 		for ( let i = 0; i < nVertices; i ++ ) {
 
-			tan1[ i ] = new Vector3();
-			tan2[ i ] = new Vector3();
+			tan1[ i ] = new three_module_Vector3();
+			tan2[ i ] = new three_module_Vector3();
 
 		}
 
-		const vA = new Vector3(),
-			vB = new Vector3(),
-			vC = new Vector3(),
+		const vA = new three_module_Vector3(),
+			vB = new three_module_Vector3(),
+			vC = new three_module_Vector3(),
 
 			uvA = new Vector2(),
 			uvB = new Vector2(),
 			uvC = new Vector2(),
 
-			sdir = new Vector3(),
-			tdir = new Vector3();
+			sdir = new three_module_Vector3(),
+			tdir = new three_module_Vector3();
 
 		function handleTriangle( a, b, c ) {
 
@@ -10439,8 +10445,8 @@ class BufferGeometry extends EventDispatcher {
 
 		}
 
-		const tmp = new Vector3(), tmp2 = new Vector3();
-		const n = new Vector3(), n2 = new Vector3();
+		const tmp = new three_module_Vector3(), tmp2 = new three_module_Vector3();
+		const n = new three_module_Vector3(), n2 = new three_module_Vector3();
 
 		function handleVertex( v ) {
 
@@ -10512,9 +10518,9 @@ class BufferGeometry extends EventDispatcher {
 
 			}
 
-			const pA = new Vector3(), pB = new Vector3(), pC = new Vector3();
-			const nA = new Vector3(), nB = new Vector3(), nC = new Vector3();
-			const cb = new Vector3(), ab = new Vector3();
+			const pA = new three_module_Vector3(), pB = new three_module_Vector3(), pC = new three_module_Vector3();
+			const nA = new three_module_Vector3(), nB = new three_module_Vector3(), nC = new three_module_Vector3();
+			const cb = new three_module_Vector3(), ab = new three_module_Vector3();
 
 			// indexed elements
 
@@ -10997,24 +11003,24 @@ const _inverseMatrix$2 = /*@__PURE__*/ new Matrix4();
 const _ray$2 = /*@__PURE__*/ new Ray();
 const _sphere$3 = /*@__PURE__*/ new Sphere();
 
-const _vA$1 = /*@__PURE__*/ new Vector3();
-const _vB$1 = /*@__PURE__*/ new Vector3();
-const _vC$1 = /*@__PURE__*/ new Vector3();
+const _vA$1 = /*@__PURE__*/ new three_module_Vector3();
+const _vB$1 = /*@__PURE__*/ new three_module_Vector3();
+const _vC$1 = /*@__PURE__*/ new three_module_Vector3();
 
-const _tempA = /*@__PURE__*/ new Vector3();
-const _tempB = /*@__PURE__*/ new Vector3();
-const _tempC = /*@__PURE__*/ new Vector3();
+const _tempA = /*@__PURE__*/ new three_module_Vector3();
+const _tempB = /*@__PURE__*/ new three_module_Vector3();
+const _tempC = /*@__PURE__*/ new three_module_Vector3();
 
-const _morphA = /*@__PURE__*/ new Vector3();
-const _morphB = /*@__PURE__*/ new Vector3();
-const _morphC = /*@__PURE__*/ new Vector3();
+const _morphA = /*@__PURE__*/ new three_module_Vector3();
+const _morphB = /*@__PURE__*/ new three_module_Vector3();
+const _morphC = /*@__PURE__*/ new three_module_Vector3();
 
 const _uvA$1 = /*@__PURE__*/ new Vector2();
 const _uvB$1 = /*@__PURE__*/ new Vector2();
 const _uvC$1 = /*@__PURE__*/ new Vector2();
 
-const _intersectionPoint = /*@__PURE__*/ new Vector3();
-const _intersectionPointWorld = /*@__PURE__*/ new Vector3();
+const _intersectionPoint = /*@__PURE__*/ new three_module_Vector3();
+const _intersectionPointWorld = /*@__PURE__*/ new three_module_Vector3();
 
 class Mesh extends Object3D {
 
@@ -11386,7 +11392,7 @@ function checkBufferGeometryIntersection( object, material, raycaster, ray, posi
 			a: a,
 			b: b,
 			c: c,
-			normal: new Vector3(),
+			normal: new three_module_Vector3(),
 			materialIndex: 0
 		};
 
@@ -11468,7 +11474,7 @@ class BoxGeometry extends BufferGeometry {
 			let vertexCounter = 0;
 			let groupCount = 0;
 
-			const vector = new Vector3();
+			const vector = new three_module_Vector3();
 
 			// generate vertices, normals and uvs
 
@@ -11863,7 +11869,7 @@ class Camera extends Object3D {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Camera: .getWorldDirection() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -12152,37 +12158,37 @@ class CubeCamera extends Object3D {
 		const cameraPX = new PerspectiveCamera( fov, aspect, near, far );
 		cameraPX.layers = this.layers;
 		cameraPX.up.set( 0, - 1, 0 );
-		cameraPX.lookAt( new Vector3( 1, 0, 0 ) );
+		cameraPX.lookAt( new three_module_Vector3( 1, 0, 0 ) );
 		this.add( cameraPX );
 
 		const cameraNX = new PerspectiveCamera( fov, aspect, near, far );
 		cameraNX.layers = this.layers;
 		cameraNX.up.set( 0, - 1, 0 );
-		cameraNX.lookAt( new Vector3( - 1, 0, 0 ) );
+		cameraNX.lookAt( new three_module_Vector3( - 1, 0, 0 ) );
 		this.add( cameraNX );
 
 		const cameraPY = new PerspectiveCamera( fov, aspect, near, far );
 		cameraPY.layers = this.layers;
 		cameraPY.up.set( 0, 0, 1 );
-		cameraPY.lookAt( new Vector3( 0, 1, 0 ) );
+		cameraPY.lookAt( new three_module_Vector3( 0, 1, 0 ) );
 		this.add( cameraPY );
 
 		const cameraNY = new PerspectiveCamera( fov, aspect, near, far );
 		cameraNY.layers = this.layers;
 		cameraNY.up.set( 0, 0, - 1 );
-		cameraNY.lookAt( new Vector3( 0, - 1, 0 ) );
+		cameraNY.lookAt( new three_module_Vector3( 0, - 1, 0 ) );
 		this.add( cameraNY );
 
 		const cameraPZ = new PerspectiveCamera( fov, aspect, near, far );
 		cameraPZ.layers = this.layers;
 		cameraPZ.up.set( 0, - 1, 0 );
-		cameraPZ.lookAt( new Vector3( 0, 0, 1 ) );
+		cameraPZ.lookAt( new three_module_Vector3( 0, 0, 1 ) );
 		this.add( cameraPZ );
 
 		const cameraNZ = new PerspectiveCamera( fov, aspect, near, far );
 		cameraNZ.layers = this.layers;
 		cameraNZ.up.set( 0, - 1, 0 );
-		cameraNZ.lookAt( new Vector3( 0, 0, - 1 ) );
+		cameraNZ.lookAt( new three_module_Vector3( 0, 0, - 1 ) );
 		this.add( cameraNZ );
 
 	}
@@ -12411,7 +12417,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 WebGLCubeRenderTarget.prototype.isWebGLCubeRenderTarget = true;
 
 const _sphere$2 = /*@__PURE__*/ new Sphere();
-const _vector$7 = /*@__PURE__*/ new Vector3();
+const _vector$7 = /*@__PURE__*/ new three_module_Vector3();
 
 class Frustum {
 
@@ -13736,7 +13742,7 @@ const ShaderLib = {
 			UniformsLib.common,
 			UniformsLib.displacementmap,
 			{
-				referencePosition: { value: new Vector3() },
+				referencePosition: { value: new three_module_Vector3() },
 				nearDistance: { value: 1 },
 				farDistance: { value: 1000 }
 			}
@@ -18277,15 +18283,15 @@ function UniformsCache() {
 
 				case 'DirectionalLight':
 					uniforms = {
-						direction: new Vector3(),
+						direction: new three_module_Vector3(),
 						color: new Color()
 					};
 					break;
 
 				case 'SpotLight':
 					uniforms = {
-						position: new Vector3(),
-						direction: new Vector3(),
+						position: new three_module_Vector3(),
+						direction: new three_module_Vector3(),
 						color: new Color(),
 						distance: 0,
 						coneCos: 0,
@@ -18296,7 +18302,7 @@ function UniformsCache() {
 
 				case 'PointLight':
 					uniforms = {
-						position: new Vector3(),
+						position: new three_module_Vector3(),
 						color: new Color(),
 						distance: 0,
 						decay: 0
@@ -18305,7 +18311,7 @@ function UniformsCache() {
 
 				case 'HemisphereLight':
 					uniforms = {
-						direction: new Vector3(),
+						direction: new three_module_Vector3(),
 						skyColor: new Color(),
 						groundColor: new Color()
 					};
@@ -18314,9 +18320,9 @@ function UniformsCache() {
 				case 'RectAreaLight':
 					uniforms = {
 						color: new Color(),
-						position: new Vector3(),
-						halfWidth: new Vector3(),
-						halfHeight: new Vector3()
+						position: new three_module_Vector3(),
+						halfWidth: new three_module_Vector3(),
+						halfHeight: new three_module_Vector3()
 					};
 					break;
 
@@ -18446,9 +18452,9 @@ function WebGLLights( extensions, capabilities ) {
 
 	};
 
-	for ( let i = 0; i < 9; i ++ ) state.probe.push( new Vector3() );
+	for ( let i = 0; i < 9; i ++ ) state.probe.push( new three_module_Vector3() );
 
-	const vector3 = new Vector3();
+	const vector3 = new three_module_Vector3();
 	const matrix4 = new Matrix4();
 	const matrix42 = new Matrix4();
 
@@ -19001,7 +19007,7 @@ class MeshDistanceMaterial extends Material {
 
 		this.type = 'MeshDistanceMaterial';
 
-		this.referencePosition = new Vector3();
+		this.referencePosition = new three_module_Vector3();
 		this.nearDistance = 1;
 		this.farDistance = 1000;
 
@@ -22177,9 +22183,9 @@ class WebXRController {
 			this._targetRay.matrixAutoUpdate = false;
 			this._targetRay.visible = false;
 			this._targetRay.hasLinearVelocity = false;
-			this._targetRay.linearVelocity = new Vector3();
+			this._targetRay.linearVelocity = new three_module_Vector3();
 			this._targetRay.hasAngularVelocity = false;
-			this._targetRay.angularVelocity = new Vector3();
+			this._targetRay.angularVelocity = new three_module_Vector3();
 
 		}
 
@@ -22195,9 +22201,9 @@ class WebXRController {
 			this._grip.matrixAutoUpdate = false;
 			this._grip.visible = false;
 			this._grip.hasLinearVelocity = false;
-			this._grip.linearVelocity = new Vector3();
+			this._grip.linearVelocity = new three_module_Vector3();
 			this._grip.hasAngularVelocity = false;
-			this._grip.angularVelocity = new Vector3();
+			this._grip.angularVelocity = new three_module_Vector3();
 
 		}
 
@@ -22700,8 +22706,8 @@ class WebXRManager extends EventDispatcher {
 
 		//
 
-		const cameraLPos = new Vector3();
-		const cameraRPos = new Vector3();
+		const cameraLPos = new three_module_Vector3();
+		const cameraRPos = new three_module_Vector3();
 
 		/**
 		 * Assumes 2 cameras that are parallel and share an X-axis, and that
@@ -23770,7 +23776,7 @@ function WebGLRenderer( parameters ) {
 
 	const _projScreenMatrix = new Matrix4();
 
-	const _vector3 = new Vector3();
+	const _vector3 = new three_module_Vector3();
 
 	const _emptyScene = { background: null, fog: null, environment: null, overrideMaterial: null, isScene: true };
 
@@ -26064,7 +26070,7 @@ class InterleavedBuffer {
 
 InterleavedBuffer.prototype.isInterleavedBuffer = true;
 
-const _vector$6 = /*@__PURE__*/ new Vector3();
+const _vector$6 = /*@__PURE__*/ new three_module_Vector3();
 
 class InterleavedBufferAttribute {
 
@@ -26405,17 +26411,17 @@ SpriteMaterial.prototype.isSpriteMaterial = true;
 
 let _geometry;
 
-const _intersectPoint = /*@__PURE__*/ new Vector3();
-const _worldScale = /*@__PURE__*/ new Vector3();
-const _mvPosition = /*@__PURE__*/ new Vector3();
+const _intersectPoint = /*@__PURE__*/ new three_module_Vector3();
+const _worldScale = /*@__PURE__*/ new three_module_Vector3();
+const _mvPosition = /*@__PURE__*/ new three_module_Vector3();
 
 const _alignedPosition = /*@__PURE__*/ new Vector2();
 const _rotatedPosition = /*@__PURE__*/ new Vector2();
 const _viewWorldMatrix = /*@__PURE__*/ new Matrix4();
 
-const _vA = /*@__PURE__*/ new Vector3();
-const _vB = /*@__PURE__*/ new Vector3();
-const _vC = /*@__PURE__*/ new Vector3();
+const _vA = /*@__PURE__*/ new three_module_Vector3();
+const _vB = /*@__PURE__*/ new three_module_Vector3();
+const _vC = /*@__PURE__*/ new three_module_Vector3();
 
 const _uvA = /*@__PURE__*/ new Vector2();
 const _uvB = /*@__PURE__*/ new Vector2();
@@ -26573,8 +26579,8 @@ function transformVertex( vertexPosition, mvPosition, center, scale, sin, cos ) 
 
 }
 
-const _v1$2 = /*@__PURE__*/ new Vector3();
-const _v2$1 = /*@__PURE__*/ new Vector3();
+const _v1$2 = /*@__PURE__*/ new three_module_Vector3();
+const _v2$1 = /*@__PURE__*/ new three_module_Vector3();
 
 class LOD extends (/* unused pure expression or super */ null && (Object3D)) {
 
@@ -26763,12 +26769,12 @@ class LOD extends (/* unused pure expression or super */ null && (Object3D)) {
 
 }
 
-const _basePosition = /*@__PURE__*/ new Vector3();
+const _basePosition = /*@__PURE__*/ new three_module_Vector3();
 
 const _skinIndex = /*@__PURE__*/ new Vector4();
 const _skinWeight = /*@__PURE__*/ new Vector4();
 
-const _vector$5 = /*@__PURE__*/ new Vector3();
+const _vector$5 = /*@__PURE__*/ new three_module_Vector3();
 const _matrix = /*@__PURE__*/ new Matrix4();
 
 class SkinnedMesh extends Mesh {
@@ -27391,8 +27397,8 @@ class LineBasicMaterial extends Material {
 
 LineBasicMaterial.prototype.isLineBasicMaterial = true;
 
-const _start$1 = /*@__PURE__*/ new Vector3();
-const _end$1 = /*@__PURE__*/ new Vector3();
+const _start$1 = /*@__PURE__*/ new three_module_Vector3();
+const _end$1 = /*@__PURE__*/ new three_module_Vector3();
 const _inverseMatrix$1 = /*@__PURE__*/ new Matrix4();
 const _ray$1 = /*@__PURE__*/ new Ray();
 const _sphere$1 = /*@__PURE__*/ new Sphere();
@@ -27489,10 +27495,10 @@ class Line extends Object3D {
 		const localThreshold = threshold / ( ( this.scale.x + this.scale.y + this.scale.z ) / 3 );
 		const localThresholdSq = localThreshold * localThreshold;
 
-		const vStart = new Vector3();
-		const vEnd = new Vector3();
-		const interSegment = new Vector3();
-		const interRay = new Vector3();
+		const vStart = new three_module_Vector3();
+		const vEnd = new three_module_Vector3();
+		const interSegment = new three_module_Vector3();
+		const interRay = new three_module_Vector3();
 		const step = this.isLineSegments ? 2 : 1;
 
 		if ( geometry.isBufferGeometry ) {
@@ -27633,8 +27639,8 @@ class Line extends Object3D {
 
 Line.prototype.isLine = true;
 
-const _start = /*@__PURE__*/ new Vector3();
-const _end = /*@__PURE__*/ new Vector3();
+const _start = /*@__PURE__*/ new three_module_Vector3();
+const _end = /*@__PURE__*/ new three_module_Vector3();
 
 class LineSegments extends Line {
 
@@ -27768,7 +27774,7 @@ PointsMaterial.prototype.isPointsMaterial = true;
 const _inverseMatrix = /*@__PURE__*/ new Matrix4();
 const _ray = /*@__PURE__*/ new Ray();
 const _sphere = /*@__PURE__*/ new Sphere();
-const _position$2 = /*@__PURE__*/ new Vector3();
+const _position$2 = /*@__PURE__*/ new three_module_Vector3();
 
 class Points extends Object3D {
 
@@ -27920,7 +27926,7 @@ function testPoint( point, index, localThresholdSq, matrixWorld, raycaster, inte
 
 	if ( rayPointDistanceSq < localThresholdSq ) {
 
-		const intersectPoint = new Vector3();
+		const intersectPoint = new three_module_Vector3();
 
 		_ray.closestPointToPoint( point, intersectPoint );
 		intersectPoint.applyMatrix4( matrixWorld );
@@ -28094,7 +28100,7 @@ class CircleGeometry extends BufferGeometry {
 
 		// helper variables
 
-		const vertex = new Vector3();
+		const vertex = new three_module_Vector3();
 		const uv = new Vector2();
 
 		// center point
@@ -28203,8 +28209,8 @@ class CylinderGeometry extends BufferGeometry {
 
 		function generateTorso() {
 
-			const normal = new Vector3();
-			const vertex = new Vector3();
+			const normal = new three_module_Vector3();
+			const vertex = new three_module_Vector3();
 
 			let groupCount = 0;
 
@@ -28302,7 +28308,7 @@ class CylinderGeometry extends BufferGeometry {
 			const centerIndexStart = index;
 
 			const uv = new Vector2();
-			const vertex = new Vector3();
+			const vertex = new three_module_Vector3();
 
 			let groupCount = 0;
 
@@ -28482,9 +28488,9 @@ class PolyhedronGeometry extends BufferGeometry {
 
 		function subdivide( detail ) {
 
-			const a = new Vector3();
-			const b = new Vector3();
-			const c = new Vector3();
+			const a = new three_module_Vector3();
+			const b = new three_module_Vector3();
+			const c = new three_module_Vector3();
 
 			// iterate over all faces and apply a subdivison with the given detail value
 
@@ -28569,7 +28575,7 @@ class PolyhedronGeometry extends BufferGeometry {
 
 		function applyRadius( radius ) {
 
-			const vertex = new Vector3();
+			const vertex = new three_module_Vector3();
 
 			// iterate over the entire buffer and apply the radius to each vertex
 
@@ -28591,7 +28597,7 @@ class PolyhedronGeometry extends BufferGeometry {
 
 		function generateUVs() {
 
-			const vertex = new Vector3();
+			const vertex = new three_module_Vector3();
 
 			for ( let i = 0; i < vertexBuffer.length; i += 3 ) {
 
@@ -28658,11 +28664,11 @@ class PolyhedronGeometry extends BufferGeometry {
 
 		function correctUVs() {
 
-			const a = new Vector3();
-			const b = new Vector3();
-			const c = new Vector3();
+			const a = new three_module_Vector3();
+			const b = new three_module_Vector3();
+			const c = new three_module_Vector3();
 
-			const centroid = new Vector3();
+			const centroid = new three_module_Vector3();
 
 			const uvA = new Vector2();
 			const uvB = new Vector2();
@@ -28783,9 +28789,9 @@ class DodecahedronGeometry extends PolyhedronGeometry {
 
 }
 
-const _v0 = new Vector3();
-const _v1$1 = new Vector3();
-const _normal = new Vector3();
+const _v0 = new three_module_Vector3();
+const _v1$1 = new three_module_Vector3();
+const _normal = new three_module_Vector3();
 const _triangle = new Triangle();
 
 class EdgesGeometry extends BufferGeometry {
@@ -29908,9 +29914,9 @@ class ExtrudeGeometry extends BufferGeometry {
 
 				// console.log(splineTube, 'splineTube', splineTube.normals.length, 'steps', steps, 'extrudePts', extrudePts.length);
 
-				binormal = new Vector3();
-				normal = new Vector3();
-				position2 = new Vector3();
+				binormal = new three_module_Vector3();
+				normal = new three_module_Vector3();
+				position2 = new three_module_Vector3();
 
 			}
 
@@ -30640,7 +30646,7 @@ class LatheGeometry extends BufferGeometry {
 		// helper variables
 
 		const inverseSegments = 1.0 / segments;
-		const vertex = new Vector3();
+		const vertex = new three_module_Vector3();
 		const uv = new Vector2();
 
 		// generate vertices and uvs
@@ -30712,9 +30718,9 @@ class LatheGeometry extends BufferGeometry {
 		if ( phiLength === Math.PI * 2 ) {
 
 			const normals = this.attributes.normal.array;
-			const n1 = new Vector3();
-			const n2 = new Vector3();
-			const n = new Vector3();
+			const n1 = new three_module_Vector3();
+			const n2 = new three_module_Vector3();
+			const n = new three_module_Vector3();
 
 			// this is the buffer offset for the last line of vertices
 
@@ -30808,10 +30814,10 @@ class ParametricGeometry extends BufferGeometry {
 
 		const EPS = 0.00001;
 
-		const normal = new Vector3();
+		const normal = new three_module_Vector3();
 
-		const p0 = new Vector3(), p1 = new Vector3();
-		const pu = new Vector3(), pv = new Vector3();
+		const p0 = new three_module_Vector3(), p1 = new three_module_Vector3();
+		const pu = new three_module_Vector3(), pv = new three_module_Vector3();
 
 		if ( func.length < 3 ) {
 
@@ -30939,7 +30945,7 @@ class RingGeometry extends BufferGeometry {
 
 		let radius = innerRadius;
 		const radiusStep = ( ( outerRadius - innerRadius ) / phiSegments );
-		const vertex = new Vector3();
+		const vertex = new three_module_Vector3();
 		const uv = new Vector2();
 
 		// generate vertices, normals and uvs
@@ -31199,8 +31205,8 @@ class SphereGeometry extends BufferGeometry {
 		let index = 0;
 		const grid = [];
 
-		const vertex = new Vector3();
-		const normal = new Vector3();
+		const vertex = new three_module_Vector3();
+		const normal = new three_module_Vector3();
 
 		// buffers
 
@@ -31391,9 +31397,9 @@ class TorusGeometry extends BufferGeometry {
 
 		// helper variables
 
-		const center = new Vector3();
-		const vertex = new Vector3();
-		const normal = new Vector3();
+		const center = new three_module_Vector3();
+		const vertex = new three_module_Vector3();
+		const normal = new three_module_Vector3();
 
 		// generate vertices, normals and uvs
 
@@ -31490,15 +31496,15 @@ class TorusKnotGeometry extends BufferGeometry {
 
 		// helper variables
 
-		const vertex = new Vector3();
-		const normal = new Vector3();
+		const vertex = new three_module_Vector3();
+		const normal = new three_module_Vector3();
 
-		const P1 = new Vector3();
-		const P2 = new Vector3();
+		const P1 = new three_module_Vector3();
+		const P2 = new three_module_Vector3();
 
-		const B = new Vector3();
-		const T = new Vector3();
-		const N = new Vector3();
+		const B = new three_module_Vector3();
+		const T = new three_module_Vector3();
+		const N = new three_module_Vector3();
 
 		// generate vertices, normals and uvs
 
@@ -31632,10 +31638,10 @@ class TubeGeometry extends BufferGeometry {
 
 		// helper variables
 
-		const vertex = new Vector3();
-		const normal = new Vector3();
+		const vertex = new three_module_Vector3();
+		const normal = new three_module_Vector3();
 		const uv = new Vector2();
-		let P = new Vector3();
+		let P = new three_module_Vector3();
 
 		// buffer
 
@@ -31799,7 +31805,7 @@ class WireframeGeometry extends BufferGeometry {
 
 		const edge = [ 0, 0 ], edges = {};
 
-		const vertex = new Vector3();
+		const vertex = new three_module_Vector3();
 
 		if ( geometry.index !== null ) {
 
@@ -36023,7 +36029,7 @@ class Curve {
 		const pt1 = this.getPoint( t1 );
 		const pt2 = this.getPoint( t2 );
 
-		const tangent = optionalTarget || ( ( pt1.isVector2 ) ? new Vector2() : new Vector3() );
+		const tangent = optionalTarget || ( ( pt1.isVector2 ) ? new Vector2() : new three_module_Vector3() );
 
 		tangent.copy( pt2 ).sub( pt1 ).normalize();
 
@@ -36042,13 +36048,13 @@ class Curve {
 
 		// see http://www.cs.indiana.edu/pub/techreports/TR425.pdf
 
-		const normal = new Vector3();
+		const normal = new three_module_Vector3();
 
 		const tangents = [];
 		const normals = [];
 		const binormals = [];
 
-		const vec = new Vector3();
+		const vec = new three_module_Vector3();
 		const mat = new Matrix4();
 
 		// compute the tangent vectors for each segment on the curve
@@ -36057,7 +36063,7 @@ class Curve {
 
 			const u = i / segments;
 
-			tangents[ i ] = this.getTangentAt( u, new Vector3() );
+			tangents[ i ] = this.getTangentAt( u, new three_module_Vector3() );
 			tangents[ i ].normalize();
 
 		}
@@ -36065,8 +36071,8 @@ class Curve {
 		// select an initial normal vector perpendicular to the first tangent vector,
 		// and in the direction of the minimum tangent xyz component
 
-		normals[ 0 ] = new Vector3();
-		binormals[ 0 ] = new Vector3();
+		normals[ 0 ] = new three_module_Vector3();
+		binormals[ 0 ] = new three_module_Vector3();
 		let min = Number.MAX_VALUE;
 		const tx = Math.abs( tangents[ 0 ].x );
 		const ty = Math.abs( tangents[ 0 ].y );
@@ -36437,7 +36443,7 @@ function CubicPoly() {
 
 //
 
-const tmp = new Vector3();
+const tmp = new three_module_Vector3();
 const px = new CubicPoly(), py = new CubicPoly(), pz = new CubicPoly();
 
 class CatmullRomCurve3 extends Curve {
@@ -36455,7 +36461,7 @@ class CatmullRomCurve3 extends Curve {
 
 	}
 
-	getPoint( t, optionalTarget = new Vector3() ) {
+	getPoint( t, optionalTarget = new three_module_Vector3() ) {
 
 		const point = optionalTarget;
 
@@ -36593,7 +36599,7 @@ class CatmullRomCurve3 extends Curve {
 		for ( let i = 0, l = json.points.length; i < l; i ++ ) {
 
 			const point = json.points[ i ];
-			this.points.push( new Vector3().fromArray( point ) );
+			this.points.push( new three_module_Vector3().fromArray( point ) );
 
 		}
 
@@ -36762,7 +36768,7 @@ CubicBezierCurve.prototype.isCubicBezierCurve = true;
 
 class CubicBezierCurve3 extends Curve {
 
-	constructor( v0 = new Vector3(), v1 = new Vector3(), v2 = new Vector3(), v3 = new Vector3() ) {
+	constructor( v0 = new three_module_Vector3(), v1 = new three_module_Vector3(), v2 = new three_module_Vector3(), v3 = new three_module_Vector3() ) {
 
 		super();
 
@@ -36775,7 +36781,7 @@ class CubicBezierCurve3 extends Curve {
 
 	}
 
-	getPoint( t, optionalTarget = new Vector3() ) {
+	getPoint( t, optionalTarget = new three_module_Vector3() ) {
 
 		const point = optionalTarget;
 
@@ -36922,7 +36928,7 @@ LineCurve.prototype.isLineCurve = true;
 
 class LineCurve3 extends Curve {
 
-	constructor( v1 = new Vector3(), v2 = new Vector3() ) {
+	constructor( v1 = new three_module_Vector3(), v2 = new three_module_Vector3() ) {
 
 		super();
 
@@ -36933,7 +36939,7 @@ class LineCurve3 extends Curve {
 		this.v2 = v2;
 
 	}
-	getPoint( t, optionalTarget = new Vector3() ) {
+	getPoint( t, optionalTarget = new three_module_Vector3() ) {
 
 		const point = optionalTarget;
 
@@ -37061,7 +37067,7 @@ QuadraticBezierCurve.prototype.isQuadraticBezierCurve = true;
 
 class QuadraticBezierCurve3 extends Curve {
 
-	constructor( v0 = new Vector3(), v1 = new Vector3(), v2 = new Vector3() ) {
+	constructor( v0 = new three_module_Vector3(), v1 = new three_module_Vector3(), v2 = new three_module_Vector3() ) {
 
 		super();
 
@@ -37073,7 +37079,7 @@ class QuadraticBezierCurve3 extends Curve {
 
 	}
 
-	getPoint( t, optionalTarget = new Vector3() ) {
+	getPoint( t, optionalTarget = new three_module_Vector3() ) {
 
 		const point = optionalTarget;
 
@@ -37848,8 +37854,8 @@ class HemisphereLight extends Light {
 HemisphereLight.prototype.isHemisphereLight = true;
 
 const _projScreenMatrix$1 = /*@__PURE__*/ new Matrix4();
-const _lightPositionWorld$1 = /*@__PURE__*/ new Vector3();
-const _lookTarget$1 = /*@__PURE__*/ new Vector3();
+const _lightPositionWorld$1 = /*@__PURE__*/ new three_module_Vector3();
+const _lookTarget$1 = /*@__PURE__*/ new three_module_Vector3();
 
 class LightShadow {
 
@@ -38098,8 +38104,8 @@ class SpotLight extends Light {
 SpotLight.prototype.isSpotLight = true;
 
 const _projScreenMatrix = /*@__PURE__*/ new Matrix4();
-const _lightPositionWorld = /*@__PURE__*/ new Vector3();
-const _lookTarget = /*@__PURE__*/ new Vector3();
+const _lightPositionWorld = /*@__PURE__*/ new three_module_Vector3();
+const _lookTarget = /*@__PURE__*/ new three_module_Vector3();
 
 class PointLightShadow extends LightShadow {
 
@@ -38140,13 +38146,13 @@ class PointLightShadow extends LightShadow {
 		];
 
 		this._cubeDirections = [
-			new Vector3( 1, 0, 0 ), new Vector3( - 1, 0, 0 ), new Vector3( 0, 0, 1 ),
-			new Vector3( 0, 0, - 1 ), new Vector3( 0, 1, 0 ), new Vector3( 0, - 1, 0 )
+			new three_module_Vector3( 1, 0, 0 ), new three_module_Vector3( - 1, 0, 0 ), new three_module_Vector3( 0, 0, 1 ),
+			new three_module_Vector3( 0, 0, - 1 ), new three_module_Vector3( 0, 1, 0 ), new three_module_Vector3( 0, - 1, 0 )
 		];
 
 		this._cubeUps = [
-			new Vector3( 0, 1, 0 ), new Vector3( 0, 1, 0 ), new Vector3( 0, 1, 0 ),
-			new Vector3( 0, 1, 0 ), new Vector3( 0, 0, 1 ),	new Vector3( 0, 0, - 1 )
+			new three_module_Vector3( 0, 1, 0 ), new three_module_Vector3( 0, 1, 0 ), new three_module_Vector3( 0, 1, 0 ),
+			new three_module_Vector3( 0, 1, 0 ), new three_module_Vector3( 0, 0, 1 ),	new three_module_Vector3( 0, 0, - 1 )
 		];
 
 	}
@@ -38493,7 +38499,7 @@ class SphericalHarmonics3 {
 
 		for ( let i = 0; i < 9; i ++ ) {
 
-			this.coefficients.push( new Vector3() );
+			this.coefficients.push( new three_module_Vector3() );
 
 		}
 
@@ -38926,7 +38932,7 @@ class MaterialLoader extends (/* unused pure expression or super */ null && (Loa
 						break;
 
 					case 'v3':
-						material.uniforms[ name ].value = new Vector3().fromArray( uniform.value );
+						material.uniforms[ name ].value = new three_module_Vector3().fromArray( uniform.value );
 						break;
 
 					case 'v4':
@@ -39375,7 +39381,7 @@ class BufferGeometryLoader extends (/* unused pure expression or super */ null &
 
 		if ( boundingSphere !== undefined ) {
 
-			const center = new Vector3();
+			const center = new three_module_Vector3();
 
 			if ( boundingSphere.center !== undefined ) {
 
@@ -41168,8 +41174,8 @@ class HemisphereLightProbe extends LightProbe {
 		const color1 = new Color().set( skyColor );
 		const color2 = new Color().set( groundColor );
 
-		const sky = new Vector3( color1.r, color1.g, color1.b );
-		const ground = new Vector3( color2.r, color2.g, color2.b );
+		const sky = new three_module_Vector3( color1.r, color1.g, color1.b );
+		const ground = new three_module_Vector3( color2.r, color2.g, color2.b );
 
 		// without extra factor of PI in the shader, should = 1 / Math.sqrt( Math.PI );
 		const c0 = Math.sqrt( Math.PI );
@@ -41368,10 +41374,10 @@ function now() {
 
 }
 
-const _position$1 = /*@__PURE__*/ new Vector3();
+const _position$1 = /*@__PURE__*/ new three_module_Vector3();
 const _quaternion$1 = /*@__PURE__*/ new Quaternion();
-const _scale$1 = /*@__PURE__*/ new Vector3();
-const _orientation$1 = /*@__PURE__*/ new Vector3();
+const _scale$1 = /*@__PURE__*/ new three_module_Vector3();
+const _orientation$1 = /*@__PURE__*/ new three_module_Vector3();
 
 class AudioListener extends (/* unused pure expression or super */ null && (Object3D)) {
 
@@ -41886,10 +41892,10 @@ class Audio extends Object3D {
 
 }
 
-const _position = /*@__PURE__*/ new Vector3();
+const _position = /*@__PURE__*/ new three_module_Vector3();
 const _quaternion = /*@__PURE__*/ new Quaternion();
-const _scale = /*@__PURE__*/ new Vector3();
-const _orientation = /*@__PURE__*/ new Vector3();
+const _scale = /*@__PURE__*/ new three_module_Vector3();
+const _orientation = /*@__PURE__*/ new three_module_Vector3();
 
 class PositionalAudio extends (/* unused pure expression or super */ null && (Audio)) {
 
@@ -45502,12 +45508,12 @@ class Box2 {
 
 Box2.prototype.isBox2 = true;
 
-const _startP = /*@__PURE__*/ new Vector3();
-const _startEnd = /*@__PURE__*/ new Vector3();
+const _startP = /*@__PURE__*/ new three_module_Vector3();
+const _startEnd = /*@__PURE__*/ new three_module_Vector3();
 
 class Line3 {
 
-	constructor( start = new Vector3(), end = new Vector3() ) {
+	constructor( start = new three_module_Vector3(), end = new three_module_Vector3() ) {
 
 		this.start = start;
 		this.end = end;
@@ -45537,7 +45543,7 @@ class Line3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Line3: .getCenter() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -45550,7 +45556,7 @@ class Line3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Line3: .delta() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -45575,7 +45581,7 @@ class Line3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Line3: .at() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -45610,7 +45616,7 @@ class Line3 {
 		if ( target === undefined ) {
 
 			console.warn( 'THREE.Line3: .closestPointToPoint() target is now required' );
-			target = new Vector3();
+			target = new three_module_Vector3();
 
 		}
 
@@ -45668,7 +45674,7 @@ class ImmediateRenderObject extends Object3D {
 
 ImmediateRenderObject.prototype.isImmediateRenderObject = true;
 
-const _vector$3 = /*@__PURE__*/ new Vector3();
+const _vector$3 = /*@__PURE__*/ new three_module_Vector3();
 
 class SpotLightHelper extends (/* unused pure expression or super */ null && (Object3D)) {
 
@@ -45750,7 +45756,7 @@ class SpotLightHelper extends (/* unused pure expression or super */ null && (Ob
 
 }
 
-const _vector$2 = /*@__PURE__*/ new Vector3();
+const _vector$2 = /*@__PURE__*/ new three_module_Vector3();
 const _boneMatrix = /*@__PURE__*/ new Matrix4();
 const _matrixWorldInv = /*@__PURE__*/ new Matrix4();
 
@@ -45945,7 +45951,7 @@ class PointLightHelper extends (/* unused pure expression or super */ null && (M
 
 }
 
-const _vector$1 = /*@__PURE__*/ new Vector3();
+const _vector$1 = /*@__PURE__*/ new three_module_Vector3();
 const _color1 = /*@__PURE__*/ new Color();
 const _color2 = /*@__PURE__*/ new Color();
 
@@ -46137,9 +46143,9 @@ class PolarGridHelper extends (/* unused pure expression or super */ null && (Li
 
 }
 
-const _v1 = /*@__PURE__*/ new Vector3();
-const _v2 = /*@__PURE__*/ new Vector3();
-const _v3 = /*@__PURE__*/ new Vector3();
+const _v1 = /*@__PURE__*/ new three_module_Vector3();
+const _v2 = /*@__PURE__*/ new three_module_Vector3();
+const _v3 = /*@__PURE__*/ new three_module_Vector3();
 
 class DirectionalLightHelper extends (/* unused pure expression or super */ null && (Object3D)) {
 
@@ -46216,7 +46222,7 @@ class DirectionalLightHelper extends (/* unused pure expression or super */ null
 
 }
 
-const _vector = /*@__PURE__*/ new Vector3();
+const _vector = /*@__PURE__*/ new three_module_Vector3();
 const _camera = /*@__PURE__*/ new Camera();
 
 /**
@@ -46606,14 +46612,14 @@ class PlaneHelper extends (/* unused pure expression or super */ null && (Line))
 
 }
 
-const _axis = /*@__PURE__*/ new Vector3();
+const _axis = /*@__PURE__*/ new three_module_Vector3();
 let _lineGeometry, _coneGeometry;
 
 class ArrowHelper extends (/* unused pure expression or super */ null && (Object3D)) {
 
 	// dir is assumed to be normalized
 
-	constructor( dir = new Vector3( 0, 0, 1 ), origin = new Vector3( 0, 0, 0 ), length = 1, color = 0xffff00, headLength = length * 0.2, headWidth = headLength * 0.2 ) {
+	constructor( dir = new three_module_Vector3( 0, 0, 1 ), origin = new three_module_Vector3( 0, 0, 0 ), length = 1, color = 0xffff00, headLength = length * 0.2, headWidth = headLength * 0.2 ) {
 
 		super();
 
@@ -46833,22 +46839,22 @@ const _clearColor = /*@__PURE__*/ new Color();
 let _oldTarget = null;
 
 // Golden Ratio
-const PHI = ( 1 + Math.sqrt( 5 ) ) / 2;
-const INV_PHI = 1 / PHI;
+const three_module_PHI = ( 1 + Math.sqrt( 5 ) ) / 2;
+const INV_PHI = 1 / three_module_PHI;
 
 // Vertices of a dodecahedron (except the opposites, which represent the
 // same axis), used as axis directions evenly spread on a sphere.
 const _axisDirections = [
-	/*@__PURE__*/ new Vector3( 1, 1, 1 ),
-	/*@__PURE__*/ new Vector3( - 1, 1, 1 ),
-	/*@__PURE__*/ new Vector3( 1, 1, - 1 ),
-	/*@__PURE__*/ new Vector3( - 1, 1, - 1 ),
-	/*@__PURE__*/ new Vector3( 0, PHI, INV_PHI ),
-	/*@__PURE__*/ new Vector3( 0, PHI, - INV_PHI ),
-	/*@__PURE__*/ new Vector3( INV_PHI, 0, PHI ),
-	/*@__PURE__*/ new Vector3( - INV_PHI, 0, PHI ),
-	/*@__PURE__*/ new Vector3( PHI, INV_PHI, 0 ),
-	/*@__PURE__*/ new Vector3( - PHI, INV_PHI, 0 ) ];
+	/*@__PURE__*/ new three_module_Vector3( 1, 1, 1 ),
+	/*@__PURE__*/ new three_module_Vector3( - 1, 1, 1 ),
+	/*@__PURE__*/ new three_module_Vector3( 1, 1, - 1 ),
+	/*@__PURE__*/ new three_module_Vector3( - 1, 1, - 1 ),
+	/*@__PURE__*/ new three_module_Vector3( 0, three_module_PHI, INV_PHI ),
+	/*@__PURE__*/ new three_module_Vector3( 0, three_module_PHI, - INV_PHI ),
+	/*@__PURE__*/ new three_module_Vector3( INV_PHI, 0, three_module_PHI ),
+	/*@__PURE__*/ new three_module_Vector3( - INV_PHI, 0, three_module_PHI ),
+	/*@__PURE__*/ new three_module_Vector3( three_module_PHI, INV_PHI, 0 ),
+	/*@__PURE__*/ new three_module_Vector3( - three_module_PHI, INV_PHI, 0 ) ];
 
 /**
  * This class generates a Prefiltered, Mipmapped Radiance Environment Map
@@ -47410,7 +47416,7 @@ function _setViewport( target, x, y, width, height ) {
 function _getBlurShader( maxSamples ) {
 
 	const weights = new Float32Array( maxSamples );
-	const poleAxis = new Vector3( 0, 1, 0 );
+	const poleAxis = new three_module_Vector3( 0, 1, 0 );
 	const shaderMaterial = new RawShaderMaterial( {
 
 		name: 'SphericalGaussianBlur',
@@ -47839,7 +47845,7 @@ function ParticleSystemMaterial( parameters ) {
 function Vertex( x, y, z ) {
 
 	console.warn( 'THREE.Vertex has been removed. Use THREE.Vector3 instead.' );
-	return new Vector3( x, y, z );
+	return new three_module_Vector3( x, y, z );
 
 }
 
@@ -48174,7 +48180,7 @@ Matrix4.prototype.flattenToArrayOffset = function ( array, offset ) {
 Matrix4.prototype.getPosition = function () {
 
 	console.warn( 'THREE.Matrix4: .getPosition() has been removed. Use Vector3.setFromMatrixPosition( matrix ) instead.' );
-	return new Vector3().setFromMatrixColumn( this, 3 );
+	return new three_module_Vector3().setFromMatrixColumn( this, 3 );
 
 };
 
@@ -48429,61 +48435,61 @@ Vector2.prototype.lengthManhattan = function () {
 
 //
 
-Vector3.prototype.setEulerFromRotationMatrix = function () {
+three_module_Vector3.prototype.setEulerFromRotationMatrix = function () {
 
 	console.error( 'THREE.Vector3: .setEulerFromRotationMatrix() has been removed. Use Euler.setFromRotationMatrix() instead.' );
 
 };
 
-Vector3.prototype.setEulerFromQuaternion = function () {
+three_module_Vector3.prototype.setEulerFromQuaternion = function () {
 
 	console.error( 'THREE.Vector3: .setEulerFromQuaternion() has been removed. Use Euler.setFromQuaternion() instead.' );
 
 };
 
-Vector3.prototype.getPositionFromMatrix = function ( m ) {
+three_module_Vector3.prototype.getPositionFromMatrix = function ( m ) {
 
 	console.warn( 'THREE.Vector3: .getPositionFromMatrix() has been renamed to .setFromMatrixPosition().' );
 	return this.setFromMatrixPosition( m );
 
 };
 
-Vector3.prototype.getScaleFromMatrix = function ( m ) {
+three_module_Vector3.prototype.getScaleFromMatrix = function ( m ) {
 
 	console.warn( 'THREE.Vector3: .getScaleFromMatrix() has been renamed to .setFromMatrixScale().' );
 	return this.setFromMatrixScale( m );
 
 };
 
-Vector3.prototype.getColumnFromMatrix = function ( index, matrix ) {
+three_module_Vector3.prototype.getColumnFromMatrix = function ( index, matrix ) {
 
 	console.warn( 'THREE.Vector3: .getColumnFromMatrix() has been renamed to .setFromMatrixColumn().' );
 	return this.setFromMatrixColumn( matrix, index );
 
 };
 
-Vector3.prototype.applyProjection = function ( m ) {
+three_module_Vector3.prototype.applyProjection = function ( m ) {
 
 	console.warn( 'THREE.Vector3: .applyProjection() has been removed. Use .applyMatrix4( m ) instead.' );
 	return this.applyMatrix4( m );
 
 };
 
-Vector3.prototype.fromAttribute = function ( attribute, index, offset ) {
+three_module_Vector3.prototype.fromAttribute = function ( attribute, index, offset ) {
 
 	console.warn( 'THREE.Vector3: .fromAttribute() has been renamed to .fromBufferAttribute().' );
 	return this.fromBufferAttribute( attribute, index, offset );
 
 };
 
-Vector3.prototype.distanceToManhattan = function ( v ) {
+three_module_Vector3.prototype.distanceToManhattan = function ( v ) {
 
 	console.warn( 'THREE.Vector3: .distanceToManhattan() has been renamed to .manhattanDistanceTo().' );
 	return this.manhattanDistanceTo( v );
 
 };
 
-Vector3.prototype.lengthManhattan = function () {
+three_module_Vector3.prototype.lengthManhattan = function () {
 
 	console.warn( 'THREE.Vector3: .lengthManhattan() has been renamed to .manhattanLength().' );
 	return this.manhattanLength();
@@ -49637,7 +49643,7 @@ if ( typeof window !== 'undefined' ) {
  * @classdesc
  * Isometry of the geometry.
  */
-class Isometry {
+class Isometry_Isometry {
 
     /**
      * Constructor.
@@ -49790,197 +49796,109 @@ class Isometry {
 }
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Utils.js
-
-
-/**
- * Some Lorentzian geometry in R^3
- * We work with Vector4 though, ignoring the last coordinates
- * This is easier as the points in H2 x E are Vector4
- */
-
-
-/**
- * Lorentzian inner product in R^3
- * @param {Vector4} v
- * @return {number}
- */
-Vector4.prototype.hypDot = function (v) {
-    return this.x * v.x + this.y * v.y - this.z * v.z;
-}
-
-/**
- * Lorentzian length squared in R^3
- * @return {number}
- */
-Vector4.prototype.hypLengthSq = function () {
-    return Math.abs(this.hypDot(this));
-}
-
-/**
- * Lorentzian length in R^3
- * @return {number}
- */
-Vector4.prototype.hypLength = function () {
-    return Math.sqrt(this.hypLengthSq());
-}
-
-/**
- * Normalize the first three coordinates of the vector for the Lorentzian length
- * @return {Vector4}
- */
-Vector4.prototype.hypNormalize = function () {
-    const [x, y, z, w] = this.toArray();
-    const len = this.hypLength();
-    this.set(x / len, y / len, z / len, w);
-    return this;
-}
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Isometry.js
+;// CONCATENATED MODULE: ./src/geometries/sol/geometry/Isometry.js
 
 
 
 
-
-Isometry.prototype.build = function () {
+Isometry_Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
-    this.shift = 0;
 }
 
-Isometry.prototype.identity = function () {
+Isometry_Isometry.prototype.identity = function () {
     this.matrix.identity();
-    this.shift = 0;
     return this;
 }
 
-Isometry.prototype.reduceError = function () {
-    // Hyperbolic Gram-Schmidt
-    const col0 = new Vector4(1, 0, 0, 0).applyMatrix4(this.matrix);
-    const col1 = new Vector4(0, 1, 0, 0).applyMatrix4(this.matrix);
-    const col2 = new Vector4(0, 0, 1, 0).applyMatrix4(this.matrix);
-    const col3 = new Vector4(0, 0, 0, 1).applyMatrix4(this.matrix);
-
-    col0.hypNormalize();
-
-    const aux10 = col0.clone().multiplyScalar(col0.hypDot(col1));
-    col1.sub(aux10).hypNormalize();
-
-    const aux20 = col0.clone().multiplyScalar(col0.hypDot(col2));
-    const aux21 = col1.clone().multiplyScalar(col1.hypDot(col2));
-    col2.sub(aux20).sub(aux21).hypNormalize();
-
-    col3.normalize();
-    this.matrix.set(
-        col0.x, col1.x, col2.x, col3.x,
-        col0.y, col1.y, col2.y, col3.y,
-        col0.z, col1.z, col2.z, col3.z,
-        col0.w, col1.w, col2.w, col3.w
-    );
+Isometry_Isometry.prototype.reduceError = function () {
     return this;
 }
 
-Isometry.prototype.multiply = function (isom) {
-    const coeff = this.matrix.elements[this.matrix.elements.length - 1];
+Isometry_Isometry.prototype.multiply = function (isom) {
     this.matrix.multiply(isom.matrix);
-    this.shift = this.shift + coeff * isom.shift;
     return this;
 }
 
-Isometry.prototype.premultiply = function (isom) {
-    const coeff = isom.matrix.elements[isom.matrix.elements.length - 1];
+Isometry_Isometry.prototype.premultiply = function (isom) {
     this.matrix.premultiply(isom.matrix);
-    this.shift = isom.shift + coeff * this.shift;
     return this;
 }
 
-Isometry.prototype.invert = function () {
+Isometry_Isometry.prototype.invert = function () {
     this.matrix.invert();
-    const coeff = this.matrix.elements[this.matrix.elements.length - 1];
-    this.shift = -coeff * this.shift;
     return this;
 }
 
-Isometry.prototype.makeTranslation = function (point) {
-    const [x, y, z, w] = point.coords.toArray();
-    this.matrix.identity();
-    this.shift = w;
-    const u = new Vector2(x, y);
-    const c1 = u.length();
+Isometry_Isometry.prototype.makeTranslation = function (point) {
+    const [x, y, z,] = point.coords.toArray();
+    this.matrix.set(
+        Math.exp(z), 0, 0, x,
+        0, Math.exp(-z), 0, y,
+        0, 0, 1, z,
+        0, 0, 0, 1,
+    )
+    return this;
+};
 
-    if (c1 === 0) {
-        return this;
-    }
-    const c2 = z - 1;
-    u.normalize();
+Isometry_Isometry.prototype.makeInvTranslation = function (point) {
+    const [x, y, z,] = point.coords.toArray();
+    this.matrix.set(
+        Math.exp(-z), 0, 0, -Math.exp(-z) * x,
+        0, Math.exp(z), 0, -Math.exp(z) * y,
+        0, 0, 1, -z,
+        0, 0, 0, 1,
+    )
+    return this;
+};
 
-    const m = new Matrix4().set(
-        0, 0, u.x, 0,
-        0, 0, u.y, 0,
-        u.x, u.y, 0, 0,
-        0, 0, 0, 0
+Isometry_Isometry.prototype.makeFlip = function () {
+    this.matrix.set(
+        0, 1, 0, 0,
+        1, 0, 0, 0,
+        0, 0, -1, 0,
+        0, 0, 0, 1
     );
-    const m2 = m.clone().multiply(m);
-    m.multiplyScalar(c1);
-    m2.multiplyScalar(c2);
-    this.matrix.add(m);
-    this.matrix.add(m2);
-
     return this;
 }
 
-Isometry.prototype.makeInvTranslation = function (point) {
-    this.makeTranslation(point);
-    this.invert();
-    return this;
-}
-
-Isometry.prototype.makeTranslationFromDir = function (vec) {
-    const [x, y, z] = vec.toArray();
-    this.matrix.identity();
-    this.shift = z;
-    const u = new Vector2(x, y);
-    const s = u.length();
-
-    if (s === 0) {
-        return this;
-    }
-
-    const c1 = Math.sinh(s);
-    const c2 = Math.cosh(s) - 1;
-    u.normalize();
-
-    const m = new Matrix4().set(
-        0, 0, u.x, 0,
-        0, 0, u.y, 0,
-        u.x, u.y, 0, 0,
-        0, 0, 0, 0
+Isometry_Isometry.prototype.makeReflectionX = function () {
+    this.matrix.set(
+        -1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
     );
-    const m2 = m.clone().multiply(m);
-
-    m.multiplyScalar(c1);
-    this.matrix.add(m);
-
-    m2.multiplyScalar(c2);
-    this.matrix.add(m2);
-
     return this;
 }
 
-Isometry.prototype.equals = function (isom) {
-    return this.matrix.equals(isom.matrix) && this.shift === isom.shift;
+Isometry_Isometry.prototype.makeReflectionY = function () {
+    this.matrix.set(
+        1, 0, 0, 0,
+        0, -1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    return this;
 }
 
-Isometry.prototype.clone = function () {
-    const res = new Isometry();
+
+Isometry_Isometry.prototype.equals = function (isom) {
+    return this.matrix.equals(isom.matrix);
+};
+
+Isometry_Isometry.prototype.clone = function () {
+    let res = new Isometry_Isometry();
     res.matrix.copy(this.matrix);
-    res.shift = this.shift;
     return res;
-}
+};
 
-Isometry.prototype.copy = function (isom) {
+Isometry_Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);
-    this.shift = isom.shift;
     return this;
-}
+};
+
+
+
 
 
 ;// CONCATENATED MODULE: ./src/core/geometry/Point.js
@@ -49990,7 +49908,7 @@ Isometry.prototype.copy = function (isom) {
  * @classdesc
  * Point in the geometry.
  */
-class Point {
+class Point_Point {
 
     /**
      * Constructor.
@@ -50072,49 +49990,48 @@ class Point {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Point.js
+;// CONCATENATED MODULE: ./src/geometries/sol/geometry/Point.js
 
 
 
 
-Point.prototype.build = function () {
+Point_Point.prototype.build = function () {
     if (arguments.length === 0) {
-        this.coords = new Vector4(0, 0, 1, 0);
+        this.coords = new Vector4(0, 0, 0, 1);
     } else {
         this.coords = new Vector4(...arguments);
     }
 };
 
-Point.prototype.set = function(){
-    this.coords.set(...arguments);
+Point_Point.prototype.set = function() {
+    this.coords.set(arguments[0], arguments[1], arguments[2], 1);
     return this;
 }
 
-Point.prototype.applyIsometry = function (isom) {
-    this.coords.applyMatrix4(isom.matrix);
-    this.coords.setW(this.coords.w + isom.shift);
+Point_Point.prototype.applyIsometry = function (isom) {
+    this.coords.applyMatrix4(isom.matrix)
     return this;
 };
 
-Point.prototype.reduceError = function () {
+Point_Point.prototype.equals = function (point) {
+    return this.coords.equals(point.coords)
+};
+
+
+Point_Point.prototype.reduceError = function () {
     return this;
 }
 
-Point.prototype.clone = function () {
-    let res = new Point();
+Point_Point.prototype.clone = function () {
+    let res = new Point_Point();
     res.coords.copy(this.coords);
     return res;
 };
 
-Point.prototype.copy = function (point) {
+Point_Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
     return this;
 };
-
-
-
-
-
 
 
 ;// CONCATENATED MODULE: ./src/core/geometry/Vector.js
@@ -50135,7 +50052,7 @@ Point.prototype.copy = function (point) {
  * If so, remove for the other files the class extensions,
  * and replace them by an `export {Vector} from './abstract.js'`
  */
-class Vector extends Vector3 {
+class Vector extends three_module_Vector3 {
 
     get isVector(){
         return true;
@@ -50196,7 +50113,7 @@ class Position {
          * The isometry component  of the position.
          * @type {Isometry}
          */
-        this.boost = new Isometry();
+        this.boost = new Isometry_Isometry();
         /**
          * The facing.
          * We represent it as quaternion, whose action by conjugation on R^3 defines an element of O(3)
@@ -50270,7 +50187,7 @@ class Position {
      * @return {Point} the translate of the origin by the isometry part of the position
      */
     get point() {
-        return new Point().applyIsometry(this.boost);
+        return new Point_Point().applyIsometry(this.boost);
     }
 
     /**
@@ -50428,129 +50345,446 @@ class Position {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/Position.js
+;// CONCATENATED MODULE: ./src/geometries/sol/geometry/Position.js
 
+//import * as utils from "../../../utils/utils.js";
+
+
+
+
+
+
+// length of the step when integrating the geodesic flow with an Euler method
+const EULER_STEP = 0.001;
 
 Position.prototype.flowFromOrigin = function (v) {
-    this.boost.makeTranslationFromDir(v);
-    this.quaternion.identity();
+    const t = v.length(); // time travelled along the flow
+    const n = t / EULER_STEP; // number of steps
+
+    const u = v.clone().normalize(); // normalized vector (initial condition of Grayson's flow)
+    const field = new three_module_Vector3(); // vector field for Grayson's flow
+    const p_aux = new Point_Point(); // position on the geodesic
+    const v_aux = new Vector4(); // tangent vector to the geodesic
+    const q_aux = new Quaternion(); // angular velocity
+
+    for (let i = 0; i < n; i++) {
+        // computing the position of the geodesic at time i*step
+        // push forward the vector from Grayson's flow
+        v_aux.set(u.x, u.y, u.z, 0)
+            .applyMatrix4(this.boost.matrix)
+            .multiplyScalar(EULER_STEP);
+        // update the position on the geodesic
+        p_aux.coords.add(v_aux);
+        // update accordingly the boost of the Position object
+        this.boost.makeTranslation(p_aux);
+
+        // computing the facing at time i*step
+        // we directly update the quaternion q defining the facing
+        // it satisfies the formula dq/dt = (1/2) * omega * q
+        // where omega = u_y i + u_x j is the angular velocity vector
+        q_aux.set(u.y, u.x, 0, 0)
+            .multiply(this.quaternion)
+            .multiplyScalar(0.5 * EULER_STEP);
+        this.quaternion.add(q_aux).normalize();
+
+
+        // computing the pull back (at the origin) of the tangent vector at time (i+1)*step
+        field.set(
+            u.x * u.z,
+            -u.y * u.z,
+            -u.x * u.x + u.y * u.y
+        );
+        u.add(field.multiplyScalar(EULER_STEP)).normalize();
+    }
     return this;
 }
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/shaders/part1.js
+;// CONCATENATED MODULE: ./src/geometries/sol/geometry/shaders/part1.js
 // language=GLSL
 /* harmony default export */ const part1 = (`//
-
 /***********************************************************************************************************************
- * @file
- * This file is a model to impletement other geometries.
- * The content of the structures can be customized.
- * The signatures and the roles of each method need to be implemented strictly.
+ ***********************************************************************************************************************
+ *
+ * Implementation of the euclidean geometry (part 1)
+ *
+ ***********************************************************************************************************************
  **********************************************************************************************************************/
 
 
-// Auxiliary function : lorentzian geometry in R^3
+/***********************************************************************************************************************
+ *
+ * Auxiliary functions 
+ *
+ **********************************************************************************************************************/
 
-float hypDot(vec3 v1, vec3 v2){
-    return v1.x * v2.x + v1.y * v2.y - v1.z * v2.z;
+/*
+   Each pixel only involves a single geodesic.
+   Hence all the parameters appearing in the elliptic integrals can be pre-computed once for all before marching.
+   We store them in global variables.
+   The names refer to the Remi's handwritten notes (following closely Troyanov's paper).
+   The prefix ell is used to avoid any ambiguity
+*/
+
+// constants, purely related to the elliptic integrals / functions
+float ell_k;
+float ell_kprime;
+float ell_m;
+float ell_K;
+float ell_E;
+
+// constants related to the parametrization of the geodesic, but only depending on the trajectory of the geodesic
+float ell_mu;
+float ell_L;
+
+/*
+    *** Legendre elliptic integrals ***
+    The modulus/parameter  k / k' / m are always implicit.
+    We use the corresponding global variable to avoid redundant computations.
+    The sources for the algorithms are:
+    [1] Frank W. J. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark
+    NIST handbook of mathematical functions
+    Cambridge University Press (2010)
+    [2] Milton Abramowitz, Irene A. Stegun
+    Handbook of Mathematical Functions_ with Formulas, Graphs, and Mathematical Tables
+    National Bureau of Standards (1970)
+    [3] Bulirsch, Roland
+    Numerical calculation of elliptic integrals and elliptic functions
+    Numer. Math. (7) 78--90 (1965)
+    DOI: 10.1007/BF01397975
+    TODO.
+        - Reduce the number of local variables when computing an iteration.
+        e.g. to compute the AGM, no need of a1 and g1, just a single temporary variable
+        - Factor the AGM computations.
+        There are indeed the same for all the elliptic functions, and thus alogn the geodesic.
+        They could be pre-computed and stored in a global variable
+*/
+
+
+// maximal number of steps in the AGM algorithm
+const int AGMSteps = 20;
+// tolerance of the AGM algorithm
+const float AGMTolerance = 0.000001;
+// steps performed to compute the AGM (useful for the Jacobi functions)
+// the coordinates of the stored vec3 have the following meaning
+// - x : arithmetic mean
+// - y : geometric mean
+// - z : error
+vec3 AGMList[AGMSteps];
+// number of steps actually used for the AGM, the index of the last non-zero entries in AGMList should be AGMLength - 1
+int AGMLength;
+
+void agm() {
+    // Compute the AGM of 1 and sqrt(1-m) to the given accuracy :
+    // Note that sqrt(1 - m) = kprime
+    // maximal number of steps : AGMMaxSteps
+    // tolerance for the error : AGMTolerance
+    // index of the last step : AGMIndex
+
+    // initialization
+    AGMList[0] = vec3(1., ell_kprime, ell_k);
+    AGMLength = 1;
+
+    // variable used during the induction
+    float a0;
+    float g0;
+    float error;
+
+    // induction
+    for (int i = 1; i < AGMSteps; i++) {
+        a0 = AGMList[i - 1].x;
+        g0 = AGMList[i - 1].y;
+        error = 0.5 * (a0 - g0);
+
+        if (error < AGMTolerance) {
+            break;
+        }
+
+        AGMList[i] = vec3(0.5 * (a0 + g0), sqrt(a0 * g0), error);
+        AGMLength = AGMLength + 1;
+    }
 }
 
-float hypLengthSq(vec3 v) {
-    return abs(hypDot(v, v));
+vec2 ellipke() {
+    // Return the complete integeral of the first and second kind
+    // Computed with the AGM method, see 19.8(i) in [1]
+
+    // initialization of all the variables;
+    float aux = 0.;
+
+    // induction
+    for (int i = 0; i < AGMLength; i++) {
+        aux = aux + pow(2., float(i-1)) * AGMList[i].z * AGMList[i].z;
+    }
+
+    // wrapping up the results
+    float K = 0.5 * PI / AGMList[AGMLength - 1].x;
+    float E = K * (1. - aux);
+    return vec2(K, E);
 }
 
-float hypLength(vec3 v) {
-    return sqrt(hypLengthSq(v));
+vec3 ellipj1(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
+    // The results is output as [sn, cn, dn]
+    // Computed with the AGM method, see Algorithm 5 in [3]
+    // Note that the algorithm only makes sense if u is not zero.
+    // u is asumme to be between 0 and 2 * K
+
+    // initialization of all the variables
+    float a0 = AGMList[AGMLength - 1].x;
+    float g0 = AGMList[AGMLength - 1].y;
+
+    float eps = 1.;
+    if (sin(u * a0) < 0.) {
+        eps = -1.;
+    }
+
+    // variables used during the second induction
+
+    float c = a0 * cos(u * a0) / sin(u * a0);
+    float d = 1.;
+    float aux_c;
+    float aux_d;
+    float num;
+    float den;
+
+    for (int j = 1; j < AGMLength; j++) {
+        aux_c = c * d;
+        num = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].y);
+        den = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].x);
+        aux_d =  num / den;
+        c = aux_c;
+        d = aux_d;
+    }
+
+    // wrappind the results
+    float sn = eps / sqrt(1. + c * c);
+    float cn = c * sn;
+    float dn = d;
+
+    return vec3(sn, cn, dn);
 }
 
-vec3 hypNormalize(vec3 v) {
-    return v / hypLength(v);
+
+vec3 ellipj2(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
+    // The results is output as [sn, cn, dn]
+    // Computed with an other AGM method, see 22.20(ii) in [1]
+    // u is asumme to be between 0 and 2 * K
+
+    // initializing the parameters for the induction
+    float phi0 = pow(2., float(AGMLength-1)) * AGMList[AGMLength - 1].x * u;
+    float phi1;
+    float aux;
+
+
+    for (int i = 1; i < AGMLength; i++) {
+        aux = AGMList[AGMLength - i].z / AGMList[AGMLength - i].x;
+        phi1 = 0.5 * (phi0 + asin(aux * sin(phi0)));
+        phi0 = phi1;
+    }
+
+    float sn = sin(phi0);
+    float cn = cos(phi0);
+    float dn = sqrt(1. - ell_m * sn * sn);
+    return vec3(sn, cn, dn);
+
 }
 
-// Same with vec4 (ignoring the last coordinates)
 
-float hypDot(vec4 v1, vec4 v2){
-    return hypDot(v1.xyz, v2.xyz);
+vec3 ellipj3(float u) {
+    // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
+    // Taken from ShaderToy: https://www.shadertoy.com/view/4tlBRl
+
+    float emc = 1.0-ell_m;
+    float a, b, c;
+    const int N = 4;
+    float em[N], en[N];
+    a = 1.0;
+    float dn = 1.0;
+    for (int i = 0; i < N; i++) {
+        em[i] = a;
+        emc = sqrt(emc);
+        en[i] = emc;
+        c = 0.5*(a+emc);
+        emc = a*emc;
+        a = c;
+    }
+    // Nothing up to here depends on u, so
+    // could be precalculated.
+    u = c*u;
+    float sn = sin(u);
+    float cn = cos(u);
+    if (sn != 0.0) {
+        a = cn/sn; c = a*c;
+        for (int i = N-1; i >= 0; i--) {
+            b = em[i];
+            a = c*a;
+            c = dn*c;
+            dn = (en[i]+a)/(b+a);
+            a = c/b;
+        }
+        a = 1.0/sqrt(c*c + 1.0);
+        if (sn < 0.0) sn = -a;
+        else sn = a;
+        cn = c*sn;
+    }
+
+    return vec3(sn, cn, dn);
 }
 
-float hypLengthSq(vec4 v) {
-    return abs(hypDot(v, v));
+
+vec3 ellipjAtZero(float u) {
+    // Asymptotic expansion around u = 0 of the Jacobi elliptic functions sn, cn and dn
+    // We use the MacLaurin series, see 22.10(i) in [1]
+
+    float k2 = ell_m;
+    float k4 = ell_m * ell_m;
+    float k6 = k4 * ell_m;
+
+    float u1 = u;
+    float u2 = u1 * u;
+    float u3 = u2 * u;
+    float u4 = u3 * u;
+    float u5 = u4 * u;
+    float u6 = u5 * u;
+    float u7 = u6 * u;
+
+    return vec3(
+    u1
+    - (1. + k2) * u3 / 6.
+    + (1. + 14. * k2 + k4) * u5 / 120.
+    - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.,
+
+    1.
+    - u2 / 2.
+    + (1. + 4. * k2) * u4 / 24.
+    - (1. + 44. * k2 + 16. * k4) * u6 / 720.,
+
+    1.
+    - k2 * u2 / 2.
+    + k2 * (4. + k2) * u4 / 24.
+    - k2 * (16. + 44. * k2 + k4) * u6 / 720.
+    );
 }
 
-float hypLength(vec4 v) {
-    return sqrt(hypLengthSq(v));
+
+
+vec3 ellipj(float u) {
+    // reducing the computation using the periodicity and symmetries of the Jacobi elliptic functions
+    // dispatching which algorithm is used to compute the result
+    float tolerance = 0.001;
+
+
+    float u1 = mod(u, 4. * ell_K);
+    float sign = 1.;
+    if (u1 > 2. * ell_K) {
+        u1 = 4.* ell_K -u1;
+        sign = -1.;
+    }
+
+    vec3 aux;
+
+    if (u1 < tolerance) {
+        aux = ellipjAtZero(u1);
+    }
+    else {
+        aux = ellipj1(u1);
+    }
+
+    return vec3(sign * aux.x, aux.y, aux.z);
 }
 
-vec4 hypNormalize(vec4 v) {
-    float len = hypLength(v);
-    return vec4(v.xyz / len, v.w);
+
+float ellipz(float tanPhi) {
+    // Return the Jacobi Zeta function, whose argument is an angle phi passed as tan(phi), i.e.
+    // Z(phi|m) = E(phi|m) - [E(m)/K(m)] * F(phi|m)
+    // the argument is passed as tan(phi) since this is the way it is computed from the Jacboi function :
+    // tan(phi) = sn(u|m) / cn(u|m)
+    // This is useless to compute the atan and then apply tan!
+    // Computed with the AGM algorithm, see §17.6 in [2]
+    float tolerance = 0.001;
+
+
+    float sign = 1.;
+    float t0 = tanPhi;
+    if (t0 < 0.) {
+        t0 = - t0;
+        sign = -1.;
+    }
+
+    float res = 0.;
+
+    // if t0 is close to zero we use an asymptotic expansion around zero
+    // (computed with SageMath)
+    if (t0 < tolerance) {
+        float k2 = ell_m;
+        float k4 = k2 * ell_m;
+        float k6 = k4 * ell_m;
+        res =  - (ell_E /ell_K - 1.) * t0;
+        res = res - (1./6.) * (ell_E * k2 / ell_K + k2 - 2. * ell_E / ell_K + 2.) * pow(t0, 3.);
+        res = res - (1./40.) * (3. * ell_E * k4 / ell_K + k4 - 8. * ell_E * k2 / ell_K - 8. * k2 + 8. * ell_E / ell_K - 8.) * pow(t0, 5.);
+        res = res - (1./112.) * (5. * ell_E * k6 / ell_K + k6 - 18. * ell_E * k4 / ell_K - 6. * k4 + 24. * ell_E * k2 / ell_K + 24. * k2 - 16. * ell_E / ell_K + 16.) * pow(t0, 7.);
+    }
+    else {
+        // initializing the parameters of the induction
+
+        float t1;// represent tan(phi_{n+1})
+        float s1;// represent sin(phi_{n+1})
+        float aux;
+
+        for (int i = 0; i < AGMLength; i++) {
+            aux = AGMList[i].y / AGMList[i].x;
+            t1 = t0 * (1. + aux) / (1. - aux * t0 * t0);
+            s1 = t0 * (1. + aux) / sqrt((1. + t0 * t0) * (1. + aux * aux * t0 * t0));
+            res = res + AGMList[i + 1].z * s1;
+
+            t0 = t1;
+        }
+    }
+    return sign * res;
 }
 
 /***********************************************************************************************************************
  *
  * @struct Isometry
  * Structure for isometries of the geometry.
+ * The isometry consists of 
+ * - a matrix
+ * - a flag (isInSol) if one knows in adavance that the element belongs to Sol
  *
  **********************************************************************************************************************/
 struct Isometry{
     mat4 matrix;
-    float shift;
+    bool isInSol;
 };
 
 /**
  * Identity isometry
  */
-const Isometry IDENTITY = Isometry(mat4(1.), 0.); /**< Identity isometry */
+const Isometry IDENTITY = Isometry(mat4(1.), true); /**< Identity isometry */
 
 /**
  * Reduce the eventual numerical errors of the given isometry.
- * @todo : Think of the best way to do this.
- * When the coordinates of the boost are too big, reduceError makes everything worse
- * Indeed the hypDot takes squares and then compute a difference...
+ * @todo to be written
  */
 Isometry reduceError(Isometry isom){
-    vec4 col0 = isom.matrix[0];
-    vec4 col1 = isom.matrix[1];
-    vec4 col2 = isom.matrix[2];
-    vec4 col3 = isom.matrix[3];
-
-    col0 = hypNormalize(col0);
-
-    col1 = col1 - hypDot(col0, col1) * col0;
-    col1 = hypNormalize(col1);
-
-    col2 = col2 - hypDot(col0, col2) * col0;
-    col2 = col2 - hypDot(col1, col2) * col1;
-    col2 = hypNormalize(col2);
-
-    col3 = normalize(col3);
-    mat4 matrix = mat4(col0, col1, col2, col3);
-    return Isometry(matrix, isom.shift);
-
-
-    //    return isom;
+    return isom;
 }
 
 /**
  * Multiply the two given isometries.
  */
 Isometry multiply(Isometry isom1, Isometry isom2) {
-    mat4 matrix = isom1.matrix * isom2.matrix;
-    float shift = isom1.shift + isom1.matrix[3][3] * isom2.shift;
-    Isometry res = Isometry(matrix, shift);
-    return reduceError(res);
+    return Isometry(isom1.matrix * isom2.matrix, isom1.isInSol && isom2.isInSol);
 }
 
 /**
  * Return the inverse of the given isometry.
  */
 Isometry geomInverse(Isometry isom) {
-    mat4 matrix = inverse(isom.matrix);
-    float shift = - isom.matrix[3][3] * isom.shift;
-    Isometry res = Isometry(matrix, shift);
-    return reduceError(res);
-
+    mat4 inv = inverse(isom.matrix);
+    return Isometry(inv, isom.isInSol);
 }
 
 /***********************************************************************************************************************
@@ -50560,19 +50794,18 @@ Isometry geomInverse(Isometry isom) {
  *
  **********************************************************************************************************************/
 struct Point{
-// Define here the fields of the structure
     vec4 coords;
 };
 
 
-const Point ORIGIN = Point(vec4(0, 0, 1, 0)); /**< Origin of the geometry */
+const Point ORIGIN = Point(vec4(0, 0, 0, 1));/**< Origin of the geometry */
+
 
 /**
  * Reduce the eventual numerical errors of the given point.
  */
 Point reduceError(Point p){
-    vec4 coords = hypNormalize(p.coords);
-    return Point(coords);
+    return p;
 }
 
 /**
@@ -50580,9 +50813,14 @@ Point reduceError(Point p){
  */
 Point applyIsometry(Isometry isom, Point p) {
     vec4 coords = isom.matrix * p.coords;
-    coords.w = coords.w + isom.shift;
-    Point res = Point(coords);
-    return reduceError(res);
+    return Point(coords);
+}
+
+/*
+ * Apply the isometry (x,y,z) -> (y,x,-z)
+ */
+Point flip(Point p){
+    return Point(vec4(p.coords.y, p.coords.x, -p.coords.z, 1.));
 }
 
 /**
@@ -50591,30 +50829,14 @@ Point applyIsometry(Isometry isom, Point p) {
  */
 
 Isometry makeTranslation(Point p) {
-
-    mat4 matrix = mat4(1.);
-    float shift = p.coords.w;
-    vec2 u = p.coords.xy;
-    float c1 = length(u);
-
-    if (c1 == 0.){
-        return Isometry(matrix, shift);
-    }
-
-    float c2 = p.coords.z - 1.;
-    u = normalize(u);
-
-    mat4 m = mat4(
-    0., 0., u.x, 0.,
-    0., 0., u.y, 0.,
-    u.x, u.y, 0., 0.,
-    0., 0., 0., 0.
-
+    vec4 c = p.coords;
+    mat4 matrix =  mat4(
+    exp(c.z), 0., 0., 0.,
+    0., exp(-c.z), 0., 0.,
+    0., 0., 1., 0,
+    c.x, c.y, c.z, 1.
     );
-
-    matrix = matrix + c1 * m + c2 * m * m;
-    Isometry res = Isometry(matrix, shift);
-    return reduceError(res);
+    return Isometry(matrix, true);
 }
 
 /**
@@ -50622,8 +50844,14 @@ Isometry makeTranslation(Point p) {
  * Previously makeInvLeftTranslation.
  */
 Isometry makeInvTranslation(Point p) {
-    Isometry isom = makeTranslation(p);
-    return geomInverse(isom);
+    vec4 c = p.coords;
+    mat4 matrix =  mat4(
+    exp(-c.z), 0., 0., 0.,
+    0., exp(c.z), 0., 0.,
+    0., 0., 1., 0,
+    -exp(-c.z) * c.x, -exp(c.z) * c.y, -c.z, 1.
+    );
+    return Isometry(matrix, true);
 }
 
 /***********************************************************************************************************************
@@ -50631,12 +50859,16 @@ Isometry makeInvTranslation(Point p) {
  * @struct Vector
  * Structure for vector in the tangent bundle of the geometry.
  * For computation of gradient, one needs to fix for each geometry, a section of the frame bundle.
+ * In this description,
+ * - pos is the underlying position of the vector (nothing fancy here)
+ * - dir is the **pullback** at the origin of the vector by the element of Sol sending the origin to pos
  *
  **********************************************************************************************************************/
 struct Vector{
-    Point pos; /**< Underlying point */
-    vec4 dir;
+    Point pos;///< Underlying point
+    vec4 dir;///< Direction of the vector
 };
+
 
 /**
  * Return the zero vector at pos
@@ -50645,13 +50877,10 @@ Vector zeroVector(Point pos){
     return Vector(pos, vec4(0));
 }
 
-
 /**
  * Reduce the eventual numerical errors of the given vector.
  */
 Vector reduceError(Vector v){
-    v.pos = reduceError(v.pos);
-    v.dir.xyz = v.dir.xyz + hypDot(v.pos.coords.xyz, v.dir.xyz) * v.pos.coords.xyz;
     return v;
 }
 
@@ -50685,47 +50914,88 @@ Vector multiplyScalar(float s, Vector v){
  * Previouly tangDot.
  */
 float geomDot(Vector v1, Vector v2) {
-    mat4 g = mat4(
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, -1, 0,
-    0, 0, 0, 1
-    );
-
-    return dot(v1.dir, g * v2.dir);
+    return dot(v1.dir, v2.dir);
 }
-
 
 /**
  * Translate the vector by the isometry.
  */
 Vector applyIsometry(Isometry isom, Vector v) {
-    vec4 coords = isom.matrix * v.pos.coords;
-    coords.w = coords.w + isom.shift;
-    Point pos = Point(coords);
-    Vector res = Vector(pos, isom.matrix * v.dir);
-    return reduceError(res);
+    Point pos = applyIsometry(isom, v.pos);
+    if (isom.isInSol) {
+        return Vector(pos, v.dir);
+    } else {
+        Isometry push = makeTranslation(v.pos);
+        Isometry pull = makeInvTranslation(pos);
+        vec4 dir = pull.matrix * isom.matrix * push.matrix * v.dir;
+        return Vector(pos, v.dir);
+    }
 }
 
+/*
+ * Apply the isometry (x,y,z) -> (y,x,-z)
+ */
+Vector flip(Vector v){
+    Point pos = flip(v.pos);
+    return Vector(pos, vec4(v.dir.y, v.dir.x, -v.dir.z, 0.));
+}
 
 /**
- * Rotate the given vector by a matrix representing an element of O(3).
+ * Rotation the given vector by a matrix representing an element of O(3).
  * @param[in] m an isometry of the tangent space. The matrix is written in the reference frame at the orign
  * @param[in] v a vector **at the origin**.
  */
 Vector applyFacing(mat4 m, Vector v) {
-    vec4 aux = m * vec4(v.dir.xy, v.dir.w, 0.);
-    Vector res = Vector(v.pos, vec4(aux.xy, 0., aux.z));
-    return res;
-    //    return reduceError(res);
+    return Vector(v.pos, m * v.dir);
 }
 
 void initFlow(Vector v){
+    // initializes all the parameters needed to march along the geodesic directed by u
+    // we assume that the position of u is the origin
+    // if ab = 0 (hyperbolic sheets), all the parameters are not needed,
+    // however their computations are trivial
+    // (all the elliptic integrals becomes, trivial, the AGM stops where it starts, etc)
+    // instead of adding cases, we simply run the computations
+
+    // some renaming to simplify the formulas
+    // by assumption a^2 + b^2 + c^2 = 1
+    float ab = abs(v.dir.x * v.dir.y);
+
+    // some auxiliary value to avoind redundant computations of roots.
+    float aux1 = sqrt(1. - 2. * ab);
+    float aux2 = 2. * sqrt(ab);
+
+    // frequency
+    ell_mu = sqrt(1. + 2. * ab);
+
+    // parameters of the elliptic functions
+    ell_k = aux1 / ell_mu;
+    ell_kprime = aux2 / ell_mu;
+    ell_m = (1. - 2. * ab) / (1. + 2. * ab);
+
+    // complete elliptic integrals and related quantities
+    agm();
+    vec2 KE = ellipke();
+    ell_K = KE.x;
+    ell_E = KE.y;
+
+    // if ab = 0 (hyperbolic sheets) then k' = 0, in which case, L will not be needed and makes no sense here
+    if (ab != 0.) {
+        ell_L = ell_E / (ell_kprime * ell_K) - 0.5 * ell_kprime;
+    }
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/shaders/part2.js
+
+;// CONCATENATED MODULE: ./src/geometries/sol/geometry/shaders/part2.js
 // language=GLSL
 /* harmony default export */ const part2 = (`//
+/***********************************************************************************************************************
+ ***********************************************************************************************************************
+ *
+ * Implementation of the euclidean geometry (part 2)
+ *
+ ***********************************************************************************************************************
+ **********************************************************************************************************************/
 
 /**
  * Section of the frame bundle.
@@ -50734,55 +51004,280 @@ void initFlow(Vector v){
  * @param[out] frame computed frame at the given point
  */
 void frame(Point p, out Vector[3] f){
-    float x = p.coords.x;
-    float y = p.coords.y;
-    float z = p.coords.z;
-
-    vec4 dir0 = vec4(z, 0, x, 0);
-    vec4 dir1 = vec4(0, z, y, 0);
-    vec4 dir2 = vec4(0, 0, 0, 1);
-
-    dir0 = hypNormalize(dir0);
-    dir1 = hypNormalize(dir1);
-
-    f[0] = Vector(p, dir0);
-    f[1] = Vector(p, dir1);
-    f[2] = Vector(p, dir2);
+    f[0] = Vector(p, vec4(1, 0, 0, 0));
+    f[1] = Vector(p, vec4(0, 1, 0, 0));
+    f[2] = Vector(p, vec4(0, 0, 1, 0));
 }
 
+/**
+ * Section of the orthonormal frame bundle.
+ * The section at the origin, should coincide with the reference frame.
+ * @param[in] p point on the geometry
+ * @param[out] frame computed frame at the given point
+ */
 void orthoFrame(Point p, out Vector[3] f){
-    float x = p.coords.x;
-    float y = p.coords.y;
-    float z = p.coords.z;
-
-    float den = 1. + z;
-    vec4 dir0 = (1. / den) * vec4(x * x + z + 1., x * y, x * den, 0.);
-    vec4 dir1 = (1. / den) * vec4(x * y, y * y + z + 1., y * den, 0.);
-    vec4 dir2 = vec4(0, 0, 0, 1);
-
-    f[0] = Vector(p, dir0);
-    f[1] = Vector(p, dir1);
-    f[2] = Vector(p, dir2);
+    f[0] = Vector(p, vec4(1, 0, 0, 0));
+    f[1] = Vector(p, vec4(0, 1, 0, 0));
+    f[2] = Vector(p, vec4(0, 0, 1, 0));
 }
 
 /**
  * Compute (an approximation of) the point obtained from p by moving the given direction.
  * @param[in] p initial point.
- * @param[in] dp the coordinate of the direction with repsect to the frame provided by frame()
+ * @param[in] dp the coordinate of the direction with respect to the frame provided by frame()
  */
 Point smallShift(Point p, vec3 dp){
-    Vector[3] f;
-    frame(p, f);
-    vec4 coords = p.coords + dp[0] * f[0].dir + dp[1] * f[1].dir + dp[2] * f[2].dir;
-
-    Point res = Point(coords);
-    return reduceError(res);
+    Point aux = Point(vec4(dp, 1));
+    Isometry isom = makeTranslation(p);
+    return applyIsometry(isom, aux);
 }
-
 
 Vector smallShift(Vector v, vec3 dp){
     Point pos = smallShift(v.pos, dp);
     return Vector(pos, v.dir);
+}
+
+/**
+ * Numerical verstion of the flow
+ * Euler method
+ * The vector v is assume to be a **unit** vector  
+ */
+Vector numFlow(Vector v, float t){
+    float NUM_STEP = 0.0002;
+    Isometry shift = makeTranslation(v.pos);
+
+    Vector aux = Vector(ORIGIN, v.dir);
+    vec4 field_p;
+    vec4 field_u;
+    int n = int(floor(t/NUM_STEP));
+    for (int i=0; i<n; i++){
+        field_p = vec4(
+        exp(aux.pos.coords.z) * aux.dir.x,
+        exp(-aux.pos.coords.z) * aux.dir.y,
+        aux.dir.z,
+        0.
+        );
+        field_u = vec4(
+        aux.dir.x * aux.dir.z,
+        -aux.dir.y * aux.dir.z,
+        - aux.dir.x *  aux.dir.x + aux.dir.y * aux.dir.y,
+        0
+        );
+        aux.pos.coords = aux.pos.coords + NUM_STEP * field_p;
+        aux.dir = aux.dir + NUM_STEP * field_u;
+        aux = geomNormalize(aux);
+    }
+    return applyIsometry(shift, aux);
+}
+
+Vector hypXFlow(Vector v, float t){
+    // flow in (the neighborhood of) the hyperbolic sheets {x = 0}
+    // use an taylor expansion at the order 2 around a = 0
+    // if need one could use a higher order expansion...
+    // one "just" need to do a few ugly computations before!
+    
+    // Isometry moving back to the origin and conversely
+    Isometry shift = makeTranslation(v.pos);
+    // result to be populated
+    Vector resOrigin;
+
+    // renaming the coordinates of the tangent vector to simplify the formulas
+    float a = v.dir.x;
+    float b = v.dir.y;
+    float c = v.dir.z;
+
+    // preparing the material to write down the formula in an easy way
+    // and avoid redundant computation
+    // look at the notes for the definitions of all the quantities
+    float b2 = b * b;
+    float c2 = c * c;
+    // norm of the yz component of the tagent vector, i.e. sqrt(b^2 + c^2) and its powsers
+    float n1 = sqrt(b2 + c2);
+    float n2 = n1 * n1;
+    float n3 = n1 * n2;
+    float n4 = n1 * n3;
+    // sign of b
+    float sign = 1.;
+    if (b < 0.) {
+        sign = -1.;
+    }
+    // cosh(s), sinh(s), and tanh(s) where s = n(t+t0)
+    float shs = (c * cosh(n1 * t) + n1 * sinh(n1 * t)) / abs(b);
+    float chs = (n1 * cosh(n1 * t) + c * sinh(n1 * t)) / abs(b);
+    float ths = shs / chs;
+
+
+    vec4 u0 = vec4(
+    0.,
+    sign * n1 / chs,
+    n1 * ths,
+    0.
+    );
+
+    vec4 u1 = vec4(
+    abs(b) * chs / n1,
+    0.,
+    0.,
+    0.
+    );
+
+    vec4 u2 = vec4(
+    0.,
+    sign * b2 * chs / (4. * n3)
+    + sign * (b2 - 2. * c2)  * (n1 * t * shs / pow(chs, 2.) - 1. / chs) / (4. * n3)
+    - 3. * sign * c * shs / (4. * n2 * pow(chs, 2.)),
+    - b2 * shs * chs / (2. * n3)
+    - (b2 - 2. * c2) * (ths - n1 * t / pow(chs, 2.)) / (4. * n3)
+    + 3. * c / (4. * n2 * pow(chs, 2.)),
+    0.
+    );
+
+    resOrigin.dir = u0  + a * u1 + a * a * u2;
+
+
+    vec4 p0 = vec4(
+    0.,
+    n1 * ths / b - c / b,
+    log(abs(b) * chs / n1),
+    1.
+    );
+
+    vec4 p1 = vec4(
+    b2 * (shs * chs + n1 * t) / (2. * n3) - c / (2. * n2),
+    0.,
+    0.,
+    0.
+    );
+
+    vec4 p2 = vec4(
+    0.,
+    b * n1 * t / (2. * n3)
+    - (b2 - 2. * c2) * ( n1 * t / pow(chs, 2.) + ths) / (4. * b * n3)
+    + 3. * c / (4. * b * n2 * pow(chs, 2.))
+    - c / (2. * b * n2),
+    - b2 * pow(chs, 2.) / (4. * n4)
+    - (b2 - 2. * c2) * (n1 * t * ths - 1.) / (4. * n4)
+    + 3. * c * ths / (4. * n3),
+    0.
+    );
+
+    resOrigin.pos.coords = p0 + a * p1 + a * a * p2;
+    
+    resOrigin = geomNormalize(resOrigin);
+    return applyIsometry(shift, resOrigin);
+}
+
+Vector hypYFlow(Vector v, float t) {
+    // flow in (the neighborhood of) the hyperbolic sheets {y = 0}
+    // instead of copy/paste the formula, use the flip
+    Vector res = flip(v);
+    res = hypXFlow(res, t);
+    res = flip(res);
+    return res;
+}
+
+
+Vector ellFlow(Vector v, float t){
+    // follow the geodesic flow during a time t
+    // generic case
+
+    // Isometry moving back to the origin and conversely
+    Isometry shift = makeTranslation(v.pos);
+
+    // result to be populated
+    Vector resOrigin;
+
+    // renaming the coordinates of the tangent vector to simplify the formulas
+    float a = v.dir.x;
+    float b = v.dir.y;
+    float c = v.dir.z;
+    
+    // In order to minimizes the computations we adopt the following trick
+    // For long steps, i.e. if mu * t > 4K, then we only march by an integer multiple of the period 4K.
+    // In this way, there is no elliptic function to compute : only the x,y coordinates are shifted by a translation
+    // We only compute elliptic functions for small steps, i.e. if mu * t < 4K
+
+ //   float steps = floor((ell_mu * t) / (4. * ell_K));
+
+//    if (steps > 0.5) {
+//        resOrigin.pos = vec4(ell_L * steps * 4. * ell_K, ell_L * steps * 4. * ell_K, 0., 1.);
+//        resOrigin.dir = vec4(a, b, c, 0.);
+//    }
+//    else {
+
+        // parameters related to the initial condition of the geodesic flow
+
+        // phase shift (Phi in the handwritten notes)
+        float aux = sqrt(1. - 2. * abs(a * b));
+        // jacobi functions applied to s0 (we don't care about the amplitude am(s0) here)
+        vec3 jacobi_s0 = vec3(
+        - c / aux,
+        (abs(a) - abs(b)) / aux,
+        (abs(a) + abs(b)) / ell_mu
+        );
+
+
+        // sign of a (resp. b)
+        float signa = 1.;
+        if (a < 0.) {
+            signa = -1.;
+        }
+        float signb = 1.;
+        if (b < 0.) {
+            signb = -1.;
+        }
+
+        // some useful intermediate computation
+        float kOkprime = ell_k / ell_kprime;
+        float oneOkprime = 1. / ell_kprime;
+
+        // we are now ready to write down the coordinates of the endpoint
+
+        // amplitude (without the phase shift of s0)
+        // the functions we consider are 4K periodic, hence we can reduce the value of mu * t modulo 4K.
+        float s = mod(ell_mu * t, 4. * ell_K);
+        // jabobi functions applied to the amplitude s
+        vec3 jacobi_s = ellipj(s);
+
+        // jacobi function applied to mu * t + s0 = s + s0  (using addition formulas)
+        float den = 1. - ell_m * jacobi_s.x * jacobi_s.x * jacobi_s0.x * jacobi_s0.x;
+        vec3 jacobi_ss0 = vec3(
+        (jacobi_s.x * jacobi_s0.y * jacobi_s0.z + jacobi_s0.x * jacobi_s.y * jacobi_s.z) / den,
+        (jacobi_s.y * jacobi_s0.y - jacobi_s.x * jacobi_s.z * jacobi_s0.x * jacobi_s0.z) / den,
+        (jacobi_s.z * jacobi_s0.z - ell_m * jacobi_s.x * jacobi_s.y * jacobi_s0.x * jacobi_s0.y) / den
+        );
+
+        // Z(mu * t + s0) - Z(s0) (using again addition formulas)
+        float zetaj = ellipz(jacobi_s.x / jacobi_s.y) - ell_m * jacobi_s.x * jacobi_s0.x * jacobi_ss0.x;
+
+
+        // wrapping all the computation
+        resOrigin.pos.coords = vec4(
+
+        signa * sqrt(abs(b / a)) * (
+        oneOkprime * zetaj
+        + kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+        + ell_L * ell_mu * t
+        ),
+        signb * sqrt(abs(a / b)) * (
+        oneOkprime * zetaj
+        - kOkprime * (jacobi_ss0.x - jacobi_s0.x)
+        + ell_L * ell_mu * t
+        ),
+        0.5 * log(abs(b / a)) + asinh(kOkprime * jacobi_ss0.y),
+        1.
+        );
+
+        resOrigin.dir = vec4(
+        a * sqrt(abs(b/a)) * (kOkprime * jacobi_ss0.y + oneOkprime * jacobi_ss0.z),
+        - b * sqrt(abs(a/b)) * (kOkprime * jacobi_ss0.y - oneOkprime * jacobi_ss0.z),
+        - ell_k * ell_mu * jacobi_ss0.x,
+        0.
+        );
+//    }
+
+    resOrigin = geomNormalize(resOrigin);
+    return applyIsometry(shift, resOrigin);
 }
 
 
@@ -50791,20 +51286,26 @@ Vector smallShift(Vector v, vec3 dp){
  * The vector v is assume to be a **unit** vector
  */
 Vector flow(Vector v, float t){
-    vec3 u = v.dir.xyz;
-    float lambda = hypLength(u);
-    u = hypNormalize(u);
-    vec3 coords = cosh(lambda * t) * v.pos.coords.xyz + sinh(lambda * t) * u;
-    Point pos = Point(vec4(coords, v.pos.coords.w + t * v.dir.w));
+    float tolerance = 0.0001;
 
-    vec3 dir = sinh(lambda * t) * v.pos.coords.xyz + cosh(lambda * t) * u;
-    Vector res = Vector(pos, vec4(lambda * dir, v.dir.w));
-    res = reduceError(res);
-    res = geomNormalize(res);
-    return res;
-}
-
-`);
+    if (abs(t) < 0.002) {
+        return numFlow(v, t);
+        //return ellflow(tv, t);
+    }
+    else {
+        if (abs(v.dir.x * t) < tolerance) {
+            //if (tv.dir.x ==0.) {
+            return hypXFlow(v, t);
+        }
+        else if (abs(v.dir.y * t) < tolerance) {
+            //else if (tv.dir.y ==0.) {
+            return hypYFlow(v, t);
+        }
+        else {
+            return ellFlow(v, t);
+        }
+    }
+}`);
 
 ;// CONCATENATED MODULE: ./node_modules/mustache/mustache.mjs
 /*!
@@ -60865,7 +61366,7 @@ class VRButton_VRButton {
  * Return a human-readable version of the vector (for debugging purpose)
  * @return {string}
  */
-Vector3.prototype.toLog = function () {
+three_module_Vector3.prototype.toLog = function () {
     return `[${this.x}, ${this.y}, ${this.z}]`
 }
 
@@ -64679,8 +65180,8 @@ class VRCamera extends BasicCamera {
                     // Thus we take here the midpoint between the two VR cameras.
                     // Those can only be accessed using the WebXRManager.
                     const camerasVR = webXRManager.getCamera(this.threeCamera).cameras;
-                    const newThreePositionL = new Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
-                    const newThreePositionR = new Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
+                    const newThreePositionL = new three_module_Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
+                    const newThreePositionR = new three_module_Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
                     newThreePosition.lerpVectors(newThreePositionL, newThreePositionR, 0.5);
                 } else {
                     newThreePosition.setFromMatrixPosition(this.matrix);
@@ -69987,8 +70488,8 @@ function computeBounds( geometry, primitiveDef, parser ) {
 		if ( min !== undefined && max !== undefined ) {
 
 			box.set(
-				new Vector3( min[ 0 ], min[ 1 ], min[ 2 ] ),
-				new Vector3( max[ 0 ], max[ 1 ], max[ 2 ] )
+				new three_module_Vector3( min[ 0 ], min[ 1 ], min[ 2 ] ),
+				new three_module_Vector3( max[ 0 ], max[ 1 ], max[ 2 ] )
 			);
 
 			if ( accessor.normalized ) {
@@ -70017,8 +70518,8 @@ function computeBounds( geometry, primitiveDef, parser ) {
 
 	if ( targets !== undefined ) {
 
-		const maxDisplacement = new Vector3();
-		const vector = new Vector3();
+		const maxDisplacement = new three_module_Vector3();
+		const vector = new three_module_Vector3();
 
 		for ( let i = 0, il = targets.length; i < il; i ++ ) {
 
@@ -71555,7 +72056,7 @@ class GroupElement_GroupElement {
  * @classdesc
  * Element of the trivial group... just nothing to do!
  */
-class GroupElement extends GroupElement_GroupElement {
+class trivial_GroupElement_GroupElement extends GroupElement_GroupElement {
 
     constructor(group) {
         super(group)
@@ -71581,7 +72082,7 @@ class GroupElement extends GroupElement_GroupElement {
     }
 
     toIsometry() {
-        return new Isometry();
+        return new Isometry_Isometry();
     }
 
     equals(elt) {
@@ -71589,7 +72090,7 @@ class GroupElement extends GroupElement_GroupElement {
     }
 
     clone() {
-        return new GroupElement();
+        return new trivial_GroupElement_GroupElement();
     }
 
     copy(elt) {
@@ -71643,7 +72144,7 @@ class trivial_Group_Group extends Group_Group {
     }
 
     element() {
-        return new GroupElement(this);
+        return new trivial_GroupElement_GroupElement(this);
     }
 
     shader(shaderBuilder) {
@@ -73236,7 +73737,7 @@ class PhongWrapMaterial extends Material_Material {
          * Reflectivity of the material
          * @type {Color}
          */
-        this.reflectivity = params.reflectivity !== undefined ? params.reflectivity : new Vector3(0, 0, 0);
+        this.reflectivity = params.reflectivity !== undefined ? params.reflectivity : new three_module_Vector3(0, 0, 0);
         /**
          * lights affecting the material
          * @type {Light[]}
@@ -73642,7 +74143,7 @@ class Shape_Shape extends Generic {
          * Isometry defining the position of the shape (relative to any potential parent)
          * @type {Isometry}
          */
-        this.isom = isom !== undefined ? isom : new Isometry();
+        this.isom = isom !== undefined ? isom : new Isometry_Isometry();
         /**
          * Inverse of the isometry
          * @type {Isometry}
@@ -73677,8 +74178,8 @@ class Shape_Shape extends Generic {
      */
     updateAbsoluteIsom() {
         if (this._absoluteIsom === undefined) {
-            this._absoluteIsom = new Isometry();
-            this._absoluteIsomInv = new Isometry();
+            this._absoluteIsom = new Isometry_Isometry();
+            this._absoluteIsomInv = new Isometry_Isometry();
         }
 
         this.isomInv = this.isom.clone().invert();
@@ -74765,8 +75266,8 @@ class IsotropicChaseControls {
             // Thus we take here the midpoint between the two VR cameras.
             // Those can only be accessed using the WebXRManager.
             const camerasVR = webXRManager.getCamera(this.camera.threeCamera).cameras;
-            const newThreePositionL = new Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
-            const newThreePositionR = new Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
+            const newThreePositionL = new three_module_Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
+            const newThreePositionR = new three_module_Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
             cameraPosition.lerpVectors(newThreePositionL, newThreePositionR, 0.5);
         } else {
             cameraPosition.setFromMatrixPosition(this.camera.matrix);
@@ -74976,8 +75477,8 @@ class ShootControls {
                 // Thus we take here the midpoint between the two VR cameras.
                 // Those can only be accessed using the WebXRManager.
                 const camerasVR = webXRManager.getCamera(this.camera.threeCamera).cameras;
-                const newThreePositionL = new Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
-                const newThreePositionR = new Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
+                const newThreePositionL = new three_module_Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
+                const newThreePositionR = new three_module_Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
                 cameraPosition.lerpVectors(newThreePositionL, newThreePositionR, 0.5);
             } else {
                 cameraPosition.setFromMatrixPosition(this.camera.matrix);
@@ -75924,7 +76425,7 @@ class isometry_GroupElement_GroupElement extends GroupElement_GroupElement {
     
     constructor(group) {
         super(group);
-        this.isom = new Isometry();
+        this.isom = new Isometry_Isometry();
     }
 
     identity() {
@@ -76027,7 +76528,7 @@ class isometry_Group_Group extends Group_Group {
         shaderBuilder.addChunk(isometry_shaders_element);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/geometry/General.js
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingTorus/GroupElement.js
 
 
 
@@ -76035,7 +76536,117 @@ class isometry_Group_Group extends Group_Group {
 
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/cuspedTorus/set.js
+/**
+ * @class
+ * @classdesc
+ * Element in the suspension of Z^2 by Z, where Z acts on Z^2 ast the matrix A from Group.js
+ * The first two coordinates (a,b) correspond to the Z^2 factor
+ * The last coordinates c correspond to the Z factor
+ */
+class mappingTorus_GroupElement_GroupElement extends (/* unused pure expression or super */ null && (AbstractGroupElement)) {
+
+    constructor(group, a = 0, b = 0, c = 0) {
+        super(group);
+        this.coords = new Vector3(a, b, c);
+        this.matrix = A.clone().power(c);
+    }
+
+    identity() {
+        this.coords.set(0, 0, 0);
+        this.matrix.identity();
+        return this;
+    }
+
+    multiply(elt) {
+        this.coords.add(elt.coords.applyMatrix3(this.matrix));
+        this.matrix.multiply(elt.matrix);
+        return this;
+    }
+
+    premultiply(elt) {
+        this.coords.applyMatrix3(elt.matrix).add(elt.coords);
+        this.matrix.premultiply(elt.matrix);
+        return this;
+    }
+
+    invert() {
+        this.matrix.invert();
+        this.coords.applyMatrix3(this.matrix).negate();
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b, c] = this.coords.toArray();
+        const point = new Point((a * PHI + b) * DENUM, (-a + b * PHI) * DENUM, c * TAU, 1);
+        return new Isometry().makeTranslation(point);
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new mappingTorus_GroupElement_GroupElement(this.group);
+        res.coords.copy(this.coords);
+        res.matrix.copy(this.matrix);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        this.matrix.copy(elt.matrix);
+        return this;
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingTorus/Group.js
+
+
+
+
+
+
+
+const Group_A = new Matrix3().set(
+    2, 1, 0,
+    1, 1, 0,
+    0, 0, 1
+);
+const Group_PHI = 0.5 * (1 + Math.sqrt(5))
+const Group_DENUM = 1 / (Group_PHI + 2);
+const Group_TAU = 2 * Math.log(Group_PHI);
+
+/**
+ * @class
+ * @classdesc
+ * Suspension of Z^2 by Z
+ * See GroupElement for the description of the representation
+ */
+class mappingTorus_Group_Group extends (/* unused pure expression or super */ null && (AbstractGroup)) {
+
+    /**
+     * Constructor
+     * The two parameters are translation vectors in the xy plane
+     * The third vector will be automatically computed as the commutator (in Nil) of the first two
+     */
+    constructor() {
+        super();
+    }
+
+    element() {
+        const x = arguments.length > 0 ? arguments[0] : 0;
+        const y = arguments.length > 1 ? arguments[1] : 0;
+        const z = arguments.length > 2 ? arguments[2] : 0;
+        return new GroupElement(this, x, y, z);
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk(element);
+    }
+
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingTorus/set.js
 
 
 
@@ -76046,84 +76657,79 @@ class isometry_Group_Group extends Group_Group {
 
 const group = new isometry_Group_Group();
 
-const sqrt2 = Math.sqrt(2);
-const modelHalfCube = 1 / sqrt2;
-
-const normalXp = new Vector4(1, 0, -modelHalfCube, 0);
+const normalX = new Vector4(Group_PHI, -1, 0, 0);
+const normalY = new Vector4(1, Group_PHI, 0, 0);
+const normalZ = new Vector4(0, 0, 1 / Group_TAU, 0);
 
 function testXp(p) {
-    return p.coords.dot(normalXp) > 0;
+    return p.coords.dot(normalX) > 0.5;
 }
 
 // language=GLSL
 const glslTestXp = `//
 bool testXp(Point p){
-    vec4 normal = vec4(1, 0, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
+    vec4 normal = vec4(${Group_PHI}, -1, 0, 0);
+    return dot(p.coords, normal) > 0.5;
 }
 `;
 
-const normalXn = new Vector4(-1, 0, -modelHalfCube, 0);
-
 function testXn(p) {
-    return p.coords.dot(normalXn) > 0;
+    return p.coords.dot(normalX) < -0.5;
 }
 
 // language=GLSL
 const glslTestXn = `//
 bool testXn(Point p){
-    vec4 normal = vec4(-1, 0, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
+    vec4 normal = vec4(${Group_PHI}, -1, 0, 0);
+    return dot(p.coords, normal) < -0.5;
 }
 `;
 
-const normalYp = new Vector4(0, 1, -modelHalfCube, 0);
-
 function testYp(p) {
-    return p.coords.dot(normalYp) > 0;
+    return p.coords.dot(normalY) > 0.5;
 }
 
 // language=GLSL
 const glslTestYp = `//
 bool testYp(Point p){
-    vec4 normal = vec4(0, 1, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
+    vec4 normal = vec4(1, ${Group_PHI}, 0, 0);
+    return dot(p.coords, normal) > 0.5;
 }
 `;
 
-const normalYn = new Vector4(0, -1, -modelHalfCube, 0);
-
 function testYn(p) {
-    return p.coords.dot(normalYn) > 0;
+    return p.coords.dot(normalY) < -0.5;
 }
 
 // language=GLSL
 const glslTestYn = `//
 bool testYn(Point p){
-    vec4 normal = vec4(0, -1, -${modelHalfCube}, 0);
-    return dot(p.coords, normal) > 0.;
+    vec4 normal = vec4(1, ${Group_PHI}, 0, 0);
+    return dot(p.coords, normal) < -0.5;
 }
 `;
 
-function testWp(p) {
-    return p.coords.w > 1;
+function testZp(p) {
+    return p.coords.dot(normalZ) > 0.5;
 }
 
 // language=GLSL
-const glslTestWp = `//
-bool testWp(Point p){
-    return p.coords.w > 1.;
+const glslTestZp = `//
+bool testZp(Point p){
+    vec4 normal = vec4(0, 0, ${1 / Group_TAU}, 0);
+    return dot(p.coords, normal) > 0.5;
 }
 `;
 
-function testWn(p) {
-    return p.coords.w < -1.;
+function testZn(p) {
+    return p.coords.dot(normalZ) < -0.5;
 }
 
 // language=GLSL
-const glslTestWn = `//
-bool testWn(Point p){
-    return p.coords.w < -1.;
+const glslTestZn = `//
+bool testZn(Point p){
+    vec4 normal = vec4(0, 0, ${1 / Group_TAU}, 0);
+    return dot(p.coords, normal) < -0.5;
 }
 `;
 
@@ -76131,496 +76737,87 @@ const shiftXp = group.element();
 const shiftXn = group.element();
 const shiftYp = group.element();
 const shiftYn = group.element();
-const shiftWp = group.element();
-const shiftWn = group.element();
+const shiftZp = group.element();
+const shiftZn = group.element();
 
-const c = 2 * sqrt2;
-shiftXp.isom.matrix.set(
-    3, 0, -c, 0,
-    0, 1, 0, 0,
-    -c, 0, 3, 0,
-    0, 0, 0, 1
-);
-shiftXn.isom.matrix.set(
-    3, 0, c, 0,
-    0, 1, 0, 0,
-    c, 0, 3, 0,
-    0, 0, 0, 1
-);
-shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 3, -c, 0,
-    0, -c, 3, 0,
-    0, 0, 0, 1
-);
-shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, 3, c, 0,
-    0, c, 3, 0,
-    0, 0, 0, 1
-);
-shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2));
-shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
+shiftXp.isom.makeTranslation(new Point_Point(-Group_PHI * Group_DENUM, Group_DENUM, 0, 1));
+shiftXn.isom.makeTranslation(new Point_Point(Group_PHI * Group_DENUM, -Group_DENUM, 0, 1));
+shiftYp.isom.makeTranslation(new Point_Point(-Group_DENUM, -Group_PHI * Group_DENUM, 0, 1));
+shiftYn.isom.makeTranslation(new Point_Point(Group_DENUM, Group_PHI * Group_DENUM, 0, 1));
+shiftZp.isom.makeTranslation(new Point_Point(0, 0, -Group_TAU, 1));
+shiftZn.isom.makeTranslation(new Point_Point(0, 0, Group_TAU, 1));
 
-/* harmony default export */ const cuspedTorus_set = (new TeleportationSet()
+/* harmony default export */ const mappingTorus_set = (new TeleportationSet()
+    .add(testZp, glslTestZp, shiftZp, shiftZn)
+    .add(testZn, glslTestZn, shiftZn, shiftZp)
     .add(testXp, glslTestXp, shiftXp, shiftXn)
     .add(testXn, glslTestXn, shiftXn, shiftXp)
     .add(testYp, glslTestYp, shiftYp, shiftYn)
-    .add(testYn, glslTestYn, shiftYn, shiftYp)
-    .add(testWp, glslTestWp, shiftWp, shiftWn)
-    .add(testWn, glslTestWn, shiftWn, shiftWp));
+    .add(testYn, glslTestYn, shiftYn, shiftYp));
 
 
-
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/orbiTorus/set.js
-
-
-
-
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/zLoop/set.js
 
 
 
 
 const set_group = new isometry_Group_Group();
+const height = 1.01;
 
-const set_sqrt2 = Math.sqrt(2);
-const aux = Math.pow(2, 0.25);
-const shB = 1 / aux;
-const chB = Math.sqrt(1 + set_sqrt2) / aux;
-const height = Math.asinh(shB);
 
-const set_normalXp = new Vector4(chB, 0, -shB, 0);
-
-function set_testXp(p) {
-    return p.coords.dot(set_normalXp) > 0;
+function set_testZp(p) {
+    return p.coords.z > 0.5 * height;
 }
 
-// language=GLSL
-const set_glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(${chB}, 0, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
+//language=GLSL
+const set_glslTestZp = `//
+bool testZp(Point p){
+    return p.coords.z > ${0.5 * height};
 }
 `;
 
-const set_normalXn = new Vector4(-chB, 0, -shB, 0);
-
-function set_testXn(p) {
-    return p.coords.dot(set_normalXn) > 0;
+function set_testZn(p) {
+    return p.coords.z < -0.5 * height;
 }
 
-// language=GLSL
-const set_glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(-${chB}, 0, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
+//language=GLSL
+const set_glslTestZn = `//
+bool testZn(Point p){
+    return p.coords.z < ${-0.5 * height};
 }
 `;
 
-const set_normalYp = new Vector4(0, chB, -shB, 0);
 
-function set_testYp(p) {
-    return p.coords.dot(set_normalYp) > 0;
-}
+const set_shiftZp = set_group.element();
+const set_shiftZn = set_group.element();
 
-// language=GLSL
-const set_glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, ${chB}, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const set_normalYn = new Vector4(0, -chB, -shB, 0);
-
-function set_testYn(p) {
-    return p.coords.dot(set_normalYn) > 0;
-}
-
-// language=GLSL
-const set_glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, -${chB}, -${shB}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-function set_testWp(p) {
-    return p.coords.w > height;
-}
-
-// language=GLSL
-const set_glslTestWp = `//
-bool testWp(Point p){
-    return p.coords.w > ${height};
-}
-`;
-
-function set_testWn(p) {
-    return p.coords.w < -height;
-}
-
-// language=GLSL
-const set_glslTestWn = `//
-bool testWn(Point p){
-    return p.coords.w < -${height};
-}
-`;
-
-const set_shiftXp = set_group.element();
-const set_shiftXn = set_group.element();
-const set_shiftYp = set_group.element();
-const set_shiftYn = set_group.element();
-const set_shiftWp = set_group.element();
-const set_shiftWn = set_group.element();
-
-const sh2b = 2 * shB * chB;
-const ch2B = 2 * chB * chB - 1;
-
-set_shiftXp.isom.matrix.set(
-    ch2B, 0, -sh2b, 0,
-    0, 1, 0, 0,
-    -sh2b, 0, ch2B, 0,
+set_shiftZp.isom.matrix.set(
+    Math.exp(-height), 0, 0, 0,
+    0, Math.exp(height), 0, 0,
+    0, 0, 1, -height,
     0, 0, 0, 1
-);
-set_shiftXn.isom.matrix.set(
-    ch2B, 0, sh2b, 0,
-    0, 1, 0, 0,
-    sh2b, 0, ch2B, 0,
+)
+set_shiftZn.isom.matrix.set(
+    Math.exp(height), 0, 0, 0,
+    0, Math.exp(-height), 0, 0,
+    0, 0, 1, height,
     0, 0, 0, 1
-);
-set_shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, ch2B, -sh2b, 0,
-    0, -sh2b, ch2B, 0,
-    0, 0, 0, 1
-);
-set_shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, ch2B, sh2b, 0,
-    0, sh2b, ch2B, 0,
-    0, 0, 0, 1
-);
-set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2 * height));
-set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2 * height));
-
-
-/* harmony default export */ const orbiTorus_set = (new TeleportationSet()
-    .add(set_testXp, set_glslTestXp, set_shiftXp, set_shiftXn)
-    .add(set_testXn, set_glslTestXn, set_shiftXn, set_shiftXp)
-    .add(set_testYp, set_glslTestYp, set_shiftYp, set_shiftYn)
-    .add(set_testYn, set_glslTestYn, set_shiftYn, set_shiftYp)
-    .add(set_testWp, set_glslTestWp, set_shiftWp, set_shiftWn)
-    .add(set_testWn, set_glslTestWn, set_shiftWn, set_shiftWp));
-
-
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/plane/set.js
-
-
-
-
-
-
-
-const plane_set_group = new isometry_Group_Group();
-
-const plane_set_sqrt2 = Math.sqrt(2);
-const set_aux = Math.pow(2, 0.25);
-const set_shB = 1 / set_aux;
-const set_chB = Math.sqrt(1 + plane_set_sqrt2) / set_aux;
-const set_height = Math.asinh(set_shB);
-
-const plane_set_normalXp = new Vector4(set_chB, 0, -set_shB, 0);
-
-function plane_set_testXp(p) {
-    return p.coords.dot(plane_set_normalXp) > 0;
-}
-
-// language=GLSL
-const plane_set_glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(${set_chB}, 0, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const plane_set_normalXn = new Vector4(-set_chB, 0, -set_shB, 0);
-
-function plane_set_testXn(p) {
-    return p.coords.dot(plane_set_normalXn) > 0;
-}
-
-// language=GLSL
-const plane_set_glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(-${set_chB}, 0, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const plane_set_normalYp = new Vector4(0, set_chB, -set_shB, 0);
-
-function plane_set_testYp(p) {
-    return p.coords.dot(plane_set_normalYp) > 0;
-}
-
-// language=GLSL
-const plane_set_glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, ${set_chB}, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-const plane_set_normalYn = new Vector4(0, -set_chB, -set_shB, 0);
-
-function plane_set_testYn(p) {
-    return p.coords.dot(plane_set_normalYn) > 0;
-}
-
-// language=GLSL
-const plane_set_glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, -${set_chB}, -${set_shB}, 0);
-    return dot(p.coords, normal) > 0.;
-}
-`;
-
-function plane_set_testWp(p) {
-    return p.coords.w > set_height;
-}
-
-
-const plane_set_shiftXp = plane_set_group.element();
-const plane_set_shiftXn = plane_set_group.element();
-const plane_set_shiftYp = plane_set_group.element();
-const plane_set_shiftYn = plane_set_group.element();
-
-const set_sh2b = 2 * set_shB * set_chB;
-const set_ch2B = 2 * set_chB * set_chB - 1;
-
-plane_set_shiftXp.isom.matrix.set(
-    set_ch2B, 0, -set_sh2b, 0,
-    0, 1, 0, 0,
-    -set_sh2b, 0, set_ch2B, 0,
-    0, 0, 0, 1
-);
-plane_set_shiftXn.isom.matrix.set(
-    set_ch2B, 0, set_sh2b, 0,
-    0, 1, 0, 0,
-    set_sh2b, 0, set_ch2B, 0,
-    0, 0, 0, 1
-);
-plane_set_shiftYp.isom.matrix.set(
-    1, 0, 0, 0,
-    0, set_ch2B, -set_sh2b, 0,
-    0, -set_sh2b, set_ch2B, 0,
-    0, 0, 0, 1
-);
-plane_set_shiftYn.isom.matrix.set(
-    1, 0, 0, 0,
-    0, set_ch2B, set_sh2b, 0,
-    0, set_sh2b, set_ch2B, 0,
-    0, 0, 0, 1
-);
-
-/* harmony default export */ const plane_set = (new TeleportationSet()
-    .add(plane_set_testXp, plane_set_glslTestXp, plane_set_shiftXp, plane_set_shiftXn)
-    .add(plane_set_testXn, plane_set_glslTestXn, plane_set_shiftXn, plane_set_shiftXp)
-    .add(plane_set_testYp, plane_set_glslTestYp, plane_set_shiftYp, plane_set_shiftYn)
-    .add(plane_set_testYn, plane_set_glslTestYn, plane_set_shiftYn, plane_set_shiftYp));
-
-
-
-
-
-;// CONCATENATED MODULE: ./src/geometries/h2e/groups/zLoop/set.js
-
-
-
-
-
-const zLoop_set_group = new isometry_Group_Group();
-
-function zLoop_set_testWp(p) {
-    return p.coords.w > 1;
-}
-
-// language=GLSL
-const zLoop_set_glslTestWp = `//
-bool testWp(Point p){
-    return p.coords.w > 1.;
-}
-`;
-
-function zLoop_set_testWn(p) {
-    return p.coords.w < -1.;
-}
-
-// language=GLSL
-const zLoop_set_glslTestWn = `//
-bool testWn(Point p){
-    return p.coords.w < -1.;
-}
-`;
-
-const zLoop_set_shiftWp = zLoop_set_group.element();
-const zLoop_set_shiftWn = zLoop_set_group.element();
-
-zLoop_set_shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -2));
-zLoop_set_shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, 2));
+)
 
 
 /* harmony default export */ const zLoop_set = (new TeleportationSet()
-    .add(zLoop_set_testWp, zLoop_set_glslTestWp, zLoop_set_shiftWp, zLoop_set_shiftWn)
-    .add(zLoop_set_testWn, zLoop_set_glslTestWn, zLoop_set_shiftWn, zLoop_set_shiftWp));
+    .add(set_testZp, set_glslTestZp, set_shiftZp, set_shiftZn)
+    .add(set_testZn, set_glslTestZn, set_shiftZn, set_shiftZp));
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/imports/direction.js
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/zSun/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const direction = (`//
-Vector direction(Point p, Point q){
-    vec3 pAux = p.coords.xyz;
-    vec3 qAux = q.coords.xyz;
-    float c = hypDot(pAux, qAux);
-    float lenAux = acosh(-c);
-    vec3 dirAux = qAux + c * pAux;
-    dirAux = (lenAux / sqrt(c * c  - 1.)) * dirAux;
-    Vector res = Vector(p, vec4(dirAux, q.coords.w - p.coords.w));
-    return geomNormalize(res);
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/imports/distance.js
-// language=GLSL
-/* harmony default export */ const distance = (`//
-/**
- * Distance between two points
- */
-float dist(Point p1, Point p2){
-    float aux1 = acosh(-hypDot(p1.coords, p2.coords));
-    float aux2 = p1.coords.w - p2.coords.w;
-    return sqrt(aux1 * aux1 + aux2 * aux2);
-}
-
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/imports/lightIntensity.js
-// language=GLSL
-/* harmony default export */ const lightIntensity = (`//
-/**
-* Intensity of the light after travelling a length \`len\` in the direction \`dir\`
-* @param[in] dir unit vector at the light position
-* @param[in] len distance from the light
-* @return intensity of the light
-*/
-float lightIntensity(float len){
-    //return 1./(len * len);
-    return 1./ len;
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/pointLight/shaders/struct.js
-// language=GLSL
-/* harmony default export */ const pointLight_shaders_struct = (`//
+/* harmony default export */ const zSun_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
  * Euclidean point light
  **********************************************************************************************************************/
-struct PointLight {
-    int id;
-    vec3 color;
-    float intensity;
-    Point position;
-    int maxDirs;
-};
 
-bool directions(PointLight light, RelVector v, int i, out RelVector dir, out float intensity) {
-    if (i!=0){
-        return false;
-    }
-    Point position = applyGroupElement(v.invCellBoost, light.position);
-    float dist = dist(v.local.pos, position);
-    intensity = lightIntensity(dist) * light.intensity;
-    Vector local = direction(v.local.pos, position);
-    dir = RelVector(local, v.cellBoost, v.invCellBoost);
-    return true;
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/pointLight/shaders/directions.js
-// language=Mustache + GLSL
-/* harmony default export */ const directions = (`
-bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
-    return directions({{name}}, v, i, dir, intensity);
-}
-`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/pointLight/PointLight.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @class
- *
- * @classdesc
- * Light at infinity in the positive E-direction
- */
-class PointLight_PointLight extends Light_Light {
-
-    /**
-     * Constructor
-     * @param {Color} color - the color of the light
-     * @param {Point} position - the position of the light
-     * @param {number} intensity - the intensity of the light
-     */
-    constructor(color, position, intensity = 1) {
-        super(1);
-        this.color = color;
-        this.intensity = intensity;
-        this.position = position;
-        this.addImport(distance, direction, lightIntensity);
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        return true;
-    }
-
-    get uniformType() {
-        return 'PointLight';
-    }
-
-    /**
-     * Return the chunk of GLSL code defining the corresponding structure.
-     * @abstract
-     * @return {string}
-     */
-    static glslClass() {
-        return pointLight_shaders_struct;
-    }
-
-    glslDirections() {
-        return mustache_mustache.render(directions, this);
-    }
-}
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/esun/shaders/struct.js
-// language=GLSL
-/* harmony default export */ const esun_shaders_struct = (`//
-/***********************************************************************************************************************
- * @struct
- * Euclidean point light
- **********************************************************************************************************************/
-struct ESun {
+struct ZSun {
     int id;
     vec3 color;
     float intensity;
@@ -76628,24 +76825,24 @@ struct ESun {
     int maxDirs;
 };
 
-bool directions(ESun light, RelVector v, int i, out RelVector dir, out float intensity) {
-    if (i != 0){
+bool directions(ZSun light, RelVector v, int i, out RelVector dir, out float intensity) {
+    if (i!=0){
         return false;
     }
     intensity = light.intensity;
-    Vector local = Vector(v.local.pos, vec4(0, 0, 0, light.direction));
+    Vector local=Vector(v.local.pos, vec4(0, 0, light.direction, 0));
     dir = RelVector(local, v.cellBoost, v.invCellBoost);
     return true;
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/esun/shaders/directions.js
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/zSun/shaders/directions.js
 // language=Mustache + GLSL
-/* harmony default export */ const shaders_directions = (`
+/* harmony default export */ const directions = (`
 bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
     return directions({{name}}, v, i, dir, intensity);
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/esun/ESun.js
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/zSun/ZSun.js
 
 
 
@@ -76655,7 +76852,7 @@ bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intens
 
 
 const DIR_UP = 1;
-const DIR_DOWN = -1;
+const DIR_DOWN = (/* unused pure expression or super */ null && (-1));
 
 /**
  * @class
@@ -76663,7 +76860,7 @@ const DIR_DOWN = -1;
  * @classdesc
  * Light at infinity in the E-direction
  */
-class ESun extends Light_Light {
+class ZSun extends Light_Light {
 
     /**
      * Constructor.
@@ -76689,7 +76886,7 @@ class ESun extends Light_Light {
     }
 
     get uniformType() {
-        return 'ESun';
+        return 'ZSun';
     }
 
     /**
@@ -76698,17 +76895,113 @@ class ESun extends Light_Light {
      * @return {string}
      */
     static glslClass() {
-        return esun_shaders_struct;
+        return zSun_shaders_struct;
+    }
+
+    glslDirections() {
+        return mustache_mustache.render(directions, this);
+    }
+
+
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/constDirLight/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const constDirLight_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Euclidean point light
+ **********************************************************************************************************************/
+
+struct ConstDirLight {
+    int id;
+    vec3 color;
+    float intensity;
+    vec3 direction;
+    int maxDirs;
+};
+
+bool directions(ConstDirLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+    if (i!=0){
+        return false;
+    }
+    intensity = light.intensity;
+    //    Isometry invCellBoost = toIsometry(v.invCellBoost);
+    //    vec4 coords = invCellBoost.matrix * vec4(light.direction, 0.);
+    vec4 coords = vec4(light.direction, 0.);
+    Vector local = Vector(v.local.pos, coords);
+    dir = RelVector(local, v.cellBoost, v.invCellBoost);
+    return true;
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/constDirLight/shaders/directions.js
+// language=Mustache + GLSL
+/* harmony default export */ const shaders_directions = (`
+bool {{name}}_directions(RelVector v, int i, out RelVector dir, out float intensity) {
+    return directions({{name}}, v, i, dir, intensity);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/constDirLight/ConstDirLight.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Constant local direction
+ */
+class ConstDirLight extends Light_Light {
+
+    /**
+     * Constructor.
+     * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
+     * @param {Vector3} direction - the direction of the light.
+     */
+    constructor(color, intensity = 1, direction) {
+        super(1);
+        this.color = color;
+        this.intensity = intensity;
+        this.direction = direction;
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'ConstDirLight';
+    }
+
+    /**
+     * Return the chunk of GLSL code defining the corresponding structure.
+     * @abstract
+     * @return {string}
+     */
+    static glslClass() {
+        return constDirLight_shaders_struct;
     }
 
     glslDirections() {
         return mustache_mustache.render(shaders_directions, this);
     }
+
+
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/lights/all.js
+;// CONCATENATED MODULE: ./src/geometries/sol/lights/all.js
 
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/varyingColor/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/sol/material/varyingColor/shaders/struct.js
 // language=GLSL
 /* harmony default export */ const varyingColor_shaders_struct = (`//
 /***********************************************************************************************************************
@@ -76721,16 +77014,16 @@ struct VaryingColorMaterial {
 };
 
 vec3 render(VaryingColorMaterial material, ExtVector v) {
-    return material.mainColor + material.weight * v.vector.local.pos.coords.xyw;
+    return material.mainColor + material.weight * v.vector.local.pos.coords.xyz;
 }`);
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/varyingColor/shaders/render.js
+;// CONCATENATED MODULE: ./src/geometries/sol/material/varyingColor/shaders/render.js
 // language=Mustache + GLSL
 /* harmony default export */ const varyingColor_shaders_render = (`//
 vec3 {{name}}_render(ExtVector v) {
     return render({{name}}, v);
 }
 `);
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/varyingColor/VaryingColorMaterial.js
+;// CONCATENATED MODULE: ./src/geometries/sol/material/varyingColor/VaryingColorMaterial.js
 
 
 
@@ -76777,7 +77070,7 @@ class VaryingColorMaterial extends Material_Material {
     }
 
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/material/all.js
+;// CONCATENATED MODULE: ./src/geometries/sol/material/all.js
 
 ;// CONCATENATED MODULE: ./src/core/shapes/BasicShape.js
 
@@ -76812,56 +77105,59 @@ class BasicShape extends Shape_Shape {
         return true;
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/fakeBall/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const ball_shaders_struct = (`//
+/* harmony default export */ const fakeBall_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
- * Shape of a ball in H2xE
+ * Fake ball in Nil
  **********************************************************************************************************************/
 
-struct BallShape {
+struct FakeBallShape {
     int id;
     Point center;
     float radius;
 };
 
 /**
- * Distance function for a global ball
+ * Distance function for a global euclidean ball
  */
-float sdf(BallShape ball, RelVector v) {
+float sdf(FakeBallShape ball, RelVector v) {
     Point center = applyGroupElement(v.invCellBoost, ball.center);
-    return dist(v.local.pos, center) - ball.radius;
+    vec4 diff = v.local.pos.coords - center.coords;
+    return length(diff) - ball.radius;
 }
 
 /**
- * Gradient field for a global ball
+ * Gradient field for a global euclidean ball
  */
-RelVector gradient(BallShape ball, RelVector v){
+RelVector gradient(FakeBallShape ball, RelVector v){
     Point center = applyGroupElement(v.invCellBoost, ball.center);
-    Vector local = direction(v.local.pos, center);
-    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
+    Vector local = Vector(v.local.pos, v.local.pos.coords - center.coords);
+    local = geomNormalize(local);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/shaders/sdf.js
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/fakeBall/shaders/sdf.js
 // language=Mustache + GLSL
-/* harmony default export */ const ball_shaders_sdf = (`        
+/* harmony default export */ const fakeBall_shaders_sdf = (`//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/shaders/gradient.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/fakeBall/shaders/gradient.js
 // language=Mustache + GLSL
-/* harmony default export */ const ball_shaders_gradient = (`
+/* harmony default export */ const fakeBall_shaders_gradient = (`//
 RelVector {{name}}_gradient(RelVector v){
     return gradient({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/ball/BallShape.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/fakeBall/FakeBallShape.js
 
 
 
@@ -76873,36 +77169,43 @@ RelVector {{name}}_gradient(RelVector v){
 
 
 
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Sol.
+ */
+class FakeBallShape extends BasicShape {
 
-class BallShape extends BasicShape {
 
     /**
      * Constructor.
-     * @param {Isometry|Point|Vector} location - the location of the center of the ball
+     * @param {Isometry|Point} location - the location of the ball
      * @param {number} radius - the radius of the ball
      */
     constructor(location, radius) {
-        const isom = new Isometry();
+        const isom = new Isometry_Isometry();
         if (location.isIsometry) {
             isom.copy(location);
         } else if (location.isPoint) {
             isom.makeTranslation(location);
-        } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
         } else {
-            throw new Error("BallShape: this type of location is not implemented");
+            throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
         this.radius = radius;
         this._center = undefined;
-        this.addImport(distance, direction);
     }
 
     updateData() {
         super.updateData();
-        this._center = new Point().applyIsometry(this.absoluteIsom);
+        this._center = new Point_Point().applyIsometry(this.absoluteIsom);
     }
 
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
     get center() {
         if (this._center === undefined) {
             this.updateData();
@@ -76910,95 +77213,81 @@ class BallShape extends BasicShape {
         return this._center;
     }
 
-    /**
-     * Says that the object inherits from `BallShape`
-     * @type {boolean}
-     */
-    get isBallShape() {
-        return true;
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
     get isGlobal() {
         return true;
     }
 
-    get uniformType() {
-        return 'BallShape';
+    get isFakeBallShape() {
+        return true;
     }
 
-    /**
-     * The UV coordinates corresponds to the spherical coordinates on the sphere...
-     * Not sure if that is the smartest choice
-     * @return {boolean}
-     */
-    get hasUVMap() {
-        return false;
+    get uniformType() {
+        return 'FakeBallShape';
     }
 
     static glslClass() {
-        return ball_shaders_struct;
+        return fakeBall_shaders_struct;
     }
 
     glslSDF() {
-        return mustache_mustache.render(ball_shaders_sdf, this);
+        return mustache_mustache.render(fakeBall_shaders_sdf, this);
     }
 
     glslGradient() {
-        return mustache_mustache.render(ball_shaders_gradient, this);
+        return mustache_mustache.render(fakeBall_shaders_gradient, this);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/shaders/struct.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localFakeBall/shaders/struct.js
 // language=GLSL
-/* harmony default export */ const localBall_shaders_struct = (`//
+/* harmony default export */ const localFakeBall_shaders_struct = (`//
 /***********************************************************************************************************************
  * @struct
- * Shape of a ball in H2xE
+ * Fake ball in Nil
  **********************************************************************************************************************/
 
-struct LocalBallShape {
+struct LocalFakeBallShape {
     int id;
     Point center;
     float radius;
 };
 
 /**
- * Distance function for a local ball
+ * Distance function for a global euclidean ball
  */
-float sdf(LocalBallShape ball, RelVector v) {
-    return dist(v.local.pos, ball.center) - ball.radius;
+float sdf(LocalFakeBallShape ball, RelVector v) {
+    vec4 diff = v.local.pos.coords - ball.center.coords;
+    return length(diff) - ball.radius;
 }
 
 /**
- * Gradient field for a local ball
+ * Gradient field for a global euclidean ball
  */
-RelVector gradient(LocalBallShape ball, RelVector v){
-    Vector local = direction(v.local.pos, ball.center);
-    return RelVector(negate(local), v.cellBoost, v.invCellBoost);
+RelVector gradient(LocalFakeBallShape ball, RelVector v){
+    Vector local = Vector(v.local.pos, v.local.pos.coords - ball.center.coords);
+    local = geomNormalize(local);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/shaders/sdf.js
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localFakeBall/shaders/sdf.js
 // language=Mustache + GLSL
-/* harmony default export */ const localBall_shaders_sdf = (`        
+/* harmony default export */ const localFakeBall_shaders_sdf = (`//
 float {{name}}_sdf(RelVector v) {
     return sdf({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/shaders/gradient.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localFakeBall/shaders/gradient.js
 // language=Mustache + GLSL
-/* harmony default export */ const localBall_shaders_gradient = (`
+/* harmony default export */ const localFakeBall_shaders_gradient = (`//
 RelVector {{name}}_gradient(RelVector v){
     return gradient({{name}},v);
 }
 `);
 
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/LocalBallShape.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localFakeBall/LocalFakeBallShape.js
 
 
 
@@ -77010,36 +77299,43 @@ RelVector {{name}}_gradient(RelVector v){
 
 
 
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Sol.
+ */
+class LocalFakeBallShape extends BasicShape {
 
-class LocalBallShape extends BasicShape {
 
     /**
      * Constructor.
-     * @param {Isometry|Point|Vector} location - the location of the center of the ball
+     * @param {Isometry|Point} location - the location of the ball
      * @param {number} radius - the radius of the ball
      */
     constructor(location, radius) {
-        const isom = new Isometry();
+        const isom = new Isometry_Isometry();
         if (location.isIsometry) {
             isom.copy(location);
         } else if (location.isPoint) {
             isom.makeTranslation(location);
-        } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
         } else {
-            throw new Error("BallShape: this type of location is not implemented");
+            throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
         this.radius = radius;
         this._center = undefined;
-        this.addImport(distance, direction);
     }
 
     updateData() {
         super.updateData();
-        this._center = new Point().applyIsometry(this.absoluteIsom);
+        this._center = new Point_Point().applyIsometry(this.absoluteIsom);
     }
 
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
     get center() {
         if (this._center === undefined) {
             this.updateData();
@@ -77047,48 +77343,865 @@ class LocalBallShape extends BasicShape {
         return this._center;
     }
 
-    /**
-     * Says that the object inherits from `LocalBallShape`
-     * @type {boolean}
-     */
-    get isLocalBallShape() {
-        return true;
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
     get isGlobal() {
         return false;
     }
 
-    get uniformType() {
-        return 'LocalBallShape';
+    get isFakeBallShape() {
+        return true;
     }
 
-    /**
-     * The UV coordinates corresponds to the spherical coordinates on the sphere...
-     * Not sure if that is the smartest choice
-     * @return {boolean}
-     */
-    get hasUVMap() {
-        return false;
+    get uniformType() {
+        return 'LocalFakeBallShape';
     }
 
     static glslClass() {
-        return localBall_shaders_struct;
+        return localFakeBall_shaders_struct;
     }
 
     glslSDF() {
-        return mustache_mustache.render(localBall_shaders_sdf, this);
+        return mustache_mustache.render(localFakeBall_shaders_sdf, this);
     }
 
     glslGradient() {
-        return mustache_mustache.render(localBall_shaders_gradient, this);
+        return mustache_mustache.render(localFakeBall_shaders_gradient, this);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/all.js
+;// CONCATENATED MODULE: ./src/geometries/sol/geometry/General.js
+
+
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/zHalfSpace/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const zHalfSpace_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Euclidean half space
+ **********************************************************************************************************************/
+
+struct ZHalfSpaceShape {
+    vec4 test; /**< Extrinsic vector used to compute the distance */
+    Point origin; /**< Origin on the boundary of the half space */
+    vec3 uDir; /**< Direction of the u-coordinates */
+    vec3 vDir; /**< Direction of the v-coordinates */
+};
+
+// one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
+float sdf(ZHalfSpaceShape halfspace, RelVector v){
+    Isometry aux = toIsometry(v.cellBoost);
+    vec4 test = transpose(aux.matrix) * halfspace.test;
+    return dot(v.local.pos.coords, test);
+}
+
+RelVector gradient(ZHalfSpaceShape halfspace, RelVector v){
+    // keep only the z coordinates of the test vector which is +/- 1 
+    vec4 dir = halfspace.test * vec4(0, 0, 1, 0);
+    Vector local = Vector(v.local.pos, dir);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+vec2 uvMap(ZHalfSpaceShape halfspace, RelVector v){
+    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);
+    Isometry isom = toIsometry(v.invCellBoost);
+    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);
+    vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);
+    float uCoord = dot(v.local.pos.coords - pos.coords, uDir);
+    float vCoord = dot(v.local.pos.coords - pos.coords, vDir);
+    return vec2(uCoord, vCoord);
+}`);
+
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/zHalfSpace/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const zHalfSpace_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/zHalfSpace/shaders/gradient.js
+// language=Mustache + GLSL
+/* harmony default export */ const zHalfSpace_shaders_gradient = (`
+RelVector {{name}}_gradient(RelVector v){
+    return gradient({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/zHalfSpace/shaders/uv.js
+// language=Mustache + GLSL
+/* harmony default export */ const zHalfSpace_shaders_uv = (`//
+vec2 {{name}}_uvMap(RelVector v){
+    return uvMap({{name}}, v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/zHalfSpace/ZHalfSpaceShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Euclidean half space
+ */
+class ZHalfSpaceShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the location of the half space
+     *
+     * The half space is the image by isom of the half space {z < 0}
+     * The UV directions are the images by isom of e_x and e_y
+     */
+    constructor(isom) {
+        super(isom);
+        this._origin = undefined;
+        this._test = undefined;
+        this._uDir = undefined;
+        this._vDir = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._origin = new Point_Point().applyIsometry(this.absoluteIsom);
+        const aux = new Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
+        this._test = new Vector4(0, 0, 1, 0).applyMatrix4(aux);
+        this._uDir = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._vDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+    }
+
+    /**
+     * The origin on the boundary of the half space
+     * @type {Point}
+     */
+    get origin() {
+        if (this._origin === undefined) {
+            this.updateData();
+        }
+        return this._origin;
+    }
+
+    /**
+     * A vector to compute the SDF
+     * @type {Vector4}
+     */
+    get test() {
+        if (this._test === undefined) {
+            this.updateData();
+        }
+        return this._test;
+    }
+
+    /**
+     * U-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get uDir() {
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
+    }
+
+    /**
+     * V-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get vDir() {
+        if (this._vDir === undefined) {
+            this.updateData();
+        }
+        return this._vDir;
+    }
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isZHalfSpaceShape() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'ZHalfSpaceShape'
+    }
+
+    static glslClass() {
+        return zHalfSpace_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(zHalfSpace_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(zHalfSpace_shaders_gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache_mustache.render(zHalfSpace_shaders_uv, this);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xyHalfSpace/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const xyHalfSpace_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Euclidean half space
+ **********************************************************************************************************************/
+
+struct XYHalfSpaceShape {
+    vec4 testX; /**< Extrinsic auxiliairy vector used to compute the distance */
+    vec4 testZ; /**< Extrinsic auxiliairy vector used to compute the distance */
+    Point origin;
+    vec3 uDir; /**< Direction of the u-coordinates */
+    vec3 vDir; /**< Direction of the v-coordinates */
+};
+
+// one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
+float sdf(XYHalfSpaceShape halfspace, RelVector v){
+    Isometry aux = toIsometry(v.cellBoost);
+    vec4 testX = transpose(aux.matrix) * halfspace.testX;
+    vec4 testZ = transpose(aux.matrix) * halfspace.testZ;
+    float dotX = dot(v.local.pos.coords, testX);
+    float dotZ = dot(v.local.pos.coords, testZ);
+    return asinh(dotX * exp(-dotZ));
+}
+
+RelVector gradient(XYHalfSpaceShape halfspace, RelVector v){
+    Isometry aux = toIsometry(v.cellBoost);
+    vec4 testX = transpose(aux.matrix) * halfspace.testX;
+    vec4 testZ = transpose(aux.matrix) * halfspace.testZ;
+    float dotX = dot(v.local.pos.coords, testX);
+    float dotZ = dot(v.local.pos.coords, testZ);
+    float eDotZ = exp(-dotZ);
+    float coeff = 1. / sqrt(dotX * dotX * eDotZ * eDotZ + 1.);
+    vec4 dir = coeff * eDotZ * (testX - dotX * testZ);
+    // projecting to the tangent space of Sol 
+    // todo : check this
+    dir.w = 0.;
+    Isometry isom = makeInvTranslation(v.local.pos);
+    dir = isom.matrix * dir;
+    Vector n = Vector(v.local.pos, dir);
+    n = geomNormalize(n);
+    return RelVector(n, v.cellBoost, v.invCellBoost);
+}
+
+vec2 uvMap(XYHalfSpaceShape halfspace, RelVector v){
+    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);
+    Isometry isom = toIsometry(v.invCellBoost);
+    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);
+    vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);
+    float uCoord = dot(v.local.pos.coords - pos.coords, uDir);
+    float vCoord = dot(v.local.pos.coords - pos.coords, vDir);
+    return vec2(uCoord, vCoord);
+}`);
+
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xyHalfSpace/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const xyHalfSpace_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xyHalfSpace/shaders/gradient.js
+// language=Mustache + GLSL
+/* harmony default export */ const xyHalfSpace_shaders_gradient = (`
+RelVector {{name}}_gradient(RelVector v){
+    return gradient({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xyHalfSpace/shaders/uv.js
+// language=Mustache + GLSL
+/* harmony default export */ const xyHalfSpace_shaders_uv = (`//
+vec2 {{name}}_uvMap(RelVector v){
+    return uvMap({{name}}, v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xyHalfSpace/XYHalfSpaceShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ *  x half space (or y half space)
+ */
+class XYHalfSpaceShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the location of the half space
+     *
+     * The half space is the image by isom of the half space {x < 0}
+     * In particular the half space {y < 0} can be obtained by applying a flip
+     */
+    constructor(isom) {
+        super(isom);
+        this._origin = undefined;
+        this._testX = undefined;
+        this._testZ = undefined;
+        this._uDir = undefined;
+        this._vDir = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._origin = new Point_Point().applyIsometry(this.absoluteIsom);
+        const aux = new Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
+        this._testX = new Vector4(1, 0, 0, 0).applyMatrix4(aux);
+        this._testZ = new Vector4(0, 0, 1, 0).applyMatrix4(aux);
+        this._uDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._vDir = new Vector(0, 0, 1).applyMatrix4(this.absoluteIsom.matrix);
+    }
+
+    /**
+     * The origin on the boundary of the half space
+     * @type {Point}
+     */
+    get origin() {
+        if (this._origin === undefined) {
+            this.updateData();
+        }
+        return this._origin;
+    }
+
+    /**
+     * An auxiliary vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testX() {
+        if (this._testX === undefined) {
+            this.updateData();
+        }
+        return this._testX;
+    }
+
+    /**
+     * An auxiliary vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testZ() {
+        if (this._testZ === undefined) {
+            this.updateData();
+        }
+        return this._testZ;
+    }
+
+    /**
+     * U-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get uDir() {
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
+    }
+
+    /**
+     * V-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get vDir() {
+        if (this._vDir === undefined) {
+            this.updateData();
+        }
+        return this._vDir;
+    }
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isXYHalfSpaceShape() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'XYHalfSpaceShape'
+    }
+
+    static glslClass() {
+        return xyHalfSpace_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(xyHalfSpace_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(xyHalfSpace_shaders_gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache_mustache.render(xyHalfSpace_shaders_uv, this);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localZHalfSpace/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localZHalfSpace_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Euclidean half space
+ **********************************************************************************************************************/
+
+struct LocalZHalfSpaceShape {
+    vec4 test; /**< Extrinsic vector used to compute the distance */
+    Point origin; /**< Origin on the boundary of the half space */
+    vec3 uDir; /**< Direction of the u-coordinates */
+    vec3 vDir; /**< Direction of the v-coordinates */
+};
+
+// one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
+float sdf(LocalZHalfSpaceShape halfspace, RelVector v){
+    return dot(v.local.pos.coords, halfspace.test);
+}
+
+RelVector gradient(LocalZHalfSpaceShape halfspace, RelVector v){
+    // keep only the z coordinates of the test vector which is +/- 1 
+    vec4 dir = halfspace.test * vec4(0, 0, 1, 0);
+    Vector local = Vector(v.local.pos, dir);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
+
+vec2 uvMap(LocalZHalfSpaceShape halfspace, RelVector v){
+//    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);
+//    Isometry isom = toIsometry(v.invCellBoost);
+//    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);
+//    vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);
+    float uCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.uDir, 0));
+    float vCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.vDir, 0));
+    return vec2(uCoord, vCoord);
+}`);
+
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localZHalfSpace/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localZHalfSpace_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localZHalfSpace/shaders/gradient.js
+// language=Mustache + GLSL
+/* harmony default export */ const localZHalfSpace_shaders_gradient = (`
+RelVector {{name}}_gradient(RelVector v){
+    return gradient({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localZHalfSpace/shaders/uv.js
+// language=Mustache + GLSL
+/* harmony default export */ const localZHalfSpace_shaders_uv = (`//
+vec2 {{name}}_uvMap(RelVector v){
+    return uvMap({{name}}, v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localZHalfSpace/LocalZHalfSpaceShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Euclidean half space
+ */
+class LocalZHalfSpaceShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the location of the half space
+     *
+     * The half space is the image by isom of the half space {z < 0}
+     * The UV directions are the images by isom of e_x and e_y
+     */
+    constructor(isom) {
+        super(isom);
+        this._origin = undefined;
+        this._test = undefined;
+        this._uDir = undefined;
+        this._vDir = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._origin = new Point_Point().applyIsometry(this.absoluteIsom);
+        const aux = new Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
+        this._test = new Vector4(0, 0, 1, 0).applyMatrix4(aux);
+        this._uDir = new Vector(1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._vDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+    }
+
+    /**
+     * The origin on the boundary of the half space
+     * @type {Point}
+     */
+    get origin() {
+        if (this._origin === undefined) {
+            this.updateData();
+        }
+        return this._origin;
+    }
+
+    /**
+     * A vector to compute the SDF
+     * @type {Vector4}
+     */
+    get test() {
+        if (this._test === undefined) {
+            this.updateData();
+        }
+        return this._test;
+    }
+
+    /**
+     * U-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get uDir() {
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
+    }
+
+    /**
+     * V-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get vDir() {
+        if (this._vDir === undefined) {
+            this.updateData();
+        }
+        return this._vDir;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalZHalfSpaceShape() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalZHalfSpaceShape'
+    }
+
+    static glslClass() {
+        return localZHalfSpace_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localZHalfSpace_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(localZHalfSpace_shaders_gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache_mustache.render(localZHalfSpace_shaders_uv, this);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/shaders/struct.js
+// language=GLSL
+/* harmony default export */ const localXYHalfSpace_shaders_struct = (`//
+/***********************************************************************************************************************
+ * @struct
+ * Euclidean half space
+ **********************************************************************************************************************/
+
+struct LocalXYHalfSpaceShape {
+    vec4 testX; /**< Extrinsic auxiliairy vector used to compute the distance */
+    vec4 testZ; /**< Extrinsic auxiliairy vector used to compute the distance */
+    Point origin;
+    vec3 uDir; /**< Direction of the u-coordinates */
+    vec3 vDir; /**< Direction of the v-coordinates */
+};
+
+// one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
+float sdf(LocalXYHalfSpaceShape halfspace, RelVector v){
+    float dotX = dot(v.local.pos.coords, halfspace.testX);
+    float dotZ = dot(v.local.pos.coords, halfspace.testZ);
+    return asinh(dotX * exp(-dotZ));
+}
+
+RelVector gradient(LocalXYHalfSpaceShape halfspace, RelVector v){
+    float dotX = dot(v.local.pos.coords, halfspace.testX);
+    float dotZ = dot(v.local.pos.coords, halfspace.testZ);
+    float eDotZ = exp(-dotZ);
+    float coeff = 1. / sqrt(dotX * dotX * eDotZ * eDotZ + 1.);
+    vec4 dir = coeff * eDotZ * (halfspace.testX - dotX * halfspace.testZ);
+    // projecting to the tangent space of Sol 
+    // todo : check this
+    dir.w = 0.;
+    Isometry isom = makeInvTranslation(v.local.pos);
+    dir = isom.matrix * dir;
+    Vector n = Vector(v.local.pos, dir);
+    n = geomNormalize(n);
+    return RelVector(n, v.cellBoost, v.invCellBoost);
+}
+
+vec2 uvMap(LocalXYHalfSpaceShape halfspace, RelVector v){
+//    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);
+//    Isometry isom = toIsometry(v.invCellBoost);
+//    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);
+//    vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);
+    float uCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.uDir, 0));
+    float vCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.vDir, 0));
+    return vec2(uCoord, vCoord);
+}`);
+
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/shaders/sdf.js
+// language=Mustache + GLSL
+/* harmony default export */ const localXYHalfSpace_shaders_sdf = (`        
+float {{name}}_sdf(RelVector v) {
+    return sdf({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/shaders/gradient.js
+// language=Mustache + GLSL
+/* harmony default export */ const localXYHalfSpace_shaders_gradient = (`
+RelVector {{name}}_gradient(RelVector v){
+    return gradient({{name}},v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/shaders/uv.js
+// language=Mustache + GLSL
+/* harmony default export */ const localXYHalfSpace_shaders_uv = (`//
+vec2 {{name}}_uvMap(RelVector v){
+    return uvMap({{name}}, v);
+}
+`);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/LocalXYHalfSpaceShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ *  x half space (or y half space)
+ */
+class LocalXYHalfSpaceShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the location of the half space
+     *
+     * The half space is the image by isom of the half space {x < 0}
+     * In particular the half space {y < 0} can be obtained by applying a flip
+     */
+    constructor(isom) {
+        super(isom);
+        this._origin = undefined;
+        this._testX = undefined;
+        this._testZ = undefined;
+        this._uDir = undefined;
+        this._vDir = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._origin = new Point_Point().applyIsometry(this.absoluteIsom);
+        const aux = new Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
+        this._testX = new Vector4(1, 0, 0, 0).applyMatrix4(aux);
+        this._testZ = new Vector4(0, 0, 1, 0).applyMatrix4(aux);
+        this._uDir = new Vector(0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._vDir = new Vector(0, 0, 1).applyMatrix4(this.absoluteIsom.matrix);
+    }
+
+    /**
+     * The origin on the boundary of the half space
+     * @type {Point}
+     */
+    get origin() {
+        if (this._origin === undefined) {
+            this.updateData();
+        }
+        return this._origin;
+    }
+
+    /**
+     * An auxiliary vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testX() {
+        if (this._testX === undefined) {
+            this.updateData();
+        }
+        return this._testX;
+    }
+
+    /**
+     * An auxiliary vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testZ() {
+        if (this._testZ === undefined) {
+            this.updateData();
+        }
+        return this._testZ;
+    }
+
+    /**
+     * U-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get uDir() {
+        if (this._uDir === undefined) {
+            this.updateData();
+        }
+        return this._uDir;
+    }
+
+    /**
+     * V-direction (for UV coordinates)
+     * @type {Vector}
+     */
+    get vDir() {
+        if (this._vDir === undefined) {
+            this.updateData();
+        }
+        return this._vDir;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalXYHalfSpaceShape() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalXYHalfSpaceShape'
+    }
+
+    static glslClass() {
+        return localXYHalfSpace_shaders_struct;
+    }
+
+    glslSDF() {
+        return mustache_mustache.render(localXYHalfSpace_shaders_sdf, this);
+    }
+
+    glslGradient() {
+        return mustache_mustache.render(localXYHalfSpace_shaders_gradient, this);
+    }
+
+    glslUVMap() {
+        return mustache_mustache.render(localXYHalfSpace_shaders_uv, this);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localCube/localCubeShape.js
+
+
+
+
+
+function localCubeShape(isom, halfWidth) {
+    const front = new LocalZHalfSpaceShape(
+        new Isometry_Isometry().makeTranslation(new Point_Point(0, 0, halfWidth))
+    );
+    const back = new LocalZHalfSpaceShape(
+        new Isometry_Isometry().makeTranslation(new Point_Point(0, 0, -halfWidth))
+            .multiply(new Isometry_Isometry().makeFlip())
+    );
+    const left = new LocalXYHalfSpaceShape(
+        new Isometry_Isometry().makeTranslation(new Point_Point(halfWidth, 0, 0))
+    );
+    const right = new LocalXYHalfSpaceShape(
+        new Isometry_Isometry().makeTranslation(new Point_Point(-halfWidth, 0, 0))
+            .multiply(new Isometry_Isometry().makeReflectionX())
+    );
+    const top = new LocalXYHalfSpaceShape(
+        new Isometry_Isometry().makeTranslation(new Point_Point(0, halfWidth, 0))
+            .multiply(new Isometry_Isometry().makeFlip())
+    );
+    const bottom = new LocalXYHalfSpaceShape(
+        new Isometry_Isometry().makeTranslation(new Point_Point(0, -halfWidth, 0))
+            .multiply(new Isometry_Isometry().makeReflectionY())
+            .multiply(new Isometry_Isometry().makeFlip())
+    );
+
+    const shape = intersection(top, bottom, front, back, left, right, {maxType: SMOOTH_MAX_POLY, maxCoeff: 0.01});
+    shape.isom = isom;
+    return shape;
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/all.js
+
+
+
+
+
+
+
+
+
 
 
 ;// CONCATENATED MODULE: ./src/core/solids/shaders/struct.js
@@ -77249,7 +78362,7 @@ class Solid extends Generic {
         super.shader(shaderBuilder);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/solids/Ball.js
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/FakeBall.js
 
 
 
@@ -77257,23 +78370,22 @@ class Solid extends Generic {
  * @class
  *
  * @classdesc
- * Ball in H2 x E.
+ * Fake ball in Nil.
  */
-class Ball extends Solid {
-
+class FakeBall extends Solid {
     /**
-     * Constructor
-     * @param {Isometry|Point|Vector} location - the location of the ball
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
      * @param {number} radius - the radius of the ball
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new BallShape(location, radius);
+        const shape = new FakeBallShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/solids/LocalBall.js
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalFakeBall.js
 
 
 
@@ -77281,28 +78393,147 @@ class Ball extends Solid {
  * @class
  *
  * @classdesc
- * Ball in H2 x E.
+ * Fake ball in Nil.
  */
-class LocalBall extends Solid {
-
+class LocalFakeBall extends Solid {
     /**
-     * Constructor
-     * @param {Isometry|Point|Vector} location - the location of the ball
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
      * @param {number} radius - the radius of the ball
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new LocalBallShape(location, radius);
+        const shape = new LocalFakeBallShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/h2e/solids/all.js
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/ZHalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Euclidean Half space
+ */
+class ZHalfSpace extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} isom - the location of the half space
+     * @param {Material} material - the material of the half space
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new ZHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/XYHalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Euclidean Half space
+ */
+class XYHalfSpace extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} isom - the location of the half space
+     * @param {Material} material - the material of the half space
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new XYHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalZHalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Euclidean Half space
+ */
+class LocalZHalfSpace extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} isom - the location of the half space
+     * @param {Material} material - the material of the half space
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new LocalZHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalXYHalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Euclidean Half space
+ */
+class LocalXYHalfSpace extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} isom - the location of the half space
+     * @param {Material} material - the material of the half space
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new LocalZHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalCube.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ */
+class LocalCube extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry} location - the location of the cube
+     * @param {number} halfWidth - the half width of the cube
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, halfWidth, material, ptMaterial = undefined) {
+        const shape = localCubeShape(location, halfWidth);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/all.js
 
 
 
 
-;// CONCATENATED MODULE: ./src/thurstonH2E.js
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/thurstonSol.js
 
 
 
@@ -77316,23 +78547,18 @@ class LocalBall extends Solid {
 
 
 
-const thurstonH2E_BasicRenderer = specifyRenderer(BasicRenderer, part1, part2);
-const thurstonH2E_PathTracerRenderer = specifyRenderer(PathTracerRenderer, part1, part2);
-const thurstonH2E_VRRenderer = specifyRenderer(VRRenderer, part1, part2);
+const thurstonSol_BasicRenderer = specifyRenderer(BasicRenderer, part1, part2);
+const thurstonSol_PathTracerRenderer = specifyRenderer(PathTracerRenderer, part1, part2);
+const thurstonSol_VRRenderer = specifyRenderer(VRRenderer, part1, part2);
 
 
 
 
 
 
-const thurstonH2E_Thurston = specifyThurston(Thurston, part1, part2);
-const thurstonH2E_ThurstonLite = specifyThurston(ThurstonLite, part1, part2);
-const thurstonH2E_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
-
-
-
-
-
+const thurstonSol_Thurston = specifyThurston(Thurston, part1, part2);
+const thurstonSol_ThurstonLite = specifyThurston(ThurstonLite, part1, part2);
+const thurstonSol_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
 
 
 
@@ -77340,8 +78566,9 @@ const thurstonH2E_ThurstonVR = specifyThurston(ThurstonVR, part1, part2);
 
 
 
-var __webpack_exports__Ball = __webpack_exports__.ec;
-var __webpack_exports__BallShape = __webpack_exports__.Yb;
+
+
+
 var __webpack_exports__BasicCamera = __webpack_exports__.QU;
 var __webpack_exports__BasicPTMaterial = __webpack_exports__.ZH;
 var __webpack_exports__BasicRenderer = __webpack_exports__.K9;
@@ -77352,12 +78579,12 @@ var __webpack_exports__CheckerboardMaterial = __webpack_exports__.Vz;
 var __webpack_exports__Clock = __webpack_exports__.SU;
 var __webpack_exports__Color = __webpack_exports__.Il;
 var __webpack_exports__ComplementShape = __webpack_exports__.Iy;
-var __webpack_exports__DIR_DOWN = __webpack_exports__.ik;
-var __webpack_exports__DIR_UP = __webpack_exports__.fY;
+var __webpack_exports__ConstDirLight = __webpack_exports__.Vf;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
-var __webpack_exports__ESun = __webpack_exports__.Gj;
 var __webpack_exports__EarthTexture = __webpack_exports__.KO;
 var __webpack_exports__ExpFog = __webpack_exports__.c$;
+var __webpack_exports__FakeBall = __webpack_exports__.OZ;
+var __webpack_exports__FakeBallShape = __webpack_exports__.Ao;
 var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
 var __webpack_exports__Group = __webpack_exports__.ZA;
@@ -77369,8 +78596,13 @@ var __webpack_exports__IsotropicChaseControls = __webpack_exports__.$m;
 var __webpack_exports__KeyGenericControls = __webpack_exports__.Nh;
 var __webpack_exports__LEFT = __webpack_exports__.RL;
 var __webpack_exports__Light = __webpack_exports__._k;
-var __webpack_exports__LocalBall = __webpack_exports__.jo;
-var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
+var __webpack_exports__LocalCube = __webpack_exports__.EB;
+var __webpack_exports__LocalFakeBall = __webpack_exports__.oR;
+var __webpack_exports__LocalFakeBallShape = __webpack_exports__.lt;
+var __webpack_exports__LocalXYHalfSpace = __webpack_exports__.mU;
+var __webpack_exports__LocalXYHalfSpaceShape = __webpack_exports__.Vh;
+var __webpack_exports__LocalZHalfSpace = __webpack_exports__.Qc;
+var __webpack_exports__LocalZHalfSpaceShape = __webpack_exports__.Q9;
 var __webpack_exports__MarsTexture = __webpack_exports__.Qv;
 var __webpack_exports__Material = __webpack_exports__.F5;
 var __webpack_exports__Matrix2 = __webpack_exports__.Uc;
@@ -77385,9 +78617,8 @@ var __webpack_exports__PathTracerWrapMaterial = __webpack_exports__._K;
 var __webpack_exports__PhongMaterial = __webpack_exports__.JF;
 var __webpack_exports__PhongWrapMaterial = __webpack_exports__.Lv;
 var __webpack_exports__Point = __webpack_exports__.E9;
-var __webpack_exports__PointLight = __webpack_exports__.ce;
 var __webpack_exports__Position = __webpack_exports__.Ly;
-var __webpack_exports__QuadRing = __webpack_exports__.iv;
+var __webpack_exports__QuadRing = __webpack_exports__.jo;
 var __webpack_exports__QuadRingElement = __webpack_exports__.mH;
 var __webpack_exports__QuadRingMatrix4 = __webpack_exports__.xd;
 var __webpack_exports__Quaternion = __webpack_exports__._f;
@@ -77418,15 +78649,19 @@ var __webpack_exports__Vector4 = __webpack_exports__.Lt;
 var __webpack_exports__WebGLRenderer = __webpack_exports__.CP;
 var __webpack_exports__WrapShape = __webpack_exports__.$9;
 var __webpack_exports__XRControllerModelFactory = __webpack_exports__.iR;
+var __webpack_exports__XYHalfSpace = __webpack_exports__.Y2;
+var __webpack_exports__XYHalfSpaceShape = __webpack_exports__.ot;
+var __webpack_exports__ZHalfSpace = __webpack_exports__.JX;
+var __webpack_exports__ZHalfSpaceShape = __webpack_exports__.fr;
+var __webpack_exports__ZSun = __webpack_exports__.t2;
 var __webpack_exports__bind = __webpack_exports__.ak;
 var __webpack_exports__complement = __webpack_exports__.Cy;
-var __webpack_exports__cuspedTorusSet = __webpack_exports__.Y7;
 var __webpack_exports__intersection = __webpack_exports__.jV;
-var __webpack_exports__orbiTorusSet = __webpack_exports__.mm;
+var __webpack_exports__localCubeShape = __webpack_exports__.sU;
+var __webpack_exports__mappingTorusSet = __webpack_exports__.jS;
 var __webpack_exports__phongWrap = __webpack_exports__.IJ;
-var __webpack_exports__planeSet = __webpack_exports__.cR;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Clock as Clock, __webpack_exports__Color as Color, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__ESun as ESun, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseControls as IsotropicChaseControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__Matrix3 as Matrix3, __webpack_exports__Matrix4 as Matrix4, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__Quaternion as Quaternion, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootControls as ShootControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRControlsDrag as VRControlsDrag, __webpack_exports__VRControlsMove as VRControlsMove, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__Vector2 as Vector2, __webpack_exports__Vector3 as Vector3, __webpack_exports__Vector4 as Vector4, __webpack_exports__WebGLRenderer as WebGLRenderer, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__intersection as intersection, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Clock as Clock, __webpack_exports__Color as Color, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseControls as IsotropicChaseControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalXYHalfSpace as LocalXYHalfSpace, __webpack_exports__LocalXYHalfSpaceShape as LocalXYHalfSpaceShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__Matrix3 as Matrix3, __webpack_exports__Matrix4 as Matrix4, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__Quaternion as Quaternion, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootControls as ShootControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRControlsDrag as VRControlsDrag, __webpack_exports__VRControlsMove as VRControlsMove, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__Vector2 as Vector2, __webpack_exports__Vector3 as Vector3, __webpack_exports__Vector4 as Vector4, __webpack_exports__WebGLRenderer as WebGLRenderer, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__XYHalfSpace as XYHalfSpace, __webpack_exports__XYHalfSpaceShape as XYHalfSpaceShape, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__intersection as intersection, __webpack_exports__localCubeShape as localCubeShape, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__phongWrap as phongWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };

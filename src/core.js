@@ -8,6 +8,7 @@ export {
     Matrix3,
     Matrix4,
     Quaternion,
+    WebGLRenderer,
 } from "three";
 export {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 

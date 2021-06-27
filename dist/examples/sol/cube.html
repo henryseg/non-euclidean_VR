@@ -12,22 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Color,
+        Vector3,
+        ThurstonLite,
+        trivialSet as trivial,
+        Point,
+        PhongMaterial,
+        ConstDirLight,
+        InfoControls,
+        Solid,
+        Isometry,
+        XYHalfSpaceShape, ZHalfSpaceShape, intersection
+    } from "../../build/thurstonSol.js";
 
-    import * as geom from "../../../src/geometries/sol/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import {ConstDirLight} from "../../../src/geometries/sol/lights/all.js";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {Solid} from "../../../src/geometries/sol/solids/all.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-    import {Isometry} from "../../../src/geometries/sol/geometry/General.js";
-    import {XYHalfSpaceShape, ZHalfSpaceShape} from "../../../src/geometries/sol/shapes/all.js";
-    import {intersection} from "../../../src/commons/shapes/all.js";
 
-    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    const thurston = new ThurstonLite(trivial, {keyboard: 'fr', maxBounces: 1});
 
 
     const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
