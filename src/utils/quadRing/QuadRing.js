@@ -1,5 +1,5 @@
 import {QuadRingElement} from "./QuadRingElement.js";
-import quadRing from "./shader/quadRing.js";
+import quadRing from "./shader/quadRing.glsl";
 import {QuadRingMatrix4} from "./QuadRingMatrix4.js";
 
 /**

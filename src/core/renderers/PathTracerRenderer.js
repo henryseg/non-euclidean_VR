@@ -14,17 +14,17 @@ import {FullScreenQuad} from "three/examples/jsm/postprocessing/EffectComposer.j
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
-import vertexShader from "./shaders/common/vertex.js";
-import constants from "./shaders/common/constants.js";
-import commons1 from "../geometry/shaders/commons1.js";
-import commons2 from "../geometry/shaders/commons2.js";
+import vertexShader from "./shaders/common/vertex.glsl";
+import constants from "./shaders/common/constants.glsl";
+import commons1 from "../geometry/shaders/commons1.glsl";
+import commons2 from "../geometry/shaders/commons2.glsl";
 import scenes from "./shaders/pathTracer/scenes.js";
-import raymarch from "./shaders/pathTracer/raymarch.js";
-import random1 from "./shaders/pathTracer/random1.js";
-import random2 from "./shaders/pathTracer/random2.js";
-import structVectorData from "./shaders/pathTracer/vectorDataStruct.js";
+import raymarch from "./shaders/pathTracer/raymarch.glsl";
+import random1 from "./shaders/pathTracer/random1.glsl";
+import random2 from "./shaders/pathTracer/random2.glsl";
+import structVectorData from "./shaders/pathTracer/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
-import main from "./shaders/pathTracer/main.js";
+import main from "./shaders/pathTracer/main.glsl";
 
 import SteveShader from "../../postProcess/steve/shader.js";
 import nextObject from "./shaders/pathTracer/nextObject.js";

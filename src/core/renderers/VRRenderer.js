@@ -8,15 +8,15 @@ import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {LEFT, RIGHT} from "../../constants.js";
 
-import vertexShader from "./shaders/common/vertex.js";
-import constants from "./shaders/common/constants.js";
-import commons1 from "../geometry/shaders/commons1.js";
-import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/common/raymarch.js";
+import vertexShader from "./shaders/common/vertex.glsl";
+import constants from "./shaders/common/constants.glsl";
+import commons1 from "../geometry/shaders/commons1.glsl";
+import commons2 from "../geometry/shaders/commons2.glsl";
+import raymarch from "./shaders/common/raymarch.glsl";
 import scenes from "./shaders/common/scenes.js";
-import structVectorData from "./shaders/basic/vectorDataStruct.js";
+import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.js";
-import main from "./shaders/basic/main.js";
+import main from "./shaders/basic/main.glsl";
 
 
 /**

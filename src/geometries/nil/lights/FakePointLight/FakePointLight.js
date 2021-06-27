@@ -2,8 +2,8 @@ import {Color} from "three";
 import mustache from "mustache/mustache.mjs";
 import {Light} from "../../../../core/lights/Light.js";
 
-import fakeDistance from "../../imports/fakeDistance.js";
-import struct from "./shaders/struct.js";
+import fakeDistance from "../../imports/fakeDistance.glsl";
+import struct from "./shaders/struct.glsl";
 import directions from "./shaders/directions.js";
 
 export class FakePointLight extends Light {

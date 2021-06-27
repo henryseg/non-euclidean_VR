@@ -2,8 +2,8 @@ import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 import {QuadRing} from "../../../../utils/quadRing/QuadRing.js";
 
-import element from "./shaders/element.js";
-import quadRingMatrix from "../../../../utils/quadRing/shader/quadRingMatrix.js";
+import element from "./shaders/element.glsl";
+import quadRingMatrix from "../../../../utils/quadRing/shader/quadRingMatrix.glsl";
 
 export const QUAD_RING = new QuadRing(3);
 

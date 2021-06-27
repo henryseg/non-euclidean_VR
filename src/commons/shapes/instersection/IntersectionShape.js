@@ -2,13 +2,13 @@ import mustache from "mustache/mustache.mjs";
 
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
-import smoothMaxPoly from "../../imports/smoothMaxPoly.js";
+import smoothMaxPoly from "../../imports/smoothMaxPoly.glsl";
 import sdfRegular from "./shaders/sdfRegular.js";
 import gradientRegular from "./shaders/gradientRegular.js";
 import sdfPoly from "./shaders/sdfPoly.js";
 import gradientPoly from "./shaders/gradientPoly.js";
 import uv from "./shaders/uv.js";
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 
 
 export const REGULAR_MAX = 0;

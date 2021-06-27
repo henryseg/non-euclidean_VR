@@ -1,0 +1,3 @@
+struct UnionShape {
+    float minCoeff;
+};

@@ -3,8 +3,8 @@ export {Point} from "./geometries/hyp/geometry/Point.js";
 export {Vector} from "./core/geometry/Vector.js";
 export {Position} from "./geometries/hyp/geometry/Position.js";
 
-import shader1 from "./geometries/hyp/geometry/shaders/part1.js";
-import shader2 from "./geometries/hyp/geometry/shaders/part2.js";
+import shader1 from "./geometries/hyp/geometry/shaders/part1.glsl";
+import shader2 from "./geometries/hyp/geometry/shaders/part2.glsl";
 
 import {BasicRenderer as BasicRendererGeneric} from "./core/renderers/BasicRenderer.js";
 import {PathTracerRenderer as PathTracerRendererGeneric} from "./core/renderers/PathTracerRenderer.js";

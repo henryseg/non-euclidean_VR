@@ -2,8 +2,8 @@ import {Color} from "three";
 
 import {Fog} from "../../../core/scene/Fog.js";
 
-import struct from "./shaders/struct.js";
-import fog from "./shaders/apply.js";
+import struct from "./shaders/struct.glsl";
+import fog from "./shaders/apply.glsl";
 
 /**
  * @class

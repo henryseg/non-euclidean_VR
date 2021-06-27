@@ -1,8 +1,8 @@
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import mustache from "mustache/mustache.mjs";
 
-import fakeDistance from "../../imports/fakeDistance.js";
-import struct from "./shaders/struct.js";
+import fakeDistance from "../../imports/fakeDistance.glsl";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 import {Isometry} from "../../../../core/geometry/Isometry.js";
 import {Point} from "../../../../core/geometry/Point.js";

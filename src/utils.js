@@ -149,10 +149,10 @@ export function bind(scope, fn) {
 
 
 /**
- * Replace all the special characters in the string by 0
+ * Replace all the special characters in the string by an underscore
  * @param {string} str
  * @return {string}
  */
 export function safeString(str) {
-    return str.replace(/\W/g, '0');
+    return str.replace(/\W/g, '_');
 }

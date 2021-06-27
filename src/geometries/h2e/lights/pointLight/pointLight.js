@@ -3,11 +3,11 @@ import {Color} from "three";
 
 import {Light} from "../../../../core/lights/Light.js";
 
-import direction from "../../imports/direction.js";
-import distance from "../../imports/distance.js";
-import lightIntensity from "../../imports/lightIntensity.js";
+import direction from "../../imports/direction.glsl";
+import distance from "../../imports/distance.glsl";
+import lightIntensity from "../../imports/lightIntensity.glsl";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import directions from "./shaders/directions.js";
 
 

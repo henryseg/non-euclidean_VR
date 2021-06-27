@@ -6,7 +6,7 @@ import {Vector} from "../../../../core/geometry/Vector.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";

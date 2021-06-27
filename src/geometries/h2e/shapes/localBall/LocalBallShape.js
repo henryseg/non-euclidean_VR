@@ -3,9 +3,9 @@ import mustache from "mustache/mustache.mjs";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Isometry, Point} from "../../geometry/General.js";
 
-import direction from "../../imports/direction.js";
-import distance from "../../imports/distance.js";
-import struct from "./shaders/struct.js";
+import direction from "../../imports/direction.glsl";
+import distance from "../../imports/distance.glsl";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 

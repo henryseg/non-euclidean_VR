@@ -1,7 +1,7 @@
 import {Group as AbstractGroup} from "../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 
-import element from "./shaders/element.js";
+import element from "./shaders/element.glsl";
 
 export class Group extends AbstractGroup {
 

@@ -1,7 +1,7 @@
 import {BasicCamera} from "../basic/BasicCamera.js";
 
-import struct from "./shaders/struct.js";
-import mapping from "./shaders/mapping.js";
+import struct from "./shaders/struct.glsl";
+import mapping from "./shaders/mapping.glsl";
 
 export class PathTracerCamera extends BasicCamera {
 

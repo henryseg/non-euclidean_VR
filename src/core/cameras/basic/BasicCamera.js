@@ -1,8 +1,8 @@
 import {PerspectiveCamera, Matrix4} from "three";
 import {RelPosition} from "../../geometry/General.js";
 
-import struct from "./shaders/struct.js";
-import mapping from "./shaders/mapping.js";
+import struct from "./shaders/struct.glsl";
+import mapping from "./shaders/mapping.glsl";
 
 /**
  * @class

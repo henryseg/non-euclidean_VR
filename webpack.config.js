@@ -24,6 +24,14 @@ module.exports = {
             type: 'module',
         },
     },
+    module: {
+        rules: [
+            {
+                test: /\.glsl$/,
+                loader: 'webpack-glsl-loader'
+            }
+        ]
+    },
     // optimization: {
     //     minimize: false
     // },

@@ -8,7 +8,7 @@ import {
 
 import {Material} from "../../../core/materials/Material.js";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import render from "./shaders/render.js";
 
 /**

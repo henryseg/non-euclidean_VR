@@ -3,12 +3,12 @@ import mustache from "mustache/mustache.mjs";
 
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
-import smoothMinPoly from "../../imports/smoothMinPoly.js";
+import smoothMinPoly from "../../imports/smoothMinPoly.glsl";
 import sdfRegular from "./shaders/sdfRegular.js";
 import gradientRegular from "./shaders/gradientRegular.js";
 import uv from "./shaders/uv.js";
 import sdfPoly from "./shaders/sdfPoly.js";
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import gradientPoly from "./shaders/gradientPoly.js";
 
 export const REGULAR_MIN = 0;

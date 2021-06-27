@@ -2,9 +2,9 @@ import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 
 import {Light} from "../../../../core/lights/Light.js";
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import directions from "./shaders/directions.js";
-import lightIntensity from "../../imports/lightIntensity.js";
+import lightIntensity from "../../imports/lightIntensity.glsl";
 
 
 /**

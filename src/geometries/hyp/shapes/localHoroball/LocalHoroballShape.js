@@ -3,7 +3,7 @@ import mustache from "mustache/mustache.mjs";
 
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import {Isometry} from "../../../../core/geometry/Isometry.js";

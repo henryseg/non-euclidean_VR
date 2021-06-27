@@ -2,11 +2,11 @@ import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 import {Light} from "../../../../core/lights/Light.js";
 
-import struct from "./shaders/struct.js";
-import direction from "../../imports/direction.js";
+import struct from "./shaders/struct.glsl";
+import direction from "../../imports/direction.glsl";
 import directions from "./shaders/directions.js";
-import distance from "../../imports/distance.js";
-import lightIntensity from "../../imports/lightIntensity.js";
+import distance from "../../imports/distance.glsl";
+import lightIntensity from "../../imports/lightIntensity.glsl";
 import {Isometry} from "../../../../core/geometry/Isometry.js";
 import {Point} from "../../../../core/geometry/Point.js";
 

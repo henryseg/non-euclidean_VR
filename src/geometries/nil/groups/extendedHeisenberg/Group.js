@@ -3,8 +3,8 @@ import {Matrix4, Vector4} from "three";
 import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 
-import element from "./shaders/element.js";
-import struct from "./shaders/struct.js";
+import element from "./shaders/element.glsl";
+import struct from "./shaders/struct.glsl";
 
 /**
  * @class

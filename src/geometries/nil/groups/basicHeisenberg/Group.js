@@ -3,7 +3,7 @@ import {Matrix4, Vector4} from "three";
 import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 
-import element from "./shaders/element.js";
+import element from "./shaders/element.glsl";
 
 /**
  * @class

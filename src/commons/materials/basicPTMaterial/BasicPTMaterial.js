@@ -3,9 +3,9 @@ import {Color} from "three";
 
 import {PTMaterial} from "../../../core/materials/PTMaterial.js";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import render from "./shaders/render.js";
-import fresnel from "../../imports/fresnelReflectAmount.js";
+import fresnel from "../../imports/fresnelReflectAmount.glsl";
 
 export class BasicPTMaterial extends PTMaterial {
 

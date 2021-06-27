@@ -3,7 +3,7 @@ import mustache from "mustache/mustache.mjs";
 import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 import {Teleportation} from "./Teleportation.js";
 
-import relative from "./shaders/relative.js";
+import relative from "./shaders/relative.glsl";
 import teleport from "./shaders/teleport.js";
 
 

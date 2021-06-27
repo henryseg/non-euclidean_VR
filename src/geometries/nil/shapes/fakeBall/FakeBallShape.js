@@ -4,8 +4,8 @@ import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import fakeDistance from "../../imports/fakeDistance.js";
-import struct from "./shaders/struct.js";
+import fakeDistance from "../../imports/fakeDistance.glsl";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 
 
