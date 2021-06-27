@@ -12,21 +12,20 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/s2e/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import lattice from "../../../src/geometries/s2e/groups/cube/set.js";
-    import {ESun} from "../../../src/geometries/s2e/lights/esun/ESun.js";
-    import {Color} from "three";
-    import {PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Point} from "../../../src/core/geometry/Point.js";
-    import {Ball} from "../../../src/geometries/s2e/solids/Ball.js";
-    import {LocalBall} from "../../../src/geometries/s2e/solids/LocalBall.js";
-    import {PointLight} from "../../../src/geometries/s2e/lights/pointLight/pointLight.js";
-    import {Vector, Isometry} from "../../../src/geometries/s2e/geometry/General.js";
+    import {
+        Color,
+        ThurstonLite,
+        cubeSet as lattice,
+        Point,
+        PhongMaterial,
+        LocalBall,
+        PointLight,
+        Vector, Isometry
+    } from "../../build/thurstonS2E.js";
 
-    const thurston = new ThurstonLite(geom, lattice, {keyboard: 'fr', maxBounces: 1});
+
+    const thurston = new ThurstonLite(lattice, {keyboard: 'fr', maxBounces: 1});
 
 
     const point1 = new Point().applyIsometry(new Isometry().makeTranslationFromDir(new Vector(Math.PI, 0, 0)));
@@ -49,20 +48,19 @@
         0.6,
         point3
     );
-    
-    const mat=new PhongMaterial({
-        color: new Color(1,1,1)
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
     });
-    
-    
-    const point = new Point(0,0,1,0);
-    const ball=new LocalBall(point,0.2,mat);
-    
+
+
+    const point = new Point(0, 0, 1, 0);
+    const ball = new LocalBall(point, 0.2, mat);
+
     thurston.add(ball, light1, light2, light3);
-    
+
     thurston.run();
     thurston.renderer.checkShader();
-
 
 
 </script>
