@@ -12,21 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/h2e/geometry/General.js";
-    import torus from "../../../src/geometries/h2e/groups/orbiTorus/set.js";
-    import {ESun} from "../../../src/geometries/h2e/lights/esun/ESun.js";
-    import {Color} from "three";
-    import {NormalMaterial, PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Isometry, Point, Vector} from "../../../src/geometries/h2e/geometry/General.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-    import {LocalBallShape} from "../../../src/geometries/h2e/shapes/localBall/LocalBallShape.js";
-    import {complement, union} from "../../../src/commons/shapes/all.js";
-    import {Solid} from "../../../src/core/solids/Solid.js";
-    import {PointLight} from "../../../src/geometries/h2e/lights/pointLight/pointLight.js";
 
-    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+    import {
+        Color,
+        ThurstonLite,
+        orbiTorusSet as torus,
+        Point,
+        PhongMaterial,
+        LocalBallShape,
+        complement, union,
+        Solid,
+        InfoControls,
+        Isometry, Vector, PointLight
+    } from "../../build/thurstonH2E.js";
+
+
+    const thurston = new ThurstonLite(torus, {keyboard: 'fr', maxBounces: 1});
 
     const sqrt2 = Math.sqrt(2);
     const aux = Math.pow(2, 0.25);
@@ -54,9 +56,6 @@
         point3
     );
 
-
-    // defining a material
-    const matNormal = new NormalMaterial();
 
     const mat = new PhongMaterial({
         color: new Color(1, 1, 1)

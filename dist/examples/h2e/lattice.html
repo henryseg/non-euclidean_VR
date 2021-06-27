@@ -12,28 +12,27 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
 
-    import * as geom from "../../../src/geometries/h2e/geometry/General.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import cuspedTorus from "../../../src/geometries/h2e/groups/cuspedTorus/set.js";
-    import {DIR_DOWN, DIR_UP, ESun} from "../../../src/geometries/h2e/lights/esun/ESun.js";
-    import {Color, Matrix4} from "three";
-    import {NormalMaterial, PhongMaterial} from "../../../src/commons/materials/all.js";
-    import {Ball} from "../../../src/geometries/h2e/solids/Ball.js";
-    import {LocalBall} from "../../../src/geometries/h2e/solids/LocalBall.js";
-    import {Isometry, Vector, Point} from "../../../src/geometries/h2e/geometry/General.js";
-    import {InfoControls} from "../../../src/controls/InfoControls.js";
-    import {LocalBallShape} from "../../../src/geometries/h2e/shapes/localBall/LocalBallShape.js";
-    import {complement} from "../../../src/commons/shapes/all.js";
-    import {Solid} from "../../../src/core/solids/Solid.js";
+    import {
+        Color,
+        ThurstonLite,
+        cuspedTorusSet as cuspedTorus,
+        Point,
+        PhongMaterial,
+        ESun,
+        DIR_UP,
+        DIR_DOWN,
+        LocalBallShape,
+        complement,
+        Solid,
+        InfoControls
+    } from "../../build/thurstonH2E.js";
 
-    const thurston = new ThurstonLite(geom, cuspedTorus, {keyboard: 'fr', maxBounces: 1});
+
+    const thurston = new ThurstonLite(cuspedTorus, {keyboard: 'fr', maxBounces: 1});
     const lightUp = new ESun(new Color(1, 1, 0), 0.5, DIR_UP);
     const lightDown = new ESun(new Color(0, 1, 1), 0.5, DIR_DOWN);
 
-    // defining a material
-    const matNormal = new NormalMaterial();
 
     const mat = new PhongMaterial({
         color: new Color(1, 1, 1)
