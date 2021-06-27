@@ -12,24 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector2} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Color,
+        ThurstonLite,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement,
+        Solid
+    } from "../../build/thurstonHyp.js";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-
-    import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball} from "../../../src/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, LocalHoroballShape} from "../../../src/geometries/hyp/shapes/all.js";
-    import {CheckerboardMaterial} from "../../../src/commons/materials/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../../src/commons/materials/phongWrap/PhongWrapMaterial.js";
-    import {union} from "../../../src/commons/shapes/all.js";
 
     // cube.usesNearestNeighbors = true;
-    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(cube, {keyboard: 'fr'});
 
 
     // lights for the Phong material

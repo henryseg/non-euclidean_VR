@@ -12,43 +12,35 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3, WebGLRenderer} from "three";
-    import {Thurston} from "../../../src/commons/app/thurston/Thurston.js";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-
-    import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball, LocalBall} from "../../../src/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, LocalHoroballShape} from "../../../src/geometries/hyp/shapes/all.js";
-    import {CheckerboardMaterial} from "../../../src/commons/materials/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../../src/commons/materials/phongWrap/PhongWrapMaterial.js";
-    import {union} from "../../../src/commons/shapes/all.js";
     import {
+        Color,
+        Thurston,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        LocalBallShape,
+        complement, union,
+        Solid,
+        LocalHoroballShape,
         BasicPTMaterial,
-        PathTracerWrapMaterial,
         PhongWrapMaterial,
-        SingleColorMaterial
-    } from "../../../src/commons/materials/all.js";
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
-    import {KeyGenericControls} from "../../../src/controls/KeyGenericControls.js";
-    import Stats from "../../../src/lib/stats.module.js";
-    import {VaryingColorMaterial} from "../../../src/geometries/hyp/material/varyingColor/VaryingColorMaterial.js";
+        VaryingColorMaterial
+    } from "../../build/thurstonHyp.js";
 
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
     //------------------------------------------------------------------------------------------------------------------
 
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+    const thurston = new Thurston(cube, {keyboard: 'fr'});
 
     //------------------------------------------------------------------------------------------------------------------
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
 
-    thurston.scene.ptBackground.absorb = new Color(0.4,0.4,0.4);
+    thurston.scene.ptBackground.absorb = new Color(0.4, 0.4, 0.4);
 
     // lights for the Phong material (not used by the path tracer)
 
@@ -81,17 +73,17 @@
     });
 
     const ptLatticeMat = new BasicPTMaterial({
-        diffuse: new Color(1,1,1),
-        specular: new Color(1,1,1),
-        ior:1.2,
+        diffuse: new Color(1, 1, 1),
+        specular: new Color(1, 1, 1),
+        ior: 1.2,
         diffuseChance: 0.,
         reflectionChance: 0.2,
         refractionChance: 0.8,
-        absorb: new Color(1,1,2),
-       // volumeEmission:new Color(0.5,0.75,2),
-        volumeEmission:new Color(2,0.5,0.25),
-        opticalDepth:1000,
-        emission:new Color(0.02,0.05,0.02),
+        absorb: new Color(1, 1, 2),
+        // volumeEmission:new Color(0.5,0.75,2),
+        volumeEmission: new Color(2, 0.5, 0.25),
+        opticalDepth: 1000,
+        emission: new Color(0.02, 0.05, 0.02),
     });
 
 
@@ -121,7 +113,7 @@
     //     emission: lightColor,
     // });
     // const light = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.08, lightMat, ptLightMat);
-   //thurston.add(light);
+    //thurston.add(light);
 
     thurston.run();
 

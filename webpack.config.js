@@ -7,7 +7,8 @@ module.exports = {
         executeModule: true,
     },
     entry: {
-        thurstonEuc: './src/thurstonEuc.js'
+        thurstonEuc: './src/thurstonEuc.js',
+        thurstonHyp: './src/thurstonHyp.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist/build'),
@@ -16,6 +17,9 @@ module.exports = {
         library: {
             type: 'module',
         },
+    },
+    optimization: {
+        minimize: false
     },
     plugins: [],
     mode: 'development',

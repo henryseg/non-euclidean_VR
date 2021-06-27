@@ -12,20 +12,23 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
+    import {
+        Color,
+        ThurstonVR,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement, union,
+        Ball, Solid,
+        LocalHoroballShape
+    } from "../../build/thurstonHyp.js";
 
-    import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball} from "../../../src/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, LocalHoroballShape, union} from "../../../src/geometries/hyp/shapes/all.js";
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
 
-
-    const thurston = new ThurstonVR(geom, cube, {keyboard: 'fr', camera: camera});
+    const thurston = new ThurstonVR(cube, {keyboard: 'fr'});
 
 
     // lights for the Phong material

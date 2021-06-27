@@ -12,21 +12,21 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
 
-    import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
+    import {
+        Color,
+        ThurstonLite,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalHoroball,
+        LocalBall
+    } from "../../build/thurstonHyp.js";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
 
-    import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {LocalHoroball} from "../../../src/geometries/hyp/solids/LocalHoroball.js";
-    import {LocalBall} from "../../../src/geometries/hyp/solids/all.js";
-
-
-    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(cube, {keyboard: 'fr'});
 
 
     // lights for the Phong material

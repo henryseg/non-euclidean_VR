@@ -12,44 +12,33 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3, WebGLRenderer} from "three";
-    import {Thurston} from "../../../src/commons/app/thurston/Thurston.js";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-    import trivial from "../../../src/commons/groups/trivial/set.js";
-    import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball, LocalBall} from "../../../src/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, LocalHoroballShape} from "../../../src/geometries/hyp/shapes/all.js";
-    import {CheckerboardMaterial} from "../../../src/commons/materials/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../../src/commons/materials/phongWrap/PhongWrapMaterial.js";
-    import {union} from "../../../src/commons/shapes/all.js";
     import {
+        Color,
+        Thurston,
+        cubeSet as cube,
+        Vector,
+        PointLight,
+        LocalBall,
         BasicPTMaterial,
-        PathTracerWrapMaterial,
         PhongWrapMaterial,
-        SingleColorMaterial
-    } from "../../../src/commons/materials/all.js";
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
-    import {KeyGenericControls} from "../../../src/controls/KeyGenericControls.js";
-    import Stats from "../../../src/lib/stats.module.js";
-    import {VaryingColorMaterial} from "../../../src/geometries/hyp/material/varyingColor/VaryingColorMaterial.js";
+        SingleColorMaterial,
+        VaryingColorMaterial
+    } from "../../build/thurstonHyp.js";
 
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
     //------------------------------------------------------------------------------------------------------------------
 
-    const thurston = new Thurston(geom, cube, {keyboard: 'us'});
+    const thurston = new Thurston(cube, {keyboard: 'us'});
 
     //------------------------------------------------------------------------------------------------------------------
     // Building the scene
     //------------------------------------------------------------------------------------------------------------------
 
-    thurston.scene.ptBackground.absorb = new Color(0.3,0.3,0.3);
-    thurston.scene.ptBackground.opticalDepth =0.3;
+    thurston.scene.ptBackground.absorb = new Color(0.3, 0.3, 0.3);
+    thurston.scene.ptBackground.opticalDepth = 0.3;
 
     // lights for the Phong material (not used by the path tracer)
 
@@ -82,30 +71,28 @@
     });
 
     const ptLensMat = new BasicPTMaterial({
-        diffuse: new Color(1,1,1),
-        specular: new Color(1,1,1),
-        ior:1.2,
+        diffuse: new Color(1, 1, 1),
+        specular: new Color(1, 1, 1),
+        ior: 1.2,
         diffuseChance: 0.3,
         reflectionChance: 0.02,
         refractionChance: 0.95,
-        absorb: new Color(2,1,2),
+        absorb: new Color(2, 1, 2),
         //volumeEmission:new Color(2,0.6,0.2),
         //volumeEmission:new Color(0.05,0.1,0.2),
-        opticalDepth:100,
-        roughness:0.,
-       // emission:new Color(0.01,0.03,0.01),
+        opticalDepth: 100,
+        roughness: 0.,
+        // emission:new Color(0.01,0.03,0.01),
     });
 
 
     // Lattice
-    const lens = new LocalBall(new Vector(0,0, -0.3), 0.15, lensMat, ptLensMat);
+    const lens = new LocalBall(new Vector(0, 0, -0.3), 0.15, lensMat, ptLensMat);
     thurston.add(lens);
 
 
-
-
     // Local light (for path tracer only)
-    const lightColor = new Color(100,100,100);
+    const lightColor = new Color(100, 100, 100);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
         emission: lightColor,

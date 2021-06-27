@@ -12,37 +12,31 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector3, WebGLRenderer} from "three";
-    import {Thurston} from "../../../src/commons/app/thurston/Thurston.js";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-
-    import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball, LocalBall} from "../../../src/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, LocalHoroballShape} from "../../../src/geometries/hyp/shapes/all.js";
-    import {CheckerboardMaterial} from "../../../src/commons/materials/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../../src/commons/materials/phongWrap/PhongWrapMaterial.js";
-    import {union} from "../../../src/commons/shapes/all.js";
     import {
+        Color,
+        Thurston,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        LocalBallShape,
+        complement, union,
+        Solid,
+        LocalHoroballShape,
         BasicPTMaterial,
-        PathTracerWrapMaterial,
         PhongWrapMaterial,
-        SingleColorMaterial
-    } from "../../../src/commons/materials/all.js";
-    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../../src/core/General.js";
-    import {KeyGenericControls} from "../../../src/controls/KeyGenericControls.js";
-    import Stats from "../../../src/lib/stats.module.js";
-    import {VaryingColorMaterial} from "../../../src/geometries/hyp/material/varyingColor/VaryingColorMaterial.js";
+        VaryingColorMaterial
+    } from "../../build/thurstonHyp.js";
+
+
 
 
     //------------------------------------------------------------------------------------------------------------------
     // General setup
     //------------------------------------------------------------------------------------------------------------------
 
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+    const thurston = new Thurston(cube, {keyboard: 'fr'});
 
     //------------------------------------------------------------------------------------------------------------------
     // Building the scene

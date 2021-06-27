@@ -12,34 +12,38 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "three";
 
-    import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-
-    import {Isometry, Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    import {Solid, Ball} from "../../../src/geometries/hyp/solids/all.js";
-    import {LocalBallShape, complement, LocalHoroballShape, union} from "../../../src/geometries/hyp/shapes/all.js";
-    import {SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    import {CREEPING_OFF} from "../../../src/core/groups/TeleportationSet.js";
-    import {ThurstonVR} from "../../../src/commons/app/thurstonVR/ThrustonVR.js";
-    import {NativeCamera} from "../../../src/geometries/hyp/cameras/native/NativeCamera.js";
+    import {
+        Color,
+        ThurstonVR,
+        cubeSet as cube,
+        Vector,
+        Point,
+        Isometry,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement, union,
+        SingleColorMaterial,
+        CREEPING_OFF,
+        NativeCamera,
+        Ball, Solid,
+        LocalHoroballShape
+    } from "../../build/thurstonHyp.js";
 
 
     const camera = new NativeCamera({set: cube});
-    const thurston = new ThurstonVR(geom, cube, {keyboard: 'fr', camera: camera});
+    const thurston = new ThurstonVR(cube, {keyboard: 'fr', camera: camera});
 
     cube.creepingType = CREEPING_OFF;
 
-    const colorWhite = new Color(1,1,1);
-    const colorRed = new Color(1,0,0);
-    const colorGreen = new Color(0,1,0);
-    const colorBlue = new Color(0,0,1);
-    const colorYellow = new Color(1,1,0);
-    const colorMagenta = new Color(1,0,1);
-    const colorCyan = new Color(0,1,1);
+    const colorWhite = new Color(1, 1, 1);
+    const colorRed = new Color(1, 0, 0);
+    const colorGreen = new Color(0, 1, 0);
+    const colorBlue = new Color(0, 0, 1);
+    const colorYellow = new Color(1, 1, 0);
+    const colorMagenta = new Color(1, 0, 1);
+    const colorCyan = new Color(0, 1, 1);
 
 
     const shiftXp = new Isometry();
@@ -95,9 +99,6 @@
     // lights for the Phong material
 
 
-
-
-
     // Phong shading material
     const mat0 = new PhongMaterial({
         color: new Color(1, 1, 1),
@@ -145,18 +146,18 @@
 
     const delta = 0.3;
     const ballCyan = new Ball(
-        new Vector(-delta, delta,-delta),
+        new Vector(-delta, delta, -delta),
         0.1,
         matCyan
     );
     const lightCyan = new PointLight(
-        new Vector(-delta,delta,-delta),
+        new Vector(-delta, delta, -delta),
         colorCyan,
         0.5
     );
 
     const ballBlue = new Ball(
-        new Vector(-delta, delta,-delta),
+        new Vector(-delta, delta, -delta),
         0.1,
         matBlue
     );
@@ -169,7 +170,7 @@
     );
 
     const ballMagenta = new Ball(
-        new Vector(-0.4, 0.4,-0.4),
+        new Vector(-0.4, 0.4, -0.4),
         0.1,
         matMagenta
     );
@@ -184,9 +185,8 @@
     );
 
 
-
     const ballRed = new Ball(
-        new Vector(-0.4, 0.4,-0.4),
+        new Vector(-0.4, 0.4, -0.4),
         0.1,
         matRed
     );
@@ -202,7 +202,7 @@
     );
 
     const ballYellow = new Ball(
-        new Vector(-0.4, 0.4,-0.4),
+        new Vector(-0.4, 0.4, -0.4),
         0.1,
         matYellow
     );
@@ -220,7 +220,7 @@
 
 
     const ballGreen = new Ball(
-        new Vector(-0.4, 0.4,-0.4),
+        new Vector(-0.4, 0.4, -0.4),
         0.1,
         matGreen
     );
@@ -239,7 +239,7 @@
 
 
     thurston.add(lattice, ballCyan, ballBlue, ballMagenta, ballRed, ballYellow, ballGreen)
-    thurston.add(lightCyan, lightBlue, lightMagenta, lightRed,lightYellow, lightGreen);
+    thurston.add(lightCyan, lightBlue, lightMagenta, lightRed, lightYellow, lightGreen);
     thurston.run();
 
 
