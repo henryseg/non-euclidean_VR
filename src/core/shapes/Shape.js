@@ -1,8 +1,7 @@
-import mustache from "mustache/mustache.mjs";
 import {Generic} from "../Generic.js";
 import {Isometry} from "../geometry/Isometry.js";
 
-import gradient from "./shaders/gradient.js";
+import gradient from "./shaders/numericalGradient.glsl.mustache";
 
 
 /**
@@ -104,7 +103,6 @@ export class Shape extends Generic {
             this.updateAbsoluteIsom();
 
         }
-        // console.log(this._absoluteIsom.matrix.toLog());
         return this._absoluteIsomInv;
     }
 
@@ -183,7 +181,7 @@ export class Shape extends Generic {
      * @return {string}
      */
     glslGradient() {
-        return mustache.render(gradient, this);
+        return gradient(this);
     }
 
     /**

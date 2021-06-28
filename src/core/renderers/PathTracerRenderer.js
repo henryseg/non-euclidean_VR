@@ -1,4 +1,3 @@
-import mustache from "mustache/mustache.mjs";
 import {
     FloatType,
     Mesh, NearestFilter, RGBAFormat,
@@ -18,16 +17,16 @@ import vertexShader from "./shaders/common/vertex.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
-import scenes from "./shaders/pathTracer/scenes.js";
+import scenes from "./shaders/pathTracer/scenes.glsl.mustache";
 import raymarch from "./shaders/pathTracer/raymarch.glsl";
 import random1 from "./shaders/pathTracer/random1.glsl";
 import random2 from "./shaders/pathTracer/random2.glsl";
 import structVectorData from "./shaders/pathTracer/vectorDataStruct.glsl";
-import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.js";
+import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.glsl.mustache";
 import main from "./shaders/pathTracer/main.glsl";
 
 import SteveShader from "../../postProcess/steve/shader.js";
-import nextObject from "./shaders/pathTracer/nextObject.js";
+import nextObject from "./shaders/pathTracer/nextObject.glsl.mustache";
 
 
 const accumulateMat = new ShaderMaterial({
@@ -153,9 +152,9 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         // scene
         this.scene.shader(this._fragmentBuilder);
-        this._fragmentBuilder.addChunk(mustache.render(scenes, this));
-        this._fragmentBuilder.addChunk(mustache.render(nextObject, this));
-        this._fragmentBuilder.addChunk(mustache.render(updateVectorData, this));
+        this._fragmentBuilder.addChunk(scenes(this));
+        this._fragmentBuilder.addChunk(nextObject(this));
+        this._fragmentBuilder.addChunk(updateVectorData(this));
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);

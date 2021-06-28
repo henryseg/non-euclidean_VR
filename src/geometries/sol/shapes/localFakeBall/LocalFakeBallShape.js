@@ -1,12 +1,11 @@
-import mustache from "mustache/mustache.mjs";
-
 import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import struct from "./shaders/struct.glsl";
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
+import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+
 
 
 /**
@@ -70,10 +69,10 @@ export class LocalFakeBallShape extends BasicShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 
     glslGradient() {
-        return mustache.render(gradient, this);
+        return gradient(this);
     }
 }

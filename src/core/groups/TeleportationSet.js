@@ -1,10 +1,8 @@
-import mustache from "mustache/mustache.mjs";
-
 import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 import {Teleportation} from "./Teleportation.js";
 
 import relative from "./shaders/relative.glsl";
-import teleport from "./shaders/teleport.js";
+import teleport from "./shaders/teleport.glsl.mustache";
 
 
 /**
@@ -128,7 +126,7 @@ export class TeleportationSet {
             shaderBuilder.addUniform(pair.elt.name, 'GroupElement', pair.elt);
             shaderBuilder.addUniform(pair.inv.name, 'GroupElement', pair.inv);
         }
-        shaderBuilder.addChunk(mustache.render(teleport, this));
+        shaderBuilder.addChunk(teleport(this));
     }
 
 }

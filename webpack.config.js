@@ -34,6 +34,10 @@ module.exports = {
                 }
             },
             {
+                test: /\.glsl.mustache$/,
+                loader: 'mustache-loader'
+            },
+            {
                 test: /\.glsl$/,
                 loader: 'webpack-glsl-loader'
             }

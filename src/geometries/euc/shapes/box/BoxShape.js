@@ -1,14 +1,10 @@
-import mustache from "mustache/mustache.mjs";
-
 import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.glsl";
 import struct from "./shaders/struct.glsl";
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
-import uv from "./shaders/uv.js";
+import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 
 
 /**
@@ -92,7 +88,7 @@ export class BoxShape extends BasicShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 
     // glslGradient() {

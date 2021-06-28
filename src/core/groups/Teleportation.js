@@ -1,8 +1,7 @@
 import {MathUtils} from "three";
-import mustache from "mustache/mustache.mjs";
 
 import {CREEPING_OFF, CREEPING_STRICT, CREEPING_FULL} from "./TeleportationSet.js";
-import creeping from "./shaders/creeping.js";
+import creeping from "./shaders/creeping.glsl.mustache";
 
 const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
 const regexpCreep = /ExtVector\s*(\w+)\(ExtVector.*\)/m;
@@ -112,7 +111,7 @@ export class Teleportation {
         } else {
             this.glslCreepCustom = false;
             this.glslCreepName = `creep${this.uuid}`;
-            this.glslCreep = mustache.render(creeping, this);
+            this.glslCreep = creeping(this);
         }
 
     }

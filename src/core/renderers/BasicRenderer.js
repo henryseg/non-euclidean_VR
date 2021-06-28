@@ -1,4 +1,3 @@
-import mustache from "mustache/mustache.mjs";
 import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -12,9 +11,9 @@ import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
 import raymarch from "./shaders/common/raymarch.glsl";
-import scenes from "./shaders/common/scenes.js";
+import scenes from "./shaders/common/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
-import updateVectorData from "./shaders/basic/vectorDataUpdate.js";
+import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
 import SteveShader from "../../postProcess/steve/shader.js";
 import main from "./shaders/basic/main.glsl";
 
@@ -92,8 +91,8 @@ export class BasicRenderer extends AbstractRenderer {
 
         // scene
         this.scene.shader(this._fragmentBuilder);
-        this._fragmentBuilder.addChunk(mustache.render(scenes, this));
-        this._fragmentBuilder.addChunk(mustache.render(updateVectorData, this));
+        this._fragmentBuilder.addChunk(scenes( this));
+        this._fragmentBuilder.addChunk(updateVectorData(this));
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);

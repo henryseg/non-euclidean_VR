@@ -1,4 +1,3 @@
-import mustache from "mustache/mustache.mjs";
 import {
     LinearFilter,
     RepeatWrapping,
@@ -9,7 +8,8 @@ import {
 import {Material} from "../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.glsl";
-import render from "./shaders/render.js";
+import render from "../../../core/materials/shaders/renderUV.glsl.mustache";
+
 
 /**
  * @class
@@ -68,7 +68,7 @@ export class SimpleTextureMaterial extends Material {
     }
 
     glslRender() {
-        return mustache.render(render, this);
+        return render(this);
     }
 
 }

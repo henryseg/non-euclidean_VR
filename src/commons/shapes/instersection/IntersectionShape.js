@@ -1,13 +1,11 @@
-import mustache from "mustache/mustache.mjs";
-
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
 import smoothMaxPoly from "../../imports/smoothMaxPoly.glsl";
-import sdfRegular from "./shaders/sdfRegular.js";
-import gradientRegular from "./shaders/gradientRegular.js";
-import sdfPoly from "./shaders/sdfPoly.js";
-import gradientPoly from "./shaders/gradientPoly.js";
-import uv from "./shaders/uv.js";
+import sdfRegular from "./shaders/sdfRegular.glsl.mustache";
+import gradientRegular from "./shaders/gradientRegular.glsl.mustache";
+import sdfPoly from "./shaders/sdfPoly.glsl.mustache";
+import gradientPoly from "./shaders/gradientPoly.glsl.mustache";
+import uv from "./shaders/uv.glsl.mustache";
 import struct from "./shaders/struct.glsl";
 
 
@@ -82,23 +80,23 @@ export class IntersectionShape extends AdvancedShape {
     glslSDF() {
         switch (this.maxType) {
             case SMOOTH_MAX_POLY:
-                return mustache.render(sdfPoly, this);
+                return sdfPoly(this);
             default:
-                return mustache.render(sdfRegular, this);
+                return sdfRegular(this);
         }
     }
 
     glslGradient() {
         switch (this.maxType) {
             case SMOOTH_MAX_POLY:
-                return mustache.render(gradientPoly, this);
+                return gradientPoly(this);
             default:
-                return mustache.render(gradientRegular, this);
+                return gradientRegular(this);
         }
     }
 
     glslUVMap() {
-        return mustache.render(uv, this);
+        return uv(this);
     }
 
     /**

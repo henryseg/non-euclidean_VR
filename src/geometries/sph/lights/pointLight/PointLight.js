@@ -1,14 +1,14 @@
-import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
+
 import {Light} from "../../../../core/lights/Light.js";
+import {Isometry} from "../../../../core/geometry/Isometry.js";
+import {Point} from "../../../../core/geometry/Point.js";
 
 import distance from "../../imports/distance.glsl";
 import direction from "../../imports/direction.glsl";
 import lightIntensity from "../../imports/lightIntensity.glsl";
 import struct from "./shaders/struct.glsl";
-import directions from "./shaders/directions.js";
-import {Isometry} from "../../../../core/geometry/Isometry.js";
-import {Point} from "../../../../core/geometry/Point.js";
+import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
 
 
 /**
@@ -85,7 +85,7 @@ export class PointLight extends Light {
     }
 
     glslDirections() {
-        return mustache.render(directions, this);
+        return directions(this);
     }
 
 

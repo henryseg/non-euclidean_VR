@@ -1,10 +1,9 @@
 import {Color} from "three";
-import mustache from "mustache/mustache.mjs";
 
 import {Material} from "../../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.glsl";
-import render from "./shaders/render.js";
+import render from "../../../../core/materials/shaders/render.glsl.mustache";
 
 /**
  * @class
@@ -31,7 +30,7 @@ export class VaryingColorMaterial extends Material {
         return 'VaryingColorMaterial';
     }
 
-    get usesNormal(){
+    get usesNormal() {
         return false;
     }
 
@@ -40,7 +39,7 @@ export class VaryingColorMaterial extends Material {
     }
 
     glslRender() {
-        return mustache.render(render, this);
+        return render(this);
     }
 
 }

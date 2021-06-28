@@ -1,14 +1,12 @@
-import mustache from "mustache/mustache.mjs";
-
 import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.glsl";
 import struct from "./shaders/struct.glsl";
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
-import uv from "./shaders/uv.js";
+import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 
@@ -93,14 +91,14 @@ export class BallShape extends BasicShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 
     glslGradient() {
-        return mustache.render(gradient, this);
+        return gradient(this);
     }
 
     glslUVMap() {
-        return mustache.render(uv, this);
+        return uv(this);
     }
 }

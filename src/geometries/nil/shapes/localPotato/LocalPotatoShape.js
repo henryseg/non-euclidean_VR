@@ -1,11 +1,11 @@
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
-import mustache from "mustache/mustache.mjs";
+import {Isometry} from "../../../../core/geometry/Isometry.js";
+import {Point} from "../../../../core/geometry/Point.js";
 
 import fakeDistance from "../../imports/fakeDistance.glsl";
 import struct from "./shaders/struct.glsl";
-import sdf from "./shaders/sdf.js";
-import {Isometry} from "../../../../core/geometry/Isometry.js";
-import {Point} from "../../../../core/geometry/Point.js";
+import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+
 
 /**
  * @class
@@ -74,6 +74,6 @@ export class LocalPotatoShape extends BasicShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 }

@@ -1,10 +1,9 @@
-import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 
 import {PTMaterial} from "../../../core/materials/PTMaterial.js";
 
 import struct from "./shaders/struct.glsl";
-import render from "./shaders/render.js";
+import render from "./shaders/render.glsl.mustache";
 import fresnel from "../../imports/fresnelReflectAmount.glsl";
 
 export class BasicPTMaterial extends PTMaterial {
@@ -96,6 +95,6 @@ export class BasicPTMaterial extends PTMaterial {
     }
 
     glslRender() {
-        return mustache.render(render, this);
+        return render(this);
     }
 }

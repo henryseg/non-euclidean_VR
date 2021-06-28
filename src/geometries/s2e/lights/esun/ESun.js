@@ -1,10 +1,9 @@
-import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 
 import {Light} from "../../../../core/lights/Light.js";
 
 import struct from "./shaders/struct.glsl";
-import directions from "./shaders/directions.js";
+import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
 
 export const DIR_UP = 1;
 export const DIR_DOWN = -1;
@@ -54,7 +53,7 @@ export class ESun extends Light {
     }
 
     glslDirections() {
-        return mustache.render(directions, this);
+        return  directions(this);
     }
 
 

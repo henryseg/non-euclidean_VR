@@ -1,13 +1,12 @@
 import {Vector3} from "three";
-import mustache from "mustache/mustache.mjs";
 
 import {Material} from "../../../core/materials/Material.js";
 
 import struct from "./shaders/struct.glsl";
-import render from "./shaders/render.js";
-import renderNormal from "./shaders/renderNormal.js";
-import renderUV from "./shaders/renderUV.js";
-import renderNormalUV from "./shaders/renderNormalUV.js";
+import render from "./shaders/render.glsl.mustache";
+import renderNormal from "./shaders/renderNormal.glsl.mustache";
+import renderUV from "./shaders/renderUV.glsl.mustache";
+import renderNormalUV from "./shaders/renderNormalUV.glsl.mustache";
 
 
 /**
@@ -95,15 +94,15 @@ export class PhongWrapMaterial extends Material {
     glslRender() {
         if (this.material.usesNormal) {
             if (this.material.usesUVMap) {
-                return mustache.render(renderNormalUV, this);
+                return renderNormalUV(this);
             } else {
-                return mustache.render(renderNormal, this);
+                return renderNormal(this);
             }
         } else {
             if (this.material.usesUVMap) {
-                return mustache.render(renderUV, this);
+                return renderUV(this);
             } else {
-                return mustache.render(render, this);
+                return render(this);
             }
         }
     }

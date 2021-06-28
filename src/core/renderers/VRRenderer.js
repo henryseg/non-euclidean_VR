@@ -1,4 +1,3 @@
-import mustache from "mustache/mustache.mjs";
 import * as WebXRPolyfill from "webxr-polyfill";
 import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
 import {VRButton as VRButtonLib} from "three/examples/jsm/webxr/VRButton.js";
@@ -13,9 +12,9 @@ import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
 import raymarch from "./shaders/common/raymarch.glsl";
-import scenes from "./shaders/common/scenes.js";
+import scenes from "./shaders/common/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
-import updateVectorData from "./shaders/basic/vectorDataUpdate.js";
+import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
 import main from "./shaders/basic/main.glsl";
 
 
@@ -98,8 +97,8 @@ export class VRRenderer extends AbstractRenderer {
 
             // scene
             this.scene.shader(this._fragmentBuilder[side]);
-            this._fragmentBuilder[side].addChunk(mustache.render(scenes, this));
-            this._fragmentBuilder[side].addChunk(mustache.render(updateVectorData, this));
+            this._fragmentBuilder[side].addChunk(scenes(this));
+            this._fragmentBuilder[side].addChunk(updateVectorData(this));
 
 
             // ray-march and main

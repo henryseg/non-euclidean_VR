@@ -1,4 +1,3 @@
-import mustache from "mustache/mustache.mjs";
 import {Vector3, Vector4} from "three";
 
 import {Isometry} from "../../geometry/Isometry.js";
@@ -7,9 +6,9 @@ import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import struct from "./shaders/struct.glsl";
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
-import uv from "./shaders/uv.js";
+import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 const ex = new Vector3(1, 0, 0);
@@ -102,14 +101,14 @@ export class HalfSpaceShape extends BasicShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 
     glslGradient() {
-        return mustache.render(gradient, this);
+        return gradient(this);
     }
 
     glslUVMap() {
-        return mustache.render(uv, this);
+        return uv(this);
     }
 }

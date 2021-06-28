@@ -35,7 +35,6 @@
   },
   "homepage": "https://github.com/henryseg/non-euclidean_VR#readme",
   "dependencies": {
-    "mustache": "^4.2.0",
     "three": "^0.129.0",
     "webxr-polyfill": "^2.0.3"
   },
@@ -45,6 +44,7 @@
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
+    "mustache-loader": "^1.4.3",
     "webpack": "^5.39.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2",

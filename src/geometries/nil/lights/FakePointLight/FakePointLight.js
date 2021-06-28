@@ -1,10 +1,10 @@
 import {Color} from "three";
-import mustache from "mustache/mustache.mjs";
+
 import {Light} from "../../../../core/lights/Light.js";
 
 import fakeDistance from "../../imports/fakeDistance.glsl";
 import struct from "./shaders/struct.glsl";
-import directions from "./shaders/directions.js";
+import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
 
 export class FakePointLight extends Light {
 
@@ -40,7 +40,7 @@ export class FakePointLight extends Light {
     }
 
     glslDirections() {
-        return mustache.render(directions, this);
+        return directions(this);
     }
 
 }

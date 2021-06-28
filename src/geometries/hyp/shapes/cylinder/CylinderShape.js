@@ -1,13 +1,12 @@
 import {Vector4} from "three";
-import mustache from "mustache/mustache.mjs";
 
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Point} from "../../geometry/General.js";
 
 import direction from "../../imports/direction.glsl";
 import struct from "./shaders/struct.glsl";
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
+import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 
 
 export class CylinderShape extends BasicShape {
@@ -60,10 +59,10 @@ export class CylinderShape extends BasicShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 
     glslGradient() {
-        return mustache.render(gradient, this);
+        return gradient(this);
     }
 }

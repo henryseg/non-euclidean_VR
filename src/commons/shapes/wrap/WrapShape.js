@@ -1,10 +1,8 @@
-import mustache from "mustache/mustache.mjs";
-
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
-import sdf from "./shaders/sdf.js";
-import gradient from "./shaders/gradient.js";
-import uv from "./shaders/uv.js";
+import sdf from "./shaders/sdf.glsl.mustache";
+import gradient from "./shaders/gradient.glsl.mustache";
+import uv from "./shaders/uv.glsl.mustache";
 
 
 /**
@@ -60,15 +58,15 @@ export class WrapShape extends AdvancedShape {
     }
 
     glslSDF() {
-        return mustache.render(sdf, this);
+        return sdf(this);
     }
 
     glslGradient() {
-        return mustache.render(gradient, this);
+        return gradient(this);
     }
 
     glslUVMap() {
-        return mustache.render(uv, this);
+        return uv(this);
     }
 
     /**

@@ -1,15 +1,12 @@
-import mustache from "mustache/mustache.mjs";
-
-
 import {AdvancedShape} from "../../../core/shapes/AdvancedShape.js";
 
 import smoothMinPoly from "../../imports/smoothMinPoly.glsl";
-import sdfRegular from "./shaders/sdfRegular.js";
-import gradientRegular from "./shaders/gradientRegular.js";
-import uv from "./shaders/uv.js";
-import sdfPoly from "./shaders/sdfPoly.js";
+import sdfRegular from "./shaders/sdfRegular.glsl.mustache";
+import gradientRegular from "./shaders/gradientRegular.glsl.mustache";
+import uv from "./shaders/uv.glsl.mustache";
+import sdfPoly from "./shaders/sdfPoly.glsl.mustache";
 import struct from "./shaders/struct.glsl";
-import gradientPoly from "./shaders/gradientPoly.js";
+import gradientPoly from "./shaders/gradientPoly.glsl.mustache";
 
 export const REGULAR_MIN = 0;
 export const SMOOTH_MIN_POLY = 1;
@@ -83,9 +80,9 @@ export class UnionShape extends AdvancedShape {
     glslSDF() {
         switch (this.minType) {
             case SMOOTH_MIN_POLY:
-                return mustache.render(sdfPoly, this);
+                return sdfPoly(this);
             default:
-                return mustache.render(sdfRegular, this);
+                return sdfRegular(this);
         }
 
     }
@@ -93,14 +90,14 @@ export class UnionShape extends AdvancedShape {
     glslGradient() {
         switch (this.minType) {
             case SMOOTH_MIN_POLY:
-                return mustache.render(gradientPoly, this);
+                return gradientPoly(this);
             default:
-                return mustache.render(gradientRegular, this);
+                return gradientRegular(this);
         }
     }
 
     glslUVMap() {
-        return mustache.render(uv, this);
+        return uv(this);
     }
 
     /**

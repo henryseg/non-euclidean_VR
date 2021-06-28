@@ -1,14 +1,13 @@
-import mustache from "mustache/mustache.mjs";
 import {Color} from "three";
 
 import {PTMaterial} from "../../../core/materials/PTMaterial.js";
 
 import struct from "./shaders/struct.glsl";
-import rayType from "./shaders/rayType.js";
-import render from "./shaders/render.js";
-import renderNormalUV from "./shaders/renderNormalUV.js";
-import renderNormal from "./shaders/renderNormal.js";
-import renderUV from "./shaders/renderUV.js";
+import rayType from "./shaders/rayType.glsl.mustache";
+import render from "./shaders/render.glsl.mustache";
+import renderNormalUV from "./shaders/renderNormalUV.glsl.mustache";
+import renderNormal from "./shaders/renderNormal.glsl.mustache";
+import renderUV from "./shaders/renderUV.glsl.mustache";
 import fresnel from "../../imports/fresnelReflectAmount.glsl";
 
 export class PathTracerWrapMaterial extends PTMaterial {
@@ -107,19 +106,19 @@ export class PathTracerWrapMaterial extends PTMaterial {
 
     glslRender() {
         let res = "";
-        res = res + mustache.render(rayType, this);
+        res = res + rayType(this);
 
         if (this.material.usesNormal) {
             if (this.material.usesUVMap) {
-                res = res + mustache.render(renderNormalUV, this);
+                res = res + renderNormalUV(this);
             } else {
-                res = res + mustache.render(renderNormal, this);
+                res = res + renderNormal(this);
             }
         } else {
             if (this.material.usesUVMap) {
-                res = res + mustache.render(renderUV, this);
+                res = res + renderUV(this);
             } else {
-                res = res + mustache.render(render, this);
+                res = res + render(this);
             }
         }
         return res;
