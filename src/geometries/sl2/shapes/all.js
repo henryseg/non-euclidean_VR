@@ -1,3 +1,3 @@
-export {FakeBallShape} from "./fakeBall/fakeBallShape.js";
-export {LocalFakeBallShape} from "./localFakeBall/localFakeBallShape.js";
+export {FakeBallShape} from "./fakeBall/FakeBallShape.js";
+export {LocalFakeBallShape} from "./localFakeBall/LocalFakeBallShape.js";
 export {LocalPotatoShape} from "./localPotato/localPotatoShape.js";

@@ -1,6 +1,6 @@
 import {MathUtils} from "three";
 
-import {CREEPING_OFF, CREEPING_STRICT, CREEPING_FULL} from "./TeleportationSet.js";
+import {CREEPING_FULL} from "./TeleportationSet.js";
 import creeping from "./shaders/creeping.glsl.mustache";
 
 const regexpTest = /bool\s*(\w+)\(Point.*\)/m;

@@ -1,4 +1,5 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     cache: false,
@@ -23,6 +24,10 @@ module.exports = {
         library: {
             type: 'module',
         },
+        // environment: {
+        //     module: true,
+        //     dynamicImport: true,
+        // },
     },
     module: {
         rules: [
@@ -35,21 +40,43 @@ module.exports = {
             },
             {
                 test: /\.glsl.mustache$/,
-                loader: 'mustache-loader'
+                use: [
+                    {loader: 'mustache-loader'},
+                    // {loader: 'strip-whitespace-loader'},
+                    // {loader: 'webpack-comment-remover-loader'}
+                ]
             },
             {
                 test: /\.glsl$/,
-                loader: 'webpack-glsl-loader'
+                use: [
+                    {loader: 'webpack-glsl-loader'},
+                    {loader: 'strip-whitespace-loader'},
+                    {loader: 'webpack-comment-remover-loader'},
+                ]
             }
         ]
     },
-    // optimization: {
-    //     minimize: false
-    // },
+    optimization: {
+        // splitChunks: {
+        //     chunks: 'all',
+        // },
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    format: {
+                        comments: false,
+                    },
+                },
+                extractComments: false,
+            }),
+        ],
+    },
     plugins: [],
     mode: 'development',
     devServer: {
-        contentBase: '/dist',
+        contentBase: path.join(__dirname, 'dist'),
+        port: 9000,
         hot: true
     }
 };

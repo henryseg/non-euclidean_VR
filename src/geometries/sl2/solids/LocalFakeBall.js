@@ -1,5 +1,5 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {LocalFakeBallShape} from "../shapes/localfakeBall/LocalFakeBallShape.js";
+import {LocalFakeBallShape} from "../shapes/localFakeBall/LocalFakeBallShape.js";
 
 /**
  * @class

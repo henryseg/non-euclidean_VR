@@ -39,14 +39,17 @@
     "webxr-polyfill": "^2.0.3"
   },
   "devDependencies": {
+    "babel-loader": "^8.2.2",
     "css-loader": "^5.2.6",
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
     "mustache-loader": "^1.4.3",
+    "strip-whitespace-loader": "^1.0.4",
     "webpack": "^5.39.0",
     "webpack-cli": "^4.7.2",
+    "webpack-comment-remover-loader": "^0.0.3",
     "webpack-dev-server": "^3.11.2",
     "webpack-glsl-loader": "^1.0.1"
   }

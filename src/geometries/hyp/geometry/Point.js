@@ -1,6 +1,7 @@
-import {Point} from "../../../core/geometry/Point.js";
 import {Vector4} from "three";
+
 import * as Utils from "./Utils.js";
+import {Point} from "../../../core/geometry/Point.js";
 
 
 Point.prototype.build = function () {

@@ -65,12 +65,6 @@ export class ThurstonLite {
         const _onWindowResize = bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
-        // /**
-        //  * Keyboard controls to switch the renderer
-        //  * @type {SwitchControls}
-        //  */
-        // this.swicthRendererControl = new SwitchControls('p', 2, RENDER_BASIC);
-
         /**
          * The keyboard controls to fly in the scene
          * @type {FlyControls}

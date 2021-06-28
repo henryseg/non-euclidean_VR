@@ -1,7 +1,5 @@
-import {Matrix4, Quaternion, Vector3} from "three";
+import {Quaternion, Vector3} from "three";
 
-import {SL2} from "./Utils.js";
-import {Point} from "./Point.js";
 import {Position} from "../../../core/geometry/Position.js";
 
 

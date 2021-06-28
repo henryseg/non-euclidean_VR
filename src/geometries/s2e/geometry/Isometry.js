@@ -34,7 +34,7 @@ Isometry.prototype.premultiply = function (isom) {
 }
 
 Isometry.prototype.invert = function () {
-    this.matrix.invert;
+    this.matrix.invert();
     const coeff = this.matrix.elements[this.matrix.elements.length - 1];
     this.shift = -coeff * this.shift;
 
@@ -45,7 +45,7 @@ Isometry.prototype.invert = function () {
 
 Isometry.prototype.makeTranslationFromDir = function (vec) {
 
-    var len = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+    const len = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
 
     this.shift = vec.z;
 

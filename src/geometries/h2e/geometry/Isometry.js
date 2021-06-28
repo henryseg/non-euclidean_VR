@@ -1,7 +1,6 @@
 import {Matrix4, Vector2, Vector4} from "three";
 
 import {Isometry} from "../../../core/geometry/Isometry.js";
-import * as Utils from "./Utils.js";
 
 Isometry.prototype.build = function () {
     this.matrix = new Matrix4();

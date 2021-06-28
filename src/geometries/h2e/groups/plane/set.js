@@ -2,7 +2,6 @@ import {Vector4} from "three";
 
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group} from "../../../../commons/groups/isometry/Group.js";
-import {Vector} from "../../geometry/General.js";
 
 
 const group = new Group();

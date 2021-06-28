@@ -1,7 +1,6 @@
 import {Quaternion, Vector3, Vector4} from "three";
 //import * as utils from "../../../utils/utils.js";
 
-import {Isometry} from "./Isometry.js";
 import {Point} from "./Point.js";
 import {Position} from "../../../core/geometry/Position.js";
 

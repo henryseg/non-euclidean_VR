@@ -1,11 +1,11 @@
 import {
-    Isometry
-} from "../../../core/geometry/Isometry.js";
-import {
     Matrix4,
     Vector3,
-    Vector4
+    Vector4,
 } from "three";
+
+import * as Utils from "./Utils.js";
+import {Isometry} from "../../../core/geometry/Isometry.js";
 import {Vector} from "../../../core/geometry/Vector.js";
 
 
