@@ -1,5 +1,5 @@
 import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
-import element from "./shaders/element.js";
+import element from "./shaders/element.glsl";
 import {GroupElement} from "./GroupElement.js";
 
 /**

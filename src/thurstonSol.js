@@ -3,8 +3,8 @@ export {Point} from "./geometries/sol/geometry/Point.js";
 export {Vector} from "./core/geometry/Vector.js";
 export {Position} from "./geometries/sol/geometry/Position.js";
 
-import shader1 from "./geometries/sol/geometry/shaders/part1.js";
-import shader2 from "./geometries/sol/geometry/shaders/part2.js";
+import shader1 from "./geometries/sol/geometry/shaders/part1.glsl";
+import shader2 from "./geometries/sol/geometry/shaders/part2.glsl";
 
 import {BasicRenderer as BasicRendererGeneric} from "./core/renderers/BasicRenderer.js";
 import {PathTracerRenderer as PathTracerRendererGeneric} from "./core/renderers/PathTracerRenderer.js";

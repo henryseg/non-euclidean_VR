@@ -4,7 +4,7 @@ import {Matrix4, Vector3, Vector4} from "three";
 import {Point, Vector} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";

@@ -1,5 +1,5 @@
-export {default as shader1} from "./shaders/part1.js";
-export {default as shader2} from "./shaders/part2.js";
+export {default as shader1} from "./shaders/part1.glsl";
+export {default as shader2} from "./shaders/part2.glsl";
 
 export { Isometry}from "./Isometry.js";
 export { Point}from "./Point.js";

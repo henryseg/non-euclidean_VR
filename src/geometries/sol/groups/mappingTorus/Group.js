@@ -3,7 +3,7 @@ import {Matrix3, Matrix4, Vector4} from "three";
 import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 
-import element from "./shaders/element.js";
+import element from "./shaders/element.glsl";
 
 export const A = new Matrix3().set(
     2, 1, 0,

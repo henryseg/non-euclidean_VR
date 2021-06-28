@@ -4,7 +4,7 @@ import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
-import struct from "./shaders/struct.js";
+import struct from "./shaders/struct.glsl";
 import sdf from "./shaders/sdf.js";
 
 
