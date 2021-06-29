@@ -1,5 +1,5 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {localCubeShape} from "../shapes/localCube/localCubeShape.js";
+import {LocalCubeShape} from "../shapes/localCube/LocalCubeShape.js";
 
 /**
  * @class
@@ -11,12 +11,12 @@ export class LocalCube extends Solid {
     /**
      * Constructor.
      * @param {Isometry} location - the location of the cube
-     * @param {number} halfWidth - the half width of the cube
+     * @param {Vector3} sides - the half width of the cube
      * @param {Material} material - the material of the ball
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(location, halfWidth, material, ptMaterial = undefined) {
-        const shape = localCubeShape(location, halfWidth);
+    constructor(location, sides, material, ptMaterial = undefined) {
+        const shape = new LocalCubeShape(location, sides);
         super(shape, material, ptMaterial);
     }
 }
