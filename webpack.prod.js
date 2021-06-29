@@ -1,8 +1,10 @@
+const {merge} = require('webpack-merge');
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
 
-module.exports = {
-    cache: false,
+const TerserPlugin = require('terser-webpack-plugin');
+const common = require('./webpack.common.js');
+
+module.exports = merge(common, {
     experiments: {
         outputModule: true,
         executeModule: true,
@@ -29,33 +31,6 @@ module.exports = {
         //     dynamicImport: true,
         // },
     },
-    module: {
-        rules: [
-            {
-                test: /\.(jpg|png)$/,
-                type: 'asset/resource',
-                generator: {
-                    filename: 'img/[hash][ext][query]'
-                }
-            },
-            {
-                test: /\.glsl.mustache$/,
-                use: [
-                    {loader: 'mustache-loader'},
-                    // {loader: 'strip-whitespace-loader'},
-                    // {loader: 'webpack-comment-remover-loader'}
-                ]
-            },
-            {
-                test: /\.glsl$/,
-                use: [
-                    {loader: 'webpack-glsl-loader'},
-                    {loader: 'strip-whitespace-loader'},
-                    {loader: 'webpack-comment-remover-loader'},
-                ]
-            }
-        ]
-    },
     optimization: {
         // splitChunks: {
         //     chunks: 'all',
@@ -73,10 +48,10 @@ module.exports = {
         ],
     },
     plugins: [],
-    mode: 'development',
+    mode: 'production',
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         port: 9000,
         hot: true
     }
-};
+});
