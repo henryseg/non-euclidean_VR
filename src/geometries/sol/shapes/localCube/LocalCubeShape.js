@@ -1,9 +1,10 @@
-import {Matrix4, Vector4} from "three";
+import {Matrix4, Vector4, Vector3} from "three";
 
 import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
+import smoothMaxPoly from "../../../../commons/imports/smoothMaxPoly.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
@@ -20,9 +21,10 @@ export class LocalCubeShape extends BasicShape {
     /**
      * Constructor.
      * @param {Isometry|Point} location - the location of the cube
-     * @param {Vector3} sides - the length of the sides
+     * @param {Vector3|number} sides - the length of the sides
+     * @param {number} smoothness - the coefficient to smooth the side of the cube (exponential method)
      */
-    constructor(location, sides) {
+    constructor(location, sides, smoothness = 32) {
         const isom = new Isometry();
         if (location.isIsometry) {
             isom.copy(location);
@@ -32,7 +34,13 @@ export class LocalCubeShape extends BasicShape {
             throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
-        this.sides = sides;
+        if (sides.isVector3) {
+            this.sides = sides.clone();
+        } else {
+            this.sides = new Vector3(sides, sides, sides);
+        }
+        this.addImport(smoothMaxPoly);
+        this.smoothness = smoothness;
         this._origin = undefined;
         this._testX = undefined;
         this._testY = undefined;

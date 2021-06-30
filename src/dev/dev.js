@@ -37,13 +37,13 @@ const baseMat2 = new VaryingColorMaterial(
 );
 const mat2 = phongWrap(baseMat2);
 const ptMat2 = new PathTracerWrapMaterial(mat2, {
-    emission: new Color(0.25, 0.5, 0.8)
+    emission: new Color(0.8, 0.5, 0.8)
 });
 
-const cube1 = new LocalCube(new Isometry(), new Vector3(0.1, 0.1, 0.1), mat1, ptMat1);
+const cube1 = new LocalCube(new Isometry(), 0.1, 0.005, mat1, ptMat1);
 // const isom1 = new Isometry().makeTranslation(new Point(0.1,0.05,-0.25, 1));
 // const cube1 = new LocalCube(isom1, 0.1, mat1);
-const cube2 = new LocalCube(new Isometry().makeTranslation(new Point(0.05, -0.1, 0.15)), new Vector3(0.1, 0.1, 0.1), mat2, ptMat2);
+const cube2 = new LocalCube(new Isometry().makeTranslation(new Point(0.05, -0.1, 0.15)), 0.1, 0.005, mat2, ptMat2);
 
 thurston.add(cube1, cube2, lightUp, lightDown);
 

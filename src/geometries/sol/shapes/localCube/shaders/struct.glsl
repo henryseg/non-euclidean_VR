@@ -8,6 +8,7 @@ struct LocalCube {
     vec4 testX;
     vec4 testY;
     vec4 testZ;
+    float smoothness;
     vec3 sides;
 };
 
@@ -22,7 +23,11 @@ float sdf(LocalCube cube, RelVector v) {
     float distX = asinh((abs(dotX) - 0.5 * cube.sides.x) * exp(-dotZ));
     float distY = asinh((abs(dotY) - 0.5 * cube.sides.y) * exp(dotZ));
     float distZ = abs(dotZ) - 0.5 * cube.sides.z;
-    return max(max(distX, distY), distZ);
+
+    float aux = smoothMaxPoly(distX, distY, cube.smoothness);
+    return smoothMaxPoly(aux, distZ, cube.smoothness);
+    //    return log(exp(cube.smoothness * distX) + exp(cube.smoothness * distY) + exp(cube.smoothness * distZ)) / cube.smoothness;
+    //    return max(max(distX, distY), distZ);
 }
 
 ///**
