@@ -1,8 +1,8 @@
 {
-  "gettingStarted": {
+  "01gettingStarted": {
     "title": "Getting started!"
   },
-  "extendingGeometry": {
+  "02extendingGeometry": {
     "title": "Adding / Extending geometries",
     "children": ["shape", "material", "solid"]
   },
