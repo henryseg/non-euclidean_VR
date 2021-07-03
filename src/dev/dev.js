@@ -1,57 +1,55 @@
 import {
     Color,
-    Vector3,
-    Thurston,
-    mappingTorusSet as mappingTorus,
-    Point,
-    ConstDirLight,
-    InfoControls,
-    Isometry,
-    PathTracerWrapMaterial,
-    LocalCube,
-    CREEPING_FULL,
-    phongWrap,
-    VaryingColorMaterial
-} from "../thurstonSol.js";
+    ThurstonLite,
+    trivialSet as trivial,
+    Vector,
+    PointLight,
+    Vector2,
+    Cylinder, Isometry, CheckerboardMaterial, phongWrap
+} from "../thurstonSph.js";
 
 
-mappingTorus.creepingType = CREEPING_FULL;
-const thurston = new Thurston(mappingTorus, {keyboard: 'fr', maxBounces: 1});
+const thurston = new ThurstonLite(trivial, {keyboard: 'fr'});
 
+thurston.camera.maxDist = 2 * Math.PI;
 
-const lightUp = new ConstDirLight(new Color(1, 1, 1), 0.9, new Vector3(0, 0, 1));
-const lightDown = new ConstDirLight(new Color(1, 1, 1), 0.9, new Vector3(0, 0, -1));
+// lights for the Phong material
 
-const baseMat1 = new VaryingColorMaterial(
-    new Color(0.1, 0.2, 0.35),
-    new Color(0.2, 0.2, 0.2)
-)
-const mat1 = phongWrap(baseMat1);
-const ptMat1 = new PathTracerWrapMaterial(mat1, {
-    emission: new Color(0.25, 0.5, 0.8)
-});
-
-const baseMat2 = new VaryingColorMaterial(
-    new Color(0.15, 0.1, 0.2),
-    new Color(0.2, 0.2, 0.2)
+//  yellow light
+const light0 = new PointLight(
+    new Vector(1, 0, 0),
+    new Color(1, 1, 0),
 );
-const mat2 = phongWrap(baseMat2);
-const ptMat2 = new PathTracerWrapMaterial(mat2, {
-    emission: new Color(0.8, 0.5, 0.8)
-});
 
-const cube1 = new LocalCube(new Isometry(), 0.1, 0.005, mat1, ptMat1);
-// const isom1 = new Isometry().makeTranslation(new Point(0.1,0.05,-0.25, 1));
-// const cube1 = new LocalCube(isom1, 0.1, mat1);
-const cube2 = new LocalCube(new Isometry().makeTranslation(new Point(0.05, -0.1, 0.15)), 0.1, 0.005, mat2, ptMat2);
+// cyan light
+const light1 = new PointLight(
+    new Vector(0, 1, -1),
+    new Color(0, 1, 1)
+);
 
-thurston.add(cube1, cube2, lightUp, lightDown);
+// magenta light
+const light2 = new PointLight(
+    new Vector(-1, -1, 1),
+    new Color(1, 0, 1)
+);
 
-function info() {
-}
+const checkerboardBase = new CheckerboardMaterial(
+    new Vector2(2 * Math.PI, 0),
+    new Vector2(0, Math.PI),
+    new Color(1, 0.2, 0.2),
+    new Color(0, 0, 0)
+)
 
-const infoControls = new InfoControls()
-infoControls.action = info;
+const mat0 = phongWrap(checkerboardBase);
 
+
+// Complement of a local ball
+const cyl = new Cylinder(
+    new Isometry(),
+    0.1,
+    mat0
+);
+
+
+thurston.add(cyl, light0, light1, light2);
 thurston.run();
-//thurston.renderer.checkShader();
