@@ -9,6 +9,7 @@ import renderNormalUV from "./shaders/renderNormalUV.glsl.mustache";
 import renderNormal from "./shaders/renderNormal.glsl.mustache";
 import renderUV from "./shaders/renderUV.glsl.mustache";
 import fresnel from "../../imports/fresnelReflectAmount.glsl";
+import {PhongWrapMaterial} from "../phongWrap/PhongWrapMaterial.js";
 
 export class PathTracerWrapMaterial extends PTMaterial {
 
@@ -148,6 +149,15 @@ export class PathTracerWrapMaterial extends PTMaterial {
         this.material.shader(shaderBuilder);
         super.shader(shaderBuilder);
     }
+}
 
 
+/**
+ * Wrap the material into another material handling the Phong model
+ * @param {Material} material - the material defining the ambient color of the Phong model
+ * @param {Object} params - the parameters of the Phong model
+ * @return {PathTracerWrapMaterial} - the wrapped material.
+ */
+export function pathTracerWrap(material, params = {}) {
+    return new PathTracerWrapMaterial(material, params);
 }
