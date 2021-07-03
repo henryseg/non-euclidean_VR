@@ -1,3 +1,5 @@
+import {Vector4} from "three";
+
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Point} from "../../geometry/Point.js";
 
@@ -5,7 +7,6 @@ import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
-import {Vector4} from "three";
 
 /**
  * @class
@@ -35,9 +36,10 @@ export class CylinderShape extends BasicShape {
 
     updateData() {
         super.updateData();
-        const pos = new Point().applyIsometry(this.absoluteIsom);
-        const dir = new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
-        this._direction = {pos: pos, dir: dir};
+        this._direction = {
+            pos: new Point().applyIsometry(this.absoluteIsom),
+            dir: new Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix)
+        };
         this._uvTestX = new Vector4(1, 0, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
         this._uvTestY = new Vector4(0, 1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
     }
