@@ -1,0 +1,45 @@
+{
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "markdown": {
+        "tags": [
+            "todo"
+        ]
+    },
+    "source": {
+        "include": [
+            "./src/"
+        ],
+        "exclude": [
+            "./src/lib"
+        ],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "destination": "./doc/jsdoc/",
+        "readme": "./doc/jsdoc.md",
+        "recurse": true,
+        "private": true,
+        "template": "./node_modules/docdash",
+        "tutorials": "./doc/tutorials",
+        "theme_opts": {
+            "theme": "dark"
+        }
+    },
+    "docdash": {
+        "search": true,
+        "collapse": true,
+        "sectionOrder": [
+            "Tutorials",
+            "Classes",
+            "Modules",
+            "Externals",
+            "Events",
+            "Namespaces",
+            "Mixins",
+            "Interfaces"
+        ]
+    }
+}

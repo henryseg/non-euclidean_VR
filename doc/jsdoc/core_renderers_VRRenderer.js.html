@@ -1,210 +1,67 @@
-<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-		<title>core/renderers/VRRenderer.js</title>
-		<!--[if lt IE 9]>
-		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
-		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
-		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
-		<link type="text/css" rel="stylesheet" href="css/template.min.css">
-		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geometries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = false;
-			window.DOCLET_AFILTER_ENABLED = false;
-		</script>
+    
+    <meta charset="utf-8">
+    <title>core/renderers/VRRenderer.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-	<!-- start:navbar.hbs -->
-	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="index.html">
-					Non-euclidean VR
-				</a>
-				<!-- displayed on small devices -->
-				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="navbar-collapse collapse" id="topNavigation">
-				<ul class="nav navbar-nav">
-								<li class="dropdown">
-									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="global.html#bind">bind</a></li>
-											<li><a href="global.html#complement">complement</a></li>
-											<li><a href="global.html#intersection">intersection</a></li>
-											<li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li>
-											<li><a href="global.html#LEFT">LEFT</a></li>
-											<li><a href="global.html#phongWrap">phongWrap</a></li>
-											<li><a href="global.html#RIGHT">RIGHT</a></li>
-											<li><a href="global.html#union">union</a></li>
-											<li><a href="global.html#wrap">wrap</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
-									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="AbstractThurston.html">AbstractThurston</a></li>
-											<li><a href="AbstractVRThurston.html">AbstractVRThurston</a></li>
-											<li><a href="AdvancedShape.html">AdvancedShape</a></li>
-											<li><a href="Ball.html">Ball</a></li>
-											<li><a href="Ball.html">Ball</a></li>
-											<li><a href="Ball.html">Ball</a></li>
-											<li><a href="BallShape.html">BallShape</a></li>
-											<li><a href="BallShape.html">BallShape</a></li>
-											<li><a href="BallShape.html">BallShape</a></li>
-											<li><a href="BasicCamera.html">BasicCamera</a></li>
-											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
-											<li><a href="BasicShape.html">BasicShape</a></li>
-											<li><a href="ChaseControls.html">ChaseControls</a></li>
-											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
-											<li><a href="ComplementShape.html">ComplementShape</a></li>
-											<li><a href="Cylinder.html">Cylinder</a></li>
-											<li><a href="CylinderShape_CylinderShape.html">CylinderShape#CylinderShape</a></li>
-											<li><a href="DebugMaterial.html">DebugMaterial</a></li>
-											<li><a href="ExpFog.html">ExpFog</a></li>
-											<li><a href="FakeBall.html">FakeBall</a></li>
-											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
-											<li><a href="FakePointLight_FakePointLight.html">FakePointLight#FakePointLight</a></li>
-											<li><a href="FlyControls.html">FlyControls</a></li>
-											<li><a href="Fog.html">Fog</a></li>
-											<li><a href="Generic.html">Generic</a></li>
-											<li><a href="Group.html">Group</a></li>
-											<li><a href="Group.html">Group</a></li>
-											<li><a href="Group.html">Group</a></li>
-											<li><a href="Group.html">Group</a></li>
-											<li><a href="Group_Group.html">Group#Group</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="GroupElement.html">GroupElement</a></li>
-											<li><a href="HalfSpace.html">HalfSpace</a></li>
-											<li><a href="HalfSpace.html">HalfSpace</a></li>
-											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
-											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
-											<li><a href="Horoball.html">Horoball</a></li>
-											<li><a href="HoroballShape.html">HoroballShape</a></li>
-											<li><a href="InfoControls_InfoControls.html">InfoControls#InfoControls</a></li>
-											<li><a href="IntersectionShape.html">IntersectionShape</a></li>
-											<li><a href="Isometry.html">Isometry</a></li>
-											<li><a href="Light.html">Light</a></li>
-											<li><a href="LinFog.html">LinFog</a></li>
-											<li><a href="LocalBall.html">LocalBall</a></li>
-											<li><a href="LocalBall.html">LocalBall</a></li>
-											<li><a href="LocalBall.html">LocalBall</a></li>
-											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
-											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
-											<li><a href="LocalBallShape.html">LocalBallShape</a></li>
-											<li><a href="LocalFakeBall.html">LocalFakeBall</a></li>
-											<li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li>
-											<li><a href="LocalHoroball.html">LocalHoroball</a></li>
-											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
-											<li><a href="LocalPotato.html">LocalPotato</a></li>
-											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
-											<li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li>
-											<li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li>
-											<li><a href="Material.html">Material</a></li>
-											<li><a href="NativeCamera.html">NativeCamera</a></li>
-											<li><a href="NativeThurston.html">NativeThurston</a></li>
-											<li><a href="NewBall.html">NewBall</a></li>
-											<li><a href="NewBallShape.html">NewBallShape</a></li>
-											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
-											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
-											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
-											<li><a href="Point.html">Point</a></li>
-											<li><a href="PointLight.html">PointLight</a></li>
-											<li><a href="PointLight.html">PointLight</a></li>
-											<li><a href="PointLight.html">PointLight</a></li>
-											<li><a href="Position.html">Position</a></li>
-											<li><a href="QuadRing.html">QuadRing</a></li>
-											<li><a href="QuadRingElement.html">QuadRingElement</a></li>
-											<li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a></li>
-											<li><a href="RelPosition.html">RelPosition</a></li>
-											<li><a href="Renderer.html">Renderer</a></li>
-											<li><a href="Scene.html">Scene</a></li>
-											<li><a href="ShaderBuilder.html">ShaderBuilder</a></li>
-											<li><a href="Shape.html">Shape</a></li>
-											<li><a href="SingleColorMaterial.html">SingleColorMaterial</a></li>
-											<li><a href="Solid.html">Solid</a></li>
-											<li><a href="Teleportation.html">Teleportation</a></li>
-											<li><a href="TeleportationSet.html">TeleportationSet</a></li>
-											<li><a href="Thurston.html">Thurston</a></li>
-											<li><a href="UnionShape.html">UnionShape</a></li>
-											<li><a href="Vector.html">Vector</a></li>
-											<li><a href="VerticalCylinder.html">VerticalCylinder</a></li>
-											<li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li>
-											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
-											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
-											<li><a href="VRCamera.html">VRCamera</a></li>
-											<li><a href="VRControlsDrag.html">VRControlsDrag</a></li>
-											<li><a href="VRControlsMove.html">VRControlsMove</a></li>
-											<li><a href="VRRenderer.html">VRRenderer</a></li>
-											<li><a href="VRThurston.html">VRThurston</a></li>
-											<li><a href="WrapShape.html">WrapShape</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
-									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li>
-											<li><a href="tutorial-gettingStarted.html">Getting started!</a></li>
-									</ul>
-								</li>
-				</ul>
-					<!-- start:lunr-search-navbar.hbs -->
-					<form class="navbar-form navbar-right" role="search">
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
-							<div class="input-group-btn">
-								<button class="btn btn-default" id="lunr-search-submit">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
-							</div>
-						</div>
-					</form>
-					<!-- start:lunr-search-navbar.hbs -->		</div>
-		</div>
-	</header>
-	<!-- end:navbar.hbs -->		<div class="page-header">
-			<div class="container">
-				<span class="kind">source</span>
-				<h1><span class="name">core/renderers/VRRenderer.js</span></h1>
-			</div>
-		</div>
-	<div class="container content">
-		<div class="row">
-			<div class="col-md-12 main-content">
-		<section class="source-section">
-			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">import * as WebXRPolyfill from "../../lib/webxr-polyfill.module.js";
-import {VRButton as VRButtonLib} from "../../lib/VRButton.js";
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-extendingGeometry.html">Adding / Extending geometries</a></li><li><a href="tutorial-gettingStarted.html">Getting started!</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractRenderer.html">AbstractRenderer</a><ul class='methods'><li data-type='method' style='display: none;'><a href="AbstractRenderer.html#build">build</a></li><li data-type='method' style='display: none;'><a href="AbstractRenderer.html#render">render</a></li><li data-type='method' style='display: none;'><a href="AbstractRenderer.html#setAnimationLoop">setAnimationLoop</a></li><li data-type='method' style='display: none;'><a href="AbstractRenderer.html#setClearColor">setClearColor</a></li><li data-type='method' style='display: none;'><a href="AbstractRenderer.html#setPixelRatio">setPixelRatio</a></li><li data-type='method' style='display: none;'><a href="AbstractRenderer.html#setSize">setSize</a></li></ul></li><li><a href="AdvancedShape.html">AdvancedShape</a></li><li><a href="Ball.html">Ball</a></li><li></li><li></li><li></li><li></li><li><a href="BallShape.html">BallShape</a></li><li></li><li></li><li><a href="BallShape_BallShape.html">BallShape</a></li><li></li><li><a href="BASIC_RENDERER.html">BASIC_RENDERER</a></li><li><a href="BasicCamera.html">BasicCamera</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BasicCamera.html#shader">shader</a></li><li data-type='method' style='display: none;'><a href="BasicCamera.html#updateProjectionMatrix">updateProjectionMatrix</a></li></ul></li><li><a href="BasicPTMaterial_BasicPTMaterial.html">BasicPTMaterial</a></li><li><a href="BasicRenderer.html">BasicRenderer</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BasicRenderer.html#build">build</a></li><li data-type='method' style='display: none;'><a href="BasicRenderer.html#buildFragmentShader">buildFragmentShader</a></li></ul></li><li><a href="BasicShape.html">BasicShape</a></li><li><a href="Box.html">Box</a></li><li><a href="BoxShape.html">BoxShape</a></li><li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="CheckerboardMaterial.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="CheckerboardMaterial.html#glslRender">glslRender</a></li></ul></li><li><a href="ComplementShape.html">ComplementShape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ComplementShape.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="ComplementShape.html#setId">setId</a></li></ul></li><li><a href="ConstDirLight.html">ConstDirLight</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ConstDirLight.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="ConstDirLight.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="ConstDirLight.html#.glslClass">glslClass</a></li></ul></li><li></li><li></li><li><a href="Cylinder.html">Cylinder</a></li><li><a href="CylinderShape_CylinderShape.html">CylinderShape</a></li><li><a href="DebugMaterial.html">DebugMaterial</a></li><li><a href="DirectedVerticalHalfSpace.html">DirectedVerticalHalfSpace</a></li><li><a href="DirectedVerticalHalfSpaceShape.html">DirectedVerticalHalfSpaceShape</a></li><li><a href="DisplacementShape.html">DisplacementShape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="DisplacementShape.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="DisplacementShape.html#setId">setId</a></li></ul></li><li><a href="EarthTexture.html">EarthTexture</a><ul class='methods'><li data-type='method' style='display: none;'><a href="EarthTexture.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="EarthTexture.html#glslRender">glslRender</a></li></ul></li><li><a href="ESun.html">ESun</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ESun.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="ESun.html#.glslClass">glslClass</a></li></ul></li><li></li><li><a href="ExpFog.html">ExpFog</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ExpFog.html#shader">shader</a></li></ul></li><li><a href="FakeBall.html">FakeBall</a></li><li></li><li></li><li><a href="FakeBallShape.html">FakeBallShape</a></li><li></li><li></li><li><a href="FakePointLight_FakePointLight.html">FakePointLight</a></li><li><a href="FlyControls.html">FlyControls</a><ul class='methods'><li data-type='method' style='display: none;'><a href="FlyControls.html#onKeyDown">onKeyDown</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#onKeyUp">onKeyUp</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#restore">restore</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#setKeyboard">setKeyboard</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#update">update</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#updateMovementVector">updateMovementVector</a></li><li data-type='method' style='display: none;'><a href="FlyControls.html#updateRotationVector">updateRotationVector</a></li></ul></li><li><a href="Fog.html">Fog</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Fog.html#shader">shader</a></li></ul></li><li><a href="Generic.html">Generic</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Generic.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="Generic.html#addImport">addImport</a></li><li data-type='method' style='display: none;'><a href="Generic.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="Generic.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="Generic.html#setId">setId</a></li><li data-type='method' style='display: none;'><a href="Generic.html#shader">shader</a></li></ul></li><li><a href="Group.html">Group</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Group.html#element">element</a></li><li data-type='method' style='display: none;'><a href="Group.html#shader">shader</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="Group_Group.html">Group</a></li><li><a href="GroupElement.html">GroupElement</a><ul class='methods'><li data-type='method' style='display: none;'><a href="GroupElement.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#identity">identity</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#invert">invert</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#premultiply">premultiply</a></li><li data-type='method' style='display: none;'><a href="GroupElement.html#toIsometry">toIsometry</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="HalfSpace.html">HalfSpace</a></li><li></li><li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li><li></li><li><a href="Horoball.html">Horoball</a></li><li><a href="HoroballShape.html">HoroballShape</a></li><li><a href="InfoControls_InfoControls.html">InfoControls</a></li><li><a href="IntersectionShape.html">IntersectionShape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="IntersectionShape.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="IntersectionShape.html#setId">setId</a></li></ul></li><li><a href="Isometry.html">Isometry</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Isometry.html#build">build</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#build">build</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#diffExpMap">diffExpMap</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#doesFlip">doesFlip</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#identity">identity</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#invert">invert</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeInvTranslation">makeInvTranslation</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeRotationX">makeRotationX</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeRotationY">makeRotationY</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeRotationZ">makeRotationZ</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeTranslation">makeTranslation</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeTranslationFromDir">makeTranslationFromDir</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeTranslationFromDir">makeTranslationFromDir</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#makeTranslationFromUnitDir">makeTranslationFromUnitDir</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#multiplyIsometries">multiplyIsometries</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#premultiply">premultiply</a></li><li data-type='method' style='display: none;'><a href="Isometry.html#reduceError">reduceError</a></li></ul></li><li><a href="IsotropicChaseControls.html">IsotropicChaseControls</a><ul class='methods'><li data-type='method' style='display: none;'><a href="IsotropicChaseControls.html#chase">chase</a></li><li data-type='method' style='display: none;'><a href="IsotropicChaseControls.html#onSelectEnd">onSelectEnd</a></li><li data-type='method' style='display: none;'><a href="IsotropicChaseControls.html#onSelectStart">onSelectStart</a></li><li data-type='method' style='display: none;'><a href="IsotropicChaseControls.html#onSqueezeEnd">onSqueezeEnd</a></li><li data-type='method' style='display: none;'><a href="IsotropicChaseControls.html#onSqueezeStart">onSqueezeStart</a></li></ul></li><li><a href="KeyGenericControls_KeyGenericControls.html">KeyGenericControls</a></li><li><a href="Light.html">Light</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Light.html#glslDirections">glslDirections</a></li><li data-type='method' style='display: none;'><a href="Light.html#glslInstance">glslInstance</a></li></ul></li><li><a href="LinFog.html">LinFog</a><ul class='methods'><li data-type='method' style='display: none;'><a href="LinFog.html#shader">shader</a></li></ul></li><li><a href="LocalBall.html">LocalBall</a></li><li></li><li></li><li></li><li></li><li><a href="LocalBallShape.html">LocalBallShape</a></li><li></li><li></li><li><a href="LocalBallShape_LocalBallShape.html">LocalBallShape</a></li><li></li><li><a href="LocalCube.html">LocalCube</a></li><li><a href="LocalCubeShape.html">LocalCubeShape</a></li><li><a href="LocalDirectedBall.html">LocalDirectedBall</a></li><li><a href="LocalDirectedBallShape.html">LocalDirectedBallShape</a></li><li><a href="LocalDirectedHoroballShape.html">LocalDirectedHoroballShape</a></li><li><a href="LocalFakeBall.html">LocalFakeBall</a></li><li></li><li></li><li><a href="LocalFakeBallShape.html">LocalFakeBallShape</a></li><li></li><li></li><li><a href="LocalHoroball.html">LocalHoroball</a></li><li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li><li><a href="LocalPotato.html">LocalPotato</a></li><li></li><li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li><li></li><li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li><li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li><li><a href="LocalXYHalfSpace.html">LocalXYHalfSpace</a></li><li><a href="LocalXYHalfSpaceShape.html">LocalXYHalfSpaceShape</a></li><li><a href="LocalZHalfSpace.html">LocalZHalfSpace</a></li><li><a href="LocalZHalfSpaceShape.html">LocalZHalfSpaceShape</a></li><li><a href="MarsTexture.html">MarsTexture</a><ul class='methods'><li data-type='method' style='display: none;'><a href="MarsTexture.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="MarsTexture.html#glslRender">glslRender</a></li></ul></li><li><a href="Material.html">Material</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Material.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="Material.html#glslRender">glslRender</a></li></ul></li><li><a href="Matrix2.html">Matrix2</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Matrix2.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#determinant">determinant</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#identity">identity</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#invert">invert</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#multplyMatrices">multplyMatrices</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#power">power</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#premultiply">premultiply</a></li><li data-type='method' style='display: none;'><a href="Matrix2.html#set">set</a></li></ul></li><li><a href="MoonTexture.html">MoonTexture</a><ul class='methods'><li data-type='method' style='display: none;'><a href="MoonTexture.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="MoonTexture.html#glslRender">glslRender</a></li></ul></li><li><a href="NativeCamera.html">NativeCamera</a><ul class='methods'><li data-type='method' style='display: none;'><a href="NativeCamera.html#sidedShader">sidedShader</a></li></ul></li><li><a href="NormalMaterial.html">NormalMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="NormalMaterial.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="NormalMaterial.html#glslRender">glslRender</a></li></ul></li><li><a href="PathTracerCamera_PathTracerCamera.html">PathTracerCamera</a></li><li><a href="PathTracerRenderer_PathTracerRenderer.html">PathTracerRenderer</a></li><li><a href="PathTracerUI.html">PathTracerUI</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PathTracerUI.html#onClickDownload">onClickDownload</a></li><li data-type='method' style='display: none;'><a href="PathTracerUI.html#onClickGo">onClickGo</a></li><li data-type='method' style='display: none;'><a href="PathTracerUI.html#onPressP">onPressP</a></li></ul></li><li><a href="PathTracerWrapMaterial_PathTracerWrapMaterial.html">PathTracerWrapMaterial</a></li><li><a href="PhongMaterial.html">PhongMaterial</a></li><li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PhongWrapMaterial.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="PhongWrapMaterial.html#setId">setId</a></li></ul></li><li><a href="Point.html">Point</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Point.html#applyIsometry">applyIsometry</a></li><li data-type='method' style='display: none;'><a href="Point.html#applyIsometry">applyIsometry</a></li><li data-type='method' style='display: none;'><a href="Point.html#build">build</a></li><li data-type='method' style='display: none;'><a href="Point.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="Point.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="Point.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="Point.html#reduceError">reduceError</a></li><li data-type='method' style='display: none;'><a href="Point.html#reduceError">reduceError</a></li><li data-type='method' style='display: none;'><a href="Point.html#set">set</a></li><li data-type='method' style='display: none;'><a href="Point.html#toKlein">toKlein</a></li><li data-type='method' style='display: none;'><a href="Point.html#toVector4">toVector4</a></li></ul></li><li><a href="PointLight.html">PointLight</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PointLight.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="PointLight.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="PointLight.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="PointLight.html#.glslClass">glslClass</a></li><li data-type='method' style='display: none;'><a href="PointLight.html#.glslClass">glslClass</a></li></ul></li><li></li><li></li><li></li><li></li><li><a href="Position.html">Position</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Position.html#applyIsometry">applyIsometry</a></li><li data-type='method' style='display: none;'><a href="Position.html#applyQuaternion">applyQuaternion</a></li><li data-type='method' style='display: none;'><a href="Position.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="Position.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="Position.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="Position.html#fakeDiffExpMap">fakeDiffExpMap</a></li><li data-type='method' style='display: none;'><a href="Position.html#flow">flow</a></li><li data-type='method' style='display: none;'><a href="Position.html#flowFromOrigin">flowFromOrigin</a></li><li data-type='method' style='display: none;'><a href="Position.html#invert">invert</a></li><li data-type='method' style='display: none;'><a href="Position.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="Position.html#premultiply">premultiply</a></li><li data-type='method' style='display: none;'><a href="Position.html#reduceError">reduceError</a></li><li data-type='method' style='display: none;'><a href="Position.html#reduceErrorBoost">reduceErrorBoost</a></li><li data-type='method' style='display: none;'><a href="Position.html#reduceErrorQuaternion">reduceErrorQuaternion</a></li><li data-type='method' style='display: none;'><a href="Position.html#setBoost">setBoost</a></li><li data-type='method' style='display: none;'><a href="Position.html#setQuaternion">setQuaternion</a></li></ul></li><li><a href="PotatoShape.html">PotatoShape</a></li><li><a href="PTMaterial.html">PTMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PTMaterial.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="PTMaterial.html#glslRender">glslRender</a></li></ul></li><li><a href="QuadRing.html">QuadRing</a><ul class='methods'><li data-type='method' style='display: none;'><a href="QuadRing.html#element">element</a></li><li data-type='method' style='display: none;'><a href="QuadRing.html#matrix4">matrix4</a></li><li data-type='method' style='display: none;'><a href="QuadRing.html#shader">shader</a></li></ul></li><li><a href="QuadRingElement.html">QuadRingElement</a><ul class='methods'><li data-type='method' style='display: none;'><a href="QuadRingElement.html#add">add</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#addProduct">addProduct</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#isZero">isZero</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#negate">negate</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#product">product</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#reduce">reduce</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#sub">sub</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#subProduct">subProduct</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#sum">sum</a></li><li data-type='method' style='display: none;'><a href="QuadRingElement.html#toNumber">toNumber</a></li></ul></li><li><a href="QuadRingMatrix4.html">QuadRingMatrix4</a><ul class='methods'><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#fromArray">fromArray</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#getEntry">getEntry</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#identity">identity</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#invert">invert</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#multiplyMatrices">multiplyMatrices</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#multiplyScalar">multiplyScalar</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#premultiply">premultiply</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#set">set</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#setEntry">setEntry</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#toArray">toArray</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#toMatrix4">toMatrix4</a></li><li data-type='method' style='display: none;'><a href="QuadRingMatrix4.html#transpose">transpose</a></li></ul></li><li><a href="RelPosition.html">RelPosition</a><ul class='methods'><li data-type='method' style='display: none;'><a href="RelPosition.html#applyQuaternion">applyQuaternion</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#copy">copy</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#equals">equals</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#fakeDiffExpMap">fakeDiffExpMap</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#flow">flow</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#reduceError">reduceError</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#reduceErrorBoost">reduceErrorBoost</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#reduceErrorFacing">reduceErrorFacing</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#reduceErrorLocal">reduceErrorLocal</a></li><li data-type='method' style='display: none;'><a href="RelPosition.html#teleport">teleport</a></li></ul></li><li><a href="Scene.html">Scene</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Scene.html#_add">_add</a></li><li data-type='method' style='display: none;'><a href="Scene.html#add">add</a></li><li data-type='method' style='display: none;'><a href="Scene.html#shader">shader</a></li></ul></li><li><a href="ShaderBuilder_ShaderBuilder.html">ShaderBuilder</a></li><li><a href="Shape.html">Shape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Shape.html#glslGradient">glslGradient</a></li><li data-type='method' style='display: none;'><a href="Shape.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="Shape.html#glslSDF">glslSDF</a></li><li data-type='method' style='display: none;'><a href="Shape.html#glslUVMap">glslUVMap</a></li><li data-type='method' style='display: none;'><a href="Shape.html#updateAbsoluteIsom">updateAbsoluteIsom</a></li><li data-type='method' style='display: none;'><a href="Shape.html#updateData">updateData</a></li></ul></li><li><a href="ShootControls.html">ShootControls</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ShootControls.html#onSelectEnd">onSelectEnd</a></li><li data-type='method' style='display: none;'><a href="ShootControls.html#onSelectStart">onSelectStart</a></li><li data-type='method' style='display: none;'><a href="ShootControls.html#shoot">shoot</a></li><li data-type='method' style='display: none;'><a href="ShootControls.html#update">update</a></li><li data-type='method' style='display: none;'><a href="ShootControls.html#updateAllBullets">updateAllBullets</a></li><li data-type='method' style='display: none;'><a href="ShootControls.html#updateBullet">updateBullet</a></li></ul></li><li><a href="SimpleTextureMaterial.html">SimpleTextureMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="SimpleTextureMaterial.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="SimpleTextureMaterial.html#glslRender">glslRender</a></li></ul></li><li><a href="SingleColorMaterial.html">SingleColorMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="SingleColorMaterial.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="SingleColorMaterial.html#glslRender">glslRender</a></li></ul></li><li><a href="SL2.html">SL2</a><ul class='methods'><li data-type='method' style='display: none;'><a href="SL2.html#flip">flip</a></li><li data-type='method' style='display: none;'><a href="SL2.html#invert">invert</a></li><li data-type='method' style='display: none;'><a href="SL2.html#multiply">multiply</a></li><li data-type='method' style='display: none;'><a href="SL2.html#premultiply">premultiply</a></li><li data-type='method' style='display: none;'><a href="SL2.html#reduceError">reduceError</a></li><li data-type='method' style='display: none;'><a href="SL2.html#rotateBy">rotateBy</a></li><li data-type='method' style='display: none;'><a href="SL2.html#toH2">toH2</a></li><li data-type='method' style='display: none;'><a href="SL2.html#toMatrix3">toMatrix3</a></li><li data-type='method' style='display: none;'><a href="SL2.html#toMatrix4">toMatrix4</a></li><li data-type='method' style='display: none;'><a href="SL2.html#translateFiberBy">translateFiberBy</a></li></ul></li><li><a href="Solid.html">Solid</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Solid.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="Solid.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="Solid.html#setId">setId</a></li><li data-type='method' style='display: none;'><a href="Solid.html#updateData">updateData</a></li></ul></li><li><a href="SunTexture.html">SunTexture</a><ul class='methods'><li data-type='method' style='display: none;'><a href="SunTexture.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="SunTexture.html#glslRender">glslRender</a></li></ul></li><li><a href="SwitchControls_SwitchControls.html">SwitchControls</a></li><li><a href="Teleportation.html">Teleportation</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Teleportation.html#shader">shader</a></li></ul></li><li><a href="TeleportationSet.html">TeleportationSet</a><ul class='methods'><li data-type='method' style='display: none;'><a href="TeleportationSet.html#add">add</a></li><li data-type='method' style='display: none;'><a href="TeleportationSet.html#shader">shader</a></li></ul></li><li><a href="Thurston.html">Thurston</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Thurston.html#add">add</a></li><li data-type='method' style='display: none;'><a href="Thurston.html#animate">animate</a></li><li data-type='method' style='display: none;'><a href="Thurston.html#initGUI">initGUI</a></li><li data-type='method' style='display: none;'><a href="Thurston.html#initStats">initStats</a></li><li data-type='method' style='display: none;'><a href="Thurston.html#onWindowResize">onWindowResize</a></li><li data-type='method' style='display: none;'><a href="Thurston.html#run">run</a></li><li data-type='method' style='display: none;'><a href="Thurston.html#switchRenderer">switchRenderer</a></li></ul></li><li><a href="ThurstonLite.html">ThurstonLite</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ThurstonLite.html#add">add</a></li><li data-type='method' style='display: none;'><a href="ThurstonLite.html#animate">animate</a></li><li data-type='method' style='display: none;'><a href="ThurstonLite.html#initGUI">initGUI</a></li><li data-type='method' style='display: none;'><a href="ThurstonLite.html#initStats">initStats</a></li><li data-type='method' style='display: none;'><a href="ThurstonLite.html#onWindowResize">onWindowResize</a></li><li data-type='method' style='display: none;'><a href="ThurstonLite.html#run">run</a></li></ul></li><li><a href="ThurstonVR.html">ThurstonVR</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ThurstonVR.html#add">add</a></li><li data-type='method' style='display: none;'><a href="ThurstonVR.html#animate">animate</a></li><li data-type='method' style='display: none;'><a href="ThurstonVR.html#initGUI">initGUI</a></li><li data-type='method' style='display: none;'><a href="ThurstonVR.html#initStats">initStats</a></li><li data-type='method' style='display: none;'><a href="ThurstonVR.html#onWindowResize">onWindowResize</a></li><li data-type='method' style='display: none;'><a href="ThurstonVR.html#run">run</a></li></ul></li><li><a href="UnionShape.html">UnionShape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="UnionShape.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="UnionShape.html#setId">setId</a></li></ul></li><li><a href="VaryingColorMaterial.html">VaryingColorMaterial</a><ul class='methods'><li data-type='method' style='display: none;'><a href="VaryingColorMaterial.html#glslInstance">glslInstance</a></li><li data-type='method' style='display: none;'><a href="VaryingColorMaterial.html#glslRender">glslRender</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="Vector.html">Vector</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Vector.html#applyFacing">applyFacing</a></li><li data-type='method' style='display: none;'><a href="Vector.html#applyMatrix4">applyMatrix4</a></li><li data-type='method' style='display: none;'><a href="Vector.html#toLog">toLog</a></li></ul></li><li><a href="VerticalCylinder.html">VerticalCylinder</a></li><li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li><li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li><li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li><li><a href="VRCamera.html">VRCamera</a><ul class='methods'><li data-type='method' style='display: none;'><a href="VRCamera.html#_chaseThreeCamera">_chaseThreeCamera</a></li><li data-type='method' style='display: none;'><a href="VRCamera.html#sidedShader">sidedShader</a></li><li data-type='method' style='display: none;'><a href="VRCamera.html#switchStereo">switchStereo</a></li><li data-type='method' style='display: none;'><a href="VRCamera.html#updateFakeCamerasPosition">updateFakeCamerasPosition</a></li></ul></li><li><a href="VRControlsDrag.html">VRControlsDrag</a><ul class='methods'><li data-type='method' style='display: none;'><a href="VRControlsDrag.html#onSelectEnd">onSelectEnd</a></li><li data-type='method' style='display: none;'><a href="VRControlsDrag.html#onSelectStart">onSelectStart</a></li><li data-type='method' style='display: none;'><a href="VRControlsDrag.html#onSqueezeEnd">onSqueezeEnd</a></li><li data-type='method' style='display: none;'><a href="VRControlsDrag.html#onSqueezeStart">onSqueezeStart</a></li></ul></li><li><a href="VRControlsMove.html">VRControlsMove</a><ul class='methods'><li data-type='method' style='display: none;'><a href="VRControlsMove.html#onSelectEnd">onSelectEnd</a></li><li data-type='method' style='display: none;'><a href="VRControlsMove.html#onSelectStart">onSelectStart</a></li><li data-type='method' style='display: none;'><a href="VRControlsMove.html#onSqueezeEnd">onSqueezeEnd</a></li><li data-type='method' style='display: none;'><a href="VRControlsMove.html#onSqueezeStart">onSqueezeStart</a></li><li data-type='method' style='display: none;'><a href="VRControlsMove.html#update">update</a></li></ul></li><li><a href="VRRenderer.html">VRRenderer</a></li><li><a href="WrapShape.html">WrapShape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="WrapShape.html#onAdd">onAdd</a></li><li data-type='method' style='display: none;'><a href="WrapShape.html#setId">setId</a></li></ul></li><li><a href="XYHalfSpace.html">XYHalfSpace</a></li><li><a href="XYHalfSpaceShape.html">XYHalfSpaceShape</a></li><li><a href="ZHalfSpace.html">ZHalfSpace</a></li><li><a href="ZHalfSpaceShape.html">ZHalfSpaceShape</a></li><li><a href="ZSun.html">ZSun</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ZSun.html#.glslClass">glslClass</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#bind">bind</a></li><li><a href="global.html#complement">complement</a></li><li><a href="global.html#CREEPING_FULL">CREEPING_FULL</a></li><li><a href="global.html#CREEPING_OFF">CREEPING_OFF</a></li><li><a href="global.html#CREEPING_STRICT">CREEPING_STRICT</a></li><li><a href="global.html#intersection">intersection</a></li><li><a href="global.html#KEYBOARD_BINDINGS">KEYBOARD_BINDINGS</a></li><li><a href="global.html#LEFT">LEFT</a></li><li><a href="global.html#pathTracerWrap">pathTracerWrap</a></li><li><a href="global.html#phongWrap">phongWrap</a></li><li><a href="global.html#RIGHT">RIGHT</a></li><li><a href="global.html#safeString">safeString</a></li><li><a href="global.html#specifyRenderer">specifyRenderer</a></li><li><a href="global.html#specifyThurston">specifyThurston</a></li><li><a href="global.html#union">union</a></li><li><a href="global.html#wrap">wrap</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">core/renderers/VRRenderer.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as WebXRPolyfill from "webxr-polyfill";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
+import {VRButton as VRButtonLib} from "three/examples/jsm/webxr/VRButton.js";
 
 import {bind} from "../../utils.js";
-
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
-import {Renderer} from "./Renderer.js";
-
+import {AbstractRenderer} from "./AbstractRenderer.js";
 import {LEFT, RIGHT} from "../../constants.js";
 
-import vertexShader from "./shaders/vertex.js";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/three.module.js";
-import constants from "./shaders/constants.js";
-import commons1 from "../geometry/shaders/commons1.js";
-import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/raymarch.js";
-import {mustache} from "../../lib/mustache.mjs";
-import scenes from "./shaders/scenes.js";
+import vertexShader from "./shaders/common/vertex.glsl";
+import constants from "./shaders/common/constants.glsl";
+import commons1 from "../geometry/shaders/commons1.glsl";
+import commons2 from "../geometry/shaders/commons2.glsl";
+import raymarch from "./shaders/common/raymarch.glsl";
+import scenes from "./shaders/common/scenes.glsl.mustache";
+import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
+import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
+import main from "./shaders/basic/main.glsl";
 
 
 /**
@@ -215,21 +72,25 @@ import scenes from "./shaders/scenes.js";
  * Based on the tools provided by Three.js (which relies on WebXR).
  * We place in distinct layer of the Three.js scene two horizon spheres.
  * Each sphere will render the picture seen by one eye.
+ *
+ * @todo Check the impact of the pixel ratio (for the three.js camera)
  */
-export class VRRenderer extends Renderer {
+export class VRRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
-     * @param {Object} geom - the underlying geometry
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the underlying teleportation set
      * @param {VRCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
+     * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(geom, set, camera, scene, params = {}) {
+    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
         // loading the polyfill if WebXR is not supported
         new WebXRPolyfill.default();
-        super(geom, set, camera, scene, params);
+        super(shader1, shader2, set, camera, scene, params, threeRenderer);
 
         this.threeRenderer.xr.enabled = true;
         this.threeRenderer.xr.setReferenceSpaceType('local');
@@ -249,11 +110,15 @@ export class VRRenderer extends Renderer {
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
     }
 
+    get isVRRenderer() {
+        return true;
+    }
+
     /**
      * Shortcut to access the Three.js WebXRManager
      * @return {WebXRManager}
      */
-    get xr(){
+    get xr() {
         return this.threeRenderer.xr;
     }
 
@@ -261,12 +126,15 @@ export class VRRenderer extends Renderer {
         for (const side of [LEFT, RIGHT]) {
             // constants
             this._fragmentBuilder[side].addChunk(constants);
+            this._fragmentBuilder[side].addUniform('maxBounces', 'int', this.maxBounces);
             // geometry
-            this._fragmentBuilder[side].addChunk(this.geom.shader1);
+            this._fragmentBuilder[side].addChunk(this.shader1);
             this._fragmentBuilder[side].addChunk(commons1);
-            this._fragmentBuilder[side].addChunk(this.geom.shader2);
+            this._fragmentBuilder[side].addChunk(this.shader2);
             this._fragmentBuilder[side].addChunk(commons2);
 
+            // data carried with RelVector
+            this._fragmentBuilder[side].addChunk(structVectorData);
             // subgroup/quotient orbifold
             this.set.shader(this._fragmentBuilder[side]);
 
@@ -275,11 +143,13 @@ export class VRRenderer extends Renderer {
 
             // scene
             this.scene.shader(this._fragmentBuilder[side]);
-            this._fragmentBuilder[side].addChunk(mustache.render(scenes, this));
+            this._fragmentBuilder[side].addChunk(scenes(this));
+            this._fragmentBuilder[side].addChunk(updateVectorData(this));
 
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
+            this._fragmentBuilder[side].addChunk(main);
         }
     }
 
@@ -308,46 +178,40 @@ export class VRRenderer extends Renderer {
         this.threeScene.add(leftHorizonSphere, rightHorizonSphere);
     }
 
-    checkShader(side=LEFT) {
+    checkShader(side = LEFT) {
         console.log(this._fragmentBuilder[side].code);
     }
 
-    render(){
+    render() {
         this.camera.chaseThreeCamera(this.threeRenderer.xr);
-        super.render();
+        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }</code></pre>
-		</section>
-			</div>
-		</div>
-	</div>
-	<footer>
-				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 18th Feb 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
-	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/clipboard.min.js"></script>
-	<script src="js/prism.min.js"></script>
-	<script src="js/template.min.js"></script>
-		<!-- start:lunr-search-modal.hbs -->
-		<div class="modal fade" id="lunr-search-modal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title">Search results</h4>
-					</div>
-					<div class="modal-body" id="lunr-search-body">
-					</div>
-					<div class="modal-footer" id="lunr-search-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div>
-		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
-	
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Sat Jul 03 2021 14:09:58 GMT+0200 (Central European Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
 </body>
 </html>
-<!-- end:source.tmpl.hbs -->

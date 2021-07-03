@@ -11,9 +11,42 @@ It comes with an API to
 
 This project started at the *Illustrating Mathematics* semester program at [ICERM](https://icerm.brown.edu).
 
-## Controls
+## Examples
 
-The default controls in the example pages are the following.
+The project contains numerous ready to use examples.
+It contains scenes in the various geometries and demonstrates the features of the API.
+To run the examples on your own computer, you need a local server.
+
+### Running a local server
+- Download the project (for a basic usage the `dist` directory is enough)
+- Start a local server making sure that the root of the server correspond to the `dist`. 
+  This can be easily done with Python 3 using the command
+  ```zsh
+  python -m http.server
+  ``` 
+- With a browser, visit the page `http://http://localhost:8000/examples/index.html` 
+  (adapt the URL depending on your local server)
+- Enjoy!
+
+**Virtual reality**.
+
+In order to run the virtual reality examples, your browser may require an HTTPS connexion.
+The script `server.py` provide one.
+You can launch the server with the following command
+```zsh
+python server.py
+```
+The password is `thurston`.
+The browser will probably ask you to add a security exception.
+
+### Exploring the examples
+The examples tagged with *(VR)* are made for virtual reality. They should work with any VR headset supported by the three.js library.
+When loaded, those examples have a button *Enter VR* at the bottom on the screen.
+Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
+
+Items flagged with *(PT)* incorporate a path tracer. Hit `p` to launch the path tracer.
+
+The default controls are the following.
 
 Command | QWERTY keyboard | AZERTY keyboard
 --- | --- | ---
@@ -30,36 +63,51 @@ Move the the right|`arrow right`|`arrow right`
 Move upwards|`'`|`ù`
 Move downwards|`/`|`=`
 
-## Install and run
-This version requires [npm](https://www.npmjs.com/) and [parcel](https://parceljs.org/).
-You must firt install these tools following the instructions for your operating system.
-(On Mac one can use [homebrew](https://brew.sh/) to install npm, and then install parcel with npm.)
+
+## Building your own scene
+
+To build your own scene, visit the tutorials from the documentation.
+You can also browse the examples.
+
+## Development 
+
+If you extend the project, you need to install the library with [npm](https://www.npmjs.com/).
+You must first install this tools following the instructions for your operating system.
+(On Mac one can use [homebrew](https://brew.sh/) to install npm.)
+
 ### Installation
 
 - clone the git repository of `non-euclidean-vr`
 - install the dependencies with the command
-  ```(zsh)
+  ```zsh
   npm install
   ```
 
-### Run
-  
-Now you can use parcel to emulate a local server by running the command
+### Build
 
-```(zsh)
-parcel index.html
+The packages are built with [webpack](https://webpack.js.org/).
+The builder is configured to produce one file for each geometry (with a name of the form `thrustonXXX.js`).
+The module exposed for each geometries are defined in the files `/src/thursontXXX.js`.
+The command to build the packages is
+```zsh
+npm run build
 ```
 
-## Examples
+### Development environment
 
-A list of examples can be found in the directory `examples`
-It contains scenes in the various geometries and demonstrates the features of the API.
+In a development phase, one can use webpack's dev server.
+Run the command
+```zsh
+npm run dev
+```
+The webpack's dev server will serve the content of the `dev` directory at the address  `http://localhost:9000/`
+Any change in the code will be updated automatically (without having to rebuild the code).
 
-The examples tagged with *VR* are made for virtual reality. They should work with any VR headset supported by the three.js library.
-When loaded, those examples have a button *Enter VR* at the bottom on the screen.
-Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
+To update the documentation (compiled from docstrings), run the command
+```zsh
+npm run doc
+```
 
-Items flagged with *PR* incorporate a path tracer. Hit `p` to launch the path tracer.
 ## License
 
 Released under the terms of the GNU [General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html), version 3 or later.
