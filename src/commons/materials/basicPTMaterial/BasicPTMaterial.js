@@ -26,10 +26,11 @@ export class BasicPTMaterial extends PTMaterial {
         this.volumeEmission = params.volumeEmission !== undefined ? params.volumeEmission : new Color(0, 0, 0);
         /**
          * Optical Depth (Probability of scattering inside a material)
+         * Initialize to some large number.
+         * Right now in scatterRayMarch, over 100 means clear.
          * @type {number}
          */
         this.opticalDepth = params.opticalDepth !== undefined ? params.opticalDepth : 1000;
-        //initialize to some large number.  Right now in scatterRayMarch, over 100 means clear.
         /**
          * Diffuse color (basically the base color of the material)
          * @type {Color}

@@ -41,7 +41,7 @@
     )
     const mat1 = phongWrap(baseMat1);
     const ptMat1 = new PathTracerWrapMaterial(mat1, {
-        emission: new Color(0.25, 0.5, 0.8)
+        emission: new Color(0.25, 0.5, 0.8),
     });
 
     const baseMat2 = new VaryingColorMaterial(
@@ -50,7 +50,7 @@
     );
     const mat2 = phongWrap(baseMat2);
     const ptMat2 = new PathTracerWrapMaterial(mat2, {
-        emission: new Color(0.8, 0.5, 0.8)
+        emission: new Color(0.8, 0.5, 0.8),
     });
 
     const cube1 = new LocalCube(new Isometry(), 0.1, 0.005, mat1, ptMat1);

@@ -109,7 +109,7 @@ export class LocalCubeShape extends BasicShape {
         return sdf(this);
     }
 
-    // glslGradient() {
-    //     return gradient(this);
-    // }
+    glslGradient() {
+        return gradient(this);
+    }
 }
