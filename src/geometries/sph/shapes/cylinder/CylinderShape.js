@@ -3,6 +3,7 @@ import {Vector4} from "three";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Point} from "../../geometry/Point.js";
 
+import direction from "../../imports/direction.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
@@ -28,6 +29,7 @@ export class CylinderShape extends BasicShape {
      */
     constructor(isom, radius) {
         super(isom);
+        this.addImport(direction);
         this.radius = radius;
         this._direction = undefined;
         this._uvTestX = undefined;
