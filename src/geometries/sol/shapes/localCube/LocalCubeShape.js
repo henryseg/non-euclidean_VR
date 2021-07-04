@@ -24,7 +24,7 @@ export class LocalCubeShape extends BasicShape {
      * @param {Vector3|number} sides - the length of the sides
      * @param {number} smoothness - the coefficient to smooth the side of the cube (exponential method)
      */
-    constructor(location, sides, smoothness = 32) {
+    constructor(location, sides, smoothness = 0.01) {
         const isom = new Isometry();
         if (location.isIsometry) {
             isom.copy(location);
