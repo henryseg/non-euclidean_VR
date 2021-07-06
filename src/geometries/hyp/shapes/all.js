@@ -4,8 +4,13 @@ export {IntersectionShape, intersection} from "../../../commons/shapes/instersec
 
 
 export {BallShape} from "./ball/BallShape.js";
-export {LocalBallShape} from "./localBall/LocalBallShape.js";
 export {HoroballShape} from "./horoball/HoroballShape.js";
-export {LocalHoroballShape} from "./localHoroball/LocalHoroballShape.js";
 export {HalfSpaceShape} from "./halfSpace/HalfSpaceShape.js";
 export {CylinderShape} from "./cylinder/CylinderShape.js";
+
+export {LocalBallShape} from "./localBall/LocalBallShape.js";
+export {LocalHoroballShape} from "./localHoroball/LocalHoroballShape.js";
+export {LocalCylinderShape} from "./localCylinder/LocalCylinderShape.js";
+export {LocalCappedCylinderShape} from "./localCappedCylinder/LocalCappedCylinderShape.js";
+export {LocalCappedConeShape} from "./localCappedCone/LocalCappedConeShape.js";
+export {LocalRoundConeShape} from "./localRoundCone/LocalRoundConeShape.js";

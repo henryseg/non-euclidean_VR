@@ -41,12 +41,18 @@ export class PhongMaterial extends Material {
          * diffuse reflection constant
          * @type {number}
          */
-        this.diffuse = params.diffuse !== undefined ? params.diffuse : 0.5;
+        this.diffuse = params.diffuse !== undefined ? params.diffuse : 0.4;
         /**
          * specular reflection constant
          * @type {number}
          */
-        this.specular = params.specular !== undefined ? params.specular : 0.5;
+        this.specular = params.specular !== undefined ? params.specular : 0.1;
+
+        // make sure that the three coefficient add up to one.
+        const sum = this.ambient + this.diffuse + this.specular;
+        this.ambient = this.ambient / sum;
+        this.diffuse = this.diffuse / sum;
+        this.specular = this.specular / sum;
         /**
          * shininess reflection constant
          * @type {number}

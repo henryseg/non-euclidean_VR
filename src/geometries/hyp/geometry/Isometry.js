@@ -139,6 +139,23 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
     return this;
 };
 
+/***
+ * Return the isometry translating the origin by a distance t along the geodesic directed by e_z = (0, 0, 1)
+ * @param {number} t - the translation distance
+ * @return {Isometry}
+ */
+Isometry.prototype.makeTranslationZ = function (t) {
+    const c = Math.cosh(t);
+    const s = Math.sin(t);
+    this.matrix.set(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, c, s,
+        0, 0, s, c
+    );
+    return this;
+}
+
 
 Isometry.prototype.diffExpMap = function (m) {
     const tangentPosition = new Vector().setFromMatrixPosition(m);
