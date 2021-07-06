@@ -29,6 +29,7 @@ import {
 
 cube.creepingType = CREEPING_FULL;
 const thurston = new ThurstonLite(cube, {keyboard: 'fr'});
+thurston.renderer.maxBounces = 1;
 // thurston.renderer.thurstonParams.postProcess = true;
 
 
@@ -61,6 +62,7 @@ const latticeBaseMat = new VaryingColorMaterial(
 const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
     color: latticeColor,
     shininess: 5,
+    reflectivity: new Color(0.3, 0.3, 0.3),
 });
 
 // Complement of a local ball
@@ -93,7 +95,7 @@ const colorFlameRed = new Color('#CA4C23');
 
 const matCakeBase = new NoiseColorMaterial(
     colorCake,
-    new Color(35/255, 12/255, 2/255),
+    new Color(35 / 255, 12 / 255, 2 / 255),
     5
 )
 const matCake = phongWrap(matCakeBase, {
