@@ -25,7 +25,11 @@ module.exports = {
                     {loader: 'strip-whitespace-loader'},
                     {loader: 'webpack-comment-remover-loader'},
                 ]
-            }
+            },
+            // {
+            //     test: require.resolve('ccapture.js-npmfixed'),
+            //     use: 'exports-loader?exports=CCapture'
+            // },
         ]
     },
 };

@@ -1,7 +1,8 @@
 import {Clock, Color} from "three";
 import {GUI} from "../../../lib/dat.gui.module.js";
 import Stats from "../../../lib/stats.module.js";
-
+import {CCapture} from "ccapture.js-npmfixed";
+// import * as captureModule from "ccapture.js-npmfixed";
 
 import {FlyControls} from "../../../controls/FlyControls.js";
 import {bind} from "../../../utils.js";
@@ -122,6 +123,28 @@ export class ThurstonLite {
             this.flyControls,
             'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
         ).name("Keyboard");
+
+        let capturer;
+        let recordingData = {recording: false};
+        const recordingController = this.gui.add(
+            recordingData,
+            'recording'
+        ).name("Record video");
+
+        recordingController.onFinishChange(function (value) {
+            if (value === true) {
+                capturer = new CCapture({
+                    format: 'jpg'
+                });
+                capturer.start();
+            } else {
+                capturer.stop();
+                capturer.save();
+                // onResize(); //Resets us back to window size
+            }
+        });
+
+
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');

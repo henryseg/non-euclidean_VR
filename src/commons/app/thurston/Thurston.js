@@ -168,6 +168,7 @@ export class Thurston {
             'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
         ).name("Keyboard");
 
+
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
         cameraGUI.add(this.camera, 'fov', 45, 120)
