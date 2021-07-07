@@ -15,7 +15,6 @@
 <script type="module" id="main">
 
 
-
     import {
         Color,
         Clock,
@@ -40,7 +39,9 @@
         BasicCamera,
         BasicRenderer,
         Scene,
-        GradientColorMaterial, NoiseColorMaterial
+        GradientColorMaterial,
+        NoiseColorMaterial,
+        ExpFog
     } from "../../build/thurstonHyp.js";
 
 
@@ -73,6 +74,7 @@
             isRecordOn = !isRecordOn;
         }
     }
+
     window.addEventListener('keydown', _onKeyDown, false);
 
 
@@ -80,8 +82,10 @@
 
 
     // initial setup
-    const camera = new BasicCamera({set: cube});
-    const scene = new Scene();
+
+    const camera = new BasicCamera({set: cube, maxSteps: 500, maxDist: 300});
+    const fog = new ExpFog(new Color(0, 0, 0), 0.07);
+    const scene = new Scene({fog: fog});
 
     const renderer = new BasicRenderer(cube, camera, scene, {}, {
         logarithmicDepthBuffer: true
@@ -89,6 +93,7 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.maxBounces = 1;
+    // renderer.postProcess = true;
     document.body.appendChild(renderer.domElement);
 
 
@@ -135,7 +140,7 @@
     const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
         color: latticeColor,
         shininess: 5,
-        reflectivity: new Color(0.3, 0.3, 0.3),
+        reflectivity: new Color(0.15, 0.15, 0.15),
     });
 
     // Complement of a local ball
@@ -171,10 +176,11 @@
         new Color(35 / 255, 12 / 255, 2 / 255),
         5
     )
-    const matCake = phongWrap(matCakeBase, {
-        specular: 0.01,
-        shininess: 0,
-    });
+    const matCake = matCakeBase;
+    // const matCake = phongWrap(matCakeBase, {
+    //     specular: 0.01,
+    //     shininess: 0,
+    // });
 
 
     const matCandle = new PhongMaterial({
@@ -230,7 +236,7 @@
         const delta = clock.getDelta();
         flyControls.update(delta);
         renderer.render();
-        if(isRecordOn){
+        if (isRecordOn) {
             capture.capture(renderer.threeRenderer.domElement);
         }
     }
@@ -238,7 +244,6 @@
     // building there renderer
     renderer.build();
     renderer.setAnimationLoop(animate);
-
 
 
 </script>
