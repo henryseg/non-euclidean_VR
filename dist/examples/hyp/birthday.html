@@ -1,0 +1,246 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hyperbolic space</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script src="../jsm/CCapture.all.min.js"></script>
+<script type="module" id="main">
+
+
+
+    import {
+        Color,
+        Clock,
+        FlyControls,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement,
+        union,
+        phongWrap,
+        Solid,
+        LocalHoroballShape,
+        PhongWrapMaterial,
+        VaryingColorMaterial,
+        Isometry,
+        CREEPING_FULL,
+        LocalRoundCone,
+        LocalCappedCylinder,
+        BasicCamera,
+        BasicRenderer,
+        Scene,
+        GradientColorMaterial, NoiseColorMaterial
+    } from "../../build/thurstonHyp.js";
+
+
+    let capture;
+    const canvas = document.createElement('canvas');
+    let isRecordOn = false;
+
+    function recordStart() {
+        console.log('start');
+        capture = new CCapture({
+            format: 'jpg'
+        });
+        capture.start();
+    }
+
+    function recordStop() {
+        console.log('stop');
+        capture.stop();
+        capture.save();
+    }
+
+    function _onKeyDown(event) {
+        if (event.key === 'r') {
+            // console.log('hello');
+            if (isRecordOn) {
+                recordStop();
+            } else {
+                recordStart();
+            }
+            isRecordOn = !isRecordOn;
+        }
+    }
+    window.addEventListener('keydown', _onKeyDown, false);
+
+
+    cube.creepingType = CREEPING_FULL;
+
+
+    // initial setup
+    const camera = new BasicCamera({set: cube});
+    const scene = new Scene();
+
+    const renderer = new BasicRenderer(cube, camera, scene, {}, {
+        logarithmicDepthBuffer: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.maxBounces = 1;
+    document.body.appendChild(renderer.domElement);
+
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+    const clock = new Clock();
+    const flyControls = new FlyControls(camera, 'fr');
+
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        new Color(1, 1, 1),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        new Color(1, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        new Color(1, 1, 1)
+    );
+
+    // Material
+    const latticeColor = new Color(0.2, 0.5, 0.95);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(0.2, 0.2, 0.2)
+    )
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
+        color: latticeColor,
+        shininess: 5,
+        reflectivity: new Color(0.3, 0.3, 0.3),
+    });
+
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(),
+        1.02,
+    );
+
+    const modelHalfCube = 1 / Math.sqrt(3);
+    const horoballs = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        horoballs[i] = new LocalHoroballShape(
+            new Vector((2 * i0 - 1) * modelHalfCube, (2 * i1 - 1) * modelHalfCube, (2 * i2 - 1) * modelHalfCube),
+            0.98
+        );
+    }
+
+    const unionShape = union(centerBall, ...horoballs);
+    const latticeShape = complement(unionShape);
+    const lattice = new Solid(latticeShape, latticeMat);
+
+
+    const colorCake = new Color('#683928');
+    const colorCandle = new Color('#E9E5E1');
+    const colorFlameYellow = new Color('#FED283');
+    const colorFlameRed = new Color('#CA4C23');
+
+    const matCakeBase = new NoiseColorMaterial(
+        colorCake,
+        new Color(35 / 255, 12 / 255, 2 / 255),
+        5
+    )
+    const matCake = phongWrap(matCakeBase, {
+        specular: 0.01,
+        shininess: 0,
+    });
+
+
+    const matCandle = new PhongMaterial({
+        color: colorCandle,
+        shininess: 5,
+    });
+
+
+    const matFlameBase = new GradientColorMaterial(
+        colorFlameRed,
+        colorFlameYellow,
+        0.10,
+        0.2
+    );
+
+    const matFlame = phongWrap(matFlameBase, {
+        shininess: 1,
+        specular: 0.3,
+    });
+
+
+    const cake = new LocalCappedCylinder(
+        new Isometry().makeTranslationFromDir(new Vector(0, 0, -0.1)),
+        0.22,
+        0.15,
+        0.01,
+        matCake
+    );
+    const candle = new LocalCappedCylinder(
+        new Isometry(),
+        0.02,
+        0.25,
+        0.01,
+        matCandle
+    );
+    const flame = new LocalRoundCone(
+        new Isometry().makeTranslationFromDir(new Vector(0, 0, 0.15)),
+        0.02,
+        0.06,
+        matFlame
+    )
+
+    // function animate() {
+    //     if(isRecordOn){
+    //         capture.capture(canvas);
+    //     }
+    // }
+
+    scene.add(lattice, cake, candle, flame, light0, light1, light2);
+
+    // rendering the scene
+    function animate() {
+        const delta = clock.getDelta();
+        flyControls.update(delta);
+        renderer.render();
+        if(isRecordOn){
+            capture.capture(renderer.threeRenderer.domElement);
+        }
+    }
+
+    // building there renderer
+    renderer.build();
+    renderer.setAnimationLoop(animate);
+
+
+
+</script>
+
+</html>
