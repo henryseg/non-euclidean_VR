@@ -97,12 +97,12 @@
         }
     }
 
+    let canvas = thurston.renderer.domElement;
     recordController.actionKeyDown = recordToggle;
 
 
     function callback() {
         if(record) {
-            const canvas = document.querySelector('canvas');
             capturer.capture(canvas)
         }
 

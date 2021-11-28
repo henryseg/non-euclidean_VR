@@ -172,11 +172,12 @@ export class ThurstonLite {
      */
     animate() {
         const delta = this.clock.getDelta();
+
+        this.flyControls.update(delta);
+        this.renderer.render();
         if (this.callback !== undefined) {
             this.callback();
         }
-        this.flyControls.update(delta);
-        this.renderer.render();
 
         this.stats.update();
     }
