@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/henryseg/non-euclidean_VR#readme",
   "dependencies": {
+    "ccapture.js": "^1.1.0",
     "ccapture.js-npmfixed": "^1.1.0",
     "three": "^0.129.0",
     "webxr-polyfill": "^2.0.3"

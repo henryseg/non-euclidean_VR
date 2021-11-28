@@ -27,6 +27,7 @@ export const ThurstonVR = specifyThurston(ThurstonVRGeneric, shader1, shader2);
 export * from "./core.js";
 
 export {default as mappingTorusSet} from "./geometries/sol/groups/mappingTorus/set.js";
+export {default as horizontalSet} from "./geometries/sol/groups/horizontalLoops/set.js";
 export {default as zLoopSet} from "./geometries/sol/groups/zLoop/set.js";
 export * from './geometries/sol/lights/all.js';
 export * from './geometries/sol/material/all.js';

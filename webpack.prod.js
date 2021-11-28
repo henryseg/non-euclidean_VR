@@ -7,7 +7,7 @@ const common = require('./webpack.common.js');
 module.exports = merge(common, {
     experiments: {
         outputModule: true,
-        executeModule: true,
+        // executeModule: true,
     },
     entry: {
         thurstonEuc: './src/thurstonEuc.js',

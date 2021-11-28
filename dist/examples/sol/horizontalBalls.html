@@ -1,0 +1,163 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sol Example (coordinate half space)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script src="CCapture.all.min.js"></script>
+<script type="module" id="main">
+
+    import {
+        BasicCamera,
+        Scene,
+        BasicRenderer,
+        Clock,
+        Color,
+        Vector3,
+        ThurstonLite,
+        horizontalSet as set,
+        Point,
+        ConstDirLight,
+        InfoControls,
+        PhongMaterial,
+        LocalFakeBall,
+        Isometry,
+        Quaternion,
+        KeyGenericControls
+    } from "../../build/thurstonSol.js";
+
+    export const PHI = 0.5 * (1 + Math.sqrt(5))
+    export const DENUM = 1 / (PHI + 2);
+
+
+    // initial setup
+    // const camera = new BasicCamera({set: set});
+    // const scene = new Scene();
+    //
+    // const renderer = new BasicRenderer(set, camera, scene, {}, {
+    //     logarithmicDepthBuffer: true
+    // });
+    // renderer.setPixelRatio(window.devicePixelRatio);
+    // renderer.setSize(window.innerWidth, window.innerHeight);
+    // document.body.appendChild(renderer.domElement);
+
+    const thurston = new ThurstonLite(set, {keyboard: 'fr', maxBounces: 1});
+    thurston.camera.fov = 100;
+
+
+    const lightUp = new ConstDirLight(new Color(0, 0, 1), 1, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, -1));
+
+    // Phong shading material
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1),
+    });
+
+    const center = new Point(0, 0, 0, 1.);
+    const ball = new LocalFakeBall(center, 0.25, mat);
+
+    thurston.add(ball, lightUp, lightDown);
+
+    const start = new Point(
+        (0.5 * PHI + 0.5) / DENUM,
+        (-0.5 + 0.5 * PHI) / DENUM,
+        2,
+        1
+    );
+
+    const isomStart = new Isometry().makeTranslation(start);
+    thurston.camera.position.local.boost.copy(isomStart);
+
+    const clock = new Clock();
+
+
+
+    let record = false;
+    let capturer;
+    const recordController = new KeyGenericControls('v');
+
+    function recordToggle() {
+        if (record === false) {
+            capturer = new CCapture({
+                format: 'jpg'
+            });
+            capturer.start();
+            record = true;
+        } else {
+            capturer.stop();
+            capturer.save();
+            record = false;
+        }
+    }
+
+    recordController.actionKeyDown = recordToggle;
+
+
+    function callback() {
+        if(record) {
+            const canvas = document.querySelector('canvas');
+            capturer.capture(canvas)
+        }
+
+
+        const motionSpeed = 0.4;
+        const rotationSpeed = 0.8;
+        const boundary = 2;
+        const axis = new Vector3(0, 1, 0);
+
+        const threshold1 = 2 * boundary / motionSpeed;
+        const threshold2 = Math.PI / rotationSpeed;
+
+        const time = clock.getElapsedTime();
+        const t = time % (2 * threshold1 + 2 * threshold2)
+        let s;
+        let angle;
+        let q;
+        if (t < threshold1) {
+            s = t;
+            const position = new Point(
+                (0.5 * PHI + 0.5) / DENUM,
+                (-0.5 + 0.5 * PHI) / DENUM,
+                boundary - motionSpeed * s,
+                1
+            );
+            const isom = new Isometry().makeTranslation(position);
+            thurston.camera.position.local.boost.copy(isom);
+        } else if (t < threshold1 + threshold2) {
+            s = t - threshold1;
+            angle = s * rotationSpeed;
+            q = new Quaternion().setFromAxisAngle(axis, angle);
+            thurston.camera.position.local.quaternion.copy(q);
+
+        } else if (t < 2 * threshold1 + threshold2) {
+            s = t - (threshold1 + threshold2);
+            const position = new Point(
+                (0.5 * PHI + 0.5) / DENUM,
+                (-0.5 + 0.5 * PHI) / DENUM,
+                -boundary + motionSpeed * s,
+                1
+            );
+            const isom = new Isometry().makeTranslation(position);
+            thurston.camera.position.local.boost.copy(isom);
+        } else {
+            s = t - (2 * threshold1 + threshold2);
+            angle = Math.PI + s * rotationSpeed;
+            q = new Quaternion().setFromAxisAngle(axis, angle);
+            thurston.camera.position.local.quaternion.copy(q);
+        }
+
+    }
+
+    thurston.callback = callback;
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>

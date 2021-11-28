@@ -5,19 +5,14 @@ import {GroupElement} from "./GroupElement.js";
 
 import element from "./shaders/element.glsl";
 
-export const A = new Matrix3().set(
-    2, 1, 0,
-    1, 1, 0,
-    0, 0, 1
-);
 export const PHI = 0.5 * (1 + Math.sqrt(5))
 export const DENUM = 1 / (PHI + 2);
-export const TAU = 2 * Math.log(PHI);
 
 /**
  * @class
  * @classdesc
- * Suspension of Z^2 by Z
+ * Subgroup Z^2 inside the suspension of Z^2 by the Anosov matrix A = [[2,1],[1,1]].
+ * (See mappingTorus group)
  * See GroupElement for the description of the representation
  */
 export class Group extends AbstractGroup {
@@ -33,8 +28,7 @@ export class Group extends AbstractGroup {
     element() {
         const x = arguments.length > 0 ? arguments[0] : 0;
         const y = arguments.length > 1 ? arguments[1] : 0;
-        const z = arguments.length > 2 ? arguments[2] : 0;
-        return new GroupElement(this, x, y, z);
+        return new GroupElement(this, x, y);
     }
 
     shader(shaderBuilder) {

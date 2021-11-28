@@ -58,16 +58,7 @@
     isomY.multiply(new Isometry().makeFlip());
     const yHalfSpace = new XYHalfSpace(isomY, matY);
 
-    // const checkerboard2 = new CheckerboardMaterial(
-    //     new Vector2(Math.exp(1), 0),
-    //     new Vector2(0, Math.exp(-1)),
-    //     new Color(0, 0, 0),
-    //     new Color(0, 1, 1)
-    // );
-    // const mat2 = phongWrap(checkerboard2);
-    // const isom2 = new Isometry().makeTranslation(new Point(0, 0, 1));
-    // isom2.multiply(new Isometry().makeFlip());
-    // const zHalfSpace2 = new ZHalfSpace(isom2, mat2);
+
 
     thurston.add(xHalfSpace, yHalfSpace, lightUp, lightDown);
 

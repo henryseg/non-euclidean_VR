@@ -19,7 +19,7 @@ Position.prototype.flowFromOrigin = function (v) {
     const q_aux = new Quaternion(); // angular velocity
 
     for (let i = 0; i < n; i++) {
-        // computing the position of the geodesic at time i*step
+        // computing the position of the geodesic at time i * step
         // push forward the vector from Grayson's flow
         v_aux.set(u.x, u.y, u.z, 0)
             .applyMatrix4(this.boost.matrix)
@@ -29,7 +29,7 @@ Position.prototype.flowFromOrigin = function (v) {
         // update accordingly the boost of the Position object
         this.boost.makeTranslation(p_aux);
 
-        // computing the facing at time i*step
+        // computing the facing at time i * step
         // we directly update the quaternion q defining the facing
         // it satisfies the formula dq/dt = (1/2) * omega * q
         // where omega = u_y i + u_x j is the angular velocity vector

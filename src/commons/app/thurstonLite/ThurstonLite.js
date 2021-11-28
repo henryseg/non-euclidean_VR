@@ -107,7 +107,7 @@ export class ThurstonLite {
 
     /**
      * Initialize the graphic user interface
-     * @return {Thurston} the current Thurston object
+     * @return {ThurstonLite} the current Thurston object
      */
     initGUI() {
         this.gui = new GUI();
