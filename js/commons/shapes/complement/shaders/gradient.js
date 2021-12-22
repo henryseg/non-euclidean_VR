@@ -5,4 +5,6 @@ export default `//
  */
 RelVector {{name}}_gradient(RelVector v){
     return negate({{shape.name}}_gradient(v));
-}`;
+}
+
+`;

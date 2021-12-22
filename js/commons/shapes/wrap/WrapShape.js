@@ -5,6 +5,7 @@ import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
 
+
 /**
  * @class
  *
@@ -25,6 +26,20 @@ export class WrapShape extends AdvancedShape {
         super();
         this.wrap = wrap;
         this.shape = shape;
+        this.shape.parent = this;
+        this.wrap.parent = this;
+    }
+
+    updateAbsoluteIsom() {
+        super.updateAbsoluteIsom();
+        this.shape.updateAbsoluteIsom();
+        this.wrap.updateAbsoluteIsom();
+    }
+
+    updateData() {
+        super.updateData();
+        this.shape.updateData();
+        this.wrap.updateData();
     }
 
     get isWrapShape() {

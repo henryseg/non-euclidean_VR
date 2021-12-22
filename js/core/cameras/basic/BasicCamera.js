@@ -1,4 +1,4 @@
-import {PerspectiveCamera} from "../../../lib/three.module.js";
+import {PerspectiveCamera} from "../../../lib/threejs/build/three.module.js";
 import {RelPosition} from "../../geometry/General.js";
 
 import struct from "./shaders/struct.js";
@@ -87,6 +87,7 @@ export class BasicCamera {
 
     /**
      * Shortcut to access the field of view of the underlying Three.js camera
+     * (Recall that in Three.js the field of view is the vertical one.)
      * @type {number}
      */
     get fov() {
@@ -95,6 +96,7 @@ export class BasicCamera {
 
     /**
      * Shortcut to reset the field of view of the underlying Three.js camera
+     * (Recall that in Three.js the field of view is the vertical one.)
      * @param {number} value
      */
     set fov(value) {

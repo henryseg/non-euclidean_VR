@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "../../js/lib/three.module.js";
+    import {Color} from "../../js/lib/threejs/build/three.module.js";
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
@@ -20,7 +20,7 @@
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {LocalBall} from "../../js/geometries/euc/solids/LocalBall.js";
-    import {SingleColorMaterial} from "../../js/commons/material/all.js";
+    import {SingleColorMaterial} from "../../js/commons/materials/all.js";
     import {ExpFog} from "../../js/commons/scenes/expFog/ExpFog.js";
 
 
@@ -33,7 +33,7 @@
     const camera = new BasicCamera({set: torus});
     const scene = new Scene({fog: expFog});
 
-    const renderer = new BasicRenderer(geom, torus, camera, scene, {
+    const renderer = new BasicRenderer(geom, torus, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

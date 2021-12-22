@@ -20,17 +20,28 @@ export class ComplementShape extends AdvancedShape {
     constructor(shape) {
         super();
         this.shape = shape;
+        this.shape.parent = this;
+    }
+
+    updateAbsoluteIsom() {
+        super.updateAbsoluteIsom();
+        this.shape.updateAbsoluteIsom();
+    }
+
+    updateData() {
+        super.updateData();
+        this.shape.updateData();
     }
 
     get isGlobal() {
         return this.shape.isGlobal;
     }
 
-    get hasUVMap(){
+    get hasUVMap() {
         return this.shape.hasUVMap;
     }
 
-    static glslClass(){
+    static glslClass() {
         return '';
     }
 
@@ -78,6 +89,6 @@ export class ComplementShape extends AdvancedShape {
  * @param {Shape} shape - the shape to invert
  * @return {ComplementShape} the complement of the given shape.
  */
-export function complement(shape){
+export function complement(shape) {
     return new ComplementShape(shape);
 }

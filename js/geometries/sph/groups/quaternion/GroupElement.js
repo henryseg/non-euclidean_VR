@@ -1,6 +1,6 @@
 import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
 import {Isometry} from "../../geometry/Isometry.js";
-import {Quaternion} from "../../../../lib/three.module.js";
+import {Quaternion} from "../../../../lib/threejs/build/three.module.js";
 
 /**
  * @class

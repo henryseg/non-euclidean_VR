@@ -11,14 +11,12 @@ export class HalfSpace extends Solid {
 
     /**
      * Constructor
-     * @param {Point} pos - a point on the boundary of the half space
-     * @param {Vector3} normal - the normal to the half space (the last coordinates should be zero)
-     * @param {Vector3} uDir - the direction of the u coordinates
-     * @param {Vector3} vDir - the direction of the v coordinates
+     * @param {Isometry} isom - the location of the half space
      * @param {Material} material - the material of the half space
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(pos, normal, material, uDir = undefined, vDir = undefined) {
-        const shape = new HalfSpaceShape(pos, normal, uDir, vDir);
-        super(shape, material);
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new HalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
     }
 }

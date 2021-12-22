@@ -12,22 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "../../js/lib/three.module.js";
+    import {Color} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/nil/geometry/General.js";
     import heisenberg from "../../js/geometries/nil/groups/heisenberg/set.js";
 
     import {Point} from "../../js/core/geometry/Point.js";
-    import {PhongMaterial} from "../../js/commons/material/all.js";
+    import {NormalMaterial, PhongMaterial} from "../../js/commons/materials/all.js";
     import {FakePointLight} from "../../js/geometries/nil/lights/all.js";
     import {FakeBall, LocalFakeBall, LocalPotato, Solid} from "../../js/geometries/nil/solids/all.js";
     import {complement, LocalFakeBallShape, LocalPotatoShape} from "../../js/geometries/nil/shapes/all.js";
     import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {CREEPING_FULL} from "../../js/core/groups/TeleportationSet.js";
 
 
-    const thurston = new Thurston(geom, heisenberg, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, heisenberg, {keyboard: 'fr'});
+    heisenberg.creepingType = CREEPING_FULL;
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;
@@ -39,27 +41,33 @@
 
     const light1 = new FakePointLight(
         new Point(1, 0, 0),
-        lightColor1
+        lightColor1,
+        0.3
     );
     const light2 = new FakePointLight(
-        new Point(0, 1., 1),
-        lightColor2
+        new Point(0, 0, 1),
+        lightColor2,
+        0.3
     );
     const light3 = new FakePointLight(
-        new Point(-1, 0, 2),
-        lightColor3
+        new Point(0, 1, 0),
+        lightColor3,
+        0.3
     );
 
     const lights = [light1, light2, light3];
 
     // Phong shading material
     const mat = new PhongMaterial({
-        color: new Color(1, 1, 1),
-        shininess: 5,
+        color: new Color(0.6, 0.8, 0.7),
+        shininess: 1,
+        ambient:0.4,
+        diffuse:0.6,
         lights: lights
     });
 
-    const center = new LocalPotatoShape(new Point(), 0.55, 0.9, 1, 4);
+    const normalMat = new NormalMaterial()
+    const center = new LocalPotatoShape(new Point(), 0.64, 1.2, 2, 4);
     const latticeShape = complement(center)
     const lattice = new Solid(latticeShape, mat);
 

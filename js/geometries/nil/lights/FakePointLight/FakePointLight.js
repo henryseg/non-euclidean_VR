@@ -1,4 +1,4 @@
-import {Color} from "../../../../lib/three.module.js";
+import {Color} from "../../../../lib/threejs/build/three.module.js";
 import {mustache} from "../../../../lib/mustache.mjs";
 import {Light} from "../../../../core/lights/Light.js";
 
@@ -12,12 +12,14 @@ export class FakePointLight extends Light {
      * Constructor
      * @param {Point} position - position of the light
      * @param {Color} color - color of the light
+     * @param {number} intensity - intensity of the light
      */
-    constructor(position, color) {
+    constructor(position, color, intensity = 1) {
         super(1);
         this.addImport(fakeDistance);
         this.position = position;
         this.color = color;
+        this.intensity = intensity;
     }
 
     get isGlobal() {

@@ -176,6 +176,12 @@ struct Vector{
 // Define here the other fields of the structure
 };
 
+/**
+ * Return the zero vector at pos
+ */
+Vector zeroVector(Point pos){
+    return Vector(pos, vec4(0));
+}
 
 /**
  * Reduce the eventual numerical errors of the given vector.
@@ -245,5 +251,8 @@ Vector applyIsometry(Isometry isom, Vector v) {
  */
 Vector applyFacing(mat4 m, Vector v) {
     return Vector(v.pos, m * v.dir);
+}
+
+void initFlow(Vector v){
 }
 `;

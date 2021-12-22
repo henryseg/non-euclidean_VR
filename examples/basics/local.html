@@ -19,14 +19,14 @@
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {LocalBall} from "../../js/geometries/euc/solids/LocalBall.js";
-    import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
+    import {NormalMaterial} from "../../js/commons/materials/normal/NormalMaterial.js";
 
 
     // initial setup
     const camera = new BasicCamera({set: torus});
     const scene = new Scene();
 
-    const renderer = new BasicRenderer(geom, torus, camera, scene, {
+    const renderer = new BasicRenderer(geom, torus, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

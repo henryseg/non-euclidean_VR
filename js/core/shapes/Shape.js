@@ -1,7 +1,9 @@
 import {mustache} from "../../lib/mustache.mjs";
 import {Generic} from "../Generic.js";
+import {Isometry} from "../geometry/Isometry.js";
 
 import gradient from "./shaders/gradient.js";
+
 
 /**
  * @class
@@ -16,10 +18,94 @@ export class Shape extends Generic {
 
     /**
      * Constructor.
-     * The constructor takes no argument.
+     * @param {Isometry} isom - the position of the shape
      */
-    constructor() {
+    constructor(isom = undefined) {
         super();
+        /**
+         * Isometry defining the position of the shape (relative to any potential parent)
+         * @type {Isometry}
+         */
+        this.isom = isom !== undefined ? isom : new Isometry();
+        /**
+         * Inverse of the isometry
+         * @type {Isometry}
+         */
+        this.isomInv = this.isom.clone().invert();
+        /**
+         * Parent of the shape (if this shape is part of an advanced shape)
+         * @type {Shape}
+         */
+        this.parent = undefined;
+        /**
+         * Isometry defining the absolute position of the shape (taking into account the position of the parent)
+         * The actual value is computed the first time `absoluteIsom` is called.
+         * If the object is moving, the updates should be made by the developer.
+         * @type {Isometry}
+         */
+        this._absoluteIsom = undefined;
+        /**
+         * Inverse of the absolute isometry
+         * @type {Isometry}
+         */
+        this._absoluteIsomInv = undefined;
+    }
+
+    /**
+     * Recompute the absolute isometry from the current data
+     * The update is "descending", updating a shape will updates the children but not the parents.
+     * @todo include an ascending / bidirectional mode ?
+     * The descending update should be done individually in each advanced shape.
+     * @todo factorize the code at the level of AdvancedShape ? How to not have two copies of the children
+     * (one at the level of AdvancedShape, one at the level of UnionShape, for instance)?
+     */
+    updateAbsoluteIsom() {
+        if (this._absoluteIsom === undefined) {
+            this._absoluteIsom = new Isometry();
+            this._absoluteIsomInv = new Isometry();
+        }
+
+        this.isomInv = this.isom.clone().invert();
+        this._absoluteIsom.copy(this.isom);
+        this._absoluteIsomInv.copy(this.isomInv);
+        if (this.parent !== undefined) {
+            this._absoluteIsom.premultiply(this.parent.absoluteIsom);
+            this._absoluteIsomInv.multiply(this.parent.absoluteIsomInv)
+
+        }
+    }
+
+    /**
+     * The shape may contains data which depends on the isometry (like the center of a ball)
+     * This method can be overlaoded to update all these data when needed
+     */
+    updateData() {
+        this.updateAbsoluteIsom();
+    }
+
+    /**
+     * If the shape is part of an advanced shape, the underlying isometry is a position relative to the parent shape.
+     * absoluteIsom, on the contrary return the isometry encoding the absolute position
+     * @type {Isometry}
+     */
+    get absoluteIsom() {
+        if (this._absoluteIsom === undefined) {
+            this.updateAbsoluteIsom();
+        }
+        return this._absoluteIsom;
+    }
+
+    /**
+     * Return the inverse of absoluteIsom
+     * @type {Isometry}
+     */
+    get absoluteIsomInv() {
+        if (this._absoluteIsomInv === undefined) {
+            this.updateAbsoluteIsom();
+
+        }
+        // console.log(this._absoluteIsom.matrix.toLog());
+        return this._absoluteIsomInv;
     }
 
     /**

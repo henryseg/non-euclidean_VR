@@ -33,14 +33,14 @@ Some of them are inherited by default from {@link Material} but can be overwritt
     
   The property should be true, if the normal to the shape is needed to compute its color with this material.
   
-  In this case, the {@link Renderer} will make sure that the normal is computed, 
+  In this case, the {@link AbstractRenderer} will make sure that the normal is computed, 
   before calling the color function of the material
 
 - [usesUVMap]{@link Material#usesUVMap} : boolean (getter)
   
   The property should be true, if the UV coordinates of the shape are needed to compute its color with this material.
     
-  In this case, the {@link Renderer} will make sure that the UV coordinates are computed,
+  In this case, the {@link AbstractRenderer} will make sure that the UV coordinates are computed,
   before calling the color function of the material.
   In addition, the {@link Solid} constructor throw an error if 
   the shape on which the material is applied does not implement UV coordinates.
@@ -80,16 +80,16 @@ Some of them are inherited by default from {@link Material} but can be overwritt
   It returns the chunk of GLSL code used to compute the color of **this instance** of the material.
   The GLSL should contain a function with one of the following signatures.
   ```
-  vec3 NAME_render(RelVector v)
+  vec3 NAME_render(ExtVector v)
   ```
   ```
-  vec3 NAME_render(RelVector v, RelVector normal)
+  vec3 NAME_render(ExtVector v, RelVector normal)
   ```
   ```
-  vec3 NAME_render(RelVector v, vec2 uv)
+  vec3 NAME_render(ExtVector v, vec2 uv)
   ```
   ```
-  vec3 NAME_render(RelVector v, RelVector normal, vec2 uv)
+  vec3 NAME_render(ExtVector v, RelVector normal, vec2 uv)
   ```
   where `NAME` is the name of the instance of the object, computed by the getter `name` (inherited from {@link Generic}). 
   The exact signature depends on whether the material requires a normal or UV coordinates.

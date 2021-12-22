@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sol Example (coordinate half space)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Vector2, Vector3} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/sol/geometry/General.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
+    import {ZSun, ConstDirLight} from "../../js/geometries/sol/lights/all.js";
+    import {CheckerboardMaterial, NormalMaterial, PhongMaterial, phongWrap} from "../../js/commons/materials/all.js";
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {FakeBall, LocalFakeBall, XYHalfSpace, ZHalfSpace} from "../../js/geometries/sol/solids/all.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {Isometry} from "../../js/geometries/sol/geometry/General.js";
+
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+    thurston.camera.fov = 120;
+
+
+    const lightUp = new ConstDirLight(new Color(1, 1, 1), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 1, 1), 0.5, new Vector3(0, 0, -1));
+
+    const checkerboardX = new CheckerboardMaterial(
+        new Vector2(1, 0),
+        new Vector2(0, 1),
+        new Color(0, 0, 0),
+        new Color(1, 1, 0)
+    );
+    const normalMat = new NormalMaterial();
+
+    const matX = phongWrap(checkerboardX);
+    const isomX = new Isometry().makeTranslation(new Point(-1, -2, 0));
+    const xHalfSpace = new XYHalfSpace(isomX, matX);
+
+    const checkerboardY = new CheckerboardMaterial(
+        new Vector2(1, 0),
+        new Vector2(0, 1),
+        new Color(0, 0, 0),
+        new Color(1, 0, 1)
+    );
+    const matY = phongWrap(checkerboardY);
+    const isomY = new Isometry().makeTranslation(new Point(-1, -2, 0));
+    isomY.multiply(new Isometry().makeFlip());
+    const yHalfSpace = new XYHalfSpace(isomY, matY);
+
+    // const checkerboard2 = new CheckerboardMaterial(
+    //     new Vector2(Math.exp(1), 0),
+    //     new Vector2(0, Math.exp(-1)),
+    //     new Color(0, 0, 0),
+    //     new Color(0, 1, 1)
+    // );
+    // const mat2 = phongWrap(checkerboard2);
+    // const isom2 = new Isometry().makeTranslation(new Point(0, 0, 1));
+    // isom2.multiply(new Isometry().makeFlip());
+    // const zHalfSpace2 = new ZHalfSpace(isom2, mat2);
+
+    thurston.add(xHalfSpace, yHalfSpace, lightUp, lightDown);
+
+    function info() {
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>

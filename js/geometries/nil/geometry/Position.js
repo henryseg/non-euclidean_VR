@@ -1,7 +1,8 @@
-import {Isometry} from "../../../core/geometry/Isometry.js";
-import {Point} from "../../../core/geometry/Point.js";
+import {Quaternion, Vector3} from "../../../lib/threejs/build/three.module.js";
+
+import {Isometry} from "./Isometry.js";
+import {Point} from "./Point.js";
 import {Position} from "../../../core/geometry/Position.js";
-import {Matrix3, Quaternion, Vector3} from "../../../lib/three.module.js";
 
 const ex = new Vector3(1, 0, 0);
 const ey = new Vector3(0, 1, 0);
@@ -21,7 +22,7 @@ Position.prototype.flowFromOrigin = function (v) {
 
     // normalized version of v
     const u = v.clone().normalize();
-    // cylindrical coordinates of u
+    // cylindrical coordinates of u (without the angle alpha)
     const c = u.z;
     const a = Math.sqrt(1 - c * c);
 

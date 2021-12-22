@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Three-torus</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Matrix4, Vector2, Vector4} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/euc/geometry/General.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
+
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+
+    import {HalfSpace, LocalBall} from "../../js/geometries/euc/solids/all.js";
+    import {CheckerboardMaterial, phongWrap, SingleColorMaterial} from "../../js/commons/materials/all.js";
+    import {Isometry} from "../../js/core/geometry/Isometry.js";
+
+
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Point(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Point(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Point(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    const checkerboardMaterial = new CheckerboardMaterial(
+        new Vector2(2, 0),
+        new Vector2(0, 2),
+        new Color(0, 0, 0),
+        new Color(1, 1, 0)
+    )
+
+    const mat = phongWrap(
+        checkerboardMaterial,
+        {shininess: 5}
+    )
+
+    const matrix = new Matrix4().makeRotationY(-1.5).setPosition(1, 0, 0);
+    const isom = new Isometry()
+    isom.matrix.copy(matrix);
+    const halfspace = new HalfSpace(isom, mat);
+
+    thurston.add(halfspace, light0, light1, light2);
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

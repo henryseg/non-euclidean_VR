@@ -9,6 +9,7 @@ struct PointLight {
     int id;
     Point position;
     vec3 color;
+    float intensity;
     int maxDirs;
 };
 
@@ -33,10 +34,10 @@ bool directions(PointLight light, RelVector v, int i, out RelVector dir, out flo
     if (i==0){
         Point position = applyIsometry(v.invCellBoost, light.position);
         float dist = dist(v.local.pos, position);
-        intensity = lightIntensity(dist);
+        intensity = lightIntensity(dist) * light.intensity;
         Vector local = direction(v.local.pos, position);
         dir = RelVector(local, v.cellBoost, v.invCellBoost);
-        pointLightComputations = PointLightComputations(dir,dist);
+        pointLightComputations = PointLightComputations(dir, dist);
     }
     if (i==1){
         intensity = lightIntensity(2. * PI - pointLightComputations.dist);

@@ -39,7 +39,7 @@ quotient manifold/orbifold we are working in. In this tutorial we will only work
 just the trivial group. It is loaded as follows
 
 ```javascript
-import trivial from "./js/commons/groups/set.js";
+import trivial from "./js/commons/groups/symbSet.js";
 ```
 
 # Step 2. Defining a scene, a camera and a renderer.
@@ -106,7 +106,7 @@ Alternatively, one can define separately a shape and a material and combine them
 Finally one adds those objects to the scene
 
 ```javascript
-scene.add(light, ball);
+basicScene.add(light, ball);
 ```
 
 # Step 4 Rendering the scene.
@@ -114,7 +114,7 @@ scene.add(light, ball);
 Before rendering the scene, we need to build the underlying shader. This is done as follows
 
 ```javascript
-renderer.build();
+basicRenderer.build();
 ```
 Note that every object added to the scene after this function has been called will not be taken into account.
 
@@ -123,7 +123,7 @@ Then we define a function that is called at each frame.
 
 ```javascript
 function animate() {
-    renderer.render();
+  basicRenderer.render();
 }
 ```
 
@@ -133,13 +133,13 @@ We can elaborate to animate the scene, handle events, etc.
 Finally, we define the animation loop
 
 ```javascript
-renderer.setAnimationLoop(animate);
+basicRenderer.setAnimationLoop(animate);
 ```
 
-A usefull command to add when debugging is 
+A usefull command to add when debugging is
 
 ````javascript
-renderer.checkShader();
+basicRenderer.checkShader();
 ````
 
 It displays in the log the shader built by the renderer.
@@ -167,7 +167,7 @@ The complete `index.html` file is
   import {Color} from "./js/lib/three.module.js";
   
   import * as geom from "./js/geometries/euc/geometry/General.js";
-  import trivial from "./js/commons/groups/set.js";
+  import trivial from "./js/commons/groups/symbSet.js";
 
   import {BasicCamera, BasicRenderer, Scene} from "./js/core/General.js";
 

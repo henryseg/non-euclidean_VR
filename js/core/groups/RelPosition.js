@@ -1,5 +1,7 @@
 import {Position} from "../geometry/Position.js";
 import {GroupElement} from "./GroupElement.js";
+import {Vector} from "../geometry/Vector.js";
+import {Quaternion} from "../../lib/threejs/build/three.module.js";
 
 
 /**
@@ -99,6 +101,14 @@ class RelPosition {
         return this;
     }
 
+    /**
+     * Facing of the local part of the relative position
+     * @return {Matrix4}
+     */
+    get facing(){
+        return this.local.facing;
+    }
+
 
     /**
      * The underlying local point (i.e. ignoring the cell boost)
@@ -114,6 +124,25 @@ class RelPosition {
      */
     get point() {
         return this.local.point.applyIsometry(this.cellBoost.toIsometry());
+    }
+
+    /**
+     * Return the global isometry (cellBoost * local boost) of the current position
+     * @return {Isometry}
+     */
+    get globalBoost() {
+        return this.cellBoost.toIsometry().multiply(this.local.boost);
+    }
+
+    /**
+     * Return a global position (with no cell boost) representing the current relative position
+     * @type{Position}
+     */
+    get globalPosition() {
+        const res = new Position();
+        res.boost.copy(this.globalBoost);
+        res.quaternion.copy(this.local.quaternion);
+        return res;
     }
 
     /**
@@ -169,6 +198,19 @@ class RelPosition {
     flow(v) {
         this.local.flow(v);
         this.teleport();
+        return this;
+    }
+
+
+    /**
+     * Fake version of the differential of the exponential map.
+     * We do not incorporate any teleportation here.
+     * (See {@link Position} for details)
+     * @param {Matrix4} matrix - an affine isometry of the tangent space at the origin
+     * @return {RelPosition}
+     */
+    fakeDiffExpMap(matrix) {
+        this.local.fakeDiffExpMap(matrix);
         return this;
     }
 

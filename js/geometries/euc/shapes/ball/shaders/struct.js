@@ -9,6 +9,7 @@ struct BallShape {
     int id;
     Point center;
     float radius;
+    Isometry absoluteIsomInv;
 };
 
 /**
@@ -16,7 +17,8 @@ struct BallShape {
  */
 float sdf(BallShape ball, RelVector v) {
     Point center = applyGroupElement(v.invCellBoost, ball.center);
-    return dist(v.local.pos, center) - ball.radius;
+    vec4 w = center.coords - v.local.pos.coords;
+    return length(w) - ball.radius;
 }
 
 /**
@@ -32,10 +34,12 @@ RelVector gradient(BallShape ball, RelVector v){
 vec2 uvMap(BallShape ball, RelVector v){
     Point center = applyGroupElement(v.invCellBoost, ball.center);
     vec4 dir = normalize(v.local.pos.coords - center.coords);
-    float sinPhi = sqrt(dir.x * dir.x + dir.y * dir.y);
+    dir.w = 0.;
+    dir = ball.absoluteIsomInv.matrix * dir;
+    float sinPhi = length(dir.xy);
     float cosPhi = dir.z;
-    float uCoord = atan(dir.y, dir.x);
+    float uCoord = -atan(dir.y, dir.x);
     float vCoord = atan(sinPhi, cosPhi);
-    return vec2(uCoord,vCoord);
+    return vec2(uCoord, vCoord);
 }
 `;

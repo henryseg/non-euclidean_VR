@@ -4,7 +4,6 @@ import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.js";
 import direction from "../../imports/direction.js";
-import normalFrame from "../../imports/normalFrame.js";
 
 import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
@@ -22,23 +21,44 @@ export class BallShape extends BasicShape {
 
     /**
      * Construction
-     * @param {Point|Vector} center - data for the center of the ball
+     * @param {Isometry|Point|Vector} location - data for the center of the ball
+     * - If the input in an Isometry, then the center is the image of the origin by this isometry.
      * - If the input in a Point, then the center is that point.
      * - If the input is a Vector, then the center is the image of this vector by the exponential map at the origin.
      * @param {number} radius - the radius od the ball
      */
-    constructor(center, radius) {
-        super();
-        this.addImport(distance, direction, normalFrame);
-        if (center.isPoint) {
-            this.center = center;
-        } else if (center.isVector) {
-            const isom = new Isometry().makeTranslationFromDir(center);
-            this.center = new Point().applyIsometry(isom);
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else if (location.isVector) {
+            isom.makeTranslationFromDir(location);
         } else {
-            throw new Error('BallShape: this type is not allowed');
+            throw new Error('BallShape: this type of location is not allowed');
         }
+        super(isom);
+        this.addImport(distance, direction);
         this.radius = radius;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined){
+            this.updateData();
+        }
+        return this._center;
     }
 
     /**

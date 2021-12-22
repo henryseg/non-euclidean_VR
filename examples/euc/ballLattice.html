@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Dehn twist</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Clock, Color, Vector4} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/euc/geometry/General.js";
+    import {default as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
+
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+
+    import {LocalBallShape, LocalDirectedBallShape} from "../../js/geometries/euc/shapes/all.js";
+    import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
+    import {LocalDirectedBall} from "../../js/geometries/euc/solids/LocalDirectedBall.js";
+    import {CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
+
+    torus.creepingType = CREEPING_STRICT;
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Point(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Point(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Point(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(1, 0.8, 0.7),
+        shininess: 5
+    });
+
+
+    // Complement of a local ball
+    const centerBall = new LocalDirectedBallShape(
+        new Point(0, 0, 0),
+        0.5,
+    );
+
+    // const latticeShape = complement(centerBall);
+    // const lattice = new Solid(latticeShape, mat0);
+    const lattice = new Solid(centerBall, mat0);
+
+    thurston.add(lattice, light0, light1, light2);
+
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

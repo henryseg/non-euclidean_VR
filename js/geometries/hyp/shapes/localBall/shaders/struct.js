@@ -29,7 +29,7 @@ RelVector gradient(LocalBallShape ball, RelVector v){
 vec2 uvMap(LocalBallShape ball, RelVector v){
     Vector radius = direction(ball.center, v.local.pos);
     Vector[3] f;
-    normalFrame(v.local.pos,f);
+    orthoFrame(v.local.pos,f);
     float x = geomDot(radius, f[0]);
     float y = geomDot(radius, f[1]);
     float cosPhi = geomDot(radius, f[2]);

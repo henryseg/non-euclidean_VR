@@ -1,5 +1,5 @@
 import {Isometry} from "../../../core/geometry/Isometry.js";
-import {Matrix4} from "../../../lib/three.module.js";
+import {Matrix4} from "../../../lib/threejs/build/three.module.js";
 
 
 Isometry.prototype.build = function () {
@@ -70,7 +70,7 @@ Isometry.prototype.makeInvTranslation = function (point) {
 };
 
 Isometry.prototype.makeTranslationFromDir = function (vec) {
-    console.warn('Not done yet');
+    console.warn('makeTranslationFromDir: not done yet');
     const [x, y, z] = vec.toArray();
     this.matrix.set(
         1, 0, 0, x,
@@ -78,6 +78,7 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
         0, 0, 1, z,
         0, 0, 0, 1,
     )
+    this.isInNil = true;
     return this;
 }
 

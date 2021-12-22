@@ -4,17 +4,7 @@ import {
     Matrix3,
     Matrix4,
     Quaternion
-} from "./lib/three.module.js";
-
-
-/**
- * Add a method to Three.js Quaternion.
- * Return a human-readable version of the vector (for debugging purpose)
- * @return {string}
- */
-Quaternion.prototype.toLog = function () {
-    return `[${this.x}, ${this.y}, ${this.z}, ${this.w}]`
-}
+} from "./lib/threejs/build/three.module.js";
 
 
 /**
@@ -55,6 +45,32 @@ Matrix3.prototype.toLog = function () {
     return res;
 }
 
+
+/**
+ * Return the given power of the current matrix
+ * @param {number} n - the exponent. It should be an integer (non necessarily positive)
+ * @return {Matrix3} - the power of the matrix
+ */
+Matrix3.prototype.power = function (n) {
+    if (n < 0) {
+        return this.invert().power(-n);
+    }
+    if (n === 0) {
+        return this.identity();
+    }
+    if (n === 1) {
+        return this;
+    }
+    if (n % 2 === 0) {
+        this.power(n / 2);
+        return this.multiply(this);
+    } else {
+        const aux = this.clone();
+        this.power(n - 1);
+        return this.multiply(aux);
+    }
+}
+
 /**
  * Add a method to Three.js Matrix4.
  * Return a human-readable version of the matrix (for debugging purpose)
@@ -87,6 +103,37 @@ Matrix4.prototype.add = function (matrix) {
     }));
     return this;
 };
+
+
+/**
+ * Add a method to Three.js Quaternion.
+ * Return a human-readable version of the vector (for debugging purpose)
+ * @return {string}
+ */
+Quaternion.prototype.toLog = function () {
+    return `[${this.x}, ${this.y}, ${this.z}, ${this.w}]`
+}
+
+
+/**
+ * Multiply a quaternion by the given scalar
+ * @param {number} c - a scalar
+ * @return {Quaternion} - the current quaternion
+ */
+Quaternion.prototype.multiplyScalar = function (c) {
+    this.set(c * this.x, c * this.y, c * this.z, c * this.w);
+    return this;
+}
+
+/**
+ * Add two quaternions
+ * @param {Quaternion} q - the quaternion to add
+ * @return {Quaternion} - the current quaternion
+ */
+Quaternion.prototype.add = function (q) {
+    this.set(this.x + q.x, this.y + q.y, this.z + q.z, this.w + q.w);
+    return this;
+}
 
 /**
  * Transform a method attached to an object into a function.

@@ -1,4 +1,6 @@
 import {mustache} from "../../../../lib/mustache.mjs";
+
+import {Isometry, Point} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.js";
@@ -6,6 +8,7 @@ import struct from "./shaders/struct.js";
 import sdf from "./shaders/sdf.js";
 import gradient from "./shaders/gradient.js";
 import uv from "./shaders/uv.js";
+
 
 /**
  * @class
@@ -17,14 +20,25 @@ export class BallShape extends BasicShape {
 
     /**
      * Construction
-     * @param {Point} center - the center of the ball
+     * @param {Isometry|Point} location - Either an isometry, or a point representing the center of the ball
      * @param {number} radius - the radius od the ball
      */
-    constructor(center, radius) {
-        super();
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        }
+        else if (location.isPoint) {
+            isom.makeTranslation(location);
+        }
+        else {
+            throw new Error('BallShape: this type of location is not allowed');
+        }
+        super(isom);
         this.addImport(distance);
-        this.center = center;
         this.radius = radius;
+        this._center = undefined;
+        this.updateData();
     }
 
     /**
@@ -33,6 +47,22 @@ export class BallShape extends BasicShape {
      */
     get isBallShape() {
         return true;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
     }
 
     /**
@@ -52,7 +82,7 @@ export class BallShape extends BasicShape {
      * Not sure if that is the smartest choice
      * @return {boolean}
      */
-    get hasUVMap(){
+    get hasUVMap() {
         return true;
     }
 

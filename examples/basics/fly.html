@@ -12,7 +12,7 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock} from "../../js/lib/three.module.js";
+    import {Clock} from "../../js/lib/threejs/build/three.module.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import trivial from "../../js/commons/groups/trivial/set.js";
@@ -21,7 +21,7 @@
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {Ball} from "../../js/geometries/euc/solids/Ball.js";
-    import {NormalMaterial} from "../../js/commons/material/normal/NormalMaterial.js";
+    import {NormalMaterial} from "../../js/commons/materials/normal/NormalMaterial.js";
     import {FlyControls} from "../../js/controls/FlyControls.js";
 
 
@@ -29,7 +29,7 @@
     const camera = new BasicCamera({set: trivial});
     const scene = new Scene();
 
-    const renderer = new BasicRenderer(geom, trivial, camera, scene, {
+    const renderer = new BasicRenderer(geom, trivial, camera, scene, {}, {
         logarithmicDepthBuffer: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);

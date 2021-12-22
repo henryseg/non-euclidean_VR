@@ -70,7 +70,6 @@ Some of them are inherited by default from the class {@link Shape} but can be ov
   Indeed, when the instance of this shape is passed to the shader, the JS sends the instance as a whole.
   
   If this function is not implemented, the class will inherit from the one of {@link Generic} which throws an error.
-
   If several instances of the same shape are added to the scene, 
   the {@link ShaderBuilder} makes sure that this code is inserted only once in the shader.
 
@@ -131,6 +130,23 @@ Some of them are inherited by default from the class {@link Shape} but can be ov
   and finally load the code from `glslSDF()`, `glslGradient` and eventually `glslUVMap()`.
   For basic shape, this should do the job.
   For an advance shape the method should propagate `shader` to the shapes it is built on.
+
+- isom : Isometry (setter)
+  
+  Some parts of the code, may try to manipulate objects, regardless of the kind of shapes they have.
+  See for instance {@link IsotropicChaseControls}.
+  To do so the shape class uses a property called `isom`.
+  It has the following meaning : the shape is the image by `isom` of the shape in its default position.
+  If the primary description of the shape location is not via an isometry, 
+  one can use a setter to update all the relevant properties
+  Advanced shapes should have a setter that will propagate the setting to all depending shapes.
+  Although isom is an object of type Isometry, one should never update this property using methods the Isometry class
+  but rather use the setter 
+  ```js
+  shape.isom = foo;
+  ```
+  Indeed, otherwise, if shape is an AdvancedShape, then the setter may not propagate.
+  Similarly, if shape is BasicShape, but its isom setter update other properties, those updates would not be applied.
 
 In order to produce the GLSL functions `NAME_sdf`, `NAME_gradient`, and `NAME_uvMap`, 
 one can use a template engine, such as [mustache.js](https://github.com/janl/mustache.js/)

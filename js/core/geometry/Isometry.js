@@ -19,6 +19,10 @@ class Isometry {
         this.build(...arguments);
     }
 
+    get isIsometry() {
+        return true;
+    }
+
     /**
      * Fake constructor
      * If no argument is passed, return the identity.
@@ -104,6 +108,19 @@ class Isometry {
      * @return {Isometry} The current isometry
      */
     makeTranslationFromDir(vec) {
+        throw new Error("This method need be overloaded.");
+    }
+
+    /**
+     * Take as input a Matrix4 m, seen as an isometry of the tangent space at the origin (in the reference frame)
+     * and set the current isometry so that its differential is dexp * dm, where
+     * - dexp is the differential of the exponential map
+     * - dm is the differential of m
+     * @todo turn it into an abstract method, when implemented in all geometries
+     * @param {Matrix4} m - an isometry of the tangent space
+     * @return {Isometry} The current isometry
+     */
+    diffExpMap(m) {
         throw new Error("This method need be overloaded.");
     }
 

@@ -1,0 +1,131 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hyperbolic space</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Vector3, WebGLRenderer} from "../../js/lib/threejs/build/three.module.js";
+    import {Thurston} from "../../js/commons/app/thurston/Thurston.js";
+
+    import * as geom from "../../js/geometries/hyp/geometry/General.js";
+    import cube from "../../js/geometries/hyp/groups/cube/set.js";
+
+    import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
+    import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+    import {Solid, Ball, LocalBall} from "../../js/geometries/hyp/solids/all.js";
+    import {LocalBallShape, complement, LocalHoroballShape} from "../../js/geometries/hyp/shapes/all.js";
+    import {CheckerboardMaterial} from "../../js/commons/materials/checkerboard/CheckerboardMaterial.js";
+    import {phongWrap} from "../../js/commons/materials/phongWrap/PhongWrapMaterial.js";
+    import {union} from "../../js/commons/shapes/all.js";
+    import {
+        BasicPTMaterial,
+        PathTracerWrapMaterial,
+        PhongWrapMaterial,
+        SingleColorMaterial
+    } from "../../js/commons/materials/all.js";
+    import {BasicCamera, BasicRenderer, PathTracerCamera, PathTracerRenderer, Scene} from "../../js/core/General.js";
+    import {KeyGenericControls} from "../../js/controls/KeyGenericControls.js";
+    import Stats from "../../js/lib/stats.module.js";
+    import {VaryingColorMaterial} from "../../js/geometries/hyp/material/varyingColor/VaryingColorMaterial.js";
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // General setup
+    //------------------------------------------------------------------------------------------------------------------
+
+    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Building the scene
+    //------------------------------------------------------------------------------------------------------------------
+
+    thurston.scene.ptBackground.absorb = new Color(0.4,0.4,0.4);
+
+    // lights for the Phong material (not used by the path tracer)
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+    // cyan light
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+    // magenta light
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+    thurston.add(light0, light1, light2);
+
+    // Material
+    const latticeColor = new Color(0.2, 0.5, 0.95);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(0.2, 0.2, 0.2)
+    )
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
+        color: latticeColor,
+        shininess: 5,
+    });
+
+    const ptLatticeMat = new BasicPTMaterial({
+        diffuse: new Color(1,1,1),
+        specular: new Color(1,1,1),
+        ior:1.2,
+        diffuseChance: 0.,
+        reflectionChance: 0.2,
+        refractionChance: 0.8,
+        absorb: new Color(1,1,2),
+       // volumeEmission:new Color(0.5,0.75,2),
+        volumeEmission:new Color(2,0.5,0.25),
+        opticalDepth:1000,
+        emission:new Color(0.02,0.05,0.02),
+    });
+
+
+    // Lattice
+    const centerBall = new LocalBallShape(new Point(), 1.02);
+    const modelHalfCube = 1 / Math.sqrt(3);
+    const horoballs = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        horoballs[i] = new LocalHoroballShape(
+            new Vector((2 * i0 - 1) * modelHalfCube, (2 * i1 - 1) * modelHalfCube, (2 * i2 - 1) * modelHalfCube),
+            0.98
+        );
+    }
+    const unionShape = union(centerBall, ...horoballs);
+    const latticeShape = complement(unionShape);
+    const lattice = new Solid(latticeShape, latticeMat, ptLatticeMat);
+    thurston.add(lattice);
+
+    //
+    // // Local light (for path tracer only)
+    // const lightColor = new Color(5,5,5);
+    // const lightMat = new SingleColorMaterial(lightColor);
+    // const ptLightMat = new BasicPTMaterial({
+    //     emission: lightColor,
+    // });
+    // const light = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.08, lightMat, ptLightMat);
+   //thurston.add(light);
+
+    thurston.run();
+
+
+</script>
+
+</html>

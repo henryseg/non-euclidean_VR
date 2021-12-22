@@ -8,11 +8,11 @@ export default `//
 * @param[in] v the relative vector to teleport.
 */
 ExtVector teleport(ExtVector v){
-    v.isTeleported = false;
+    v.data.isTeleported = false;
     {{#teleportations}}
         if({{glslTestName}}(v.vector.local.pos)){
             v.vector = rewrite(v.vector, {{elt.name}}, {{inv.name}});
-            v.isTeleported = true;
+            v.data.isTeleported = true;
             return v;
         }
     {{/teleportations}}
@@ -30,21 +30,25 @@ ExtVector teleport(ExtVector v){
  */
 ExtVector creepingFlow(ExtVector v, float t, float offset){
     ExtVector try = flow(v, t);
-    {{#usesCreeping}}
-        {{#teleportations}}
-            if({{glslTestName}}(try.vector.local.pos)){
-            
-                {{#glslCreepCustom}}
-                    try = {{glslCreepName}}(v, offset);
-                {{/glslCreepCustom}}
-            
-                {{^glslCreepCustom}}
-                    try = {{glslCreepName}}(v, try, offset);
-                {{/glslCreepCustom}}
-                
-            }
-        {{/teleportations}}
-    {{/usesCreeping}}
+    {{#teleportations}}
+
+        {{#usesCreepingCustom}}
+        if({{glslTestName}}(try.vector.local.pos)){
+            try = {{glslCreepName}}(v, offset);
+        }
+        {{/usesCreepingCustom}}
+
+        {{#usesCreepingBinary}}
+        if({{glslTestName}}(try.vector.local.pos)){
+            try = {{glslCreepName}}(v, try, offset);
+        }
+        {{/usesCreepingBinary}}
+        
+    {{/teleportations}}
     return try;
-}`;
+}
+
+
+
+`;
 

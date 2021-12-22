@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Three-sphere</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/sph/geometry/General.js";
+    import quaternion from "../../js/geometries/sph/groups/quaternion/set.js";
+
+
+    import {Point, Vector} from "../../js/geometries/sph/geometry/General.js";
+    import {PointLight} from "../../js/geometries/sph/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+    import {Solid, Ball} from "../../js/geometries/sph/solids/all.js";
+    import {LocalBallShape, union, complement} from "../../js/geometries/sph/shapes/all.js";
+
+
+    const thurston = new ThurstonLite(geom, quaternion, {keyboard: 'fr'});
+
+    thurston.camera.maxDist = 2 * Math.PI;
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+    const lights = [light0, light1, light2];
+
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(1, 0.2, 0.2),
+        shininess: 5,
+        lights: lights
+    });
+
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(),
+        0.1,
+    );
+
+    const lattice = new Solid(centerBall, mat0);
+
+
+    // Phong shading material
+    const mat1 = new PhongMaterial({
+        color: new Color(1, 1, 1),
+        shininess: 10,
+        lights: lights
+    });
+
+    const ball1 = new Ball(
+        new Vector(0, 0, -0.5),
+        0.1,
+        mat1
+    );
+
+    thurston.add(lattice, ball1, light0, light1, light2);
+    thurston.run();
+
+
+</script>
+
+</html>

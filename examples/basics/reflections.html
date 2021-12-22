@@ -12,6 +12,8 @@
 <body>
 </body>
 <script type="module" id="main">
+    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
+
     import * as geom from "../../js/geometries/euc/geometry/General.js";
     import torus from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
@@ -20,17 +22,14 @@
     import {Point} from "../../js/core/geometry/Point.js";
     import {LocalBall} from "../../js/geometries/euc/solids/LocalBall.js";
     import {PointLight} from "../../js/geometries/euc/lights/all.js";
-    import {PhongMaterial} from "../../js/commons/material/all.js";
-    import {Color, Vector3} from "../../js/lib/three.module.js";
+    import {PhongMaterial} from "../../js/commons/materials/all.js";
 
 
     // initial setup
     const camera = new BasicCamera({set: torus});
-    const scene = new Scene({maxBounces: 1});
+    const scene = new Scene();
 
-    const renderer = new BasicRenderer(geom, torus, camera, scene, {
-        logarithmicDepthBuffer: true
-    });
+    const renderer = new BasicRenderer(geom, torus, camera, scene, {maxBounces: 1}, {logarithmicDepthBuffer: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);

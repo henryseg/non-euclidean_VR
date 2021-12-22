@@ -12,25 +12,24 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color} from "../../js/lib/three.module.js";
+    import {Color, Vector2} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
     import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
-    import {Solid} from "../../js/core/solids/Solid.js";
-    import {LocalBallShape, complement} from "../../js/geometries/hyp/shapes/all.js";
-    import {NormalMaterial, SingleColorMaterial} from "../../js/commons/material/all.js";
-    import {DebugMaterial} from "../../js/commons/material/debug/DebugMaterial.js";
-    import {Ball} from "../../js/geometries/hyp/solids/all.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+    import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
+    import {LocalBallShape, complement, LocalHoroballShape} from "../../js/geometries/hyp/shapes/all.js";
+    import {CheckerboardMaterial} from "../../js/commons/materials/checkerboard/CheckerboardMaterial.js";
+    import {phongWrap} from "../../js/commons/materials/phongWrap/PhongWrapMaterial.js";
+    import {union} from "../../js/commons/shapes/all.js";
 
-
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
-    thurston.scene.fog = undefined;
+    // cube.usesNearestNeighbors = true;
+    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr'});
 
 
     // lights for the Phong material
@@ -53,38 +52,21 @@
         new Color(1, 0, 1)
     );
 
-    const matColor = new SingleColorMaterial(
-        new Color(0.6,0.2, 0.1)
-    )
-
-    const matNormal = new NormalMaterial();
-
-    const matDebug = new DebugMaterial(
-        light0
-    )
-
     // Phong shading material
-    const matPhong = new PhongMaterial({
+    const mat0 = new PhongMaterial({
         color: new Color(1, 0.2, 0.2),
         shininess: 5,
     });
 
     // Complement of a local ball
-    const ball0 = new LocalBallShape(
+    const centerBall = new LocalBallShape(
         new Point(),
         1.02,
     );
 
-    const ball = new Ball(
-        new Vector(0,0,-8),
-        6,
-        matColor
-    )
 
-
-    const latticeShape = complement(ball0);
-    const lattice = new Solid(latticeShape, matPhong);
-
+    const latticeShape = complement(centerBall);
+    const lattice = new Solid(latticeShape, mat0);
 
 
     thurston.add(lattice, light0, light1, light2);

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Virtual Reality (Relation between tangent space and geometry)</title>
+</head>
+<body>
+</body>
+<script type="module" id="main">
+    import {Clock, Color} from "../../js/lib/threejs/build/three.module.js";
+    import {XRControllerModelFactory} from "../../js/lib/threejs/examples/jsm/webxr/XRControllerModelFactory.js";
+
+    import * as geom from "../../js/geometries/hyp/geometry/General.js";
+    import cube from "../../js/geometries/hyp/groups/cube/set.js";
+
+    import {VRRenderer, Scene, VRCamera} from "../../js/core/General.js";
+    import {NativeCamera} from "../../js/geometries/hyp/cameras/native/NativeCamera.js";
+
+    import {Isometry, Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
+    import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
+    import {Cylinder, Solid} from "../../js/geometries/hyp/solids/all.js";
+    import {LocalBallShape, complement, HalfSpaceShape} from "../../js/geometries/hyp/shapes/all.js";
+
+
+    import {FlyControls} from "../../js/controls/FlyControls.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {IsotropicChaseControls} from "../../js/controls/IsotropicChaseControls.js";
+    import {SingleColorMaterial} from "../../js/commons/materials/all.js";
+    import {CylinderShape} from "../../js/geometries/hyp/shapes/cylinder/CylinderShape.js";
+    import {intersection} from "../../js/commons/shapes/all.js";
+
+
+    // initial setup
+    const camera = new VRCamera({set: cube});
+    camera.maxSteps = 300;
+    const scene = new Scene();
+    const renderer = new VRRenderer(geom, cube, camera, scene, {}, {
+        logarithmicDepthBuffer: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+    const controllerModelFactory = new XRControllerModelFactory();
+
+    const controllerGrip0 = renderer.xr.getControllerGrip(0);
+    const model0 = controllerModelFactory.createControllerModel(controllerGrip0);
+    controllerGrip0.add(model0);
+    renderer.threeScene.add(controllerGrip0);
+
+    const controllerGrip1 = renderer.xr.getControllerGrip(1);
+    const model1 = controllerModelFactory.createControllerModel(controllerGrip1);
+    controllerGrip1.add(model1);
+    renderer.threeScene.add(controllerGrip1);
+
+    const controller0 = renderer.xr.getController(0);
+    renderer.threeScene.add(controller0);
+    const controller1 = renderer.xr.getController(1);
+    renderer.threeScene.add(controller1);
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    //  yellow light
+    const light3 = new PointLight(
+        new Vector(0, 0, -1.5),
+        new Color(1, 1, 1),
+    );
+
+
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(1, 0.2, 0.2),
+        shininess: 5
+    });
+
+    // Complement of a local ball
+    const ball0 = new LocalBallShape(
+        new Point(),
+        1.02,
+    );
+    const latticeShape = complement(ball0);
+    const lattice = new Solid(latticeShape, mat0);
+
+
+    // Phong shading material
+    const mat1 = new PhongMaterial({
+        color: new Color(0, 0, 1),
+        shininess: 10
+    });
+
+    const beamMat = new SingleColorMaterial(new Color(0.8, 0.8, 1));
+
+
+    const isom1 = new Isometry();
+    const cylShape = new CylinderShape(isom1, 0.01);
+    const halfspaceShape = new HalfSpaceShape(isom1);
+    const beamShape = intersection(cylShape, halfspaceShape);
+    const beam = new Solid(beamShape, beamMat);
+    beam.isRendered = false;
+    //const ball1 = new NewBall(isom1, 0.05, mat1);
+
+    // adding the solid to the scene
+    scene.add(lattice, beam, light0, light1, light2, light3);
+
+    // building there renderer
+    renderer.build();
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+    const clock = new Clock();
+
+    const flyControls = new FlyControls(camera, 'fr');
+    const infoControls = new InfoControls();
+    infoControls.action = function () {
+        console.log(controller0.matrixWorld.toLog());
+    }
+    const chaseControls = new IsotropicChaseControls(controller0, camera, beam);
+
+
+    // rendering the scene
+    function animate() {
+        const delta = clock.getDelta();
+        flyControls.update(delta);
+        chaseControls.chase(renderer.xr);
+        renderer.render();
+    }
+
+    renderer.setAnimationLoop(animate);
+    renderer.checkShader();
+
+
+</script>
+</html>

@@ -13,7 +13,7 @@
 		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geometries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
 			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
@@ -64,8 +64,12 @@
 											<li><a href="BasicCamera.html">BasicCamera</a></li>
 											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
 											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="ChaseControls.html">ChaseControls</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="Cylinder.html">Cylinder</a></li>
+											<li><a href="CylinderShape_CylinderShape.html">CylinderShape#CylinderShape</a></li>
+											<li><a href="DebugMaterial.html">DebugMaterial</a></li>
 											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
@@ -86,6 +90,8 @@
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
 											<li><a href="HoroballShape.html">HoroballShape</a></li>
@@ -106,9 +112,13 @@
 											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
 											<li><a href="LocalPotato.html">LocalPotato</a></li>
 											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li>
+											<li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="NativeCamera.html">NativeCamera</a></li>
 											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NewBall.html">NewBall</a></li>
+											<li><a href="NewBallShape.html">NewBallShape</a></li>
 											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
 											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
@@ -132,6 +142,8 @@
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalCylinder.html">VerticalCylinder</a></li>
+											<li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li>
 											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
 											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
 											<li><a href="VRCamera.html">VRCamera</a></li>
@@ -179,7 +191,7 @@
 import {GroupElement} from "./GroupElement.js";
 import element from "./shaders/element.js";
 import struct from "./shaders/struct.js";
-import {Vector4} from "../../../../lib/three.module.js";
+import {Matrix4, Vector4} from "../../../../lib/three.module.js";
 
 
 export class Group extends AbstractGroup {
@@ -196,17 +208,18 @@ export class Group extends AbstractGroup {
          * Translation of the first generator
          * @type {Vector4}
          */
-        this.halfTranslationA = halfTranslationA;
+        this._halfTranslationA = halfTranslationA !== undefined ? halfTranslationA : new Vector4(1, 0, 0, 0);
         /**
          * Translation of the second generator
          * @type {Vector4}
          */
-        this.halfTranslationB = halfTranslationB;
+        this._halfTranslationB = halfTranslationB !== undefined ? halfTranslationB : new Vector4(0, 1, 0, 0);
         /**
          * Translation of the third generator
          * @type {Vector4}
          */
-        this.halfTranslationC = halfTranslationC;
+        this._halfTranslationC = halfTranslationC !== undefined ? halfTranslationC : new Vector4(0, 0, 1, 0);
+        this.updateDotMatrix();
     }
 
     get halfTranslationA() {
@@ -215,12 +228,9 @@ export class Group extends AbstractGroup {
 
     set halfTranslationA(value) {
         this._halfTranslationA = value !== undefined ? value : new Vector4(1, 0, 0, 0);
-        this._halfLengthSqA = this._halfTranslationA.lengthSq();
+        this.updateDotMatrix();
     }
 
-    get halfLengthSqA() {
-        return this._halfLengthSqA;
-    }
 
     get halfTranslationB() {
         return this._halfTranslationB;
@@ -228,11 +238,7 @@ export class Group extends AbstractGroup {
 
     set halfTranslationB(value) {
         this._halfTranslationB = value !== undefined ? value : new Vector4(0, 1, 0, 0);
-        this._halfLengthSqB = this._halfTranslationB.lengthSq();
-    }
-
-    get halfLengthSqB() {
-        return this._halfLengthSqB;
+        this.updateDotMatrix();
     }
 
 
@@ -242,11 +248,31 @@ export class Group extends AbstractGroup {
 
     set halfTranslationC(value) {
         this._halfTranslationC = value !== undefined ? value : new Vector4(0, 0, 1, 0);
-        this._halfLengthSqC = this._halfTranslationC.lengthSq();
+        this.updateDotMatrix();
     }
 
-    get halfLengthSqC() {
-        return this._halfLengthSqC;
+    updateDotMatrix() {
+        if (this._dotMatrix === undefined) {
+            this._dotMatrix = new Matrix4();
+        }
+        const aux = new Matrix4().set(
+            this.halfTranslationA.x, this.halfTranslationB.x, this.halfTranslationC.x, 0,
+            this.halfTranslationA.y, this.halfTranslationB.y, this.halfTranslationC.y, 0,
+            this.halfTranslationA.z, this.halfTranslationB.z, this.halfTranslationC.z, 0,
+            0, 0, 0, 1
+        ).invert();
+        this._dotMatrix.copy(aux).transpose().multiply(aux);
+
+    }
+
+    /**
+     * Return a positive definite matrix for which the family
+     * halfTranslationA, halfTranslationB, halfTranslationC
+     * is orthonormal.
+     * @type{Matrix4}
+     */
+    get dotMatrix() {
+        return this._dotMatrix;
     }
 
     element() {
@@ -268,7 +294,7 @@ export class Group extends AbstractGroup {
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 18th Feb 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

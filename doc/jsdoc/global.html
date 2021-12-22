@@ -12,7 +12,7 @@
 		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geometries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
 			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
@@ -63,8 +63,12 @@
 											<li><a href="BasicCamera.html">BasicCamera</a></li>
 											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
 											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="ChaseControls.html">ChaseControls</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="Cylinder.html">Cylinder</a></li>
+											<li><a href="CylinderShape_CylinderShape.html">CylinderShape#CylinderShape</a></li>
+											<li><a href="DebugMaterial.html">DebugMaterial</a></li>
 											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
@@ -85,6 +89,8 @@
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
 											<li><a href="HoroballShape.html">HoroballShape</a></li>
@@ -105,9 +111,13 @@
 											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
 											<li><a href="LocalPotato.html">LocalPotato</a></li>
 											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li>
+											<li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="NativeCamera.html">NativeCamera</a></li>
 											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NewBall.html">NewBall</a></li>
+											<li><a href="NewBallShape.html">NewBallShape</a></li>
 											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
 											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
@@ -131,6 +141,8 @@
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalCylinder.html">VerticalCylinder</a></li>
+											<li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li>
 											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
 											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
 											<li><a href="VRCamera.html">VRCamera</a></li>
@@ -180,6 +192,110 @@
 							<article class="secondary">
 									<h3>Methods</h3>
 									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="complement" class="function public"><span class="name">complement</span><span class="signature-params">( <span class="signature-param">shape</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="ComplementShape.html">ComplementShape</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the complement of the given shape.
+			The goal is a to have behavior similar to <code>union</code> and <code>intersection</code>.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>shape</code></td>
+							<td><span class="param-type"><a href="Shape.html">Shape</a></span></td>
+							<td class="last">
+									<p>the shape to invert</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="ComplementShape.html">ComplementShape</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><p>the complement of the given shape.</p></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="commons_shapes_complement_ComplementShape.js.html">commons/shapes/complement/ComplementShape.js</a>, <a href="commons_shapes_complement_ComplementShape.js.html#line-90">line 90</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="union" class="function public"><span class="name">union</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The union of an arbitrary number of shapes</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="commons_shapes_union_UnionShape.js.html">commons/shapes/union/UnionShape.js</a>, <a href="commons_shapes_union_UnionShape.js.html#line-97">line 97</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
 			<h4 id="bind" class="function public"><span class="name">bind</span><span class="signature-params">( <span class="signature-param">scope</span>, <span class="signature-param">fn</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{function}</span></h4>
@@ -255,73 +371,6 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="complement" class="function public"><span class="name">complement</span><span class="signature-params">( <span class="signature-param">shape</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="ComplementShape.html">ComplementShape</a>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Return the complement of the given shape.
-			The goal is a to have behavior similar to <code>union</code> and <code>intersection</code>.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>shape</code></td>
-							<td><span class="param-type"><a href="Shape.html">Shape</a></span></td>
-							<td class="last">
-									<p>the shape to invert</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="ComplementShape.html">ComplementShape</a></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><p>the complement of the given shape.</p></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="commons_shapes_complement_ComplementShape.js.html">commons/shapes/complement/ComplementShape.js</a>, <a href="commons_shapes_complement_ComplementShape.js.html#line-81">line 81</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
 			<h4 id="intersection" class="function public"><span class="name">intersection</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
@@ -347,44 +396,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="commons_shapes_instersection_IntersectionShape.js.html">commons/shapes/instersection/IntersectionShape.js</a>, <a href="commons_shapes_instersection_IntersectionShape.js.html#line-87">line 87</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="union" class="function public"><span class="name">union</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>The union of an arbitrary number of shapes</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="commons_shapes_union_UnionShape.js.html">commons/shapes/union/UnionShape.js</a>, <a href="commons_shapes_union_UnionShape.js.html#line-87">line 87</a></p>
+									<p class="form-control-static"><a href="commons_shapes_instersection_IntersectionShape.js.html">commons/shapes/instersection/IntersectionShape.js</a>, <a href="commons_shapes_instersection_IntersectionShape.js.html#line-98">line 98</a></p>
 								</div>
 							</div>
 			
@@ -458,7 +470,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="commons_shapes_wrap_WrapShape.js.html">commons/shapes/wrap/WrapShape.js</a>, <a href="commons_shapes_wrap_WrapShape.js.html#line-94">line 94</a></p>
+									<p class="form-control-static"><a href="commons_shapes_wrap_WrapShape.js.html">commons/shapes/wrap/WrapShape.js</a>, <a href="commons_shapes_wrap_WrapShape.js.html#line-104">line 104</a></p>
 								</div>
 							</div>
 			
@@ -554,7 +566,7 @@
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 18th Feb 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

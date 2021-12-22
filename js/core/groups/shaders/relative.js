@@ -35,7 +35,6 @@ Vector applyGroupElement(GroupElement elt, Vector v){
 
 
 
-
 /***********************************************************************************************************************
  *
  * @struct RelPosition
@@ -74,12 +73,69 @@ struct RelVector {
     GroupElement invCellBoost;
 };
 
+
+/**
+ * Reduce the eventual numerical errors of the given vector.
+ */
+RelVector reduceError(RelVector v){
+    v.local = reduceError(v.local);
+    return v;
+}
+
+/**
+ * Add the given vectors.
+ * @return @f$ v_1 + v_2 @f$
+ * We assume that the vectors have the same cellBoost.
+ */
+RelVector add(RelVector v1, RelVector v2){
+    v1.local = add(v1.local, v2.local);
+    return v1;
+}
+
+/**
+ * Subtrack the given vectors.
+ * @return @f$ v_1 - v_2 @f$
+ * We assume that the vectors have the same cellBoost.
+ */
+RelVector sub(RelVector v1, RelVector v2){
+    v1.local = sub(v1.local, v2.local);
+    return v1;
+}
+
+/**
+ * Multiply the vector by a scalar.
+ * Previously scalarMult.
+ * @return @f$ s v @f$
+ */
+RelVector multiplyScalar(float s, RelVector v){
+    v.local = multiplyScalar(s, v.local);
+    return v;
+}
+
+/**
+ * Return the dot product of the two vectors (with respect to the metric tensor).
+ * Previouly tangDot.
+ * We assume that the vectors have the same cellBoost.  
+ */
+float geomDot(RelVector v1, RelVector v2) {
+    return geomDot(v1.local, v2.local);
+}
+
 /**
  * Normalize the given vector.
  */
 RelVector geomNormalize(RelVector v){
     v.local = geomNormalize(v.local);
     return v;
+}
+
+/**
+ * Mix version for relative vectors
+ * We assume that the vectors have the same cellBoost.  
+ */
+RelVector geomMix(RelVector v1, RelVector v2, float a) {
+    v1.local = geomMix(v1.local, v2.local, a);
+    return v1;
 }
 
 /**
@@ -96,6 +152,16 @@ RelVector negate(RelVector v){
  */
 RelVector geomReflect(RelVector v, RelVector normal){
     v.local = geomReflect(v.local, normal.local);
+    return v;
+}
+
+
+/**
+ * Refract the vector accrosse the plane defined by the given normal.
+ * We assume that v and normal have the same cellBoost.
+ */
+RelVector geomRefract(RelVector v, RelVector normal, float n){
+    v.local = geomRefract(v.local, normal.local, n);
     return v;
 }
 
@@ -167,25 +233,23 @@ RelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){
  * This structure is meant to follow vector during the ray-marching procedure.
  * It consists of 
  * - vector : the position and direction of the vector
- * - travelledDist : the distance travelled during the raymarching
- * - lastFlowTime : the time flowed during the last step
- * - isTeleported : a flag, boolean flag that is true, if the vector has been teleported in the last loop
- * - probably more to come
+ * - data : additional data (such as the accumulated color) carried along the raymarching
  *
  **********************************************************************************************************************/
 
 struct ExtVector {
     RelVector vector;
-    float lastFlowTime;
-    float travelledDist;
-    bool isTeleported;
+    VectorData data;
 };
+
 
 ExtVector flow(ExtVector v, float t) {
     v.vector = flow(v.vector, t);
-    v.lastFlowTime = t;
-    v.travelledDist = v.travelledDist + t;
+    v.data.lastFlowDist = t;
+    v.data.lastBounceDist = v.data.lastBounceDist + t;
+    v.data.totalDist  = v.data.totalDist + t;
     return v;
 }`;
+
 
 

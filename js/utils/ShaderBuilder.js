@@ -3,13 +3,25 @@
  *
  * @classdesc
  * Tool to build shaders without redundancies in the imported chunks of code
+ *
  */
+
+export const BASIC_RENDERER = 1;
+export const VR_RENDERER = 2;
+export const PATHTRACER_RENDERER = 3;
+
 export class ShaderBuilder {
     /**
      * Constructor.
      * The constructor does not take arguments.
+     * @param useCase - what kind of use is made of this shader builder
      */
-    constructor() {
+    constructor(useCase = BASIC_RENDERER) {
+        /**
+         * What kind of use is made of this shader builder
+         * @type {number}
+         */
+        this.useCase = useCase;
         /**
          * The shader built shader code.
          * @type {string}
@@ -123,7 +135,7 @@ export class ShaderBuilder {
      * @return {ShaderBuilder} - the current shader builder
      */
     updateUniform(name, value) {
-        this.uniforms[name] = value;
+        this.uniforms[name].value = value;
         return this;
     }
 

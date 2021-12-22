@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>S2E Example</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/s2e/geometry/General.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
+    import cube from "../../js/geometries/s2e/groups/cube/set.js";
+    import {ESun} from "../../js/geometries/s2e/lights/esun/ESun.js";
+    import {Color} from "../../js/lib/threejs/build/three.module.js";
+    import {PhongMaterial} from "../../js/commons/materials/all.js";
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {Ball} from "../../js/geometries/s2e/solids/Ball.js";
+    import {LocalBall} from "../../js/geometries/s2e/solids/LocalBall.js";
+    import {LocalBallShape} from "../../js/geometries/s2e/shapes/localBall/LocalBallShape.js";
+    import {complement} from "../../js/commons/shapes/all.js";
+    import {Solid} from "../../js/core/solids/Solid.js";
+
+    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr', maxBounces: 1});
+
+
+    const lightUp = new ESun(new Color(1, 1, 0), 1);
+    const lightDown = new ESun(new Color(1, 0, 1), -1);
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+
+    const point = new Point(0, 0, 1, 0);
+    const center = new LocalBallShape(point, 0.9);
+    const latticeShape = complement(center);
+    const lattice = new Solid(latticeShape, mat);
+
+    thurston.add(lattice, lightUp, lightDown);
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

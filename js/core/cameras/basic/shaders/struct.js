@@ -6,7 +6,7 @@ export default `//
  * Mostly used to carry all informations linked to the camera (minDist, maxDist, maxSteps, etc)
  **********************************************************************************************************************/
 struct Camera {
-    float fov;/**< field of view */
+    float fov;/**< vertical field of view */
     float minDist;/**< minimal distance we ray-march */
     float maxDist;/**< maximal distance we ray-march */
     int maxSteps;/**< maximal number of steps during the ray-marching */

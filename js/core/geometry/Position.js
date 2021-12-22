@@ -1,4 +1,4 @@
-import {Matrix4, Quaternion} from "../../lib/three.module.js";
+import {Matrix4, Quaternion} from "../../lib/threejs/build/three.module.js";
 import {Isometry} from "./Isometry.js";
 import {Point} from "./Point.js";
 import {Vector} from "./Vector.js";
@@ -28,6 +28,10 @@ class Position {
          * We represent it as quaternion, whose action by conjugation on R^3 defines an element of O(3)
          */
         this.quaternion = new Quaternion();
+    }
+
+    get isPosition(){
+        return true;
     }
 
     /**
@@ -183,6 +187,37 @@ class Position {
         const w = v.clone().applyFacing(this);
         const shift = new Position().flowFromOrigin(w);
         this.multiply(shift);
+        return this;
+    }
+
+    /**
+     * Fake version of the differential of the exponential map.
+     *
+     * Assume that the current position is the (Id,Id).
+     * Take as input a Matrix4 `matrix` seen as an affine isometry of R^3 = T_oX with respect to the reference frame e = (e_1, e_2, e_3)
+     * (or more precisely, an isometry of the tangent bundle of T_oX)
+     * Update the position with the following properties.
+     * Let u = matrix . (0,0,0,1) that is the image of the origin of T_oX by matrix
+     * Let v = matrix . (0,0,1,0) that is the image of the vector e_3 by matrix
+     * The updated position (g,m) is such that g . origin = exp(u) and d_og m v = d_u exp v
+     * Or at least, this is the ideal goal.
+     *
+     * We fake the behavior using parallel transport.
+     * Apparently the error made if of the order of O(|u|^2).
+     * https://mathoverflow.net/questions/126104/difference-between-parallel-transport-and-derivative-of-the-exponential-map
+     * Thus for controllers supposed to stay close to the user, it could be enough.
+     * (The overlay of the controllers and the seen is only correct at the first order.)
+     *
+     * If the current position is not (Id, Id), then everything is made "relative" to the current position.
+     *
+     * @param {Matrix4} matrix - an affine isometry of the tangent space at the origin
+     * @return {Position}
+     */
+    fakeDiffExpMap(matrix) {
+        const u = new Vector().setFromMatrixPosition(matrix);
+        const quaternion = new Quaternion().setFromRotationMatrix(matrix);
+        this.flow(u);
+        this.quaternion.multiply(quaternion);
         return this;
     }
 

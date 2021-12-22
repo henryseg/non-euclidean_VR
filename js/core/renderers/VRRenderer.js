@@ -1,21 +1,24 @@
 import * as WebXRPolyfill from "../../lib/webxr-polyfill.module.js";
-import {VRButton as VRButtonLib} from "../../lib/VRButton.js";
+import {VRButton as VRButtonLib} from "../../lib/threejs/examples/jsm/webxr/VRButton.js";
 
 import {bind} from "../../utils.js";
 
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
-import {Renderer} from "./Renderer.js";
+import {AbstractRenderer} from "./AbstractRenderer.js";
 
 import {LEFT, RIGHT} from "../../constants.js";
 
-import vertexShader from "./shaders/vertex.js";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/three.module.js";
-import constants from "./shaders/constants.js";
+import vertexShader from "./shaders/common/vertex.js";
+import {Mesh, ShaderMaterial, SphereBufferGeometry} from "../../lib/threejs/build/three.module.js";
+import constants from "./shaders/common/constants.js";
 import commons1 from "../geometry/shaders/commons1.js";
 import commons2 from "../geometry/shaders/commons2.js";
-import raymarch from "./shaders/raymarch.js";
+import raymarch from "./shaders/common/raymarch.js";
 import {mustache} from "../../lib/mustache.mjs";
-import scenes from "./shaders/scenes.js";
+import scenes from "./shaders/common/scenes.js";
+import structVectorData from "./shaders/basic/vectorDataStruct.js";
+import updateVectorData from "./shaders/basic/vectorDataUpdate.js";
+import main from "./shaders/basic/main.js";
 
 
 /**
@@ -27,7 +30,7 @@ import scenes from "./shaders/scenes.js";
  * We place in distinct layer of the Three.js scene two horizon spheres.
  * Each sphere will render the picture seen by one eye.
  */
-export class VRRenderer extends Renderer {
+export class VRRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
@@ -36,11 +39,12 @@ export class VRRenderer extends Renderer {
      * @param {VRCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
+     * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(geom, set, camera, scene, params = {}) {
+    constructor(geom, set, camera, scene, params = {}, threeRenderer = {}) {
         // loading the polyfill if WebXR is not supported
         new WebXRPolyfill.default();
-        super(geom, set, camera, scene, params);
+        super(geom, set, camera, scene, params, threeRenderer);
 
         this.threeRenderer.xr.enabled = true;
         this.threeRenderer.xr.setReferenceSpaceType('local');
@@ -60,11 +64,15 @@ export class VRRenderer extends Renderer {
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
     }
 
+    get isVRRenderer() {
+        return true;
+    }
+
     /**
      * Shortcut to access the Three.js WebXRManager
      * @return {WebXRManager}
      */
-    get xr(){
+    get xr() {
         return this.threeRenderer.xr;
     }
 
@@ -72,12 +80,15 @@ export class VRRenderer extends Renderer {
         for (const side of [LEFT, RIGHT]) {
             // constants
             this._fragmentBuilder[side].addChunk(constants);
+            this._fragmentBuilder[side].addUniform('maxBounces', 'int', this.maxBounces);
             // geometry
             this._fragmentBuilder[side].addChunk(this.geom.shader1);
             this._fragmentBuilder[side].addChunk(commons1);
             this._fragmentBuilder[side].addChunk(this.geom.shader2);
             this._fragmentBuilder[side].addChunk(commons2);
 
+            // data carried with RelVector
+            this._fragmentBuilder[side].addChunk(structVectorData);
             // subgroup/quotient orbifold
             this.set.shader(this._fragmentBuilder[side]);
 
@@ -87,10 +98,12 @@ export class VRRenderer extends Renderer {
             // scene
             this.scene.shader(this._fragmentBuilder[side]);
             this._fragmentBuilder[side].addChunk(mustache.render(scenes, this));
+            this._fragmentBuilder[side].addChunk(mustache.render(updateVectorData, this));
 
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
+            this._fragmentBuilder[side].addChunk(main);
         }
     }
 
@@ -119,12 +132,12 @@ export class VRRenderer extends Renderer {
         this.threeScene.add(leftHorizonSphere, rightHorizonSphere);
     }
 
-    checkShader(side=LEFT) {
+    checkShader(side = LEFT) {
         console.log(this._fragmentBuilder[side].code);
     }
 
-    render(){
+    render() {
         this.camera.chaseThreeCamera(this.threeRenderer.xr);
-        super.render();
+        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }

@@ -2,7 +2,7 @@ import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 import element from "./shaders/element.js";
 import struct from "./shaders/struct.js";
-import {Vector4} from "../../../../lib/three.module.js";
+import {Matrix4, Vector4} from "../../../../lib/threejs/build/three.module.js";
 
 
 export class Group extends AbstractGroup {
@@ -19,17 +19,18 @@ export class Group extends AbstractGroup {
          * Translation of the first generator
          * @type {Vector4}
          */
-        this.halfTranslationA = halfTranslationA;
+        this._halfTranslationA = halfTranslationA !== undefined ? halfTranslationA : new Vector4(1, 0, 0, 0);
         /**
          * Translation of the second generator
          * @type {Vector4}
          */
-        this.halfTranslationB = halfTranslationB;
+        this._halfTranslationB = halfTranslationB !== undefined ? halfTranslationB : new Vector4(0, 1, 0, 0);
         /**
          * Translation of the third generator
          * @type {Vector4}
          */
-        this.halfTranslationC = halfTranslationC;
+        this._halfTranslationC = halfTranslationC !== undefined ? halfTranslationC : new Vector4(0, 0, 1, 0);
+        this.updateDotMatrix();
     }
 
     get halfTranslationA() {
@@ -38,12 +39,9 @@ export class Group extends AbstractGroup {
 
     set halfTranslationA(value) {
         this._halfTranslationA = value !== undefined ? value : new Vector4(1, 0, 0, 0);
-        this._halfLengthSqA = this._halfTranslationA.lengthSq();
+        this.updateDotMatrix();
     }
 
-    get halfLengthSqA() {
-        return this._halfLengthSqA;
-    }
 
     get halfTranslationB() {
         return this._halfTranslationB;
@@ -51,11 +49,7 @@ export class Group extends AbstractGroup {
 
     set halfTranslationB(value) {
         this._halfTranslationB = value !== undefined ? value : new Vector4(0, 1, 0, 0);
-        this._halfLengthSqB = this._halfTranslationB.lengthSq();
-    }
-
-    get halfLengthSqB() {
-        return this._halfLengthSqB;
+        this.updateDotMatrix();
     }
 
 
@@ -65,11 +59,31 @@ export class Group extends AbstractGroup {
 
     set halfTranslationC(value) {
         this._halfTranslationC = value !== undefined ? value : new Vector4(0, 0, 1, 0);
-        this._halfLengthSqC = this._halfTranslationC.lengthSq();
+        this.updateDotMatrix();
     }
 
-    get halfLengthSqC() {
-        return this._halfLengthSqC;
+    updateDotMatrix() {
+        if (this._dotMatrix === undefined) {
+            this._dotMatrix = new Matrix4();
+        }
+        const aux = new Matrix4().set(
+            this.halfTranslationA.x, this.halfTranslationB.x, this.halfTranslationC.x, 0,
+            this.halfTranslationA.y, this.halfTranslationB.y, this.halfTranslationC.y, 0,
+            this.halfTranslationA.z, this.halfTranslationB.z, this.halfTranslationC.z, 0,
+            0, 0, 0, 1
+        ).invert();
+        this._dotMatrix.copy(aux).transpose().multiply(aux);
+
+    }
+
+    /**
+     * Return a positive definite matrix for which the family
+     * halfTranslationA, halfTranslationB, halfTranslationC
+     * is orthonormal.
+     * @type{Matrix4}
+     */
+    get dotMatrix() {
+        return this._dotMatrix;
     }
 
     element() {

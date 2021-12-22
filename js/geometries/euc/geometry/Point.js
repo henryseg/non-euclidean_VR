@@ -1,5 +1,6 @@
+import {Vector4} from "../../../lib/threejs/build/three.module.js";
 import {Point} from "../../../core/geometry/Point.js";
-import {Vector4} from "../../../lib/three.module.js";
+
 
 
 Point.prototype.build = function () {
@@ -12,6 +13,7 @@ Point.prototype.build = function () {
 
 Point.prototype.set = function() {
     this.coords.set(arguments[0], arguments[1], arguments[2], 1);
+    return this;
 }
 
 Point.prototype.applyIsometry = function (isom) {
@@ -29,7 +31,7 @@ Point.prototype.reduceError = function () {
 }
 
 Point.prototype.clone = function () {
-    let res = new Point();
+    const res = new Point();
     res.coords.copy(this.coords);
     return res;
 };
@@ -38,8 +40,6 @@ Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
     return this;
 };
-
-
 
 export {
     Point

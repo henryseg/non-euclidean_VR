@@ -1,6 +1,6 @@
-import {Isometry} from "../../../core/geometry/Isometry.js";
-import {Matrix4} from "../../../lib/three.module.js";
+import {Matrix4} from "../../../lib/threejs/build/three.module.js";
 
+import {Isometry} from "../../../core/geometry/Isometry.js";
 
 Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
@@ -8,6 +8,7 @@ Isometry.prototype.build = function () {
 
 Isometry.prototype.identity = function () {
     this.matrix.identity();
+    return this;
 }
 
 Isometry.prototype.reduceError = function () {
@@ -62,12 +63,39 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
     return this;
 }
 
+/**
+ * Set the current isometry with a rotation around the x-axis
+ * @param {number} theta - the rotation angle
+ */
+Isometry.prototype.makeRotationX = function (theta) {
+    this.matrix.makeRotationX(theta);
+    return this;
+}
+
+/**
+ * Set the current isometry with a rotation around the y-axis
+ * @param {number} theta - the rotation angle
+ */
+Isometry.prototype.makeRotationY = function (theta) {
+    this.matrix.makeRotationY(theta);
+    return this;
+}
+
+/**
+ * Set the current isometry with a rotation around the z-axis
+ * @param {number} theta - the rotation angle
+ */
+Isometry.prototype.makeRotationZ = function (theta) {
+    this.matrix.makeRotationZ(theta);
+    return this;
+}
+
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
 
 Isometry.prototype.clone = function () {
-    let res = new Isometry();
+    const res = new Isometry();
     res.matrix.copy(this.matrix);
     return res;
 };

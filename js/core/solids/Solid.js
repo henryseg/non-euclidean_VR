@@ -1,6 +1,7 @@
 import {Generic} from "../Generic.js";
 
 import struct from "./shaders/struct.js";
+import {PATHTRACER_RENDERER} from "../../utils/ShaderBuilder.js";
 
 /**
  * @class
@@ -17,10 +18,16 @@ export class Solid extends Generic {
      *
      * @param {Shape} shape - the shape of the solid
      * @param {Material} material - the material of the solid
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(shape, material) {
-        if (material.usesUVMap && !shape.hasUVMap) {
-            throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+    constructor(shape, material, ptMaterial = undefined) {
+        if (!shape.hasUVMap) {
+            if (material.usesUVMap) {
+                throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+            }
+            if (ptMaterial !== undefined && ptMaterial.usesUVMap) {
+                throw new Error('Solid: a material using UV coordinates cannot be applied to a shape without a UV map');
+            }
         }
         super();
         /**
@@ -34,6 +41,12 @@ export class Solid extends Generic {
          */
         this.material = material;
         /**
+         * The material of the solid for path tracing
+         * @type {PTMaterial}
+         */
+        this.ptMaterial = ptMaterial;
+
+        /**
          * Says whether the solid should be rendered or not.
          * The property can be used to define solids that will appear later in the scene
          * (because of some animation, game event, etc) without having to rebuild the shader.
@@ -41,7 +54,7 @@ export class Solid extends Generic {
          * @type{boolean}
          */
         this.isRendered = true;
-        this.addImport(struct)
+        this.addImport(struct);
     }
 
     /**
@@ -52,6 +65,14 @@ export class Solid extends Generic {
         return true;
     }
 
+    get isom() {
+        return this.shape.isom;
+    }
+
+    get absoluteIsom() {
+        return this.shape.absoluteIsom;
+    }
+
     get isGlobal() {
         return this.shape.isGlobal;
     }
@@ -60,8 +81,16 @@ export class Solid extends Generic {
         return this.shape.isLocal;
     }
 
-    get uniformType(){
+    get uniformType() {
         return 'Solid';
+    }
+
+    /**
+     * Update the data of the underlying shape.
+     * It should also update the data of all itd children.
+     */
+    updateData() {
+        this.shape.updateData();
     }
 
     /**
@@ -102,7 +131,11 @@ export class Solid extends Generic {
 
     shader(shaderBuilder) {
         this.shape.shader(shaderBuilder);
-        this.material.shader(shaderBuilder);
+        if (shaderBuilder.useCase === PATHTRACER_RENDERER && this.ptMaterial !== undefined) {
+            this.ptMaterial.shader(shaderBuilder);
+        } else {
+            this.material.shader(shaderBuilder);
+        }
         super.shader(shaderBuilder);
     }
 }

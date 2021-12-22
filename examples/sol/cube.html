@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sol Example (coordinate half space)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {Color, Vector3} from "../../js/lib/threejs/build/three.module.js";
+
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
+
+    import * as geom from "../../js/geometries/sol/geometry/General.js";
+    import trivial from "../../js/commons/groups/trivial/set.js";
+    import {ConstDirLight} from "../../js/geometries/sol/lights/all.js";
+    import {PhongMaterial} from "../../js/commons/materials/all.js";
+    import {Point} from "../../js/core/geometry/Point.js";
+    import {Solid} from "../../js/geometries/sol/solids/all.js";
+    import {InfoControls} from "../../js/controls/InfoControls.js";
+    import {Isometry} from "../../js/geometries/sol/geometry/General.js";
+    import {XYHalfSpaceShape, ZHalfSpaceShape} from "../../js/geometries/sol/shapes/all.js";
+    import {intersection} from "../../js/commons/shapes/all.js";
+
+    const thurston = new ThurstonLite(geom, trivial, {keyboard: 'fr', maxBounces: 1});
+
+
+    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+    const halfWidth = 0.2;
+    const front = new ZHalfSpaceShape(
+        new Isometry().makeTranslation(new Point(0, 0, halfWidth))
+    );
+    const back = new ZHalfSpaceShape(
+        new Isometry().makeTranslation(new Point(0, 0, -halfWidth))
+            .multiply(new Isometry().makeFlip())
+    );
+    const left = new XYHalfSpaceShape(
+        new Isometry().makeTranslation(new Point(halfWidth, 0, 0))
+    );
+    const right = new XYHalfSpaceShape(
+        new Isometry().makeTranslation(new Point(-halfWidth, 0, 0))
+            .multiply(new Isometry().makeReflectionX())
+    );
+    const top = new XYHalfSpaceShape(
+        new Isometry().makeTranslation(new Point(0, halfWidth, 0))
+            .multiply(new Isometry().makeFlip())
+    );
+    const bottom = new XYHalfSpaceShape(
+        new Isometry().makeTranslation(new Point(0, -halfWidth, 0))
+            .multiply(new Isometry().makeReflectionY())
+            .multiply(new Isometry().makeFlip())
+    );
+
+    const shape = intersection(top, bottom, front, back, left, right);
+    shape.isom = new Isometry().makeTranslation(new Point(0, 0, -0.4));
+    shape.updateData();
+    const solid = new Solid(shape, mat);
+
+    thurston.add(solid, lightUp, lightDown);
+
+    function info() {
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>

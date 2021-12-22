@@ -12,24 +12,25 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Color, Vector2} from "../../js/lib/three.module.js";
+    import {Color, Vector2} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/hyp/geometry/General.js";
     import cube from "../../js/geometries/hyp/groups/cube/set.js";
 
     import {Point, Vector} from "../../js/geometries/hyp/geometry/General.js";
     import {PointLight} from "../../js/geometries/hyp/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
     import {Solid, Ball} from "../../js/geometries/hyp/solids/all.js";
     import {LocalBallShape, complement, LocalHoroballShape} from "../../js/geometries/hyp/shapes/all.js";
-    import {CheckerboardMaterial} from "../../js/commons/material/checkerboard/CheckerboardMaterial.js";
-    import {phongWrap} from "../../js/commons/material/phongWrap/PhongWrapMaterial.js";
+    import {CheckerboardMaterial} from "../../js/commons/materials/checkerboard/CheckerboardMaterial.js";
+    import {phongWrap} from "../../js/commons/materials/phongWrap/PhongWrapMaterial.js";
     import {union} from "../../js/commons/shapes/all.js";
 
 
-    const thurston = new Thurston(geom, cube, {keyboard: 'fr'});
+    const thurston = new ThurstonLite(geom, cube, {keyboard: 'fr'});
+    // thurston.renderer.thurstonParams.postProcess = true;
 
 
     // lights for the Phong material
@@ -51,13 +52,11 @@
         new Vector(-1, -1, 1),
         new Color(1, 0, 1)
     );
-    const lights = [light0, light1, light2];
 
     // Phong shading material
     const mat0 = new PhongMaterial({
         color: new Color(1, 0.2, 0.2),
         shininess: 5,
-        lights: lights
     });
 
     // Complement of a local ball
@@ -89,7 +88,7 @@
         new Color(1, 1, 1),
         new Color(0, 0, 1)
     )
-    const mat1 = phongWrap(checkerboard, {lights: lights});
+    const mat1 = phongWrap(checkerboard);
 
 
     const ball1 = new Ball(

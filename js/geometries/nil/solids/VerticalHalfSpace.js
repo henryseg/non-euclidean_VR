@@ -5,17 +5,17 @@ import {VerticalHalfSpaceShape} from "../shapes/verticalHalfSpace/VerticalHalfSp
  * @class
  *
  * @classdesc
- * Local potato shape in Nil.
+ * Vertical half space in Nil
  */
 export class VerticalHalfSpace extends Solid {
     /**
      * Constructor.
-     * @param {Point} pos - a point on the boundary of the half space
-     * @param {Vector4|Vector3|Vector2} normal - the normal to the boundary of the half space (pointing outwards).
+     * @param {Isometry} isom - location of the half space
      * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
-    constructor(pos,normal, material) {
-        const shape = new VerticalHalfSpaceShape(pos, normal);
-        super(shape, material);
+    constructor(isom, material, ptMaterial = undefined) {
+        const shape = new VerticalHalfSpaceShape(isom);
+        super(shape, material, ptMaterial);
     }
 }

@@ -13,7 +13,7 @@
 		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geoemtries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.TEMPLATE_OPTIONS = {"includeDate":"true","dateFormat":"Do MMM YYYY","systemName":"Non-euclidean VR","systemSummary":"First person exploration of Thurston's geometries","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
 			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
@@ -64,8 +64,12 @@
 											<li><a href="BasicCamera.html">BasicCamera</a></li>
 											<li><a href="BasicRenderer.html">BasicRenderer</a></li>
 											<li><a href="BasicShape.html">BasicShape</a></li>
+											<li><a href="ChaseControls.html">ChaseControls</a></li>
 											<li><a href="CheckerboardMaterial.html">CheckerboardMaterial</a></li>
 											<li><a href="ComplementShape.html">ComplementShape</a></li>
+											<li><a href="Cylinder.html">Cylinder</a></li>
+											<li><a href="CylinderShape_CylinderShape.html">CylinderShape#CylinderShape</a></li>
+											<li><a href="DebugMaterial.html">DebugMaterial</a></li>
 											<li><a href="ExpFog.html">ExpFog</a></li>
 											<li><a href="FakeBall.html">FakeBall</a></li>
 											<li><a href="FakeBallShape.html">FakeBallShape</a></li>
@@ -86,6 +90,8 @@
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="GroupElement.html">GroupElement</a></li>
 											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpace.html">HalfSpace</a></li>
+											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="HalfSpaceShape.html">HalfSpaceShape</a></li>
 											<li><a href="Horoball.html">Horoball</a></li>
 											<li><a href="HoroballShape.html">HoroballShape</a></li>
@@ -106,9 +112,13 @@
 											<li><a href="LocalHoroballShape.html">LocalHoroballShape</a></li>
 											<li><a href="LocalPotato.html">LocalPotato</a></li>
 											<li><a href="LocalPotatoShape.html">LocalPotatoShape</a></li>
+											<li><a href="LocalVerticalCylinder.html">LocalVerticalCylinder</a></li>
+											<li><a href="LocalVerticalCylinderShape.html">LocalVerticalCylinderShape</a></li>
 											<li><a href="Material.html">Material</a></li>
 											<li><a href="NativeCamera.html">NativeCamera</a></li>
 											<li><a href="NativeThurston.html">NativeThurston</a></li>
+											<li><a href="NewBall.html">NewBall</a></li>
+											<li><a href="NewBallShape.html">NewBallShape</a></li>
 											<li><a href="NormalMaterial.html">NormalMaterial</a></li>
 											<li><a href="PhongMaterial.html">PhongMaterial</a></li>
 											<li><a href="PhongWrapMaterial.html">PhongWrapMaterial</a></li>
@@ -132,6 +142,8 @@
 											<li><a href="Thurston.html">Thurston</a></li>
 											<li><a href="UnionShape.html">UnionShape</a></li>
 											<li><a href="Vector.html">Vector</a></li>
+											<li><a href="VerticalCylinder.html">VerticalCylinder</a></li>
+											<li><a href="VerticalCylinderShape.html">VerticalCylinderShape</a></li>
 											<li><a href="VerticalHalfSpace.html">VerticalHalfSpace</a></li>
 											<li><a href="VerticalHalfSpaceShape.html">VerticalHalfSpaceShape</a></li>
 											<li><a href="VRCamera.html">VRCamera</a></li>
@@ -240,8 +252,8 @@ If true, the class should implement the method <code>glslUVMap()</code> (see bel
 If <code>uniformType</code> return a custom GLSL type, then this GLSL code should define the corresponding structure.
 To each property used in the GLSL structure, should correspond a property of the JS class with the same name.
 Indeed, when the instance of this shape is passed to the shader, the JS sends the instance as a whole.</p>
-<p>If this function is not implemented, the class will inherit from the one of <a href="Generic.html">Generic</a> which throws an error.</p>
-<p>If several instances of the same shape are added to the scene,
+<p>If this function is not implemented, the class will inherit from the one of <a href="Generic.html">Generic</a> which throws an error.
+If several instances of the same shape are added to the scene,
 the <a href="ShaderBuilder.html">ShaderBuilder</a> makes sure that this code is inserted only once in the shader.</p>
 </li>
 <li>
@@ -294,6 +306,22 @@ and finally load the code from <code>glslSDF()</code>, <code>glslGradient</code>
 For basic shape, this should do the job.
 For an advance shape the method should propagate <code>shader</code> to the shapes it is built on.</p>
 </li>
+<li>
+<p>[isom] : Isometry (setter)</p>
+<p>Some parts of the code, may try to manipulate objects, regardless of the kind of shapes they have.
+See for instance <a href="ChaseControls.html">ChaseControls</a>.
+To do so the shape class uses a property called <code>isom</code>.
+It has the following meaning : the shape is the image by <code>isom</code> of the shape in its default position.
+If the primary description of the shape location is not via an isometry,
+one can use a setter to update all the relevant properties
+Advanced shapes should have a setter that will propagate the setting to all depending shapes.
+Although isom is an object of type Isometry, one should never update this property using methods the Isometry class
+but rather use the setter</p>
+<pre class="prettyprint source lang-js"><code>shape.isom = foo;
+</code></pre>
+<p>Indeed otherwise, if shape is an AdvancedShape, then the setter may not propagate.
+Similarly, if shape is BasicShape, but its isom setter update other properties, those updates would not be applied.</p>
+</li>
 </ul>
 <p>In order to produce the GLSL functions <code>NAME_sdf</code>, <code>NAME_gradient</code>, and <code>NAME_uvMap</code>,
 one can use a template engine, such as <a href="https://github.com/janl/mustache.js/">mustache.js</a>
@@ -307,7 +335,7 @@ that will dynamically generate the code, with the appropriate name.</p></article
 	</div>
 	<footer>
 				<div class="copyright">FooDoc Copyright © 2016 The contributors to the JSDoc3 and FooDoc projects.</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 14th Jan 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 18th Feb 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

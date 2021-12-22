@@ -12,23 +12,26 @@
 <body>
 </body>
 <script type="module" id="main">
-    import {Clock, Color, Vector3, Vector4} from "../../js/lib/three.module.js";
+    import {Clock, Color, Vector4} from "../../js/lib/threejs/build/three.module.js";
 
-    import {Thurston} from "../../js/commons/Thurston.js";
+    import {ThurstonLite} from "../../js/commons/app/thurstonLite/ThurstonLite.js";
 
     import * as geom from "../../js/geometries/euc/geometry/General.js";
-    import {fullTorus as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
+    import {default as torus} from "../../js/geometries/euc/groups/freeAbelian/set.js";
 
     import {Point} from "../../js/core/geometry/Point.js";
     import {PointLight} from "../../js/geometries/euc/lights/pointLight/PointLight.js";
-    import {PhongMaterial} from "../../js/commons/material/phong/PhongMaterial.js";
+    import {PhongMaterial} from "../../js/commons/materials/phong/PhongMaterial.js";
 
     import {LocalBallShape} from "../../js/geometries/euc/shapes/all.js";
     import {Ball, Solid} from "../../js/geometries/euc/solids/all.js";
+    import {CREEPING_STRICT} from "../../js/core/groups/TeleportationSet.js";
 
-    const thurston = new Thurston(geom, torus, {keyboard: 'fr', maxBounces: 1});
-    thurston.set.usesNearestNeighbors = true;
-    thurston.set.usesCreeping = false;
+    torus.usesNearestNeighbors = false;
+    torus.creepingType = CREEPING_STRICT;
+
+    const thurston = new ThurstonLite(geom, torus, {keyboard: 'fr', maxBounces: 1});
+
 
     // lights for the Phong material
 

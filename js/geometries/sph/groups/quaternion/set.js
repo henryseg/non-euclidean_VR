@@ -1,5 +1,4 @@
-import {Vector4} from "../../../../lib/three.module.js";
-import {GroupElement} from "./GroupElement.js";
+import {Vector4} from "../../../../lib/threejs/build/three.module.js";
 import {Teleportation} from "../../../../core/groups/Teleportation.js";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group} from "./Group.js";
@@ -94,20 +93,20 @@ const shiftYn = group.element(0, -1, 0, 0);
 const shiftZp = group.element(0, 0, -1, 0);
 const shiftZn = group.element(0, 0, 1, 0);
 
-const teleportXp = new Teleportation(testXp, glslTestXp, shiftXp, shiftXn);
-const teleportXn = new Teleportation(testXn, glslTestXn, shiftXn, shiftXp);
-const teleportYp = new Teleportation(testYp, glslTestYp, shiftYp, shiftYn);
-const teleportYn = new Teleportation(testYn, glslTestYn, shiftYn, shiftYp);
-const teleportZp = new Teleportation(testZp, glslTestZp, shiftZp, shiftZn);
-const teleportZn = new Teleportation(testZn, glslTestZn, shiftZn, shiftZp);
 
-const teleportations = [
-    teleportXp,
-    teleportXn,
-    teleportYp,
-    teleportYn,
-    teleportZp,
-    teleportZn
-];
+console.log(shiftXp.toIsometry().matrix.toLog());
+console.log(shiftXn.toIsometry().matrix.toLog());
+console.log(shiftYp.toIsometry().matrix.toLog());
+console.log(shiftYn.toIsometry().matrix.toLog());
+console.log(shiftZp.toIsometry().matrix.toLog());
+console.log(shiftZn.toIsometry().matrix.toLog());
 
-export default new TeleportationSet(teleportations);
+
+export default new TeleportationSet()
+    .add(testXp, glslTestXp, shiftXp, shiftXn)
+    .add(testXn, glslTestXn, shiftXn, shiftXp)
+    .add(testYp, glslTestYp, shiftYp, shiftYn)
+    .add(testYn, glslTestYn, shiftYn, shiftYp)
+    .add(testZp, glslTestZp, shiftZp, shiftZn)
+    .add(testZn, glslTestZn, shiftZn, shiftZp);
+
