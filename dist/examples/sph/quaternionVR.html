@@ -26,12 +26,15 @@
         complement, union,
         Ball, Solid,
         VaryingColorMaterial,
-        PhongWrapMaterial
+        PhongWrapMaterial,
+        CREEPING_OFF
     } from "../../build/thurstonSph.js";
 
-
+    quaternion.creepingType = CREEPING_OFF;
     const thurston = new ThurstonVR(quaternion, {keyboard: 'fr'});
     thurston.camera.maxDist = 2 * Math.PI;
+
+
 
     // lights for the Phong material
 
