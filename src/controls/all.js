@@ -6,3 +6,4 @@ export {ShootControls} from "./ShootControls.js";
 export {SwitchControls} from "./SwitchControls.js";
 export {VRControlsDrag} from "./VRControlsDrag.js";
 export {VRControlsMove} from "./VRControlsMove.js";
+export {VRControlsLight} from "./VRControlsLight.js";
