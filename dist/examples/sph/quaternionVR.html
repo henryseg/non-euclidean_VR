@@ -21,11 +21,12 @@
         Vector,
         Isometry,
         PointLight,
-        PhongMaterial,
         LocalBallShape,
         EarthTexture,
         complement, union,
-        Ball, Solid
+        Ball, Solid,
+        VaryingColorMaterial,
+        PhongWrapMaterial
     } from "../../build/thurstonSph.js";
 
 
@@ -34,34 +35,47 @@
 
     // lights for the Phong material
 
+    const colorLight = new Color(1,1,1);
+
     //  yellow light
     const light0 = new PointLight(
         new Vector(1, 0, 0),
-        new Color(1, 1, 0),
-        0.3
+        colorLight,
+        0.5
     );
 
     // cyan light
     const light1 = new PointLight(
         new Vector(0, 1, -1),
-        new Color(0, 1, 1),
-        0.3
+        colorLight,
+        0.5
     );
 
     // magenta light
     const light2 = new PointLight(
         new Vector(-1, -1, 1),
-        new Color(1, 0, 1),
-        0.3
+        colorLight,
+        0.5
     );
     const lights = [light0, light1, light2];
 
-    // Phong shading material
-    const mat0 = new PhongMaterial({
-        color: new Color(1, 0.9, 0.9),
+
+    const latticeColor = new Color(0.5, 0.5, 0.5);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(-0.5, 0.3, 0.3)
+    );
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
+        color: latticeColor,
         shininess: 5,
-        lights: lights
     });
+
+    // // Phong shading material
+    // const mat0 = new PhongMaterial({
+    //     color: new Color(1, 1, 1),
+    //     shininess: 5,
+    //     lights: lights
+    // });
 
     // Complement of a local ball
     const centerBall = new LocalBallShape(
@@ -91,7 +105,7 @@
         vertices[7],
     );
     const latticeShape = complement(unionShape);
-    const lattice = new Solid(latticeShape, mat0);
+    const lattice = new Solid(latticeShape, latticeMat);
 
 
     // Earth texture
@@ -108,6 +122,20 @@
     ball1.shape.updateData();
 
     thurston.add(lattice, ball1, light0, light1, light2);
+
+    const step = 0.002;
+
+    function animate() {
+        const rotIsom = new Isometry();
+        rotIsom.matrix.makeRotationZ(step);
+        ball1.shape.isom.multiply(rotIsom);
+        ball1.shape.updateData();
+    }
+
+    thurston.callback = animate;
+    thurston.run();
+
+
     thurston.run();
 
 

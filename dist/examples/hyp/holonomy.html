@@ -1,0 +1,114 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hyperbolic space (Native view)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        Color,
+        ThurstonVR,
+        cubeSet as cube,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        LocalBallShape,
+        complement, union,
+        VaryingColorMaterial,
+        CREEPING_OFF,
+        NativeCamera,
+        Solid,
+        PhongWrapMaterial,
+        LocalHoroballShape
+    } from "../../build/thurstonHyp.js";
+
+
+    const camera = new NativeCamera({set: cube});
+    const thurston = new ThurstonVR(cube, {keyboard: 'fr', camera: camera});
+
+    cube.creepingType = CREEPING_OFF;
+
+    const colorWhite = new Color(1, 1, 1);
+
+    // lights for the Phong material
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        colorWhite,
+        0.8
+    );
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        colorWhite,
+        0.8
+    );
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        colorWhite,
+        0.8
+    );
+    const light3 = new PointLight(
+        new Vector(-1, 0, -1),
+        colorWhite,
+        0.3
+    );
+    thurston.add(light0, light1, light2, light3);
+
+    const latticeColor = new Color(0.5, 0, 0.8);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(-0.5, 0.3, 0.3)
+    );
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
+        color: latticeColor,
+        shininess: 5,
+    });
+
+
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(),
+        1.02,
+    );
+
+    const modelHalfCube = 1 / Math.sqrt(3);
+    const horoballs = [];
+    for (let i = 0; i < 8; i++) {
+        const i0 = i % 2;
+        const i1 = 0.5 * (i - i0) % 2;
+        const i2 = 0.25 * (i - 2 * i1 - i0) % 2;
+        horoballs[i] = new LocalHoroballShape(
+            new Vector((2 * i0 - 1) * modelHalfCube, (2 * i1 - 1) * modelHalfCube, (2 * i2 - 1) * modelHalfCube),
+            0.98
+        );
+    }
+
+    const unionShape = union(centerBall, ...horoballs);
+    const latticeShape = complement(unionShape);
+    // const latticeShape = complement(centerBall);
+
+    const lattice = new Solid(latticeShape, latticeMat);
+
+
+    // Phong shading material
+    const mat1 = new PhongMaterial({
+        color: new Color(0, 0, 1),
+        shininess: 10
+    });
+
+
+    thurston.add(lattice);
+    thurston.run();
+
+
+</script>
+
+</html>
