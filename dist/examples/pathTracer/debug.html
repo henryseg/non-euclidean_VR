@@ -6,6 +6,18 @@
     <link rel="icon" type="image/png" href="../../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonEuc": "../../build/thurstonEuc.js",
+                "stats": "../jsm/stats.module.js"
+            }
+        }
+    </script>
 
     <title>Path tracer, first attempt</title>
 </head>
@@ -13,9 +25,7 @@
 </body>
 <script type="module" id="main">
     import {
-        Color,
         trivialSet as trivial,
-        Vector3,
         Point, Isometry,
         BasicPTMaterial,
         SingleColorMaterial,
@@ -23,9 +33,10 @@
         PhongMaterial,
         Ball, HalfSpace,
         ConstDirLight
-    } from "../../build/thurstonEuc.js";
+    } from "thurstonEuc";
+    import {Color, Vector3} from "three";
 
-    import Stats from "../jsm/stats.module.js";
+    import Stats from "stats";
 
 
     //------------------------------------------------------------------------------------------------------------------

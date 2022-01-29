@@ -29,7 +29,7 @@
     "webgl2",
     "webxr"
   ],
-  "author": "",
+  "author": "Rémi Coulon, Sabetta Matsumoto, Henry Segerman, Steve Trettel",
   "license": "GPL 3 or later",
   "bugs": {
     "url": "https://github.com/henryseg/non-euclidean_VR/issues"

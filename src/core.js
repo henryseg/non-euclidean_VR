@@ -1,15 +1,4 @@
 // all the exports used by the bundler expect the geometry
-export {
-    Color,
-    Clock,
-    Vector2,
-    Vector3,
-    Vector4,
-    Matrix3,
-    Matrix4,
-    Quaternion,
-    WebGLRenderer,
-} from "three";
 export {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
 export * from './constants.js';

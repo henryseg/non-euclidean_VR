@@ -7,6 +7,17 @@
     <link rel="icon" type="image/png" href="../../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonHyp": "../../build/thurstonHyp.js"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -15,7 +26,6 @@
 
 
     import {
-        Color,
         ThurstonLite,
         cubeSet as cube,
         Vector,
@@ -23,23 +33,9 @@
         PhongMaterial,
         LocalBall,
         CREEPING_STRICT
-    } from "../../build/thurstonHyp.js";
-    // import {Color, Vector2} from "three";
-    //
-    // import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
-    //
-    // import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    // import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-    //
-    // import {Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    // import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    // import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    // import {Solid, Ball, LocalBall} from "../../../src/geometries/hyp/solids/all.js";
-    // import {LocalBallShape, complement, LocalHoroballShape} from "../../../src/geometries/hyp/shapes/all.js";
-    // import {CheckerboardMaterial} from "../../../src/commons/materials/checkerboard/CheckerboardMaterial.js";
-    // import {phongWrap} from "../../../src/commons/materials/phongWrap/PhongWrapMaterial.js";
-    // import {union} from "../../../src/commons/shapes/all.js";
-    // import {CREEPING_OFF, CREEPING_STRICT} from "../../../src/core/groups/TeleportationSet.js";
+    } from "thurstonHyp";
+    import {Color} from "three";
+
 
     cube.creepingType = CREEPING_STRICT;
     const thurston = new ThurstonLite(cube, {keyboard: 'fr'});

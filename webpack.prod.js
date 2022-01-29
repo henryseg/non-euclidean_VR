@@ -1,10 +1,11 @@
 const {merge} = require('webpack-merge');
 const path = require('path');
-
 const TerserPlugin = require('terser-webpack-plugin');
+
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
+    mode: 'production',
     experiments: {
         outputModule: true,
         // executeModule: true,
@@ -26,16 +27,19 @@ module.exports = merge(common, {
         library: {
             type: 'module',
         },
-        // environment: {
-        //     module: true,
+        environment: {
+             module: true,
         //     dynamicImport: true,
-        // },
+        },
+    },
+    externals: {
+        three: 'three'
     },
     optimization: {
         // splitChunks: {
         //     chunks: 'all',
         // },
-        minimize: true,
+        minimize: false,
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
@@ -48,7 +52,6 @@ module.exports = merge(common, {
         ],
     },
     plugins: [],
-    mode: 'production',
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         port: 9000,

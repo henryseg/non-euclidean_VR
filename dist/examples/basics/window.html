@@ -2,13 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Window size</title>
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
-
-    <title>Window size</title>
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonEuc": "../../build/thurstonEuc.js"
+            }
+        }
+    </script>
 </head>
 <body>
 </body>
+
 <script type="module" id="main">
 
     import {
@@ -19,7 +30,7 @@
         NormalMaterial,
         Point,
         Ball
-    } from "../../build/thurstonEuc.js";
+    } from "thurstonEuc";
 
     // initial setup
     const camera = new BasicCamera({set: freeAbelianSet});

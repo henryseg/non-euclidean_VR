@@ -7,6 +7,17 @@
     <link rel="icon" type="image/png" href="../../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonEuc": "../../build/thurstonEuc.js"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -14,9 +25,6 @@
 <script type="module" id="main">
 
     import {
-        Clock,
-        Color,
-        Matrix4,
         ThurstonVR,
         freeAbelianSet as torus,
         Point,
@@ -28,7 +36,8 @@
         union,
         Ball, Solid,
         Isometry
-    } from "../../build/thurstonEuc.js";
+    } from "thurstonEuc";
+    import {Color, Clock, Matrix4} from "three";
 
     const thurston = new ThurstonVR(torus, {keyboard: 'fr'});
     thurston.camera.maxSteps = 500;

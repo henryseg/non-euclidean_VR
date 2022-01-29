@@ -8,12 +8,22 @@
     <link rel="stylesheet" href="../css/style.css">
 
     <title>Euclidean scene - moving sphere</title>
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonEuc": "../../build/thurstonEuc.js"
+            }
+        }
+    </script>
 </head>
 <body>
 </body>
 <script type="module" id="main">
     import {
-        Clock,
         BasicRenderer,
         BasicCamera,
         Scene,
@@ -21,7 +31,8 @@
         NormalMaterial,
         Point,
         Ball
-    } from "../../build/thurstonEuc.js";
+    } from "thurstonEuc";
+    import {Clock} from "three";
 
 
     // initial setup

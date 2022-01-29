@@ -7,6 +7,17 @@
     <link rel="icon" type="image/png" href="../../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonEuc": "../../build/thurstonEuc.js"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -14,9 +25,6 @@
 <script type="module" id="main">
 
     import {
-        Color,
-        Matrix4,
-        Vector2,
         ThurstonLite,
         trivialSet as trivial,
         Point,
@@ -25,23 +33,8 @@
         CheckerboardMaterial,
         phongWrap,
         Isometry
-    } from "../../build/thurstonEuc.js";
-
-    // import {Color, Matrix4, Vector2, Vector4} from "three";
-    //
-    // import {ThurstonLite} from "../../../src/commons/app/thurstonLite/ThurstonLite.js";
-    //
-    // import * as geom from "../../geometries/euc/geometry/General.js";
-    // import trivial from "../../../src/commons/groups/trivial/set.js";
-    //
-    // import {Point} from "../../../src/core/geometry/Point.js";
-    // import {PointLight} from "../../../src/geometries/euc/lights/pointLight/PointLight.js";
-    // import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    //
-    // import {HalfSpace, LocalBall} from "../../../src/geometries/euc/solids/all.js";
-    // import {CheckerboardMaterial, phongWrap, SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    // import {Isometry} from "../../../src/core/geometry/Isometry.js";
-
+    } from "thurstonEuc";
+    import {Color, Matrix4, Vector2} from "three";
 
     const thurston = new ThurstonLite(trivial, {keyboard: 'fr', maxBounces: 1});
 

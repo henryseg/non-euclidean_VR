@@ -7,6 +7,17 @@
     <link rel="icon" type="image/png" href="../../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonNil": "../../build/thurstonNil.js"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -14,7 +25,6 @@
 <script type="module" id="main">
 
     import {
-        Color,
         ThurstonLite,
         heisenbergSet as heisenberg,
         Point,
@@ -24,7 +34,8 @@
         complement,
         Solid,
         CREEPING_OFF
-    } from "../../build/thurstonNil.js";
+    } from "thurstonNil";
+    import {Color} from "three";
 
 
     const thurston = new ThurstonLite(heisenberg, {keyboard: 'fr'});

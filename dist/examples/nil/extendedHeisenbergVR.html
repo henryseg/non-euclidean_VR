@@ -7,6 +7,17 @@
     <link rel="icon" type="image/png" href="../../../images/favicon.png">
     <!-- Style sheets -->
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../jsm/three.module.js",
+                "thurstonNil": "../../build/thurstonNil.js"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -14,8 +25,6 @@
 <script type="module" id="main">
 
     import {
-        Color,
-        Vector4,
         ThurstonVR,
         extendedHeisenbergSet as extendedHeisenberg,
         Point,
@@ -26,7 +35,8 @@
         complement,
         CREEPING_FULL
 
-    } from "../../build/thurstonNil.js";
+    } from "thurstonNil";
+    import {Color, Vector4} from "three";
 
 
     extendedHeisenberg.group.translationA = new Vector4(2, 0, 0, 0);
