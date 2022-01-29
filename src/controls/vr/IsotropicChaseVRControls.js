@@ -1,8 +1,8 @@
 import {Vector3} from "three";
 
-import {Vector} from "../core/geometry/Vector.js";
-import {LEFT, RIGHT} from "../constants.js";
-import {bind} from "../utils.js";
+import {Vector} from "../../core/geometry/Vector.js";
+import {LEFT, RIGHT} from "../../constants.js";
+import {bind} from "../../utils.js";
 
 /**
  * @class
@@ -11,7 +11,7 @@ import {bind} from "../utils.js";
  * Makes sure that an given solid in the geometry follows a VR controller (living in the tangent space).
  * The position of the underlying shape should be given by an isometry of the geometry
  */
-export class IsotropicChaseControls {
+export class IsotropicChaseVRControls {
 
     /**
      * Constructor

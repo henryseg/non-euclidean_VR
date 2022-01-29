@@ -1,6 +1,6 @@
 import {
     bind
-} from "../utils.js";
+} from "../../utils.js";
 
 
 /**
@@ -14,7 +14,7 @@ import {
 const RESET_CALLED = 1;
 const RESET_WAIT = 0;
 
-export class VRControlsReset {
+export class ResetVRControls {
 
     /**
      * Constructor

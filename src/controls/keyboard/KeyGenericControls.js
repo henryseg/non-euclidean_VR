@@ -5,13 +5,13 @@
  * Add an event when a certain key is pressed.
  * The event run a callback
  */
-import {bind} from "../utils.js";
+import {bind} from "../../utils.js";
 
 export class KeyGenericControls {
 
     /**
      * Constructor.
-     * @param {string} key - the key triggering the event, by default `i`
+     * @param {string} key - the key triggering the event, by default `p`
      */
     constructor(key = 'p') {
         /**

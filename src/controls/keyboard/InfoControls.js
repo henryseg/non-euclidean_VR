@@ -1,3 +1,5 @@
+import {bind} from "../../utils.js";
+
 /**
  * @class
  *
@@ -5,8 +7,6 @@
  * Add an event when a certain key is pressed.
  * The event run a callback
  */
-import {bind} from "../utils.js";
-
 export class InfoControls {
 
     /**

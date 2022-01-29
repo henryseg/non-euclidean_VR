@@ -6,10 +6,10 @@ import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerMod
 import {bind} from "../../../utils.js";
 
 import {Scene, VRCamera, VRRenderer} from "../../../core/General.js";
-import {VRControlsMove} from "../../../controls/VRControlsMove.js";
-import {VRControlsDrag} from "../../../controls/VRControlsDrag.js";
+import {MoveVRControls} from "../../../controls/vr/MoveVRControls.js";
+import {DragVRControls} from "../../../controls/vr/DragVRControls.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
-import {FlyControls} from "../../../controls/FlyControls.js";
+import {FlyControls} from "../../../controls/keyboard/FlyControls.js";
 
 
 /**
@@ -123,15 +123,15 @@ export class ThurstonVR {
         /**
          * Moving in the scene with the VR controller
          * @protected
-         * @type {VRControlsMove}
+         * @type {MoveVRControls}
          */
-        this.VRControlsMove = new VRControlsMove(this.camera.position, controller0);
+        this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
         /**
          * Rotating the scene with the VR controller
          * @protected
-         * @type {VRControlsDrag}
+         * @type {DragVRControls}
          */
-        this.VRControlsDrag = new VRControlsDrag(this.camera.position, controller1);
+        this.VRControlsDrag = new DragVRControls(this.camera.position, controller1);
     }
 
 

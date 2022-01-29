@@ -28,7 +28,7 @@
         FakeBall,
         Solid,
         complement, LocalFakeBallShape, LocalVerticalCylinderShape, union, VRCamera, Scene, VRRenderer,
-        FlyControls, InfoControls, ShootControls
+        FlyControls, InfoControls, ShootVRControls
     } from "../../build/thurstonNil.js";
 
 
@@ -134,7 +134,7 @@
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
     }
-    const shootControls = new ShootControls(controller0, camera, bullets, 1);
+    const shootControls = new ShootVRControls(controller0, camera, bullets, 1);
 
 
     // rendering the scene

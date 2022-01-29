@@ -5,11 +5,11 @@ import {
 
 import {
     Vector
-} from "../core/geometry/General.js";
+} from "../../core/geometry/General.js";
 
 import {
     bind
-} from "../utils.js";
+} from "../../utils.js";
 
 /**
  * @desc
@@ -49,12 +49,6 @@ const KEYBOARD_BINDINGS = {
         "=": "down"
     }
 };
-
-
-// internals constants
-
-const CHANGE_EVENT = {type: "change"};
-const EPS = 0.000001;
 
 
 /**

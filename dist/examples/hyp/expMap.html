@@ -32,7 +32,7 @@
         InfoControls,
         SingleColorMaterial,
         HalfSpaceShape,
-        IsotropicChaseControls,
+        IsotropicChaseVRControls,
         CylinderShape,
         intersection,
     } from "../../build/thurstonHyp.js";
@@ -148,7 +148,7 @@
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
     }
-    const chaseControls = new IsotropicChaseControls(controller0, camera, beam);
+    const chaseControls = new IsotropicChaseVRControls(controller0, camera, beam);
 
 
     // rendering the scene

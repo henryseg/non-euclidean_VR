@@ -33,36 +33,9 @@
         FlyControls,
         InfoControls,
         SingleColorMaterial,
-        HalfSpaceShape,
-        ShootControls,
-        CylinderShape,
-        intersection,
+        ShootVRControls
     } from "../../build/thurstonHyp.js";
 
-
-    // import {Clock, Color} from "three";
-    // import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
-    //
-    // import * as geom from "../../../src/geometries/hyp/geometry/General.js";
-    // import cube from "../../../src/geometries/hyp/groups/cube/set.js";
-    //
-    // import {VRRenderer, Scene, VRCamera} from "../../../src/core/General.js";
-    // import {NativeCamera} from "../../../src/geometries/hyp/cameras/native/NativeCamera.js";
-    //
-    // import {Isometry, Point, Vector} from "../../../src/geometries/hyp/geometry/General.js";
-    // import {PointLight} from "../../../src/geometries/hyp/lights/pointLight/PointLight.js";
-    // import {PhongMaterial} from "../../../src/commons/materials/phong/PhongMaterial.js";
-    // import {Ball, Cylinder, Solid} from "../../../src/geometries/hyp/solids/all.js";
-    // import {LocalBallShape, complement, HalfSpaceShape} from "../../../src/geometries/hyp/shapes/all.js";
-    //
-    //
-    // import {FlyControls} from "../../../src/controls/FlyControls.js";
-    // import {InfoControls} from "../../../src/controls/InfoControls.js";
-    // import {IsotropicChaseControls} from "../../../src/controls/IsotropicChaseControls.js";
-    // import {SingleColorMaterial} from "../../../src/commons/materials/all.js";
-    // import {CylinderShape} from "../../../src/geometries/hyp/shapes/cylinder/CylinderShape.js";
-    // import {intersection} from "../../../src/commons/shapes/all.js";
-    // import {ShootControls} from "../../../src/controls/ShootControls.js";
 
 
     // initial setup
@@ -182,7 +155,7 @@
     infoControls.action = function () {
         console.log(controller0.matrixWorld.toLog());
     }
-    const shootControls = new ShootControls(controller0, camera, bullets, 1);
+    const shootControls = new ShootVRControls(controller0, camera, bullets, 1);
 
 
     // rendering the scene

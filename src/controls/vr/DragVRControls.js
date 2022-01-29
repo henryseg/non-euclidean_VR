@@ -1,16 +1,15 @@
 import {
     EventDispatcher,
+    Quaternion,
 } from "three";
 
 import {
     Vector,
-} from "../core/geometry/Vector.js";
+} from "../../core/geometry/Vector.js";
 
 import {
     bind
-} from "../utils.js";
-
-const EPS = 0.000001;
+} from "../../utils.js";
 
 
 /**
@@ -23,7 +22,7 @@ const EPS = 0.000001;
  * This is inspired from Three.js
  * {@link https://threejs.org/docs/#examples/en/controls/FlyControls | FlyControls}
  */
-class VRControlsMove extends EventDispatcher {
+export class DragVRControls extends EventDispatcher {
 
     /**
      * Constructor
@@ -34,8 +33,6 @@ class VRControlsMove extends EventDispatcher {
         super();
         this.position = position;
         this.controller = controller;
-
-        this.movementSpeed = 0.5;
 
         this._isSelecting = false;
         this._isSqueezing = false;
@@ -83,21 +80,51 @@ class VRControlsMove extends EventDispatcher {
     /**
      * Function to update the position
      * @todo Dispatch an event, when the position has sufficiently changed.
+     *
+     * @type {Function}
      */
-    update(delta) {
-        // call the new direction of the controller
-        if (this._isSelecting) {
-            // flow if the select button is pressed
-            const deltaPosition = new Vector();
-            this.controller.getWorldDirection(deltaPosition);
-            deltaPosition
-                .normalize()
-                .multiplyScalar(-this.movementSpeed * delta)
-            this.position.flow(deltaPosition);
+    get update() {
+        if (this._update === undefined) {
+            const n = 10;
+            const avgDirection0 = new Vector();
+            const avgDirection1 = new Vector();
+            let directions = [];
+            let i = 0;
+            let start = false;
+
+            this._update = function (delta) {
+                // call the new direction of the controller
+
+                  const newDirection = new Vector();
+                  this.controller.getWorldDirection(newDirection);
+                  newDirection.normalize().multiplyScalar(1 / n);
+
+                  avgDirection1.add(newDirection);
+                  if (start) {
+                      avgDirection1.sub(directions[i]);
+                  }
+                  directions[i] = newDirection;
+
+                  if (start && this._isSelecting) {
+                      const target = avgDirection1.clone().normalize();
+                      const source = avgDirection0.clone().normalize();
+                      const quaternion = new Quaternion().setFromUnitVectors(target, source).normalize();
+                      this.position.applyQuaternion(quaternion);
+                  }
+
+                  avgDirection0.copy(avgDirection1);
+                  i = (i + 1) % n;
+                  if(i === 0){
+                      start = true;
+                  }
+
+            }
         }
+        return this._update;
+
+
     }
+
+
 }
 
-export {
-    VRControlsMove
-}

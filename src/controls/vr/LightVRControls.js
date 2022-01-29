@@ -1,10 +1,10 @@
 import {
     Vector,
-} from "../core/geometry/Vector.js";
+} from "../../core/geometry/Vector.js";
 
-import {Point} from "../core/geometry/Point.js"
+import {Point} from "../../core/geometry/Point.js"
 import {Vector3} from "three";
-import {LEFT, RIGHT} from "../constants.js";
+import {LEFT, RIGHT} from "../../constants.js";
 
 
 /**
@@ -17,7 +17,7 @@ import {LEFT, RIGHT} from "../constants.js";
  * This is inspired from Three.js
  * {@link https://threejs.org/docs/#examples/en/controls/FlyControls | FlyControls}
  */
-export class VRControlsLight {
+export class LightVRControls {
 
     /**
      * Constructor
