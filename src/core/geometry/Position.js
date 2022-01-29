@@ -100,6 +100,16 @@ class Position {
     }
 
     /**
+     * Reset the position in its default position (boost = identity, quaternion = 1)
+     * @return {Position} The current position
+     */
+    reset(){
+        this.boost.identity();
+        this.quaternion.identity();
+        return this;
+    }
+
+    /**
      * Translate the current position by `isom` (left action of the isometry group G on the set of positions).
      * @param {Isometry} isom - the isometry to apply
      * @return {Position} The current position

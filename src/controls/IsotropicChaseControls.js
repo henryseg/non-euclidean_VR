@@ -80,7 +80,7 @@ export class IsotropicChaseControls {
         if (this.camera.isStereoOn) {
             // If XR is enable, we get the position of the left and right camera.
             // Note that when XR is on, then main Three.js Camera is shifted to coincide with the right eye.
-            // Do its position is NOT the midpoint between the eyes of the observer.
+            // So its position is NOT the midpoint between the eyes of the observer.
             // Thus we take here the midpoint between the two VR cameras.
             // Those can only be accessed using the WebXRManager.
             const camerasVR = webXRManager.getCamera(this.camera.threeCamera).cameras;

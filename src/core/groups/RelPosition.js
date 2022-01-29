@@ -100,7 +100,6 @@ class RelPosition {
         return this.local.facing;
     }
 
-
     /**
      * The underlying local point (i.e. ignoring the cell boost)
      * @type {Point}
@@ -134,6 +133,16 @@ class RelPosition {
         res.boost.copy(this.globalBoost);
         res.quaternion.copy(this.local.quaternion);
         return res;
+    }
+
+    /**
+     * Reset the position in its default position (boost = identity, quaternion = 1)
+     * @return {RelPosition} The current position
+     */
+    reset(){
+        this.local.reset();
+        this.cellBoost.identity();
+        this.invCellBoost.identity();
     }
 
     /**
