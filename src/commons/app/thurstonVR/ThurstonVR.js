@@ -1,5 +1,5 @@
-import Stats from "../../../lib/stats.module.js";
-import {GUI} from "../../../lib/dat.gui.module.js";
+import Stats from "stats";
+import {GUI} from "dat.gui";
 import {Clock, Color} from "three";
 import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 

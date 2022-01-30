@@ -1,6 +1,6 @@
 import {Clock, Color, WebGLRenderer} from "three";
-import {GUI} from "../../../lib/dat.gui.module.js";
-import Stats from "../../../lib/stats.module.js";
+import {GUI} from "dat.gui";
+import Stats from "stats";
 
 import {FlyControls} from "../../../controls/keyboard/FlyControls.js";
 import {bind} from "../../../utils.js";

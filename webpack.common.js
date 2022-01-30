@@ -1,4 +1,5 @@
 const path = require('path');
+// TODO: remove comments from glsl.mustache files
 
 module.exports = {
     module: {
@@ -13,9 +14,9 @@ module.exports = {
             {
                 test: /\.glsl.mustache$/,
                 use: [
+                    //{loader: 'strip-whitespace-loader'},
+                    //{loader: 'webpack-comment-remover-loader'},
                     {loader: 'mustache-loader'},
-                    // {loader: 'strip-whitespace-loader'},
-                    // {loader: 'webpack-comment-remover-loader'}
                 ]
             },
             {

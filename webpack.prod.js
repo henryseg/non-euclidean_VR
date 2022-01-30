@@ -1,6 +1,9 @@
 const {merge} = require('webpack-merge');
 const path = require('path');
+// plugin to remove comment from javascript files
 const TerserPlugin = require('terser-webpack-plugin');
+// plugin used to copy files from 3dparty modules in a vendor directory
+const CopyPlugin = require("copy-webpack-plugin");
 
 const common = require('./webpack.common.js');
 
@@ -8,7 +11,6 @@ module.exports = merge(common, {
     mode: 'production',
     experiments: {
         outputModule: true,
-        // executeModule: true,
     },
     entry: {
         thurstonEuc: './src/thurstonEuc.js',
@@ -21,7 +23,7 @@ module.exports = merge(common, {
         thurstonSol: './src/thurstonSol.js',
     },
     output: {
-        path: path.resolve(__dirname, 'dist/build'),
+        path: path.resolve(__dirname, 'dist/build/thurston'),
         filename: '[name].js',
         clean: true,
         library: {
@@ -29,11 +31,13 @@ module.exports = merge(common, {
         },
         environment: {
              module: true,
-        //     dynamicImport: true,
         },
     },
     externals: {
-        three: 'three'
+        'three': 'three',
+        'webxr-polyfill': 'webxr-polyfill',
+        'stats': 'stats',
+        'dat.gui': 'dat.gui'
     },
     optimization: {
         // splitChunks: {
@@ -51,10 +55,30 @@ module.exports = merge(common, {
             }),
         ],
     },
-    plugins: [],
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        port: 9000,
-        hot: true
-    }
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: 'node_modules/es-module-shims/dist/es-module-shims.js',
+                    to: path.resolve(__dirname, 'dist/build/vendor')
+                },
+                {
+                    from: 'node_modules/three/build/three.module.js',
+                    to: path.resolve(__dirname, 'dist/build/vendor')
+                },
+                {
+                    from: 'node_modules/three/examples/jsm/libs/stats.module.js',
+                    to: path.resolve(__dirname, 'dist/build/vendor')
+                },
+                {
+                    from: 'node_modules/dat.gui/build/dat.gui.module.js',
+                    to: path.resolve(__dirname, 'dist/build/vendor')
+                },
+                {
+                    from: 'node_modules/webxr-polyfill/build/webxr-polyfill.module.js',
+                    to: path.resolve(__dirname, 'dist/build/vendor')
+                }
+            ]
+        }),
+    ]
 });
