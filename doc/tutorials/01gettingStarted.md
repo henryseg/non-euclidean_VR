@@ -22,14 +22,40 @@ Let's start with a basic HTML file `index.html`
 </html>
 ```
 
-All the instruction to generate a scene will be added in the `script` tag at the end of the file. At each step of the
-tutorial, we highlight the additional lines of code needed to perform the described action. The complete script can be
-found at the end of this tutorial.
+At each step of the  tutorial, we highlight the additional lines of code needed to perform the described action. 
+The complete script can be found at the end of this tutorial.
 
-# Step 1. Choosing a geometry.
+# Step 0. Declaring required modules / Choosing a geometry.
 
-The first step is to choose your geometry. All the tools for each geometry are wrapped in a single file with the
-name `ThurstonXXX.js` where `XXX` has the following meaning.
+Beside the Thurston module, the application relies on several 3d-party JavaScript modules (Three.js in particular).
+There are several options to load them.
+We use here the "import-map" specification. 
+Since this feature is not supported by all browser, it requires a polyfill.
+In practice the following should be added in the header
+
+```html
+<script async src="vendor/es-module-shims.js"></script>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "vendor/three.module.js",
+            "stats": "vendor/stats.module.js",
+            "dat.gui": "vendor/dat.gui.module.js",
+            "webxr-polyfill": "vendor/webxr-polyfill.module.js",
+            "thurstonEuc": "thurston/thurstonEuc.js"
+        }
+    }
+</script>
+```
+
+## Remarks
+- In this example we assume that the directories `vendor` and `thurston` are at the same level as the `index.html` file.
+- For the moment, all the modules need be declared (even if we are not using them).
+- The names of the 3d-party modules (three, stats, dat.gui, etc) should not be changed.
+
+## Geometry.
+In the above example, we have chosen a geometry, via the module `ThurstonEuc.js`. 
+Indeed all the tools for each geometry are wrapped in a single file with the name `ThurstonXXX.js` where `XXX` has the following meaning.
 
 XXX | Geometry
 --- | --- 
@@ -42,14 +68,17 @@ Nil | Nil
 SL2 | The universal cover of SL(2,R)
 Sol | Sol
 
-In the remainder of this tutorial we assume that this file is at the same level as `index.html`
+From now on, all the instructions to generate a scene will be added in the `script` tag identify as `main`.
 
-Next, one need to load a discrete subgroup of isometries. This subgroup corresponds to the fundamental group of the
-quotient manifold/orbifold we are working in. In this tutorial we will only work in E^3, hence the discrete subgroup is
-just the trivial group. It is loaded as follows
+# Step 1. Choosing a discrete group.
+
+Next, one need to load a discrete subgroup of isometries. 
+This subgroup corresponds to the fundamental group of the quotient manifold/orbifold we are working in. 
+In this tutorial we will only work in E^3, hence the discrete subgroup is just the trivial group. 
+It is loaded as follows
 
 ```javascript
-import {trivialSet as trivial} from "./thurstonEuc.js";
+import {trivialSet as trivial} from "thurstonEuc";
 ```
 
 # Step 2. Defining a scene, a camera and a renderer.
@@ -58,7 +87,7 @@ Before adding object, one needs to define a scene and a camera. Those items are 
 is to dynamically create a shader and run it.
 
 ```javascript
-import {BasicCamera, BasicRenderer, Scene} from "./thurstonEuc.js";
+import {BasicCamera, BasicRenderer, Scene} from "thurstonEuc";
 
 // ...
 
@@ -82,18 +111,19 @@ document.body.appendChild(renderer.domElement);
 
 # Step 3 Populating the scene
 
-The scene is made of objects which are either solids or lights. Before defining those object, we need to extend our list
-of imports with the relevant classes. In our examples we will also use {@link Point}
-and [Color](https://threejs.org/docs/index.html#api/en/math/Color) to create the objects.
+The scene is made of objects which are either solids or lights. 
+Before defining those object, we need to extend our list of imports with the relevant classes. 
+In our examples we will also use {@link Point}
+as well as the [Color](https://threejs.org/docs/index.html#api/en/math/Color) implementation from Three.js.
 
 ```javascript
 import {
     PointLight,
     PhongMaterial,
     Ball,
-    Color,
     Point
-} from "./thurstonEuc.js";
+} from "thurstonEuc";
+import {Color} from "three";
 ```
 
 Then we define all the objects in the scene. Here a single point light, and a ball with a phong material.
@@ -173,27 +203,44 @@ The complete `index.html` file is
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <title>My first example</title>
+  
+  <!-- Import maps polyfill -->
+  <!-- Remove this when import maps will be widely supported -->
+  <script async src="vendor/es-module-shims.js"></script>
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "vendor/three.module.js",
+            "stats": "vendor/stats.module.js",
+            "dat.gui": "vendor/dat.gui.module.js",
+            "webxr-polyfill": "vendor/webxr-polyfill.module.js",
+            "thurstonEuc": "thurston/thurstonEuc.js"
         }
-    </style>
-    <title>My first example</title>
+    }
+  </script>
 </head>
+
 <body>
 </body>
+
 <script type="module" id="main">
     import {
         trivialSet as trivial
         BasicCamera, BasicRenderer, Scene,
         PointLight,
-        Color,
         Point,
         PhongMaterial,
         Ball
-    } from "./thurstonEuc.js";
+    } from "thurstonEuc";
+    import {Color} from "three";
 
     // initial setup
     const camera = new BasicCamera({subgroup: trivial});
