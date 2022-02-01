@@ -42,7 +42,7 @@ vec2 uvMap(CylinderShape cylinder, RelVector v){
     vec4 pm = m.coords - cylinder.vector.pos.coords;
     pm.w = 0.;
     vec4 pm_pullback = cylinder.absoluteIsomInv.matrix * pm;
-    float uCoord = pm_pullback.z;
-    float vCoord = atan(pm_pullback.y, pm_pullback.x);
+    float uCoord = atan(pm_pullback.y, pm_pullback.x);
+    float vCoord = pm_pullback.z;
     return vec2(uCoord, vCoord);
 }

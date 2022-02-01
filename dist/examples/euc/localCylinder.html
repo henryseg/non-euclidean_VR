@@ -21,6 +21,7 @@
             }
         }
 
+
     </script>
 </head>
 
@@ -43,7 +44,7 @@
 
     const thurston = new ThurstonLite(torus, {keyboard: 'fr', maxBounces: 1});
 
-    thurston.camera.position.local.boost.makeTranslation(new Point(1,1,1));
+    thurston.camera.position.local.boost.makeTranslation(new Point(1, 1, 1));
 
     // lights for the Phong material
 
@@ -64,8 +65,8 @@
     )
 
     const checkerboardRaw = new CheckerboardMaterial(
-        new Vector2(0, Math.PI),
-        new Vector2(3, 0),
+        new Vector2(Math.PI, 0),
+        new Vector2(0, 3),
         new Color(1, 1, 1),
         new Color(0, 0, 0)
     )
