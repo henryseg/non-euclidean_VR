@@ -1,0 +1,121 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Cylinder</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonEuc": "../../build/thurston/thurstonEuc.js"
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        ThurstonLite,
+        freeAbelianSet as torus,
+        Point,
+        PointLight,
+        Isometry,
+        InfoControls,
+        LocalCylinder,
+        CheckerboardMaterial,
+        phongWrap
+    } from "thurstonEuc";
+    import {Color, Clock, Matrix4, Vector2} from "three";
+
+    const thurston = new ThurstonLite(torus, {keyboard: 'fr', maxBounces: 1});
+
+    thurston.camera.position.local.boost.makeTranslation(new Point(1,1,1));
+
+    // lights for the Phong material
+
+
+    // lights for the Phong material
+    const light1 = new PointLight(
+        new Point(2, 1, -2.5),
+        new Color(1, 1, 0),
+    )
+    const light2 = new PointLight(
+        new Point(1, 0.2, -0.5),
+        new Color(1, 0, 1),
+    )
+
+    const light3 = new PointLight(
+        new Point(-1, 1, -2.5),
+        new Color(0, 1, 1),
+    )
+
+    const checkerboardRaw = new CheckerboardMaterial(
+        new Vector2(0, Math.PI),
+        new Vector2(3, 0),
+        new Color(1, 1, 1),
+        new Color(0, 0, 0)
+    )
+    const checkerboardWrap = phongWrap(checkerboardRaw);
+
+
+    const isom1 = new Isometry();
+    isom1.matrix.multiply(new Matrix4().makeRotationX(0.5 * Math.PI));
+    const cyl1 = new LocalCylinder(isom1, 0.2, checkerboardWrap);
+
+    const isom2 = new Isometry();
+    isom2.matrix.multiply(new Matrix4().makeRotationY(0.5 * Math.PI));
+    const cyl2 = new LocalCylinder(isom2, 0.2, checkerboardWrap);
+
+    const isom3 = new Isometry();
+    isom3.matrix.multiply(new Matrix4().makeRotationZ(0.5 * Math.PI));
+    const cyl3 = new LocalCylinder(isom3, 0.2, checkerboardWrap);
+
+    thurston.add(cyl1, cyl2, cyl3, light3, light1, light2);
+
+    const clock = new Clock();
+    const speed = 0.5;
+
+    function animate() {
+        const time = clock.getDelta();
+        const update = new Matrix4().makeRotationZ(speed * time);
+        cyl1.isom.matrix.multiply(update);
+        cyl1.updateData();
+        cyl2.isom.matrix.multiply(update);
+        cyl2.updateData();
+        cyl3.isom.matrix.multiply(update);
+        cyl3.updateData();
+    }
+
+    thurston.callback = animate;
+
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+    // console.log(thurston.scene.fog);
+
+    function info() {
+        console.log("mat", cyl.absoluteIsomInv);
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+
+</script>
+
+</html>
