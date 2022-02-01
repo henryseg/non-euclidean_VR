@@ -7,3 +7,4 @@ export {BallShape} from "./ball/BallShape.js";
 export {LocalBallShape} from "./localBall/LocalBallShape.js";
 export {LocalDirectedBallShape} from "./localDirectedBall/LocalDirectedBallShape.js";
 export {HalfSpaceShape} from "./halfSpace/HalfSpaceShape.js";
+export {CylinderShape} from "./cylinder/CylinderShape.js";

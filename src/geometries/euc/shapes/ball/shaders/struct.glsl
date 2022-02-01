@@ -33,6 +33,7 @@ vec2 uvMap(BallShape ball, RelVector v){
     Point center = applyGroupElement(v.invCellBoost, ball.center);
     vec4 dir = normalize(v.local.pos.coords - center.coords);
     dir.w = 0.;
+    // TODO: not sure about this step!
     dir = ball.absoluteIsomInv.matrix * dir;
     float sinPhi = length(dir.xy);
     float cosPhi = dir.z;

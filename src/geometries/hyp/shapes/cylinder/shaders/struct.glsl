@@ -7,6 +7,7 @@ struct CylinderShape {
     int id;
     Vector vector;
     float radius;
+    Isometry absoluteIsomInv;
 };
 
 /**

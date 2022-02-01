@@ -5,3 +5,4 @@ export {Box} from "./Box.js";
 export {LocalBall} from "./LocalBall.js";
 export {LocalDirectedBall} from "./LocalDirectedBall.js";
 export {HalfSpace} from "./HalfSpace.js";
+export {Cylinder} from "./Cylinder.js";
