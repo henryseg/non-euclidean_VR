@@ -26,7 +26,6 @@ float sdf(CylinderShape cylinder, RelVector v) {
  */
 RelVector gradient(CylinderShape cylinder, RelVector v){
     Point point = applyIsometry(v.invCellBoost, cylinder.vector.pos);
-    vec4 p = point.coords;
     vec4 dir = toIsometry(v.invCellBoost).matrix * cylinder.vector.dir;
     vec4 pm = v.local.pos.coords - point.coords;
     vec4 qm = pm - dot(pm, dir) * dir;
