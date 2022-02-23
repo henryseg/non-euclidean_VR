@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonEuc": "../../build/thurston/thurstonEuc.js"
+            }
+        }
+    </script>
+
+    <title>Path tracer, first attempt</title>
+</head>
+<body>
+</body>
+<script type="module" id="main">
+    import {
+        trivialSet as trivial,
+        Point, Isometry,
+        BasicPTMaterial,
+        SingleColorMaterial,
+        PathTracerCamera, PathTracerRenderer, Scene,
+        Ball, HalfSpace
+    } from "thurstonEuc";
+    import {Color} from "three";
+
+    import Stats from "stats";
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // General setup
+    //------------------------------------------------------------------------------------------------------------------
+
+    const stats = new Stats();
+    stats.showPanel(0);
+    document.body.appendChild(stats.dom);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Building the scene
+    //------------------------------------------------------------------------------------------------------------------
+
+    // every solid need to have a material for basic rendering
+    // since we are not using the basic renderer here, we use a placeholder everywhere
+    const placeholderMat = new SingleColorMaterial(new Color(0, 0, 0));
+
+    const bgColor = new Color(0, 0, 0);
+    const scene = new Scene({
+        background: placeholderMat,
+        ptBackground: new BasicPTMaterial({
+            diffuse: bgColor,
+            specular: bgColor,
+        })
+    });
+
+    // main ball
+    const ballColor = new Color(1, 1, 1);
+    const ptBallMat = new BasicPTMaterial({
+        diffuse: ballColor,
+        specular: ballColor,
+        roughness: 0.2,
+        ior: 1.6,
+        // volumeEmission:new Color(10,1,1),
+        // absorb:new Color(5,1,3),
+        reflectionChance: 0.01,
+        refractionChance: 0.99,
+        diffuseChance: 0.,
+    });
+    const ball = new Ball(new Point(0, 0, -1), 0.3, placeholderMat, ptBallMat);
+    scene.add(ball);
+
+    // back wall
+    const backColor = new Color(1, 0, 0);
+    const backPoint = new Point(0, 0, -2.5);
+    const backIsom = new Isometry().makeTranslation(backPoint);
+    const ptBackMat = new BasicPTMaterial({
+        diffuse: backColor,
+        specular: backColor,
+        diffuseChance: 1,
+        reflectionChance: 0,
+        refractionChance: 0
+    });
+    const back = new HalfSpace(backIsom, placeholderMat, ptBackMat);
+    scene.add(back);
+
+    // left wall
+    const leftColor = new Color(0, 1, 0);
+    const ptLeftMat = new BasicPTMaterial({
+        diffuse: leftColor,
+        specular: leftColor
+    });
+    const leftPoint = new Point(-1, 0, 0);
+    const leftIsom = new Isometry().makeTranslation(leftPoint);
+    leftIsom.multiply(new Isometry().makeRotationY(0.5 * Math.PI));
+    const ptLeft = new HalfSpace(leftIsom, placeholderMat, ptLeftMat);
+    scene.add(ptLeft);
+
+    // right wall
+    const rightColor = new Color(0, 0, 1);
+    const ptRightMat = new BasicPTMaterial({
+        diffuse: rightColor,
+        specular: rightColor
+    });
+    const rightPoint = new Point(1, 0, 0);
+    const rightIsom = new Isometry().makeTranslation(rightPoint);
+    rightIsom.multiply(new Isometry().makeRotationY(-0.5 * Math.PI));
+    const right = new HalfSpace(rightIsom, placeholderMat, ptRightMat);
+    scene.add(right);
+
+    // bottom wall
+    const bottomColor = new Color(1, 1, 1);
+    const ptBottomMat = new BasicPTMaterial({
+        diffuse: bottomColor,
+        specular: bottomColor,
+    });
+    const bottomPoint = new Point(0, -0.3, 0);
+    const bottomIsom = new Isometry().makeTranslation(bottomPoint);
+    bottomIsom.multiply(new Isometry().makeRotationX(-0.5 * Math.PI));
+    const bottom = new HalfSpace(bottomIsom, placeholderMat, ptBottomMat);
+    scene.add(bottom);
+
+    // top wall
+    const topColor = new Color(3, 3, 3);
+    const ptTopMat = new BasicPTMaterial({
+        emission: topColor,
+    })
+    const topPoint = new Point(0, 4, 0);
+    const topIsom = new Isometry().makeTranslation(topPoint);
+    topIsom.multiply(new Isometry().makeRotationX(0.5 * Math.PI));
+    const top = new HalfSpace(topIsom, placeholderMat, ptTopMat);
+    scene.add(top);
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Path tracer renderer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const ptCamera = new PathTracerCamera({set: trivial, maxSteps: 500});
+    const ptRenderer = new PathTracerRenderer(trivial, ptCamera, scene, {}, {
+        logarithmicDepthBuffer: true
+    });
+
+    // building there renderer
+    ptRenderer.build();
+
+
+    // rendering the scene
+    function animate() {
+        ptRenderer.updateFrameSeed();
+        ptRenderer.render();
+        stats.update();
+    }
+
+
+    ptRenderer.setPixelRatio(window.devicePixelRatio);
+    ptRenderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(ptRenderer.domElement);
+
+    ptRenderer.setAnimationLoop(animate);
+    ptRenderer.checkShader();
+
+
+</script>
+</html>

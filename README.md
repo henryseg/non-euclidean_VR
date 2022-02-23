@@ -11,9 +11,42 @@ It comes with an API to
 
 This project started at the *Illustrating Mathematics* semester program at [ICERM](https://icerm.brown.edu).
 
-## Controls
+## Examples
 
-The default controls in the example pages are the following.
+The project contains numerous ready to use examples.
+It contains scenes in the various geometries and demonstrates the features of the API.
+To run the examples on your own computer, you need a local server.
+
+### Running a local server
+- Download the project (for a basic usage the `dist` directory is enough)
+- Start a local server making sure that the root of the server correspond to the `dist`. 
+  This can be easily done with Python 3 using the command
+  ```zsh
+  python -m http.server
+  ``` 
+- With a browser, visit the page `http://http://localhost:8000/examples/index.html` 
+  (adapt the URL depending on your local server)
+- Enjoy!
+
+**Virtual reality**.
+
+In order to run the virtual reality examples, your browser may require an HTTPS connexion.
+The script `server.py` provide one.
+You can launch the server with the following command
+```zsh
+python server.py
+```
+The password is `thurston`.
+The browser will probably ask you to add a security exception.
+
+### Exploring the examples
+The examples tagged with *(VR)* are made for virtual reality. They should work with any VR headset supported by the three.js library.
+When loaded, those examples have a button *Enter VR* at the bottom on the screen.
+Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
+
+Items flagged with *(PT)* incorporate a path tracer. Hit `p` to launch the path tracer.
+
+The default controls are the following.
 
 Command | QWERTY keyboard | AZERTY keyboard
 --- | --- | ---
@@ -30,39 +63,50 @@ Move the the right|`arrow right`|`arrow right`
 Move upwards|`'`|`ù`
 Move downwards|`/`|`=`
 
-## Running Locally
-Running this locally requires a simple web server (to allow CORS requests).
-This can be done in Python 3 by running the command
 
-```(zsh)
-python -m http.server
+## Building your own scene
+
+To build your own scene, visit the tutorials from the documentation.
+You can also browse the examples.
+
+## Development 
+
+If you extend the project, you need to install the library with [npm](https://www.npmjs.com/).
+You must first install this tools following the instructions for your operating system.
+(On Mac one can use [homebrew](https://brew.sh/) to install npm.)
+
+### Installation
+
+- clone the git repository of `non-euclidean-vr`
+- install the dependencies with the command
+  ```zsh
+  npm install
+  ```
+
+### Build
+
+The packages are built with [webpack](https://webpack.js.org/).
+The builder is configured to produce one file for each geometry (with a name of the form `thrustonXXX.js`).
+The module exposed for each geometries are defined in the files `/src/thursontXXX.js`.
+The command to build the packages is
+```zsh
+npm run build
 ```
 
-To run the VR examples you may need a more advance settings as an HTTPS protocol is required.
-You can launch a local server with the command
+### Development environment
 
-```(zsh)
-python server.py
+In a development phase, one can use webpack's dev server.
+Run the command
+```zsh
+npm run dev
 ```
+The webpack's dev server will serve the content of the `dev` directory at the address  `http://localhost:9000/`
+Any change in the code will be updated automatically (without having to rebuild the code).
 
-The password needed is `thurston`.
-The server is serving at `https://localhost:4443`.
-
-On Windows, you can set up a server in the Control Panel Administrative Tools, in the IIS Manager (you may need to turn this feature on first).
-
-**Note**: The server will need to have a MIME type configuration:
-- `.glsl` files -> `text/plain` (probably no more needed).
-- `.mjs` files -> `text/javascript`
-
-
-## Examples
-
-A list of examples can be found in `examples/index.html`
-It contains scenes in the various geometries and demonstrates the features of the API.
-
-The examples tagged with *VR* are made for virtual reality. They should work with any VR headset supported by the three.js library.
-When loaded, those examples have a button *Enter VR* at the bottom on the screen.
-Clicking this button should launch the simulation in the VR headset (you may first need to allow your browser to interact with the VR system).
+To update the documentation (compiled from docstrings), run the command
+```zsh
+npm run doc
+```
 
 ## License
 

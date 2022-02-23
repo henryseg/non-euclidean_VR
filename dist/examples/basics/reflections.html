@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Reflection</title>
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonEuc": "../../build/thurston/thurstonEuc.js"
+            }
+        }
+    </script>
+</head>
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        freeAbelianSet as torus,
+        BasicCamera, BasicRenderer, Scene,
+        Point, LocalBall,
+        PhongMaterial, PointLight
+    } from "thurstonEuc";
+    import {Color, Vector3} from "three";
+
+
+    // initial setup
+    const camera = new BasicCamera({set: torus});
+    const scene = new Scene();
+
+    const renderer = new BasicRenderer(torus, camera, scene, {maxBounces: 1}, {logarithmicDepthBuffer: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Point(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Point(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Point(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    // Phong shading material
+    const mat = new PhongMaterial({
+        color: new Color(1, 0.2, 0.2),
+        shininess: 5,
+        reflectivity: new Vector3(0.5, 0.5, 0.5)
+    });
+
+
+    const ball1 = new LocalBall(
+        new Point(0, 0, -0.3),
+        0.15,
+        mat
+    );
+
+    // adding the solid to the scene
+    scene.add(ball1, light0, light1, light2);
+
+    // building there renderer
+    renderer.build();
+
+    // event controller on windows resize
+    function onWindowResize(event) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+    renderer.checkShader();
+
+    // rendering the scene
+    function animate() {
+        renderer.render();
+    }
+
+    renderer.setAnimationLoop(animate);
+
+
+</script>
+</html>

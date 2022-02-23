@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>H2E</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonH2E": "../../build/thurston/thurstonH2E.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        ThurstonLite,
+        cuspedTorusSet as cuspedTorus,
+        Point,
+        PhongMaterial,
+        ESun,
+        DIR_UP,
+        DIR_DOWN,
+        LocalBallShape,
+        complement,
+        Solid,
+        InfoControls
+    } from "thurstonH2E";
+    import {Color} from "three";
+
+
+    const thurston = new ThurstonLite(cuspedTorus, {keyboard: 'fr', maxBounces: 1});
+    const lightUp = new ESun(new Color(1, 1, 0), 0.5, DIR_UP);
+    const lightDown = new ESun(new Color(0, 1, 1), 0.5, DIR_DOWN);
+
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+
+    const point = new Point(0, 0, 1, 0);
+    const ballShape = new LocalBallShape(point, 1.1);
+    const latticeShape = complement(ballShape);
+    const lattice = new Solid(latticeShape, mat);
+
+
+    thurston.add(lattice, lightUp, lightDown);
+
+    const infoControls = new InfoControls();
+    infoControls.action = function () {
+
+    }
+
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

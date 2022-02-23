@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SL(2,R) Example</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonSL2": "../../build/thurston/thurstonSL2.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        ThurstonLite,
+        trivialSet as trivial,
+        Vector,
+        Point,
+        PhongMaterial,
+        FakeBall,
+        ConstDirLight,
+        InfoControls,
+    } from "thurstonSL2";
+    import {Color, Vector3} from "three";
+
+
+    const thurston = new ThurstonLite(trivial, {keyboard: 'fr', maxBounces: 1});
+
+    const lightUp = new ConstDirLight(new Color(1, 1, 0), 0.5, new Vector3(0, 0, 1));
+    const lightDown = new ConstDirLight(new Color(1, 0, 1), 0.5, new Vector3(0, 0, -1));
+
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1)
+    });
+
+
+    const point = new Point();
+    // point.set(-1, 0, 0, 0);
+    // point.fiber = -2 * Math.PI;
+    const dir = new Vector(0, 0, -8 * Math.PI);
+    const ball = new FakeBall(dir, 0.1, mat);
+
+    thurston.add(ball, lightUp, lightDown);
+
+    function info() {
+        console.log("fiber", thurston.camera.position.local.point);
+    }
+
+    const infoControls = new InfoControls()
+    infoControls.action = info;
+
+    thurston.run();
+    //thurston.renderer.checkShader();
+</script>
+
+</html>

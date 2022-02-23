@@ -1,8 +1,8 @@
 import {
     Isometry as IsometryEuc,
     Position as PositionEuc
-} from "../../../../../js/geometries/euc/geometry/General.js";
-import {Matrix4, Quaternion} from "../../../../../js/lib/three.module.js";
+} from "../../../../../src/geometries/euc/geometry/General.js";
+import {Matrix4, Quaternion} from "../../../../../src/lib/three.module.js";
 
 let assert = chai.assert;
 

@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Mapping torus by a Dehn twist (Virtual reality)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonNil": "../../build/thurston/thurstonNil.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        ThurstonVR,
+        heisenbergSet as heisenberg,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        Solid,
+        complement,
+        LocalFakeBallShape,
+        LocalVerticalCylinderShape,
+        union,
+        Isometry
+
+    } from "thurstonNil";
+    import {Color, Vector4} from "three";
+
+
+    heisenberg.group.translationA = new Vector4(2, 0, 0, 0);
+    heisenberg.group.translationB = new Vector4(0, 2, 0, 0);
+    //heisenberg.creepingType = CREEPING_STRICT;
+
+    const thurston = new ThurstonVR(heisenberg, {keyboard: 'fr'});
+
+    thurston.camera.maxDist = 20;
+    thurston.camera.maxSteps = 200;
+
+    // light colors
+    const lightColor1 = new Color(68 / 256, 197 / 256, 203 / 256, 1);
+    const lightColor2 = new Color(252 / 256, 227 / 256, 21 / 256, 1);
+    const lightColor3 = new Color(245 / 256, 61 / 256, 82 / 256, 1);
+
+    const light1 = new FakePointLight(
+        new Point(1, 0, 0),
+        lightColor1
+    );
+    const light2 = new FakePointLight(
+        new Point(0, 1., 1),
+        lightColor2
+    );
+    const light3 = new FakePointLight(
+        new Point(-1, 0, 2),
+        lightColor3
+    );
+
+    const lights = [light1, light2, light3];
+
+    // Phong shading material
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1),
+        shininess: 5,
+        lights: lights
+    });
+
+    const cyl = new LocalVerticalCylinderShape(new Isometry(), 0.8);
+    const center = new LocalFakeBallShape(new Point(), 0.9);
+    const unionShape = union(cyl, center)
+    const latticeShape = complement(unionShape)
+    const lattice = new Solid(latticeShape, mat);
+
+    thurston.add(lattice);
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

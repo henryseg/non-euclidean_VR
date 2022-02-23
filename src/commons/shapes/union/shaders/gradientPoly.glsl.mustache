@@ -1,0 +1,10 @@
+/**
+ * Gradient for the union of two shapes
+ */
+RelVector {{name}}_gradient(RelVector v){
+    float dist1 = {{shape1.name}}_sdf(v);
+    float dist2 = {{shape2.name}}_sdf(v);
+    RelVector grad1 = {{shape1.name}}_gradient(v);
+    RelVector grad2 = {{shape2.name}}_gradient(v);
+    return gradientMinPoly(dist1, dist2, grad1, grad2, {{name}}.minCoeff);
+}

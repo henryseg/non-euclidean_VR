@@ -1,0 +1,1 @@
+export {VaryingColorMaterial} from "./varyingColor/VaryingColorMaterial.js";

@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hyperbolic space</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonHyp": "../../build/thurston/thurstonHyp.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+
+    import {
+        ThurstonLite,
+        cubeSet as cube,
+        Vector,
+        PointLight,
+        PhongMaterial,
+        LocalBall,
+        CREEPING_STRICT
+    } from "thurstonHyp";
+    import {Color} from "three";
+
+
+    cube.creepingType = CREEPING_STRICT;
+    const thurston = new ThurstonLite(cube, {keyboard: 'fr'});
+
+
+    // lights for the Phong material
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    // Phong shading material
+    const mat0 = new PhongMaterial({
+        color: new Color(1, 0.8, 0.8),
+        shininess: 5,
+    });
+
+    const ball = new LocalBall(
+        new Vector(0.3, 0, 0),
+        0.2,
+        mat0
+    );
+
+
+    thurston.add(ball, light0, light1, light2);
+    thurston.run();
+
+
+</script>
+
+</html>

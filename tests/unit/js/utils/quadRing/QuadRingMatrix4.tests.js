@@ -1,6 +1,6 @@
-import * as utils from "../../../../../js/utils.js";
-import {QuadRing} from "../../../../../js/utils/quadRing/QuadRing.js";
-import {QuadRingElement} from "../../../../../js/utils/quadRing/QuadRingElement.js";
+import * as utils from "../../../../../src/utils.js";
+import {QuadRing} from "../../../../../src/utils/quadRing/QuadRing.js";
+import {QuadRingElement} from "../../../../../src/utils/quadRing/QuadRingElement.js";
 
 let assert = chai.assert;
 

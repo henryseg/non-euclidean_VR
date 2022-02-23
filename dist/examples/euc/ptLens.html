@@ -1,0 +1,157 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Three-torus</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonEuc": "../../build/thurston/thurstonEuc.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {
+        Thurston,
+        trivialSet as trivial,
+        Isometry,
+        Point,
+        BasicPTMaterial,
+        SingleColorMaterial,
+        Ball, HalfSpace
+    } from "thurstonEuc";
+    import {Color} from "three";
+
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // General setup
+    //------------------------------------------------------------------------------------------------------------------
+
+    const thurston = new Thurston(trivial, {keyboard: 'us'});
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Building the scene
+    //------------------------------------------------------------------------------------------------------------------
+
+    thurston.scene.ptBackground.absorb = new Color(0, 0, 0);
+    thurston.scene.ptBackground.opticalDepth = 0.1;
+
+    // lights for the Phong material (not used by the path tracer)
+
+    const placeholderMat = new SingleColorMaterial(new Color(1, 1, 1));
+
+
+    // main ball
+    const ptBallMat = new BasicPTMaterial({
+        diffuse: new Color(1, 1, 1),
+        specular: new Color(1, 1, 1),
+        ior: 1.6,
+        //volumeEmission:new Color(10,1,1),
+        opticalDepth: 0.1,
+        //absorb:new Color(5,1,3),
+        reflectionChance: 0.01,
+        refractionChance: 0.99,
+        diffuseChance: 0.,
+    });
+    const ball = new Ball(new Point(0, 0.5, -2), 0.3, placeholderMat, ptBallMat);
+    thurston.add(ball);
+
+
+    // main light
+    const lightColor = new Color(1, 1, 1);
+    const ptLightMat = new BasicPTMaterial({
+        diffuse: lightColor,
+        specular: lightColor,
+        emission: new Color(50, 50, 50),
+        reflectionChance: 0.01,
+        refractionChance: 0.,
+        diffuseChance: 0.99,
+    });
+    const light = new Ball(new Point(0, 1.5, -2), 0.1, placeholderMat, ptLightMat);
+    thurston.add(light);
+
+    // back wall
+    const backColor = new Color(1, 0, 0);
+    const backPoint = new Point(0, 0, -2.5);
+    const backIsom = new Isometry().makeTranslation(backPoint);
+    const ptBackMat = new BasicPTMaterial({
+        diffuse: backColor,
+        specular: backColor,
+        diffuseChance: 1,
+        reflectionChance: 0,
+        refractionChance: 0
+    });
+    const back = new HalfSpace(backIsom, placeholderMat, ptBackMat);
+    thurston.add(back);
+
+    // left wall
+    const leftColor = new Color(0, 1, 0);
+    const ptLeftMat = new BasicPTMaterial({
+        diffuse: leftColor,
+        specular: leftColor
+    });
+    const leftPoint = new Point(-1, 0, 0);
+    const leftIsom = new Isometry().makeTranslation(leftPoint);
+    leftIsom.multiply(new Isometry().makeRotationY(0.5 * Math.PI));
+    const ptLeft = new HalfSpace(leftIsom, placeholderMat, ptLeftMat);
+    thurston.add(ptLeft);
+
+    // right wall
+    const rightColor = new Color(0, 0, 1);
+    const ptRightMat = new BasicPTMaterial({
+        diffuse: rightColor,
+        specular: rightColor
+    });
+    const rightPoint = new Point(1, 0, 0);
+    const rightIsom = new Isometry().makeTranslation(rightPoint);
+    rightIsom.multiply(new Isometry().makeRotationY(-0.5 * Math.PI));
+    const right = new HalfSpace(rightIsom, placeholderMat, ptRightMat);
+    thurston.add(right);
+
+    // bottom wall
+    const bottomColor = new Color(1, 1, 1);
+    const ptBottomMat = new BasicPTMaterial({
+        diffuse: bottomColor,
+        specular: bottomColor,
+    });
+    const bottomPoint = new Point(0, -0.3, 0);
+    const bottomIsom = new Isometry().makeTranslation(bottomPoint);
+    bottomIsom.multiply(new Isometry().makeRotationX(-0.5 * Math.PI));
+    const bottom = new HalfSpace(bottomIsom, placeholderMat, ptBottomMat);
+    thurston.add(bottom);
+
+    // //top wall
+    // const topColor = new Color(3, 3, 3);
+    // const ptTopMat = new BasicPTMaterial({
+    //     emission: topColor,
+    // })
+    // const topPoint = new Point(0, 4, 0);
+    // const topIsom = new Isometry().makeTranslation(topPoint);
+    // topIsom.multiply(new Isometry().makeRotationX(0.5 * Math.PI));
+    // const top = new HalfSpace(topIsom, placeholderMat, ptTopMat);
+    // thurston.add(top);
+    //
+
+
+    thurston.run();
+
+</script>
+
+</html>

@@ -1,6 +1,6 @@
-import {SL2} from "../../../../../js/geometries/sl2/geometry/Utils.js";
-import {Isometry, Point} from "../../../../../js/geometries/sl2/geometry/General.js";
-import {Matrix4, Vector4} from "../../../../../js/lib/three.module.js";
+import {SL2} from "../../../../../src/geometries/sl2/geometry/Utils.js";
+import {Isometry, Point} from "../../../../../src/geometries/sl2/geometry/General.js";
+import {Matrix4, Vector4} from "../../../../../src/lib/three.module.js";
 
 let assert = chai.assert;
 
