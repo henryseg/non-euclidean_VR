@@ -94,7 +94,7 @@ export class TeleportationSet {
      * @return {TeleportationSet} - the teleportation set
      */
     add(jsTest, glslTest, elt, inv = undefined, glslCreep = undefined) {
-        const length = this.teleportations.push(new Teleportation(this, jsTest, glslTest, elt, inv, glslCreep));
+        this.teleportations.push(new Teleportation(this, jsTest, glslTest, elt, inv, glslCreep));
         return this;
     }
 
