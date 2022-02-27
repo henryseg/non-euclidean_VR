@@ -11,7 +11,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "buildEuc": "webpack --config webpack.prod.euc.js",
+    "buildHyp": "webpack --config webpack.prod.hyp.js",
+    "buildSph": "webpack --config webpack.prod.sph.js",
+    "buildS2E": "webpack --config webpack.prod.s2e.js",
+    "buildH2E": "webpack --config webpack.prod.h2e.js",
+    "buildNil": "webpack --config webpack.prod.nil.js",
+    "buildSL2": "webpack --config webpack.prod.sl2.js",
+    "buildSol": "webpack --config webpack.prod.sol.js",
+    "build": "webpack --config webpack.prod.all.js",
     "doc": "jsdoc -c jsdoc.conf.json"
   },
   "repository": {
