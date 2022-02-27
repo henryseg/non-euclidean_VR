@@ -35,7 +35,7 @@
         Solid,
         complement,
         InfoControls,
-        CREEPING_FULL,
+        CREEPING_FULL,CREEPING_OFF,
         LocalPotatoShape
 
     } from "thurstonNil";
@@ -43,7 +43,7 @@
 
 
     const thurston = new ThurstonLite(heisenberg, {keyboard: 'fr'});
-    heisenberg.creepingType = CREEPING_FULL;
+    heisenberg.creepingType = CREEPING_OFF;
 
     thurston.camera.maxDist = 20;
     thurston.camera.maxSteps = 200;

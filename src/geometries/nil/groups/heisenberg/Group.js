@@ -33,10 +33,13 @@ export class Group extends AbstractGroup {
          * @type {Vector4}
          */
         this._translationB = translationB !== undefined ? translationB : new Vector4(0, 1, 0, 0);
+
+        this._testTranslationA = undefined;
+        this._testTranslationB = undefined;
+        this._testTranslationC = undefined;
+
         this.updateTranslationC();
         this.updateDotMatrix();
-        console.log("Dot matrix", this.dotMatrix);
-        console.log("Dot matrix", this.dotMatrix.toLog());
     }
 
 
@@ -50,6 +53,13 @@ export class Group extends AbstractGroup {
         this.updateDotMatrix();
     }
 
+    get testTranslationA() {
+        if (this._testTranslationA === undefined) {
+            this._testTranslationA = this.translationA.clone().applyMatrix4(this.dotMatrix);
+        }
+        return this._testTranslationA;
+    }
+
 
     get translationB() {
         return this._translationB;
@@ -61,6 +71,13 @@ export class Group extends AbstractGroup {
         this.updateDotMatrix();
     }
 
+    get testTranslationB() {
+        if (this._testTranslationB === undefined) {
+            this._testTranslationB = this.translationA.clone().applyMatrix4(this.dotMatrix);
+        }
+        return this._testTranslationB;
+    }
+
     updateTranslationC() {
         const [xa, ya, za, wa] = this._translationA.toArray();
         const [xb, yb, zb, wb] = this._translationB.toArray();
@@ -69,6 +86,13 @@ export class Group extends AbstractGroup {
 
     get translationC() {
         return this._halfTranslationC;
+    }
+
+    get testTranslationC() {
+        if (this._testTranslationC === undefined) {
+            this._testTranslationC = this.translationA.clone().applyMatrix4(this.dotMatrix);
+        }
+        return this._testTranslationC;
     }
 
     updateDotMatrix() {
@@ -82,6 +106,9 @@ export class Group extends AbstractGroup {
             0, 0, 0, 1
         ).invert();
         this._dotMatrix.copy(aux).transpose().multiply(aux);
+        this._testTranslationA = this.translationA.clone().applyMatrix4(this.dotMatrix);
+        this._testTranslationB = this.translationB.clone().applyMatrix4(this.dotMatrix);
+        this._testTranslationC = this.translationC.clone().applyMatrix4(this.dotMatrix);
 
     }
 

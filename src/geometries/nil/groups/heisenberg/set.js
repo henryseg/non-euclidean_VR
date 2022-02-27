@@ -4,15 +4,13 @@ import {Group} from "./Group.js";
 const group = new Group();
 
 function testXp(p) {
-    const aux = group.translationA.clone().applyMatrix4(group.dotMatrix);
-    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
-    return p.coords.dot(aux) > 0.5;
+    return p.coords.dot(group.testTranslationA) > 0.5;
 }
 
 // language=GLSL
 const glslTestXp = `//
 bool testXp(Point p){
-    return dot(p.coords, group.dotMatrix * group.translationA) > 0.5;
+    return dot(p.coords, group.testTranslationA) > 0.5;
 }
 `;
 
@@ -28,67 +26,61 @@ bool testXp(Point p){
 
 
 function testXn(p) {
-    const aux = group.translationA.clone().applyMatrix4(group.dotMatrix);
-    return p.coords.dot(aux) < -0.5;
+    return p.coords.dot(group.testTranslationA) < -0.5;
 }
 
 // language=GLSL
 const glslTestXn = `//
 bool testXn(Point p){
-    return dot(p.coords, group.dotMatrix * group.translationA) < -0.5;
+    return dot(p.coords, group.testTranslationA) < -0.5;
 }
 `;
 
 
 function testYp(p) {
-    const aux = group.translationB.clone().applyMatrix4(group.dotMatrix);
-    return p.coords.dot(aux) > 0.5;
+    return p.coords.dot(group.testTranslationB) > 0.5;
 }
 
 // language=GLSL
 const glslTestYp = `//
 bool testYp(Point p){
-    return dot(p.coords, group.dotMatrix * group.translationB) > 0.5;
+    return dot(p.coords, group.testTranslationB) > 0.5;
 }
 `;
 
 
 function testYn(p) {
-    const aux = group.translationB.clone().applyMatrix4(group.dotMatrix);
-    return p.coords.dot(aux) < -0.5;
+    return p.coords.dot(group.testTranslationB) < -0.5;
 }
 
 // language=GLSL
 const glslTestYn = `//
 bool testYn(Point p){
-    return dot(p.coords, group.dotMatrix * group.translationB) < -0.5;
+    return dot(p.coords, group.testTranslationB) < -0.5;
 }
 `;
 
 
 function testZp(p) {
-    const aux = group.translationC.clone().applyMatrix4(group.dotMatrix);
-    //console.log("aux Xp", aux.toLog(), p.coords.dot(aux));
-    return p.coords.dot(aux) > 0.5;
+    return p.coords.dot(group.testTranslationC) > 0.5;
 }
 
 // language=GLSL
 const glslTestZp = `//
 bool testZp(Point p){
-    return dot(p.coords, group.dotMatrix * group.translationC) > 0.5;
+    return dot(p.coords, group.testTranslationC) > 0.5;
 }
 `;
 
 
 function testZn(p) {
-    const aux = group.translationC.clone().applyMatrix4(group.dotMatrix);
-    return p.coords.dot(aux) < -0.5;
+    return p.coords.dot(group.testTranslationC) < -0.5;
 }
 
 // language=GLSL
 const glslTestZn = `//
 bool testZn(Point p){
-    return dot(p.coords, group.dotMatrix * group.translationC) < -0.5;
+    return dot(p.coords, group.testTranslationC) < -0.5;
 }
 `;
 
