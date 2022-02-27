@@ -19,30 +19,34 @@ ExtVector teleport(ExtVector v){
 
 
 /**
- * Does one of the two following transformation: 
- * flow the vector by the given time, if the vector escape the fundamental domain, 
- * then flow during a smaller time to reach the boundary (creeping).
- * @param[inout] v the relative vector to flow / teleport / creep.
- * @param[in] t the (maximal) time to flow
- * @param[in] offset the amount we march passed the boundary
- */
-ExtVector creepingFlow(ExtVector v, float t, float offset){
+* Does one of the two following transformation:
+* flow the vector by the given time, if the vector escape the fundamental domain,
+* then try to find a smaller time so that the vector is moved closer to the boundary of the fudamental domain
+* (and even a bit further)
+*
+* @param[inout] v the relative vector to flow / teleport / creep.
+* @param[in] t the (maximal) time to flow
+* @param[in] offset the amount we march passed the boundary
+*/
+float creepingDist(ExtVector v, float t, float offset){
+    float res = t;
     ExtVector try = flow(v, t);
     {{#teleportations}}
 
         {{#usesCreepingCustom}}
-        if({{glslTestName}}(try.vector.local.pos)){
-            try = {{glslCreepName}}(v, offset);
-        }
+            if({{glslTestName}}(try.vector.local.pos)){
+                res = min(res, {{glslCreepName}}(v, offset));
+            }
         {{/usesCreepingCustom}}
 
         {{#usesCreepingBinary}}
-        if({{glslTestName}}(try.vector.local.pos)){
-            try = {{glslCreepName}}(v, try, offset);
-        }
+            if({{glslTestName}}(try.vector.local.pos)){
+                res = min(res, {{glslCreepName}}(v, try, offset));
+            }
         {{/usesCreepingBinary}}
-        
+
     {{/teleportations}}
-    return try;
+    return res;
 }
+
 

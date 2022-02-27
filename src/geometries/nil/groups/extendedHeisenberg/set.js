@@ -16,12 +16,6 @@ bool testXp(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslTestXp = `//
-// bool testXp(Point p){
-//     return p.coords.x > 0.5;
-// }
-// `;
 
 function testXn(p) {
     const aux = group.translationA.clone().applyMatrix4(group.dotMatrix);
@@ -36,12 +30,6 @@ bool testXn(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslTestXn = `//
-// bool testXn(Point p){
-//     return p.coords.x < -0.5;
-// }
-// `;
 
 function testYp(p) {
     const aux = group.translationB.clone().applyMatrix4(group.dotMatrix);
@@ -55,12 +43,6 @@ bool testYp(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslTestYp = `//
-// bool testYp(Point p){
-//     return p.coords.y > 0.5;
-// }
-// `;
 
 function testYn(p) {
     const aux = group.translationB.clone().applyMatrix4(group.dotMatrix);
@@ -74,12 +56,6 @@ bool testYn(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslTestYn = `//
-// bool testYn(Point p){
-//     return p.coords.y < -0.5;
-// }
-// `;
 
 function testZp(p) {
     const aux = group.translationC.clone().applyMatrix4(group.dotMatrix);
@@ -94,13 +70,6 @@ bool testZp(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslTestZp = `//
-// bool testZp(Point p){
-//     return p.coords.z > 0.5;
-// }
-// `;
-
 
 function testZn(p) {
     const aux = group.translationC.clone().applyMatrix4(group.dotMatrix);
@@ -114,13 +83,6 @@ bool testZn(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslTestZn = `//
-// bool testZn(Point p){
-//     return p.coords.z < -0.5;
-// }
-// `;
-
 
 const shiftXp = group.element(-1, 0, 0);
 const shiftXn = group.element(1, 0, 0);
@@ -128,10 +90,6 @@ const shiftYp = group.element(0, -1, 0);
 const shiftYn = group.element(0, 1, 0);
 const shiftZp = group.element(0, 0, -1);
 const shiftZn = group.element(0, 0, 1);
-
-//console.log("Xp", shiftXp.toIsometry().matrix.toLog());
-//console.log("Yp", shiftYp.toIsometry().matrix.toLog());
-//console.log("Zp", shiftZp.toIsometry().matrix.toLog());
 
 
 /**

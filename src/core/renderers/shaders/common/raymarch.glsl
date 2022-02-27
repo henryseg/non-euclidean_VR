@@ -36,12 +36,12 @@ int raymarch(inout ExtVector v, out int objId){
     float dist;
     int hit = HIT_NOTHING;
 
-    
+
     // local scene
     for (int i = 0; i < camera.maxSteps; i++){
         // debugging stuff
         localV.data.iMarch = v.data.iMarch + i;
-        
+
         // start by teleporting eventually the vector
         localV = teleport(localV);
         if (localV.data.isTeleported){
@@ -67,11 +67,11 @@ int raymarch(inout ExtVector v, out int objId){
                 v = localV;
                 break;
             }
-            marchingStep = marchingStep + dist;
-            localV = creepingFlow(localV0, marchingStep, camera.threshold);
+            marchingStep = marchingStep + creepingDist(localV, dist, camera.threshold);
+            localV = flow(localV0, marchingStep);
         }
     }
-    if(hit == HIT_NOTHING) {
+    if (hit == HIT_NOTHING) {
         v = localV;
     }
 
@@ -80,7 +80,7 @@ int raymarch(inout ExtVector v, out int objId){
     for (int i=0; i < camera.maxSteps; i++){
         // debugging stuff
         globalV.data.iMarch = v.data.iMarch + i;
-        
+
         if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){
             // we reached the maximal distance
             break;
@@ -102,7 +102,7 @@ int raymarch(inout ExtVector v, out int objId){
         globalV = flow(globalV0, marchingStep);
     }
 
-    if(hit == HIT_NOTHING) {
+    if (hit == HIT_NOTHING) {
         v = globalV;
     }
     return hit;

@@ -17,10 +17,9 @@ bool testXp(Point p){
 
 // language=GLSL
 const glslCreepXp = `//
-ExtVector creepXp(ExtVector v, float offset){
+float creepXp(ExtVector v, float offset){
     Vector local = v.vector.local;
-    float t =  0.5 - local.pos.coords.x + offset;
-    return flow(v, t);
+    return 0.5 - local.pos.coords.x + offset;
 }
 `;
 
@@ -37,10 +36,9 @@ bool testXn(Point p){
 
 // language=GLSL
 const glslCreepXn = `//
-ExtVector creepXn(ExtVector v, float offset){
+float creepXn(ExtVector v, float offset){
     Vector local = v.vector.local;
-    float t =  -0.5 - local.pos.coords.x + offset;
-    return flow(v, t);
+    return  0.5 + local.pos.coords.x + offset;
 }
 `;
 
@@ -57,10 +55,9 @@ bool testYp(Point p){
 
 // language=GLSL
 const glslCreepYp = `//
-ExtVector creepYp(ExtVector v, float offset){
+float creepYp(ExtVector v, float offset){
     Vector local = v.vector.local;
-    float t =  0.5 - local.pos.coords.y + offset;
-    return flow(v, t);
+    return  0.5 - local.pos.coords.y + offset;
 }
 `;
 
@@ -77,10 +74,9 @@ bool testYn(Point p){
 
 // language=GLSL
 const glslCreepYn = `//
-ExtVector creepYn(ExtVector v, float offset){
+float creepYn(ExtVector v, float offset){
     Vector local = v.vector.local;
-    float t =  -0.5 - local.pos.coords.y + offset;
-    return flow(v, t);
+    return  0.5 + local.pos.coords.y + offset;
 }
 `;
 
