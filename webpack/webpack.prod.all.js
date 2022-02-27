@@ -18,28 +18,31 @@ module.exports = merge(common, {
         thurstonSL2: './src/thurstonSL2.js',
         thurstonSol: './src/thurstonSol.js',
     },
+    output: {
+        clean: true,
+    },
     plugins: [
         new CopyPlugin({
             patterns: [
                 {
                     from: 'node_modules/es-module-shims/dist/es-module-shims.js',
-                    to: path.resolve(__dirname, 'dist/build/vendor')
+                    to: path.resolve(__dirname, '../dist/build/vendor')
                 },
                 {
                     from: 'node_modules/three/build/three.module.js',
-                    to: path.resolve(__dirname, 'dist/build/vendor')
+                    to: path.resolve(__dirname, '../dist/build/vendor')
                 },
                 {
                     from: 'node_modules/three/examples/jsm/libs/stats.module.js',
-                    to: path.resolve(__dirname, 'dist/build/vendor')
+                    to: path.resolve(__dirname, '../dist/build/vendor')
                 },
                 {
                     from: 'node_modules/dat.gui/build/dat.gui.module.js',
-                    to: path.resolve(__dirname, 'dist/build/vendor')
+                    to: path.resolve(__dirname, '../dist/build/vendor')
                 },
                 {
                     from: 'node_modules/webxr-polyfill/build/webxr-polyfill.module.js',
-                    to: path.resolve(__dirname, 'dist/build/vendor')
+                    to: path.resolve(__dirname, '../dist/build/vendor')
                 }
             ]
         }),

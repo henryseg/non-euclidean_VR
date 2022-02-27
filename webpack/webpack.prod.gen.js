@@ -15,7 +15,6 @@ module.exports = merge(common, {
     output: {
         path: path.resolve(__dirname, '../dist/build/thurston'),
         filename: '[name].js',
-        clean: true,
         library: {
             type: 'module',
         },

@@ -8,6 +8,7 @@ Point.prototype.build = function () {
     } else {
         this.coords = new Vector4(...arguments);
     }
+    this.coords.normalize();
 };
 
 Point.prototype.reduceError = function () {
