@@ -71,6 +71,14 @@ bool testZp(Point p){
 }
 `;
 
+// language=GLSL
+const glslCreepZp = `//
+float creepZp(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    return 0.5 - coords.z + offset;
+}
+`;
+
 function testZn(p) {
     return p.coords.dot(normalZ) < -0.5;
 }
@@ -80,6 +88,14 @@ const glslTestZn = `//
 bool testZn(Point p){
     vec4 normal = vec4(0, 0, ${1 / TAU}, 0);
     return dot(p.coords, normal) < -0.5;
+}
+`;
+
+// language=GLSL
+const glslCreepZn = `//
+float creepZn(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    return 0.5 + coords.z + offset;
 }
 `;
 
@@ -98,8 +114,8 @@ shiftZp.isom.makeTranslation(new Point(0, 0, -TAU, 1));
 shiftZn.isom.makeTranslation(new Point(0, 0, TAU, 1));
 
 export default new TeleportationSet()
-    .add(testZp, glslTestZp, shiftZp, shiftZn)
-    .add(testZn, glslTestZn, shiftZn, shiftZp)
+    .add(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp)
+    .add(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn)
     .add(testXp, glslTestXp, shiftXp, shiftXn)
     .add(testXn, glslTestXn, shiftXn, shiftXp)
     .add(testYp, glslTestYp, shiftYp, shiftYn)
