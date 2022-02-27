@@ -109,7 +109,6 @@ export class Group extends AbstractGroup {
         this._testTranslationA = this.translationA.clone().applyMatrix4(this.dotMatrix);
         this._testTranslationB = this.translationB.clone().applyMatrix4(this.dotMatrix);
         this._testTranslationC = this.translationC.clone().applyMatrix4(this.dotMatrix);
-
     }
 
     /**

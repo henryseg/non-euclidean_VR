@@ -14,15 +14,14 @@ bool testXp(Point p){
 }
 `;
 
-// // language=GLSL
-// const glslCreepXp = `//
-// ExtVector creepXp(ExtVector v, float offset){
-//     Vector local = v.vector.local;
-//     vec4 uAux = group.dotMatrix * group.translationA;
-//     float t = (0.5 - dot(local.pos.coords.xy, uAux.xy)) / length(uAux.xy) + offset;
-//     return flow(v, t);
-// }
-// `;
+// language=GLSL
+const glslCreepXp = `//
+float creepXp(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    float dist = (0.5 - dot(coords, group.testTranslationA)) / length(group.testTranslationA);
+    return dist + offset;
+}
+`;
 
 
 function testXn(p) {
@@ -33,6 +32,15 @@ function testXn(p) {
 const glslTestXn = `//
 bool testXn(Point p){
     return dot(p.coords, group.testTranslationA) < -0.5;
+}
+`;
+
+// language=GLSL
+const glslCreepXn = `//
+float creepXn(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    float dist = (0.5 + dot(coords, group.testTranslationA)) / length(group.testTranslationA);
+    return dist + offset;
 }
 `;
 
@@ -48,6 +56,15 @@ bool testYp(Point p){
 }
 `;
 
+// language=GLSL
+const glslCreepYp = `//
+float creepYp(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    float dist = (0.5 - dot(coords, group.testTranslationB)) / length(group.testTranslationB);
+    return dist + offset;
+}
+`;
+
 
 function testYn(p) {
     return p.coords.dot(group.testTranslationB) < -0.5;
@@ -57,6 +74,15 @@ function testYn(p) {
 const glslTestYn = `//
 bool testYn(Point p){
     return dot(p.coords, group.testTranslationB) < -0.5;
+}
+`;
+
+// language=GLSL
+const glslCreepYn = `//
+float creepYn(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    float dist = (0.5 + dot(coords, group.testTranslationB)) / length(group.testTranslationB);
+    return dist + offset;
 }
 `;
 
@@ -106,10 +132,10 @@ const neighborsLite = [
  * Subgroup corresponding to the integer Heisenberg group
  */
 export default new TeleportationSet(neighborsLite)
-    .add(testXp, glslTestXp, shiftXp, shiftXn)
-    .add(testXn, glslTestXn, shiftXn, shiftXp)
-    .add(testYp, glslTestYp, shiftYp, shiftYn)
-    .add(testYn, glslTestYn, shiftYn, shiftYp)
+    .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
+    .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
+    .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
+    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
     .add(testZp, glslTestZp, shiftZp, shiftZn)
     .add(testZn, glslTestZn, shiftZn, shiftZp);
 
