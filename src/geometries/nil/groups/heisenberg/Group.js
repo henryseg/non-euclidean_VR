@@ -33,9 +33,20 @@ export class Group extends AbstractGroup {
          * @type {Vector4}
          */
         this._translationB = translationB !== undefined ? translationB : new Vector4(0, 1, 0, 0);
-
+        /**
+         * Normal to the boundary in the A direction
+         * @type {Vector4}
+         */
         this._testTranslationA = undefined;
+        /**
+         * Normal to the boundary in the B direction
+         * @type {Vector4}
+         */
         this._testTranslationB = undefined;
+        /**
+         * Normal to the boundary in the C direction
+         * @type {Vector4}
+         */
         this._testTranslationC = undefined;
 
         this.updateTranslationC();

@@ -36,7 +36,7 @@
         Solid,
         LocalPotatoShape,
         complement,
-        CREEPING_FULL
+        CREEPING_FULL, CREEPING_OFF, CREEPING_STRICT
 
     } from "thurstonNil";
     import {Color, Vector4} from "three";
@@ -46,7 +46,7 @@
     extendedHeisenberg.group.translationB = new Vector4(0, 2, 0, 0);
     extendedHeisenberg.group.root = 2;
 
-    extendedHeisenberg.creepingType = CREEPING_FULL;
+    extendedHeisenberg.creepingType = CREEPING_STRICT;
     const thurston = new ThurstonVR(extendedHeisenberg, {keyboard: 'fr'});
 
     thurston.camera.maxDist = 20;
