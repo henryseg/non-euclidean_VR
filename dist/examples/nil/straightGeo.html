@@ -1,0 +1,108 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Straight geodesic in Nil</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonNil": "../../build/thurston/thurstonNil.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+    import {
+        ThurstonVR,
+        heisenbergSet as set,
+        Point,
+        FakePointLight,
+        PhongMaterial,
+        StraightGeo,
+        FakeBall,
+        SingleColorMaterial,
+        Isometry
+
+    } from "thurstonNil";
+    import {Color, Vector4} from "three";
+
+
+    set.group.translationA = new Vector4(2, 0, 0, 0);
+    set.group.translationB = new Vector4(0, 2, 0, 0);
+
+    const thurston = new ThurstonVR(set, {keyboard: 'fr'});
+    thurston.camera.maxSteps = 20;
+
+    thurston.camera.maxDist = 20;
+    thurston.camera.maxSteps = 200;
+
+    // light colors
+    const lightColor1 = new Color(1, 1, 0, 1); // yellow
+    const lightColor2 = new Color(1, 0, 1, 1); // magenta
+    const lightColor3 = new Color(0, 1, 1, 1); // cyan
+    const lightColor3bis = new Color(1, 1, 1, 1); // white
+
+    const lightPos1 = new Point(1, 0, 0);
+    const lightPos2 = new Point(0, 1, 0);
+    const lightPos3 = new Point(0, 0, -1);
+    const lightPos3bis = new Point(0, 0, 1);
+
+    const light1 = new FakePointLight(lightPos1, lightColor1, 0.4);
+    const light2 = new FakePointLight(lightPos2, lightColor2, 0.4);
+    const light3 = new FakePointLight(lightPos3, lightColor3, 0.4);
+    const light3bis = new FakePointLight(lightPos3bis, lightColor3bis, 0.4);
+
+    thurston.add(light1, light2, light3, light3bis);
+
+
+    const mat1 = new SingleColorMaterial(
+        lightColor1
+    );
+    const mat2 = new SingleColorMaterial(
+        lightColor2
+    );
+    const mat3 = new SingleColorMaterial(
+        lightColor3
+    );
+    const mat3bis = new SingleColorMaterial(
+        lightColor3bis
+    );
+    const lightBall1 = new FakeBall(lightPos1, 0.1, mat1);
+    const lightBall2 = new FakeBall(lightPos2, 0.1, mat2);
+    const lightBall3 = new FakeBall(lightPos3, 0.1, mat3);
+    const lightBall3bis = new FakeBall(lightPos3bis, 0.1, mat3bis);
+
+    thurston.add(lightBall2, lightBall3);
+
+    // Ball
+    const mat = new PhongMaterial({
+        color: new Color(1, 1, 1),
+        shininess: 5
+    });
+
+    const isom = new Isometry().makeTranslation(new Point(0, -0.2, -0.2));
+    const geo = new StraightGeo(isom, 0.01, mat);
+
+
+    thurston.add(geo);
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>

@@ -6,3 +6,4 @@ export {VerticalHalfSpace} from "./VerticalHalfSpace.js";
 export {VerticalCylinder} from "./VerticalCylinder.js";
 export {LocalVerticalCylinder} from "./LocalVerticalCylinder.js";
 export {DirectedVerticalHalfSpace} from "./DirectedVerticalHalfSpace.js";
+export {StraightGeo} from "./StraightGeo.js";
