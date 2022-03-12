@@ -10,7 +10,7 @@ import render from "../../../core/materials/shaders/renderUV.glsl.mustache";
  * @extends Material
  *
  * @classdesc
- * A material that display a single plain color
+ * A material that display a checkerboard
  */
 export class CheckerboardMaterial extends Material {
 

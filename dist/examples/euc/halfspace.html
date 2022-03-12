@@ -20,6 +20,7 @@
                 "thurstonEuc": "../../build/thurston/thurstonEuc.js"
             }
         }
+
     </script>
 </head>
 
@@ -34,6 +35,7 @@
         PointLight,
         HalfSpace,
         CheckerboardMaterial,
+        SquaresMaterial,
         phongWrap,
         Isometry
     } from "thurstonEuc";
@@ -62,15 +64,20 @@
         new Color(1, 0, 1)
     );
 
-    const checkerboardMaterial = new CheckerboardMaterial(
-        new Vector2(2, 0),
-        new Vector2(0, 2),
-        new Color(0, 0, 0),
-        new Color(1, 1, 0)
+    const baseMat = new SquaresMaterial(
+        new Vector2(1, 0),
+        new Vector2(0, 1),
+        [
+            new Color(1, 1, 1),
+            new Color(245. / 256, 194. / 256, 251. / 256),
+            new Color(237. / 256, 109. / 256, 185. / 256),
+            new Color(152. / 256, 59. / 256, 93. / 256)
+        ]
     )
+    console.log(baseMat.lengths);
 
     const mat = phongWrap(
-        checkerboardMaterial,
+        baseMat,
         {shininess: 5}
     )
 

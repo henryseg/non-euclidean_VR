@@ -8,6 +8,7 @@ export {EarthTexture} from "./astronomy/earth/EarthTexture.js";
 export {MoonTexture} from "./astronomy/moon/MoonTexture.js";
 export {SunTexture} from "./astronomy/sun/SunTexture.js";
 export {MarsTexture} from "./astronomy/mars/MarsTexture.js";
+export {SquaresMaterial} from "./squares/SquaresMaterial.js";
 
 // Composite basic materials
 export {PhongWrapMaterial, phongWrap} from "./phongWrap/PhongWrapMaterial.js";
