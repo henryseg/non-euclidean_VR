@@ -20,6 +20,7 @@
                 "thurstonSph": "../../build/thurston/thurstonSph.js"
             }
         }
+
     </script>
 </head>
 
@@ -33,9 +34,10 @@
         Vector,
         PointLight,
         Ball, SingleColorMaterial,
-        CliffordTorus, Isometry, PhongMaterial
+        Circle, PhongMaterial,
+        Isometry,
     } from "thurstonSph";
-    import {Color} from "three";
+    import {Color, Vector2, Matrix4} from "three";
 
 
     const thurston = new ThurstonLite(trivial, {keyboard: 'fr'});
@@ -54,7 +56,6 @@
         new Vector(1, 0, 0),
         0.1,
         new SingleColorMaterial(new Color(1, 1, 0)),
-
     );
 
     // cyan light
@@ -67,7 +68,6 @@
         new Vector(0, 1, -1),
         0.1,
         new SingleColorMaterial(new Color(0, 1, 1)),
-
     );
 
     // magenta light
@@ -80,27 +80,47 @@
         new Vector(-1, -1, 1),
         0.1,
         new SingleColorMaterial(new Color(1, 0, 1)),
-
     );
-
-
 
     // Phong shading material
-    const mat0 = new PhongMaterial({
-        color: new Color(1, 0.8, 0.8),
-        shininess: 5
+    const mat1 = new PhongMaterial({
+        color: new Color(0.3, 0.3, 1),
+        shininess: 10
     });
 
-
-
-    // Complement of a local ball
-    const torus = new CliffordTorus(
-        new Isometry(),
-        mat0,
+    let circles = [];
+    const n = 15;
+    let cx = 1 / Math.sqrt(2);
+    let angle, cz, cw;
+    const identity = new Isometry();
+    const flip = new Isometry();
+    const radius = 0.02;
+    flip.matrix.set(
+        0, 0, 1, 0,
+        0, 0, 0, 1,
+        1, 0, 0, 0,
+        0, 1, 0, 0
     );
 
+    for (let i = 0; i < n; i++) {
+        angle = 2 * i * Math.PI / n;
+        cz = cx * Math.cos(angle);
+        cw = cx * Math.sin(angle);
+        circles[2 * i] = new Circle(
+            identity,
+            cz, cw,
+            radius,
+            mat1,
+        );
+        circles[2 * i + 1] = new Circle(
+            flip,
+            cz, cw,
+            radius,
+            mat1,
+        );
+    }
 
-    thurston.add(torus, ball0, ball1, ball2, light0, light1, light2);
+    thurston.add(...circles, ball0, ball1, ball2, light0, light1, light2);
     thurston.run();
 
 </script>
