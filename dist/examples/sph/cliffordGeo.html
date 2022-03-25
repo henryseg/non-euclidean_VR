@@ -89,41 +89,54 @@
         shininess: 10
     });
 
-    let circles = [];
     const n = 15;
-    let cx = 1 / Math.sqrt(2);
-    let angle, cz, cw;
-    const identity = new Isometry();
-    const flip = new Isometry();
-    const radius = 0.02;
-    flip.matrix.set(
-        0, 0, 1, 0,
-        0, 0, 0, 1,
-        1, 0, 0, 0,
-        0, 1, 0, 0
-    );
 
-    for (let i = 0; i < n; i++) {
-        angle = 2 * i * Math.PI / n;
-        cz = cx * Math.cos(angle);
-        cw = cx * Math.sin(angle);
-        circles[2 * i] = new Circle(
-            identity,
-            cz, cw,
-            radius,
-            mat1,
+    // Phong shading material
+    const mat2 = new PhongMaterial({
+        color: new Color(0.2, 0.2, 0.8),
+        shininess: 10
+    });
+    const mat3 = new PhongMaterial({
+        color: new Color(0.6, 0.1, 0.1),
+        shininess: 10
+    });
+
+    const geoIsom = new Isometry();
+    let alpha;
+    let ca, sa;
+    let geodesics = [];
+    for(let i = 0; i < n; i++){
+        alpha = 2 * i * Math.PI / n;
+        ca = Math.cos(alpha);
+        sa = Math.sin(alpha);
+
+        geoIsom.matrix.set(
+            0, 1, -sa, ca,
+            1, 0, ca, sa,
+            -sa, -ca, 0, 1,
+            -ca, sa, 1, 0
+        ).multiplyScalar(1 / Math.sqrt(2));
+        geodesics[2 * i] = new Cylinder(
+            geoIsom.clone(),
+            0.02,
+            mat2
         );
-        circles[2 * i + 1] = new Circle(
-            flip,
-            cz, cw,
-            radius,
-            mat1,
+
+        geoIsom.matrix.set(
+            0, 1, sa, ca,
+            1, 0, -ca, sa,
+            -sa, -ca, 0, 1,
+            ca, -sa, 1, 0
+        ).multiplyScalar(1 / Math.sqrt(2));
+        geodesics[2 * i + 1] = new Cylinder(
+            geoIsom.clone(),
+            0.02,
+            mat3
         );
+
     }
 
-
-
-    thurston.add(...circles, ball0, ball1, ball2, light0, light1, light2);
+    thurston.add(...geodesics, ball0, ball1, ball2, light0, light1, light2);
     thurston.run();
 
 </script>
