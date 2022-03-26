@@ -36,12 +36,12 @@ int raymarch(inout ExtVector v, out int objId){
     float dist;
     int hit = HIT_NOTHING;
 
-    
+
     // local scene
     for (int i = 0; i < camera.maxSteps; i++){
         // debugging stuff
         localV.data.iMarch = v.data.iMarch + i;
-        
+
         // start by teleporting eventually the vector
         localV = teleport(localV);
         if (localV.data.isTeleported){
@@ -67,11 +67,13 @@ int raymarch(inout ExtVector v, out int objId){
                 v = localV;
                 break;
             }
-            marchingStep = marchingStep + abs(dist);
-            localV = creepingFlow(localV0, marchingStep, camera.threshold);
+            marchingStep = marchingStep + creepingDist(localV, dist, camera.threshold);
+            localV = flow(localV0, marchingStep);
+            //            marchingStep = marchingStep + abs(dist);
+            //            localV = creepingFlow(localV0, marchingStep, camera.threshold);
         }
     }
-    if(hit == HIT_NOTHING) {
+    if (hit == HIT_NOTHING) {
         v = localV;
     }
     //global scene
@@ -79,7 +81,7 @@ int raymarch(inout ExtVector v, out int objId){
     for (int i=0; i < camera.maxSteps; i++){
         // debugging stuff
         globalV.data.iMarch = v.data.iMarch + i;
-        
+
         if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){
             // we reached the maximal distance
             break;
@@ -101,7 +103,7 @@ int raymarch(inout ExtVector v, out int objId){
         globalV = flow(globalV0, marchingStep);
     }
 
-    if(hit == HIT_NOTHING) {
+    if (hit == HIT_NOTHING) {
         v = globalV;
     }
     return hit;
@@ -147,7 +149,7 @@ bool doesItScatter(inout float dist, float opticalDepth){
 void scatterRay(inout ExtVector v){
     //choose random scattering direction:
     RelVector w=randomVector(v.vector);
-    
+
     //depending on the type of scattering, either
     //replace v with this vector (random scatter);
     v.vector=w;
@@ -203,22 +205,26 @@ int scatterRaymarch(inout ExtVector v, out int objId){
                 v = localV;
                 break;
             }
-            
+
             //check if we need to scatter:
             d=abs(dist);
-            doScatter=doesItScatter(d,v.data.currentOpticalDepth);
-            
+            doScatter=doesItScatter(d, v.data.currentOpticalDepth);
+
             //flow forward by the correct amount
-            marchingStep = marchingStep + d;
-            localV = creepingFlow(localV0, marchingStep, camera.threshold);
-            
+            marchingStep = marchingStep + creepingDist(localV, d, camera.threshold);
+            localV = flow(localV0, marchingStep);
+
+
+            // marchingStep = marchingStep + d;
+            // localV = creepingFlow(localV0, marchingStep, camera.threshold);
+
             //if we are supposed to scatter, do so now:
-            if(doScatter){
+            if (doScatter){
                 scatterRay(localV);
             }
         }
     }
-    if(hit == HIT_NOTHING) {
+    if (hit == HIT_NOTHING) {
         v = localV;
     }
     //global scene
@@ -244,22 +250,22 @@ int scatterRaymarch(inout ExtVector v, out int objId){
             v = globalV;
             break;
         }
-        
+
         //check if we need to scatter:
         d=abs(dist);
-        doScatter=doesItScatter(d,v.data.currentOpticalDepth);
+        doScatter=doesItScatter(d, v.data.currentOpticalDepth);
 
         //flow forward by the correct amount
         marchingStep = marchingStep + d;
         globalV = flow(globalV0, marchingStep);
 
         //if we are supposed to scatter, do so now:
-        if(doScatter){
+        if (doScatter){
             scatterRay(globalV);
         }
     }
 
-    if(hit == HIT_NOTHING) {
+    if (hit == HIT_NOTHING) {
         v = globalV;
     }
     return hit;
