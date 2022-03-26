@@ -156,7 +156,6 @@ Isometry.prototype.makeTranslationZ = function (t) {
     return this;
 }
 
-
 Isometry.prototype.diffExpMap = function (m) {
     const tangentPosition = new Vector().setFromMatrixPosition(m);
     const aux = m.clone().setPosition(0, 0, 0);

@@ -29,6 +29,7 @@ export {NativeCamera} from "./geometries/hyp/cameras/native/NativeCamera.js";
 
 export {default as cubeSet} from "./geometries/hyp/groups/cube/set.js";
 export {default as symCubeSet} from "./geometries/hyp/groups/cube/symbSet.js";
+export {default as SWSet} from "./geometries/hyp/groups/seifert-weber/set.js";
 export * from './geometries/hyp/lights/all.js';
 export * from './geometries/hyp/material/all.js';
 export * from './geometries/hyp/shapes/all.js';
