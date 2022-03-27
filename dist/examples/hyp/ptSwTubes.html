@@ -1,0 +1,159 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hyperbolic space (Seifert-Weber dodecahedral space)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonHyp": "../../build/thurston/thurstonHyp.js"
+            }
+        }
+
+
+
+
+
+
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        Thurston,
+        SWSet as set,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        BasicPTMaterial,
+        LocalBallShape,
+        complement,
+        VaryingColorMaterial,
+        CheckerboardMaterial,
+        SingleColorMaterial,
+        phongWrap,
+        Isometry,
+        Ball, Solid, LocalBall, LocalCylinder,
+        PhongWrapMaterial, PathTracerWrapMaterial,
+        CREEPING_FULL
+    } from "thurstonHyp";
+    import {Color, Quaternion} from "three";
+
+
+    const thurston = new Thurston(set, {keyboard: 'fr'});
+    // thurston.renderer.thurstonParams.postProcess = true;
+    thurston.scene.ptBackground.absorb = new Color(0.5, 0.5, 0.5);
+    set.creepingType = CREEPING_FULL;
+
+    //  yellow light
+    const light0 = new PointLight(
+        new Vector(1, 0, 0),
+        new Color(1, 1, 0),
+    );
+
+    // cyan light
+    const light1 = new PointLight(
+        new Vector(0, 1, -1),
+        new Color(0, 1, 1)
+    );
+
+    // magenta light
+    const light2 = new PointLight(
+        new Vector(-1, -1, 1),
+        new Color(1, 0, 1)
+    );
+
+    const latticeColor = new Color(0.3, 0.2, 0.35);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(0., 0.0, 0.0)
+    )
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
+        color: latticeColor,
+        shininess: 5,
+    });
+
+
+    const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
+        specular: new Color(1, 1, 1),
+        roughness: 0.5,
+        diffuseChance: 0.7,
+        reflectionChance: 0.3,
+        refractionChance: 0
+    });
+
+    const Phi = 0.5 + 0.5 * Math.sqrt(5); // golden ratio
+    const dirs = [
+        new Vector(0., 1, Phi),
+        new Vector(0., 1, -Phi),
+        new Vector(1, Phi, 0),
+        new Vector(1, -Phi, 0),
+        new Vector(Phi, 0, 1),
+        new Vector(-Phi, 0, 1)
+    ]
+    const ez = new Vector(0, 0, 1);
+
+    const cyls = []
+    for (let i = 0; i < dirs.length; i++) {
+        const dir = dirs[i].normalize();
+        const q = new Quaternion().setFromUnitVectors(ez, dir);
+        const isom = new Isometry();
+        isom.matrix.makeRotationFromQuaternion(q);
+        // console.log(isom);
+        cyls[i] = new LocalCylinder(isom, 0.15, latticeMat, ptLatticeMat);
+    }
+
+
+    // const checkerboard = new CheckerboardMaterial(
+    //     new Vector2(Math.PI, 0),
+    //     new Vector2(0, Math.PI),
+    //     new Color(1, 1, 1),
+    //     new Color(0, 0, 1)
+    // )
+    // const mat1 = phongWrap(checkerboard);
+    //
+    // const ball1 = new Ball(
+    //     new Vector(0, 0, 0.5),
+    //     0.2,
+    //     mat1
+    // );
+
+
+    //  light
+    const light = new PointLight(
+        new Vector(-0.1, 0.1, -0.1),
+        new Color(1, 1, 1),
+    );
+
+
+    // Local light (for path tracer only)
+    const lightColor = new Color(300, 300, 300);
+    const lightMat = new SingleColorMaterial(lightColor);
+    const ptLightMat = new BasicPTMaterial({
+        emission: lightColor,
+    });
+    const ptLight = new LocalBall(new Vector(1, 0, 0), 0.08, lightMat, ptLightMat);
+
+    thurston.add(...cyls, light, ptLight, light0, light1, light2);
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>
