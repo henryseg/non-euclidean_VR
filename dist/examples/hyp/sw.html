@@ -36,6 +36,7 @@
         PhongMaterial,
         LocalBallShape,
         complement,
+        VaryingColorMaterial,
         CheckerboardMaterial,
         phongWrap,
         Ball, Solid,
@@ -52,26 +53,28 @@
     //  yellow light
     const light0 = new PointLight(
         new Vector(1, 0, 0),
-        new Color(1, 1, 0),
+        new Color(1, 1, 1),
     );
 
     // cyan light
     const light1 = new PointLight(
         new Vector(0, 1, -1),
-        new Color(0, 1, 1)
+        new Color(1, 1, 1)
     );
 
     // magenta light
     const light2 = new PointLight(
         new Vector(-1, -1, 1),
-        new Color(1, 0, 1)
+        new Color(1, 1, 1)
     );
 
     // Phong shading material
-    const mat0 = new PhongMaterial({
-        color: new Color(1, 0.2, 0.2),
-        shininess: 5,
-    });
+    const baseMat0 = new VaryingColorMaterial(
+        new Color(0.3,0.2,0.35),
+        new Color(0.05,0.02,0.05)
+    )
+
+    const mat0 = phongWrap(baseMat0);
 
     // Complement of a local ball
     const centerBall = new LocalBallShape(

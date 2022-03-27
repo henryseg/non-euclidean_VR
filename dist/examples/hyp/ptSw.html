@@ -1,0 +1,125 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hyperbolic space (Seifert-Weber dodecahedral space)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/favicon.png">
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="../../build/vendor/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../../build/vendor/three.module.js",
+                "stats": "../../build/vendor/stats.module.js",
+                "dat.gui": "../../build/vendor/dat.gui.module.js",
+                "webxr-polyfill": "../../build/vendor/webxr-polyfill.module.js",
+                "thurstonHyp": "../../build/thurston/thurstonHyp.js"
+            }
+        }
+
+
+
+
+    </script>
+</head>
+
+<body>
+</body>
+<script type="module" id="main">
+
+    import {
+        Thurston,
+        SWSet as set,
+        Vector,
+        Point,
+        PointLight,
+        PhongMaterial,
+        BasicPTMaterial,
+        LocalBallShape,
+        complement,
+        VaryingColorMaterial,
+        CheckerboardMaterial,
+        SingleColorMaterial,
+        phongWrap,
+        Ball, Solid, LocalBall,
+        PhongWrapMaterial, PathTracerWrapMaterial,
+    } from "thurstonHyp";
+    import {Color, Vector2} from "three";
+
+
+    const thurston = new Thurston(set, {keyboard: 'fr'});
+    // thurston.renderer.thurstonParams.postProcess = true;
+    thurston.scene.ptBackground.absorb = new Color(0.5,0.5,0.5);
+
+
+
+    const latticeColor = new Color(0.3, 0.2, 0.35);
+    const latticeBaseMat = new VaryingColorMaterial(
+        latticeColor,
+        new Color(0.04, 0.0, 0.0)
+    )
+    const latticeMat = new PhongWrapMaterial(latticeBaseMat, {
+        color: latticeColor,
+        shininess: 5,
+    });
+
+
+    const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
+        specular: new Color(1, 1, 1),
+        roughness: 0.5,
+        diffuseChance: 0.7,
+        reflectionChance: 0.3,
+        refractionChance: 0
+    });
+    // Complement of a local ball
+    const centerBall = new LocalBallShape(
+        new Point(),
+        1.35,
+    );
+
+    const latticeShape = complement(centerBall);
+    const lattice = new Solid(latticeShape, latticeMat, ptLatticeMat);
+
+
+    // const checkerboard = new CheckerboardMaterial(
+    //     new Vector2(Math.PI, 0),
+    //     new Vector2(0, Math.PI),
+    //     new Color(1, 1, 1),
+    //     new Color(0, 0, 1)
+    // )
+    // const mat1 = phongWrap(checkerboard);
+    //
+    // const ball1 = new Ball(
+    //     new Vector(0, 0, 0.5),
+    //     0.2,
+    //     mat1
+    // );
+
+
+    //  light
+    const light = new PointLight(
+        new Vector(-0.2, 0.2, -0.2),
+        new Color(1, 1, 1),
+    );
+
+
+    // Local light (for path tracer only)
+    const lightColor = new Color(300, 300, 300);
+    const lightMat = new SingleColorMaterial(lightColor);
+    const ptLightMat = new BasicPTMaterial({
+        emission: lightColor,
+    });
+    const ptLight = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.08, lightMat, ptLightMat);
+
+    thurston.add(lattice, light, ptLight);
+    thurston.run();
+    thurston.renderer.checkShader();
+
+
+</script>
+
+</html>
