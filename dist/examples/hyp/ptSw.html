@@ -47,17 +47,19 @@
         phongWrap,
         Ball, Solid, LocalBall,
         PhongWrapMaterial, PathTracerWrapMaterial,
+        CREEPING_FULL
     } from "thurstonHyp";
     import {Color, Vector2} from "three";
 
 
     const thurston = new Thurston(set, {keyboard: 'fr'});
+    set.creepingType = CREEPING_FULL;
     // thurston.renderer.thurstonParams.postProcess = true;
     thurston.scene.ptBackground.absorb = new Color(0.5,0.5,0.5);
 
 
 
-    const latticeColor = new Color(0.3, 0.2, 0.35);
+    const latticeColor = new Color(0.4, 0.2, 0.35);
     const latticeBaseMat = new VaryingColorMaterial(
         latticeColor,
         new Color(0.04, 0.0, 0.0)
@@ -70,11 +72,17 @@
 
     const ptLatticeMat = new PathTracerWrapMaterial(latticeBaseMat, {
         specular: new Color(1, 1, 1),
-        roughness: 0.5,
+        roughness: 0.1,
         diffuseChance: 0.7,
         reflectionChance: 0.3,
-        refractionChance: 0
+        refractionChance: 0,
+       // emission:latticeColor
     });
+
+
+
+
+
     // Complement of a local ball
     const centerBall = new LocalBallShape(
         new Point(),
@@ -84,20 +92,6 @@
     const latticeShape = complement(centerBall);
     const lattice = new Solid(latticeShape, latticeMat, ptLatticeMat);
 
-
-    // const checkerboard = new CheckerboardMaterial(
-    //     new Vector2(Math.PI, 0),
-    //     new Vector2(0, Math.PI),
-    //     new Color(1, 1, 1),
-    //     new Color(0, 0, 1)
-    // )
-    // const mat1 = phongWrap(checkerboard);
-    //
-    // const ball1 = new Ball(
-    //     new Vector(0, 0, 0.5),
-    //     0.2,
-    //     mat1
-    // );
 
 
     //  light
@@ -111,9 +105,14 @@
     const lightColor = new Color(300, 300, 300);
     const lightMat = new SingleColorMaterial(lightColor);
     const ptLightMat = new BasicPTMaterial({
+        specular: new Color(1, 1, 1),
+        roughness: 0.1,
+        diffuseChance: 0.9,
+        reflectionChance: 0.1,
+        refractionChance: 0,
         emission: lightColor,
     });
-    const ptLight = new LocalBall(new Vector(-0.2, 0.2, -0.2), 0.08, lightMat, ptLightMat);
+    const ptLight = new LocalBall(new Vector(-0.5, 0.5, -0.5), 0.08, lightMat, ptLightMat);
 
     thurston.add(lattice, light, ptLight);
     thurston.run();
