@@ -63,6 +63,7 @@
     "exports-loader": "^3.0.0",
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
+    "filemanager-webpack-plugin": "^6.1.7",
     "foodoc": "^0.0.9",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",

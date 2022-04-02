@@ -13,7 +13,7 @@ module.exports = merge(common, {
         outputModule: true,
     },
     output: {
-        path: path.resolve(__dirname, '../dist/build/thurston'),
+        path: path.resolve(__dirname, '../dist/thurston'),
         filename: '[name].js',
         library: {
             type: 'module',
