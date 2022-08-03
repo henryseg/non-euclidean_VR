@@ -25,6 +25,7 @@ export const ThurstonLite = specifyThurston(ThurstonLiteGeneric, shader1, shader
 export const ThurstonVR = specifyThurston(ThurstonVRGeneric, shader1, shader2);
 
 export * from "./core.js";
+export {DollyCamera} from "./geometries/euc/cameras/dolly/DollyCamera.js";
 
 export {default as freeAbelianSet} from "./geometries/euc/groups/freeAbelian/set.js";
 export * from './geometries/euc/lights/all.js';

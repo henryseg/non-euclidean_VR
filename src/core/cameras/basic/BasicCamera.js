@@ -10,7 +10,7 @@ import mapping from "./shaders/mapping.glsl";
  * @classdesc
  * Camera in the non-euclidean scene.
  * It should not be confused with the Three.js camera in the virtual euclidean scene.
- * The minimal GLSL struct should contains
+ * The minimal GLSL struct should contain
  * - fov
  * - minDist
  * - maxDist
@@ -18,7 +18,7 @@ import mapping from "./shaders/mapping.glsl";
  * - threshold
  * - position
  * - matrix
- * The GLSL code needs to contains (after the declaration) a function `mapping`.
+ * The GLSL code needs to contain (after the declaration) a function `mapping`.
  * The role of this function is to map a point on the horizon sphere
  * to the initial direction to follow during the ray-marching.
  */
@@ -27,7 +27,7 @@ export class BasicCamera {
     /**
      * Constructor.
      * @param {Object} parameters - the parameters of the camera.
-     * This parameters are
+     * These parameters are
      * - {number} fov - the field of view
      * - {number} minDist - the minimal distance we ray-march
      * - {number} maxDist - the maximal distance we ray-march

@@ -69,7 +69,7 @@ export class PathTracerRenderer extends AbstractRenderer {
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the underlying teleportation set
-     * @param {BasicCamera} camera - the camera
+     * @param {DollyCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
