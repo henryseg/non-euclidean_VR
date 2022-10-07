@@ -10,6 +10,9 @@ const FileManagerPlugin = require("filemanager-webpack-plugin");
 const common = require('./webpack.prod.gen.js');
 
 module.exports = merge(common, {
+    optimization: {
+        minimize: false
+    },
     entry: {
         thurstonEuc: './src/thurstonEuc.js',
         thurstonHyp: './src/thurstonHyp.js',

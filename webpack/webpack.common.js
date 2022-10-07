@@ -2,7 +2,9 @@ const path = require('path');
 // TODO: remove comments from glsl.mustache files
 
 module.exports = {
+
     module: {
+
         rules: [
             {
                 test: /\.(jpg|png)$/,
