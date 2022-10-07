@@ -46,6 +46,10 @@ module.exports = merge(common, {
                     to: path.resolve(__dirname, '../dist/vendor')
                 },
                 {
+                    from: 'node_modules/dat.gui/build/dat.gui.module.js.map',
+                    to: path.resolve(__dirname, '../dist/vendor')
+                },
+                {
                     from: 'node_modules/webxr-polyfill/build/webxr-polyfill.module.js',
                     to: path.resolve(__dirname, '../dist/vendor')
                 },

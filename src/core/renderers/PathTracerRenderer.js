@@ -2,7 +2,7 @@ import {
     FloatType,
     Mesh, NearestFilter, RGBAFormat,
     ShaderMaterial,
-    SphereBufferGeometry, Uniform, Vector2,
+    SphereGeometry, Uniform, Vector2,
     WebGLRenderTarget
 } from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
@@ -168,7 +168,7 @@ export class PathTracerRenderer extends AbstractRenderer {
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
+        const geometry = new SphereGeometry(1000, 60, 40);
         // flip the sphere inside out
         geometry.scale(1, 1, -1);
 

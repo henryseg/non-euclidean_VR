@@ -4,16 +4,6 @@ import {
     WebGLRenderer
 } from "three";
 
-/**
- * Hack : add a property to check if an element inherits from the class 'WebGLRenderer'
- * We cannot use the constructor name, as this one will change if the code is minified.
- */
-Object.defineProperty(WebGLRenderer.prototype, 'isWebGLRenderer', {
-    get: function () {
-        return true;
-    }
-})
-
 
 /**
  * @class
@@ -72,6 +62,7 @@ export class AbstractRenderer {
          * @type {WebGLRenderer}
          */
         this.threeRenderer = threeRenderer.isWebGLRenderer ? threeRenderer : new WebGLRenderer(threeRenderer);
+        // this.threeRenderer = new WebGLRenderer(threeRenderer);
         /**
          * Number of time the light rays bounce
          * @type {number}

@@ -1,4 +1,4 @@
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
+import {Mesh, ShaderMaterial, SphereGeometry} from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
@@ -106,7 +106,7 @@ export class BasicRenderer extends AbstractRenderer {
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
+        const geometry = new SphereGeometry(1000, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
 
