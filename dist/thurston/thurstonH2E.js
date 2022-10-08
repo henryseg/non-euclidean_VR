@@ -12294,7 +12294,7 @@ class ThurstonVR {
          * The non-euclidean renderer
          * @type {VRRenderer}
          */
-        this.renderer = new VRRenderer(shader1, shader2, this.set, this.camera, this.scene);
+        this.renderer = new VRRenderer(shader1, shader2, this.set, this.camera, this.scene, {}, {antialias: true});
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new external_three_namespaceObject.Color(0, 0, 0.2), 1);
