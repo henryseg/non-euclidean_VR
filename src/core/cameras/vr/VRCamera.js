@@ -34,11 +34,11 @@ export class VRCamera extends BasicCamera {
      */
     constructor(parameters) {
         super(parameters);
-        // /**
-        //  * True if stereo is on
-        //  * @type {boolean}
-        //  */
-        // this.isStereoOn = false;
+        /**
+         * True if stereo is on
+         * @type {boolean}
+         */
+        this.isStereoOn = false;
         /**
          * **Half** the interpupillary distance
          * @return {number}
@@ -62,20 +62,20 @@ export class VRCamera extends BasicCamera {
         }
     }
 
-    // /**
-    //  * True if stereo is off
-    //  * @type {boolean}
-    //  */
-    // get isStereoOff() {
-    //     return !this.isStereoOn
-    // }
-    //
-    // /**
-    //  * Turn the stereo mode on or off
-    //  */
-    // switchStereo() {
-    //     this.isStereoOn = !this.isStereoOn;
-    // }
+    /**
+     * True if stereo is off
+     * @type {boolean}
+     */
+    get isStereoOff() {
+        return !this.isStereoOn
+    }
+
+    /**
+     * Turn the stereo mode on or off
+     */
+    switchStereo() {
+        this.isStereoOn = !this.isStereoOn;
+    }
 
     /**
      * Update the fake camera position.
@@ -86,13 +86,14 @@ export class VRCamera extends BasicCamera {
         this.fakeCameras[RIGHT].position.copy(this.position);
 
         if (this.isStereoOn) {
-            // if we are in VR mode, the position corresponds to the left eye
-            // we offset the right eye, by flowing in the right direction
+            // if we are in VR mode, the position corresponds to the right eye
+            // we offset the left eye, by flowing in the left direction
             // we have to be careful that left and right are meant in the point of view of the camera.
             const dir = new Vector(1, 0, 0)
                 .multiplyScalar(2 * this.ipDist)
-                .applyMatrix4(this.matrix);
-            this.fakeCameras[RIGHT].position.flow(dir);
+                .applyMatrix4(this.matrix)
+                .negate();
+            this.fakeCameras[LEFT].position.flow(dir);
 
 
             // // if we are in VR mode we offset the position of the left and right eyes

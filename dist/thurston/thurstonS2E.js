@@ -5350,14 +5350,14 @@ class VRCamera extends BasicCamera {
         this.fakeCameras[RIGHT].position.copy(this.position);
 
         if (this.isStereoOn) {
-            // if we are in VR mode we offset the position of the left and right eyes
-            // to that end, we flow the position along the left / right direction
+            // if we are in VR mode, the position corresponds to the right eye
+            // we offset the left eye, by flowing in the left direction
             // we have to be careful that left and right are meant in the point of view of the camera.
             const dir = new Vector(1, 0, 0)
                 .multiplyScalar(2 * this.ipDist)
-                .applyMatrix4(this.matrix);
-            // this.fakeCameras[RIGHT].position.flow(dir);
-            // this.fakeCameras[LEFT].position.flow(leftDir);
+                .applyMatrix4(this.matrix)
+                .negate();
+            this.fakeCameras[LEFT].position.flow(dir);
 
 
             // // if we are in VR mode we offset the position of the left and right eyes
