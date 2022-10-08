@@ -22,7 +22,7 @@ export class AbstractRenderer {
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the underlying teleportation set
-     * @param {DollyCamera} camera - the camera
+     * @param {BasicCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the render. For the moment includes
      * @param {WebGLRenderer|Object} threeRenderer - either a Three.js renderer or the parameters to build it
