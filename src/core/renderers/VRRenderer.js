@@ -110,7 +110,7 @@ export class VRRenderer extends AbstractRenderer {
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereGeometry(1000, 60, 40);
+        const geometry = new SphereGeometry(50, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
 
