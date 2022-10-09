@@ -18,7 +18,10 @@ void main()
 {
     spherePosition = position;
     // keep only the rotation part from the matrix view
-    mat4 aux = modelViewMatrix;
-    aux[3] = vec4(0, 0, 0, 1);
-    gl_Position = projectionMatrix * aux * vec4(position, 1.0);
+    mat4 rot = modelViewMatrix;
+    rot[3] = vec4(0, 0, 0, 1);
+
+    vec4 aux = rot * vec4(position, 1.0);
+    spherePosition = aux.xyz;
+    gl_Position = projectionMatrix * rot * aux;
 }

@@ -1,4 +1,4 @@
-/* ES Module Shims 1.6.1 */
+/* ES Module Shims 1.6.0 */
 (function () {
 
   const hasWindow = typeof window !== 'undefined';
@@ -58,7 +58,7 @@
   }
   else if (typeof skip === 'string') {
     const r = new RegExp(skip);
-    skip = s => r.test(s);
+    skip = s => s.test(r);
   }
 
   const eoop = err => setTimeout(() => { throw err });
@@ -786,7 +786,7 @@
         if (b && (!supportsImportMaps || importMapSrcOrLazy))
           load.n = true;
         if (d !== -1) return;      
-        if (skip && skip(r)) return { b: r };
+        if (skip && skip.test(r)) return { b: r };
         if (childFetchOpts.integrity)
           childFetchOpts = Object.assign({}, childFetchOpts, { integrity: undefined });
         return getOrCreateLoad(r, childFetchOpts, load.r).f;
