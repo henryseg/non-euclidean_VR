@@ -1282,7 +1282,7 @@ module.exports = "struct UnionShape {\n    float minCoeff;\n};\n"
 /***/ 1685:
 /***/ ((module) => {
 
-module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = vec4(coords, 0);\n                                \n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
+module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = vec4(coords, 0);\n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
 
 /***/ }),
 
@@ -1296,7 +1296,7 @@ module.exports = "                                                              
 /***/ 4651:
 /***/ ((module) => {
 
-module.exports = "   \n                                                                                                 \n                                                                                        \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = vec4(coords, 0);\n                                \n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}\n\n   \n                                                                                             \n                                                               \n   \nRelVector mappingFromFlatScreen(vec2 coords) {\n                                                         \n    vec2 jitter = vec2(randomFloat(), randomFloat()) - 0.5;\n\n                                                                            \n    vec2 planeCoords = (coords - 0.5 * resolution + jitter) / (0.5 * resolution.y);\n\n                              \n    float z = - 1. / tan(radians(0.5 * camera.fov));\n\n                                                      \n    vec4 dir = vec4(planeCoords, z, 0);\n\n    dir = camera.matrix * dir;\n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
+module.exports = "   \n                                                                                                 \n                                                                                        \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = vec4(coords, 0);\n                                \n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}\n\n   \n                                                                                             \n                                                               \n   \nRelVector mappingFromFlatScreen(vec2 coords) {\n                                                         \n    vec2 jitter = vec2(randomFloat(), randomFloat()) - 0.5;\n\n                                                                            \n    vec2 planeCoords = (coords - 0.5 * resolution + jitter) / (0.5 * resolution.y);\n\n                              \n    float z = - 1. / tan(radians(0.5 * camera.fov));\n\n                                                      \n    vec4 dir = vec4(planeCoords, z, 0);\n\n                                \n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
 
 /***/ }),
 
@@ -1310,7 +1310,7 @@ module.exports = "                                                              
 /***/ 5074:
 /***/ ((module) => {
 
-module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = normalize(vec4(coords, 0));\n                                \n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    return applyPosition(camera.position, v);\n}"
+module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = normalize(vec4(coords, 0));\n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    return applyPosition(camera.position, v);\n}"
 
 /***/ }),
 
@@ -1345,7 +1345,7 @@ module.exports = "                                                              
 /***/ 5315:
 /***/ ((module) => {
 
-module.exports = "   \n                          \n   \nvarying vec3 spherePosition;\n\n   \n                                           \n                       \n                                                           \n                                 \n                                                         \n   \nvoid main() {\n    RelVector vector = mapping(spherePosition);\n                                                       \n    ExtVector v = ExtVector(vector, initVectorData());\n    vec3 color = getColor(v);\n    gl_FragColor = vec4(color, 1);\n}"
+module.exports = "   \n                          \n   \nvarying vec3 spherePosition;\n\n   \n                                           \n                       \n                                                           \n                                 \n                                                         \n   \nvoid main() {\n    RelVector vector = mapping(spherePosition);\n    ExtVector v = ExtVector(vector, initVectorData());\n    vec3 color = getColor(v);\n    gl_FragColor = vec4(color, 1);\n}"
 
 /***/ }),
 
@@ -4481,7 +4481,7 @@ class VRRenderer extends AbstractRenderer {
     }
 
     render() {
-        this.camera.chaseThreeCamera(this.threeRenderer.xr);
+        this.camera.chaseThreeCamera();
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }
@@ -5395,31 +5395,13 @@ class VRCamera extends BasicCamera {
             const oldThreePosition = new Vector();
 
             /**
-             * @param {WebXRManager} webXRManager - the WebXRManager used by Three.js
              * @private
              */
-            this._chaseThreeCamera = function (webXRManager) {
-                const newThreePosition = new Vector()
-                // if (this.isStereoOn) {
-                //     // If XR is enable, we get the position of the left and right camera.
-                //     // Note that when XR is on, then main Three.js Camera is shifted to coincide with the right eye.
-                //     // So its position is NOT the midpoint between the eyes of the observer.
-                //     // Thus we take here the midpoint between the two VR cameras.
-                //     // Those can only be accessed using the WebXRManager.
-                //
-                //     // console.log("webxr", webXRManager);
-                //     const camerasVR = webXRManager.getCamera(this.threeCamera).cameras;
-                //     console.log("camera",  webXRManager.getCamera(this.threeCamera));
-                //     // console.log("left", camerasVR[LEFT]);
-                //     // console.log("left matrix", camerasVR[LEFT].matrixWorld);
-                //     const newThreePositionL = new Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
-                //     const newThreePositionR = new Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
-                //     newThreePosition.lerpVectors(newThreePositionL, newThreePositionR, 0.5);
-                // } else {
-                //     newThreePosition.setFromMatrixPosition(this.matrix);
-                // }
-                newThreePosition.setFromMatrixPosition(this.matrix);
-
+            this._chaseThreeCamera = function () {
+                // if we are in VR mode, the position corresponds to the right eye
+                // this should not  be an issue though.
+                // indeed we only care of the relative displacement.
+                const newThreePosition = new Vector().setFromMatrixPosition(this.matrix);
                 const deltaPosition = new Vector().subVectors(newThreePosition, oldThreePosition);
                 this.position.flow(deltaPosition);
                 this.updateFakeCamerasPosition();

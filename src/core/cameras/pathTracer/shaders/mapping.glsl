@@ -29,7 +29,7 @@ RelVector mappingFromFlatScreen(vec2 coords) {
     // -1 to +1 on x,y axis. 1 unit away on the z axis
     vec4 dir = vec4(planeCoords, z, 0);
 
-    dir = camera.matrix * dir;
+//    dir = camera.matrix * dir;
     dir = normalize(dir);
     Vector v = createVector(ORIGIN, dir.xyz);
     RelVector res = applyPosition(camera.position, v);

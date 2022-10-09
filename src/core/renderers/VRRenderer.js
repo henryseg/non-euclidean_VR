@@ -137,7 +137,7 @@ export class VRRenderer extends AbstractRenderer {
     }
 
     render() {
-        this.camera.chaseThreeCamera(this.threeRenderer.xr);
+        this.camera.chaseThreeCamera();
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }
