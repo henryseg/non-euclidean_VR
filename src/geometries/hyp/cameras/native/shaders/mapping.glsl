@@ -16,7 +16,7 @@ RelVector mapping(vec3 coords){
     dir.w = 1.;
     dir = m * dir;
     dir.w = 0.;
-    dir = camera.matrix * dir;
+//    dir = camera.matrix * dir;
     dir = normalize(dir);
     Vector v = createVector(ORIGIN, dir.xyz);
     return applyPosition(camera.position, v);
