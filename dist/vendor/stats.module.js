@@ -1,1 +1,167 @@
-var Stats=function(){var e=0,t=document.createElement("div");function l(e){return t.appendChild(e.dom),e}function n(l){for(var n=0;n<t.children.length;n++)t.children[n].style.display=n===l?"block":"none";e=l}t.style.cssText="position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000",t.addEventListener("click",(function(l){l.preventDefault(),n(++e%t.children.length)}),!1);var a=(performance||Date).now(),i=a,o=0,r=l(new Stats.Panel("FPS","#0ff","#002")),f=l(new Stats.Panel("MS","#0f0","#020"));if(self.performance&&self.performance.memory)var c=l(new Stats.Panel("MB","#f08","#201"));return n(0),{REVISION:16,dom:t,addPanel:l,showPanel:n,begin:function(){a=(performance||Date).now()},end:function(){o++;var e=(performance||Date).now();if(f.update(e-a,200),e>=i+1e3&&(r.update(1e3*o/(e-i),100),i=e,o=0,c)){var t=performance.memory;c.update(t.usedJSHeapSize/1048576,t.jsHeapSizeLimit/1048576)}return e},update:function(){a=this.end()},domElement:t,setMode:n}};Stats.Panel=function(e,t,l){var n=1/0,a=0,i=Math.round,o=i(window.devicePixelRatio||1),r=80*o,f=48*o,c=3*o,d=2*o,p=3*o,s=15*o,u=74*o,m=30*o,h=document.createElement("canvas");h.width=r,h.height=f,h.style.cssText="width:80px;height:48px";var S=h.getContext("2d");return S.font="bold "+9*o+"px Helvetica,Arial,sans-serif",S.textBaseline="top",S.fillStyle=l,S.fillRect(0,0,r,f),S.fillStyle=t,S.fillText(e,c,d),S.fillRect(p,s,u,m),S.fillStyle=l,S.globalAlpha=.9,S.fillRect(p,s,u,m),{dom:h,update:function(f,v){n=Math.min(n,f),a=Math.max(a,f),S.fillStyle=l,S.globalAlpha=1,S.fillRect(0,0,r,s),S.fillStyle=t,S.fillText(i(f)+" "+e+" ("+i(n)+"-"+i(a)+")",c,d),S.drawImage(h,p+o,s,u-o,m,p,s,u-o,m),S.fillRect(p+u-o,s,o,m),S.fillStyle=l,S.globalAlpha=.9,S.fillRect(p+u-o,s,o,i((1-f/v)*m))}}};export default Stats;
+var Stats = function () {
+
+	var mode = 0;
+
+	var container = document.createElement( 'div' );
+	container.style.cssText = 'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+	container.addEventListener( 'click', function ( event ) {
+
+		event.preventDefault();
+		showPanel( ++ mode % container.children.length );
+
+	}, false );
+
+	//
+
+	function addPanel( panel ) {
+
+		container.appendChild( panel.dom );
+		return panel;
+
+	}
+
+	function showPanel( id ) {
+
+		for ( var i = 0; i < container.children.length; i ++ ) {
+
+			container.children[ i ].style.display = i === id ? 'block' : 'none';
+
+		}
+
+		mode = id;
+
+	}
+
+	//
+
+	var beginTime = ( performance || Date ).now(), prevTime = beginTime, frames = 0;
+
+	var fpsPanel = addPanel( new Stats.Panel( 'FPS', '#0ff', '#002' ) );
+	var msPanel = addPanel( new Stats.Panel( 'MS', '#0f0', '#020' ) );
+
+	if ( self.performance && self.performance.memory ) {
+
+		var memPanel = addPanel( new Stats.Panel( 'MB', '#f08', '#201' ) );
+
+	}
+
+	showPanel( 0 );
+
+	return {
+
+		REVISION: 16,
+
+		dom: container,
+
+		addPanel: addPanel,
+		showPanel: showPanel,
+
+		begin: function () {
+
+			beginTime = ( performance || Date ).now();
+
+		},
+
+		end: function () {
+
+			frames ++;
+
+			var time = ( performance || Date ).now();
+
+			msPanel.update( time - beginTime, 200 );
+
+			if ( time >= prevTime + 1000 ) {
+
+				fpsPanel.update( ( frames * 1000 ) / ( time - prevTime ), 100 );
+
+				prevTime = time;
+				frames = 0;
+
+				if ( memPanel ) {
+
+					var memory = performance.memory;
+					memPanel.update( memory.usedJSHeapSize / 1048576, memory.jsHeapSizeLimit / 1048576 );
+
+				}
+
+			}
+
+			return time;
+
+		},
+
+		update: function () {
+
+			beginTime = this.end();
+
+		},
+
+		// Backwards Compatibility
+
+		domElement: container,
+		setMode: showPanel
+
+	};
+
+};
+
+Stats.Panel = function ( name, fg, bg ) {
+
+	var min = Infinity, max = 0, round = Math.round;
+	var PR = round( window.devicePixelRatio || 1 );
+
+	var WIDTH = 80 * PR, HEIGHT = 48 * PR,
+		TEXT_X = 3 * PR, TEXT_Y = 2 * PR,
+		GRAPH_X = 3 * PR, GRAPH_Y = 15 * PR,
+		GRAPH_WIDTH = 74 * PR, GRAPH_HEIGHT = 30 * PR;
+
+	var canvas = document.createElement( 'canvas' );
+	canvas.width = WIDTH;
+	canvas.height = HEIGHT;
+	canvas.style.cssText = 'width:80px;height:48px';
+
+	var context = canvas.getContext( '2d' );
+	context.font = 'bold ' + ( 9 * PR ) + 'px Helvetica,Arial,sans-serif';
+	context.textBaseline = 'top';
+
+	context.fillStyle = bg;
+	context.fillRect( 0, 0, WIDTH, HEIGHT );
+
+	context.fillStyle = fg;
+	context.fillText( name, TEXT_X, TEXT_Y );
+	context.fillRect( GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT );
+
+	context.fillStyle = bg;
+	context.globalAlpha = 0.9;
+	context.fillRect( GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT );
+
+	return {
+
+		dom: canvas,
+
+		update: function ( value, maxValue ) {
+
+			min = Math.min( min, value );
+			max = Math.max( max, value );
+
+			context.fillStyle = bg;
+			context.globalAlpha = 1;
+			context.fillRect( 0, 0, WIDTH, GRAPH_Y );
+			context.fillStyle = fg;
+			context.fillText( round( value ) + ' ' + name + ' (' + round( min ) + '-' + round( max ) + ')', TEXT_X, TEXT_Y );
+
+			context.drawImage( canvas, GRAPH_X + PR, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT, GRAPH_X, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT );
+
+			context.fillRect( GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, GRAPH_HEIGHT );
+
+			context.fillStyle = bg;
+			context.globalAlpha = 0.9;
+			context.fillRect( GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round( ( 1 - ( value / maxValue ) ) * GRAPH_HEIGHT ) );
+
+		}
+
+	};
+
+};
+
+export default Stats;
