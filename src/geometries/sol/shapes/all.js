@@ -9,3 +9,4 @@ export {XYHalfSpaceShape} from "./xyHalfSpace/XYHalfSpaceShape.js";
 export {LocalZHalfSpaceShape} from "./localZHalfSpace/LocalZHalfSpaceShape.js";
 export {LocalXYHalfSpaceShape} from "./localXYHalfSpace/LocalXYHalfSpaceShape.js";
 export {LocalCubeShape} from "./localCube/LocalCubeShape.js";
+export {LocalRodShape} from "./localRod/LocalRodShape.js";

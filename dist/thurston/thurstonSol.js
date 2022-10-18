@@ -1497,6 +1497,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 5253:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct LocalRod {\n    int id;\n    vec4 testX;\n    vec4 testY;\n    vec4 testZ;\n    float smoothness;\n    vec2 sides;\n};\n\n   \n                                           \n   \nfloat sdf(LocalRod rod, RelVector v) {\n    float dotX = dot(v.local.pos.coords, rod.testX);\n    float dotY = dot(v.local.pos.coords, rod.testY);\n    float dotZ = dot(v.local.pos.coords, rod.testZ);\n\n    float distX = asinh((abs(dotX) - 0.5 * rod.sides.x) * exp(-dotZ));\n    float distY = asinh((abs(dotY) - 0.5 * rod.sides.y) * exp(dotZ));\n    return smoothMaxPoly(distX, distY, rod.smoothness);\n}\n\n   \n                                        \n   \nRelVector gradient(LocalRod rod, RelVector v){\n    float dotX = dot(v.local.pos.coords, rod.testX);\n    float dotY = dot(v.local.pos.coords, rod.testY);\n    float dotZ = dot(v.local.pos.coords, rod.testZ);\n\n    float auxX = abs(dotX) - 0.5 * rod.sides.x;\n    float auxY = abs(dotY) - 0.5 * rod.sides.y;\n    float auxZX = exp(-dotZ);\n    float auxZY = exp(dotZ);\n    float distX = asinh(auxX * auxZX);\n    float distY = asinh(auxY * auxZY);\n\n    float den;\n    vec4 dir;\n\n    den = sqrt(auxX * auxX + auxZX * auxZX + 1.);\n    dir = (auxZX / den) * (-auxX * rod.testZ + sign(auxX) * rod.testX);\n    dir.w = 0.;\n    RelVector gradX = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    den = sqrt(auxY * auxY + auxZY * auxZY + 1.);\n    dir = (auxZY / den) * (auxY * rod.testZ + sign(auxY) * rod.testY);\n    dir.w = 0.;\n    RelVector gradY = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    return gradientMaxPoly(distX, distY, gradX, gradY, rod.smoothness);\n}"
+
+/***/ }),
+
 /***/ 1273:
 /***/ ((module) => {
 
@@ -1637,6 +1644,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Zs": () => (/* reexport */ LocalCubeShape),
   "oR": () => (/* reexport */ LocalFakeBall),
   "lt": () => (/* reexport */ LocalFakeBallShape),
+  "M6": () => (/* reexport */ LocalRod),
+  "G4": () => (/* reexport */ LocalRodShape),
   "mU": () => (/* reexport */ LocalXYHalfSpace),
   "Vh": () => (/* reexport */ LocalXYHalfSpaceShape),
   "Qc": () => (/* reexport */ LocalZHalfSpace),
@@ -17796,7 +17805,127 @@ class LocalCubeShape extends BasicShape {
         return shapes_shaders_gradient_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/geometries/sol/shapes/localRod/shaders/struct.glsl
+var localRod_shaders_struct = __webpack_require__(5253);
+var localRod_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localRod_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localRod/LocalRodShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Local cube in Sol.
+ */
+class LocalRodShape extends BasicShape {
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the rod (only the xy coordinates matter)
+     * @param {Vector2|number} sides - the length of the xy-sides
+     * @param {number} smoothness - the coefficient to smooth the side of the cube (exponential method)
+     */
+    constructor(location, sides, smoothness = 0.01) {
+        const isom = new Isometry_Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        if (sides.isVector2) {
+            this.sides = sides.clone();
+        } else {
+            this.sides = new external_three_namespaceObject.Vector2(sides, sides);
+        }
+        this.addImport((smoothMaxPoly_default()));
+        this.smoothness = smoothness;
+        this._origin = undefined;
+        this._testX = undefined;
+        this._testY = undefined;
+        this._testZ = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._origin = new Point_Point().applyIsometry(this.absoluteIsom);
+        const aux = new external_three_namespaceObject.Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
+        this._testX = new external_three_namespaceObject.Vector4(1, 0, 0, 0).applyMatrix4(aux);
+        this._testY = new external_three_namespaceObject.Vector4(0, 1, 0, 0).applyMatrix4(aux);
+        this._testZ = new external_three_namespaceObject.Vector4(0, 0, 1, 0).applyMatrix4(aux);
+    }
+
+    /**
+     * A vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testX() {
+        if (this._testX === undefined) {
+            this.updateData();
+        }
+        return this._testX;
+    }
+
+    /**
+     * A vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testY() {
+        if (this._testY === undefined) {
+            this.updateData();
+        }
+        return this._testY;
+    }
+
+    /**
+     * A vector to compute the SDF
+     * @type {Vector4}
+     */
+    get testZ() {
+        if (this._testZ === undefined) {
+            this.updateData();
+        }
+        return this._testZ;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalRod() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalRod';
+    }
+
+    static glslClass() {
+        return (localRod_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslGradient() {
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/sol/shapes/all.js
+
 
 
 
@@ -18116,7 +18245,32 @@ class LocalCube extends Solid {
         super(shape, material, ptMaterial);
     }
 }
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalRod.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Local Rod in Sol
+ */
+class LocalRod extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the rod
+     * @param {Vector2|number} sides - the half width of the rod
+     * @param {number} smoothness - smoothness parameter
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, sides, smoothness, material, ptMaterial = undefined) {
+        const shape = new LocalRodShape(location, sides, smoothness);
+        super(shape, material, ptMaterial);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/sol/solids/all.js
+
 
 
 
@@ -18196,6 +18350,8 @@ var __webpack_exports__LocalCube = __webpack_exports__.EB;
 var __webpack_exports__LocalCubeShape = __webpack_exports__.Zs;
 var __webpack_exports__LocalFakeBall = __webpack_exports__.oR;
 var __webpack_exports__LocalFakeBallShape = __webpack_exports__.lt;
+var __webpack_exports__LocalRod = __webpack_exports__.M6;
+var __webpack_exports__LocalRodShape = __webpack_exports__.G4;
 var __webpack_exports__LocalXYHalfSpace = __webpack_exports__.mU;
 var __webpack_exports__LocalXYHalfSpaceShape = __webpack_exports__.Vh;
 var __webpack_exports__LocalZHalfSpace = __webpack_exports__.Qc;
@@ -18257,4 +18413,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalCubeShape as LocalCubeShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalXYHalfSpace as LocalXYHalfSpace, __webpack_exports__LocalXYHalfSpaceShape as LocalXYHalfSpaceShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__XYHalfSpace as XYHalfSpace, __webpack_exports__XYHalfSpaceShape as XYHalfSpaceShape, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__horizontalSet as horizontalSet, __webpack_exports__intersection as intersection, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalCubeShape as LocalCubeShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalRod as LocalRod, __webpack_exports__LocalRodShape as LocalRodShape, __webpack_exports__LocalXYHalfSpace as LocalXYHalfSpace, __webpack_exports__LocalXYHalfSpaceShape as LocalXYHalfSpaceShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__XYHalfSpace as XYHalfSpace, __webpack_exports__XYHalfSpaceShape as XYHalfSpaceShape, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__horizontalSet as horizontalSet, __webpack_exports__intersection as intersection, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
