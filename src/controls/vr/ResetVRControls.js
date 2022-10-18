@@ -24,15 +24,18 @@ export class ResetVRControls {
      *  - if False, the facing of the position is reset to its default value (quaternion = 1).
      *  - if True, the facing is set up to that the camera is directed toward the negative z axis.
      *    in this case the camera should be passed to the constructor as an argument
+     * @param {boolean} snap - if alignFacing and snap are true,
+     * align the orientation to the "closest" relation around the y-axis
      * @param {VRCamera} camera - the camera (giving the position of the observer)
      *
      */
-    constructor(position, controller, alignFacing = false, camera = undefined) {
+    constructor(position, controller, alignFacing = false, snap = false, camera = undefined) {
         this.position = position;
         this.controller = controller;
 
         this._reset = RESET_WAIT;
         this._alignFacing = alignFacing;
+        this._snap = snap;
         this._camera = camera;
         if (this._alignFacing && camera === undefined) {
             throw new Error("VRControlsReset.constructor, the camera is needed when the alignFacing option is on");
@@ -67,6 +70,11 @@ export class ResetVRControls {
             if (this._alignFacing) {
                 const matrix = this._camera.threeCamera.matrixWorld;
                 this.position.local.quaternion.setFromRotationMatrix(matrix);
+                if (this._snap){
+                    this.position.local.quaternion.x = 0;
+                    this.position.local.quaternion.z = 0;
+                    this.position.local.quaternion.normalize();
+                }
                 this.position.local.quaternion.invert();
             }
             this._reset = RESET_WAIT;
