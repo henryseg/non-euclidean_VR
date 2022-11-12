@@ -8,13 +8,14 @@ import smoothMaxPoly from "../../../../commons/imports/smoothMaxPoly.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 /**
  * @class
  *
  * @classdesc
- * Local cube in Sol.
+ * Local rod in Sol.
  */
 export class LocalRodShape extends BasicShape {
 
@@ -101,6 +102,10 @@ export class LocalRodShape extends BasicShape {
         return 'LocalRod';
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     static glslClass() {
         return struct;
     }
@@ -111,5 +116,9 @@ export class LocalRodShape extends BasicShape {
 
     glslGradient() {
         return gradient(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }

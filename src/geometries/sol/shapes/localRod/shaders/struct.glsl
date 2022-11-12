@@ -55,3 +55,17 @@ RelVector gradient(LocalRod rod, RelVector v){
 
     return gradientMaxPoly(distX, distY, gradX, gradY, rod.smoothness);
 }
+
+/*
+ * UV map for the rod.
+ * Just using euclidean cylinder coordinates.
+ */
+vec2 uvMap(LocalRod rod, RelVector v){
+    float dotX = dot(v.local.pos.coords, rod.testX);
+    float dotY = dot(v.local.pos.coords, rod.testY);
+    float dotZ = dot(v.local.pos.coords, rod.testZ);
+
+    float uCoords = atan(dotY, dotX);
+    float vCoords = dotZ;
+    return vec2(uCoords, vCoords);
+}
