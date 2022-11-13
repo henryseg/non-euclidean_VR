@@ -6,12 +6,10 @@
  ***********************************************************************************************************************
  **********************************************************************************************************************/
 
-const float PHI = 0.5 * (1. + sqrt(5.));
-const float DENUM = 1. / (PHI + 2.);
 
 /***********************************************************************************************************************
  * @struct
- * Integral Heisenberg group
+ * Z^2 subgroup (translation in the xy-plane of Sol)
  **********************************************************************************************************************/
 
 struct GroupElement {
@@ -28,6 +26,6 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2){
 Isometry toIsometry(GroupElement elt) {
     float a = elt.coords.x;
     float b = elt.coords.y;
-    vec4 coords = vec4((a * PHI + b) * DENUM, (-a + b * PHI) * DENUM, 0, 1);
+    vec4 coords = a * group.dirA + b * group.dirB;
     return makeTranslation(Point(coords));
 }

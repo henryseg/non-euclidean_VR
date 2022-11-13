@@ -1,75 +1,70 @@
 import {Vector4} from "three";
 
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
-import {Group} from "../../../../commons/groups/isometry/Group.js";
-import {Point} from "../../geometry/Point.js";
+import {Group} from "./Group.js";
 
-const group = new Group();
+const group = new Group(
+    new Vector4(1, 0, 0, 0),
+    new Vector4(0, 1, 0, 0)
+);
 
-const normalX = new Vector4(1, 0, 0, 0);
-const normalY = new Vector4(0, 1, 0, 0);
-
-function testXp(p) {
-    return p.coords.dot(normalX) > 0.5;
+function testAp(p) {
+    const aux = group.dirA.clone().applyMatrix4(group.dotMatrix);
+    return p.coords.dot(aux) > 1;
 }
 
 // language=GLSL
-const glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(1, 0, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+const glslTestAp = `//
+bool testAp(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirA) > 0.5;
 }
 `;
 
-function testXn(p) {
-    return p.coords.dot(normalX) < -0.5;
+function testAn(p) {
+    const aux = group.dirA.clone().applyMatrix4(group.dotMatrix)
+    return p.coords.dot(aux) < -1;
 }
 
 // language=GLSL
-const glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(1, 0, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+const glslTestAn = `//
+bool testAn(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirA) < -0.5;
 }
 `;
 
-function testYp(p) {
-    return p.coords.dot(normalY) > 0.5;
+function testBp(p) {
+    const aux = group.dirB.clone().applyMatrix4(group.dotMatrix)
+    return p.coords.dot(aux) > 1;
 }
 
 // language=GLSL
-const glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, 1, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+const glslTestBp = `//
+bool testBp(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirB) > 0.5;
 }
 `;
 
 function testYn(p) {
-    return p.coords.dot(normalY) < -0.5;
+    const aux = group.dirB.clone().applyMatrix4(group.dotMatrix)
+    return p.coords.dot(aux) < -1;
 }
 
 // language=GLSL
-const glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, 1, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+const glslTestBn = `//
+bool testBn(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirB) < -0.5;
 }
 `;
 
-const shiftXp = group.element();
-const shiftXn = group.element();
-const shiftYp = group.element();
-const shiftYn = group.element();
+const shiftAp = group.element(-1, 0);
+const shiftAn = group.element(1, 0);
+const shiftBp = group.element(0, -1);
+const shiftBn = group.element(0, 1);
 
-shiftXp.isom.makeTranslation(new Point(-1, 0, 0, 1));
-shiftXn.isom.makeTranslation(new Point(1, 0, 0, 1));
-shiftYp.isom.makeTranslation(new Point(0, -1, 0, 1));
-shiftYn.isom.makeTranslation(new Point(0, 1, 0, 1));
 
 export default new TeleportationSet()
-    .add(testXp, glslTestXp, shiftXp, shiftXn)
-    .add(testXn, glslTestXn, shiftXn, shiftXp)
-    .add(testYp, glslTestYp, shiftYp, shiftYn)
-    .add(testYn, glslTestYn, shiftYn, shiftYp);
+    .add(testAp, glslTestAp, shiftAp, shiftAn)
+    .add(testAn, glslTestAn, shiftAn, shiftAp)
+    .add(testBp, glslTestBp, shiftBp, shiftBn)
+    .add(testYn, glslTestBn, shiftBn, shiftBp);
 

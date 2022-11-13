@@ -1462,6 +1462,20 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 9136:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                     \n  \n                                                                                                                        \n                                                                                                                        \n\n\n                                                                                                                        \n          \n                                                    \n                                                                                                                        \n\nstruct GroupElement {\n    vec2 coords;                                           \n};\n\nconst GroupElement GROUP_IDENTITY = GroupElement(vec2(0));\n\nGroupElement multiply(GroupElement elt1, GroupElement elt2){\n    vec2 coords = elt1.coords + elt2.coords;\n    return GroupElement(coords);\n}\n\nIsometry toIsometry(GroupElement elt) {\n    float a = elt.coords.x;\n    float b = elt.coords.y;\n    vec4 coords = a * group.dirA + b * group.dirB;\n    return makeTranslation(Point(coords));\n}"
+
+/***/ }),
+
+/***/ 5846:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                                      \n                                                                                                                        \n\nstruct Group {\n    vec4 dirA;\n    vec4 dirB;\n    mat4 dotMatrix;\n};"
+
+/***/ }),
+
 /***/ 3573:
 /***/ ((module) => {
 
@@ -16888,81 +16902,231 @@ set_shiftZn.isom.matrix.set(
     .add(set_testZp, set_glslTestZp, set_shiftZp, set_shiftZn, set_glslCreepZp)
     .add(set_testZn, set_glslTestZn, set_shiftZn, set_shiftZp, set_glslCreepZn));
 
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/xyLoops/GroupElement.js
+
+
+
+
+
+
+/**
+ * @class
+ * @classdesc
+ * Element in Z^2
+ */
+class xyLoops_GroupElement_GroupElement extends GroupElement_GroupElement {
+
+    constructor(group, a = 0, b = 0) {
+        super(group);
+        this.coords = new external_three_namespaceObject.Vector2(a, b);
+    }
+
+    identity() {
+        this.coords.set(0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        this.coords.add(elt.coords);
+        return this;
+    }
+
+    premultiply(elt) {
+        this.coords.add(elt.coords);
+        return this;
+    }
+
+    invert() {
+        this.coords.negate();
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b] = this.coords.toArray();
+        const point = new Point_Point(
+            a * this.group.dirA.x + b * this.group.dirB.x,
+            a * this.group.dirA.y + b * this.group.dirB.y,
+            0,
+            1
+        );
+        return new Isometry_Isometry().makeTranslation(point);
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new xyLoops_GroupElement_GroupElement(this.group);
+        res.coords.copy(this.coords);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        return this;
+    }
+}
+
+
+// EXTERNAL MODULE: ./src/geometries/sol/groups/xyLoops/shaders/element.glsl
+var xyLoops_shaders_element = __webpack_require__(9136);
+var xyLoops_shaders_element_default = /*#__PURE__*/__webpack_require__.n(xyLoops_shaders_element);
+// EXTERNAL MODULE: ./src/geometries/sol/groups/xyLoops/shaders/struct.glsl
+var xyLoops_shaders_struct = __webpack_require__(5846);
+var xyLoops_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(xyLoops_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/xyLoops/Group.js
+
+
+
+
+
+
+
+
+/**
+ * @class
+ * @classdesc
+ * Subgroup Z^2 in Sol corresponding to two vectors in the xy-plane
+ * See GroupElement for the description of the representation
+ */
+class xyLoops_Group_Group extends Group_Group {
+
+    /**
+     * Constructor
+     * @param {Vector4} dirA - the first vector in the xy-plane
+     * @param {Vector4} dirB - the first vector in the xy-plane
+     */
+    constructor(dirA, dirB) {
+        super();
+        this._dirA = dirA;
+        this._dirB = dirB;
+        this.updateDotMatrix();
+    }
+
+    get dirA() {
+        return this._dirA;
+    }
+
+    set dirA(value) {
+        this._dirA = value !== undefined ? value : new external_three_namespaceObject.Vector4(1, 0, 0, 0);
+        this.updateDotMatrix();
+    }
+
+    get dirB() {
+        return this._dirB;
+    }
+
+    set dirB(value) {
+        this._dirB = value !== undefined ? value : new external_three_namespaceObject.Vector4(0, 1, 0, 0);
+        this.updateDotMatrix();
+    }
+
+    updateDotMatrix() {
+        if (this._dotMatrix === undefined) {
+            this._dotMatrix = new external_three_namespaceObject.Matrix4();
+        }
+        const aux = new external_three_namespaceObject.Matrix4().set(
+            this.dirA.x, this.dirB.x, 0, 0,
+            this.dirA.y, this.dirB.y, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ).invert();
+        this._dotMatrix.copy(aux).transpose().multiply(aux);
+    }
+
+    /**
+     * Return a positive definite matrix for which the family
+     * halfTranslationA, halfTranslationB, halfTranslationC
+     * is orthonormal.
+     * @type{Matrix4}
+     */
+    get dotMatrix() {
+        return this._dotMatrix;
+    }
+
+    element() {
+        const x = arguments.length > 0 ? arguments[0] : 0;
+        const y = arguments.length > 1 ? arguments[1] : 0;
+        return new xyLoops_GroupElement_GroupElement(this, x, y);
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk((xyLoops_shaders_struct_default()));
+        shaderBuilder.addUniform('group', 'Group', this);
+        shaderBuilder.addChunk((xyLoops_shaders_element_default()));
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/sol/groups/xyLoops/set.js
 
 
 
 
 
+const xyLoops_set_group = new xyLoops_Group_Group(
+    new external_three_namespaceObject.Vector4(1, 0, 0, 0),
+    new external_three_namespaceObject.Vector4(0, 1, 0, 0)
+);
 
-const xyLoops_set_group = new isometry_Group_Group();
-
-const xyLoops_set_normalX = new external_three_namespaceObject.Vector4(1, 0, 0, 0);
-const xyLoops_set_normalY = new external_three_namespaceObject.Vector4(0, 1, 0, 0);
-
-function xyLoops_set_testXp(p) {
-    return p.coords.dot(xyLoops_set_normalX) > 0.5;
+function testAp(p) {
+    const aux = xyLoops_set_group.dirA.clone().applyMatrix4(xyLoops_set_group.dotMatrix);
+    return p.coords.dot(aux) > 1;
 }
 
 // language=GLSL
-const xyLoops_set_glslTestXp = `//
-bool testXp(Point p){
-    vec4 normal = vec4(1, 0, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+const glslTestAp = `//
+bool testAp(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirA) > 0.5;
 }
 `;
 
-function xyLoops_set_testXn(p) {
-    return p.coords.dot(xyLoops_set_normalX) < -0.5;
+function testAn(p) {
+    const aux = xyLoops_set_group.dirA.clone().applyMatrix4(xyLoops_set_group.dotMatrix)
+    return p.coords.dot(aux) < -1;
 }
 
 // language=GLSL
-const xyLoops_set_glslTestXn = `//
-bool testXn(Point p){
-    vec4 normal = vec4(1, 0, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+const glslTestAn = `//
+bool testAn(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirA) < -0.5;
 }
 `;
 
-function xyLoops_set_testYp(p) {
-    return p.coords.dot(xyLoops_set_normalY) > 0.5;
+function testBp(p) {
+    const aux = xyLoops_set_group.dirB.clone().applyMatrix4(xyLoops_set_group.dotMatrix)
+    return p.coords.dot(aux) > 1;
 }
 
 // language=GLSL
-const xyLoops_set_glslTestYp = `//
-bool testYp(Point p){
-    vec4 normal = vec4(0, 1, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+const glslTestBp = `//
+bool testBp(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirB) > 0.5;
 }
 `;
 
 function xyLoops_set_testYn(p) {
-    return p.coords.dot(xyLoops_set_normalY) < -0.5;
+    const aux = xyLoops_set_group.dirB.clone().applyMatrix4(xyLoops_set_group.dotMatrix)
+    return p.coords.dot(aux) < -1;
 }
 
 // language=GLSL
-const xyLoops_set_glslTestYn = `//
-bool testYn(Point p){
-    vec4 normal = vec4(0, 1, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+const glslTestBn = `//
+bool testBn(Point p){
+    return dot(p.coords, group.dotMatrix * group.dirB) < -0.5;
 }
 `;
 
-const xyLoops_set_shiftXp = xyLoops_set_group.element();
-const xyLoops_set_shiftXn = xyLoops_set_group.element();
-const xyLoops_set_shiftYp = xyLoops_set_group.element();
-const xyLoops_set_shiftYn = xyLoops_set_group.element();
+const shiftAp = xyLoops_set_group.element(-1, 0);
+const shiftAn = xyLoops_set_group.element(1, 0);
+const shiftBp = xyLoops_set_group.element(0, -1);
+const shiftBn = xyLoops_set_group.element(0, 1);
 
-xyLoops_set_shiftXp.isom.makeTranslation(new Point_Point(-1, 0, 0, 1));
-xyLoops_set_shiftXn.isom.makeTranslation(new Point_Point(1, 0, 0, 1));
-xyLoops_set_shiftYp.isom.makeTranslation(new Point_Point(0, -1, 0, 1));
-xyLoops_set_shiftYn.isom.makeTranslation(new Point_Point(0, 1, 0, 1));
 
 /* harmony default export */ const xyLoops_set = (new TeleportationSet()
-    .add(xyLoops_set_testXp, xyLoops_set_glslTestXp, xyLoops_set_shiftXp, xyLoops_set_shiftXn)
-    .add(xyLoops_set_testXn, xyLoops_set_glslTestXn, xyLoops_set_shiftXn, xyLoops_set_shiftXp)
-    .add(xyLoops_set_testYp, xyLoops_set_glslTestYp, xyLoops_set_shiftYp, xyLoops_set_shiftYn)
-    .add(xyLoops_set_testYn, xyLoops_set_glslTestYn, xyLoops_set_shiftYn, xyLoops_set_shiftYp));
+    .add(testAp, glslTestAp, shiftAp, shiftAn)
+    .add(testAn, glslTestAn, shiftAn, shiftAp)
+    .add(testBp, glslTestBp, shiftBp, shiftBn)
+    .add(xyLoops_set_testYn, glslTestBn, shiftBn, shiftBp));
 
 
 // EXTERNAL MODULE: ./src/geometries/sol/lights/zSun/shaders/struct.glsl
