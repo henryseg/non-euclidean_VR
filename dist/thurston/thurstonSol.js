@@ -1504,17 +1504,17 @@ module.exports = "                                                              
 
 /***/ }),
 
-/***/ 5253:
-/***/ ((module) => {
-
-module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct LocalRod {\n    int id;\n    vec4 testX;\n    vec4 testY;\n    vec4 testZ;\n    float smoothness;\n    vec2 sides;\n};\n\n   \n                                           \n   \nfloat sdf(LocalRod rod, RelVector v) {\n    float dotX = dot(v.local.pos.coords, rod.testX);\n    float dotY = dot(v.local.pos.coords, rod.testY);\n    float dotZ = dot(v.local.pos.coords, rod.testZ);\n\n    float distX = asinh((abs(dotX) - 0.5 * rod.sides.x) * exp(-dotZ));\n    float distY = asinh((abs(dotY) - 0.5 * rod.sides.y) * exp(dotZ));\n    return smoothMaxPoly(distX, distY, rod.smoothness);\n}\n\n   \n                                        \n   \nRelVector gradient(LocalRod rod, RelVector v){\n    float dotX = dot(v.local.pos.coords, rod.testX);\n    float dotY = dot(v.local.pos.coords, rod.testY);\n    float dotZ = dot(v.local.pos.coords, rod.testZ);\n\n    float auxX = abs(dotX) - 0.5 * rod.sides.x;\n    float auxY = abs(dotY) - 0.5 * rod.sides.y;\n    float auxZX = exp(-dotZ);\n    float auxZY = exp(dotZ);\n    float distX = asinh(auxX * auxZX);\n    float distY = asinh(auxY * auxZY);\n\n    float den;\n    vec4 dir;\n\n    den = sqrt(auxX * auxX + auxZX * auxZX + 1.);\n    dir = (auxZX / den) * (-auxX * rod.testZ + sign(auxX) * rod.testX);\n    dir.w = 0.;\n    RelVector gradX = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    den = sqrt(auxY * auxY + auxZY * auxZY + 1.);\n    dir = (auxZY / den) * (auxY * rod.testZ + sign(auxY) * rod.testY);\n    dir.w = 0.;\n    RelVector gradY = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    return gradientMaxPoly(distX, distY, gradX, gradY, rod.smoothness);\n}\n\n  \n                      \n                                             \n   \nvec2 uvMap(LocalRod rod, RelVector v){\n    float dotX = dot(v.local.pos.coords, rod.testX);\n    float dotY = dot(v.local.pos.coords, rod.testY);\n    float dotZ = dot(v.local.pos.coords, rod.testZ);\n\n    float uCoords = atan(dotY, dotX);\n    float vCoords = dotZ;\n    return vec2(uCoords, vCoords);\n}"
-
-/***/ }),
-
 /***/ 1273:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                       \n                                                                                                                        \n\nstruct LocalXYHalfSpaceShape {\n    vec4 testX;                                                                 \n    vec4 testZ;                                                                 \n    Point origin;\n    vec3 uDir;                                       \n    vec3 vDir;                                       \n};\n\n                                                                                                            \nfloat sdf(LocalXYHalfSpaceShape halfspace, RelVector v){\n    float dotX = dot(v.local.pos.coords, halfspace.testX);\n    float dotZ = dot(v.local.pos.coords, halfspace.testZ);\n    return asinh(dotX * exp(-dotZ));\n}\n\nRelVector gradient(LocalXYHalfSpaceShape halfspace, RelVector v){\n    float dotX = dot(v.local.pos.coords, halfspace.testX);\n    float dotZ = dot(v.local.pos.coords, halfspace.testZ);\n    float eDotZ = exp(-dotZ);\n    float coeff = 1. / sqrt(dotX * dotX * eDotZ * eDotZ + 1.);\n    vec4 dir = coeff * eDotZ * (halfspace.testX - dotX * halfspace.testZ);\n                                              \n                        \n    dir.w = 0.;\n    Isometry isom = makeInvTranslation(v.local.pos);\n    dir = isom.matrix * dir;\n    Vector n = Vector(v.local.pos, dir);\n    n = geomNormalize(n);\n    return RelVector(n, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(LocalXYHalfSpaceShape halfspace, RelVector v){\n                                                                      \n                                                 \n                                                        \n                                                        \n    float uCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.uDir, 0));\n    float vCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.vDir, 0));\n    return vec2(uCoord, vCoord);\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                       \n                                                                                                                        \n\nstruct LocalXHalfSpaceShape {\n    vec4 testX;                                                                 \n    vec4 testZ;                                                                 \n    Point origin;\n    vec3 uDir;                                       \n    vec3 vDir;                                       \n};\n\n                                                                                                            \nfloat sdf(LocalXHalfSpaceShape halfspace, RelVector v){\n    float dotX = dot(v.local.pos.coords, halfspace.testX);\n    float dotZ = dot(v.local.pos.coords, halfspace.testZ);\n    return asinh(dotX * exp(-dotZ));\n}\n\nRelVector gradient(LocalXHalfSpaceShape halfspace, RelVector v){\n    float dotX = dot(v.local.pos.coords, halfspace.testX);\n    float dotZ = dot(v.local.pos.coords, halfspace.testZ);\n    float eDotZ = exp(-dotZ);\n    float coeff = 1. / sqrt(dotX * dotX * eDotZ * eDotZ + 1.);\n    vec4 dir = coeff * eDotZ * (halfspace.testX - dotX * halfspace.testZ);\n                                              \n                        \n    dir.w = 0.;\n    Isometry isom = makeInvTranslation(v.local.pos);\n    dir = isom.matrix * dir;\n    Vector n = Vector(v.local.pos, dir);\n    n = geomNormalize(n);\n    return RelVector(n, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(LocalXHalfSpaceShape halfspace, RelVector v){\n                                                                      \n                                                 \n                                                        \n                                                        \n    float uCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.uDir, 0));\n    float vCoord = dot(v.local.pos.coords - halfspace.origin.coords, vec4(halfspace.vDir, 0));\n    return vec2(uCoord, vCoord);\n}\n\n"
+
+/***/ }),
+
+/***/ 6316:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct LocalZAxisShape {\n    int id;\n    vec4 testX;\n    vec4 testY;\n    vec4 testZ;\n    float smoothness;\n    vec2 sides;\n};\n\n   \n                                           \n   \nfloat sdf(LocalZAxisShape a, RelVector v) {\n    float dotX = dot(v.local.pos.coords, a.testX);\n    float dotY = dot(v.local.pos.coords, a.testY);\n    float dotZ = dot(v.local.pos.coords, a.testZ);\n\n    float distX = asinh((abs(dotX) - 0.5 * a.sides.x) * exp(-dotZ));\n    float distY = asinh((abs(dotY) - 0.5 * a.sides.y) * exp(dotZ));\n    return smoothMaxPoly(distX, distY, a.smoothness);\n}\n\n   \n                                        \n   \nRelVector gradient(LocalZAxisShape a, RelVector v){\n    float dotX = dot(v.local.pos.coords, a.testX);\n    float dotY = dot(v.local.pos.coords, a.testY);\n    float dotZ = dot(v.local.pos.coords, a.testZ);\n\n    float auxX = abs(dotX) - 0.5 * a.sides.x;\n    float auxY = abs(dotY) - 0.5 * a.sides.y;\n    float auxZX = exp(-dotZ);\n    float auxZY = exp(dotZ);\n    float distX = asinh(auxX * auxZX);\n    float distY = asinh(auxY * auxZY);\n\n    float den;\n    vec4 dir;\n\n    den = sqrt(auxX * auxX + auxZX * auxZX + 1.);\n    dir = (auxZX / den) * (-auxX * a.testZ + sign(auxX) * a.testX);\n    dir.w = 0.;\n    RelVector gradX = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    den = sqrt(auxY * auxY + auxZY * auxZY + 1.);\n    dir = (auxZY / den) * (auxY * a.testZ + sign(auxY) * a.testY);\n    dir.w = 0.;\n    RelVector gradY = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    return gradientMaxPoly(distX, distY, gradX, gradY, a.smoothness);\n}\n\n  \n                      \n                                             \n   \nvec2 uvMap(LocalZAxisShape a, RelVector v){\n    float dotX = dot(v.local.pos.coords, a.testX);\n    float dotY = dot(v.local.pos.coords, a.testY);\n    float dotZ = dot(v.local.pos.coords, a.testZ);\n\n    float uCoords = atan(dotY, dotX);\n    float vCoords = dotZ;\n    return vec2(uCoords, vCoords);\n}"
 
 /***/ }),
 
@@ -1525,10 +1525,10 @@ module.exports = "                                                              
 
 /***/ }),
 
-/***/ 668:
+/***/ 3980:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                       \n                                                                                                                        \n\nstruct XYHalfSpaceShape {\n    vec4 testX;                                                                 \n    vec4 testZ;                                                                 \n    Point origin;\n    vec3 uDir;                                       \n    vec3 vDir;                                       \n};\n\n                                                                                                            \nfloat sdf(XYHalfSpaceShape halfspace, RelVector v){\n    Isometry aux = toIsometry(v.cellBoost);\n    vec4 testX = transpose(aux.matrix) * halfspace.testX;\n    vec4 testZ = transpose(aux.matrix) * halfspace.testZ;\n    float dotX = dot(v.local.pos.coords, testX);\n    float dotZ = dot(v.local.pos.coords, testZ);\n    return asinh(dotX * exp(-dotZ));\n}\n\nRelVector gradient(XYHalfSpaceShape halfspace, RelVector v){\n    Isometry aux = toIsometry(v.cellBoost);\n    vec4 testX = transpose(aux.matrix) * halfspace.testX;\n    vec4 testZ = transpose(aux.matrix) * halfspace.testZ;\n    float dotX = dot(v.local.pos.coords, testX);\n    float dotZ = dot(v.local.pos.coords, testZ);\n    float eDotZ = exp(-dotZ);\n    float coeff = 1. / sqrt(dotX * dotX * eDotZ * eDotZ + 1.);\n    vec4 dir = coeff * eDotZ * (testX - dotX * testZ);\n                                              \n                        \n    dir.w = 0.;\n    Isometry isom = makeInvTranslation(v.local.pos);\n    dir = isom.matrix * dir;\n    Vector n = Vector(v.local.pos, dir);\n    n = geomNormalize(n);\n    return RelVector(n, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(XYHalfSpaceShape halfspace, RelVector v){\n    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);\n    Isometry isom = toIsometry(v.invCellBoost);\n    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);\n    vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);\n    float uCoord = dot(v.local.pos.coords - pos.coords, uDir);\n    float vCoord = dot(v.local.pos.coords - pos.coords, vDir);\n    return vec2(uCoord, vCoord);\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                       \n                                                                                                                        \n\nstruct XHalfSpaceShape {\n    vec4 testX;                                                                 \n    vec4 testZ;                                                                 \n    Point origin;\n    vec3 uDir;                                       \n    vec3 vDir;                                       \n};\n\n                                                                                                            \nfloat sdf(XHalfSpaceShape halfspace, RelVector v){\n    Isometry aux = toIsometry(v.cellBoost);\n    vec4 testX = transpose(aux.matrix) * halfspace.testX;\n    vec4 testZ = transpose(aux.matrix) * halfspace.testZ;\n    float dotX = dot(v.local.pos.coords, testX);\n    float dotZ = dot(v.local.pos.coords, testZ);\n    return asinh(dotX * exp(-dotZ));\n}\n\nRelVector gradient(XHalfSpaceShape halfspace, RelVector v){\n    Isometry aux = toIsometry(v.cellBoost);\n    vec4 testX = transpose(aux.matrix) * halfspace.testX;\n    vec4 testZ = transpose(aux.matrix) * halfspace.testZ;\n    float dotX = dot(v.local.pos.coords, testX);\n    float dotZ = dot(v.local.pos.coords, testZ);\n    float eDotZ = exp(-dotZ);\n    float coeff = 1. / sqrt(dotX * dotX * eDotZ * eDotZ + 1.);\n    vec4 dir = coeff * eDotZ * (testX - dotX * testZ);\n                                              \n                        \n    dir.w = 0.;\n    Isometry isom = makeInvTranslation(v.local.pos);\n    dir = isom.matrix * dir;\n    Vector n = Vector(v.local.pos, dir);\n    n = geomNormalize(n);\n    return RelVector(n, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(XHalfSpaceShape halfspace, RelVector v){\n    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);\n    Isometry isom = toIsometry(v.invCellBoost);\n    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);\n    vec4 vDir = isom.matrix * vec4(halfspace.vDir, 0);\n    float uCoord = dot(v.local.pos.coords - pos.coords, uDir);\n    float vCoord = dot(v.local.pos.coords - pos.coords, vDir);\n    return vec2(uCoord, vCoord);\n}\n\n"
 
 /***/ }),
 
@@ -1651,10 +1651,10 @@ __webpack_require__.d(__webpack_exports__, {
   "Zs": () => (/* reexport */ LocalCubeShape),
   "oR": () => (/* reexport */ LocalFakeBall),
   "lt": () => (/* reexport */ LocalFakeBallShape),
-  "M6": () => (/* reexport */ LocalRod),
-  "G4": () => (/* reexport */ LocalRodShape),
-  "mU": () => (/* reexport */ LocalXYHalfSpace),
-  "Vh": () => (/* reexport */ LocalXYHalfSpaceShape),
+  "EA": () => (/* reexport */ LocalXHalfSpace),
+  "Bm": () => (/* reexport */ LocalXHalfSpaceShape),
+  "b_": () => (/* reexport */ LocalZAxis),
+  "YE": () => (/* reexport */ LocalZAxisShape),
   "Qc": () => (/* reexport */ LocalZHalfSpace),
   "Q9": () => (/* reexport */ LocalZHalfSpaceShape),
   "Qv": () => (/* reexport */ MarsTexture),
@@ -1697,9 +1697,9 @@ __webpack_require__.d(__webpack_exports__, {
   "cB": () => (/* reexport */ VaryingColorMaterial),
   "OW": () => (/* reexport */ Vector),
   "$9": () => (/* reexport */ WrapShape),
+  "D_": () => (/* reexport */ XHalfSpace),
+  "qT": () => (/* reexport */ XHalfSpaceShape),
   "iR": () => (/* reexport */ XRControllerModelFactory),
-  "Y2": () => (/* reexport */ XYHalfSpace),
-  "ot": () => (/* reexport */ XYHalfSpaceShape),
   "JX": () => (/* reexport */ ZHalfSpace),
   "fr": () => (/* reexport */ ZHalfSpaceShape),
   "t2": () => (/* reexport */ ZSun),
@@ -17396,10 +17396,10 @@ class ZHalfSpaceShape extends BasicShape {
     }
 }
 
-// EXTERNAL MODULE: ./src/geometries/sol/shapes/xyHalfSpace/shaders/struct.glsl
-var xyHalfSpace_shaders_struct = __webpack_require__(668);
-var xyHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(xyHalfSpace_shaders_struct);
-;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xyHalfSpace/XYHalfSpaceShape.js
+// EXTERNAL MODULE: ./src/geometries/sol/shapes/xHalfSpace/shaders/struct.glsl
+var xHalfSpace_shaders_struct = __webpack_require__(3980);
+var xHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(xHalfSpace_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/xHalfSpace/XHalfSpaceShape.js
 
 
 
@@ -17417,7 +17417,7 @@ var xyHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(xyHa
  * @classdesc
  *  x half space (or y half space)
  */
-class XYHalfSpaceShape extends BasicShape {
+class XHalfSpaceShape extends BasicShape {
 
     /**
      * Constructor.
@@ -17513,11 +17513,11 @@ class XYHalfSpaceShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'XYHalfSpaceShape'
+        return 'XHalfSpaceShape'
     }
 
     static glslClass() {
-        return (xyHalfSpace_shaders_struct_default());
+        return (xHalfSpace_shaders_struct_default());
     }
 
     glslSDF() {
@@ -17660,7 +17660,7 @@ class LocalZHalfSpaceShape extends BasicShape {
 // EXTERNAL MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/shaders/struct.glsl
 var localXYHalfSpace_shaders_struct = __webpack_require__(1273);
 var localXYHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localXYHalfSpace_shaders_struct);
-;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/LocalXYHalfSpaceShape.js
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localXYHalfSpace/LocalXHalfSpaceShape.js
 
 
 
@@ -17678,7 +17678,7 @@ var localXYHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n
  * @classdesc
  *  x half space (or y half space)
  */
-class LocalXYHalfSpaceShape extends BasicShape {
+class LocalXHalfSpaceShape extends BasicShape {
 
     /**
      * Constructor.
@@ -17774,7 +17774,7 @@ class LocalXYHalfSpaceShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'LocalXYHalfSpaceShape'
+        return 'LocalXHalfSpaceShape'
     }
 
     static glslClass() {
@@ -17913,10 +17913,10 @@ class LocalCubeShape extends BasicShape {
         return shapes_shaders_gradient_glsl_mustache_default()(this);
     }
 }
-// EXTERNAL MODULE: ./src/geometries/sol/shapes/localRod/shaders/struct.glsl
-var localRod_shaders_struct = __webpack_require__(5253);
-var localRod_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localRod_shaders_struct);
-;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localRod/LocalRodShape.js
+// EXTERNAL MODULE: ./src/geometries/sol/shapes/localZAxis/shaders/struct.glsl
+var localZAxis_shaders_struct = __webpack_require__(6316);
+var localZAxis_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localZAxis_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sol/shapes/localZAxis/LocalZAxisShape.js
 
 
 
@@ -17934,9 +17934,9 @@ var localRod_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localRo
  * @class
  *
  * @classdesc
- * Local rod in Sol.
+ * Local z Axis in Sol.
  */
-class LocalRodShape extends BasicShape {
+class LocalZAxisShape extends BasicShape {
 
     /**
      * Constructor.
@@ -18018,7 +18018,7 @@ class LocalRodShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'LocalRod';
+        return 'LocalZAxisShape';
     }
 
     get hasUVMap() {
@@ -18026,7 +18026,7 @@ class LocalRodShape extends BasicShape {
     }
 
     static glslClass() {
-        return (localRod_shaders_struct_default());
+        return (localZAxis_shaders_struct_default());
     }
 
     glslSDF() {
@@ -18269,7 +18269,7 @@ class ZHalfSpace extends Solid {
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/sol/solids/XYHalfSpace.js
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/XHalfSpace.js
 
 
 
@@ -18279,7 +18279,7 @@ class ZHalfSpace extends Solid {
  * @classdesc
  * Euclidean Half space
  */
-class XYHalfSpace extends Solid {
+class XHalfSpace extends Solid {
 
     /**
      * Constructor
@@ -18288,7 +18288,7 @@ class XYHalfSpace extends Solid {
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(isom, material, ptMaterial = undefined) {
-        const shape = new XYHalfSpaceShape(isom);
+        const shape = new XHalfSpaceShape(isom);
         super(shape, material, ptMaterial);
     }
 }
@@ -18315,7 +18315,7 @@ class LocalZHalfSpace extends Solid {
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalXYHalfSpace.js
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalXHalfSpace.js
 
 
 
@@ -18325,7 +18325,7 @@ class LocalZHalfSpace extends Solid {
  * @classdesc
  * Euclidean Half space
  */
-class LocalXYHalfSpace extends Solid {
+class LocalXHalfSpace extends Solid {
 
     /**
      * Constructor
@@ -18362,7 +18362,7 @@ class LocalCube extends Solid {
         super(shape, material, ptMaterial);
     }
 }
-;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalRod.js
+;// CONCATENATED MODULE: ./src/geometries/sol/solids/LocalZAxis.js
 
 
 
@@ -18372,7 +18372,7 @@ class LocalCube extends Solid {
  * @classdesc
  * Local Rod in Sol
  */
-class LocalRod extends Solid {
+class LocalZAxis extends Solid {
     /**
      * Constructor.
      * @param {Isometry|Point} location - the location of the rod
@@ -18382,7 +18382,7 @@ class LocalRod extends Solid {
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, sides, smoothness, material, ptMaterial = undefined) {
-        const shape = new LocalRodShape(location, sides, smoothness);
+        const shape = new LocalZAxisShape(location, sides, smoothness);
         super(shape, material, ptMaterial);
     }
 }
@@ -18467,10 +18467,10 @@ var __webpack_exports__LocalCube = __webpack_exports__.EB;
 var __webpack_exports__LocalCubeShape = __webpack_exports__.Zs;
 var __webpack_exports__LocalFakeBall = __webpack_exports__.oR;
 var __webpack_exports__LocalFakeBallShape = __webpack_exports__.lt;
-var __webpack_exports__LocalRod = __webpack_exports__.M6;
-var __webpack_exports__LocalRodShape = __webpack_exports__.G4;
-var __webpack_exports__LocalXYHalfSpace = __webpack_exports__.mU;
-var __webpack_exports__LocalXYHalfSpaceShape = __webpack_exports__.Vh;
+var __webpack_exports__LocalXHalfSpace = __webpack_exports__.EA;
+var __webpack_exports__LocalXHalfSpaceShape = __webpack_exports__.Bm;
+var __webpack_exports__LocalZAxis = __webpack_exports__.b_;
+var __webpack_exports__LocalZAxisShape = __webpack_exports__.YE;
 var __webpack_exports__LocalZHalfSpace = __webpack_exports__.Qc;
 var __webpack_exports__LocalZHalfSpaceShape = __webpack_exports__.Q9;
 var __webpack_exports__MarsTexture = __webpack_exports__.Qv;
@@ -18513,9 +18513,9 @@ var __webpack_exports__VRRenderer = __webpack_exports__.zO;
 var __webpack_exports__VaryingColorMaterial = __webpack_exports__.cB;
 var __webpack_exports__Vector = __webpack_exports__.OW;
 var __webpack_exports__WrapShape = __webpack_exports__.$9;
+var __webpack_exports__XHalfSpace = __webpack_exports__.D_;
+var __webpack_exports__XHalfSpaceShape = __webpack_exports__.qT;
 var __webpack_exports__XRControllerModelFactory = __webpack_exports__.iR;
-var __webpack_exports__XYHalfSpace = __webpack_exports__.Y2;
-var __webpack_exports__XYHalfSpaceShape = __webpack_exports__.ot;
 var __webpack_exports__ZHalfSpace = __webpack_exports__.JX;
 var __webpack_exports__ZHalfSpaceShape = __webpack_exports__.fr;
 var __webpack_exports__ZSun = __webpack_exports__.t2;
@@ -18531,4 +18531,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalCubeShape as LocalCubeShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalRod as LocalRod, __webpack_exports__LocalRodShape as LocalRodShape, __webpack_exports__LocalXYHalfSpace as LocalXYHalfSpace, __webpack_exports__LocalXYHalfSpaceShape as LocalXYHalfSpaceShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__XYHalfSpace as XYHalfSpace, __webpack_exports__XYHalfSpaceShape as XYHalfSpaceShape, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__horizontalSet as horizontalSet, __webpack_exports__intersection as intersection, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalCubeShape as LocalCubeShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalXHalfSpace as LocalXHalfSpace, __webpack_exports__LocalXHalfSpaceShape as LocalXHalfSpaceShape, __webpack_exports__LocalZAxis as LocalZAxis, __webpack_exports__LocalZAxisShape as LocalZAxisShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XHalfSpace as XHalfSpace, __webpack_exports__XHalfSpaceShape as XHalfSpaceShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__horizontalSet as horizontalSet, __webpack_exports__intersection as intersection, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };

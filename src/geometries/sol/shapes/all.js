@@ -5,8 +5,8 @@ export {IntersectionShape, intersection} from "../../../commons/shapes/instersec
 export {FakeBallShape} from "./fakeBall/FakeBallShape.js";
 export {LocalFakeBallShape} from "./localFakeBall/LocalFakeBallShape.js";
 export {ZHalfSpaceShape} from "./zHalfSpace/ZHalfSpaceShape.js";
-export {XYHalfSpaceShape} from "./xyHalfSpace/XYHalfSpaceShape.js";
+export {XHalfSpaceShape} from "./xHalfSpace/XHalfSpaceShape.js";
 export {LocalZHalfSpaceShape} from "./localZHalfSpace/LocalZHalfSpaceShape.js";
-export {LocalXYHalfSpaceShape} from "./localXYHalfSpace/LocalXYHalfSpaceShape.js";
+export {LocalXHalfSpaceShape} from "./localXYHalfSpace/LocalXHalfSpaceShape.js";
 export {LocalCubeShape} from "./localCube/LocalCubeShape.js";
-export {LocalRodShape} from "./localRod/LocalRodShape.js";
+export {LocalZAxisShape} from "./localZAxis/LocalZAxisShape.js";

@@ -15,9 +15,9 @@ import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
  * @class
  *
  * @classdesc
- * Local rod in Sol.
+ * Local z Axis in Sol.
  */
-export class LocalRodShape extends BasicShape {
+export class LocalZAxisShape extends BasicShape {
 
     /**
      * Constructor.
@@ -99,7 +99,7 @@ export class LocalRodShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'LocalRod';
+        return 'LocalZAxisShape';
     }
 
     get hasUVMap() {

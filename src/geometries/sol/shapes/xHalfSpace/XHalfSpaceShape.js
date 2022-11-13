@@ -15,7 +15,7 @@ import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
  * @classdesc
  *  x half space (or y half space)
  */
-export class XYHalfSpaceShape extends BasicShape {
+export class XHalfSpaceShape extends BasicShape {
 
     /**
      * Constructor.
@@ -111,7 +111,7 @@ export class XYHalfSpaceShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'XYHalfSpaceShape'
+        return 'XHalfSpaceShape'
     }
 
     static glslClass() {

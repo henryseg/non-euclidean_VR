@@ -1,5 +1,5 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {LocalRodShape} from "../shapes/localRod/LocalRodShape.js";
+import {LocalZAxisShape} from "../shapes/localZAxis/LocalZAxisShape.js";
 
 /**
  * @class
@@ -7,7 +7,7 @@ import {LocalRodShape} from "../shapes/localRod/LocalRodShape.js";
  * @classdesc
  * Local Rod in Sol
  */
-export class LocalRod extends Solid {
+export class LocalZAxis extends Solid {
     /**
      * Constructor.
      * @param {Isometry|Point} location - the location of the rod
@@ -17,7 +17,7 @@ export class LocalRod extends Solid {
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, sides, smoothness, material, ptMaterial = undefined) {
-        const shape = new LocalRodShape(location, sides, smoothness);
+        const shape = new LocalZAxisShape(location, sides, smoothness);
         super(shape, material, ptMaterial);
     }
 }

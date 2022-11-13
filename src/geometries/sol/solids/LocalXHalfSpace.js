@@ -7,7 +7,7 @@ import {LocalZHalfSpaceShape} from "../shapes/localZHalfSpace/LocalZHalfSpaceSha
  * @classdesc
  * Euclidean Half space
  */
-export class LocalXYHalfSpace extends Solid {
+export class LocalXHalfSpace extends Solid {
 
     /**
      * Constructor
