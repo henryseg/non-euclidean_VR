@@ -5,6 +5,7 @@
 
 struct LocalZAxisShape {
     int id;
+    Isometry absoluteIsom;
     Isometry absoluteIsomInv;
     float smoothness;
     vec2 sides;
@@ -35,17 +36,22 @@ RelVector gradient(LocalZAxisShape a, RelVector v){
 
     float auxX = abs(x) - 0.5 * a.sides.x;
     float auxY = abs(y) - 0.5 * a.sides.y;
-    float auxZX = exp(-z);
-    float auxZY = exp(z);
-    float distX = asinh(auxX * auxZX);
-    float distY = asinh(auxY * auxZY);
+    float eZN = exp(-z);
+    float ezP = exp(z);
+    float distX = asinh(auxX * eZN);
+    float distY = asinh(auxY * ezP);
 
+    Isometry pull = makeInvTranslation(v.local.pos);
 
-    vec4 dirX = sign(x) * vec4(1, 0, - x * auxZX, 0);
+    vec4 dirX = sign(x) * vec4(ezP * ezP, 0, -x, 0);
+    dirX = a.absoluteIsom.matrix * dirX;
+    dirX = pull.matrix * dirX;
     dirX = normalize(dirX);
     RelVector gradX = RelVector(Vector(v.local.pos, dirX), v.cellBoost, v.invCellBoost);
 
-    vec4 dirY = sign(y) * vec4(0, 1, - y * auxZY, 0);
+    vec4 dirY = sign(y) * vec4(0, eZN * eZN, -y, 0);
+    dirY = a.absoluteIsom.matrix * dirY;
+    dirY = pull.matrix * dirY;
     dirY = normalize(dirY);
     RelVector gradY = RelVector(Vector(v.local.pos, dirY), v.cellBoost, v.invCellBoost);
 
