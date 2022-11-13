@@ -11,7 +11,7 @@ struct LocalZAxisShape {
 };
 
 /**
- * Distance function for a local rod in Sol
+ * Distance function for a local z-axis in Sol
  */
 float sdf(LocalZAxisShape a, RelVector v) {
     Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);
@@ -25,7 +25,7 @@ float sdf(LocalZAxisShape a, RelVector v) {
 }
 
 /**
- * Gradient field for a local rod in Sol
+ * Gradient field for a local z-axis in Sol
  */
 RelVector gradient(LocalZAxisShape a, RelVector v){
     Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);
@@ -41,11 +41,11 @@ RelVector gradient(LocalZAxisShape a, RelVector v){
     float distY = asinh(auxY * auxZY);
 
 
-    vec4 dirX = vec4(-1, 0, x * auxZX, 0);
+    vec4 dirX = sign(x) * vec4(1, 0, - x * auxZX, 0);
     dirX = normalize(dirX);
     RelVector gradX = RelVector(Vector(v.local.pos, dirX), v.cellBoost, v.invCellBoost);
 
-    vec4 dirY = vec4(0, -1, y * auxZY, 0);
+    vec4 dirY = sign(y) * vec4(0, 1, - y * auxZY, 0);
     dirY = normalize(dirY);
     RelVector gradY = RelVector(Vector(v.local.pos, dirY), v.cellBoost, v.invCellBoost);
 
@@ -53,7 +53,7 @@ RelVector gradient(LocalZAxisShape a, RelVector v){
 }
 
 /*
- * UV map for the rod.
+ * UV map for the z-axis.
  * Just using euclidean cylinder coordinates.
  */
 vec2 uvMap(LocalZAxisShape a, RelVector v){
