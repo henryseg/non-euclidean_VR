@@ -7,3 +7,4 @@ export {LocalZHalfSpace} from "./LocalZHalfSpace.js";
 export {LocalXHalfSpace} from "./LocalXHalfSpace.js";
 export {LocalCube} from "./LocalCube.js";
 export {LocalZAxis} from "./LocalZAxis.js";
+export {LocalXAxis} from "./LocalXAxis.js";
