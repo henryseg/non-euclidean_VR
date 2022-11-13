@@ -102,7 +102,7 @@ export class LocalXHalfSpaceShape extends BasicShape {
         return false;
     }
 
-    get isLocalXYHalfSpaceShape() {
+    get isLocalXHalfSpaceShape() {
         return true;
     }
 

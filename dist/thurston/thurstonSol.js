@@ -17765,7 +17765,7 @@ class LocalXHalfSpaceShape extends BasicShape {
         return false;
     }
 
-    get isLocalXYHalfSpaceShape() {
+    get isLocalXHalfSpaceShape() {
         return true;
     }
 
@@ -17967,7 +17967,7 @@ class LocalZAxisShape extends BasicShape {
         return false;
     }
 
-    get isLocalRod() {
+    get isLocalZAxisShape() {
         return true;
     }
 

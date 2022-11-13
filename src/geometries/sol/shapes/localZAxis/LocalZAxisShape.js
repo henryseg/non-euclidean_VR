@@ -1,4 +1,4 @@
-import {Matrix4, Vector4, Vector2} from "three";
+import {Vector2} from "three";
 
 import {Isometry} from "../../geometry/Isometry.js";
 import {Point} from "../../geometry/Point.js";
@@ -48,7 +48,7 @@ export class LocalZAxisShape extends BasicShape {
         return false;
     }
 
-    get isLocalRod() {
+    get isLocalZAxisShape() {
         return true;
     }
 
