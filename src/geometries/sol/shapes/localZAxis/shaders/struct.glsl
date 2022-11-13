@@ -5,9 +5,6 @@
 
 struct LocalZAxisShape {
     int id;
-    vec4 testX;
-    vec4 testY;
-    vec4 testZ;
     Isometry absoluteIsomInv;
     float smoothness;
     vec2 sides;
@@ -43,18 +40,14 @@ RelVector gradient(LocalZAxisShape a, RelVector v){
     float distX = asinh(auxX * auxZX);
     float distY = asinh(auxY * auxZY);
 
-    float den;
-    vec4 dir;
 
-    den = sqrt(auxX * auxX + auxZX * auxZX + 1.);
-    dir = (auxZX / den) * (-auxX * a.testZ + sign(auxX) * a.testX);
-    dir.w = 0.;
-    RelVector gradX = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);
+    vec4 dirX = vec4(-1, 0, x * auxZX, 0);
+    dirX = normalize(dirX);
+    RelVector gradX = RelVector(Vector(v.local.pos, dirX), v.cellBoost, v.invCellBoost);
 
-    den = sqrt(auxY * auxY + auxZY * auxZY + 1.);
-    dir = (auxZY / den) * (auxY * a.testZ + sign(auxY) * a.testY);
-    dir.w = 0.;
-    RelVector gradY = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);
+    vec4 dirY = vec4(0, -1, y * auxZY, 0);
+    dirY = normalize(dirY);
+    RelVector gradY = RelVector(Vector(v.local.pos, dirY), v.cellBoost, v.invCellBoost);
 
     return gradientMaxPoly(distX, distY, gradX, gradY, a.smoothness);
 }

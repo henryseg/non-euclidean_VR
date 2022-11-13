@@ -44,47 +44,6 @@ export class LocalZAxisShape extends BasicShape {
         this.smoothness = smoothness;
     }
 
-    updateData() {
-        super.updateData();
-        const aux = new Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
-        this._testX = new Vector4(1, 0, 0, 0).applyMatrix4(aux);
-        this._testY = new Vector4(0, 1, 0, 0).applyMatrix4(aux);
-        this._testZ = new Vector4(0, 0, 1, 0).applyMatrix4(aux);
-    }
-
-    /**
-     * A vector to compute the SDF
-     * @type {Vector4}
-     */
-    get testX() {
-        if (this._testX === undefined) {
-            this.updateData();
-        }
-        return this._testX;
-    }
-
-    /**
-     * A vector to compute the SDF
-     * @type {Vector4}
-     */
-    get testY() {
-        if (this._testY === undefined) {
-            this.updateData();
-        }
-        return this._testY;
-    }
-
-    /**
-     * A vector to compute the SDF
-     * @type {Vector4}
-     */
-    get testZ() {
-        if (this._testZ === undefined) {
-            this.updateData();
-        }
-        return this._testZ;
-    }
-
     get isGlobal() {
         return false;
     }
