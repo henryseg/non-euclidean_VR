@@ -1514,7 +1514,7 @@ module.exports = "                                                              
 /***/ 6316:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct LocalZAxisShape {\n    int id;\n    vec4 testX;\n    vec4 testY;\n    vec4 testZ;\n    float smoothness;\n    vec2 sides;\n};\n\n   \n                                           \n   \nfloat sdf(LocalZAxisShape a, RelVector v) {\n    float dotX = dot(v.local.pos.coords, a.testX);\n    float dotY = dot(v.local.pos.coords, a.testY);\n    float dotZ = dot(v.local.pos.coords, a.testZ);\n\n    float distX = asinh((abs(dotX) - 0.5 * a.sides.x) * exp(-dotZ));\n    float distY = asinh((abs(dotY) - 0.5 * a.sides.y) * exp(dotZ));\n    return smoothMaxPoly(distX, distY, a.smoothness);\n}\n\n   \n                                        \n   \nRelVector gradient(LocalZAxisShape a, RelVector v){\n    float dotX = dot(v.local.pos.coords, a.testX);\n    float dotY = dot(v.local.pos.coords, a.testY);\n    float dotZ = dot(v.local.pos.coords, a.testZ);\n\n    float auxX = abs(dotX) - 0.5 * a.sides.x;\n    float auxY = abs(dotY) - 0.5 * a.sides.y;\n    float auxZX = exp(-dotZ);\n    float auxZY = exp(dotZ);\n    float distX = asinh(auxX * auxZX);\n    float distY = asinh(auxY * auxZY);\n\n    float den;\n    vec4 dir;\n\n    den = sqrt(auxX * auxX + auxZX * auxZX + 1.);\n    dir = (auxZX / den) * (-auxX * a.testZ + sign(auxX) * a.testX);\n    dir.w = 0.;\n    RelVector gradX = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    den = sqrt(auxY * auxY + auxZY * auxZY + 1.);\n    dir = (auxZY / den) * (auxY * a.testZ + sign(auxY) * a.testY);\n    dir.w = 0.;\n    RelVector gradY = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    return gradientMaxPoly(distX, distY, gradX, gradY, a.smoothness);\n}\n\n  \n                      \n                                             \n   \nvec2 uvMap(LocalZAxisShape a, RelVector v){\n    float dotX = dot(v.local.pos.coords, a.testX);\n    float dotY = dot(v.local.pos.coords, a.testY);\n    float dotZ = dot(v.local.pos.coords, a.testZ);\n\n    float uCoords = atan(dotY, dotX);\n    float vCoords = dotZ;\n    return vec2(uCoords, vCoords);\n}"
+module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct LocalZAxisShape {\n    int id;\n    vec4 testX;\n    vec4 testY;\n    vec4 testZ;\n    Isometry absoluteIsomInv;\n    float smoothness;\n    vec2 sides;\n};\n\n   \n                                           \n   \nfloat sdf(LocalZAxisShape a, RelVector v) {\n    Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);\n    float x = aux.coords.x;\n    float y = aux.coords.y;\n    float z = aux.coords.z;\n\n    float distX = asinh((abs(x) - 0.5 * a.sides.x) * exp(-z));\n    float distY = asinh((abs(y) - 0.5 * a.sides.y) * exp(z));\n    return smoothMaxPoly(distX, distY, a.smoothness);\n}\n\n   \n                                        \n   \nRelVector gradient(LocalZAxisShape a, RelVector v){\n    Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);\n    float x = aux.coords.x;\n    float y = aux.coords.y;\n    float z = aux.coords.z;\n\n    float auxX = abs(x) - 0.5 * a.sides.x;\n    float auxY = abs(y) - 0.5 * a.sides.y;\n    float auxZX = exp(-z);\n    float auxZY = exp(z);\n    float distX = asinh(auxX * auxZX);\n    float distY = asinh(auxY * auxZY);\n\n    float den;\n    vec4 dir;\n\n    den = sqrt(auxX * auxX + auxZX * auxZX + 1.);\n    dir = (auxZX / den) * (-auxX * a.testZ + sign(auxX) * a.testX);\n    dir.w = 0.;\n    RelVector gradX = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    den = sqrt(auxY * auxY + auxZY * auxZY + 1.);\n    dir = (auxZY / den) * (auxY * a.testZ + sign(auxY) * a.testY);\n    dir.w = 0.;\n    RelVector gradY = RelVector(Vector(v.local.pos, dir), v.cellBoost, v.invCellBoost);\n\n    return gradientMaxPoly(distX, distY, gradX, gradY, a.smoothness);\n}\n\n  \n                      \n                                             \n   \nvec2 uvMap(LocalZAxisShape a, RelVector v){\n    Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);\n    float x = aux.coords.x;\n    float y = aux.coords.y;\n    float z = aux.coords.z;\n\n    float uCoords = atan(y, x);\n    float vCoords = z;\n    return vec2(uCoords, vCoords);\n}"
 
 /***/ }),
 
@@ -5532,7 +5532,7 @@ class PathTracerCamera extends BasicCamera {
     }
 }
 ;// CONCATENATED MODULE: ./src/core/Generic.js
-
+                                                                                                                                          
 
 
 /**
@@ -17961,15 +17961,10 @@ class LocalZAxisShape extends BasicShape {
         }
         this.addImport((smoothMaxPoly_default()));
         this.smoothness = smoothness;
-        this._origin = undefined;
-        this._testX = undefined;
-        this._testY = undefined;
-        this._testZ = undefined;
     }
 
     updateData() {
         super.updateData();
-        this._origin = new Point_Point().applyIsometry(this.absoluteIsom);
         const aux = new external_three_namespaceObject.Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
         this._testX = new external_three_namespaceObject.Vector4(1, 0, 0, 0).applyMatrix4(aux);
         this._testY = new external_three_namespaceObject.Vector4(0, 1, 0, 0).applyMatrix4(aux);

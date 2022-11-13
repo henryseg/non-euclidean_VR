@@ -8,6 +8,7 @@ struct LocalZAxisShape {
     vec4 testX;
     vec4 testY;
     vec4 testZ;
+    Isometry absoluteIsomInv;
     float smoothness;
     vec2 sides;
 };
@@ -16,12 +17,13 @@ struct LocalZAxisShape {
  * Distance function for a local rod in Sol
  */
 float sdf(LocalZAxisShape a, RelVector v) {
-    float dotX = dot(v.local.pos.coords, a.testX);
-    float dotY = dot(v.local.pos.coords, a.testY);
-    float dotZ = dot(v.local.pos.coords, a.testZ);
+    Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);
+    float x = aux.coords.x;
+    float y = aux.coords.y;
+    float z = aux.coords.z;
 
-    float distX = asinh((abs(dotX) - 0.5 * a.sides.x) * exp(-dotZ));
-    float distY = asinh((abs(dotY) - 0.5 * a.sides.y) * exp(dotZ));
+    float distX = asinh((abs(x) - 0.5 * a.sides.x) * exp(-z));
+    float distY = asinh((abs(y) - 0.5 * a.sides.y) * exp(z));
     return smoothMaxPoly(distX, distY, a.smoothness);
 }
 
@@ -29,14 +31,15 @@ float sdf(LocalZAxisShape a, RelVector v) {
  * Gradient field for a local rod in Sol
  */
 RelVector gradient(LocalZAxisShape a, RelVector v){
-    float dotX = dot(v.local.pos.coords, a.testX);
-    float dotY = dot(v.local.pos.coords, a.testY);
-    float dotZ = dot(v.local.pos.coords, a.testZ);
+    Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);
+    float x = aux.coords.x;
+    float y = aux.coords.y;
+    float z = aux.coords.z;
 
-    float auxX = abs(dotX) - 0.5 * a.sides.x;
-    float auxY = abs(dotY) - 0.5 * a.sides.y;
-    float auxZX = exp(-dotZ);
-    float auxZY = exp(dotZ);
+    float auxX = abs(x) - 0.5 * a.sides.x;
+    float auxY = abs(y) - 0.5 * a.sides.y;
+    float auxZX = exp(-z);
+    float auxZY = exp(z);
     float distX = asinh(auxX * auxZX);
     float distY = asinh(auxY * auxZY);
 
@@ -61,11 +64,12 @@ RelVector gradient(LocalZAxisShape a, RelVector v){
  * Just using euclidean cylinder coordinates.
  */
 vec2 uvMap(LocalZAxisShape a, RelVector v){
-    float dotX = dot(v.local.pos.coords, a.testX);
-    float dotY = dot(v.local.pos.coords, a.testY);
-    float dotZ = dot(v.local.pos.coords, a.testZ);
+    Point aux = applyIsometry(a.absoluteIsomInv, v.local.pos);
+    float x = aux.coords.x;
+    float y = aux.coords.y;
+    float z = aux.coords.z;
 
-    float uCoords = atan(dotY, dotX);
-    float vCoords = dotZ;
+    float uCoords = atan(y, x);
+    float vCoords = z;
     return vec2(uCoords, vCoords);
 }

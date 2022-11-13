@@ -42,15 +42,10 @@ export class LocalZAxisShape extends BasicShape {
         }
         this.addImport(smoothMaxPoly);
         this.smoothness = smoothness;
-        this._origin = undefined;
-        this._testX = undefined;
-        this._testY = undefined;
-        this._testZ = undefined;
     }
 
     updateData() {
         super.updateData();
-        this._origin = new Point().applyIsometry(this.absoluteIsom);
         const aux = new Matrix4().copy(this.absoluteIsomInv.matrix).transpose();
         this._testX = new Vector4(1, 0, 0, 0).applyMatrix4(aux);
         this._testY = new Vector4(0, 1, 0, 0).applyMatrix4(aux);

@@ -5772,7 +5772,7 @@ class PathTracerCamera extends BasicCamera {
     }
 }
 ;// CONCATENATED MODULE: ./src/core/Generic.js
-
+                                                                                                                                          
 
 
 /**
