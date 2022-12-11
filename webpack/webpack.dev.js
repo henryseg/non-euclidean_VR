@@ -8,7 +8,7 @@ module.exports = merge(common, {
     mode: 'development',
     cache: false,
     devtool: 'inline-source-map',
-    entry: './src/dev/dev.js',
+    entry: './dev/dev.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'dev.js',
