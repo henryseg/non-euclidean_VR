@@ -16840,7 +16840,7 @@ class ConstDirLight extends Light {
         super(1);
         this.color = color;
         this.intensity = intensity;
-        this.direction = direction;
+        this.direction = direction.clone().normalize();
     }
 
     /**
