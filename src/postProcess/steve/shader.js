@@ -2,8 +2,8 @@ export default {
 
     uniforms: {
         'tDiffuse': {value: null}
-
     },
+
     // language=GLSL
     vertexShader: `
         varying vec2 vUv;
@@ -66,5 +66,4 @@ export default {
             vec3 aux = postProcess(color.rgb);
             gl_FragColor = vec4(min(vec3(1.0), aux), color.a);
         }`
-
 };
