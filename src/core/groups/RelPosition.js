@@ -249,6 +249,7 @@ class RelPosition {
         this.cellBoost.copy(position.cellBoost);
         this.invCellBoost.copy(position.invCellBoost);
         this.local.copy(position.local);
+        return this;
     }
 }
 

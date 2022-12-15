@@ -4,7 +4,7 @@ import {CREEPING_FULL} from "./TeleportationSet.js";
 import creeping from "./shaders/creeping.glsl.mustache";
 
 const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
-const regexpCreep = /ExtVector\s*(\w+)\(ExtVector.*\)/m;
+const regexpCreep = /float\s*(\w+)\(ExtVector.*\)/m;
 
 /**
  * @class
@@ -27,6 +27,7 @@ export class Teleportation {
      * @param {GroupElement} inv - the inverse of the isometry (optional)
      * If the inverse is not passed as an argument, it is computed automatically.
      * @param {string} glslCreep -  a chunk of GLSL to move to the boundary defined by the test
+     * The test should be encapsulated in a function with signature ExtVector, float, float -> float
      */
     constructor(set, jsTest, glslTest, elt, inv = undefined, glslCreep = undefined) {
         /**

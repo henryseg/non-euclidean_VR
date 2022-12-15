@@ -1,5 +1,5 @@
 import {Isometry} from "../../../core/geometry/Isometry.js";
-import {Matrix4, Vector3} from "three";
+import {Matrix4, Vector3, Vector4, Quaternion} from "three";
 
 
 Isometry.prototype.build = function () {
@@ -87,6 +87,26 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
 
     return this;
 };
+
+/**
+ * Update the current isometry with the one sending the vector e_z at the origin to the given vector at the given point
+ * It is assumed that `vector` is a vector in the tangent space of the sphere at `point`
+ * @param {Point} point - the image of the origin
+ * @param {Vector4} vector - the image of e_z.
+ * @returns {Isometry} - the current isometry
+ */
+Isometry.prototype.makeTranslationWithDir = function (point, vector) {
+    const transInv = new Isometry().makeInvTranslation(point);
+    const trans = new Isometry().makeTranslation(point);
+
+    const aux = vector.clone().applyMatrix4(transInv.matrix);
+    const vAtOrigin = new Vector3(aux.x, aux.y, aux.z).normalize();
+    const ez = new Vector3(0, 0, 1);
+    const q = new Quaternion().setFromUnitVectors(ez, vAtOrigin);
+    const rotMatrix = new Matrix4().makeRotationFromQuaternion(q);
+    this.matrix.copy(trans.matrix).multiply(rotMatrix);
+    return this;
+}
 
 Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);

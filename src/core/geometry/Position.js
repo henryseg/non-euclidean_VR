@@ -259,6 +259,7 @@ class Position {
     copy(position) {
         this.boost.copy(position.boost);
         this.quaternion.copy(position.quaternion);
+        return this;
     }
 }
 

@@ -10,3 +10,4 @@ export {VerticalHalfSpaceShape} from "./verticalHalfSpace/VerticalHalfSpaceShape
 export {VerticalCylinderShape} from "./verticalCylinder/VerticalCylinderShape.js";
 export {LocalVerticalCylinderShape} from "./localVerticalCylinder/LocalVerticalCylinderShape.js";
 export {DirectedVerticalHalfSpaceShape} from "./directedVerticalHalfSpace/DirectedVerticalHalfSpaceShape.js";
+export {StraightGeoShape} from "./straightGeo/StraightGeoShape.js";

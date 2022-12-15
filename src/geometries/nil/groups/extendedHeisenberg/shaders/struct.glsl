@@ -7,6 +7,8 @@ struct Group {
     vec4 translationA;
     vec4 translationB;
     vec4 translationC;
+    vec4 testTranslationA;
+    vec4 testTranslationB;
+    vec4 testTranslationC;
     int root;
-    mat4 dotMatrix;
 };

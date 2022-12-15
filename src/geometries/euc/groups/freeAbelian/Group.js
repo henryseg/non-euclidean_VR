@@ -75,7 +75,6 @@ export class Group extends AbstractGroup {
             0, 0, 0, 1
         ).invert();
         this._dotMatrix.copy(aux).transpose().multiply(aux);
-
     }
 
     /**

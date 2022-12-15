@@ -18,8 +18,10 @@ export class NativeCamera extends VRCamera {
         super(parameters);
         this.fakeCameras[LEFT].ipDist = -this.ipDist;
         this.fakeCameras[RIGHT].ipDist = this.ipDist;
+        for (const side in [LEFT, RIGHT]) {
+            this.fakeCameras[side].matrixInverse = this.threeCamera.matrixWorldInverse;
+        }
     }
-
 
     /**
      * build the GLSL code needed to declare the camera
@@ -31,4 +33,5 @@ export class NativeCamera extends VRCamera {
         shaderBuilder.addUniform('camera', 'NativeCamera', this.fakeCameras[side]);
         shaderBuilder.addChunk(mapping);
     }
+
 }

@@ -86,15 +86,25 @@ export class VRCamera extends BasicCamera {
         this.fakeCameras[RIGHT].position.copy(this.position);
 
         if (this.isStereoOn) {
-            // if we are in VR mode we offset the position of the left and right eyes
-            // to that end, we flow the position along the left / right direction
+            // if we are in VR mode, the position corresponds to the right eye
+            // we offset the left eye, by flowing in the left direction
             // we have to be careful that left and right are meant in the point of view of the camera.
-            const rightDir = new Vector(1, 0, 0)
-                .multiplyScalar(this.ipDist)
-                .applyMatrix4(this.matrix);
-            const leftDir = rightDir.clone().negate();
-            this.fakeCameras[RIGHT].position.flow(rightDir);
-            this.fakeCameras[LEFT].position.flow(leftDir);
+            const dir = new Vector(1, 0, 0)
+                .multiplyScalar(2 * this.ipDist)
+                .applyMatrix4(this.matrix)
+                .negate();
+            this.fakeCameras[LEFT].position.flow(dir);
+
+
+            // // if we are in VR mode we offset the position of the left and right eyes
+            // // to that end, we flow the position along the left / right direction
+            // // we have to be careful that left and right are meant in the point of view of the camera.
+            // const rightDir = new Vector(1, 0, 0)
+            //     .multiplyScalar(this.ipDist)
+            //     .applyMatrix4(this.matrix);
+            // const leftDir = rightDir.clone().negate();
+            // this.fakeCameras[RIGHT].position.flow(rightDir);
+            // this.fakeCameras[LEFT].position.flow(leftDir);
         }
     }
 
@@ -114,24 +124,13 @@ export class VRCamera extends BasicCamera {
             const oldThreePosition = new Vector();
 
             /**
-             * @param {WebXRManager} webXRManager - the WebXRManager used by Three.js
              * @private
              */
-            this._chaseThreeCamera = function (webXRManager) {
-                const newThreePosition = new Vector()
-                if (this.isStereoOn) {
-                    // If XR is enable, we get the position of the left and right camera.
-                    // Note that when XR is on, then main Three.js Camera is shifted to coincide with the right eye.
-                    // Do its position is NOT the midpoint between the eyes of the observer.
-                    // Thus we take here the midpoint between the two VR cameras.
-                    // Those can only be accessed using the WebXRManager.
-                    const camerasVR = webXRManager.getCamera(this.threeCamera).cameras;
-                    const newThreePositionL = new Vector3().setFromMatrixPosition(camerasVR[LEFT].matrixWorld);
-                    const newThreePositionR = new Vector3().setFromMatrixPosition(camerasVR[RIGHT].matrixWorld);
-                    newThreePosition.lerpVectors(newThreePositionL, newThreePositionR, 0.5);
-                } else {
-                    newThreePosition.setFromMatrixPosition(this.matrix);
-                }
+            this._chaseThreeCamera = function () {
+                // if we are in VR mode, the position corresponds to the right eye
+                // this should not  be an issue though.
+                // indeed we only care of the relative displacement.
+                const newThreePosition = new Vector().setFromMatrixPosition(this.matrix);
                 const deltaPosition = new Vector().subVectors(newThreePosition, oldThreePosition);
                 this.position.flow(deltaPosition);
                 this.updateFakeCamerasPosition();

@@ -10,8 +10,16 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack serve --config webpack/webpack.dev.js",
+    "buildEuc": "webpack --config webpack/webpack.prod.euc.js",
+    "buildHyp": "webpack --config webpack/webpack.prod.hyp.js",
+    "buildSph": "webpack --config webpack/webpack.prod.sph.js",
+    "buildS2E": "webpack --config webpack/webpack.prod.s2e.js",
+    "buildH2E": "webpack --config webpack/webpack.prod.h2e.js",
+    "buildNil": "webpack --config webpack/webpack.prod.nil.js",
+    "buildSL2": "webpack --config webpack/webpack.prod.sl2.js",
+    "buildSol": "webpack --config webpack/webpack.prod.sol.js",
+    "build": "webpack --config webpack/webpack.prod.all.js",
     "doc": "jsdoc -c jsdoc.conf.json"
   },
   "repository": {
@@ -39,8 +47,8 @@
     "ccapture.js": "^1.1.0",
     "ccapture.js-npmfixed": "^1.1.0",
     "dat.gui": "^0.7.7",
-    "es-module-shims": "^1.4.3",
-    "three": "^0.129.0",
+    "es-module-shims": "^1.6.1",
+    "three": "^0.145.0",
     "webxr-polyfill": "^2.0.3"
   },
   "devDependencies": {
@@ -55,6 +63,7 @@
     "exports-loader": "^3.0.0",
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
+    "filemanager-webpack-plugin": "^6.1.7",
     "foodoc": "^0.0.9",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",

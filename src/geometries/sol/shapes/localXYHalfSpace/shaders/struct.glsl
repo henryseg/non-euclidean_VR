@@ -3,7 +3,7 @@
  * Euclidean half space
  **********************************************************************************************************************/
 
-struct LocalXYHalfSpaceShape {
+struct LocalXHalfSpaceShape {
     vec4 testX; /**< Extrinsic auxiliairy vector used to compute the distance */
     vec4 testZ; /**< Extrinsic auxiliairy vector used to compute the distance */
     Point origin;
@@ -12,13 +12,13 @@ struct LocalXYHalfSpaceShape {
 };
 
 // one has to be careful with the signs, to make sure that the opposite is indeed the SDF of the complement.
-float sdf(LocalXYHalfSpaceShape halfspace, RelVector v){
+float sdf(LocalXHalfSpaceShape halfspace, RelVector v){
     float dotX = dot(v.local.pos.coords, halfspace.testX);
     float dotZ = dot(v.local.pos.coords, halfspace.testZ);
     return asinh(dotX * exp(-dotZ));
 }
 
-RelVector gradient(LocalXYHalfSpaceShape halfspace, RelVector v){
+RelVector gradient(LocalXHalfSpaceShape halfspace, RelVector v){
     float dotX = dot(v.local.pos.coords, halfspace.testX);
     float dotZ = dot(v.local.pos.coords, halfspace.testZ);
     float eDotZ = exp(-dotZ);
@@ -34,7 +34,7 @@ RelVector gradient(LocalXYHalfSpaceShape halfspace, RelVector v){
     return RelVector(n, v.cellBoost, v.invCellBoost);
 }
 
-vec2 uvMap(LocalXYHalfSpaceShape halfspace, RelVector v){
+vec2 uvMap(LocalXHalfSpaceShape halfspace, RelVector v){
 //    Point pos = applyGroupElement(v.invCellBoost, halfspace.origin);
 //    Isometry isom = toIsometry(v.invCellBoost);
 //    vec4 uDir = isom.matrix * vec4(halfspace.uDir, 0);

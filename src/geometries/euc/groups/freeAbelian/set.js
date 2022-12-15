@@ -17,13 +17,12 @@ bool testXp(Point p){
 `;
 // language=GLSL
 const glslCreepXp = `//
-ExtVector creepXp(ExtVector v, float offset){
+float creepXp(ExtVector v, float offset){
     Vector local = v.vector.local;
     vec4 uAux = group.dotMatrix * group.halfTranslationA;
     float aux0 = 1. - dot(local.pos.coords, uAux);
     float aux1 = dot(local.dir, uAux);
-    float t = aux0 / aux1 + offset;
-    return flow(v, t);
+    return aux0 / aux1 + offset;
 }
 `;
 
@@ -40,13 +39,12 @@ bool testXn(Point p){
 `;
 // language=GLSL
 const glslCreepXn = `//
-ExtVector creepXn(ExtVector v, float offset){
+float creepXn(ExtVector v, float offset){
     Vector local = v.vector.local;
     vec4 uAux = group.dotMatrix * group.halfTranslationA;
     float aux0 = 1. + dot(local.pos.coords, uAux);
     float aux1 = -dot(local.dir, uAux);
-    float t = aux0 / aux1 + offset;
-    return flow(v, t);
+    return aux0 / aux1 + offset;
 }
 `;
 
@@ -63,13 +61,12 @@ bool testYp(Point p){
 `;
 // language=GLSL
 const glslCreepYp = `//
-ExtVector creepYp(ExtVector v, float offset){
+float creepYp(ExtVector v, float offset){
     Vector local = v.vector.local;
     vec4 uAux = group.dotMatrix * group.halfTranslationB;
     float aux0 = 1. - dot(local.pos.coords, uAux);
     float aux1 = dot(local.dir, uAux);
-    float t = aux0 / aux1 + offset;
-    return flow(v, t);
+    return aux0 / aux1 + offset;
 }
 `;
 
@@ -86,13 +83,12 @@ bool testYn(Point p){
 `;
 // language=GLSL
 const glslCreepYn = `//
-ExtVector creepYn(ExtVector v, float offset){
+float creepYn(ExtVector v, float offset){
     Vector local = v.vector.local;
     vec4 uAux = group.dotMatrix * group.halfTranslationB;
     float aux0 = 1. + dot(local.pos.coords, uAux);
     float aux1 = -dot(local.dir, uAux);
-    float t = aux0 / aux1 + offset;
-    return flow(v, t);
+    return aux0 / aux1 + offset;
 }
 `;
 
@@ -109,13 +105,12 @@ bool testZp(Point p){
 `;
 // language=GLSL
 const glslCreepZp = `//
-ExtVector creepZp(ExtVector v, float offset){
+float creepZp(ExtVector v, float offset){
     Vector local = v.vector.local;
     vec4 uAux = group.dotMatrix * group.halfTranslationC;
     float aux0 = 1. - dot(local.pos.coords, uAux);
     float aux1 = dot(local.dir, uAux);
-    float t = aux0 / aux1 + offset;
-    return flow(v, t);
+    return aux0 / aux1 + offset;
 }
 `;
 
@@ -132,13 +127,12 @@ bool testZn(Point p){
 `;
 // language=GLSL
 const glslCreepZn = `//
-ExtVector creepZn(ExtVector v, float offset){
+float creepZn(ExtVector v, float offset){
     Vector local = v.vector.local;
     vec4 uAux = group.dotMatrix * group.halfTranslationC;
     float aux0 = 1. + dot(local.pos.coords, uAux);
     float aux1 = -dot(local.dir, uAux);
-    float t = aux0 / aux1 + offset;
-    return flow(v, t);
+    return aux0 / aux1 + offset;
 }
 `;
 

@@ -1,5 +1,5 @@
 import * as WebXRPolyfill from "webxr-polyfill";
-import {Mesh, ShaderMaterial, SphereBufferGeometry} from "three";
+import {Mesh, ShaderMaterial, SphereGeometry} from "three";
 import {VRButton as VRButtonLib} from "three/examples/jsm/webxr/VRButton.js";
 
 import {bind} from "../../utils.js";
@@ -110,7 +110,7 @@ export class VRRenderer extends AbstractRenderer {
     build() {
         // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereBufferGeometry(1000, 60, 40);
+        const geometry = new SphereGeometry(50, 60, 40);
         // sphere eversion !
         geometry.scale(1, 1, -1);
 
@@ -137,7 +137,7 @@ export class VRRenderer extends AbstractRenderer {
     }
 
     render() {
-        this.camera.chaseThreeCamera(this.threeRenderer.xr);
+        this.camera.chaseThreeCamera();
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }

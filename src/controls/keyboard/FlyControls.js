@@ -65,7 +65,7 @@ class FlyControls extends EventDispatcher {
     /**
      * Constructor
      * (and not the one of the three.js camera in the virtual euclidean space).
-     * @param {BasicCamera} camera - the non-euclidean camera
+     * @param {DollyCamera} camera - the non-euclidean camera
      * (needed to get the orientation of the observer when using both VR and keyboard).
      * @param {string} keyboard - the keyboard type (us, fr, etc)
      */
