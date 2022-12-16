@@ -119,16 +119,29 @@ const neighborsLite = [
     {elt: shiftZn, inv: shiftZp}
 ];
 
+
 /**
  * Subgroup corresponding to the integer Heisenberg group
  */
 export default new TeleportationSet(neighborsLite)
-    .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
-    .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
-    .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
-    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+    .add(testXp, glslTestXp, shiftXp, shiftXn)
+    .add(testXn, glslTestXn, shiftXn, shiftXp)
+    .add(testYp, glslTestYp, shiftYp, shiftYn)
+    .add(testYn, glslTestYn, shiftYn, shiftYp)
     .add(testZp, glslTestZp, shiftZp, shiftZn)
     .add(testZn, glslTestZn, shiftZn, shiftZp);
+
+
+// /**
+//  * Subgroup corresponding to the integer Heisenberg group
+//  */
+// export default new TeleportationSet(neighborsLite)
+//     .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
+//     .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
+//     .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
+//     .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+//     .add(testZp, glslTestZp, shiftZp, shiftZn)
+//     .add(testZn, glslTestZn, shiftZn, shiftZp);
 
 
 

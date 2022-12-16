@@ -30,9 +30,10 @@ export class LocalFakeBallShape extends BasicShape {
         } else {
             throw new Error("LocalFakeBallShape: the type of location is not implemented");
         }
-        super();
+        super(isom);
         this.addImport(fakeDistance);
-        this.radius = radius;this._center = undefined;
+        this.radius = radius;
+        this._center = undefined;
     }
 
     updateData() {

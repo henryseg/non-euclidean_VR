@@ -1490,6 +1490,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 653:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \n\nstruct ConstDirLight {\n    int id;\n    vec3 color;\n    float intensity;\n    vec3 direction;\n    int maxDirs;\n};\n\nbool directions(ConstDirLight light, RelVector v, int i, out RelVector dir, out float intensity) {\n    if (i!=0){\n        return false;\n    }\n    intensity = light.intensity;\n                                                             \n                                                                        \n    vec4 coords = vec4(light.direction, 0.);\n    Vector local = Vector(v.local.pos, coords);\n    dir = RelVector(local, v.cellBoost, v.invCellBoost);\n    return true;\n}"
+
+/***/ }),
+
 /***/ 3022:
 /***/ ((module) => {
 
@@ -1649,6 +1656,7 @@ __webpack_require__.d(__webpack_exports__, {
   "kj": () => (/* reexport */ CREEPING_STRICT),
   "Vz": () => (/* reexport */ CheckerboardMaterial),
   "Iy": () => (/* reexport */ ComplementShape),
+  "Vf": () => (/* reexport */ ConstDirLight),
   "TB": () => (/* reexport */ DebugMaterial),
   "F6": () => (/* reexport */ DirectedVerticalHalfSpace),
   "Kd": () => (/* reexport */ DirectedVerticalHalfSpaceShape),
@@ -3556,8 +3564,8 @@ var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(
 
     uniforms: {
         'tDiffuse': {value: null}
-
     },
+
     // language=GLSL
     vertexShader: `
         varying vec2 vUv;
@@ -3620,7 +3628,6 @@ var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(
             vec3 aux = postProcess(color.rgb);
             gl_FragColor = vec4(min(vec3(1.0), aux), color.a);
         }`
-
 });
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/main.glsl
 var main = __webpack_require__(5315);
@@ -16357,9 +16364,9 @@ class Matrix2 {
  *
  * @classdesc
  * Integral Heisenberg group element
- * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
+ * Elements are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
  * The coordinates of the group element correspond to the Heisenberg model of Nil (to keep integer coordinates).
- * However the isometry is in the projective model.
+ * However, the isometry is in the projective model.
  */
 class basicHeisenberg_GroupElement_GroupElement extends GroupElement_GroupElement {
 
@@ -16480,12 +16487,12 @@ bool testXp(Point p){
 `;
 
 // language=GLSL
-const glslCreepXp = `//
+const glslCreepXp = (/* unused pure expression or super */ null && (`//
 float creepXp(ExtVector v, float offset){
     Vector local = v.vector.local;
     return 0.5 - local.pos.coords.x + offset;
 }
-`;
+`));
 
 function testXn(p) {
     return p.coords.x < -0.5;
@@ -16499,12 +16506,12 @@ bool testXn(Point p){
 `;
 
 // language=GLSL
-const glslCreepXn = `//
+const glslCreepXn = (/* unused pure expression or super */ null && (`//
 float creepXn(ExtVector v, float offset){
     Vector local = v.vector.local;
     return  0.5 + local.pos.coords.x + offset;
 }
-`;
+`));
 
 function testYp(p) {
     return p.coords.y > 0.5;
@@ -16518,12 +16525,12 @@ bool testYp(Point p){
 `;
 
 // language=GLSL
-const glslCreepYp = `//
+const glslCreepYp = (/* unused pure expression or super */ null && (`//
 float creepYp(ExtVector v, float offset){
     Vector local = v.vector.local;
     return  0.5 - local.pos.coords.y + offset;
 }
-`;
+`));
 
 function testYn(p) {
     return p.coords.y < -0.5;
@@ -16537,12 +16544,12 @@ bool testYn(Point p){
 `;
 
 // language=GLSL
-const glslCreepYn = `//
+const glslCreepYn = (/* unused pure expression or super */ null && (`//
 float creepYn(ExtVector v, float offset){
     Vector local = v.vector.local;
     return  0.5 + local.pos.coords.y + offset;
 }
-`;
+`));
 
 function testZp(p) {
     return p.coords.z > 0.5;
@@ -16583,16 +16590,29 @@ const neighborsLite = [
     {elt: shiftZn, inv: shiftZp}
 ];
 
+
 /**
  * Subgroup corresponding to the integer Heisenberg group
  */
 /* harmony default export */ const basicHeisenberg_set = (new TeleportationSet(neighborsLite)
-    .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
-    .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
-    .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
-    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+    .add(testXp, glslTestXp, shiftXp, shiftXn)
+    .add(testXn, glslTestXn, shiftXn, shiftXp)
+    .add(testYp, glslTestYp, shiftYp, shiftYn)
+    .add(testYn, glslTestYn, shiftYn, shiftYp)
     .add(testZp, glslTestZp, shiftZp, shiftZn)
     .add(testZn, glslTestZn, shiftZn, shiftZp));
+
+
+// /**
+//  * Subgroup corresponding to the integer Heisenberg group
+//  */
+// export default new TeleportationSet(neighborsLite)
+//     .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
+//     .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
+//     .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
+//     .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+//     .add(testZp, glslTestZp, shiftZp, shiftZn)
+//     .add(testZn, glslTestZn, shiftZn, shiftZp);
 
 
 
@@ -17458,7 +17478,68 @@ class FakePointLight extends Light {
     }
 
 }
+// EXTERNAL MODULE: ./src/geometries/nil/lights/constDirLight/shaders/struct.glsl
+var constDirLight_shaders_struct = __webpack_require__(653);
+var constDirLight_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(constDirLight_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/nil/lights/constDirLight/ConstDirLight.js
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Constant local direction
+ */
+class ConstDirLight extends Light {
+
+    /**
+     * Constructor.
+     * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
+     * @param {Vector3} direction - the direction of the light.
+     */
+    constructor(color, intensity = 1, direction) {
+        super(1);
+        this.color = color;
+        this.intensity = intensity;
+        this.direction = direction.clone().normalize();
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'ConstDirLight';
+    }
+
+    /**
+     * Return the chunk of GLSL code defining the corresponding structure.
+     * @abstract
+     * @return {string}
+     */
+    static glslClass() {
+        return (constDirLight_shaders_struct_default());
+    }
+
+    glslDirections() {
+        return directions_glsl_mustache_default()(this);
+    }
+
+
+}
 ;// CONCATENATED MODULE: ./src/geometries/nil/lights/all.js
+
 
 // EXTERNAL MODULE: ./src/geometries/nil/material/varyingColor/shaders/struct.glsl
 var varyingColor_shaders_struct = __webpack_require__(3022);
@@ -17663,9 +17744,10 @@ class LocalFakeBallShape extends BasicShape {
         } else {
             throw new Error("LocalFakeBallShape: the type of location is not implemented");
         }
-        super();
+        super(isom);
         this.addImport((fakeDistance_default()));
-        this.radius = radius;this._center = undefined;
+        this.radius = radius;
+        this._center = undefined;
     }
 
     updateData() {
@@ -18777,6 +18859,7 @@ var __webpack_exports__CREEPING_OFF = __webpack_exports__._x;
 var __webpack_exports__CREEPING_STRICT = __webpack_exports__.kj;
 var __webpack_exports__CheckerboardMaterial = __webpack_exports__.Vz;
 var __webpack_exports__ComplementShape = __webpack_exports__.Iy;
+var __webpack_exports__ConstDirLight = __webpack_exports__.Vf;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
 var __webpack_exports__DirectedVerticalHalfSpace = __webpack_exports__.F6;
 var __webpack_exports__DirectedVerticalHalfSpaceShape = __webpack_exports__.Kd;
@@ -18864,4 +18947,4 @@ var __webpack_exports__safeString = __webpack_exports__.p2;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StraightGeo as StraightGeo, __webpack_exports__StraightGeoShape as StraightGeoShape, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__intersection as intersection, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
+export { __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StraightGeo as StraightGeo, __webpack_exports__StraightGeoShape as StraightGeoShape, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__intersection as intersection, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };

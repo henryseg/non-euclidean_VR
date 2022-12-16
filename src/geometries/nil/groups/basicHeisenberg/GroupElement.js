@@ -8,9 +8,9 @@ import {Point} from "../../geometry/General.js";
  *
  * @classdesc
  * Integral Heisenberg group element
- * Element are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
+ * Elements are represented as Vector3 with integer coordinates (both on the JS and the GLSL side).
  * The coordinates of the group element correspond to the Heisenberg model of Nil (to keep integer coordinates).
- * However the isometry is in the projective model.
+ * However, the isometry is in the projective model.
  */
 export class GroupElement extends AbstractGroupElement {
 

@@ -3751,8 +3751,8 @@ var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(
 
     uniforms: {
         'tDiffuse': {value: null}
-
     },
+
     // language=GLSL
     vertexShader: `
         varying vec2 vUv;
@@ -3815,7 +3815,6 @@ var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(
             vec3 aux = postProcess(color.rgb);
             gl_FragColor = vec4(min(vec3(1.0), aux), color.a);
         }`
-
 });
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/main.glsl
 var main = __webpack_require__(5315);
