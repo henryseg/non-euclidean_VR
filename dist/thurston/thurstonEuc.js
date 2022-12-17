@@ -13119,6 +13119,12 @@ class PhongMaterial extends Material {
          */
         this.shininess = params.shininess !== undefined ? params.shininess : 10;
         /**
+         * Is the material reflecting (false by default)
+         * The changes will no be passed to the shader (hard coded shader)
+         * @type {boolean}
+         */
+        this._isReflecting = params.isReflecting !== undefined ? params.isReflecting : false;
+        /**
          * Reflectivity of the material
          * @type {Color}
          */
@@ -13139,7 +13145,7 @@ class PhongMaterial extends Material {
     }
 
     get isReflecting() {
-        return true;
+        return this._isReflecting;
     }
 
     static glslClass() {
@@ -13758,6 +13764,12 @@ class PhongWrapMaterial extends Material {
          */
         this.shininess = params.shininess !== undefined ? params.shininess : 10;
         /**
+         * Is the material reflecting (false by default)
+         * The changes will no be passed to the shader (hard coded shader)
+         * @type {boolean}
+         */
+        this._isReflecting = params.isReflecting !== undefined ? params.isReflecting : false;
+        /**
          * Reflectivity of the material
          * @type {Color}
          */
@@ -13790,7 +13802,7 @@ class PhongWrapMaterial extends Material {
     }
 
     get isReflecting() {
-        return true;
+        return this._isReflecting;
     }
 
     glslRender() {
