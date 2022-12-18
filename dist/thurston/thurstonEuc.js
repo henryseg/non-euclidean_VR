@@ -1219,6 +1219,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 6130:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct SunTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(SunTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
+
+/***/ }),
+
 /***/ 2143:
 /***/ ((module) => {
 
@@ -1544,7 +1551,7 @@ module.exports = "                                                              
 /***/ 1241:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    vec4 w = center.coords - v.local.pos.coords;\n    return length(w) - ball.radius;\n}\n\n   \n                                             \n   \nRelVector gradient(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    Vector local = Vector(v.local.pos, v.local.pos.coords - center.coords);\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    vec4 dir = normalize(v.local.pos.coords - center.coords);\n    dir.w = 0.;\n                                      \n    dir = ball.absoluteIsomInv.matrix * dir;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}"
+module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    vec4 w = center.coords - v.local.pos.coords;\n    return length(w) - ball.radius;\n}\n\n   \n                                             \n   \nRelVector gradient(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    Vector local = Vector(v.local.pos, v.local.pos.coords - center.coords);\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    vec4 dir = v.local.pos.coords - center.coords;\n    dir.w = 0.;\n                                      \n    dir = ball.absoluteIsomInv.matrix * dir;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}"
 
 /***/ }),
 
@@ -1572,7 +1579,7 @@ module.exports = "                                                              
 /***/ 7111:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                                  \n                                                                                                                        \n\nstruct LocalBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(LocalBallShape ball, RelVector v) {\n    vec4 w =  ball.center.coords  - v.local.pos.coords;\n    return length(w) - ball.radius;\n}\n\n   \n                                             \n   \nRelVector gradient(LocalBallShape ball, RelVector v){\n    Vector local = Vector(v.local.pos, v.local.pos.coords - ball.center.coords);\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(LocalBallShape ball, RelVector v){\n    vec4 dir = normalize(v.local.pos.coords - ball.center.coords);\n    float sinPhi = sqrt(dir.x * dir.x + dir.y * dir.y);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                                  \n                                                                                                                        \n\nstruct LocalBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(LocalBallShape ball, RelVector v) {\n    vec4 w =  ball.center.coords  - v.local.pos.coords;\n    return length(w) - ball.radius;\n}\n\n   \n                                             \n   \nRelVector gradient(LocalBallShape ball, RelVector v){\n    Vector local = Vector(v.local.pos, v.local.pos.coords - ball.center.coords);\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(LocalBallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = sqrt(dir.x * dir.x + dir.y * dir.y);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n\n"
 
 /***/ }),
 
@@ -13801,7 +13808,11 @@ class MoonTexture extends SimpleTextureMaterial {
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/img/2k_sun.jpg
 const _2k_sun_namespaceObject = __webpack_require__.p + "img/4b569137334e61081651.jpg";
+// EXTERNAL MODULE: ./src/commons/materials/astronomy/sun/shaders/struct.glsl
+var sun_shaders_struct = __webpack_require__(6130);
+var sun_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(sun_shaders_struct);
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/SunTexture.js
+
 
 
 
@@ -13823,6 +13834,14 @@ class SunTexture extends SimpleTextureMaterial {
             start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
             scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
+    }
+
+    get uniformType() {
+        return 'SunTextureMaterial';
+    }
+
+    static glslClass() {
+        return (sun_shaders_struct_default());
     }
 }
 // EXTERNAL MODULE: ./src/commons/materials/astronomy/mars/shaders/struct.glsl

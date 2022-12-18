@@ -1202,6 +1202,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 6130:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct SunTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(SunTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
+
+/***/ }),
+
 /***/ 2143:
 /***/ ((module) => {
 
@@ -13755,7 +13762,11 @@ class MoonTexture extends SimpleTextureMaterial {
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/img/2k_sun.jpg
 const _2k_sun_namespaceObject = __webpack_require__.p + "img/4b569137334e61081651.jpg";
+// EXTERNAL MODULE: ./src/commons/materials/astronomy/sun/shaders/struct.glsl
+var sun_shaders_struct = __webpack_require__(6130);
+var sun_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(sun_shaders_struct);
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/SunTexture.js
+
 
 
 
@@ -13777,6 +13788,14 @@ class SunTexture extends SimpleTextureMaterial {
             start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
             scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
+    }
+
+    get uniformType() {
+        return 'SunTextureMaterial';
+    }
+
+    static glslClass() {
+        return (sun_shaders_struct_default());
     }
 }
 // EXTERNAL MODULE: ./src/commons/materials/astronomy/mars/shaders/struct.glsl
