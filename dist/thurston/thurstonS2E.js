@@ -1181,6 +1181,27 @@ module.exports = "float smoothMinPoly(float a, float b, float k){\n    float h =
 
 /***/ }),
 
+/***/ 2529:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct EarthTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(EarthTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
+
+/***/ }),
+
+/***/ 7225:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct MarsTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(MarsTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
+
+/***/ }),
+
+/***/ 3069:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct MoonTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(MoonTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
+
+/***/ }),
+
 /***/ 2143:
 /***/ ((module) => {
 
@@ -1233,7 +1254,7 @@ module.exports = "                                                              
 /***/ 9095:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct SimpleTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(SimpleTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n                                                 \n    return color.xyz;\n}\n\n\n"
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct SimpleTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(SimpleTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
 
 /***/ }),
 
@@ -13610,9 +13631,17 @@ class SimpleTextureMaterial extends Material {
     }
 
 }
+// EXTERNAL MODULE: ./src/commons/materials/astronomy/earth/shaders/struct.glsl
+var earth_shaders_struct = __webpack_require__(2529);
+var earth_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(earth_shaders_struct);
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/earth/img/earthmap2k.png
 const earthmap2k_namespaceObject = __webpack_require__.p + "img/426f7657671a2811d4aa.png";
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/earth/img/Earth_NoClouds.jpg
+const Earth_NoClouds_namespaceObject = __webpack_require__.p + "img/953837709706027f7dc2.jpg";
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/earth/EarthTexture.js
+
+
+
 
 
 
@@ -13629,16 +13658,47 @@ const earthmap2k_namespaceObject = __webpack_require__.p + "img/426f7657671a2811
  */
 class EarthTexture extends SimpleTextureMaterial {
 
-    constructor() {
-        super(earthmap2k_namespaceObject, {
+    /**
+     * Constructor
+     * @param {number} textureID - The id of a texture (among the ones available)
+     */
+    constructor(textureID = 0) {
+        let texture;
+        switch (textureID) {
+            case 0:
+                texture = earthmap2k_namespaceObject;
+                break;
+            case 1:
+                texture = Earth_NoClouds_namespaceObject;
+                break;
+            default:
+                texture = earthmap2k_namespaceObject;
+        }
+
+        super(texture, {
             start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
             scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
     }
+
+    get uniformType() {
+        return 'EarthTextureMaterial';
+    }
+
+    static glslClass() {
+        return (earth_shaders_struct_default());
+    }
 }
+// EXTERNAL MODULE: ./src/commons/materials/astronomy/moon/shaders/struct.glsl
+var moon_shaders_struct = __webpack_require__(3069);
+var moon_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(moon_shaders_struct);
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/moon/img/lroc_color_poles_2k.png
 const lroc_color_poles_2k_namespaceObject = __webpack_require__.p + "img/eba62d0cff4836a949b8.png";
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/moon/img/2k_moon.jpg
+const _2k_moon_namespaceObject = __webpack_require__.p + "img/26419cb1ce4138a11aa9.jpg";
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/moon/MoonTexture.js
+
+
 
 
 
@@ -13656,11 +13716,34 @@ const lroc_color_poles_2k_namespaceObject = __webpack_require__.p + "img/eba62d0
  */
 class MoonTexture extends SimpleTextureMaterial {
 
-    constructor() {
-        super(lroc_color_poles_2k_namespaceObject, {
+    /**
+     * Constructor
+     * @param {number} textureID - The id of a texture (among the ones available)
+     */
+    constructor(textureID) {
+        let texture;
+        switch (textureID) {
+            case 0:
+                texture = lroc_color_poles_2k_namespaceObject;
+                break;
+            case 1:
+                texture = _2k_moon_namespaceObject;
+                break;
+            default:
+                texture = lroc_color_poles_2k_namespaceObject;
+        }
+        super(texture, {
             start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
             scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
+    }
+
+    get uniformType() {
+        return 'MoonTextureMaterial';
+    }
+
+    static glslClass() {
+        return (moon_shaders_struct_default());
     }
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/img/2k_sun.jpg
@@ -13689,9 +13772,14 @@ class SunTexture extends SimpleTextureMaterial {
         });
     }
 }
+// EXTERNAL MODULE: ./src/commons/materials/astronomy/mars/shaders/struct.glsl
+var mars_shaders_struct = __webpack_require__(7225);
+var mars_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(mars_shaders_struct);
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/mars/img/2k_mars.jpg
 const _2k_mars_namespaceObject = __webpack_require__.p + "img/33960f5af615e67309e5.jpg";
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/mars/MarsTexture.js
+
+
 
 
 
@@ -13714,6 +13802,15 @@ class MarsTexture extends SimpleTextureMaterial {
             start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
             scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
+    }
+
+
+    get uniformType() {
+        return 'MarsTextureMaterial';
+    }
+
+    static glslClass() {
+        return (mars_shaders_struct_default());
     }
 }
 // EXTERNAL MODULE: ./src/commons/materials/squares/shaders/struct.glsl

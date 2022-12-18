@@ -1,8 +1,10 @@
 import {Vector2} from "three";
 
 import {SimpleTextureMaterial} from "../../simpleTexture/SimpleTextureMaterial.js";
+import struct from "./shaders/struct.glsl";
 
 import texture from "./img/2k_mars.jpg";
+
 
 /**
  * @class
@@ -20,5 +22,14 @@ export class MarsTexture extends SimpleTextureMaterial {
             start: new Vector2(-Math.PI, 0),
             scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
         });
+    }
+
+
+    get uniformType() {
+        return 'MarsTextureMaterial';
+    }
+
+    static glslClass() {
+        return struct;
     }
 }
