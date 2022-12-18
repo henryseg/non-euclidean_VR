@@ -1542,21 +1542,21 @@ module.exports = "                                                              
 /***/ 129:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct FakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(FakeBallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    return fakeDistance(v.local.pos, center) - ball.radius;\n}\n"
+module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct FakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(FakeBallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    return fakeDistance(v.local.pos, center) - ball.radius;\n}\n\nvec2 uvMap(FakeBallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 
 /***/ 9039:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                  \n                                                                                                                        \n\nstruct LocalFakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(LocalFakeBallShape ball, RelVector v) {\n    return fakeDistance(v.local.pos, ball.center) - ball.radius;\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                  \n                                                                                                                        \n\nstruct LocalFakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(LocalFakeBallShape ball, RelVector v) {\n    return fakeDistance(v.local.pos, ball.center) - ball.radius;\n}\n\nvec2 uvMap(LocalFakeBallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n\n\n"
 
 /***/ }),
 
 /***/ 8206:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                     \n                                                                                                                        \n\nstruct LocalPotatoShape {\n    int id;\n    Point center;\n    float radius;\n    float coeff1;\n    float coeff2;\n    float exp;\n};\n\n   \n                                                \n   \nfloat sdf(LocalPotatoShape potato, RelVector v) {\n    Isometry pull = makeInvTranslation(potato.center);\n    Point p = applyIsometry(pull, v.local.pos);\n    float x = p.coords.x;\n    float y = p.coords.y;\n    float rhosq = x * x + y * y;\n    float hsq = fakeHeightSq(p);\n    float aux = potato.coeff1 * pow(rhosq, 0.5 * potato.exp) + potato.coeff2 * pow(hsq, 0.5 * potato.exp);\n    return pow(aux, 1. / potato.exp) - potato.radius;\n}\n"
+module.exports = "                                                                                                                        \n          \n                     \n                                                                                                                        \n\nstruct LocalPotatoShape {\n    int id;\n    Point center;\n    float radius;\n    float coeff1;\n    float coeff2;\n    float exp;\n};\n\n   \n                                                \n   \nfloat sdf(LocalPotatoShape potato, RelVector v) {\n    Isometry pull = makeInvTranslation(potato.center);\n    Point p = applyIsometry(pull, v.local.pos);\n    float x = p.coords.x;\n    float y = p.coords.y;\n    float rhosq = x * x + y * y;\n    float hsq = fakeHeightSq(p);\n    float aux = potato.coeff1 * pow(rhosq, 0.5 * potato.exp) + potato.coeff2 * pow(hsq, 0.5 * potato.exp);\n    return pow(aux, 1. / potato.exp) - potato.radius;\n}\n\nvec2 uvMap(LocalPotatoShape potato, RelVector v){\n    vec4 dir = v.local.pos.coords - potato.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 
@@ -17766,7 +17766,11 @@ var fakeBall_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(fakeBal
 // EXTERNAL MODULE: ./src/core/shapes/shaders/sdf.glsl.mustache
 var shapes_shaders_sdf_glsl_mustache = __webpack_require__(3707);
 var shapes_shaders_sdf_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shapes_shaders_sdf_glsl_mustache);
+// EXTERNAL MODULE: ./src/core/shapes/shaders/uv.glsl.mustache
+var shapes_shaders_uv_glsl_mustache = __webpack_require__(4355);
+var shapes_shaders_uv_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shapes_shaders_uv_glsl_mustache);
 ;// CONCATENATED MODULE: ./src/geometries/nil/shapes/fakeBall/FakeBallShape.js
+
 
 
 
@@ -17835,6 +17839,10 @@ class FakeBallShape extends BasicShape {
         return 'FakeBallShape';
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     static glslClass() {
         return (fakeBall_shaders_struct_default());
     }
@@ -17842,11 +17850,16 @@ class FakeBallShape extends BasicShape {
     glslSDF() {
         return shapes_shaders_sdf_glsl_mustache_default()(this);
     }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
 }
 // EXTERNAL MODULE: ./src/geometries/nil/shapes/localFakeBall/shaders/struct.glsl
 var localFakeBall_shaders_struct = __webpack_require__(9039);
 var localFakeBall_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localFakeBall_shaders_struct);
 ;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localFakeBall/LocalFakeBallShape.js
+
 
 
 
@@ -17913,12 +17926,20 @@ class LocalFakeBallShape extends BasicShape {
         return 'LocalFakeBallShape';
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     static glslClass() {
         return (localFakeBall_shaders_struct_default());
     }
 
     glslSDF() {
         return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
 // EXTERNAL MODULE: ./src/geometries/nil/shapes/potato/shaders/struct.glsl
@@ -18016,6 +18037,7 @@ var localPotato_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(loca
 
 
 
+
 /**
  * @class
  *
@@ -18078,12 +18100,20 @@ class LocalPotatoShape extends BasicShape {
         return 'LocalPotatoShape';
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     static glslClass() {
         return (localPotato_shaders_struct_default());
     }
 
     glslSDF() {
         return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
 // EXTERNAL MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/shaders/struct.glsl
@@ -18092,9 +18122,6 @@ var verticalHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.
 // EXTERNAL MODULE: ./src/core/shapes/shaders/gradient.glsl.mustache
 var shapes_shaders_gradient_glsl_mustache = __webpack_require__(5030);
 var shapes_shaders_gradient_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shapes_shaders_gradient_glsl_mustache);
-// EXTERNAL MODULE: ./src/core/shapes/shaders/uv.glsl.mustache
-var shapes_shaders_uv_glsl_mustache = __webpack_require__(4355);
-var shapes_shaders_uv_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shapes_shaders_uv_glsl_mustache);
 ;// CONCATENATED MODULE: ./src/geometries/nil/shapes/verticalHalfSpace/VerticalHalfSpaceShape.js
 
 

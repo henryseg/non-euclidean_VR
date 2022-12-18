@@ -5,6 +5,7 @@ import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import fakeDistance from "../../imports/fakeDistance.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 
@@ -66,11 +67,19 @@ export class FakeBallShape extends BasicShape {
         return 'FakeBallShape';
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     static glslClass() {
         return struct;
     }
 
     glslSDF() {
         return sdf(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }
