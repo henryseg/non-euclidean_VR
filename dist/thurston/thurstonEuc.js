@@ -1650,11 +1650,13 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  "GU": () => (/* reexport */ AdvancedShape),
   "ec": () => (/* reexport */ Ball),
   "Yb": () => (/* reexport */ BallShape),
   "QU": () => (/* reexport */ BasicCamera),
   "ZH": () => (/* reexport */ BasicPTMaterial),
   "K9": () => (/* binding */ thurstonEuc_BasicRenderer),
+  "FT": () => (/* reexport */ BasicShape),
   "xu": () => (/* reexport */ Box),
   "cK": () => (/* reexport */ CREEPING_FULL),
   "_x": () => (/* reexport */ CREEPING_OFF),
@@ -1714,6 +1716,7 @@ __webpack_require__.d(__webpack_exports__, {
   "cV": () => (/* reexport */ SMOOTH_MAX_POLY),
   "lR": () => (/* reexport */ SMOOTH_MIN_POLY),
   "xs": () => (/* reexport */ Scene),
+  "bn": () => (/* reexport */ Shape),
   "oC": () => (/* reexport */ ShootVRControls),
   "h8": () => (/* reexport */ SingleColorMaterial),
   "Qf": () => (/* reexport */ Solid),
@@ -12931,6 +12934,286 @@ class TeleportationSet {
     }
 
 }
+// EXTERNAL MODULE: ./src/core/shapes/shaders/numericalGradient.glsl.mustache
+var numericalGradient_glsl_mustache = __webpack_require__(8266);
+var numericalGradient_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(numericalGradient_glsl_mustache);
+;// CONCATENATED MODULE: ./src/core/shapes/Shape.js
+
+
+
+
+
+
+/**
+ * @class
+ * @abstract
+ *
+ * @classdesc
+ * A representation of a 3D geometric shape.
+ * It should not be confused with Three.js `Shape` class.
+ * It is more an analogue of the class `BufferGeometry` in Three.js.
+ */
+class Shape extends Generic {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the position of the shape
+     */
+    constructor(isom = undefined) {
+        super();
+        /**
+         * Isometry defining the position of the shape (relative to any potential parent)
+         * @type {Isometry}
+         */
+        this.isom = isom !== undefined ? isom : new Isometry();
+        /**
+         * Inverse of the isometry
+         * @type {Isometry}
+         */
+        this.isomInv = this.isom.clone().invert();
+        /**
+         * Parent of the shape (if this shape is part of an advanced shape)
+         * @type {Shape}
+         */
+        this.parent = undefined;
+        /**
+         * Isometry defining the absolute position of the shape (taking into account the position of the parent)
+         * The actual value is computed the first time `absoluteIsom` is called.
+         * If the object is moving, the updates should be made by the developer.
+         * @type {Isometry}
+         */
+        this._absoluteIsom = undefined;
+        /**
+         * Inverse of the absolute isometry
+         * @type {Isometry}
+         */
+        this._absoluteIsomInv = undefined;
+    }
+
+    /**
+     * Recompute the absolute isometry from the current data
+     * The update is "descending", updating a shape will updates the children but not the parents.
+     * @todo include an ascending / bidirectional mode ?
+     * The descending update should be done individually in each advanced shape.
+     * @todo factorize the code at the level of AdvancedShape ? How to not have two copies of the children
+     * (one at the level of AdvancedShape, one at the level of UnionShape, for instance)?
+     */
+    updateAbsoluteIsom() {
+        if (this._absoluteIsom === undefined) {
+            this._absoluteIsom = new Isometry();
+            this._absoluteIsomInv = new Isometry();
+        }
+
+        this.isomInv = this.isom.clone().invert();
+        this._absoluteIsom.copy(this.isom);
+        this._absoluteIsomInv.copy(this.isomInv);
+        if (this.parent !== undefined) {
+            this._absoluteIsom.premultiply(this.parent.absoluteIsom);
+            this._absoluteIsomInv.multiply(this.parent.absoluteIsomInv)
+
+        }
+    }
+
+    /**
+     * The shape may contains data which depends on the isometry (like the center of a ball)
+     * This method can be overlaoded to update all these data when needed
+     */
+    updateData() {
+        this.updateAbsoluteIsom();
+    }
+
+    /**
+     * If the shape is part of an advanced shape, the underlying isometry is a position relative to the parent shape.
+     * absoluteIsom, on the contrary return the isometry encoding the absolute position
+     * @type {Isometry}
+     */
+    get absoluteIsom() {
+        if (this._absoluteIsom === undefined) {
+            this.updateAbsoluteIsom();
+        }
+        return this._absoluteIsom;
+    }
+
+    /**
+     * Return the inverse of absoluteIsom
+     * @type {Isometry}
+     */
+    get absoluteIsomInv() {
+        if (this._absoluteIsomInv === undefined) {
+            this.updateAbsoluteIsom();
+
+        }
+        return this._absoluteIsomInv;
+    }
+
+    /**
+     * Says that the object inherits from `Shape`
+     * @type {boolean}
+     */
+    get isShape() {
+        return true;
+    }
+
+    /**
+     * Says whether the shape is a basic shape,
+     * that it is not build on top of other shapes.
+     * @type {boolean}
+     */
+    get isBasicShape() {
+        throw new Error('Shape: this method should be implemented');
+    }
+
+    /**
+     * Says whether the shape is a basic shape,
+     * that it is not build on top of other shapes.
+     * @type {boolean}
+     */
+    get isAdvancedShape() {
+        return !this.isBasicShape;
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        throw new Error('Shape: this method should be implemented');
+    }
+
+    /**
+     * Says whether the shape is local. True if local, false otherwise.
+     * @type {boolean}
+     */
+    get isLocal() {
+        return !this.isGlobal;
+    }
+
+    /**
+     * Says whether the shape comes with a UV map.
+     * Default is false
+     * If true, the shape should implement the method glslUVMap.
+     * @type {boolean}
+     */
+    get hasUVMap() {
+        return false;
+    }
+
+    /**
+     * Return the chunk of GLSL code corresponding to the signed distance function.
+     * The SDF on the GLSL side should have the following signature
+     * `float {{name}}_sdf(RelVector v)`
+     * It takes a vector, corresponding the position and direction of the geodesic we are following
+     * and return an under-estimation of the distance from this position to the shape along this geodesic.
+     * @abstract
+     * @return {string}
+     */
+    glslSDF() {
+        throw new Error('Shape: this method should be implemented');
+    }
+
+    /**
+     * Return the chunk of GLSL code corresponding to the gradient field.
+     * The default computation approximates numerically the gradient.
+     * This function can be overwritten for an explicit computation.
+     * If so, the gradient function on the GLSL side should have the following signature
+     * `RelVector {{name}}_gradient(RelVector v)`
+     * It takes the vector obtained when we hit the shape and render the normal to the shape at this point.
+     * @return {string}
+     */
+    glslGradient() {
+        return numericalGradient_glsl_mustache_default()(this);
+    }
+
+    /**
+     * Return the chunk of GLSL code corresponding to the UV map
+     * The UV map on the GLSL side should have the signature
+     * `vec2 {{name}}_uvMap(RelVector v)`
+     * It takes the vector obtained when we hit the shape and render the UV coordinates at this point.
+     */
+    glslUVMap() {
+        throw new Error('Shape: this method should be implemented');
+    }
+
+    /**
+     * Compile all the function directly related to the object (e.g. sdf, gradient, etc).
+     * @return {string}
+     */
+    glslInstance() {
+        let res = this.glslSDF() + "\r\n" + this.glslGradient();
+        if (this.hasUVMap) {
+            res = res + "\r\n" + this.glslUVMap();
+        }
+        return res;
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/core/shapes/BasicShape.js
+
+
+/**
+ * @class
+ * @abstract
+ *
+ * @classdesc
+ * A representation of 3D basic shape.
+ * A basic shape is a shape that is not built on top of other shapes.
+ * The types of the properties of a basic shape should not depend on the instance of this shape.
+ * Indeed these properties will be passed to the shader in the form of a struct.
+ * (This gives the options to animate the shapes.)
+ */
+class BasicShape extends Shape {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the position of the shape
+     */
+    constructor(isom = undefined) {
+        super(isom);
+    }
+
+    /**
+     * Says whether the shape is a basic shape,
+     * that it is not build on top of other shapes.
+     * @type {boolean}
+     */
+    get isBasicShape() {
+        return true;
+    }
+}
+;// CONCATENATED MODULE: ./src/core/shapes/AdvancedShape.js
+
+
+/**
+ * @class
+ * @abstract
+ *
+ * @classdesc
+ * A representation of 3D advanced shapes.
+ * An advanced shape is a shape that is built on top of other shapes.
+ * The types of the properties of an advanced shape may depend on the instance of this shape.
+ * Theses properties will not be passed to the shader.
+ * Only the signed distance function will carry the relevant data.
+ */
+class AdvancedShape extends Shape {
+
+    /**
+     * Constructor.
+     * @param {Isometry} isom - the position of the shape
+     */
+    constructor(isom = undefined) {
+        super(isom);
+    }
+
+    /**
+     * Says whether the shape is a basic shape,
+     * that it is not build on top of other shapes.
+     * @type {boolean}
+     */
+    get isBasicShape() {
+        return false;
+    }
+}
 ;// CONCATENATED MODULE: ./src/core/lights/Light.js
 
 
@@ -14063,253 +14346,6 @@ function pathTracerWrap(material, params = {}) {
 
 // Composite tracer material
 
-// EXTERNAL MODULE: ./src/core/shapes/shaders/numericalGradient.glsl.mustache
-var numericalGradient_glsl_mustache = __webpack_require__(8266);
-var numericalGradient_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(numericalGradient_glsl_mustache);
-;// CONCATENATED MODULE: ./src/core/shapes/Shape.js
-
-
-
-
-
-
-/**
- * @class
- * @abstract
- *
- * @classdesc
- * A representation of a 3D geometric shape.
- * It should not be confused with Three.js `Shape` class.
- * It is more an analogue of the class `BufferGeometry` in Three.js.
- */
-class Shape extends Generic {
-
-    /**
-     * Constructor.
-     * @param {Isometry} isom - the position of the shape
-     */
-    constructor(isom = undefined) {
-        super();
-        /**
-         * Isometry defining the position of the shape (relative to any potential parent)
-         * @type {Isometry}
-         */
-        this.isom = isom !== undefined ? isom : new Isometry();
-        /**
-         * Inverse of the isometry
-         * @type {Isometry}
-         */
-        this.isomInv = this.isom.clone().invert();
-        /**
-         * Parent of the shape (if this shape is part of an advanced shape)
-         * @type {Shape}
-         */
-        this.parent = undefined;
-        /**
-         * Isometry defining the absolute position of the shape (taking into account the position of the parent)
-         * The actual value is computed the first time `absoluteIsom` is called.
-         * If the object is moving, the updates should be made by the developer.
-         * @type {Isometry}
-         */
-        this._absoluteIsom = undefined;
-        /**
-         * Inverse of the absolute isometry
-         * @type {Isometry}
-         */
-        this._absoluteIsomInv = undefined;
-    }
-
-    /**
-     * Recompute the absolute isometry from the current data
-     * The update is "descending", updating a shape will updates the children but not the parents.
-     * @todo include an ascending / bidirectional mode ?
-     * The descending update should be done individually in each advanced shape.
-     * @todo factorize the code at the level of AdvancedShape ? How to not have two copies of the children
-     * (one at the level of AdvancedShape, one at the level of UnionShape, for instance)?
-     */
-    updateAbsoluteIsom() {
-        if (this._absoluteIsom === undefined) {
-            this._absoluteIsom = new Isometry();
-            this._absoluteIsomInv = new Isometry();
-        }
-
-        this.isomInv = this.isom.clone().invert();
-        this._absoluteIsom.copy(this.isom);
-        this._absoluteIsomInv.copy(this.isomInv);
-        if (this.parent !== undefined) {
-            this._absoluteIsom.premultiply(this.parent.absoluteIsom);
-            this._absoluteIsomInv.multiply(this.parent.absoluteIsomInv)
-
-        }
-    }
-
-    /**
-     * The shape may contains data which depends on the isometry (like the center of a ball)
-     * This method can be overlaoded to update all these data when needed
-     */
-    updateData() {
-        this.updateAbsoluteIsom();
-    }
-
-    /**
-     * If the shape is part of an advanced shape, the underlying isometry is a position relative to the parent shape.
-     * absoluteIsom, on the contrary return the isometry encoding the absolute position
-     * @type {Isometry}
-     */
-    get absoluteIsom() {
-        if (this._absoluteIsom === undefined) {
-            this.updateAbsoluteIsom();
-        }
-        return this._absoluteIsom;
-    }
-
-    /**
-     * Return the inverse of absoluteIsom
-     * @type {Isometry}
-     */
-    get absoluteIsomInv() {
-        if (this._absoluteIsomInv === undefined) {
-            this.updateAbsoluteIsom();
-
-        }
-        return this._absoluteIsomInv;
-    }
-
-    /**
-     * Says that the object inherits from `Shape`
-     * @type {boolean}
-     */
-    get isShape() {
-        return true;
-    }
-
-    /**
-     * Says whether the shape is a basic shape,
-     * that it is not build on top of other shapes.
-     * @type {boolean}
-     */
-    get isBasicShape() {
-        throw new Error('Shape: this method should be implemented');
-    }
-
-    /**
-     * Says whether the shape is a basic shape,
-     * that it is not build on top of other shapes.
-     * @type {boolean}
-     */
-    get isAdvancedShape() {
-        return !this.isBasicShape;
-    }
-
-    /**
-     * Says whether the shape is global. True if global, false otherwise.
-     * @type {boolean}
-     */
-    get isGlobal() {
-        throw new Error('Shape: this method should be implemented');
-    }
-
-    /**
-     * Says whether the shape is local. True if local, false otherwise.
-     * @type {boolean}
-     */
-    get isLocal() {
-        return !this.isGlobal;
-    }
-
-    /**
-     * Says whether the shape comes with a UV map.
-     * Default is false
-     * If true, the shape should implement the method glslUVMap.
-     * @type {boolean}
-     */
-    get hasUVMap() {
-        return false;
-    }
-
-    /**
-     * Return the chunk of GLSL code corresponding to the signed distance function.
-     * The SDF on the GLSL side should have the following signature
-     * `float {{name}}_sdf(RelVector v)`
-     * It takes a vector, corresponding the position and direction of the geodesic we are following
-     * and return an under-estimation of the distance from this position to the shape along this geodesic.
-     * @abstract
-     * @return {string}
-     */
-    glslSDF() {
-        throw new Error('Shape: this method should be implemented');
-    }
-
-    /**
-     * Return the chunk of GLSL code corresponding to the gradient field.
-     * The default computation approximates numerically the gradient.
-     * This function can be overwritten for an explicit computation.
-     * If so, the gradient function on the GLSL side should have the following signature
-     * `RelVector {{name}}_gradient(RelVector v)`
-     * It takes the vector obtained when we hit the shape and render the normal to the shape at this point.
-     * @return {string}
-     */
-    glslGradient() {
-        return numericalGradient_glsl_mustache_default()(this);
-    }
-
-    /**
-     * Return the chunk of GLSL code corresponding to the UV map
-     * The UV map on the GLSL side should have the signature
-     * `vec2 {{name}}_uvMap(RelVector v)`
-     * It takes the vector obtained when we hit the shape and render the UV coordinates at this point.
-     */
-    glslUVMap() {
-        throw new Error('Shape: this method should be implemented');
-    }
-
-    /**
-     * Compile all the function directly related to the object (e.g. sdf, gradient, etc).
-     * @return {string}
-     */
-    glslInstance() {
-        let res = this.glslSDF() + "\r\n" + this.glslGradient();
-        if (this.hasUVMap) {
-            res = res + "\r\n" + this.glslUVMap();
-        }
-        return res;
-    }
-}
-
-
-;// CONCATENATED MODULE: ./src/core/shapes/AdvancedShape.js
-
-
-/**
- * @class
- * @abstract
- *
- * @classdesc
- * A representation of 3D advanced shapes.
- * An advanced shape is a shape that is built on top of other shapes.
- * The types of the properties of an advanced shape may depend on the instance of this shape.
- * Theses properties will not be passed to the shader.
- * Only the signed distance function will carry the relevant data.
- */
-class AdvancedShape extends Shape {
-
-    /**
-     * Constructor.
-     * @param {Isometry} isom - the position of the shape
-     */
-    constructor(isom = undefined) {
-        super(isom);
-    }
-
-    /**
-     * Says whether the shape is a basic shape,
-     * that it is not build on top of other shapes.
-     * @type {boolean}
-     */
-    get isBasicShape() {
-        return false;
-    }
-}
 // EXTERNAL MODULE: ./src/commons/shapes/complement/shaders/sdf.glsl.mustache
 var sdf_glsl_mustache = __webpack_require__(7939);
 var sdf_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(sdf_glsl_mustache);
@@ -16295,6 +16331,10 @@ class Matrix2 {
 
 
 
+
+
+
+
 // EXTERNAL MODULE: ./src/geometries/euc/cameras/dolly/shaders/struct.glsl
 var dolly_shaders_struct = __webpack_require__(9642);
 var dolly_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(dolly_shaders_struct);
@@ -17021,39 +17061,6 @@ class DisplacementShape extends AdvancedShape {
     shader(shaderBuilder) {
         this.shape.shader(shaderBuilder);
         super.shader(shaderBuilder);
-    }
-}
-;// CONCATENATED MODULE: ./src/core/shapes/BasicShape.js
-
-
-/**
- * @class
- * @abstract
- *
- * @classdesc
- * A representation of 3D basic shape.
- * A basic shape is a shape that is not built on top of other shapes.
- * The types of the properties of a basic shape should not depend on the instance of this shape.
- * Indeed these properties will be passed to the shader in the form of a struct.
- * (This gives the options to animate the shapes.)
- */
-class BasicShape extends Shape {
-
-    /**
-     * Constructor.
-     * @param {Isometry} isom - the position of the shape
-     */
-    constructor(isom = undefined) {
-        super(isom);
-    }
-
-    /**
-     * Says whether the shape is a basic shape,
-     * that it is not build on top of other shapes.
-     * @type {boolean}
-     */
-    get isBasicShape() {
-        return true;
     }
 }
 // EXTERNAL MODULE: ./src/geometries/euc/imports/distance.glsl
@@ -18140,11 +18147,13 @@ const thurstonEuc_ThurstonVR = specifyThurston(ThurstonVR, (part1_default()), (p
 
 })();
 
+var __webpack_exports__AdvancedShape = __webpack_exports__.GU;
 var __webpack_exports__Ball = __webpack_exports__.ec;
 var __webpack_exports__BallShape = __webpack_exports__.Yb;
 var __webpack_exports__BasicCamera = __webpack_exports__.QU;
 var __webpack_exports__BasicPTMaterial = __webpack_exports__.ZH;
 var __webpack_exports__BasicRenderer = __webpack_exports__.K9;
+var __webpack_exports__BasicShape = __webpack_exports__.FT;
 var __webpack_exports__Box = __webpack_exports__.xu;
 var __webpack_exports__CREEPING_FULL = __webpack_exports__.cK;
 var __webpack_exports__CREEPING_OFF = __webpack_exports__._x;
@@ -18204,6 +18213,7 @@ var __webpack_exports__ResetVRControls = __webpack_exports__.Uj;
 var __webpack_exports__SMOOTH_MAX_POLY = __webpack_exports__.cV;
 var __webpack_exports__SMOOTH_MIN_POLY = __webpack_exports__.lR;
 var __webpack_exports__Scene = __webpack_exports__.xs;
+var __webpack_exports__Shape = __webpack_exports__.bn;
 var __webpack_exports__ShootVRControls = __webpack_exports__.oC;
 var __webpack_exports__SingleColorMaterial = __webpack_exports__.h8;
 var __webpack_exports__Solid = __webpack_exports__.Qf;
@@ -18232,4 +18242,4 @@ var __webpack_exports__safeString = __webpack_exports__.p2;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__Box as Box, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DisplacementShape as DisplacementShape, __webpack_exports__DollyCamera as DollyCamera, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__LocalDirectedBall as LocalDirectedBall, __webpack_exports__LocalDirectedBallShape as LocalDirectedBallShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__freeAbelianSet as freeAbelianSet, __webpack_exports__intersection as intersection, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__Box as Box, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DisplacementShape as DisplacementShape, __webpack_exports__DollyCamera as DollyCamera, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__LocalDirectedBall as LocalDirectedBall, __webpack_exports__LocalDirectedBallShape as LocalDirectedBallShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__freeAbelianSet as freeAbelianSet, __webpack_exports__intersection as intersection, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };

@@ -133,7 +133,6 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
     this.matrix.add(m);
 
     m2.multiplyScalar(c2);
-
     this.matrix.add(m2);
 
     return this;

@@ -13,6 +13,10 @@ export {GroupElement} from "./core/groups/GroupElement.js";
 export {RelPosition} from "./core/geometry/General.js";
 export {TeleportationSet, CREEPING_FULL, CREEPING_STRICT, CREEPING_OFF} from "./core/groups/TeleportationSet.js";
 
+export {Shape} from "./core/shapes/Shape.js";
+export {BasicShape} from "./core/shapes/BasicShape.js";
+export {AdvancedShape} from "./core/shapes/AdvancedShape.js";
+
 export {Light} from "./core/lights/Light.js";
 export {Material} from "./core/materials/Material.js";
 export {PTMaterial} from "./core/materials/PTMaterial.js";
