@@ -29,7 +29,12 @@ export * from "./core.js";
 export {default as basicHeisenbergSet} from "./geometries/nil/groups/basicHeisenberg/set.js";
 export {default as heisenbergSet} from "./geometries/nil/groups/heisenberg/set.js";
 export {default as extendedHeisenbergSet} from "./geometries/nil/groups/extendedHeisenberg/set.js";
+
 export * from './geometries/nil/lights/all.js';
 export * from './geometries/nil/material/all.js';
 export * from './geometries/nil/shapes/all.js';
 export * from './geometries/nil/solids/all.js';
+
+export {default as importUtils} from "./geometries/nil/imports/utils.glsl";
+export {default as importFakeDistance} from "./geometries/nil/imports/fakeDistance.glsl";
+export {default as importExactDistance} from "./geometries/nil/imports/exactDistance.glsl";
