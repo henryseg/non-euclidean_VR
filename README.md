@@ -11,6 +11,8 @@ It comes with an API to
 
 This project started at the *Illustrating Mathematics* semester program at [ICERM](https://icerm.brown.edu).
 
+Visit the website https://3-dimensional.space for demos, math explanations, and documentation. 
+
 ## Examples
 
 The project contains numerous ready to use examples.
@@ -28,16 +30,7 @@ To run the examples on your own computer, you need a local server.
   (adapt the URL depending on your local server)
 - Enjoy!
 
-**Virtual reality**.
 
-In order to run the virtual reality examples, your browser may require an HTTPS connexion.
-The script `server.py` provide one.
-You can launch the server with the following command
-```zsh
-python server.py
-```
-The password is `thurston`.
-The browser will probably ask you to add a security exception.
 
 ### Exploring the examples
 The examples tagged with *(VR)* are made for virtual reality. They should work with any VR headset supported by the three.js library.

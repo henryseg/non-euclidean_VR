@@ -6537,7 +6537,7 @@ class Thurston {
         this.gui.close();
         this.gui.add({
             help: function () {
-                window.open('https://github.com/henryseg/non-euclidean_VR');
+                window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
         this.gui.add(
@@ -6759,7 +6759,7 @@ class ThurstonLite {
         this.gui.close();
         this.gui.add({
             help: function () {
-                window.open('https://github.com/henryseg/non-euclidean_VR');
+                window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
         this.gui.add(
@@ -12392,7 +12392,7 @@ class ThurstonVR {
         this.gui.close();
         this.gui.add({
             help: function () {
-                window.open('https://github.com/henryseg/non-euclidean_VR');
+                window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
         this.gui.add(
