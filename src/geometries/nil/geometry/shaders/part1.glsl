@@ -21,6 +21,12 @@ struct Isometry{
  * Identity isometry
  */
 const Isometry IDENTITY = Isometry(mat4(1.), true); /**< Identity isometry */
+const Isometry FLIP = Isometry(mat4(
+0, 1, 0, 0,
+1, 0, 0, 0,
+0, 0, -1, 0,
+0, 0, 0, 1
+), false);
 
 /**
  * Reduce the eventual numerical errors of the given isometry.

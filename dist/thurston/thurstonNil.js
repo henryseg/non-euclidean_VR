@@ -1430,7 +1430,7 @@ module.exports = "                                                              
 /***/ 1398:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                                              \n  \n                                                                                                                        \n                                                                                                                        \n\n                                                                                                                        \n  \n                   \n                                            \n  \n                                                                                                                        \nstruct Isometry{\n    mat4 matrix;\n    bool isInNil;\n};\n\n   \n                    \n   \nconst Isometry IDENTITY = Isometry(mat4(1.), true);                          \n\n   \n                                                              \n                      \n   \nIsometry reduceError(Isometry isom){\n    return isom;\n}\n\n   \n                                     \n   \nIsometry multiply(Isometry isom1, Isometry isom2) {\n    return Isometry(isom1.matrix * isom2.matrix, isom1.isInNil && isom2.isInNil);\n}\n\n   \n                                            \n   \nIsometry geomInverse(Isometry isom) {\n    mat4 inv = inverse(isom.matrix);\n    return Isometry(inv, isom.isInNil);\n}\n\n                                                                                                                        \n  \n                \n                                        \n  \n                                                                                                                        \nstruct Point{\n    vec4 coords;\n};\n\n\nconst Point ORIGIN = Point(vec4(0, 0, 0, 1));                              \n\n\n   \n                                                           \n   \nPoint reduceError(Point p){\n    return p;\n}\n\n   \n                                       \n   \nPoint applyIsometry(Isometry isom, Point p) {\n    vec4 coords = isom.matrix * p.coords;\n    return Point(coords);\n}\n\n   \n                                                                     \n                                  \n   \n\nIsometry makeTranslation(Point p) {\n    vec4 c = p.coords;\n    mat4 matrix =  mat4(\n    1, 0., -0.5 * c.y, 0.,\n    0., 1, 0.5 * c.x, 0.,\n    0., 0., 1., 0,\n    c.x, c.y, c.z, 1.\n    );\n    return Isometry(matrix, true);\n}\n\n   \n                                                                     \n                                     \n   \nIsometry makeInvTranslation(Point p) {\n    vec4 c = p.coords;\n    mat4 matrix =  mat4(\n    1, 0., 0.5 * c.y, 0.,\n    0., 1, -0.5 * c.x, 0.,\n    0., 0., 1., 0,\n    -c.x, -c.y, -c.z, 1.\n    );\n    return Isometry(matrix, true);\n}\n\n                                                                                                                        \n  \n                 \n                                                              \n                                                                                                  \n                       \n                                                                      \n                                                                                                        \n  \n                                                                                                                        \nstruct Vector{\n    Point pos;                     \n    vec4 dir;                            \n};\n\n   \n                                \n   \nVector zeroVector(Point pos){\n    return Vector(pos, vec4(0));\n}\n\n   \n                                                            \n   \nVector reduceError(Vector v){\n    return v;\n}\n\n   \n                         \n                            \n   \nVector add(Vector v1, Vector v2){\n    return Vector(v1.pos, v1.dir + v2.dir);\n}\n\n   \n                              \n                            \n   \nVector sub(Vector v1, Vector v2){\n    return Vector(v1.pos, v1.dir - v2.dir);\n}\n\n   \n                                   \n                         \n                      \n   \nVector multiplyScalar(float s, Vector v){\n    return Vector(v.pos, s * v.dir);\n}\n\n\n   \n                                                                                 \n                     \n   \nfloat geomDot(Vector v1, Vector v2) {\n    return dot(v1.dir, v2.dir);\n}\n\n\n   \n                                        \n   \nVector applyIsometry(Isometry isom, Vector v) {\n    Point pos = applyIsometry(isom, v.pos);\n    if(isom.isInNil) {\n        return Vector(pos, v.dir);\n    } else {\n        Isometry push = makeTranslation(v.pos);\n        Isometry pull = makeInvTranslation(pos);\n        vec4 dir = pull.matrix * isom.matrix * push.matrix * v.dir;\n        return Vector(pos, v.dir);\n    }\n}\n\n\n   \n                                                                         \n                                                                                                           \n                                           \n   \nVector applyFacing(mat4 m, Vector v) {\n    return Vector(v.pos, m * v.dir);\n}\n\nvoid initFlow(Vector v){\n}\n"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                                              \n  \n                                                                                                                        \n                                                                                                                        \n\n                                                                                                                        \n  \n                   \n                                            \n  \n                                                                                                                        \nstruct Isometry{\n    mat4 matrix;\n    bool isInNil;\n};\n\n   \n                    \n   \nconst Isometry IDENTITY = Isometry(mat4(1.), true);                          \nconst Isometry FLIP = Isometry(mat4(\n0, 1, 0, 0,\n1, 0, 0, 0,\n0, 0, -1, 0,\n0, 0, 0, 1\n), false);\n\n   \n                                                              \n                      \n   \nIsometry reduceError(Isometry isom){\n    return isom;\n}\n\n   \n                                     \n   \nIsometry multiply(Isometry isom1, Isometry isom2) {\n    return Isometry(isom1.matrix * isom2.matrix, isom1.isInNil && isom2.isInNil);\n}\n\n   \n                                            \n   \nIsometry geomInverse(Isometry isom) {\n    mat4 inv = inverse(isom.matrix);\n    return Isometry(inv, isom.isInNil);\n}\n\n                                                                                                                        \n  \n                \n                                        \n  \n                                                                                                                        \nstruct Point{\n    vec4 coords;\n};\n\n\nconst Point ORIGIN = Point(vec4(0, 0, 0, 1));                              \n\n\n   \n                                                           \n   \nPoint reduceError(Point p){\n    return p;\n}\n\n   \n                                       \n   \nPoint applyIsometry(Isometry isom, Point p) {\n    vec4 coords = isom.matrix * p.coords;\n    return Point(coords);\n}\n\n   \n                                                                     \n                                  \n   \n\nIsometry makeTranslation(Point p) {\n    vec4 c = p.coords;\n    mat4 matrix =  mat4(\n    1, 0., -0.5 * c.y, 0.,\n    0., 1, 0.5 * c.x, 0.,\n    0., 0., 1., 0,\n    c.x, c.y, c.z, 1.\n    );\n    return Isometry(matrix, true);\n}\n\n   \n                                                                     \n                                     \n   \nIsometry makeInvTranslation(Point p) {\n    vec4 c = p.coords;\n    mat4 matrix =  mat4(\n    1, 0., 0.5 * c.y, 0.,\n    0., 1, -0.5 * c.x, 0.,\n    0., 0., 1., 0,\n    -c.x, -c.y, -c.z, 1.\n    );\n    return Isometry(matrix, true);\n}\n\n                                                                                                                        \n  \n                 \n                                                              \n                                                                                                  \n                       \n                                                                      \n                                                                                                        \n  \n                                                                                                                        \nstruct Vector{\n    Point pos;                     \n    vec4 dir;                            \n};\n\n   \n                                \n   \nVector zeroVector(Point pos){\n    return Vector(pos, vec4(0));\n}\n\n   \n                                                            \n   \nVector reduceError(Vector v){\n    return v;\n}\n\n   \n                         \n                            \n   \nVector add(Vector v1, Vector v2){\n    return Vector(v1.pos, v1.dir + v2.dir);\n}\n\n   \n                              \n                            \n   \nVector sub(Vector v1, Vector v2){\n    return Vector(v1.pos, v1.dir - v2.dir);\n}\n\n   \n                                   \n                         \n                      \n   \nVector multiplyScalar(float s, Vector v){\n    return Vector(v.pos, s * v.dir);\n}\n\n\n   \n                                                                                 \n                     \n   \nfloat geomDot(Vector v1, Vector v2) {\n    return dot(v1.dir, v2.dir);\n}\n\n\n   \n                                        \n   \nVector applyIsometry(Isometry isom, Vector v) {\n    Point pos = applyIsometry(isom, v.pos);\n    if(isom.isInNil) {\n        return Vector(pos, v.dir);\n    } else {\n        Isometry push = makeTranslation(v.pos);\n        Isometry pull = makeInvTranslation(pos);\n        vec4 dir = pull.matrix * isom.matrix * push.matrix * v.dir;\n        return Vector(pos, v.dir);\n    }\n}\n\n\n   \n                                                                         \n                                                                                                           \n                                           \n   \nVector applyFacing(mat4 m, Vector v) {\n    return Vector(v.pos, m * v.dir);\n}\n\nvoid initFlow(Vector v){\n}\n"
 
 /***/ }),
 
@@ -1476,10 +1476,24 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 8302:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                        \n  \n                                  \n                                                                                                                        \n\n                                             \nfloat exactDistance(Point p, Point q) {\n                                             \n    Isometry shift = makeInvTranslation(p);\n    Point qOrigin = applyIsometry(shift, q);\n\n                                                                                 \n                                                      \n    if (qOrigin.coords.z < 0.){\n        qOrigin = applyIsometry(FLIP, qOrigin);\n    }\n    float z = qOrigin.coords.z;\n    float rhoSq = pow(qOrigin.coords.x, 2.) + pow(qOrigin.coords.y, 2.);\n\n    if (z == 0.) {\n                                  \n        return sqrt(rhoSq);\n    }\n    else if (rhoSq == 0.){\n                                \n        if (z < 2. * PI) {\n            return z;\n        }\n        else {\n            return 2. * PI * sqrt(z / PI - 1.);\n        }\n    }\n    else {\n                                       \n        float phi = zero_height(rhoSq, z);\n        float length;\n        _lengthFromPhi(rhoSq, z, phi, length);\n        return length;\n    }\n}\n\nfloat exactDistance(Vector u, Vector v){\n                                                                             \n    return exactDistance(u.pos, v.pos);\n}"
+
+/***/ }),
+
 /***/ 2637:
 /***/ ((module) => {
 
 module.exports = "   \n                              \n                                                                                         \n   \nfloat fakeHeightSq(Point p) {\n    float z = abs(p.coords.z);\n\n    if (z < sqrt(6.)){\n        return z * z;\n    }\n    else if (z < 4. * sqrt(3.)){\n        return 12. * (pow(0.75 * z, 2. / 3.) - 1.);\n    }\n    else {\n        return 2. * sqrt(3.) * z;\n    }\n}\n\n   \n                                                           \n               \n   \nfloat fakeDistance(Point p, Point q){\n    Isometry shift = makeInvTranslation(p);\n    Point qOrigin = applyIsometry(shift, q);\n                                                        \n    float x = qOrigin.coords.x;\n    float y = qOrigin.coords.y;\n    float rhosq = x * x + y * y;\n    float hsq = fakeHeightSq(qOrigin);\n\n    return pow(0.2 * rhosq * rhosq + 0.8 * hsq * hsq, 0.25);\n}\n\n    \n                                                                         \n    \nfloat fakeDistance(Vector u, Vector v){\n    return fakeDistance(u.pos, v.pos);\n}"
+
+/***/ }),
+
+/***/ 7462:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                           \n                               \n                                                                                    \n  \n                                               \n                                                                                                                        \n\nconst int MAX_NEWTON_INIT_ITERATION = 10;\nconst int MAX_NEWTON_ITERATION = 10;\nconst float NEWTON_INIT_TOLERANCE = 0.001;\nconst float NEWTON_TOLERANCE = 0.0001;\n\n                                                                    \n                                                            \n                                                                           \n                                     \n                                    \nfloat _height(float rhoSq, float z0, float phi) {\n    float res = -z0 + phi;\n\n    if (phi < 0.001) {\n                                                                                        \n        float phi2 = phi * phi;\n        float phi4 = phi2 * phi2;\n        res = res + rhoSq * phi * (phi2 + 30.) * (phi4 + 840.) / 302400.;\n    }\n    else {\n        res = res + 0.5 * rhoSq * (phi - sin(phi)) / pow(2. * sin(0.5 * phi), 2.0);\n    }\n    return res;\n}\n\n                                            \nfloat _dheight(float rhoSq, float z0, float phi) {\n    float res = 1.;\n\n    if (phi < 0.001) {\n                                                                                        \n        float phi2 = phi * phi;\n        float phi4 = phi2 * phi2;\n        float phi6 = phi4 * phi2;\n        res = res + rhoSq * (25200. + 2520. * phi2 + 150. * phi4 + 7. * phi6) / 302400.;\n    }\n    else {\n        float cPhi = cos(0.5 * phi);\n        float sPhi = sin(0.5 * phi);\n        res =  res - rhoSq * (phi * cPhi - 2. * sPhi) / (8. * pow(sPhi, 3.));\n    }\n    return res;\n}\n\n                                                   \nfloat _d2height(float rhoSq, float z0, float phi) {\n    float res;\n\n    if (phi < 0.001) {\n                                                                                        \n        float phi2 = phi * phi;\n        float phi4 = phi2 * phi2;\n        float phi6 = phi4 * phi2;\n        res = rhoSq * phi * (55440. + 6600. * phi2 + 462. * phi4 + 25. * phi6) / 3326400.;\n    }\n    else {\n        float cPhi = cos(0.5 * phi);\n        float sPhi = sin(0.5 * phi);\n        res =  rhoSq * (2. * phi * pow(cPhi, 2.) - 6. * cPhi * sPhi + phi) / (16. * pow(sPhi, 4.));\n    }\n    return res;\n}\n\n\n                                                                    \n                                          \n                                                                 \n                                            \n                                                                                        \n                                                                  \nfloat _height_newton_init(float rhoSq, float z0, float phimin, float phimax, bool increasing) {\n    float auxmin = phimin;\n    float auxmax = phimax;\n    float aux, val;\n    for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){\n        aux = 0.5 * auxmin + 0.5 * auxmax;\n        val = _height(rhoSq, z0, aux);\n        if (val >= 0.) {\n            break;\n        }\n        else {\n            if (increasing) {\n                auxmin = aux;\n            }\n            else {\n                auxmax = aux;\n            }\n        }\n    }\n    return aux;\n}\n\n                                                        \n                     \nfloat _height_newton(float rhoSq, float z0, float phi0) {\n    float phi = phi0;\n    float aux;\n    float val;\n    for (int i=0; i < MAX_NEWTON_ITERATION; i++){\n                                  \n        val = _height(rhoSq, z0, phi);\n                                              \n        aux = phi;\n                           \n        phi = phi - val/_dheight(rhoSq, z0, phi);\n        if (abs(phi - aux) < NEWTON_TOLERANCE) {\n            break;\n        }\n    }\n    return phi;\n}\n\n\n                                                               \n                          \n                                                                            \n                                                                         \nfloat zero_height(float rhoSq, float z0) {\n    float phi0 = _height_newton_init(rhoSq, z0, 0., 2. * PI, true);\n    return _height_newton(rhoSq, z0, phi0);\n}\n\n                                                                                       \n                        \n                                                      \nfloat _dheight_newton_init(float rhosq, float z0, int n) {\n    float nFloat = float(n);\n    float auxmin = 2. * nFloat * PI;\n    float auxmax = 2. * (nFloat + 1.) * PI;\n    float aux, val;\n    for (int i=0; i < MAX_NEWTON_INIT_ITERATION; i++){\n        if (auxmax - auxmin < NEWTON_INIT_TOLERANCE) {\n            break;\n        }\n        aux = 0.5 * auxmin + 0.5 * auxmax;\n        val = _dheight(rhosq, z0, aux);\n        if (val >= 0.) {\n            auxmax = aux;\n        }\n        else {\n            auxmin = aux;\n        }\n    }\n    return aux;\n}\n\n                                                             \n                     \nfloat _dheight_newton(float rhosq, float z0, float phi0) {\n    float phi = phi0;\n    float aux;\n    float val;\n    for (int i=0; i < MAX_NEWTON_ITERATION; i++){\n        val = _dheight(rhosq, z0, phi);\n        aux = phi;\n        phi = phi - val/_d2height(rhosq, z0, phi);\n        if (abs(phi - aux) < NEWTON_TOLERANCE) {\n            break;\n        }\n    }\n    return phi;\n}\n\n\n                                                                             \n                                   \n                          \n                                                                            \n                                                   \n                                                                             \nbool zerobis_height(float rhoSq, float z0, int n, out float[2] phis) {\n    float nFloat = float(n);\n                                                      \n    float aux0 = _dheight_newton_init(rhoSq, z0, n);\n    float aux1 = _dheight_newton(rhoSq, z0, aux0);\n    float height_min = _height(rhoSq, z0, aux1);\n                                      \n    if (height_min > 0.) {\n        return false;\n    }\n    else {\n                                            \n        float phi0 = _height_newton_init(rhoSq, z0, 2. * nFloat * PI, aux1, false);\n        phis[0] = _height_newton(rhoSq, z0, phi0);\n        float phi1 = _height_newton_init(rhoSq, z0, aux1, 2. * (nFloat + 1.) * PI, true);\n        phis[1] = _height_newton(rhoSq, z0, phi1);\n        return true;\n    }\n}\n\n                                                                    \n                                                  \n                                     \n                                                               \n                                   \nvoid _lengthFromPhi(float rhoSq, float z, float phi, out float len) {\n    float c = 2. * sin(0.5 * phi) / sqrt(rhoSq + 4.0 * pow(sin(0.5 * phi), 2.));\n    len = phi / c;\n}\n"
 
 /***/ }),
 
@@ -1504,6 +1518,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 1407:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n              \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    float fakeDist = fakeDistance(v.local.pos, center);\n    if (fakeDist > 10. * ball.radius) {\n        return fakeDist - ball.radius;\n    }\n    else {\n        return exactDistance(v.local.pos, center) - ball.radius;\n    }\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
+
+/***/ }),
+
 /***/ 1209:
 /***/ ((module) => {
 
@@ -1515,6 +1536,13 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct FakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(FakeBallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    return fakeDistance(v.local.pos, center) - ball.radius;\n}\n\nvec2 uvMap(FakeBallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
+
+/***/ }),
+
+/***/ 5627:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n             \n                                                                                                                        \n\nstruct LocalBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(LocalBallShape ball, RelVector v) {\n    float fakeDist = fakeDistance(v.local.pos, ball.center);\n    if (fakeDist > 10. * ball.radius) {\n        return fakeDist - ball.radius;\n    }\n    else {\n        return exactDistance(v.local.pos, ball.center) - ball.radius;\n    }\n}\n\nvec2 uvMap(LocalBallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n\n\n"
 
 /***/ }),
 
@@ -1649,6 +1677,8 @@ var __webpack_exports__ = {};
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "GU": () => (/* reexport */ AdvancedShape),
+  "ec": () => (/* reexport */ Ball),
+  "Yb": () => (/* reexport */ BallShape),
   "QU": () => (/* reexport */ BasicCamera),
   "ZH": () => (/* reexport */ BasicPTMaterial),
   "K9": () => (/* binding */ thurstonNil_BasicRenderer),
@@ -1679,6 +1709,8 @@ __webpack_require__.d(__webpack_exports__, {
   "RL": () => (/* reexport */ LEFT),
   "_k": () => (/* reexport */ Light),
   "uR": () => (/* reexport */ LightVRControls),
+  "jo": () => (/* reexport */ LocalBall),
+  "Q": () => (/* reexport */ LocalBallShape),
   "oR": () => (/* reexport */ LocalFakeBall),
   "lt": () => (/* reexport */ LocalFakeBallShape),
   "tl": () => (/* reexport */ LocalPotato),
@@ -1698,7 +1730,7 @@ __webpack_require__.d(__webpack_exports__, {
   "E9": () => (/* reexport */ Point),
   "Ly": () => (/* reexport */ Position),
   "Gx": () => (/* reexport */ PotatoShape),
-  "jo": () => (/* reexport */ QuadRing),
+  "iv": () => (/* reexport */ QuadRing),
   "mH": () => (/* reexport */ QuadRingElement),
   "xd": () => (/* reexport */ QuadRingMatrix4),
   "pX": () => (/* reexport */ RIGHT),
@@ -17724,6 +17756,104 @@ class FakeBallShape extends BasicShape {
         return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/geometries/nil/imports/utils.glsl
+var utils = __webpack_require__(7462);
+var utils_default = /*#__PURE__*/__webpack_require__.n(utils);
+// EXTERNAL MODULE: ./src/geometries/nil/imports/exactDistance.glsl
+var exactDistance = __webpack_require__(8302);
+var exactDistance_default = /*#__PURE__*/__webpack_require__.n(exactDistance);
+// EXTERNAL MODULE: ./src/geometries/nil/shapes/ball/shaders/struct.glsl
+var ball_shaders_struct = __webpack_require__(1407);
+var ball_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(ball_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/ball/BallShape.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
+ */
+class BallShape extends BasicShape {
+
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     */
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("FakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport((utils_default()));
+        this.addImport((fakeDistance_default()));
+        this.addImport((exactDistance_default()));
+        this.radius = radius;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return true;
+    }
+
+    get isFakeBallShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'BallShape';
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    static glslClass() {
+        return (ball_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
+}
 // EXTERNAL MODULE: ./src/geometries/nil/shapes/localFakeBall/shaders/struct.glsl
 var localFakeBall_shaders_struct = __webpack_require__(9039);
 var localFakeBall_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localFakeBall_shaders_struct);
@@ -17801,6 +17931,97 @@ class LocalFakeBallShape extends BasicShape {
 
     static glslClass() {
         return (localFakeBall_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
+}
+// EXTERNAL MODULE: ./src/geometries/nil/shapes/localBall/shaders/struct.glsl
+var localBall_shaders_struct = __webpack_require__(5627);
+var localBall_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localBall_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/nil/shapes/localBall/LocalBallShape.js
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Fake ball in Nil.
+ * The distance under-estimator is only correct at large scale
+ */
+class LocalBallShape extends BasicShape {
+
+
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     */
+    constructor(location, radius) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else if (location.isPoint) {
+            isom.makeTranslation(location);
+        } else {
+            throw new Error("LocalFakeBallShape: the type of location is not implemented");
+        }
+        super(isom);
+        this.addImport((utils_default()));
+        this.addImport((fakeDistance_default()));
+        this.addImport((exactDistance_default()));
+        this.radius = radius;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get center() {
+        if(this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get isLocalFakeBallShape() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalBallShape';
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    static glslClass() {
+        return (localBall_shaders_struct_default());
     }
 
     glslSDF() {
@@ -18498,6 +18719,8 @@ class StraightGeoShape extends BasicShape {
 
 
 
+
+
 // EXTERNAL MODULE: ./src/core/solids/shaders/struct.glsl
 var solids_shaders_struct = __webpack_require__(7499);
 var solids_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(solids_shaders_struct);
@@ -18667,6 +18890,29 @@ class FakeBall extends Solid {
         super(shape, material, ptMaterial);
     }
 }
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/Ball.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Ball in Nil.
+ */
+class Ball extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, radius, material, ptMaterial = undefined) {
+        const shape = new BallShape(location, radius);
+        super(shape, material, ptMaterial);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/nil/solids/LocalFakeBall.js
 
 
@@ -18687,6 +18933,29 @@ class LocalFakeBall extends Solid {
      */
     constructor(location, radius, material, ptMaterial = undefined) {
         const shape = new LocalFakeBallShape(location, radius);
+        super(shape, material, ptMaterial);
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/nil/solids/LocalBall.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Local Ball in Nil.
+ */
+class LocalBall extends Solid {
+    /**
+     * Constructor.
+     * @param {Isometry|Point} location - the location of the ball
+     * @param {number} radius - the radius of the ball
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, radius, material, ptMaterial = undefined) {
+        const shape = new LocalBallShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
@@ -18843,6 +19112,8 @@ class StraightGeo extends Solid {
 
 
 
+
+
 ;// CONCATENATED MODULE: ./src/thurstonNil.js
 
 
@@ -18883,6 +19154,8 @@ const thurstonNil_ThurstonVR = specifyThurston(ThurstonVR, (part1_default()), (p
 })();
 
 var __webpack_exports__AdvancedShape = __webpack_exports__.GU;
+var __webpack_exports__Ball = __webpack_exports__.ec;
+var __webpack_exports__BallShape = __webpack_exports__.Yb;
 var __webpack_exports__BasicCamera = __webpack_exports__.QU;
 var __webpack_exports__BasicPTMaterial = __webpack_exports__.ZH;
 var __webpack_exports__BasicRenderer = __webpack_exports__.K9;
@@ -18913,6 +19186,8 @@ var __webpack_exports__KeyGenericControls = __webpack_exports__.Nh;
 var __webpack_exports__LEFT = __webpack_exports__.RL;
 var __webpack_exports__Light = __webpack_exports__._k;
 var __webpack_exports__LightVRControls = __webpack_exports__.uR;
+var __webpack_exports__LocalBall = __webpack_exports__.jo;
+var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
 var __webpack_exports__LocalFakeBall = __webpack_exports__.oR;
 var __webpack_exports__LocalFakeBallShape = __webpack_exports__.lt;
 var __webpack_exports__LocalPotato = __webpack_exports__.tl;
@@ -18932,7 +19207,7 @@ var __webpack_exports__PhongWrapMaterial = __webpack_exports__.Lv;
 var __webpack_exports__Point = __webpack_exports__.E9;
 var __webpack_exports__Position = __webpack_exports__.Ly;
 var __webpack_exports__PotatoShape = __webpack_exports__.Gx;
-var __webpack_exports__QuadRing = __webpack_exports__.jo;
+var __webpack_exports__QuadRing = __webpack_exports__.iv;
 var __webpack_exports__QuadRingElement = __webpack_exports__.mH;
 var __webpack_exports__QuadRingMatrix4 = __webpack_exports__.xd;
 var __webpack_exports__RIGHT = __webpack_exports__.pX;
@@ -18981,4 +19256,4 @@ var __webpack_exports__sunTexture = __webpack_exports__.w0;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StraightGeo as StraightGeo, __webpack_exports__StraightGeoShape as StraightGeoShape, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StraightGeo as StraightGeo, __webpack_exports__StraightGeoShape as StraightGeoShape, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
