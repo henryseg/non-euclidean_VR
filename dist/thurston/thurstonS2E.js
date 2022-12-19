@@ -1181,34 +1181,6 @@ module.exports = "float smoothMinPoly(float a, float b, float k){\n    float h =
 
 /***/ }),
 
-/***/ 2529:
-/***/ ((module) => {
-
-module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct EarthTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(EarthTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
-
-/***/ }),
-
-/***/ 7225:
-/***/ ((module) => {
-
-module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct MarsTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(MarsTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
-
-/***/ }),
-
-/***/ 3069:
-/***/ ((module) => {
-
-module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct MoonTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(MoonTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
-
-/***/ }),
-
-/***/ 6130:
-/***/ ((module) => {
-
-module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \nstruct SunTextureMaterial {\n    sampler2D sampler;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec3 render(SunTextureMaterial material, ExtVector v, vec2 uv) {\n    vec2 texCoords = (uv - material.start) * material.scale;\n    vec4 color = texture(material.sampler, texCoords);\n    return color.xyz;\n}\n\n\n"
-
-/***/ }),
-
 /***/ 2143:
 /***/ ((module) => {
 
@@ -1622,7 +1594,6 @@ __webpack_require__.d(__webpack_exports__, {
   "TB": () => (/* reexport */ DebugMaterial),
   "Al": () => (/* reexport */ DragVRControls),
   "Gj": () => (/* reexport */ ESun),
-  "KO": () => (/* reexport */ EarthTexture),
   "c$": () => (/* reexport */ ExpFog),
   "mD": () => (/* reexport */ FlyControls),
   "yb": () => (/* reexport */ Fog),
@@ -1638,10 +1609,8 @@ __webpack_require__.d(__webpack_exports__, {
   "uR": () => (/* reexport */ LightVRControls),
   "jo": () => (/* reexport */ LocalBall),
   "Q": () => (/* reexport */ LocalBallShape),
-  "Qv": () => (/* reexport */ MarsTexture),
   "F5": () => (/* reexport */ Material),
   "Uc": () => (/* reexport */ Matrix2),
-  "Yu": () => (/* reexport */ MoonTexture),
   "Fh": () => (/* reexport */ MoveVRControls),
   "oB": () => (/* reexport */ NormalMaterial),
   "pJ": () => (/* reexport */ PTMaterial),
@@ -1668,7 +1637,6 @@ __webpack_require__.d(__webpack_exports__, {
   "Qf": () => (/* reexport */ Solid),
   "k1": () => (/* reexport */ SquaresMaterial),
   "ew": () => (/* reexport */ StripsMaterial),
-  "_D": () => (/* reexport */ SunTexture),
   "$p": () => (/* reexport */ SwitchControls),
   "xG": () => (/* reexport */ TeleportationSet),
   "qC": () => (/* binding */ thurstonS2E_Thurston),
@@ -1684,10 +1652,14 @@ __webpack_require__.d(__webpack_exports__, {
   "ak": () => (/* reexport */ bind),
   "Cy": () => (/* reexport */ complement),
   "Rc": () => (/* reexport */ cube_set),
+  "qM": () => (/* reexport */ earthTexture),
   "jV": () => (/* reexport */ intersection),
+  "j9": () => (/* reexport */ marsTexture),
+  "oc": () => (/* reexport */ moonTexture),
   "wS": () => (/* reexport */ pathTracerWrap),
   "IJ": () => (/* reexport */ phongWrap),
   "p2": () => (/* reexport */ safeString),
+  "w0": () => (/* reexport */ sunTexture),
   "dV": () => (/* reexport */ set),
   "G0": () => (/* reexport */ union),
   "re": () => (/* reexport */ wrap),
@@ -13638,165 +13610,25 @@ class SimpleTextureMaterial extends Material {
     }
 
 }
-// EXTERNAL MODULE: ./src/commons/materials/astronomy/earth/shaders/struct.glsl
-var earth_shaders_struct = __webpack_require__(2529);
-var earth_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(earth_shaders_struct);
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/earth/img/earthmap2k.png
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/earth/earthmap2k.png
 const earthmap2k_namespaceObject = __webpack_require__.p + "img/426f7657671a2811d4aa.png";
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/earth/img/Earth_NoClouds.jpg
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/earth/Earth_NoClouds.jpg
 const Earth_NoClouds_namespaceObject = __webpack_require__.p + "img/953837709706027f7dc2.jpg";
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/earth/EarthTexture.js
-
-
-
-
-
-
-
-
-
-/**
- * @class
- * @extends SimpleTextureMaterial
- *
- * @classdesc
- * Texture of the earth
- *
- */
-class EarthTexture extends SimpleTextureMaterial {
-
-    /**
-     * Constructor
-     * @param {number} textureID - The id of a texture (among the ones available)
-     */
-    constructor(textureID = 0) {
-        let texture;
-        switch (textureID) {
-            case 0:
-                texture = earthmap2k_namespaceObject;
-                break;
-            case 1:
-                texture = Earth_NoClouds_namespaceObject;
-                break;
-            default:
-                texture = earthmap2k_namespaceObject;
-        }
-
-        super(texture, {
-            start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
-            scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
-        });
-    }
-
-    get uniformType() {
-        return 'EarthTextureMaterial';
-    }
-
-    static glslClass() {
-        return (earth_shaders_struct_default());
-    }
-}
-// EXTERNAL MODULE: ./src/commons/materials/astronomy/moon/shaders/struct.glsl
-var moon_shaders_struct = __webpack_require__(3069);
-var moon_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(moon_shaders_struct);
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/moon/img/lroc_color_poles_2k.png
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/moon/lroc_color_poles_2k.png
 const lroc_color_poles_2k_namespaceObject = __webpack_require__.p + "img/eba62d0cff4836a949b8.png";
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/moon/img/2k_moon.jpg
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/moon/2k_moon.jpg
 const _2k_moon_namespaceObject = __webpack_require__.p + "img/26419cb1ce4138a11aa9.jpg";
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/moon/MoonTexture.js
-
-
-
-
-
-
-
-
-/**
- * @class
- * @extends SimpleTextureMaterial
- *
- * @classdesc
- * Texture of the moon
- * Image from https://svs.gsfc.nasa.gov/4720
- * Credits : NASA's Scientific Visualization Studio
- */
-class MoonTexture extends SimpleTextureMaterial {
-
-    /**
-     * Constructor
-     * @param {number} textureID - The id of a texture (among the ones available)
-     */
-    constructor(textureID) {
-        let texture;
-        switch (textureID) {
-            case 0:
-                texture = lroc_color_poles_2k_namespaceObject;
-                break;
-            case 1:
-                texture = _2k_moon_namespaceObject;
-                break;
-            default:
-                texture = lroc_color_poles_2k_namespaceObject;
-        }
-        super(texture, {
-            start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
-            scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
-        });
-    }
-
-    get uniformType() {
-        return 'MoonTextureMaterial';
-    }
-
-    static glslClass() {
-        return (moon_shaders_struct_default());
-    }
-}
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/img/2k_sun.jpg
-const _2k_sun_namespaceObject = __webpack_require__.p + "img/4b569137334e61081651.jpg";
-// EXTERNAL MODULE: ./src/commons/materials/astronomy/sun/shaders/struct.glsl
-var sun_shaders_struct = __webpack_require__(6130);
-var sun_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(sun_shaders_struct);
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/sun/SunTexture.js
-
-
-
-
-
-
-
-/**
- * @class
- * @extends SimpleTextureMaterial
- *
- * @classdesc
- * Texture of the sun
- * Image from https://www.solarsystemscope.com/textures/
- */
-class SunTexture extends SimpleTextureMaterial {
-
-    constructor() {
-        super(_2k_sun_namespaceObject, {
-            start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
-            scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
-        });
-    }
-
-    get uniformType() {
-        return 'SunTextureMaterial';
-    }
-
-    static glslClass() {
-        return (sun_shaders_struct_default());
-    }
-}
-// EXTERNAL MODULE: ./src/commons/materials/astronomy/mars/shaders/struct.glsl
-var mars_shaders_struct = __webpack_require__(7225);
-var mars_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(mars_shaders_struct);
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/mars/img/2k_mars.jpg
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/mars/2k_mars.jpg
 const _2k_mars_namespaceObject = __webpack_require__.p + "img/33960f5af615e67309e5.jpg";
-;// CONCATENATED MODULE: ./src/commons/materials/astronomy/mars/MarsTexture.js
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/sun/2k_sun.jpg
+const _2k_sun_namespaceObject = __webpack_require__.p + "img/4b569137334e61081651.jpg";
+;// CONCATENATED MODULE: ./src/commons/materials/astronomy/astromonyTextures.js
+
+
+
+
+
+
 
 
 
@@ -13806,32 +13638,72 @@ const _2k_mars_namespaceObject = __webpack_require__.p + "img/33960f5af615e67309
 
 
 /**
- * @class
- * @extends SimpleTextureMaterial
- *
- * @classdesc
- * Texture of Mars
- * Image from https://www.solarsystemscope.com/textures/
- *
+ * Return a SimpleTextureMaterial corresponding to the earth
+ * @param {number} textureID - The id of a texture (among the ones available)
  */
-class MarsTexture extends SimpleTextureMaterial {
-
-    constructor() {
-        super(_2k_mars_namespaceObject, {
-            start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
-            scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
-        });
+function earthTexture(textureID) {
+    let texture;
+    switch (textureID) {
+        case 0:
+            texture = earthmap2k_namespaceObject;
+            break;
+        case 1:
+            texture = Earth_NoClouds_namespaceObject;
+            break;
+        default:
+            texture = earthmap2k_namespaceObject;
     }
 
-
-    get uniformType() {
-        return 'MarsTextureMaterial';
-    }
-
-    static glslClass() {
-        return (mars_shaders_struct_default());
-    }
+    return new SimpleTextureMaterial(texture, {
+        start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
+        scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+    });
 }
+
+
+/**
+ * Return a SimpleTextureMaterial corresponding to the moon
+ * @param {number} textureID - The id of a texture (among the ones available)
+ */
+function moonTexture(textureID) {
+    let texture;
+    switch (textureID) {
+        case 0:
+            texture = lroc_color_poles_2k_namespaceObject;
+            break;
+        case 1:
+            texture = _2k_moon_namespaceObject;
+            break;
+        default:
+            texture = lroc_color_poles_2k_namespaceObject;
+    }
+
+    return new SimpleTextureMaterial(texture, {
+        start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
+        scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+    });
+}
+
+/**
+ * Return a SimpleTextureMaterial corresponding to Mars
+ */
+function marsTexture() {
+    return new SimpleTextureMaterial(_2k_mars_namespaceObject, {
+        start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
+        scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+    });
+}
+
+/**
+ * Return a SimpleTextureMaterial corresponding to the sun
+ */
+function sunTexture(textureID) {
+    return new SimpleTextureMaterial(_2k_sun_namespaceObject, {
+        start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
+        scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+    });
+}
+
 // EXTERNAL MODULE: ./src/commons/materials/squares/shaders/struct.glsl
 var squares_shaders_struct = __webpack_require__(3081);
 var squares_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(squares_shaders_struct);
@@ -14389,9 +14261,6 @@ function pathTracerWrap(material, params = {}) {
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/all.js
 // Basic materials
-
-
-
 
 
 
@@ -17319,7 +17188,6 @@ var __webpack_exports__DIR_UP = __webpack_exports__.fY;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
 var __webpack_exports__DragVRControls = __webpack_exports__.Al;
 var __webpack_exports__ESun = __webpack_exports__.Gj;
-var __webpack_exports__EarthTexture = __webpack_exports__.KO;
 var __webpack_exports__ExpFog = __webpack_exports__.c$;
 var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
@@ -17335,10 +17203,8 @@ var __webpack_exports__Light = __webpack_exports__._k;
 var __webpack_exports__LightVRControls = __webpack_exports__.uR;
 var __webpack_exports__LocalBall = __webpack_exports__.jo;
 var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
-var __webpack_exports__MarsTexture = __webpack_exports__.Qv;
 var __webpack_exports__Material = __webpack_exports__.F5;
 var __webpack_exports__Matrix2 = __webpack_exports__.Uc;
-var __webpack_exports__MoonTexture = __webpack_exports__.Yu;
 var __webpack_exports__MoveVRControls = __webpack_exports__.Fh;
 var __webpack_exports__NormalMaterial = __webpack_exports__.oB;
 var __webpack_exports__PTMaterial = __webpack_exports__.pJ;
@@ -17365,7 +17231,6 @@ var __webpack_exports__SingleColorMaterial = __webpack_exports__.h8;
 var __webpack_exports__Solid = __webpack_exports__.Qf;
 var __webpack_exports__SquaresMaterial = __webpack_exports__.k1;
 var __webpack_exports__StripsMaterial = __webpack_exports__.ew;
-var __webpack_exports__SunTexture = __webpack_exports__._D;
 var __webpack_exports__SwitchControls = __webpack_exports__.$p;
 var __webpack_exports__TeleportationSet = __webpack_exports__.xG;
 var __webpack_exports__Thurston = __webpack_exports__.qC;
@@ -17381,12 +17246,16 @@ var __webpack_exports__XRControllerModelFactory = __webpack_exports__.iR;
 var __webpack_exports__bind = __webpack_exports__.ak;
 var __webpack_exports__complement = __webpack_exports__.Cy;
 var __webpack_exports__cubeSet = __webpack_exports__.Rc;
+var __webpack_exports__earthTexture = __webpack_exports__.qM;
 var __webpack_exports__intersection = __webpack_exports__.jV;
+var __webpack_exports__marsTexture = __webpack_exports__.j9;
+var __webpack_exports__moonTexture = __webpack_exports__.oc;
 var __webpack_exports__pathTracerWrap = __webpack_exports__.wS;
 var __webpack_exports__phongWrap = __webpack_exports__.IJ;
 var __webpack_exports__safeString = __webpack_exports__.p2;
+var __webpack_exports__sunTexture = __webpack_exports__.w0;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EarthTexture as EarthTexture, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__MarsTexture as MarsTexture, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoonTexture as MoonTexture, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunTexture as SunTexture, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__intersection as intersection, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
