@@ -182,7 +182,11 @@ export class PathTracerRenderer extends AbstractRenderer {
         this.threeScene.add(horizonSphere);
 
         this.displayComposer.addPass(new TexturePass(this.accReadTarget.texture));
-        this.displayComposer.addPass(new ShaderPass(SteveShader));
+        for (let i = 0; i < this.postProcess.length; i++) {
+            const effectPass = new ShaderPass(this.postProcess[i].fullShader());
+            effectPass.clear = false;
+            this.composer.addPass(effectPass);
+        }
 
         return this;
     }

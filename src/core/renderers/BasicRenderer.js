@@ -91,7 +91,7 @@ export class BasicRenderer extends AbstractRenderer {
 
         // scene
         this.scene.shader(this._fragmentBuilder);
-        this._fragmentBuilder.addChunk(scenes( this));
+        this._fragmentBuilder.addChunk(scenes(this));
         this._fragmentBuilder.addChunk(updateVectorData(this));
 
         // ray-march and main
@@ -124,11 +124,12 @@ export class BasicRenderer extends AbstractRenderer {
         renderPass.clear = false;
         this.composer.addPass(renderPass);
 
-        if (this.postProcess) {
-            const effectPass = new ShaderPass(SteveShader);
+        for (let i = 0; i < this.postProcess.length; i++) {
+            const effectPass = new ShaderPass(this.postProcess[i].fullShader());
             effectPass.clear = false;
             this.composer.addPass(effectPass);
         }
+
 
         return this;
     }

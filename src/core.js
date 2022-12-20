@@ -29,6 +29,7 @@ export {default as trivialSet} from './commons/groups/trivial/set.js';
 export * from './commons/materials/all.js';
 export * from './commons/shapes/all.js';
 export * from './controls/all.js';
+export * from './commons/postProcess/all.js';
 
 export {QuadRing} from "./utils/quadRing/QuadRing.js";
 export {QuadRingElement} from "./utils/quadRing/QuadRingElement.js";

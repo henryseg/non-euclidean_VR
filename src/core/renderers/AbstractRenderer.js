@@ -69,10 +69,10 @@ export class AbstractRenderer {
          */
         this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
         /**
-         * Add post processing to the final output
-         * @type {Boolean}
+         * Add post-processing to the final output
+         * @type {PostProcess[]}
          */
-        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : [];
 
         /**
          * The underlying Three.js scene
