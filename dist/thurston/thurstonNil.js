@@ -1521,7 +1521,7 @@ module.exports = "                                                              
 /***/ 1407:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n              \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    float fakeDist = fakeDistance(v.local.pos, center);\n    if (fakeDist > 10. * ball.radius) {\n        return fakeDist - ball.radius;\n    }\n    else {\n        return exactDistance(v.local.pos, center) - ball.radius;\n    }\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
+module.exports = "                                                                                                                        \n          \n              \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    float fakeDist = fakeDistance(v.local.pos, center);\n    if (fakeDist > 10. * ball.radius) {\n        return fakeDist - ball.radius;\n    }\n    else {\n        return exactDistance(v.local.pos, center) - ball.radius;\n    }\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    vec4 dir = v.local.pos.coords - center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 
@@ -1535,7 +1535,7 @@ module.exports = "                                                              
 /***/ 129:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct FakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(FakeBallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    return fakeDistance(v.local.pos, center) - ball.radius;\n}\n\nvec2 uvMap(FakeBallShape ball, RelVector v){\n    vec4 dir = v.local.pos.coords - ball.center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
+module.exports = "                                                                                                                        \n          \n                   \n                                                                                                                        \n\nstruct FakeBallShape {\n    int id;\n    Point center;\n    float radius;\n};\n\n   \n                                                \n   \nfloat sdf(FakeBallShape ball, RelVector v) {\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    return fakeDistance(v.local.pos, center) - ball.radius;\n}\n\nvec2 uvMap(FakeBallShape ball, RelVector v){\n    Point center = applyIsometry(v.invCellBoost, ball.center);\n    vec4 dir = v.local.pos.coords - center.coords;\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 
@@ -19143,6 +19143,7 @@ const thurstonNil_VRRenderer = specifyRenderer(VRRenderer, (part1_default()), (p
 const thurstonNil_Thurston = specifyThurston(Thurston, (part1_default()), (part2_default()));
 const thurstonNil_ThurstonLite = specifyThurston(ThurstonLite, (part1_default()), (part2_default()));
 const thurstonNil_ThurstonVR = specifyThurston(ThurstonVR, (part1_default()), (part2_default()));
+
 
 
 

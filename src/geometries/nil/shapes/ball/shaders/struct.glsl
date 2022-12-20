@@ -24,7 +24,8 @@ float sdf(BallShape ball, RelVector v) {
 }
 
 vec2 uvMap(BallShape ball, RelVector v){
-    vec4 dir = v.local.pos.coords - ball.center.coords;
+    Point center = applyIsometry(v.invCellBoost, ball.center);
+    vec4 dir = v.local.pos.coords - center.coords;
     float sinPhi = length(dir.xy);
     float cosPhi = dir.z;
     float uCoord = atan(dir.y, dir.x);
