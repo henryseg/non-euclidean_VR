@@ -25,7 +25,7 @@ import structVectorData from "./shaders/pathTracer/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.glsl.mustache";
 import main from "./shaders/pathTracer/main.glsl";
 
-import SteveShader from "../../postProcess/steve/shader.js";
+// import SteveShader from "../../postProcess/steve/shader.js";
 import nextObject from "./shaders/pathTracer/nextObject.glsl.mustache";
 
 

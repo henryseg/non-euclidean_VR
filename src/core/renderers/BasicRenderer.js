@@ -14,7 +14,7 @@ import raymarch from "./shaders/common/raymarch.glsl";
 import scenes from "./shaders/basic/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
-import SteveShader from "../../postProcess/steve/shader.js";
+// import SteveShader from "../../postProcess/steve/shader.js";
 import main from "./shaders/basic/main.glsl";
 
 
