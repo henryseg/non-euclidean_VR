@@ -14,11 +14,17 @@ struct NaryMaterial {
 };
 
 vec3 render(NaryMaterial material, ExtVector v, vec2 uv) {
-    float logn = log(float(material.n));
-    float k = round(uv.y / logn);
-    float c1 = 2. * abs(uv.y - k * logn);
-    float aux = round(uv.x / (k * material.t));
-    float c2 = 2. * abs(uv.x - aux * k * material.t);
+    float nfloat = float(material.n);
+    float logn = log(nfloat);
+
+    float scaledY = uv.y / logn;
+    float k = round(scaledY);
+    float c1 = 2. * abs(scaledY - k);
+
+    float scaledX = uv.x / (pow(nfloat, k) * material.t);
+    float aux = round(scaledX);
+    float c2 = 2. * abs(scaledX - aux);
+
     if (c1 < material.lengths.x && c2 < material.lengths.x){
         return material.color0;
     } else if (c1 < material.lengths.y && c2 < material.lengths.y){
