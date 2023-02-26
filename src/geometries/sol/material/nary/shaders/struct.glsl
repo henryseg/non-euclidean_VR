@@ -21,9 +21,9 @@ vec3 render(NaryMaterial material, ExtVector v, vec2 uv) {
     float k = round(scaledY);
     float c1 = 2. * abs(scaledY - k);
 
-    float scaledX = uv.x / (pow(nfloat, k) * material.t);
-    float aux = round(scaledX);
-    float c2 = 2. * abs(scaledX - aux);
+    float scaledX = uv.x / (pow(nfloat, -k) * material.t);
+    float aux = floor(scaledX);
+    float c2 = abs(2. * (scaledX - aux) - 1.);
 
     if (c1 < material.lengths.x && c2 < material.lengths.x){
         return material.color0;
