@@ -1,4 +1,4 @@
-import {Color, Vector4} from "three";
+import {Color, Vector3, Vector4} from "three";
 
 import {Material} from "../../../../core/materials/Material.js";
 
@@ -56,8 +56,8 @@ export class NaryEquidistantMaterial extends Material {
         this.heights = new Vector4(...aux1);
 
 
-        aux1 = widths !== undefined ? widths : [1, 2, 3, 4];
-        this.widths = new Vector4(...aux1);
+        aux1 = widths !== undefined ? widths : [1, 2, 3];
+        this.widths = new Vector3(...aux1);
 
 
         let lastColor = new Color(1, 1, 1);

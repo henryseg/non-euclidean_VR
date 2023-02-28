@@ -6,7 +6,7 @@ struct NaryMaterialEquidistant {
     float t;
     int n;
     vec4 heights;
-    vec4 widths;
+    vec3 widths;
     vec3 color0;
     vec3 color1;
     vec3 color2;
