@@ -1535,7 +1535,7 @@ module.exports = "                                                              
 /***/ 8803:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                                     \n                                                                                                                        \nstruct NaryMaterialEquidistant {\n    float t;\n    int n;\n    vec4 heights;\n    vec4 widths;\n    vec3 color0;\n    vec3 color1;\n    vec3 color2;\n    vec3 color3;\n\n};\n\nvec3 render(NaryMaterialEquidistant material, ExtVector v, vec2 uv) {\n    float nfloat = float(material.n);\n    float logn = log(nfloat);\n\n    float scaledY = uv.y / logn;\n    float k = round(scaledY);\n    float y = 2. * (scaledY - k);\n    float testY = abs(y);\n\n    float scaledX = uv.x / (pow(nfloat, -k) * material.t);\n    float aux = floor(scaledX);\n    float x = 2. * (scaledX - aux) - 1.;\n    float testX = -y - 2. * log(1. - abs(x)) / logn;\n\n    if (testY < material.heights.x && testX < material.widths.x){\n        return material.color0;\n    } else if (testY < material.heights.y && testX < material.widths.y){\n        return material.color1;\n    } else if (testY < material.heights.z && testX < material.widths.z){\n        return material.color2;\n    } else {\n        return material.color3;\n    }\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                                     \n                                                                                                                        \nstruct NaryMaterialEquidistant {\n    float t;\n    int n;\n    vec4 heights;\n    vec3 widths;\n    vec3 color0;\n    vec3 color1;\n    vec3 color2;\n    vec3 color3;\n\n};\n\nvec3 render(NaryMaterialEquidistant material, ExtVector v, vec2 uv) {\n    float nfloat = float(material.n);\n    float logn = log(nfloat);\n\n    float scaledY = uv.y / logn;\n    float k = round(scaledY);\n    float y = 2. * (scaledY - k);\n    float testY = abs(y);\n\n    float scaledX = uv.x / (pow(nfloat, -k) * material.t);\n    float aux = floor(scaledX);\n    float x = 2. * (scaledX - aux) - 1.;\n    float testX = -y - 2. * log(1. - abs(x)) / logn;\n\n    if (testY < material.heights.x && testX < material.widths.x){\n        return material.color0;\n    } else if (testY < material.heights.y && testX < material.widths.y){\n        return material.color1;\n    } else if (testY < material.heights.z && testX < material.widths.z){\n        return material.color2;\n    } else {\n        return material.color3;\n    }\n}\n\n"
 
 /***/ }),
 
@@ -17719,8 +17719,8 @@ class NaryEquidistantMaterial extends Material {
         this.heights = new external_three_namespaceObject.Vector4(...aux1);
 
 
-        aux1 = widths !== undefined ? widths : [1, 2, 3, 4];
-        this.widths = new external_three_namespaceObject.Vector4(...aux1);
+        aux1 = widths !== undefined ? widths : [1, 2, 3];
+        this.widths = new external_three_namespaceObject.Vector3(...aux1);
 
 
         let lastColor = new external_three_namespaceObject.Color(1, 1, 1);
