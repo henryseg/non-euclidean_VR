@@ -1,7 +1,7 @@
 import {
     LinearFilter,
     RepeatWrapping,
-    TextureLoader,
+    VideoTexture,
     Vector2
 } from "three";
 
@@ -16,23 +16,23 @@ import render from "../../../core/materials/shaders/renderUV.glsl.mustache";
  * @extends Material
  *
  * @classdesc
- * A material given by an image file
+ * A material given by an video file
  *
  */
-export class SimpleTextureMaterial extends Material {
+export class VideoTextureMaterial extends Material {
 
     /**
      * Constructor
-     * @param {string} file - path to the image file
+     * @param {HTMLVideoElement} videoElement - the element in the HTML file containing the video
      * @param {Object} params - options for the material
      */
-    constructor(file, params = {}) {
+    constructor(videoElement, params = {}) {
         super();
         /**
          * Texture built from the given image
          * @type {Texture}
          */
-        this.sampler = new TextureLoader().load(file);
+        this.sampler = new VideoTexture(videoElement);
         this.sampler.wrapS = params.wrapS !== undefined ? params.wrapS : RepeatWrapping;
         this.sampler.wrapT = params.wrapT !== undefined ? params.wrapT : RepeatWrapping;
         this.sampler.magFilter = LinearFilter;
@@ -52,7 +52,7 @@ export class SimpleTextureMaterial extends Material {
     }
 
     get uniformType() {
-        return 'SimpleTextureMaterial';
+        return 'VideoTextureMaterial';
     }
 
     get usesNormal() {

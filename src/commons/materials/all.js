@@ -10,6 +10,7 @@ export {
     marsTexture,
     sunTexture
 } from "./astronomy/astromonyTextures.js";
+export {VideoTextureMaterial} from "./videoTexture/VideoTextureMaterial";
 export {SquaresMaterial} from "./squares/SquaresMaterial.js";
 export {StripsMaterial} from "./strips/StripsMaterial.js";
 
