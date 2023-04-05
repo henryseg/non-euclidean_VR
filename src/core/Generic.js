@@ -130,7 +130,7 @@ export class Generic {
         // add the struct dependencies (which only depends on the class and not the instance)
         shaderBuilder.addClass(this.constructor.name, this.constructor.glslClass());
 
-        // if needed declare the uniform for this instance
+        // if needed, declare the uniform for this instance
         if (this.uniformType !== '') {
             shaderBuilder.addUniform(this.name, this.uniformType, this);
         }
