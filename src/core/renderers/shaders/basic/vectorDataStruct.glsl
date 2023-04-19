@@ -14,6 +14,6 @@ struct VectorData {
     int iMarch; /**< number of time we looped in the raymarch method */
     int iBounce; /**< number of time we bounced on a solid */
     bool stop; /**< do we stop bouncing ? */
-    vec3 pixel; /**< accumulated color : color computed until the current stage */
-    vec3 leftToComputeColor; /**< amount of color that is left to compute for each RGB channel */
+    vec4 pixel; /**< accumulated color : color computed until the current stage */
+    vec4 leftToComputeColor; /**< amount of color that is left to compute for each RGBA channel */
 };

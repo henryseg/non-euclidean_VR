@@ -1,4 +1,4 @@
-vec3 {{name}}_render(ExtVector v) {
-    return vec3(0, float(v.data.iMarch/camera.maxSteps), v.data.totalDist / camera.maxDist);
-    //return debugColor;
+vec4 {{name}}_render(ExtVector v) {
+    return vec4(0, float(v.data.iMarch/camera.maxSteps), v.data.totalDist / camera.maxDist, 1);
+    //return vec4(debugColor,1);
 }

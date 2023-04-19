@@ -14,7 +14,7 @@ const float PI = 3.1415926538;
 /**
  * Default debug color
  */
-vec3 debugColor = vec3(0.5, 0, 0.8);
+vec4 debugColor = vec4(0.5, 0, 0.8, 1);
 
 /**
  * Value of hit when we hit nothing.

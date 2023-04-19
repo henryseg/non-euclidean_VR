@@ -108,7 +108,7 @@ int raymarch(inout ExtVector v, out int objId){
     return hit;
 }
 
-vec3 getColor(ExtVector v){
+vec4 getColor(ExtVector v){
     int objId;
     int hit;
     for (int i = 0; i <= maxBounces; i++){

@@ -49,6 +49,12 @@ export class SimpleTextureMaterial extends Material {
          * @type {Vector2}
          */
         this.scale = params.scale !== undefined ? params.scale.clone() : new Vector2(1, 1);
+
+        /**
+         * Says if the texture has an alpha channel that need be taken into account
+         * @type {boolean}
+         */
+        this.transparent = params.transparent !== undefined ? params.transparent : false;
     }
 
     get uniformType() {
@@ -61,6 +67,10 @@ export class SimpleTextureMaterial extends Material {
 
     get usesUVMap() {
         return true;
+    }
+
+    get isTransparent() {
+        return this.transparent;
     }
 
     static glslClass() {

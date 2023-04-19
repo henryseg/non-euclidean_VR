@@ -10,11 +10,10 @@ import vertexShader from "./shaders/common/vertex.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
-import raymarch from "./shaders/common/raymarch.glsl";
+import raymarch from "./shaders/basic/raymarch.glsl";
 import scenes from "./shaders/basic/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
-// import SteveShader from "../../postProcess/steve/shader.js";
 import main from "./shaders/basic/main.glsl";
 
 
@@ -104,7 +103,7 @@ export class BasicRenderer extends AbstractRenderer {
      * @return {BasicRenderer}
      */
     build() {
-        // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
+        // The lag that may occur when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
         const geometry = new SphereGeometry(1000, 60, 40);
         // sphere eversion !
@@ -141,6 +140,4 @@ export class BasicRenderer extends AbstractRenderer {
     render() {
         this.composer.render();
     }
-
-
 }

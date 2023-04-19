@@ -147,7 +147,7 @@ switch(objId){
 
 void updateVectorData(inout ExtVector v, int hit, int objId){
     if (hit == HIT_DEBUG) {
-        v.data.pixel = debugColor;
+        v.data.pixel = debugColor.rgb;
         v.data.stop = true;
         return;
     }

@@ -1,11 +1,11 @@
-vec3 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {
+vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {
     bool check;
     RelVector dir;
     float intensity;
     int k;
 
     PhongWrapMaterial material = {{name}};
-    vec3 baseColor = {{material.name}}_render(v, normal, uv);
+    vec3 baseColor = {{material.name}}_render(v, normal, uv).rgb;
     vec3 color = vec3(0);
 
     {{#lights}}
@@ -17,4 +17,6 @@ vec3 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {
             }
         }
     {{/lights}}
+
+    return vec4(color, 1);
 }

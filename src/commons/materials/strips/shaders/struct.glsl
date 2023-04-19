@@ -12,16 +12,19 @@ struct StripsMaterial {
 
 };
 
-vec3 render(StripsMaterial material, ExtVector v, vec2 uv) {
+vec4 render(StripsMaterial material, ExtVector v, vec2 uv) {
+    vec3 color;
     float x = mod(dot(uv, material.dir) / dot(material.dir, material.dir), 1.);
     if (x < material.lengths.x){
-        return material.color0;
+        color = material.color0;
     } else if (x < material.lengths.y){
-        return material.color1;
+        color = material.color1;
     } else if (x < material.lengths.z){
-        return material.color2;
+        color = material.color2;
     } else {
-        return material.color3;
+        color = material.color3;
     }
+
+    return vec4(color, 1);
 }
 

@@ -4,7 +4,7 @@
  * However there is a function, to factorize the code
  **********************************************************************************************************************/
 
-vec3 normalMaterialRender(ExtVector v, RelVector normal) {
+vec4 normalMaterialRender(ExtVector v, RelVector normal) {
     Vector[3] f;
     Point pos = applyGroupElement(v.vector.cellBoost, v.vector.local.pos);
     frame(pos, f);
@@ -18,5 +18,5 @@ vec3 normalMaterialRender(ExtVector v, RelVector normal) {
     float r =  geomDot(normal.local, f[0]);
     float g =  geomDot(normal.local, f[1]);
     float b =  geomDot(normal.local, f[2]);
-    return abs(vec3(r, g, b));
+    return abs(vec4(r, g, b, 1));
 }

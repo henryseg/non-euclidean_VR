@@ -109,23 +109,6 @@ int raymarch(inout ExtVector v, out int objId){
     return hit;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bool doesItScatter(inout float dist, float opticalDepth){
     //decide if we scatter
     if (opticalDepth>100.){
@@ -271,18 +254,7 @@ int scatterRaymarch(inout ExtVector v, out int objId){
     return hit;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-vec3 getColor(ExtVector v){
+vec4 getColor(ExtVector v){
     int objId;
     int hit;
     for (int i = 0; i <= maxBounces; i++){
@@ -292,5 +264,5 @@ vec3 getColor(ExtVector v){
         hit = scatterRaymarch(v, objId);
         updateVectorData(v, hit, objId);
     }
-    return v.data.pixel;
+    return vec4(v.data.pixel,1);
 }

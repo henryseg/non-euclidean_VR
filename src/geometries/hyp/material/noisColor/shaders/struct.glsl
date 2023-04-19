@@ -44,8 +44,9 @@ float fracNoise(vec2 p){
     return f;
 }
 
-vec3 render(NoiseColorMaterial material, ExtVector v) {
+vec4 render(NoiseColorMaterial material, ExtVector v) {
     float f1 = fracNoise(v.vector.local.pos.coords.xy);
     float f2 = fracNoise(v.vector.local.pos.coords.yz);
-    return material.mainColor + material.intensity * (f1*f2) * material.weight;
+    vec3 color =  material.mainColor + material.intensity * (f1*f2) * material.weight;
+    return vec4(color, 1);
 }

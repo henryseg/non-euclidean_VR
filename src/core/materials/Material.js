@@ -75,6 +75,15 @@ export class Material extends Generic {
         return false;
     }
 
+    /**
+     * Says whether the material is transparent
+     * Default is false.
+     * @return {boolean}
+     */
+    get isTransparent() {
+        return false;
+    }
+
     onAdd(scene) {
         if (this.usesLight) {
             if (!this.hasOwnProperty('lights') || this['lights'] === undefined) {
@@ -86,10 +95,10 @@ export class Material extends Generic {
     /**
      * Return the chunk of GLSL code used to compute the color of the material at the given point
      * The render function on the GLSL side should have one of the following signatures
-     * - `vec3 {{name}}_render(ExtVector v)`
-     * - `vec3 {{name}}_render(ExtVector v, RelVector normal)`
-     * - `vec3 {{name}}_render(ExtVector v, vec2 uv)`
-     * - `vec3 {{name}}_render(ExtVector v, RelVector normal, vec2 uv)`
+     * - `vec4 {{name}}_render(ExtVector v)`
+     * - `vec4 {{name}}_render(ExtVector v, RelVector normal)`
+     * - `vec4 {{name}}_render(ExtVector v, vec2 uv)`
+     * - `vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv)`
      * The exact signature depends on whether the material requires a normal or UV coordinates.
      * Here v is the vector obtained when we hit the shape.
      * It should return the color as a vec3 of the material at the given point, without taking into account reflections.

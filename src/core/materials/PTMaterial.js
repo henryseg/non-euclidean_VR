@@ -52,7 +52,7 @@ export class PTMaterial extends Generic {
      * - `vec3 {{name}}_render(RelVector v, RelVector normal)`
      * - `vec3 {{name}}_render(RelVector v, vec2 uv)`
      * - `vec3 {{name}}_render(RelVector v, RelVector normal, vec2 uv)`
-     * The exact signature depends whether the material requires a normal or UV coordinates.
+     * The exact signature depends on whether the material requires a normal or UV coordinates.
      * Here v is the vector obtained when we hit the shape.
      * It should return the color as a vec3 of the material at the given point, without taking into account reflections.
      * @abstract

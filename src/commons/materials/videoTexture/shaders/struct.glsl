@@ -12,8 +12,7 @@ struct VideoTextureMaterial {
 
 vec3 render(VideoTextureMaterial material, ExtVector v, vec2 uv) {
     vec2 texCoords = (uv - material.start) * material.scale;
-    vec4 color = texture(material.sampler, texCoords);
-    return color.xyz;
+    return texture(material.sampler, texCoords);
 }
 
 

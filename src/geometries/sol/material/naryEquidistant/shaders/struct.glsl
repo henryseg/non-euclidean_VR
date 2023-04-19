@@ -14,7 +14,8 @@ struct NaryMaterialEquidistant {
 
 };
 
-vec3 render(NaryMaterialEquidistant material, ExtVector v, vec2 uv) {
+vec4 render(NaryMaterialEquidistant material, ExtVector v, vec2 uv) {
+    vec3 color;
     float nfloat = float(material.n);
     float logn = log(nfloat);
 
@@ -29,13 +30,15 @@ vec3 render(NaryMaterialEquidistant material, ExtVector v, vec2 uv) {
     float testX = -y - 2. * log(1. - abs(x)) / logn;
 
     if (testY < material.heights.x && testX < material.widths.x){
-        return material.color0;
+        color = material.color0;
     } else if (testY < material.heights.y && testX < material.widths.y){
-        return material.color1;
+        color = material.color1;
     } else if (testY < material.heights.z && testX < material.widths.z){
-        return material.color2;
+        color = material.color2;
     } else {
-        return material.color3;
+        color = material.color3;
     }
+
+    return vec4(color, 1);
 }
 

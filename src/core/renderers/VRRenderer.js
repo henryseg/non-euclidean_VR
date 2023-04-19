@@ -11,7 +11,7 @@ import vertexShader from "./shaders/common/vertex.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
-import raymarch from "./shaders/common/raymarch.glsl";
+import raymarch from "./shaders/basic/raymarch.glsl";
 import scenes from "./shaders/basic/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";

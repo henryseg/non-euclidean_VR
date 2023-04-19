@@ -9,15 +9,15 @@ struct CheckerboardMaterial {
     vec3 color2;
 };
 
-vec3 render(CheckerboardMaterial material, ExtVector v, vec2 uv) {
+vec4 render(CheckerboardMaterial material, ExtVector v, vec2 uv) {
     float x1 = mod(dot(uv, material.dir1), 2.);
     float x2 = mod(dot(uv, material.dir2), 2.);
     if (x1 < 1. && x2 < 1.){
-        return material.color1;
+        return vec4(material.color1, 1);
     } else if (x1 >= 1. && x2 >= 1.) {
-        return material.color1;
+        return vec4(material.color1, 1);
     } else {
-        return material.color2;
+        return vec4(material.color2, 1);
     }
 }
 

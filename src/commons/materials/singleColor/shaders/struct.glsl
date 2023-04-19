@@ -6,6 +6,6 @@ struct SingleColorMaterial {
     vec3 color;
 };
 
-vec3 render(SingleColorMaterial material, ExtVector v) {
-    return material.color;
+vec4 render(SingleColorMaterial material, ExtVector v) {
+    return vec4(material.color, 1);
 }

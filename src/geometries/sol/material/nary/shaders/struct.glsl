@@ -13,7 +13,8 @@ struct NaryMaterial {
 
 };
 
-vec3 render(NaryMaterial material, ExtVector v, vec2 uv) {
+vec4 render(NaryMaterial material, ExtVector v, vec2 uv) {
+    vec3 color;
     float nfloat = float(material.n);
     float logn = log(nfloat);
 
@@ -26,13 +27,14 @@ vec3 render(NaryMaterial material, ExtVector v, vec2 uv) {
     float c2 = abs(2. * (scaledX - aux) - 1.);
 
     if (c1 < material.lengths.x && c2 < material.lengths.x){
-        return material.color0;
+        color = material.color0;
     } else if (c1 < material.lengths.y && c2 < material.lengths.y){
-        return material.color1;
+        color = material.color1;
     } else if (c1 < material.lengths.z && c2 < material.lengths.z){
-        return material.color2;
+        color = material.color2;
     } else {
-        return material.color3;
+        color = material.color3;
     }
+    return vec4(color, 1);
 }
 
