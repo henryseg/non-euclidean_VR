@@ -55,6 +55,7 @@ export class Solid extends Generic {
          * @type{boolean}
          */
         this.isRendered = true;
+
         this.addImport(struct);
     }
 
@@ -121,13 +122,21 @@ export class Solid extends Generic {
     }
 
     /**
-     * Return a chunk of GLSL code used to compute the color of the solid.
-     * This computation may involve normal and/or UV coordinates.
-     * This is automatically determined from the properties of the material.
+     * Return a chunk of GLSL code specific to the instance of the solid
+     * We use a hack here.
+     * It is indeed impossible in GLSL to update the fields of a uniform variable
+     * However for the (crude) handling of transparency we need to modify the isRendered variable.
+     * Therefore, after the object is defined, we directly add a variable _isRenderedHack set to true.
+     * In the scene SDF the test to check is an object should be rendered is :
+     * .isRendered & _isRenderedHack
+     * (with the right prefixes)
      * @return {string}
      */
     glslInstance() {
-        return '';
+        // language=GLSL
+        return `
+            bool ${this.name}_isRenderedHack = true;
+        `;
     }
 
     shader(shaderBuilder) {

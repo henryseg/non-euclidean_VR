@@ -19,7 +19,7 @@ float _localSceneSDF(RelVector v, out int hit, out int objId){
 
     {{#scene.solids}}
         {{#isLocal}}
-            if({{name}}.isRendered){
+            if({{name}}.isRendered && {{name}}_isRenderedHack){
                 dist = {{shape.name}}_sdf(v);
                 if(dist < camera.threshold) {
                     hit = HIT_SOLID;
@@ -87,7 +87,7 @@ float globalSceneSDF(RelVector v, out int hit, out int objId){
     
     {{#scene.solids}}
         {{#isGlobal}}
-            if({{name}}.isRendered){
+            if({{name}}.isRendered && {{name}}_isRenderedHack){
                 dist = {{shape.name}}_sdf(v);
                 if(dist < camera.threshold) {
                     hit = HIT_SOLID;

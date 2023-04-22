@@ -70,7 +70,7 @@ export class ShaderBuilder {
     }
 
     /**
-     * Incorporate the given import (if it does not already exists)
+     * Incorporate the given import (if it does not already exist)
      * @param {string} imp - the import to add
      * @return {ShaderBuilder} - the current shader builder
      */
@@ -83,7 +83,7 @@ export class ShaderBuilder {
     }
 
     /**
-     * Incorporate the given dependency (if it does not already exists)
+     * Incorporate the given dependency (if it does not already exist)
      * @param {string} name - the name of the class
      * @param {string} code - the code of the class
      * @return {ShaderBuilder} - the current shader builder

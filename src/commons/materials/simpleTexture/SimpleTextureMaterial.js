@@ -54,7 +54,7 @@ export class SimpleTextureMaterial extends Material {
          * Says if the texture has an alpha channel that need be taken into account
          * @type {boolean}
          */
-        this.transparent = params.transparent !== undefined ? params.transparent : false;
+        this._isTransparent = params.isTransparent !== undefined ? params.isTransparent : false;
     }
 
     get uniformType() {
@@ -70,7 +70,7 @@ export class SimpleTextureMaterial extends Material {
     }
 
     get isTransparent() {
-        return this.transparent;
+        return this._isTransparent;
     }
 
     static glslClass() {

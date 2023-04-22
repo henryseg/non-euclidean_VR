@@ -16,10 +16,12 @@ import render from "../../../core/materials/shaders/renderUV.glsl.mustache";
  * @extends Material
  *
  * @classdesc
- * A material given by a video file
- *
+ * A material given by a "double" video file
+ * The file should consist of two videos stacked on top of one another
+ * The video in the upper half part corresponds to the RGB channels
+ * The video in the lower half part is a gray scale video encoding the alpha channel.
  */
-export class VideoTextureMaterial extends Material {
+export class VideoAlphaTextureMaterial extends Material {
 
     /**
      * Constructor
@@ -54,11 +56,11 @@ export class VideoTextureMaterial extends Material {
          * Says if the texture has an alpha channel that need be taken into account
          * @type {boolean}
          */
-        this.transparent = params.transparent !== undefined ? params.transparent : false;
+        this.transparent = params.transparent !== undefined ? params.transparent : true;
     }
 
     get uniformType() {
-        return 'VideoTextureMaterial';
+        return 'VideoAlphaTextureMaterial';
     }
 
     get usesNormal() {

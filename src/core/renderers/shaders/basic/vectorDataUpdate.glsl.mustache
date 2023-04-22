@@ -8,25 +8,15 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     vec2 uv;
     vec4 color;
     vec4 reflectivity;
+    float opacity;
     float t;
     
     switch(objId){
     {{#scene.solids}}
     
         case {{id}}:
-        {{#material.isReflecting}}
-            
-            if(v.data.iBounce == maxBounces){
-                reflectivity = vec4(0);
-            } 
-            else {
-                reflectivity = vec4({{material.name}}.reflectivity,1);
-            }
-            
-            normal = {{shape.name}}_gradient(v.vector);
-            // in general the gradient is not necessarily a unit vector
-            normal = geomNormalize(normal);
-    
+        {{#material.isTransparent}}
+
             {{^material.usesNormal}}
                 {{^material.usesUVMap}}
                     color =  {{material.name}}_render(v);
@@ -36,68 +26,134 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
                     color = {{material.name}}_render(v, uv);
                 {{/material.usesUVMap}}
             {{/material.usesNormal}}
-    
+
             {{#material.usesNormal}}
                 {{^material.usesUVMap}}
+                    normal = {{shape.name}}_gradient(v.vector);
                     color = {{material.name}}_render(v, normal);
                 {{/material.usesUVMap}}
                 {{#material.usesUVMap}}
+                    normal = {{shape.name}}_gradient(v.vector);
                     uv = {{shape.name}}_uvMap(v.vector);
                     color = {{material.name}}_render(v, normal, uv);
                 {{/material.usesUVMap}}
             {{/material.usesNormal}}
 
+            if(v.data.iBounce == maxBounces){
+                opacity = 1.;
+            }
+            else {
+                opacity = color.a;
+            }
+
             {{#scene.fog}}
-                color = applyFog(color, v.data.lastBounceDist);
+                //color = applyFog(color, v.data.lastBounceDist);
             {{/scene.fog}}
 
-            if(length(reflectivity) == 0.) {
+            if(opacity == 1.) {
                 v.data.stop = true;
             }
             else{
                 v.data.stop = false;
             }
-            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec4(1) - reflectivity) * color;
-            v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;
-            v.vector = geomReflect(v.vector,normal);
+            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * opacity * color;
+            v.data.leftToComputeColor = (1. - opacity) * v.data.leftToComputeColor;
+            {{name}}_isRenderedHack = false;
             v.data.lastBounceDist = 0.;
             v.data.iBounce = v.data.iBounce + 1;
-            t = 20. * camera.threshold / abs(geomDot(v.vector, normal));
-            v = flow(v, t);
-    
-        {{/material.isReflecting}}
-    
-        {{^material.isReflecting}}
-            {{^material.usesNormal}}
-                {{^material.usesUVMap}}
-                    color =  {{material.name}}_render(v);
-                {{/material.usesUVMap}}
-                {{#material.usesUVMap}}
-                    uv = {{shape.name}}_uvMap(v.vector);
-                    color = {{material.name}}_render(v, uv);
-                {{/material.usesUVMap}}
-            {{/material.usesNormal}}
-    
-            {{#material.usesNormal}}
-                {{^material.usesUVMap}}
-                    normal = {{shape.name}}_gradient(v.vector);
-                    color = {{material.name}}_render(v, normal);
-                {{/material.usesUVMap}}
-                {{#material.usesUVMap}}
-                    normal = {{shape.name}}_gradient(v.vector);
-                    uv = {{shape.name}}_uvMap(v.vector);
-                    color = {{material.name}}_render(v, normal, uv);
-                {{/material.usesUVMap}}
-            {{/material.usesNormal}}
+            //t = 20. * camera.threshold / abs(geomDot(v.vector, normal));
+            //v = flow(v, t);
 
-            {{#scene.fog}}
-                color = applyFog(color, v.data.lastBounceDist);
-            {{/scene.fog}}
-            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;
-            v.data.leftToComputeColor = vec4(0);
-            v.data.stop = true;
-        {{/material.isReflecting}}
-    
+        {{/material.isTransparent}}
+
+        {{^material.isTransparent}}
+
+            {{#material.isReflecting}}
+
+                if(v.data.iBounce == maxBounces){
+                    reflectivity = vec4(0);
+                }
+                else {
+                    reflectivity = vec4({{material.name}}.reflectivity,1);
+                }
+
+                normal = {{shape.name}}_gradient(v.vector);
+                // in general the gradient is not necessarily a unit vector
+                normal = geomNormalize(normal);
+
+                {{^material.usesNormal}}
+                    {{^material.usesUVMap}}
+                        color =  {{material.name}}_render(v);
+                    {{/material.usesUVMap}}
+                    {{#material.usesUVMap}}
+                        uv = {{shape.name}}_uvMap(v.vector);
+                        color = {{material.name}}_render(v, uv);
+                    {{/material.usesUVMap}}
+                {{/material.usesNormal}}
+
+                {{#material.usesNormal}}
+                    {{^material.usesUVMap}}
+                        color = {{material.name}}_render(v, normal);
+                    {{/material.usesUVMap}}
+                    {{#material.usesUVMap}}
+                        uv = {{shape.name}}_uvMap(v.vector);
+                        color = {{material.name}}_render(v, normal, uv);
+                    {{/material.usesUVMap}}
+                {{/material.usesNormal}}
+
+                {{#scene.fog}}
+                    color = applyFog(color, v.data.lastBounceDist);
+                {{/scene.fog}}
+
+                if(length(reflectivity) == 0.) {
+                    v.data.stop = true;
+                }
+                else{
+                    v.data.stop = false;
+                }
+                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec4(1) - reflectivity) * color;
+                v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;
+                v.vector = geomReflect(v.vector,normal);
+                v.data.lastBounceDist = 0.;
+                v.data.iBounce = v.data.iBounce + 1;
+                t = 20. * camera.threshold / abs(geomDot(v.vector, normal));
+                v = flow(v, t);
+
+            {{/material.isReflecting}}
+
+            {{^material.isReflecting}}
+                {{^material.usesNormal}}
+                    {{^material.usesUVMap}}
+                        color =  {{material.name}}_render(v);
+                    {{/material.usesUVMap}}
+                    {{#material.usesUVMap}}
+                        uv = {{shape.name}}_uvMap(v.vector);
+                        color = {{material.name}}_render(v, uv);
+                    {{/material.usesUVMap}}
+                {{/material.usesNormal}}
+
+                {{#material.usesNormal}}
+                    {{^material.usesUVMap}}
+                        normal = {{shape.name}}_gradient(v.vector);
+                        color = {{material.name}}_render(v, normal);
+                    {{/material.usesUVMap}}
+                    {{#material.usesUVMap}}
+                        normal = {{shape.name}}_gradient(v.vector);
+                        uv = {{shape.name}}_uvMap(v.vector);
+                        color = {{material.name}}_render(v, normal, uv);
+                    {{/material.usesUVMap}}
+                {{/material.usesNormal}}
+
+                {{#scene.fog}}
+                    color = applyFog(color, v.data.lastBounceDist);
+                {{/scene.fog}}
+
+                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;
+                v.data.leftToComputeColor = vec4(0);
+                v.data.stop = true;
+            {{/material.isReflecting}}
+
+        {{/material.isTransparent}}
         break;
     
     {{/scene.solids}}
