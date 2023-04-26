@@ -31,6 +31,7 @@ export {default as cubeSet} from "./geometries/hyp/groups/cube/set.js";
 export {default as symCubeSet} from "./geometries/hyp/groups/cube/symbSet.js";
 export {default as SWSet} from "./geometries/hyp/groups/seifert-weber/set.js";
 export {default as whiteheadSet} from "./geometries/hyp/groups/whitehead/set.js";
+export {default as m125Set} from "./geometries/hyp/groups/m125/set.js";
 export * from './geometries/hyp/lights/all.js';
 export * from './geometries/hyp/material/all.js';
 export * from './geometries/hyp/shapes/all.js';
