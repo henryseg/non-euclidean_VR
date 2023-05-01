@@ -13891,9 +13891,7 @@ var videoFrameTexture_shaders_struct_default = /*#__PURE__*/__webpack_require__.
 
 
 
-const REFRESH_READY = 0;
-const REFRESH_IN_PROGRESS = 1;
-const REFRESH_COMPLETE = 2;
+
 
 /**
  * @class
@@ -13906,6 +13904,10 @@ const REFRESH_COMPLETE = 2;
  *
  */
 class VideoFrameTextureMaterial extends Material {
+
+    static REFRESH_READY = 0;
+    static REFRESH_IN_PROGRESS = 1;
+    static REFRESH_COMPLETE = 2;
 
     /**
      * Constructor
@@ -13987,7 +13989,7 @@ class VideoFrameTextureMaterial extends Material {
          * 1 - refresh in progress. The call for the next frame has been sent, waiting for the file to be loaded
          * @type {number}
          */
-        this.imageStatus = REFRESH_READY;
+        this.imageStatus = VideoFrameTextureMaterial.REFRESH_READY;
 
         /**
          * Image Loader
@@ -13995,23 +13997,12 @@ class VideoFrameTextureMaterial extends Material {
         this.imageLoader = new external_three_namespaceObject.ImageLoader();
         this.imageLoader.setPath(prefix);
 
+        /**
+         * Current frame used for the texture
+         * @type {number}
+         */
         this.currentFrame = 0;
 
-    }
-
-    /**
-     * Return the index of the frame, corresponding to the given time (in ms).
-     * @param {number} time - the time in ms
-     * @returns {number} - the index of the frame
-     */
-    frameIndex(time) {
-        let index = Math.floor(time * this.fps);
-        if (this.loop) {
-            index = index % this.frameNumber;
-        } else {
-            index = Math.min(index, this.frameNumber - 1)
-        }
-        return index
     }
 
 
@@ -14024,42 +14015,13 @@ class VideoFrameTextureMaterial extends Material {
     }
 
     /**
-     * Load the frame corresponding to the given time.
-     * @param {number} time - the current time (in ms)
-     */
-    loadFrame(time) {
-        if (this.imageStatus === REFRESH_READY) {
-
-            this.imageStatus = REFRESH_IN_PROGRESS;
-            const index = this.frameIndex(time);
-            console.log('frame index ', index);
-            const url = this.files[index];
-
-            const texture = this;
-            this.imageLoader.load(
-                url,
-                function (image) {
-                    texture.sampler.image = image;
-                    texture.sampler.needsUpdate = true;
-                    texture.imageStatus = REFRESH_COMPLETE;
-                    texture.callback();
-                },
-                undefined,
-                function () {
-                    console.log(`Cannot load the file ${url}`);
-                }
-            );
-        }
-    }
-
-    /**
      * Load the next file as the image texture,
      * and update the current frame index
      */
     nextFrame() {
-        if (this.imageStatus === REFRESH_READY) {
+        if (this.imageStatus === VideoFrameTextureMaterial.REFRESH_READY) {
 
-            this.imageStatus = REFRESH_IN_PROGRESS;
+            this.imageStatus = VideoFrameTextureMaterial.REFRESH_IN_PROGRESS;
             const url = this.files[this.currentFrame];
             this.currentFrame = this.nextFrameIndex(this.currentFrame);
 
@@ -14069,7 +14031,7 @@ class VideoFrameTextureMaterial extends Material {
                 function (image) {
                     texture.sampler.image = image;
                     texture.sampler.needsUpdate = true;
-                    texture.imageStatus = REFRESH_COMPLETE;
+                    texture.imageStatus = VideoFrameTextureMaterial.REFRESH_COMPLETE;
                 },
                 undefined,
                 function () {
