@@ -6,7 +6,6 @@ import element from "./shaders/element.glsl";
 import struct from "./shaders/struct.glsl";
 
 
-
 export class Group extends AbstractGroup {
 
     /**

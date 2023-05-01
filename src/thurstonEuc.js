@@ -28,6 +28,7 @@ export * from "./core.js";
 export {DollyCamera} from "./geometries/euc/cameras/dolly/DollyCamera.js";
 
 export {default as freeAbelianSet} from "./geometries/euc/groups/freeAbelian/set.js";
+export {default as kleinS1} from "./geometries/euc/groups/kleinS1/set.js";
 export * from './geometries/euc/lights/all.js';
 export * from './geometries/euc/material/all.js';
 export * from './geometries/euc/shapes/all.js';
