@@ -13,6 +13,7 @@ export {
 } from "./astronomy/astromonyTextures.js";
 export {VideoTextureMaterial} from "./videoTexture/VideoTextureMaterial";
 export {VideoAlphaTextureMaterial} from "./videoAlphaTexture/VideoAlphaTextureMaterial";
+export {VideoFrameTextureMaterial} from "./videoFrameTexture/VideoFrameTextureMaterial";
 export {SquaresMaterial} from "./squares/SquaresMaterial.js";
 export {StripsMaterial} from "./strips/StripsMaterial.js";
 
