@@ -64,10 +64,23 @@ export class AbstractRenderer {
         this.threeRenderer = threeRenderer.isWebGLRenderer ? threeRenderer : new WebGLRenderer(threeRenderer);
         // this.threeRenderer = new WebGLRenderer(threeRenderer);
         /**
-         * Number of time the light rays bounce
-         * @type {number}
+         * "Global" uniforms (i.e. values that will not depend on the objects in the scene)
+         * A uniform is encoded by an object with two properties
+         * `type` - a glsl type
+         * `value` - the JS value.
+         * @type {Object}
          */
-        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
+        this.globalUniforms = params.globalUniforms !== undefined ? params.globalUniforms : {};
+
+        if (this.globalUniforms.maxBounces === undefined) {
+            this.globalUniforms.maxBounces = {type: 'int', value: 0}
+        }
+
+        // /**
+        //  * Number of time the light rays bounce
+        //  * @type {number}
+        //  */
+        // this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
         /**
          * Add post-processing to the final output
          * @type {PostProcess[]}

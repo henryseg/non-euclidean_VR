@@ -77,7 +77,7 @@ export class PathTracerRenderer extends AbstractRenderer {
     constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
         super(shader1, shader2, set, camera, scene, params, threeRenderer);
         // different default value for the number of time we bounce
-        this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 50;
+        this.globalUniforms.maxBounces.value = params.maxBounces !== undefined ? params.maxBounces : 50;
 
         /**
          * Builder for the fragment shader.
@@ -125,9 +125,15 @@ export class PathTracerRenderer extends AbstractRenderer {
     buildFragmentShader() {
         // constants
         this._fragmentBuilder.addChunk(constants);
+        Object.keys(this.globalUniforms).forEach(name => {
+            const type = this.globalUniforms[name].type;
+            const value = this.globalUniforms[name].value;
+            this._fragmentBuilder.addUniform(name, type, value);
+        });
+
         const res = new Vector2(this.accWriteTarget.width, this.accWriteTarget.height);
-        this._fragmentBuilder.addUniform('resolution', 'vec2', res)
-        this._fragmentBuilder.addUniform('maxBounces', 'int', this.maxBounces);
+        this._fragmentBuilder.addUniform('resolution', 'vec2', res);
+
         // geometry
         this._fragmentBuilder.addChunk(this.shader1);
         this._fragmentBuilder.addChunk(commons1);

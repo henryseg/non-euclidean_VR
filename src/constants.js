@@ -9,3 +9,9 @@ export const LEFT = 0;
  * @type {number}
  */
 export const RIGHT = 1;
+
+/**
+ * ID for the both sides (in VR / Stereo)
+ * @type {number}
+ */
+export const BOTH = 2;

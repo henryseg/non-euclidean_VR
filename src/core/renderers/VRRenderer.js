@@ -5,7 +5,7 @@ import {VRButton as VRButtonLib} from "three/examples/jsm/webxr/VRButton.js";
 import {bind} from "../../utils.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {AbstractRenderer} from "./AbstractRenderer.js";
-import {LEFT, RIGHT} from "../../constants.js";
+import {LEFT, RIGHT, BOTH} from "../../constants.js";
 
 import vertexShader from "./shaders/common/vertex.glsl";
 import constants from "./shaders/common/constants.glsl";
@@ -80,7 +80,12 @@ export class VRRenderer extends AbstractRenderer {
         for (const side of [LEFT, RIGHT]) {
             // constants
             this._fragmentBuilder[side].addChunk(constants);
-            this._fragmentBuilder[side].addUniform('maxBounces', 'int', this.maxBounces);
+            Object.keys(this.globalUniforms).forEach(name => {
+                const type = this.globalUniforms[name].type;
+                const value = this.globalUniforms[name].value;
+                this._fragmentBuilder[side].addUniform(name, type, value);
+            });
+
             // geometry
             this._fragmentBuilder[side].addChunk(this.shader1);
             this._fragmentBuilder[side].addChunk(commons1);

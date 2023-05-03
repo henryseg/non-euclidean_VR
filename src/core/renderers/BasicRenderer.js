@@ -73,7 +73,11 @@ export class BasicRenderer extends AbstractRenderer {
 
         // constants
         this._fragmentBuilder.addChunk(constants);
-        this._fragmentBuilder.addUniform('maxBounces', 'int', this.maxBounces);
+        Object.keys(this.globalUniforms).forEach(name => {
+            const type = this.globalUniforms[name].type;
+            const value = this.globalUniforms[name].value;
+            this._fragmentBuilder.addUniform(name, type, value);
+        });
         // geometry
         this._fragmentBuilder.addChunk(this.shader1);
         this._fragmentBuilder.addChunk(commons1);
