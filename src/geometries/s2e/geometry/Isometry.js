@@ -22,7 +22,7 @@ Isometry.prototype.reduceError = function () {}
 Isometry.prototype.multiply = function (isom) {
     this.matrix.multiply(isom.matrix);
     const coeff = this.matrix.elements[this.matrix.elements.length - 1];
-    this.shift = this.shift + isom.shift;
+    this.shift = this.shift + coeff * isom.shift;
     return this;
 }
 
