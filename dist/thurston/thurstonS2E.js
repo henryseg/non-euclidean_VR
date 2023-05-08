@@ -1556,7 +1556,7 @@ module.exports = "                                                              
 /***/ 8462:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                             \n                                                                                                                        \n\nstruct WCylinderShape {\n    int id;\n    Point origin;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(WCylinderShape cyl, RelVector v) {\n    Point origin = applyGroupElement(v.invCellBoost, cyl.origin);\n    float aux = dot(v.local.pos.coords.xyz, origin.coords.xyz);\n    return acos(aux) - cyl.radius;\n}\n\nRelVector gradient(WCylinderShape cyl, RelVector v){\n    vec3 origin = applyGroupElement(v.invCellBoost, cyl.origin).coords.xyz;\n    vec3 pos = v.local.pos.coords.xyz;\n    vec3 aux = origin - dot(origin, pos) * pos;\n    Vector local = Vector(v.local.pos, vec4(-aux, 0));\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(WCylinderShape cyl, RelVector v){\n    Point m = applyGroupElement(v.cellBoost, v.local.pos);\n    m = applyIsometry(cyl.absoluteIsomInv, m);\n    vec3 dir = m.coords.xyz - dot(m.coords.xyz, ORIGIN.coords.xyz) * ORIGIN.coords.xyz;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = m.coords.w;\n    return vec2(uCoord, vCoord);\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                             \n                                                                                                                        \n\nstruct WCylinderShape {\n    int id;\n    float radius;\n    Point center;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(WCylinderShape cyl, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, cyl.center);\n                                                                                 \n    float aux = dot(v.local.pos.coords.xyz, center.coords.xyz);\n    return abs(acos(aux)) - cyl.radius;\n}\n\nRelVector gradient(WCylinderShape cyl, RelVector v){\n    vec3 origin = applyGroupElement(v.invCellBoost, cyl.center).coords.xyz;\n    vec3 pos = v.local.pos.coords.xyz;\n    vec3 aux = origin - dot(origin, pos) * pos;\n    Vector local = Vector(v.local.pos, vec4(-aux, 0));\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(WCylinderShape cyl, RelVector v){\n    Point m = applyGroupElement(v.cellBoost, v.local.pos);\n    m = applyIsometry(cyl.absoluteIsomInv, m);\n    vec3 dir = m.coords.xyz - dot(m.coords.xyz, ORIGIN.coords.xyz) * ORIGIN.coords.xyz;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = m.coords.w;\n    return vec2(uCoord, vCoord);\n}\n\n"
 
 /***/ }),
 
@@ -17599,6 +17599,9 @@ var wCylinder_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(wCylin
 
 
 
+// import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
+
+
 
 
 
@@ -17621,20 +17624,22 @@ class WCylinderShape extends BasicShape {
         }
 
         super(isom);
+        this.addImport((distance_default()), (direction_default()));
+
         this.radius = radius;
-        this._origin = undefined;
+        this._center = undefined;
     }
 
     updateData() {
         super.updateData();
-        this._origin = new Point().applyIsometry(this.absoluteIsom);
+        this._center = new Point().applyIsometry(this.absoluteIsom);
     }
 
-    get origin() {
-        if (this._origin === undefined) {
+    get center() {
+        if (this._center === undefined) {
             this.updateData();
         }
-        return this._origin;
+        return this._center;
     }
 
     /**
