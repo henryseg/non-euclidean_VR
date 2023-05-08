@@ -3,8 +3,11 @@ import {Isometry, Point} from "../../geometry/General.js";
 
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+// import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
+import distance from "../../imports/distance.glsl";
+import direction from "../../imports/direction.glsl";
 
 
 export class WCylinderShape extends BasicShape {
@@ -25,20 +28,22 @@ export class WCylinderShape extends BasicShape {
         }
 
         super(isom);
+        this.addImport(distance, direction);
+
         this.radius = radius;
-        this._origin = undefined;
+        this._center = undefined;
     }
 
     updateData() {
         super.updateData();
-        this._origin = new Point().applyIsometry(this.absoluteIsom);
+        this._center = new Point().applyIsometry(this.absoluteIsom);
     }
 
-    get origin() {
-        if (this._origin === undefined) {
+    get center() {
+        if (this._center === undefined) {
             this.updateData();
         }
-        return this._origin;
+        return this._center;
     }
 
     /**
