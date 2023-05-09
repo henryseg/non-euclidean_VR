@@ -6,6 +6,7 @@ import {Isometry, Point} from "../../geometry/General.js";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 /**
@@ -60,6 +61,10 @@ export class HalfSpaceShape extends BasicShape {
         return true;
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     get uniformType() {
         return 'HalfSpaceShape';
     }
@@ -74,5 +79,9 @@ export class HalfSpaceShape extends BasicShape {
 
     glslGradient() {
         return gradient(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }

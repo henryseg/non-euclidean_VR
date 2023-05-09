@@ -1591,7 +1591,7 @@ module.exports = "                                                              
 /***/ 2581:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                       \n                                                                                                                        \n\nstruct HalfSpaceShape {\n    int id;                           \n    Vector normal;                                                                          \n};\n\n   \n                                                      \n   \nfloat sdf(HalfSpaceShape halfspace, RelVector v) {\n    Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);\n    float aux = hypDot(v.local.pos.coords, normal.dir);\n    return asinh(aux);\n}\n\n   \n                                                   \n   \nRelVector gradient(HalfSpaceShape halfspace, RelVector v){\n    Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);\n    Vector local = Vector(v.local.pos, normal.dir);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n"
+module.exports = "                                                                                                                        \n          \n                       \n                                                                                                                        \n\nstruct HalfSpaceShape {\n    int id;                           \n    Vector normal;                                                                          \n    Isometry absoluteIsomInv;\n};\n\n   \n                                                      \n   \nfloat sdf(HalfSpaceShape halfspace, RelVector v) {\n    Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);\n    float aux = hypDot(v.local.pos.coords, normal.dir);\n    return asinh(aux);\n}\n\n   \n                                                   \n   \nRelVector gradient(HalfSpaceShape halfspace, RelVector v){\n    Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);\n    Vector local = Vector(v.local.pos, normal.dir);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\n                                                                                                  \nvec2 uvMap(HalfSpaceShape halfspace, RelVector v){\n    Point point = applyGroupElement(v.cellBoost, v.local.pos);\n    point = applyIsometry(halfspace.absoluteIsomInv, point);\n    return point.coords.xy / point.coords.w;\n}\n"
 
 /***/ }),
 
@@ -18580,6 +18580,7 @@ var halfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(halfSp
 
 
 
+
 /**
  * @class
  *
@@ -18632,6 +18633,10 @@ class HalfSpaceShape extends BasicShape {
         return true;
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     get uniformType() {
         return 'HalfSpaceShape';
     }
@@ -18646,6 +18651,10 @@ class HalfSpaceShape extends BasicShape {
 
     glslGradient() {
         return shapes_shaders_gradient_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
 // EXTERNAL MODULE: ./src/geometries/hyp/shapes/cylinder/shaders/struct.glsl
