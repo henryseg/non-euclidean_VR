@@ -1553,10 +1553,17 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 8117:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                             \n                                                                                                                        \n\nstruct WCappedCylinderShape {\n    int id;\n    float radius;\n    float height;\n    float smoothness;\n    Point center;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(WCappedCylinderShape cyl, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, cyl.center);\n                                                                                  \n    float aux = dot(v.local.pos.coords.xyz, center.coords.xyz);\n                                                                                                     \n                                                                                                             \n    float distCyl = abs(acos(aux)) - cyl.radius;\n    float distCap = abs(v.local.pos.coords.w - center.coords.w) - 0.5 * cyl.height;\n    return smoothMaxPoly(distCyl, distCap, cyl.smoothness);\n}\n\nRelVector gradient(WCappedCylinderShape cyl, RelVector v){\n    Vector local;\n\n    Point center = applyGroupElement(v.invCellBoost, cyl.center);\n    Point pos = v.local.pos;\n    float aux = dot(pos.coords.xyz, center.coords.xyz);\n                                                                                                     \n                                                                                                             \n    float distCyl = abs(acos(aux)) - cyl.radius;\n    float distCap = abs(pos.coords.w - center.coords.w) - 0.5 * cyl.height;\n\n    vec3 dirCyl = center.coords.xyz - dot(center.coords.xyz, pos.coords.xyz) * pos.coords.xyz;\n    local = Vector(v.local.pos, vec4(-dirCyl, 0));\n    local = geomNormalize(local);\n    RelVector gradCyl =  RelVector(local, v.cellBoost, v.invCellBoost);\n\n    float sign = sign(cyl.absoluteIsomInv.matrix[3][3] * (pos.coords.w - center.coords.w));\n    local = Vector(v.local.pos, vec4(0, 0, 0, sign));\n    RelVector gradCap =  RelVector(local, v.cellBoost, v.invCellBoost);\n\n    return gradientMaxPoly(distCyl, distCap, gradCyl, gradCap, cyl.smoothness);\n}\n\n"
+
+/***/ }),
+
 /***/ 8462:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                             \n                                                                                                                        \n\nstruct WCylinderShape {\n    int id;\n    float radius;\n    Point center;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(WCylinderShape cyl, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, cyl.center);\n                                                                                 \n    float aux = dot(v.local.pos.coords.xyz, center.coords.xyz);\n    return abs(acos(aux)) - cyl.radius;\n}\n\nRelVector gradient(WCylinderShape cyl, RelVector v){\n    vec3 origin = applyGroupElement(v.invCellBoost, cyl.center).coords.xyz;\n    vec3 pos = v.local.pos.coords.xyz;\n    vec3 aux = origin - dot(origin, pos) * pos;\n    Vector local = Vector(v.local.pos, vec4(-aux, 0));\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(WCylinderShape cyl, RelVector v){\n    Point m = applyGroupElement(v.cellBoost, v.local.pos);\n    m = applyIsometry(cyl.absoluteIsomInv, m);\n    vec3 dir = m.coords.xyz - dot(m.coords.xyz, ORIGIN.coords.xyz) * ORIGIN.coords.xyz;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = m.coords.w;\n    return vec2(uCoord, vCoord);\n}\n\n"
+module.exports = "                                                                                                                        \n          \n                             \n                                                                                                                        \n\nstruct WCylinderShape {\n    int id;\n    float radius;\n    Point center;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(WCylinderShape cyl, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, cyl.center);\n                                                                                  \n    float aux = dot(v.local.pos.coords.xyz, center.coords.xyz);\n                                                                                                     \n                                                                                                             \n    return abs(acos(aux)) - cyl.radius;\n}\n\nRelVector gradient(WCylinderShape cyl, RelVector v){\n    vec3 origin = applyGroupElement(v.invCellBoost, cyl.center).coords.xyz;\n    vec3 pos = v.local.pos.coords.xyz;\n    vec3 aux = origin - dot(origin, pos) * pos;\n    Vector local = Vector(v.local.pos, vec4(-aux, 0));\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(WCylinderShape cyl, RelVector v){\n    Point m = applyGroupElement(v.cellBoost, v.local.pos);\n    m = applyIsometry(cyl.absoluteIsomInv, m);\n    vec3 dir = m.coords.xyz - dot(m.coords.xyz, ORIGIN.coords.xyz) * ORIGIN.coords.xyz;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = m.coords.w;\n    return vec2(uCoord, vCoord);\n}\n\n"
 
 /***/ }),
 
@@ -1726,6 +1733,8 @@ __webpack_require__.d(__webpack_exports__, {
   "n3": () => (/* reexport */ VideoAlphaTextureMaterial),
   "Se": () => (/* reexport */ VideoFrameTextureMaterial),
   "PQ": () => (/* reexport */ VideoTextureMaterial),
+  "S_": () => (/* reexport */ WCappedCylinder),
+  "m4": () => (/* reexport */ WCappedCylinderShape),
   "G3": () => (/* reexport */ WCylinder),
   "Nu": () => (/* reexport */ WCylinderShape),
   "Uy": () => (/* reexport */ WHalfSpace),
@@ -17682,7 +17691,98 @@ class WCylinderShape extends BasicShape {
         return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/geometries/s2e/shapes/wCappedCylinder/shaders/struct.glsl
+var wCappedCylinder_shaders_struct = __webpack_require__(8117);
+var wCappedCylinder_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(wCappedCylinder_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/wCappedCylinder/WCappedCylinderShape.js
+
+
+
+
+
+
+
+
+
+
+class WCappedCylinderShape extends BasicShape {
+
+    /**
+     * Construction
+     * (Image by the isometry of the) cylinder around the w-axis.
+     * @param {Isometry} location - data for the position of the cylinder
+     * @param {number} radius - radius of the cylinder
+     * @param {number} height - height of the cylinder
+     * @param {number} smoothness - smoothness of the edge (polynomial smooth max)
+     */
+    constructor(location, radius, height, smoothness) {
+
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else {
+            throw new Error("WCylinderShape: this type of location is not implemented");
+        }
+
+        super(isom);
+        this.addImport((distance_default()), (smoothMaxPoly_default()));
+
+        this.radius = radius;
+        this.height = height;
+        this.smoothness = smoothness;
+        this._center = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._center = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    get center() {
+        if (this._center === undefined) {
+            this.updateData();
+        }
+        return this._center;
+    }
+
+    /**
+     * Says that the object inherits from `Ball`
+     * @type {boolean}
+     */
+    get isWCappedCylinderShape() {
+        return true;
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return false;
+    }
+
+    get uniformType() {
+        return 'WCappedCylinderShape';
+    }
+
+    static glslClass() {
+        return (wCappedCylinder_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslGradient() {
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/s2e/shapes/all.js
+
 
 
 
@@ -17937,7 +18037,34 @@ class WCylinder extends Solid {
         super(shape, material, ptMaterial);
     }
 }
+;// CONCATENATED MODULE: ./src/geometries/s2e/solids/WCappedCylinder.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Cylinder around the w-axis
+ */
+class WCappedCylinder extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} location - the location of the cylinder
+     * @param {number} radius - the radius of the cylinder
+     * @param {number} height - height of the cylinder
+     * @param {number} smoothness - smoothness of the edge (polynomial smooth max)
+     * @param {Material} material - the material of the cylinder
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, radius, height, smoothness, material, ptMaterial = undefined) {
+        const shape = new WCappedCylinderShape(location, radius, height, smoothness);
+        super(shape, material, ptMaterial);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/s2e/solids/all.js
+
 
 
 
@@ -18060,6 +18187,8 @@ var __webpack_exports__Vector = __webpack_exports__.OW;
 var __webpack_exports__VideoAlphaTextureMaterial = __webpack_exports__.n3;
 var __webpack_exports__VideoFrameTextureMaterial = __webpack_exports__.Se;
 var __webpack_exports__VideoTextureMaterial = __webpack_exports__.PQ;
+var __webpack_exports__WCappedCylinder = __webpack_exports__.S_;
+var __webpack_exports__WCappedCylinderShape = __webpack_exports__.m4;
 var __webpack_exports__WCylinder = __webpack_exports__.G3;
 var __webpack_exports__WCylinderShape = __webpack_exports__.Nu;
 var __webpack_exports__WHalfSpace = __webpack_exports__.Uy;
@@ -18081,4 +18210,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WCylinder as WCylinder, __webpack_exports__WCylinderShape as WCylinderShape, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WCappedCylinder as WCappedCylinder, __webpack_exports__WCappedCylinderShape as WCappedCylinderShape, __webpack_exports__WCylinder as WCylinder, __webpack_exports__WCylinderShape as WCylinderShape, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
