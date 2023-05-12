@@ -1197,7 +1197,7 @@ module.exports = "\n                                                            
 /***/ 7685:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct HypStripsMaterial {\n    vec3 color1;\n    vec3 color2;\n    float width1;\n    float width2;\n};\n\nvec4 render(HypStripsMaterial material, ExtVector v, vec2 uv) {\n    float aux = clamp(uv.x, -1., 1.);\n    float dist = atanh(aux);\n    dist = mod(dist, material.width1 + material.width2);\n    if (dist < material.width1) {\n        return vec4(material.color1, 1);\n    } else {\n        return vec4(material.color2, 1);\n    }\n}"
+module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct HypStripsMaterial {\n    float totalWidth;\n    vec4 lengths;\n    vec3 color0;\n    vec3 color1;\n    vec3 color2;\n    vec3 color3;\n};\n\nvec4 render(HypStripsMaterial material, ExtVector v, vec2 uv) {\n    vec3 color;\n    float aux = clamp(uv.x, -1., 1.);\n    float dist = atanh(aux);\n    float x = mod(dist / material.totalWidth, 1.);\n    if (x < material.lengths.x){\n        color = material.color0;\n    } else if (x < material.lengths.y){\n        color = material.color1;\n    } else if (x < material.lengths.z){\n        color = material.color2;\n    } else {\n        color = material.color3;\n    }\n\n    return vec4(color, 1);\n}"
 
 /***/ }),
 
@@ -14540,13 +14540,13 @@ class StripsMaterial extends Material {
     /**
      * Constructor
      * @param {Vector2} dir - the direction orthogonal to the strips
-     * @param {number[]} widths - a list of four numbers
      * @param {Color[]} colors - a list of four colors
+     * @param {number[]} widths - a list of four numbers
      */
     constructor(dir, colors, widths = undefined) {
         super();
         /**
-         * first direction of the checkerboard
+         * the direction orthogonal to the strips
          * @type {Vector2}
          */
         this.dir = dir;
@@ -14629,26 +14629,67 @@ var hypStrips_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(hypStr
  * @extends Material
  *
  * @classdesc
- * Alternating strips on a surface representing the hyperbolic plane.
+ * Strips on a surface representing the hyperbolic plane.
  * Coordinates correspond to the Klein model
  * The strips are delimited by geodesic orthogonal to a fixed line
+ *
+ * It works with at most four colors.
+ * The given width correspond to the relative with of each strip.
+ * The constructor will renormalize these numbers so that their sum is one.
  */
 class HypStripsMaterial extends Material {
 
     /**
      * Constructor.
      * The constructor takes no argument.
-     * @param {Color} color1 - the color of the odd strips
-     * @param {Color} color2 - the color of the even strips
-     * @param {number} width1 - the width of the odd strips
-     * @param {number} width2 - the width of the even strips
+     * @param {number} totalWidth - total length of the four widths
+     * @param {Color[]} colors - a list of four colors
+     * @param {number[]} widths - a list of four numbers
      */
-    constructor(color1, color2, width1, width2) {
+    constructor(totalWidth, colors, widths = undefined) {
         super();
-        this.color1 = color1;
-        this.color2 = color2;
-        this.width1 = width1;
-        this.width2 = width2;
+
+        this.totalWidth = totalWidth;
+
+        const aux0 = widths !== undefined ? widths : [0.5, 1, 1, 0.5];
+        let sum = 0;
+        const aux1 = [];
+        for (let i = 0; i < 4; i++) {
+            if (aux0[i] !== undefined) {
+                sum = sum + aux0[i];
+            }
+            aux1[i] = sum;
+        }
+        for (let i = 0; i < 4; i++) {
+            aux1[i] = aux1[i] / sum;
+        }
+        this.lengths = new external_three_namespaceObject.Vector4(...aux1);
+
+
+        let lastColor = new external_three_namespaceObject.Color(1, 1, 1);
+        /**
+         * first color
+         * @type {Color}
+         */
+        this.color0 = colors[0] !== undefined ? colors[0] : lastColor.clone();
+        lastColor = this.color0;
+        /**
+         * second color
+         * @type {Color}
+         */
+        this.color1 = colors[1] !== undefined ? colors[1] : lastColor.clone();
+        lastColor = this.color1;
+        /**
+         * third color
+         * @type {Color}
+         */
+        this.color2 = colors[2] !== undefined ? colors[2] : lastColor.clone();
+        lastColor = this.color2;
+        /**
+         * fourth color
+         * @type {Color}
+         */
+        this.color3 = colors[3] !== undefined ? colors[3] : lastColor.clone();
     }
 
     get uniformType() {
