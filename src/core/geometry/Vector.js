@@ -27,7 +27,7 @@ class Vector extends Vector3 {
 
     /**
      * Overload Three.js `applyMatrix4`.
-     * Indeed Three.js considers the `Vector3` as a 3D **point**
+     * Indeed, Three.js considers the `Vector3` as a 3D **point**
      * It multiplies the vector (with an implicit 1 in the 4th dimension) and `m`, and divides by perspective.
      * Here the data represents a **vector**, thus the implicit 4th coordinate is 0
      * @param {Matrix4} m - The matrix to apply
