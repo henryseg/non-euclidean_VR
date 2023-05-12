@@ -20,13 +20,13 @@ export class StripsMaterial extends Material {
     /**
      * Constructor
      * @param {Vector2} dir - the direction orthogonal to the strips
-     * @param {number[]} widths - a list of four numbers
      * @param {Color[]} colors - a list of four colors
+     * @param {number[]} widths - a list of four numbers
      */
     constructor(dir, colors, widths = undefined) {
         super();
         /**
-         * first direction of the checkerboard
+         * the direction orthogonal to the strips
          * @type {Vector2}
          */
         this.dir = dir;
