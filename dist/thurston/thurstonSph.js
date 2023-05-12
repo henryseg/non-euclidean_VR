@@ -1203,6 +1203,13 @@ module.exports = "\n                                                            
 
 /***/ }),
 
+/***/ 7685:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct HypStripsMaterial {\n    vec3 color1;\n    vec3 color2;\n    float width1;\n    float width2;\n};\n\nvec4 render(HypStripsMaterial material, ExtVector v, vec2 uv) {\n    float aux = clamp(uv.x, -1., 1.);\n    float dist = atanh(aux);\n    dist = mod(dist, material.width1 + material.width2);\n    if (dist < material.width1) {\n        return vec4(material.color1, 1);\n    } else {\n        return vec4(material.color2, 1);\n    }\n}"
+
+/***/ }),
+
 /***/ 3496:
 /***/ ((module) => {
 
@@ -1486,7 +1493,7 @@ module.exports = "                                                              
 /***/ 7772:
 /***/ ((module) => {
 
-module.exports = "   \n                               \n                                                                       \n                                     \n                                                      \n   \nvoid frame(Point p, out Vector[3] f){\n    vec4 dir0 = vec4(p.coords.w, 0, 0, -p.coords.x);\n    vec4 dir1 = vec4(0, p.coords.w, 0, -p.coords.y);\n    vec4 dir2 = vec4(0, 0, p.coords.w, -p.coords.z);\n    dir0 = normalize(dir0);\n    dir1 = normalize(dir1);\n    dir2 = normalize(dir2);\n    f[0] = Vector(p, dir0);\n    f[1] = Vector(p, dir1);\n    f[2] = Vector(p, dir2);\n}\n\n   \n                                           \n                                                                       \n                                                                      \n                                     \n                                                      \n   \nvoid orthoFrame(Point p, out Vector[3] f){\n    float x = p.coords.x;\n    float y = p.coords.y;\n    float z = p.coords.z;\n    float w = p.coords.w;\n\n    float den = 1. + w;\n    vec4 dir0 = (1. / den) * vec4(-x * x + w + 1., -x * y, -x * z, -x * den);\n    vec4 dir1 = (1. / den) * vec4(-x * y, -y * y + w + 1., -y * z, -y * den);\n    vec4 dir2 = (1. / den) * vec4(-x * z, -y * z, -z * z + w + 1., -z * den);\n\n    f[0] = Vector(p, dir0);\n    f[1] = Vector(p, dir1);\n    f[2] = Vector(p, dir2);\n}\n\n\n   \n                                                                                         \n                              \n                                                                                              \n   \nPoint smallShift(Point p, vec3 dp){\n    Vector[3] f;\n    frame(p, f);\n    vec4 coords = p.coords + dp[0] * f[0].dir + dp[1] * f[1].dir + dp[2] * f[2].dir;\n    Point res = Point(coords);\n    return reduceError(res);\n}\n\n\nVector smallShift(Vector v, vec3 dp){\n    Point pos = smallShift(v.pos, dp);\n    return Vector(pos, v.dir);\n}\n\n\n   \n                                  \n                                                 \n   \nVector flow(Vector v, float t){\n    vec4 coords = cos(t) * v.pos.coords + sin(t) * v.dir;\n    Point pos = Point(coords);\n    vec4 dir = -sin(t) * v.pos.coords + cos(t) * v.dir;\n    return Vector(pos, dir);\n}\n"
+module.exports = "   \n                               \n                                                                       \n                                     \n                                                      \n   \nvoid frame(Point p, out Vector[3] f){\n    vec4 dir0 = vec4(p.coords.w, 0, 0, -p.coords.x);\n    vec4 dir1 = vec4(0, p.coords.w, 0, -p.coords.y);\n    vec4 dir2 = vec4(0, 0, p.coords.w, -p.coords.z);\n    dir0 = normalize(dir0);\n    dir1 = normalize(dir1);\n    dir2 = normalize(dir2);\n    f[0] = Vector(p, dir0);\n    f[1] = Vector(p, dir1);\n    f[2] = Vector(p, dir2);\n}\n\n   \n                                           \n                                                                       \n                                                                      \n                                     \n                                                      \n   \nvoid orthoFrame(Point p, out Vector[3] f){\n    float x = p.coords.x;\n    float y = p.coords.y;\n    float z = p.coords.z;\n    float w = p.coords.w;\n\n    float den = 1. + w;\n    vec4 dir0 = (1. / den) * vec4(-x * x + w + 1., -x * y, -x * z, -x * den);\n    vec4 dir1 = (1. / den) * vec4(-x * y, -y * y + w + 1., -y * z, -y * den);\n    vec4 dir2 = (1. / den) * vec4(-x * z, -y * z, -z * z + w + 1., -z * den);\n\n    f[0] = Vector(p, dir0);\n    f[1] = Vector(p, dir1);\n    f[2] = Vector(p, dir2);\n}\n\n\n   \n                                                                                         \n                              \n                                                                                              \n   \nPoint smallShift(Point p, vec3 dp){\n    Vector[3] f;\n    frame(p, f);\n    vec4 coords = p.coords + dp[0] * f[0].dir + dp[1] * f[1].dir + dp[2] * f[2].dir;\n    Point res = Point(coords);\n    return reduceError(res);\n}\n\n\nVector smallShift(Vector v, vec3 dp){\n    Point pos = smallShift(v.pos, dp);\n    return Vector(pos, v.dir);\n}\n\n\n   \n                                  \n                                                 \n   \nVector flow(Vector v, float t){\n    vec4 coords = cos(t) * v.pos.coords + sin(t) * v.dir;\n    Point pos = Point(coords);\n    vec4 dir = -sin(t) * v.pos.coords + cos(t) * v.dir;\n    Vector res = Vector(pos, dir);\n    return reduceError(res);\n}\n"
 
 /***/ }),
 
@@ -1535,7 +1542,7 @@ module.exports = "                                                              
 /***/ 2473:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                 \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    return dist(v.local.pos, center) - ball.radius;\n}\n\n   \n                                              \n   \nRelVector gradient(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    Vector local = direction(v.local.pos, center);\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point pos = applyGroupElement(v.cellBoost, v.local.pos);\n    Vector direction = direction(ball.center, pos);\n    direction = applyIsometry(ball.absoluteIsomInv, direction);\n    vec4 dir = normalize(direction.dir);\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
+module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                 \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    center = reduceError(center);\n    return abs(dist(v.local.pos, center)) - ball.radius;\n}\n\n   \n                                              \n   \nRelVector gradient(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    Vector local = direction(v.local.pos, center);\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point pos = applyGroupElement(v.cellBoost, v.local.pos);\n    Vector direction = direction(ball.center, pos);\n    direction = applyIsometry(ball.absoluteIsomInv, direction);\n    vec4 dir = normalize(direction.dir);\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 
@@ -1557,6 +1564,13 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n          \n                                            \n                                                                                                                        \n\nstruct CylinderShape {\n    int id;\n    Vector direction;\n    float radius;\n    vec4 uvTestX;\n    vec4 uvTestY;\n};\n\n   \n                           \n   \nfloat sdf(CylinderShape cyl, RelVector v) {\n    Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);\n    float aux1 = dot(v.local.pos.coords, dir.pos.coords);\n    float aux2 = dot(v.local.pos.coords, dir.dir);\n    return acos(sqrt(aux1 * aux1 + aux2 * aux2)) - cyl.radius;\n}\n\n   \n                                              \n   \nRelVector gradient(CylinderShape cyl, RelVector v){\n    vec4 m = v.local.pos.coords;\n    Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);\n    float aux1 = dot(m, dir.pos.coords);\n    float aux2 = dot(m, dir.dir);\n    vec4 coords = aux1 * dir.pos.coords + aux2 * dir.dir;\n    Point proj = Point(coords);\n    Vector local = direction(v.local.pos, proj);\n    local = negate(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(CylinderShape cyl, RelVector v){\n    vec4 m = v.local.pos.coords;\n    Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);\n    float aux1 = dot(m, dir.pos.coords);\n    float aux2 = dot(m, dir.dir);\n    vec4 proj = aux1 * dir.pos.coords + aux2 * dir.dir;\n    float uCoord = acos(dot(normalize(proj), dir.pos.coords));\n\n                                                                                                                       \n    vec4 aux = m - proj + length(proj) * dir.pos.coords;\n    float vCoord = atan(dot(aux, cyl.uvTestY), dot(aux, cyl.uvTestX));\n\n    return vec2(uCoord, vCoord);\n}\n"
+
+/***/ }),
+
+/***/ 9521:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct HalfSpaceShape {\n    int id;\n    Vector normal;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                 \n   \nfloat sdf(HalfSpaceShape halfspace, RelVector v) {\n    Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);\n    float aux = dot(v.local.pos.coords, normal.dir);\n    return asin(aux);\n}\n\n   \n                                              \n   \nRelVector gradient(HalfSpaceShape halfspace, RelVector v){\n    Vector normal = applyGroupElement(v.invCellBoost, halfspace.normal);\n    Vector local = Vector(v.local.pos, normal.dir);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(HalfSpaceShape halfspace, RelVector v){\n    Point point = applyGroupElement(v.cellBoost, v.local.pos);\n    point = applyIsometry(halfspace.absoluteIsomInv, point);\n    vec3 aux = normalize(point.coords.xyw);\n    float sinPhi = length(aux.xy);\n    float cosPhi = aux.z;\n    float uCoord = -atan(aux.y, aux.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 
@@ -1676,6 +1690,9 @@ __webpack_require__.d(__webpack_exports__, {
   "yb": () => (/* reexport */ Fog),
   "ZA": () => (/* reexport */ Group_Group),
   "Jz": () => (/* reexport */ GroupElement_GroupElement),
+  "Fr": () => (/* reexport */ HalfSpace),
+  "RM": () => (/* reexport */ HalfSpaceShape),
+  "ZX": () => (/* reexport */ HypStripsMaterial),
   "HZ": () => (/* reexport */ InfoControls),
   "TN": () => (/* reexport */ IntersectionShape),
   "JV": () => (/* reexport */ Isometry),
@@ -14313,6 +14330,64 @@ class StripsMaterial extends Material {
     }
 
 }
+// EXTERNAL MODULE: ./src/commons/materials/hypStrips/shaders/struct.glsl
+var hypStrips_shaders_struct = __webpack_require__(7685);
+var hypStrips_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(hypStrips_shaders_struct);
+;// CONCATENATED MODULE: ./src/commons/materials/hypStrips/HypStripsMaterial.js
+
+
+
+
+
+
+
+/**
+ * @class
+ * @extends Material
+ *
+ * @classdesc
+ * Alternating strips on a surface representing the hyperbolic plane.
+ * Coordinates correspond to the Klein model
+ * The strips are delimited by geodesic orthogonal to a fixed line
+ */
+class HypStripsMaterial extends Material {
+
+    /**
+     * Constructor.
+     * The constructor takes no argument.
+     * @param {Color} color1 - the color of the odd strips
+     * @param {Color} color2 - the color of the even strips
+     * @param {number} width1 - the width of the odd strips
+     * @param {number} width2 - the width of the even strips
+     */
+    constructor(color1, color2, width1, width2) {
+        super();
+        this.color1 = color1;
+        this.color2 = color2;
+        this.width1 = width1;
+        this.width2 = width2;
+    }
+
+    get uniformType() {
+        return 'HypStripsMaterial';
+    }
+
+    get usesNormal() {
+        return false;
+    }
+
+    get usesUVMap() {
+        return true;
+    }
+
+    static glslClass() {
+        return (hypStrips_shaders_struct_default());
+    }
+
+    glslRender() {
+        return renderUV_glsl_mustache_default()(this);
+    }
+}
 // EXTERNAL MODULE: ./src/commons/materials/phongWrap/shaders/struct.glsl
 var phongWrap_shaders_struct = __webpack_require__(5836);
 var phongWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(phongWrap_shaders_struct);
@@ -14666,6 +14741,7 @@ function pathTracerWrap(material, params = {}) {
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/all.js
 // Basic materials
+
 
 
 
@@ -17742,7 +17818,105 @@ class CircleShape extends BasicShape {
         return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/geometries/sph/shapes/halfSpace/shaders/struct.glsl
+var halfSpace_shaders_struct = __webpack_require__(9521);
+var halfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(halfSpace_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sph/shapes/halfSpace/HalfSpaceShape.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Shape of a half space, which is also a ball of radius pi/2 !
+ * The half space is the (image of by the given isometry of the) space {z < 0}
+ *
+ */
+class HalfSpaceShape extends BasicShape {
+
+    /**
+     * Construction
+     * @param {Isometry} location - location of the half space
+     */
+    constructor(location) {
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else {
+            throw new Error('HalfSpaceShape: this type of location is not allowed');
+        }
+        super(isom);
+        this._normal = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        const pos = new Point().applyIsometry(this.absoluteIsom);
+        const dir = new external_three_namespaceObject.Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._normal = {pos: pos, dir: dir};
+    }
+
+    /**
+     * Center of the ball
+     * @type {Point}
+     */
+    get normal() {
+        if (this._normal === undefined) {
+            this.updateData();
+        }
+        return this._normal;
+    }
+
+    /**
+     * Says that the object inherits from `Ball`
+     * @type {boolean}
+     */
+    get isHalfSpaceShape() {
+        return true;
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        return true;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'HalfSpaceShape';
+    }
+
+    static glslClass() {
+        return (halfSpace_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslGradient() {
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
+
+}
 ;// CONCATENATED MODULE: ./src/geometries/sph/shapes/all.js
+
 
 
 
@@ -18022,7 +18196,31 @@ class Circle extends Solid {
         super(shape, material, ptMaterial);
     }
 }
+;// CONCATENATED MODULE: ./src/geometries/sph/solids/HalfSpace.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Half space
+ */
+class HalfSpace extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} location - the location of the half space
+     * @param {Material} material - the material of the ball
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(location, material, ptMaterial = undefined) {
+        const shape = new HalfSpaceShape(location);
+        super(shape, material, ptMaterial);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/sph/solids/all.js
+
 
 
 
@@ -18095,6 +18293,9 @@ var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
 var __webpack_exports__Group = __webpack_exports__.ZA;
 var __webpack_exports__GroupElement = __webpack_exports__.Jz;
+var __webpack_exports__HalfSpace = __webpack_exports__.Fr;
+var __webpack_exports__HalfSpaceShape = __webpack_exports__.RM;
+var __webpack_exports__HypStripsMaterial = __webpack_exports__.ZX;
 var __webpack_exports__InfoControls = __webpack_exports__.HZ;
 var __webpack_exports__IntersectionShape = __webpack_exports__.TN;
 var __webpack_exports__Isometry = __webpack_exports__.JV;
@@ -18164,4 +18365,4 @@ var __webpack_exports__sunTexture = __webpack_exports__.w0;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Circle as Circle, __webpack_exports__CircleShape as CircleShape, __webpack_exports__CliffordTorus as CliffordTorus, __webpack_exports__CliffordTorusShape as CliffordTorusShape, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__quaternionSet as quaternionSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Circle as Circle, __webpack_exports__CircleShape as CircleShape, __webpack_exports__CliffordTorus as CliffordTorus, __webpack_exports__CliffordTorusShape as CliffordTorusShape, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__quaternionSet as quaternionSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };

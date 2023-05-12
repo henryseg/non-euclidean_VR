@@ -16,6 +16,7 @@ export {VideoAlphaTextureMaterial} from "./videoAlphaTexture/VideoAlphaTextureMa
 export {VideoFrameTextureMaterial} from "./videoFrameTexture/VideoFrameTextureMaterial";
 export {SquaresMaterial} from "./squares/SquaresMaterial.js";
 export {StripsMaterial} from "./strips/StripsMaterial.js";
+export {HypStripsMaterial} from "./hypStrips/HypStripsMaterial.js";
 
 // Composite basic materials
 export {PhongWrapMaterial, phongWrap} from "./phongWrap/PhongWrapMaterial.js";

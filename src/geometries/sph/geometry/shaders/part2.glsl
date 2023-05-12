@@ -68,5 +68,6 @@ Vector flow(Vector v, float t){
     vec4 coords = cos(t) * v.pos.coords + sin(t) * v.dir;
     Point pos = Point(coords);
     vec4 dir = -sin(t) * v.pos.coords + cos(t) * v.dir;
-    return Vector(pos, dir);
+    Vector res = Vector(pos, dir);
+    return reduceError(res);
 }
