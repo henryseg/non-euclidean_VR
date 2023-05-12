@@ -1514,7 +1514,7 @@ module.exports = "   \n                        \n   \nVector direction(Point p, 
 /***/ 3830:
 /***/ ((module) => {
 
-module.exports = "   \n                              \n   \nfloat dist(Point p1, Point p2){\n    return acos(dot(p1.coords, p2.coords));\n}"
+module.exports = "   \n                              \n   \nfloat dist(Point p1, Point p2){\n    return abs(acos(dot(p1.coords, p2.coords)));\n}"
 
 /***/ }),
 
@@ -1542,7 +1542,7 @@ module.exports = "                                                              
 /***/ 2473:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                 \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    center = reduceError(center);\n    return abs(dist(v.local.pos, center)) - ball.radius;\n}\n\n   \n                                              \n   \nRelVector gradient(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    Vector local = direction(v.local.pos, center);\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point pos = applyGroupElement(v.cellBoost, v.local.pos);\n    Vector direction = direction(ball.center, pos);\n    direction = applyIsometry(ball.absoluteIsomInv, direction);\n    vec4 dir = normalize(direction.dir);\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
+module.exports = "                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct BallShape {\n    int id;\n    Point center;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\n   \n                                                 \n   \nfloat sdf(BallShape ball, RelVector v) {\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    center = reduceError(center);\n    return dist(v.local.pos, center) - ball.radius;\n}\n\n   \n                                              \n   \nRelVector gradient(BallShape ball, RelVector v){\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\n    Vector local = direction(v.local.pos, center);\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\n}\n\nvec2 uvMap(BallShape ball, RelVector v){\n    Point pos = applyGroupElement(v.cellBoost, v.local.pos);\n    Vector direction = direction(ball.center, pos);\n    direction = applyIsometry(ball.absoluteIsomInv, direction);\n    vec4 dir = normalize(direction.dir);\n    float sinPhi = length(dir.xy);\n    float cosPhi = dir.z;\n    float uCoord = -atan(dir.y, dir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    return vec2(uCoord, vCoord);\n}\n"
 
 /***/ }),
 

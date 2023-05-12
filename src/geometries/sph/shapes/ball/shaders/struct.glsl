@@ -16,7 +16,7 @@ struct BallShape {
 float sdf(BallShape ball, RelVector v) {
     Point center = applyGroupElement(v.invCellBoost, ball.center);
     center = reduceError(center);
-    return abs(dist(v.local.pos, center)) - ball.radius;
+    return dist(v.local.pos, center) - ball.radius;
 }
 
 /**
