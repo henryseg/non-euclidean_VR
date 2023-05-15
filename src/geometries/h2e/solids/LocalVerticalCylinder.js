@@ -11,7 +11,7 @@ export class LocalVerticalCylinder extends Solid {
 
     /**
      * Constructor
-     * @param {Isometry|Point|Vector} location - the location of the cylinder
+     * @param {Isometry} location - the location of the cylinder
      * @param {number} radius - the radius of the cylinder
      * @param {Material} material - the material of the cylinder
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)

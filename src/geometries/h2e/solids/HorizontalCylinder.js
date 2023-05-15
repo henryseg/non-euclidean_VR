@@ -1,13 +1,13 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {VerticalCylinderShape} from "../shapes/verticalCylinder/VerticalCylinderShape.js";
+import {HorizontalCylinderShape} from "../shapes/horizontalCylinder/HorizontalCylinderShape.js";
 
 /**
  * @class
  *
  * @classdesc
- * Vertical cylinder in H2 x E.
+ * Horizontal cylinder in H2 x E.
  */
-export class VerticalCylinder extends Solid {
+export class HorizontalCylinder extends Solid {
 
     /**
      * Constructor
@@ -17,7 +17,7 @@ export class VerticalCylinder extends Solid {
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(location, radius, material, ptMaterial = undefined) {
-        const shape = new VerticalCylinderShape(location, radius);
+        const shape = new HorizontalCylinderShape(location, radius);
         super(shape, material, ptMaterial);
     }
 }
