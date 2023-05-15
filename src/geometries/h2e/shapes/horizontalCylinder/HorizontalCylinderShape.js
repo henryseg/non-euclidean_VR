@@ -3,10 +3,11 @@ import {Vector4} from "three";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Point} from "../../geometry/Point.js";
 
+import direction from "../../imports/direction.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
-import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
-// import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+// import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
+import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
@@ -23,6 +24,8 @@ export class HorizontalCylinderShape extends BasicShape {
         super(isom);
         this.radius = radius;
         this._vector = undefined;
+        this.addImport(direction);
+
     }
 
     updateData() {

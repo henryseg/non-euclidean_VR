@@ -1556,7 +1556,7 @@ module.exports = "                                                              
 /***/ 9577:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                                 \n                                                                                                                        \n\nstruct HorizontalCylinderShape {\n    int id;\n    Vector vector;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(HorizontalCylinderShape cylinder, RelVector v) {\n    Vector u = applyGroupElement(v.invCellBoost, cylinder.vector);\n    float dot1 = hypDot(v.local.pos.coords.xyz, u.pos.coords.xyz);\n    float dot2 = hypDot(v.local.pos.coords.xyz, u.dir.xyz);\n    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);\n    float auxH = acosh(sqrt(diffDot));\n    float auxV = v.local.pos.coords.w - u.pos.coords.w;\n    return sqrt(auxH * auxH + auxV * auxV) - cylinder.radius;\n}\n\n                                                                    \n                                                                       \n                                \n                                      \n                                      \n                                                        \n                                   \n                                                           \n   \n\n   \n                               \n   \n                                                          \n                                                        \n                                                      \n                \n                                                              \n                                                        \n                                   \n                                  \n   "
+module.exports = "                                                                                                                        \n          \n                                 \n                                                                                                                        \n\nstruct HorizontalCylinderShape {\n    int id;\n    Vector vector;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(HorizontalCylinderShape cylinder, RelVector v) {\n    Vector u = applyGroupElement(v.invCellBoost, cylinder.vector);\n    float dot1 = hypDot(v.local.pos.coords, u.pos.coords);\n    float dot2 = hypDot(v.local.pos.coords, u.dir);\n    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);\n    float auxH = acosh(sqrt(diffDot));\n    float auxV = v.local.pos.coords.w - u.pos.coords.w;\n    return sqrt(auxH * auxH + auxV * auxV) - cylinder.radius;\n}\n\nRelVector gradient(HorizontalCylinderShape cylinder, RelVector v){\n    Vector u = applyGroupElement(v.invCellBoost, cylinder.vector);\n    float dot1 = hypDot(v.local.pos.coords, u.pos.coords);\n    float dot2 = hypDot(v.local.pos.coords, u.dir);\n    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);\n    float den = sqrt(diffDot);\n    vec4 coords = vec4(- (dot1 / den) * u.pos.coords.xyz + (dot2 / den) * u.dir.xyz, u.pos.coords.w);\n    Point proj = Point(coords);\n    Vector local = direction(v.local.pos, proj);\n    local = negate(local);\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\n   \n                               \n   \n                                                          \n                                                        \n                                                      \n                \n                                                              \n                                                        \n                                   \n                                  \n   "
 
 /***/ }),
 
@@ -1570,7 +1570,7 @@ module.exports = "                                                              
 /***/ 7177:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                                 \n                                                                                                                        \n\nstruct LocalHorizontalCylinderShape {\n    int id;\n    Vector vector;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(LocalHorizontalCylinderShape cylinder, RelVector v) {\n    Vector u = cylinder.vector;\n    float dot1 = hypDot(v.local.pos.coords.xyz, u.pos.coords.xyz);\n    float dot2 = hypDot(v.local.pos.coords.xyz, u.dir.xyz);\n    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);\n    float auxH = acosh(sqrt(diffDot));\n    float auxV = v.local.pos.coords.w - u.pos.coords.w;\n    return sqrt(auxH * auxH + auxV * auxV) - cylinder.radius;\n}\n\n                                                                         \n                                                                       \n                                \n                                      \n                                      \n                                                        \n                                   \n                                                           \n   \n\n\n                                                                 \n                                                        \n                                                      \n                \n                                                              \n                                                        \n                                   \n                                  \n   "
+module.exports = "                                                                                                                        \n          \n                                 \n                                                                                                                        \n\nstruct LocalHorizontalCylinderShape {\n    int id;\n    Vector vector;\n    float radius;\n    Isometry absoluteIsomInv;\n};\n\nfloat sdf(LocalHorizontalCylinderShape cylinder, RelVector v) {\n    Vector u = cylinder.vector;\n    float dot1 = hypDot(v.local.pos.coords.xyz, u.pos.coords.xyz);\n    float dot2 = hypDot(v.local.pos.coords.xyz, u.dir.xyz);\n    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);\n    float auxH = acosh(sqrt(diffDot));\n    float auxV = v.local.pos.coords.w - u.pos.coords.w;\n    return sqrt(auxH * auxH + auxV * auxV) - cylinder.radius;\n}\n\nRelVector gradient(LocalHorizontalCylinderShape cylinder, RelVector v){\n    Vector u = cylinder.vector;\n    float dot1 = hypDot(v.local.pos.coords, u.pos.coords);\n    float dot2 = hypDot(v.local.pos.coords, u.dir);\n    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);\n    float den = sqrt(diffDot);\n    vec4 coords = vec4(- (dot1 / den) * u.pos.coords.xyz + (dot2 / den) * u.dir.xyz, u.pos.coords.w);\n    Point proj = Point(coords);\n    Vector local = direction(v.local.pos, proj);\n    local = negate(local);\n    local = geomNormalize(local);\n    return RelVector(local, v.cellBoost, v.invCellBoost);\n}\n\n\n                                                                 \n                                                        \n                                                      \n                \n                                                              \n                                                        \n                                   \n                                  \n   "
 
 /***/ }),
 
@@ -18142,7 +18142,8 @@ var horizontalCylinder_shaders_struct_default = /*#__PURE__*/__webpack_require__
 
 
 
-// import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+// import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
+
 
 
 
@@ -18159,6 +18160,8 @@ class HorizontalCylinderShape extends BasicShape {
         super(isom);
         this.radius = radius;
         this._vector = undefined;
+        this.addImport((direction_default()));
+
     }
 
     updateData() {
@@ -18200,7 +18203,7 @@ class HorizontalCylinderShape extends BasicShape {
     }
 
     glslGradient() {
-        return numericalGradient_glsl_mustache_default()(this);
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
     }
 
     // glslUVMap() {
@@ -18219,7 +18222,9 @@ var localHorizontalCylinder_shaders_struct_default = /*#__PURE__*/__webpack_requ
 
 
 
+
 // import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+
 
 
 
@@ -18236,6 +18241,7 @@ class LocalHorizontalCylinderShape extends BasicShape {
         super(isom);
         this.radius = radius;
         this._vector = undefined;
+        this.addImport((direction_default()));
     }
 
     updateData() {

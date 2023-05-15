@@ -12,23 +12,27 @@ struct HorizontalCylinderShape {
 
 float sdf(HorizontalCylinderShape cylinder, RelVector v) {
     Vector u = applyGroupElement(v.invCellBoost, cylinder.vector);
-    float dot1 = hypDot(v.local.pos.coords.xyz, u.pos.coords.xyz);
-    float dot2 = hypDot(v.local.pos.coords.xyz, u.dir.xyz);
+    float dot1 = hypDot(v.local.pos.coords, u.pos.coords);
+    float dot2 = hypDot(v.local.pos.coords, u.dir);
     float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);
     float auxH = acosh(sqrt(diffDot));
     float auxV = v.local.pos.coords.w - u.pos.coords.w;
     return sqrt(auxH * auxH + auxV * auxV) - cylinder.radius;
 }
 
-//RelVector gradient(HorizontalCylinderShape cylinder, RelVector v){
-//    Point point = applyIsometry(v.invCellBoost, cylinder.vector.pos);
-//    vec3 q = point.coords.xyz;
-//    vec3 p = v.local.pos.coords.xyz;
-//    vec3 dir = q + hypDot(p, q) * p;
-//    Vector local = Vector(v.local.pos, vec4(-dir, 0));
-//    local = geomNormalize(local);
-//    return RelVector(local, v.cellBoost, v.invCellBoost);
-//}
+RelVector gradient(HorizontalCylinderShape cylinder, RelVector v){
+    Vector u = applyGroupElement(v.invCellBoost, cylinder.vector);
+    float dot1 = hypDot(v.local.pos.coords, u.pos.coords);
+    float dot2 = hypDot(v.local.pos.coords, u.dir);
+    float diffDot = max(dot1 * dot1 - dot2 * dot2, 1.);
+    float den = sqrt(diffDot);
+    vec4 coords = vec4(- (dot1 / den) * u.pos.coords.xyz + (dot2 / den) * u.dir.xyz, u.pos.coords.w);
+    Point proj = Point(coords);
+    Vector local = direction(v.local.pos, proj);
+    local = negate(local);
+    local = geomNormalize(local);
+    return RelVector(local, v.cellBoost, v.invCellBoost);
+}
 
 /**
  * UV map for a global cylinder
