@@ -2,7 +2,7 @@ import {GroupElement} from "./GroupElement.js";
 
 /**
  * @class
- *
+ * @abstract
  * @classdesc
  * Group (in the mathematical sense).
  * This class is mainly a contained to receive the data common to all elements of the group.

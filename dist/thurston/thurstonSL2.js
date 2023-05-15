@@ -12806,7 +12806,7 @@ function specifyThurston(thurstonClass, shader1, shader2) {
 
 /**
  * @class
- *
+ * @abstract
  * @classdesc
  * Group (in the mathematical sense).
  * This class is mainly a contained to receive the data common to all elements of the group.

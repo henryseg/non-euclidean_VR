@@ -12574,7 +12574,7 @@ function specifyThurston(thurstonClass, shader1, shader2) {
 
 /**
  * @class
- *
+ * @abstract
  * @classdesc
  * Group (in the mathematical sense).
  * This class is mainly a contained to receive the data common to all elements of the group.
@@ -17099,7 +17099,7 @@ class freeAbelian_GroupElement_GroupElement extends GroupElement_GroupElement {
 
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
-        const translation = new external_three_namespaceObject.Vector3()
+        const translation = new external_three_namespaceObject.Vector4()
             .add(this.group.halfTranslationA.clone().multiplyScalar(2 * a))
             .add(this.group.halfTranslationB.clone().multiplyScalar(2 * b))
             .add(this.group.halfTranslationC.clone().multiplyScalar(2 * c));
