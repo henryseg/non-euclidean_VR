@@ -18142,7 +18142,6 @@ var horizontalCylinder_shaders_struct_default = /*#__PURE__*/__webpack_require__
 
 
 
-// import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
 
 
 
@@ -18223,8 +18222,6 @@ var localHorizontalCylinder_shaders_struct_default = /*#__PURE__*/__webpack_requ
 
 
 
-// import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
-
 
 
 
@@ -18283,7 +18280,7 @@ class LocalHorizontalCylinderShape extends BasicShape {
     }
 
     glslGradient() {
-        return numericalGradient_glsl_mustache_default()(this);
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
     }
 
     // glslUVMap() {

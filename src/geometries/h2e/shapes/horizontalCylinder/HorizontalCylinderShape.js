@@ -6,7 +6,6 @@ import {Point} from "../../geometry/Point.js";
 import direction from "../../imports/direction.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
-// import gradient from "../../../../core/shapes/shaders/numericalGradient.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
