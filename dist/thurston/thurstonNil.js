@@ -1867,7 +1867,7 @@ class Isometry {
      * Since the constructor is different for each geometry, it delegates the task to the method `build`
      * (that can be overwritten easily unlike the constructor).
      * Another way to do would be to implement for each geometry a new class that inherit from Isometry.
-     * How ever the drawback is that the class Position would need also to be extended,
+     * However, the drawback is that the class Position would need also to be extended,
      * so that it manipulate the right classes.
      *
      */
@@ -2278,7 +2278,7 @@ class Vector extends external_three_namespaceObject.Vector3 {
 
     /**
      * Overload Three.js `applyMatrix4`.
-     * Indeed Three.js considers the `Vector3` as a 3D **point**
+     * Indeed, Three.js considers the `Vector3` as a 3D **point**
      * It multiplies the vector (with an implicit 1 in the 4th dimension) and `m`, and divides by perspective.
      * Here the data represents a **vector**, thus the implicit 4th coordinate is 0
      * @param {Matrix4} m - The matrix to apply
