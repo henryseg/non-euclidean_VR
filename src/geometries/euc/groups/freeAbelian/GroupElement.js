@@ -1,4 +1,4 @@
-import {Vector3} from "three";
+import {Vector3, Vector4} from "three";
 
 import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
 import {Isometry} from "../../geometry/Isometry.js";
@@ -50,7 +50,7 @@ export class GroupElement extends AbstractGroupElement {
 
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
-        const translation = new Vector3()
+        const translation = new Vector4()
             .add(this.group.halfTranslationA.clone().multiplyScalar(2 * a))
             .add(this.group.halfTranslationB.clone().multiplyScalar(2 * b))
             .add(this.group.halfTranslationC.clone().multiplyScalar(2 * c));
