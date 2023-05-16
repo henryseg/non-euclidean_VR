@@ -18,7 +18,7 @@ float sdf(CylinderShape cyl, RelVector v) {
     Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);
     float aux1 = dot(v.local.pos.coords, dir.pos.coords);
     float aux2 = dot(v.local.pos.coords, dir.dir);
-    return acos(sqrt(aux1 * aux1 + aux2 * aux2)) - cyl.radius;
+    return abs(acos(sqrt(aux1 * aux1 + aux2 * aux2))) - cyl.radius;
 }
 
 /**
@@ -29,7 +29,8 @@ RelVector gradient(CylinderShape cyl, RelVector v){
     Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);
     float aux1 = dot(m, dir.pos.coords);
     float aux2 = dot(m, dir.dir);
-    vec4 coords = aux1 * dir.pos.coords + aux2 * dir.dir;
+    float den = sqrt(aux1 * aux1 + aux2 * aux2);
+    vec4 coords = (aux1/den) * dir.pos.coords + (aux2/den) * dir.dir;
     Point proj = Point(coords);
     Vector local = direction(v.local.pos, proj);
     local = negate(local);
