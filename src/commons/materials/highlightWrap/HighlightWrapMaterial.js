@@ -102,8 +102,7 @@ export class HighlightWrapMaterial extends Material {
  * Wrap the material into another material handling the Phong model
  * @param {Material} defaultMat - the default material
  * @param {Material} highlightMat - the highlight material
- * @param {Isometry} cellBoost - isometry, in case we only highlight a single copy of a local object
  */
-export function highlightWrap(defaultMat, highlightMat, cellBoost) {
+export function highlightWrap(defaultMat, highlightMat) {
     return new HighlightWrapMaterial(defaultMat, highlightMat);
 }
