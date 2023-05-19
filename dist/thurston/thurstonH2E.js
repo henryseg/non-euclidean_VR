@@ -978,6 +978,70 @@ module.exports = function() { var T = new H.Template({code: function (c,p,i) { v
 
 /***/ }),
 
+/***/ 5377:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v) {");t.b("\n" + i);t.b("    vec4 color0, color1;");t.b("\n" + i);t.b("    TransitionLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n");t.b("\n" + i);t.b("    if(v.vector.cellBoost == material.cellBoost){");t.b("\n" + i);t.b("        color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("    } else{");t.b("\n" + i);t.b("        color1 = color0;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v) {\n    vec4 color0, color1;\n    TransitionLocalWrapMaterial material = {{name}};\n\n    color0 = {{mat0.name}}_render(v);\n\n    if(v.vector.cellBoost == material.cellBoost){\n        color1 = {{mat1.name}}_render(v);\n    } else{\n        color1 = color0;\n    }\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 9441:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal) {");t.b("\n" + i);t.b("    TransitionLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n" + i);t.b("    vec4 color0, color1;");t.b("\n" + i);if(t.s(t.d("mat0.usesNormal",c,p,1),c,p,0,156,212,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        color0 =  ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat0.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("        color0 =  ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("\n" + i);t.b("    if(v.vector.cellBoost == material.cellBoost){");t.b("\n" + i);if(t.s(t.d("mat1.usesNormal",c,p,1),c,p,0,405,469,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            color1 =  ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat1.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("            color1 =  ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("    } else {");t.b("\n" + i);t.b("        color1 = color0;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal) {\n    TransitionLocalWrapMaterial material = {{name}};\n    vec4 color0, color1;\n    {{#mat0.usesNormal}}\n        color0 =  {{mat0.name}}_render(v, normal);\n    {{/mat0.usesNormal}}\n    {{^mat0.usesNormal}}\n        color0 =  {{mat0.name}}_render(v);\n    {{/mat0.usesNormal}}\n\n    if(v.vector.cellBoost == material.cellBoost){\n        {{#mat1.usesNormal}}\n            color1 =  {{mat1.name}}_render(v, normal);\n        {{/mat1.usesNormal}}\n        {{^mat1.usesNormal}}\n            color1 =  {{mat1.name}}_render(v);\n        {{/mat1.usesNormal}}\n    } else {\n        color1 = color0;\n    }\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 9245:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal, vec2 uv) {");t.b("\n" + i);t.b("    vec4 color0, color1;");t.b("\n" + i);t.b("    TransitionLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);if(!t.s(t.d("mat0.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("mat0.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("mat0.usesUVMap",c,p,1),c,p,0,296,355,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("    ");t.b("\n" + i);if(t.s(t.d("mat0.usesNormal",c,p,1),c,p,0,429,658,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("mat0.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("mat0.usesUVMap",c,p,1),c,p,0,567,634,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);if(!t.s(t.d("mat1.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("mat1.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("mat1.usesUVMap",c,p,1),c,p,0,834,893,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);t.b("    if(v.vector.cellBoost == material.cellBoost){");t.b("\n" + i);if(t.s(t.d("mat1.usesNormal",c,p,1),c,p,0,1017,1274,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("mat1.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("mat1.usesUVMap",c,p,1),c,p,0,1171,1246,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("    } else{");t.b("\n" + i);t.b("        color1 = color0;");t.b("\n" + i);t.b("    }");t.b("\n");t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {\n    vec4 color0, color1;\n    TransitionLocalWrapMaterial material = {{name}};\n\n    {{^mat0.usesNormal}}\n        {{^mat0.usesUVMap}}\n            color0 = {{mat0.name}}_render(v);\n        {{/mat0.usesUVMap}}\n        {{#mat0.usesUVMap}}\n            color0 = {{mat0.name}}_render(v, uv);\n        {{/mat0.usesUVMap}}\n    {{/mat0.usesNormal}}\n    \n    {{#mat0.usesNormal}}\n        {{^mat0.usesUVMap}}\n            color0 = {{mat0.name}}_render(v, normal);\n        {{/mat0.usesUVMap}}\n        {{#mat0.usesUVMap}}\n            color0 = {{mat0.name}}_render(v, normal, uv);\n        {{/mat0.usesUVMap}}\n    {{/mat0.usesNormal}}\n\n    {{^mat1.usesNormal}}\n        {{^mat1.usesUVMap}}\n            color1 = {{mat1.name}}_render(v);\n        {{/mat1.usesUVMap}}\n        {{#mat1.usesUVMap}}\n            color1 = {{mat1.name}}_render(v, uv);\n        {{/mat1.usesUVMap}}\n    {{/mat1.usesNormal}}\n\n    if(v.vector.cellBoost == material.cellBoost){\n        {{#mat1.usesNormal}}\n            {{^mat1.usesUVMap}}\n                color1 = {{mat1.name}}_render(v, normal);\n            {{/mat1.usesUVMap}}\n            {{#mat1.usesUVMap}}\n                color1 = {{mat1.name}}_render(v, normal, uv);\n            {{/mat1.usesUVMap}}\n        {{/mat1.usesNormal}}\n    } else{\n        color1 = color0;\n    }\n\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}\n\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 6766:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, vec2 uv) {");t.b("\n" + i);t.b("    vec4 color0, color1;");t.b("\n" + i);t.b("    TransitionLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);if(t.s(t.d("mat0.usesUVMap",c,p,1),c,p,0,147,198,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat0.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("        color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("\n" + i);t.b("    if(v.vector.cellBoost == material.cellBoost){");t.b("\n" + i);if(t.s(t.d("mat1.usesUVMap",c,p,1),c,p,0,386,445,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat1.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("    } else{");t.b("\n" + i);t.b("        color1 = color0;");t.b("\n" + i);t.b("    }");t.b("\n");t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, vec2 uv) {\n    vec4 color0, color1;\n    TransitionLocalWrapMaterial material = {{name}};\n\n    {{#mat0.usesUVMap}}\n        color0 = {{mat0.name}}_render(v, uv);\n    {{/mat0.usesUVMap}}\n    {{^mat0.usesUVMap}}\n        color0 = {{mat0.name}}_render(v);\n    {{/mat0.usesUVMap}}\n\n    if(v.vector.cellBoost == material.cellBoost){\n        {{#mat1.usesUVMap}}\n            color1 = {{mat1.name}}_render(v, uv);\n        {{/mat1.usesUVMap}}\n        {{^mat1.usesUVMap}}\n            color1 = {{mat1.name}}_render(v);\n        {{/mat1.usesUVMap}}\n    } else{\n        color1 = color0;\n    }\n\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 8402:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v) {");t.b("\n" + i);t.b("    TransitionWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("    vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n");t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v) {\n    TransitionWrapMaterial material = {{name}};\n\n    vec4 color0 = {{mat0.name}}_render(v);\n    vec4 color1 = {{mat1.name}}_render(v);\n\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 6158:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal) {");t.b("\n" + i);t.b("    TransitionWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);if(t.s(t.d("mat0.usesNormal",c,p,1),c,p,0,127,188,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        vec4 color0 =  ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat0.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("        vec4 color0 =  ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("\n" + i);if(t.s(t.d("mat1.usesNormal",c,p,1),c,p,0,332,393,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        vec4 color1 =  ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat1.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("        vec4 color1 =  ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal) {\n    TransitionWrapMaterial material = {{name}};\n\n    {{#mat0.usesNormal}}\n        vec4 color0 =  {{mat0.name}}_render(v, normal);\n    {{/mat0.usesNormal}}\n    {{^mat0.usesNormal}}\n        vec4 color0 =  {{mat0.name}}_render(v);\n    {{/mat0.usesNormal}}\n\n    {{#mat1.usesNormal}}\n        vec4 color1 =  {{mat1.name}}_render(v, normal);\n    {{/mat1.usesNormal}}\n    {{^mat1.usesNormal}}\n        vec4 color1 =  {{mat1.name}}_render(v);\n    {{/mat1.usesNormal}}\n\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 4146:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal, vec2 uv) {");t.b("\n" + i);t.b("    TransitionWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);if(!t.s(t.d("mat0.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("mat0.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("mat0.usesUVMap",c,p,1),c,p,0,271,335,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("    ");t.b("\n" + i);if(t.s(t.d("mat0.usesNormal",c,p,1),c,p,0,409,648,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("mat0.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("mat0.usesUVMap",c,p,1),c,p,0,552,624,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);if(!t.s(t.d("mat1.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("mat1.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("mat1.usesUVMap",c,p,1),c,p,0,829,893,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("    ");t.b("\n" + i);if(t.s(t.d("mat1.usesNormal",c,p,1),c,p,0,967,1206,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("mat1.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("mat1.usesUVMap",c,p,1),c,p,0,1110,1182,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {\n    TransitionWrapMaterial material = {{name}};\n\n    {{^mat0.usesNormal}}\n        {{^mat0.usesUVMap}}\n            vec4 color0 = {{mat0.name}}_render(v);\n        {{/mat0.usesUVMap}}\n        {{#mat0.usesUVMap}}\n            vec4 color0 = {{mat0.name}}_render(v, uv);\n        {{/mat0.usesUVMap}}\n    {{/mat0.usesNormal}}\n    \n    {{#mat0.usesNormal}}\n        {{^mat0.usesUVMap}}\n            vec4 color0 = {{mat0.name}}_render(v, normal);\n        {{/mat0.usesUVMap}}\n        {{#mat0.usesUVMap}}\n            vec4 color0 = {{mat0.name}}_render(v, normal, uv);\n        {{/mat0.usesUVMap}}\n    {{/mat0.usesNormal}}\n\n    {{^mat1.usesNormal}}\n        {{^mat1.usesUVMap}}\n            vec4 color1 = {{mat1.name}}_render(v);\n        {{/mat1.usesUVMap}}\n        {{#mat1.usesUVMap}}\n            vec4 color1 = {{mat1.name}}_render(v, uv);\n        {{/mat1.usesUVMap}}\n    {{/mat1.usesNormal}}\n    \n    {{#mat1.usesNormal}}\n        {{^mat1.usesUVMap}}\n            vec4 color1 = {{mat1.name}}_render(v, normal);\n        {{/mat1.usesUVMap}}\n        {{#mat1.usesUVMap}}\n            vec4 color1 = {{mat1.name}}_render(v, normal, uv);\n        {{/mat1.usesUVMap}}\n    {{/mat1.usesNormal}}\n\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}\n\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 2332:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, vec2 uv) {");t.b("\n" + i);t.b("    TransitionWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);if(t.s(t.d("mat0.usesUVMap",c,p,1),c,p,0,117,173,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat0.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("        vec4 color0 = ");t.b(t.v(t.d("mat0.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("\n" + i);if(t.s(t.d("mat1.usesUVMap",c,p,1),c,p,0,312,368,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("mat1.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("        vec4 color1 = ");t.b(t.v(t.d("mat1.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("\n" + i);t.b("    return (1. - material.ratio) * color0 + material.ratio * color1;");t.b("\n" + i);t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, vec2 uv) {\n    TransitionWrapMaterial material = {{name}};\n\n    {{#mat0.usesUVMap}}\n        vec4 color0 = {{mat0.name}}_render(v, uv);\n    {{/mat0.usesUVMap}}\n    {{^mat0.usesUVMap}}\n        vec4 color0 = {{mat0.name}}_render(v);\n    {{/mat0.usesUVMap}}\n\n    {{#mat1.usesUVMap}}\n        vec4 color1 = {{mat1.name}}_render(v, uv);\n    {{/mat1.usesUVMap}}\n    {{^mat1.usesUVMap}}\n        vec4 color1 = {{mat1.name}}_render(v);\n    {{/mat1.usesUVMap}}\n\n    return (1. - material.ratio) * color0 + material.ratio * color1;\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
 /***/ 6142:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1348,6 +1412,20 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n          \n                  \n                                                                                                                        \nstruct StripsMaterial {\n    vec2 dir;\n    vec4 lengths;\n    vec3 color0;\n    vec3 color1;\n    vec3 color2;\n    vec3 color3;\n\n};\n\nvec4 render(StripsMaterial material, ExtVector v, vec2 uv) {\n    vec3 color;\n    float x = mod(dot(uv, material.dir) / dot(material.dir, material.dir), 1.);\n    if (x < material.lengths.x){\n        color = material.color0;\n    } else if (x < material.lengths.y){\n        color = material.color1;\n    } else if (x < material.lengths.z){\n        color = material.color2;\n    } else {\n        color = material.color3;\n    }\n\n    return vec4(color, 1);\n}\n\n"
+
+/***/ }),
+
+/***/ 1888:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                     \n                                                                                                                        \n\nstruct TransitionLocalWrapMaterial {\n    GroupElement cellBoost;\n    float ratio;\n};\n"
+
+/***/ }),
+
+/***/ 5698:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                     \n                                                                                                                        \n\nstruct TransitionWrapMaterial {\n    float ratio;\n};\n"
 
 /***/ }),
 
@@ -1847,6 +1925,8 @@ __webpack_require__.d(__webpack_exports__, {
   "qC": () => (/* binding */ thurstonH2E_Thurston),
   "N$": () => (/* binding */ thurstonH2E_ThurstonLite),
   "TO": () => (/* binding */ thurstonH2E_ThurstonVR),
+  "l_": () => (/* reexport */ TransitionLocalWrapMaterial),
+  "pk": () => (/* reexport */ TransitionWrapMaterial),
   "yI": () => (/* reexport */ UnionShape),
   "E6": () => (/* reexport */ VRCamera),
   "zO": () => (/* binding */ thurstonH2E_VRRenderer),
@@ -1862,6 +1942,7 @@ __webpack_require__.d(__webpack_exports__, {
   "$9": () => (/* reexport */ WrapShape),
   "iR": () => (/* reexport */ XRControllerModelFactory),
   "ak": () => (/* reexport */ bind),
+  "uZ": () => (/* reexport */ clamp),
   "Cy": () => (/* reexport */ complement),
   "Y7": () => (/* reexport */ cuspedTorus_set),
   "qM": () => (/* reexport */ earthTexture),
@@ -1877,6 +1958,8 @@ __webpack_require__.d(__webpack_exports__, {
   "cR": () => (/* reexport */ plane_set),
   "p2": () => (/* reexport */ safeString),
   "w0": () => (/* reexport */ sunTexture),
+  "VL": () => (/* reexport */ transitionLocalWrap),
+  "UR": () => (/* reexport */ transitionWrap),
   "dV": () => (/* reexport */ set),
   "G0": () => (/* reexport */ union),
   "re": () => (/* reexport */ wrap),
@@ -4509,6 +4592,15 @@ function safeString(str) {
     return str.replace(/\W/g, '_');
 }
 
+/**
+ * Standard clamp function
+ * @param {number} value
+ * @param {number} min
+ * @param {number} max
+ */
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
 ;// CONCATENATED MODULE: ./src/constants.js
 /**
  * ID for the left side (in VR / Stereo)
@@ -14858,9 +14950,8 @@ class HighlightWrapMaterial extends Material {
  * Wrap the material into another material handling the Phong model
  * @param {Material} defaultMat - the default material
  * @param {Material} highlightMat - the highlight material
- * @param {Isometry} cellBoost - isometry, in case we only highlight a single copy of a local object
  */
-function highlightWrap(defaultMat, highlightMat, cellBoost) {
+function highlightWrap(defaultMat, highlightMat) {
     return new HighlightWrapMaterial(defaultMat, highlightMat);
 }
 // EXTERNAL MODULE: ./src/commons/materials/highlightLocalWrap/shaders/struct.glsl
@@ -14879,7 +14970,6 @@ var highlightLocalWrap_shaders_renderUV_glsl_mustache_default = /*#__PURE__*/__w
 var highlightLocalWrap_shaders_renderNormalUV_glsl_mustache = __webpack_require__(699);
 var highlightLocalWrap_shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightLocalWrap_shaders_renderNormalUV_glsl_mustache);
 ;// CONCATENATED MODULE: ./src/commons/materials/highlightLocalWrap/HighlightLocalWrapMaterial.js
-
 
 
 
@@ -14988,6 +15078,306 @@ class HighlightLocalWrapMaterial extends Material {
  */
 function highlightLocalWrap(defaultMat, highlightMat, cellBoost) {
     return new HighlightLocalWrapMaterial(defaultMat, highlightMat, cellBoost);
+}
+// EXTERNAL MODULE: ./src/commons/materials/transitionWrap/shaders/struct.glsl
+var transitionWrap_shaders_struct = __webpack_require__(5698);
+var transitionWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(transitionWrap_shaders_struct);
+// EXTERNAL MODULE: ./src/commons/materials/transitionWrap/shaders/render.glsl.mustache
+var transitionWrap_shaders_render_glsl_mustache = __webpack_require__(8402);
+var transitionWrap_shaders_render_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionWrap_shaders_render_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/transitionWrap/shaders/renderNormal.glsl.mustache
+var transitionWrap_shaders_renderNormal_glsl_mustache = __webpack_require__(6158);
+var transitionWrap_shaders_renderNormal_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionWrap_shaders_renderNormal_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/transitionWrap/shaders/renderUV.glsl.mustache
+var transitionWrap_shaders_renderUV_glsl_mustache = __webpack_require__(2332);
+var transitionWrap_shaders_renderUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionWrap_shaders_renderUV_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/transitionWrap/shaders/renderNormalUV.glsl.mustache
+var transitionWrap_shaders_renderNormalUV_glsl_mustache = __webpack_require__(4146);
+var transitionWrap_shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionWrap_shaders_renderNormalUV_glsl_mustache);
+;// CONCATENATED MODULE: ./src/commons/materials/transitionWrap/TransitionWrapMaterial.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Combination of two materials.
+ * Can smoothly interpolate between two materials
+ */
+class TransitionWrapMaterial extends Material {
+
+    /**
+     * Constructor.
+     * @param {Material} mat0 - the first material (ratio 0)
+     * @param {Material} mat1 - the second material (ratio 1)
+     * @param {number} duration - duration of the transition (in s)
+     */
+    constructor(mat0, mat1, duration = undefined) {
+        super();
+        this.mat0 = mat0;
+        this.mat1 = mat1;
+        this.duration = duration !== undefined ? duration : 5;
+
+        this._clock = new external_three_namespaceObject.Clock();
+        this._ratio = 0;
+        this._ratioOrigin = 0;
+        this._direction = -1;
+    }
+
+    toggle() {
+        this._direction = -this._direction;
+        this._ratioOrigin = this._ratio;
+        this._clock.start();
+    }
+
+    get ratio() {
+        this._ratio = clamp(
+            this._ratioOrigin + this._direction * (this._clock.getElapsedTime() / this.duration),
+            0,
+            1
+        );
+        return this._ratio;
+    }
+
+    get uniformType() {
+        return 'TransitionWrapMaterial';
+    }
+
+    static glslClass() {
+        return (transitionWrap_shaders_struct_default());
+    }
+
+    get usesNormal() {
+        return true;
+    }
+
+    get usesUVMap() {
+        return (this.mat0.usesUVMap || this.mat1.usesUVMap);
+    }
+
+    get usesLight() {
+        return (this.mat0.usesLight || this.mat1.usesLight);
+    }
+
+    get isReflecting() {
+        return (this.mat0.isReflecting || this.mat1.isReflecting);
+    }
+
+    glslRender() {
+        if (this.usesNormal) {
+            if (this.usesUVMap) {
+                return transitionWrap_shaders_renderNormalUV_glsl_mustache_default()(this);
+            } else {
+                return transitionWrap_shaders_renderNormal_glsl_mustache_default()(this);
+            }
+        } else {
+            if (this.usesUVMap) {
+                return transitionWrap_shaders_renderUV_glsl_mustache_default()(this);
+            } else {
+                return transitionWrap_shaders_render_glsl_mustache_default()(this);
+            }
+        }
+    }
+
+    /**
+     * Set the ID of the material.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.mat0.setId(scene);
+        this.mat1.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the material is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.mat0.onAdd(scene);
+        this.mat1.onAdd(scene);
+        super.onAdd(scene);
+    }
+
+    shader(shaderBuilder) {
+        this.mat0.shader(shaderBuilder);
+        this.mat1.shader(shaderBuilder);
+        super.shader(shaderBuilder);
+    }
+}
+
+/**
+ * Wrap the material into another material handling the Phong model
+ * @param {Material} defaultMat - the default material
+ * @param {Material} highlightMat - the highlight material
+ * @param {number} duration - duration of the transition (in ms)
+ */
+function transitionWrap(defaultMat, highlightMat, duration) {
+    return new TransitionWrapMaterial(defaultMat, highlightMat, duration);
+}
+// EXTERNAL MODULE: ./src/commons/materials/transitionLocalWrap/shaders/struct.glsl
+var transitionLocalWrap_shaders_struct = __webpack_require__(1888);
+var transitionLocalWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(transitionLocalWrap_shaders_struct);
+// EXTERNAL MODULE: ./src/commons/materials/transitionLocalWrap/shaders/render.glsl.mustache
+var transitionLocalWrap_shaders_render_glsl_mustache = __webpack_require__(5377);
+var transitionLocalWrap_shaders_render_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionLocalWrap_shaders_render_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/transitionLocalWrap/shaders/renderNormal.glsl.mustache
+var transitionLocalWrap_shaders_renderNormal_glsl_mustache = __webpack_require__(9441);
+var transitionLocalWrap_shaders_renderNormal_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionLocalWrap_shaders_renderNormal_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/transitionLocalWrap/shaders/renderUV.glsl.mustache
+var transitionLocalWrap_shaders_renderUV_glsl_mustache = __webpack_require__(6766);
+var transitionLocalWrap_shaders_renderUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionLocalWrap_shaders_renderUV_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/transitionLocalWrap/shaders/renderNormalUV.glsl.mustache
+var transitionLocalWrap_shaders_renderNormalUV_glsl_mustache = __webpack_require__(9245);
+var transitionLocalWrap_shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(transitionLocalWrap_shaders_renderNormalUV_glsl_mustache);
+;// CONCATENATED MODULE: ./src/commons/materials/transitionLocalWrap/TransitionLocalWrapMaterial.js
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Combination of two materials.
+ * Can smoothly interpolate between two materials
+ * Only a single "copy" of a local object is affected (characterized by its cellBoost)
+ */
+class TransitionLocalWrapMaterial extends Material {
+
+    /**
+     * Constructor.
+     * @param {Material} mat0 - the first material (ratio 0)
+     * @param {Material} mat1 - the second material (ratio 1)
+     * @param {GroupElement} cellBoost - isometry, in case we only highlight a single copy of a local object
+     * @param {number} duration - duration of the transition (in s)
+     */
+    constructor(mat0, mat1, cellBoost, duration = undefined) {
+        super();
+        this.mat0 = mat0;
+        this.mat1 = mat1;
+        this.duration = duration !== undefined ? duration : 5;
+        this.cellBoost = cellBoost;
+
+        this._clock = new external_three_namespaceObject.Clock();
+        this._ratio = 0;
+        this._ratioOrigin = 0;
+        this._direction = -1;
+    }
+
+    toggle() {
+        this._direction = -this._direction;
+        this._ratioOrigin = this._ratio;
+        this._clock.start();
+    }
+
+    get ratio() {
+        this._ratio = clamp(
+            this._ratioOrigin + this._direction * (this._clock.getElapsedTime() / this.duration),
+            0,
+            1
+        );
+        return this._ratio;
+    }
+
+    get uniformType() {
+        return 'TransitionLocalWrapMaterial';
+    }
+
+    static glslClass() {
+        return (transitionLocalWrap_shaders_struct_default());
+    }
+
+    get usesNormal() {
+        return true;
+    }
+
+    get usesUVMap() {
+        return (this.mat0.usesUVMap || this.mat1.usesUVMap);
+    }
+
+    get usesLight() {
+        return (this.mat0.usesLight || this.mat1.usesLight);
+    }
+
+    get isReflecting() {
+        return (this.mat0.isReflecting || this.mat1.isReflecting);
+    }
+
+    glslRender() {
+        if (this.usesNormal) {
+            if (this.usesUVMap) {
+                return transitionLocalWrap_shaders_renderNormalUV_glsl_mustache_default()(this);
+            } else {
+                return transitionLocalWrap_shaders_renderNormal_glsl_mustache_default()(this);
+            }
+        } else {
+            if (this.usesUVMap) {
+                return transitionLocalWrap_shaders_renderUV_glsl_mustache_default()(this);
+            } else {
+                return transitionLocalWrap_shaders_render_glsl_mustache_default()(this);
+            }
+        }
+    }
+
+    /**
+     * Set the ID of the material.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.mat0.setId(scene);
+        this.mat1.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the material is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.mat0.onAdd(scene);
+        this.mat1.onAdd(scene);
+        super.onAdd(scene);
+    }
+
+    shader(shaderBuilder) {
+        this.mat0.shader(shaderBuilder);
+        this.mat1.shader(shaderBuilder);
+        super.shader(shaderBuilder);
+    }
+}
+
+/**
+ * Wrap the material into another material handling the Phong model
+ * @param {Material} defaultMat - the default material
+ * @param {Material} highlightMat - the highlight material
+ * @param {GroupElement} cellBoost - isometry, in case we only highlight a single copy of a local object
+ * @param {number} duration - duration of the transition (in ms)
+ */
+function transitionLocalWrap(defaultMat, highlightMat, cellBoost, duration) {
+    return new TransitionLocalWrapMaterial(defaultMat, highlightMat, cellBoost, duration);
 }
 // EXTERNAL MODULE: ./src/commons/materials/pathTracerWrap/shaders/struct.glsl
 var pathTracerWrap_shaders_struct = __webpack_require__(7198);
@@ -15188,6 +15578,8 @@ function pathTracerWrap(material, params = {}) {
 
 
 // Composite basic materials
+
+
 
 
 
@@ -19267,6 +19659,8 @@ var __webpack_exports__TeleportationSet = __webpack_exports__.xG;
 var __webpack_exports__Thurston = __webpack_exports__.qC;
 var __webpack_exports__ThurstonLite = __webpack_exports__.N$;
 var __webpack_exports__ThurstonVR = __webpack_exports__.TO;
+var __webpack_exports__TransitionLocalWrapMaterial = __webpack_exports__.l_;
+var __webpack_exports__TransitionWrapMaterial = __webpack_exports__.pk;
 var __webpack_exports__UnionShape = __webpack_exports__.yI;
 var __webpack_exports__VRCamera = __webpack_exports__.E6;
 var __webpack_exports__VRRenderer = __webpack_exports__.zO;
@@ -19282,6 +19676,7 @@ var __webpack_exports__WHalfSpaceShape = __webpack_exports__.CI;
 var __webpack_exports__WrapShape = __webpack_exports__.$9;
 var __webpack_exports__XRControllerModelFactory = __webpack_exports__.iR;
 var __webpack_exports__bind = __webpack_exports__.ak;
+var __webpack_exports__clamp = __webpack_exports__.uZ;
 var __webpack_exports__complement = __webpack_exports__.Cy;
 var __webpack_exports__cuspedTorusSet = __webpack_exports__.Y7;
 var __webpack_exports__earthTexture = __webpack_exports__.qM;
@@ -19297,8 +19692,10 @@ var __webpack_exports__phongWrap = __webpack_exports__.WT;
 var __webpack_exports__planeSet = __webpack_exports__.cR;
 var __webpack_exports__safeString = __webpack_exports__.p2;
 var __webpack_exports__sunTexture = __webpack_exports__.w0;
+var __webpack_exports__transitionLocalWrap = __webpack_exports__.VL;
+var __webpack_exports__transitionWrap = __webpack_exports__.UR;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
