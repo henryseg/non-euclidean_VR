@@ -1,0 +1,13 @@
+vec4 {{name}}_render(ExtVector v) {
+    vec4 color0, color1;
+    TransitionLocalWrapMaterial material = {{name}};
+
+    color0 = {{mat0.name}}_render(v);
+
+    if(v.vector.cellBoost == material.cellBoost){
+        color1 = {{mat1.name}}_render(v);
+    } else{
+        color1 = color0;
+    }
+    return (1. - material.ratio) * color0 + material.ratio * color1;
+}

@@ -1,0 +1,42 @@
+vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {
+    TransitionWrapMaterial material = {{name}};
+
+    {{^mat0.usesNormal}}
+        {{^mat0.usesUVMap}}
+            vec4 color0 = {{mat0.name}}_render(v);
+        {{/mat0.usesUVMap}}
+        {{#mat0.usesUVMap}}
+            vec4 color0 = {{mat0.name}}_render(v, uv);
+        {{/mat0.usesUVMap}}
+    {{/mat0.usesNormal}}
+    
+    {{#mat0.usesNormal}}
+        {{^mat0.usesUVMap}}
+            vec4 color0 = {{mat0.name}}_render(v, normal);
+        {{/mat0.usesUVMap}}
+        {{#mat0.usesUVMap}}
+            vec4 color0 = {{mat0.name}}_render(v, normal, uv);
+        {{/mat0.usesUVMap}}
+    {{/mat0.usesNormal}}
+
+    {{^mat1.usesNormal}}
+        {{^mat1.usesUVMap}}
+            vec4 color1 = {{mat1.name}}_render(v);
+        {{/mat1.usesUVMap}}
+        {{#mat1.usesUVMap}}
+            vec4 color1 = {{mat1.name}}_render(v, uv);
+        {{/mat1.usesUVMap}}
+    {{/mat1.usesNormal}}
+    
+    {{#mat1.usesNormal}}
+        {{^mat1.usesUVMap}}
+            vec4 color1 = {{mat1.name}}_render(v, normal);
+        {{/mat1.usesUVMap}}
+        {{#mat1.usesUVMap}}
+            vec4 color1 = {{mat1.name}}_render(v, normal, uv);
+        {{/mat1.usesUVMap}}
+    {{/mat1.usesNormal}}
+
+    return (1. - material.ratio) * color0 + material.ratio * color1;
+}
+

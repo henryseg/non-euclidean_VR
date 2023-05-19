@@ -1,0 +1,22 @@
+vec4 {{name}}_render(ExtVector v, RelVector normal) {
+    TransitionLocalWrapMaterial material = {{name}};
+    vec4 color0, color1;
+    {{#mat0.usesNormal}}
+        color0 =  {{mat0.name}}_render(v, normal);
+    {{/mat0.usesNormal}}
+    {{^mat0.usesNormal}}
+        color0 =  {{mat0.name}}_render(v);
+    {{/mat0.usesNormal}}
+
+    if(v.vector.cellBoost == material.cellBoost){
+        {{#mat1.usesNormal}}
+            color1 =  {{mat1.name}}_render(v, normal);
+        {{/mat1.usesNormal}}
+        {{^mat1.usesNormal}}
+            color1 =  {{mat1.name}}_render(v);
+        {{/mat1.usesNormal}}
+    } else {
+        color1 = color0;
+    }
+    return (1. - material.ratio) * color0 + material.ratio * color1;
+}

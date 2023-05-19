@@ -22,6 +22,8 @@ export {HypStripsMaterial} from "./hypStrips/HypStripsMaterial.js";
 export {PhongWrapMaterial, phongWrap} from "./phongWrap/PhongWrapMaterial.js";
 export {HighlightWrapMaterial, highlightWrap} from "./highlightWrap/HighlightWrapMaterial.js";
 export {HighlightLocalWrapMaterial, highlightLocalWrap} from "./highlightLocalWrap/HighlightLocalWrapMaterial.js";
+export {TransitionWrapMaterial, transitionWrap} from "./transitionWrap/TransitionWrapMaterial.js";
+export {TransitionLocalWrapMaterial, transitionLocalWrap} from "./transitionLocalWrap/TransitionLocalWrapMaterial.js";
 
 // Path tracer material
 export {BasicPTMaterial} from "./basicPTMaterial/BasicPTMaterial.js";

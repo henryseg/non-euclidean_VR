@@ -1,0 +1,24 @@
+vec4 {{name}}_render(ExtVector v, vec2 uv) {
+    vec4 color0, color1;
+    TransitionLocalWrapMaterial material = {{name}};
+
+    {{#mat0.usesUVMap}}
+        color0 = {{mat0.name}}_render(v, uv);
+    {{/mat0.usesUVMap}}
+    {{^mat0.usesUVMap}}
+        color0 = {{mat0.name}}_render(v);
+    {{/mat0.usesUVMap}}
+
+    if(v.vector.cellBoost == material.cellBoost){
+        {{#mat1.usesUVMap}}
+            color1 = {{mat1.name}}_render(v, uv);
+        {{/mat1.usesUVMap}}
+        {{^mat1.usesUVMap}}
+            color1 = {{mat1.name}}_render(v);
+        {{/mat1.usesUVMap}}
+    } else{
+        color1 = color0;
+    }
+
+    return (1. - material.ratio) * color0 + material.ratio * color1;
+}

@@ -1,0 +1,8 @@
+vec4 {{name}}_render(ExtVector v) {
+    TransitionWrapMaterial material = {{name}};
+
+    vec4 color0 = {{mat0.name}}_render(v);
+    vec4 color1 = {{mat1.name}}_render(v);
+
+    return (1. - material.ratio) * color0 + material.ratio * color1;
+}
