@@ -826,6 +826,70 @@ module.exports = function() { var T = new H.Template({code: function (c,p,i) { v
 
 /***/ }),
 
+/***/ 8906:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v) {");t.b("\n" + i);t.b("    HighlightLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {");t.b("\n" + i);t.b("        return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v) {\n    HighlightLocalWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {\n        return {{highlightMat.name}}_render(v);\n    }\n    return {{defaultMat.name}}_render(v);\n}", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 1998:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal) {");t.b("\n" + i);t.b("    HighlightLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {");t.b("\n" + i);if(t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,0,220,289,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("    }");t.b("\n");t.b("\n" + i);if(t.s(t.d("defaultMat.usesNormal",c,p,1),c,p,0,481,540,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("defaultMat.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal) {\n    HighlightLocalWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {\n        {{#highlightMat.usesNormal}}\n            return {{highlightMat.name}}_render(v, normal);\n        {{/highlightMat.usesNormal}}\n        {{^highlightMat.usesNormal}}\n            return {{highlightMat.name}}_render(v);\n        {{/highlightMat.usesNormal}}\n    }\n\n    {{#defaultMat.usesNormal}}\n        return {{defaultMat.name}}_render(v, normal);\n    {{/defaultMat.usesNormal}}\n    {{^defaultMat.usesNormal}}\n        return {{defaultMat.name}}_render(v);\n    {{/defaultMat.usesNormal}}\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 699:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal, vec2 uv) {");t.b("\n" + i);t.b("    HighlightLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {");t.b("\n" + i);if(!t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,0,405,478,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,0,580,881,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,0,764,845,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("    }");t.b("\n");t.b("\n" + i);if(!t.s(t.d("defaultMat.name.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,0,1119,1182,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("    ");t.b("\n" + i);if(t.s(t.d("defaultMat.name.usesNormal",c,p,1),c,p,0,1289,1570,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,0,1464,1535,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("}");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {\n    HighlightLocalWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {\n        {{^highlightMat.usesNormal}}\n            {{^highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v);\n            {{/highlightMat.usesUVMap}}\n            {{#highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v, uv);\n            {{/highlightMat.usesUVMap}}\n        {{/highlightMat.usesNormal}}\n\n        {{#highlightMat.usesNormal}}\n            {{^highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v, normal);\n            {{/highlightMat.usesUVMap}}\n            {{#highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v, normal, uv);\n            {{/highlightMat.usesUVMap}}\n        {{/highlightMat.usesNormal}}\n    }\n\n    {{^defaultMat.name.usesNormal}}\n        {{^defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v);\n        {{/defaultMat.name.usesUVMap}}\n        {{#defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v, uv);\n        {{/defaultMat.name.usesUVMap}}\n    {{/defaultMat.name.usesNormal}}\n    \n    {{#defaultMat.name.usesNormal}}\n        {{^defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v, normal);\n        {{/defaultMat.name.usesUVMap}}\n        {{#defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v, normal, uv);\n        {{/defaultMat.name.usesUVMap}}\n    {{/defaultMat.name.usesNormal}}\n}\n\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 4261:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, vec2 uv) {");t.b("\n" + i);t.b("    HighlightLocalWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {");t.b("\n" + i);if(t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,0,210,275,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("    }");t.b("\n");t.b("\n" + i);if(t.s(t.d("defaultMat.usesUVMap",c,p,1),c,p,0,463,518,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("defaultMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, vec2 uv) {\n    HighlightLocalWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {\n        {{#highlightMat.usesUVMap}}\n            return {{highlightMat.name}}_render(v, uv);\n        {{/highlightMat.usesUVMap}}\n        {{^highlightMat.usesUVMap}}\n            return {{highlightMat.name}}_render(v);\n        {{/highlightMat.usesUVMap}}\n    }\n\n    {{#defaultMat.usesUVMap}}\n        return {{defaultMat.name}}_render(v, uv);\n    {{/defaultMat.usesUVMap}}\n    {{^defaultMat.usesUVMap}}\n        return {{defaultMat.name}}_render(v);\n    {{/defaultMat.usesUVMap}}\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 8474:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v) {");t.b("\n" + i);t.b("    HighlightWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn) {");t.b("\n" + i);t.b("        return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v) {\n    HighlightWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn) {\n        return {{highlightMat.name}}_render(v);\n    }\n    return {{defaultMat.name}}_render(v);\n}", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 5506:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal) {");t.b("\n" + i);t.b("    HighlightWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn) {");t.b("\n" + i);if(t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,0,171,240,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("    }");t.b("\n");t.b("\n" + i);if(t.s(t.d("defaultMat.usesNormal",c,p,1),c,p,0,432,491,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("defaultMat.usesNormal",c,p,1),c,p,1,0,0,"")){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal) {\n    HighlightWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn) {\n        {{#highlightMat.usesNormal}}\n            return {{highlightMat.name}}_render(v, normal);\n        {{/highlightMat.usesNormal}}\n        {{^highlightMat.usesNormal}}\n            return {{highlightMat.name}}_render(v);\n        {{/highlightMat.usesNormal}}\n    }\n\n    {{#defaultMat.usesNormal}}\n        return {{defaultMat.name}}_render(v, normal);\n    {{/defaultMat.usesNormal}}\n    {{^defaultMat.usesNormal}}\n        return {{defaultMat.name}}_render(v);\n    {{/defaultMat.usesNormal}}\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 7397:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, RelVector normal, vec2 uv) {");t.b("\n" + i);t.b("    HighlightWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn) {");t.b("\n" + i);if(!t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,0,356,429,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("highlightMat.usesNormal",c,p,1),c,p,0,531,832,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,0,715,796,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("    }");t.b("\n");t.b("\n" + i);if(!t.s(t.d("defaultMat.name.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,0,1070,1133,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("    ");t.b("\n" + i);if(t.s(t.d("defaultMat.name.usesNormal",c,p,1),c,p,0,1240,1521,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("defaultMat.name.usesUVMap",c,p,1),c,p,0,1415,1486,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("}");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {\n    HighlightWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn) {\n        {{^highlightMat.usesNormal}}\n            {{^highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v);\n            {{/highlightMat.usesUVMap}}\n            {{#highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v, uv);\n            {{/highlightMat.usesUVMap}}\n        {{/highlightMat.usesNormal}}\n\n        {{#highlightMat.usesNormal}}\n            {{^highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v, normal);\n            {{/highlightMat.usesUVMap}}\n            {{#highlightMat.usesUVMap}}\n                return {{highlightMat.name}}_render(v, normal, uv);\n            {{/highlightMat.usesUVMap}}\n        {{/highlightMat.usesNormal}}\n    }\n\n    {{^defaultMat.name.usesNormal}}\n        {{^defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v);\n        {{/defaultMat.name.usesUVMap}}\n        {{#defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v, uv);\n        {{/defaultMat.name.usesUVMap}}\n    {{/defaultMat.name.usesNormal}}\n    \n    {{#defaultMat.name.usesNormal}}\n        {{^defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v, normal);\n        {{/defaultMat.name.usesUVMap}}\n        {{#defaultMat.name.usesUVMap}}\n            return {{defaultMat.name}}_render(v, normal, uv);\n        {{/defaultMat.name.usesUVMap}}\n    {{/defaultMat.name.usesNormal}}\n}\n\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 3045:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec4 ");t.b(t.v(t.f("name",c,p,0)));t.b("_render(ExtVector v, vec2 uv) {");t.b("\n" + i);t.b("    HighlightWrapMaterial material = ");t.b(t.v(t.f("name",c,p,0)));t.b(";");t.b("\n");t.b("\n" + i);t.b("    if(material.isHighlightOn) {");t.b("\n" + i);if(t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,0,161,226,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("highlightMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("            return ");t.b(t.v(t.d("highlightMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("    }");t.b("\n");t.b("\n" + i);if(t.s(t.d("defaultMat.usesUVMap",c,p,1),c,p,0,414,469,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}if(!t.s(t.d("defaultMat.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("        return ");t.b(t.v(t.d("defaultMat.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};t.b("}");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "vec4 {{name}}_render(ExtVector v, vec2 uv) {\n    HighlightWrapMaterial material = {{name}};\n\n    if(material.isHighlightOn) {\n        {{#highlightMat.usesUVMap}}\n            return {{highlightMat.name}}_render(v, uv);\n        {{/highlightMat.usesUVMap}}\n        {{^highlightMat.usesUVMap}}\n            return {{highlightMat.name}}_render(v);\n        {{/highlightMat.usesUVMap}}\n    }\n\n    {{#defaultMat.usesUVMap}}\n        return {{defaultMat.name}}_render(v, uv);\n    {{/defaultMat.usesUVMap}}\n    {{^defaultMat.usesUVMap}}\n        return {{defaultMat.name}}_render(v);\n    {{/defaultMat.usesUVMap}}\n}\n", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
 /***/ 6077:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1207,6 +1271,20 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "\n                                                                                                                        \n                       \n                                                                                                                        \n"
+
+/***/ }),
+
+/***/ 2278:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                     \n                                                                                                                        \n\nstruct HighlightLocalWrapMaterial {\n    GroupElement cellBoost;\n    bool isHighlightOn;\n};\n"
+
+/***/ }),
+
+/***/ 3048:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                     \n                                                                                                                        \n\nstruct HighlightWrapMaterial {\n    bool isHighlightOn;\n};\n"
 
 /***/ }),
 
@@ -1715,6 +1793,8 @@ __webpack_require__.d(__webpack_exports__, {
   "yb": () => (/* reexport */ Fog),
   "ZA": () => (/* reexport */ Group_Group),
   "Jz": () => (/* reexport */ GroupElement_GroupElement),
+  "fR": () => (/* reexport */ HighlightLocalWrapMaterial),
+  "kK": () => (/* reexport */ HighlightWrapMaterial),
   "ic": () => (/* reexport */ HorizontalCylinder),
   "Fn": () => (/* reexport */ HorizontalCylinderShape),
   "ZX": () => (/* reexport */ HypStripsMaterial),
@@ -1785,6 +1865,8 @@ __webpack_require__.d(__webpack_exports__, {
   "Cy": () => (/* reexport */ complement),
   "Y7": () => (/* reexport */ cuspedTorus_set),
   "qM": () => (/* reexport */ earthTexture),
+  "mV": () => (/* reexport */ highlightLocalWrap),
+  "Gi": () => (/* reexport */ highlightWrap),
   "H3": () => (/* reexport */ horizontalLoop_set),
   "jV": () => (/* reexport */ intersection),
   "j9": () => (/* reexport */ marsTexture),
@@ -14656,6 +14738,257 @@ class PhongWrapMaterial extends Material {
 function phongWrap(material, params = {}) {
     return new PhongWrapMaterial(material, params);
 }
+// EXTERNAL MODULE: ./src/commons/materials/highlightWrap/shaders/struct.glsl
+var highlightWrap_shaders_struct = __webpack_require__(3048);
+var highlightWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(highlightWrap_shaders_struct);
+// EXTERNAL MODULE: ./src/commons/materials/highlightWrap/shaders/render.glsl.mustache
+var highlightWrap_shaders_render_glsl_mustache = __webpack_require__(8474);
+var highlightWrap_shaders_render_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightWrap_shaders_render_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/highlightWrap/shaders/renderNormal.glsl.mustache
+var shaders_renderNormal_glsl_mustache = __webpack_require__(5506);
+var shaders_renderNormal_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shaders_renderNormal_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/highlightWrap/shaders/renderUV.glsl.mustache
+var highlightWrap_shaders_renderUV_glsl_mustache = __webpack_require__(3045);
+var highlightWrap_shaders_renderUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightWrap_shaders_renderUV_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/highlightWrap/shaders/renderNormalUV.glsl.mustache
+var shaders_renderNormalUV_glsl_mustache = __webpack_require__(7397);
+var shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shaders_renderNormalUV_glsl_mustache);
+;// CONCATENATED MODULE: ./src/commons/materials/highlightWrap/HighlightWrapMaterial.js
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Combination of two materials, to highlight an object in a simulation
+ * The highlighted solid is either a global object or all the "copies" of a local object
+ */
+class HighlightWrapMaterial extends Material {
+
+    /**
+     * Constructor.
+     * @param {Material} defaultMat - the default material
+     * @param {Material} highlightMat - the highlight material
+     */
+    constructor(defaultMat, highlightMat) {
+        super();
+        this.defaultMat = defaultMat;
+        this.highlightMat = highlightMat;
+
+        this.isHighlightOn = false;
+    }
+
+    get uniformType() {
+        return 'HighlightWrapMaterial';
+    }
+
+    static glslClass() {
+        return (highlightWrap_shaders_struct_default());
+    }
+
+    get usesNormal() {
+        return true;
+    }
+
+    get usesUVMap() {
+        return (this.defaultMat.usesUVMap || this.highlightMat.usesUVMap);
+    }
+
+    get usesLight() {
+        return (this.defaultMat.usesLight || this.highlightMat.usesLight);
+    }
+
+    get isReflecting() {
+        return (this.defaultMat.isReflecting || this.highlightMat.isReflecting);
+    }
+
+    glslRender() {
+        if (this.usesNormal) {
+            if (this.usesUVMap) {
+                return shaders_renderNormalUV_glsl_mustache_default()(this);
+            } else {
+                return shaders_renderNormal_glsl_mustache_default()(this);
+            }
+        } else {
+            if (this.usesUVMap) {
+                return highlightWrap_shaders_renderUV_glsl_mustache_default()(this);
+            } else {
+                return highlightWrap_shaders_render_glsl_mustache_default()(this);
+            }
+        }
+    }
+
+    /**
+     * Set the ID of the material.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.defaultMat.setId(scene);
+        this.highlightMat.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the material is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.defaultMat.onAdd(scene);
+        this.highlightMat.onAdd(scene);
+        super.onAdd(scene);
+    }
+
+    shader(shaderBuilder) {
+        this.defaultMat.shader(shaderBuilder);
+        this.highlightMat.shader(shaderBuilder);
+        super.shader(shaderBuilder);
+    }
+}
+
+/**
+ * Wrap the material into another material handling the Phong model
+ * @param {Material} defaultMat - the default material
+ * @param {Material} highlightMat - the highlight material
+ * @param {Isometry} cellBoost - isometry, in case we only highlight a single copy of a local object
+ */
+function highlightWrap(defaultMat, highlightMat, cellBoost) {
+    return new HighlightWrapMaterial(defaultMat, highlightMat);
+}
+// EXTERNAL MODULE: ./src/commons/materials/highlightLocalWrap/shaders/struct.glsl
+var highlightLocalWrap_shaders_struct = __webpack_require__(2278);
+var highlightLocalWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(highlightLocalWrap_shaders_struct);
+// EXTERNAL MODULE: ./src/commons/materials/highlightLocalWrap/shaders/render.glsl.mustache
+var highlightLocalWrap_shaders_render_glsl_mustache = __webpack_require__(8906);
+var highlightLocalWrap_shaders_render_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightLocalWrap_shaders_render_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/highlightLocalWrap/shaders/renderNormal.glsl.mustache
+var highlightLocalWrap_shaders_renderNormal_glsl_mustache = __webpack_require__(1998);
+var highlightLocalWrap_shaders_renderNormal_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightLocalWrap_shaders_renderNormal_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/highlightLocalWrap/shaders/renderUV.glsl.mustache
+var highlightLocalWrap_shaders_renderUV_glsl_mustache = __webpack_require__(4261);
+var highlightLocalWrap_shaders_renderUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightLocalWrap_shaders_renderUV_glsl_mustache);
+// EXTERNAL MODULE: ./src/commons/materials/highlightLocalWrap/shaders/renderNormalUV.glsl.mustache
+var highlightLocalWrap_shaders_renderNormalUV_glsl_mustache = __webpack_require__(699);
+var highlightLocalWrap_shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(highlightLocalWrap_shaders_renderNormalUV_glsl_mustache);
+;// CONCATENATED MODULE: ./src/commons/materials/highlightLocalWrap/HighlightLocalWrapMaterial.js
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Combination of two materials, to highlight an object in a simulation
+ * The highlighted object is a single "copy" of a local object (characterized by its cellBoost)
+ */
+class HighlightLocalWrapMaterial extends Material {
+
+    /**
+     * Constructor.
+     * @param {Material} defaultMat - the default material
+     * @param {Material} highlightMat - the highlight material
+     * @param {GroupElement} cellBoost - isometry, in case we only highlight a single copy of a local object
+     */
+    constructor(defaultMat, highlightMat, cellBoost) {
+        super();
+        this.defaultMat = defaultMat;
+        this.highlightMat = highlightMat;
+        this.cellBoost = cellBoost;
+    }
+
+    get uniformType() {
+        return 'HighlightLocalWrapMaterial';
+    }
+
+    static glslClass() {
+        return (highlightLocalWrap_shaders_struct_default());
+    }
+
+    get usesNormal() {
+        return true;
+    }
+
+    get usesUVMap() {
+        return (this.defaultMat.usesUVMap || this.highlightMat.usesUVMap);
+    }
+
+    get usesLight() {
+        return (this.defaultMat.usesLight || this.highlightMat.usesLight);
+    }
+
+    get isReflecting() {
+        return (this.defaultMat.isReflecting || this.highlightMat.isReflecting);
+    }
+
+    glslRender() {
+        if (this.usesNormal) {
+            if (this.usesUVMap) {
+                return highlightLocalWrap_shaders_renderNormalUV_glsl_mustache_default()(this);
+            } else {
+                return highlightLocalWrap_shaders_renderNormal_glsl_mustache_default()(this);
+            }
+        } else {
+            if (this.usesUVMap) {
+                return highlightLocalWrap_shaders_renderUV_glsl_mustache_default()(this);
+            } else {
+                return highlightLocalWrap_shaders_render_glsl_mustache_default()(this);
+            }
+        }
+    }
+
+    /**
+     * Set the ID of the material.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    setId(scene) {
+        this.defaultMat.setId(scene);
+        this.highlightMat.setId(scene);
+        super.setId(scene);
+    }
+
+    /**
+     * Additional actions to perform when the material is added to the scene.
+     * Propagate the call.
+     * @param {Scene} scene - the scene to which the object is added.
+     */
+    onAdd(scene) {
+        this.defaultMat.onAdd(scene);
+        this.highlightMat.onAdd(scene);
+        super.onAdd(scene);
+    }
+
+    shader(shaderBuilder) {
+        this.defaultMat.shader(shaderBuilder);
+        this.highlightMat.shader(shaderBuilder);
+        super.shader(shaderBuilder);
+    }
+}
+
+/**
+ * Wrap the material into another material handling the Phong model
+ * @param {Material} defaultMat - the default material
+ * @param {Material} highlightMat - the highlight material
+ * @param {GroupElement} cellBoost - isometry, in case we only highlight a single copy of a local object
+ */
+function highlightLocalWrap(defaultMat, highlightMat, cellBoost) {
+    return new HighlightLocalWrapMaterial(defaultMat, highlightMat, cellBoost);
+}
 // EXTERNAL MODULE: ./src/commons/materials/pathTracerWrap/shaders/struct.glsl
 var pathTracerWrap_shaders_struct = __webpack_require__(7198);
 var pathTracerWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(pathTracerWrap_shaders_struct);
@@ -14666,11 +14999,11 @@ var rayType_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(rayType_g
 var pathTracerWrap_shaders_render_glsl_mustache = __webpack_require__(2330);
 var pathTracerWrap_shaders_render_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(pathTracerWrap_shaders_render_glsl_mustache);
 // EXTERNAL MODULE: ./src/commons/materials/pathTracerWrap/shaders/renderNormalUV.glsl.mustache
-var shaders_renderNormalUV_glsl_mustache = __webpack_require__(588);
-var shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shaders_renderNormalUV_glsl_mustache);
+var pathTracerWrap_shaders_renderNormalUV_glsl_mustache = __webpack_require__(588);
+var pathTracerWrap_shaders_renderNormalUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(pathTracerWrap_shaders_renderNormalUV_glsl_mustache);
 // EXTERNAL MODULE: ./src/commons/materials/pathTracerWrap/shaders/renderNormal.glsl.mustache
-var shaders_renderNormal_glsl_mustache = __webpack_require__(9040);
-var shaders_renderNormal_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shaders_renderNormal_glsl_mustache);
+var pathTracerWrap_shaders_renderNormal_glsl_mustache = __webpack_require__(9040);
+var pathTracerWrap_shaders_renderNormal_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(pathTracerWrap_shaders_renderNormal_glsl_mustache);
 // EXTERNAL MODULE: ./src/commons/materials/pathTracerWrap/shaders/renderUV.glsl.mustache
 var pathTracerWrap_shaders_renderUV_glsl_mustache = __webpack_require__(1365);
 var pathTracerWrap_shaders_renderUV_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(pathTracerWrap_shaders_renderUV_glsl_mustache);
@@ -14788,9 +15121,9 @@ class PathTracerWrapMaterial extends PTMaterial {
 
         if (this.material.usesNormal) {
             if (this.material.usesUVMap) {
-                res = res + shaders_renderNormalUV_glsl_mustache_default()(this);
+                res = res + pathTracerWrap_shaders_renderNormalUV_glsl_mustache_default()(this);
             } else {
-                res = res + shaders_renderNormal_glsl_mustache_default()(this);
+                res = res + pathTracerWrap_shaders_renderNormal_glsl_mustache_default()(this);
             }
         } else {
             if (this.material.usesUVMap) {
@@ -14857,10 +15190,14 @@ function pathTracerWrap(material, params = {}) {
 // Composite basic materials
 
 
+
+
 // Path tracer material
 
 
 // Composite tracer material
+
+
 
 // EXTERNAL MODULE: ./src/commons/shapes/complement/shaders/sdf.glsl.mustache
 var sdf_glsl_mustache = __webpack_require__(7939);
@@ -18876,6 +19213,8 @@ var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
 var __webpack_exports__Group = __webpack_exports__.ZA;
 var __webpack_exports__GroupElement = __webpack_exports__.Jz;
+var __webpack_exports__HighlightLocalWrapMaterial = __webpack_exports__.fR;
+var __webpack_exports__HighlightWrapMaterial = __webpack_exports__.kK;
 var __webpack_exports__HorizontalCylinder = __webpack_exports__.ic;
 var __webpack_exports__HorizontalCylinderShape = __webpack_exports__.Fn;
 var __webpack_exports__HypStripsMaterial = __webpack_exports__.ZX;
@@ -18946,6 +19285,8 @@ var __webpack_exports__bind = __webpack_exports__.ak;
 var __webpack_exports__complement = __webpack_exports__.Cy;
 var __webpack_exports__cuspedTorusSet = __webpack_exports__.Y7;
 var __webpack_exports__earthTexture = __webpack_exports__.qM;
+var __webpack_exports__highlightLocalWrap = __webpack_exports__.mV;
+var __webpack_exports__highlightWrap = __webpack_exports__.Gi;
 var __webpack_exports__horizontalLoopSet = __webpack_exports__.H3;
 var __webpack_exports__intersection = __webpack_exports__.jV;
 var __webpack_exports__marsTexture = __webpack_exports__.j9;
@@ -18960,4 +19301,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
