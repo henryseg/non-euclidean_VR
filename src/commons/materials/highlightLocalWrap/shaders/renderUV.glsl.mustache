@@ -1,0 +1,19 @@
+vec4 {{name}}_render(ExtVector v, vec2 uv) {
+    HighlightLocalWrapMaterial material = {{name}};
+
+    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {
+        {{#highlightMat.usesUVMap}}
+            return {{highlightMat.name}}_render(v, uv);
+        {{/highlightMat.usesUVMap}}
+        {{^highlightMat.usesUVMap}}
+            return {{highlightMat.name}}_render(v);
+        {{/highlightMat.usesUVMap}}
+    }
+
+    {{#defaultMat.usesUVMap}}
+        return {{defaultMat.name}}_render(v, uv);
+    {{/defaultMat.usesUVMap}}
+    {{^defaultMat.usesUVMap}}
+        return {{defaultMat.name}}_render(v);
+    {{/defaultMat.usesUVMap}}
+}

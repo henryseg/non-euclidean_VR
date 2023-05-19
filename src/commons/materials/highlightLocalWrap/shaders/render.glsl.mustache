@@ -1,0 +1,8 @@
+vec4 {{name}}_render(ExtVector v) {
+    HighlightLocalWrapMaterial material = {{name}};
+
+    if(material.isHighlightOn && material.cellBoost == v.vector.cellBoost) {
+        return {{highlightMat.name}}_render(v);
+    }
+    return {{defaultMat.name}}_render(v);
+}

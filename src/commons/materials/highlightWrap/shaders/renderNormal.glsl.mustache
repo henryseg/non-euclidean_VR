@@ -1,0 +1,19 @@
+vec4 {{name}}_render(ExtVector v, RelVector normal) {
+    HighlightWrapMaterial material = {{name}};
+
+    if(material.isHighlightOn) {
+        {{#highlightMat.usesNormal}}
+            return {{highlightMat.name}}_render(v, normal);
+        {{/highlightMat.usesNormal}}
+        {{^highlightMat.usesNormal}}
+            return {{highlightMat.name}}_render(v);
+        {{/highlightMat.usesNormal}}
+    }
+
+    {{#defaultMat.usesNormal}}
+        return {{defaultMat.name}}_render(v, normal);
+    {{/defaultMat.usesNormal}}
+    {{^defaultMat.usesNormal}}
+        return {{defaultMat.name}}_render(v);
+    {{/defaultMat.usesNormal}}
+}

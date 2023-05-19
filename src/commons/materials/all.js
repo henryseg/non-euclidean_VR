@@ -20,9 +20,12 @@ export {HypStripsMaterial} from "./hypStrips/HypStripsMaterial.js";
 
 // Composite basic materials
 export {PhongWrapMaterial, phongWrap} from "./phongWrap/PhongWrapMaterial.js";
+export {HighlightWrapMaterial, highlightWrap} from "./highlightWrap/HighlightWrapMaterial.js";
+export {HighlightLocalWrapMaterial, highlightLocalWrap} from "./highlightLocalWrap/HighlightLocalWrapMaterial.js";
 
 // Path tracer material
 export {BasicPTMaterial} from "./basicPTMaterial/BasicPTMaterial.js";
 
 // Composite tracer material
 export {PathTracerWrapMaterial, pathTracerWrap} from "./pathTracerWrap/PathTracerWrapMaterial.js";
+

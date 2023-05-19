@@ -131,9 +131,9 @@ Then we define all the objects in the scene. Here a single point light, and a ba
 ```javascript
 // A light
 const light = new PointLight(
-    new Point(-1, 1, -2),
-    new Color(0, 1, 1),
-    0.5,
+        new Point(-1, 1, -2),
+        new Color(0, 1, 1),
+        0.5,
 );
 
 // Phong shading material
@@ -141,9 +141,9 @@ const mat = new PhongMaterial({shininess: 10});
 
 // A ball
 const ball = new Ball(
-    new Point(-1, -0.5, -2),
-    0.3,
-    mat
+        new Point(-1, -0.5, -2),
+        0.3,
+        mat
 );
 ```
 

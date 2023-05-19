@@ -1,0 +1,42 @@
+vec4 {{name}}_render(ExtVector v, RelVector normal, vec2 uv) {
+    HighlightWrapMaterial material = {{name}};
+
+    if(material.isHighlightOn) {
+        {{^highlightMat.usesNormal}}
+            {{^highlightMat.usesUVMap}}
+                return {{highlightMat.name}}_render(v);
+            {{/highlightMat.usesUVMap}}
+            {{#highlightMat.usesUVMap}}
+                return {{highlightMat.name}}_render(v, uv);
+            {{/highlightMat.usesUVMap}}
+        {{/highlightMat.usesNormal}}
+
+        {{#highlightMat.usesNormal}}
+            {{^highlightMat.usesUVMap}}
+                return {{highlightMat.name}}_render(v, normal);
+            {{/highlightMat.usesUVMap}}
+            {{#highlightMat.usesUVMap}}
+                return {{highlightMat.name}}_render(v, normal, uv);
+            {{/highlightMat.usesUVMap}}
+        {{/highlightMat.usesNormal}}
+    }
+
+    {{^defaultMat.name.usesNormal}}
+        {{^defaultMat.name.usesUVMap}}
+            return {{defaultMat.name}}_render(v);
+        {{/defaultMat.name.usesUVMap}}
+        {{#defaultMat.name.usesUVMap}}
+            return {{defaultMat.name}}_render(v, uv);
+        {{/defaultMat.name.usesUVMap}}
+    {{/defaultMat.name.usesNormal}}
+    
+    {{#defaultMat.name.usesNormal}}
+        {{^defaultMat.name.usesUVMap}}
+            return {{defaultMat.name}}_render(v, normal);
+        {{/defaultMat.name.usesUVMap}}
+        {{#defaultMat.name.usesUVMap}}
+            return {{defaultMat.name}}_render(v, normal, uv);
+        {{/defaultMat.name.usesUVMap}}
+    {{/defaultMat.name.usesNormal}}
+}
+
