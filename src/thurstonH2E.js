@@ -32,7 +32,10 @@ export {default as planeSet} from "./geometries/h2e/groups/plane/set.js";
 export {default as zLoopSet} from "./geometries/h2e/groups/zLoop/set.js";
 export {default as horizontalLoopSet} from "./geometries/h2e/groups/horizontalLoop/set.js";
 export {default as genus2Set} from "./geometries/h2e/groups/genus2/set.js";
+export {default as quotientGenus2Set} from "./geometries/h2e/groups/quotientGenus2/set.js";
 export * from './geometries/h2e/lights/all.js';
 export * from './geometries/h2e/material/all.js';
 export * from './geometries/h2e/shapes/all.js';
 export * from './geometries/h2e/solids/all.js';
+
+export {RegularHypPolygon} from "./utils/regularHypPolygon/RegularHypPolygon.js";

@@ -1695,7 +1695,7 @@ module.exports = "                                                              
 
 /***/ }),
 
-/***/ 697:
+/***/ 6010:
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \n\nstruct ZSun {\n    int id;\n    vec3 color;\n    float intensity;\n    float direction;\n    int maxDirs;\n};\n\nbool directions(ZSun light, RelVector v, int i, out RelVector dir, out float intensity) {\n    if (i!=0){\n        return false;\n    }\n    intensity = light.intensity;\n    Vector local=Vector(v.local.pos, vec4(0, 0, light.direction, 0));\n    dir = RelVector(local, v.cellBoost, v.invCellBoost);\n    return true;\n}"
@@ -18586,7 +18586,7 @@ const shiftBn = xyLoops_set_group.element(0, 1);
 
 
 // EXTERNAL MODULE: ./src/geometries/sol/lights/zSun/shaders/struct.glsl
-var zSun_shaders_struct = __webpack_require__(697);
+var zSun_shaders_struct = __webpack_require__(6010);
 var zSun_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(zSun_shaders_struct);
 // EXTERNAL MODULE: ./src/core/lights/shaders/directions.glsl.mustache
 var directions_glsl_mustache = __webpack_require__(7577);
