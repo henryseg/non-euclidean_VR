@@ -69,6 +69,27 @@ export class RegularHypPolygon {
     }
 
     /**
+     * Return the coordinates of the i-th vertex
+     * @param {number} i
+     * @return {Vector3}
+     */
+    vertexCoords(i) {
+        const alpha = Math.PI / this.n;
+        const halfTheta = 0.5 * this.theta;
+
+        const sinAlpha = Math.sin(alpha);
+        const cosAlpha = Math.cos(alpha);
+        const sinHalfTheta = Math.sin(halfTheta);
+        const cosHalfTheta = Math.cos(halfTheta);
+
+        const sh = Math.sqrt(cosAlpha ** 2 - sinHalfTheta ** 2) / (sinAlpha * sinHalfTheta);
+        const ch = (cosAlpha * cosHalfTheta) / (sinAlpha * sinHalfTheta);
+        return new Vector3()
+            .set(sh, 0, ch)
+            .applyMatrix3(new Matrix3().makeRotation((2 * i + 1) * Math.PI / this.n));
+    }
+
+    /**
      * Return a 3x3 matrix, which belongs to S0(2,1) and represents a translation along the x-axis,
      * sending one side to the opposite one
      * (`n` should be even)
