@@ -4633,6 +4633,28 @@ external_three_namespaceObject.Matrix3.prototype.power = function (n) {
         return this.multiply(aux);
     }
 }
+/**
+ * Sets this matrix as a 2D rotational transformation (i.e. around the Z-axis) by theta radians.
+ * This if a fix while before updating to the next version of Three.js (which implements this method).
+ * @param {number} theta
+ * @return {Matrix3}
+ */
+external_three_namespaceObject.Matrix3.prototype.makeRotation = function (theta) {
+
+    // counterclockwise
+
+    const c = Math.cos(theta);
+    const s = Math.sin(theta);
+
+    this.set(
+        c, -s, 0,
+        s, c, 0,
+        0, 0, 1
+    );
+
+    return this;
+
+}
 
 /**
  * Add a method to Three.js Matrix4.

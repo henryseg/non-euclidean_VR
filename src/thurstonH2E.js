@@ -31,6 +31,7 @@ export {default as orbiTorusSet} from "./geometries/h2e/groups/orbiTorus/set.js"
 export {default as planeSet} from "./geometries/h2e/groups/plane/set.js";
 export {default as zLoopSet} from "./geometries/h2e/groups/zLoop/set.js";
 export {default as horizontalLoopSet} from "./geometries/h2e/groups/horizontalLoop/set.js";
+export {default as genus2Set} from "./geometries/h2e/groups/genus2/set.js";
 export * from './geometries/h2e/lights/all.js';
 export * from './geometries/h2e/material/all.js';
 export * from './geometries/h2e/shapes/all.js';
