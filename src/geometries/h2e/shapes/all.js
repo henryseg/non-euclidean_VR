@@ -5,3 +5,4 @@ export {VerticalCylinderShape} from "./verticalCylinder/VerticalCylinderShape.js
 export {LocalVerticalCylinderShape} from "./localVerticalCylinder/LocalVerticalCylinderShape.js";
 export {HorizontalCylinderShape} from "./horizontalCylinder/HorizontalCylinderShape.js";
 export {LocalHorizontalCylinderShape} from "./localHorizontalCylinder/LocalHorizontalCylinderShape.js";
+export {LocalWHalfSpaceShape} from "./localWHalfSpace/LocalWHalfSpaceShape";

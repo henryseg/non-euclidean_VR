@@ -7,3 +7,4 @@ export {VerticalCylinder} from "./VerticalCylinder.js";
 export {LocalVerticalCylinder} from "./LocalVerticalCylinder.js";
 export {HorizontalCylinder} from "./HorizontalCylinder.js";
 export {LocalHorizontalCylinder} from "./LocalHorizontalCylinder.js";
+export {LocalWHalfSpace} from "./LocalWHalfSpace.js";
