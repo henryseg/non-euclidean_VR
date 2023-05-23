@@ -1322,6 +1322,13 @@ module.exports = "\n                                                            
 
 /***/ }),
 
+/***/ 4743:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct EquidistantHypStripsMaterial {\n    float distance;\n    float width;\n    vec3 stripColor;\n    vec3 bgColor;\n};\n\n  \n                                                                     \n                                                                           \n   \nfloat distToYAxis(vec2 m) {\n    float aux = sqrt(1. - m.y * m.y);\n    return 0.5 * log((aux + m.x) / (aux - m.x));\n}\n\n                                                                                     \n                                                  \n   \nvec2 horizontalTranslate(vec2 m, float t) {\n    float ch = cosh(t);\n    float sh = sinh(t);\n    float x = m.x * ch + sh;\n    float den = m.x * sh + ch;\n    return vec2(x / den, m.y / den);\n}\n\nvec4 render(EquidistantHypStripsMaterial material, ExtVector v, vec2 uv) {\n    float distP = atanh(uv.x);\n    float k = round(distP / material.distance);\n    vec2 q = horizontalTranslate(uv, -k * material.distance);\n    float distQ = distToYAxis(q);\n    if (abs(distQ) < material.width) {\n        return vec4(material.stripColor, 1);\n    }\n    else {\n        return vec4(material.bgColor, 1);\n    }\n}"
+
+/***/ }),
+
 /***/ 2278:
 /***/ ((module) => {
 
@@ -1340,6 +1347,13 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct HypStripsMaterial {\n    float totalWidth;\n    vec4 lengths;\n    vec3 color0;\n    vec3 color1;\n    vec3 color2;\n    vec3 color3;\n};\n\nvec4 render(HypStripsMaterial material, ExtVector v, vec2 uv) {\n    vec3 color;\n    float aux = clamp(uv.x, -1., 1.);\n    float dist = atanh(aux);\n    float x = mod(dist / material.totalWidth, 1.);\n    if (x < material.lengths.x){\n        color = material.color0;\n    } else if (x < material.lengths.y){\n        color = material.color1;\n    } else if (x < material.lengths.z){\n        color = material.color2;\n    } else {\n        color = material.color3;\n    }\n\n    return vec4(color, 1);\n}"
+
+/***/ }),
+
+/***/ 4566:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct ImprovedEquidistantHypStripsMaterial {\n    float distance;\n    float width;\n    vec3 stripColor;\n    vec3 bgColor;\n};\n\n  \n                                                                     \n                                                                           \n   \nfloat distToYAxis(vec2 m) {\n    float aux = sqrt(1. - m.y * m.y);\n    return 0.5 * log((aux + m.x) / (aux - m.x));\n}\n\n                                                                                     \n                                                  \n   \nvec2 horizontalTranslate(vec2 m, float t) {\n    float ch = cosh(t);\n    float sh = sinh(t);\n    float x = m.x * ch + sh;\n    float den = m.x * sh + ch;\n    return vec2(x / den, m.y / den);\n}\n\nvec4 render(ImprovedEquidistantHypStripsMaterial material, ExtVector v, vec2 uv) {\n    float t = atanh(uv.x) - material.distance;\n    vec2 m = horizontalTranslate(uv, -t);\n    float distM = abs(distToYAxis(m));\n    float n = floor(log(distM / material.distance) / log(2.));\n\n    float distP = atanh(uv.x);\n    float period = pow(2., -n) * material.distance;\n    float k = round(distP / period);\n    vec2 q = horizontalTranslate(uv, -k * period);\n    float distQ = distToYAxis(q);\n    if (abs(distQ) < material.width) {\n        return vec4(material.stripColor, 1);\n    }\n    else {\n        return vec4(material.bgColor, 1);\n    }\n}"
 
 /***/ }),
 
@@ -1783,6 +1797,7 @@ __webpack_require__.d(__webpack_exports__, {
   "Vf": () => (/* reexport */ ConstDirLight),
   "TB": () => (/* reexport */ DebugMaterial),
   "Al": () => (/* reexport */ DragVRControls),
+  "ix": () => (/* reexport */ EquidistantHypStripsMaterial),
   "c$": () => (/* reexport */ ExpFog),
   "OZ": () => (/* reexport */ FakeBall),
   "Ao": () => (/* reexport */ FakeBallShape),
@@ -1793,6 +1808,7 @@ __webpack_require__.d(__webpack_exports__, {
   "fR": () => (/* reexport */ HighlightLocalWrapMaterial),
   "kK": () => (/* reexport */ HighlightWrapMaterial),
   "ZX": () => (/* reexport */ HypStripsMaterial),
+  "_f": () => (/* reexport */ ImprovedEquidistantHypStripsMaterial),
   "HZ": () => (/* reexport */ InfoControls),
   "TN": () => (/* reexport */ IntersectionShape),
   "JV": () => (/* reexport */ Isometry),
@@ -14908,6 +14924,129 @@ class HypStripsMaterial extends Material {
         return renderUV_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/commons/materials/equidistantHypStrips/shaders/struct.glsl
+var equidistantHypStrips_shaders_struct = __webpack_require__(4743);
+var equidistantHypStrips_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(equidistantHypStrips_shaders_struct);
+;// CONCATENATED MODULE: ./src/commons/materials/equidistantHypStrips/EquidistantHypStripsMaterial.js
+
+
+
+
+
+
+
+/**
+ * @class
+ * @extends Material
+ *
+ * @classdesc
+ * Strips on a surface representing the hyperbolic plane.
+ * Coordinates correspond to the Klein model
+ * The strips are delimited by equidistant lines to geodesics orthogoal to the x-axis.
+ *
+ */
+class EquidistantHypStripsMaterial extends Material {
+
+    /**
+     * Constructor.
+     * The constructor takes no argument.
+     * @param {number} distance - distance between two strips
+     * @param {number} width - with of the strip
+     * @param {Color} stripColor - color of the strip
+     * @param {Color} bgColor - color in between the group
+     */
+    constructor(distance, width, stripColor, bgColor) {
+        super();
+
+        this.distance = distance;
+        this.width = width;
+        this.stripColor = stripColor;
+        this.bgColor = bgColor;
+    }
+
+    get uniformType() {
+        return 'EquidistantHypStripsMaterial';
+    }
+
+    get usesNormal() {
+        return false;
+    }
+
+    get usesUVMap() {
+        return true;
+    }
+
+    static glslClass() {
+        return (equidistantHypStrips_shaders_struct_default());
+    }
+
+    glslRender() {
+        return renderUV_glsl_mustache_default()(this);
+    }
+}
+// EXTERNAL MODULE: ./src/commons/materials/improvedEquidistantHypStrips/shaders/struct.glsl
+var improvedEquidistantHypStrips_shaders_struct = __webpack_require__(4566);
+var improvedEquidistantHypStrips_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(improvedEquidistantHypStrips_shaders_struct);
+;// CONCATENATED MODULE: ./src/commons/materials/improvedEquidistantHypStrips/ImprovedEquidistantHypStripsMaterial.js
+
+
+
+
+
+
+
+/**
+ * @class
+ * @extends Material
+ *
+ * @classdesc
+ * Strips on a surface representing the hyperbolic plane.
+ * Coordinates correspond to the Klein model
+ * The strips are delimited by equidistant lines to geodesics orthogonal to the x-axis.
+ * New strips are added at the geodesics diverge
+ *
+ * @todo Factor the shader functions also appearing in `EquidistantHypStripsMaterial`
+ *
+ */
+class ImprovedEquidistantHypStripsMaterial extends Material {
+
+    /**
+     * Constructor.
+     * The constructor takes no argument.
+     * @param {number} distance - distance between two strips
+     * @param {number} width - with of the strip
+     * @param {Color} stripColor - color of the strip
+     * @param {Color} bgColor - color in between the group
+     */
+    constructor(distance, width, stripColor, bgColor) {
+        super();
+
+        this.distance = distance;
+        this.width = width;
+        this.stripColor = stripColor;
+        this.bgColor = bgColor;
+    }
+
+    get uniformType() {
+        return 'ImprovedEquidistantHypStripsMaterial';
+    }
+
+    get usesNormal() {
+        return false;
+    }
+
+    get usesUVMap() {
+        return true;
+    }
+
+    static glslClass() {
+        return (improvedEquidistantHypStrips_shaders_struct_default());
+    }
+
+    glslRender() {
+        return renderUV_glsl_mustache_default()(this);
+    }
+}
 // EXTERNAL MODULE: ./src/commons/materials/phongWrap/shaders/struct.glsl
 var phongWrap_shaders_struct = __webpack_require__(5836);
 var phongWrap_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(phongWrap_shaders_struct);
@@ -15810,6 +15949,8 @@ function pathTracerWrap(material, params = {}) {
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/all.js
 // Basic materials
+
+
 
 
 
@@ -19093,6 +19234,7 @@ var __webpack_exports__ComplementShape = __webpack_exports__.Iy;
 var __webpack_exports__ConstDirLight = __webpack_exports__.Vf;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
 var __webpack_exports__DragVRControls = __webpack_exports__.Al;
+var __webpack_exports__EquidistantHypStripsMaterial = __webpack_exports__.ix;
 var __webpack_exports__ExpFog = __webpack_exports__.c$;
 var __webpack_exports__FakeBall = __webpack_exports__.OZ;
 var __webpack_exports__FakeBallShape = __webpack_exports__.Ao;
@@ -19103,6 +19245,7 @@ var __webpack_exports__GroupElement = __webpack_exports__.Jz;
 var __webpack_exports__HighlightLocalWrapMaterial = __webpack_exports__.fR;
 var __webpack_exports__HighlightWrapMaterial = __webpack_exports__.kK;
 var __webpack_exports__HypStripsMaterial = __webpack_exports__.ZX;
+var __webpack_exports__ImprovedEquidistantHypStripsMaterial = __webpack_exports__._f;
 var __webpack_exports__InfoControls = __webpack_exports__.HZ;
 var __webpack_exports__IntersectionShape = __webpack_exports__.TN;
 var __webpack_exports__Isometry = __webpack_exports__.JV;
@@ -19182,4 +19325,4 @@ var __webpack_exports__transitionWrap = __webpack_exports__.UR;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__fiberLoopSet as fiberLoopSet, __webpack_exports__genus2Set as genus2Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__fiberLoopSet as fiberLoopSet, __webpack_exports__genus2Set as genus2Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__wrap as wrap };
