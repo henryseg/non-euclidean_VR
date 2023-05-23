@@ -1702,7 +1702,7 @@ module.exports = "                                                              
 
 /***/ }),
 
-/***/ 9236:
+/***/ 1228:
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n          \n                                     \n                                                                                                                        \nstruct NaryMaterial {\n    float t;\n    int n;\n    vec4 lengths;\n    vec3 color0;\n    vec3 color1;\n    vec3 color2;\n    vec3 color3;\n\n};\n\nvec4 render(NaryMaterial material, ExtVector v, vec2 uv) {\n    vec3 color;\n    float nfloat = float(material.n);\n    float logn = log(nfloat);\n\n    float scaledY = uv.y / logn;\n    float k = round(scaledY);\n    float c1 = 2. * abs(scaledY - k);\n\n    float scaledX = uv.x / (pow(nfloat, -k) * material.t);\n    float aux = floor(scaledX);\n    float c2 = abs(2. * (scaledX - aux) - 1.);\n\n    if (c1 < material.lengths.x && c2 < material.lengths.x){\n        color = material.color0;\n    } else if (c1 < material.lengths.y && c2 < material.lengths.y){\n        color = material.color1;\n    } else if (c1 < material.lengths.z && c2 < material.lengths.z){\n        color = material.color2;\n    } else {\n        color = material.color3;\n    }\n    return vec4(color, 1);\n}\n\n"
@@ -18765,7 +18765,7 @@ class VaryingColorMaterial extends Material {
 
 }
 // EXTERNAL MODULE: ./src/geometries/sol/material/nary/shaders/struct.glsl
-var nary_shaders_struct = __webpack_require__(9236);
+var nary_shaders_struct = __webpack_require__(1228);
 var nary_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(nary_shaders_struct);
 ;// CONCATENATED MODULE: ./src/geometries/sol/material/nary/NaryMaterial.js
 
