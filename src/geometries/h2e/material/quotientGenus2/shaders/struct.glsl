@@ -12,6 +12,14 @@ struct QuotientGenus2Material {
     vec3 weight;
 };
 
+//vec4 render(QuotientGenus2Material material, ExtVector v) {
+//
+//    ivec2 fp = v.vector.cellBoost.finitePart;
+//    int index = fp.x + 3 * (fp.y + 1) / 2;
+//    vec3 mainColor = vec3(0.9 * float(index)) / 6.;
+//    vec3 color = mainColor + 0.2 * abs(vec3(v.vector.local.pos.coords.xy, 0));
+//    return vec4(color, 1);
+//}
 vec4 render(QuotientGenus2Material material, ExtVector v) {
     vec3 mainColor = material.mainColor0;
     ivec2 fp = v.vector.cellBoost.finitePart;

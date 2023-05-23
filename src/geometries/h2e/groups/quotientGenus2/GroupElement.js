@@ -26,15 +26,19 @@ export class GroupElement extends AbstractGroupElement {
     }
 
     identity() {
-        this.isom = new Isometry();
+        this.isom.identity();
         this.finitePart.set(0, 1);
         return this;
     }
 
     multiply(elt) {
         this.isom.multiply(elt.isom);
+        const aux = this.finitePart.x + this.finitePart.y* elt.finitePart.x;
         this.finitePart.set(
-            (this.finitePart.x + this.finitePart.y * elt.finitePart.x) % 3,
+            // Note that we are not using the % operator
+            // Indeed this operator return a negative if the operand in negative
+            // This is not the behavior that we want.
+            aux - 3 * Math.floor(aux / 3),
             this.finitePart.y * elt.finitePart.y
         )
         return this;
@@ -42,8 +46,10 @@ export class GroupElement extends AbstractGroupElement {
 
     premultiply(elt) {
         this.isom.premultiply(elt.isom);
+        const aux = elt.finitePart.x + elt.finitePart.y * this.finitePart.x;
         this.finitePart.set(
-            (elt.finitePart.x + elt.finitePart.y * this.finitePart.x) % 3,
+            // Same remark as above for the % operator.
+            aux - 3 * Math.floor(aux / 3),
             elt.finitePart.y * this.finitePart.y
         )
         return this;
