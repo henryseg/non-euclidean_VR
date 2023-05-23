@@ -2,9 +2,9 @@
  * Strips on a hyperbolic plane (represented as the Klein model).
  **********************************************************************************************************************/
 
-struct EquidistantHypStripsMaterial {
+struct ImprovedEquidistantHypStripsMaterial {
     float distance;
-    float width;
+    float halfWidth;
     vec3 stripColor;
     vec3 bgColor;
 };
@@ -29,10 +29,16 @@ vec2 horizontalTranslate(vec2 m, float t) {
     return vec2(x / den, m.y / den);
 }
 
-vec4 render(EquidistantHypStripsMaterial material, ExtVector v, vec2 uv) {
+vec4 render(ImprovedEquidistantHypStripsMaterial material, ExtVector v, vec2 uv) {
+    float t = atanh(uv.x) - material.distance;
+    vec2 m = horizontalTranslate(uv, -t);
+    float distM = abs(distToYAxis(m));
+    float n = floor(log(distM / material.distance) / log(2.));
+
     float distP = atanh(uv.x);
-    float k = round(distP / material.distance);
-    vec2 q = horizontalTranslate(uv, -k * material.distance);
+    float period = pow(2., -n) * material.distance;
+    float k = round(distP / period);
+    vec2 q = horizontalTranslate(uv, -k * period);
     float distQ = distToYAxis(q);
     if (abs(distQ) < material.width) {
         return vec4(material.stripColor, 1);
