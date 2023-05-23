@@ -1719,7 +1719,7 @@ module.exports = "                                                              
 /***/ 1603:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                         \n                                                                                                                        \n\nstruct QuotientGenus2Material {\n    vec3 mainColor0;\n    vec3 mainColor2;\n    vec3 mainColor1;\n    vec3 mainColor3;\n    vec3 mainColor4;\n    vec3 mainColor5;\n    vec3 weight;\n};\n\nvec4 render(QuotientGenus2Material material, ExtVector v) {\n    vec3 mainColor = material.mainColor0;\n    ivec2 fp = v.vector.cellBoost.finitePart;\n    int index = fp.x + 3 * (fp.y + 1) / 2;\n    if (index == 1) {\n        mainColor = material.mainColor1;\n    }\n    if (index == 2) {\n        mainColor = material.mainColor2;\n    }\n    if (index == 3) {\n        mainColor = material.mainColor3;\n    }\n    if (index == 4) {\n        mainColor = material.mainColor4;\n    }\n    if (index == 5) {\n        mainColor = material.mainColor5;\n    }\n    vec3 color = mainColor + material.weight * v.vector.local.pos.coords.xyw;\n    return vec4(color, 1);\n}"
+module.exports = "                                                                                                                        \n                         \n                                                                                                                        \n\nstruct QuotientGenus2Material {\n    vec3 mainColor0;\n    vec3 mainColor2;\n    vec3 mainColor1;\n    vec3 mainColor3;\n    vec3 mainColor4;\n    vec3 mainColor5;\n    vec3 weight;\n};\n\n                                                             \n  \n                                               \n                                            \n                                                     \n                                                                                \n                            \n   \nvec4 render(QuotientGenus2Material material, ExtVector v) {\n    vec3 mainColor = material.mainColor0;\n    ivec2 fp = v.vector.cellBoost.finitePart;\n    int index = fp.x + 3 * (fp.y + 1) / 2;\n    if (index == 1) {\n        mainColor = material.mainColor1;\n    }\n    if (index == 2) {\n        mainColor = material.mainColor2;\n    }\n    if (index == 3) {\n        mainColor = material.mainColor3;\n    }\n    if (index == 4) {\n        mainColor = material.mainColor4;\n    }\n    if (index == 5) {\n        mainColor = material.mainColor5;\n    }\n    vec3 color = mainColor + material.weight * v.vector.local.pos.coords.xyw;\n    return vec4(color, 1);\n}"
 
 /***/ }),
 
@@ -4969,10 +4969,10 @@ class GroupElement_GroupElement {
  * The frame represented by the relative position is the image by h of the frame represented by the position p
  *
  * We split the isometry part (hg) in two pieces.
- * The idea is to g should gives a position in the fundamental domain of the (implicit) underlying lattice.
+ * The idea is to g should give a position in the fundamental domain of the (implicit) underlying lattice.
  * This will keep the coordinates of g in a bounded range.
  *
- * For simplicity we also keep track of the inverse of the cellBoost.
+ * For simplicity, we also keep track of the inverse of the cellBoost.
  */
 class RelPosition {
 
@@ -18744,15 +18744,19 @@ class quotientGenus2_GroupElement_GroupElement extends GroupElement_GroupElement
     }
 
     identity() {
-        this.isom = new Isometry();
+        this.isom.identity();
         this.finitePart.set(0, 1);
         return this;
     }
 
     multiply(elt) {
         this.isom.multiply(elt.isom);
+        const aux = this.finitePart.x + this.finitePart.y* elt.finitePart.x;
         this.finitePart.set(
-            (this.finitePart.x + this.finitePart.y * elt.finitePart.x) % 3,
+            // Note that we are not using the % operator
+            // Indeed this operator return a negative if the operand in negative
+            // This is not the behavior that we want.
+            aux - 3 * Math.floor(aux / 3),
             this.finitePart.y * elt.finitePart.y
         )
         return this;
@@ -18760,8 +18764,10 @@ class quotientGenus2_GroupElement_GroupElement extends GroupElement_GroupElement
 
     premultiply(elt) {
         this.isom.premultiply(elt.isom);
+        const aux = elt.finitePart.x + elt.finitePart.y * this.finitePart.x;
         this.finitePart.set(
-            (elt.finitePart.x + elt.finitePart.y * this.finitePart.x) % 3,
+            // Same remark as above for the % operator.
+            aux - 3 * Math.floor(aux / 3),
             elt.finitePart.y * this.finitePart.y
         )
         return this;

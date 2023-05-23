@@ -5024,10 +5024,10 @@ class GroupElement_GroupElement {
  * The frame represented by the relative position is the image by h of the frame represented by the position p
  *
  * We split the isometry part (hg) in two pieces.
- * The idea is to g should gives a position in the fundamental domain of the (implicit) underlying lattice.
+ * The idea is to g should give a position in the fundamental domain of the (implicit) underlying lattice.
  * This will keep the coordinates of g in a bounded range.
  *
- * For simplicity we also keep track of the inverse of the cellBoost.
+ * For simplicity, we also keep track of the inverse of the cellBoost.
  */
 class RelPosition {
 
