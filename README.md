@@ -84,7 +84,7 @@ You must first install this tools following the instructions for your operating 
 
 The packages are built with [webpack](https://webpack.js.org/).
 The builder is configured to produce one file for each geometry (with a name of the form `thrustonXXX.js`).
-The module exposed for each geometries are defined in the files `/src/thursontXXX.js`.
+The module exposed for each geometry are defined in the files `/src/thursontXXX.js`.
 The command to build the packages is
 
 ```zsh
@@ -93,14 +93,14 @@ npm run build
 
 ### Development environment
 
-In a development phase, one can use webpack's dev server.
+In a development phase, one can use webpack dev server.
 Run the command
 
 ```zsh
 npm run dev
 ```
 
-The webpack's dev server will serve the content of the `dev` directory at the address  `http://localhost:9000/`
+The webpack dev server will serve the content of the `dev` directory at the address  `http://localhost:9000/`
 Any change in the code will be updated automatically (without having to rebuild the code).
 
 To update the documentation (compiled from docstrings), run the command
@@ -120,7 +120,7 @@ later.
 
 - **Rémi Coulon** [@remi-coulon](https://github.com/remi-coulon)
 
-  Rémi Coulon is partially supported by the the *Centre Henri Lebesgue* ANR-11-LABX-0020-01
+  Rémi Coulon is partially supported by the *Centre Henri Lebesgue* ANR-11-LABX-0020-01
   and the Agence Nationale de la Recherche under Grant *Dagger* ANR-16-CE40- 0006-01.
 - **Sabetta Matsumoto** [@sabetta](https://github.com/sabetta)
 
