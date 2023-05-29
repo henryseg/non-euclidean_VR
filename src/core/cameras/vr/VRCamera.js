@@ -23,12 +23,15 @@ export class VRCamera extends BasicCamera {
     /**
      * Constructor.
      * @param {Object} parameters - the parameters of the camera.
-     * This parameters are
+     * These parameters are
      * - {number} fov - the field of view
      * - {number} minDist - the minimal distance we ray-march
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
      * - {number} threshold - the threshold to stop the ray-marching
+     * - {number} safetyDist - in case an object is at the same place as the camera,
+     *      we always initially march a distance safetyDist,
+     *      no matter what the SDFs return
      * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
      * - {number} ipDist - the interpupillary distance
      */
@@ -55,6 +58,7 @@ export class VRCamera extends BasicCamera {
                 minDist: this.minDist,
                 maxDist: this.maxDist,
                 maxSteps: this.maxSteps,
+                safetyDist: this.safetyDist,
                 threshold: this.threshold,
                 position: this.position.clone(),
                 matrix: this.matrix,
@@ -109,7 +113,7 @@ export class VRCamera extends BasicCamera {
     }
 
     /**
-     * In VR mode the position of the Three.js camera (in the euclidean Three.js scene)
+     * In VR mode the position of the Three.js camera (in the Euclidean Three.js scene)
      * is directly controlled by the VR headset.
      * This method update the position of the observer in the geometry accordingly.
      * Every displacement is the Three.js scene is interpreted as a tangent vector.

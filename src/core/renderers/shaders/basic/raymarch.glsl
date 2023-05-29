@@ -111,6 +111,7 @@ int raymarch(inout ExtVector v, out int objId){
 vec4 getColor(ExtVector v){
     int objId;
     int hit;
+    v = flow(v, camera.safetyDist);
     for (int i = 0; i <= maxBounces; i++){
         if (v.data.stop){
             break;

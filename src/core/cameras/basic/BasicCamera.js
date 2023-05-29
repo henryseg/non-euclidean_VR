@@ -32,6 +32,9 @@ export class BasicCamera {
      * - {number} minDist - the minimal distance we ray-march
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
+     * - {number} safetyDist - in case an object is at the same place as the camera,
+     *      we always initially march a distance safetyDist,
+     *      no matter what the SDFs return
      * - {number} threshold - the threshold to stop the ray-marching
      * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
      */
@@ -60,6 +63,11 @@ export class BasicCamera {
          * @type {number}
          */
         this.maxDist = parameters.maxDist !== undefined ? parameters.maxDist : 50;
+        /**
+         * Safety distance, to avoid collision with objects attached to the camera
+         * @type {number}
+         */
+        this.safetyDist = parameters.safetyDist !== undefined ? parameters.safetyDist : 0;
         /**
          * Maximal number of steps during the ray-marching
          * @type {number}

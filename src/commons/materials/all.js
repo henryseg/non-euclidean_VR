@@ -5,13 +5,14 @@ export {PhongMaterial} from "./phong/PhongMaterial.js";
 export {CheckerboardMaterial} from "./checkerboard/CheckerboardMaterial.js";
 export {DebugMaterial} from "./debug/DebugMaterial.js";
 export {SimpleTextureMaterial} from "./simpleTexture/SimpleTextureMaterial";
+export {RotatedSphericalTextureMaterial} from "./rotatedSphericalTexture/RotatedSphericalTextureMaterial.js";
 export {
     earthTexture,
     moonTexture,
     marsTexture,
     sunTexture
 } from "./astronomy/astromonyTextures.js";
-export {woodBallMaterial} from "./woodBall/woddballsMaterials";
+export {woodBallMaterial} from "./woodBall/woodballsMaterials";
 export {VideoTextureMaterial} from "./videoTexture/VideoTextureMaterial";
 export {VideoAlphaTextureMaterial} from "./videoAlphaTexture/VideoAlphaTextureMaterial";
 export {VideoFrameTextureMaterial} from "./videoFrameTexture/VideoFrameTextureMaterial";

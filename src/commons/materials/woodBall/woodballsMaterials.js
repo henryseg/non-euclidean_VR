@@ -1,6 +1,6 @@
 import {Vector2} from "three";
 
-import {SimpleTextureMaterial} from "../simpleTexture/SimpleTextureMaterial.js";
+import {RotatedSphericalTextureMaterial} from "../rotatedSphericalTexture/RotatedSphericalTextureMaterial.js";
 
 import eye0 from "./img/eye/eye_logo4.jpg";
 import eye1 from "./img/eye/eye_logo4_cedar.jpg";
@@ -15,8 +15,9 @@ import hand2 from "./img/hand/hand_logo3_darker.jpg";
  * Return a SimpleTextureMaterial corresponding to the wood ball with an eye or hands on it.
  * @param {string} type - the type of the texture ("eye" or "hand")
  * @param {number} textureID - The id of a texture (among the ones available)
+ * @param {Quaternion} quaternion - The rotation to apply before mapping the structure
  */
-export function woodBallMaterial(type, textureID) {
+export function woodBallMaterial(type, textureID, quaternion = undefined) {
     let texture;
     switch (type) {
         case "eye":
@@ -56,7 +57,7 @@ export function woodBallMaterial(type, textureID) {
             throw new Error("WoodBallMaterial: this type of texture is not implemented.");
     }
 
-    return new SimpleTextureMaterial(texture, {
+    return new RotatedSphericalTextureMaterial(texture, quaternion, {
         start: new Vector2(-Math.PI, 0),
         scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
     });
