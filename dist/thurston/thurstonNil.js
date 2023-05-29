@@ -1394,6 +1394,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 1220:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n                        \n                                                                                                                        \n\nstruct RotatedSphericalTextureMaterial {\n    sampler2D sampler;\n    mat4 rotation;\n    vec2 start;\n    vec2 scale;\n    bool repeatU;\n    bool repeatV;\n};\n\nvec4 render(RotatedSphericalTextureMaterial material, ExtVector v, vec2 uv) {\n    vec4 origDir = vec4(vec2(cos(uv.x), sin(uv.x)) * sin(uv.y), cos(uv.y), 0.);\n    vec4 rotatedDir = material.rotation * origDir;\n    float sinPhi = length(rotatedDir.xy);\n    float cosPhi = rotatedDir.z;\n    float uCoord = -atan(rotatedDir.y, rotatedDir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    vec2 rotatedUV = vec2(uCoord, vCoord);\n    vec2 texCoords = (rotatedUV - material.start) * material.scale;\n    return texture(material.sampler, texCoords);\n}\n\n\n"
+
+/***/ }),
+
 /***/ 9095:
 /***/ ((module) => {
 
@@ -1516,7 +1523,7 @@ module.exports = "   \n                                                     \n  
 /***/ 7591:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct Camera {\n    float fov;                              \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n};"
+module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct Camera {\n    float fov;                              \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float safetyDist;                                                                               \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n};"
 
 /***/ }),
 
@@ -1530,7 +1537,7 @@ module.exports = "   \n                                                         
 /***/ 766:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n                      \n                                                                                               \n                                                                                                                        \nstruct PathTracerCamera {\n    float fov;                     \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n    float focalLength;                    \n    float aperture;                \n};"
+module.exports = "                                                                                                                        \n          \n                      \n                                                                                               \n                                                                                                                        \nstruct PathTracerCamera {\n    float fov;                     \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float safetyDist;                                                                               \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n    float focalLength;                    \n    float aperture;                \n};"
 
 /***/ }),
 
@@ -1544,7 +1551,7 @@ module.exports = "   \n                                                     \n  
 /***/ 6539:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct VRCamera {\n    float fov;                     \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n};"
+module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct VRCamera {\n    float fov;                     \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float safetyDist;                                                                               \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n};"
 
 /***/ }),
 
@@ -1579,7 +1586,7 @@ module.exports = "   \n                          \n   \nvarying vec3 spherePosit
 /***/ 2977:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n              \n  \n                                                                                                                        \n                                                                                                                        \n\n\n   \n                \n                                                      \n                                         \n                                                                                       \n                                                      \n                                                                    \n          \n                                \n                               \n                          \n                                                                                               \n                                                               \n                                                                                                                 \n                                                                                         \n   \nint raymarch(inout ExtVector v, out int objId){\n    initFlow(v.vector.local);                                                                 \n    ExtVector globalV0 = v;\n    ExtVector globalV = globalV0;\n    ExtVector localV0 = v;\n    ExtVector localV = localV0;\n    ExtVector res = v;\n    int auxId;\n    int auxHit;\n    float marchingStep = camera.minDist;\n    float dist;\n    int hit = HIT_NOTHING;\n\n\n                  \n    for (int i = 0; i < camera.maxSteps; i++){\n                          \n        localV.data.iMarch = v.data.iMarch + i;\n\n                                                     \n        localV = teleport(localV);\n        if (localV.data.isTeleported){\n                                                                                           \n            localV0 = localV;\n                                                                                      \n            marchingStep = camera.minDist;\n        }\n        else {\n                                                    \n            if (localV.data.totalDist > camera.maxDist) {\n                break;\n            }\n            dist = localSceneSDF(localV.vector, auxHit, auxId);\n            if (auxHit == HIT_DEBUG){\n                hit = HIT_DEBUG;\n                break;\n            }\n            if (auxHit == HIT_SOLID) {\n                                   \n                hit = HIT_SOLID;\n                objId = auxId;\n                v = localV;\n                break;\n            }\n            marchingStep = marchingStep + creepingDist(localV, dist, camera.threshold);\n            localV = flow(localV0, marchingStep);\n        }\n    }\n    if (hit == HIT_NOTHING) {\n        v = localV;\n    }\n\n                  \n    marchingStep = camera.minDist;\n    for (int i=0; i < camera.maxSteps; i++){\n                          \n        globalV.data.iMarch = v.data.iMarch + i;\n\n        if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){\n                                              \n            break;\n        }\n        dist = globalSceneSDF(globalV.vector, auxHit, auxId);\n\n        if (auxHit == HIT_DEBUG){\n            hit = HIT_DEBUG;\n            break;\n        }\n        if (auxHit == HIT_SOLID) {\n                               \n            hit = auxHit;\n            objId = auxId;\n            v = globalV;\n            break;\n        }\n        marchingStep = marchingStep + dist;\n        globalV = flow(globalV0, marchingStep);\n    }\n\n    if (hit == HIT_NOTHING) {\n        v = globalV;\n    }\n    return hit;\n}\n\nvec4 getColor(ExtVector v){\n    int objId;\n    int hit;\n    for (int i = 0; i <= maxBounces; i++){\n        if (v.data.stop){\n            break;\n        }\n        hit = raymarch(v, objId);\n        updateVectorData(v, hit, objId);\n    }\n    return v.data.pixel;\n}"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n              \n  \n                                                                                                                        \n                                                                                                                        \n\n\n   \n                \n                                                      \n                                         \n                                                                                       \n                                                      \n                                                                    \n          \n                                \n                               \n                          \n                                                                                               \n                                                               \n                                                                                                                 \n                                                                                         \n   \nint raymarch(inout ExtVector v, out int objId){\n    initFlow(v.vector.local);                                                                 \n    ExtVector globalV0 = v;\n    ExtVector globalV = globalV0;\n    ExtVector localV0 = v;\n    ExtVector localV = localV0;\n    ExtVector res = v;\n    int auxId;\n    int auxHit;\n    float marchingStep = camera.minDist;\n    float dist;\n    int hit = HIT_NOTHING;\n\n\n                  \n    for (int i = 0; i < camera.maxSteps; i++){\n                          \n        localV.data.iMarch = v.data.iMarch + i;\n\n                                                     \n        localV = teleport(localV);\n        if (localV.data.isTeleported){\n                                                                                           \n            localV0 = localV;\n                                                                                      \n            marchingStep = camera.minDist;\n        }\n        else {\n                                                    \n            if (localV.data.totalDist > camera.maxDist) {\n                break;\n            }\n            dist = localSceneSDF(localV.vector, auxHit, auxId);\n            if (auxHit == HIT_DEBUG){\n                hit = HIT_DEBUG;\n                break;\n            }\n            if (auxHit == HIT_SOLID) {\n                                   \n                hit = HIT_SOLID;\n                objId = auxId;\n                v = localV;\n                break;\n            }\n            marchingStep = marchingStep + creepingDist(localV, dist, camera.threshold);\n            localV = flow(localV0, marchingStep);\n        }\n    }\n    if (hit == HIT_NOTHING) {\n        v = localV;\n    }\n\n                  \n    marchingStep = camera.minDist;\n    for (int i=0; i < camera.maxSteps; i++){\n                          \n        globalV.data.iMarch = v.data.iMarch + i;\n\n        if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){\n                                              \n            break;\n        }\n        dist = globalSceneSDF(globalV.vector, auxHit, auxId);\n\n        if (auxHit == HIT_DEBUG){\n            hit = HIT_DEBUG;\n            break;\n        }\n        if (auxHit == HIT_SOLID) {\n                               \n            hit = auxHit;\n            objId = auxId;\n            v = globalV;\n            break;\n        }\n        marchingStep = marchingStep + dist;\n        globalV = flow(globalV0, marchingStep);\n    }\n\n    if (hit == HIT_NOTHING) {\n        v = globalV;\n    }\n    return hit;\n}\n\nvec4 getColor(ExtVector v){\n    int objId;\n    int hit;\n    v = flow(v, camera.safetyDist);\n    for (int i = 0; i <= maxBounces; i++){\n        if (v.data.stop){\n            break;\n        }\n        hit = raymarch(v, objId);\n        updateVectorData(v, hit, objId);\n    }\n    return v.data.pixel;\n}"
 
 /***/ }),
 
@@ -1971,6 +1978,7 @@ __webpack_require__.d(__webpack_exports__, {
   "pX": () => (/* reexport */ RIGHT),
   "Dz": () => (/* reexport */ RelPosition),
   "Uj": () => (/* reexport */ ResetVRControls),
+  "bY": () => (/* reexport */ RotatedSphericalTextureMaterial),
   "cV": () => (/* reexport */ SMOOTH_MAX_POLY),
   "lR": () => (/* reexport */ SMOOTH_MIN_POLY),
   "xs": () => (/* reexport */ Scene),
@@ -1988,6 +1996,7 @@ __webpack_require__.d(__webpack_exports__, {
   "qC": () => (/* binding */ thurstonNil_Thurston),
   "N$": () => (/* binding */ thurstonNil_ThurstonLite),
   "TO": () => (/* binding */ thurstonNil_ThurstonVR),
+  "g$": () => (/* binding */ thurstonNil_ThurstonVRWoodBalls),
   "l_": () => (/* reexport */ TransitionLocalWrapMaterial),
   "pk": () => (/* reexport */ TransitionWrapMaterial),
   "yI": () => (/* reexport */ UnionShape),
@@ -5559,6 +5568,9 @@ class BasicCamera {
      * - {number} minDist - the minimal distance we ray-march
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
+     * - {number} safetyDist - in case an object is at the same place as the camera,
+     *      we always initially march a distance safetyDist,
+     *      no matter what the SDFs return
      * - {number} threshold - the threshold to stop the ray-marching
      * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
      */
@@ -5587,6 +5599,11 @@ class BasicCamera {
          * @type {number}
          */
         this.maxDist = parameters.maxDist !== undefined ? parameters.maxDist : 50;
+        /**
+         * Safety distance, to avoid collision with objects attached to the camera
+         * @type {number}
+         */
+        this.safetyDist = parameters.safetyDist !== undefined ? parameters.safetyDist : 0;
         /**
          * Maximal number of steps during the ray-marching
          * @type {number}
@@ -5689,12 +5706,15 @@ class VRCamera extends BasicCamera {
     /**
      * Constructor.
      * @param {Object} parameters - the parameters of the camera.
-     * This parameters are
+     * These parameters are
      * - {number} fov - the field of view
      * - {number} minDist - the minimal distance we ray-march
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
      * - {number} threshold - the threshold to stop the ray-marching
+     * - {number} safetyDist - in case an object is at the same place as the camera,
+     *      we always initially march a distance safetyDist,
+     *      no matter what the SDFs return
      * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
      * - {number} ipDist - the interpupillary distance
      */
@@ -5721,6 +5741,7 @@ class VRCamera extends BasicCamera {
                 minDist: this.minDist,
                 maxDist: this.maxDist,
                 maxSteps: this.maxSteps,
+                safetyDist: this.safetyDist,
                 threshold: this.threshold,
                 position: this.position.clone(),
                 matrix: this.matrix,
@@ -5775,7 +5796,7 @@ class VRCamera extends BasicCamera {
     }
 
     /**
-     * In VR mode the position of the Three.js camera (in the euclidean Three.js scene)
+     * In VR mode the position of the Three.js camera (in the Euclidean Three.js scene)
      * is directly controlled by the VR headset.
      * This method update the position of the observer in the geometry accordingly.
      * Every displacement is the Three.js scene is interpreted as a tangent vector.
@@ -12845,6 +12866,387 @@ class ThurstonVR {
         this.renderer.setAnimationLoop(_animate);
     }
 }
+;// CONCATENATED MODULE: ./src/commons/app/thurstonVRWoodBalls/ThurstonVRWoodBalls.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ *
+ * @classdesc
+ * A combination of all main parts of the API. It can be used to quickly create scenes
+ */
+class ThurstonVRWoodBalls {
+
+    /**
+     * Constructor.
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
+     * @param {TeleportationSet} set - the teleportation set
+     * @param {Object} params - additional parameters including
+     * - {string} keyboard - the type of keyboard (french, american, etc)
+     * - {Solid} controller0 - the object representing the controller 0
+     * - {Solid} controller1 - the object representing the controller 1
+     */
+    constructor(shader1, shader2, set, params = {}) {
+        /**
+         * The underlying subgroup
+         * @type {TeleportationSet}
+         */
+        this.set = set;
+
+        /**
+         * A callback called at each frame
+         * @type {Function}
+         */
+        this.callback = undefined;
+
+        /**
+         * The non-euclidean camera
+         * @type {VRCamera}
+         */
+        this.camera = params.camera !== undefined ? params.camera : new VRCamera({set: this.set});
+
+        const fog = new ExpFog(new external_three_namespaceObject.Color(0, 0, 0), 0.07);
+        /**
+         * The non-euclidean scene
+         * @type {Scene}
+         */
+        this.scene = new Scene({fog: fog});
+
+        /**
+         * The non-euclidean renderer
+         * @type {VRRenderer}
+         */
+        this.renderer = new VRRenderer(shader1, shader2, this.set, this.camera, this.scene, {}, {antialias: true});
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setClearColor(new external_three_namespaceObject.Color(0, 0, 0.2), 1);
+        document.body.appendChild(this.renderer.domElement);
+
+
+        // event listener
+        const _onWindowResize = bind(this, this.onWindowResize);
+        window.addEventListener("resize", _onWindowResize, false);
+
+
+        /**
+         * The keyboard controls
+         * @type {FlyControls}
+         * @protected
+         */
+        this.flyControls = new FlyControls(
+            this.camera,
+            params.keyboard !== undefined ? params.keyboard : 'us'
+        );
+
+        /**
+         * A clock to measure the time between two call of animate
+         * @type {Clock}
+         * @protected
+         */
+        this.clock = new external_three_namespaceObject.Clock();
+
+        /**
+         * The performance stats.
+         * Setup when the renderer is built.
+         * @type {Stats}
+         */
+        this.stats = undefined;
+
+        /**
+         * The graphical user interface.
+         * Setup when the renderer is built.
+         * @type {GUI}
+         */
+        this.gui = undefined;
+
+
+        const controllerModelFactory = new XRControllerModelFactory();
+
+        const controllerGrip0 = this.renderer.xr.getControllerGrip(0);
+        // const model0 = controllerModelFactory.createControllerModel(controllerGrip0);
+        // controllerGrip0.add(model0);
+        this.renderer.threeScene.add(controllerGrip0);
+        const controllerGrip1 = this.renderer.xr.getControllerGrip(1);
+        // const model1 = controllerModelFactory.createControllerModel(controllerGrip1);
+        // controllerGrip1.add(model1);
+        this.renderer.threeScene.add(controllerGrip1);
+
+        const controller0 = this.renderer.xr.getController(0);
+        this.renderer.threeScene.add(controller0);
+        const controller1 = this.renderer.xr.getController(1);
+        this.renderer.threeScene.add(controller1);
+        this._controllerOldMatrices = [undefined, undefined];
+        this._controllerUpdateRequired = true;
+        this._cameraOldMatrix = new external_three_namespaceObject.Matrix4();
+
+
+        /**
+         * Moving in the scene with the VR controller
+         * @protected
+         * @type {MoveVRControls}
+         */
+        this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
+        /**
+         * Rotating the scene with the VR controller
+         * @protected
+         * @type {DragVRControls}
+         */
+        this.VRControlsDrag = new DragVRControls(this.camera.position, controller1);
+
+
+        /**
+         * Object representing the controller 0 in the scene.
+         * type {Solid}
+         */
+        this.controllerObject0 = params.controllerObject0;
+        /**
+         * Object representing the controller 0 in the scene.
+         * type {Solid}
+         */
+        this.controllerObject1 = params.controllerObject1;
+        /**
+         * Object representing the camera in the scene.
+         * type {Solid}
+         */
+        this.cameraObject = params.cameraObject;
+
+        // add the controller to the scene.
+        // if we are not in VR mode, these objects are not displayed.
+        if (this.controllerObject0 !== undefined) {
+            this.scene.add(this.controllerObject0);
+            this.controllerObject0.isRendered = false;
+        }
+        if (this.controllerObject1 !== undefined) {
+            this.scene.add(this.controllerObject1);
+            this.controllerObject1.isRendered = false;
+        }
+        if (this.cameraObject !== undefined) {
+            this.scene.add(this.cameraObject);
+            this.cameraObject.isRendered = false;
+        }
+
+
+    }
+
+    /**
+     * Shortcut to get the controller target ray
+     * @param {number} index - the index of the controller
+     * @return {Group} - the Three.js Group representing the controller target ray
+     */
+    getController(index) {
+        return this.renderer.xr.getController(index);
+    }
+
+    /**
+     * Shortcut to get the controller grip
+     * @param {number} index - the index of the controller
+     * @return {Group} - the Three.js Group representing the controller grip
+     */
+    getControllerGrip(index) {
+        return this.renderer.xr.getControllerGrip(index);
+    }
+
+    getControllerFull(index) {
+        let object;
+        switch (index) {
+            case 0:
+                object = this.controllerObject0;
+                break;
+            case 1:
+                object = this.controllerObject1;
+        }
+        return {
+            targetRay: this.renderer.xr.getController(index),
+            grip: this.renderer.xr.getControllerGrip(index),
+            object: object
+        }
+    }
+
+    /**
+     * Initialize the graphic user interface
+     * @return {Thurston} the current Thurston object
+     */
+    initGUI() {
+        this.gui = new external_dat_gui_namespaceObject.GUI();
+        this.gui.close();
+        this.gui.add({
+            help: function () {
+                window.open('https://3-dimensional.space');
+            }
+        }, 'help').name("Help/About");
+        this.gui.add(
+            this.flyControls,
+            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
+        ).name("Keyboard");
+
+        // controls for the camera
+        const cameraGUI = this.gui.addFolder('Camera');
+        cameraGUI.add(this.camera, 'fov', 45, 120)
+            .name('Field of view');
+        cameraGUI.add(this.camera, 'maxDist', 0, 100, 1)
+            .name('Max distance');
+        cameraGUI.add(this.camera, 'maxSteps', 20, 500, 1)
+            .name('Max steps');
+        cameraGUI.add(this.camera, 'threshold')
+            .name('Threshold');
+
+        return this;
+    }
+
+    /**
+     * Initialize the performance stats
+     * @return {Thurston} the current Thurston object
+     */
+    initStats() {
+        this.stats = new external_stats_namespaceObject["default"]();
+        this.stats.showPanel(0);
+        document.body.appendChild(this.stats.dom);
+        return this;
+    }
+
+    /**
+     * Shortcut to add objects to the scene.
+     * @param {...(Solid|Light)} obj - the objects to add
+     */
+    add(obj) {
+        this.scene.add(/**@type {(Solid|Light)} */...arguments);
+    }
+
+    /**
+     * Action when the window is resized.
+     * @param {UIEvent} event
+     */
+    onWindowResize(event) {
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.camera.aspect = window.innerWidth / window.innerHeight
+        this.camera.updateProjectionMatrix();
+    }
+
+
+    /**
+     * animation function
+     */
+    animate() {
+        const delta = this.clock.getDelta();
+        if (this.callback !== undefined) {
+            this.callback();
+        }
+        this.flyControls.update(delta);
+        this.VRControlsMove.update(delta);
+        this.VRControlsDrag.update(delta);
+
+        // updating the position / orientation of the camera
+        if (this.cameraObject !== undefined) {
+            if (this.camera.isStereoOn) {
+
+                const matrix = this.camera.matrix.clone();
+                this.cameraObject.isRendered = true;
+                this.cameraObject.isom.copy(this.camera.position.local.boost);
+                this.cameraObject.updateData();
+
+                const diffMatrix = new external_three_namespaceObject.Matrix4()
+                    .copy(this._cameraOldMatrix)
+                    .invert()
+                    .multiply(matrix);
+                this.cameraObject.material.material.quaternion.multiply(
+                    new external_three_namespaceObject.Quaternion().setFromRotationMatrix(diffMatrix)
+                );
+                this._cameraOldMatrix = matrix;
+
+            } else {
+                this.cameraObject.isRendered = false;
+            }
+        }
+
+        // updating the position / orientation of the controllers
+        for (let i = 0; i < 2; i++) {
+            const controllerFull = this.getControllerFull(i);
+            if (controllerFull.object !== undefined) {
+                if (this.camera.isStereoOn) {
+                    controllerFull.object.isRendered = true;
+                    // global position of the controller (in the real world)
+                    const globalMatrix = controllerFull.targetRay.matrix.clone();
+                    if (this._controllerUpdateRequired) {
+                        // the VR mode has just been turned on
+                        // update the position of the controller, relative to the camera
+                        // position of the controller relative to the camera (in the real world)
+                        const localMatrix = new external_three_namespaceObject.Matrix4()
+                            .copy(this.camera.matrix)
+                            .invert()
+                            .multiply(globalMatrix);
+                        // update the position of the controller (in the geometry)
+                        controllerFull.object.isom
+                            .copy(this.camera.position.local.boost)
+                            .multiply(new Isometry().makeTranslationFromDir(
+                                new Vector().setFromMatrixPosition(localMatrix)
+                            ));
+                        // WARNING: hack !!
+                        // if the material is wrap in a phong material,
+                        // one needs to get deeper in the hierarchy to find the quaternion!
+                        controllerFull.object.material.material.quaternion.multiply(
+                            new external_three_namespaceObject.Quaternion().setFromRotationMatrix(localMatrix)
+                        )
+                        this._controllerUpdateRequired = false;
+                    } else {
+                        // the VR was already on
+                        // update the position of the controller relative to its previous location
+                        const diffMatrix = new external_three_namespaceObject.Matrix4()
+                            .copy(this._controllerOldMatrices[i])
+                            .invert()
+                            .multiply(globalMatrix);
+                        controllerFull.object.isom.multiply(new Isometry().makeTranslationFromDir(
+                            new Vector().setFromMatrixPosition(diffMatrix)
+                        ));
+                        // WARNING: hack !!
+                        // if the material is wrap in a phong material,
+                        // one needs to get deeper in the hierarchy to find the quaternion!
+                        controllerFull.object.material.material.quaternion.multiply(
+                            new external_three_namespaceObject.Quaternion().setFromRotationMatrix(diffMatrix)
+                        )
+                    }
+                    this._controllerOldMatrices[i] = globalMatrix;
+                    controllerFull.object.updateData();
+                } else {
+                    // an update of the controller position is needed next time the VR mode is turned on.
+                    controllerFull.object.isRendered = false;
+                    this._controllerUpdateRequired = true;
+                }
+            }
+        }
+
+
+        this.renderer.render();
+        this.stats.update();
+    }
+
+
+    /**
+     * Build the renderer and run the animation.
+     */
+    run() {
+        this.initStats();
+        this.initGUI();
+        this.renderer.build();
+        const _animate = bind(this, this.animate);
+        this.renderer.setAnimationLoop(_animate);
+    }
+}
 ;// CONCATENATED MODULE: ./src/commons/app/specifyThurston.js
 /**
  * Take a generic Thurston class and return the class specific for a geometry
@@ -14021,6 +14423,107 @@ class SimpleTextureMaterial extends Material {
     }
 
 }
+// EXTERNAL MODULE: ./src/commons/materials/rotatedSphericalTexture/shaders/struct.glsl
+var rotatedSphericalTexture_shaders_struct = __webpack_require__(1220);
+var rotatedSphericalTexture_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(rotatedSphericalTexture_shaders_struct);
+;// CONCATENATED MODULE: ./src/commons/materials/rotatedSphericalTexture/RotatedSphericalTextureMaterial.js
+
+
+
+
+
+
+
+
+/**
+ * @class
+ * @extends Material
+ *
+ * @classdesc
+ * A material given by an image file
+ * The uv coordinates should correspond to spherical coordinates
+ * Apply a rotation given y a quaternion before mapping the texture
+ *
+ */
+class RotatedSphericalTextureMaterial extends Material {
+
+    /**
+     * Constructor
+     * @param {string} file - path to the image file
+     * @param {Quaternion} quaternion - rotation to apply
+     * @param {Object} params - options for the material
+     */
+    constructor(file, quaternion = undefined, params = {}) {
+        super();
+        /**
+         * Quaternion representing the rotation to apply
+         * @type {Quaternion}
+         */
+        this.quaternion = quaternion !== undefined ? quaternion : new external_three_namespaceObject.Quaternion();
+        /**
+         * Texture built from the given image
+         * @type {Texture}
+         */
+        this.sampler = new external_three_namespaceObject.TextureLoader().load(file);
+        this.sampler.wrapS = params.wrapS !== undefined ? params.wrapS : external_three_namespaceObject.RepeatWrapping;
+        this.sampler.wrapT = params.wrapT !== undefined ? params.wrapT : external_three_namespaceObject.RepeatWrapping;
+        this.sampler.magFilter = external_three_namespaceObject.LinearFilter;
+        this.sampler.minFilter = external_three_namespaceObject.LinearFilter;
+
+        /**
+         * Point in the UV coordinates that will be mapped to the origin of the Texture Coordinates
+         * @type {Vector2}
+         */
+        this.start = params.start !== undefined ? params.start.clone() : new external_three_namespaceObject.Vector2(0, 0);
+
+        /**
+         * Scaling factor applied to the UV Coordinates before using them as Texture Coordinates
+         * @type {Vector2}
+         */
+        this.scale = params.scale !== undefined ? params.scale.clone() : new external_three_namespaceObject.Vector2(1, 1);
+
+        /**
+         * Says if the texture has an alpha channel that need be taken into account
+         * @type {boolean}
+         */
+        this._isTransparent = params.isTransparent !== undefined ? params.isTransparent : false;
+    }
+
+    /**
+     * Return the rotation to apply represented as a Matrix4
+     * @type {Matrix4}
+     */
+    get rotation() {
+        return new external_three_namespaceObject.Matrix4()
+            .makeRotationFromQuaternion(this.quaternion)
+            .invert();
+    }
+
+    get uniformType() {
+        return 'RotatedSphericalTextureMaterial';
+    }
+
+    get usesNormal() {
+        return false;
+    }
+
+    get usesUVMap() {
+        return true;
+    }
+
+    get isTransparent() {
+        return this._isTransparent;
+    }
+
+    static glslClass() {
+        return (rotatedSphericalTexture_shaders_struct_default());
+    }
+
+    glslRender() {
+        return renderUV_glsl_mustache_default()(this);
+    }
+
+}
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/earth/earthmap2k.png
 const earthmap2k_namespaceObject = __webpack_require__.p + "img/426f7657671a2811d4aa.png";
 ;// CONCATENATED MODULE: ./src/commons/materials/astronomy/img/earth/Earth_NoClouds.jpg
@@ -14129,7 +14632,7 @@ const hand_logo2_namespaceObject = __webpack_require__.p + "img/bb733e02d9f86b8b
 const hand_logo3_namespaceObject = __webpack_require__.p + "img/f5196bbc22091948755e.jpg";
 ;// CONCATENATED MODULE: ./src/commons/materials/woodBall/img/hand/hand_logo3_darker.jpg
 const hand_logo3_darker_namespaceObject = __webpack_require__.p + "img/9e3233c13cddac942dc4.jpg";
-;// CONCATENATED MODULE: ./src/commons/materials/woodBall/woddballsMaterials.js
+;// CONCATENATED MODULE: ./src/commons/materials/woodBall/woodballsMaterials.js
 
 
 
@@ -14147,8 +14650,9 @@ const hand_logo3_darker_namespaceObject = __webpack_require__.p + "img/9e3233c13
  * Return a SimpleTextureMaterial corresponding to the wood ball with an eye or hands on it.
  * @param {string} type - the type of the texture ("eye" or "hand")
  * @param {number} textureID - The id of a texture (among the ones available)
+ * @param {Quaternion} quaternion - The rotation to apply before mapping the structure
  */
-function woodBallMaterial(type, textureID) {
+function woodBallMaterial(type, textureID, quaternion = undefined) {
     let texture;
     switch (type) {
         case "eye":
@@ -14188,7 +14692,7 @@ function woodBallMaterial(type, textureID) {
             throw new Error("WoodBallMaterial: this type of texture is not implemented.");
     }
 
-    return new SimpleTextureMaterial(texture, {
+    return new RotatedSphericalTextureMaterial(texture, quaternion, {
         start: new external_three_namespaceObject.Vector2(-Math.PI, 0),
         scale: new external_three_namespaceObject.Vector2(1 / (2 * Math.PI), 1 / Math.PI),
     });
@@ -15879,6 +16383,7 @@ function pathTracerWrap(material, params = {}) {
 }
 ;// CONCATENATED MODULE: ./src/commons/materials/all.js
 // Basic materials
+
 
 
 
@@ -20777,9 +21282,11 @@ const thurstonNil_VRRenderer = specifyRenderer(VRRenderer, (part1_default()), (p
 
 
 
+
 const thurstonNil_Thurston = specifyThurston(Thurston, (part1_default()), (part2_default()));
 const thurstonNil_ThurstonLite = specifyThurston(ThurstonLite, (part1_default()), (part2_default()));
 const thurstonNil_ThurstonVR = specifyThurston(ThurstonVR, (part1_default()), (part2_default()));
+const thurstonNil_ThurstonVRWoodBalls = specifyThurston(ThurstonVRWoodBalls, (part1_default()), (part2_default()));
 
 
 
@@ -20867,6 +21374,7 @@ var __webpack_exports__QuadRingMatrix4 = __webpack_exports__.xd;
 var __webpack_exports__RIGHT = __webpack_exports__.pX;
 var __webpack_exports__RelPosition = __webpack_exports__.Dz;
 var __webpack_exports__ResetVRControls = __webpack_exports__.Uj;
+var __webpack_exports__RotatedSphericalTextureMaterial = __webpack_exports__.bY;
 var __webpack_exports__SMOOTH_MAX_POLY = __webpack_exports__.cV;
 var __webpack_exports__SMOOTH_MIN_POLY = __webpack_exports__.lR;
 var __webpack_exports__Scene = __webpack_exports__.xs;
@@ -20884,6 +21392,7 @@ var __webpack_exports__TeleportationSet = __webpack_exports__.xG;
 var __webpack_exports__Thurston = __webpack_exports__.qC;
 var __webpack_exports__ThurstonLite = __webpack_exports__.N$;
 var __webpack_exports__ThurstonVR = __webpack_exports__.TO;
+var __webpack_exports__ThurstonVRWoodBalls = __webpack_exports__.g$;
 var __webpack_exports__TransitionLocalWrapMaterial = __webpack_exports__.l_;
 var __webpack_exports__TransitionWrapMaterial = __webpack_exports__.pk;
 var __webpack_exports__UnionShape = __webpack_exports__.yI;
@@ -20925,4 +21434,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StraightGeo as StraightGeo, __webpack_exports__StraightGeoShape as StraightGeoShape, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__importExactDistance as importExactDistance, __webpack_exports__importFakeDistance as importFakeDistance, __webpack_exports__importUtils as importUtils, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirectedVerticalHalfSpace as DirectedVerticalHalfSpace, __webpack_exports__DirectedVerticalHalfSpaceShape as DirectedVerticalHalfSpaceShape, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FakePointLight as FakePointLight, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalPotato as LocalPotato, __webpack_exports__LocalPotatoShape as LocalPotatoShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__PotatoShape as PotatoShape, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StraightGeo as StraightGeo, __webpack_exports__StraightGeoShape as StraightGeoShape, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VerticalHalfSpace as VerticalHalfSpace, __webpack_exports__VerticalHalfSpaceShape as VerticalHalfSpaceShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__basicHeisenbergSet as basicHeisenbergSet, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__extendedHeisenbergSet as extendedHeisenbergSet, __webpack_exports__heisenbergSet as heisenbergSet, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__importExactDistance as importExactDistance, __webpack_exports__importFakeDistance as importFakeDistance, __webpack_exports__importUtils as importUtils, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };
