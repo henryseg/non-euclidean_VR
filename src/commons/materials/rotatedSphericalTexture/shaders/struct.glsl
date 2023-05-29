@@ -17,7 +17,7 @@ vec4 render(RotatedSphericalTextureMaterial material, ExtVector v, vec2 uv) {
     vec4 rotatedDir = material.rotation * origDir;
     float sinPhi = length(rotatedDir.xy);
     float cosPhi = rotatedDir.z;
-    float uCoord = -atan(rotatedDir.y, rotatedDir.x);
+    float uCoord = atan(rotatedDir.y, rotatedDir.x);
     float vCoord = atan(sinPhi, cosPhi);
     vec2 rotatedUV = vec2(uCoord, vCoord);
     vec2 texCoords = (rotatedUV - material.start) * material.scale;

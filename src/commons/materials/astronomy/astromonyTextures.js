@@ -31,7 +31,12 @@ export function earthTexture(textureID) {
 
     return new SimpleTextureMaterial(texture, {
         start: new Vector2(-Math.PI, 0),
-        scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+        // note the sign on the scaling factor
+        // the reason comes from the fact that in our convention for spherical coordinates (theta, phi)
+        // phi = 0 is mapped to the point (0,0,1) in cartesian coordinates
+        // hence phi is a *decreasing* function of z,
+        // which has the effect of reversing the orientation of the image file
+        scale: new Vector2(1 / (2 * Math.PI), -1 / Math.PI),
     });
 }
 
@@ -55,7 +60,7 @@ export function moonTexture(textureID) {
 
     return new SimpleTextureMaterial(texture, {
         start: new Vector2(-Math.PI, 0),
-        scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+        scale: new Vector2(1 / (2 * Math.PI), -1 / Math.PI),
     });
 }
 
@@ -65,7 +70,7 @@ export function moonTexture(textureID) {
 export function marsTexture() {
     return new SimpleTextureMaterial(mars0, {
         start: new Vector2(-Math.PI, 0),
-        scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+        scale: new Vector2(1 / (2 * Math.PI), -1 / Math.PI),
     });
 }
 
@@ -75,6 +80,6 @@ export function marsTexture() {
 export function sunTexture(textureID) {
     return new SimpleTextureMaterial(sun0, {
         start: new Vector2(-Math.PI, 0),
-        scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+        scale: new Vector2(1 / (2 * Math.PI), -1 / Math.PI),
     });
 }

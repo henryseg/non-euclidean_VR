@@ -47,8 +47,10 @@ RelVector gradient(LocalDirectedBallShape ball, RelVector v){
 }
 
 vec2 uvMap(LocalDirectedBallShape ball, RelVector v){
-    vec4 dir = normalize(v.local.pos.coords - ball.center.coords);
-    float sinPhi = sqrt(dir.x * dir.x + dir.y * dir.y);
+    vec4 dir = v.local.pos.coords - ball.center.coords;
+    dir.w = 0.;
+    dir = ball.absoluteIsomInv.matrix * dir;
+    float sinPhi = length(dir.xy);
     float cosPhi = dir.z;
     float uCoord = atan(dir.y, dir.x);
     float vCoord = atan(sinPhi, cosPhi);

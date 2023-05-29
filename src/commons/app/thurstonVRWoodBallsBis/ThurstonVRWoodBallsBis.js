@@ -21,7 +21,7 @@ import {FlyControls} from "../../../controls/keyboard/FlyControls.js";
  * @classdesc
  * A combination of all main parts of the API. It can be used to quickly create scenes
  */
-export class ThurstonVRWoodBalls {
+export class ThurstonVRWoodBallsBis {
 
     /**
      * Constructor.
@@ -330,24 +330,12 @@ export class ThurstonVRWoodBalls {
                     const globalMatrix = controllerFull.targetRay.matrix.clone();
                     if (this._controllerUpdateRequired) {
                         // the VR mode has just been turned on
-                        // update the position of the controller, relative to the camera
-                        // position of the controller relative to the camera (in the real world)
-                        const localMatrix = new Matrix4()
-                            .copy(this.camera.matrix)
-                            .invert()
-                            .multiply(globalMatrix);
-                        // update the position of the controller (in the geometry)
-                        controllerFull.object.isom
-                            .copy(this.camera.position.local.boost)
-                            .multiply(new Isometry().makeTranslationFromDir(
-                                new Vector().setFromMatrixPosition(localMatrix)
-                            ));
                         // update the facing of the texture
-                        // this is tricky, one has to multiply the rotation obainted by incrementation
+                        // this is tricky, one has to multiply the rotation obtained by incrementation
                         // with the original rotation of the texture
                         // not sure how to mathematically justify this yet...
                         this._controllerTextureInitialQuat[i] = controllerFull.object.material.material.quaternion.clone();
-                        this._controllerPositionCurrentQuat[i] = new Quaternion().setFromRotationMatrix(localMatrix);
+                        this._controllerPositionCurrentQuat[i] = new Quaternion().setFromRotationMatrix(globalMatrix);
                         // WARNING: hack !!
                         // if the material is wrap in a phong material,
                         // one needs to get deeper in the hierarchy to find the quaternion!
@@ -357,14 +345,6 @@ export class ThurstonVRWoodBalls {
                         this._controllerUpdateRequired = false;
                     } else {
                         // the VR was already on
-                        // update the position of the controller relative to its previous location
-                        const diffVector = new Vector()
-                            .setFromMatrixPosition(this._controllerOldMatrices[i])
-                            .negate()
-                            .add(new Vector().setFromMatrixPosition(globalMatrix));
-                        controllerFull.object.isom.multiply(new Isometry().makeTranslationFromDir(
-                            diffVector
-                        ));
                         const diffMatrix = new Matrix4()
                             .copy(this._controllerOldMatrices[i])
                             .invert()
@@ -380,6 +360,16 @@ export class ThurstonVRWoodBalls {
                             .multiply(this._controllerTextureInitialQuat[i]);
                     }
                     this._controllerOldMatrices[i] = globalMatrix;
+
+                    // update the position of the controller relative to its previous location
+                    const diffVector = new Vector()
+                        .setFromMatrixPosition(this.camera.matrix)
+                        .negate()
+                        .add(new Vector().setFromMatrixPosition(globalMatrix));
+                    controllerFull.object.isom
+                        .copy(this.camera.position.globalBoost)
+                        .multiply(new Isometry().makeTranslationFromDir(diffVector));
+
                     controllerFull.object.updateData();
                 } else {
                     // an update of the controller position is needed next time the VR mode is turned on.

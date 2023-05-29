@@ -30,7 +30,6 @@ RelVector gradient(LocalBallShape ball, RelVector v){
 vec2 uvMap(LocalBallShape ball, RelVector v){
     vec4 dir = v.local.pos.coords - ball.center.coords;
     dir.w = 0.;
-    // TODO: not sure about this step!
     dir = ball.absoluteIsomInv.matrix * dir;
     float sinPhi = length(dir.xy);
     float cosPhi = dir.z;

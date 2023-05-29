@@ -59,7 +59,7 @@ export function woodBallMaterial(type, textureID, quaternion = undefined) {
 
     return new RotatedSphericalTextureMaterial(texture, quaternion, {
         start: new Vector2(-Math.PI, 0),
-        scale: new Vector2(1 / (2 * Math.PI), 1 / Math.PI),
+        scale: new Vector2(1 / (2 * Math.PI), -1 / Math.PI),
     });
 }
 

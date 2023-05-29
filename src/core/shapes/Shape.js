@@ -70,13 +70,12 @@ export class Shape extends Generic {
         if (this.parent !== undefined) {
             this._absoluteIsom.premultiply(this.parent.absoluteIsom);
             this._absoluteIsomInv.multiply(this.parent.absoluteIsomInv)
-
         }
     }
 
     /**
-     * The shape may contains data which depends on the isometry (like the center of a ball)
-     * This method can be overlaoded to update all these data when needed
+     * The shape may contain data which depends on the isometry (like the center of a ball)
+     * This method can be overloaded to update all these data when needed
      */
     updateData() {
         this.updateAbsoluteIsom();
