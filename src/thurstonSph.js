@@ -29,6 +29,7 @@ export const ThurstonVRWoodBalls = specifyThurston(ThurstonVRWoodBallsGeneric, s
 export * from "./core.js";
 
 export {default as quaternionSet} from "./geometries/sph/groups/quaternion/set.js";
+export {default as poincareSet} from "./geometries/sph/groups/poincare/set.js";
 export * from './geometries/sph/lights/all.js';
 export * from './geometries/sph/material/all.js';
 export * from './geometries/sph/shapes/all.js';
