@@ -7,6 +7,7 @@ struct LocalDirectedBallShape {
     int id;
     Point center;
     float radius;
+    Isometry absoluteIsomInv;
 };
 
 /**
