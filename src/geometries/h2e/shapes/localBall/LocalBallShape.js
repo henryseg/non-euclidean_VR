@@ -6,6 +6,7 @@ import distance from "../../imports/distance.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 export class LocalBallShape extends BasicShape {
@@ -70,7 +71,7 @@ export class LocalBallShape extends BasicShape {
      * @return {boolean}
      */
     get hasUVMap() {
-        return false;
+        return true;
     }
 
     static glslClass() {
@@ -83,5 +84,9 @@ export class LocalBallShape extends BasicShape {
 
     glslGradient() {
         return gradient(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }
