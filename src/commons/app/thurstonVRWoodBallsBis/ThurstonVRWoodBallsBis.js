@@ -293,7 +293,6 @@ export class ThurstonVRWoodBallsBis {
                 const matrix = this.camera.matrix.clone();
                 this.cameraObject.isRendered = true;
                 this.cameraObject.isom.copy(this.camera.position.local.boost);
-                this.cameraObject.updateData();
 
                 if (this._cameraUpdateRequired) {
                     this._cameraTextureInitialQuat = this.cameraObject.material.material.quaternion.clone();
@@ -309,9 +308,11 @@ export class ThurstonVRWoodBallsBis {
                     );
                     this.cameraObject.material.material.quaternion
                         .copy(this._cameraPositionCurrentQuat)
-                        .multiply(this._cameraTextureInitialQuat);
+                        .multiply(this._cameraTextureInitialQuat)
+                        .premultiply(this.camera.position.local.quaternion);
                 }
 
+                this.cameraObject.updateData();
                 this._cameraOldMatrix = matrix;
 
             } else {
@@ -357,7 +358,8 @@ export class ThurstonVRWoodBallsBis {
                         )
                         controllerFull.object.material.material.quaternion
                             .copy(this._controllerPositionCurrentQuat[i])
-                            .multiply(this._controllerTextureInitialQuat[i]);
+                            .multiply(this._controllerTextureInitialQuat[i])
+                            .premultiply(this.camera.position.local.quaternion);
                     }
                     this._controllerOldMatrices[i] = globalMatrix;
 
@@ -365,9 +367,11 @@ export class ThurstonVRWoodBallsBis {
                     const diffVector = new Vector()
                         .setFromMatrixPosition(this.camera.matrix)
                         .negate()
-                        .add(new Vector().setFromMatrixPosition(globalMatrix));
+                        .add(new Vector().setFromMatrixPosition(globalMatrix))
+                        .applyMatrix4(new Matrix4().makeRotationFromQuaternion(this.camera.position.local.quaternion));
+
                     controllerFull.object.isom
-                        .copy(this.camera.position.globalBoost)
+                        .copy(this.camera.position.local.boost)
                         .multiply(new Isometry().makeTranslationFromDir(diffVector));
 
                     controllerFull.object.updateData();
