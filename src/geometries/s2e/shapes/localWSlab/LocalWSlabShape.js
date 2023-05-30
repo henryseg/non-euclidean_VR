@@ -1,62 +1,53 @@
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import {Isometry, Point} from "../../geometry/General.js";
 
-import distance from "../../imports/distance.glsl";
-import direction from "../../imports/direction.glsl";
-
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
-export class LocalBallShape extends BasicShape {
-
+export class LocalWSlabShape extends BasicShape {
 
     /**
      * Construction
-     * @param {Isometry|Point|Vector} location - data for the center of the ball
-     * @param {number} radius - the radius od the ball
+     * (Image by the isometry of the) slab  with equation {|w| < thickness}.
+     * @param {Isometry} location - data for the center of the ball
+     * @param {number} thickness - thickness of the slab
      */
-    constructor(location, radius) {
+    constructor(location,thickness) {
 
         const isom = new Isometry();
         if (location.isIsometry) {
             isom.copy(location);
-        } else if (location.isPoint) {
-            isom.makeTranslation(location);
-        } else if (location.isVector) {
-            isom.makeTranslationFromDir(location);
         } else {
-            throw new Error("BallShape: this type of location is not implemented");
+            throw new Error("LocalWHalfSpaceShape: this type of location is not implemented");
         }
 
         super(isom);
-        this.addImport(distance, direction);
-        this.radius = radius;
-        this._center = undefined;
+        this.thickness = thickness;
+        this._origin = undefined;
     }
 
     updateData() {
         super.updateData();
-        this._center = new Point().applyIsometry(this.absoluteIsom);
+        this._origin = new Point().applyIsometry(this.absoluteIsom);
     }
 
-    get center() {
-        if (this._center === undefined) {
+    get origin() {
+        if (this._origin === undefined) {
             this.updateData();
         }
-        return this._center;
+        return this._origin;
     }
 
     /**
-     * Says that the object inherits from `Ball`
+     * Says that the object inherits from `LocalWHalfSpaceShape`
      * @type {boolean}
      */
-    get isLocalBallShape() {
+    get isLocalWSlabShape() {
         return true;
     }
-
 
     /**
      * Says whether the shape is global. True if global, false otherwise.
@@ -66,31 +57,27 @@ export class LocalBallShape extends BasicShape {
         return false;
     }
 
-
     get hasUVMap() {
         return true;
     }
 
-
     get uniformType() {
-        return 'LocalBallShape';
+        return 'LocalWSlabShape';
     }
 
     static glslClass() {
         return struct;
     }
 
-    glslGradient() {
+    glslSDF() {
         return sdf(this);
     }
 
-    glslSDF() {
+    glslGradient() {
         return gradient(this);
     }
 
     glslUVMap() {
         return uv(this);
     }
-
-
 }
