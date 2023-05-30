@@ -133,18 +133,18 @@ export class ThurstonVRWoodBallsBis {
         this._cameraUpdateRequired = true;
 
 
-        /**
-         * Moving in the scene with the VR controller
-         * @protected
-         * @type {MoveVRControls}
-         */
-        this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
-
-        this.VRControlsClap = new ClapVRControls(
-            controller1,
-            this.scene,
-            new Color(1,1,0)
-        );
+        // /**
+        //  * Moving in the scene with the VR controller
+        //  * @protected
+        //  * @type {MoveVRControls}
+        //  */
+        // this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
+        //
+        // this.VRControlsClap = new ClapVRControls(
+        //     controller1,
+        //     this.scene,
+        //     new Color(1,1,0)
+        // );
 
 
         /**
@@ -285,13 +285,13 @@ export class ThurstonVRWoodBallsBis {
             this.callback();
         }
         this.flyControls.update(delta);
-        this.VRControlsMove.update(delta);
+        // this.VRControlsMove.update(delta);
 
         // updating the position / orientation of the camera
         if (this.cameraObject !== undefined) {
             if (this.camera.isStereoOn) {
                 const matrix = this.camera.matrix.clone();
-                this.cameraObject.isRendered = true;
+                // this.cameraObject.isRendered = true;
                 this.cameraObject.isom.copy(this.camera.position.local.boost);
 
                 if (this._cameraUpdateRequired) {
@@ -317,7 +317,7 @@ export class ThurstonVRWoodBallsBis {
 
             } else {
                 this._cameraUpdateRequired = true;
-                this.cameraObject.isRendered = false;
+                // this.cameraObject.isRendered = false;
             }
         }
 
@@ -326,7 +326,7 @@ export class ThurstonVRWoodBallsBis {
             const controllerFull = this.getControllerFull(i);
             if (controllerFull.object !== undefined) {
                 if (this.camera.isStereoOn) {
-                    controllerFull.object.isRendered = true;
+                    // controllerFull.object.isRendered = true;
                     // global position of the controller (in the real world)
                     const globalMatrix = controllerFull.targetRay.matrix.clone();
                     if (this._controllerUpdateRequired) {
@@ -377,7 +377,7 @@ export class ThurstonVRWoodBallsBis {
                     controllerFull.object.updateData();
                 } else {
                     // an update of the controller position is needed next time the VR mode is turned on.
-                    controllerFull.object.isRendered = false;
+                    // controllerFull.object.isRendered = false;
                     this._controllerUpdateRequired = true;
                 }
             }

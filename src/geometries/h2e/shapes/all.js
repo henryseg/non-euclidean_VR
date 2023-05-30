@@ -7,3 +7,4 @@ export {HorizontalCylinderShape} from "./horizontalCylinder/HorizontalCylinderSh
 export {LocalHorizontalCylinderShape} from "./localHorizontalCylinder/LocalHorizontalCylinderShape.js";
 export {LocalWHalfSpaceShape} from "./localWHalfSpace/LocalWHalfSpaceShape.js";
 export {LocalWSlabShape} from "./localWSlab/LocalWSlabShape.js";
+export {LocalDirectedWSlabShape} from "./localDirectedWSlab/LocalDirectedWSlabShape.js";

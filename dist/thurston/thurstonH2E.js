@@ -1744,6 +1744,13 @@ module.exports = "   \r\n                                                       
 
 /***/ }),
 
+/***/ 7337:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \r\n          \r\n                        \r\n                                                                                                                        \r\nstruct DirLight {\r\n    int id;\r\n    vec3 color;\r\n    float intensity;\r\n    vec4 direction;\r\n    int maxDirs;\r\n};\r\n\r\nbool directions(DirLight light, RelVector v, int i, out RelVector dir, out float intensity) {\r\n    if (i != 0){\r\n        return false;\r\n    }\r\n    intensity = light.intensity;\r\n    Vector local = Vector(v.local.pos, light.direction);\r\n    dir = RelVector(local, v.cellBoost, v.invCellBoost);\r\n    return true;\r\n}\r\n"
+
+/***/ }),
+
 /***/ 6671:
 /***/ ((module) => {
 
@@ -1789,7 +1796,14 @@ module.exports = "                                                              
 /***/ 9511:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \r\n          \r\n                          \r\n                                                                                                                        \r\n\r\nstruct LocalBallShape {\r\n    int id;\r\n    Point center;\r\n    float radius;\r\n};\r\n\r\n   \r\n                                     \r\n   \r\nfloat sdf(LocalBallShape ball, RelVector v) {\r\n    return dist(v.local.pos, ball.center) - ball.radius;\r\n}\r\n\r\n   \r\n                                  \r\n   \r\nRelVector gradient(LocalBallShape ball, RelVector v){\r\n    Vector local = direction(v.local.pos, ball.center);\r\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\r\n}\r\n"
+module.exports = "                                                                                                                        \r\n          \r\n                          \r\n                                                                                                                        \r\n\r\nstruct LocalBallShape {\r\n    int id;\r\n    Point center;\r\n    float radius;\r\n    Isometry absoluteIsomInv;\r\n};\r\n\r\n   \r\n                                     \r\n   \r\nfloat sdf(LocalBallShape ball, RelVector v) {\r\n    return dist(v.local.pos, ball.center) - ball.radius;\r\n}\r\n\r\n   \r\n                                  \r\n   \r\nRelVector gradient(LocalBallShape ball, RelVector v){\r\n    Vector local = direction(v.local.pos, ball.center);\r\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\r\n}\r\n\r\nvec2 uvMap(LocalBallShape ball, RelVector v){\r\n    Vector vec =  direction(ball.center, v.local.pos);\r\n    vec4 dir = ball.absoluteIsomInv.matrix * vec.dir;\r\n                         \r\n    float sinPhi = hypLength(dir.xyz);\r\n    float cosPhi = dir.w;\r\n    float uCoord = atan(dir.y, dir.x);\r\n    float vCoord = atan(sinPhi, cosPhi);\r\n    return vec2(uCoord, vCoord);\r\n}\r\n"
+
+/***/ }),
+
+/***/ 8730:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \r\n          \r\n                     \r\n                                                                                                                        \r\n\r\nstruct LocalDirectedWSlabShape {\r\n    int id;\r\n    Point origin;\r\n    float thickness;\r\n    Isometry absoluteIsomInv;\r\n};\r\n\r\nfloat sdf(LocalDirectedWSlabShape slab, RelVector v) {\r\n    float diffW = v.local.pos.coords.w - slab.origin.coords.w;\r\n    if(sign(diffW * v.local.dir.w) > 0.) {\r\n        return camera.maxDist;\r\n    } else {\r\n        float tanTheta = hypLength(v.local.dir.xyz) / v.local.dir.w;\r\n        float cosTheta = 1. / sqrt(1. + tanTheta * tanTheta);\r\n        return (abs(diffW) - slab.thickness) / cosTheta;\r\n    }\r\n\r\n}\r\n\r\nRelVector gradient(LocalDirectedWSlabShape slab, RelVector v){\r\n    float diff = v.local.pos.coords.w - slab.origin.coords.w;\r\n    Vector local = Vector(v.local.pos, vec4(0, 0, 0, sign(diff)));\r\n    return RelVector(local, v.cellBoost, v.invCellBoost);\r\n}\r\n\r\n                                                                                                  \r\nvec2 uvMap(LocalDirectedWSlabShape slab, RelVector v){\r\n    Point point = v.local.pos;\r\n    vec4 dir = point.coords;\r\n    dir = slab.absoluteIsomInv.matrix * dir;\r\n    return dir.xy / dir.z;\r\n}\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -2039,6 +2053,7 @@ __webpack_require__.d(__webpack_exports__, {
   "ik": () => (/* reexport */ DIR_DOWN),
   "fY": () => (/* reexport */ DIR_UP),
   "TB": () => (/* reexport */ DebugMaterial),
+  "Kl": () => (/* reexport */ DirLight),
   "Al": () => (/* reexport */ DragVRControls),
   "Gj": () => (/* reexport */ ESun),
   "ix": () => (/* reexport */ EquidistantHypStripsMaterial),
@@ -2064,6 +2079,7 @@ __webpack_require__.d(__webpack_exports__, {
   "gU": () => (/* reexport */ LinearToSRGBPostProcess),
   "jo": () => (/* reexport */ LocalBall),
   "Q": () => (/* reexport */ LocalBallShape),
+  "QX": () => (/* reexport */ LocalDirectedWSlabShape),
   "NQ": () => (/* reexport */ LocalHorizontalCylinder),
   "h3": () => (/* reexport */ LocalHorizontalCylinderShape),
   "IJ": () => (/* reexport */ LocalVerticalCylinder),
@@ -2127,7 +2143,7 @@ __webpack_require__.d(__webpack_exports__, {
   "CI": () => (/* reexport */ WHalfSpaceShape),
   "$9": () => (/* reexport */ WrapShape),
   "iR": () => (/* reexport */ XRControllerModelFactory),
-  "ak": () => (/* reexport */ bind),
+  "ak": () => (/* reexport */ utils_bind),
   "uZ": () => (/* reexport */ clamp),
   "Cy": () => (/* reexport */ complement),
   "Y7": () => (/* reexport */ cuspedTorus_set),
@@ -4789,7 +4805,7 @@ external_three_namespaceObject.Quaternion.prototype.add = function (q) {
  * @param {function} fn - the method to call
  * @return {function(): *}
  */
-function bind(scope, fn) {
+function utils_bind(scope, fn) {
     return function () {
         return fn.apply(scope, arguments);
     };
@@ -4886,7 +4902,7 @@ class VRRenderer extends AbstractRenderer {
         this.camera.threeCamera.layers.enable(1);
 
         const VRButton = VRButton_VRButton.createButton(this.threeRenderer);
-        const _onClickVRButton = bind(this.camera, this.camera.switchStereo);
+        const _onClickVRButton = utils_bind(this.camera, this.camera.switchStereo);
         VRButton.addEventListener('click', _onClickVRButton, false);
         document.body.appendChild(VRButton);
 
@@ -5480,8 +5496,8 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         this._moveVector = new Vector(0, 0, 0);
         this._rotationVector = new Vector(0, 0, 0);
 
-        this._onKeyDown = bind(this, this.onKeyDown);
-        this._onKeyUp = bind(this, this.onKeyUp);
+        this._onKeyDown = utils_bind(this, this.onKeyDown);
+        this._onKeyUp = utils_bind(this, this.onKeyUp);
 
         window.addEventListener('keydown', this._onKeyDown, false);
         window.addEventListener('keyup', this._onKeyUp, false);
@@ -6729,11 +6745,11 @@ class PathTracerUI {
          */
         this.downloadButton = document.getElementById('thurstonDownloadButton');
 
-        const _onPressP = bind(this, this.onPressP);
+        const _onPressP = utils_bind(this, this.onPressP);
         window.addEventListener('keydown', _onPressP);
-        const _onClickGo = bind(this, this.onClickGo);
+        const _onClickGo = utils_bind(this, this.onClickGo);
         document.querySelector('#thurstonDialogBox input[type=submit]').addEventListener('click', _onClickGo);
-        const _onClickDownload = bind(this, this.onClickDownload);
+        const _onClickDownload = utils_bind(this, this.onClickDownload);
         document.getElementById('thurstonDownloadButton').addEventListener('click', _onClickDownload);
 
 
@@ -6950,7 +6966,7 @@ class Thurston {
         // set the renderer size
         this.setSize(window.innerWidth, window.innerHeight);
         // event listener
-        this._onWindowResize = bind(this, this.onWindowResize);
+        this._onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener('resize', this._onWindowResize, false);
 
         /**
@@ -7124,7 +7140,7 @@ class Thurston {
         this.initPathTracerUI();
         this.renderer.build();
         this.ptRenderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.threeRenderer.setAnimationLoop(_animate);
     }
 }
@@ -7192,7 +7208,7 @@ class ThurstonLite {
         document.body.appendChild(this.renderer.domElement);
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
         /**
@@ -7320,7 +7336,7 @@ class ThurstonLite {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.threeRenderer.setAnimationLoop(_animate);
     }
 }
@@ -12548,10 +12564,10 @@ class MoveVRControls extends external_three_namespaceObject.EventDispatcher {
         this._isSelecting = false;
         this._isSqueezing = false;
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
-        const _onSqueezeStart = bind(this, this.onSqueezeStart);
-        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
+        const _onSqueezeStart = utils_bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = utils_bind(this, this.onSqueezeEnd);
 
 
         this.controller.addEventListener('selectstart', _onSelectStart);
@@ -12639,10 +12655,10 @@ class DragVRControls extends external_three_namespaceObject.EventDispatcher {
         this._isSelecting = false;
         this._isSqueezing = false;
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
-        const _onSqueezeStart = bind(this, this.onSqueezeStart);
-        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
+        const _onSqueezeStart = utils_bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = utils_bind(this, this.onSqueezeEnd);
 
 
         this.controller.addEventListener('selectstart', _onSelectStart);
@@ -12801,7 +12817,7 @@ class ThurstonVR {
 
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
 
@@ -12954,7 +12970,7 @@ class ThurstonVR {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
     }
 }
@@ -13032,7 +13048,7 @@ class ThurstonVRWoodBalls {
 
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
 
@@ -13363,7 +13379,7 @@ class ThurstonVRWoodBalls {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
     }
 }
@@ -13504,7 +13520,7 @@ class ThurstonVRWoodBallsBis {
 
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
 
@@ -13565,18 +13581,18 @@ class ThurstonVRWoodBallsBis {
         this._cameraUpdateRequired = true;
 
 
-        /**
-         * Moving in the scene with the VR controller
-         * @protected
-         * @type {MoveVRControls}
-         */
-        this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
-
-        this.VRControlsClap = new ClapVRControls(
-            controller1,
-            this.scene,
-            new external_three_namespaceObject.Color(1,1,0)
-        );
+        // /**
+        //  * Moving in the scene with the VR controller
+        //  * @protected
+        //  * @type {MoveVRControls}
+        //  */
+        // this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
+        //
+        // this.VRControlsClap = new ClapVRControls(
+        //     controller1,
+        //     this.scene,
+        //     new Color(1,1,0)
+        // );
 
 
         /**
@@ -13717,15 +13733,14 @@ class ThurstonVRWoodBallsBis {
             this.callback();
         }
         this.flyControls.update(delta);
-        this.VRControlsMove.update(delta);
+        // this.VRControlsMove.update(delta);
 
         // updating the position / orientation of the camera
         if (this.cameraObject !== undefined) {
             if (this.camera.isStereoOn) {
                 const matrix = this.camera.matrix.clone();
-                this.cameraObject.isRendered = true;
+                // this.cameraObject.isRendered = true;
                 this.cameraObject.isom.copy(this.camera.position.local.boost);
-                this.cameraObject.updateData();
 
                 if (this._cameraUpdateRequired) {
                     this._cameraTextureInitialQuat = this.cameraObject.material.material.quaternion.clone();
@@ -13741,14 +13756,16 @@ class ThurstonVRWoodBallsBis {
                     );
                     this.cameraObject.material.material.quaternion
                         .copy(this._cameraPositionCurrentQuat)
-                        .multiply(this._cameraTextureInitialQuat);
+                        .multiply(this._cameraTextureInitialQuat)
+                        .premultiply(this.camera.position.local.quaternion);
                 }
 
+                this.cameraObject.updateData();
                 this._cameraOldMatrix = matrix;
 
             } else {
                 this._cameraUpdateRequired = true;
-                this.cameraObject.isRendered = false;
+                // this.cameraObject.isRendered = false;
             }
         }
 
@@ -13757,7 +13774,7 @@ class ThurstonVRWoodBallsBis {
             const controllerFull = this.getControllerFull(i);
             if (controllerFull.object !== undefined) {
                 if (this.camera.isStereoOn) {
-                    controllerFull.object.isRendered = true;
+                    // controllerFull.object.isRendered = true;
                     // global position of the controller (in the real world)
                     const globalMatrix = controllerFull.targetRay.matrix.clone();
                     if (this._controllerUpdateRequired) {
@@ -13789,7 +13806,8 @@ class ThurstonVRWoodBallsBis {
                         )
                         controllerFull.object.material.material.quaternion
                             .copy(this._controllerPositionCurrentQuat[i])
-                            .multiply(this._controllerTextureInitialQuat[i]);
+                            .multiply(this._controllerTextureInitialQuat[i])
+                            .premultiply(this.camera.position.local.quaternion);
                     }
                     this._controllerOldMatrices[i] = globalMatrix;
 
@@ -13797,15 +13815,17 @@ class ThurstonVRWoodBallsBis {
                     const diffVector = new Vector()
                         .setFromMatrixPosition(this.camera.matrix)
                         .negate()
-                        .add(new Vector().setFromMatrixPosition(globalMatrix));
+                        .add(new Vector().setFromMatrixPosition(globalMatrix))
+                        .applyMatrix4(new external_three_namespaceObject.Matrix4().makeRotationFromQuaternion(this.camera.position.local.quaternion));
+
                     controllerFull.object.isom
-                        .copy(this.camera.position.globalBoost)
+                        .copy(this.camera.position.local.boost)
                         .multiply(new Isometry().makeTranslationFromDir(diffVector));
 
                     controllerFull.object.updateData();
                 } else {
                     // an update of the controller position is needed next time the VR mode is turned on.
-                    controllerFull.object.isRendered = false;
+                    // controllerFull.object.isRendered = false;
                     this._controllerUpdateRequired = true;
                 }
             }
@@ -13824,7 +13844,7 @@ class ThurstonVRWoodBallsBis {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
     }
 }
@@ -17618,7 +17638,7 @@ class InfoControls {
          */
         this.key = key;
 
-        const _onKeyDown = bind(this, this.onKeyDown);
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
         window.addEventListener('keydown', _onKeyDown, false);
     }
 
@@ -17666,10 +17686,10 @@ class IsotropicChaseVRControls {
         this._isSelecting = false;
         this._isSqueezing = false;
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
-        const _onSqueezeStart = bind(this, this.onSqueezeStart);
-        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
+        const _onSqueezeStart = utils_bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = utils_bind(this, this.onSqueezeEnd);
 
 
         this.controller.addEventListener('selectstart', _onSelectStart);
@@ -17769,8 +17789,8 @@ class KeyGenericControls {
          */
         this.key = key;
 
-        const _onKeyDown = bind(this, this.onKeyDown);
-        const _onKeyUp = bind(this, this.onKeyUp);
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
+        const _onKeyUp = utils_bind(this, this.onKeyUp);
         window.addEventListener('keydown', _onKeyDown, false);
         window.addEventListener('keyup', _onKeyUp, false);
     }
@@ -17856,8 +17876,8 @@ class ShootVRControls {
          */
         this._clock = new external_three_namespaceObject.Clock();
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
 
         this.controller.addEventListener('selectstart', _onSelectStart);
         this.controller.addEventListener('selectend', _onSelectEnd);
@@ -17980,7 +18000,7 @@ class SwitchControls {
         this.state = initialSate;
         this.justChanged = false;
 
-        const _onKeyDown = bind(this, this.onKeyDown);
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
         window.addEventListener('keydown', _onKeyDown, false);
     }
 
@@ -18095,8 +18115,8 @@ class ResetVRControls {
             throw new Error("VRControlsReset.constructor, the camera is needed when the alignFacing option is on");
         }
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
 
         this.controller.addEventListener('selectstart', _onSelectStart);
         this.controller.addEventListener('selectend', _onSelectEnd);
@@ -20902,7 +20922,70 @@ class ESun extends Light {
         return directions_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/geometries/h2e/lights/dirLight/shaders/struct.glsl
+var dirLight_shaders_struct = __webpack_require__(7337);
+var dirLight_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(dirLight_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/h2e/lights/dirLight/dirLight.js
+
+
+
+
+
+
+
+const dirLight_DIR_UP = 1;
+const dirLight_DIR_DOWN = (/* unused pure expression or super */ null && (-1));
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Light at infinity in the E-direction
+ */
+class DirLight extends Light {
+
+    /**
+     * Constructor.
+     * @param {Color} color - the color of the light
+     * @param {number} intensity - the intensity of the light
+     * @param {Vector4} direction - the direction of the light. It should be on of the following values:
+     * - -1 (light coming from the negative direction)
+     * - +1 (light coming from the positive direction)
+     */
+    constructor(color, intensity = 1, direction = undefined) {
+        super(1);
+        this.color = color;
+        this.intensity = intensity;
+        this.direction = direction !== undefined ? direction : new external_three_namespaceObject.Vector4(0,0,0,1);
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'DirLight';
+    }
+
+    /**
+     * Return the chunk of GLSL code defining the corresponding structure.
+     * @abstract
+     * @return {string}
+     */
+    static glslClass() {
+        return (dirLight_shaders_struct_default());
+    }
+
+    glslDirections() {
+        return directions_glsl_mustache_default()(this);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/h2e/lights/all.js
+
 
 
 // EXTERNAL MODULE: ./src/geometries/h2e/material/varyingColor/shaders/struct.glsl
@@ -21131,7 +21214,11 @@ class BallShape extends BasicShape {
 // EXTERNAL MODULE: ./src/geometries/h2e/shapes/localBall/shaders/struct.glsl
 var localBall_shaders_struct = __webpack_require__(9511);
 var localBall_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localBall_shaders_struct);
+// EXTERNAL MODULE: ./src/core/shapes/shaders/uv.glsl.mustache
+var shapes_shaders_uv_glsl_mustache = __webpack_require__(4355);
+var shapes_shaders_uv_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shapes_shaders_uv_glsl_mustache);
 ;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localBall/LocalBallShape.js
+
 
 
 
@@ -21204,7 +21291,7 @@ class LocalBallShape extends BasicShape {
      * @return {boolean}
      */
     get hasUVMap() {
-        return false;
+        return true;
     }
 
     static glslClass() {
@@ -21218,13 +21305,14 @@ class LocalBallShape extends BasicShape {
     glslGradient() {
         return shapes_shaders_gradient_glsl_mustache_default()(this);
     }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
 }
 // EXTERNAL MODULE: ./src/geometries/h2e/shapes/wHalfSpace/shaders/struct.glsl
 var wHalfSpace_shaders_struct = __webpack_require__(3532);
 var wHalfSpace_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(wHalfSpace_shaders_struct);
-// EXTERNAL MODULE: ./src/core/shapes/shaders/uv.glsl.mustache
-var shapes_shaders_uv_glsl_mustache = __webpack_require__(4355);
-var shapes_shaders_uv_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(shapes_shaders_uv_glsl_mustache);
 ;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/wHalfSpace/WHalfSpaceShape.js
 
 
@@ -21787,7 +21875,98 @@ class LocalWSlabShape extends BasicShape {
         return shapes_shaders_uv_glsl_mustache_default()(this);
     }
 }
+// EXTERNAL MODULE: ./src/geometries/h2e/shapes/localDirectedWSlab/shaders/struct.glsl
+var localDirectedWSlab_shaders_struct = __webpack_require__(8730);
+var localDirectedWSlab_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localDirectedWSlab_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/localDirectedWSlab/LocalDirectedWSlabShape.js
+
+
+
+
+
+
+
+
+
+
+
+class LocalDirectedWSlabShape extends BasicShape {
+
+    /**
+     * Construction
+     * (Image by the isometry of the) slab  with equation {|w| < thickness}.
+     * @param {Isometry} location - data for the center of the ball
+     * @param {number} thickness - thickness of the slab
+     */
+    constructor(location,thickness) {
+
+        const isom = new Isometry();
+        if (location.isIsometry) {
+            isom.copy(location);
+        } else {
+            throw new Error("LocalDirectedWSlabShape: this type of location is not implemented");
+        }
+
+        super(isom);
+        this.addImport((distance_default()), (direction_default()));
+        this.thickness = thickness;
+        this._origin = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._origin = new Point().applyIsometry(this.absoluteIsom);
+    }
+
+    get origin() {
+        if (this._origin === undefined) {
+            this.updateData();
+        }
+        return this._origin;
+    }
+
+    /**
+     * Says that the object inherits from `LocalWHalfSpaceShape`
+     * @type {boolean}
+     */
+    get isLocalDirectedWSlabShape() {
+        return true;
+    }
+
+    /**
+     * Says whether the shape is global. True if global, false otherwise.
+     * @type {boolean}
+     */
+    get isGlobal() {
+        return false;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalDirectedWSlabShape';
+    }
+
+    static glslClass() {
+        return (localDirectedWSlab_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslGradient() {
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/h2e/shapes/all.js
+
 
 
 
@@ -22247,6 +22426,7 @@ var __webpack_exports__ComplementShape = __webpack_exports__.Iy;
 var __webpack_exports__DIR_DOWN = __webpack_exports__.ik;
 var __webpack_exports__DIR_UP = __webpack_exports__.fY;
 var __webpack_exports__DebugMaterial = __webpack_exports__.TB;
+var __webpack_exports__DirLight = __webpack_exports__.Kl;
 var __webpack_exports__DragVRControls = __webpack_exports__.Al;
 var __webpack_exports__ESun = __webpack_exports__.Gj;
 var __webpack_exports__EquidistantHypStripsMaterial = __webpack_exports__.ix;
@@ -22272,6 +22452,7 @@ var __webpack_exports__LightVRControls = __webpack_exports__.uR;
 var __webpack_exports__LinearToSRGBPostProcess = __webpack_exports__.gU;
 var __webpack_exports__LocalBall = __webpack_exports__.jo;
 var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
+var __webpack_exports__LocalDirectedWSlabShape = __webpack_exports__.QX;
 var __webpack_exports__LocalHorizontalCylinder = __webpack_exports__.NQ;
 var __webpack_exports__LocalHorizontalCylinderShape = __webpack_exports__.h3;
 var __webpack_exports__LocalVerticalCylinder = __webpack_exports__.IJ;
@@ -22363,4 +22544,4 @@ var __webpack_exports__variableHeightQuotientGenus2Set = __webpack_exports__.dj;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__LocalWHalfSpace as LocalWHalfSpace, __webpack_exports__LocalWHalfSpaceShape as LocalWHalfSpaceShape, __webpack_exports__LocalWSlab as LocalWSlab, __webpack_exports__LocalWSlabShape as LocalWSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__QuotientGenus2Material as QuotientGenus2Material, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RegularHypPolygon as RegularHypPolygon, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__genus2Set as genus2Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__horizontalQuotientGenus2Set as horizontalQuotientGenus2Set, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__quotientGenus2Set as quotientGenus2Set, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__variableHeightQuotientGenus2Set as variableHeightQuotientGenus2Set, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DirLight as DirLight, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalDirectedWSlabShape as LocalDirectedWSlabShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__LocalWHalfSpace as LocalWHalfSpace, __webpack_exports__LocalWHalfSpaceShape as LocalWHalfSpaceShape, __webpack_exports__LocalWSlab as LocalWSlab, __webpack_exports__LocalWSlabShape as LocalWSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__QuotientGenus2Material as QuotientGenus2Material, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RegularHypPolygon as RegularHypPolygon, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__genus2Set as genus2Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__horizontalQuotientGenus2Set as horizontalQuotientGenus2Set, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__quotientGenus2Set as quotientGenus2Set, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__variableHeightQuotientGenus2Set as variableHeightQuotientGenus2Set, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };

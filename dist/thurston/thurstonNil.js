@@ -2120,7 +2120,7 @@ __webpack_require__.d(__webpack_exports__, {
   "$9": () => (/* reexport */ WrapShape),
   "iR": () => (/* reexport */ XRControllerModelFactory),
   "wJ": () => (/* reexport */ basicHeisenberg_set),
-  "ak": () => (/* reexport */ bind),
+  "ak": () => (/* reexport */ utils_bind),
   "uZ": () => (/* reexport */ clamp),
   "Cy": () => (/* reexport */ complement),
   "qM": () => (/* reexport */ earthTexture),
@@ -4803,7 +4803,7 @@ external_three_namespaceObject.Quaternion.prototype.add = function (q) {
  * @param {function} fn - the method to call
  * @return {function(): *}
  */
-function bind(scope, fn) {
+function utils_bind(scope, fn) {
     return function () {
         return fn.apply(scope, arguments);
     };
@@ -4900,7 +4900,7 @@ class VRRenderer extends AbstractRenderer {
         this.camera.threeCamera.layers.enable(1);
 
         const VRButton = VRButton_VRButton.createButton(this.threeRenderer);
-        const _onClickVRButton = bind(this.camera, this.camera.switchStereo);
+        const _onClickVRButton = utils_bind(this.camera, this.camera.switchStereo);
         VRButton.addEventListener('click', _onClickVRButton, false);
         document.body.appendChild(VRButton);
 
@@ -5494,8 +5494,8 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         this._moveVector = new Vector(0, 0, 0);
         this._rotationVector = new Vector(0, 0, 0);
 
-        this._onKeyDown = bind(this, this.onKeyDown);
-        this._onKeyUp = bind(this, this.onKeyUp);
+        this._onKeyDown = utils_bind(this, this.onKeyDown);
+        this._onKeyUp = utils_bind(this, this.onKeyUp);
 
         window.addEventListener('keydown', this._onKeyDown, false);
         window.addEventListener('keyup', this._onKeyUp, false);
@@ -6743,11 +6743,11 @@ class PathTracerUI {
          */
         this.downloadButton = document.getElementById('thurstonDownloadButton');
 
-        const _onPressP = bind(this, this.onPressP);
+        const _onPressP = utils_bind(this, this.onPressP);
         window.addEventListener('keydown', _onPressP);
-        const _onClickGo = bind(this, this.onClickGo);
+        const _onClickGo = utils_bind(this, this.onClickGo);
         document.querySelector('#thurstonDialogBox input[type=submit]').addEventListener('click', _onClickGo);
-        const _onClickDownload = bind(this, this.onClickDownload);
+        const _onClickDownload = utils_bind(this, this.onClickDownload);
         document.getElementById('thurstonDownloadButton').addEventListener('click', _onClickDownload);
 
 
@@ -6964,7 +6964,7 @@ class Thurston {
         // set the renderer size
         this.setSize(window.innerWidth, window.innerHeight);
         // event listener
-        this._onWindowResize = bind(this, this.onWindowResize);
+        this._onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener('resize', this._onWindowResize, false);
 
         /**
@@ -7138,7 +7138,7 @@ class Thurston {
         this.initPathTracerUI();
         this.renderer.build();
         this.ptRenderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.threeRenderer.setAnimationLoop(_animate);
     }
 }
@@ -7206,7 +7206,7 @@ class ThurstonLite {
         document.body.appendChild(this.renderer.domElement);
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
         /**
@@ -7334,7 +7334,7 @@ class ThurstonLite {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.threeRenderer.setAnimationLoop(_animate);
     }
 }
@@ -12562,10 +12562,10 @@ class MoveVRControls extends external_three_namespaceObject.EventDispatcher {
         this._isSelecting = false;
         this._isSqueezing = false;
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
-        const _onSqueezeStart = bind(this, this.onSqueezeStart);
-        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
+        const _onSqueezeStart = utils_bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = utils_bind(this, this.onSqueezeEnd);
 
 
         this.controller.addEventListener('selectstart', _onSelectStart);
@@ -12653,10 +12653,10 @@ class DragVRControls extends external_three_namespaceObject.EventDispatcher {
         this._isSelecting = false;
         this._isSqueezing = false;
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
-        const _onSqueezeStart = bind(this, this.onSqueezeStart);
-        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
+        const _onSqueezeStart = utils_bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = utils_bind(this, this.onSqueezeEnd);
 
 
         this.controller.addEventListener('selectstart', _onSelectStart);
@@ -12815,7 +12815,7 @@ class ThurstonVR {
 
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
 
@@ -12968,7 +12968,7 @@ class ThurstonVR {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
     }
 }
@@ -13046,7 +13046,7 @@ class ThurstonVRWoodBalls {
 
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
 
@@ -13377,7 +13377,7 @@ class ThurstonVRWoodBalls {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
     }
 }
@@ -13518,7 +13518,7 @@ class ThurstonVRWoodBallsBis {
 
 
         // event listener
-        const _onWindowResize = bind(this, this.onWindowResize);
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
         window.addEventListener("resize", _onWindowResize, false);
 
 
@@ -13579,18 +13579,18 @@ class ThurstonVRWoodBallsBis {
         this._cameraUpdateRequired = true;
 
 
-        /**
-         * Moving in the scene with the VR controller
-         * @protected
-         * @type {MoveVRControls}
-         */
-        this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
-
-        this.VRControlsClap = new ClapVRControls(
-            controller1,
-            this.scene,
-            new external_three_namespaceObject.Color(1,1,0)
-        );
+        // /**
+        //  * Moving in the scene with the VR controller
+        //  * @protected
+        //  * @type {MoveVRControls}
+        //  */
+        // this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
+        //
+        // this.VRControlsClap = new ClapVRControls(
+        //     controller1,
+        //     this.scene,
+        //     new Color(1,1,0)
+        // );
 
 
         /**
@@ -13731,15 +13731,14 @@ class ThurstonVRWoodBallsBis {
             this.callback();
         }
         this.flyControls.update(delta);
-        this.VRControlsMove.update(delta);
+        // this.VRControlsMove.update(delta);
 
         // updating the position / orientation of the camera
         if (this.cameraObject !== undefined) {
             if (this.camera.isStereoOn) {
                 const matrix = this.camera.matrix.clone();
-                this.cameraObject.isRendered = true;
+                // this.cameraObject.isRendered = true;
                 this.cameraObject.isom.copy(this.camera.position.local.boost);
-                this.cameraObject.updateData();
 
                 if (this._cameraUpdateRequired) {
                     this._cameraTextureInitialQuat = this.cameraObject.material.material.quaternion.clone();
@@ -13755,14 +13754,16 @@ class ThurstonVRWoodBallsBis {
                     );
                     this.cameraObject.material.material.quaternion
                         .copy(this._cameraPositionCurrentQuat)
-                        .multiply(this._cameraTextureInitialQuat);
+                        .multiply(this._cameraTextureInitialQuat)
+                        .premultiply(this.camera.position.local.quaternion);
                 }
 
+                this.cameraObject.updateData();
                 this._cameraOldMatrix = matrix;
 
             } else {
                 this._cameraUpdateRequired = true;
-                this.cameraObject.isRendered = false;
+                // this.cameraObject.isRendered = false;
             }
         }
 
@@ -13771,7 +13772,7 @@ class ThurstonVRWoodBallsBis {
             const controllerFull = this.getControllerFull(i);
             if (controllerFull.object !== undefined) {
                 if (this.camera.isStereoOn) {
-                    controllerFull.object.isRendered = true;
+                    // controllerFull.object.isRendered = true;
                     // global position of the controller (in the real world)
                     const globalMatrix = controllerFull.targetRay.matrix.clone();
                     if (this._controllerUpdateRequired) {
@@ -13803,7 +13804,8 @@ class ThurstonVRWoodBallsBis {
                         )
                         controllerFull.object.material.material.quaternion
                             .copy(this._controllerPositionCurrentQuat[i])
-                            .multiply(this._controllerTextureInitialQuat[i]);
+                            .multiply(this._controllerTextureInitialQuat[i])
+                            .premultiply(this.camera.position.local.quaternion);
                     }
                     this._controllerOldMatrices[i] = globalMatrix;
 
@@ -13811,15 +13813,17 @@ class ThurstonVRWoodBallsBis {
                     const diffVector = new Vector()
                         .setFromMatrixPosition(this.camera.matrix)
                         .negate()
-                        .add(new Vector().setFromMatrixPosition(globalMatrix));
+                        .add(new Vector().setFromMatrixPosition(globalMatrix))
+                        .applyMatrix4(new external_three_namespaceObject.Matrix4().makeRotationFromQuaternion(this.camera.position.local.quaternion));
+
                     controllerFull.object.isom
-                        .copy(this.camera.position.globalBoost)
+                        .copy(this.camera.position.local.boost)
                         .multiply(new Isometry().makeTranslationFromDir(diffVector));
 
                     controllerFull.object.updateData();
                 } else {
                     // an update of the controller position is needed next time the VR mode is turned on.
-                    controllerFull.object.isRendered = false;
+                    // controllerFull.object.isRendered = false;
                     this._controllerUpdateRequired = true;
                 }
             }
@@ -13838,7 +13842,7 @@ class ThurstonVRWoodBallsBis {
         this.initStats();
         this.initGUI();
         this.renderer.build();
-        const _animate = bind(this, this.animate);
+        const _animate = utils_bind(this, this.animate);
         this.renderer.setAnimationLoop(_animate);
     }
 }
@@ -17632,7 +17636,7 @@ class InfoControls {
          */
         this.key = key;
 
-        const _onKeyDown = bind(this, this.onKeyDown);
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
         window.addEventListener('keydown', _onKeyDown, false);
     }
 
@@ -17680,10 +17684,10 @@ class IsotropicChaseVRControls {
         this._isSelecting = false;
         this._isSqueezing = false;
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
-        const _onSqueezeStart = bind(this, this.onSqueezeStart);
-        const _onSqueezeEnd = bind(this, this.onSqueezeEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
+        const _onSqueezeStart = utils_bind(this, this.onSqueezeStart);
+        const _onSqueezeEnd = utils_bind(this, this.onSqueezeEnd);
 
 
         this.controller.addEventListener('selectstart', _onSelectStart);
@@ -17783,8 +17787,8 @@ class KeyGenericControls {
          */
         this.key = key;
 
-        const _onKeyDown = bind(this, this.onKeyDown);
-        const _onKeyUp = bind(this, this.onKeyUp);
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
+        const _onKeyUp = utils_bind(this, this.onKeyUp);
         window.addEventListener('keydown', _onKeyDown, false);
         window.addEventListener('keyup', _onKeyUp, false);
     }
@@ -17870,8 +17874,8 @@ class ShootVRControls {
          */
         this._clock = new external_three_namespaceObject.Clock();
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
 
         this.controller.addEventListener('selectstart', _onSelectStart);
         this.controller.addEventListener('selectend', _onSelectEnd);
@@ -17994,7 +17998,7 @@ class SwitchControls {
         this.state = initialSate;
         this.justChanged = false;
 
-        const _onKeyDown = bind(this, this.onKeyDown);
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
         window.addEventListener('keydown', _onKeyDown, false);
     }
 
@@ -18109,8 +18113,8 @@ class ResetVRControls {
             throw new Error("VRControlsReset.constructor, the camera is needed when the alignFacing option is on");
         }
 
-        const _onSelectStart = bind(this, this.onSelectStart);
-        const _onSelectEnd = bind(this, this.onSelectEnd);
+        const _onSelectStart = utils_bind(this, this.onSelectStart);
+        const _onSelectEnd = utils_bind(this, this.onSelectEnd);
 
         this.controller.addEventListener('selectstart', _onSelectStart);
         this.controller.addEventListener('selectend', _onSelectEnd);
