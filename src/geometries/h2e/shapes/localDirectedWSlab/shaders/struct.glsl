@@ -17,7 +17,7 @@ float sdf(LocalDirectedWSlabShape slab, RelVector v) {
     } else {
         float tanTheta = hypLength(v.local.dir.xyz) / v.local.dir.w;
         float cosTheta = 1. / sqrt(1. + tanTheta * tanTheta);
-        return (abs(diffW) - slab.thickness) / cosTheta;
+        return min((abs(diffW) - slab.thickness) / cosTheta, camera.maxDist);
     }
 
 }
