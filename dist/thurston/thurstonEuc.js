@@ -1893,6 +1893,13 @@ module.exports = __webpack_require__.p + "img/29989970ee70af555fd4.jpg";
 
 /***/ }),
 
+/***/ 2026:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "img/ded429c2b934f6ccf5f8.jpg";
+
+/***/ }),
+
 /***/ 7287:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1911,6 +1918,13 @@ module.exports = __webpack_require__.p + "img/f5196bbc22091948755e.jpg";
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = __webpack_require__.p + "img/9e3233c13cddac942dc4.jpg";
+
+/***/ }),
+
+/***/ 9054:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "img/2528cfc76a03ca71fb7f.jpg";
 
 /***/ })
 
@@ -13287,7 +13301,70 @@ class ThurstonVRWoodBalls {
         this.renderer.setAnimationLoop(_animate);
     }
 }
+;// CONCATENATED MODULE: ./src/controls/vr/ClapVRControls.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * When pressing the button, change the color of the background
+ * The color turn back to normal, when the button is released
+ * Log the event if a log function is provided
+ * The background material is assumed to be a single color material.
+ */
+
+const STATUS_WAITING = 0;
+const STATUS_CLAPING = 1;
+
+class ClapVRControls {
+
+    /**
+     * Constructor
+     * @param {Group} controller - the group representing the controller
+     * @param {Scene} scene - the scene (to access its background color)
+     * @param {Color} color - clap color
+     * @param {function} log - a callback for the log
+     *
+     */
+    constructor( controller,  scene, color, log =undefined) {
+        this.controller = controller;
+        this._status = STATUS_WAITING;
+
+        this._scene = scene
+        this._originalBgColor = this._scene.background.color.clone();
+        this._clapBgGolor = color;
+        this._log = log;
+
+        const _onSelectStart = bind(this, this.onSelectStart);
+        const _onSelectEnd = bind(this, this.onSelectEnd);
+
+        this.controller.addEventListener('selectstart', _onSelectStart);
+        this.controller.addEventListener('selectend', _onSelectEnd);
+    }
+
+    /**
+     * Event handler when the user starts selecting
+     */
+    onSelectStart() {
+        this._status = STATUS_CLAPING;
+        this._scene.background.color.copy(this._clapBgGolor);
+        if(this._log !== undefined){
+            this._log();
+        }
+    }
+
+    /**
+     * Event handler when the user stops selecting
+     */
+    onSelectEnd() {
+        this._status = STATUS_WAITING;
+        this._scene.background.color.copy(this._originalBgColor);
+    }
+}
 ;// CONCATENATED MODULE: ./src/commons/app/thurstonVRWoodBallsBis/ThurstonVRWoodBallsBis.js
+
 
 
 
@@ -13428,12 +13505,12 @@ class ThurstonVRWoodBallsBis {
          * @type {MoveVRControls}
          */
         this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
-        /**
-         * Rotating the scene with the VR controller
-         * @protected
-         * @type {DragVRControls}
-         */
-        this.VRControlsDrag = new DragVRControls(this.camera.position, controller1);
+
+        this.VRControlsClap = new ClapVRControls(
+            controller1,
+            this.scene,
+            new external_three_namespaceObject.Color(1,1,0)
+        );
 
 
         /**
@@ -13575,7 +13652,6 @@ class ThurstonVRWoodBallsBis {
         }
         this.flyControls.update(delta);
         this.VRControlsMove.update(delta);
-        this.VRControlsDrag.update(delta);
 
         // updating the position / orientation of the camera
         if (this.cameraObject !== undefined) {
@@ -15069,13 +15145,19 @@ var eye_logo4_cedar = __webpack_require__(2703);
 var eye_logo4_oak = __webpack_require__(420);
 // EXTERNAL MODULE: ./src/commons/materials/woodBall/img/eye/eye_logo5.jpg
 var eye_logo5 = __webpack_require__(5291);
+// EXTERNAL MODULE: ./src/commons/materials/woodBall/img/eye/eye_logo6.jpg
+var eye_logo6 = __webpack_require__(2026);
 // EXTERNAL MODULE: ./src/commons/materials/woodBall/img/hand/hand_logo2.jpg
 var hand_logo2 = __webpack_require__(7287);
 // EXTERNAL MODULE: ./src/commons/materials/woodBall/img/hand/hand_logo3.jpg
 var hand_logo3 = __webpack_require__(2500);
 // EXTERNAL MODULE: ./src/commons/materials/woodBall/img/hand/hand_logo3_darker.jpg
 var hand_logo3_darker = __webpack_require__(8534);
+// EXTERNAL MODULE: ./src/commons/materials/woodBall/img/hand/hand_logo4.jpg
+var hand_logo4 = __webpack_require__(9054);
 ;// CONCATENATED MODULE: ./src/commons/materials/woodBall/woodballsMaterials.js
+
+
 
 
 
@@ -15112,6 +15194,9 @@ function woodBallMaterial(type, textureID, quaternion = undefined) {
                 case 3:
                     texture = eye_logo5;
                     break;
+                case 4:
+                    texture = eye_logo6;
+                    break;
                 default:
                     throw new Error("WoodBallMaterial: this texture ID does not exists.");
             }
@@ -15126,6 +15211,9 @@ function woodBallMaterial(type, textureID, quaternion = undefined) {
                     break;
                 case 2:
                     texture = hand_logo3_darker;
+                    break;
+                case 3:
+                    texture = hand_logo4;
                     break;
                 default:
                     throw new Error("WoodBallMaterial: this texture ID does not exists.");
