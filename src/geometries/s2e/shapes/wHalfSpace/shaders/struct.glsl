@@ -28,7 +28,7 @@ vec2 uvMap(WHalfSpaceShape halfspace, RelVector v){
     dir = halfspace.absoluteIsomInv.matrix * dir;
     float sinPhi = length(dir.xy);
     float cosPhi = dir.z;
-    float uCoord = -atan(dir.y, dir.x);
+    float uCoord = atan(dir.y, dir.x);
     float vCoord = atan(sinPhi, cosPhi);
     return vec2(uCoord, vCoord);
 }
