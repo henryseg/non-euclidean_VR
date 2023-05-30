@@ -38,6 +38,7 @@ export {default as horizontalLoopSet} from "./geometries/h2e/groups/horizontalLo
 export {default as genus2Set} from "./geometries/h2e/groups/genus2/set.js";
 export {default as quotientGenus2Set} from "./geometries/h2e/groups/quotientGenus2/set.js";
 export {default as horizontalQuotientGenus2Set} from "./geometries/h2e/groups/horizontalQuotientGenus2/set.js";
+export {default as variableHeightQuotientGenus2Set} from "./geometries/h2e/groups/variableHeightQuotientGenus2/set.js";
 export * from './geometries/h2e/lights/all.js';
 export * from './geometries/h2e/material/all.js';
 export * from './geometries/h2e/shapes/all.js';
