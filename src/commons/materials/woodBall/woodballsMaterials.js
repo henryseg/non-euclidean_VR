@@ -6,10 +6,12 @@ import eye0 from "./img/eye/eye_logo4.jpg";
 import eye1 from "./img/eye/eye_logo4_cedar.jpg";
 import eye2 from "./img/eye/eye_logo4_oak.jpg";
 import eye3 from "./img/eye/eye_logo5.jpg";
+import eye4 from "./img/eye/eye_logo6.jpg";
 
 import hand0 from "./img/hand/hand_logo2.jpg";
 import hand1 from "./img/hand/hand_logo3.jpg";
 import hand2 from "./img/hand/hand_logo3_darker.jpg";
+import hand3 from "./img/hand/hand_logo4.jpg";
 
 /**
  * Return a SimpleTextureMaterial corresponding to the wood ball with an eye or hands on it.
@@ -34,6 +36,9 @@ export function woodBallMaterial(type, textureID, quaternion = undefined) {
                 case 3:
                     texture = eye3;
                     break;
+                case 4:
+                    texture = eye4;
+                    break;
                 default:
                     throw new Error("WoodBallMaterial: this texture ID does not exists.");
             }
@@ -48,6 +53,9 @@ export function woodBallMaterial(type, textureID, quaternion = undefined) {
                     break;
                 case 2:
                     texture = hand2;
+                    break;
+                case 3:
+                    texture = hand3;
                     break;
                 default:
                     throw new Error("WoodBallMaterial: this texture ID does not exists.");

@@ -9,9 +9,10 @@ import {Isometry} from "../../../core/geometry/Isometry.js";
 import {Vector} from "../../../core/geometry/Vector.js";
 import {Scene, VRCamera, VRRenderer} from "../../../core/General.js";
 import {MoveVRControls} from "../../../controls/vr/MoveVRControls.js";
-import {DragVRControls} from "../../../controls/vr/DragVRControls.js";
+import {ClapVRControls} from "../../../controls/vr/ClapVRControls";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 import {FlyControls} from "../../../controls/keyboard/FlyControls.js";
+
 
 
 /**
@@ -138,12 +139,12 @@ export class ThurstonVRWoodBallsBis {
          * @type {MoveVRControls}
          */
         this.VRControlsMove = new MoveVRControls(this.camera.position, controller0);
-        /**
-         * Rotating the scene with the VR controller
-         * @protected
-         * @type {DragVRControls}
-         */
-        this.VRControlsDrag = new DragVRControls(this.camera.position, controller1);
+
+        this.VRControlsClap = new ClapVRControls(
+            controller1,
+            this.scene,
+            new Color(1,1,0)
+        );
 
 
         /**
@@ -285,7 +286,6 @@ export class ThurstonVRWoodBallsBis {
         }
         this.flyControls.update(delta);
         this.VRControlsMove.update(delta);
-        this.VRControlsDrag.update(delta);
 
         // updating the position / orientation of the camera
         if (this.cameraObject !== undefined) {
