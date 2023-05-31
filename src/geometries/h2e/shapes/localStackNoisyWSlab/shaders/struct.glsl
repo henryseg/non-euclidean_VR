@@ -37,7 +37,7 @@ RelVector gradient(LocalStackNoisyWSlabShape slab, RelVector v) {
     float f3 = fracNoise(0.5 * global.coords.xz);
     float f4 = fracNoise(0.5 * global.coords.yz);
 
-    vec4 dir = vec4(0.3 * normalize(vec2(f1, f2)) + 0.13 * normalize(vec2(f3, f4)), 0, sign(diff));
+    vec4 dir = vec4(0.2 * normalize(vec2(f1, f2)) + 0.1 * normalize(vec2(f3, f4)), 0, sign(diff));
     dir = toIsometry(v.invCellBoost).matrix * dir;
     Vector local = Vector(v.local.pos, dir);
     local = reduceError(local);
