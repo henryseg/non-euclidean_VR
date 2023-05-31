@@ -15,6 +15,8 @@ import raymarch from "./shaders/basic/raymarch.glsl";
 import scenes from "./shaders/basic/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
+import postProcessVoid from "./shaders/basic/postProcessVoid.glsl";
+import postProcessGammaCorrection from "./shaders/basic/postProcessGammaCorrection.glsl";
 import main from "./shaders/basic/main.glsl";
 
 
@@ -62,6 +64,11 @@ export class VRRenderer extends AbstractRenderer {
          * @private
          */
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
     }
 
     get isVRRenderer() {
@@ -108,6 +115,13 @@ export class VRRenderer extends AbstractRenderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk(raymarch);
+            if(this.postProcess){
+                this._fragmentBuilder[side].addUniform("exposure", "float", this.exposure);
+                this._fragmentBuilder[side].addChunk(postProcessGammaCorrection);
+            }
+            else{
+                this._fragmentBuilder[side].addChunk(postProcessVoid);
+            }
             this._fragmentBuilder[side].addChunk(main);
         }
     }
