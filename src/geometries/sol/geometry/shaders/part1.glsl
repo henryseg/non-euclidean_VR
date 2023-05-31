@@ -79,9 +79,9 @@ void agm() {
     // index of the last step : AGMIndex
 
     // initialization
-//    for (int i = 0; i < AGMSteps; i++) {
-//        AGMList[i] = vec3(1);
-//    }
+    //    for (int i = 0; i < AGMSteps; i++) {
+    //        AGMList[i] = vec3(1);
+    //    }
     AGMList[0] = vec3(1., ell_kprime, ell_k);
 
     AGMLength = 1;
@@ -290,7 +290,9 @@ vec3 ellipj(float u) {
         aux = ellipjAtZero(u1);
     }
     else {
-        aux = ellipj1(u1);
+        aux = ellipj3(u1);
+        // ellipj1 creates an error on Windows Chrome
+        // aux = ellipj1(u1);
     }
 
     return vec3(sign * aux.x, aux.y, aux.z);
