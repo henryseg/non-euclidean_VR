@@ -12,7 +12,7 @@ import direction from "../../imports/direction.glsl";
 import noise from "../../imports/noise.glsl";
 
 
-export class LocalVerticalCylinderShape extends BasicShape {
+export class LocalNoisyVerticalCylinderShape extends BasicShape {
 
     /**
      * Constructor
@@ -54,7 +54,7 @@ export class LocalVerticalCylinderShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'LocalVerticalCylinderShape';
+        return 'LocalNoisyVerticalCylinderShape';
     }
 
     static glslClass() {
