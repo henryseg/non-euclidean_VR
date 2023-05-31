@@ -1595,7 +1595,21 @@ module.exports = "                                                              
 /***/ 5315:
 /***/ ((module) => {
 
-module.exports = "   \r\n                          \r\n   \r\nvarying vec3 spherePosition;\r\n\r\n   \r\n                                           \r\n                       \r\n                                                           \r\n                                 \r\n                                                         \r\n   \r\nvoid main() {\r\n    RelVector vector = mapping(spherePosition);\r\n    ExtVector v = ExtVector(vector, initVectorData());\r\n    gl_FragColor = getColor(v);\r\n}"
+module.exports = "   \r\n                          \r\n   \r\nvarying vec3 spherePosition;\r\n\r\n   \r\n                                           \r\n                       \r\n                                                           \r\n                                 \r\n                                                         \r\n   \r\nvoid main() {\r\n    RelVector vector = mapping(spherePosition);\r\n    ExtVector v = ExtVector(vector, initVectorData());\r\n    gl_FragColor = postProcess(getColor(v));\r\n}"
+
+/***/ }),
+
+/***/ 6983:
+/***/ ((module) => {
+
+module.exports = "vec3 LessThan(vec3 f, float value)\r\n{\r\n    return vec3(\r\n        (f.x < value) ? 1.0f : 0.0f,\r\n        (f.y < value) ? 1.0f : 0.0f,\r\n        (f.z < value) ? 1.0f : 0.0f);\r\n}\r\n\r\n                  \r\nvec3 LinearToSRGB(vec3 rgb)\r\n{\r\n    rgb = clamp(rgb, 0.0f, 1.0f);\r\n\r\n    return mix(\r\n        pow(rgb, vec3(1.0f / 2.4f)) * 1.055f - 0.055f,\r\n        rgb * 12.92f,\r\n        LessThan(rgb, 0.0031308f)\r\n    );\r\n}\r\n              \r\nvec3 ACESFilm(vec3 x)\r\n{\r\n    float a = 2.51f;\r\n    float b = 0.03f;\r\n    float c = 2.43f;\r\n    float d = 0.59f;\r\n    float e = 0.14f;\r\n    return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0f, 1.0f);\r\n}\r\n\r\nvec4 postProcess(vec4 pixelColor) {\r\n\r\n                      \r\n    pixelColor.xyz *= exposure;\r\n\r\n                   \r\n    pixelColor.xyz = ACESFilm(pixelColor.xyz);\r\n    pixelColor.xyz = LinearToSRGB(pixelColor.xyz);\r\n\r\n    return pixelColor;\r\n}"
+
+/***/ }),
+
+/***/ 6159:
+/***/ ((module) => {
+
+module.exports = "vec4 postProcess(vec4 color) {\r\n    return color;\r\n}"
 
 /***/ }),
 
@@ -1693,14 +1707,14 @@ module.exports = "                                                              
 /***/ 3219:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \r\n                                                                                                                        \r\n  \r\n                                                    \r\n  \r\n                                                                                                                        \r\n                                                                                                                        \r\n\r\n                                                                                                                        \r\n  \r\n                   \r\n                                            \r\n  \r\n                                                                                                                        \r\nstruct Isometry{\r\n    mat4 matrix;\r\n};\r\n\r\n   \r\n                    \r\n   \r\nconst Isometry IDENTITY = Isometry(mat4(1.));                          \r\n\r\n   \r\n                                                              \r\n                      \r\n   \r\nIsometry reduceError(Isometry isom){\r\n    return isom;\r\n}\r\n\r\n   \r\n                                     \r\n   \r\nIsometry multiply(Isometry isom1, Isometry isom2) {\r\n    return Isometry(isom1.matrix * isom2.matrix);\r\n}\r\n\r\n   \r\n                                            \r\n   \r\nIsometry geomInverse(Isometry isom) {\r\n    mat4 inv = inverse(isom.matrix);\r\n    return Isometry(inv);\r\n}\r\n\r\n                                                                                                                        \r\n  \r\n                \r\n                                        \r\n  \r\n                                                                                                                        \r\nstruct Point{\r\n    vec4 coords;\r\n};\r\n\r\n\r\nconst Point ORIGIN = Point(vec4(0, 0, 0, 1));                              \r\n\r\n\r\n   \r\n                                                           \r\n   \r\nPoint reduceError(Point p){\r\n    return p;\r\n}\r\n\r\n   \r\n                                       \r\n   \r\nPoint applyIsometry(Isometry isom, Point p) {\r\n    vec4 coords = isom.matrix * p.coords;\r\n    return Point(coords);\r\n}\r\n\r\n   \r\n                                                                     \r\n                                  \r\n   \r\n\r\nIsometry makeTranslation(Point p) {\r\n    vec4 c = p.coords;\r\n    mat4 matrix =  mat4(\r\n    1, 0., 0., 0.,\r\n    0., 1, 0., 0.,\r\n    0., 0., 1., 0,\r\n    c.x, c.y, c.z, 1.\r\n    );\r\n    return Isometry(matrix);\r\n}\r\n\r\n   \r\n                                                                     \r\n                                     \r\n   \r\nIsometry makeInvTranslation(Point p) {\r\n    vec4 c = p.coords;\r\n    mat4 matrix =  mat4(\r\n    1, 0., 0., 0.,\r\n    0., 1, 0., 0.,\r\n    0., 0., 1., 0,\r\n    -c.x, -c.y, -c.z, 1.\r\n    );\r\n    return Isometry(matrix);\r\n}\r\n\r\n                                                                                                                        \r\n  \r\n                 \r\n                                                              \r\n                                                                                                  \r\n  \r\n                                                                                                                        \r\nstruct Vector{\r\n    Point pos;                     \r\n    vec4 dir;                            \r\n};\r\n\r\n   \r\n                                \r\n   \r\nVector zeroVector(Point pos){ \r\n    return Vector(pos, vec4(0)); \r\n}\r\n\r\n   \r\n                                                            \r\n   \r\nVector reduceError(Vector v){\r\n    return v;\r\n}\r\n\r\n   \r\n                         \r\n                            \r\n   \r\nVector add(Vector v1, Vector v2){\r\n    return Vector(v1.pos, v1.dir + v2.dir);\r\n}\r\n\r\n   \r\n                              \r\n                            \r\n   \r\nVector sub(Vector v1, Vector v2){\r\n    return Vector(v1.pos, v1.dir - v2.dir);\r\n}\r\n\r\n   \r\n                                   \r\n                         \r\n                      \r\n   \r\nVector multiplyScalar(float s, Vector v){\r\n    return Vector(v.pos, s * v.dir);\r\n}\r\n\r\n\r\n   \r\n                                                                                 \r\n                     \r\n   \r\nfloat geomDot(Vector v1, Vector v2) {\r\n    return dot(v1.dir, v2.dir);\r\n}\r\n\r\n\r\n   \r\n                                        \r\n   \r\nVector applyIsometry(Isometry isom, Vector v) {\r\n    Point p = applyIsometry(isom, v.pos);\r\n    return Vector(p, isom.matrix * v.dir);\r\n}\r\n\r\n\r\n   \r\n                                                                         \r\n                                                                                                           \r\n                                           \r\n   \r\nVector applyFacing(mat4 m, Vector v) {\r\n    return Vector(v.pos, m * v.dir);\r\n}\r\n\r\nvoid initFlow(Vector v){\r\n}\r\n"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                                                    \n  \n                                                                                                                        \n                                                                                                                        \n\n                                                                                                                        \n  \n                   \n                                            \n  \n                                                                                                                        \nstruct Isometry{\n    mat4 matrix;\n};\n\n   \n                    \n   \nconst Isometry IDENTITY = Isometry(mat4(1.));                          \n\n   \n                                                              \n                      \n   \nIsometry reduceError(Isometry isom){\n    return isom;\n}\n\n   \n                                     \n   \nIsometry multiply(Isometry isom1, Isometry isom2) {\n    return Isometry(isom1.matrix * isom2.matrix);\n}\n\n   \n                                            \n   \nIsometry geomInverse(Isometry isom) {\n    mat4 inv = inverse(isom.matrix);\n    return Isometry(inv);\n}\n\n                                                                                                                        \n  \n                \n                                        \n  \n                                                                                                                        \nstruct Point{\n    vec4 coords;\n};\n\n\nconst Point ORIGIN = Point(vec4(0, 0, 0, 1));                              \n\n\n   \n                                                           \n   \nPoint reduceError(Point p){\n    return p;\n}\n\n   \n                                       \n   \nPoint applyIsometry(Isometry isom, Point p) {\n    vec4 coords = isom.matrix * p.coords;\n    return Point(coords);\n}\n\n   \n                                                                     \n                                  \n   \n\nIsometry makeTranslation(Point p) {\n    vec4 c = p.coords;\n    mat4 matrix =  mat4(\n    1, 0., 0., 0.,\n    0., 1, 0., 0.,\n    0., 0., 1., 0,\n    c.x, c.y, c.z, 1.\n    );\n    return Isometry(matrix);\n}\n\n   \n                                                                     \n                                     \n   \nIsometry makeInvTranslation(Point p) {\n    vec4 c = p.coords;\n    mat4 matrix =  mat4(\n    1, 0., 0., 0.,\n    0., 1, 0., 0.,\n    0., 0., 1., 0,\n    -c.x, -c.y, -c.z, 1.\n    );\n    return Isometry(matrix);\n}\n\n                                                                                                                        \n  \n                 \n                                                              \n                                                                                                  \n  \n                                                                                                                        \nstruct Vector{\n    Point pos;                     \n    vec4 dir;                            \n};\n\n   \n                                \n   \nVector zeroVector(Point pos){ \n    return Vector(pos, vec4(0)); \n}\n\n   \n                                                            \n   \nVector reduceError(Vector v){\n    return v;\n}\n\n   \n                         \n                            \n   \nVector add(Vector v1, Vector v2){\n    return Vector(v1.pos, v1.dir + v2.dir);\n}\n\n   \n                              \n                            \n   \nVector sub(Vector v1, Vector v2){\n    return Vector(v1.pos, v1.dir - v2.dir);\n}\n\n   \n                                   \n                         \n                      \n   \nVector multiplyScalar(float s, Vector v){\n    return Vector(v.pos, s * v.dir);\n}\n\n\n   \n                                                                                 \n                     \n   \nfloat geomDot(Vector v1, Vector v2) {\n    return dot(v1.dir, v2.dir);\n}\n\n\n   \n                                        \n   \nVector applyIsometry(Isometry isom, Vector v) {\n    Point p = applyIsometry(isom, v.pos);\n    return Vector(p, isom.matrix * v.dir);\n}\n\n\n   \n                                                                         \n                                                                                                           \n                                           \n   \nVector applyFacing(mat4 m, Vector v) {\n    return Vector(v.pos, m * v.dir);\n}\n\nvoid initFlow(Vector v){\n}\n"
 
 /***/ }),
 
 /***/ 1999:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \r\n                                                                                                                        \r\n  \r\n                                                    \r\n  \r\n                                                                                                                        \r\n                                                                                                                        \r\n\r\n   \r\n                               \r\n                                                                       \r\n                                     \r\n                                                      \r\n   \r\nvoid frame(Point p, out Vector[3] f){\r\n    f[0] = Vector(p, vec4(1, 0, 0, 0));\r\n    f[1] = Vector(p, vec4(0, 1, 0, 0));\r\n    f[2] = Vector(p, vec4(0, 0, 1, 0));\r\n}\r\n\r\n   \r\n                                           \r\n                                                                       \r\n                                     \r\n                                                      \r\n   \r\nvoid orthoFrame(Point p, out Vector[3] f){\r\n    f[0] = Vector(p, vec4(1, 0, 0, 0));\r\n    f[1] = Vector(p, vec4(0, 1, 0, 0));\r\n    f[2] = Vector(p, vec4(0, 0, 1, 0));\r\n}\r\n\r\n   \r\n                                                                                         \r\n                              \r\n                                                                                              \r\n   \r\nPoint smallShift(Point p, vec3 dp){\r\n    vec4 aux = vec4(dp, 0);\r\n    return Point(p.coords + aux);\r\n}\r\n\r\nVector smallShift(Vector v, vec3 dp){\r\n    Point pos = smallShift(v.pos, dp);\r\n    return Vector(pos, v.dir);\r\n}\r\n\r\n\r\n   \r\n                                  \r\n                                                 \r\n   \r\nVector flow(Vector v, float t){\r\n    vec4 coords = v.pos.coords + t * v.dir;\r\n    Point p = Point(coords);\r\n    return Vector(p, v.dir);\r\n}\r\n"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                                                    \n  \n                                                                                                                        \n                                                                                                                        \n\n   \n                               \n                                                                       \n                                     \n                                                      \n   \nvoid frame(Point p, out Vector[3] f){\n    f[0] = Vector(p, vec4(1, 0, 0, 0));\n    f[1] = Vector(p, vec4(0, 1, 0, 0));\n    f[2] = Vector(p, vec4(0, 0, 1, 0));\n}\n\n   \n                                           \n                                                                       \n                                     \n                                                      \n   \nvoid orthoFrame(Point p, out Vector[3] f){\n    f[0] = Vector(p, vec4(1, 0, 0, 0));\n    f[1] = Vector(p, vec4(0, 1, 0, 0));\n    f[2] = Vector(p, vec4(0, 0, 1, 0));\n}\n\n   \n                                                                                         \n                              \n                                                                                              \n   \nPoint smallShift(Point p, vec3 dp){\n    vec4 aux = vec4(dp, 0);\n    return Point(p.coords + aux);\n}\n\nVector smallShift(Vector v, vec3 dp){\n    Point pos = smallShift(v.pos, dp);\n    return Vector(pos, v.dir);\n}\n\n\n   \n                                  \n                                                 \n   \nVector flow(Vector v, float t){\n    vec4 coords = v.pos.coords + t * v.dir;\n    Point p = Point(coords);\n    return Vector(p, v.dir);\n}\n"
 
 /***/ }),
 
@@ -3892,10 +3906,18 @@ var vectorDataStruct_default = /*#__PURE__*/__webpack_require__.n(vectorDataStru
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/vectorDataUpdate.glsl.mustache
 var vectorDataUpdate_glsl_mustache = __webpack_require__(7781);
 var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(vectorDataUpdate_glsl_mustache);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/basic/postProcessVoid.glsl
+var postProcessVoid = __webpack_require__(6159);
+var postProcessVoid_default = /*#__PURE__*/__webpack_require__.n(postProcessVoid);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/basic/postProcessGammaCorrection.glsl
+var postProcessGammaCorrection = __webpack_require__(6983);
+var postProcessGammaCorrection_default = /*#__PURE__*/__webpack_require__.n(postProcessGammaCorrection);
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/main.glsl
 var main = __webpack_require__(5315);
 var main_default = /*#__PURE__*/__webpack_require__.n(main);
 ;// CONCATENATED MODULE: ./src/core/renderers/BasicRenderer.js
+
+
 
 
 
@@ -3948,6 +3970,9 @@ class BasicRenderer extends AbstractRenderer {
          * @type {EffectComposer}
          */
         this.composer = new EffectComposer(this.threeRenderer);
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
     }
 
     get isBasicRenderer() {
@@ -3997,6 +4022,13 @@ class BasicRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk((raymarch_default()));
+        if(this.postProcess){
+            this._fragmentBuilder.addUniform("exposure", "float", this.exposure);
+            this._fragmentBuilder.addChunk((postProcessGammaCorrection_default()));
+        }
+        else{
+            this._fragmentBuilder.addChunk((postProcessVoid_default()));
+        }
         this._fragmentBuilder.addChunk((main_default()));
     }
 
@@ -4787,6 +4819,8 @@ const BOTH = 2;
 
 
 
+
+
 /**
  * @class
  *
@@ -4831,6 +4865,11 @@ class VRRenderer extends AbstractRenderer {
          * @private
          */
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
     }
 
     get isVRRenderer() {
@@ -4877,6 +4916,13 @@ class VRRenderer extends AbstractRenderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk((raymarch_default()));
+            if(this.postProcess){
+                this._fragmentBuilder[side].addUniform("exposure", "float", this.exposure);
+                this._fragmentBuilder[side].addChunk((postProcessGammaCorrection_default()));
+            }
+            else{
+                this._fragmentBuilder[side].addChunk((postProcessVoid_default()));
+            }
             this._fragmentBuilder[side].addChunk((main_default()));
         }
     }

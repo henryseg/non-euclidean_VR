@@ -1586,7 +1586,21 @@ module.exports = "                                                              
 /***/ 5315:
 /***/ ((module) => {
 
-module.exports = "   \r\n                          \r\n   \r\nvarying vec3 spherePosition;\r\n\r\n   \r\n                                           \r\n                       \r\n                                                           \r\n                                 \r\n                                                         \r\n   \r\nvoid main() {\r\n    RelVector vector = mapping(spherePosition);\r\n    ExtVector v = ExtVector(vector, initVectorData());\r\n    gl_FragColor = getColor(v);\r\n}"
+module.exports = "   \r\n                          \r\n   \r\nvarying vec3 spherePosition;\r\n\r\n   \r\n                                           \r\n                       \r\n                                                           \r\n                                 \r\n                                                         \r\n   \r\nvoid main() {\r\n    RelVector vector = mapping(spherePosition);\r\n    ExtVector v = ExtVector(vector, initVectorData());\r\n    gl_FragColor = postProcess(getColor(v));\r\n}"
+
+/***/ }),
+
+/***/ 6983:
+/***/ ((module) => {
+
+module.exports = "vec3 LessThan(vec3 f, float value)\r\n{\r\n    return vec3(\r\n        (f.x < value) ? 1.0f : 0.0f,\r\n        (f.y < value) ? 1.0f : 0.0f,\r\n        (f.z < value) ? 1.0f : 0.0f);\r\n}\r\n\r\n                  \r\nvec3 LinearToSRGB(vec3 rgb)\r\n{\r\n    rgb = clamp(rgb, 0.0f, 1.0f);\r\n\r\n    return mix(\r\n        pow(rgb, vec3(1.0f / 2.4f)) * 1.055f - 0.055f,\r\n        rgb * 12.92f,\r\n        LessThan(rgb, 0.0031308f)\r\n    );\r\n}\r\n              \r\nvec3 ACESFilm(vec3 x)\r\n{\r\n    float a = 2.51f;\r\n    float b = 0.03f;\r\n    float c = 2.43f;\r\n    float d = 0.59f;\r\n    float e = 0.14f;\r\n    return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0f, 1.0f);\r\n}\r\n\r\nvec4 postProcess(vec4 pixelColor) {\r\n\r\n                      \r\n    pixelColor.xyz *= exposure;\r\n\r\n                   \r\n    pixelColor.xyz = ACESFilm(pixelColor.xyz);\r\n    pixelColor.xyz = LinearToSRGB(pixelColor.xyz);\r\n\r\n    return pixelColor;\r\n}"
+
+/***/ }),
+
+/***/ 6159:
+/***/ ((module) => {
+
+module.exports = "vec4 postProcess(vec4 color) {\r\n    return color;\r\n}"
 
 /***/ }),
 
@@ -1716,6 +1730,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 3889:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \r\n                       \r\n                                                                                                                        \r\n\r\nstruct MultiColorMaterial {\r\n    vec3 mainColor;\r\n    vec3 accent1;\r\n    vec3 accent2;\r\n    vec3 accent3;\r\n    bool grid;\r\n};\r\n\r\nvec4 render(MultiColorMaterial material, ExtVector v) {\r\n\r\n    vec3 dir = normalize(v.vector.local.pos.coords.xyz);\r\n    float height = acos(v.vector.local.pos.coords.w);\r\n\r\n    float cosphi = dir.z;\r\n    float sinphi = length(dir.xy);\r\n    float phi = atan(sinphi,cosphi);\r\n    float theta = atan(dir.y,dir.x);\r\n\r\n    vec3 color = material.mainColor;\r\n    color += material.accent1 * dir.x;\r\n    color += material.accent2 * dir.y;\r\n    color += material.accent3 * dir.z;\r\n\r\n    if(material.grid){\r\n        float test = sin(70.*phi)*sin(70.*theta)*sin(70.*height);\r\n        float sgn = sign(test);\r\n        if (sgn<0.){\r\n            color *=0.9;\r\n        }\r\n    }\r\n\r\n    return vec4(color, 1);\r\n}"
+
+/***/ }),
+
 /***/ 4193:
 /***/ ((module) => {
 
@@ -1726,7 +1747,7 @@ module.exports = "                                                              
 /***/ 2473:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \r\n          \r\n                            \r\n                                                                                                                        \r\n\r\nstruct BallShape {\r\n    int id;\r\n    Point center;\r\n    float radius;\r\n    Isometry absoluteIsomInv;\r\n};\r\n\r\n   \r\n                                                 \r\n   \r\nfloat sdf(BallShape ball, RelVector v) {\r\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\r\n    center = reduceError(center);\r\n    return dist(v.local.pos, center) - ball.radius;\r\n}\r\n\r\n   \r\n                                              \r\n   \r\nRelVector gradient(BallShape ball, RelVector v){\r\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\r\n    Vector local = direction(v.local.pos, center);\r\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\r\n}\r\n\r\nvec2 uvMap(BallShape ball, RelVector v){\r\n    Point pos = applyGroupElement(v.cellBoost, v.local.pos);\r\n    Vector direction = direction(ball.center, pos);\r\n    direction = applyIsometry(ball.absoluteIsomInv, direction);\r\n    vec4 dir = normalize(direction.dir);\r\n    float sinPhi = length(dir.xy);\r\n    float cosPhi = dir.z;\r\n    float uCoord = -atan(dir.y, dir.x);\r\n    float vCoord = atan(sinPhi, cosPhi);\r\n    return vec2(uCoord, vCoord);\r\n}\r\n"
+module.exports = "                                                                                                                        \r\n          \r\n                            \r\n                                                                                                                        \r\n\r\nstruct BallShape {\r\n    int id;\r\n    Point center;\r\n    float radius;\r\n    Isometry absoluteIsomInv;\r\n};\r\n\r\n   \r\n                                                 \r\n   \r\nfloat sdf(BallShape ball, RelVector v) {\r\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\r\n    center = reduceError(center);\r\n    return dist(v.local.pos, center) - ball.radius;\r\n}\r\n\r\n   \r\n                                              \r\n   \r\nRelVector gradient(BallShape ball, RelVector v){\r\n    Point center = applyGroupElement(v.invCellBoost, ball.center);\r\n    Vector local = direction(v.local.pos, center);\r\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\r\n}\r\n\r\nvec2 uvMap(BallShape ball, RelVector v){\r\n    Point pos = applyGroupElement(v.cellBoost, v.local.pos);\r\n    Vector direction = direction(ball.center, pos);\r\n    direction = applyIsometry(ball.absoluteIsomInv, direction);\r\n    vec4 dir = normalize(direction.dir);\r\n    float sinPhi = length(dir.xy);\r\n    float cosPhi = dir.z;\r\n    float uCoord = atan(dir.y, dir.x);\r\n    float vCoord = atan(sinPhi, cosPhi);\r\n    return vec2(uCoord, vCoord);\r\n}\r\n"
 
 /***/ }),
 
@@ -1762,6 +1783,13 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \r\n          \r\n                            \r\n                                                                                                                        \r\n\r\nstruct LocalBallShape {\r\n    int id;\r\n    Point center;\r\n    float radius;\r\n};\r\n\r\n   \r\n                                                 \r\n   \r\nfloat sdf(LocalBallShape ball, RelVector v) {\r\n    return dist(v.local.pos, ball.center) - ball.radius;\r\n}\r\n\r\n   \r\n                                              \r\n   \r\nRelVector gradient(LocalBallShape ball, RelVector v){\r\n    Vector local = direction(v.local.pos, ball.center);\r\n    return RelVector(negate(local), v.cellBoost, v.invCellBoost);\r\n}\r\n"
+
+/***/ }),
+
+/***/ 9807:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \r\n          \r\n                                            \r\n                                                                                                                        \r\n\r\nstruct LocalCylinderShape {\r\n    int id;\r\n    Vector direction;\r\n    float radius;\r\n    vec4 uvTestX;\r\n    vec4 uvTestY;\r\n};\r\n\r\n   \r\n                           \r\n   \r\nfloat sdf(LocalCylinderShape cyl, RelVector v) {\r\n    float aux1 = dot(v.local.pos.coords, cyl.direction.pos.coords);\r\n    float aux2 = dot(v.local.pos.coords, cyl.direction.dir);\r\n    return abs(acos(sqrt(aux1 * aux1 + aux2 * aux2))) - cyl.radius;\r\n}\r\n\r\n\r\n   \r\n                                              \r\n   \r\nRelVector gradient(LocalCylinderShape cyl, RelVector v){\r\n    vec4 m = v.local.pos.coords;\r\n    Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);\r\n    float aux1 = dot(m, dir.pos.coords);\r\n    float aux2 = dot(m, dir.dir);\r\n    float den = sqrt(aux1 * aux1 + aux2 * aux2);\r\n    vec4 coords = (aux1/den) * dir.pos.coords + (aux2/den) * dir.dir;\r\n    Point proj = Point(coords);\r\n    Vector local = direction(v.local.pos, proj);\r\n    local = negate(local);\r\n    return RelVector(local, v.cellBoost, v.invCellBoost);\r\n}\r\n\r\nvec2 uvMap(LocalCylinderShape cyl, RelVector v){\r\n    vec4 m = v.local.pos.coords;\r\n    Vector dir = applyGroupElement(v.invCellBoost, cyl.direction);\r\n    float aux1 = dot(m, dir.pos.coords);\r\n    float aux2 = dot(m, dir.dir);\r\n    vec4 proj = aux1 * dir.pos.coords + aux2 * dir.dir;\r\n    float uCoord = acos(dot(normalize(proj), dir.pos.coords));\r\n\r\n                                                                                                                       \r\n    vec4 aux = m - proj + length(proj) * dir.pos.coords;\r\n    float vCoord = atan(dot(aux, cyl.uvTestY), dot(aux, cyl.uvTestX));\r\n\r\n    return vec2(uCoord, vCoord);\r\n}\r\n"
 
 /***/ }),
 
@@ -1997,9 +2025,12 @@ __webpack_require__.d(__webpack_exports__, {
   "gU": () => (/* reexport */ LinearToSRGBPostProcess),
   "jo": () => (/* reexport */ LocalBall),
   "Q": () => (/* reexport */ LocalBallShape),
+  "gq": () => (/* reexport */ LocalCylinder),
+  "Gj": () => (/* reexport */ LocalCylinderShape),
   "F5": () => (/* reexport */ Material),
   "Uc": () => (/* reexport */ Matrix2),
   "Fh": () => (/* reexport */ MoveVRControls),
+  "O5": () => (/* reexport */ MultiColorMaterial),
   "oB": () => (/* reexport */ NormalMaterial),
   "pJ": () => (/* reexport */ PTMaterial),
   "GW": () => (/* reexport */ PathTracerCamera),
@@ -3849,10 +3880,18 @@ var vectorDataStruct_default = /*#__PURE__*/__webpack_require__.n(vectorDataStru
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/vectorDataUpdate.glsl.mustache
 var vectorDataUpdate_glsl_mustache = __webpack_require__(7781);
 var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(vectorDataUpdate_glsl_mustache);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/basic/postProcessVoid.glsl
+var postProcessVoid = __webpack_require__(6159);
+var postProcessVoid_default = /*#__PURE__*/__webpack_require__.n(postProcessVoid);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/basic/postProcessGammaCorrection.glsl
+var postProcessGammaCorrection = __webpack_require__(6983);
+var postProcessGammaCorrection_default = /*#__PURE__*/__webpack_require__.n(postProcessGammaCorrection);
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/main.glsl
 var main = __webpack_require__(5315);
 var main_default = /*#__PURE__*/__webpack_require__.n(main);
 ;// CONCATENATED MODULE: ./src/core/renderers/BasicRenderer.js
+
+
 
 
 
@@ -3905,6 +3944,9 @@ class BasicRenderer extends AbstractRenderer {
          * @type {EffectComposer}
          */
         this.composer = new EffectComposer(this.threeRenderer);
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
     }
 
     get isBasicRenderer() {
@@ -3954,6 +3996,13 @@ class BasicRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk((raymarch_default()));
+        if(this.postProcess){
+            this._fragmentBuilder.addUniform("exposure", "float", this.exposure);
+            this._fragmentBuilder.addChunk((postProcessGammaCorrection_default()));
+        }
+        else{
+            this._fragmentBuilder.addChunk((postProcessVoid_default()));
+        }
         this._fragmentBuilder.addChunk((main_default()));
     }
 
@@ -4744,6 +4793,8 @@ const BOTH = 2;
 
 
 
+
+
 /**
  * @class
  *
@@ -4788,6 +4839,11 @@ class VRRenderer extends AbstractRenderer {
          * @private
          */
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
     }
 
     get isVRRenderer() {
@@ -4834,6 +4890,13 @@ class VRRenderer extends AbstractRenderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk((raymarch_default()));
+            if(this.postProcess){
+                this._fragmentBuilder[side].addUniform("exposure", "float", this.exposure);
+                this._fragmentBuilder[side].addChunk((postProcessGammaCorrection_default()));
+            }
+            else{
+                this._fragmentBuilder[side].addChunk((postProcessVoid_default()));
+            }
             this._fragmentBuilder[side].addChunk((main_default()));
         }
     }
@@ -19652,7 +19715,63 @@ class VaryingColorMaterial extends Material {
     }
 
 }
+// EXTERNAL MODULE: ./src/geometries/sph/material/multiColor/shaders/struct.glsl
+var multiColor_shaders_struct = __webpack_require__(3889);
+var multiColor_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(multiColor_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sph/material/multiColor/MultiColorMaterial.js
+
+
+
+
+
+
+
+/**
+ * @class
+ * @extends Material
+ *
+ * @classdesc
+ * A material that display a single plain color
+ */
+class MultiColorMaterial extends Material {
+
+    /**
+     * Constructor.
+     * The constructor takes no argument.
+     * @param {Color} mainColor - the color of the material
+     * @param {Color} accent1 - amplitudes of the variations on each channel
+     * @param {Color} accent2 - amplitudes of the variations on each channel
+     * @param {Color} accent3 - amplitudes of the variations on each channel
+     * @param {Bool} grid - do we draw a grid or not
+     */
+    constructor(mainColor, accent1,accent2,accent3,grid) {
+        super();
+        this.mainColor = mainColor;
+        this.accent1 = accent1;
+        this.accent2 = accent2;
+        this.accent3 = accent3;
+        this.grid = grid != undefined ? grid : false;
+    }
+
+    get uniformType() {
+        return 'MultiColorMaterial';
+    }
+
+    get usesNormal(){
+        return false;
+    }
+
+    static glslClass() {
+        return (multiColor_shaders_struct_default());
+    }
+
+    glslRender() {
+        return render_glsl_mustache_default()(this);
+    }
+
+}
 ;// CONCATENATED MODULE: ./src/geometries/sph/material/all.js
+
 
 ;// CONCATENATED MODULE: ./src/geometries/sph/geometry/General.js
 
@@ -20238,7 +20357,113 @@ class HalfSpaceShape extends BasicShape {
     }
 
 }
+// EXTERNAL MODULE: ./src/geometries/sph/shapes/localCylinder/shaders/struct.glsl
+var localCylinder_shaders_struct = __webpack_require__(9807);
+var localCylinder_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(localCylinder_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/sph/shapes/localCylinder/LocalCylinderShape.js
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ * @extends BasicShape
+ *
+ * @classdesc
+ * Cylinder in spherical geometry.
+ */
+class LocalCylinderShape extends BasicShape {
+
+    /**
+     * Constructor
+     * The cylinder is the image by isom of the cylinder going through the origin and directed by e_z
+     * The UV map takes value in [-pi, pi] x [-pi, pi]. It is computed as follows
+     * - the u-coordinate is the distance between the origin and the projection of the on the "core" geodesic
+     * - the v-coordinate is such that v = 0 correspond to the point in the e_y direction
+     * @param {Isometry} isom - the position of the cylinder
+     * @param {number} radius - the radius of the cylinder
+     */
+    constructor(isom, radius) {
+        super(isom);
+        this.addImport((direction_default()));
+        this.radius = radius;
+        this._direction = undefined;
+        this._uvTestX = undefined;
+        this._uvTestY = undefined;
+    }
+
+    updateData() {
+        super.updateData();
+        this._direction = {
+            pos: new Point().applyIsometry(this.absoluteIsom),
+            dir: new external_three_namespaceObject.Vector4(0, 0, 1, 0).applyMatrix4(this.absoluteIsom.matrix)
+        };
+        this._uvTestX = new external_three_namespaceObject.Vector4(1, 0, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+        this._uvTestY = new external_three_namespaceObject.Vector4(0, 1, 0, 0).applyMatrix4(this.absoluteIsom.matrix);
+    }
+
+    get direction() {
+        if (this._direction === undefined) {
+            this.updateData();
+        }
+        return this._direction;
+    }
+
+    get uvTestX() {
+        if (this._uvTestX === undefined) {
+            this.updateData();
+        }
+        return this._uvTestX;
+    }
+
+    get uvTestY() {
+        if (this._uvTestY === undefined) {
+            this.updateData();
+        }
+        return this._uvTestY;
+    }
+
+    // get isCylinderShape() {
+    //     return true;
+    // }
+
+    get isGlobal() {
+        return false;
+    }
+
+    get hasUVMap() {
+        return true;
+    }
+
+    get uniformType() {
+        return 'LocalCylinderShape';
+    }
+
+    static glslClass() {
+        return (localCylinder_shaders_struct_default());
+    }
+
+    glslSDF() {
+        return shapes_shaders_sdf_glsl_mustache_default()(this);
+    }
+
+    glslGradient() {
+        return shapes_shaders_gradient_glsl_mustache_default()(this);
+    }
+
+    glslUVMap() {
+        return shapes_shaders_uv_glsl_mustache_default()(this);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/sph/shapes/all.js
+
 
 
 
@@ -20542,7 +20767,32 @@ class HalfSpace extends Solid {
         super(shape, material, ptMaterial);
     }
 }
+;// CONCATENATED MODULE: ./src/geometries/sph/solids/LocalCylinder.js
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Spherical cylinder
+ */
+class LocalCylinder extends Solid {
+
+    /**
+     * Constructor
+     * @param {Isometry} isom - the location of the cylinder
+     * @param {number} radius - the radius of the cylinder
+     * @param {Material} material - the material of the cylinder
+     * @param {PTMaterial} ptMaterial - material for path tracing (optional)
+     */
+    constructor(isom, radius, material, ptMaterial = undefined) {
+        const shape = new LocalCylinderShape(isom, radius);
+        super(shape, material, ptMaterial);
+    }
+}
 ;// CONCATENATED MODULE: ./src/geometries/sph/solids/all.js
+
 
 
 
@@ -20639,9 +20889,12 @@ var __webpack_exports__LightVRControls = __webpack_exports__.uR;
 var __webpack_exports__LinearToSRGBPostProcess = __webpack_exports__.gU;
 var __webpack_exports__LocalBall = __webpack_exports__.jo;
 var __webpack_exports__LocalBallShape = __webpack_exports__.Q;
+var __webpack_exports__LocalCylinder = __webpack_exports__.gq;
+var __webpack_exports__LocalCylinderShape = __webpack_exports__.Gj;
 var __webpack_exports__Material = __webpack_exports__.F5;
 var __webpack_exports__Matrix2 = __webpack_exports__.Uc;
 var __webpack_exports__MoveVRControls = __webpack_exports__.Fh;
+var __webpack_exports__MultiColorMaterial = __webpack_exports__.O5;
 var __webpack_exports__NormalMaterial = __webpack_exports__.oB;
 var __webpack_exports__PTMaterial = __webpack_exports__.pJ;
 var __webpack_exports__PathTracerCamera = __webpack_exports__.GW;
@@ -20709,4 +20962,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Circle as Circle, __webpack_exports__CircleShape as CircleShape, __webpack_exports__CliffordTorus as CliffordTorus, __webpack_exports__CliffordTorusShape as CliffordTorusShape, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__poincareSet as poincareSet, __webpack_exports__quaternionSet as quaternionSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__Circle as Circle, __webpack_exports__CircleShape as CircleShape, __webpack_exports__CliffordTorus as CliffordTorus, __webpack_exports__CliffordTorusShape as CliffordTorusShape, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__poincareSet as poincareSet, __webpack_exports__quaternionSet as quaternionSet, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };
