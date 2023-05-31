@@ -7,10 +7,11 @@ struct LocalCylinderShape {
     int id;
     Vector direction;
     float radius;
+    Isometry absoluteIsomInv;
 };
 
 /**
- * Distance function for a global hyperbolic ball
+ * Distance function for a local hyperbolic cylinder
  */
 float sdf(LocalCylinderShape cyl, RelVector v) {
     float aux0 = hypDot(v.local.pos.coords, cyl.direction.pos.coords);
@@ -19,7 +20,7 @@ float sdf(LocalCylinderShape cyl, RelVector v) {
 }
 
 /**
- * Gradient field for a global hyperbolic ball
+ * Gradient field for a local hyperbolic cylinder
  */
 RelVector gradient(LocalCylinderShape cyl, RelVector v){
     float aux0 = hypDot(v.local.pos.coords, cyl.direction.pos.coords);
@@ -37,5 +38,5 @@ RelVector gradient(LocalCylinderShape cyl, RelVector v){
  * Hence we have to go back and forth between the local and the global position.
  * Find a better way to do this? 
  */
-//vec2 uvMap(CylinderShape cylinder, RelVector v){
+//vec2 uvMap(LocalCylinderShape cylinder, RelVector v){
 //}

@@ -13,7 +13,7 @@ struct MultiColorMaterial {
 vec4 render(MultiColorMaterial material, ExtVector v) {
 
     vec3 dir = normalize(v.vector.local.pos.coords.xyz);
-    float height = v.vector.local.pos.coords.w;
+    float height = acos(v.vector.local.pos.coords.w);
 
     float cosphi = dir.z;
     float sinphi = length(dir.xy);
