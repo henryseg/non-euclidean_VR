@@ -22,5 +22,7 @@ RelVector gradient(LocalVerticalCylinderShape cyl, RelVector v) {
 }
 
 vec2 uvMap(LocalVerticalCylinderShape cyl, RelVector v) {
-    return vec2(0, 0);
+    vec2 dir = v.local.pos.coords.xy - cyl.pos.coords.xy;
+    float height = v.local.pos.coords.z;
+    return vec2(atan(dir.y,dir.x),height);
 }

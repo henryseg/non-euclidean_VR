@@ -4,6 +4,7 @@ import {Isometry, Point} from "../../geometry/General.js";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 /**
  * @class
@@ -49,13 +50,12 @@ export class LocalVerticalCylinderShape extends BasicShape {
     }
 
     get hasUVMap() {
-        return false;
+        return true;
     }
 
     get uniformType() {
         return 'LocalVerticalCylinderShape';
     }
-
 
     static glslClass() {
         return struct;
@@ -67,5 +67,9 @@ export class LocalVerticalCylinderShape extends BasicShape {
 
     glslGradient() {
         return gradient(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }

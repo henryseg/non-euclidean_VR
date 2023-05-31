@@ -33,7 +33,7 @@ vec2 uvMap(HalfSpaceShape halfspace, RelVector v){
     vec3 aux = normalize(point.coords.xyw);
     float sinPhi = length(aux.xy);
     float cosPhi = aux.z;
-    float uCoord = -atan(aux.y, aux.x);
+    float uCoord = atan(aux.y, aux.x);
     float vCoord = atan(sinPhi, cosPhi);
     return vec2(uCoord, vCoord);
 }
