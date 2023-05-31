@@ -7,6 +7,7 @@ struct BallShape {
     int id;
     Point center;
     float radius;
+    Isometry absoluteIsomInv;
 };
 
 /**
@@ -20,7 +21,7 @@ float sdf(BallShape ball, RelVector v) {
 /**
  * Gradient field for a global hyperbolic ball
  */
-RelVector gradient(BallShape ball, RelVector v){
+RelVector gradient(BallShape ball, RelVector v) {
     Point center = applyIsometry(v.invCellBoost, ball.center);
     Vector local = direction(v.local.pos, center);
     return RelVector(negate(local), v.cellBoost, v.invCellBoost);
@@ -32,23 +33,14 @@ RelVector gradient(BallShape ball, RelVector v){
  * Hence we have to go back and forth between the local and the global position.
  * Find a better way to do this? 
  */
-vec2 uvMap(BallShape ball, RelVector v){
-    Vector[3] f;
+vec2 uvMap(BallShape ball, RelVector v) {
     Point pos = applyGroupElement(v.cellBoost, v.local.pos);
-    orthoFrame(pos, f);
-
-    f[0] = applyGroupElement(v.invCellBoost, f[0]);
-    f[1] = applyGroupElement(v.invCellBoost, f[1]);
-    f[2] = applyGroupElement(v.invCellBoost, f[2]);
-    Point center = applyIsometry(v.invCellBoost, ball.center);
-    
-    Vector radius = direction(center, v.local.pos);
-
-    float x = geomDot(radius, f[0]);
-    float y = geomDot(radius, f[1]);
-    float cosPhi = geomDot(radius, f[2]);
-    float sinPhi = sqrt(x * x + y * y);
-    float uCoord = atan(y, x);
+    Vector direction = direction(ball.center, pos);
+    direction = applyIsometry(ball.absoluteIsomInv, direction);
+    vec4 dir = normalize(direction.dir);
+    float sinPhi = length(dir.xy);
+    float cosPhi = dir.z;
+    float uCoord = atan(dir.y, dir.x);
     float vCoord = atan(sinPhi, cosPhi);
     return vec2(uCoord, vCoord);
 }
