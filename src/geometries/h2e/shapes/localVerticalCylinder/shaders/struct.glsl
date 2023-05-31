@@ -15,6 +15,7 @@ float sdf(LocalVerticalCylinderShape cylinder, RelVector v) {
     return acosh(-hypDot(v.local.pos.coords, point.coords)) - cylinder.radius;
 }
 
+
 RelVector gradient(LocalVerticalCylinderShape cylinder, RelVector v){
     Point point = cylinder.vector.pos;
     vec3 q = point.coords.xyz;
