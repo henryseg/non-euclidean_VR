@@ -69,6 +69,8 @@ vec3 AGMList[AGMSteps];
 // number of steps actually used for the AGM, the index of the last non-zero entries in AGMList should be AGMLength - 1
 int AGMLength;
 
+
+
 void agm() {
     // Compute the AGM of 1 and sqrt(1-m) to the given accuracy :
     // Note that sqrt(1 - m) = kprime
@@ -77,7 +79,11 @@ void agm() {
     // index of the last step : AGMIndex
 
     // initialization
+//    for (int i = 0; i < AGMSteps; i++) {
+//        AGMList[i] = vec3(1);
+//    }
     AGMList[0] = vec3(1., ell_kprime, ell_k);
+
     AGMLength = 1;
 
     // variable used during the induction
@@ -109,7 +115,7 @@ vec2 ellipke() {
 
     // induction
     for (int i = 0; i < AGMLength; i++) {
-        aux = aux + pow(2., float(i-1)) * AGMList[i].z * AGMList[i].z;
+        aux = aux + pow(2., float(i - 1)) * AGMList[i].z * AGMList[i].z;
     }
 
     // wrapping up the results
@@ -147,7 +153,7 @@ vec3 ellipj1(float u) {
         aux_c = c * d;
         num = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].y);
         den = (c * c / AGMList[AGMLength - j].x + AGMList[AGMLength - 1 - j].x);
-        aux_d =  num / den;
+        aux_d = num / den;
         c = aux_c;
         d = aux_d;
     }
@@ -168,7 +174,7 @@ vec3 ellipj2(float u) {
     // u is asumme to be between 0 and 2 * K
 
     // initializing the parameters for the induction
-    float phi0 = pow(2., float(AGMLength-1)) * AGMList[AGMLength - 1].x * u;
+    float phi0 = pow(2., float(AGMLength - 1)) * AGMList[AGMLength - 1].x * u;
     float phi1;
     float aux;
 
@@ -191,7 +197,7 @@ vec3 ellipj3(float u) {
     // Return the 3 Jacobi ellpitic functions sn(u|m), cn(u|m) and dn(u|m)
     // Taken from ShaderToy: https://www.shadertoy.com/view/4tlBRl
 
-    float emc = 1.0-ell_m;
+    float emc = 1.0 - ell_m;
     float a, b, c;
     const int N = 4;
     float em[N], en[N];
@@ -201,28 +207,28 @@ vec3 ellipj3(float u) {
         em[i] = a;
         emc = sqrt(emc);
         en[i] = emc;
-        c = 0.5*(a+emc);
-        emc = a*emc;
+        c = 0.5 * (a + emc);
+        emc = a * emc;
         a = c;
     }
     // Nothing up to here depends on u, so
     // could be precalculated.
-    u = c*u;
+    u = c * u;
     float sn = sin(u);
     float cn = cos(u);
     if (sn != 0.0) {
-        a = cn/sn; c = a*c;
-        for (int i = N-1; i >= 0; i--) {
+        a = cn / sn; c = a * c;
+        for (int i = N - 1; i >= 0; i--) {
             b = em[i];
-            a = c*a;
-            c = dn*c;
-            dn = (en[i]+a)/(b+a);
-            a = c/b;
+            a = c * a;
+            c = dn * c;
+            dn = (en[i] + a) / (b + a);
+            a = c / b;
         }
-        a = 1.0/sqrt(c*c + 1.0);
+        a = 1.0 / sqrt(c * c + 1.0);
         if (sn < 0.0) sn = -a;
         else sn = a;
-        cn = c*sn;
+        cn = c * sn;
     }
 
     return vec3(sn, cn, dn);
@@ -246,20 +252,20 @@ vec3 ellipjAtZero(float u) {
     float u7 = u6 * u;
 
     return vec3(
-    u1
-    - (1. + k2) * u3 / 6.
-    + (1. + 14. * k2 + k4) * u5 / 120.
-    - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.,
+        u1
+        - (1. + k2) * u3 / 6.
+        + (1. + 14. * k2 + k4) * u5 / 120.
+        - (1. + 135. * k2 + 135. * k4 + k6) * u7 / 5040.,
 
-    1.
-    - u2 / 2.
-    + (1. + 4. * k2) * u4 / 24.
-    - (1. + 44. * k2 + 16. * k4) * u6 / 720.,
+        1.
+        - u2 / 2.
+        + (1. + 4. * k2) * u4 / 24.
+        - (1. + 44. * k2 + 16. * k4) * u6 / 720.,
 
-    1.
-    - k2 * u2 / 2.
-    + k2 * (4. + k2) * u4 / 24.
-    - k2 * (16. + 44. * k2 + k4) * u6 / 720.
+        1.
+        - k2 * u2 / 2.
+        + k2 * (4. + k2) * u4 / 24.
+        - k2 * (16. + 44. * k2 + k4) * u6 / 720.
     );
 }
 
@@ -274,7 +280,7 @@ vec3 ellipj(float u) {
     float u1 = mod(u, 4. * ell_K);
     float sign = 1.;
     if (u1 > 2. * ell_K) {
-        u1 = 4.* ell_K -u1;
+        u1 = 4. * ell_K - u1;
         sign = -1.;
     }
 
@@ -297,14 +303,14 @@ float ellipz(float tanPhi) {
     // the argument is passed as tan(phi) since this is the way it is computed from the Jacboi function :
     // tan(phi) = sn(u|m) / cn(u|m)
     // This is useless to compute the atan and then apply tan!
-    // Computed with the AGM algorithm, see §17.6 in [2]
+    // Computed with the AGM algorithm, see  paragraph 17.6 in [2]
     float tolerance = 0.001;
 
 
     float sign = 1.;
     float t0 = tanPhi;
     if (t0 < 0.) {
-        t0 = - t0;
+        t0 = -t0;
         sign = -1.;
     }
 
@@ -316,10 +322,10 @@ float ellipz(float tanPhi) {
         float k2 = ell_m;
         float k4 = k2 * ell_m;
         float k6 = k4 * ell_m;
-        res =  - (ell_E /ell_K - 1.) * t0;
-        res = res - (1./6.) * (ell_E * k2 / ell_K + k2 - 2. * ell_E / ell_K + 2.) * pow(t0, 3.);
-        res = res - (1./40.) * (3. * ell_E * k4 / ell_K + k4 - 8. * ell_E * k2 / ell_K - 8. * k2 + 8. * ell_E / ell_K - 8.) * pow(t0, 5.);
-        res = res - (1./112.) * (5. * ell_E * k6 / ell_K + k6 - 18. * ell_E * k4 / ell_K - 6. * k4 + 24. * ell_E * k2 / ell_K + 24. * k2 - 16. * ell_E / ell_K + 16.) * pow(t0, 7.);
+        res = -(ell_E / ell_K - 1.) * t0;
+        res = res - (1. / 6.) * (ell_E * k2 / ell_K + k2 - 2. * ell_E / ell_K + 2.) * pow(t0, 3.);
+        res = res - (1. / 40.) * (3. * ell_E * k4 / ell_K + k4 - 8. * ell_E * k2 / ell_K - 8. * k2 + 8. * ell_E / ell_K - 8.) * pow(t0, 5.);
+        res = res - (1. / 112.) * (5. * ell_E * k6 / ell_K + k6 - 18. * ell_E * k4 / ell_K - 6. * k4 + 24. * ell_E * k2 / ell_K + 24. * k2 - 16. * ell_E / ell_K + 16.) * pow(t0, 7.);
     }
     else {
         // initializing the parameters of the induction
@@ -349,7 +355,7 @@ float ellipz(float tanPhi) {
  * - a flag (isInSol) if one knows in adavance that the element belongs to Sol
  *
  **********************************************************************************************************************/
-struct Isometry{
+struct Isometry {
     mat4 matrix;
     bool isInSol;
 };
@@ -363,7 +369,7 @@ const Isometry IDENTITY = Isometry(mat4(1.), true); /**< Identity isometry */
  * Reduce the eventual numerical errors of the given isometry.
  * @todo to be written
  */
-Isometry reduceError(Isometry isom){
+Isometry reduceError(Isometry isom) {
     return isom;
 }
 
@@ -388,7 +394,7 @@ Isometry geomInverse(Isometry isom) {
  * Structure for points in the geometry.
  *
  **********************************************************************************************************************/
-struct Point{
+struct Point {
     vec4 coords;
 };
 
@@ -399,7 +405,7 @@ const Point ORIGIN = Point(vec4(0, 0, 0, 1));/**< Origin of the geometry */
 /**
  * Reduce the eventual numerical errors of the given point.
  */
-Point reduceError(Point p){
+Point reduceError(Point p) {
     return p;
 }
 
@@ -414,7 +420,7 @@ Point applyIsometry(Isometry isom, Point p) {
 /*
  * Apply the isometry (x,y,z) -> (y,x,-z)
  */
-Point flip(Point p){
+Point flip(Point p) {
     return Point(vec4(p.coords.y, p.coords.x, -p.coords.z, 1.));
 }
 
@@ -425,11 +431,11 @@ Point flip(Point p){
 
 Isometry makeTranslation(Point p) {
     vec4 c = p.coords;
-    mat4 matrix =  mat4(
-    exp(c.z), 0., 0., 0.,
-    0., exp(-c.z), 0., 0.,
-    0., 0., 1., 0,
-    c.x, c.y, c.z, 1.
+    mat4 matrix = mat4(
+        exp(c.z), 0., 0., 0.,
+        0., exp(-c.z), 0., 0.,
+        0., 0., 1., 0,
+        c.x, c.y, c.z, 1.
     );
     return Isometry(matrix, true);
 }
@@ -440,11 +446,11 @@ Isometry makeTranslation(Point p) {
  */
 Isometry makeInvTranslation(Point p) {
     vec4 c = p.coords;
-    mat4 matrix =  mat4(
-    exp(-c.z), 0., 0., 0.,
-    0., exp(c.z), 0., 0.,
-    0., 0., 1., 0,
-    -exp(-c.z) * c.x, -exp(c.z) * c.y, -c.z, 1.
+    mat4 matrix = mat4(
+        exp(-c.z), 0., 0., 0.,
+        0., exp(c.z), 0., 0.,
+        0., 0., 1., 0,
+        -exp(-c.z) * c.x, -exp(c.z) * c.y, -c.z, 1.
     );
     return Isometry(matrix, true);
 }
@@ -459,7 +465,7 @@ Isometry makeInvTranslation(Point p) {
  * - dir is the **pullback** at the origin of the vector by the element of Sol sending the origin to pos
  *
  **********************************************************************************************************************/
-struct Vector{
+struct Vector {
     Point pos;///< Underlying point
     vec4 dir;///< Direction of the vector
 };
@@ -468,14 +474,14 @@ struct Vector{
 /**
  * Return the zero vector at pos
  */
-Vector zeroVector(Point pos){
+Vector zeroVector(Point pos) {
     return Vector(pos, vec4(0));
 }
 
 /**
  * Reduce the eventual numerical errors of the given vector.
  */
-Vector reduceError(Vector v){
+Vector reduceError(Vector v) {
     return v;
 }
 
@@ -483,7 +489,7 @@ Vector reduceError(Vector v){
  * Add the given vectors.
  * @return @f$ v_1 + v_2 @f$
  */
-Vector add(Vector v1, Vector v2){
+Vector add(Vector v1, Vector v2) {
     return Vector(v1.pos, v1.dir + v2.dir);
 }
 
@@ -491,7 +497,7 @@ Vector add(Vector v1, Vector v2){
  * Subtrack the given vectors.
  * @return @f$ v_1 - v_2 @f$
  */
-Vector sub(Vector v1, Vector v2){
+Vector sub(Vector v1, Vector v2) {
     return Vector(v1.pos, v1.dir - v2.dir);
 }
 
@@ -500,7 +506,7 @@ Vector sub(Vector v1, Vector v2){
  * Previously scalarMult.
  * @return @f$ s v @f$
  */
-Vector multiplyScalar(float s, Vector v){
+Vector multiplyScalar(float s, Vector v) {
     return Vector(v.pos, s * v.dir);
 }
 
@@ -530,7 +536,7 @@ Vector applyIsometry(Isometry isom, Vector v) {
 /*
  * Apply the isometry (x,y,z) -> (y,x,-z)
  */
-Vector flip(Vector v){
+Vector flip(Vector v) {
     Point pos = flip(v.pos);
     return Vector(pos, vec4(v.dir.y, v.dir.x, -v.dir.z, 0.));
 }
@@ -544,7 +550,7 @@ Vector applyFacing(mat4 m, Vector v) {
     return Vector(v.pos, m * v.dir);
 }
 
-void initFlow(Vector v){
+void initFlow(Vector v) {
     // initializes all the parameters needed to march along the geodesic directed by u
     // we assume that the position of u is the origin
     // if ab = 0 (hyperbolic sheets), all the parameters are not needed,
