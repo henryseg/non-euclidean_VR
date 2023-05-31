@@ -8,3 +8,6 @@ export {LocalHorizontalCylinderShape} from "./localHorizontalCylinder/LocalHoriz
 export {LocalWHalfSpaceShape} from "./localWHalfSpace/LocalWHalfSpaceShape.js";
 export {LocalWSlabShape} from "./localWSlab/LocalWSlabShape.js";
 export {LocalDirectedWSlabShape} from "./localDirectedWSlab/LocalDirectedWSlabShape.js";
+export {LocalDirectedNoisyWSlabShape} from "./localDirectedNoisyWSlab/LocalDirectedNoisyWSlabShape.js";
+export {LocalNoisyVerticalCylinderShape} from "./localNoisyVerticalCylinder/LocalNoisyVerticalCylinderShape";
+export {LocalStackNoisyWSlabShape} from "./localStackNoisyWSlab/LocalStackNoisyWSlabShape";

@@ -1579,7 +1579,21 @@ module.exports = "                                                              
 /***/ 5315:
 /***/ ((module) => {
 
-module.exports = "   \r\n                          \r\n   \r\nvarying vec3 spherePosition;\r\n\r\n   \r\n                                           \r\n                       \r\n                                                           \r\n                                 \r\n                                                         \r\n   \r\nvoid main() {\r\n    RelVector vector = mapping(spherePosition);\r\n    ExtVector v = ExtVector(vector, initVectorData());\r\n    gl_FragColor = getColor(v);\r\n}"
+module.exports = "   \r\n                          \r\n   \r\nvarying vec3 spherePosition;\r\n\r\n   \r\n                                           \r\n                       \r\n                                                           \r\n                                 \r\n                                                         \r\n   \r\nvoid main() {\r\n    RelVector vector = mapping(spherePosition);\r\n    ExtVector v = ExtVector(vector, initVectorData());\r\n    gl_FragColor = postProcess(getColor(v));\r\n}"
+
+/***/ }),
+
+/***/ 6983:
+/***/ ((module) => {
+
+module.exports = "vec3 LessThan(vec3 f, float value)\r\n{\r\n    return vec3(\r\n        (f.x < value) ? 1.0f : 0.0f,\r\n        (f.y < value) ? 1.0f : 0.0f,\r\n        (f.z < value) ? 1.0f : 0.0f);\r\n}\r\n\r\n                  \r\nvec3 LinearToSRGB(vec3 rgb)\r\n{\r\n    rgb = clamp(rgb, 0.0f, 1.0f);\r\n\r\n    return mix(\r\n        pow(rgb, vec3(1.0f / 2.4f)) * 1.055f - 0.055f,\r\n        rgb * 12.92f,\r\n        LessThan(rgb, 0.0031308f)\r\n    );\r\n}\r\n              \r\nvec3 ACESFilm(vec3 x)\r\n{\r\n    float a = 2.51f;\r\n    float b = 0.03f;\r\n    float c = 2.43f;\r\n    float d = 0.59f;\r\n    float e = 0.14f;\r\n    return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0f, 1.0f);\r\n}\r\n\r\nvec4 postProcess(vec4 pixelColor) {\r\n\r\n                      \r\n    pixelColor.xyz *= exposure;\r\n\r\n                   \r\n    pixelColor.xyz = ACESFilm(pixelColor.xyz);\r\n    pixelColor.xyz = LinearToSRGB(pixelColor.xyz);\r\n\r\n    return pixelColor;\r\n}"
+
+/***/ }),
+
+/***/ 6159:
+/***/ ((module) => {
+
+module.exports = "vec4 postProcess(vec4 color) {\r\n    return color;\r\n}"
 
 /***/ }),
 
@@ -3972,10 +3986,18 @@ var vectorDataStruct_default = /*#__PURE__*/__webpack_require__.n(vectorDataStru
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/vectorDataUpdate.glsl.mustache
 var vectorDataUpdate_glsl_mustache = __webpack_require__(7781);
 var vectorDataUpdate_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(vectorDataUpdate_glsl_mustache);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/basic/postProcessVoid.glsl
+var postProcessVoid = __webpack_require__(6159);
+var postProcessVoid_default = /*#__PURE__*/__webpack_require__.n(postProcessVoid);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/basic/postProcessGammaCorrection.glsl
+var postProcessGammaCorrection = __webpack_require__(6983);
+var postProcessGammaCorrection_default = /*#__PURE__*/__webpack_require__.n(postProcessGammaCorrection);
 // EXTERNAL MODULE: ./src/core/renderers/shaders/basic/main.glsl
 var main = __webpack_require__(5315);
 var main_default = /*#__PURE__*/__webpack_require__.n(main);
 ;// CONCATENATED MODULE: ./src/core/renderers/BasicRenderer.js
+
+
 
 
 
@@ -4028,6 +4050,9 @@ class BasicRenderer extends AbstractRenderer {
          * @type {EffectComposer}
          */
         this.composer = new EffectComposer(this.threeRenderer);
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
     }
 
     get isBasicRenderer() {
@@ -4077,6 +4102,13 @@ class BasicRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk((raymarch_default()));
+        if(this.postProcess){
+            this._fragmentBuilder.addUniform("exposure", "float", this.exposure);
+            this._fragmentBuilder.addChunk((postProcessGammaCorrection_default()));
+        }
+        else{
+            this._fragmentBuilder.addChunk((postProcessVoid_default()));
+        }
         this._fragmentBuilder.addChunk((main_default()));
     }
 
@@ -4867,6 +4899,8 @@ const BOTH = 2;
 
 
 
+
+
 /**
  * @class
  *
@@ -4911,6 +4945,11 @@ class VRRenderer extends AbstractRenderer {
          * @private
          */
         this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
     }
 
     get isVRRenderer() {
@@ -4957,6 +4996,13 @@ class VRRenderer extends AbstractRenderer {
 
             // ray-march and main
             this._fragmentBuilder[side].addChunk((raymarch_default()));
+            if(this.postProcess){
+                this._fragmentBuilder[side].addUniform("exposure", "float", this.exposure);
+                this._fragmentBuilder[side].addChunk((postProcessGammaCorrection_default()));
+            }
+            else{
+                this._fragmentBuilder[side].addChunk((postProcessVoid_default()));
+            }
             this._fragmentBuilder[side].addChunk((main_default()));
         }
     }

@@ -13,5 +13,5 @@ varying vec3 spherePosition;
 void main() {
     RelVector vector = mapping(spherePosition);
     ExtVector v = ExtVector(vector, initVectorData());
-    gl_FragColor = getColor(v);
+    gl_FragColor = postProcess(getColor(v));
 }
