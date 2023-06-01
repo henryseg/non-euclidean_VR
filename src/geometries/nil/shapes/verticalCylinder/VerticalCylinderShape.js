@@ -49,7 +49,7 @@ export class VerticalCylinderShape extends BasicShape {
     }
 
     get hasUVMap() {
-        return false;
+        return false
     }
 
     get uniformType() {
