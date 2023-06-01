@@ -2,6 +2,7 @@ import {Isometry, Point} from "../../geometry/General.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import distance from "../../imports/distance.glsl";
+import direction from "../../imports/direction.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
@@ -36,7 +37,7 @@ export class LocalBallShape extends BasicShape {
             throw new Error('BallShape: this type of location is not allowed');
         }
         super(isom);
-        this.addImport(distance);
+        this.addImport(distance, direction);
         this.radius = radius;this._center = undefined;
     }
 
