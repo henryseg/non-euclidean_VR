@@ -7,7 +7,7 @@ import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
 import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
-export class StackWSlabShape extends BasicShape {
+export class LocalStackWSlabShape extends BasicShape {
 
     /**
      * Construction
@@ -22,7 +22,7 @@ export class StackWSlabShape extends BasicShape {
         if (location.isIsometry) {
             isom.copy(location);
         } else {
-            throw new Error("StackWSlabShape: this type of location is not implemented");
+            throw new Error("LocalStackWSlabShape: this type of location is not implemented");
         }
 
         super(isom);
@@ -47,7 +47,7 @@ export class StackWSlabShape extends BasicShape {
      * Says that the object inherits from `LocalWHalfSpaceShape`
      * @type {boolean}
      */
-    get isStackWSlabShape() {
+    get isLocalStackWSlabShape() {
         return true;
     }
 
@@ -56,7 +56,7 @@ export class StackWSlabShape extends BasicShape {
      * @type {boolean}
      */
     get isGlobal() {
-        return true;
+        return false;
     }
 
     get hasUVMap() {
@@ -64,7 +64,7 @@ export class StackWSlabShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'LocalWSlabShape';
+        return 'LocalStackWSlabShape';
     }
 
     static glslClass() {

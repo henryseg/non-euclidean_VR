@@ -8,4 +8,5 @@ export {LocalVerticalCylinderShape} from "./localVerticalCylinder/LocalVerticalC
 export {HorizontalCylinderShape} from "./horizontalCylinder/HorizontalCylinderShape.js";
 export {VerticalCylinderShape} from "./verticalCylinder/VerticalCylinderShape.js";
 export {LocalWSlabShape} from "./localWSlab/LocalWSlabShape.js";
-export {StackWSlabShape} from "./stackWSlab/StackWSlabShape.js";
+export {LocalStackWSlabShape} from "./localStackWSlab/LocalStackWSlabShape.js";
+export {LocalStackBallShape} from "./localStackBall/LocalStackBallShape.js";

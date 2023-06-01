@@ -3,7 +3,7 @@
  * half space {w < 0}
  **********************************************************************************************************************/
 
-struct StackWSlabShape {
+struct LocalStackWSlabShape {
     int id;
     Point origin;
     float thickness;
@@ -11,7 +11,7 @@ struct StackWSlabShape {
     Isometry absoluteIsomInv;
 };
 
-float sdf(StackWSlabShape slab, RelVector v) {
+float sdf(LocalStackWSlabShape slab, RelVector v) {
     vec4 coords = v.local.pos.coords;
     float w = mod(coords.w, slab.height);
     w = 0.5 * slab.height - abs(0.5 * slab.height - w);
@@ -19,14 +19,14 @@ float sdf(StackWSlabShape slab, RelVector v) {
 //    return abs(v.local.pos.coords.w - slab.origin.coords.w) - slab.thickness;
 }
 
-RelVector gradient(StackWSlabShape slab, RelVector v){
+RelVector gradient(LocalStackWSlabShape slab, RelVector v){
     float diff = v.local.pos.coords.w - slab.origin.coords.w;
     Vector local = Vector(v.local.pos, vec4(0, 0, 0, sign(diff)));
     return RelVector(local, v.cellBoost, v.invCellBoost);
 }
 
 // PROBABLY NEED TO REDO THIS: TAKE THE UV COORDINATES OF HALF SPACE!
-vec2 uvMap(StackWSlabShape slab, RelVector v){
+vec2 uvMap(LocalStackWSlabShape slab, RelVector v){
     Point point = v.local.pos;
     vec4 dir = point.coords;
     dir = slab.absoluteIsomInv.matrix * dir;
