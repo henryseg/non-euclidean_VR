@@ -8,3 +8,4 @@ export {DragVRControls} from "./vr/DragVRControls.js";
 export {MoveVRControls} from "./vr/MoveVRControls.js";
 export {LightVRControls} from "./vr/LightVRControls.js";
 export {ResetVRControls} from "./vr/ResetVRControls.js";
+export {AdvancedResetVRControls} from "./vr/AdvancedResetVRControls.js";
