@@ -16,13 +16,9 @@ struct LocalStackBallShape {
  * Distance function for a global hyperbolic ball
  */
 float sdf(LocalStackBallShape ball, RelVector v) {
-    //    vec4 coords = v.local.pos.coords;
-    //    float w = mod(coords.w, ball.height);
-    //    w = 0.5 * ball.height - abs(0.5 * ball.height - w);
-    //    v.local.pos.coords.w = w;
-    float w = v.local.pos.coords.w;
+    float w = v.local.pos.coords.w - ball.center.coords.w;
     w = w - round(w / ball.height) * ball.height;
-    v.local.pos.coords.w = w;
+    v.local.pos.coords.w = ball.center.coords.w + w;
     return dist(v.local.pos, ball.center) - ball.radius;
 }
 
@@ -30,27 +26,18 @@ float sdf(LocalStackBallShape ball, RelVector v) {
  * Gradient field for a local ball
  */
 RelVector gradient(LocalStackBallShape ball, RelVector v) {
-    //    vec4 coords = v.local.pos.coords;
-    //    float w = mod(coords.w, ball.height);
-    //    w = 0.5 * ball.height - abs(0.5 * ball.height - w);
-    float w = v.local.pos.coords.w;
+    float w = v.local.pos.coords.w - ball.center.coords.w;
     w = w - round(w / ball.height) * ball.height;
-    v.local.pos.coords.w = w;
+    v.local.pos.coords.w = ball.center.coords.w + w;
     Vector local = direction(v.local.pos, ball.center);
-    //    local.dir.w = sign(0.5 * ball.height - w) * local.dir.w;
     return RelVector(negate(local), v.cellBoost, v.invCellBoost);
 }
 
 
 vec2 uvMap(LocalStackBallShape ball, RelVector v) {
-    //    vec4 coords = v.local.pos.coords;
-    //    float w = mod(coords.w, ball.height);
-    //    w = 0.5 * ball.height - abs(0.5 * ball.height - w);
-    //    w = sign(0.5 * ball.height - w) * w;
-    //    v.local.pos.coords.w = w;
-    float w = v.local.pos.coords.w;
+    float w = v.local.pos.coords.w - ball.center.coords.w;
     w = w - round(w / ball.height) * ball.height;
-    v.local.pos.coords.w = w;
+    v.local.pos.coords.w = ball.center.coords.w + w;
 
     Vector vec = direction(ball.center, v.local.pos);
     vec4 dir = ball.absoluteIsomInv.matrix * vec.dir;
