@@ -3,6 +3,7 @@ export {NormalMaterial} from "./normal/NormalMaterial.js";
 export {SingleColorMaterial} from "./singleColor/SingleColorMaterial.js";
 export {PhongMaterial} from "./phong/PhongMaterial.js";
 export {CheckerboardMaterial} from "./checkerboard/CheckerboardMaterial.js";
+export {GraphPaperMaterial} from "./graphPaper/GraphPaperMaterial.js";
 export {DebugMaterial} from "./debug/DebugMaterial.js";
 export {SimpleTextureMaterial} from "./simpleTexture/SimpleTextureMaterial";
 export {RotatedSphericalTextureMaterial} from "./rotatedSphericalTexture/RotatedSphericalTextureMaterial.js";
@@ -36,4 +37,3 @@ export {BasicPTMaterial} from "./basicPTMaterial/BasicPTMaterial.js";
 
 // Composite tracer material
 export {PathTracerWrapMaterial, pathTracerWrap} from "./pathTracerWrap/PathTracerWrapMaterial.js";
-
