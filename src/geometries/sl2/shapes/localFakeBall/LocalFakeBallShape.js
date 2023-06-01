@@ -3,8 +3,10 @@ import {Point} from "../../geometry/Point.js";
 import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 
 import fakeDistance from "../../imports/fakeDistance.glsl";
+import h2eGeom from "../../imports/h2eGeom.glsl";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 /**
@@ -34,7 +36,7 @@ export class LocalFakeBallShape extends BasicShape {
             throw new Error("FakeBallShape: the type of location is not implemented");
         }
         super(isom);
-        this.addImport(fakeDistance);
+        this.addImport(fakeDistance, h2eGeom);
         this.radius = radius;
         this._center = undefined;
     }
@@ -59,6 +61,10 @@ export class LocalFakeBallShape extends BasicShape {
         return false;
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     get isLocalFakeBallShape() {
         return true;
     }
@@ -73,5 +79,9 @@ export class LocalFakeBallShape extends BasicShape {
 
     glslSDF() {
         return sdf(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }

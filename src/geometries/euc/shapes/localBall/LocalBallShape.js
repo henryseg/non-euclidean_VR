@@ -96,8 +96,6 @@ export class LocalBallShape extends BasicShape {
         return gradient(this);
     }
 
-    glslUVMap() {
-        return uv(this);
-    }
+
 
 }

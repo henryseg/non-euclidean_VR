@@ -1,6 +1,7 @@
 import {Matrix4} from "three";
 
 import {Isometry} from "../../../core/geometry/Isometry.js";
+import {Position} from "./Position.js";
 
 Isometry.prototype.build = function () {
     this.matrix = new Matrix4();
@@ -38,6 +39,12 @@ Isometry.prototype.makeTranslation = function (point) {
         0, 0, 1, z,
         0, 0, 0, 1,
     )
+    return this;
+};
+
+Isometry.prototype.makeTranslationFromDir = function (vec) {
+    const position = new Position().flowFromOrigin(vec);
+    this.matrix.copy(position.boost.matrix);
     return this;
 };
 

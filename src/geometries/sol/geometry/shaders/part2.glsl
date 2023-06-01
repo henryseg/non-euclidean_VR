@@ -312,6 +312,7 @@ Vector flow(Vector v, float t){
         }
         else {
             return ellFlow(v, t);
+//            return numFlow(v, t);
         }
     }
 }

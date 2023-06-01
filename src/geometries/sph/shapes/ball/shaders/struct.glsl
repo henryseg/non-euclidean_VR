@@ -10,18 +10,12 @@ struct BallShape {
     Isometry absoluteIsomInv;
 };
 
-/**
- * Distance function for a global hyperbolic ball
- */
 float sdf(BallShape ball, RelVector v) {
     Point center = applyGroupElement(v.invCellBoost, ball.center);
     center = reduceError(center);
     return dist(v.local.pos, center) - ball.radius;
 }
 
-/**
- * Gradient field for a global hyperbolic ball
- */
 RelVector gradient(BallShape ball, RelVector v){
     Point center = applyGroupElement(v.invCellBoost, ball.center);
     Vector local = direction(v.local.pos, center);

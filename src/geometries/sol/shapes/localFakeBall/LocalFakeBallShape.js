@@ -5,6 +5,7 @@ import {BasicShape} from "../../../../core/shapes/BasicShape.js";
 import struct from "./shaders/struct.glsl";
 import sdf from "../../../../core/shapes/shaders/sdf.glsl.mustache";
 import gradient from "../../../../core/shapes/shaders/gradient.glsl.mustache";
+import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
 
 
 
@@ -56,6 +57,10 @@ export class LocalFakeBallShape extends BasicShape {
         return false;
     }
 
+    get hasUVMap() {
+        return true;
+    }
+
     get isFakeBallShape() {
         return true;
     }
@@ -74,5 +79,9 @@ export class LocalFakeBallShape extends BasicShape {
 
     glslGradient() {
         return gradient(this);
+    }
+
+    glslUVMap() {
+        return uv(this);
     }
 }

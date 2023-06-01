@@ -1910,7 +1910,7 @@ module.exports = __webpack_require__.p + "img/29989970ee70af555fd4.jpg";
 /***/ 2026:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "img/ded429c2b934f6ccf5f8.jpg";
+module.exports = __webpack_require__.p + "img/1a661a5afc65c969818f.jpg";
 
 /***/ }),
 
@@ -13589,8 +13589,6 @@ class ThurstonVRWoodBallsBis {
             this.scene.add(this.cameraObject);
             this.cameraObject.isRendered = false;
         }
-
-
     }
 
     /**
@@ -20306,9 +20304,7 @@ class LocalBallShape extends BasicShape {
         return shapes_shaders_gradient_glsl_mustache_default()(this);
     }
 
-    glslUVMap() {
-        return shapes_shaders_uv_glsl_mustache_default()(this);
-    }
+
 
 }
 // EXTERNAL MODULE: ./src/geometries/euc/shapes/localDirectedBall/shaders/struct.glsl

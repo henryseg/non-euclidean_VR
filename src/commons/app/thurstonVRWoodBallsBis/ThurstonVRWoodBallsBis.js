@@ -177,8 +177,6 @@ export class ThurstonVRWoodBallsBis {
             this.scene.add(this.cameraObject);
             this.cameraObject.isRendered = false;
         }
-
-
     }
 
     /**

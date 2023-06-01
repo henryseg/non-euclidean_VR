@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  * @struct
- * Fake ball in Nil
+ * Fake ball in SL2
  **********************************************************************************************************************/
 
 struct FakeBallShape {
@@ -16,3 +16,5 @@ float sdf(FakeBallShape ball, RelVector v) {
     Point center = applyIsometry(v.invCellBoost, ball.center);
     return fakeDistance(v.local.pos, center) - ball.radius;
 }
+
+
