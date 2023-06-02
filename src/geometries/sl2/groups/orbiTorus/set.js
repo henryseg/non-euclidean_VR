@@ -19,11 +19,11 @@ function testSide1P(p) {
 
 // language=GLSL
 const glslTestSide1P = `//
-bool testSide1P(Point p){
-    vec4 n1 = vec4(1, 1, 0, 0);
-    vec4 klein = toKlein(p);
-    return dot(klein, n1) > ${threshold};
-}
+                        bool testSide1P(Point p) {
+                            vec4 n1 = vec4(1, 1, 0, 0);
+                            vec4 klein = toKlein(p);
+                            return dot(klein, n1) > ${threshold};
+                        }
 `;
 
 function testSide1N(p) {
@@ -33,11 +33,11 @@ function testSide1N(p) {
 
 // language=GLSL
 const glslTestSide1N = `//
-bool testSide1N(Point p){
-    vec4 n1 = vec4(1, 1, 0, 0);
-    vec4 klein = toKlein(p);
-    return dot(klein, n1) < -${threshold};
-}
+                        bool testSide1N(Point p) {
+                            vec4 n1 = vec4(1, 1, 0, 0);
+                            vec4 klein = toKlein(p);
+                            return dot(klein, n1) < -${threshold};
+                        }
 `;
 
 function testSide2P(p) {
@@ -47,11 +47,11 @@ function testSide2P(p) {
 
 // language=GLSL
 const glslTestSide2P = `//
-bool testSide2P(Point p){
-    vec4 n2 = vec4(-1, 1, 0, 0);
-    vec4 klein = toKlein(p);
-    return dot(klein, n2) > ${threshold};
-}
+                        bool testSide2P(Point p) {
+                            vec4 n2 = vec4(-1, 1, 0, 0);
+                            vec4 klein = toKlein(p);
+                            return dot(klein, n2) > ${threshold};
+                        }
 `;
 
 function testSide2N(p) {
@@ -61,11 +61,11 @@ function testSide2N(p) {
 
 // language=GLSL
 const glslTestSide2N = `//
-bool testSide2N(Point p){
-    vec4 n2 = vec4(-1, 1, 0, 0);
-    vec4 klein = toKlein(p);
-    return dot(klein, n2) < -${threshold};
-}
+                        bool testSide2N(Point p) {
+                            vec4 n2 = vec4(-1, 1, 0, 0);
+                            vec4 klein = toKlein(p);
+                            return dot(klein, n2) < -${threshold};
+                        }
 `;
 
 
@@ -75,9 +75,9 @@ function testWp(p) {
 
 // language=GLSL
 const glslTestWp = `//
-bool testWp(Point p){
-    return p.fiber > ${0.5 * height};
-}
+                    bool testWp(Point p) {
+                        return p.fiber > ${0.5 * height};
+                    }
 `;
 
 function testWn(p) {
@@ -86,9 +86,9 @@ function testWn(p) {
 
 // language=GLSL
 const glslTestWn = `//
-bool testWn(Point p){
-    return p.fiber < -${0.5 * height};
-}
+                    bool testWn(Point p) {
+                        return p.fiber < -${0.5 * height};
+                    }
 `;
 const shiftA = group.element();
 const sinftAInv = group.element();
@@ -109,15 +109,19 @@ shiftA.isom.makeTranslation(auxA);
 sinftAInv.isom.makeInvTranslation(auxA);
 shiftB.isom.makeTranslation(auxB);
 shiftBInv.isom.makeInvTranslation(auxB);
-shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
-shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
+shiftWp.isom.makeTranslation(new Point().set(-1, 0, 0, 0, -height));
+shiftWn.isom.makeTranslation(new Point().set(-1, 0, 0, 0, height));
 
 
+// shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
 export default new TeleportationSet()
-    .add(testSide1P, glslTestSide1P, sinftAInv, shiftA)
-    .add(testSide1N, glslTestSide1N, shiftBInv, shiftB)
     .add(testSide2P, glslTestSide2P, shiftA, sinftAInv)
+    .add(testSide1P, glslTestSide1P, sinftAInv, shiftA)
     .add(testSide2N, glslTestSide2N, shiftB, shiftBInv)
+    .add(testSide1N, glslTestSide1N, shiftBInv, shiftB)
     .add(testWp, glslTestWp, shiftWp, shiftWn)
     .add(testWn, glslTestWn, shiftWn, shiftWp);
+
+
+// shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
 
