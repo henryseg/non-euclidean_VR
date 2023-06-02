@@ -14,16 +14,18 @@ import directions from "../../../../core/lights/shaders/directions.glsl.mustache
  * @class
  *
  * @classdesc
+ * Light at infinity in the positive E-direction
  */
 export class LocalPointLight extends Light {
 
     /**
      * Constructor
      * @param {Color} color - the color of the light
-     * @param {Point} position - the position of the light
      * @param {number} intensity - the intensity of the light
+     * @param {Point} position - the position of the light
+     *
      */
-    constructor(color, position, intensity = 1) {
+    constructor(color, intensity = 1, position) {
         super(1);
         this.color = color;
         this.intensity = intensity;

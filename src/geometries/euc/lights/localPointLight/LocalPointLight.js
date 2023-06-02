@@ -2,33 +2,43 @@ import {Color} from "three";
 
 import {Light} from "../../../../core/lights/Light.js";
 
-import direction from "../../imports/direction.glsl";
-import distance from "../../imports/distance.glsl";
-import lightIntensity from "../../imports/lightIntensity.glsl";
-
 import struct from "./shaders/struct.glsl";
 import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
+import lightIntensity from "../../imports/lightIntensity.glsl";
 
 
 /**
  * @class
  *
  * @classdesc
+ * Point light
  */
 export class LocalPointLight extends Light {
 
     /**
      * Constructor
-     * @param {Color} color - the color of the light
      * @param {Point} position - the position of the light
+     * @param {Color} color - the color of the light
      * @param {number} intensity - the intensity of the light
      */
-    constructor(color, position, intensity = 1) {
+    constructor(position, color, intensity = 1) {
         super(1);
-        this.color = color;
-        this.intensity = intensity;
+        /**
+         * The position of the light.
+         * @type {Point}
+         */
         this.position = position;
-        this.addImport(distance, direction, lightIntensity);
+        /**
+         * The color of the light.
+         * @type {Color}
+         */
+        this.color = color;
+        /**
+         * The intensity of the light.
+         * @type {number}
+         */
+        this.intensity = intensity;
+        this.addImport(lightIntensity);
     }
 
     /**

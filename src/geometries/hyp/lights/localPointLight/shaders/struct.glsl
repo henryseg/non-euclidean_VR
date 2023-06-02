@@ -1,12 +1,13 @@
 /***********************************************************************************************************************
  * @struct
- * Local point light
+ * Hyperbolic point light
  **********************************************************************************************************************/
+
 struct LocalPointLight {
     int id;
+    Point position;
     vec3 color;
     float intensity;
-    Point position;
     int maxDirs;
 };
 
