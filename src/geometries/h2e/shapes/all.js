@@ -11,3 +11,4 @@ export {LocalDirectedWSlabShape} from "./localDirectedWSlab/LocalDirectedWSlabSh
 export {LocalDirectedNoisyWSlabShape} from "./localDirectedNoisyWSlab/LocalDirectedNoisyWSlabShape.js";
 export {LocalNoisyVerticalCylinderShape} from "./localNoisyVerticalCylinder/LocalNoisyVerticalCylinderShape";
 export {LocalStackNoisyWSlabShape} from "./localStackNoisyWSlab/LocalStackNoisyWSlabShape";
+export {LocalStackWSlabShape} from "./localStackWSlab/LocalStackWSlabShape.js";
