@@ -2,7 +2,7 @@
  * @struct
  * Euclidean point light
  **********************************************************************************************************************/
-struct DirLight {
+struct ConstDirLight {
     int id;
     vec3 color;
     float intensity;
@@ -10,7 +10,7 @@ struct DirLight {
     int maxDirs;
 };
 
-bool directions(DirLight light, RelVector v, int i, out RelVector dir, out float intensity) {
+bool directions(ConstDirLight light, RelVector v, int i, out RelVector dir, out float intensity) {
     if (i != 0){
         return false;
     }

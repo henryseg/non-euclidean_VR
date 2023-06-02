@@ -11,7 +11,7 @@ import directions from "../../../../core/lights/shaders/directions.glsl.mustache
  * @classdesc
  * Light at a fixed direction
  */
-export class DirLight extends Light {
+export class ConstDirLight extends Light {
 
     /**
      * Constructor.
@@ -35,7 +35,7 @@ export class DirLight extends Light {
     }
 
     get uniformType() {
-        return 'DirLight';
+        return 'ConstDirLight';
     }
 
     /**

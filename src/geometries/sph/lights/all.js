@@ -1,3 +1,3 @@
 export {PointLight} from "./pointLight/PointLight.js";
-export {DirLight} from "./dirLight/dirLight.js";
+export {ConstDirLight} from "./constDirLight/ConstDirLight.js";
 export {LocalPointLight} from "./localPointLight/LocalPointLight";

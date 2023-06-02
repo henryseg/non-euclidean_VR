@@ -5,8 +5,6 @@ import {Light} from "../../../../core/lights/Light.js";
 import struct from "./shaders/struct.glsl";
 import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
 
-export const DIR_UP = 1;
-export const DIR_DOWN = -1;
 
 /**
  * @class
@@ -14,7 +12,7 @@ export const DIR_DOWN = -1;
  * @classdesc
  * Light at infinity in the E-direction
  */
-export class DirLight extends Light {
+export class ConstDirLight extends Light {
 
     /**
      * Constructor.
@@ -40,7 +38,7 @@ export class DirLight extends Light {
     }
 
     get uniformType() {
-        return 'DirLight';
+        return 'ConstDirLight';
     }
 
     /**
