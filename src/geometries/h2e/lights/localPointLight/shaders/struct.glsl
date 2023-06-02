@@ -15,9 +15,9 @@ bool directions(PointLight light, RelVector v, int i, out RelVector dir, out flo
         return false;
     }
 //    Point position = applyGroupElement(v.invCellBoost, light.position);
-    float dist = dist(v.local.pos, position);
+    float dist = dist(v.local.pos, light.position);
     intensity = lightIntensity(dist) * light.intensity;
-    Vector local = direction(v.local.pos, position);
+    Vector local = direction(v.local.pos, light.position);
     dir = RelVector(local, v.cellBoost, v.invCellBoost);
     return true;
 }
