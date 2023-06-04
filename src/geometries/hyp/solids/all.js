@@ -11,3 +11,4 @@ export {LocalCylinder} from "./LocalCylinder.js";
 export {LocalCappedCone} from "./LocalCappedCone.js";
 export {LocalCappedCylinder} from "./LocalCappedCylinder.js";
 export {LocalRoundCone} from "./LocalRoundCone.js";
+export {LocalSlab} from "./LocalSlab.js";
