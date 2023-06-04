@@ -1,34 +1,44 @@
-import {Color, Vector4} from "three";
+import {Color} from "three";
 
 import {Light} from "../../../../core/lights/Light.js";
 
 import struct from "./shaders/struct.glsl";
 import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
+import lightIntensity from "../../imports/lightIntensity.glsl";
 
-export const DIR_UP = 1;
-export const DIR_DOWN = -1;
 
 /**
  * @class
  *
  * @classdesc
- * Light at infinity in the E-direction
+ * Point light
  */
-export class DirLight extends Light {
+export class LocalPointLight extends Light {
 
     /**
-     * Constructor.
+     * Constructor
+     * @param {Point} position - the position of the light
      * @param {Color} color - the color of the light
      * @param {number} intensity - the intensity of the light
-     * @param {Vector4} direction - the direction of the light. It should be on of the following values:
-     * - -1 (light coming from the negative direction)
-     * - +1 (light coming from the positive direction)
      */
-    constructor(color, intensity = 1, direction = undefined) {
+    constructor(position, color, intensity = 1) {
         super(1);
+        /**
+         * The position of the light.
+         * @type {Point}
+         */
+        this.position = position;
+        /**
+         * The color of the light.
+         * @type {Color}
+         */
         this.color = color;
+        /**
+         * The intensity of the light.
+         * @type {number}
+         */
         this.intensity = intensity;
-        this.direction = direction !== undefined ? direction.clone().normalize() : new Vector4(0,0,0,1);
+        this.addImport(lightIntensity);
     }
 
     /**
@@ -40,7 +50,7 @@ export class DirLight extends Light {
     }
 
     get uniformType() {
-        return 'DirLight';
+        return 'LocalPointLight';
     }
 
     /**

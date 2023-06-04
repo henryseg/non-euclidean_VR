@@ -5,19 +5,24 @@ import {Light} from "../../../../core/lights/Light.js";
 import struct from "./shaders/struct.glsl";
 import directions from "../../../../core/lights/shaders/directions.glsl.mustache";
 
+export const DIR_UP = 1;
+export const DIR_DOWN = -1;
+
 /**
  * @class
  *
  * @classdesc
- * Light at a fixed direction
+ * Light at infinity in the E-direction
  */
-export class DirLight extends Light {
+export class ConstDirLight extends Light {
 
     /**
      * Constructor.
      * @param {Color} color - the color of the light
      * @param {number} intensity - the intensity of the light
-     * @param {Vector4} direction - the direction of the light.
+     * @param {Vector4} direction - the direction of the light. It should be on of the following values:
+     * - -1 (light coming from the negative direction)
+     * - +1 (light coming from the positive direction)
      */
     constructor(color, intensity = 1, direction = undefined) {
         super(1);
@@ -35,7 +40,7 @@ export class DirLight extends Light {
     }
 
     get uniformType() {
-        return 'DirLight';
+        return 'ConstDirLight';
     }
 
     /**
