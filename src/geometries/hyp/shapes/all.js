@@ -14,4 +14,4 @@ export {LocalCylinderShape} from "./localCylinder/LocalCylinderShape.js";
 export {LocalCappedCylinderShape} from "./localCappedCylinder/LocalCappedCylinderShape.js";
 export {LocalCappedConeShape} from "./localCappedCone/LocalCappedConeShape.js";
 export {LocalRoundConeShape} from "./localRoundCone/LocalRoundConeShape.js";
-export {LocalSlabShape} from "./localSlab/LocalSlabShape.js";
+export {SlabShape} from "./slab/SlabShape.js";

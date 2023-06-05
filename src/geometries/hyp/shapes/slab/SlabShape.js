@@ -14,8 +14,13 @@ import uv from "../../../../core/shapes/shaders/uv.glsl.mustache";
  *
  * @classdesc
  * Slab around the horizontal hyperbolic plane {z = 0}
+ *
+ * Frankenstein Shape :
+ * - the SDF is the one of a global object,
+ * - but it is declared as a local object,
+ *   so that the ray-marching keep track of the cell boost
  */
-export class LocalSlabShape extends BasicShape {
+export class SlabShape extends BasicShape {
 
     /**
      * Constructor.
@@ -52,7 +57,7 @@ export class LocalSlabShape extends BasicShape {
         return this._normal;
     }
 
-    get isLocalSlabShape() {
+    get isSlabShape() {
         return true;
     }
 
@@ -61,7 +66,7 @@ export class LocalSlabShape extends BasicShape {
      * @type {boolean}
      */
     get isGlobal() {
-        return true;
+        return false;
     }
 
     get hasUVMap() {
@@ -69,7 +74,7 @@ export class LocalSlabShape extends BasicShape {
     }
 
     get uniformType() {
-        return 'LocalSlabShape';
+        return 'SlabShape';
     }
 
     static glslClass() {

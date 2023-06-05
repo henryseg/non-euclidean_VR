@@ -13,7 +13,7 @@ import render from "../../../../core/materials/shaders/render.glsl.mustache";
  * Warning: this material only works with the set of teleportations `quotientGenus2`
  * (indeed it uses the finite part of the group element to decide the color) of the cell
  */
-export class QuotientGenus2Material extends Material {
+export class AugmentedCubeMaterial extends Material {
 
     /**
      * Constructor.
@@ -52,7 +52,7 @@ export class QuotientGenus2Material extends Material {
     }
 
     get uniformType() {
-        return 'QuotientGenus2Material';
+        return 'AugmentedCubeMaterial';
     }
 
     get usesNormal() {

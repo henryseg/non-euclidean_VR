@@ -3,9 +3,6 @@ import {Vector4} from "three";
 import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
 import {Group} from "./Group.js";
 
-// Major problem : the set {z = 0} is not invariant by the given isometries!!
-
-
 const sqrt3 = Math.sqrt(3);
 const modelHalfCube = 1 / sqrt3;
 
@@ -108,11 +105,61 @@ float creepYn(ExtVector v, float offset){
 `;
 
 
+const normalZp = new Vector4(0, 0, 1, -modelHalfCube);
+
+function testZp(p) {
+    return p.coords.dot(normalZp) > 0;
+}
+
+// language=GLSL
+const glslTestZp = `//
+bool testZp(Point p){
+    vec4 normal = vec4(0, 0, 1, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
+}
+`;
+
+// language=GLSL
+const glslCreepZp = `//
+float creepZp(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(0, 0, 1, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    return atanh(aux) + offset;
+}
+`;
+
+const normalZn = new Vector4(0, 0, -1, -modelHalfCube);
+
+function testZn(p) {
+    return p.coords.dot(normalZn) > 0;
+}
+
+// language=GLSL
+const glslTestZn = `//
+bool testZn(Point p){
+    vec4 normal = vec4(0, 0, -1, -${modelHalfCube});
+    return dot(p.coords, normal) > 0.;
+}
+`;
+
+// language=GLSL
+const glslCreepZn = `//
+float creepZn(ExtVector v, float offset){
+    Vector local = v.vector.local;
+    vec4 normal = vec4(0, 0, -1, -${modelHalfCube});
+    float aux = - dot(local.pos.coords, normal) / dot(local.dir, normal);
+    return atanh(aux) + offset;
+}
+`;
+
 
 const shiftXp = group.element();
 const shiftXn = group.element();
 const shiftYp = group.element();
 const shiftYn = group.element();
+const shiftZp = group.element();
+const shiftZn = group.element();
 
 shiftXp.isom.matrix.set(
     2, 0, 0, -sqrt3,
@@ -120,14 +167,15 @@ shiftXp.isom.matrix.set(
     0, -1, 0, 0,
     -sqrt3, 0, 0, 2
 );
-shiftXp.finitePart.set(0, -1);
+shiftXp.finitePart = 5;
+
 shiftXn.isom.matrix.set(
     2, 0, 0, sqrt3,
     0, 0, -1, 0,
     0, 1, 0, 0,
     sqrt3, 0, 0, 2
-)
-shiftXn.finitePart.set(0, -1);
+);
+shiftXn.finitePart = 1;
 
 shiftYp.isom.matrix.set(
     0, 0, -1, 0,
@@ -135,7 +183,7 @@ shiftYp.isom.matrix.set(
     1, 0, 0, 0,
     0, -sqrt3, 0, 2
 );
-shiftYp.finitePart.set(1, -1);
+shiftYp.finitePart = 1;
 
 shiftYn.isom.matrix.set(
     0, 0, 1, 0,
@@ -143,21 +191,41 @@ shiftYn.isom.matrix.set(
     -1, 0, 0, 0,
     0, sqrt3, 0, 2
 );
-shiftYn.finitePart.set(1, -1);
+shiftYn.finitePart = 5;
+
+shiftZp.isom.matrix.set(
+    0, 1, 0, 0,
+    -1, 0, 0, 0,
+    0, 0, 2, -sqrt3,
+    0, 0, -sqrt3, 2
+);
+shiftZp.finitePart = 1;
+
+shiftZn.isom.matrix.set(
+    0, -1, 0, 0,
+    1, 0, 0, 0,
+    0, 0, 2, sqrt3,
+    0, 0, sqrt3, 2
+);
+shiftZn.finitePart = 5;
 
 
 const neighbors = [
     {elt: shiftXp, inv: shiftXn},
     {elt: shiftXn, inv: shiftXp},
     {elt: shiftYp, inv: shiftYn},
-    {elt: shiftYn, inv: shiftYp}
+    {elt: shiftYn, inv: shiftYp},
+    {elt: shiftZp, inv: shiftZn},
+    {elt: shiftZn, inv: shiftZp}
 ];
 
 export default new TeleportationSet(neighbors)
     .add(testXp, glslTestXp, shiftXp, shiftXn, glslCreepXp)
     .add(testXn, glslTestXn, shiftXn, shiftXp, glslCreepXn)
     .add(testYp, glslTestYp, shiftYp, shiftYn, glslCreepYp)
-    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn);
+    .add(testYn, glslTestYn, shiftYn, shiftYp, glslCreepYn)
+    .add(testZp, glslTestZp, shiftZp, shiftZn, glslCreepZp)
+    .add(testZn, glslTestZn, shiftZn, shiftZp, glslCreepZn);
 
 
 

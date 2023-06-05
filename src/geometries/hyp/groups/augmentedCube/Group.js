@@ -7,9 +7,7 @@ export class Group extends AbstractGroup {
 
     /**
      * Constructor
-     * Lattice in the stabilizer of the {z = 0} hyperplane
-     * (corresponding to a quotient of a genus two surface).
-     * and its image in the dihedral group of order 6
+     * Same group as the cube, but with image in a finite quotient
      */
     constructor() {
         super();

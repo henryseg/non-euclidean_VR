@@ -1,4 +1,4 @@
-struct QuotientGenus2Material {
+struct AugmentedCubeMaterial {
     vec3 mainColor0;
     vec3 mainColor2;
     vec3 mainColor1;
@@ -8,10 +8,9 @@ struct QuotientGenus2Material {
     vec3 weight;
 };
 
-vec4 render(QuotientGenus2Material material, ExtVector v) {
+vec4 render(AugmentedCubeMaterial material, ExtVector v) {
     vec3 mainColor = material.mainColor0;
-    ivec2 fp = v.vector.cellBoost.finitePart;
-    int index = fp.x + 3 * (fp.y + 1) / 2;
+    int index = v.vector.cellBoost.finitePart;
     if (index == 1) {
         mainColor = material.mainColor1;
     }

@@ -1,5 +1,5 @@
 import {Solid} from "../../../core/solids/Solid.js";
-import {LocalSlabShape} from "../shapes/localSlab/LocalSlabShape.js";
+import {SlabShape} from "../shapes/slab/SlabShape.js";
 
 /**
  * @class
@@ -17,7 +17,7 @@ export class LocalSlab extends Solid {
      * @param {PTMaterial} ptMaterial - material for path tracing (optional)
      */
     constructor(isom, thickness, material, ptMaterial = undefined) {
-        const shape = new LocalSlabShape(isom, thickness);
+        const shape = new SlabShape(isom, thickness);
         super(shape, material, ptMaterial);
     }
 }
