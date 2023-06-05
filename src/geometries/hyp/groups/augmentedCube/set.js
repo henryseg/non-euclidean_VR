@@ -167,7 +167,7 @@ shiftXp.isom.matrix.set(
     0, -1, 0, 0,
     -sqrt3, 0, 0, 2
 );
-shiftXp.finitePart = 5;
+shiftXp.finitePart.set(0,-1);
 
 shiftXn.isom.matrix.set(
     2, 0, 0, sqrt3,
@@ -175,7 +175,7 @@ shiftXn.isom.matrix.set(
     0, 1, 0, 0,
     sqrt3, 0, 0, 2
 );
-shiftXn.finitePart = 1;
+shiftXn.finitePart.set(0,-1);
 
 shiftYp.isom.matrix.set(
     0, 0, -1, 0,
@@ -183,7 +183,7 @@ shiftYp.isom.matrix.set(
     1, 0, 0, 0,
     0, -sqrt3, 0, 2
 );
-shiftYp.finitePart = 1;
+shiftYp.finitePart.set(1,-1);
 
 shiftYn.isom.matrix.set(
     0, 0, 1, 0,
@@ -191,7 +191,7 @@ shiftYn.isom.matrix.set(
     -1, 0, 0, 0,
     0, sqrt3, 0, 2
 );
-shiftYn.finitePart = 5;
+shiftYn.finitePart.set(1,-1);
 
 shiftZp.isom.matrix.set(
     0, 1, 0, 0,
@@ -199,7 +199,7 @@ shiftZp.isom.matrix.set(
     0, 0, 2, -sqrt3,
     0, 0, -sqrt3, 2
 );
-shiftZp.finitePart = 1;
+shiftZp.finitePart.set(2,-1);
 
 shiftZn.isom.matrix.set(
     0, -1, 0, 0,
@@ -207,7 +207,7 @@ shiftZn.isom.matrix.set(
     0, 0, 2, sqrt3,
     0, 0, sqrt3, 2
 );
-shiftZn.finitePart = 5;
+shiftZn.finitePart.set(2,-1);
 
 
 const neighbors = [

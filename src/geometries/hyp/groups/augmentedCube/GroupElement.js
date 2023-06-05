@@ -1,4 +1,4 @@
-import {Matrix3} from "three";
+import {Vector2} from "three";
 
 import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
 import {Isometry} from "../../geometry/Isometry.js";
@@ -11,7 +11,7 @@ import {Isometry} from "../../geometry/Isometry.js";
  * In this group an element is both an isometry of H3
  * and its image in a suitable finite group
  *
- * (Finite group Z/6 represented as an integer)
+ * (Dihedral group of order 6(?) represented as the semi-direct product (Z/3) \rtimes (Z/2))
  */
 
 export class GroupElement extends AbstractGroupElement {
@@ -19,36 +19,45 @@ export class GroupElement extends AbstractGroupElement {
     constructor(group) {
         super(group);
         this.isom = new Isometry();
-        this.finitePart = 0;
+        this.finitePart = new Vector2(0, 1);
     }
 
     identity() {
         this.isom.identity();
-        this.finitePart.identity();
+        this.finitePart.set(0, 1);
         return this;
     }
 
     multiply(elt) {
         this.isom.multiply(elt.isom);
-        let aux = this.finitePart + elt.finitePart;
-        aux = aux - 6 * Math.floor(aux / 6);
-        this.finitePart = aux;
+        const aux = this.finitePart.x + this.finitePart.y* elt.finitePart.x;
+        this.finitePart.set(
+            // Note that we are not using the % operator
+            // Indeed this operator return a negative if the operand in negative
+            // This is not the behavior that we want.
+            aux - 3 * Math.floor(aux / 3),
+            this.finitePart.y * elt.finitePart.y
+        )
         return this;
     }
 
     premultiply(elt) {
         this.isom.premultiply(elt.isom);
-        let aux = this.finitePart + elt.finitePart;
-        aux = aux - 6 * Math.floor(aux / 6);
-        this.finitePart = aux;
+        const aux = elt.finitePart.x + elt.finitePart.y * this.finitePart.x;
+        this.finitePart.set(
+            // Same remark as above for the % operator.
+            aux - 3 * Math.floor(aux / 3),
+            elt.finitePart.y * this.finitePart.y
+        )
         return this;
     }
 
     invert() {
         this.isom.invert();
-        let aux = -this.finitePart;
-        aux = aux - 6 * Math.floor(aux / 6);
-        this.finitePart = aux;
+        this.finitePart.set(
+            (-this.finitePart.y * this.finitePart.x) % 3,
+            this.finitePart.y
+        );
         return this;
     }
 
@@ -63,13 +72,13 @@ export class GroupElement extends AbstractGroupElement {
     clone() {
         const res = new GroupElement(this.group);
         res.isom.copy(this.isom);
-        res.finitePart = this.finitePart;
+        res.finitePart.copy(this.finitePart);
         return res;
     }
 
     copy(elt) {
         this.isom.copy(elt.isom);
-        this.finitePart = elt.finitePart;
+        this.finitePart.copy(elt.finitePart);
         return this;
     }
 }

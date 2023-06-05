@@ -10,7 +10,8 @@ struct AugmentedCubeMaterial {
 
 vec4 render(AugmentedCubeMaterial material, ExtVector v) {
     vec3 mainColor = material.mainColor0;
-    int index = v.vector.cellBoost.finitePart;
+    ivec2 fp = v.vector.cellBoost.finitePart;
+    int index = fp.x + 3 * (fp.y + 1) / 2;
     if (index == 1) {
         mainColor = material.mainColor1;
     }

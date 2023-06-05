@@ -60,7 +60,7 @@ export class GroupElement extends AbstractGroupElement {
         this.finitePart.set(
             (-this.finitePart.y * this.finitePart.x) % 3,
             this.finitePart.y
-        )
+        );
         return this;
     }
 
