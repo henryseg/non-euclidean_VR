@@ -20,6 +20,7 @@ export {VideoFrameTextureMaterial} from "./videoFrameTexture/VideoFrameTextureMa
 export {SquaresMaterial} from "./squares/SquaresMaterial.js";
 export {StripsMaterial} from "./strips/StripsMaterial.js";
 export {HypStripsMaterial} from "./hypStrips/HypStripsMaterial.js";
+export {EquidistantSphStripsMaterial} from "./equidistantSphStrips/EquidistantSphStripsMaterial.js";
 export {EquidistantHypStripsMaterial} from "./equidistantHypStrips/EquidistantHypStripsMaterial.js";
 export {
     ImprovedEquidistantHypStripsMaterial
