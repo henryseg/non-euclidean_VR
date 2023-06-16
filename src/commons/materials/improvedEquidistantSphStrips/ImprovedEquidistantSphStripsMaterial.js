@@ -10,12 +10,15 @@ import render from "../../../core/materials/shaders/renderUV.glsl.mustache";
  * @extends Material
  *
  * @classdesc
- * Strips on a surface representing a sphere.
- * Coordinates correspond to spherical coordinates (theta, phi) where phi = 0 is the North Pole.
- * The strips are delimited by equidistant lines to geodesics orthogonal to the equator {phi=pi/2}.
+ * Strips on a sphere.
+ * Coordinates correspond to spherical coordinates (theta, phi) with phi = 0 representing the North Pole
+ * The strips are delimited by equidistant lines to geodesics orthogonal to the equator {phi = pi/2}
+ * Strips are removed as the geodesics converges
+ *
+ * @todo Factor the shader functions also appearing in `EquidistantHypStripsMaterial`
  *
  */
-export class EquidistantSphStripsMaterial extends Material {
+export class ImprovedEquidistantSphStripsMaterial extends Material {
 
     /**
      * Constructor.
@@ -40,7 +43,7 @@ export class EquidistantSphStripsMaterial extends Material {
     }
 
     get uniformType() {
-        return 'EquidistantSphStripsMaterial';
+        return 'ImprovedEquidistantSphStripsMaterial';
     }
 
     get usesNormal() {

@@ -25,6 +25,10 @@ export {EquidistantHypStripsMaterial} from "./equidistantHypStrips/EquidistantHy
 export {
     ImprovedEquidistantHypStripsMaterial
 } from "./improvedEquidistantHypStrips/ImprovedEquidistantHypStripsMaterial.js";
+export {
+    ImprovedEquidistantSphStripsMaterial
+} from "./improvedEquidistantSphStrips/ImprovedEquidistantSphStripsMaterial.js";
+
 
 // Composite basic materials
 export {PhongWrapMaterial, phongWrap} from "./phongWrap/PhongWrapMaterial.js";
