@@ -13,7 +13,7 @@ import render from "../../../core/materials/shaders/renderUV.glsl.mustache";
  * Strips on a surface representing the hyperbolic plane.
  * Coordinates correspond to the Klein model
  * The strips are delimited by equidistant lines to geodesics orthogonal to the x-axis.
- * New strips are added at the geodesics diverge
+ * New strips are added as the geodesics diverge
  *
  * @todo Factor the shader functions also appearing in `EquidistantHypStripsMaterial`
  *
