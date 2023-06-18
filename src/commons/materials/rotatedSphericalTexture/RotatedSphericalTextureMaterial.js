@@ -69,6 +69,7 @@ export class RotatedSphericalTextureMaterial extends Material {
 
     /**
      * Return the rotation to apply represented as a Matrix4
+     * (or more precisely its inverse)
      * @type {Matrix4}
      */
     get rotation() {
