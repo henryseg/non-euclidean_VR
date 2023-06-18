@@ -1390,7 +1390,7 @@ module.exports = "                                                              
 /***/ 1650:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct ImprovedEquidistantSphStripsMaterial {\n    float distance;\n    float cosHalfWidthSq;\n    vec3 stripColor;\n    vec3 bgColor;\n};\n\nvec4 render(ImprovedEquidistantSphStripsMaterial material, ExtVector v, vec2 uv) {\n                                                                                              \n    float ln2 = 0.6931471;                               \n\n    float theta = uv.x;\n    float phi = uv.y;\n    float c = 0.66;\n                                                                                 \n                                                                     \n                                 \n    float n = ceil(-log(abs(sin(phi)) / c) / ln2);\n\n    float period = pow(2., n) * material.distance;\n    theta = theta - round(theta / period) * period;\n    float aux = sin(phi) * sin(theta);\n    float cosDistSq = 1. - aux * aux;\n\n                                                                                            \n    if (cosDistSq > material.cosHalfWidthSq) {\n        return vec4(material.stripColor, 1);\n    }\n    else {\n        return vec4(material.bgColor, 1);\n    }\n}"
+module.exports = "                                                                                                                        \n                                                                 \n                                                                                                                        \n\nstruct ImprovedEquidistantSphStripsMaterial {\n    float distance;\n    float cosHalfWidthSq;\n    float fadingAmplitude;\n    vec3 stripColor;\n    vec3 bgColor;\n    mat4 rotation;\n};\n\nvec4 render(ImprovedEquidistantSphStripsMaterial material, ExtVector v, vec2 uv) {\n                         \n    vec4 origDir = vec4(vec2(cos(uv.x), sin(uv.x)) * sin(uv.y), cos(uv.y), 0.);\n    vec4 rotatedDir = material.rotation * origDir;\n    float sinPhi = length(rotatedDir.xy);\n    float cosPhi = rotatedDir.z;\n    float uCoord = atan(rotatedDir.y, rotatedDir.x);\n    float vCoord = atan(sinPhi, cosPhi);\n    vec2 rotatedUV = vec2(uCoord, vCoord);\n\n\n                                                                                              \n    float ln2 = 0.6931471;                               \n\n    float theta = rotatedUV.x;\n    float phi = rotatedUV.y;\n    float k = round(theta / material.distance);\n    theta = theta - k * material.distance;\n    float aux = sin(phi) * sin(theta);\n    float cosDistSq = 1. - aux * aux;\n\n                                                                                            \n    if (cosDistSq < material.cosHalfWidthSq) {\n                                                               \n        return vec4(material.bgColor, 1);\n    }\n    if (k == 0.) {\n        return vec4(material.stripColor, 1);\n    }\n\n                                                                        \n                                                                             \n    int kInt = int(k);\n    int nInt = kInt & (~kInt + 1);\n    float n = float(nInt);\n                                \n                                                                                        \n    float theta0 = material.distance;\n    float theta1 = n * theta0;\n\n                                                    \n                                   \n                                                  \n           \n\n    float c = 0.66;\n    float sinPh1 = sin(c * theta0) / sin(theta1);\n    float phi1 = asin(clamp(sinPh1, 0., 1.));\n\n    float coeff = ((0.5 * PI - phi1) - abs(0.5 * PI - phi)) / material.fadingAmplitude + 0.5;\n    coeff = clamp(coeff, 0., 1.);\n    vec3 base = coeff * material.stripColor + (1. - coeff) * material.bgColor;\n    return vec4(base, 1);\n\n                         \n                                                                                       \n                                                                           \n                                       \n                                                        \n      \n                                                        \n}"
 
 /***/ }),
 
@@ -15092,6 +15092,7 @@ class RotatedSphericalTextureMaterial extends Material {
 
     /**
      * Return the rotation to apply represented as a Matrix4
+     * (or more precisely its inverse)
      * @type {Matrix4}
      */
     get rotation() {
@@ -16195,16 +16196,38 @@ class ImprovedEquidistantSphStripsMaterial extends Material {
      * The constructor takes no argument.
      * @param {number} distance - distance between two strips
      * @param {number} halfWidth - with of the strip
+     * @param {number} fadingAmplitude - amplitude of the fading
      * @param {Color} stripColor - color of the strip
      * @param {Color} bgColor - color in between the group
+     * @param {Quaternion} quaternion - quaternion to eventually rotate the texture
+     * (when this cannot be done by an isometry of the space)
+     * by default the identity
      */
-    constructor(distance, halfWidth, stripColor, bgColor) {
+    constructor(distance, halfWidth, fadingAmplitude, stripColor, bgColor, quaternion = undefined) {
         super();
 
         this.distance = distance;
         this.halfWidth = halfWidth;
+        this.fadingAmplitude = fadingAmplitude;
         this.stripColor = stripColor;
         this.bgColor = bgColor;
+
+        /**
+         * Quaternion representing the rotation to apply
+         * @type {Quaternion}
+         */
+        this.quaternion = quaternion !== undefined ? quaternion : new external_three_namespaceObject.Quaternion();
+    }
+
+    /**
+     * Return the rotation to apply represented as a Matrix4
+     * (or more precisely its inverse)
+     * @type {Matrix4}
+     */
+    get rotation() {
+        return new external_three_namespaceObject.Matrix4()
+            .makeRotationFromQuaternion(this.quaternion)
+            .invert();
     }
 
     get cosHalfWidthSq() {
