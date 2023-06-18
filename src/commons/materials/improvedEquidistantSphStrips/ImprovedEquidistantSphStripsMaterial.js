@@ -1,4 +1,4 @@
-import {Color} from "three";
+import {Color, Quaternion, Matrix4} from "three";
 
 import {Material} from "../../../core/materials/Material.js";
 
@@ -25,16 +25,38 @@ export class ImprovedEquidistantSphStripsMaterial extends Material {
      * The constructor takes no argument.
      * @param {number} distance - distance between two strips
      * @param {number} halfWidth - with of the strip
+     * @param {number} fadingAmplitude - amplitude of the fading
      * @param {Color} stripColor - color of the strip
      * @param {Color} bgColor - color in between the group
+     * @param {Quaternion} quaternion - quaternion to eventually rotate the texture
+     * (when this cannot be done by an isometry of the space)
+     * by default the identity
      */
-    constructor(distance, halfWidth, stripColor, bgColor) {
+    constructor(distance, halfWidth, fadingAmplitude, stripColor, bgColor, quaternion = undefined) {
         super();
 
         this.distance = distance;
         this.halfWidth = halfWidth;
+        this.fadingAmplitude = fadingAmplitude;
         this.stripColor = stripColor;
         this.bgColor = bgColor;
+
+        /**
+         * Quaternion representing the rotation to apply
+         * @type {Quaternion}
+         */
+        this.quaternion = quaternion !== undefined ? quaternion : new Quaternion();
+    }
+
+    /**
+     * Return the rotation to apply represented as a Matrix4
+     * (or more precisely its inverse)
+     * @type {Matrix4}
+     */
+    get rotation() {
+        return new Matrix4()
+            .makeRotationFromQuaternion(this.quaternion)
+            .invert();
     }
 
     get cosHalfWidthSq() {
