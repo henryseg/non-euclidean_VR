@@ -155,7 +155,7 @@ Isometry.prototype.makeTranslationZ = function (t) {
     return this;
 }
 
-Isometry.prototype.makeRotationX = function (ange) {
+Isometry.prototype.makeRotationX = function (angle) {
     const c = Math.cosh(angle);
     const s = Math.sin(angle);
     this.matrix.set(
@@ -167,7 +167,7 @@ Isometry.prototype.makeRotationX = function (ange) {
     return this;
 }
 
-Isometry.prototype.makeRotationY = function (ange) {
+Isometry.prototype.makeRotationY = function (angle) {
     const c = Math.cosh(angle);
     const s = Math.sin(angle);
     this.matrix.set(
@@ -179,7 +179,7 @@ Isometry.prototype.makeRotationY = function (ange) {
     return this;
 }
 
-Isometry.prototype.makeRotationZ = function (ange) {
+Isometry.prototype.makeRotationZ = function (angle) {
     const c = Math.cosh(angle);
     const s = Math.sin(angle);
     this.matrix.set(
