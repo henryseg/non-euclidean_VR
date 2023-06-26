@@ -155,6 +155,42 @@ Isometry.prototype.makeTranslationZ = function (t) {
     return this;
 }
 
+Isometry.prototype.makeRotationX = function (ange) {
+    const c = Math.cosh(angle);
+    const s = Math.sin(angle);
+    this.matrix.set(
+        1, 0, 0, 0,
+        0, c, -s, 0,
+        0, s, c, 0,
+        0, 0, 0, 1
+    );
+    return this;
+}
+
+Isometry.prototype.makeRotationY = function (ange) {
+    const c = Math.cosh(angle);
+    const s = Math.sin(angle);
+    this.matrix.set(
+        c, 0, s, 0,
+        0, 1, 0, 0,
+        -s, 0, c, 0,
+        0, 0, 0, 1
+    );
+    return this;
+}
+
+Isometry.prototype.makeRotationZ = function (ange) {
+    const c = Math.cosh(angle);
+    const s = Math.sin(angle);
+    this.matrix.set(
+        c, -s, 0, 0,
+        s, c, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    return this;
+}
+
 Isometry.prototype.diffExpMap = function (m) {
     const tangentPosition = new Vector().setFromMatrixPosition(m);
     const aux = m.clone().setPosition(0, 0, 0);
