@@ -69,15 +69,6 @@ export class SemiLocalSlabShape extends BasicShape {
         this.elt3 = elts[3];
         this.elt4 = elts[4];
         this.elt5 = elts[5];
-
-        console.log(
-            this.elt0.hash(),
-            this.elt1.hash(),
-            this.elt2.hash(),
-            this.elt3.hash(),
-            this.elt4.hash(),
-            this.elt5.hash(),
-        )
     }
 
     updateData() {
