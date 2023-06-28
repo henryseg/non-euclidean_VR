@@ -15,3 +15,4 @@ export {LocalCappedCylinderShape} from "./localCappedCylinder/LocalCappedCylinde
 export {LocalCappedConeShape} from "./localCappedCone/LocalCappedConeShape.js";
 export {LocalRoundConeShape} from "./localRoundCone/LocalRoundConeShape.js";
 export {SlabShape} from "./slab/SlabShape.js";
+export {SemiLocalSlabShape} from "./semiLocalSlab/SemiLocalSlabShape.js";

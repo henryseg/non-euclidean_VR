@@ -145,7 +145,7 @@ Isometry.prototype.makeTranslationFromDir = function (vec) {
  */
 Isometry.prototype.makeTranslationZ = function (t) {
     const c = Math.cosh(t);
-    const s = Math.sin(t);
+    const s = Math.sinh(t);
     this.matrix.set(
         1, 0, 0, 0,
         0, 1, 0, 0,
@@ -156,7 +156,7 @@ Isometry.prototype.makeTranslationZ = function (t) {
 }
 
 Isometry.prototype.makeRotationX = function (angle) {
-    const c = Math.cosh(angle);
+    const c = Math.cos(angle);
     const s = Math.sin(angle);
     this.matrix.set(
         1, 0, 0, 0,
@@ -168,7 +168,7 @@ Isometry.prototype.makeRotationX = function (angle) {
 }
 
 Isometry.prototype.makeRotationY = function (angle) {
-    const c = Math.cosh(angle);
+    const c = Math.cos(angle);
     const s = Math.sin(angle);
     this.matrix.set(
         c, 0, s, 0,
@@ -180,7 +180,7 @@ Isometry.prototype.makeRotationY = function (angle) {
 }
 
 Isometry.prototype.makeRotationZ = function (angle) {
-    const c = Math.cosh(angle);
+    const c = Math.cos(angle);
     const s = Math.sin(angle);
     this.matrix.set(
         c, -s, 0, 0,

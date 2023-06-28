@@ -9,23 +9,27 @@ struct AugmentedCubeMaterial {
 };
 
 vec4 render(AugmentedCubeMaterial material, ExtVector v) {
-    vec3 mainColor = material.mainColor0;
-    ivec2 fp = v.vector.cellBoost.finitePart;
-    int index = fp.x + 3 * (fp.y + 1) / 2;
-    if (index == 1) {
-        mainColor = material.mainColor1;
-    }
-    if (index == 2) {
-        mainColor = material.mainColor2;
-    }
-    if (index == 3) {
-        mainColor = material.mainColor3;
-    }
-    if (index == 4) {
-        mainColor = material.mainColor4;
-    }
-    if (index == 5) {
-        mainColor = material.mainColor5;
+    vec3 mainColor;
+    int hash = hash(v.vector.cellBoost);
+    switch (hash) {
+        case 0:
+            mainColor = material.mainColor0;
+            break;
+        case 1:
+            mainColor = material.mainColor1;
+            break;
+        case 2:
+            mainColor = material.mainColor2;
+            break;
+        case 3:
+            mainColor = material.mainColor3;
+            break;
+        case 4:
+            mainColor = material.mainColor4;
+            break;
+        case 5:
+            mainColor = material.mainColor5;
+            break;
     }
     vec3 color = mainColor + material.weight * v.vector.local.pos.coords.xyw;
     return vec4(color, 1);

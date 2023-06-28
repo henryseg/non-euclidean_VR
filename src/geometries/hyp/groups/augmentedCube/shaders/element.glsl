@@ -21,6 +21,12 @@ GroupElement multiply(GroupElement elt1, GroupElement elt2) {
     return GroupElement(isom, finitePart);
 }
 
+// Produce a number between 0 and 5 characterizing the finite part of the element
+int hash(GroupElement elt){
+    ivec2 fp = elt.finitePart;
+    return fp.x + 3 * (fp.y + 1) / 2;
+}
+
 Isometry toIsometry(GroupElement elt) {
     return elt.isom;
 }

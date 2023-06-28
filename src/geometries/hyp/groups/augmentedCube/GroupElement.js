@@ -65,6 +65,12 @@ export class GroupElement extends AbstractGroupElement {
         return this.isom;
     }
 
+    // Produce a number between 0 and 5 characterizing the finite part of the element
+    hash() {
+        const fp = this.finitePart;
+        return fp.x + 3 * (fp.y + 1) / 2;
+    }
+
     equals(elt) {
         return this.isom.equals(elt.isom);
     }
