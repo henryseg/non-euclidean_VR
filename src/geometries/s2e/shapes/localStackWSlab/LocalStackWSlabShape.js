@@ -16,7 +16,7 @@ export class LocalStackWSlabShape extends BasicShape {
      * @param {number} thickness - thickness of the slab
      * @param {number} height - height between two slabs
      */
-    constructor(location,thickness,height) {
+    constructor(location, thickness, height) {
 
         const isom = new Isometry();
         if (location.isIsometry) {
