@@ -1716,6 +1716,20 @@ module.exports = "   \n                               \n                        
 
 /***/ }),
 
+/***/ 157:
+/***/ ((module) => {
+
+module.exports = "struct GroupElement {\n    ivec2 coords;\n};\n\nconst GroupElement GROUP_IDENTITY = GroupElement(ivec2(0, 0));\n\nGroupElement multiply(GroupElement elt1, GroupElement elt2) {\n    ivec2 coords = elt1.coords + elt2.coords;\n    coords.x = int(mod(float(coords.x), group.n));\n    return GroupElement(coords);\n}\n\nIsometry toIsometry(GroupElement elt) {\n    float angle = 2. * float(elt.coords.x) * PI / group.n;\n    float shift = 2. * float(elt.coords.y) * group.halfHeight;\n    float c = cos(angle);\n    float s = sin(angle);\n    mat4 matrix = mat4(\n        1, 0, 0, 0,\n        0, c, s, 0,\n        0, -s, c, 0,\n        0, 0, 0, 1\n    );\n    return Isometry(matrix, shift);\n}"
+
+/***/ }),
+
+/***/ 7515:
+/***/ ((module) => {
+
+module.exports = "struct Group {\n    float n;\n    float halfHeight;\n    vec4 normalP;\n    vec4 normalN;\n};"
+
+/***/ }),
+
 /***/ 8098:
 /***/ ((module) => {
 
@@ -1958,141 +1972,142 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "T0": () => (/* reexport */ AcesFilmPostProcess),
-  "FJ": () => (/* reexport */ AdvancedResetVRControls),
-  "GU": () => (/* reexport */ AdvancedShape),
-  "XH": () => (/* reexport */ BOTH),
-  "ec": () => (/* reexport */ Ball),
-  "Yb": () => (/* reexport */ BallShape),
-  "QU": () => (/* reexport */ BasicCamera),
-  "ZH": () => (/* reexport */ BasicPTMaterial),
-  "K9": () => (/* binding */ thurstonS2E_BasicRenderer),
-  "FT": () => (/* reexport */ BasicShape),
-  "cK": () => (/* reexport */ CREEPING_FULL),
-  "_x": () => (/* reexport */ CREEPING_OFF),
-  "kj": () => (/* reexport */ CREEPING_STRICT),
-  "Vz": () => (/* reexport */ CheckerboardMaterial),
-  "ck": () => (/* reexport */ CombinedPostProcess),
-  "Iy": () => (/* reexport */ ComplementShape),
-  "Vf": () => (/* reexport */ ConstDirLight),
-  "ik": () => (/* reexport */ DIR_DOWN),
-  "fY": () => (/* reexport */ DIR_UP),
-  "TB": () => (/* reexport */ DebugMaterial),
-  "Al": () => (/* reexport */ DragVRControls),
-  "Gj": () => (/* reexport */ ESun),
-  "ix": () => (/* reexport */ EquidistantHypStripsMaterial),
-  "jZ": () => (/* reexport */ EquidistantSphStripsMaterial),
-  "c$": () => (/* reexport */ ExpFog),
-  "mD": () => (/* reexport */ FlyControls),
-  "yb": () => (/* reexport */ Fog),
-  "iJ": () => (/* reexport */ GraphPaperMaterial),
-  "ZA": () => (/* reexport */ Group_Group),
-  "Jz": () => (/* reexport */ GroupElement_GroupElement),
-  "fR": () => (/* reexport */ HighlightLocalWrapMaterial),
-  "kK": () => (/* reexport */ HighlightWrapMaterial),
-  "ic": () => (/* reexport */ HorizontalCylinder),
-  "Fn": () => (/* reexport */ HorizontalCylinderShape),
-  "ZX": () => (/* reexport */ HypStripsMaterial),
-  "_f": () => (/* reexport */ ImprovedEquidistantHypStripsMaterial),
-  "Ht": () => (/* reexport */ ImprovedEquidistantSphStripsMaterial),
-  "HZ": () => (/* reexport */ InfoControls),
-  "TN": () => (/* reexport */ IntersectionShape),
-  "JV": () => (/* reexport */ Isometry),
-  "Sc": () => (/* reexport */ IsotropicChaseVRControls),
-  "Nh": () => (/* reexport */ KeyGenericControls),
-  "RL": () => (/* reexport */ LEFT),
-  "_k": () => (/* reexport */ Light),
-  "uR": () => (/* reexport */ LightVRControls),
-  "gU": () => (/* reexport */ LinearToSRGBPostProcess),
-  "jo": () => (/* reexport */ LocalBall),
-  "Q": () => (/* reexport */ LocalBallShape),
-  "NQ": () => (/* reexport */ LocalHorizontalCylinder),
-  "h3": () => (/* reexport */ LocalHorizontalCylinderShape),
-  "L8": () => (/* reexport */ LocalPointLight),
-  "XK": () => (/* reexport */ LocalStackBallShape),
-  "W1": () => (/* reexport */ LocalStackWSlabShape),
-  "IJ": () => (/* reexport */ LocalVerticalCylinder),
-  "jD": () => (/* reexport */ LocalVerticalCylinderShape),
-  "kd": () => (/* reexport */ LocalWSlabShape),
-  "F5": () => (/* reexport */ Material),
-  "Uc": () => (/* reexport */ Matrix2),
-  "Fh": () => (/* reexport */ MoveVRControls),
-  "O5": () => (/* reexport */ MultiColorMaterial),
-  "oB": () => (/* reexport */ NormalMaterial),
-  "pJ": () => (/* reexport */ PTMaterial),
-  "GW": () => (/* reexport */ PathTracerCamera),
-  "DZ": () => (/* binding */ thurstonS2E_PathTracerRenderer),
-  "_K": () => (/* reexport */ PathTracerWrapMaterial),
-  "JF": () => (/* reexport */ PhongMaterial),
-  "Lv": () => (/* reexport */ PhongWrapMaterial),
-  "E9": () => (/* reexport */ Point),
-  "ce": () => (/* reexport */ PointLight),
-  "Ly": () => (/* reexport */ Position),
-  "iv": () => (/* reexport */ QuadRing),
-  "mH": () => (/* reexport */ QuadRingElement),
-  "xd": () => (/* reexport */ QuadRingMatrix4),
-  "pX": () => (/* reexport */ RIGHT),
-  "Dz": () => (/* reexport */ RelPosition),
-  "Uj": () => (/* reexport */ ResetVRControls),
-  "bY": () => (/* reexport */ RotatedSphericalTextureMaterial),
-  "cV": () => (/* reexport */ SMOOTH_MAX_POLY),
-  "lR": () => (/* reexport */ SMOOTH_MIN_POLY),
-  "xs": () => (/* reexport */ Scene),
-  "bn": () => (/* reexport */ Shape),
-  "oC": () => (/* reexport */ ShootVRControls),
-  "Z1": () => (/* reexport */ SimpleTextureMaterial),
-  "h8": () => (/* reexport */ SingleColorMaterial),
-  "Qf": () => (/* reexport */ Solid),
-  "k1": () => (/* reexport */ SquaresMaterial),
-  "ew": () => (/* reexport */ StripsMaterial),
-  "$p": () => (/* reexport */ SwitchControls),
-  "xG": () => (/* reexport */ TeleportationSet),
-  "qC": () => (/* binding */ thurstonS2E_Thurston),
-  "N$": () => (/* binding */ thurstonS2E_ThurstonLite),
-  "TO": () => (/* binding */ thurstonS2E_ThurstonVR),
-  "g$": () => (/* binding */ thurstonS2E_ThurstonVRWoodBalls),
-  "u3": () => (/* binding */ thurstonS2E_ThurstonVRWoodBallsBis),
-  "l_": () => (/* reexport */ TransitionLocalWrapMaterial),
-  "pk": () => (/* reexport */ TransitionWrapMaterial),
-  "yI": () => (/* reexport */ UnionShape),
-  "E6": () => (/* reexport */ VRCamera),
-  "zO": () => (/* binding */ thurstonS2E_VRRenderer),
-  "cB": () => (/* reexport */ VaryingColorMaterial),
-  "OW": () => (/* reexport */ Vector),
-  "DV": () => (/* reexport */ VerticalCylinder),
-  "bt": () => (/* reexport */ VerticalCylinderShape),
-  "n3": () => (/* reexport */ VideoAlphaTextureMaterial),
-  "Se": () => (/* reexport */ VideoFrameTextureMaterial),
-  "PQ": () => (/* reexport */ VideoTextureMaterial),
-  "S_": () => (/* reexport */ WCappedCylinder),
-  "m4": () => (/* reexport */ WCappedCylinderShape),
-  "G3": () => (/* reexport */ WCylinder),
-  "Nu": () => (/* reexport */ WCylinderShape),
-  "Uy": () => (/* reexport */ WHalfSpace),
-  "CI": () => (/* reexport */ WHalfSpaceShape),
-  "$9": () => (/* reexport */ WrapShape),
-  "iR": () => (/* reexport */ XRControllerModelFactory),
-  "ak": () => (/* reexport */ utils_bind),
-  "uZ": () => (/* reexport */ clamp),
-  "Cy": () => (/* reexport */ complement),
-  "Rc": () => (/* reexport */ cube_set),
-  "qM": () => (/* reexport */ earthTexture),
-  "mV": () => (/* reexport */ highlightLocalWrap),
-  "Gi": () => (/* reexport */ highlightWrap),
-  "jV": () => (/* reexport */ intersection),
-  "j9": () => (/* reexport */ marsTexture),
-  "oc": () => (/* reexport */ moonTexture),
-  "wS": () => (/* reexport */ pathTracerWrap),
-  "WT": () => (/* reexport */ phongWrap),
-  "p2": () => (/* reexport */ safeString),
-  "w0": () => (/* reexport */ sunTexture),
-  "VL": () => (/* reexport */ transitionLocalWrap),
-  "UR": () => (/* reexport */ transitionWrap),
-  "dV": () => (/* reexport */ set),
-  "G0": () => (/* reexport */ union),
-  "YL": () => (/* reexport */ woodBallMaterial),
-  "re": () => (/* reexport */ wrap),
-  "xS": () => (/* reexport */ zLoop_set)
+  T0: () => (/* reexport */ AcesFilmPostProcess),
+  FJ: () => (/* reexport */ AdvancedResetVRControls),
+  GU: () => (/* reexport */ AdvancedShape),
+  XH: () => (/* reexport */ BOTH),
+  ec: () => (/* reexport */ Ball),
+  Yb: () => (/* reexport */ BallShape),
+  QU: () => (/* reexport */ BasicCamera),
+  ZH: () => (/* reexport */ BasicPTMaterial),
+  K9: () => (/* binding */ thurstonS2E_BasicRenderer),
+  FT: () => (/* reexport */ BasicShape),
+  cK: () => (/* reexport */ CREEPING_FULL),
+  _x: () => (/* reexport */ CREEPING_OFF),
+  kj: () => (/* reexport */ CREEPING_STRICT),
+  Vz: () => (/* reexport */ CheckerboardMaterial),
+  ck: () => (/* reexport */ CombinedPostProcess),
+  Iy: () => (/* reexport */ ComplementShape),
+  Vf: () => (/* reexport */ ConstDirLight),
+  ik: () => (/* reexport */ DIR_DOWN),
+  fY: () => (/* reexport */ DIR_UP),
+  TB: () => (/* reexport */ DebugMaterial),
+  Al: () => (/* reexport */ DragVRControls),
+  Gj: () => (/* reexport */ ESun),
+  ix: () => (/* reexport */ EquidistantHypStripsMaterial),
+  jZ: () => (/* reexport */ EquidistantSphStripsMaterial),
+  c$: () => (/* reexport */ ExpFog),
+  mD: () => (/* reexport */ FlyControls),
+  yb: () => (/* reexport */ Fog),
+  iJ: () => (/* reexport */ GraphPaperMaterial),
+  ZA: () => (/* reexport */ Group_Group),
+  Jz: () => (/* reexport */ GroupElement_GroupElement),
+  fR: () => (/* reexport */ HighlightLocalWrapMaterial),
+  kK: () => (/* reexport */ HighlightWrapMaterial),
+  ic: () => (/* reexport */ HorizontalCylinder),
+  Fn: () => (/* reexport */ HorizontalCylinderShape),
+  ZX: () => (/* reexport */ HypStripsMaterial),
+  _f: () => (/* reexport */ ImprovedEquidistantHypStripsMaterial),
+  Ht: () => (/* reexport */ ImprovedEquidistantSphStripsMaterial),
+  HZ: () => (/* reexport */ InfoControls),
+  TN: () => (/* reexport */ IntersectionShape),
+  JV: () => (/* reexport */ Isometry),
+  Sc: () => (/* reexport */ IsotropicChaseVRControls),
+  Nh: () => (/* reexport */ KeyGenericControls),
+  RL: () => (/* reexport */ LEFT),
+  _k: () => (/* reexport */ Light),
+  uR: () => (/* reexport */ LightVRControls),
+  gU: () => (/* reexport */ LinearToSRGBPostProcess),
+  jo: () => (/* reexport */ LocalBall),
+  Q: () => (/* reexport */ LocalBallShape),
+  NQ: () => (/* reexport */ LocalHorizontalCylinder),
+  h3: () => (/* reexport */ LocalHorizontalCylinderShape),
+  L8: () => (/* reexport */ LocalPointLight),
+  XK: () => (/* reexport */ LocalStackBallShape),
+  W1: () => (/* reexport */ LocalStackWSlabShape),
+  IJ: () => (/* reexport */ LocalVerticalCylinder),
+  jD: () => (/* reexport */ LocalVerticalCylinderShape),
+  kd: () => (/* reexport */ LocalWSlabShape),
+  F5: () => (/* reexport */ Material),
+  Uc: () => (/* reexport */ Matrix2),
+  Fh: () => (/* reexport */ MoveVRControls),
+  O5: () => (/* reexport */ MultiColorMaterial),
+  oB: () => (/* reexport */ NormalMaterial),
+  pJ: () => (/* reexport */ PTMaterial),
+  GW: () => (/* reexport */ PathTracerCamera),
+  DZ: () => (/* binding */ thurstonS2E_PathTracerRenderer),
+  _K: () => (/* reexport */ PathTracerWrapMaterial),
+  JF: () => (/* reexport */ PhongMaterial),
+  Lv: () => (/* reexport */ PhongWrapMaterial),
+  E9: () => (/* reexport */ Point),
+  ce: () => (/* reexport */ PointLight),
+  Ly: () => (/* reexport */ Position),
+  iv: () => (/* reexport */ QuadRing),
+  mH: () => (/* reexport */ QuadRingElement),
+  xd: () => (/* reexport */ QuadRingMatrix4),
+  pX: () => (/* reexport */ RIGHT),
+  Dz: () => (/* reexport */ RelPosition),
+  Uj: () => (/* reexport */ ResetVRControls),
+  bY: () => (/* reexport */ RotatedSphericalTextureMaterial),
+  cV: () => (/* reexport */ SMOOTH_MAX_POLY),
+  lR: () => (/* reexport */ SMOOTH_MIN_POLY),
+  xs: () => (/* reexport */ Scene),
+  bn: () => (/* reexport */ Shape),
+  oC: () => (/* reexport */ ShootVRControls),
+  Z1: () => (/* reexport */ SimpleTextureMaterial),
+  h8: () => (/* reexport */ SingleColorMaterial),
+  Qf: () => (/* reexport */ Solid),
+  k1: () => (/* reexport */ SquaresMaterial),
+  ew: () => (/* reexport */ StripsMaterial),
+  $p: () => (/* reexport */ SwitchControls),
+  xG: () => (/* reexport */ TeleportationSet),
+  qC: () => (/* binding */ thurstonS2E_Thurston),
+  N$: () => (/* binding */ thurstonS2E_ThurstonLite),
+  TO: () => (/* binding */ thurstonS2E_ThurstonVR),
+  g$: () => (/* binding */ thurstonS2E_ThurstonVRWoodBalls),
+  u3: () => (/* binding */ thurstonS2E_ThurstonVRWoodBallsBis),
+  l_: () => (/* reexport */ TransitionLocalWrapMaterial),
+  pk: () => (/* reexport */ TransitionWrapMaterial),
+  yI: () => (/* reexport */ UnionShape),
+  E6: () => (/* reexport */ VRCamera),
+  zO: () => (/* binding */ thurstonS2E_VRRenderer),
+  cB: () => (/* reexport */ VaryingColorMaterial),
+  OW: () => (/* reexport */ Vector),
+  DV: () => (/* reexport */ VerticalCylinder),
+  bt: () => (/* reexport */ VerticalCylinderShape),
+  n3: () => (/* reexport */ VideoAlphaTextureMaterial),
+  Se: () => (/* reexport */ VideoFrameTextureMaterial),
+  PQ: () => (/* reexport */ VideoTextureMaterial),
+  S_: () => (/* reexport */ WCappedCylinder),
+  m4: () => (/* reexport */ WCappedCylinderShape),
+  G3: () => (/* reexport */ WCylinder),
+  Nu: () => (/* reexport */ WCylinderShape),
+  Uy: () => (/* reexport */ WHalfSpace),
+  CI: () => (/* reexport */ WHalfSpaceShape),
+  $9: () => (/* reexport */ WrapShape),
+  iR: () => (/* reexport */ XRControllerModelFactory),
+  ak: () => (/* reexport */ utils_bind),
+  uZ: () => (/* reexport */ clamp),
+  Cy: () => (/* reexport */ complement),
+  Rc: () => (/* reexport */ cube_set),
+  qM: () => (/* reexport */ earthTexture),
+  mV: () => (/* reexport */ highlightLocalWrap),
+  Gi: () => (/* reexport */ highlightWrap),
+  jV: () => (/* reexport */ intersection),
+  j9: () => (/* reexport */ marsTexture),
+  oc: () => (/* reexport */ moonTexture),
+  wS: () => (/* reexport */ pathTracerWrap),
+  WT: () => (/* reexport */ phongWrap),
+  p2: () => (/* reexport */ safeString),
+  w0: () => (/* reexport */ sunTexture),
+  O8: () => (/* reexport */ torus_set),
+  VL: () => (/* reexport */ transitionLocalWrap),
+  UR: () => (/* reexport */ transitionWrap),
+  dV: () => (/* reexport */ set),
+  G0: () => (/* reexport */ union),
+  YL: () => (/* reexport */ woodBallMaterial),
+  re: () => (/* reexport */ wrap),
+  xS: () => (/* reexport */ zLoop_set)
 });
 
 ;// CONCATENATED MODULE: external "three"
@@ -5362,12 +5377,25 @@ class RelPosition {
 /**
  * @desc
  * Keyboard bindings.
- * Each main entry correspond to a keyboard type (American, French, etc).
- * KeyCode are replaced by Key (as KeyCode are now deprecated).
  * To each key is associated an action
  * @const
  */
-const KEYBOARD_BINDINGS = {
+const KEYBOARD_BINDING = {
+    "KeyA": "yawLeft",
+    "KeyD": "yawRight",
+    "KeyW": "pitchUp",
+    "KeyS": "pitchDown",
+    "KeyQ": "rollLeft",
+    "KeyE": "rollRight",
+    "ArrowUp": "forward",
+    "ArrowDown": "back",
+    "ArrowLeft": "left",
+    "ArrowRight": "right",
+    "Quote": "up",
+    "Slash": "down"
+}
+
+/*const KEYBOARD_BINDINGS_OD = {
     'us': {
         "a": "yawLeft",
         "d": "yawRight",
@@ -5396,7 +5424,7 @@ const KEYBOARD_BINDINGS = {
         "ù": "up",
         "=": "down"
     }
-};
+};*/
 
 
 /**
@@ -5415,17 +5443,14 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
      * (and not the one of the three.js camera in the virtual euclidean space).
      * @param {DollyCamera} camera - the non-euclidean camera
      * (needed to get the orientation of the observer when using both VR and keyboard).
-     * @param {string} keyboard - the keyboard type (us, fr, etc)
      */
-    constructor(camera, keyboard = 'us') {
+    constructor(camera) {
         super();
         this.camera = camera;
-
-        this.keyboard = keyboard;
+        // this.keyboard = keyboard;
 
         this.movementSpeed = 0.5;
         this.rollSpeed = 0.8;
-
 
         // private fields
         this._moveState = {
@@ -5461,7 +5486,7 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
     }
 
     /**
-     * Restor the event listener
+     * Restore the event listener
      */
     restore() {
         window.addEventListener('keydown', this._onKeyDown, false);
@@ -5469,43 +5494,31 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
     }
 
     /**
-     * Set the type of keyboard used for the controls.
-     * Just an alias of the setter, that can be called easily as a function.
-     * @param {string} keyboard - the new keyboard ('fr', 'us', etc).
-     */
-    setKeyboard(keyboard) {
-        this.keyboard = keyboard;
-    }
-
-    /**
      * Event handler when a key is pressed
      * @param {KeyboardEvent} event - the caught event
      */
     onKeyDown(event) {
-        if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
-            const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
+        if (event.code in KEYBOARD_BINDING) {
+            const action = KEYBOARD_BINDING[event.code]
             this._moveState[action] = 1;
             this.updateMovementVector();
             this.updateRotationVector();
-
         }
     }
-
 
     /**
      * Event handler when a key is pressed
      * @param {KeyboardEvent} event - the caught event
      */
     onKeyUp(event) {
-        if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
-            const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
+        if (event.code in KEYBOARD_BINDING) {
+            const action = KEYBOARD_BINDING[event.code]
             this._moveState[action] = 0;
             this.updateMovementVector();
             this.updateRotationVector();
 
         }
     }
-
 
     /**
      * Update the movement vector
@@ -5514,9 +5527,6 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         this._moveVector.x = (-this._moveState.left + this._moveState.right);
         this._moveVector.y = (-this._moveState.down + this._moveState.up);
         this._moveVector.z = (-this._moveState.forward + this._moveState.back);
-
-        // console.log( 'move:', [ this._moveVector.x, this._moveVector.y, this._moveVector.z ] );
-
     };
 
     /**
@@ -5526,9 +5536,6 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         this._rotationVector.x = (-this._moveState.pitchDown + this._moveState.pitchUp);
         this._rotationVector.y = (-this._moveState.yawRight + this._moveState.yawLeft);
         this._rotationVector.z = (-this._moveState.rollRight + this._moveState.rollLeft);
-
-        //console.log( 'rotate:', [ this._rotationVector.x, this._rotationVector.y, this._rotationVector.z ] );
-
     };
 
     /**
@@ -5557,7 +5564,7 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
      */
     update(delta) {
         // Somehow, in VR mode, the cameras' quaternion is not updated.
-        // Thus we use the cameras' matrixWorld for our computations.
+        // Thus, we use the cameras' matrixWorld for our computations.
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
@@ -5574,12 +5581,10 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         const quaternion = new external_three_namespaceObject.Quaternion(deltaRotation.x, deltaRotation.y, deltaRotation.z, 1).normalize();
         this.camera.position.applyQuaternion(quaternion);
 
-
         // if (false) {
         //     this.dispatchEvent(CHANGE_EVENT);
         // }
     }
-
 }
 
 
@@ -6924,8 +6929,7 @@ class Thurston {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -6991,11 +6995,6 @@ class Thurston {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
-
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -7166,8 +7165,7 @@ class ThurstonLite {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -7213,10 +7211,6 @@ class ThurstonLite {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
 
         // controls for the camera
@@ -12776,8 +12770,7 @@ class ThurstonVR {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -12846,10 +12839,6 @@ class ThurstonVR {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -13007,8 +12996,7 @@ class ThurstonVRWoodBalls {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -13152,10 +13140,6 @@ class ThurstonVRWoodBalls {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -13479,8 +13463,7 @@ class ThurstonVRWoodBallsBis {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -13622,10 +13605,6 @@ class ThurstonVRWoodBallsBis {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -19816,6 +19795,214 @@ set_set.setHalfHeight = function(value) {
 }
 
 /* harmony default export */ const zLoop_set = (set_set);
+;// CONCATENATED MODULE: ./src/geometries/s2e/groups/torus/GroupElement.js
+
+
+
+
+
+
+/**
+ * @class
+ * Element in Z/n x Z represented as Vector2
+ */
+class torus_GroupElement_GroupElement extends GroupElement_GroupElement {
+
+    /**
+     * Constructor
+     * @param {Group} group - the underlying group
+     * @param {number} x - the finite part
+     * @param {number} y - the infinite part
+     */
+    constructor(group, x = 0, y = 0) {
+        super(group);
+        this.coords = new external_three_namespaceObject.Vector2(x % this.group.n, y);
+    }
+
+    identity() {
+        this.coords.set(0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        this.coords.add(elt.coords);
+        this.coords.setX(this.coords.x % this.group.n);
+        return this;
+    }
+
+    premultiply(elt) {
+        // the group is abelian !
+        return this.multiply(elt);
+    }
+
+    invert() {
+        this.coords.multiplyScalar(-1);
+        return this;
+    }
+
+    toIsometry() {
+        const angle = this.coords.x * this.group.angle;
+        const res = new Isometry();
+        const c = Math.cos(angle);
+        const s = Math.sin(angle);
+        res.matrix = new external_three_namespaceObject.Matrix4().set(
+            1, 0, 0, 0,
+            0, c, -s, 0,
+            0, s, c, 0,
+            0, 0, 0, 1
+        )
+        res.shift = 2 * this.group.halfHeight * this.coords.y;
+        return res;
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = this.group.element();
+        res.coords.copy(this.coords);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        return this;
+    }
+}
+
+// EXTERNAL MODULE: ./src/geometries/s2e/groups/torus/shaders/struct.glsl
+var torus_shaders_struct = __webpack_require__(7515);
+var torus_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(torus_shaders_struct);
+// EXTERNAL MODULE: ./src/geometries/s2e/groups/torus/shaders/element.glsl
+var torus_shaders_element = __webpack_require__(157);
+var torus_shaders_element_default = /*#__PURE__*/__webpack_require__.n(torus_shaders_element);
+;// CONCATENATED MODULE: ./src/geometries/s2e/groups/torus/Group.js
+
+
+
+
+
+
+
+class torus_Group_Group extends Group_Group {
+
+    /**
+     * Constructor.
+     * Group Z/n x Z, where
+     * - Z/n is a rotation group in the sphere (around the x-axis)
+     * - Z is a translation group along the fiber by a length 2 pi / n
+     * @param {number} n - the order of the cyclic factor
+     */
+    constructor(n = undefined) {
+        super();
+        this.n = n !== undefined ? n : 4;
+    }
+
+    get halfHeight() {
+        return Math.PI / this.n;
+    }
+
+    get angle() {
+        return 2 * Math.PI / this.n;
+    }
+
+    get normalP() {
+        return new external_three_namespaceObject.Vector4(
+            0,
+            -Math.cos(0.5 * this.angle),
+            -Math.sin(0.5 * this.angle),
+            0
+        );
+    }
+
+    get normalN() {
+        return new external_three_namespaceObject.Vector4(
+            0,
+            Math.cos(0.5 * this.angle),
+            -Math.sin(0.5 * this.angle),
+            0
+        );
+    }
+
+    element() {
+        return new torus_GroupElement_GroupElement(this, ...arguments);
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk((torus_shaders_struct_default()));
+        shaderBuilder.addUniform('group', 'Group', this);
+        shaderBuilder.addChunk((torus_shaders_element_default()));
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/s2e/groups/torus/set.js
+
+
+
+const torus_set_group = new torus_Group_Group();
+
+function testAngleP(p) {
+    return p.coords.dot(torus_set_group.normalP) > 0;
+}
+
+//language=GLSL
+const glslTestAngleP = `//
+
+bool testAngleP(Point p){
+    return dot(p.coords, group.normalP) > 0.;
+}
+`;
+
+function testAngleN(p) {
+    return p.coords.dot(torus_set_group.normalN) > 0;
+}
+
+//language=GLSL
+const glslTestAngleN = `//
+
+bool testAngleN(Point p){
+    return dot(p.coords, group.normalN) > 0.;
+}
+`;
+
+
+function torus_set_testWp(p) {
+    return p.coords.w > torus_set_group.halfHeight;
+}
+
+//language=GLSL
+const torus_set_glslTestWp = `//
+
+bool testWp(Point p){
+    return p.coords.w > group.halfHeight;
+}
+`;
+
+function torus_set_testWn(p) {
+    return p.coords.w < -torus_set_group.halfHeight;
+}
+
+//language=GLSL
+const torus_set_glslTestWn = `//
+
+bool testWn(Point p){
+    return p.coords.w < -group.halfHeight;
+}
+`;
+
+const shiftAngleP = torus_set_group.element(-1, 0);
+const shiftAngleN = torus_set_group.element(1, 0);
+const torus_set_shiftWp = torus_set_group.element(0, -1);
+const torus_set_shiftWn = torus_set_group.element(0, 1);
+
+
+const torus_set_set = new TeleportationSet()
+    .add(testAngleP, glslTestAngleP, shiftAngleP, shiftAngleN)
+    .add(testAngleN, glslTestAngleN, shiftAngleN, shiftAngleP)
+    .add(torus_set_testWp, torus_set_glslTestWp, torus_set_shiftWp, torus_set_shiftWn)
+    .add(torus_set_testWn, torus_set_glslTestWn, torus_set_shiftWn, torus_set_shiftWp);
+
+/* harmony default export */ const torus_set = (torus_set_set);
 // EXTERNAL MODULE: ./src/geometries/s2e/imports/direction.glsl
 var direction = __webpack_require__(1936);
 var direction_default = /*#__PURE__*/__webpack_require__.n(direction);
@@ -21078,7 +21265,7 @@ class LocalStackWSlabShape extends BasicShape {
      * @param {number} thickness - thickness of the slab
      * @param {number} height - height between two slabs
      */
-    constructor(location,thickness,height) {
+    constructor(location, thickness, height) {
 
         const isom = new Isometry();
         if (location.isIsometry) {
@@ -21685,6 +21872,7 @@ const thurstonS2E_ThurstonVRWoodBallsBis = specifyThurston(ThurstonVRWoodBallsBi
 
 
 
+
 })();
 
 var __webpack_exports__AcesFilmPostProcess = __webpack_exports__.T0;
@@ -21815,6 +22003,7 @@ var __webpack_exports__pathTracerWrap = __webpack_exports__.wS;
 var __webpack_exports__phongWrap = __webpack_exports__.WT;
 var __webpack_exports__safeString = __webpack_exports__.p2;
 var __webpack_exports__sunTexture = __webpack_exports__.w0;
+var __webpack_exports__torusSet = __webpack_exports__.O8;
 var __webpack_exports__transitionLocalWrap = __webpack_exports__.VL;
 var __webpack_exports__transitionWrap = __webpack_exports__.UR;
 var __webpack_exports__trivialSet = __webpack_exports__.dV;
@@ -21822,4 +22011,4 @@ var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__LocalStackBallShape as LocalStackBallShape, __webpack_exports__LocalStackWSlabShape as LocalStackWSlabShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__LocalWSlabShape as LocalWSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WCappedCylinder as WCappedCylinder, __webpack_exports__WCappedCylinderShape as WCappedCylinderShape, __webpack_exports__WCylinder as WCylinder, __webpack_exports__WCylinderShape as WCylinderShape, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__LocalStackBallShape as LocalStackBallShape, __webpack_exports__LocalStackWSlabShape as LocalStackWSlabShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__LocalWSlabShape as LocalWSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WCappedCylinder as WCappedCylinder, __webpack_exports__WCappedCylinderShape as WCappedCylinderShape, __webpack_exports__WCylinder as WCylinder, __webpack_exports__WCylinderShape as WCylinderShape, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__torusSet as torusSet, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };

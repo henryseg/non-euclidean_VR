@@ -2000,149 +2000,149 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "T0": () => (/* reexport */ AcesFilmPostProcess),
-  "FJ": () => (/* reexport */ AdvancedResetVRControls),
-  "GU": () => (/* reexport */ AdvancedShape),
-  "uv": () => (/* reexport */ AugmentedCubeMaterial),
-  "XH": () => (/* reexport */ BOTH),
-  "ec": () => (/* reexport */ Ball),
-  "Yb": () => (/* reexport */ BallShape),
-  "QU": () => (/* reexport */ BasicCamera),
-  "ZH": () => (/* reexport */ BasicPTMaterial),
-  "K9": () => (/* binding */ thurstonHyp_BasicRenderer),
-  "FT": () => (/* reexport */ BasicShape),
-  "cK": () => (/* reexport */ CREEPING_FULL),
-  "_x": () => (/* reexport */ CREEPING_OFF),
-  "kj": () => (/* reexport */ CREEPING_STRICT),
-  "Vz": () => (/* reexport */ CheckerboardMaterial),
-  "ck": () => (/* reexport */ CombinedPostProcess),
-  "Iy": () => (/* reexport */ ComplementShape),
-  "Vf": () => (/* reexport */ ConstDirLight),
-  "Ab": () => (/* reexport */ Cylinder),
-  "g6": () => (/* reexport */ CylinderShape),
-  "TB": () => (/* reexport */ DebugMaterial),
-  "Al": () => (/* reexport */ DragVRControls),
-  "ix": () => (/* reexport */ EquidistantHypStripsMaterial),
-  "jZ": () => (/* reexport */ EquidistantSphStripsMaterial),
-  "c$": () => (/* reexport */ ExpFog),
-  "mD": () => (/* reexport */ FlyControls),
-  "yb": () => (/* reexport */ Fog),
-  "d1": () => (/* reexport */ GradientColorMaterial),
-  "iJ": () => (/* reexport */ GraphPaperMaterial),
-  "ZA": () => (/* reexport */ Group_Group),
-  "Jz": () => (/* reexport */ GroupElement_GroupElement),
-  "Fr": () => (/* reexport */ HalfSpace),
-  "RM": () => (/* reexport */ HalfSpaceShape),
-  "fR": () => (/* reexport */ HighlightLocalWrapMaterial),
-  "kK": () => (/* reexport */ HighlightWrapMaterial),
-  "KV": () => (/* reexport */ Horoball),
-  "sm": () => (/* reexport */ HoroballShape),
-  "ZX": () => (/* reexport */ HypStripsMaterial),
-  "_f": () => (/* reexport */ ImprovedEquidistantHypStripsMaterial),
-  "Ht": () => (/* reexport */ ImprovedEquidistantSphStripsMaterial),
-  "HZ": () => (/* reexport */ InfoControls),
-  "TN": () => (/* reexport */ IntersectionShape),
-  "JV": () => (/* reexport */ Isometry),
-  "Sc": () => (/* reexport */ IsotropicChaseVRControls),
-  "Nh": () => (/* reexport */ KeyGenericControls),
-  "RL": () => (/* reexport */ LEFT),
-  "_k": () => (/* reexport */ Light),
-  "uR": () => (/* reexport */ LightVRControls),
-  "gU": () => (/* reexport */ LinearToSRGBPostProcess),
-  "jo": () => (/* reexport */ LocalBall),
-  "Q": () => (/* reexport */ LocalBallShape),
-  "l8": () => (/* reexport */ LocalCappedCone),
-  "dd": () => (/* reexport */ LocalCappedConeShape),
-  "Sx": () => (/* reexport */ LocalCappedCylinder),
-  "ML": () => (/* reexport */ LocalCappedCylinderShape),
-  "gq": () => (/* reexport */ LocalCylinder),
-  "Gj": () => (/* reexport */ LocalCylinderShape),
-  "NW": () => (/* reexport */ LocalHoroball),
-  "pt": () => (/* reexport */ LocalHoroballShape),
-  "L8": () => (/* reexport */ LocalPointLight),
-  "Wu": () => (/* reexport */ LocalRoundCone),
-  "iq": () => (/* reexport */ LocalRoundConeShape),
-  "hk": () => (/* reexport */ LocalSlab),
-  "F5": () => (/* reexport */ Material),
-  "Uc": () => (/* reexport */ Matrix2),
-  "Fh": () => (/* reexport */ MoveVRControls),
-  "O5": () => (/* reexport */ MultiColorMaterial),
-  "jy": () => (/* reexport */ NativeCamera),
-  "MV": () => (/* reexport */ NoiseColorMaterial),
-  "oB": () => (/* reexport */ NormalMaterial),
-  "pJ": () => (/* reexport */ PTMaterial),
-  "GW": () => (/* reexport */ PathTracerCamera),
-  "DZ": () => (/* binding */ thurstonHyp_PathTracerRenderer),
-  "_K": () => (/* reexport */ PathTracerWrapMaterial),
-  "JF": () => (/* reexport */ PhongMaterial),
-  "Lv": () => (/* reexport */ PhongWrapMaterial),
-  "E9": () => (/* reexport */ Point),
-  "ce": () => (/* reexport */ PointLight),
-  "Ly": () => (/* reexport */ Position),
-  "iv": () => (/* reexport */ QuadRing),
-  "mH": () => (/* reexport */ QuadRingElement),
-  "xd": () => (/* reexport */ QuadRingMatrix4),
-  "pX": () => (/* reexport */ RIGHT),
-  "Dz": () => (/* reexport */ RelPosition),
-  "Uj": () => (/* reexport */ ResetVRControls),
-  "bY": () => (/* reexport */ RotatedSphericalTextureMaterial),
-  "cV": () => (/* reexport */ SMOOTH_MAX_POLY),
-  "lR": () => (/* reexport */ SMOOTH_MIN_POLY),
-  "eZ": () => (/* reexport */ seifert_weber_set),
-  "xs": () => (/* reexport */ Scene),
-  "zK": () => (/* reexport */ SemiLocalSlabShape),
-  "bn": () => (/* reexport */ Shape),
-  "oC": () => (/* reexport */ ShootVRControls),
-  "Z1": () => (/* reexport */ SimpleTextureMaterial),
-  "h8": () => (/* reexport */ SingleColorMaterial),
-  "sQ": () => (/* reexport */ SlabShape),
-  "Qf": () => (/* reexport */ Solid),
-  "k1": () => (/* reexport */ SquaresMaterial),
-  "ew": () => (/* reexport */ StripsMaterial),
-  "Ck": () => (/* reexport */ SunLight),
-  "$p": () => (/* reexport */ SwitchControls),
-  "xG": () => (/* reexport */ TeleportationSet),
-  "qC": () => (/* binding */ thurstonHyp_Thurston),
-  "N$": () => (/* binding */ thurstonHyp_ThurstonLite),
-  "TO": () => (/* binding */ thurstonHyp_ThurstonVR),
-  "g$": () => (/* binding */ thurstonHyp_ThurstonVRWoodBalls),
-  "u3": () => (/* binding */ thurstonHyp_ThurstonVRWoodBallsBis),
-  "l_": () => (/* reexport */ TransitionLocalWrapMaterial),
-  "pk": () => (/* reexport */ TransitionWrapMaterial),
-  "yI": () => (/* reexport */ UnionShape),
-  "E6": () => (/* reexport */ VRCamera),
-  "zO": () => (/* binding */ thurstonHyp_VRRenderer),
-  "cB": () => (/* reexport */ VaryingColorMaterial),
-  "OW": () => (/* reexport */ Vector),
-  "n3": () => (/* reexport */ VideoAlphaTextureMaterial),
-  "Se": () => (/* reexport */ VideoFrameTextureMaterial),
-  "PQ": () => (/* reexport */ VideoTextureMaterial),
-  "$9": () => (/* reexport */ WrapShape),
-  "iR": () => (/* reexport */ XRControllerModelFactory),
-  "zy": () => (/* reexport */ augmentedCube_set),
-  "ak": () => (/* reexport */ utils_bind),
-  "uZ": () => (/* reexport */ clamp),
-  "Cy": () => (/* reexport */ complement),
-  "Rc": () => (/* reexport */ cube_set),
-  "qM": () => (/* reexport */ earthTexture),
-  "mV": () => (/* reexport */ highlightLocalWrap),
-  "Gi": () => (/* reexport */ highlightWrap),
-  "jV": () => (/* reexport */ intersection),
-  "LK": () => (/* reexport */ m125_set),
-  "j9": () => (/* reexport */ marsTexture),
-  "oc": () => (/* reexport */ moonTexture),
-  "wS": () => (/* reexport */ pathTracerWrap),
-  "IJ": () => (/* reexport */ phongWrap),
-  "p2": () => (/* reexport */ safeString),
-  "w0": () => (/* reexport */ sunTexture),
-  "aZ": () => (/* reexport */ symbSet),
-  "VL": () => (/* reexport */ transitionLocalWrap),
-  "UR": () => (/* reexport */ transitionWrap),
-  "dV": () => (/* reexport */ set),
-  "G0": () => (/* reexport */ union),
-  "HP": () => (/* reexport */ whitehead_set),
-  "YL": () => (/* reexport */ woodBallMaterial),
-  "re": () => (/* reexport */ wrap)
+  T0: () => (/* reexport */ AcesFilmPostProcess),
+  FJ: () => (/* reexport */ AdvancedResetVRControls),
+  GU: () => (/* reexport */ AdvancedShape),
+  uv: () => (/* reexport */ AugmentedCubeMaterial),
+  XH: () => (/* reexport */ BOTH),
+  ec: () => (/* reexport */ Ball),
+  Yb: () => (/* reexport */ BallShape),
+  QU: () => (/* reexport */ BasicCamera),
+  ZH: () => (/* reexport */ BasicPTMaterial),
+  K9: () => (/* binding */ thurstonHyp_BasicRenderer),
+  FT: () => (/* reexport */ BasicShape),
+  cK: () => (/* reexport */ CREEPING_FULL),
+  _x: () => (/* reexport */ CREEPING_OFF),
+  kj: () => (/* reexport */ CREEPING_STRICT),
+  Vz: () => (/* reexport */ CheckerboardMaterial),
+  ck: () => (/* reexport */ CombinedPostProcess),
+  Iy: () => (/* reexport */ ComplementShape),
+  Vf: () => (/* reexport */ ConstDirLight),
+  Ab: () => (/* reexport */ Cylinder),
+  g6: () => (/* reexport */ CylinderShape),
+  TB: () => (/* reexport */ DebugMaterial),
+  Al: () => (/* reexport */ DragVRControls),
+  ix: () => (/* reexport */ EquidistantHypStripsMaterial),
+  jZ: () => (/* reexport */ EquidistantSphStripsMaterial),
+  c$: () => (/* reexport */ ExpFog),
+  mD: () => (/* reexport */ FlyControls),
+  yb: () => (/* reexport */ Fog),
+  d1: () => (/* reexport */ GradientColorMaterial),
+  iJ: () => (/* reexport */ GraphPaperMaterial),
+  ZA: () => (/* reexport */ Group_Group),
+  Jz: () => (/* reexport */ GroupElement_GroupElement),
+  Fr: () => (/* reexport */ HalfSpace),
+  RM: () => (/* reexport */ HalfSpaceShape),
+  fR: () => (/* reexport */ HighlightLocalWrapMaterial),
+  kK: () => (/* reexport */ HighlightWrapMaterial),
+  KV: () => (/* reexport */ Horoball),
+  sm: () => (/* reexport */ HoroballShape),
+  ZX: () => (/* reexport */ HypStripsMaterial),
+  _f: () => (/* reexport */ ImprovedEquidistantHypStripsMaterial),
+  Ht: () => (/* reexport */ ImprovedEquidistantSphStripsMaterial),
+  HZ: () => (/* reexport */ InfoControls),
+  TN: () => (/* reexport */ IntersectionShape),
+  JV: () => (/* reexport */ Isometry),
+  Sc: () => (/* reexport */ IsotropicChaseVRControls),
+  Nh: () => (/* reexport */ KeyGenericControls),
+  RL: () => (/* reexport */ LEFT),
+  _k: () => (/* reexport */ Light),
+  uR: () => (/* reexport */ LightVRControls),
+  gU: () => (/* reexport */ LinearToSRGBPostProcess),
+  jo: () => (/* reexport */ LocalBall),
+  Q: () => (/* reexport */ LocalBallShape),
+  l8: () => (/* reexport */ LocalCappedCone),
+  dd: () => (/* reexport */ LocalCappedConeShape),
+  Sx: () => (/* reexport */ LocalCappedCylinder),
+  ML: () => (/* reexport */ LocalCappedCylinderShape),
+  gq: () => (/* reexport */ LocalCylinder),
+  Gj: () => (/* reexport */ LocalCylinderShape),
+  NW: () => (/* reexport */ LocalHoroball),
+  pt: () => (/* reexport */ LocalHoroballShape),
+  L8: () => (/* reexport */ LocalPointLight),
+  Wu: () => (/* reexport */ LocalRoundCone),
+  iq: () => (/* reexport */ LocalRoundConeShape),
+  hk: () => (/* reexport */ LocalSlab),
+  F5: () => (/* reexport */ Material),
+  Uc: () => (/* reexport */ Matrix2),
+  Fh: () => (/* reexport */ MoveVRControls),
+  O5: () => (/* reexport */ MultiColorMaterial),
+  jy: () => (/* reexport */ NativeCamera),
+  MV: () => (/* reexport */ NoiseColorMaterial),
+  oB: () => (/* reexport */ NormalMaterial),
+  pJ: () => (/* reexport */ PTMaterial),
+  GW: () => (/* reexport */ PathTracerCamera),
+  DZ: () => (/* binding */ thurstonHyp_PathTracerRenderer),
+  _K: () => (/* reexport */ PathTracerWrapMaterial),
+  JF: () => (/* reexport */ PhongMaterial),
+  Lv: () => (/* reexport */ PhongWrapMaterial),
+  E9: () => (/* reexport */ Point),
+  ce: () => (/* reexport */ PointLight),
+  Ly: () => (/* reexport */ Position),
+  iv: () => (/* reexport */ QuadRing),
+  mH: () => (/* reexport */ QuadRingElement),
+  xd: () => (/* reexport */ QuadRingMatrix4),
+  pX: () => (/* reexport */ RIGHT),
+  Dz: () => (/* reexport */ RelPosition),
+  Uj: () => (/* reexport */ ResetVRControls),
+  bY: () => (/* reexport */ RotatedSphericalTextureMaterial),
+  cV: () => (/* reexport */ SMOOTH_MAX_POLY),
+  lR: () => (/* reexport */ SMOOTH_MIN_POLY),
+  eZ: () => (/* reexport */ seifert_weber_set),
+  xs: () => (/* reexport */ Scene),
+  zK: () => (/* reexport */ SemiLocalSlabShape),
+  bn: () => (/* reexport */ Shape),
+  oC: () => (/* reexport */ ShootVRControls),
+  Z1: () => (/* reexport */ SimpleTextureMaterial),
+  h8: () => (/* reexport */ SingleColorMaterial),
+  sQ: () => (/* reexport */ SlabShape),
+  Qf: () => (/* reexport */ Solid),
+  k1: () => (/* reexport */ SquaresMaterial),
+  ew: () => (/* reexport */ StripsMaterial),
+  Ck: () => (/* reexport */ SunLight),
+  $p: () => (/* reexport */ SwitchControls),
+  xG: () => (/* reexport */ TeleportationSet),
+  qC: () => (/* binding */ thurstonHyp_Thurston),
+  N$: () => (/* binding */ thurstonHyp_ThurstonLite),
+  TO: () => (/* binding */ thurstonHyp_ThurstonVR),
+  g$: () => (/* binding */ thurstonHyp_ThurstonVRWoodBalls),
+  u3: () => (/* binding */ thurstonHyp_ThurstonVRWoodBallsBis),
+  l_: () => (/* reexport */ TransitionLocalWrapMaterial),
+  pk: () => (/* reexport */ TransitionWrapMaterial),
+  yI: () => (/* reexport */ UnionShape),
+  E6: () => (/* reexport */ VRCamera),
+  zO: () => (/* binding */ thurstonHyp_VRRenderer),
+  cB: () => (/* reexport */ VaryingColorMaterial),
+  OW: () => (/* reexport */ Vector),
+  n3: () => (/* reexport */ VideoAlphaTextureMaterial),
+  Se: () => (/* reexport */ VideoFrameTextureMaterial),
+  PQ: () => (/* reexport */ VideoTextureMaterial),
+  $9: () => (/* reexport */ WrapShape),
+  iR: () => (/* reexport */ XRControllerModelFactory),
+  zy: () => (/* reexport */ augmentedCube_set),
+  ak: () => (/* reexport */ utils_bind),
+  uZ: () => (/* reexport */ clamp),
+  Cy: () => (/* reexport */ complement),
+  Rc: () => (/* reexport */ cube_set),
+  qM: () => (/* reexport */ earthTexture),
+  mV: () => (/* reexport */ highlightLocalWrap),
+  Gi: () => (/* reexport */ highlightWrap),
+  jV: () => (/* reexport */ intersection),
+  LK: () => (/* reexport */ m125_set),
+  j9: () => (/* reexport */ marsTexture),
+  oc: () => (/* reexport */ moonTexture),
+  wS: () => (/* reexport */ pathTracerWrap),
+  IJ: () => (/* reexport */ phongWrap),
+  p2: () => (/* reexport */ safeString),
+  w0: () => (/* reexport */ sunTexture),
+  aZ: () => (/* reexport */ symbSet),
+  VL: () => (/* reexport */ transitionLocalWrap),
+  UR: () => (/* reexport */ transitionWrap),
+  dV: () => (/* reexport */ set),
+  G0: () => (/* reexport */ union),
+  HP: () => (/* reexport */ whitehead_set),
+  YL: () => (/* reexport */ woodBallMaterial),
+  re: () => (/* reexport */ wrap)
 });
 
 ;// CONCATENATED MODULE: external "three"
@@ -5525,12 +5525,25 @@ class RelPosition {
 /**
  * @desc
  * Keyboard bindings.
- * Each main entry correspond to a keyboard type (American, French, etc).
- * KeyCode are replaced by Key (as KeyCode are now deprecated).
  * To each key is associated an action
  * @const
  */
-const KEYBOARD_BINDINGS = {
+const KEYBOARD_BINDING = {
+    "KeyA": "yawLeft",
+    "KeyD": "yawRight",
+    "KeyW": "pitchUp",
+    "KeyS": "pitchDown",
+    "KeyQ": "rollLeft",
+    "KeyE": "rollRight",
+    "ArrowUp": "forward",
+    "ArrowDown": "back",
+    "ArrowLeft": "left",
+    "ArrowRight": "right",
+    "Quote": "up",
+    "Slash": "down"
+}
+
+/*const KEYBOARD_BINDINGS_OD = {
     'us': {
         "a": "yawLeft",
         "d": "yawRight",
@@ -5559,7 +5572,7 @@ const KEYBOARD_BINDINGS = {
         "ù": "up",
         "=": "down"
     }
-};
+};*/
 
 
 /**
@@ -5578,17 +5591,14 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
      * (and not the one of the three.js camera in the virtual euclidean space).
      * @param {DollyCamera} camera - the non-euclidean camera
      * (needed to get the orientation of the observer when using both VR and keyboard).
-     * @param {string} keyboard - the keyboard type (us, fr, etc)
      */
-    constructor(camera, keyboard = 'us') {
+    constructor(camera) {
         super();
         this.camera = camera;
-
-        this.keyboard = keyboard;
+        // this.keyboard = keyboard;
 
         this.movementSpeed = 0.5;
         this.rollSpeed = 0.8;
-
 
         // private fields
         this._moveState = {
@@ -5624,7 +5634,7 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
     }
 
     /**
-     * Restor the event listener
+     * Restore the event listener
      */
     restore() {
         window.addEventListener('keydown', this._onKeyDown, false);
@@ -5632,43 +5642,31 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
     }
 
     /**
-     * Set the type of keyboard used for the controls.
-     * Just an alias of the setter, that can be called easily as a function.
-     * @param {string} keyboard - the new keyboard ('fr', 'us', etc).
-     */
-    setKeyboard(keyboard) {
-        this.keyboard = keyboard;
-    }
-
-    /**
      * Event handler when a key is pressed
      * @param {KeyboardEvent} event - the caught event
      */
     onKeyDown(event) {
-        if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
-            const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
+        if (event.code in KEYBOARD_BINDING) {
+            const action = KEYBOARD_BINDING[event.code]
             this._moveState[action] = 1;
             this.updateMovementVector();
             this.updateRotationVector();
-
         }
     }
-
 
     /**
      * Event handler when a key is pressed
      * @param {KeyboardEvent} event - the caught event
      */
     onKeyUp(event) {
-        if (event.key in KEYBOARD_BINDINGS[this.keyboard]) {
-            const action = KEYBOARD_BINDINGS[this.keyboard][event.key]
+        if (event.code in KEYBOARD_BINDING) {
+            const action = KEYBOARD_BINDING[event.code]
             this._moveState[action] = 0;
             this.updateMovementVector();
             this.updateRotationVector();
 
         }
     }
-
 
     /**
      * Update the movement vector
@@ -5677,9 +5675,6 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         this._moveVector.x = (-this._moveState.left + this._moveState.right);
         this._moveVector.y = (-this._moveState.down + this._moveState.up);
         this._moveVector.z = (-this._moveState.forward + this._moveState.back);
-
-        // console.log( 'move:', [ this._moveVector.x, this._moveVector.y, this._moveVector.z ] );
-
     };
 
     /**
@@ -5689,9 +5684,6 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         this._rotationVector.x = (-this._moveState.pitchDown + this._moveState.pitchUp);
         this._rotationVector.y = (-this._moveState.yawRight + this._moveState.yawLeft);
         this._rotationVector.z = (-this._moveState.rollRight + this._moveState.rollLeft);
-
-        //console.log( 'rotate:', [ this._rotationVector.x, this._rotationVector.y, this._rotationVector.z ] );
-
     };
 
     /**
@@ -5720,7 +5712,7 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
      */
     update(delta) {
         // Somehow, in VR mode, the cameras' quaternion is not updated.
-        // Thus we use the cameras' matrixWorld for our computations.
+        // Thus, we use the cameras' matrixWorld for our computations.
         const deltaPosition = this._moveVector
             .clone()
             .multiplyScalar(this.movementSpeed * delta)
@@ -5737,12 +5729,10 @@ class FlyControls extends external_three_namespaceObject.EventDispatcher {
         const quaternion = new external_three_namespaceObject.Quaternion(deltaRotation.x, deltaRotation.y, deltaRotation.z, 1).normalize();
         this.camera.position.applyQuaternion(quaternion);
 
-
         // if (false) {
         //     this.dispatchEvent(CHANGE_EVENT);
         // }
     }
-
 }
 
 
@@ -7087,8 +7077,7 @@ class Thurston {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -7154,11 +7143,6 @@ class Thurston {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
-
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -7329,8 +7313,7 @@ class ThurstonLite {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -7376,10 +7359,6 @@ class ThurstonLite {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
 
         // controls for the camera
@@ -12939,8 +12918,7 @@ class ThurstonVR {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -13009,10 +12987,6 @@ class ThurstonVR {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -13170,8 +13144,7 @@ class ThurstonVRWoodBalls {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -13315,10 +13288,6 @@ class ThurstonVRWoodBalls {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
@@ -13642,8 +13611,7 @@ class ThurstonVRWoodBallsBis {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -13785,10 +13753,6 @@ class ThurstonVRWoodBallsBis {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');

@@ -77,8 +77,7 @@ export class ThurstonVR {
          * @protected
          */
         this.flyControls = new FlyControls(
-            this.camera,
-            params.keyboard !== undefined ? params.keyboard : 'us'
+            this.camera
         );
 
         /**
@@ -147,10 +146,6 @@ export class ThurstonVR {
                 window.open('https://3-dimensional.space');
             }
         }, 'help').name("Help/About");
-        this.gui.add(
-            this.flyControls,
-            'keyboard', {QWERTY: 'us', AZERTY: 'fr'}
-        ).name("Keyboard");
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
