@@ -32,6 +32,7 @@ export * from "./core.js";
 
 export {default as cubeSet} from "./geometries/s2e/groups/cube/set.js";
 export {default as zLoopSet} from "./geometries/s2e/groups/zLoop/set.js";
+export {default as torusSet} from "./geometries/s2e/groups/torus/set.js";
 export * from './geometries/s2e/lights/all.js';
 export * from './geometries/s2e/material/all.js';
 export * from './geometries/s2e/shapes/all.js';
