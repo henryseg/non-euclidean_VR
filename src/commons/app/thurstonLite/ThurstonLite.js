@@ -120,8 +120,8 @@ export class ThurstonLite {
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
-        cameraGUI.add(this.camera, 'fov', 45, 120)
-            .name('Field of view');
+        // cameraGUI.add(this.camera, 'fov', 45, 120)
+        //     .name('Field of view');
         cameraGUI.add(this.camera, 'maxDist', 0, 100, 1)
             .name('Max distance');
         cameraGUI.add(this.camera, 'maxSteps', 20, 500, 1)
