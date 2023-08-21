@@ -14307,15 +14307,18 @@ class ThurstonRecord {
     recordStart() {
         console.log('start');
         this.capture = new CCapture({
+            framerate: 24,
             format: 'jpg'
         });
         this.capture.start();
+        this.isRecordOn = true;
     }
 
     recordStop() {
         console.log('stop');
         this.capture.stop();
         this.capture.save();
+        this.isRecordOn = false;
     }
 
     onKeyDown(event) {
@@ -14325,7 +14328,6 @@ class ThurstonRecord {
             } else {
                 this.recordStart();
             }
-            this.isRecordOn = !this.isRecordOn;
         }
     }
 
@@ -14333,6 +14335,9 @@ class ThurstonRecord {
      * animation function
      */
     animate() {
+        if(this.capture === undefined){
+            this.recordStart();
+        }
         const delta = this.clock.getDelta();
         this.flyControls.update(delta);
         this.renderer.render();
