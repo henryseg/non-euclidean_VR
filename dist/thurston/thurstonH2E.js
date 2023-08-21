@@ -1222,7 +1222,7 @@ module.exports = function() { var T = new H.Template({code: function (c,p,i) { v
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var H = __webpack_require__(5485);
-module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("VectorData initVectorData(){");t.b("\n" + i);t.b("    return VectorData(0., 0., 0., false, 0, 0, false, vec4(0), vec4(1));");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");t.b("\n" + i);t.b("void updateVectorDataFromSolid(inout ExtVector v, int objId){");t.b("\n" + i);t.b("    RelVector normal;");t.b("\n" + i);t.b("    vec2 uv;");t.b("\n" + i);t.b("    vec4 color;");t.b("\n" + i);t.b("    vec4 reflectivity;");t.b("\n" + i);t.b("    float opacity;");t.b("\n" + i);t.b("    float t;");t.b("\n" + i);t.b("    ");t.b("\n" + i);t.b("    switch(objId){");t.b("\n" + i);if(t.s(t.d("scene.solids",c,p,1),c,p,0,319,5930,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("    ");t.b("\n" + i);t.b("        case ");t.b(t.v(t.f("id",c,p,0)));t.b(":");t.b("\n" + i);if(t.s(t.d("material.isTransparent",c,p,1),c,p,0,381,2198,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);if(!t.s(t.d("material.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                    color =  ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,597,732,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                    color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("material.usesNormal",c,p,1),c,p,0,830,1322,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                    normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                    color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,1079,1286,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                    uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                    color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);t.b("            if(v.data.iBounce == maxBounces){");t.b("\n" + i);t.b("                opacity = 1.;");t.b("\n" + i);t.b("            }");t.b("\n" + i);t.b("            else {");t.b("\n" + i);t.b("                opacity = color.a;");t.b("\n" + i);t.b("            }");t.b("\n");t.b("\n" + i);if(t.s(t.d("scene.fog",c,p,1),c,p,0,1533,1612,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                //color = applyFog(color, v.data.lastBounceDist);");t.b("\n" + i);});c.pop();}t.b("\n" + i);t.b("            if(opacity == 1.) {");t.b("\n" + i);t.b("                v.data.stop = true;");t.b("\n" + i);t.b("            }");t.b("\n" + i);t.b("            else{");t.b("\n" + i);t.b("                v.data.stop = false;");t.b("\n" + i);t.b("            }");t.b("\n" + i);t.b("            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * opacity * color;");t.b("\n" + i);t.b("            v.data.leftToComputeColor = (1. - opacity) * v.data.leftToComputeColor;");t.b("\n" + i);t.b("            ");t.b(t.v(t.f("name",c,p,0)));t.b("_isRenderedHack = false;");t.b("\n" + i);t.b("            v.data.lastBounceDist = 0.;");t.b("\n" + i);t.b("            v.data.iBounce = v.data.iBounce + 1;");t.b("\n" + i);t.b("            //t = 20. * camera.threshold / abs(geomDot(v.vector, normal));");t.b("\n" + i);t.b("            //v = flow(v, t);");t.b("\n");t.b("\n" + i);});c.pop();}t.b("\n" + i);if(!t.s(t.d("material.isTransparent",c,p,1),c,p,1,0,0,"")){t.b("\n" + i);if(t.s(t.d("material.isReflecting",c,p,1),c,p,0,2302,4417,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);t.b("                if(v.data.iBounce == maxBounces){");t.b("\n" + i);t.b("                    reflectivity = vec4(0);");t.b("\n" + i);t.b("                }");t.b("\n" + i);t.b("                else {");t.b("\n" + i);t.b("                    reflectivity = vec4(");t.b(t.v(t.d("material.name",c,p,0)));t.b(".reflectivity,1);");t.b("\n" + i);t.b("                }");t.b("\n");t.b("\n" + i);t.b("                normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                // in general the gradient is not necessarily a unit vector");t.b("\n" + i);t.b("                normal = geomNormalize(normal);");t.b("\n");t.b("\n" + i);if(!t.s(t.d("material.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        color =  ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,2952,3099,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("material.usesNormal",c,p,1),c,p,0,3205,3601,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,3406,3561,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);if(t.s(t.d("scene.fog",c,p,1),c,p,0,3657,3742,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    color = applyFog(color, v.data.lastBounceDist);");t.b("\n" + i);});c.pop();}t.b("\n" + i);t.b("                if(length(reflectivity) == 0.) {");t.b("\n" + i);t.b("                    v.data.stop = true;");t.b("\n" + i);t.b("                }");t.b("\n" + i);t.b("                else{");t.b("\n" + i);t.b("                    v.data.stop = false;");t.b("\n" + i);t.b("                }");t.b("\n" + i);t.b("                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec4(1) - reflectivity) * color;");t.b("\n" + i);t.b("                v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;");t.b("\n" + i);t.b("                v.vector = geomReflect(v.vector,normal);");t.b("\n" + i);t.b("                v.data.lastBounceDist = 0.;");t.b("\n" + i);t.b("                v.data.iBounce = v.data.iBounce + 1;");t.b("\n" + i);t.b("                t = 20. * camera.threshold / abs(geomDot(v.vector, normal));");t.b("\n" + i);t.b("                v = flow(v, t);");t.b("\n");t.b("\n" + i);});c.pop();}t.b("\n" + i);if(!t.s(t.d("material.isReflecting",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        color =  ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,4718,4865,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("material.usesNormal",c,p,1),c,p,0,4971,5503,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,5240,5463,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);if(t.s(t.d("scene.fog",c,p,1),c,p,0,5559,5644,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    color = applyFog(color, v.data.lastBounceDist);");t.b("\n" + i);});c.pop();}t.b("\n" + i);t.b("                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;");t.b("\n" + i);t.b("                v.data.leftToComputeColor = vec4(0);");t.b("\n" + i);t.b("                v.data.stop = true;");t.b("\n" + i);};t.b("\n" + i);};t.b("        break;");t.b("\n" + i);t.b("    ");t.b("\n" + i);});c.pop();}t.b("    }");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n" + i);t.b("void updateVectorData(inout ExtVector v, int hit, int objId){");t.b("\n" + i);t.b("    if (hit == HIT_DEBUG) {");t.b("\n" + i);t.b("        v.data.pixel = debugColor;");t.b("\n" + i);t.b("        v.data.leftToComputeColor = vec4(0);");t.b("\n" + i);t.b("        v.data.stop = true;");t.b("\n" + i);t.b("        return;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    if (hit == HIT_NOTHING) {");t.b("\n" + i);t.b("        vec4 color = ");t.b(t.v(t.d("scene.background.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("        v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;");t.b("\n" + i);t.b("        v.data.leftToComputeColor = vec4(0);");t.b("\n" + i);t.b("        v.data.stop = true;");t.b("\n" + i);t.b("        return;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    if(hit == HIT_SOLID) {");t.b("\n" + i);t.b("        updateVectorDataFromSolid(v, objId);");t.b("\n" + i);t.b("        return;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "VectorData initVectorData(){\n    return VectorData(0., 0., 0., false, 0, 0, false, vec4(0), vec4(1));\n}\n\n\nvoid updateVectorDataFromSolid(inout ExtVector v, int objId){\n    RelVector normal;\n    vec2 uv;\n    vec4 color;\n    vec4 reflectivity;\n    float opacity;\n    float t;\n    \n    switch(objId){\n    {{#scene.solids}}\n    \n        case {{id}}:\n        {{#material.isTransparent}}\n\n            {{^material.usesNormal}}\n                {{^material.usesUVMap}}\n                    color =  {{material.name}}_render(v);\n                {{/material.usesUVMap}}\n                {{#material.usesUVMap}}\n                    uv = {{shape.name}}_uvMap(v.vector);\n                    color = {{material.name}}_render(v, uv);\n                {{/material.usesUVMap}}\n            {{/material.usesNormal}}\n\n            {{#material.usesNormal}}\n                {{^material.usesUVMap}}\n                    normal = {{shape.name}}_gradient(v.vector);\n                    color = {{material.name}}_render(v, normal);\n                {{/material.usesUVMap}}\n                {{#material.usesUVMap}}\n                    normal = {{shape.name}}_gradient(v.vector);\n                    uv = {{shape.name}}_uvMap(v.vector);\n                    color = {{material.name}}_render(v, normal, uv);\n                {{/material.usesUVMap}}\n            {{/material.usesNormal}}\n\n            if(v.data.iBounce == maxBounces){\n                opacity = 1.;\n            }\n            else {\n                opacity = color.a;\n            }\n\n            {{#scene.fog}}\n                //color = applyFog(color, v.data.lastBounceDist);\n            {{/scene.fog}}\n\n            if(opacity == 1.) {\n                v.data.stop = true;\n            }\n            else{\n                v.data.stop = false;\n            }\n            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * opacity * color;\n            v.data.leftToComputeColor = (1. - opacity) * v.data.leftToComputeColor;\n            {{name}}_isRenderedHack = false;\n            v.data.lastBounceDist = 0.;\n            v.data.iBounce = v.data.iBounce + 1;\n            //t = 20. * camera.threshold / abs(geomDot(v.vector, normal));\n            //v = flow(v, t);\n\n        {{/material.isTransparent}}\n\n        {{^material.isTransparent}}\n\n            {{#material.isReflecting}}\n\n                if(v.data.iBounce == maxBounces){\n                    reflectivity = vec4(0);\n                }\n                else {\n                    reflectivity = vec4({{material.name}}.reflectivity,1);\n                }\n\n                normal = {{shape.name}}_gradient(v.vector);\n                // in general the gradient is not necessarily a unit vector\n                normal = geomNormalize(normal);\n\n                {{^material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        color =  {{material.name}}_render(v);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        color = {{material.name}}_render(v, normal);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, normal, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#scene.fog}}\n                    color = applyFog(color, v.data.lastBounceDist);\n                {{/scene.fog}}\n\n                if(length(reflectivity) == 0.) {\n                    v.data.stop = true;\n                }\n                else{\n                    v.data.stop = false;\n                }\n                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec4(1) - reflectivity) * color;\n                v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;\n                v.vector = geomReflect(v.vector,normal);\n                v.data.lastBounceDist = 0.;\n                v.data.iBounce = v.data.iBounce + 1;\n                t = 20. * camera.threshold / abs(geomDot(v.vector, normal));\n                v = flow(v, t);\n\n            {{/material.isReflecting}}\n\n            {{^material.isReflecting}}\n                {{^material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        color =  {{material.name}}_render(v);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        normal = {{shape.name}}_gradient(v.vector);\n                        color = {{material.name}}_render(v, normal);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        normal = {{shape.name}}_gradient(v.vector);\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, normal, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#scene.fog}}\n                    color = applyFog(color, v.data.lastBounceDist);\n                {{/scene.fog}}\n\n                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;\n                v.data.leftToComputeColor = vec4(0);\n                v.data.stop = true;\n            {{/material.isReflecting}}\n\n        {{/material.isTransparent}}\n        break;\n    \n    {{/scene.solids}}\n    }\n}\n\nvoid updateVectorData(inout ExtVector v, int hit, int objId){\n    if (hit == HIT_DEBUG) {\n        v.data.pixel = debugColor;\n        v.data.leftToComputeColor = vec4(0);\n        v.data.stop = true;\n        return;\n    }\n    if (hit == HIT_NOTHING) {\n        vec4 color = {{scene.background.name}}_render(v);\n        v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;\n        v.data.leftToComputeColor = vec4(0);\n        v.data.stop = true;\n        return;\n    }\n    if(hit == HIT_SOLID) {\n        updateVectorDataFromSolid(v, objId);\n        return;\n    }\n}", H);return T.render.apply(T, arguments); };
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("VectorData initVectorData(){");t.b("\n" + i);t.b("    return VectorData(0., 0., 0., false, 0, 0, false, vec4(0), vec4(1));");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");t.b("\n" + i);t.b("void updateVectorDataFromSolid(inout ExtVector v, int objId){");t.b("\n" + i);t.b("    RelVector normal;");t.b("\n" + i);t.b("    vec2 uv;");t.b("\n" + i);t.b("    vec4 color;");t.b("\n" + i);t.b("    vec4 reflectivity;");t.b("\n" + i);t.b("    float opacity;");t.b("\n" + i);t.b("    float t;");t.b("\n");t.b("\n" + i);t.b("    switch(objId){");t.b("\n" + i);if(t.s(t.d("scene.solids",c,p,1),c,p,0,315,5918,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);t.b("        case ");t.b(t.v(t.f("id",c,p,0)));t.b(":");t.b("\n" + i);if(t.s(t.d("material.isTransparent",c,p,1),c,p,0,373,2190,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);if(!t.s(t.d("material.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                    color =  ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,589,724,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                    color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("material.usesNormal",c,p,1),c,p,0,822,1314,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                    normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                    color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,1071,1278,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                    uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                    color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);t.b("            if(v.data.iBounce == maxBounces){");t.b("\n" + i);t.b("                opacity = 1.;");t.b("\n" + i);t.b("            }");t.b("\n" + i);t.b("            else {");t.b("\n" + i);t.b("                opacity = color.a;");t.b("\n" + i);t.b("            }");t.b("\n");t.b("\n" + i);if(t.s(t.d("scene.fog",c,p,1),c,p,0,1525,1604,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                //color = applyFog(color, v.data.lastBounceDist);");t.b("\n" + i);});c.pop();}t.b("\n" + i);t.b("            if(opacity == 1.) {");t.b("\n" + i);t.b("                v.data.stop = true;");t.b("\n" + i);t.b("            }");t.b("\n" + i);t.b("            else{");t.b("\n" + i);t.b("                v.data.stop = false;");t.b("\n" + i);t.b("            }");t.b("\n" + i);t.b("            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * opacity * color;");t.b("\n" + i);t.b("            v.data.leftToComputeColor = (1. - opacity) * v.data.leftToComputeColor;");t.b("\n" + i);t.b("            ");t.b(t.v(t.f("name",c,p,0)));t.b("_isRenderedHack = false;");t.b("\n" + i);t.b("            v.data.lastBounceDist = 0.;");t.b("\n" + i);t.b("            v.data.iBounce = v.data.iBounce + 1;");t.b("\n" + i);t.b("            //t = 20. * camera.threshold / abs(geomDot(v.vector, normal));");t.b("\n" + i);t.b("            //v = flow(v, t);");t.b("\n");t.b("\n" + i);});c.pop();}t.b("\n" + i);if(!t.s(t.d("material.isTransparent",c,p,1),c,p,1,0,0,"")){t.b("\n" + i);if(t.s(t.d("material.isReflecting",c,p,1),c,p,0,2294,4409,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);t.b("                if(v.data.iBounce == maxBounces){");t.b("\n" + i);t.b("                    reflectivity = vec4(0);");t.b("\n" + i);t.b("                }");t.b("\n" + i);t.b("                else {");t.b("\n" + i);t.b("                    reflectivity = vec4(");t.b(t.v(t.d("material.name",c,p,0)));t.b(".reflectivity,1);");t.b("\n" + i);t.b("                }");t.b("\n");t.b("\n" + i);t.b("                normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                // in general the gradient is not necessarily a unit vector");t.b("\n" + i);t.b("                normal = geomNormalize(normal);");t.b("\n");t.b("\n" + i);if(!t.s(t.d("material.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        color =  ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,2944,3091,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("material.usesNormal",c,p,1),c,p,0,3197,3593,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,3398,3553,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);if(t.s(t.d("scene.fog",c,p,1),c,p,0,3649,3734,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    color = applyFog(color, v.data.lastBounceDist);");t.b("\n" + i);});c.pop();}t.b("\n" + i);t.b("                if(length(reflectivity) == 0.) {");t.b("\n" + i);t.b("                    v.data.stop = true;");t.b("\n" + i);t.b("                }");t.b("\n" + i);t.b("                else{");t.b("\n" + i);t.b("                    v.data.stop = false;");t.b("\n" + i);t.b("                }");t.b("\n" + i);t.b("                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec4(1) - reflectivity) * color;");t.b("\n" + i);t.b("                v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;");t.b("\n" + i);t.b("                v.vector = geomReflect(v.vector,normal);");t.b("\n" + i);t.b("                v.data.lastBounceDist = 0.;");t.b("\n" + i);t.b("                v.data.iBounce = v.data.iBounce + 1;");t.b("\n" + i);t.b("                t = 20. * camera.threshold / abs(geomDot(v.vector, normal));");t.b("\n" + i);t.b("                v = flow(v, t);");t.b("\n");t.b("\n" + i);});c.pop();}t.b("\n" + i);if(!t.s(t.d("material.isReflecting",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesNormal",c,p,1),c,p,1,0,0,"")){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        color =  ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,4710,4857,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, uv);");t.b("\n" + i);});c.pop();}};t.b("\n" + i);if(t.s(t.d("material.usesNormal",c,p,1),c,p,0,4963,5495,"{{ }}")){t.rs(c,p,function(c,p,t){if(!t.s(t.d("material.usesUVMap",c,p,1),c,p,1,0,0,"")){t.b("                        normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal);");t.b("\n" + i);};if(t.s(t.d("material.usesUVMap",c,p,1),c,p,0,5232,5455,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                        normal = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_gradient(v.vector);");t.b("\n" + i);t.b("                        uv = ");t.b(t.v(t.d("shape.name",c,p,0)));t.b("_uvMap(v.vector);");t.b("\n" + i);t.b("                        color = ");t.b(t.v(t.d("material.name",c,p,0)));t.b("_render(v, normal, uv);");t.b("\n" + i);});c.pop();}});c.pop();}t.b("\n" + i);if(t.s(t.d("scene.fog",c,p,1),c,p,0,5551,5636,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("                    color = applyFog(color, v.data.lastBounceDist);");t.b("\n" + i);});c.pop();}t.b("\n" + i);t.b("                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;");t.b("\n" + i);t.b("                v.data.leftToComputeColor = vec4(0);");t.b("\n" + i);t.b("                v.data.stop = true;");t.b("\n" + i);};t.b("\n" + i);};t.b("        break;");t.b("\n");t.b("\n" + i);});c.pop();}t.b("    }");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n" + i);t.b("void updateVectorData(inout ExtVector v, int hit, int objId){");t.b("\n" + i);t.b("    if (hit == HIT_DEBUG) {");t.b("\n" + i);t.b("        v.data.pixel = debugColor;");t.b("\n" + i);t.b("        v.data.leftToComputeColor = vec4(0);");t.b("\n" + i);t.b("        v.data.stop = true;");t.b("\n" + i);t.b("        return;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    if (hit == HIT_NOTHING) {");t.b("\n" + i);t.b("        vec4 color = ");t.b(t.v(t.d("scene.background.name",c,p,0)));t.b("_render(v);");t.b("\n" + i);t.b("        v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;");t.b("\n" + i);t.b("        v.data.leftToComputeColor = vec4(0);");t.b("\n" + i);t.b("        v.data.stop = true;");t.b("\n" + i);t.b("        return;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    if(hit == HIT_SOLID) {");t.b("\n" + i);t.b("        updateVectorDataFromSolid(v, objId);");t.b("\n" + i);t.b("        return;");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "VectorData initVectorData(){\n    return VectorData(0., 0., 0., false, 0, 0, false, vec4(0), vec4(1));\n}\n\n\nvoid updateVectorDataFromSolid(inout ExtVector v, int objId){\n    RelVector normal;\n    vec2 uv;\n    vec4 color;\n    vec4 reflectivity;\n    float opacity;\n    float t;\n\n    switch(objId){\n    {{#scene.solids}}\n\n        case {{id}}:\n        {{#material.isTransparent}}\n\n            {{^material.usesNormal}}\n                {{^material.usesUVMap}}\n                    color =  {{material.name}}_render(v);\n                {{/material.usesUVMap}}\n                {{#material.usesUVMap}}\n                    uv = {{shape.name}}_uvMap(v.vector);\n                    color = {{material.name}}_render(v, uv);\n                {{/material.usesUVMap}}\n            {{/material.usesNormal}}\n\n            {{#material.usesNormal}}\n                {{^material.usesUVMap}}\n                    normal = {{shape.name}}_gradient(v.vector);\n                    color = {{material.name}}_render(v, normal);\n                {{/material.usesUVMap}}\n                {{#material.usesUVMap}}\n                    normal = {{shape.name}}_gradient(v.vector);\n                    uv = {{shape.name}}_uvMap(v.vector);\n                    color = {{material.name}}_render(v, normal, uv);\n                {{/material.usesUVMap}}\n            {{/material.usesNormal}}\n\n            if(v.data.iBounce == maxBounces){\n                opacity = 1.;\n            }\n            else {\n                opacity = color.a;\n            }\n\n            {{#scene.fog}}\n                //color = applyFog(color, v.data.lastBounceDist);\n            {{/scene.fog}}\n\n            if(opacity == 1.) {\n                v.data.stop = true;\n            }\n            else{\n                v.data.stop = false;\n            }\n            v.data.pixel = v.data.pixel + v.data.leftToComputeColor * opacity * color;\n            v.data.leftToComputeColor = (1. - opacity) * v.data.leftToComputeColor;\n            {{name}}_isRenderedHack = false;\n            v.data.lastBounceDist = 0.;\n            v.data.iBounce = v.data.iBounce + 1;\n            //t = 20. * camera.threshold / abs(geomDot(v.vector, normal));\n            //v = flow(v, t);\n\n        {{/material.isTransparent}}\n\n        {{^material.isTransparent}}\n\n            {{#material.isReflecting}}\n\n                if(v.data.iBounce == maxBounces){\n                    reflectivity = vec4(0);\n                }\n                else {\n                    reflectivity = vec4({{material.name}}.reflectivity,1);\n                }\n\n                normal = {{shape.name}}_gradient(v.vector);\n                // in general the gradient is not necessarily a unit vector\n                normal = geomNormalize(normal);\n\n                {{^material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        color =  {{material.name}}_render(v);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        color = {{material.name}}_render(v, normal);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, normal, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#scene.fog}}\n                    color = applyFog(color, v.data.lastBounceDist);\n                {{/scene.fog}}\n\n                if(length(reflectivity) == 0.) {\n                    v.data.stop = true;\n                }\n                else{\n                    v.data.stop = false;\n                }\n                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * (vec4(1) - reflectivity) * color;\n                v.data.leftToComputeColor = v.data.leftToComputeColor *  reflectivity;\n                v.vector = geomReflect(v.vector,normal);\n                v.data.lastBounceDist = 0.;\n                v.data.iBounce = v.data.iBounce + 1;\n                t = 20. * camera.threshold / abs(geomDot(v.vector, normal));\n                v = flow(v, t);\n\n            {{/material.isReflecting}}\n\n            {{^material.isReflecting}}\n                {{^material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        color =  {{material.name}}_render(v);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#material.usesNormal}}\n                    {{^material.usesUVMap}}\n                        normal = {{shape.name}}_gradient(v.vector);\n                        color = {{material.name}}_render(v, normal);\n                    {{/material.usesUVMap}}\n                    {{#material.usesUVMap}}\n                        normal = {{shape.name}}_gradient(v.vector);\n                        uv = {{shape.name}}_uvMap(v.vector);\n                        color = {{material.name}}_render(v, normal, uv);\n                    {{/material.usesUVMap}}\n                {{/material.usesNormal}}\n\n                {{#scene.fog}}\n                    color = applyFog(color, v.data.lastBounceDist);\n                {{/scene.fog}}\n\n                v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;\n                v.data.leftToComputeColor = vec4(0);\n                v.data.stop = true;\n            {{/material.isReflecting}}\n\n        {{/material.isTransparent}}\n        break;\n\n    {{/scene.solids}}\n    }\n}\n\nvoid updateVectorData(inout ExtVector v, int hit, int objId){\n    if (hit == HIT_DEBUG) {\n        v.data.pixel = debugColor;\n        v.data.leftToComputeColor = vec4(0);\n        v.data.stop = true;\n        return;\n    }\n    if (hit == HIT_NOTHING) {\n        vec4 color = {{scene.background.name}}_render(v);\n        v.data.pixel = v.data.pixel + v.data.leftToComputeColor * color;\n        v.data.leftToComputeColor = vec4(0);\n        v.data.stop = true;\n        return;\n    }\n    if(hit == HIT_SOLID) {\n        updateVectorDataFromSolid(v, objId);\n        return;\n    }\n}", H);return T.render.apply(T, arguments); };
 
 /***/ }),
 
@@ -1555,6 +1555,20 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 9396:
+/***/ ((module) => {
+
+module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec2 scaledCoords = 0.5 * PI * coords.xy;\n    float radius = length(scaledCoords);\n    vec3 dir = vec3((sin(radius) / radius) * scaledCoords, -cos(radius));\n\n    Vector v = createVector(ORIGIN, dir);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
+
+/***/ }),
+
+/***/ 6374:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct Camera {\n    float fov;                              \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float safetyDist;                                                                               \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n};"
+
+/***/ }),
+
 /***/ 4651:
 /***/ ((module) => {
 
@@ -1607,7 +1621,7 @@ module.exports = "                                                              
 /***/ 5315:
 /***/ ((module) => {
 
-module.exports = "   \n                          \n   \nvarying vec3 spherePosition;\n\n   \n                                           \n                       \n                                                           \n                                 \n                                                         \n   \nvoid main() {\n    RelVector vector = mapping(spherePosition);\n    ExtVector v = ExtVector(vector, initVectorData());\n    gl_FragColor = postProcess(getColor(v));\n}"
+module.exports = "   \n                          \n   \nvarying vec3 screenPosition;\n\n   \n                                           \n                       \n                                                           \n                                 \n                                                         \n   \nvoid main() {\n    RelVector vector = mapping(screenPosition);\n    ExtVector v = ExtVector(vector, initVectorData());\n    gl_FragColor = postProcess(getColor(v));\n}"
 
 /***/ }),
 
@@ -1628,7 +1642,7 @@ module.exports = "vec4 postProcess(vec4 color) {\n    return color;\n}"
 /***/ 2977:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n              \n  \n                                                                                                                        \n                                                                                                                        \n\n\n   \n                \n                                                      \n                                         \n                                                                                       \n                                                      \n                                                                    \n          \n                                \n                               \n                          \n                                                                                               \n                                                               \n                                                                                                                 \n                                                                                         \n   \nint raymarch(inout ExtVector v, out int objId){\n    initFlow(v.vector.local);                                                                 \n    ExtVector globalV0 = v;\n    ExtVector globalV = globalV0;\n    ExtVector localV0 = v;\n    ExtVector localV = localV0;\n    ExtVector res = v;\n    int auxId;\n    int auxHit;\n    float marchingStep = camera.minDist;\n    float dist;\n    int hit = HIT_NOTHING;\n\n\n                  \n    for (int i = 0; i < camera.maxSteps; i++){\n                          \n        localV.data.iMarch = v.data.iMarch + i;\n\n                                                     \n        localV = teleport(localV);\n        if (localV.data.isTeleported){\n                                                                                           \n            localV0 = localV;\n                                                                                      \n            marchingStep = camera.minDist;\n        }\n        else {\n                                                    \n            if (localV.data.totalDist > camera.maxDist) {\n                break;\n            }\n            dist = localSceneSDF(localV.vector, auxHit, auxId);\n            if (auxHit == HIT_DEBUG){\n                hit = HIT_DEBUG;\n                break;\n            }\n            if (auxHit == HIT_SOLID) {\n                                   \n                hit = HIT_SOLID;\n                objId = auxId;\n                v = localV;\n                break;\n            }\n            marchingStep = marchingStep + creepingDist(localV, dist, camera.threshold);\n            localV = flow(localV0, marchingStep);\n        }\n    }\n    if (hit == HIT_NOTHING) {\n        v = localV;\n    }\n\n                  \n    marchingStep = camera.minDist;\n    for (int i=0; i < camera.maxSteps; i++){\n                          \n        globalV.data.iMarch = v.data.iMarch + i;\n\n        if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){\n                                              \n            break;\n        }\n        dist = globalSceneSDF(globalV.vector, auxHit, auxId);\n\n        if (auxHit == HIT_DEBUG){\n            hit = HIT_DEBUG;\n            break;\n        }\n        if (auxHit == HIT_SOLID) {\n                               \n            hit = auxHit;\n            objId = auxId;\n            v = globalV;\n            break;\n        }\n        marchingStep = marchingStep + dist;\n        globalV = flow(globalV0, marchingStep);\n    }\n\n    if (hit == HIT_NOTHING) {\n        v = globalV;\n    }\n    return hit;\n}\n\nvec4 getColor(ExtVector v){\n    int objId;\n    int hit;\n    v = flow(v, camera.safetyDist);\n    for (int i = 0; i <= maxBounces; i++){\n        if (v.data.stop){\n            break;\n        }\n        hit = raymarch(v, objId);\n        updateVectorData(v, hit, objId);\n    }\n    return v.data.pixel;\n}"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n              \n  \n                                                                                                                        \n                                                                                                                        \n\n\n   \n                \n                                                      \n                                         \n                                                                                       \n                                                      \n                                                                    \n          \n                                \n                               \n                          \n                                                                                               \n                                                               \n                                                                                                                 \n                                                                                         \n   \nint raymarch(inout ExtVector v, out int objId){\n    initFlow(v.vector.local);                                                                 \n    ExtVector globalV0 = v;\n    ExtVector globalV = globalV0;\n    ExtVector localV0 = v;\n    ExtVector localV = localV0;\n    ExtVector res = v;\n    int auxId;\n    int auxHit;\n    float marchingStep = camera.minDist;\n    float dist;\n    int hit = HIT_NOTHING;\n\n\n                  \n    for (int i = 0; i < camera.maxSteps; i++){\n                          \n        localV.data.iMarch = v.data.iMarch + i;\n\n                                                     \n        localV = teleport(localV);\n        if (localV.data.isTeleported){\n                                                                                           \n            localV0 = localV;\n                                                                                      \n            marchingStep = camera.minDist;\n        }\n        else {\n                                                    \n            if (localV.data.totalDist > camera.maxDist) {\n                break;\n            }\n            dist = localSceneSDF(localV.vector, auxHit, auxId);\n            if (auxHit == HIT_DEBUG){\n                hit = HIT_DEBUG;\n                break;\n            }\n            if (auxHit == HIT_SOLID) {\n                                   \n                hit = HIT_SOLID;\n                objId = auxId;\n                v = localV;\n                break;\n            }\n            marchingStep = marchingStep + creepingDist(localV, dist, camera.threshold);\n            localV = flow(localV0, marchingStep);\n        }\n    }\n\n                               \n                     \n       \n\n                  \n    marchingStep = camera.minDist;\n    for (int i=0; i < camera.maxSteps; i++){\n                          \n        globalV.data.iMarch = v.data.iMarch + i;\n\n        if (globalV.data.totalDist > localV.data.totalDist || globalV.data.totalDist > camera.maxDist){\n                                              \n            break;\n        }\n        dist = globalSceneSDF(globalV.vector, auxHit, auxId);\n\n        if (auxHit == HIT_DEBUG){\n            hit = HIT_DEBUG;\n            break;\n        }\n        if (auxHit == HIT_SOLID) {\n                               \n            hit = auxHit;\n            objId = auxId;\n            v = globalV;\n            break;\n        }\n        marchingStep = marchingStep + dist;\n        globalV = flow(globalV0, marchingStep);\n    }\n\n    if (hit == HIT_NOTHING) {\n        v = globalV;\n    }\n    return hit;\n}\n\nvec4 getColor(ExtVector v){\n    int objId;\n    int hit;\n    v = flow(v, camera.safetyDist);\n    for (int i = 0; i <= maxBounces; i++){\n        if (v.data.stop){\n            break;\n        }\n        hit = raymarch(v, objId);\n        updateVectorData(v, hit, objId);\n    }\n    return v.data.pixel;\n}"
 
 /***/ }),
 
@@ -1646,10 +1660,10 @@ module.exports = "                                                              
 
 /***/ }),
 
-/***/ 2639:
+/***/ 4098:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                \n  \n                                                                                                                        \n                                                                                                                        \n\nvarying vec3 spherePosition;\n\n   \n                                      \n                                                                    \n                                                                               \n                                                 \n  \n                                                                \n                                                        \n                                                  \n                                                                                     \n   \nvoid main()\n{\n    spherePosition = position;\n                                                       \n    mat4 rot = modelViewMatrix;\n    rot[3] = vec4(0, 0, 0, 1);\n\n    vec4 aux = rot * vec4(position, 1.0);\n    spherePosition = aux.xyz;\n    gl_Position = projectionMatrix * rot * aux;\n}"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                \n  \n                                                                                                                        \n                                                                                                                        \n\nuniform vec2 windowSize;\nvarying vec3 screenPosition;\n\n   \n                                      \n                                                                    \n                                                                               \n                                                 \n  \n                                                                \n                                                        \n                                                  \n                                                                                     \n  \n                                          \n   \nvoid main()\n{\n\n    screenPosition = vec3((2. * uv - 1.) * windowSize / windowSize.y, 1);\n    gl_Position =  vec4(position, 1);\n\n}"
 
 /***/ }),
 
@@ -1657,6 +1671,13 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "varying vec2 vUv;\n\nvoid main() {\n    vUv = uv;\n    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n}"
+
+/***/ }),
+
+/***/ 6623:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                \n  \n                                                                                                                        \n                                                                                                                        \n\nvarying vec3 screenPosition;\n\n   \n                                      \n                                                                    \n                                                                               \n                                                 \n  \n                                                                \n                                                        \n                                                  \n                                                                                     \n   \nvoid main()\n{\n                                 \n                                                       \n    mat4 rot = modelViewMatrix;\n    rot[3] = vec4(0, 0, 0, 1);\n\n    vec4 aux = rot * vec4(position, 1.0);\n    screenPosition = aux.xyz;\n    gl_Position = projectionMatrix * rot * aux;\n}"
 
 /***/ }),
 
@@ -2046,8 +2067,10 @@ __webpack_require__.d(__webpack_exports__, {
   ix: () => (/* reexport */ EquidistantHypStripsMaterial),
   jZ: () => (/* reexport */ EquidistantSphStripsMaterial),
   c$: () => (/* reexport */ ExpFog),
+  sM: () => (/* binding */ thurstonH2E_FlatScreenRenderer),
   mD: () => (/* reexport */ FlyControls),
   yb: () => (/* reexport */ Fog),
+  t3: () => (/* reexport */ FullDomCamera),
   iJ: () => (/* reexport */ GraphPaperMaterial),
   ZA: () => (/* reexport */ Group_Group),
   Jz: () => (/* reexport */ GroupElement_GroupElement),
@@ -2121,6 +2144,7 @@ __webpack_require__.d(__webpack_exports__, {
   xG: () => (/* reexport */ TeleportationSet),
   qC: () => (/* binding */ thurstonH2E_Thurston),
   N$: () => (/* binding */ thurstonH2E_ThurstonLite),
+  tz: () => (/* binding */ thurstonH2E_ThurstonRecord),
   TO: () => (/* binding */ thurstonH2E_ThurstonVR),
   g$: () => (/* binding */ thurstonH2E_ThurstonVRWoodBalls),
   u3: () => (/* binding */ thurstonH2E_ThurstonVRWoodBallsBis),
@@ -2173,7 +2197,7 @@ __webpack_require__.d(__webpack_exports__, {
 ;// CONCATENATED MODULE: external "three"
 var x = y => { var x = {}; __webpack_require__.d(x, y); return x; }
 var y = x => () => x
-const external_three_namespaceObject = x({ ["AnimationClip"]: () => __WEBPACK_EXTERNAL_MODULE_three__.AnimationClip, ["Bone"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Bone, ["Box3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Box3, ["BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferAttribute, ["BufferGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferGeometry, ["ClampToEdgeWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ClampToEdgeWrapping, ["Clock"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Clock, ["Color"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Color, ["DirectionalLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DirectionalLight, ["DoubleSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DoubleSide, ["EventDispatcher"]: () => __WEBPACK_EXTERNAL_MODULE_three__.EventDispatcher, ["FileLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FileLoader, ["Float32BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Float32BufferAttribute, ["FloatType"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FloatType, ["FrontSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FrontSide, ["Group"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Group, ["ImageBitmapLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageBitmapLoader, ["ImageLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageLoader, ["InterleavedBuffer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBuffer, ["InterleavedBufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBufferAttribute, ["Interpolant"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Interpolant, ["InterpolateDiscrete"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateDiscrete, ["InterpolateLinear"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateLinear, ["Line"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Line, ["LineBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineBasicMaterial, ["LineLoop"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineLoop, ["LineSegments"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineSegments, ["LinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearFilter, ["LinearMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapLinearFilter, ["LinearMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapNearestFilter, ["Loader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Loader, ["LoaderUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LoaderUtils, ["Material"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Material, ["MathUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MathUtils, ["Matrix3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix3, ["Matrix4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix4, ["Mesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Mesh, ["MeshBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshBasicMaterial, ["MeshPhysicalMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshPhysicalMaterial, ["MeshStandardMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshStandardMaterial, ["MirroredRepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MirroredRepeatWrapping, ["NearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestFilter, ["NearestMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapLinearFilter, ["NearestMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapNearestFilter, ["NumberKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NumberKeyframeTrack, ["Object3D"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Object3D, ["OrthographicCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.OrthographicCamera, ["PerspectiveCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PerspectiveCamera, ["PointLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointLight, ["Points"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Points, ["PointsMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointsMaterial, ["PropertyBinding"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PropertyBinding, ["Quaternion"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Quaternion, ["QuaternionKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.QuaternionKeyframeTrack, ["RGBAFormat"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RGBAFormat, ["RepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RepeatWrapping, ["Scene"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Scene, ["ShaderMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ShaderMaterial, ["Skeleton"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Skeleton, ["SkinnedMesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SkinnedMesh, ["Sphere"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Sphere, ["SphereGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SphereGeometry, ["SpotLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SpotLight, ["TangentSpaceNormalMap"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TangentSpaceNormalMap, ["Texture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Texture, ["TextureLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TextureLoader, ["TriangleFanDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleFanDrawMode, ["TriangleStripDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleStripDrawMode, ["Uniform"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Uniform, ["UniformsUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.UniformsUtils, ["Vector2"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector2, ["Vector3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector3, ["Vector4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector4, ["VectorKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VectorKeyframeTrack, ["VideoTexture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VideoTexture, ["WebGLRenderTarget"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderTarget, ["WebGLRenderer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderer, ["sRGBEncoding"]: () => __WEBPACK_EXTERNAL_MODULE_three__.sRGBEncoding });
+const external_three_namespaceObject = x({ ["AnimationClip"]: () => __WEBPACK_EXTERNAL_MODULE_three__.AnimationClip, ["Bone"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Bone, ["Box3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Box3, ["BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferAttribute, ["BufferGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferGeometry, ["ClampToEdgeWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ClampToEdgeWrapping, ["Clock"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Clock, ["Color"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Color, ["DirectionalLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DirectionalLight, ["DoubleSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DoubleSide, ["EventDispatcher"]: () => __WEBPACK_EXTERNAL_MODULE_three__.EventDispatcher, ["FileLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FileLoader, ["Float32BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Float32BufferAttribute, ["FloatType"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FloatType, ["FrontSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FrontSide, ["Group"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Group, ["ImageBitmapLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageBitmapLoader, ["ImageLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageLoader, ["InterleavedBuffer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBuffer, ["InterleavedBufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBufferAttribute, ["Interpolant"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Interpolant, ["InterpolateDiscrete"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateDiscrete, ["InterpolateLinear"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateLinear, ["Line"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Line, ["LineBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineBasicMaterial, ["LineLoop"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineLoop, ["LineSegments"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineSegments, ["LinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearFilter, ["LinearMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapLinearFilter, ["LinearMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapNearestFilter, ["Loader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Loader, ["LoaderUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LoaderUtils, ["Material"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Material, ["MathUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MathUtils, ["Matrix3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix3, ["Matrix4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix4, ["Mesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Mesh, ["MeshBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshBasicMaterial, ["MeshPhysicalMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshPhysicalMaterial, ["MeshStandardMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshStandardMaterial, ["MirroredRepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MirroredRepeatWrapping, ["NearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestFilter, ["NearestMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapLinearFilter, ["NearestMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapNearestFilter, ["NumberKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NumberKeyframeTrack, ["Object3D"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Object3D, ["OrthographicCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.OrthographicCamera, ["PerspectiveCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PerspectiveCamera, ["PlaneGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PlaneGeometry, ["PointLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointLight, ["Points"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Points, ["PointsMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointsMaterial, ["PropertyBinding"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PropertyBinding, ["Quaternion"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Quaternion, ["QuaternionKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.QuaternionKeyframeTrack, ["RGBAFormat"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RGBAFormat, ["RepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RepeatWrapping, ["Scene"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Scene, ["ShaderMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ShaderMaterial, ["Skeleton"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Skeleton, ["SkinnedMesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SkinnedMesh, ["Sphere"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Sphere, ["SphereGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SphereGeometry, ["SpotLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SpotLight, ["TangentSpaceNormalMap"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TangentSpaceNormalMap, ["Texture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Texture, ["TextureLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TextureLoader, ["TriangleFanDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleFanDrawMode, ["TriangleStripDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleStripDrawMode, ["Uniform"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Uniform, ["UniformsUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.UniformsUtils, ["Vector2"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector2, ["Vector3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector3, ["Vector4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector4, ["VectorKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VectorKeyframeTrack, ["VideoTexture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VideoTexture, ["WebGLRenderTarget"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderTarget, ["WebGLRenderer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderer, ["sRGBEncoding"]: () => __WEBPACK_EXTERNAL_MODULE_three__.sRGBEncoding });
 ;// CONCATENATED MODULE: ./src/core/geometry/Isometry.js
 /**
  * @class
@@ -3651,7 +3675,7 @@ class AbstractRenderer {
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {TeleportationSet} set - the underlying teleportation set
-     * @param {BasicCamera} camera - the camera
+     * @param {Camera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the render. For the moment includes
      * @param {WebGLRenderer|Object} threeRenderer - either a Three.js renderer or the parameters to build it
@@ -3947,9 +3971,9 @@ class ShaderBuilder {
         return this;
     }
 }
-// EXTERNAL MODULE: ./src/core/renderers/shaders/common/vertex.glsl
-var vertex = __webpack_require__(2639);
-var vertex_default = /*#__PURE__*/__webpack_require__.n(vertex);
+// EXTERNAL MODULE: ./src/core/renderers/shaders/common/vertexSphercialScreen.glsl
+var vertexSphercialScreen = __webpack_require__(6623);
+var vertexSphercialScreen_default = /*#__PURE__*/__webpack_require__.n(vertexSphercialScreen);
 // EXTERNAL MODULE: ./src/core/renderers/shaders/common/constants.glsl
 var constants = __webpack_require__(1767);
 var constants_default = /*#__PURE__*/__webpack_require__.n(constants);
@@ -4009,6 +4033,10 @@ var main_default = /*#__PURE__*/__webpack_require__.n(main);
  * Non-euclidean renderer.
  * Takes as input the non-euclidean camera and scene and makes some magic.
  * It should not be confused with the Three.js WebGLRenderer it relies on.
+ *
+ * This one is built with a spherical Three.js screen.
+ * It is more convenient for virtual reality (see VRRenderer)
+ * It should be used with a perspective Three.js camera
  */
 class BasicRenderer extends AbstractRenderer {
 
@@ -4038,6 +4066,12 @@ class BasicRenderer extends AbstractRenderer {
 
         this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
         this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
+        this.globalUniforms.windowSize = {
+            type: 'vec2',
+            value: new external_three_namespaceObject.Vector2(window.innerWidth, window.innerHeight)
+        };
     }
 
     get isBasicRenderer() {
@@ -4111,7 +4145,7 @@ class BasicRenderer extends AbstractRenderer {
         this.buildFragmentShader();
         const material = new external_three_namespaceObject.ShaderMaterial({
             uniforms: this._fragmentBuilder.uniforms,
-            vertexShader: (vertex_default()),
+            vertexShader: (vertexSphercialScreen_default()),
             fragmentShader: this._fragmentBuilder.code,
         });
         const horizonSphere = new external_three_namespaceObject.Mesh(geometry, material);
@@ -4401,7 +4435,7 @@ class PathTracerRenderer extends AbstractRenderer {
         this.buildFragmentShader();
         const material = new external_three_namespaceObject.ShaderMaterial({
             uniforms: this._fragmentBuilder.uniforms,
-            vertexShader: (vertex_default()),
+            vertexShader: (vertexSphercialScreen_default()),
             fragmentShader: this._fragmentBuilder.code,
         });
         const horizonSphere = new external_three_namespaceObject.Mesh(geometry, material);
@@ -4993,7 +5027,7 @@ class VRRenderer extends AbstractRenderer {
     }
 
     build() {
-        // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
+        // The lag that may occur when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
         const geometry = new external_three_namespaceObject.SphereGeometry(50, 60, 40);
         // sphere eversion !
@@ -5002,12 +5036,12 @@ class VRRenderer extends AbstractRenderer {
         this.buildFragmentShader();
         const leftMaterial = new external_three_namespaceObject.ShaderMaterial({
             uniforms: this._fragmentBuilder[LEFT].uniforms,
-            vertexShader: (vertex_default()),
+            vertexShader: (vertexSphercialScreen_default()),
             fragmentShader: this._fragmentBuilder[LEFT].code,
         });
         const rightMaterial = new external_three_namespaceObject.ShaderMaterial({
             uniforms: this._fragmentBuilder[RIGHT].uniforms,
-            vertexShader: (vertex_default()),
+            vertexShader: (vertexSphercialScreen_default()),
             fragmentShader: this._fragmentBuilder[RIGHT].code,
         });
         const leftHorizonSphere = new external_three_namespaceObject.Mesh(geometry, leftMaterial);
@@ -5024,6 +5058,177 @@ class VRRenderer extends AbstractRenderer {
     render() {
         this.camera.chaseThreeCamera();
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
+    }
+}
+// EXTERNAL MODULE: ./src/core/renderers/shaders/common/vertexFlatScreen.glsl
+var vertexFlatScreen = __webpack_require__(4098);
+var vertexFlatScreen_default = /*#__PURE__*/__webpack_require__.n(vertexFlatScreen);
+;// CONCATENATED MODULE: ./src/core/renderers/FlatScreenRenderer.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Non-euclidean renderer.
+ * Takes as input the non-euclidean camera and scene and makes some magic.
+ * It should not be confused with the Three.js WebGLRenderer it relies on.
+ *
+ * This one is built with a flat Three.js screen.
+ * It is provides an easier control on the projections between the tangent space and the screen.
+ * It should be used with an orthographic Three.js camera
+ */
+class FlatScreenRenderer extends AbstractRenderer {
+
+    /**
+     * Constructor.
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
+     * @param {TeleportationSet} set - the underlying teleportation set
+     * @param {Camera} camera - the camera
+     * @param {Scene} scene - the scene
+     * @param {Object} params - parameters for the Thurston part of the renderer
+     * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
+     */
+    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
+        super(shader1, shader2, set, camera, scene, params, threeRenderer);
+        /**
+         * Builder for the fragment shader.
+         * @type {ShaderBuilder}
+         * @private
+         */
+        this._fragmentBuilder = new ShaderBuilder();
+        /**
+         * Effect composer for postprocessing
+         * @type {EffectComposer}
+         */
+        this.composer = new EffectComposer(this.threeRenderer);
+
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
+        this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
+        this.globalUniforms.windowSize = {
+            type: 'vec2',
+            value: new external_three_namespaceObject.Vector2(window.innerWidth, window.innerHeight)
+        };
+    }
+
+    get isBasicRenderer() {
+        return true;
+    }
+
+    setPixelRatio(value) {
+        super.setPixelRatio(value);
+        this.composer.setPixelRatio(window.devicePixelRatio);
+    }
+
+    setSize(width, height, updateStyle = true) {
+        super.setSize(width, height, updateStyle);
+        this.composer.setSize(width, height);
+        this.globalUniforms.windowSize.value.set(width, height);
+    }
+
+    /**
+     * Build the fragment shader
+     */
+    buildFragmentShader() {
+
+        // constants
+        this._fragmentBuilder.addChunk((constants_default()));
+        Object.keys(this.globalUniforms).forEach(name => {
+            const type = this.globalUniforms[name].type;
+            const value = this.globalUniforms[name].value;
+            this._fragmentBuilder.addUniform(name, type, value);
+        });
+        // geometry
+        this._fragmentBuilder.addChunk(this.shader1);
+        this._fragmentBuilder.addChunk((commons1_default()));
+        this._fragmentBuilder.addChunk(this.shader2);
+        this._fragmentBuilder.addChunk((commons2_default()));
+
+        // data carried by ExtVector
+        this._fragmentBuilder.addChunk((vectorDataStruct_default()));
+        // subgroup/quotient orbifold
+        this.set.shader(this._fragmentBuilder);
+
+        // camera
+        this.camera.shader(this._fragmentBuilder);
+
+        // scene
+        this.scene.shader(this._fragmentBuilder);
+        this._fragmentBuilder.addChunk(scenes_glsl_mustache_default()(this));
+        this._fragmentBuilder.addChunk(vectorDataUpdate_glsl_mustache_default()(this));
+
+        // ray-march and main
+        this._fragmentBuilder.addChunk((raymarch_default()));
+        if (this.postProcess) {
+            this._fragmentBuilder.addUniform("exposure", "float", this.exposure);
+            this._fragmentBuilder.addChunk((postProcessGammaCorrection_default()));
+        } else {
+            this._fragmentBuilder.addChunk((postProcessVoid_default()));
+        }
+        this._fragmentBuilder.addChunk((main_default()));
+    }
+
+    /**
+     * Build the Three.js scene with the non-euclidean shader.
+     * @return {BasicRenderer}
+     */
+    build() {
+
+
+        const geometry = new external_three_namespaceObject.PlaneGeometry(2, 2);
+        this.buildFragmentShader();
+        const material = new external_three_namespaceObject.ShaderMaterial({
+            uniforms: this._fragmentBuilder.uniforms,
+            vertexShader: (vertexFlatScreen_default()),
+            fragmentShader: this._fragmentBuilder.code,
+        });
+
+        const threeScreen = new external_three_namespaceObject.Mesh(geometry, material);
+        this.threeScene.add(threeScreen);
+
+        // add the render to the passes of the effect composer
+        const renderPass = new RenderPass(this.threeScene, this.camera.threeCamera);
+        renderPass.clear = false;
+        this.composer.addPass(renderPass);
+
+        for (let i = 0; i < this.postProcess.length; i++) {
+            const effectPass = new ShaderPass(this.postProcess[i].fullShader());
+            effectPass.clear = false;
+            this.composer.addPass(effectPass);
+        }
+
+
+        return this;
+    }
+
+    checkShader() {
+        console.log(this._fragmentBuilder.code);
+    }
+
+    render() {
+        this.composer.render();
     }
 }
 ;// CONCATENATED MODULE: ./src/core/renderers/specifyRenderer.js
@@ -6013,6 +6218,144 @@ class PathTracerCamera extends BasicCamera {
         shaderBuilder.addChunk((pathTracer_shaders_mapping_default()));
     }
 }
+// EXTERNAL MODULE: ./src/core/cameras/fulldom/shaders/struct.glsl
+var fulldom_shaders_struct = __webpack_require__(6374);
+var fulldom_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(fulldom_shaders_struct);
+// EXTERNAL MODULE: ./src/core/cameras/fulldom/shaders/mapping.glsl
+var fulldom_shaders_mapping = __webpack_require__(9396);
+var fulldom_shaders_mapping_default = /*#__PURE__*/__webpack_require__.n(fulldom_shaders_mapping);
+;// CONCATENATED MODULE: ./src/core/cameras/fulldom/FullDomCamera.js
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Camera in the non-euclidean scene, with a special projection, used for the BurningMan festival(!)
+ * Suitable only with a flat screen.
+ */
+class FullDomCamera {
+
+    /**
+     * Constructor.
+     * @param {Object} parameters - the parameters of the camera.
+     * These parameters are
+     * - {number} fov - the field of view
+     * - {number} minDist - the minimal distance we ray-march
+     * - {number} maxDist - the maximal distance we ray-march
+     * - {number} maxSteps - the maximal number of steps during the ray-marching
+     * - {number} safetyDist - in case an object is at the same place as the camera,
+     *      we always initially march a distance safetyDist,
+     *      no matter what the SDFs return
+     * - {number} threshold - the threshold to stop the ray-marching
+     * - {TeleportationSet} set - the underlying subgroup of the geometry (to create the position)
+     */
+    constructor(parameters) {
+
+        /**
+         * The underlying Three.js camera
+         * @type {OrthographicCamera}
+         */
+        this.threeCamera = new external_three_namespaceObject.OrthographicCamera(
+            -1,
+            1,
+            1,
+            -1,
+            0,
+            1
+        );
+        this.threeCamera.position.set(0, 0, 0);
+        this.threeCamera.lookAt(0, 0, -1);
+
+        /**
+         * Minimal distance we ray-march
+         * @type {number}
+         */
+        this.minDist = parameters.minDist !== undefined ? parameters.minDist : 0;
+        /**
+         * Maximal distance we ray-march
+         * @type {number}
+         */
+        this.maxDist = parameters.maxDist !== undefined ? parameters.maxDist : 50;
+        /**
+         * Safety distance, to avoid collision with objects attached to the camera
+         * @type {number}
+         */
+        this.safetyDist = parameters.safetyDist !== undefined ? parameters.safetyDist : 0;
+        /**
+         * Maximal number of steps during the ray-marching
+         * @type {number}
+         */
+        this.maxSteps = parameters.maxSteps !== undefined ? parameters.maxSteps : 100;
+        /**
+         * Threshold to stop the ray-marching
+         * @type {number}
+         */
+        this.threshold = parameters.threshold !== undefined ? parameters.threshold : 0.0001;
+        /**
+         * Position of the camera
+         * @type {RelPosition}
+         */
+        this.position = new RelPosition(parameters.set);
+    }
+
+    /**
+     * Shortcut to reset the aspect of the underlying Three.js camera
+     * @param {number} value
+     */
+    set aspect(value) {
+        this.threeCamera.aspect = value;
+    }
+
+    /**
+     * Shortcut to access the field of view of the underlying Three.js camera
+     * (Recall that in Three.js the field of view is the vertical one.)
+     * @type {number}
+     */
+    get fov() {
+        return this.threeCamera.fov;
+    }
+
+    /**
+     * Shortcut to reset the field of view of the underlying Three.js camera
+     * (Recall that in Three.js the field of view is the vertical one.)
+     * @param {number} value
+     */
+    set fov(value) {
+        // this.threeCamera.fov = value;
+        // this.threeCamera.updateProjectionMatrix();
+    }
+
+    /**
+     * Matrix of the underlying Three.js camera in the virtual euclidean scene
+     * @type {Matrix4}
+     */
+    get matrix() {
+        return this.threeCamera.matrixWorld;
+    }
+
+    /**
+     * Shortcut to update the projection matrix of the underlying Three.js camera
+     */
+    updateProjectionMatrix() {
+        this.threeCamera.updateProjectionMatrix();
+    }
+
+
+    /**
+     * build the GLSL code needed to declare the camera
+     * @param {ShaderBuilder} shaderBuilder - the shader builder
+     */
+    shader(shaderBuilder) {
+        shaderBuilder.addClass('Camera', (fulldom_shaders_struct_default()));
+        shaderBuilder.addUniform('camera', 'Camera', this);
+        shaderBuilder.addChunk((fulldom_shaders_mapping_default()));
+    }
+}
 ;// CONCATENATED MODULE: ./src/core/Generic.js
                                                                                                                                           
 
@@ -6637,6 +6980,8 @@ class Scene {
     }
 }
 ;// CONCATENATED MODULE: ./src/core/General.js
+
+
 
 
 
@@ -7280,8 +7625,8 @@ class ThurstonLite {
 
         // controls for the camera
         const cameraGUI = this.gui.addFolder('Camera');
-        cameraGUI.add(this.camera, 'fov', 45, 120)
-            .name('Field of view');
+        // cameraGUI.add(this.camera, 'fov', 45, 120)
+        //     .name('Field of view');
         cameraGUI.add(this.camera, 'maxDist', 0, 100, 1)
             .name('Max distance');
         cameraGUI.add(this.camera, 'maxSteps', 20, 500, 1)
@@ -13839,6 +14184,175 @@ class ThurstonVRWoodBallsBis {
         this.renderer.setAnimationLoop(_animate);
     }
 }
+;// CONCATENATED MODULE: ./src/commons/app/thurstonRecord/ThurstonRecord.js
+
+
+
+
+
+
+
+/**
+ * @class
+ *
+ *
+ * @classdesc
+ * A combination of all main parts of the API. It can be used to quickly create scenes
+ * Useful to record videos with CCapture
+ * CCapture should be inserted as a global variable in a script
+ */
+class ThurstonRecord {
+
+    /**
+     * Constructor.
+     * @param {string} shader1 - the first part of the geometry dependent shader
+     * @param {string} shader2 - the second part of the geometry dependent shader
+     * @param {TeleportationSet} set - the teleportation set
+     * @param {Object} params - additional parameters including
+     * - {string} keyboard - the type of keyboard (french, american, etc)
+     */
+    constructor(shader1, shader2, set, params = {}) {
+        /**
+         * The underlying subgroup
+         * @type {TeleportationSet}
+         */
+        this.set = set;
+        /**
+         * A callback called at each frame
+         * @type {Function}
+         */
+        this.callback = undefined;
+
+
+        const fog = new ExpFog(new external_three_namespaceObject.Color(0, 0, 0), 0.07);
+        /**
+         * The non-euclidean scene
+         * @type {Scene}
+         */
+        this.scene = new Scene({fog: fog});
+
+        /**
+         * The non-euclidean camera for the basic renderer
+         * @type {FullDomCamera}
+         */
+        this.camera = new FullDomCamera({set: this.set});
+
+        /**
+         * Non-euclidean renderer for basic renderer
+         * @type {FlatScreenRenderer}
+         */
+        this.renderer = new FlatScreenRenderer(shader1, shader2, this.set, this.camera, this.scene, {});
+        this.setPixelRatio(window.devicePixelRatio);
+        this.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setClearColor(new external_three_namespaceObject.Color(0, 0, 0.2), 1);
+        document.body.appendChild(this.renderer.domElement);
+
+        // event listener
+        const _onWindowResize = utils_bind(this, this.onWindowResize);
+        window.addEventListener("resize", _onWindowResize, false);
+
+        /**
+         * The keyboard controls to fly in the scene
+         * @type {FlyControls}
+         * @protected
+         */
+        this.flyControls = new FlyControls(
+            this.camera
+        );
+
+        /**
+         * Is the recording on or off
+         * @type {boolean}
+         */
+        this.isRecordOn = false;
+        this.capture = undefined;
+
+        const _onKeyDown = utils_bind(this, this.onKeyDown);
+        window.addEventListener('keydown', _onKeyDown, false);
+
+        /**
+         * A clock to measure the time between two call of animate
+         * @type {Clock}
+         * @protected
+         */
+        this.clock = new external_three_namespaceObject.Clock();
+    }
+
+    setPixelRatio(value) {
+        this.renderer.setPixelRatio(value);
+    }
+
+    setSize(width, height) {
+        this.renderer.setSize(width, height);
+    }
+
+    /**
+     * Shortcut to add objects to the scene.
+     * @param {...(Solid|Light)} obj - the objects to add
+     */
+    add(obj) {
+        this.scene.add(/**@type {(Solid|Light)} */...arguments);
+    }
+
+    /**
+     * Action when the window is resized.
+     * @param {UIEvent} event
+     */
+    onWindowResize(event) {
+        this.setSize(window.innerWidth, window.innerHeight);
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+    }
+
+    recordStart() {
+        console.log('start');
+        this.capture = new CCapture({
+            format: 'jpg'
+        });
+        this.capture.start();
+    }
+
+    recordStop() {
+        console.log('stop');
+        this.capture.stop();
+        this.capture.save();
+    }
+
+    onKeyDown(event) {
+        if (event.key === 'r') {
+            if (this.isRecordOn) {
+                this.recordStop();
+            } else {
+                this.recordStart();
+            }
+            this.isRecordOn = !this.isRecordOn;
+        }
+    }
+
+    /**
+     * animation function
+     */
+    animate() {
+        const delta = this.clock.getDelta();
+        this.flyControls.update(delta);
+        this.renderer.render();
+        if (this.isRecordOn) {
+            this.capture.capture(this.renderer.threeRenderer.domElement);
+        }
+        if (this.callback !== undefined) {
+            this.callback();
+        }
+    }
+
+    /**
+     * Build the renderer and run the animation.
+     */
+    run() {
+        this.renderer.build();
+        const _animate = utils_bind(this, this.animate);
+        this.renderer.threeRenderer.setAnimationLoop(_animate);
+    }
+}
 ;// CONCATENATED MODULE: ./src/commons/app/specifyThurston.js
 /**
  * Take a generic Thurston class and return the class specific for a geometry
@@ -19475,6 +19989,7 @@ class Matrix2 {
 
 
 
+
 ;// CONCATENATED MODULE: ./src/commons/groups/isometry/GroupElement.js
 
 
@@ -23271,9 +23786,12 @@ class LocalWSlab extends Solid {
 
 
 
+
 const thurstonH2E_BasicRenderer = specifyRenderer(BasicRenderer, (part1_default()), (part2_default()));
 const thurstonH2E_PathTracerRenderer = specifyRenderer(PathTracerRenderer, (part1_default()), (part2_default()));
 const thurstonH2E_VRRenderer = specifyRenderer(VRRenderer, (part1_default()), (part2_default()));
+const thurstonH2E_FlatScreenRenderer = specifyRenderer(FlatScreenRenderer, (part1_default()), (part2_default()));
+
 
 
 
@@ -23287,6 +23805,7 @@ const thurstonH2E_ThurstonLite = specifyThurston(ThurstonLite, (part1_default())
 const thurstonH2E_ThurstonVR = specifyThurston(ThurstonVR, (part1_default()), (part2_default()));
 const thurstonH2E_ThurstonVRWoodBalls = specifyThurston(ThurstonVRWoodBalls, (part1_default()), (part2_default()));
 const thurstonH2E_ThurstonVRWoodBallsBis = specifyThurston(ThurstonVRWoodBallsBis, (part1_default()), (part2_default()));
+const thurstonH2E_ThurstonRecord = specifyThurston(ThurstonRecord, (part1_default()), (part2_default()));
 
 
 
@@ -23333,8 +23852,10 @@ var __webpack_exports__ESun = __webpack_exports__.Gj;
 var __webpack_exports__EquidistantHypStripsMaterial = __webpack_exports__.ix;
 var __webpack_exports__EquidistantSphStripsMaterial = __webpack_exports__.jZ;
 var __webpack_exports__ExpFog = __webpack_exports__.c$;
+var __webpack_exports__FlatScreenRenderer = __webpack_exports__.sM;
 var __webpack_exports__FlyControls = __webpack_exports__.mD;
 var __webpack_exports__Fog = __webpack_exports__.yb;
+var __webpack_exports__FullDomCamera = __webpack_exports__.t3;
 var __webpack_exports__GraphPaperMaterial = __webpack_exports__.iJ;
 var __webpack_exports__Group = __webpack_exports__.ZA;
 var __webpack_exports__GroupElement = __webpack_exports__.Jz;
@@ -23408,6 +23929,7 @@ var __webpack_exports__SwitchControls = __webpack_exports__.$p;
 var __webpack_exports__TeleportationSet = __webpack_exports__.xG;
 var __webpack_exports__Thurston = __webpack_exports__.qC;
 var __webpack_exports__ThurstonLite = __webpack_exports__.N$;
+var __webpack_exports__ThurstonRecord = __webpack_exports__.tz;
 var __webpack_exports__ThurstonVR = __webpack_exports__.TO;
 var __webpack_exports__ThurstonVRWoodBalls = __webpack_exports__.g$;
 var __webpack_exports__ThurstonVRWoodBallsBis = __webpack_exports__.u3;
@@ -23455,4 +23977,4 @@ var __webpack_exports__variableHeightQuotientGenus2Set = __webpack_exports__.dj;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalDirectedNoisyWSlabShape as LocalDirectedNoisyWSlabShape, __webpack_exports__LocalDirectedWSlabShape as LocalDirectedWSlabShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalNoisyVerticalCylinderShape as LocalNoisyVerticalCylinderShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__LocalStackBallShape as LocalStackBallShape, __webpack_exports__LocalStackNoisyWSlabShape as LocalStackNoisyWSlabShape, __webpack_exports__LocalStackWSlabShape as LocalStackWSlabShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__LocalWHalfSpace as LocalWHalfSpace, __webpack_exports__LocalWHalfSpaceShape as LocalWHalfSpaceShape, __webpack_exports__LocalWSlab as LocalWSlab, __webpack_exports__LocalWSlabShape as LocalWSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__QuotientGenus2Material as QuotientGenus2Material, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RegularHypPolygon as RegularHypPolygon, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__genus2Set as genus2Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__horizontalQuotientGenus2Set as horizontalQuotientGenus2Set, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__quotientGenus2Set as quotientGenus2Set, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__variableHeightQuotientGenus2Set as variableHeightQuotientGenus2Set, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DIR_DOWN as DIR_DOWN, __webpack_exports__DIR_UP as DIR_UP, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__ESun as ESun, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HorizontalCylinder as HorizontalCylinder, __webpack_exports__HorizontalCylinderShape as HorizontalCylinderShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalDirectedNoisyWSlabShape as LocalDirectedNoisyWSlabShape, __webpack_exports__LocalDirectedWSlabShape as LocalDirectedWSlabShape, __webpack_exports__LocalHorizontalCylinder as LocalHorizontalCylinder, __webpack_exports__LocalHorizontalCylinderShape as LocalHorizontalCylinderShape, __webpack_exports__LocalNoisyVerticalCylinderShape as LocalNoisyVerticalCylinderShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__LocalStackBallShape as LocalStackBallShape, __webpack_exports__LocalStackNoisyWSlabShape as LocalStackNoisyWSlabShape, __webpack_exports__LocalStackWSlabShape as LocalStackWSlabShape, __webpack_exports__LocalVerticalCylinder as LocalVerticalCylinder, __webpack_exports__LocalVerticalCylinderShape as LocalVerticalCylinderShape, __webpack_exports__LocalWHalfSpace as LocalWHalfSpace, __webpack_exports__LocalWHalfSpaceShape as LocalWHalfSpaceShape, __webpack_exports__LocalWSlab as LocalWSlab, __webpack_exports__LocalWSlabShape as LocalWSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__QuotientGenus2Material as QuotientGenus2Material, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RegularHypPolygon as RegularHypPolygon, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VerticalCylinder as VerticalCylinder, __webpack_exports__VerticalCylinderShape as VerticalCylinderShape, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WHalfSpace as WHalfSpace, __webpack_exports__WHalfSpaceShape as WHalfSpaceShape, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cuspedTorusSet as cuspedTorusSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__genus2Set as genus2Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalLoopSet as horizontalLoopSet, __webpack_exports__horizontalQuotientGenus2Set as horizontalQuotientGenus2Set, __webpack_exports__intersection as intersection, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__orbiTorusSet as orbiTorusSet, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__planeSet as planeSet, __webpack_exports__quotientGenus2Set as quotientGenus2Set, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__variableHeightQuotientGenus2Set as variableHeightQuotientGenus2Set, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__zLoopSet as zLoopSet };
