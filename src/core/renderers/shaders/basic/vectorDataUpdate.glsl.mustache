@@ -10,10 +10,10 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
     vec4 reflectivity;
     float opacity;
     float t;
-    
+
     switch(objId){
     {{#scene.solids}}
-    
+
         case {{id}}:
         {{#material.isTransparent}}
 
@@ -155,7 +155,7 @@ void updateVectorDataFromSolid(inout ExtVector v, int objId){
 
         {{/material.isTransparent}}
         break;
-    
+
     {{/scene.solids}}
     }
 }

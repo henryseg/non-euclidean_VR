@@ -6,7 +6,8 @@
  ***********************************************************************************************************************
  **********************************************************************************************************************/
 
-varying vec3 spherePosition;
+uniform vec2 windowSize;
+varying vec3 screenPosition;
 
 /**
  * Main function of the vertex shader.
@@ -18,15 +19,13 @@ varying vec3 spherePosition;
  * and implement the rotation inside the camera mapping.
  * It seems that this choice is less jiggly in VR.
  * However there are so many parameters invovled that this might be totally unrelated
+ *
+ * Added fulldome project for Burnside man
  */
 void main()
 {
-    spherePosition = position;
-    // keep only the rotation part from the matrix view
-    mat4 rot = modelViewMatrix;
-    rot[3] = vec4(0, 0, 0, 1);
 
-    vec4 aux = rot * vec4(position, 1.0);
-    spherePosition = aux.xyz;
-    gl_Position = projectionMatrix * rot * aux;
+    screenPosition = vec3((2. * uv - 1.) * windowSize / windowSize.y, 1);
+    gl_Position =  vec4(position, 1);
+
 }

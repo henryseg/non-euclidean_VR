@@ -13,7 +13,7 @@ import {FullScreenQuad} from "three/examples/jsm/postprocessing/EffectComposer.j
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
-import vertexShader from "./shaders/common/vertex.glsl";
+import vertexShader from "./shaders/common/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";

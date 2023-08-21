@@ -7,7 +7,7 @@ import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {LEFT, RIGHT, BOTH} from "../../constants.js";
 
-import vertexShader from "./shaders/common/vertex.glsl";
+import vertexShader from "./shaders/common/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
@@ -127,7 +127,7 @@ export class VRRenderer extends AbstractRenderer {
     }
 
     build() {
-        // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
+        // The lag that may occur when we move the sphere to chase the camera can be the source of noisy movement.
         // We put a very large sphere around the user, to minimize this effect.
         const geometry = new SphereGeometry(50, 60, 40);
         // sphere eversion !

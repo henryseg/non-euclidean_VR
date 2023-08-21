@@ -71,9 +71,10 @@ int raymarch(inout ExtVector v, out int objId){
             localV = flow(localV0, marchingStep);
         }
     }
-    if (hit == HIT_NOTHING) {
-        v = localV;
-    }
+
+//    if (hit == HIT_NOTHING) {
+//        v = localV;
+//    }
 
     //global scene
     marchingStep = camera.minDist;

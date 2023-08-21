@@ -1,7 +1,7 @@
 /**
  * Position on the sphere.
  */
-varying vec3 spherePosition;
+varying vec3 screenPosition;
 
 /**
  * Main function. Wrap everything together:
@@ -11,7 +11,7 @@ varying vec3 spherePosition;
  * - If we hit an object compute the corresponding color.
  */
 void main() {
-    RelVector vector = mapping(spherePosition);
+    RelVector vector = mapping(screenPosition);
     ExtVector v = ExtVector(vector, initVectorData());
     gl_FragColor = postProcess(getColor(v));
 }
