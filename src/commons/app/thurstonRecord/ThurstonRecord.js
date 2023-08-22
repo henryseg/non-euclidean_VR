@@ -120,7 +120,7 @@ export class ThurstonRecord {
     recordStart() {
         console.log('start');
         this.capture = new CCapture({
-            framerate: 24,
+            framerate: 60,
             format: 'jpg'
         });
         this.capture.start();
