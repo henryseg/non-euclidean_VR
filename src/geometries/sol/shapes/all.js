@@ -11,3 +11,4 @@ export {LocalXHalfSpaceShape} from "./localXYHalfSpace/LocalXHalfSpaceShape.js";
 export {LocalCubeShape} from "./localCube/LocalCubeShape.js";
 export {LocalZAxisShape} from "./localZAxis/LocalZAxisShape.js";
 export {LocalXAxisShape} from "./localXAxis/LocalXAxisShape.js";
+export {LocalZSlabShape} from "./localZSlab/LocalZSlabShape.js";
