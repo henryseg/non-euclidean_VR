@@ -26,7 +26,8 @@ vec4 SLreduceError(vec4 elt) {
     0, 0, 0, 1
     );
     float q = dot(elt, J * elt);
-    return elt / sqrt(-q);
+//    return elt / sqrt(-q);
+    return elt / sqrt(abs(q));
 }
 
 // change of model
@@ -50,7 +51,8 @@ mat2 SLtoMatrix2(vec4 elt) {
     );
     mat2 res = elt.x * ex + elt.y * ey + elt.z * ez + elt.w * ew;
     // reducing the eventual error
-    res = res / sqrt(determinant(res));
+//    res = res / sqrt(determinant(res));
+    res = res / sqrt(abs(determinant(res)));
     return res;
 }
 
@@ -96,7 +98,8 @@ vec3 SLtoH2(vec4 elt) {
     0, 0, -1
     );
     float q = dot(res, J * res);
-    res = res / sqrt(-q);
+//    res = res / sqrt(-q);
+    res = res / sqrt(abs(q));
     return res;
 }
 

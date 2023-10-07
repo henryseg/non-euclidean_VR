@@ -5,6 +5,7 @@ import {Vector} from "../../geometry/General.js";
 const group = new Group();
 
 const height = 2 * Math.PI;
+// const height = 4 * Math.PI;
 
 function testWp(p) {
     return p.fiber > 0.5 * height;
@@ -33,8 +34,8 @@ const shiftWn = group.element();
 
 shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
 shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
-// shiftWp.isom.fiber = -2 * height;
-// shiftWn.isom.fiber = 2 * height;
+// shiftWp.isom.fiber = -0.5 * height;
+// shiftWn.isom.fiber = 0.5 * height;
 
 export default new TeleportationSet()
     .add(testWp, glslTestWp, shiftWp, shiftWn)
