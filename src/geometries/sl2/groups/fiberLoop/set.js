@@ -33,6 +33,8 @@ const shiftWn = group.element();
 
 shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
 shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
+// shiftWp.isom.fiber = -2 * height;
+// shiftWn.isom.fiber = 2 * height;
 
 export default new TeleportationSet()
     .add(testWp, glslTestWp, shiftWp, shiftWn)
