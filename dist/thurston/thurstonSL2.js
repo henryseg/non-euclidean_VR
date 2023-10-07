@@ -14409,7 +14409,7 @@ class ThurstonRecord {
     recordStart() {
         console.log('start');
         this.capture = new CCapture({
-            framerate: 60,
+            framerate: 24,
             format: 'jpg'
         });
         this.capture.start();
@@ -20200,7 +20200,7 @@ class isometry_Group_Group extends Group_Group {
 
 const group = new isometry_Group_Group();
 
-const height = 2 * Math.PI;
+const height = 4 * Math.PI;
 
 function testWp(p) {
     return p.fiber > 0.5 * height;
@@ -20227,8 +20227,10 @@ bool testWn(Point p){
 const shiftWp = group.element();
 const shiftWn = group.element();
 
-shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
-shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
+// shiftWp.isom.makeTranslationFromDir(new Vector(0, 0, -height));
+// shiftWn.isom.makeTranslationFromDir(new Vector(0, 0, height));
+shiftWp.isom.fiber = -2 * height;
+shiftWn.isom.fiber = 2 * height;
 
 /* harmony default export */ const fiberLoop_set = (new TeleportationSet()
     .add(testWp, glslTestWp, shiftWp, shiftWn)

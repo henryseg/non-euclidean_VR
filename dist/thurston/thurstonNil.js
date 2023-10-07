@@ -14258,7 +14258,7 @@ class ThurstonRecord {
     recordStart() {
         console.log('start');
         this.capture = new CCapture({
-            framerate: 60,
+            framerate: 24,
             format: 'jpg'
         });
         this.capture.start();
