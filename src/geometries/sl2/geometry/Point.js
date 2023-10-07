@@ -47,6 +47,28 @@ Point.prototype.toVector4 = function () {
 }
 
 /**
+ * Change of model:
+ * Update the current point from a vector 4 (x,y,z,w)
+ * the input is a vector (x,y,z,w) representing a point p where
+ * - (x,y,z) is the projection of p in H^2 (hyperboloid model)
+ * - w is the fiber coordinate
+ * @param {Vector4} v - the input vector
+ * @return {Point}
+ */
+Point.prototype.fromVector4 = function (v) {
+    const [x, y, z, w] = v.toArray();
+    this.fiber = w;
+    this.proj.set(
+        Math.sqrt(0.5 * z + 0.5),
+        0,
+        x / Math.sqrt(2 * z + 2),
+        y / Math.sqrt(2 * z + 2)
+    );
+    this.proj.translateFiberBy(this.fiber);
+    return this;
+}
+
+/**
  * Return the current point as an element (x,y,1,w) of H^2 x R, where
  * - (x,y,1) are th coordinates of a point of H^2 with the Klein model
  * - w is the fiber component
