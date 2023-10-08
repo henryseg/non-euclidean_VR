@@ -1774,6 +1774,20 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 6678:
+/***/ ((module) => {
+
+module.exports = "struct GroupElement {\n    ivec3 irotation;\n    ivec3 itranslation;\n};\n\nconst GroupElement GROUP_IDENTITY = GroupElement(ivec3(1), ivec3(0));\n\nGroupElement multiply(GroupElement elt1, GroupElement elt2){\n    ivec3 rotation = elt1.irotation * elt2.irotation;\n    ivec3 transaltion = elt1.itranslation + elt1.irotation * elt2.itranslation;\n    return GroupElement(rotation, transaltion);\n}\n\nIsometry toIsometry(GroupElement elt) {\n    ivec3 a = elt.irotation;\n    vec3 t = group.length * vec3(elt.itranslation);\n    mat4 matrix =  mat4(\n    a.x, 0, 0, 0,\n    0, a.y, 0, 0,\n    0, 0, a.z, 0,\n    t.x, t.y, t.z, 1\n    );\n    return Isometry(matrix);\n}"
+
+/***/ }),
+
+/***/ 3794:
+/***/ ((module) => {
+
+module.exports = "struct Group {\n    float length;\n};"
+
+/***/ }),
+
 /***/ 4693:
 /***/ ((module) => {
 
@@ -2001,6 +2015,7 @@ __webpack_require__.d(__webpack_exports__, {
   iJ: () => (/* reexport */ GraphPaperMaterial),
   ZA: () => (/* reexport */ Group_Group),
   Jz: () => (/* reexport */ GroupElement_GroupElement),
+  eK: () => (/* reexport */ hantzsche_wendt_set),
   Fr: () => (/* reexport */ HalfSpace),
   RM: () => (/* reexport */ HalfSpaceShape),
   fR: () => (/* reexport */ HighlightLocalWrapMaterial),
@@ -20541,6 +20556,265 @@ const set_shiftZn = set_group.element(0, 0, 1);
     .add(set_testZp, set_glslTestZp, set_shiftZp, set_shiftZn)
     .add(set_testZn, set_glslTestZn, set_shiftZn, set_shiftZp));
 
+;// CONCATENATED MODULE: ./src/geometries/euc/groups/hantzsche-wendt/GroupElement.js
+
+
+
+
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Element in the fundamental group of the Hantzsche-Wendt manifold
+ * Elements are represented by two triples :
+ * - (ax,ay,az) where ax, ay, az belong to {±1} and ax * ay * az = 1
+ * - (ux,uy,uz) an integer value vector.
+ * The group law is the one of a semi-direct product (see group description)
+ * We make it compatible with the standard conventions of isometries of E^3.
+ * An isometry of E^3 has the form T * R, where R is a rotation fixing the origin and T a translation.
+ * Hence, the product of isometries is (T1 R1) (T2 R2) = T R where
+ * - R = R1 R2
+ * - T = T1 (R1 T2 R1^{-1})
+ * In our description of the semi-direct product, `u` encodes the translation and `a` the rotation.
+ */
+
+class hantzsche_wendt_GroupElement_GroupElement extends GroupElement_GroupElement {
+
+    constructor(group) {
+        super(group);
+        this.rotation = new external_three_namespaceObject.Vector3(1, 1, 1);
+        this.translation = new external_three_namespaceObject.Vector3(0, 0, 0);
+    }
+
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @type{number[]}
+     */
+    get irotation() {
+        return this.rotation.toArray();
+    }
+
+    /**
+     * the only way to pass an integer vector to the shader is as an array and not a Vector3
+     * @type{number[]}
+     */
+    get itranslation() {
+        return this.translation.toArray();
+    }
+
+    setRotation(x, y, z) {
+        this.rotation.set(x, y, z);
+        return this;
+    }
+
+    setTranslation(x, y, z) {
+        this.translation.set(x, y, z);
+        return this;
+    }
+
+
+    identity() {
+        this.rotation.set(1, 1, 1);
+        this.translation.set(0, 0, 0);
+        return this;
+    }
+
+    multiply(elt) {
+        // Three.js vector multiplication acts component wise.
+        const rotation = new external_three_namespaceObject.Vector3().multiplyVectors(this.rotation, elt.rotation);
+        const translation = new external_three_namespaceObject.Vector3().addVectors(
+            this.translation,
+            new external_three_namespaceObject.Vector3().multiplyVectors(this.rotation, elt.translation)
+        );
+        this.rotation.copy(rotation);
+        this.translation.copy(translation);
+        return this;
+    }
+
+    premultiply(elt) {
+        const rotation = new external_three_namespaceObject.Vector3().multiplyVectors(elt.rotation, this.rotation);
+        const translation = new external_three_namespaceObject.Vector3().addVectors(
+            elt.translation,
+            new external_three_namespaceObject.Vector3().multiplyVectors(elt.rotation, this.translation)
+        );
+        this.rotation.copy(rotation);
+        this.translation.copy(translation);
+        return this;
+    }
+
+    invert() {
+        const translation = new external_three_namespaceObject.Vector3()
+            .multiplyVectors(this.rotation, this.translation)
+            .negate();
+        this.translation.copy(translation);
+        return this;
+    }
+
+    toIsometry() {
+        const [ax, ay, az] = this.rotation.toArray();
+        const [ux, uy, uz] = this.translation.toArray();
+        const res = new Isometry();
+        res.matrix.set(
+            ax, 0, 0, this.group.length * ux,
+            0, ay, 0, this.group.length * uy,
+            0, 0, az, this.group.length * uz,
+            0, 0, 0, 1
+        );
+        return res;
+    }
+
+    equals(elt) {
+        return this.rotation.equals(elt.rotation) && this.translation.equals(elt.rotation);
+    }
+
+    copy(elt) {
+        this.rotation.copy(elt.rotation);
+        this.translation.copy(elt.translation);
+        return this;
+    }
+
+    clone() {
+        const res = new hantzsche_wendt_GroupElement_GroupElement(this.group);
+        res.copy(this);
+        return res;
+    }
+}
+
+// EXTERNAL MODULE: ./src/geometries/euc/groups/hantzsche-wendt/shaders/element.glsl
+var hantzsche_wendt_shaders_element = __webpack_require__(6678);
+var hantzsche_wendt_shaders_element_default = /*#__PURE__*/__webpack_require__.n(hantzsche_wendt_shaders_element);
+// EXTERNAL MODULE: ./src/geometries/euc/groups/hantzsche-wendt/shaders/struct.glsl
+var hantzsche_wendt_shaders_struct = __webpack_require__(3794);
+var hantzsche_wendt_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(hantzsche_wendt_shaders_struct);
+;// CONCATENATED MODULE: ./src/geometries/euc/groups/hantzsche-wendt/Group.js
+
+
+
+
+
+
+/**
+ * Fundamental group of the Hantzsche-Wendt manifold
+ * The group is contained in the semi-direct product of Z^3 with (Z/2)^2
+ * - The group (Z/2)^2 is viewed as the set of triples a = (ax, ay, az) where ax, ay, az belong to {±1} and ax * ay * az = 1
+ * - The factor (Z/2)^2 (as described above) acts on Z^3 by pointwise multiplication,
+ *      i.e. a·u = (ax * ux, ay * uy, az * uz)
+ * A fundamental domain for the action of this group on E^3 is a rhombic dodecahedron
+ */
+class hantzsche_wendt_Group_Group extends Group_Group {
+
+    /**
+     * Constructor
+     * @param {number} length - a length parameter controlling the size of the fundamental domain
+     */
+    constructor(length = 1) {
+        super();
+        this._length = length;
+    }
+
+    get length() {
+        return this._length;
+    }
+
+    set length(value) {
+        this._length = value;
+    }
+
+    element() {
+        return new hantzsche_wendt_GroupElement_GroupElement(this)
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk((hantzsche_wendt_shaders_struct_default()));
+        shaderBuilder.addUniform('group', 'Group', this);
+        shaderBuilder.addChunk((hantzsche_wendt_shaders_element_default()));
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/euc/groups/hantzsche-wendt/set.js
+
+
+
+
+
+
+const hantzsche_wendt_set_group = new hantzsche_wendt_Group_Group();
+
+/**
+ * group elements for the teleportations arranged in pairs: elt1, elt1^{-1}, elt2, elt2^{-1}, etc
+ * @type {GroupElement[]}
+ */
+const isoms = [
+    hantzsche_wendt_set_group.element().setRotation(1, -1, -1).setTranslation(1, 1, 0), // A
+    hantzsche_wendt_set_group.element().setRotation(1, -1, -1).setTranslation(-1, 1, 0), // A^{-1}
+    hantzsche_wendt_set_group.element().setRotation(-1, 1, -1).setTranslation(0, 1, 1), // B
+    hantzsche_wendt_set_group.element().setRotation(-1, 1, -1).setTranslation(0, -1, 1), // B^{-1}
+    hantzsche_wendt_set_group.element().setRotation(-1, -1, 1).setTranslation(1, 0, 1), // C
+    hantzsche_wendt_set_group.element().setRotation(-1, -1, 1).setTranslation(1, 0, -1), // C^{-1}
+    hantzsche_wendt_set_group.element().setRotation(1, -1, -1).setTranslation(-1, -1, 0), // B^{-1}C
+    hantzsche_wendt_set_group.element().setRotation(1, -1, -1).setTranslation(1, -1, 0), // C^{-1}B
+    hantzsche_wendt_set_group.element().setRotation(-1, 1, -1).setTranslation(0, -1, -1), // C^{-1}A
+    hantzsche_wendt_set_group.element().setRotation(-1, 1, -1).setTranslation(0, 1, -1), // A^{-1}C
+    hantzsche_wendt_set_group.element().setRotation(-1, -1, 1).setTranslation(-1, 0, -1), // A^{-1}B
+    hantzsche_wendt_set_group.element().setRotation(-1, -1, 1).setTranslation(-1, 0, 1), // B^{-1}A
+]
+
+/**
+ * Data to create the teleportations
+ * Each line is a triple (normal, isom, isomInv) with
+ * - the normal to the face to test if we have left the fundamental domain. The normal is point outside
+ * - the isometry to teleport
+ * - the inverse of this isometry
+ * @type {(Vector4, GroupElement, GroupElement)[]}
+ */
+const teleportationsData = [
+    [new external_three_namespaceObject.Vector4(-1, 1, 0, -hantzsche_wendt_set_group.length), isoms[0], isoms[1]],
+    [new external_three_namespaceObject.Vector4(1, 1, 0, -hantzsche_wendt_set_group.length), isoms[1], isoms[0]],
+    [new external_three_namespaceObject.Vector4(0, -1, 1, -hantzsche_wendt_set_group.length), isoms[2], isoms[3]],
+    [new external_three_namespaceObject.Vector4(0, 1, 1, -hantzsche_wendt_set_group.length), isoms[3], isoms[2]],
+    [new external_three_namespaceObject.Vector4(1, 0, -1, -hantzsche_wendt_set_group.length), isoms[4], isoms[5]],
+    [new external_three_namespaceObject.Vector4(1, 0, 1, -hantzsche_wendt_set_group.length), isoms[5], isoms[4]],
+    [new external_three_namespaceObject.Vector4(1, -1, 0, -hantzsche_wendt_set_group.length), isoms[6], isoms[7]],
+    [new external_three_namespaceObject.Vector4(-1, -1, 0, -hantzsche_wendt_set_group.length), isoms[7], isoms[6]],
+    [new external_three_namespaceObject.Vector4(0, 1, -1, -hantzsche_wendt_set_group.length), isoms[8], isoms[9]],
+    [new external_three_namespaceObject.Vector4(0, -1, -1, -hantzsche_wendt_set_group.length), isoms[9], isoms[8]],
+    [new external_three_namespaceObject.Vector4(-1, 0, 1, -hantzsche_wendt_set_group.length), isoms[10], isoms[11]],
+    [new external_three_namespaceObject.Vector4(-1, 0, -1, -hantzsche_wendt_set_group.length), isoms[11], isoms[10]]
+]
+
+const teleportations = new TeleportationSet();
+
+for (let i = 0; i < teleportationsData.length; i++) {
+    const [n, shift, inv] = teleportationsData[i];
+
+    /**
+     * Test if we have exit the fundamental domain through the face characterized by its normal `n`
+     * @param {Point} p - the current point
+     * @return {boolean} - return True or False
+     */
+    const test = function (p) {
+        return p.coords.dot(n) > 0;
+    }
+
+    /**
+     * GLSL version of the test
+     * @type {string}
+     */
+    // language=GLSL
+    const glslTest = `//
+    bool test${i}(Point p){
+        vec4 normal = vec4(${n.x}, ${n.y}, ${n.z}, ${n.w});
+        return dot(p.coords, normal) > 0.;
+    }
+    `;
+
+    // creating the new teleportation
+    teleportations.add(test, glslTest, shift, inv);
+}
+
+
+/* harmony default export */ const hantzsche_wendt_set = (teleportations);
 // EXTERNAL MODULE: ./src/geometries/euc/lights/pointLight/shaders/struct.glsl
 var pointLight_shaders_struct = __webpack_require__(6313);
 var pointLight_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(pointLight_shaders_struct);
@@ -22050,6 +22324,7 @@ const thurstonEuc_ThurstonRecord = specifyThurston(ThurstonRecord, (part1_defaul
 
 
 
+
 })();
 
 var __webpack_exports__AcesFilmPostProcess = __webpack_exports__.T0;
@@ -22086,6 +22361,7 @@ var __webpack_exports__FullDomCamera = __webpack_exports__.t3;
 var __webpack_exports__GraphPaperMaterial = __webpack_exports__.iJ;
 var __webpack_exports__Group = __webpack_exports__.ZA;
 var __webpack_exports__GroupElement = __webpack_exports__.Jz;
+var __webpack_exports__HWSet = __webpack_exports__.eK;
 var __webpack_exports__HalfSpace = __webpack_exports__.Fr;
 var __webpack_exports__HalfSpaceShape = __webpack_exports__.RM;
 var __webpack_exports__HighlightLocalWrapMaterial = __webpack_exports__.fR;
@@ -22181,4 +22457,4 @@ var __webpack_exports__trivialSet = __webpack_exports__.dV;
 var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__Box as Box, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DisplacementShape as DisplacementShape, __webpack_exports__DollyCamera as DollyCamera, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__LocalDirectedBall as LocalDirectedBall, __webpack_exports__LocalDirectedBallShape as LocalDirectedBallShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__freeAbelianSet as freeAbelianSet, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__kleinS1 as kleinS1, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__Box as Box, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DisplacementShape as DisplacementShape, __webpack_exports__DollyCamera as DollyCamera, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HWSet as HWSet, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__LocalDirectedBall as LocalDirectedBall, __webpack_exports__LocalDirectedBallShape as LocalDirectedBallShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__freeAbelianSet as freeAbelianSet, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__kleinS1 as kleinS1, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };

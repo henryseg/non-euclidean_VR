@@ -1,0 +1,3 @@
+struct Group {
+    float length;
+};
