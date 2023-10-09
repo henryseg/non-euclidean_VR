@@ -72,9 +72,9 @@ int raymarch(inout ExtVector v, out int objId){
         }
     }
 
-//    if (hit == HIT_NOTHING) {
-//        v = localV;
-//    }
+    //    if (hit == HIT_NOTHING) {
+    //        v = localV;
+    //    }
 
     //global scene
     marchingStep = camera.minDist;
@@ -112,7 +112,13 @@ int raymarch(inout ExtVector v, out int objId){
 vec4 getColor(ExtVector v){
     int objId;
     int hit;
-    v = flow(v, camera.safetyDist);
+    //    v = flow(v, camera.safetyDist);
+    // Dirty fix
+    float t = camera.safetyDist;
+    v.vector.local = numFlow(v.vector.local, t);
+    v.data.lastFlowDist = t;
+    v.data.lastBounceDist = v.data.lastBounceDist + t;
+    v.data.totalDist  = v.data.totalDist + t;
     for (int i = 0; i <= maxBounces; i++){
         if (v.data.stop){
             break;
