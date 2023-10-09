@@ -27,7 +27,7 @@ export class GroupElement extends AbstractGroupElement {
     }
 
     multiply(elt) {
-        this.coords.add(elt.coords.applyMatrix3(this.matrix));
+        this.coords.add(elt.coords.clone().applyMatrix3(this.matrix));
         this.matrix.multiply(elt.matrix);
         return this;
     }

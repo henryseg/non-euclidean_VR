@@ -174,8 +174,6 @@ class RelPosition {
                 if (!inside) {
                     this.local.applyIsometry(teleportation.elt.toIsometry());
                     this.cellBoost.multiply(teleportation.inv);
-                    // console.log("Elt (inv)", teleportation.inv.toIsometry().matrix.toLog())
-                    // console.log("Boost", this.cellBoost.toIsometry().matrix.toLog())
                     this.invCellBoost.premultiply(teleportation.elt);
                     break;
                 }
