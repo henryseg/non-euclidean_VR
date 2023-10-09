@@ -35,6 +35,7 @@ export const ThurstonRecord = specifyThurston(ThurstonRecordGeneric, shader1, sh
 export * from "./core.js";
 
 export {default as mappingTorusSet} from "./geometries/sol/groups/mappingTorus/set.js";
+export {default as mappingLargeTorusSet} from "./geometries/sol/groups/mappingLargeTorus/set.js";
 export {default as horizontalSet} from "./geometries/sol/groups/horizontalLoops/set.js";
 export {default as zLoopSet} from "./geometries/sol/groups/zLoop/set.js";
 export {default as xyLoopSet} from "./geometries/sol/groups/xyLoops/set.js";

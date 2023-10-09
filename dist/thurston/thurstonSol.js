@@ -1744,6 +1744,13 @@ module.exports = "                                                              
 
 /***/ }),
 
+/***/ 9980:
+/***/ ((module) => {
+
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                     \n  \n                                                                                                                        \n                                                                                                                        \n\nconst float PHI = 0.5 * (1. + sqrt(5.));\nconst float DENUM = 1. / (PHI + 2.);\nconst float TAU = 2. * log(PHI);\n\n                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct GroupElement {\n    vec3 coords;                                           \n    mat3 matrix;                                                 \n};\n\nconst GroupElement GROUP_IDENTITY = GroupElement(vec3(0), mat3(1));\n\nGroupElement multiply(GroupElement elt1, GroupElement elt2){\n    vec3 coords = elt1.coords + elt1.matrix * elt2.coords;\n    mat3 matrix = elt1.matrix * elt2.matrix;\n    return GroupElement(coords, matrix);\n}\n\nIsometry toIsometry(GroupElement elt) {\n    float a = elt.coords.x;\n    float b = elt.coords.y;\n    float c = elt.coords.z;\n    vec4 coords = vec4(2. * (a * PHI + b) * DENUM, 2. * (-a + b * PHI) * DENUM, c * TAU, 1);\n    return makeTranslation(Point(coords));\n}"
+
+/***/ }),
+
 /***/ 7802:
 /***/ ((module) => {
 
@@ -2088,6 +2095,7 @@ __webpack_require__.d(__webpack_exports__, {
   Gi: () => (/* reexport */ highlightWrap),
   M3: () => (/* reexport */ horizontalLoops_set),
   jV: () => (/* reexport */ intersection),
+  Oe: () => (/* reexport */ mappingLargeTorus_set),
   jS: () => (/* reexport */ mappingTorus_set),
   j9: () => (/* reexport */ marsTexture),
   oc: () => (/* reexport */ moonTexture),
@@ -20244,6 +20252,250 @@ shiftZn.isom.makeTranslation(new Point_Point(0, 0, Group_TAU, 1));
     .add(testYn, glslTestYn, shiftYn, shiftYp));
 
 
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingLargeTorus/GroupElement.js
+
+
+
+
+
+
+
+/**
+ * @class
+ * @classdesc
+ * Element in the suspension of Z^2 by Z, where Z acts on Z^2 ast the matrix A from Group.js
+ * The first two coordinates (a,b) correspond to the Z^2 factor
+ * The last coordinates c correspond to the Z factor
+ */
+class mappingLargeTorus_GroupElement_GroupElement extends (/* unused pure expression or super */ null && (AbstractGroupElement)) {
+
+    constructor(group, a = 0, b = 0, c = 0) {
+        super(group);
+        this.coords = new Vector3(a, b, c);
+        this.matrix = A.clone().power(c);
+    }
+
+    identity() {
+        this.coords.set(0, 0, 0);
+        this.matrix.identity();
+        return this;
+    }
+
+    multiply(elt) {
+        this.coords.add(elt.coords.applyMatrix3(this.matrix));
+        this.matrix.multiply(elt.matrix);
+        return this;
+    }
+
+    premultiply(elt) {
+        this.coords.applyMatrix3(elt.matrix).add(elt.coords);
+        this.matrix.premultiply(elt.matrix);
+        return this;
+    }
+
+    invert() {
+        this.matrix.invert();
+        this.coords.applyMatrix3(this.matrix).negate();
+        return this;
+    }
+
+    toIsometry() {
+        const [a, b, c] = this.coords.toArray();
+        const point = new Point(2 * (a * PHI + b) * DENUM, 2 * (-a + b * PHI) * DENUM, c * TAU, 1);
+        return new Isometry().makeTranslation(point);
+    }
+
+    equals(elt) {
+        return this.coords.equals(elt.coords);
+    }
+
+    clone() {
+        const res = new mappingLargeTorus_GroupElement_GroupElement(this.group);
+        res.coords.copy(this.coords);
+        res.matrix.copy(this.matrix);
+        return res;
+    }
+
+    copy(elt) {
+        this.coords.copy(elt.coords);
+        this.matrix.copy(elt.matrix);
+        return this;
+    }
+}
+
+
+// EXTERNAL MODULE: ./src/geometries/sol/groups/mappingLargeTorus/shaders/element.glsl
+var mappingLargeTorus_shaders_element = __webpack_require__(9980);
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingLargeTorus/Group.js
+
+
+
+
+
+
+
+const mappingLargeTorus_Group_A = new external_three_namespaceObject.Matrix3().set(
+    2, 1, 0,
+    1, 1, 0,
+    0, 0, 1
+);
+const mappingLargeTorus_Group_PHI = 0.5 * (1 + Math.sqrt(5))
+const mappingLargeTorus_Group_DENUM = 1 / (mappingLargeTorus_Group_PHI + 2);
+const mappingLargeTorus_Group_TAU = 2 * Math.log(mappingLargeTorus_Group_PHI);
+
+/**
+ * @class
+ * @classdesc
+ * Suspension of Z^2 by Z
+ * See GroupElement for the description of the representation
+ */
+class mappingLargeTorus_Group_Group extends (/* unused pure expression or super */ null && (AbstractGroup)) {
+
+    /**
+     * Constructor
+     * The two parameters are translation vectors in the xy plane
+     */
+    constructor() {
+        super();
+    }
+
+    element() {
+        const x = arguments.length > 0 ? arguments[0] : 0;
+        const y = arguments.length > 1 ? arguments[1] : 0;
+        const z = arguments.length > 2 ? arguments[2] : 0;
+        return new GroupElement(this, x, y, z);
+    }
+
+    shader(shaderBuilder) {
+        shaderBuilder.addChunk(element);
+    }
+
+}
+;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingLargeTorus/set.js
+
+
+
+
+
+
+
+const set_group = new isometry_Group_Group();
+
+const set_normalX = new external_three_namespaceObject.Vector4(mappingLargeTorus_Group_PHI, -1, 0, 0);
+const set_normalY = new external_three_namespaceObject.Vector4(1, mappingLargeTorus_Group_PHI, 0, 0);
+const set_normalZ = new external_three_namespaceObject.Vector4(0, 0, 1 / mappingLargeTorus_Group_TAU, 0);
+
+function set_testXp(p) {
+    return p.coords.dot(set_normalX) > 1;
+}
+
+// language=GLSL
+const set_glslTestXp = `//
+bool testXp(Point p){
+    vec4 normal = vec4(${mappingLargeTorus_Group_PHI}, -1, 0, 0);
+    return dot(p.coords, normal) > 1.;
+}
+`;
+
+function set_testXn(p) {
+    return p.coords.dot(set_normalX) < -1;
+}
+
+// language=GLSL
+const set_glslTestXn = `//
+bool testXn(Point p){
+    vec4 normal = vec4(${mappingLargeTorus_Group_PHI}, -1, 0, 0);
+    return dot(p.coords, normal) < -1.;
+}
+`;
+
+function set_testYp(p) {
+    return p.coords.dot(set_normalY) > 1;
+}
+
+// language=GLSL
+const set_glslTestYp = `//
+bool testYp(Point p){
+    vec4 normal = vec4(1, ${mappingLargeTorus_Group_PHI}, 0, 0);
+    return dot(p.coords, normal) > 1.;
+}
+`;
+
+function set_testYn(p) {
+    return p.coords.dot(set_normalY) < -1.;
+}
+
+// language=GLSL
+const set_glslTestYn = `//
+bool testYn(Point p){
+    vec4 normal = vec4(1, ${mappingLargeTorus_Group_PHI}, 0, 0);
+    return dot(p.coords, normal) < -1.;
+}
+`;
+
+function set_testZp(p) {
+    return p.coords.dot(set_normalZ) > 0.5;
+}
+
+// language=GLSL
+const set_glslTestZp = `//
+bool testZp(Point p){
+    vec4 normal = vec4(0, 0, ${1 / mappingLargeTorus_Group_TAU}, 0);
+    return dot(p.coords, normal) > 0.5;
+}
+`;
+
+// language=GLSL
+const set_glslCreepZp = `//
+float creepZp(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    return 0.5 - coords.z + offset;
+}
+`;
+
+function set_testZn(p) {
+    return p.coords.dot(set_normalZ) < -0.5;
+}
+
+// language=GLSL
+const set_glslTestZn = `//
+bool testZn(Point p){
+    vec4 normal = vec4(0, 0, ${1 / mappingLargeTorus_Group_TAU}, 0);
+    return dot(p.coords, normal) < -0.5;
+}
+`;
+
+// language=GLSL
+const set_glslCreepZn = `//
+float creepZn(ExtVector v, float offset){
+    vec4 coords = v.vector.local.pos.coords;
+    return 0.5 + coords.z + offset;
+}
+`;
+
+const set_shiftXp = set_group.element();
+const set_shiftXn = set_group.element();
+const set_shiftYp = set_group.element();
+const set_shiftYn = set_group.element();
+const set_shiftZp = set_group.element();
+const set_shiftZn = set_group.element();
+
+set_shiftXp.isom.makeTranslation(new Point_Point(-2 * mappingLargeTorus_Group_PHI * mappingLargeTorus_Group_DENUM, 2 * mappingLargeTorus_Group_DENUM, 0, 1));
+set_shiftXn.isom.makeTranslation(new Point_Point(2 * mappingLargeTorus_Group_PHI * mappingLargeTorus_Group_DENUM, -2 * mappingLargeTorus_Group_DENUM, 0, 1));
+set_shiftYp.isom.makeTranslation(new Point_Point(-2 * mappingLargeTorus_Group_DENUM, -2 * mappingLargeTorus_Group_PHI * mappingLargeTorus_Group_DENUM, 0, 1));
+set_shiftYn.isom.makeTranslation(new Point_Point(2 * mappingLargeTorus_Group_DENUM, 2 * mappingLargeTorus_Group_PHI * mappingLargeTorus_Group_DENUM, 0, 1));
+set_shiftZp.isom.makeTranslation(new Point_Point(0, 0, -mappingLargeTorus_Group_TAU, 1));
+set_shiftZn.isom.makeTranslation(new Point_Point(0, 0, mappingLargeTorus_Group_TAU, 1));
+
+/* harmony default export */ const mappingLargeTorus_set = (new TeleportationSet()
+    .add(set_testZp, set_glslTestZp, set_shiftZp, set_shiftZn, set_glslCreepZp)
+    .add(set_testZn, set_glslTestZn, set_shiftZn, set_shiftZp, set_glslCreepZn)
+    .add(set_testXp, set_glslTestXp, set_shiftXp, set_shiftXn)
+    .add(set_testXn, set_glslTestXn, set_shiftXn, set_shiftXp)
+    .add(set_testYp, set_glslTestYp, set_shiftYp, set_shiftYn)
+    .add(set_testYn, set_glslTestYn, set_shiftYn, set_shiftYp));
+
+
 ;// CONCATENATED MODULE: ./src/geometries/sol/groups/horizontalLoops/GroupElement.js
 
 
@@ -20358,74 +20610,74 @@ class horizontalLoops_Group_Group extends (/* unused pure expression or super */
 
 
 
-const set_group = new isometry_Group_Group();
+const horizontalLoops_set_group = new isometry_Group_Group();
 
-const set_normalX = new external_three_namespaceObject.Vector4(horizontalLoops_Group_PHI, -1, 0, 0);
-const set_normalY = new external_three_namespaceObject.Vector4(1, horizontalLoops_Group_PHI, 0, 0);
+const horizontalLoops_set_normalX = new external_three_namespaceObject.Vector4(horizontalLoops_Group_PHI, -1, 0, 0);
+const horizontalLoops_set_normalY = new external_three_namespaceObject.Vector4(1, horizontalLoops_Group_PHI, 0, 0);
 
-function set_testXp(p) {
-    return p.coords.dot(set_normalX) > 0.5;
+function horizontalLoops_set_testXp(p) {
+    return p.coords.dot(horizontalLoops_set_normalX) > 0.5;
 }
 
 // language=GLSL
-const set_glslTestXp = `//
+const horizontalLoops_set_glslTestXp = `//
 bool testXp(Point p){
     vec4 normal = vec4(${horizontalLoops_Group_PHI}, -1, 0, 0);
     return dot(p.coords, normal) > 0.5;
 }
 `;
 
-function set_testXn(p) {
-    return p.coords.dot(set_normalX) < -0.5;
+function horizontalLoops_set_testXn(p) {
+    return p.coords.dot(horizontalLoops_set_normalX) < -0.5;
 }
 
 // language=GLSL
-const set_glslTestXn = `//
+const horizontalLoops_set_glslTestXn = `//
 bool testXn(Point p){
     vec4 normal = vec4(${horizontalLoops_Group_PHI}, -1, 0, 0);
     return dot(p.coords, normal) < -0.5;
 }
 `;
 
-function set_testYp(p) {
-    return p.coords.dot(set_normalY) > 0.5;
+function horizontalLoops_set_testYp(p) {
+    return p.coords.dot(horizontalLoops_set_normalY) > 0.5;
 }
 
 // language=GLSL
-const set_glslTestYp = `//
+const horizontalLoops_set_glslTestYp = `//
 bool testYp(Point p){
     vec4 normal = vec4(1, ${horizontalLoops_Group_PHI}, 0, 0);
     return dot(p.coords, normal) > 0.5;
 }
 `;
 
-function set_testYn(p) {
-    return p.coords.dot(set_normalY) < -0.5;
+function horizontalLoops_set_testYn(p) {
+    return p.coords.dot(horizontalLoops_set_normalY) < -0.5;
 }
 
 // language=GLSL
-const set_glslTestYn = `//
+const horizontalLoops_set_glslTestYn = `//
 bool testYn(Point p){
     vec4 normal = vec4(1, ${horizontalLoops_Group_PHI}, 0, 0);
     return dot(p.coords, normal) < -0.5;
 }
 `;
 
-const set_shiftXp = set_group.element();
-const set_shiftXn = set_group.element();
-const set_shiftYp = set_group.element();
-const set_shiftYn = set_group.element();
+const horizontalLoops_set_shiftXp = horizontalLoops_set_group.element();
+const horizontalLoops_set_shiftXn = horizontalLoops_set_group.element();
+const horizontalLoops_set_shiftYp = horizontalLoops_set_group.element();
+const horizontalLoops_set_shiftYn = horizontalLoops_set_group.element();
 
-set_shiftXp.isom.makeTranslation(new Point_Point(-horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, horizontalLoops_Group_DENUM, 0, 1));
-set_shiftXn.isom.makeTranslation(new Point_Point(horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, -horizontalLoops_Group_DENUM, 0, 1));
-set_shiftYp.isom.makeTranslation(new Point_Point(-horizontalLoops_Group_DENUM, -horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, 0, 1));
-set_shiftYn.isom.makeTranslation(new Point_Point(horizontalLoops_Group_DENUM, horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, 0, 1));
+horizontalLoops_set_shiftXp.isom.makeTranslation(new Point_Point(-horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, horizontalLoops_Group_DENUM, 0, 1));
+horizontalLoops_set_shiftXn.isom.makeTranslation(new Point_Point(horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, -horizontalLoops_Group_DENUM, 0, 1));
+horizontalLoops_set_shiftYp.isom.makeTranslation(new Point_Point(-horizontalLoops_Group_DENUM, -horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, 0, 1));
+horizontalLoops_set_shiftYn.isom.makeTranslation(new Point_Point(horizontalLoops_Group_DENUM, horizontalLoops_Group_PHI * horizontalLoops_Group_DENUM, 0, 1));
 
 /* harmony default export */ const horizontalLoops_set = (new TeleportationSet()
-    .add(set_testXp, set_glslTestXp, set_shiftXp, set_shiftXn)
-    .add(set_testXn, set_glslTestXn, set_shiftXn, set_shiftXp)
-    .add(set_testYp, set_glslTestYp, set_shiftYp, set_shiftYn)
-    .add(set_testYn, set_glslTestYn, set_shiftYn, set_shiftYp));
+    .add(horizontalLoops_set_testXp, horizontalLoops_set_glslTestXp, horizontalLoops_set_shiftXp, horizontalLoops_set_shiftXn)
+    .add(horizontalLoops_set_testXn, horizontalLoops_set_glslTestXn, horizontalLoops_set_shiftXn, horizontalLoops_set_shiftXp)
+    .add(horizontalLoops_set_testYp, horizontalLoops_set_glslTestYp, horizontalLoops_set_shiftYp, horizontalLoops_set_shiftYn)
+    .add(horizontalLoops_set_testYn, horizontalLoops_set_glslTestYn, horizontalLoops_set_shiftYn, horizontalLoops_set_shiftYp));
 
 
 ;// CONCATENATED MODULE: ./src/geometries/sol/groups/zLoop/set.js
@@ -20436,38 +20688,38 @@ const zLoop_set_group = new isometry_Group_Group();
 const height = 1.01;
 
 
-function set_testZp(p) {
+function zLoop_set_testZp(p) {
     return p.coords.z > 0.5 * height;
 }
 
 //language=GLSL
-const set_glslTestZp = `//
+const zLoop_set_glslTestZp = `//
 bool testZp(Point p){
     return p.coords.z > ${0.5 * height};
 }
 `;
 
 // language=GLSL
-const set_glslCreepZp = `//
+const zLoop_set_glslCreepZp = `//
 float creepZp(ExtVector v, float offset){
     vec4 coords = v.vector.local.pos.coords;
     return ${0.5 * height} - coords.z + offset;
 }
 `;
 
-function set_testZn(p) {
+function zLoop_set_testZn(p) {
     return p.coords.z < -0.5 * height;
 }
 
 //language=GLSL
-const set_glslTestZn = `//
+const zLoop_set_glslTestZn = `//
 bool testZn(Point p){
     return p.coords.z < ${-0.5 * height};
 }
 `;
 
 // language=GLSL
-const set_glslCreepZn = `//
+const zLoop_set_glslCreepZn = `//
 float creepZn(ExtVector v, float offset){
     vec4 coords = v.vector.local.pos.coords;
     return ${0.5 * height} + coords.z + offset;
@@ -20475,19 +20727,19 @@ float creepZn(ExtVector v, float offset){
 `;
 
 
-const set_shiftZp = zLoop_set_group.element();
-const set_shiftZn = zLoop_set_group.element();
+const zLoop_set_shiftZp = zLoop_set_group.element();
+const zLoop_set_shiftZn = zLoop_set_group.element();
 
 const ehP = Math.exp(height);
 const ehM = Math.exp(-height);
 
-set_shiftZp.isom.matrix.set(
+zLoop_set_shiftZp.isom.matrix.set(
     ehM, 0, 0, 0,
     0, ehP, 0, 0,
     0, 0, 1, -height,
     0, 0, 0, 1
 )
-set_shiftZn.isom.matrix.set(
+zLoop_set_shiftZn.isom.matrix.set(
     ehP, 0, 0, 0,
     0, ehM, 0, 0,
     0, 0, 1, height,
@@ -20498,8 +20750,8 @@ set_shiftZn.isom.matrix.set(
 /* harmony default export */ const zLoop_set = (new TeleportationSet()
     // .add(testZp, glslTestZp, shiftZp, shiftZn)
     // .add(testZn, glslTestZn, shiftZn, shiftZp);
-    .add(set_testZp, set_glslTestZp, set_shiftZp, set_shiftZn, set_glslCreepZp)
-    .add(set_testZn, set_glslTestZn, set_shiftZn, set_shiftZp, set_glslCreepZn));
+    .add(zLoop_set_testZp, zLoop_set_glslTestZp, zLoop_set_shiftZp, zLoop_set_shiftZn, zLoop_set_glslCreepZp)
+    .add(zLoop_set_testZn, zLoop_set_glslTestZn, zLoop_set_shiftZn, zLoop_set_shiftZp, zLoop_set_glslCreepZn));
 
 ;// CONCATENATED MODULE: ./src/geometries/sol/groups/xyLoops/GroupElement.js
 
@@ -22824,6 +23076,7 @@ const thurstonSol_ThurstonRecord = specifyThurston(ThurstonRecord, (part1_defaul
 
 
 
+
 })();
 
 var __webpack_exports__AcesFilmPostProcess = __webpack_exports__.T0;
@@ -22949,6 +23202,7 @@ var __webpack_exports__highlightLocalWrap = __webpack_exports__.mV;
 var __webpack_exports__highlightWrap = __webpack_exports__.Gi;
 var __webpack_exports__horizontalSet = __webpack_exports__.M3;
 var __webpack_exports__intersection = __webpack_exports__.jV;
+var __webpack_exports__mappingLargeTorusSet = __webpack_exports__.Oe;
 var __webpack_exports__mappingTorusSet = __webpack_exports__.jS;
 var __webpack_exports__marsTexture = __webpack_exports__.j9;
 var __webpack_exports__moonTexture = __webpack_exports__.oc;
@@ -22964,4 +23218,4 @@ var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
 var __webpack_exports__xyLoopSet = __webpack_exports__.QG;
 var __webpack_exports__zLoopSet = __webpack_exports__.xS;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalCubeShape as LocalCubeShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalFakePointLight as LocalFakePointLight, __webpack_exports__LocalXAxis as LocalXAxis, __webpack_exports__LocalXAxisShape as LocalXAxisShape, __webpack_exports__LocalXHalfSpace as LocalXHalfSpace, __webpack_exports__LocalXHalfSpaceShape as LocalXHalfSpaceShape, __webpack_exports__LocalZAxis as LocalZAxis, __webpack_exports__LocalZAxisShape as LocalZAxisShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__LocalZSlab as LocalZSlab, __webpack_exports__LocalZSlabShape as LocalZSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NaryEquidistantMaterial as NaryEquidistantMaterial, __webpack_exports__NaryMaterial as NaryMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XHalfSpace as XHalfSpace, __webpack_exports__XHalfSpaceShape as XHalfSpaceShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalSet as horizontalSet, __webpack_exports__intersection as intersection, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__xyLoopSet as xyLoopSet, __webpack_exports__zLoopSet as zLoopSet };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__BOTH as BOTH, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FakeBall as FakeBall, __webpack_exports__FakeBallShape as FakeBallShape, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalCube as LocalCube, __webpack_exports__LocalCubeShape as LocalCubeShape, __webpack_exports__LocalFakeBall as LocalFakeBall, __webpack_exports__LocalFakeBallShape as LocalFakeBallShape, __webpack_exports__LocalFakePointLight as LocalFakePointLight, __webpack_exports__LocalXAxis as LocalXAxis, __webpack_exports__LocalXAxisShape as LocalXAxisShape, __webpack_exports__LocalXHalfSpace as LocalXHalfSpace, __webpack_exports__LocalXHalfSpaceShape as LocalXHalfSpaceShape, __webpack_exports__LocalZAxis as LocalZAxis, __webpack_exports__LocalZAxisShape as LocalZAxisShape, __webpack_exports__LocalZHalfSpace as LocalZHalfSpace, __webpack_exports__LocalZHalfSpaceShape as LocalZHalfSpaceShape, __webpack_exports__LocalZSlab as LocalZSlab, __webpack_exports__LocalZSlabShape as LocalZSlabShape, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NaryEquidistantMaterial as NaryEquidistantMaterial, __webpack_exports__NaryMaterial as NaryMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__Scene as Scene, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XHalfSpace as XHalfSpace, __webpack_exports__XHalfSpaceShape as XHalfSpaceShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__ZHalfSpace as ZHalfSpace, __webpack_exports__ZHalfSpaceShape as ZHalfSpaceShape, __webpack_exports__ZSun as ZSun, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__horizontalSet as horizontalSet, __webpack_exports__intersection as intersection, __webpack_exports__mappingLargeTorusSet as mappingLargeTorusSet, __webpack_exports__mappingTorusSet as mappingTorusSet, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap, __webpack_exports__xyLoopSet as xyLoopSet, __webpack_exports__zLoopSet as zLoopSet };
