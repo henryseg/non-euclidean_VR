@@ -46,7 +46,12 @@ export class GroupElement extends AbstractGroupElement {
 
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
-        const point = new Point((a * PHI + b) * DENUM, (-a + b * PHI) * DENUM, c * TAU, 1);
+        const point = new Point(
+            (a * PHI + b) * this.group.length * DENUM,
+            (-a + b * PHI) * this.group.length * DENUM,
+            c * TAU,
+            1
+        );
         return new Isometry().makeTranslation(point);
     }
 

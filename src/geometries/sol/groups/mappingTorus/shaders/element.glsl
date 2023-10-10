@@ -1,20 +1,3 @@
-/***********************************************************************************************************************
- ***********************************************************************************************************************
- *
- * Subgroup managment
- *
- ***********************************************************************************************************************
- **********************************************************************************************************************/
-
-const float PHI = 0.5 * (1. + sqrt(5.));
-const float DENUM = 1. / (PHI + 2.);
-const float TAU = 2. * log(PHI);
-
-/***********************************************************************************************************************
- * @struct
- * Integral Heisenberg group
- **********************************************************************************************************************/
-
 struct GroupElement {
     vec3 coords; /**< integer coordinates of the element */
     mat3 matrix; /**< matrix used for computing the suspension */
@@ -32,6 +15,11 @@ Isometry toIsometry(GroupElement elt) {
     float a = elt.coords.x;
     float b = elt.coords.y;
     float c = elt.coords.z;
-    vec4 coords = vec4((a * PHI + b) * DENUM, (-a + b * PHI) * DENUM, c * TAU, 1);
+    vec4 coords = vec4(
+    (a * PHI + b) * group.length * DENUM,
+    (-a + b * PHI) * group.length * DENUM,
+    c * TAU,
+    1
+    );
     return makeTranslation(Point(coords));
 }

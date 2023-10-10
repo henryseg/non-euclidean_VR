@@ -3,6 +3,7 @@ import {Matrix3} from "three";
 import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
 import {GroupElement} from "./GroupElement.js";
 
+import struct from "./shaders/struct.glsl";
 import element from "./shaders/element.glsl";
 
 export const A = new Matrix3().set(
@@ -25,9 +26,11 @@ export class Group extends AbstractGroup {
     /**
      * Constructor
      * The two parameters are translation vectors in the xy plane
+     * @param {number} length - a parameter controlling the size of the fundamental domain
      */
-    constructor() {
+    constructor(length = 1) {
         super();
+        this.length = length;
     }
 
     element() {
@@ -38,6 +41,8 @@ export class Group extends AbstractGroup {
     }
 
     shader(shaderBuilder) {
+        shaderBuilder.addChunk(struct);
+        shaderBuilder.addUniform('group', 'Group', this);
         shaderBuilder.addChunk(element);
     }
 

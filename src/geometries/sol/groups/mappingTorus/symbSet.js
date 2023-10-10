@@ -11,50 +11,50 @@ const normalY = new Vector4(1, PHI, 0, 0);
 const normalZ = new Vector4(0, 0, 1 / TAU, 0);
 
 function testXp(p) {
-    return p.coords.dot(normalX) > 0.5;
+    return p.coords.dot(normalX) > 0.5 * group.length;
 }
 
 // language=GLSL
 const glslTestXp = `//
 bool testXp(Point p){
     vec4 normal = vec4(${PHI}, -1, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+    return dot(p.coords, normal) > 0.5 * group.length;
 }
 `;
 
 function testXn(p) {
-    return p.coords.dot(normalX) < -0.5;
+    return p.coords.dot(normalX) < -0.5 * group.length;
 }
 
 // language=GLSL
 const glslTestXn = `//
 bool testXn(Point p){
     vec4 normal = vec4(${PHI}, -1, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+    return dot(p.coords, normal) < -0.5 * group.length;
 }
 `;
 
 function testYp(p) {
-    return p.coords.dot(normalY) > 0.5;
+    return p.coords.dot(normalY) > 0.5 * group.length;
 }
 
 // language=GLSL
 const glslTestYp = `//
 bool testYp(Point p){
     vec4 normal = vec4(1, ${PHI}, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+    return dot(p.coords, normal) > 0.5 * group.length;
 }
 `;
 
 function testYn(p) {
-    return p.coords.dot(normalY) < -0.5;
+    return p.coords.dot(normalY) < -0.5 * group.length;
 }
 
 // language=GLSL
 const glslTestYn = `//
 bool testYn(Point p){
     vec4 normal = vec4(1, ${PHI}, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+    return dot(p.coords, normal) < -0.5 * group.length;
 }
 `;
 
