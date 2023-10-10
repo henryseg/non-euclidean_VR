@@ -1747,7 +1747,14 @@ module.exports = "                                                              
 /***/ 7802:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                     \n  \n                                                                                                                        \n                                                                                                                        \n\nconst float PHI = 0.5 * (1. + sqrt(5.));\nconst float DENUM = 1. / (PHI + 2.);\nconst float TAU = 2. * log(PHI);\n\n                                                                                                                        \n          \n                            \n                                                                                                                        \n\nstruct GroupElement {\n    vec3 coords;                                           \n    mat3 matrix;                                                 \n};\n\nconst GroupElement GROUP_IDENTITY = GroupElement(vec3(0), mat3(1));\n\nGroupElement multiply(GroupElement elt1, GroupElement elt2){\n    vec3 coords = elt1.coords + elt1.matrix * elt2.coords;\n    mat3 matrix = elt1.matrix * elt2.matrix;\n    return GroupElement(coords, matrix);\n}\n\nIsometry toIsometry(GroupElement elt) {\n    float a = elt.coords.x;\n    float b = elt.coords.y;\n    float c = elt.coords.z;\n    vec4 coords = vec4((a * PHI + b) * DENUM, (-a + b * PHI) * DENUM, c * TAU, 1);\n    return makeTranslation(Point(coords));\n}"
+module.exports = "struct GroupElement {\n    vec3 coords;                                           \n    mat3 matrix;                                                 \n};\n\nconst GroupElement GROUP_IDENTITY = GroupElement(vec3(0), mat3(1));\n\nGroupElement multiply(GroupElement elt1, GroupElement elt2){\n    vec3 coords = elt1.coords + elt1.matrix * elt2.coords;\n    mat3 matrix = elt1.matrix * elt2.matrix;\n    return GroupElement(coords, matrix);\n}\n\nIsometry toIsometry(GroupElement elt) {\n    float a = elt.coords.x;\n    float b = elt.coords.y;\n    float c = elt.coords.z;\n    vec4 coords = vec4(\n    (a * PHI + b) * group.length * DENUM,\n    (-a + b * PHI) * group.length * DENUM,\n    c * TAU,\n    1\n    );\n    return makeTranslation(Point(coords));\n}"
+
+/***/ }),
+
+/***/ 607:
+/***/ ((module) => {
+
+module.exports = "const float PHI = 0.5 * (1. + sqrt(5.));\nconst float DENUM = 1. / (PHI + 2.);\nconst float TAU = 2. * log(PHI);\n\nstruct Group {\n    float length;\n};"
 
 /***/ }),
 
@@ -20048,7 +20055,12 @@ class mappingTorus_GroupElement_GroupElement extends GroupElement_GroupElement {
 
     toIsometry() {
         const [a, b, c] = this.coords.toArray();
-        const point = new Point_Point((a * Group_PHI + b) * Group_DENUM, (-a + b * Group_PHI) * Group_DENUM, c * TAU, 1);
+        const point = new Point_Point(
+            (a * Group_PHI + b) * this.group.length * Group_DENUM,
+            (-a + b * Group_PHI) * this.group.length * Group_DENUM,
+            c * TAU,
+            1
+        );
         return new Isometry_Isometry().makeTranslation(point);
     }
 
@@ -20071,10 +20083,14 @@ class mappingTorus_GroupElement_GroupElement extends GroupElement_GroupElement {
 }
 
 
+// EXTERNAL MODULE: ./src/geometries/sol/groups/mappingTorus/shaders/struct.glsl
+var mappingTorus_shaders_struct = __webpack_require__(607);
+var mappingTorus_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(mappingTorus_shaders_struct);
 // EXTERNAL MODULE: ./src/geometries/sol/groups/mappingTorus/shaders/element.glsl
 var mappingTorus_shaders_element = __webpack_require__(7802);
 var mappingTorus_shaders_element_default = /*#__PURE__*/__webpack_require__.n(mappingTorus_shaders_element);
 ;// CONCATENATED MODULE: ./src/geometries/sol/groups/mappingTorus/Group.js
+
 
 
 
@@ -20102,9 +20118,11 @@ class mappingTorus_Group_Group extends Group_Group {
     /**
      * Constructor
      * The two parameters are translation vectors in the xy plane
+     * @param {number} length - a parameter controlling the size of the fundamental domain
      */
-    constructor() {
+    constructor(length = 1) {
         super();
+        this.length = length;
     }
 
     element() {
@@ -20115,6 +20133,8 @@ class mappingTorus_Group_Group extends Group_Group {
     }
 
     shader(shaderBuilder) {
+        shaderBuilder.addChunk((mappingTorus_shaders_struct_default()));
+        shaderBuilder.addUniform('group', 'Group', this);
         shaderBuilder.addChunk((mappingTorus_shaders_element_default()));
     }
 
@@ -20258,50 +20278,50 @@ const symbSet_normalY = new external_three_namespaceObject.Vector4(1, Group_PHI,
 const symbSet_normalZ = new external_three_namespaceObject.Vector4(0, 0, 1 / TAU, 0);
 
 function symbSet_testXp(p) {
-    return p.coords.dot(symbSet_normalX) > 0.5;
+    return p.coords.dot(symbSet_normalX) > 0.5 * symbSet_group.length;
 }
 
 // language=GLSL
 const symbSet_glslTestXp = `//
 bool testXp(Point p){
     vec4 normal = vec4(${Group_PHI}, -1, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+    return dot(p.coords, normal) > 0.5 * group.length;
 }
 `;
 
 function symbSet_testXn(p) {
-    return p.coords.dot(symbSet_normalX) < -0.5;
+    return p.coords.dot(symbSet_normalX) < -0.5 * symbSet_group.length;
 }
 
 // language=GLSL
 const symbSet_glslTestXn = `//
 bool testXn(Point p){
     vec4 normal = vec4(${Group_PHI}, -1, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+    return dot(p.coords, normal) < -0.5 * group.length;
 }
 `;
 
 function symbSet_testYp(p) {
-    return p.coords.dot(symbSet_normalY) > 0.5;
+    return p.coords.dot(symbSet_normalY) > 0.5 * symbSet_group.length;
 }
 
 // language=GLSL
 const symbSet_glslTestYp = `//
 bool testYp(Point p){
     vec4 normal = vec4(1, ${Group_PHI}, 0, 0);
-    return dot(p.coords, normal) > 0.5;
+    return dot(p.coords, normal) > 0.5 * group.length;
 }
 `;
 
 function symbSet_testYn(p) {
-    return p.coords.dot(symbSet_normalY) < -0.5;
+    return p.coords.dot(symbSet_normalY) < -0.5 * symbSet_group.length;
 }
 
 // language=GLSL
 const symbSet_glslTestYn = `//
 bool testYn(Point p){
     vec4 normal = vec4(1, ${Group_PHI}, 0, 0);
-    return dot(p.coords, normal) < -0.5;
+    return dot(p.coords, normal) < -0.5 * group.length;
 }
 `;
 
