@@ -2128,6 +2128,7 @@ __webpack_require__.d(__webpack_exports__, {
   mH: () => (/* reexport */ QuadRingElement),
   xd: () => (/* reexport */ QuadRingMatrix4),
   pX: () => (/* reexport */ RIGHT),
+  tX: () => (/* reexport */ RegularHypPolygon),
   Dz: () => (/* reexport */ RelPosition),
   Uj: () => (/* reexport */ ResetVRControls),
   bY: () => (/* reexport */ RotatedSphericalTextureMaterial),
@@ -2172,6 +2173,7 @@ __webpack_require__.d(__webpack_exports__, {
   Cy: () => (/* reexport */ complement),
   Rc: () => (/* reexport */ cube_set),
   qM: () => (/* reexport */ earthTexture),
+  MO: () => (/* reexport */ h435),
   mV: () => (/* reexport */ highlightLocalWrap),
   Gi: () => (/* reexport */ highlightWrap),
   jV: () => (/* reexport */ intersection),
@@ -5653,6 +5655,7 @@ class RelPosition {
                 // we perform the teleportation and exit the loop
                 // (to restart the checks from the beginning).
                 if (!inside) {
+                    console.log('teleported');
                     this.local.applyIsometry(teleportation.elt.toIsometry());
                     this.cellBoost.multiply(teleportation.inv);
                     this.invCellBoost.premultiply(teleportation.elt);
@@ -21430,6 +21433,247 @@ const set_neighbors = [
 
 
 
+;// CONCATENATED MODULE: ./src/utils/regularHypPolygon/RegularHypPolygon.js
+
+
+/**
+ * @class
+ *
+ * @classdesc
+ * Auxiliary computation related to a regular polygon in the hyperbolic plane.
+ * The polygon is characterized by its number of sides and the angle at its vertices
+ * All the computation below are done in the hyperboloid model
+ * We assume that the center of the polygon is the origin, i.e. (0,0,1)
+ * The 0-th side is given by the equation  x/z = cst > 0
+ * The other sides are number counter clock wise.
+ */
+class RegularHypPolygon {
+
+    /**
+     * Constructor
+     * @param {number} n - number of sides of the polygon
+     * @param {number} theta - angle at the vertex
+     */
+    constructor(n, theta) {
+        /**
+         * Number of sides of the polygon
+         * @type {number}
+         */
+        this.n = n;
+        /**
+         * Angle at the apex
+         * @type {number}
+         */
+        this.theta = theta;
+
+        /**
+         * Coordinates of the orthogonal projection of the origin onto the 0-th side
+         * @type {number[]}
+         * @private
+         */
+        this._sideCoords = undefined;
+        /**
+         * Translation along the x-axis sending one side to the opposite side
+         * (`n` should be even here)
+         * @type {Matrix3}
+         * @private
+         */
+        this._translation = undefined;
+
+    }
+
+    /**
+     * Return the coordinates of the intersection of the Oxz-plane (with x > 0) with polygon.
+     * These coordinates are completely determined by n and theta.
+     * @returns {number[]}
+     */
+    get sideCoords() {
+        if (this._sideCoords === undefined) {
+            const alpha = Math.PI / this.n;
+            const halfTheta = 0.5 * this.theta;
+
+            const sinAlpha = Math.sin(alpha);
+            const cosAlpha = Math.cos(alpha);
+            const sinHalfTheta = Math.sin(halfTheta);
+            const cosHalfTheta = Math.cos(halfTheta);
+
+            const sh = Math.sqrt(cosAlpha ** 2 - sinHalfTheta ** 2) / sinAlpha;
+            const ch = cosHalfTheta / sinAlpha;
+            this._sideCoords = [sh, 0, ch];
+        }
+        return this._sideCoords;
+    }
+
+    /**
+     * Return the coordinates of the i-th vertex
+     * @param {number} i
+     * @return {Vector3}
+     */
+    vertexCoords(i) {
+        const alpha = Math.PI / this.n;
+        const halfTheta = 0.5 * this.theta;
+
+        const sinAlpha = Math.sin(alpha);
+        const cosAlpha = Math.cos(alpha);
+        const sinHalfTheta = Math.sin(halfTheta);
+        const cosHalfTheta = Math.cos(halfTheta);
+
+        const sh = Math.sqrt(cosAlpha ** 2 - sinHalfTheta ** 2) / (sinAlpha * sinHalfTheta);
+        const ch = (cosAlpha * cosHalfTheta) / (sinAlpha * sinHalfTheta);
+        return new external_three_namespaceObject.Vector3()
+            .set(sh, 0, ch)
+            .applyMatrix3(new external_three_namespaceObject.Matrix3().makeRotation((2 * i + 1) * Math.PI / this.n));
+    }
+
+    /**
+     * Return a 3x3 matrix, which belongs to S0(2,1) and represents a translation along the x-axis,
+     * sending one side to the opposite one
+     * (`n` should be even)
+     * @returns {Matrix3}
+     */
+    get translation() {
+        if (this._translation === undefined) {
+            const [sh, _, ch] = this.sideCoords;
+            const ch2 = ch * ch + sh * sh;
+            const sh2 = 2 * sh * ch;
+            this._translation = new external_three_namespaceObject.Matrix3().set(
+                ch2, 0, sh2,
+                0, 1, 0,
+                sh2, 0, ch2,
+            )
+        }
+        return this._translation;
+    }
+
+    /**
+     * The function returns a vector n in R^3 with the following meaning.
+     * Assume that p = [x,y,z] is a point on H^2.
+     * If dot(n,p) > 0 then the polygon and p are on the opposite side of the i-th segment.
+     * If dot(n,p) < 0 then the polygon and p are on the same side of the i-th segment.
+     *
+     * @param {number} i - the side number
+     * @return {Vector3}
+     */
+    normalTest(i) {
+        const [x0, _, z0] = this.sideCoords;
+        const n = new external_three_namespaceObject.Vector3().set(z0, 0, -x0);
+        return n.applyMatrix3(new external_three_namespaceObject.Matrix3().makeRotation(2 * i * Math.PI / this.n));
+    }
+
+    /**
+     * Return a 3x3 Matrix in S0(2,1) sending the i-th side of the polygon to the j-th side.
+     * For this to work properly `n` should be even.
+     *
+     * @param {number} i - the side number
+     * @param {number} j - the side number
+     * @return {Matrix3}
+     */
+    sideIdentification(i, j) {
+        return new external_three_namespaceObject.Matrix3()
+            .premultiply(new external_three_namespaceObject.Matrix3().makeRotation(2 * (0.5 * this.n - i) * Math.PI / this.n))
+            .premultiply(this.translation)
+            .premultiply(new external_three_namespaceObject.Matrix3().makeRotation(2 * j * Math.PI / this.n));
+
+    }
+}
+;// CONCATENATED MODULE: ./src/geometries/hyp/groups/honeycombs/h435.js
+
+
+
+
+
+
+
+/*
+ Auxilary computations
+ */
+
+const polygon = new RegularHypPolygon(4, 2 * Math.PI / 5);
+const [shL, _, chL] = polygon.sideCoords;
+const sh2L = 2 * shL * chL;
+const ch2L = chL * chL + shL * shL;
+
+/*
+Isometry group corresponding to the manifold m125 (from Snapy census?)
+The fundamental domain is an octahedron.
+ */
+
+const h435_group = new isometry_Group_Group();
+
+// "normals" to the faces
+// normal at the origin to the "plane" {z = 0}
+const h435_normal0 = new external_three_namespaceObject.Vector4(0, 0, 1, 0);
+// normal at the origin to the "plane" {y = -z}
+const h435_normal1 = new external_three_namespaceObject.Vector4(0, -1, -1, 0).normalize();
+// normal at the origin to the "plane" {y = x}
+const h435_normal2 = new external_three_namespaceObject.Vector4(-1, 1, 0, 0).normalize();
+// normal at the point [shL, O, O, chl]
+const h435_normal3 = new external_three_namespaceObject.Vector4(chL, 0, 0, -shL);
+
+const h435_normals = [h435_normal0, h435_normal1, h435_normal2, h435_normal3];
+
+// reflection at the origin across the "plane" {z = 0}
+const elt0 = h435_group.element();
+elt0.isom.matrix.set(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, -1, 0,
+    0, 0, 0, 1
+);
+// reflection at the origin across the "plane" {y = -z}
+const elt1 = h435_group.element();
+elt1.isom.matrix.set(
+    1, 0, 0, 0,
+    0, 0, -1, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1
+);
+// reflection at the origin across the "plane" {y = x}
+const elt2 = h435_group.element();
+elt2.isom.matrix.set(
+    0, 1, 0, 0,
+    1, 0, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+);
+// reflection at the point [shL, O, O, chl]
+const elt3 = h435_group.element();
+elt3.isom.matrix.set(
+    -ch2L, 0, 0, sh2L,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    -sh2L, 0, 0, ch2L
+);
+
+const isoms = [elt0, elt1, elt2, elt3];
+
+const h435_set = new TeleportationSet();
+
+
+// building a list of pairs of test.
+// one pair for each face
+// the elements of the pairs are the JS and the GLSL tests respectively
+const h435_testPairs = (/* unused pure expression or super */ null && ([]));
+
+for (let i = 0; i < 4; i++) {
+    const test = function (p) {
+        return p.coords.dot(h435_normals[i]) > 0;
+    };
+    // language=GLSL
+    const glslTest = `//
+    bool test${i}(Point p){
+        vec4 normal = vec4(${h435_normals[i].x}, ${h435_normals[i].y}, ${h435_normals[i].z}, ${h435_normals[i].w});
+        return dot(p.coords, normal) > 0.;
+    }`;
+    h435_set.add(test, glslTest, isoms[i], isoms[i]);
+}
+
+
+/* harmony default export */ const h435 = (h435_set);
+
+
+
+
 // EXTERNAL MODULE: ./src/geometries/hyp/lights/pointLight/shaders/struct.glsl
 var pointLight_shaders_struct = __webpack_require__(9191);
 var pointLight_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(pointLight_shaders_struct);
@@ -24041,6 +24285,9 @@ const thurstonHyp_ThurstonRecord = specifyThurston(ThurstonRecord, (part1_defaul
 
 
 
+
+
+
 })();
 
 var __webpack_exports__AcesFilmPostProcess = __webpack_exports__.T0;
@@ -24129,6 +24376,7 @@ var __webpack_exports__QuadRing = __webpack_exports__.iv;
 var __webpack_exports__QuadRingElement = __webpack_exports__.mH;
 var __webpack_exports__QuadRingMatrix4 = __webpack_exports__.xd;
 var __webpack_exports__RIGHT = __webpack_exports__.pX;
+var __webpack_exports__RegularHypPolygon = __webpack_exports__.tX;
 var __webpack_exports__RelPosition = __webpack_exports__.Dz;
 var __webpack_exports__ResetVRControls = __webpack_exports__.Uj;
 var __webpack_exports__RotatedSphericalTextureMaterial = __webpack_exports__.bY;
@@ -24173,6 +24421,7 @@ var __webpack_exports__clamp = __webpack_exports__.uZ;
 var __webpack_exports__complement = __webpack_exports__.Cy;
 var __webpack_exports__cubeSet = __webpack_exports__.Rc;
 var __webpack_exports__earthTexture = __webpack_exports__.qM;
+var __webpack_exports__h435Set = __webpack_exports__.MO;
 var __webpack_exports__highlightLocalWrap = __webpack_exports__.mV;
 var __webpack_exports__highlightWrap = __webpack_exports__.Gi;
 var __webpack_exports__intersection = __webpack_exports__.jV;
@@ -24191,4 +24440,4 @@ var __webpack_exports__union = __webpack_exports__.G0;
 var __webpack_exports__whiteheadSet = __webpack_exports__.HP;
 var __webpack_exports__woodBallMaterial = __webpack_exports__.YL;
 var __webpack_exports__wrap = __webpack_exports__.re;
-export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__AugmentedCubeMaterial as AugmentedCubeMaterial, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GradientColorMaterial as GradientColorMaterial, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__Horoball as Horoball, __webpack_exports__HoroballShape as HoroballShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCappedCone as LocalCappedCone, __webpack_exports__LocalCappedConeShape as LocalCappedConeShape, __webpack_exports__LocalCappedCylinder as LocalCappedCylinder, __webpack_exports__LocalCappedCylinderShape as LocalCappedCylinderShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__LocalHoroball as LocalHoroball, __webpack_exports__LocalHoroballShape as LocalHoroballShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__LocalRoundCone as LocalRoundCone, __webpack_exports__LocalRoundConeShape as LocalRoundConeShape, __webpack_exports__LocalSlab as LocalSlab, __webpack_exports__LocalTruePointLight as LocalTruePointLight, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NativeCamera as NativeCamera, __webpack_exports__NoiseColorMaterial as NoiseColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__SWSet as SWSet, __webpack_exports__Scene as Scene, __webpack_exports__SemiLocalSlabShape as SemiLocalSlabShape, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__SlabShape as SlabShape, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunLight as SunLight, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__TruePointLight as TruePointLight, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__augmentedCubeSet as augmentedCubeSet, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__m125Set as m125Set, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__symCubeSet as symCubeSet, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__whiteheadSet as whiteheadSet, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };
+export { __webpack_exports__AcesFilmPostProcess as AcesFilmPostProcess, __webpack_exports__AdvancedResetVRControls as AdvancedResetVRControls, __webpack_exports__AdvancedShape as AdvancedShape, __webpack_exports__AugmentedCubeMaterial as AugmentedCubeMaterial, __webpack_exports__BOTH as BOTH, __webpack_exports__Ball as Ball, __webpack_exports__BallShape as BallShape, __webpack_exports__BasicCamera as BasicCamera, __webpack_exports__BasicPTMaterial as BasicPTMaterial, __webpack_exports__BasicRenderer as BasicRenderer, __webpack_exports__BasicShape as BasicShape, __webpack_exports__CREEPING_FULL as CREEPING_FULL, __webpack_exports__CREEPING_OFF as CREEPING_OFF, __webpack_exports__CREEPING_STRICT as CREEPING_STRICT, __webpack_exports__CheckerboardMaterial as CheckerboardMaterial, __webpack_exports__CombinedPostProcess as CombinedPostProcess, __webpack_exports__ComplementShape as ComplementShape, __webpack_exports__ConstDirLight as ConstDirLight, __webpack_exports__Cylinder as Cylinder, __webpack_exports__CylinderShape as CylinderShape, __webpack_exports__DebugMaterial as DebugMaterial, __webpack_exports__DragVRControls as DragVRControls, __webpack_exports__EquidistantHypStripsMaterial as EquidistantHypStripsMaterial, __webpack_exports__EquidistantSphStripsMaterial as EquidistantSphStripsMaterial, __webpack_exports__ExpFog as ExpFog, __webpack_exports__FlatScreenRenderer as FlatScreenRenderer, __webpack_exports__FlyControls as FlyControls, __webpack_exports__Fog as Fog, __webpack_exports__FullDomCamera as FullDomCamera, __webpack_exports__GradientColorMaterial as GradientColorMaterial, __webpack_exports__GraphPaperMaterial as GraphPaperMaterial, __webpack_exports__Group as Group, __webpack_exports__GroupElement as GroupElement, __webpack_exports__HalfSpace as HalfSpace, __webpack_exports__HalfSpaceShape as HalfSpaceShape, __webpack_exports__HighlightLocalWrapMaterial as HighlightLocalWrapMaterial, __webpack_exports__HighlightWrapMaterial as HighlightWrapMaterial, __webpack_exports__Horoball as Horoball, __webpack_exports__HoroballShape as HoroballShape, __webpack_exports__HypStripsMaterial as HypStripsMaterial, __webpack_exports__ImprovedEquidistantHypStripsMaterial as ImprovedEquidistantHypStripsMaterial, __webpack_exports__ImprovedEquidistantSphStripsMaterial as ImprovedEquidistantSphStripsMaterial, __webpack_exports__InfoControls as InfoControls, __webpack_exports__IntersectionShape as IntersectionShape, __webpack_exports__Isometry as Isometry, __webpack_exports__IsotropicChaseVRControls as IsotropicChaseVRControls, __webpack_exports__KeyGenericControls as KeyGenericControls, __webpack_exports__LEFT as LEFT, __webpack_exports__Light as Light, __webpack_exports__LightVRControls as LightVRControls, __webpack_exports__LinearToSRGBPostProcess as LinearToSRGBPostProcess, __webpack_exports__LocalBall as LocalBall, __webpack_exports__LocalBallShape as LocalBallShape, __webpack_exports__LocalCappedCone as LocalCappedCone, __webpack_exports__LocalCappedConeShape as LocalCappedConeShape, __webpack_exports__LocalCappedCylinder as LocalCappedCylinder, __webpack_exports__LocalCappedCylinderShape as LocalCappedCylinderShape, __webpack_exports__LocalCylinder as LocalCylinder, __webpack_exports__LocalCylinderShape as LocalCylinderShape, __webpack_exports__LocalHoroball as LocalHoroball, __webpack_exports__LocalHoroballShape as LocalHoroballShape, __webpack_exports__LocalPointLight as LocalPointLight, __webpack_exports__LocalRoundCone as LocalRoundCone, __webpack_exports__LocalRoundConeShape as LocalRoundConeShape, __webpack_exports__LocalSlab as LocalSlab, __webpack_exports__LocalTruePointLight as LocalTruePointLight, __webpack_exports__Material as Material, __webpack_exports__Matrix2 as Matrix2, __webpack_exports__MoveVRControls as MoveVRControls, __webpack_exports__MultiColorMaterial as MultiColorMaterial, __webpack_exports__NativeCamera as NativeCamera, __webpack_exports__NoiseColorMaterial as NoiseColorMaterial, __webpack_exports__NormalMaterial as NormalMaterial, __webpack_exports__PTMaterial as PTMaterial, __webpack_exports__PathTracerCamera as PathTracerCamera, __webpack_exports__PathTracerRenderer as PathTracerRenderer, __webpack_exports__PathTracerWrapMaterial as PathTracerWrapMaterial, __webpack_exports__PhongMaterial as PhongMaterial, __webpack_exports__PhongWrapMaterial as PhongWrapMaterial, __webpack_exports__Point as Point, __webpack_exports__PointLight as PointLight, __webpack_exports__Position as Position, __webpack_exports__QuadRing as QuadRing, __webpack_exports__QuadRingElement as QuadRingElement, __webpack_exports__QuadRingMatrix4 as QuadRingMatrix4, __webpack_exports__RIGHT as RIGHT, __webpack_exports__RegularHypPolygon as RegularHypPolygon, __webpack_exports__RelPosition as RelPosition, __webpack_exports__ResetVRControls as ResetVRControls, __webpack_exports__RotatedSphericalTextureMaterial as RotatedSphericalTextureMaterial, __webpack_exports__SMOOTH_MAX_POLY as SMOOTH_MAX_POLY, __webpack_exports__SMOOTH_MIN_POLY as SMOOTH_MIN_POLY, __webpack_exports__SWSet as SWSet, __webpack_exports__Scene as Scene, __webpack_exports__SemiLocalSlabShape as SemiLocalSlabShape, __webpack_exports__Shape as Shape, __webpack_exports__ShootVRControls as ShootVRControls, __webpack_exports__SimpleTextureMaterial as SimpleTextureMaterial, __webpack_exports__SingleColorMaterial as SingleColorMaterial, __webpack_exports__SlabShape as SlabShape, __webpack_exports__Solid as Solid, __webpack_exports__SquaresMaterial as SquaresMaterial, __webpack_exports__StripsMaterial as StripsMaterial, __webpack_exports__SunLight as SunLight, __webpack_exports__SwitchControls as SwitchControls, __webpack_exports__TeleportationSet as TeleportationSet, __webpack_exports__Thurston as Thurston, __webpack_exports__ThurstonLite as ThurstonLite, __webpack_exports__ThurstonRecord as ThurstonRecord, __webpack_exports__ThurstonVR as ThurstonVR, __webpack_exports__ThurstonVRWoodBalls as ThurstonVRWoodBalls, __webpack_exports__ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBis, __webpack_exports__TransitionLocalWrapMaterial as TransitionLocalWrapMaterial, __webpack_exports__TransitionWrapMaterial as TransitionWrapMaterial, __webpack_exports__TruePointLight as TruePointLight, __webpack_exports__UnionShape as UnionShape, __webpack_exports__VRCamera as VRCamera, __webpack_exports__VRRenderer as VRRenderer, __webpack_exports__VaryingColorMaterial as VaryingColorMaterial, __webpack_exports__Vector as Vector, __webpack_exports__VideoAlphaTextureMaterial as VideoAlphaTextureMaterial, __webpack_exports__VideoFrameTextureMaterial as VideoFrameTextureMaterial, __webpack_exports__VideoTextureMaterial as VideoTextureMaterial, __webpack_exports__WrapShape as WrapShape, __webpack_exports__XRControllerModelFactory as XRControllerModelFactory, __webpack_exports__augmentedCubeSet as augmentedCubeSet, __webpack_exports__bind as bind, __webpack_exports__clamp as clamp, __webpack_exports__complement as complement, __webpack_exports__cubeSet as cubeSet, __webpack_exports__earthTexture as earthTexture, __webpack_exports__h435Set as h435Set, __webpack_exports__highlightLocalWrap as highlightLocalWrap, __webpack_exports__highlightWrap as highlightWrap, __webpack_exports__intersection as intersection, __webpack_exports__m125Set as m125Set, __webpack_exports__marsTexture as marsTexture, __webpack_exports__moonTexture as moonTexture, __webpack_exports__pathTracerWrap as pathTracerWrap, __webpack_exports__phongWrap as phongWrap, __webpack_exports__safeString as safeString, __webpack_exports__sunTexture as sunTexture, __webpack_exports__symCubeSet as symCubeSet, __webpack_exports__transitionLocalWrap as transitionLocalWrap, __webpack_exports__transitionWrap as transitionWrap, __webpack_exports__trivialSet as trivialSet, __webpack_exports__union as union, __webpack_exports__whiteheadSet as whiteheadSet, __webpack_exports__woodBallMaterial as woodBallMaterial, __webpack_exports__wrap as wrap };

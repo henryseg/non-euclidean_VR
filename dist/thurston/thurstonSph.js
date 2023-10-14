@@ -5392,6 +5392,7 @@ class RelPosition {
                 // we perform the teleportation and exit the loop
                 // (to restart the checks from the beginning).
                 if (!inside) {
+                    console.log('teleported');
                     this.local.applyIsometry(teleportation.elt.toIsometry());
                     this.cellBoost.multiply(teleportation.inv);
                     this.invCellBoost.premultiply(teleportation.elt);
