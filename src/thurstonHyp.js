@@ -41,8 +41,11 @@ export {default as SWSet} from "./geometries/hyp/groups/seifert-weber/set.js";
 export {default as whiteheadSet} from "./geometries/hyp/groups/whitehead/set.js";
 export {default as m125Set} from "./geometries/hyp/groups/m125/set.js";
 export {default as augmentedCubeSet} from "./geometries/hyp/groups/augmentedCube/set.js";
+export {default as h435Set} from "./geometries/hyp/groups/honeycombs/h435.js";
 export * from './geometries/hyp/lights/all.js';
 export * from './geometries/hyp/material/all.js';
 export * from './geometries/hyp/shapes/all.js';
 export * from './geometries/hyp/solids/all.js';
+
+export {RegularHypPolygon} from "./utils/regularHypPolygon/RegularHypPolygon.js";
 
