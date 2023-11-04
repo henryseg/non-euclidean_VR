@@ -8,7 +8,7 @@ import {
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {TexturePass} from "three/examples/jsm/postprocessing/TexturePass.js";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
-import {FullScreenQuad} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {FullScreenQuad} from "three/examples/jsm/postprocessing/Pass.js";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
