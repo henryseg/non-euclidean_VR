@@ -1,6 +1,6 @@
 import {
-    FloatType,
-    Mesh, NearestFilter, RGBAFormat,
+    FloatType, NearestFilter, RGBAFormat, HalfFloatType,
+    Mesh,
     ShaderMaterial,
     SphereGeometry, Uniform, Vector2,
     WebGLRenderTarget
@@ -12,6 +12,7 @@ import {FullScreenQuad} from "three/examples/jsm/postprocessing/Pass.js";
 
 import {AbstractRenderer} from "./AbstractRenderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
+import {CombinedPostProcess} from "../../commons/postProcess/combined/CombinedPostProcess.js";
 
 import vertexShader from "./shaders/common/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
@@ -55,11 +56,11 @@ const accumulateMat = new ShaderMaterial({
 });
 const accumulateQuad = new FullScreenQuad(accumulateMat);
 
-const rtParameters = {
+const RT_PARAMETERS = {
     minFilter: NearestFilter,
     magFilter: NearestFilter,
     format: RGBAFormat,
-    type: FloatType,
+    type: HalfFloatType,
 };
 
 export class PathTracerRenderer extends AbstractRenderer {
@@ -79,6 +80,10 @@ export class PathTracerRenderer extends AbstractRenderer {
         // different default value for the number of time we bounce
         this.globalUniforms.maxBounces.value = params.maxBounces !== undefined ? params.maxBounces : 50;
 
+        if (this.postProcess.length === 0) {
+            this.postProcess.push(new CombinedPostProcess())
+        }
+
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -86,9 +91,9 @@ export class PathTracerRenderer extends AbstractRenderer {
          */
         this._fragmentBuilder = new ShaderBuilder(PATHTRACER_RENDERER);
 
-        this.sceneTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
-        this.accReadTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
-        this.accWriteTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
+        this.sceneTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, RT_PARAMETERS);
+        this.accReadTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, RT_PARAMETERS);
+        this.accWriteTarget = new WebGLRenderTarget(window.innerWidth, window.innerHeight, RT_PARAMETERS);
         /**
          * Index of the frame (used to average the picture in the accumulation)
          * @type {number}
@@ -191,7 +196,7 @@ export class PathTracerRenderer extends AbstractRenderer {
         for (let i = 0; i < this.postProcess.length; i++) {
             const effectPass = new ShaderPass(this.postProcess[i].fullShader());
             effectPass.clear = false;
-            this.composer.addPass(effectPass);
+            this.displayComposer.addPass(effectPass);
         }
 
         return this;
@@ -218,7 +223,7 @@ export class PathTracerRenderer extends AbstractRenderer {
 
         this.threeRenderer.setRenderTarget(this.sceneTarget);
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
-
+        //
         this.threeRenderer.setRenderTarget(this.accWriteTarget);
         accumulateMat.uniforms['accTex'].value = this.accReadTarget.texture;
         accumulateMat.uniforms['newTex'].value = this.sceneTarget.texture;

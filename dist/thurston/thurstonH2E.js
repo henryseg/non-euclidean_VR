@@ -2213,7 +2213,7 @@ __webpack_require__.d(__webpack_exports__, {
 ;// CONCATENATED MODULE: external "three"
 var x = y => { var x = {}; __webpack_require__.d(x, y); return x; }
 var y = x => () => x
-const external_three_namespaceObject = x({ ["AnimationClip"]: () => __WEBPACK_EXTERNAL_MODULE_three__.AnimationClip, ["Bone"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Bone, ["Box3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Box3, ["BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferAttribute, ["BufferGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferGeometry, ["ClampToEdgeWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ClampToEdgeWrapping, ["Clock"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Clock, ["Color"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Color, ["ColorManagement"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ColorManagement, ["DirectionalLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DirectionalLight, ["DoubleSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DoubleSide, ["EventDispatcher"]: () => __WEBPACK_EXTERNAL_MODULE_three__.EventDispatcher, ["FileLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FileLoader, ["Float32BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Float32BufferAttribute, ["FloatType"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FloatType, ["FrontSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FrontSide, ["Group"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Group, ["HalfFloatType"]: () => __WEBPACK_EXTERNAL_MODULE_three__.HalfFloatType, ["ImageBitmapLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageBitmapLoader, ["ImageLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageLoader, ["InstancedBufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InstancedBufferAttribute, ["InstancedMesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InstancedMesh, ["InterleavedBuffer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBuffer, ["InterleavedBufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBufferAttribute, ["Interpolant"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Interpolant, ["InterpolateDiscrete"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateDiscrete, ["InterpolateLinear"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateLinear, ["Line"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Line, ["LineBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineBasicMaterial, ["LineLoop"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineLoop, ["LineSegments"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineSegments, ["LinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearFilter, ["LinearMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapLinearFilter, ["LinearMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapNearestFilter, ["LinearSRGBColorSpace"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearSRGBColorSpace, ["Loader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Loader, ["LoaderUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LoaderUtils, ["Material"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Material, ["MathUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MathUtils, ["Matrix3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix3, ["Matrix4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix4, ["Mesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Mesh, ["MeshBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshBasicMaterial, ["MeshPhysicalMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshPhysicalMaterial, ["MeshStandardMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshStandardMaterial, ["MirroredRepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MirroredRepeatWrapping, ["NearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestFilter, ["NearestMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapLinearFilter, ["NearestMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapNearestFilter, ["NoBlending"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NoBlending, ["NumberKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NumberKeyframeTrack, ["Object3D"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Object3D, ["OrthographicCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.OrthographicCamera, ["PerspectiveCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PerspectiveCamera, ["PlaneGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PlaneGeometry, ["PointLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointLight, ["Points"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Points, ["PointsMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointsMaterial, ["PropertyBinding"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PropertyBinding, ["Quaternion"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Quaternion, ["QuaternionKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.QuaternionKeyframeTrack, ["RGBAFormat"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RGBAFormat, ["RepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RepeatWrapping, ["SRGBColorSpace"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SRGBColorSpace, ["Scene"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Scene, ["ShaderMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ShaderMaterial, ["Skeleton"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Skeleton, ["SkinnedMesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SkinnedMesh, ["Sphere"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Sphere, ["SphereGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SphereGeometry, ["SpotLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SpotLight, ["Texture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Texture, ["TextureLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TextureLoader, ["TriangleFanDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleFanDrawMode, ["TriangleStripDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleStripDrawMode, ["TrianglesDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TrianglesDrawMode, ["Uniform"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Uniform, ["UniformsUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.UniformsUtils, ["Vector2"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector2, ["Vector3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector3, ["Vector4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector4, ["VectorKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VectorKeyframeTrack, ["VideoTexture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VideoTexture, ["WebGLRenderTarget"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderTarget, ["WebGLRenderer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderer });
+const external_three_namespaceObject = x({ ["AnimationClip"]: () => __WEBPACK_EXTERNAL_MODULE_three__.AnimationClip, ["Bone"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Bone, ["Box3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Box3, ["BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferAttribute, ["BufferGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.BufferGeometry, ["ClampToEdgeWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ClampToEdgeWrapping, ["Clock"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Clock, ["Color"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Color, ["ColorManagement"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ColorManagement, ["DirectionalLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DirectionalLight, ["DoubleSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.DoubleSide, ["EventDispatcher"]: () => __WEBPACK_EXTERNAL_MODULE_three__.EventDispatcher, ["FileLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FileLoader, ["Float32BufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Float32BufferAttribute, ["FrontSide"]: () => __WEBPACK_EXTERNAL_MODULE_three__.FrontSide, ["Group"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Group, ["HalfFloatType"]: () => __WEBPACK_EXTERNAL_MODULE_three__.HalfFloatType, ["ImageBitmapLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageBitmapLoader, ["ImageLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ImageLoader, ["InstancedBufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InstancedBufferAttribute, ["InstancedMesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InstancedMesh, ["InterleavedBuffer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBuffer, ["InterleavedBufferAttribute"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterleavedBufferAttribute, ["Interpolant"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Interpolant, ["InterpolateDiscrete"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateDiscrete, ["InterpolateLinear"]: () => __WEBPACK_EXTERNAL_MODULE_three__.InterpolateLinear, ["Line"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Line, ["LineBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineBasicMaterial, ["LineLoop"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineLoop, ["LineSegments"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LineSegments, ["LinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearFilter, ["LinearMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapLinearFilter, ["LinearMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearMipmapNearestFilter, ["LinearSRGBColorSpace"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LinearSRGBColorSpace, ["Loader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Loader, ["LoaderUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.LoaderUtils, ["Material"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Material, ["MathUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MathUtils, ["Matrix3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix3, ["Matrix4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Matrix4, ["Mesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Mesh, ["MeshBasicMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshBasicMaterial, ["MeshPhysicalMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshPhysicalMaterial, ["MeshStandardMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MeshStandardMaterial, ["MirroredRepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.MirroredRepeatWrapping, ["NearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestFilter, ["NearestMipmapLinearFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapLinearFilter, ["NearestMipmapNearestFilter"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NearestMipmapNearestFilter, ["NoBlending"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NoBlending, ["NumberKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.NumberKeyframeTrack, ["Object3D"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Object3D, ["OrthographicCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.OrthographicCamera, ["PerspectiveCamera"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PerspectiveCamera, ["PlaneGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PlaneGeometry, ["PointLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointLight, ["Points"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Points, ["PointsMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PointsMaterial, ["PropertyBinding"]: () => __WEBPACK_EXTERNAL_MODULE_three__.PropertyBinding, ["Quaternion"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Quaternion, ["QuaternionKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.QuaternionKeyframeTrack, ["RGBAFormat"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RGBAFormat, ["RepeatWrapping"]: () => __WEBPACK_EXTERNAL_MODULE_three__.RepeatWrapping, ["SRGBColorSpace"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SRGBColorSpace, ["Scene"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Scene, ["ShaderMaterial"]: () => __WEBPACK_EXTERNAL_MODULE_three__.ShaderMaterial, ["Skeleton"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Skeleton, ["SkinnedMesh"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SkinnedMesh, ["Sphere"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Sphere, ["SphereGeometry"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SphereGeometry, ["SpotLight"]: () => __WEBPACK_EXTERNAL_MODULE_three__.SpotLight, ["Texture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Texture, ["TextureLoader"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TextureLoader, ["TriangleFanDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleFanDrawMode, ["TriangleStripDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TriangleStripDrawMode, ["TrianglesDrawMode"]: () => __WEBPACK_EXTERNAL_MODULE_three__.TrianglesDrawMode, ["Uniform"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Uniform, ["UniformsUtils"]: () => __WEBPACK_EXTERNAL_MODULE_three__.UniformsUtils, ["Vector2"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector2, ["Vector3"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector3, ["Vector4"]: () => __WEBPACK_EXTERNAL_MODULE_three__.Vector4, ["VectorKeyframeTrack"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VectorKeyframeTrack, ["VideoTexture"]: () => __WEBPACK_EXTERNAL_MODULE_three__.VideoTexture, ["WebGLRenderTarget"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderTarget, ["WebGLRenderer"]: () => __WEBPACK_EXTERNAL_MODULE_three__.WebGLRenderer });
 ;// CONCATENATED MODULE: ./src/core/geometry/Isometry.js
 /**
  * @class
@@ -4226,6 +4226,95 @@ class TexturePass extends Pass {
 
 
 
+// EXTERNAL MODULE: ./src/core/renderers/shaders/common/vertexPostProcess.glsl
+var vertexPostProcess = __webpack_require__(7962);
+var vertexPostProcess_default = /*#__PURE__*/__webpack_require__.n(vertexPostProcess);
+;// CONCATENATED MODULE: ./src/core/renderers/PostProcess.js
+
+
+/**
+ * @class
+ * @abstract
+ *
+ * @classdesc
+ * A post process is a treatment apply to the picture obtained after rendering the geometry.
+ * A post process defines 3 elements :
+ * - its uniforms
+ * - a vertex shader
+ * - a fragment shader
+ * Most of the time the vertex shader will be the same.
+ * These data are packaged by the method `fullShader`
+ */
+class PostProcess {
+
+    constructor() {
+    }
+
+    /**
+     * Return the uniforms needed in the fragment shader.
+     * It is a good practice to extend the object return by the method of this abstract class.
+     * tDiffuse is the texture containing the rendered geometry.
+     * @return {Object} - an object with all the uniforms of the post process
+     */
+    uniforms() {
+        return {'tDiffuse': {value: null}};
+    }
+
+    /**
+     * @return {string} - the vertex shader
+     */
+    vertexShader() {
+        return (vertexPostProcess_default());
+    }
+
+    /**
+     * @return {string} - the fragment shader
+     */
+    fragmentShader() {
+        throw new Error('Shape: this method should be implemented');
+    }
+
+    /**
+     *
+     * @return {Object} - all the data needed by the Three.js `addPass` method.
+     */
+    fullShader() {
+        return {
+            uniforms: this.uniforms(),
+            vertexShader: this.vertexShader(),
+            fragmentShader: this.fragmentShader()
+        }
+    }
+}
+// EXTERNAL MODULE: ./src/commons/postProcess/combined/shaders/fragment.glsl
+var fragment = __webpack_require__(2690);
+var fragment_default = /*#__PURE__*/__webpack_require__.n(fragment);
+;// CONCATENATED MODULE: ./src/commons/postProcess/combined/CombinedPostProcess.js
+
+
+
+
+class CombinedPostProcess extends PostProcess {
+
+    /**
+     * Constructor
+     * @param {number} exposure - the exposure
+     */
+    constructor(exposure) {
+        super();
+        this.exposure = exposure !== undefined ? exposure : 0.8;
+    }
+
+    uniforms() {
+        const res = super.uniforms();
+        res.exposure = {value: this.exposure}
+        return res;
+    }
+
+    fragmentShader() {
+        return (fragment_default());
+    }
+}
 // EXTERNAL MODULE: ./src/core/renderers/shaders/pathTracer/scenes.glsl.mustache
 var pathTracer_scenes_glsl_mustache = __webpack_require__(6172);
 var pathTracer_scenes_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(pathTracer_scenes_glsl_mustache);
@@ -4251,6 +4340,7 @@ var pathTracer_main_default = /*#__PURE__*/__webpack_require__.n(pathTracer_main
 var nextObject_glsl_mustache = __webpack_require__(4122);
 var nextObject_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(nextObject_glsl_mustache);
 ;// CONCATENATED MODULE: ./src/core/renderers/PathTracerRenderer.js
+
 
 
 
@@ -4302,11 +4392,11 @@ const accumulateMat = new external_three_namespaceObject.ShaderMaterial({
 });
 const accumulateQuad = new FullScreenQuad(accumulateMat);
 
-const rtParameters = {
+const RT_PARAMETERS = {
     minFilter: external_three_namespaceObject.NearestFilter,
     magFilter: external_three_namespaceObject.NearestFilter,
     format: external_three_namespaceObject.RGBAFormat,
-    type: external_three_namespaceObject.FloatType,
+    type: external_three_namespaceObject.HalfFloatType,
 };
 
 class PathTracerRenderer extends AbstractRenderer {
@@ -4326,6 +4416,10 @@ class PathTracerRenderer extends AbstractRenderer {
         // different default value for the number of time we bounce
         this.globalUniforms.maxBounces.value = params.maxBounces !== undefined ? params.maxBounces : 50;
 
+        if (this.postProcess.length === 0) {
+            this.postProcess.push(new CombinedPostProcess())
+        }
+
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -4333,9 +4427,9 @@ class PathTracerRenderer extends AbstractRenderer {
          */
         this._fragmentBuilder = new ShaderBuilder(PATHTRACER_RENDERER);
 
-        this.sceneTarget = new external_three_namespaceObject.WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
-        this.accReadTarget = new external_three_namespaceObject.WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
-        this.accWriteTarget = new external_three_namespaceObject.WebGLRenderTarget(window.innerWidth, window.innerHeight, rtParameters);
+        this.sceneTarget = new external_three_namespaceObject.WebGLRenderTarget(window.innerWidth, window.innerHeight, RT_PARAMETERS);
+        this.accReadTarget = new external_three_namespaceObject.WebGLRenderTarget(window.innerWidth, window.innerHeight, RT_PARAMETERS);
+        this.accWriteTarget = new external_three_namespaceObject.WebGLRenderTarget(window.innerWidth, window.innerHeight, RT_PARAMETERS);
         /**
          * Index of the frame (used to average the picture in the accumulation)
          * @type {number}
@@ -4438,7 +4532,7 @@ class PathTracerRenderer extends AbstractRenderer {
         for (let i = 0; i < this.postProcess.length; i++) {
             const effectPass = new ShaderPass(this.postProcess[i].fullShader());
             effectPass.clear = false;
-            this.composer.addPass(effectPass);
+            this.displayComposer.addPass(effectPass);
         }
 
         return this;
@@ -4465,7 +4559,7 @@ class PathTracerRenderer extends AbstractRenderer {
 
         this.threeRenderer.setRenderTarget(this.sceneTarget);
         this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
-
+        //
         this.threeRenderer.setRenderTarget(this.accWriteTarget);
         accumulateMat.uniforms['accTex'].value = this.accReadTarget.texture;
         accumulateMat.uniforms['newTex'].value = this.sceneTarget.texture;
@@ -20670,69 +20764,9 @@ class AdvancedResetVRControls {
 
 
 
-// EXTERNAL MODULE: ./src/core/renderers/shaders/common/vertexPostProcess.glsl
-var vertexPostProcess = __webpack_require__(7962);
-var vertexPostProcess_default = /*#__PURE__*/__webpack_require__.n(vertexPostProcess);
-;// CONCATENATED MODULE: ./src/core/renderers/PostProcess.js
-
-
-/**
- * @class
- * @abstract
- *
- * @classdesc
- * A post process is a treatment apply to the picture obtained after rendering the geometry.
- * A post process defines 3 elements :
- * - its uniforms
- * - a vertex shader
- * - a fragment shader
- * Most of the time the vertex shader will be the same.
- * These data are packaged by the method `fullShader`
- */
-class PostProcess {
-
-    constructor() {
-    }
-
-    /**
-     * Return the uniforms needed in the fragment shader.
-     * It is a good practice to extend the object return by the method of this abstract class.
-     * tDiffuse is the texture containing the rendered geometry.
-     * @return {Object} - an object with all the uniforms of the post process
-     */
-    uniforms() {
-        return {'tDiffuse': {value: null}};
-    }
-
-    /**
-     * @return {string} - the vertex shader
-     */
-    vertexShader() {
-        return (vertexPostProcess_default());
-    }
-
-    /**
-     * @return {string} - the fragment shader
-     */
-    fragmentShader() {
-        throw new Error('Shape: this method should be implemented');
-    }
-
-    /**
-     *
-     * @return {Object} - all the data needed by the Three.js `addPass` method.
-     */
-    fullShader() {
-        return {
-            uniforms: this.uniforms(),
-            vertexShader: this.vertexShader(),
-            fragmentShader: this.fragmentShader()
-        }
-    }
-}
 // EXTERNAL MODULE: ./src/commons/postProcess/acesFilm/shaders/fragment.glsl
-var fragment = __webpack_require__(6947);
-var fragment_default = /*#__PURE__*/__webpack_require__.n(fragment);
+var shaders_fragment = __webpack_require__(6947);
+var shaders_fragment_default = /*#__PURE__*/__webpack_require__.n(shaders_fragment);
 ;// CONCATENATED MODULE: ./src/commons/postProcess/acesFilm/AcesFilmPostProcess.js
 
 
@@ -20746,7 +20780,7 @@ class AcesFilmPostProcess extends PostProcess {
      */
     constructor(exposure) {
         super();
-        this.exposure = exposure;
+        this.exposure = exposure !== undefined ? exposure : 0.8;
     }
 
     uniforms() {
@@ -20756,12 +20790,12 @@ class AcesFilmPostProcess extends PostProcess {
     }
 
     fragmentShader() {
-        return (fragment_default());
+        return (shaders_fragment_default());
     }
 }
 // EXTERNAL MODULE: ./src/commons/postProcess/linearToSRBG/shaders/fragment.glsl
-var shaders_fragment = __webpack_require__(4024);
-var shaders_fragment_default = /*#__PURE__*/__webpack_require__.n(shaders_fragment);
+var linearToSRBG_shaders_fragment = __webpack_require__(4024);
+var linearToSRBG_shaders_fragment_default = /*#__PURE__*/__webpack_require__.n(linearToSRBG_shaders_fragment);
 ;// CONCATENATED MODULE: ./src/commons/postProcess/linearToSRBG/LinearToSRGBPostProcess.js
 
 
@@ -20777,36 +20811,7 @@ class LinearToSRGBPostProcess extends PostProcess {
     }
 
     fragmentShader() {
-        return (shaders_fragment_default());
-    }
-}
-// EXTERNAL MODULE: ./src/commons/postProcess/combined/shaders/fragment.glsl
-var combined_shaders_fragment = __webpack_require__(2690);
-var combined_shaders_fragment_default = /*#__PURE__*/__webpack_require__.n(combined_shaders_fragment);
-;// CONCATENATED MODULE: ./src/commons/postProcess/combined/CombinedPostProcess.js
-
-
-
-
-class CombinedPostProcess extends PostProcess {
-
-    /**
-     * Constructor
-     * @param {number} exposure - the exposure
-     */
-    constructor(exposure) {
-        super();
-        this.exposure = exposure;
-    }
-
-    uniforms() {
-        const res = super.uniforms();
-        res.exposure = {value: this.exposure}
-        return res;
-    }
-
-    fragmentShader() {
-        return (combined_shaders_fragment_default());
+        return (linearToSRBG_shaders_fragment_default());
     }
 }
 ;// CONCATENATED MODULE: ./src/commons/postProcess/all.js

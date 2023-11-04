@@ -10,7 +10,7 @@ export class CombinedPostProcess extends PostProcess {
      */
     constructor(exposure) {
         super();
-        this.exposure = exposure;
+        this.exposure = exposure !== undefined ? exposure : 0.8;
     }
 
     uniforms() {
