@@ -16061,6 +16061,12 @@ class ThurstonRecord {
          * @protected
          */
         this.clock = new external_three_namespaceObject.Clock();
+
+        /**
+         * A clock that is reset everytime the recording starts
+         * @type {Clock}
+         */
+        this.recordClock = new external_three_namespaceObject.Clock()
     }
 
     setPixelRatio(value) {
@@ -16099,6 +16105,7 @@ class ThurstonRecord {
             format: 'jpg'
         });
         this.capture.start();
+        this.recordClock.start();
         this.isRecordOn = true;
     }
 

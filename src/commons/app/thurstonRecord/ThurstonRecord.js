@@ -98,6 +98,12 @@ export class ThurstonRecord {
          * @protected
          */
         this.clock = new Clock();
+
+        /**
+         * A clock that is reset everytime the recording starts
+         * @type {Clock}
+         */
+        this.recordClock = new Clock()
     }
 
     setPixelRatio(value) {
@@ -136,6 +142,7 @@ export class ThurstonRecord {
             format: 'jpg'
         });
         this.capture.start();
+        this.recordClock.start();
         this.isRecordOn = true;
     }
 
