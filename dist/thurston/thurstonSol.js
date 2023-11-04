@@ -1558,7 +1558,7 @@ module.exports = "                                                              
 /***/ 7326:
 /***/ ((module) => {
 
-module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec3 dir = vec3(coords.xy, 1. / tan(0.5 * camera.fovRadians));\n    Vector v = createVector(ORIGIN, dir);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
+module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec3 dir = vec3(coords.xy, -1. / tan(0.5 * camera.fovRadians));\n    Vector v = createVector(ORIGIN, dir);\n    RelVector res = applyPosition(camera.position, v);\n    return geomNormalize(res);\n}"
 
 /***/ }),
 
@@ -5566,7 +5566,6 @@ class RelPosition {
                 // we perform the teleportation and exit the loop
                 // (to restart the checks from the beginning).
                 if (!inside) {
-                    console.log('teleported');
                     this.local.applyIsometry(teleportation.elt.toIsometry());
                     this.cellBoost.multiply(teleportation.inv);
                     this.invCellBoost.premultiply(teleportation.elt);
