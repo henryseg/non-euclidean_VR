@@ -45,6 +45,12 @@ export class FlatScreenRenderer extends AbstractRenderer {
      */
     constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
         super(shader1, shader2, set, camera, scene, params, threeRenderer);
+
+        // Check if the three.js camera is compatible with the three.js screen used by the renderer.
+        if(this.camera.threeCamera.type !== 'OrthographicCamera') {
+            throw new Error('The underlying camera for this renderer should be of type "OrthographicCamera".');
+        }
+
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}

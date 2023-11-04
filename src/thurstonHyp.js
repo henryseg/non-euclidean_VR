@@ -23,6 +23,7 @@ import {ThurstonVR as ThurstonVRGeneric} from "./commons/app/thurstonVR/Thurston
 import {ThurstonVRWoodBalls as ThurstonVRWoodBallsGeneric} from "./commons/app/thurstonVRWoodBalls/ThurstonVRWoodBalls.js";
 import {ThurstonVRWoodBallsBis as ThurstonVRWoodBallsBisGeneric} from "./commons/app/thurstonVRWoodBallsBis/ThurstonVRWoodBallsBis.js";
 import {ThurstonRecord as ThurstonRecordGeneric} from "./commons/app/thurstonRecord/ThurstonRecord.js";
+import {ThurstonRecordBM as ThurstonRecordBMGeneric} from "./commons/app/thurstonRecordBM/ThurstonRecordBM.js";
 import {specifyThurston} from "./commons/app/specifyThurston.js";
 
 export const Thurston = specifyThurston(ThurstonGeneric, shader1, shader2);
@@ -31,6 +32,7 @@ export const ThurstonVR = specifyThurston(ThurstonVRGeneric, shader1, shader2);
 export const ThurstonVRWoodBalls = specifyThurston(ThurstonVRWoodBallsGeneric, shader1, shader2);
 export const ThurstonVRWoodBallsBis = specifyThurston(ThurstonVRWoodBallsBisGeneric, shader1, shader2);
 export const ThurstonRecord = specifyThurston(ThurstonRecordGeneric, shader1, shader2);
+export const ThurstonRecordBM = specifyThurston(ThurstonRecordBMGeneric, shader1, shader2);
 
 export * from "./core.js";
 export {NativeCamera} from "./geometries/hyp/cameras/native/NativeCamera.js";

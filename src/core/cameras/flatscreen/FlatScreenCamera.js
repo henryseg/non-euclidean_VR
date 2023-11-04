@@ -8,16 +8,15 @@ import mapping from "./shaders/mapping.glsl";
  * @class
  *
  * @classdesc
- * Camera in the non-euclidean scene, with a special projection, used for the BurningMan festival(!)
+ * Camera in the non-euclidean scene, meant to record videos.
  * Suitable only with a flat screen.
  */
-export class FullDomCamera {
+export class FlatScreenCamera {
 
     /**
      * Constructor.
      * @param {Object} parameters - the parameters of the camera.
      * These parameters are
-     * - {number} fov - the field of view
      * - {number} minDist - the minimal distance we ray-march
      * - {number} maxDist - the maximal distance we ray-march
      * - {number} maxSteps - the maximal number of steps during the ray-marching
@@ -70,11 +69,31 @@ export class FullDomCamera {
          */
         this.threshold = parameters.threshold !== undefined ? parameters.threshold : 0.0001;
         /**
+         * Vertical field of view (in degrees)
+         * Default value is the same as in three.js
+         * @type {number}
+         */
+        this.fov = parameters.fov !== undefined ? parameters.fov : 50;
+        /**
          * Position of the camera
          * @type {RelPosition}
          */
         this.position = new RelPosition(parameters.set);
     }
+
+    /**
+     * Vertical field of view in radians
+     * @return {number}
+     */
+    get fovRadians() {
+        return Math.PI * this.fov / 180;
+    }
+
+
+    get isFlatScreenCamera() {
+        return true;
+    }
+
 
     /**
      * Matrix of the underlying Three.js camera in the virtual euclidean scene

@@ -4,6 +4,7 @@
  * Mostly used to carry all informations linked to the camera (minDist, maxDist, maxSteps, etc)
  **********************************************************************************************************************/
 struct Camera {
+    float fovRadians;/** < vertical field of view in radians */
     float minDist;/**< minimal distance we ray-march */
     float maxDist;/**< maximal distance we ray-march */
     int maxSteps;/**< maximal number of steps during the ray-marching */

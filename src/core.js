@@ -8,6 +8,7 @@ export {BasicCamera} from "./core/cameras/basic/BasicCamera.js";
 export {PathTracerCamera} from "./core/cameras/pathTracer/PathTracerCamera.js";
 export {VRCamera} from "./core/cameras/vr/VRCamera.js";
 export {FullDomCamera} from "./core/cameras/fulldom/FullDomCamera.js";
+export {FlatScreenCamera} from "./core/cameras/flatscreen/FlatScreenCamera.js";
 
 export {Group} from "./core/groups/Group.js";
 export {GroupElement} from "./core/groups/GroupElement.js";

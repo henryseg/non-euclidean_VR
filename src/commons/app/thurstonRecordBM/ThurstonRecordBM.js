@@ -1,8 +1,8 @@
-import {Clock, Color, Vector2} from "three";
+import {Clock, Color} from "three";
 
 import {FlyControls} from "../../../controls/keyboard/FlyControls.js";
 import {bind} from "../../../utils.js";
-import {FlatScreenCamera, FlatScreenRenderer, Scene} from "../../../core/General.js";
+import {FullDomCamera, FlatScreenRenderer, Scene} from "../../../core/General.js";
 import {ExpFog} from "../../scenes/expFog/ExpFog.js";
 
 /**
@@ -14,7 +14,7 @@ import {ExpFog} from "../../scenes/expFog/ExpFog.js";
  * Useful to record videos with CCapture
  * CCapture should be inserted as a global variable in a script
  */
-export class ThurstonRecord {
+export class ThurstonRecordBM {
 
     /**
      * Constructor.
@@ -46,9 +46,9 @@ export class ThurstonRecord {
 
         /**
          * The non-euclidean camera for the basic renderer
-         * @type {FlatScreenCamera}
+         * @type {FullDomCamera}
          */
-        this.camera = new FlatScreenCamera({set: this.set});
+        this.camera = new FullDomCamera({set: this.set});
 
         /**
          * Non-euclidean renderer for basic renderer
@@ -59,14 +59,6 @@ export class ThurstonRecord {
         this.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
         document.body.appendChild(this.renderer.domElement);
-
-        /**
-         * Resolution of the recording (in pixels)
-         * By default 16:9 screen with 4K resolution
-         * https://fr.wikipedia.org/wiki/4K
-         * @type {Vector2}
-         */
-        this.recordSize = params.recordSize !== undefined ? params.recordSize : new Vector2(3840, 2160);
 
         // event listener
         const _onWindowResize = bind(this, this.onWindowResize);
@@ -86,7 +78,6 @@ export class ThurstonRecord {
          * @type {boolean}
          */
         this.isRecordOn = false;
-        this.recordOnLoad = false;
         this.capture = undefined;
 
         const _onKeyDown = bind(this, this.onKeyDown);
@@ -128,9 +119,6 @@ export class ThurstonRecord {
 
     recordStart() {
         console.log('start');
-        const _onWindowResize = bind(this, this.onWindowResize);
-        window.removeEventListener('resize', _onWindowResize);
-        this.setSize(this.recordSize.x, this.recordSize.y);
         this.capture = new CCapture({
             framerate: 24,
             format: 'jpg'
@@ -144,9 +132,6 @@ export class ThurstonRecord {
         this.capture.stop();
         this.capture.save();
         this.isRecordOn = false;
-        this.setSize(window.innerWidth, window.innerHeight);
-        const _onWindowResize = bind(this, this.onWindowResize);
-        window.addEventListener("resize", _onWindowResize, false);
     }
 
     onKeyDown(event) {
@@ -163,7 +148,7 @@ export class ThurstonRecord {
      * animation function
      */
     animate() {
-        if (this.recordOnLoad && this.capture === undefined) {
+        if(this.capture === undefined){
             this.recordStart();
         }
         const delta = this.clock.getDelta();
