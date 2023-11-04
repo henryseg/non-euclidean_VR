@@ -1,4 +1,4 @@
-/* ES Module Shims 1.7.3 */
+/* ES Module Shims 1.8.1 */
 (function () {
 
   const hasWindow = typeof window !== 'undefined';
@@ -127,6 +127,9 @@
         relUrl.length === 1  && (relUrl += '/')) ||
         relUrl[0] === '/') {
       const parentProtocol = parentUrl.slice(0, parentUrl.indexOf(':') + 1);
+      if (parentProtocol === 'blob:') {
+        throw new TypeError(`Failed to resolve module specifier "${relUrl}". Invalid relative url or base scheme isn't hierarchical.`);
+      }
       // Disabled, but these cases will give inconsistent results for deep backtracking
       //if (parentUrl[parentProtocol.length] !== '/')
       //  throw new Error('Cannot resolve');
@@ -458,6 +461,7 @@
   };
 
   const registry = importShim._r = {};
+  importShim._w = {};
 
   async function loadAll (load, seen) {
     if (load.b || seen[load.u])
@@ -701,6 +705,7 @@
   const sourceMapURLCommentPrefix = '\n//# sourceMappingURL=';
 
   const jsContentType = /^(text|application)\/(x-)?javascript(;|$)/;
+  const wasmContentType = /^(application)\/wasm(;|$)/;
   const jsonContentType = /^(text|application)\/json(;|$)/;
   const cssContentType = /^(text|application)\/css(;|$)/;
 
@@ -734,8 +739,12 @@
     finally {
       popFetchPool();
     }
-    if (!res.ok)
-      throw Error(`${res.status} ${res.statusText} ${res.url}${fromParent(parent)}`);
+
+    if (!res.ok) {
+      const error = new TypeError(`${res.status} ${res.statusText} ${res.url}${fromParent(parent)}`);
+      error.response = res;
+      throw error;
+    }
     return res;
   }
 
@@ -744,6 +753,21 @@
     const contentType = res.headers.get('content-type');
     if (jsContentType.test(contentType))
       return { r: res.url, s: await res.text(), t: 'js' };
+    else if (wasmContentType.test(contentType)) {
+      const module = importShim._w[url] = await WebAssembly.compileStreaming(res);
+      let s = '', i = 0, importObj = '';
+      for (const impt of WebAssembly.Module.imports(module)) {
+        s += `import * as impt${i} from '${impt.module}';\n`;
+        importObj += `'${impt.module}':impt${i++},`;
+      }
+      i = 0;
+      s += `const instance = await WebAssembly.instantiate(importShim._w['${url}'], {${importObj}});\n`;
+      for (const expt of WebAssembly.Module.exports(module)) {
+        s += `const expt${i} = instance['${expt.name}'];\n`;
+        s += `export { expt${i++} as "${expt.name}" };\n`;
+      }
+      return { r: res.url, s, t: 'wasm' };
+    }
     else if (jsonContentType.test(contentType))
       return { r: res.url, s: `export default ${await res.text()}`, t: 'json' };
     else if (cssContentType.test(contentType)) {
