@@ -13,11 +13,6 @@ import {
  * Are available form three.js:
  * - all the linear algebra
  * - the length of a vector
- *
- * @todo It seems that this class is actually geometry independent
- * (because of the choice of a reference frame).
- * If so, remove for the other files the class extensions,
- * and replace them by an `export {Vector} from './abstract.js'`
  */
 class Vector extends Vector3 {
 

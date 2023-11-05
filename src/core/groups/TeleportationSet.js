@@ -6,19 +6,19 @@ import teleport from "./shaders/teleport.glsl.mustache";
 
 
 /**
- * Possible value for usesCreeping
+ * Possible value for `usesCreeping`
  * No creeping is used
  * @type {number}
  */
 export const CREEPING_OFF = 0;
 /**
- * Possible value for usesCreeping
+ * Possible value for `usesCreeping`
  * Only the creeping defined by the user are used
  * @type {number}
  */
 export const CREEPING_STRICT = 1;
 /**
- * Possible value for usesCreeping
+ * Possible value for `usesCreeping`
  * Uses creeping for all possible teleportations,
  * if the user did not define the creeping function, the computation is done with a binary search
  * @type {number}
@@ -31,7 +31,7 @@ export const CREEPING_FULL = 2;
  *
  * @classdesc
  * Set of teleportations.
- * It implicitly a set of generators of a discrete subgroup and a fundamental domain for this subgroup
+ * It is implicitly a set of generators of a discrete subgroup and a fundamental domain for this subgroup
  */
 export class TeleportationSet {
 

@@ -26,7 +26,7 @@ export class Teleportation {
      * @param {GroupElement} elt - the isometry to apply when teleporting
      * @param {GroupElement} inv - the inverse of the isometry (optional)
      * If the inverse is not passed as an argument, it is computed automatically.
-     * @param {string} glslCreep -  a chunk of GLSL to move to the boundary defined by the test
+     * @param {string} glslCreep -  a chunk of GLSL to move to the boundary defined by the test.
      * The test should be encapsulated in a function with signature ExtVector, float, float -> float
      */
     constructor(set, jsTest, glslTest, elt, inv = undefined, glslCreep = undefined) {
@@ -132,7 +132,7 @@ export class Teleportation {
     /**
      * Return true if the following conditions are satisfies
      * - the teleportation set uses creeping (strict or full)
-     * - the a custom creeping function exists
+     * - a custom creeping function exists
      * @type {boolean}
      */
     get usesCreepingCustom() {

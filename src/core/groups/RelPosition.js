@@ -187,7 +187,7 @@ class RelPosition {
 
     /**
      * Flow the current position.
-     * `v` is the pull back at the origin by the position of the direction in which we flow
+     * `v` is the pullback at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
      * This method makes sure that the boost stays in the fundamental domain
      * @param {Vector} v - the direction (and length) to follow

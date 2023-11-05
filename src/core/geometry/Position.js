@@ -73,7 +73,7 @@ class Position {
     }
 
     /**
-     * Make the the quaternion has length one.
+     * Make the quaternion has length one.
      * @return {Position} The current position
      */
     reduceErrorQuaternion() {
