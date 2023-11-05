@@ -56,7 +56,7 @@ Position.prototype.flowFromOrigin = function (v) {
     // The quaternion corresponding to R_alpha * P in the paper
     // This is a matrix sending e_x to u
     // Such a matrix is well-defined up to a rotation around e_x.
-    // However the formula in the paper shows that
+    // However, the formula in the paper shows that
     // the parallel transport operator Q does not depend on this choice.
     const qp = new Quaternion().setFromUnitVectors(ex, u);
 

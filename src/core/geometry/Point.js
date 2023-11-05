@@ -4,7 +4,7 @@
  * @classdesc
  * Point in the geometry.
  */
-class Point {
+export class Point {
 
     /**
      * Constructor.
@@ -87,9 +87,4 @@ class Point {
         res.copy(this);
         return res;
     }
-}
-
-
-export {
-    Point
 }

@@ -10,7 +10,7 @@ import {Vector3, Vector4, Matrix4} from "three";
  * - all the linear algebra
  * - the length of a vector
  */
-class Vector extends Vector3 {
+export class Vector extends Vector3 {
 
     /**
      * True if the object implements the class `Vector`
@@ -47,8 +47,4 @@ class Vector extends Vector3 {
         this.applyQuaternion(position.quaternion);
         return this;
     }
-}
-
-export {
-    Vector
 }

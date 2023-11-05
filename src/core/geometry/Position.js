@@ -11,7 +11,7 @@ import {Vector} from "./Vector.js";
  *
  * @todo Choose a better name ??
  */
-class Position {
+export class Position {
 
     /**
      * Constructor.
@@ -26,17 +26,22 @@ class Position {
         /**
          * The facing.
          * We represent it as quaternion, whose action by conjugation on R^3 defines an element of O(3)
+         * @type {Quaternion}
          */
         this.quaternion = new Quaternion();
     }
 
+    /**
+     * True if the object implements the class `Position`
+     * @return {boolean}
+     */
     get isPosition(){
         return true;
     }
 
     /**
-     * The facing as a Matrix4, representing an element of O(3).
-     * This is the data that is actually passed to the shader
+     * The `facing` as a Matrix4, representing an element of O(3).
+     * These are the data that actually passed to the shader
      * @type {Matrix4}
      */
     get facing() {
@@ -49,7 +54,7 @@ class Position {
      * @return {Position} The current position
      */
     setBoost(isom) {
-        this.boost = isom;
+        this.boost.copy(isom);
         return this;
     }
 
@@ -59,7 +64,7 @@ class Position {
      * @return {Position} The current position
      */
     setQuaternion(quaternion) {
-        this.quaternion = quaternion;
+        this.quaternion.copy(quaternion);
         return this;
     }
 
@@ -152,18 +157,7 @@ class Position {
     }
 
     /**
-     * Set the current position to its inverse
-     * @deprecated Not sure this is really needed
-     * @return {Position} The current position
-     */
-    invert() {
-        this.boost.invert();
-        this.quaternion.conjugate();
-        return this;
-    }
-
-    /**
-     * Replace the current position, by the one obtained by flow the initial position `(id, id)`
+     * Replace the current position, by the one obtained by flowing the initial position `(id, id)`
      * in the direction `v` (given in the reference frame).
      * @abstract
      * @param {Vector} v - the direction in the reference frame
@@ -175,7 +169,7 @@ class Position {
 
     /**
      * Flow the current position.
-     * `v` is the pull back at the origin by the position of the direction in which we flow
+     * `v` is the pullback at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`.
      *
      * The procedure goes as follows.
@@ -241,17 +235,6 @@ class Position {
     }
 
     /**
-     * Return a new copy of the current position.
-     * @return {Position} The clone of the current position
-     */
-    clone() {
-        let res = new Position();
-        res.boost.copy(this.boost);
-        res.quaternion.copy(this.quaternion);
-        return res;
-    }
-
-    /**
      * Set the current position with the given one.
      * @param {Position} position - the position to copy
      * @return {Position} the current position
@@ -261,8 +244,15 @@ class Position {
         this.quaternion.copy(position.quaternion);
         return this;
     }
+
+    /**
+     * Return a new copy of the current position.
+     * @return {Position} The clone of the current position
+     */
+    clone() {
+        const res = new Position();
+        res.copy(this);
+        return res;
+    }
 }
 
-export {
-    Position
-}

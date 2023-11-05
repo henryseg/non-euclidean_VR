@@ -4,7 +4,7 @@
  * @classdesc
  * Isometry of the geometry.
  */
-class Isometry {
+export class Isometry {
 
     /**
      * Constructor.
@@ -163,8 +163,4 @@ class Isometry {
         return res;
     }
 
-}
-
-export {
-    Isometry
 }
