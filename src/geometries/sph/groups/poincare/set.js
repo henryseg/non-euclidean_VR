@@ -3,7 +3,7 @@ import {Vector4, Vector3, Matrix4} from "three";
 import {Vector} from "../../../../core/geometry/Vector.js";
 import {Point} from "../../geometry/Point.js";
 import {Isometry} from "../../geometry/Isometry.js";
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 import {Group} from "../../../../commons/groups/isometry/Group.js";
 
 /**

@@ -1,6 +1,6 @@
 import {Vector4} from "three";
 
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 import {Group} from "./Group.js";
 import {Vector} from "../../geometry/General.js";
 import {RegularHypPolygon} from "../../../../utils/regularHypPolygon/RegularHypPolygon";

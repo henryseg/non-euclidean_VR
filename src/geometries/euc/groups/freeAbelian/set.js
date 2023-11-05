@@ -1,5 +1,5 @@
 import {Group} from "./Group.js";
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 
 
 const group = new Group();

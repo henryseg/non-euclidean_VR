@@ -1,14 +1,10 @@
 /**
- * @class
- *
  * @classdesc
  * Isometry of the geometry.
  */
 export class Isometry {
 
     /**
-     * Constructor.
-     *
      * Since the constructor is different for each geometry, it delegates the task to the method `build`
      * (that can be overwritten easily unlike the constructor).
      * Another way to do would be to implement for each geometry a new class that inherit from Isometry.
@@ -135,7 +131,7 @@ export class Isometry {
      * Check if the current isometry and `isom` are the same.
      * Mainly for debugging purposes.
      * @abstract
-     * @param isom
+     * @param {Isometry} isom
      * @return {boolean} true if the isometries are equal, false otherwise
      */
     equals(isom) {

@@ -3,9 +3,10 @@ import {GroupElement} from "./GroupElement.js";
 /**
  * @class
  * @abstract
+ *
  * @classdesc
  * Group (in the mathematical sense).
- * This class is mainly a contained to receive the data common to all elements of the group.
+ * This class is mainly a container to receive the data common to all elements of the group.
  */
 export class Group {
     /**
@@ -16,7 +17,7 @@ export class Group {
 
     /**
      * Create an element in the group.
-     * If no data is passed it should be the identity.
+     * If no data is passed, it should be the identity.
      * @abstract
      * @return {GroupElement}
      */

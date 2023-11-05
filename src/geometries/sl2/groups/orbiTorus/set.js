@@ -1,4 +1,4 @@
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 import {Group} from "../../../../commons/groups/isometry/Group.js";
 import {Point, Vector} from "../../geometry/General.js";
 import {Vector4} from "three";

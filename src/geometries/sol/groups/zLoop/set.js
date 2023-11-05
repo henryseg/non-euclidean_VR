@@ -1,4 +1,4 @@
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 import {Group} from "../../../../commons/groups/isometry/Group.js";
 
 const group = new Group();

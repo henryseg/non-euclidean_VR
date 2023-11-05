@@ -1,7 +1,6 @@
 import {Vector3, Vector4, Matrix4} from "three";
 
 /**
- * @class
  * @extends Vector3
  *
  * @classdesc

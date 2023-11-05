@@ -102,11 +102,6 @@ export class BasicCamera {
         return this.threeCamera.fov;
     }
 
-    /**
-     * Shortcut to reset the field of view of the underlying Three.js camera
-     * (Recall that in Three.js the field of view is the vertical one.)
-     * @param {number} value
-     */
     set fov(value) {
         this.threeCamera.fov = value;
         this.threeCamera.updateProjectionMatrix();

@@ -85,11 +85,6 @@ export class VideoFrameTextureMaterial extends Material {
          */
         this.loop = params.loop !== undefined ? params.loop : false;
 
-        /**
-         * Says if the video should be looped
-         * @type {boolean}
-         */
-        this.loop = params.loop !== undefined ? params.loop : false;
 
         /**
          * A callback called at each time a frame is loaded

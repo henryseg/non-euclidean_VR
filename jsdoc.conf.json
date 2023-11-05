@@ -11,9 +11,7 @@
         "include": [
             "./src/"
         ],
-        "exclude": [
-            "./src/lib"
-        ],
+        "exclude": [],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },

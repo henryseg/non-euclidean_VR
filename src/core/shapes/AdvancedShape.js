@@ -7,8 +7,8 @@ import {Shape} from "./Shape.js";
  * @classdesc
  * A representation of 3D advanced shapes.
  * An advanced shape is a shape that is built on top of other shapes.
- * The types of the properties of an advanced shape may depend on the instance of this shape.
- * Theses properties will not be passed to the shader.
+ * The type of the properties of an advanced shape may depend on the instance of this shape.
+ * These properties will not be passed to the shader.
  * Only the signed distance function will carry the relevant data.
  */
 export class AdvancedShape extends Shape {

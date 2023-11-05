@@ -1,8 +1,8 @@
 import {Generic} from "../Generic.js";
 
 /**
- * @class
  * @abstract
+ * @augments Generic
  *
  * @classdesc
  * Abstract class for lights
@@ -10,7 +10,6 @@ import {Generic} from "../Generic.js";
 export class Light extends Generic {
 
     /**
-     * Constructor.
      * @param {number} maxDirs - the maximum number of directions computed for this light.
       */
     constructor(maxDirs) {

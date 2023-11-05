@@ -7,8 +7,8 @@ import {Shape} from "./Shape.js";
  * @classdesc
  * A representation of 3D basic shape.
  * A basic shape is a shape that is not built on top of other shapes.
- * The types of the properties of a basic shape should not depend on the instance of this shape.
- * Indeed these properties will be passed to the shader in the form of a struct.
+ * The type of the properties of a basic shape should not depend on the instance of this shape.
+ * Indeed, these properties will be passed to the shader in the form of a struct.
  * (This gives the options to animate the shapes.)
  */
 export class BasicShape extends Shape {

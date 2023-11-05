@@ -30,21 +30,24 @@ export class StraightGeoShape extends BasicShape {
         super(isom);
         this.radius = radius;
         /**
+         * A point on the (unique) vertical half plane containing the geodesic
          * @type {Object}
          * @private
-         * A point on the (unique) vertical half plane containing the geodesic
+         *
          */
         this._pos = undefined;
         /**
+         * The normal of the (unique) vertical half plane containing the geodesic
          * @type {Vector4}
          * @private
-         * The normal of the (unique) vertical half plane containing the geodesic
+         *
          */
         this._normal = undefined;
         /**
+         * Normal to the geodesic, inside the vertical half plane containing it
          * @type {Vector4}
          * @private
-         * Normal to the geodesic, inside the vertical half plane containing it
+         *
          */
         this._trans = undefined;
     }

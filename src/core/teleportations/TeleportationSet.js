@@ -1,7 +1,8 @@
 import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 import {Teleportation} from "./Teleportation.js";
 
-import relative from "./shaders/relative.glsl";
+import groups from "../groups/shaders/groups.glsl";
+import relative from "../geometry/shaders/relative.glsl";
 import teleport from "./shaders/teleport.glsl.mustache";
 
 
@@ -118,6 +119,7 @@ export class TeleportationSet {
      */
     shader(shaderBuilder) {
         this.group.shader(shaderBuilder);
+        shaderBuilder.addChunk(groups);
         shaderBuilder.addChunk(relative);
         for (const teleportation of this.teleportations) {
             teleportation.shader(shaderBuilder);

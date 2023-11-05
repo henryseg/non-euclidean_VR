@@ -1170,22 +1170,6 @@ module.exports = function() { var T = new H.Template({code: function (c,p,i) { v
 
 /***/ }),
 
-/***/ 8008:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var H = __webpack_require__(5485);
-module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("/**");t.b("\n" + i);t.b(" * Default creeping function (binary search)");t.b("\n" + i);t.b(" * @param start starting point of the creeping");t.b("\n" + i);t.b(" * @param outside vector out of the boundary (obtained from the previous flow, or the previous creeping)");t.b("\n" + i);t.b(" * @param offset how long we flow after passing the boundary");t.b("\n" + i);t.b(" */");t.b("\n" + i);t.b("float ");t.b(t.v(t.f("glslCreepName",c,p,0)));t.b("(ExtVector v, ExtVector outside,  float offset){");t.b("\n" + i);t.b("    ExtVector try = outside;");t.b("\n" + i);t.b("    float sIn = 0.;");t.b("\n" + i);t.b("    float sOut = try.data.lastFlowDist;");t.b("\n" + i);t.b("    float s;");t.b("\n" + i);t.b("    for(int i=0; i < 100; i++){");t.b("\n" + i);t.b("        if(sOut - sIn < offset){");t.b("\n" + i);t.b("            break;");t.b("\n" + i);t.b("        }");t.b("\n" + i);t.b("        s = 0.5 * sIn + 0.5 * sOut;");t.b("\n" + i);t.b("        try = flow(v,s);");t.b("\n" + i);t.b("        if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(try.vector.local.pos)){");t.b("\n" + i);t.b("            sOut = s;");t.b("\n" + i);t.b("            outside = try;");t.b("\n" + i);t.b("        } else {");t.b("\n" + i);t.b("            sIn = s;");t.b("\n" + i);t.b("        }");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    return sOut;");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "/**\n * Default creeping function (binary search)\n * @param start starting point of the creeping\n * @param outside vector out of the boundary (obtained from the previous flow, or the previous creeping)\n * @param offset how long we flow after passing the boundary\n */\nfloat {{glslCreepName}}(ExtVector v, ExtVector outside,  float offset){\n    ExtVector try = outside;\n    float sIn = 0.;\n    float sOut = try.data.lastFlowDist;\n    float s;\n    for(int i=0; i < 100; i++){\n        if(sOut - sIn < offset){\n            break;\n        }\n        s = 0.5 * sIn + 0.5 * sOut;\n        try = flow(v,s);\n        if({{glslTestName}}(try.vector.local.pos)){\n            sOut = s;\n            outside = try;\n        } else {\n            sIn = s;\n        }\n    }\n    return sOut;\n}", H);return T.render.apply(T, arguments); };
-
-/***/ }),
-
-/***/ 968:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var H = __webpack_require__(5485);
-module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("/**");t.b("\n" + i);t.b("* Teleportation.");t.b("\n" + i);t.b("* Check if the local vector is still in the fundamental domain define by the teleportation tests.");t.b("\n" + i);t.b("* If not, teleport the local vector, update the cellBoost and its inverse accordingly and set teleported to true");t.b("\n" + i);t.b("* Otherwise, do nothing and set teleported to false");t.b("\n" + i);t.b("* @param[in] v the relative vector to teleport.");t.b("\n" + i);t.b("*/");t.b("\n" + i);t.b("ExtVector teleport(ExtVector v){");t.b("\n" + i);t.b("    v.data.isTeleported = false;");t.b("\n" + i);if(t.s(t.f("teleportations",c,p,1),c,p,0,424,621,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(v.vector.local.pos)){");t.b("\n" + i);t.b("            v.vector = rewrite(v.vector, ");t.b(t.v(t.d("elt.name",c,p,0)));t.b(", ");t.b(t.v(t.d("inv.name",c,p,0)));t.b(");");t.b("\n" + i);t.b("            v.data.isTeleported = true;");t.b("\n" + i);t.b("            return v;");t.b("\n" + i);t.b("        }");t.b("\n" + i);});c.pop();}t.b("    return v;");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");t.b("\n" + i);t.b("/**");t.b("\n" + i);t.b("* Does one of the two following transformation:");t.b("\n" + i);t.b("* flow the vector by the given time, if the vector escape the fundamental domain,");t.b("\n" + i);t.b("* then try to find a smaller time so that the vector is moved closer to the boundary of the fudamental domain");t.b("\n" + i);t.b("* (and even a bit further)");t.b("\n" + i);t.b("*");t.b("\n" + i);t.b("* @param[inout] v the relative vector to flow / teleport / creep.");t.b("\n" + i);t.b("* @param[in] t the (maximal) time to flow");t.b("\n" + i);t.b("* @param[in] offset the amount we march passed the boundary");t.b("\n" + i);t.b("*/");t.b("\n" + i);t.b("float creepingDist(ExtVector v, float t, float offset){");t.b("\n" + i);t.b("    float res = t;");t.b("\n" + i);t.b("    ExtVector try = flow(v, t);");t.b("\n" + i);if(t.s(t.f("teleportations",c,p,1),c,p,0,1233,1638,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);if(t.s(t.f("usesCreepingCustom",c,p,1),c,p,0,1266,1407,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(try.vector.local.pos)){");t.b("\n" + i);t.b("                res = min(res, ");t.b(t.v(t.f("glslCreepName",c,p,0)));t.b("(v, offset));");t.b("\n" + i);t.b("            }");t.b("\n" + i);});c.pop();}t.b("\n" + i);if(t.s(t.f("usesCreepingBinary",c,p,1),c,p,0,1463,1609,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(try.vector.local.pos)){");t.b("\n" + i);t.b("                res = min(res, ");t.b(t.v(t.f("glslCreepName",c,p,0)));t.b("(v, try, offset));");t.b("\n" + i);t.b("            }");t.b("\n" + i);});c.pop();}t.b("\n" + i);});c.pop();}t.b("    return res;");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "/**\n* Teleportation.\n* Check if the local vector is still in the fundamental domain define by the teleportation tests.\n* If not, teleport the local vector, update the cellBoost and its inverse accordingly and set teleported to true\n* Otherwise, do nothing and set teleported to false\n* @param[in] v the relative vector to teleport.\n*/\nExtVector teleport(ExtVector v){\n    v.data.isTeleported = false;\n    {{#teleportations}}\n        if({{glslTestName}}(v.vector.local.pos)){\n            v.vector = rewrite(v.vector, {{elt.name}}, {{inv.name}});\n            v.data.isTeleported = true;\n            return v;\n        }\n    {{/teleportations}}\n    return v;\n}\n\n\n/**\n* Does one of the two following transformation:\n* flow the vector by the given time, if the vector escape the fundamental domain,\n* then try to find a smaller time so that the vector is moved closer to the boundary of the fudamental domain\n* (and even a bit further)\n*\n* @param[inout] v the relative vector to flow / teleport / creep.\n* @param[in] t the (maximal) time to flow\n* @param[in] offset the amount we march passed the boundary\n*/\nfloat creepingDist(ExtVector v, float t, float offset){\n    float res = t;\n    ExtVector try = flow(v, t);\n    {{#teleportations}}\n\n        {{#usesCreepingCustom}}\n            if({{glslTestName}}(try.vector.local.pos)){\n                res = min(res, {{glslCreepName}}(v, offset));\n            }\n        {{/usesCreepingCustom}}\n\n        {{#usesCreepingBinary}}\n            if({{glslTestName}}(try.vector.local.pos)){\n                res = min(res, {{glslCreepName}}(v, try, offset));\n            }\n        {{/usesCreepingBinary}}\n\n    {{/teleportations}}\n    return res;\n}\n\n\n", H);return T.render.apply(T, arguments); };
-
-/***/ }),
-
 /***/ 7577:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1279,6 +1263,22 @@ module.exports = function() { var T = new H.Template({code: function (c,p,i) { v
 
 var H = __webpack_require__(5485);
 module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("vec2 ");t.b(t.v(t.f("name",c,p,0)));t.b("_uvMap(RelVector v){");t.b("\n" + i);t.b("    return uvMap(");t.b(t.v(t.f("name",c,p,0)));t.b(", v);");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "vec2 {{name}}_uvMap(RelVector v){\n    return uvMap({{name}}, v);\n}", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 3148:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("/**");t.b("\n" + i);t.b(" * Default creeping function (binary search)");t.b("\n" + i);t.b(" * @param start starting point of the creeping");t.b("\n" + i);t.b(" * @param outside vector out of the boundary (obtained from the previous flow, or the previous creeping)");t.b("\n" + i);t.b(" * @param offset how long we flow after passing the boundary");t.b("\n" + i);t.b(" */");t.b("\n" + i);t.b("float ");t.b(t.v(t.f("glslCreepName",c,p,0)));t.b("(ExtVector v, ExtVector outside,  float offset){");t.b("\n" + i);t.b("    ExtVector try = outside;");t.b("\n" + i);t.b("    float sIn = 0.;");t.b("\n" + i);t.b("    float sOut = try.data.lastFlowDist;");t.b("\n" + i);t.b("    float s;");t.b("\n" + i);t.b("    for(int i=0; i < 100; i++){");t.b("\n" + i);t.b("        if(sOut - sIn < offset){");t.b("\n" + i);t.b("            break;");t.b("\n" + i);t.b("        }");t.b("\n" + i);t.b("        s = 0.5 * sIn + 0.5 * sOut;");t.b("\n" + i);t.b("        try = flow(v,s);");t.b("\n" + i);t.b("        if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(try.vector.local.pos)){");t.b("\n" + i);t.b("            sOut = s;");t.b("\n" + i);t.b("            outside = try;");t.b("\n" + i);t.b("        } else {");t.b("\n" + i);t.b("            sIn = s;");t.b("\n" + i);t.b("        }");t.b("\n" + i);t.b("    }");t.b("\n" + i);t.b("    return sOut;");t.b("\n" + i);t.b("}");return t.fl(); },partials: {}, subs: {  }}, "/**\n * Default creeping function (binary search)\n * @param start starting point of the creeping\n * @param outside vector out of the boundary (obtained from the previous flow, or the previous creeping)\n * @param offset how long we flow after passing the boundary\n */\nfloat {{glslCreepName}}(ExtVector v, ExtVector outside,  float offset){\n    ExtVector try = outside;\n    float sIn = 0.;\n    float sOut = try.data.lastFlowDist;\n    float s;\n    for(int i=0; i < 100; i++){\n        if(sOut - sIn < offset){\n            break;\n        }\n        s = 0.5 * sIn + 0.5 * sOut;\n        try = flow(v,s);\n        if({{glslTestName}}(try.vector.local.pos)){\n            sOut = s;\n            outside = try;\n        } else {\n            sIn = s;\n        }\n    }\n    return sOut;\n}", H);return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 5103:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var H = __webpack_require__(5485);
+module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("/**");t.b("\n" + i);t.b("* Teleportation.");t.b("\n" + i);t.b("* Check if the local vector is still in the fundamental domain define by the teleportation tests.");t.b("\n" + i);t.b("* If not, teleport the local vector, update the cellBoost and its inverse accordingly and set teleported to true");t.b("\n" + i);t.b("* Otherwise, do nothing and set teleported to false");t.b("\n" + i);t.b("* @param[in] v the relative vector to teleport.");t.b("\n" + i);t.b("*/");t.b("\n" + i);t.b("ExtVector teleport(ExtVector v){");t.b("\n" + i);t.b("    v.data.isTeleported = false;");t.b("\n" + i);if(t.s(t.f("teleportations",c,p,1),c,p,0,424,621,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("        if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(v.vector.local.pos)){");t.b("\n" + i);t.b("            v.vector = rewrite(v.vector, ");t.b(t.v(t.d("elt.name",c,p,0)));t.b(", ");t.b(t.v(t.d("inv.name",c,p,0)));t.b(");");t.b("\n" + i);t.b("            v.data.isTeleported = true;");t.b("\n" + i);t.b("            return v;");t.b("\n" + i);t.b("        }");t.b("\n" + i);});c.pop();}t.b("    return v;");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");t.b("\n" + i);t.b("/**");t.b("\n" + i);t.b("* Does one of the two following transformation:");t.b("\n" + i);t.b("* flow the vector by the given time, if the vector escape the fundamental domain,");t.b("\n" + i);t.b("* then try to find a smaller time so that the vector is moved closer to the boundary of the fudamental domain");t.b("\n" + i);t.b("* (and even a bit further)");t.b("\n" + i);t.b("*");t.b("\n" + i);t.b("* @param[inout] v the relative vector to flow / teleport / creep.");t.b("\n" + i);t.b("* @param[in] t the (maximal) time to flow");t.b("\n" + i);t.b("* @param[in] offset the amount we march passed the boundary");t.b("\n" + i);t.b("*/");t.b("\n" + i);t.b("float creepingDist(ExtVector v, float t, float offset){");t.b("\n" + i);t.b("    float res = t;");t.b("\n" + i);t.b("    ExtVector try = flow(v, t);");t.b("\n" + i);if(t.s(t.f("teleportations",c,p,1),c,p,0,1233,1638,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("\n" + i);if(t.s(t.f("usesCreepingCustom",c,p,1),c,p,0,1266,1407,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(try.vector.local.pos)){");t.b("\n" + i);t.b("                res = min(res, ");t.b(t.v(t.f("glslCreepName",c,p,0)));t.b("(v, offset));");t.b("\n" + i);t.b("            }");t.b("\n" + i);});c.pop();}t.b("\n" + i);if(t.s(t.f("usesCreepingBinary",c,p,1),c,p,0,1463,1609,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("            if(");t.b(t.v(t.f("glslTestName",c,p,0)));t.b("(try.vector.local.pos)){");t.b("\n" + i);t.b("                res = min(res, ");t.b(t.v(t.f("glslCreepName",c,p,0)));t.b("(v, try, offset));");t.b("\n" + i);t.b("            }");t.b("\n" + i);});c.pop();}t.b("\n" + i);});c.pop();}t.b("    return res;");t.b("\n" + i);t.b("}");t.b("\n");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "/**\n* Teleportation.\n* Check if the local vector is still in the fundamental domain define by the teleportation tests.\n* If not, teleport the local vector, update the cellBoost and its inverse accordingly and set teleported to true\n* Otherwise, do nothing and set teleported to false\n* @param[in] v the relative vector to teleport.\n*/\nExtVector teleport(ExtVector v){\n    v.data.isTeleported = false;\n    {{#teleportations}}\n        if({{glslTestName}}(v.vector.local.pos)){\n            v.vector = rewrite(v.vector, {{elt.name}}, {{inv.name}});\n            v.data.isTeleported = true;\n            return v;\n        }\n    {{/teleportations}}\n    return v;\n}\n\n\n/**\n* Does one of the two following transformation:\n* flow the vector by the given time, if the vector escape the fundamental domain,\n* then try to find a smaller time so that the vector is moved closer to the boundary of the fudamental domain\n* (and even a bit further)\n*\n* @param[inout] v the relative vector to flow / teleport / creep.\n* @param[in] t the (maximal) time to flow\n* @param[in] offset the amount we march passed the boundary\n*/\nfloat creepingDist(ExtVector v, float t, float offset){\n    float res = t;\n    ExtVector try = flow(v, t);\n    {{#teleportations}}\n\n        {{#usesCreepingCustom}}\n            if({{glslTestName}}(try.vector.local.pos)){\n                res = min(res, {{glslCreepName}}(v, offset));\n            }\n        {{/usesCreepingCustom}}\n\n        {{#usesCreepingBinary}}\n            if({{glslTestName}}(try.vector.local.pos)){\n                res = min(res, {{glslCreepName}}(v, try, offset));\n            }\n        {{/usesCreepingBinary}}\n\n    {{/teleportations}}\n    return res;\n}\n\n\n", H);return T.render.apply(T, arguments); };
 
 /***/ }),
 
@@ -1625,10 +1625,17 @@ module.exports = "                                                              
 
 /***/ }),
 
-/***/ 2792:
+/***/ 1043:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                       \n                                                                                               \n  \n                                                                                                                        \n                                                                                                                        \n\n   \n              \n                                \n   \nPoint applyIsometry(GroupElement elt, Point p){\n    return applyIsometry(toIsometry(elt), p);\n}\n\nPoint applyGroupElement(GroupElement elt, Point p){\n    return applyIsometry(toIsometry(elt), p);\n}\n\n   \n              \n                                \n   \nVector applyIsometry(GroupElement elt, Vector v){\n    return applyIsometry(toIsometry(elt), v);\n}\n\nVector applyGroupElement(GroupElement elt, Vector v){\n    return applyIsometry(toIsometry(elt), v);\n}\n\n\n\n                                                                                                                        \n  \n                      \n                                                        \n                                                                     \n                        \n                                                                                 \n                                                                                 \n                                                                                   \n                                                                                    \n                                                                       \n                                                                                                                        \n\nstruct RelPosition {\n    Position local;\n    GroupElement cellBoost;\n    GroupElement invCellBoost;\n};\n\n\n                                                                                                                        \n  \n                    \n                                  \n                                                                       \n                      \n                                                                                 \n                                                                                 \n                                                                            \n                                                                                    \n                                                                                                                        \n\nstruct RelVector {\n    Vector local;\n    GroupElement cellBoost;\n    GroupElement invCellBoost;\n};\n\n\n   \n                                                            \n   \nRelVector reduceError(RelVector v){\n    v.local = reduceError(v.local);\n    return v;\n}\n\n   \n                         \n                            \n                                                      \n   \nRelVector add(RelVector v1, RelVector v2){\n    v1.local = add(v1.local, v2.local);\n    return v1;\n}\n\n   \n                              \n                            \n                                                      \n   \nRelVector sub(RelVector v1, RelVector v2){\n    v1.local = sub(v1.local, v2.local);\n    return v1;\n}\n\n   \n                                   \n                         \n                      \n   \nRelVector multiplyScalar(float s, RelVector v){\n    v.local = multiplyScalar(s, v.local);\n    return v;\n}\n\n   \n                                                                                 \n                     \n                                                        \n   \nfloat geomDot(RelVector v1, RelVector v2) {\n    return geomDot(v1.local, v2.local);\n}\n\n   \n                              \n   \nRelVector geomNormalize(RelVector v){\n    v.local = geomNormalize(v.local);\n    return v;\n}\n\n   \n                                   \n                                                        \n   \nRelVector geomMix(RelVector v1, RelVector v2, float a) {\n    v1.local = geomMix(v1.local, v2.local, a);\n    return v1;\n}\n\n   \n                                            \n   \nRelVector negate(RelVector v){\n    v.local = negate(v.local);\n    return v;\n}\n\n   \n                                                                     \n                                                       \n   \nRelVector geomReflect(RelVector v, RelVector normal){\n    v.local = geomReflect(v.local, normal.local);\n    return v;\n}\n\n\n   \n                                                                     \n                                                       \n   \nRelVector geomRefract(RelVector v, RelVector normal, float n){\n    v.local = geomRefract(v.local, normal.local, n);\n    return v;\n}\n\n   \n                         \n                                            \n                                                                         \n   \nRelVector flow(RelVector v, float t) {\n    v.local = flow(v.local, t);\n    return v;\n}\n\n   \n                                                                                          \n                                                                           \n                                                                          \n                               \n                                                                                              \n   \nRelVector smallShift(RelVector v, vec3 dp){\n    v.local = smallShift(v.local, dp);\n    return v;\n                                                 \n                                                               \n}\n\n\n   \n                                                                                                            \n                           \n                                                   \n                                                                                             \n                                            \n   \n                                                   \n                                                   \n               \n                                                             \n                                                                 \n   \n\n   \n                                                                                                            \n                                                   \n                                                                                             \n   \nRelVector createRelVector(RelVector v, vec3 coords){\n    v.local =  createVector(v.local.pos, coords);\n    return v;\n                                                           \n                                                               \n}\n\n   \n                                                                  \n                          \n                                           \n   \nRelVector applyPosition(RelPosition position, Vector v) {\n    Vector local = applyPosition(position.local, v);\n    return RelVector(local, position.cellBoost, position.invCellBoost);\n}\n\n   \n                                                                                                                    \n   \nRelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){\n    v.local = applyGroupElement(elt, v.local);\n                                     \n                                       \n    v.cellBoost = multiply(v.cellBoost, inv);\n    v.invCellBoost = multiply(elt, v.invCellBoost);\n    return v;\n}\n\n\n                                                                                                                        \n  \n                    \n                                    \n                                                                              \n                  \n                                                      \n                                                                                         \n  \n                                                                                                                        \n\nstruct ExtVector {\n    RelVector vector;\n    VectorData data;\n};\n\n\nExtVector flow(ExtVector v, float t) {\n    v.vector = flow(v.vector, t);\n    v.data.lastFlowDist = t;\n    v.data.lastBounceDist = v.data.lastBounceDist + t;\n    v.data.totalDist  = v.data.totalDist + t;\n    return v;\n}\n\n\n\n"
+module.exports = "                                                                                                                        \n  \n                      \n                                                        \n                                                                     \n                        \n                                                                                 \n                                                                                 \n                                                                                   \n                                                                                    \n                                                                       \n                                                                                                                        \n\nstruct RelPosition {\n    Position local;\n    GroupElement cellBoost;\n    GroupElement invCellBoost;\n};\n\n\n                                                                                                                        \n  \n                    \n                                  \n                                                                       \n                      \n                                                                                 \n                                                                                 \n                                                                            \n                                                                                    \n                                                                                                                        \n\nstruct RelVector {\n    Vector local;\n    GroupElement cellBoost;\n    GroupElement invCellBoost;\n};\n\n\n   \n                                                            \n   \nRelVector reduceError(RelVector v){\n    v.local = reduceError(v.local);\n    return v;\n}\n\n   \n                         \n                            \n                                                      \n   \nRelVector add(RelVector v1, RelVector v2){\n    v1.local = add(v1.local, v2.local);\n    return v1;\n}\n\n   \n                              \n                            \n                                                      \n   \nRelVector sub(RelVector v1, RelVector v2){\n    v1.local = sub(v1.local, v2.local);\n    return v1;\n}\n\n   \n                                   \n                         \n                      \n   \nRelVector multiplyScalar(float s, RelVector v){\n    v.local = multiplyScalar(s, v.local);\n    return v;\n}\n\n   \n                                                                                 \n                     \n                                                        \n   \nfloat geomDot(RelVector v1, RelVector v2) {\n    return geomDot(v1.local, v2.local);\n}\n\n   \n                              \n   \nRelVector geomNormalize(RelVector v){\n    v.local = geomNormalize(v.local);\n    return v;\n}\n\n   \n                                   \n                                                        \n   \nRelVector geomMix(RelVector v1, RelVector v2, float a) {\n    v1.local = geomMix(v1.local, v2.local, a);\n    return v1;\n}\n\n   \n                                            \n   \nRelVector negate(RelVector v){\n    v.local = negate(v.local);\n    return v;\n}\n\n   \n                                                                     \n                                                       \n   \nRelVector geomReflect(RelVector v, RelVector normal){\n    v.local = geomReflect(v.local, normal.local);\n    return v;\n}\n\n\n   \n                                                                     \n                                                       \n   \nRelVector geomRefract(RelVector v, RelVector normal, float n){\n    v.local = geomRefract(v.local, normal.local, n);\n    return v;\n}\n\n   \n                         \n                                            \n                                                                         \n   \nRelVector flow(RelVector v, float t) {\n    v.local = flow(v.local, t);\n    return v;\n}\n\n   \n                                                                                          \n                                                                           \n                                                                          \n                               \n                                                                                              \n   \nRelVector smallShift(RelVector v, vec3 dp){\n    v.local = smallShift(v.local, dp);\n    return v;\n                                                 \n                                                               \n}\n\n\n   \n                                                                                                            \n                           \n                                                   \n                                                                                             \n                                            \n   \n                                                   \n                                                   \n               \n                                                             \n                                                                 \n   \n\n   \n                                                                                                            \n                                                   \n                                                                                             \n   \nRelVector createRelVector(RelVector v, vec3 coords){\n    v.local =  createVector(v.local.pos, coords);\n    return v;\n                                                           \n                                                               \n}\n\n   \n                                                                  \n                          \n                                           \n   \nRelVector applyPosition(RelPosition position, Vector v) {\n    Vector local = applyPosition(position.local, v);\n    return RelVector(local, position.cellBoost, position.invCellBoost);\n}\n\n   \n                                                                                                                    \n   \nRelVector rewrite(RelVector v, GroupElement elt, GroupElement inv){\n    v.local = applyGroupElement(elt, v.local);\n                                     \n                                       \n    v.cellBoost = multiply(v.cellBoost, inv);\n    v.invCellBoost = multiply(elt, v.invCellBoost);\n    return v;\n}\n\n\n                                                                                                                        \n  \n                    \n                                    \n                                                                              \n                  \n                                                      \n                                                                                         \n  \n                                                                                                                        \n\nstruct ExtVector {\n    RelVector vector;\n    VectorData data;\n};\n\n\nExtVector flow(ExtVector v, float t) {\n    v.vector = flow(v.vector, t);\n    v.data.lastFlowDist = t;\n    v.data.lastBounceDist = v.data.lastBounceDist + t;\n    v.data.totalDist  = v.data.totalDist + t;\n    return v;\n}\n\n\n\n"
+
+/***/ }),
+
+/***/ 3711:
+/***/ ((module) => {
+
+module.exports = "   \n              \n                                \n   \nPoint applyIsometry(GroupElement elt, Point p){\n    return applyIsometry(toIsometry(elt), p);\n}\n\nPoint applyGroupElement(GroupElement elt, Point p){\n    return applyIsometry(toIsometry(elt), p);\n}\n\n   \n              \n                                \n   \nVector applyIsometry(GroupElement elt, Vector v){\n    return applyIsometry(toIsometry(elt), v);\n}\n\nVector applyGroupElement(GroupElement elt, Vector v){\n    return applyIsometry(toIsometry(elt), v);\n}\n\n\n"
 
 /***/ }),
 
@@ -2078,15 +2085,12 @@ __webpack_require__.d(__webpack_exports__, {
 
 ;// CONCATENATED MODULE: ./src/core/geometry/Isometry.js
 /**
- * @class
- *
  * @classdesc
  * Isometry of the geometry.
  */
 class Isometry {
 
     /**
-     * Constructor.
      * Since the constructor is different for each geometry, it delegates the task to the method `build`
      * (that can be overwritten easily unlike the constructor).
      * Another way to do would be to implement for each geometry a new class that inherit from Isometry.
@@ -2098,17 +2102,21 @@ class Isometry {
         this.build(...arguments);
     }
 
-    get isIsometry() {
-        return true;
-    }
-
     /**
      * Fake constructor
-     * If no argument is passed, return the identity.
+     * If no argument is passed, should return the identity.
      * @abstract
      */
     build() {
         throw new Error("This method need be overloaded.");
+    }
+
+    /**
+     * True if the object implements the class `Isometry`
+     * @return {boolean}
+     */
+    get isIsometry() {
+        return true;
     }
 
     /**
@@ -2121,7 +2129,8 @@ class Isometry {
     }
 
     /**
-     * Reduce the eventual numerical errors of the current isometry (typically Gram-Schmidt).
+     * Reduce the eventual numerical errors of the current isometry
+     * (e.g. Gram-Schmidt for orthogonal matrices).
      * @abstract
      * @return {Isometry} The current isometry
      */
@@ -2130,7 +2139,7 @@ class Isometry {
     }
 
     /**
-     * Multiply the current isometry by isom on the left, i.e. replace `this` by `this * isom`.
+     * Multiply the current isometry by `isom` on the left, i.e. replace `this` by `this` * `isom`.
      * @abstract
      * @param {Isometry} isom
      * @return {Isometry} The current isometry
@@ -2140,7 +2149,7 @@ class Isometry {
     }
 
     /**
-     * Multiply the current isometry by isom on the right, i.e. replace `this` by `isom * this`.
+     * Multiply the current isometry by `isom` on the right, i.e. replace `this` by `isom` * `this`.
      * @abstract
      * @param {Isometry} isom
      * @return {Isometry} The current isometry
@@ -2150,7 +2159,7 @@ class Isometry {
     }
 
     /**
-     * Invert the current isometry
+     * Set the current isometry to its inverse
      * @return {Isometry} The current isometry
      */
     invert() {
@@ -2159,7 +2168,7 @@ class Isometry {
     }
 
     /**
-     * Return a preferred isometry sending the origin to the given point
+     * Set the current isometry to a preferred one sending the origin to the given point
      * (typically in Nil, Sol, SL2, etc).
      * @abstract
      * @param {Point} point - the target point
@@ -2170,10 +2179,11 @@ class Isometry {
     }
 
     /**
-     * Return a preferred isometry sending the given point to the origin
+     * Set the current isometry to a preferred one sending the given point to the origin
      * (typically in Nil, Sol, SL2, etc).
+     * The returned isometry should be the inverse of the one generated by `makeTranslation`.
      * @abstract
-     * @param {Point} point - the point that is moved back to the orign
+     * @param {Point} point - the point that is moved back to the origin
      * @return {Isometry} The current isometry
      */
     makeInvTranslation(point) {
@@ -2181,7 +2191,7 @@ class Isometry {
     }
 
     /**
-     * Return a preferred isometry sending the origin to the image of v by the exponential map.
+     * Set the current isometry to a preferred one sending the origin to the image of v by the exponential map.
      * @abstract
      * @param {Vector} vec - the vector in the tangent space
      * @return {Isometry} The current isometry
@@ -2207,19 +2217,10 @@ class Isometry {
      * Check if the current isometry and `isom` are the same.
      * Mainly for debugging purposes.
      * @abstract
-     * @param isom
+     * @param {Isometry} isom
      * @return {boolean} true if the isometries are equal, false otherwise
      */
     equals(isom) {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
-     * Return a new copy of the current isometry.
-     * @abstract
-     * @return {Isometry} The clone of the current isometry
-     */
-    clone() {
         throw new Error("This method need be overloaded.");
     }
 
@@ -2230,11 +2231,21 @@ class Isometry {
      * @return {Isometry} The current isometry
      */
     copy(isom) {
+
         throw new Error("This method need be overloaded.");
     }
 
-}
+    /**
+     * Return a new copy of the current isometry.
+     * @return {Isometry} The clone of the current isometry
+     */
+    clone() {
+        const res = new Isometry();
+        res.copy(this);
+        return res;
+    }
 
+}
 
 ;// CONCATENATED MODULE: external "three"
 var x = y => { var x = {}; __webpack_require__.d(x, y); return x; }
@@ -2355,12 +2366,6 @@ Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
 
-Isometry.prototype.clone = function () {
-    let res = new Isometry();
-    res.matrix.copy(this.matrix);
-    return res;
-};
-
 Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);
     return this;
@@ -2370,8 +2375,6 @@ Isometry.prototype.copy = function (isom) {
 
 ;// CONCATENATED MODULE: ./src/core/geometry/Point.js
 /**
- * @class
- *
  * @classdesc
  * Point in the geometry.
  */
@@ -2379,7 +2382,7 @@ class Point {
 
     /**
      * Constructor.
-     * Same remark as for isometries.
+     * Same remark as for `Isometry`.
      */
     constructor(...args) {
         this.build(...args);
@@ -2395,14 +2398,18 @@ class Point {
     }
 
     /**
+     * True if the object implements the class `Point`
+     * @return {boolean}
+     */
+    get isPoint(){
+        return true;
+    }
+
+    /**
      * Set the coordinates of the point
      */
     set() {
         throw new Error("This method need be overloaded.");
-    }
-
-    get isPoint(){
-        return true;
     }
 
     /**
@@ -2436,16 +2443,7 @@ class Point {
     }
 
     /**
-     * Return a new copy of the current point.
-     * @abstract
-     * @return {Point} the clone of the current point
-     */
-    clone() {
-        throw new Error("This method need be overloaded.");
-    }
-
-    /**
-     * set the current point with the given point
+     * Set the current point with the given point
      * @abstract
      * @param {Point} point - the point to copy
      * @return {Point} The current point
@@ -2453,9 +2451,17 @@ class Point {
     copy(point) {
         throw new Error("This method need be overloaded.");
     }
+
+    /**
+     * Return a new copy of the current point.
+     * @return {Point} the clone of the current point
+     */
+    clone() {
+        const res = new Point()
+        res.copy(this);
+        return res;
+    }
 }
-
-
 
 ;// CONCATENATED MODULE: ./src/geometries/sph/geometry/Point.js
 
@@ -2486,11 +2492,6 @@ Point.prototype.equals = function (point) {
     return this.coords.equals(point.coords)
 };
 
-Point.prototype.clone = function () {
-    let res = new Point();
-    res.coords.copy(this.coords);
-    return res;
-};
 
 Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
@@ -2503,7 +2504,6 @@ Point.prototype.copy = function (point) {
 
 
 /**
- * @class
  * @extends Vector3
  *
  * @classdesc
@@ -2511,22 +2511,21 @@ Point.prototype.copy = function (point) {
  * Are available form three.js:
  * - all the linear algebra
  * - the length of a vector
- *
- * @todo It seems that this class is actually geometry independent
- * (because of the choice of a reference frame).
- * If so, remove for the other files the class extensions,
- * and replace them by an `export {Vector} from './abstract.js'`
  */
 class Vector extends external_three_namespaceObject.Vector3 {
 
-    get isVector(){
+    /**
+     * True if the object implements the class `Vector`
+     * @return {boolean}
+     */
+    get isVector() {
         return true;
     }
 
     /**
      * Overload Three.js `applyMatrix4`.
-     * Indeed, Three.js considers the `Vector3` as a 3D **point**
-     * It multiplies the vector (with an implicit 1 in the 4th dimension) and `m`, and divides by perspective.
+     * Indeed, Three.js considers the `Vector3` as a 3D **point**.
+     * It multiplies the vector (with an implicit 1 in the 4th dimension) by the matrix, and divides by perspective.
      * Here the data represents a **vector**, thus the implicit 4th coordinate is 0
      * @param {Matrix4} m - The matrix to apply
      * @return {Vector} The current vector
@@ -2552,7 +2551,6 @@ class Vector extends external_three_namespaceObject.Vector3 {
     }
 }
 
-
 ;// CONCATENATED MODULE: ./src/core/geometry/Position.js
 
 
@@ -2560,8 +2558,6 @@ class Vector extends external_three_namespaceObject.Vector3 {
 
 
 /**
- * @class
- *
  * @classdesc
  * Location and facing (of the observer, an object, etc).
  *
@@ -2582,17 +2578,22 @@ class Position {
         /**
          * The facing.
          * We represent it as quaternion, whose action by conjugation on R^3 defines an element of O(3)
+         * @type {Quaternion}
          */
         this.quaternion = new external_three_namespaceObject.Quaternion();
     }
 
+    /**
+     * True if the object implements the class `Position`
+     * @return {boolean}
+     */
     get isPosition(){
         return true;
     }
 
     /**
-     * The facing as a Matrix4, representing an element of O(3).
-     * This is the data that is actually passed to the shader
+     * The `facing` as a Matrix4, representing an element of O(3).
+     * These are the data that actually passed to the shader
      * @type {Matrix4}
      */
     get facing() {
@@ -2605,7 +2606,7 @@ class Position {
      * @return {Position} The current position
      */
     setBoost(isom) {
-        this.boost = isom;
+        this.boost.copy(isom);
         return this;
     }
 
@@ -2615,7 +2616,7 @@ class Position {
      * @return {Position} The current position
      */
     setQuaternion(quaternion) {
-        this.quaternion = quaternion;
+        this.quaternion.copy(quaternion);
         return this;
     }
 
@@ -2629,7 +2630,7 @@ class Position {
     }
 
     /**
-     * Make the the quaternion has length one.
+     * Make the quaternion has length one.
      * @return {Position} The current position
      */
     reduceErrorQuaternion() {
@@ -2708,18 +2709,7 @@ class Position {
     }
 
     /**
-     * Set the current position to its inverse
-     * @deprecated Not sure this is really needed
-     * @return {Position} The current position
-     */
-    invert() {
-        this.boost.invert();
-        this.quaternion.conjugate();
-        return this;
-    }
-
-    /**
-     * Replace the current position, by the one obtained by flow the initial position `(id, id)`
+     * Replace the current position, by the one obtained by flowing the initial position `(id, id)`
      * in the direction `v` (given in the reference frame).
      * @abstract
      * @param {Vector} v - the direction in the reference frame
@@ -2731,7 +2721,7 @@ class Position {
 
     /**
      * Flow the current position.
-     * `v` is the pull back at the origin by the position of the direction in which we flow
+     * `v` is the pullback at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`.
      *
      * The procedure goes as follows.
@@ -2797,17 +2787,6 @@ class Position {
     }
 
     /**
-     * Return a new copy of the current position.
-     * @return {Position} The clone of the current position
-     */
-    clone() {
-        let res = new Position();
-        res.boost.copy(this.boost);
-        res.quaternion.copy(this.quaternion);
-        return res;
-    }
-
-    /**
      * Set the current position with the given one.
      * @param {Position} position - the position to copy
      * @return {Position} the current position
@@ -2817,8 +2796,17 @@ class Position {
         this.quaternion.copy(position.quaternion);
         return this;
     }
-}
 
+    /**
+     * Return a new copy of the current position.
+     * @return {Position} The clone of the current position
+     */
+    clone() {
+        const res = new Position();
+        res.copy(this);
+        return res;
+    }
+}
 
 
 ;// CONCATENATED MODULE: ./src/geometries/sph/geometry/Position.js
@@ -5201,7 +5189,7 @@ const external_stats_namespaceObject = external_stats_x({ ["default"]: () => __W
  *
  * @classdesc
  * Group element.
- * This class allows to define a symbolic representation for element of a discrete subgroup of isometries.
+ * This class allows to define a "symbolic" representation for element of a discrete subgroup of isometries.
  */
 class GroupElement_GroupElement {
 
@@ -5220,19 +5208,14 @@ class GroupElement_GroupElement {
          * @readonly
          */
         this.uuid = external_three_namespaceObject.MathUtils.generateUUID().replaceAll('-', '_');
+        /**
+         * The name of the item.
+         * This name is computed (from the uuid) the first time the getter is called.
+         * @type {string}
+         */
+        this.name = `groupElement_${this.uuid}`;
     }
 
-    /**
-     * The name of the item.
-     * This name is computed (from the uuid) the first time the getter is called.
-     * @type {string}
-     */
-    get name() {
-        if (this._name === undefined) {
-            this._name = `groupElement_${this.uuid}`;
-        }
-        return this._name;
-    }
 
     /**
      * Set the current element to the identity.
@@ -5244,7 +5227,7 @@ class GroupElement_GroupElement {
 
 
     /**
-     * Multiply the current element by elt on the left, i.e. replace `this` by `this * elt`.
+     * Multiply the current element by elt on the left, i.e. replace `this` by `this` * `elt`.
      * @abstract
      * @param {GroupElement} elt
      * @return {GroupElement} The current element
@@ -5254,7 +5237,7 @@ class GroupElement_GroupElement {
     }
 
     /**
-     * Multiply the current element by elt on the right, i.e. replace `this` by `elt * this`.
+     * Multiply the current element by elt on the right, i.e. replace `this` by `elt` * `this`.
      * @abstract
      * @param {GroupElement} elt
      * @return {GroupElement} The current element
@@ -5309,7 +5292,7 @@ class GroupElement_GroupElement {
         throw new Error("GroupElement: This method need be overloaded.");
     }
 }
-;// CONCATENATED MODULE: ./src/core/groups/RelPosition.js
+;// CONCATENATED MODULE: ./src/core/geometry/RelPosition.js
 
 
 
@@ -5319,7 +5302,6 @@ class GroupElement_GroupElement {
 
 
 /**
- * @class
  *
  * @classdesc
  * Relative position.
@@ -5499,7 +5481,7 @@ class RelPosition {
 
     /**
      * Flow the current position.
-     * `v` is the pull back at the origin by the position of the direction in which we flow
+     * `v` is the pullback at the origin by the position of the direction in which we flow
      * The time by which we flow is the norm of `v`
      * This method makes sure that the boost stays in the fundamental domain
      * @param {Vector} v - the direction (and length) to follow
@@ -5539,18 +5521,6 @@ class RelPosition {
     }
 
     /**
-     * Return a new copy of the current position.
-     * @return {RelPosition} the clone of the current relative position
-     */
-    clone() {
-        let res = new RelPosition(this.set);
-        res.cellBoost.copy(this.cellBoost);
-        res.invCellBoost.copy(this.invCellBoost);
-        res.local.copy(this.local);
-        return res;
-    }
-
-    /**
      * Set the current position with the given position.
      * @param {RelPosition} position - the relative position to copy
      * @return {RelPosition} the current relative position
@@ -5560,6 +5530,16 @@ class RelPosition {
         this.invCellBoost.copy(position.invCellBoost);
         this.local.copy(position.local);
         return this;
+    }
+
+    /**
+     * Return a new copy of the current position.
+     * @return {RelPosition} the clone of the current relative position
+     */
+    clone() {
+        const res = new RelPosition(this.set);
+        res.copy(this);
+        return res;
     }
 }
 
@@ -5905,11 +5885,6 @@ class BasicCamera {
         return this.threeCamera.fov;
     }
 
-    /**
-     * Shortcut to reset the field of view of the underlying Three.js camera
-     * (Recall that in Three.js the field of view is the vertical one.)
-     * @param {number} value
-     */
     set fov(value) {
         this.threeCamera.fov = value;
         this.threeCamera.updateProjectionMatrix();
@@ -16001,9 +15976,10 @@ function specifyThurston(thurstonClass, shader1, shader2) {
 /**
  * @class
  * @abstract
+ *
  * @classdesc
  * Group (in the mathematical sense).
- * This class is mainly a contained to receive the data common to all elements of the group.
+ * This class is mainly a container to receive the data common to all elements of the group.
  */
 class Group_Group {
     /**
@@ -16014,7 +15990,7 @@ class Group_Group {
 
     /**
      * Create an element in the group.
-     * If no data is passed it should be the identity.
+     * If no data is passed, it should be the identity.
      * @abstract
      * @return {GroupElement}
      */
@@ -16105,10 +16081,10 @@ class Group extends Group_Group {
         shaderBuilder.addChunk((element_default()));
     }
 }
-// EXTERNAL MODULE: ./src/core/groups/shaders/creeping.glsl.mustache
-var creeping_glsl_mustache = __webpack_require__(8008);
+// EXTERNAL MODULE: ./src/core/teleportations/shaders/creeping.glsl.mustache
+var creeping_glsl_mustache = __webpack_require__(3148);
 var creeping_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(creeping_glsl_mustache);
-;// CONCATENATED MODULE: ./src/core/groups/Teleportation.js
+;// CONCATENATED MODULE: ./src/core/teleportations/Teleportation.js
 
 
 
@@ -16137,7 +16113,7 @@ class Teleportation {
      * @param {GroupElement} elt - the isometry to apply when teleporting
      * @param {GroupElement} inv - the inverse of the isometry (optional)
      * If the inverse is not passed as an argument, it is computed automatically.
-     * @param {string} glslCreep -  a chunk of GLSL to move to the boundary defined by the test
+     * @param {string} glslCreep -  a chunk of GLSL to move to the boundary defined by the test.
      * The test should be encapsulated in a function with signature ExtVector, float, float -> float
      */
     constructor(set, jsTest, glslTest, elt, inv = undefined, glslCreep = undefined) {
@@ -16243,7 +16219,7 @@ class Teleportation {
     /**
      * Return true if the following conditions are satisfies
      * - the teleportation set uses creeping (strict or full)
-     * - the a custom creeping function exists
+     * - a custom creeping function exists
      * @type {boolean}
      */
     get usesCreepingCustom() {
@@ -16276,13 +16252,17 @@ class Teleportation {
         //shaderBuilder.addChunk("//post inv");
     }
 }
-// EXTERNAL MODULE: ./src/core/groups/shaders/relative.glsl
-var relative = __webpack_require__(2792);
+// EXTERNAL MODULE: ./src/core/groups/shaders/groups.glsl
+var groups = __webpack_require__(3711);
+var groups_default = /*#__PURE__*/__webpack_require__.n(groups);
+// EXTERNAL MODULE: ./src/core/geometry/shaders/relative.glsl
+var relative = __webpack_require__(1043);
 var relative_default = /*#__PURE__*/__webpack_require__.n(relative);
-// EXTERNAL MODULE: ./src/core/groups/shaders/teleport.glsl.mustache
-var teleport_glsl_mustache = __webpack_require__(968);
+// EXTERNAL MODULE: ./src/core/teleportations/shaders/teleport.glsl.mustache
+var teleport_glsl_mustache = __webpack_require__(5103);
 var teleport_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(teleport_glsl_mustache);
-;// CONCATENATED MODULE: ./src/core/groups/TeleportationSet.js
+;// CONCATENATED MODULE: ./src/core/teleportations/TeleportationSet.js
+
 
 
 
@@ -16291,19 +16271,19 @@ var teleport_glsl_mustache_default = /*#__PURE__*/__webpack_require__.n(teleport
 
 
 /**
- * Possible value for usesCreeping
+ * Possible value for `usesCreeping`
  * No creeping is used
  * @type {number}
  */
 const CREEPING_OFF = 0;
 /**
- * Possible value for usesCreeping
+ * Possible value for `usesCreeping`
  * Only the creeping defined by the user are used
  * @type {number}
  */
 const CREEPING_STRICT = 1;
 /**
- * Possible value for usesCreeping
+ * Possible value for `usesCreeping`
  * Uses creeping for all possible teleportations,
  * if the user did not define the creeping function, the computation is done with a binary search
  * @type {number}
@@ -16316,7 +16296,7 @@ const CREEPING_FULL = 2;
  *
  * @classdesc
  * Set of teleportations.
- * It implicitly a set of generators of a discrete subgroup and a fundamental domain for this subgroup
+ * It is implicitly a set of generators of a discrete subgroup and a fundamental domain for this subgroup
  */
 class TeleportationSet {
 
@@ -16403,6 +16383,7 @@ class TeleportationSet {
      */
     shader(shaderBuilder) {
         this.group.shader(shaderBuilder);
+        shaderBuilder.addChunk((groups_default()));
         shaderBuilder.addChunk((relative_default()));
         for (const teleportation of this.teleportations) {
             teleportation.shader(shaderBuilder);
@@ -16638,8 +16619,8 @@ class Shape extends Generic {
  * @classdesc
  * A representation of 3D basic shape.
  * A basic shape is a shape that is not built on top of other shapes.
- * The types of the properties of a basic shape should not depend on the instance of this shape.
- * Indeed these properties will be passed to the shader in the form of a struct.
+ * The type of the properties of a basic shape should not depend on the instance of this shape.
+ * Indeed, these properties will be passed to the shader in the form of a struct.
  * (This gives the options to animate the shapes.)
  */
 class BasicShape extends Shape {
@@ -16671,8 +16652,8 @@ class BasicShape extends Shape {
  * @classdesc
  * A representation of 3D advanced shapes.
  * An advanced shape is a shape that is built on top of other shapes.
- * The types of the properties of an advanced shape may depend on the instance of this shape.
- * Theses properties will not be passed to the shader.
+ * The type of the properties of an advanced shape may depend on the instance of this shape.
+ * These properties will not be passed to the shader.
  * Only the signed distance function will carry the relevant data.
  */
 class AdvancedShape extends Shape {
@@ -17773,11 +17754,6 @@ class VideoFrameTextureMaterial extends Material {
          */
         this.loop = params.loop !== undefined ? params.loop : false;
 
-        /**
-         * Says if the video should be looped
-         * @type {boolean}
-         */
-        this.loop = params.loop !== undefined ? params.loop : false;
 
         /**
          * A callback called at each time a frame is loaded

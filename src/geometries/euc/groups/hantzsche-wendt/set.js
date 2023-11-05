@@ -1,7 +1,7 @@
 import {Vector4} from "three";
 
 import {Group} from "./Group.js";
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 
 
 const group = new Group();
@@ -31,7 +31,7 @@ const isoms = [
  * - the normal to the face to test if we have left the fundamental domain. The normal is point outside
  * - the isometry to teleport
  * - the inverse of this isometry
- * @type {(Vector4, GroupElement, GroupElement)[]}
+ * @type {Array}
  */
 const teleportationsData = [
     [new Vector4(-1, 1, 0, -group.length), isoms[0], isoms[1]],

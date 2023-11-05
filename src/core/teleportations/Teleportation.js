@@ -7,8 +7,6 @@ const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
 const regexpCreep = /float\s*(\w+)\(ExtVector.*\)/m;
 
 /**
- * @class
- *
  * @classdesc
  * A teleportation is a tool to bring back a point in a prescribed fundamental domain of a discrete group.
  * It consists of a test to decide if teleportation is needed and the group element to apply to teleport the point

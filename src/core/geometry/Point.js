@@ -1,6 +1,4 @@
 /**
- * @class
- *
  * @classdesc
  * Point in the geometry.
  */

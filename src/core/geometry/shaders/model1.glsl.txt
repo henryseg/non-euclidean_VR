@@ -117,7 +117,7 @@ Vector multiplyScalar(float s, Vector v){ }
 
 /**
  * Return the dot product of the two vectors (with respect to the metric tensor).
- * Previouly `tangDot`.
+ * Previously `tangDot`.
  */
 float geomDot(Vector v1, Vector v2) { }
 

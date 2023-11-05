@@ -1,13 +1,12 @@
 import {Quaternion} from "three";
 
-import {Position} from "../geometry/Position.js";
-import {GroupElement} from "./GroupElement.js";
-import {Vector} from "../geometry/Vector.js";
+import {Position} from "./Position.js";
+import {GroupElement} from "../groups/GroupElement.js";
+import {Vector} from "./Vector.js";
 
 
 
 /**
- * @class
  *
  * @classdesc
  * Relative position.
@@ -227,18 +226,6 @@ class RelPosition {
     }
 
     /**
-     * Return a new copy of the current position.
-     * @return {RelPosition} the clone of the current relative position
-     */
-    clone() {
-        let res = new RelPosition(this.set);
-        res.cellBoost.copy(this.cellBoost);
-        res.invCellBoost.copy(this.invCellBoost);
-        res.local.copy(this.local);
-        return res;
-    }
-
-    /**
      * Set the current position with the given position.
      * @param {RelPosition} position - the relative position to copy
      * @return {RelPosition} the current relative position
@@ -248,6 +235,16 @@ class RelPosition {
         this.invCellBoost.copy(position.invCellBoost);
         this.local.copy(position.local);
         return this;
+    }
+
+    /**
+     * Return a new copy of the current position.
+     * @return {RelPosition} the clone of the current relative position
+     */
+    clone() {
+        const res = new RelPosition(this.set);
+        res.copy(this);
+        return res;
     }
 }
 

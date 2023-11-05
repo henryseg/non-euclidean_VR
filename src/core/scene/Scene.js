@@ -46,7 +46,7 @@ export class Scene {
 
         /**
          * Background material
-         * @type{Material|PTMaterial}
+         * @type{Material}
          */
         this.background = params.background !== undefined ? params.background : new SingleColorMaterial(new Color(0, 0, 0));
         /**
@@ -66,7 +66,7 @@ export class Scene {
      * @return {Scene} the current scene
      */
     _add(obj) {
-        // setup the id for the object
+        // set up the id for the object
         obj.setId(this);
         // run the callback
         obj.onAdd(this);

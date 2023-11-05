@@ -2,7 +2,6 @@
 import {safeString} from "../utils.js";
 
 /**
- * @class
  * @abstract
  *
  * @classdesc

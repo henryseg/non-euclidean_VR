@@ -5,7 +5,7 @@ import {MathUtils} from "three";
  *
  * @classdesc
  * Group element.
- * This class allows to define a symbolic representation for element of a discrete subgroup of isometries.
+ * This class allows to define a "symbolic" representation for element of a discrete subgroup of isometries.
  */
 export class GroupElement {
 
@@ -24,19 +24,14 @@ export class GroupElement {
          * @readonly
          */
         this.uuid = MathUtils.generateUUID().replaceAll('-', '_');
+        /**
+         * The name of the item.
+         * This name is computed (from the uuid) the first time the getter is called.
+         * @type {string}
+         */
+        this.name = `groupElement_${this.uuid}`;
     }
 
-    /**
-     * The name of the item.
-     * This name is computed (from the uuid) the first time the getter is called.
-     * @type {string}
-     */
-    get name() {
-        if (this._name === undefined) {
-            this._name = `groupElement_${this.uuid}`;
-        }
-        return this._name;
-    }
 
     /**
      * Set the current element to the identity.
@@ -48,7 +43,7 @@ export class GroupElement {
 
 
     /**
-     * Multiply the current element by elt on the left, i.e. replace `this` by `this * elt`.
+     * Multiply the current element by elt on the left, i.e. replace `this` by `this` * `elt`.
      * @abstract
      * @param {GroupElement} elt
      * @return {GroupElement} The current element
@@ -58,7 +53,7 @@ export class GroupElement {
     }
 
     /**
-     * Multiply the current element by elt on the right, i.e. replace `this` by `elt * this`.
+     * Multiply the current element by elt on the right, i.e. replace `this` by `elt` * `this`.
      * @abstract
      * @param {GroupElement} elt
      * @return {GroupElement} The current element

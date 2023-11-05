@@ -4,8 +4,6 @@ import {Point} from "./Point.js";
 import {Vector} from "./Vector.js";
 
 /**
- * @class
- *
  * @classdesc
  * Location and facing (of the observer, an object, etc).
  *

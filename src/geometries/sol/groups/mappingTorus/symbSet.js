@@ -1,6 +1,6 @@
 import {Vector4} from "three";
 
-import {TeleportationSet} from "../../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../../core/teleportations/TeleportationSet.js";
 import {Group, PHI, TAU} from "./Group.js";
 
 

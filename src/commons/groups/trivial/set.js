@@ -1,3 +1,3 @@
-import {TeleportationSet} from "../../../core/groups/TeleportationSet.js";
+import {TeleportationSet} from "../../../core/teleportations/TeleportationSet.js";
 
 export default new TeleportationSet();

@@ -13,7 +13,7 @@ export {FlatScreenCamera} from "./core/cameras/flatscreen/FlatScreenCamera.js";
 export {Group} from "./core/groups/Group.js";
 export {GroupElement} from "./core/groups/GroupElement.js";
 export {RelPosition} from "./core/geometry/General.js";
-export {TeleportationSet, CREEPING_FULL, CREEPING_STRICT, CREEPING_OFF} from "./core/groups/TeleportationSet.js";
+export {TeleportationSet, CREEPING_FULL, CREEPING_STRICT, CREEPING_OFF} from "./core/teleportations/TeleportationSet.js";
 
 export {Shape} from "./core/shapes/Shape.js";
 export {BasicShape} from "./core/shapes/BasicShape.js";
