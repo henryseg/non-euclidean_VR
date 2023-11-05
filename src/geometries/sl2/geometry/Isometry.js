@@ -192,13 +192,6 @@ Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix) && this.fiber === isom.fiber;
 }
 
-Isometry.prototype.clone = function () {
-    const res = new Isometry();
-    res.matrix.copy(this.matrix);
-    res.fiber = this.fiber;
-    res.isInSL = this.isInSL;
-    return res;
-}
 
 Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);

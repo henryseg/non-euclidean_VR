@@ -94,11 +94,6 @@ Isometry.prototype.equals = function (isom) {
     return this.matrix.equals(isom.matrix);
 };
 
-Isometry.prototype.clone = function () {
-    const res = new Isometry();
-    res.matrix.copy(this.matrix);
-    return res;
-};
 
 Isometry.prototype.copy = function (isom) {
     this.matrix.copy(isom.matrix);
