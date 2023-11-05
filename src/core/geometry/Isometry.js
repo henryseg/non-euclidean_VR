@@ -21,20 +21,20 @@ class Isometry {
     }
 
     /**
-     * True if the object implements the class `Isometry`
-     * @return {boolean}
-     */
-    get isIsometry() {
-        return true;
-    }
-
-    /**
      * Fake constructor
      * If no argument is passed, should return the identity.
      * @abstract
      */
     build() {
         throw new Error("This method need be overloaded.");
+    }
+
+    /**
+     * True if the object implements the class `Isometry`
+     * @return {boolean}
+     */
+    get isIsometry() {
+        return true;
     }
 
     /**
