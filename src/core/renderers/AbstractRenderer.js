@@ -46,7 +46,7 @@ export class AbstractRenderer {
         this.set = set;
         /**
          * Non-euclidean camera
-         * @type {DollyCamera}
+         * @type {Camera}
          */
         this.camera = camera;
         /**

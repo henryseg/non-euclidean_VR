@@ -31,7 +31,7 @@ export class QuadRing {
     }
 
     /**
-     * Return a matrix on this quadratic rign
+     * Return a matrix on this quadratic ring
      * @return {QuadRingMatrix4}
      */
     matrix4(){
