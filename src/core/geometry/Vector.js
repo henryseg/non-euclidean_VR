@@ -1,8 +1,4 @@
-import {
-    Vector3,
-    Vector4,
-    Matrix4
-} from "three";
+import {Vector3, Vector4, Matrix4} from "three";
 
 /**
  * @class
@@ -16,14 +12,18 @@ import {
  */
 class Vector extends Vector3 {
 
-    get isVector(){
+    /**
+     * True if the object implements the class `Vector`
+     * @return {boolean}
+     */
+    get isVector() {
         return true;
     }
 
     /**
      * Overload Three.js `applyMatrix4`.
-     * Indeed, Three.js considers the `Vector3` as a 3D **point**
-     * It multiplies the vector (with an implicit 1 in the 4th dimension) and `m`, and divides by perspective.
+     * Indeed, Three.js considers the `Vector3` as a 3D **point**.
+     * It multiplies the vector (with an implicit 1 in the 4th dimension) by the matrix, and divides by perspective.
      * Here the data represents a **vector**, thus the implicit 4th coordinate is 0
      * @param {Matrix4} m - The matrix to apply
      * @return {Vector} The current vector
