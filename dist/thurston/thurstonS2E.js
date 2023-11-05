@@ -3608,7 +3608,7 @@ class AbstractRenderer {
         this.set = set;
         /**
          * Non-euclidean camera
-         * @type {DollyCamera}
+         * @type {Camera}
          */
         this.camera = camera;
         /**
@@ -6464,7 +6464,6 @@ class FlatScreenCamera {
 
 
 /**
- * @class
  * @abstract
  *
  * @classdesc
@@ -7006,7 +7005,7 @@ class Scene {
 
         /**
          * Background material
-         * @type{Material|PTMaterial}
+         * @type{Material}
          */
         this.background = params.background !== undefined ? params.background : new SingleColorMaterial(new external_three_namespaceObject.Color(0, 0, 0));
         /**
@@ -7026,7 +7025,7 @@ class Scene {
      * @return {Scene} the current scene
      */
     _add(obj) {
-        // setup the id for the object
+        // set up the id for the object
         obj.setId(this);
         // run the callback
         obj.onAdd(this);
@@ -16184,8 +16183,6 @@ const regexpTest = /bool\s*(\w+)\(Point.*\)/m;
 const regexpCreep = /float\s*(\w+)\(ExtVector.*\)/m;
 
 /**
- * @class
- *
  * @classdesc
  * A teleportation is a tool to bring back a point in a prescribed fundamental domain of a discrete group.
  * It consists of a test to decide if teleportation is needed and the group element to apply to teleport the point
@@ -16769,8 +16766,8 @@ class AdvancedShape extends Shape {
 
 
 /**
- * @class
  * @abstract
+ * @augments Generic
  *
  * @classdesc
  * Abstract class for lights
@@ -16778,7 +16775,6 @@ class AdvancedShape extends Shape {
 class Light extends Generic {
 
     /**
-     * Constructor.
      * @param {number} maxDirs - the maximum number of directions computed for this light.
       */
     constructor(maxDirs) {
@@ -21369,7 +21365,7 @@ class QuadRing {
     }
 
     /**
-     * Return a matrix on this quadratic rign
+     * Return a matrix on this quadratic ring
      * @return {QuadRingMatrix4}
      */
     matrix4(){
