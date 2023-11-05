@@ -33,11 +33,6 @@ Point.prototype.reduceError = function () {
     return this;
 }
 
-Point.prototype.clone = function () {
-    let res = new Point();
-    res.coords.copy(this.coords);
-    return res;
-};
 
 Point.prototype.copy = function (point) {
     this.coords.copy(point.coords);
