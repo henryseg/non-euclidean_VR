@@ -16021,7 +16021,7 @@ class ThurstonRecord {
          * @type {boolean}
          */
         this.isRecordOn = false;
-        this.recordOnLoad = false;
+        this.autostart = false;
         this.capture = undefined;
 
         const _onKeyDown = utils_bind(this, this.onKeyDown);
@@ -16105,7 +16105,7 @@ class ThurstonRecord {
      * animation function
      */
     animate() {
-        if (this.recordOnLoad && this.capture === undefined) {
+        if (this.autostart && this.capture === undefined) {
             this.recordStart();
         }
         const delta = this.clock.getDelta();
