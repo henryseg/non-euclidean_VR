@@ -1,4 +1,0 @@
-[submodule "examples"]
-	path = examples
-	url = git@plmlab.math.cnrs.fr:rcoulon/non-euclidean_VR_examples.git
-	branch = main

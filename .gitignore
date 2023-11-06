@@ -10,5 +10,4 @@ __pycache__/**
 **/.idea/**
 
 /node_modules/
-/examples/
 /doc/_build/
