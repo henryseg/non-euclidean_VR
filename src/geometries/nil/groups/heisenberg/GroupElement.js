@@ -1,6 +1,6 @@
 import {Vector3, Vector4} from "three";
 import {Isometry} from "../../geometry/Isometry.js";
-import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
+import {GroupElement as AbstractGroupElement} from "../../../../core/geometry/GroupElement.js";
 
 /**
  * @class

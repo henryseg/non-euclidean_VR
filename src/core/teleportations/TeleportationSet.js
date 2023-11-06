@@ -1,8 +1,8 @@
 import {Group as TrivialGroup} from "../../commons/groups/trivial/Group.js";
 import {Teleportation} from "./Teleportation.js";
 
-import groups from "../groups/shaders/groups.glsl";
-import relative from "../geometry/shaders/relative.glsl";
+import groups from "../geometry/shaders/groups.glsl";
+import relative from "./shaders/relative.glsl";
 import teleport from "./shaders/teleport.glsl.mustache";
 
 

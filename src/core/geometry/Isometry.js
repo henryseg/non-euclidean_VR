@@ -5,11 +5,7 @@
 export class Isometry {
 
     /**
-     * Since the constructor is different for each geometry, it delegates the task to the method `build`
-     * (that can be overwritten easily unlike the constructor).
-     * Another way to do would be to implement for each geometry a new class that inherit from Isometry.
-     * However, the drawback is that the class Position would need also to be extended,
-     * so that it manipulate the right classes.
+     *
      *
      */
     constructor() {

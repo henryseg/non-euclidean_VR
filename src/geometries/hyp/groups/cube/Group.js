@@ -1,4 +1,4 @@
-import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
+import {Group as AbstractGroup} from "../../../../core/geometry/Group.js";
 import {GroupElement} from "./GroupElement.js";
 import {QuadRing} from "../../../../utils/quadRing/QuadRing.js";
 

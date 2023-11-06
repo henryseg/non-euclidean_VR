@@ -14,7 +14,7 @@ release = '2.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx_js', 'myst_parser']
+extensions = ['sphinx_js', 'sphinx_math_dollar', 'myst_parser']
 js_source_path = '../src/'
 jsdoc_config_path = './jsdoc.conf.json'
 primary_domain = 'js'

@@ -1,4 +1,4 @@
-import {Group as AbstractGroup} from "../../../../core/groups/Group.js";
+import {Group as AbstractGroup} from "../../../../core/geometry/Group.js";
 import {GroupElement} from "./GroupElement.js";
 import element from "./shaders/element.glsl";
 import struct from "./shaders/struct.glsl";

@@ -1,6 +1,6 @@
 import {Vector3} from "three";
 import {Isometry} from "../../geometry/Isometry.js";
-import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
+import {GroupElement as AbstractGroupElement} from "../../../../core/geometry/GroupElement.js";
 
 import {A, PHI, DENUM, TAU} from "./Group.js";
 import {Point} from "../../geometry/Point.js";

@@ -1,8 +1,8 @@
 import {Quaternion} from "three";
 
-import {Position} from "./Position.js";
-import {GroupElement} from "../groups/GroupElement.js";
-import {Vector} from "./Vector.js";
+import {Position} from "../geometry/Position.js";
+import {GroupElement} from "../geometry/GroupElement.js";
+import {Vector} from "../geometry/Vector.js";
 
 
 
@@ -10,14 +10,16 @@ import {Vector} from "./Vector.js";
  *
  * @classdesc
  * Relative position.
- * A general position is represented as a pair (h,p) where
- * - h (cellBoost) is an GroupElement representing an element of a discrete subgroups
- * - p (local) is a Position
- * The frame represented by the relative position is the image by h of the frame represented by the position p
+ * A general position is represented as a pair $(h,p)$ where
  *
- * We split the isometry part (hg) in two pieces.
- * The idea is to g should give a position in the fundamental domain of the (implicit) underlying lattice.
- * This will keep the coordinates of g in a bounded range.
+ * - $h$ (`cellBoost`) is a GroupElement representing an element of a discrete subgroups
+ * - $p$ (`local`) is a Position
+ *
+ * The frame represented by the relative position is the image by $h$ of the frame represented by the position $p$
+ *
+ * We split the isometry part $hg$ in two pieces.
+ * The idea is that $g$ should give a position in the fundamental domain of the (implicit) underlying lattice.
+ * This will keep the coordinates of $g$ in a bounded range.
  *
  * For simplicity, we also keep track of the inverse of the cellBoost.
  */

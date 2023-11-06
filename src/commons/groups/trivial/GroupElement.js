@@ -1,4 +1,4 @@
-import {GroupElement as AbstractGroupElement} from "../../../core/groups/GroupElement.js";
+import {GroupElement as AbstractGroupElement} from "../../../core/geometry/GroupElement.js";
 import {Isometry} from "../../../core/geometry/General.js";
 
 /**

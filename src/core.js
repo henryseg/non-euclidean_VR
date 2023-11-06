@@ -10,8 +10,8 @@ export {VRCamera} from "./core/cameras/vr/VRCamera.js";
 export {FullDomCamera} from "./core/cameras/fulldom/FullDomCamera.js";
 export {FlatScreenCamera} from "./core/cameras/flatscreen/FlatScreenCamera.js";
 
-export {Group} from "./core/groups/Group.js";
-export {GroupElement} from "./core/groups/GroupElement.js";
+export {Group} from "./core/geometry/Group.js";
+export {GroupElement} from "./core/geometry/GroupElement.js";
 export {RelPosition} from "./core/geometry/General.js";
 export {TeleportationSet, CREEPING_FULL, CREEPING_STRICT, CREEPING_OFF} from "./core/teleportations/TeleportationSet.js";
 

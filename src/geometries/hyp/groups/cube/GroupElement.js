@@ -1,5 +1,5 @@
 import {QUAD_RING} from "./Group.js";
-import {GroupElement as AbstractGroupElement} from "../../../../core/groups/GroupElement.js";
+import {GroupElement as AbstractGroupElement} from "../../../../core/geometry/GroupElement.js";
 import {QuadRingMatrix4} from "../../../../utils/quadRing/QuadRingMatrix4.js";
 import {Isometry} from "../../../../core/geometry/Isometry.js";
 

@@ -6,7 +6,6 @@ Core
     :caption: Core Reference:
 
     geometry
-    groups
     teleportations
     generic
     shapes
