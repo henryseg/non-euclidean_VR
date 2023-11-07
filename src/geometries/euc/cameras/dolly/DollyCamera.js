@@ -1,4 +1,4 @@
-import {BasicCamera} from "../../../../core/cameras/basic/BasicCamera";
+import {BasicCamera} from "../../../../core/cameras/old/basic/BasicCamera";
 
 import struct from "./shaders/struct.glsl";
 import mapping from "./shaders/mapping.glsl";

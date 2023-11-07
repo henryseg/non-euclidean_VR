@@ -1,8 +1,8 @@
 import {Vector3} from "three";
 
-import {Vector} from "../../geometry/General.js";
+import {Vector} from "../../../geometry/General.js";
 import {BasicCamera} from "../basic/BasicCamera.js";
-import {LEFT, RIGHT} from "../../../constants.js";
+import {LEFT, RIGHT} from "../../../../constants.js";
 
 import struct from "./shaders/struct.glsl";
 import mapping from "./shaders/mapping.glsl";

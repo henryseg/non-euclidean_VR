@@ -10,11 +10,11 @@ import {TexturePass} from "three/examples/jsm/postprocessing/TexturePass.js";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
 import {FullScreenQuad} from "three/examples/jsm/postprocessing/Pass.js";
 
-import {AbstractRenderer} from "./AbstractRenderer.js";
+import {Renderer} from "./Renderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {CombinedPostProcess} from "../../commons/postProcess/combined/CombinedPostProcess.js";
 
-import vertexShader from "./shaders/common/vertexSphercialScreen.glsl";
+import vertexShader from "./old/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
@@ -25,8 +25,6 @@ import random2 from "./shaders/pathTracer/random2.glsl";
 import structVectorData from "./shaders/pathTracer/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/pathTracer/vectorDataUpdate.glsl.mustache";
 import main from "./shaders/pathTracer/main.glsl";
-
-// import SteveShader from "../../postProcess/steve/shader.js";
 import nextObject from "./shaders/pathTracer/nextObject.glsl.mustache";
 
 
@@ -63,23 +61,27 @@ const RT_PARAMETERS = {
     type: HalfFloatType,
 };
 
-export class PathTracerRenderer extends AbstractRenderer {
+export class PathTracerRenderer extends Renderer {
 
     /**
      * Constructor.
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
-     * @param {TeleportationSet} set - the underlying teleportation set
-     * @param {DollyCamera} camera - the camera
+     * @param {PathTracerCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
-        super(shader1, shader2, set, camera, scene, params, threeRenderer);
+    constructor(shader1, shader2,  camera, scene, params = {}, threeRenderer = {}) {
+        super(shader1, shader2,camera, scene, params, threeRenderer);
         // different default value for the number of time we bounce
         this.globalUniforms.maxBounces.value = params.maxBounces !== undefined ? params.maxBounces : 50;
 
+        /**
+         * Add post-processing to the final output
+         * @type {PostProcess[]}
+         */
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : [];
         if (this.postProcess.length === 0) {
             this.postProcess.push(new CombinedPostProcess())
         }
@@ -99,7 +101,7 @@ export class PathTracerRenderer extends AbstractRenderer {
          * @type {number}
          */
         this.iFrame = 0;
-        this.displayComposer = new EffectComposer(this.threeRenderer);
+        this.composer = new EffectComposer(this.threeRenderer);
     }
 
     get isPathTracerRenderer() {
@@ -108,7 +110,7 @@ export class PathTracerRenderer extends AbstractRenderer {
 
     setPixelRatio(value) {
         super.setPixelRatio(value);
-        this.displayComposer.setPixelRatio(value);
+        this.composer.setPixelRatio(value);
     }
 
     setSize(width, height, updateStyle = true) {
@@ -116,7 +118,7 @@ export class PathTracerRenderer extends AbstractRenderer {
         this.sceneTarget.setSize(width, height);
         this.accReadTarget.setSize(width, height);
         this.accWriteTarget.setSize(width, height);
-        this.displayComposer.setSize(width, height);
+        this.composer.setSize(width, height);
     }
 
     updateFrameSeed() {
@@ -177,26 +179,15 @@ export class PathTracerRenderer extends AbstractRenderer {
      * @return {PathTracerRenderer}
      */
     build() {
-        // The lag that may occurs when we move the sphere to chase the camera can be the source of noisy movement.
-        // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereGeometry(1000, 60, 40);
-        // flip the sphere inside out
-        geometry.scale(1, 1, -1);
 
         this.buildFragmentShader();
-        const material = new ShaderMaterial({
-            uniforms: this._fragmentBuilder.uniforms,
-            vertexShader: vertexShader,
-            fragmentShader: this._fragmentBuilder.code,
-        });
-        const horizonSphere = new Mesh(geometry, material);
-        this.threeScene.add(horizonSphere);
+        this.camera.setThreeScene(this._fragmentBuilder);
+        this.composer.addPass(new TexturePass(this.accReadTarget.texture));
 
-        this.displayComposer.addPass(new TexturePass(this.accReadTarget.texture));
         for (let i = 0; i < this.postProcess.length; i++) {
             const effectPass = new ShaderPass(this.postProcess[i].fullShader());
             effectPass.clear = false;
-            this.displayComposer.addPass(effectPass);
+            this.composer.addPass(effectPass);
         }
 
         return this;
@@ -212,7 +203,7 @@ export class PathTracerRenderer extends AbstractRenderer {
      */
     renderAccTarget() {
         this.threeRenderer.setRenderTarget(null);
-        this.displayComposer.render();
+        this.composer.render();
     }
 
     render() {

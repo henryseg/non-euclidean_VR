@@ -1,23 +1,23 @@
 import * as WebXRPolyfill from "webxr-polyfill";
 import {Mesh, ShaderMaterial, SphereGeometry} from "three";
-import {VRButton as VRButtonLib} from "three/addons";
+import {VRButton as VRButtonLib} from "three/examples/jsm/webxr/VRButton.js";
 
-import {bind} from "../../utils.js";
-import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
-import {Renderer} from "./Renderer.js";
-import {LEFT, RIGHT} from "../../constants.js";
+import {bind} from "../../../utils.js";
+import {ShaderBuilder} from "../../../utils/ShaderBuilder.js";
+import {AbstractRenderer} from "./AbstractRenderer.js";
+import {LEFT, RIGHT, BOTH} from "../../../constants.js";
 
-import vertexShader from "./old/vertexSphercialScreen.glsl";
-import constants from "./shaders/common/constants.glsl";
-import commons1 from "../geometry/shaders/commons1.glsl";
-import commons2 from "../geometry/shaders/commons2.glsl";
-import raymarch from "./shaders/basic/raymarch.glsl";
-import scenes from "./shaders/basic/scenes.glsl.mustache";
-import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
-import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
-import postProcessVoid from "./shaders/basic/postProcessVoid.glsl";
-import postProcessGammaCorrection from "./shaders/vr/postProcessGammaCorrection.glsl";
-import main from "./shaders/basic/main.glsl";
+import vertexShader from "./vertexSphercialScreen.glsl";
+import constants from "../shaders/common/constants.glsl";
+import commons1 from "../../geometry/shaders/commons1.glsl";
+import commons2 from "../../geometry/shaders/commons2.glsl";
+import raymarch from "../shaders/basic/raymarch.glsl";
+import scenes from "../shaders/basic/scenes.glsl.mustache";
+import structVectorData from "../shaders/basic/vectorDataStruct.glsl";
+import updateVectorData from "../shaders/basic/vectorDataUpdate.glsl.mustache";
+import postProcessVoid from "../shaders/basic/postProcessVoid.glsl";
+import postProcessGammaCorrection from "../shaders/vr/postProcessGammaCorrection.glsl";
+import main from "../shaders/basic/main.glsl";
 
 
 /**
@@ -31,21 +31,22 @@ import main from "./shaders/basic/main.glsl";
  *
  * @todo Check the impact of the pixel ratio (for the three.js camera)
  */
-export class VRRenderer extends Renderer {
+export class VRRenderer extends AbstractRenderer {
 
     /**
      * Constructor.
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
+     * @param {TeleportationSet} set - the underlying teleportation set
      * @param {VRCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(shader1, shader2, camera, scene, params = {}, threeRenderer = {}) {
+    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
         // loading the polyfill if WebXR is not supported
         new WebXRPolyfill.default();
-        super(shader1, shader2, camera, scene, params, threeRenderer);
+        super(shader1, shader2, set, camera, scene, params, threeRenderer);
 
         this.threeRenderer.xr.enabled = true;
         this.threeRenderer.xr.setReferenceSpaceType('local');
@@ -62,10 +63,12 @@ export class VRRenderer extends Renderer {
          * @type {ShaderBuilder[]}
          * @private
          */
-        this._fragmentBuilders = [new ShaderBuilder(), new ShaderBuilder()];
+        this._fragmentBuilder = [new ShaderBuilder(), new ShaderBuilder()];
 
         this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
         this.exposure = params.exposure !== undefined ? params.exposure : 1;
+
+
     }
 
     get isVRRenderer() {
@@ -124,8 +127,28 @@ export class VRRenderer extends Renderer {
     }
 
     build() {
+        // The lag that may occur when we move the sphere to chase the camera can be the source of noisy movement.
+        // We put a very large sphere around the user, to minimize this effect.
+        const geometry = new SphereGeometry(50, 60, 40);
+        // sphere eversion !
+        geometry.scale(1, 1, -1);
+
         this.buildFragmentShader();
-        this.camera.setThreeScene(this._fragmentBuilders);
+        const leftMaterial = new ShaderMaterial({
+            uniforms: this._fragmentBuilders[LEFT].uniforms,
+            vertexShader: vertexShader,
+            fragmentShader: this._fragmentBuilders[LEFT].code,
+        });
+        const rightMaterial = new ShaderMaterial({
+            uniforms: this._fragmentBuilders[RIGHT].uniforms,
+            vertexShader: vertexShader,
+            fragmentShader: this._fragmentBuilders[RIGHT].code,
+        });
+        const leftHorizonSphere = new Mesh(geometry, leftMaterial);
+        const rightHorizonSphere = new Mesh(geometry, rightMaterial);
+        leftHorizonSphere.layers.set(1);
+        rightHorizonSphere.layers.set(2);
+        this.threeScene.add(leftHorizonSphere, rightHorizonSphere);
     }
 
     checkShader(side = LEFT) {

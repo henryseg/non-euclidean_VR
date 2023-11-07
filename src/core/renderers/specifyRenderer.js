@@ -11,6 +11,5 @@ export function specifyRenderer(rendererClass, shader1, shader2) {
             super(shader1, shader2, ...arguments);
         }
     }
-
     return GeomRenderer;
 }

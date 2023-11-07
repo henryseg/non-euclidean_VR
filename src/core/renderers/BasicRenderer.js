@@ -1,12 +1,10 @@
-import {Mesh, ShaderMaterial, SphereGeometry, Vector2} from "three";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
-import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
+import {RenderPass} from "three/addons/postprocessing/RenderPass.js";
+import {ShaderPass} from "three/addons/postprocessing/ShaderPass.js";
+import {EffectComposer} from "three/addons/postprocessing/EffectComposer.js";
 
-import {AbstractRenderer} from "./AbstractRenderer.js";
+import {Renderer} from "./Renderer.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 
-import vertexShader from "./shaders/common/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
@@ -15,7 +13,6 @@ import scenes from "./shaders/basic/scenes.glsl.mustache";
 import structVectorData from "./shaders/basic/vectorDataStruct.glsl";
 import updateVectorData from "./shaders/basic/vectorDataUpdate.glsl.mustache";
 import postProcessVoid from "./shaders/basic/postProcessVoid.glsl";
-import postProcessGammaCorrection from "./shaders/basic/postProcessGammaCorrection.glsl";
 import main from "./shaders/basic/main.glsl";
 
 
@@ -31,40 +28,36 @@ import main from "./shaders/basic/main.glsl";
  * It is more convenient for virtual reality (see VRRenderer)
  * It should be used with a perspective Three.js camera
  */
-export class BasicRenderer extends AbstractRenderer {
+export class BasicRenderer extends Renderer {
 
     /**
      * Constructor.
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
-     * @param {TeleportationSet} set - the underlying teleportation set
-     * @param {DollyCamera} camera - the camera
+     * @param {Camera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
-        super(shader1, shader2, set, camera, scene, params, threeRenderer);
+    constructor(shader1, shader2, camera, scene, params = {}, threeRenderer = {}) {
+        super(shader1, shader2, camera, scene, params, threeRenderer);
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
          * @private
          */
         this._fragmentBuilder = new ShaderBuilder();
+
+        /**
+         * Add post-processing to the final output
+         * @type {PostProcess[]}
+         */
+        this.postProcess = params.postProcess !== undefined ? params.postProcess : [];
         /**
          * Effect composer for postprocessing
          * @type {EffectComposer}
          */
         this.composer = new EffectComposer(this.threeRenderer);
-
-        this.postProcess = params.postProcess !== undefined ? params.postProcess : false;
-        this.exposure = params.exposure !== undefined ? params.exposure : 1;
-
-
-        this.globalUniforms.windowSize = {
-            type: 'vec2',
-            value: new Vector2(window.innerWidth, window.innerHeight)
-        };
     }
 
     get isBasicRenderer() {
@@ -73,12 +66,12 @@ export class BasicRenderer extends AbstractRenderer {
 
     setPixelRatio(value) {
         super.setPixelRatio(value);
-        this.composer.setPixelRatio(window.devicePixelRatio);
+        this.composer.setPixelRatio(value);
     }
 
     setSize(width, height, updateStyle = true) {
         super.setSize(width, height, updateStyle);
-        this.composer.setSize(window.innerWidth, window.innerHeight);
+        this.composer.setSize(width, height);
     }
 
     /**
@@ -114,13 +107,7 @@ export class BasicRenderer extends AbstractRenderer {
 
         // ray-march and main
         this._fragmentBuilder.addChunk(raymarch);
-        if(this.postProcess){
-            this._fragmentBuilder.addUniform("exposure", "float", this.exposure);
-            this._fragmentBuilder.addChunk(postProcessGammaCorrection);
-        }
-        else{
-            this._fragmentBuilder.addChunk(postProcessVoid);
-        }
+        this._fragmentBuilder.addChunk(postProcessVoid);
         this._fragmentBuilder.addChunk(main);
     }
 
@@ -129,23 +116,9 @@ export class BasicRenderer extends AbstractRenderer {
      * @return {BasicRenderer}
      */
     build() {
-        // The lag that may occur when we move the sphere to chase the camera can be the source of noisy movement.
-        // We put a very large sphere around the user, to minimize this effect.
-        const geometry = new SphereGeometry(1000, 60, 40);
-        // sphere eversion !
-        geometry.scale(1, 1, -1);
-
         this.buildFragmentShader();
-        const material = new ShaderMaterial({
-            uniforms: this._fragmentBuilder.uniforms,
-            vertexShader: vertexShader,
-            fragmentShader: this._fragmentBuilder.code,
-        });
-        const horizonSphere = new Mesh(geometry, material);
-        this.threeScene.add(horizonSphere);
-
-        // add the render to the passes of the effect composer
-        const renderPass = new RenderPass(this.threeScene, this.camera.threeCamera);
+        this.camera.setThreeScene(this._fragmentBuilder);
+        const renderPass = new RenderPass(this.camera.threeScene, this.camera.threeCamera);
         renderPass.clear = false;
         this.composer.addPass(renderPass);
 
@@ -154,8 +127,6 @@ export class BasicRenderer extends AbstractRenderer {
             effectPass.clear = false;
             this.composer.addPass(effectPass);
         }
-
-
         return this;
     }
 

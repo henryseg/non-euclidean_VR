@@ -60,6 +60,14 @@ export class ShaderBuilder {
     }
 
     /**
+     * Alias for the code
+     * @return {string}
+     */
+    get fragmentShader() {
+        return this.code;
+    }
+
+    /**
      * Add the given chunk (without any prior test)
      * @param {string} code
      * @return {ShaderBuilder} - the current shader builder

@@ -1,5 +1,5 @@
 import {OrthographicCamera, Matrix4} from "three";
-import {RelPosition} from "../../geometry/General.js";
+import {RelPosition} from "../../../geometry/General.js";
 
 import struct from "./shaders/struct.glsl";
 import mapping from "./shaders/mapping.glsl";

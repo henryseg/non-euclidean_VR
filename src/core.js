@@ -4,11 +4,11 @@ export {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerMod
 export * from './constants.js';
 export * from './utils.js'
 
-export {BasicCamera} from "./core/cameras/basic/BasicCamera.js";
-export {PathTracerCamera} from "./core/cameras/pathTracer/PathTracerCamera.js";
-export {VRCamera} from "./core/cameras/vr/VRCamera.js";
-export {FullDomCamera} from "./core/cameras/fulldom/FullDomCamera.js";
-export {FlatScreenCamera} from "./core/cameras/flatscreen/FlatScreenCamera.js";
+export {BasicCamera} from "./core/cameras/old/basic/BasicCamera.js";
+export {PathTracerCamera} from "./core/cameras/old/pathTracer/PathTracerCamera.js";
+export {VRCamera} from "./core/cameras/old/vr/VRCamera.js";
+export {FullDomCamera} from "./core/cameras/old/fulldom/FullDomCamera.js";
+export {FlatScreenCamera} from "./core/cameras/old/flatscreen/FlatScreenCamera.js";
 
 export {Group} from "./core/geometry/Group.js";
 export {GroupElement} from "./core/geometry/GroupElement.js";

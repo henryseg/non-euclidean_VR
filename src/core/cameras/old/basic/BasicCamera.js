@@ -1,5 +1,5 @@
-import {OrthographicCamera, Matrix4} from "three";
-import {RelPosition} from "../../geometry/General.js";
+import {PerspectiveCamera, Matrix4} from "three";
+import {RelPosition} from "../../../geometry/General.js";
 
 import struct from "./shaders/struct.glsl";
 import mapping from "./shaders/mapping.glsl";
@@ -8,10 +8,21 @@ import mapping from "./shaders/mapping.glsl";
  * @class
  *
  * @classdesc
- * Camera in the non-euclidean scene, with a special projection, used for the BurningMan festival(!)
- * Suitable only with a flat screen.
+ * Camera in the non-euclidean scene.
+ * It should not be confused with the Three.js camera in the virtual euclidean scene.
+ * The minimal GLSL struct should contain
+ * - fov
+ * - minDist
+ * - maxDist
+ * - maxSteps
+ * - threshold
+ * - position
+ * - matrix
+ * The GLSL code needs to contain (after the declaration) a function `mapping`.
+ * The role of this function is to map a point on the horizon sphere
+ * to the initial direction to follow during the ray-marching.
  */
-export class FullDomCamera {
+export class BasicCamera {
 
     /**
      * Constructor.
@@ -31,15 +42,13 @@ export class FullDomCamera {
 
         /**
          * The underlying Three.js camera
-         * @type {OrthographicCamera}
+         * @type {PerspectiveCamera}
          */
-        this.threeCamera = new OrthographicCamera(
-            -1,
-            1,
-            1,
-            -1,
-            0,
-            1
+        this.threeCamera = new PerspectiveCamera(
+            parameters.fov !== undefined ? parameters.fov : 70,
+            window.innerWidth / window.innerHeight,
+            0.01,
+            2000
         );
         this.threeCamera.position.set(0, 0, 0);
         this.threeCamera.lookAt(0, 0, -1);
@@ -74,6 +83,28 @@ export class FullDomCamera {
          * @type {RelPosition}
          */
         this.position = new RelPosition(parameters.set);
+    }
+
+    /**
+     * Shortcut to reset the aspect of the underlying Three.js camera
+     * @param {number} value
+     */
+    set aspect(value) {
+        this.threeCamera.aspect = value;
+    }
+
+    /**
+     * Shortcut to access the field of view of the underlying Three.js camera
+     * (Recall that in Three.js the field of view is the vertical one.)
+     * @type {number}
+     */
+    get fov() {
+        return this.threeCamera.fov;
+    }
+
+    set fov(value) {
+        this.threeCamera.fov = value;
+        this.threeCamera.updateProjectionMatrix();
     }
 
     /**

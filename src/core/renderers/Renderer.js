@@ -1,8 +1,10 @@
 import {
-    Color,
-    Scene as ThreeScene,
+    Color, Vector2,
     WebGLRenderer
 } from "three";
+import {EffectComposer} from "three/addons/postprocessing/EffectComposer.js";
+import {RenderPass} from "three/addons/postprocessing/RenderPass.js";
+import {ShaderPass} from "three/addons/postprocessing/ShaderPass.js";
 
 
 /**
@@ -15,20 +17,19 @@ import {
  * It should not be confused with the Three.js WebGLRenderer it relies on.
  * Abstract class with the code common to all renderers.
  */
-export class AbstractRenderer {
+export class Renderer {
 
     /**
      * Constructor.
      * @param {string} shader1 - the first part of the geometry dependent shader
      * @param {string} shader2 - the second part of the geometry dependent shader
-     * @param {TeleportationSet} set - the underlying teleportation set
      * @param {Camera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the render. For the moment includes
      * @param {WebGLRenderer|Object} threeRenderer - either a Three.js renderer or the parameters to build it
      * - {boolean} postprocess - Gamma and Tone correction
      */
-    constructor(shader1, shader2, set, camera, scene, params = {}, threeRenderer = {}) {
+    constructor(shader1, shader2, camera, scene, params = {}, threeRenderer = {}) {
         /**
          * The first part of the geometry dependent shader.
          * @type{string}
@@ -39,11 +40,6 @@ export class AbstractRenderer {
          * @type{string}
          */
         this.shader2 = shader2;
-        /**
-         * The underlying subgroup
-         * @type {TeleportationSet}
-         */
-        this.set = set;
         /**
          * Non-euclidean camera
          * @type {Camera}
@@ -62,7 +58,6 @@ export class AbstractRenderer {
          * @type {WebGLRenderer}
          */
         this.threeRenderer = threeRenderer.isWebGLRenderer ? threeRenderer : new WebGLRenderer(threeRenderer);
-        // this.threeRenderer = new WebGLRenderer(threeRenderer);
         /**
          * "Global" uniforms (i.e. values that will not depend on the objects in the scene)
          * A uniform is encoded by an object with two properties
@@ -75,24 +70,18 @@ export class AbstractRenderer {
         if (this.globalUniforms.maxBounces === undefined) {
             this.globalUniforms.maxBounces = {type: 'int', value: 0}
         }
+        this.globalUniforms.windowSize = {
+            type: 'vec2',
+            value: new Vector2(window.innerWidth, window.innerHeight)
+        };
+    }
 
-        // /**
-        //  * Number of time the light rays bounce
-        //  * @type {number}
-        //  */
-        // this.maxBounces = params.maxBounces !== undefined ? params.maxBounces : 0;
-        /**
-         * Add post-processing to the final output
-         * @type {PostProcess[]}
-         */
-        this.postProcess = params.postProcess !== undefined ? params.postProcess : [];
-
-        /**
-         * The underlying Three.js scene
-         * Not to be confused with the non-euclidean scene.
-         * @type {ThreeScene}
-         */
-        this.threeScene = new ThreeScene();
+    /**
+     * Shortcut for the underlying teleportation set.
+     * @return {TeleportationSet}
+     */
+    get set() {
+        return this.camera.position.set;
     }
 
     /**
@@ -148,7 +137,7 @@ export class AbstractRenderer {
      * @abstract
      */
     build() {
-        throw new Error('AbstractRenderer: this method is not implemented');
+
     }
 
     /**
