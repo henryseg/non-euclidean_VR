@@ -1,9 +1,9 @@
 import {Clock, Vector3} from "three";
 
 import {Vector} from "../../core/geometry/Vector.js";
-import {LEFT, RIGHT} from "../../constants.js";
+import {LEFT, RIGHT} from "../../core/constants.js";
 import {Position} from "../../core/geometry/General.js";
-import {bind} from "../../utils.js";
+import {bind} from "../../core/utils.js";
 
 const STATUS_REST = 0;
 const STATUS_TRIGGERED = 1;

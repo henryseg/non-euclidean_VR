@@ -5,7 +5,7 @@
  * Change state each time a given key is pressed
  *
  */
-import {bind} from "../../utils.js";
+import {bind} from "../../core/utils.js";
 
 export class SwitchControls {
 

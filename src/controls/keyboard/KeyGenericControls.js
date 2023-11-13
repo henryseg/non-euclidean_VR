@@ -5,7 +5,7 @@
  * Add an event when a certain key is pressed.
  * The event run a callback
  */
-import {bind} from "../../utils.js";
+import {bind} from "../../core/utils.js";
 
 export class KeyGenericControls {
 

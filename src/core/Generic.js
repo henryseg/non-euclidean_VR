@@ -1,5 +1,5 @@
                                                                                                                                           import {MathUtils} from "three";
-import {safeString} from "../utils.js";
+import {safeString} from "./utils.js";
 
 /**
  * @abstract

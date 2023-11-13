@@ -4,7 +4,7 @@ import {
 
 import {Point} from "../../core/geometry/Point.js"
 import {Vector3} from "three";
-import {LEFT, RIGHT} from "../../constants.js";
+import {LEFT, RIGHT} from "../../core/constants.js";
 
 
 /**

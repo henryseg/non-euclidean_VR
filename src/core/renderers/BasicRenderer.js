@@ -32,15 +32,13 @@ export class BasicRenderer extends Renderer {
 
     /**
      * Constructor.
-     * @param {string} shader1 - the first part of the geometry dependent shader
-     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {Camera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(shader1, shader2, camera, scene, params = {}, threeRenderer = {}) {
-        super(shader1, shader2, camera, scene, params, threeRenderer);
+    constructor(camera, scene, params = {}, threeRenderer = {}) {
+        super(camera, scene, params, threeRenderer);
         /**
          * Builder for the fragment shader.
          * @type {ShaderBuilder}
@@ -87,9 +85,9 @@ export class BasicRenderer extends Renderer {
             this._fragmentBuilder.addUniform(name, type, value);
         });
         // geometry
-        this._fragmentBuilder.addChunk(this.shader1);
+        this._fragmentBuilder.addChunk(this.constructor.shader1);
         this._fragmentBuilder.addChunk(commons1);
-        this._fragmentBuilder.addChunk(this.shader2);
+        this._fragmentBuilder.addChunk(this.constructor.shader2);
         this._fragmentBuilder.addChunk(commons2);
 
         // data carried by ExtVector
@@ -111,10 +109,6 @@ export class BasicRenderer extends Renderer {
         this._fragmentBuilder.addChunk(main);
     }
 
-    /**
-     * Build the Three.js scene with the non-euclidean shader.
-     * @return {BasicRenderer}
-     */
     build() {
         this.buildFragmentShader();
         this.camera.setThreeScene(this._fragmentBuilder);
@@ -127,7 +121,6 @@ export class BasicRenderer extends Renderer {
             effectPass.clear = false;
             this.composer.addPass(effectPass);
         }
-        return this;
     }
 
     checkShader() {

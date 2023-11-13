@@ -1,5 +1,5 @@
-import {VRCamera} from "../../../../core/General.js";
-import {LEFT, RIGHT} from "../../../../constants.js";
+import {VRCamera} from "../../../../core/cameras/vrCamera/VRCamera.js";
+import {LEFT, RIGHT} from "../../../../core/constants.js";
 
 import struct from "./shaders/struct.glsl";
 import mapping from "./shaders/mapping.glsl";

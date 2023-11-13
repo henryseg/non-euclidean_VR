@@ -1,8 +1,7 @@
 import {
-    FloatType, NearestFilter, RGBAFormat, HalfFloatType,
-    Mesh,
+    NearestFilter, RGBAFormat, HalfFloatType,
     ShaderMaterial,
-    SphereGeometry, Uniform, Vector2,
+    Uniform, Vector2,
     WebGLRenderTarget
 } from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
@@ -14,7 +13,6 @@ import {Renderer} from "./Renderer.js";
 import {PATHTRACER_RENDERER, ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {CombinedPostProcess} from "../../commons/postProcess/combined/CombinedPostProcess.js";
 
-import vertexShader from "./old/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
@@ -65,15 +63,13 @@ export class PathTracerRenderer extends Renderer {
 
     /**
      * Constructor.
-     * @param {string} shader1 - the first part of the geometry dependent shader
-     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {PathTracerCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(shader1, shader2,  camera, scene, params = {}, threeRenderer = {}) {
-        super(shader1, shader2,camera, scene, params, threeRenderer);
+    constructor(camera, scene, params = {}, threeRenderer = {}) {
+        super(camera, scene, params, threeRenderer);
         // different default value for the number of time we bounce
         this.globalUniforms.maxBounces.value = params.maxBounces !== undefined ? params.maxBounces : 50;
 
@@ -142,9 +138,9 @@ export class PathTracerRenderer extends Renderer {
         this._fragmentBuilder.addUniform('resolution', 'vec2', res);
 
         // geometry
-        this._fragmentBuilder.addChunk(this.shader1);
+        this._fragmentBuilder.addChunk(this.constructor.shader1);
         this._fragmentBuilder.addChunk(commons1);
-        this._fragmentBuilder.addChunk(this.shader2);
+        this._fragmentBuilder.addChunk(this.constructor.shader2);
         this._fragmentBuilder.addChunk(commons2);
 
         // methods for random data
@@ -174,12 +170,7 @@ export class PathTracerRenderer extends Renderer {
         this._fragmentBuilder.addChunk(main);
     }
 
-    /**
-     * Build the Three.js scene with the non-euclidean shader.
-     * @return {PathTracerRenderer}
-     */
     build() {
-
         this.buildFragmentShader();
         this.camera.setThreeScene(this._fragmentBuilder);
         this.composer.addPass(new TexturePass(this.accReadTarget.texture));
@@ -189,8 +180,6 @@ export class PathTracerRenderer extends Renderer {
             effectPass.clear = false;
             this.composer.addPass(effectPass);
         }
-
-        return this;
     }
 
     checkShader() {

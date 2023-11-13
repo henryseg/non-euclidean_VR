@@ -55,7 +55,6 @@ export class FlatCamera extends Camera {
      */
     setThreeScene(shaderBuilder) {
         const geometry = new PlaneGeometry(2, 2);
-        this.buildFragmentShader();
         const material = new ShaderMaterial({
             uniforms: shaderBuilder.uniforms,
             vertexShader: vertexShader,

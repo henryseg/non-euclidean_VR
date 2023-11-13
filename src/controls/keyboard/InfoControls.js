@@ -1,4 +1,4 @@
-import {bind} from "../../utils.js";
+import {bind} from "../../core/utils.js";
 
 /**
  * @class

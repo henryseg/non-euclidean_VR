@@ -2,9 +2,6 @@ import {
     Color, Vector2,
     WebGLRenderer
 } from "three";
-import {EffectComposer} from "three/addons/postprocessing/EffectComposer.js";
-import {RenderPass} from "three/addons/postprocessing/RenderPass.js";
-import {ShaderPass} from "three/addons/postprocessing/ShaderPass.js";
 
 
 /**
@@ -19,27 +16,27 @@ import {ShaderPass} from "three/addons/postprocessing/ShaderPass.js";
  */
 export class Renderer {
 
+
+    /**
+     * The first part of the geometry dependent shader.
+     * @type{string}
+     */
+    static shader1 = undefined;
+    /**
+     * The second part of the geometry dependent shader.
+     * @type{string}
+     */
+    static shader2 = undefined;
+
     /**
      * Constructor.
-     * @param {string} shader1 - the first part of the geometry dependent shader
-     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {Camera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the Thurston part of the render. For the moment includes
      * @param {WebGLRenderer|Object} threeRenderer - either a Three.js renderer or the parameters to build it
      * - {boolean} postprocess - Gamma and Tone correction
      */
-    constructor(shader1, shader2, camera, scene, params = {}, threeRenderer = {}) {
-        /**
-         * The first part of the geometry dependent shader.
-         * @type{string}
-         */
-        this.shader1 = shader1;
-        /**
-         * The second part of the geometry dependent shader.
-         * @type{string}
-         */
-        this.shader2 = shader2;
+    constructor(camera, scene, params = {}, threeRenderer = {}) {
         /**
          * Non-euclidean camera
          * @type {Camera}
@@ -137,7 +134,7 @@ export class Renderer {
      * @abstract
      */
     build() {
-
+        throw new Error('Renderer: this method is not implemented');
     }
 
     /**
@@ -146,7 +143,7 @@ export class Renderer {
      * @abstract
      */
     render() {
-        throw new Error('AbstractRenderer: this method is not implemented');
+        throw new Error('Renderer: this method is not implemented');
         // this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
     }
 }

@@ -72,7 +72,6 @@ export class SphereCamera extends Camera {
         // sphere eversion !
         geometry.scale(1, 1, -1);
 
-        this.buildFragmentShader();
         const material = new ShaderMaterial({
             uniforms: shaderBuilder.uniforms,
             vertexShader: vertexShader,

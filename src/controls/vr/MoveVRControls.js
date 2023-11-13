@@ -8,7 +8,7 @@ import {
 
 import {
     bind
-} from "../../utils.js";
+} from "../../core/utils.js";
 
 /**
  * @class

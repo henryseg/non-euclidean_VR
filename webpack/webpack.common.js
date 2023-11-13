@@ -16,8 +16,8 @@ module.exports = {
             {
                 test: /\.glsl.mustache$/,
                 use: [
-                    //{loader: 'strip-whitespace-loader'},
-                    //{loader: 'webpack-comment-remover-loader'},
+                    // {loader: 'strip-whitespace-loader'},
+                    // {loader: 'webpack-comment-remover-loader'},
                     {loader: 'mustache-loader'},
                 ]
             },

@@ -1,7 +1,7 @@
 import {Clock} from "three";
 
 import {Material} from "../../../core/materials/Material.js";
-import {clamp} from "../../../utils.js"
+import {clamp} from "../../../core/utils.js"
 
 import struct from "./shaders/struct.glsl";
 import render from "./shaders/render.glsl.mustache";

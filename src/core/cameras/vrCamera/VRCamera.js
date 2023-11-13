@@ -1,7 +1,7 @@
 import {SphereCamera} from "../sphereCamera/SphereCamera.js";
 import {Vector} from "../../geometry/Vector.js";
 
-import {LEFT, RIGHT} from "../../../constants.js";
+import {LEFT, RIGHT} from "../../constants.js";
 import {Mesh, ShaderMaterial, SphereGeometry} from "three";
 import vertexShader from "../sphereCamera/shaders/vertex.glsl";
 

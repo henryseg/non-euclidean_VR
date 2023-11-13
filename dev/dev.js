@@ -19,7 +19,7 @@ import {
     LocalRoundCone,
     LocalCappedCylinder,
     GradientColorMaterial, NoiseColorMaterial
-} from "../src/thurstonHyp.js";
+} from "../src/3dsHyp.js";
 
 
 cube.creepingType = CREEPING_FULL;

@@ -1,13 +1,11 @@
-import * as WebXRPolyfill from "webxr-polyfill";
-import {Mesh, ShaderMaterial, SphereGeometry} from "three";
 import {VRButton as VRButtonLib} from "three/addons";
 
-import {bind} from "../../utils.js";
+import {bind} from "../utils.js";
 import {ShaderBuilder} from "../../utils/ShaderBuilder.js";
 import {Renderer} from "./Renderer.js";
-import {LEFT, RIGHT} from "../../constants.js";
+import {LEFT, RIGHT} from "../constants.js";
+import {VRCamera} from "../cameras/vrCamera/VRCamera.js";
 
-import vertexShader from "./old/vertexSphercialScreen.glsl";
 import constants from "./shaders/common/constants.glsl";
 import commons1 from "../geometry/shaders/commons1.glsl";
 import commons2 from "../geometry/shaders/commons2.glsl";
@@ -35,17 +33,13 @@ export class VRRenderer extends Renderer {
 
     /**
      * Constructor.
-     * @param {string} shader1 - the first part of the geometry dependent shader
-     * @param {string} shader2 - the second part of the geometry dependent shader
      * @param {VRCamera} camera - the camera
      * @param {Scene} scene - the scene
      * @param {Object} params - parameters for the underlying Three.js renderer
      * @param {WebGLRenderer|Object} threeRenderer - parameters for the underlying Three.js renderer
      */
-    constructor(shader1, shader2, camera, scene, params = {}, threeRenderer = {}) {
-        // loading the polyfill if WebXR is not supported
-        new WebXRPolyfill.default();
-        super(shader1, shader2, camera, scene, params, threeRenderer);
+    constructor(camera, scene, params = {}, threeRenderer = {}) {
+        super(camera, scene, params, threeRenderer);
 
         this.threeRenderer.xr.enabled = true;
         this.threeRenderer.xr.setReferenceSpaceType('local');
@@ -91,9 +85,9 @@ export class VRRenderer extends Renderer {
             });
 
             // geometry
-            this._fragmentBuilders[side].addChunk(this.shader1);
+            this._fragmentBuilders[side].addChunk(this.constructor.shader1);
             this._fragmentBuilders[side].addChunk(commons1);
-            this._fragmentBuilders[side].addChunk(this.shader2);
+            this._fragmentBuilders[side].addChunk(this.constructor.shader2);
             this._fragmentBuilders[side].addChunk(commons2);
 
             // data carried with RelVector
@@ -102,7 +96,7 @@ export class VRRenderer extends Renderer {
             this.set.shader(this._fragmentBuilders[side]);
 
             // camera
-            this.camera.sidedShader(this._fragmentBuilders[side], side);
+            this.camera.shader(this._fragmentBuilders[side], side);
 
             // scene
             this.scene.shader(this._fragmentBuilders[side]);
@@ -134,6 +128,6 @@ export class VRRenderer extends Renderer {
 
     render() {
         this.camera.chaseThreeCamera();
-        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
+        this.threeRenderer.render(this.camera.threeScene, this.camera.threeCamera);
     }
 }

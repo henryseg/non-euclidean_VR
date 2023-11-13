@@ -1,7 +1,7 @@
 # Getting started
 
 
-This tutorial explains how to build a simple scene with the *Thurston* module. The basics are very similar
+This tutorial explains how to build a simple scene with the *3DS* module. The basics are very similar
 to [Three.js](https://threejs.org/). There are some differences though that we will highlight along the way.
 
 Let's start with a basic HTML file `index.html`
@@ -30,7 +30,7 @@ The complete script can be found at the end of this tutorial.
 
 ## Step 0. Declaring required modules / Choosing a geometry.
 
-Beside the Thurston module, the application relies on several 3d-party JavaScript modules (Three.js in particular).
+Beside the 3DS module, the application relies on several 3d-party JavaScript modules (Three.js in particular).
 There are several options to load them.
 We use here the "import-map" specification.
 Since this feature is not supported by all browser, it requires a polyfill.
@@ -43,10 +43,7 @@ In practice the following should be added in the header
     {
         "imports": {
             "three": "vendor/three.module.js",
-            "stats": "vendor/stats.module.js",
-            "dat.gui": "vendor/dat.gui.module.js",
-            "webxr-polyfill": "vendor/webxr-polyfill.module.js",
-            "thurstonEuc": "thurston/thurstonEuc.js"
+            "3ds": "3ds/3dsEuc.js"
         }
     }
 </script>
@@ -54,14 +51,14 @@ In practice the following should be added in the header
 
 ### Remarks
 
-- In this example we assume that the directories `vendor` and `thurston` are at the same level as the `index.html` file.
+- In this example we assume that the directories `vendor` and `3ds` are at the same level as the `index.html` file.
 - For the moment, all the modules need be declared (even if we are not using them).
-- The names of the 3d-party modules (three, stats, dat.gui, etc) should not be changed.
+- The names in the import map ('three', '3ds', etc) cannot be changed.
 
 ### Geometry.
 
-In the above example, we have chosen a geometry, via the module `ThurstonEuc.js`.
-Indeed all the tools for each geometry are wrapped in a single file with the name `ThurstonXXX.js` where `XXX` has the
+In the above example, we have chosen a geometry, via the module `3dsEuc.js`.
+Indeed, all the tools for each geometry are wrapped in a single file with the name `3dsXXX.js` where `XXX` has the
 following meaning.
 
 | XXX | Geometry                                          |
@@ -85,7 +82,7 @@ In this tutorial we will only work in E^3, hence the discrete subgroup is just t
 It is loaded as follows
 
 ```javascript
-import {trivialSet as trivial} from "thurstonEuc";
+import {trivialSet as set} from "3ds";
 ```
 
 ## Step 2. Defining a scene, a camera and a renderer.
@@ -94,14 +91,14 @@ Before adding object, one needs to define a scene and a camera. Those items are 
 is to dynamically create a shader and run it.
 
 ```javascript
-import {BasicCamera, BasicRenderer, Scene} from "thurstonEuc";
+import {BasicCamera, BasicRenderer, Scene} from "3ds";
 
 // ...
 
 // initial setup
-const camera = new BasicCamera({set: trivial});
+const camera = new BasicCamera({set: set});
 const scene = new Scene();
-const renderer = new BasicRenderer(trivial, camera, scene, {}, {
+const renderer = new BasicRenderer(camera, scene, {}, {
     logarithmicDepthBuffer: true
 });
 // adjust the renderer to the size of the screen
@@ -129,7 +126,7 @@ import {
     PhongMaterial,
     Ball,
     Point
-} from "thurstonEuc";
+} from "3ds";
 import {Color} from "three";
 ```
 
@@ -226,10 +223,7 @@ The complete `index.html` file is
     {
         "imports": {
             "three": "vendor/three.module.js",
-            "stats": "vendor/stats.module.js",
-            "dat.gui": "vendor/dat.gui.module.js",
-            "webxr-polyfill": "vendor/webxr-polyfill.module.js",
-            "thurstonEuc": "thurston/thurstonEuc.js"
+            "3ds": "3ds/3dsEuc.js"
         }
     }
     </script>
@@ -240,19 +234,19 @@ The complete `index.html` file is
 
 <script type="module" id="main">
     import {
-        trivialSet as trivial
+        trivialSet as set
         BasicCamera, BasicRenderer, Scene,
         PointLight,
         Point,
         PhongMaterial,
         Ball
-    } from "thurstonEuc";
+    } from "3ds";
     import {Color} from "three";
 
     // initial setup
-    const camera = new BasicCamera({subgroup: trivial});
+    const camera = new BasicCamera({set: set});
     const scene = new Scene();
-    const renderer = new BasicRenderer(trivial, camera, scene);
+    const renderer = new BasicRenderer(camera, scene);
     // adjust the renderer to the size of the screen
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);

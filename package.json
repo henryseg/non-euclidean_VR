@@ -1,8 +1,7 @@
 {
-  "name": "non-euclidean_vr",
+  "name": "3ds",
   "version": "2.0.0",
-  "description": "This project aims to visualize the Thruston's geometries with various techniques (virtual reality, photorealistic pictures, etc)",
-  "main": "index.js",
+  "description": "This project aims to visualize the Thurston's geometries with various techniques (virtual reality, photorealistic pictures, etc)",
   "directories": {
     "doc": "doc",
     "example": "dist/examples",
@@ -11,22 +10,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack serve --config webpack/webpack.dev.js",
-    "buildEuc": "webpack --config webpack/webpack.prod.euc.js",
-    "buildHyp": "webpack --config webpack/webpack.prod.hyp.js",
-    "buildSph": "webpack --config webpack/webpack.prod.sph.js",
-    "buildS2E": "webpack --config webpack/webpack.prod.s2e.js",
-    "buildH2E": "webpack --config webpack/webpack.prod.h2e.js",
-    "buildNil": "webpack --config webpack/webpack.prod.nil.js",
-    "buildSL2": "webpack --config webpack/webpack.prod.sl2.js",
-    "buildSol": "webpack --config webpack/webpack.prod.sol.js",
-    "build": "webpack --config webpack/webpack.prod.all.js",
-    "doc": "jsdoc -c jsdoc.conf.json"
+    "build": "sh ./webpack/build.sh",
+    "doc": "./doc/make html"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/henryseg/non-euclidean_VR.git"
   },
   "keywords": [
+    "3-dimensional.space",
     "non-euclidean-geometry",
     "thurston-geometries",
     "first-person-exploration",

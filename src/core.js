@@ -1,14 +1,11 @@
-// all the exports used by the bundler expect the geometry
-export {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
+export * from './core/constants.js';
+export * from './core/utils.js'
 
-export * from './constants.js';
-export * from './utils.js'
-
-export {BasicCamera} from "./core/cameras/old/basic/BasicCamera.js";
-export {PathTracerCamera} from "./core/cameras/old/pathTracer/PathTracerCamera.js";
-export {VRCamera} from "./core/cameras/old/vr/VRCamera.js";
-export {FullDomCamera} from "./core/cameras/old/fulldom/FullDomCamera.js";
-export {FlatScreenCamera} from "./core/cameras/old/flatscreen/FlatScreenCamera.js";
+export {Camera} from "./core/cameras/camera/Camera.js";
+export {SphereCamera} from "./core/cameras/sphereCamera/SphereCamera.js";
+export {FlatCamera} from "./core/cameras/flatCamera/FlatCamera.js";
+export {VRCamera} from "./core/cameras/vrCamera/VRCamera.js";
+export {PathTracerCamera} from "./core/cameras/pathTracerCamera/PathTracerCamera.js";
 
 export {Group} from "./core/geometry/Group.js";
 export {GroupElement} from "./core/geometry/GroupElement.js";
@@ -27,6 +24,7 @@ export {Fog} from "./core/scene/Fog.js";
 export {Scene} from "./core/scene/Scene.js";
 
 export {ExpFog} from "./commons/scenes/expFog/ExpFog.js";
+
 export {default as trivialSet} from './commons/groups/trivial/set.js';
 export * from './commons/materials/all.js';
 export * from './commons/shapes/all.js';
