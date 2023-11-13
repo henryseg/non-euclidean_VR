@@ -43,6 +43,7 @@ In practice the following should be added in the header
     {
         "imports": {
             "three": "vendor/three.module.js",
+            "three/addons": "vendor/three/addons/Addons.js",            
             "3ds": "3ds/3dsEuc.js"
         }
     }
@@ -91,12 +92,12 @@ Before adding object, one needs to define a scene and a camera. Those items are 
 is to dynamically create a shader and run it.
 
 ```javascript
-import {BasicCamera, BasicRenderer, Scene} from "3ds";
+import {SphereCamera, BasicRenderer, Scene} from "3ds";
 
 // ...
 
 // initial setup
-const camera = new BasicCamera({set: set});
+const camera = new SphereCamera({set: set});
 const scene = new Scene();
 const renderer = new BasicRenderer(camera, scene, {}, {
     logarithmicDepthBuffer: true
@@ -223,6 +224,7 @@ The complete `index.html` file is
     {
         "imports": {
             "three": "vendor/three.module.js",
+            "three/addons": "vendor/three/addons/Addons.js",   
             "3ds": "3ds/3dsEuc.js"
         }
     }
@@ -235,7 +237,7 @@ The complete `index.html` file is
 <script type="module" id="main">
     import {
         trivialSet as set
-        BasicCamera, BasicRenderer, Scene,
+        SphereCamera, BasicRenderer, Scene,
         PointLight,
         Point,
         PhongMaterial,
@@ -244,7 +246,7 @@ The complete `index.html` file is
     import {Color} from "three";
 
     // initial setup
-    const camera = new BasicCamera({set: set});
+    const camera = new SphereCamera({set: set});
     const scene = new Scene();
     const renderer = new BasicRenderer(camera, scene);
     // adjust the renderer to the size of the screen

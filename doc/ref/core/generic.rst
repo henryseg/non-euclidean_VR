@@ -1,4 +1,5 @@
 .. _ref_generic:
+
 Generic
 =======
 

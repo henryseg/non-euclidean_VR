@@ -15,7 +15,7 @@ module.exports = merge(common, {
         outputModule: true,
     },
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
@@ -23,6 +23,7 @@ module.exports = merge(common, {
                         comments: false,
                     },
                 },
+                exclude: /\/node_modules/,
                 extractComments: false,
             }),
         ],
@@ -51,6 +52,7 @@ module.exports = merge(common, {
     },
     externals: {
         'three': 'three',
+        'three/addons': 'three/addons',
         'webxr-polyfill': 'webxr-polyfill',
         'stats': 'stats',
         'dat.gui': 'dat.gui'
@@ -65,7 +67,11 @@ module.exports = merge(common, {
                 },
                 {
                     from: 'node_modules/three/build/three.module.js',
-                    to: path.resolve(__dirname, '../dist/vendor')
+                    to: path.resolve(__dirname, '../dist/vendor/three')
+                },
+                {
+                    from: 'node_modules/three/examples/jsm',
+                    to: path.resolve(__dirname, '../dist/vendor/three/addons')
                 },
                 {
                     from: 'node_modules/three/examples/jsm/libs/stats.module.js',

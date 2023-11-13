@@ -40,7 +40,7 @@ vec4 render(ImprovedEquidistantHypStripsMaterial material, ExtVector v, vec2 uv)
     float k = round(distP / period);
     vec2 q = horizontalTranslate(uv, -k * period);
     float distQ = distToYAxis(q);
-    if (abs(distQ) < material.width) {
+    if (abs(distQ) < material.halfWidth) {
         return vec4(material.stripColor, 1);
     }
     else {

@@ -15,7 +15,7 @@ export {PathTracerRenderer} from "./core/renderers/PathTracerRenderer.js";
 export {VRRenderer} from "./core/renderers/VRRenderer.js";
 
 export * from "./core.js";
-export {DollyCamera} from "./geometries/euc/cameras/dolly/DollyCamera.js";
+// export {DollyCamera} from "./geometries/euc/cameras/dolly/DollyCamera.js";
 
 export * from "./geometries/euc/groups/all.js";
 export * from './geometries/euc/lights/all.js';

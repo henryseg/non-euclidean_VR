@@ -202,7 +202,7 @@ export class PathTracerRenderer extends Renderer {
         this._fragmentBuilder.updateUniform('resolution', res);
 
         this.threeRenderer.setRenderTarget(this.sceneTarget);
-        this.threeRenderer.render(this.threeScene, this.camera.threeCamera);
+        this.threeRenderer.render(this.camera.threeScene, this.camera.threeCamera);
         //
         this.threeRenderer.setRenderTarget(this.accWriteTarget);
         accumulateMat.uniforms['accTex'].value = this.accReadTarget.texture;

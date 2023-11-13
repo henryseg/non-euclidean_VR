@@ -1,11 +1,8 @@
 import {
-    Camera as ThreeCamera,
     Scene as ThreeScene
 } from "three";
 
 import {RelPosition} from "../../geometry/General.js";
-import struct from "../vrCamera/shaders/struct.glsl";
-import mapping from "../vrCamera/shaders/mapping.glsl";
 
 /**
  * @abstract
@@ -100,7 +97,6 @@ export class Camera {
     }
 
     /**
-     * @abstract
      * Set up the Three.js camera compatible with the Three.js scene
      */
     setThreeCamera(parameters) {
@@ -108,7 +104,6 @@ export class Camera {
     }
 
     /**
-     * @abstract
      * Set up the Three.js scene compatible with the Three.js camera
      */
     setThreeScene() {

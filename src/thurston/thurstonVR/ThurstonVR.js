@@ -2,7 +2,8 @@ import * as WebXRPolyfill from "webxr-polyfill";
 import Stats from "stats";
 import {GUI} from "dat.gui";
 import {Clock, Color} from "three";
-import {XRControllerModelFactory} from "three/examples/jsm/webxr/XRControllerModelFactory.js";
+import {XRControllerModelFactory} from "three/addons";
+// import {XRControllerModelFactory} from "three/addons/webxr/XRControllerModelFactory.js";
 
 import {
     bind,
