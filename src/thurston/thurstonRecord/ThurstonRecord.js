@@ -49,7 +49,7 @@ export class ThurstonRecord {
          * The non-euclidean camera for the basic renderer
          * @type {Camera}
          */
-        this.camera = new FlatCamera({set: this.set});
+        this._camera = new FlatCamera({set: this.set});
 
         /**
          * Non-euclidean renderer for basic renderer
@@ -105,6 +105,15 @@ export class ThurstonRecord {
          * @type {Clock}
          */
         this.recordClock = new Clock()
+    }
+
+    get camera() {
+        return this._camera;
+    }
+
+    set camera(camera) {
+        this._camera = camera;
+        this.renderer.camera = camera;
     }
 
     setPixelRatio(value) {

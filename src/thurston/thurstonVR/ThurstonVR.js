@@ -50,7 +50,7 @@ export class ThurstonVR {
          * The non-euclidean camera
          * @type {VRCamera}
          */
-        this.camera = params.camera !== undefined ? params.camera : new VRCamera({set: this.set});
+        this._camera = params.camera !== undefined ? params.camera : new VRCamera({set: this.set});
 
         const fog = new ExpFog(new Color(0, 0, 0), 0.07);
         /**
@@ -136,6 +136,16 @@ export class ThurstonVR {
          */
         this.VRControlsDrag = new DragVRControls(this.camera.position, controller1);
     }
+
+    get camera() {
+        return this._camera;
+    }
+
+    set camera(camera) {
+        this._camera = camera;
+        this.renderer.camera = camera;
+    }
+
 
 
     /**

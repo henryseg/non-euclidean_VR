@@ -48,7 +48,7 @@ export class ThurstonLite {
          * The non-euclidean camera for the basic renderer
          * @type {Camera}
          */
-        this.camera = new SphereCamera({set: this.set});
+        this._camera = new SphereCamera({set: this.set});
 
         /**
          * Non-euclidean renderer for basic renderer
@@ -94,6 +94,16 @@ export class ThurstonLite {
          */
         this.gui = undefined;
     }
+
+    get camera() {
+        return this._camera;
+    }
+
+    set camera(camera) {
+        this._camera = camera;
+        this.renderer.camera = camera;
+    }
+
 
     setPixelRatio(value) {
         this.renderer.setPixelRatio(value);
