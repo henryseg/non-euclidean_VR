@@ -1556,7 +1556,7 @@ module.exports = "                                                              
 /***/ 6224:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                \n  \n                                                                                                                        \n                                                                                                                        \n\nvarying vec3 screenPosition;\n\n   \n                                      \n                                                                    \n                                                                               \n                                                 \n  \n                                                                \n                                                        \n                                                  \n                                                                                     \n   \nvoid main()\n{\n                                 \n                                                       \n    mat4 rot = modelViewMatrix;\n    rot[3] = vec4(0, 0, 0, 1);\n\n    vec4 aux = rot * vec4(position, 1.0);\n    screenPosition = aux.xyz;\n    gl_Position = projectionMatrix * rot * aux;\n}"
+module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                \n  \n                                                                                                                        \n                                                                                                                        \n\nuniform vec2 windowSize;\nvarying vec3 screenPosition;\n\n   \n                                      \n                                                            \n                              \n                            \n                                                                                                         \n   \nvoid main()\n{\n    screenPosition = vec3((2. * uv - 1.) * windowSize / windowSize.y, 1);\n    gl_Position =  vec4(position, 1);\n\n}"
 
 /***/ }),
 
@@ -1592,20 +1592,6 @@ module.exports = "                                                              
 /***/ ((module) => {
 
 module.exports = "                                                                                                                        \n                                                                                                                        \n  \n                \n  \n                                                                                                                        \n                                                                                                                        \n\nvarying vec3 screenPosition;\n\n   \n                                      \n                                                                    \n                                                                               \n                                                 \n  \n                                                                \n                                                        \n                                                  \n                                                                                     \n   \nvoid main()\n{\n                                 \n                                                       \n    mat4 rot = modelViewMatrix;\n    rot[3] = vec4(0, 0, 0, 1);\n\n    vec4 aux = rot * vec4(position, 1.0);\n    screenPosition = aux.xyz;\n    gl_Position = projectionMatrix * rot * aux;\n}"
-
-/***/ }),
-
-/***/ 4770:
-/***/ ((module) => {
-
-module.exports = "   \n                                                     \n                                                               \n   \nRelVector mapping(vec3 coords){\n    vec4 dir = normalize(vec4(coords, 0));\n    dir = normalize(dir);\n    Vector v = createVector(ORIGIN, dir.xyz);\n    return applyPosition(camera.position, v);\n}"
-
-/***/ }),
-
-/***/ 8415:
-/***/ ((module) => {
-
-module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct Camera {\n    float fov;                     \n    float minDist;                                     \n    float maxDist;                                     \n    int maxSteps;                                                       \n    float safetyDist;                                                                               \n    float threshold;                                          \n    RelPosition position;                                                                            \n    mat4 matrix;                                                 \n};"
 
 /***/ }),
 
@@ -4893,13 +4879,7 @@ class RelPosition {
 
 
 
-// EXTERNAL MODULE: ./src/core/cameras/vrCamera/shaders/struct.glsl
-var struct = __webpack_require__(8415);
-// EXTERNAL MODULE: ./src/core/cameras/vrCamera/shaders/mapping.glsl
-var mapping = __webpack_require__(4770);
 ;// CONCATENATED MODULE: ./src/core/cameras/camera/Camera.js
-
-
 
 
 
@@ -4997,7 +4977,6 @@ class Camera {
     }
 
     /**
-     * @abstract
      * Set up the Three.js camera compatible with the Three.js scene
      */
     setThreeCamera(parameters) {
@@ -5005,7 +4984,6 @@ class Camera {
     }
 
     /**
-     * @abstract
      * Set up the Three.js scene compatible with the Three.js camera
      */
     setThreeScene() {
@@ -5074,11 +5052,11 @@ class Camera {
 var vertex = __webpack_require__(5682);
 var vertex_default = /*#__PURE__*/__webpack_require__.n(vertex);
 // EXTERNAL MODULE: ./src/core/cameras/sphereCamera/shaders/struct.glsl
-var shaders_struct = __webpack_require__(5970);
-var shaders_struct_default = /*#__PURE__*/__webpack_require__.n(shaders_struct);
+var struct = __webpack_require__(5970);
+var struct_default = /*#__PURE__*/__webpack_require__.n(struct);
 // EXTERNAL MODULE: ./src/core/cameras/sphereCamera/shaders/mapping.glsl
-var shaders_mapping = __webpack_require__(9222);
-var shaders_mapping_default = /*#__PURE__*/__webpack_require__.n(shaders_mapping);
+var mapping = __webpack_require__(9222);
+var mapping_default = /*#__PURE__*/__webpack_require__.n(mapping);
 ;// CONCATENATED MODULE: ./src/core/cameras/sphereCamera/SphereCamera.js
 
 
@@ -5164,11 +5142,11 @@ class SphereCamera extends Camera {
     }
 
     static glslClass() {
-        return (shaders_struct_default());
+        return (struct_default());
     }
 
     static glslMapping() {
-        return (shaders_mapping_default());
+        return (mapping_default());
     }
 
 }
@@ -5465,11 +5443,11 @@ class VRRenderer extends Renderer {
 var shaders_vertex = __webpack_require__(6224);
 var shaders_vertex_default = /*#__PURE__*/__webpack_require__.n(shaders_vertex);
 // EXTERNAL MODULE: ./src/core/cameras/flatCamera/shaders/struct.glsl
-var flatCamera_shaders_struct = __webpack_require__(8710);
-var flatCamera_shaders_struct_default = /*#__PURE__*/__webpack_require__.n(flatCamera_shaders_struct);
+var shaders_struct = __webpack_require__(8710);
+var shaders_struct_default = /*#__PURE__*/__webpack_require__.n(shaders_struct);
 // EXTERNAL MODULE: ./src/core/cameras/flatCamera/shaders/mapping.glsl
-var flatCamera_shaders_mapping = __webpack_require__(4750);
-var flatCamera_shaders_mapping_default = /*#__PURE__*/__webpack_require__.n(flatCamera_shaders_mapping);
+var shaders_mapping = __webpack_require__(4750);
+var shaders_mapping_default = /*#__PURE__*/__webpack_require__.n(shaders_mapping);
 ;// CONCATENATED MODULE: ./src/core/cameras/flatCamera/FlatCamera.js
 
 
@@ -5539,11 +5517,11 @@ class FlatCamera extends Camera {
     }
 
     static glslClass() {
-        return (flatCamera_shaders_struct_default());
+        return (shaders_struct_default());
     }
 
     static glslMapping() {
-        return (flatCamera_shaders_mapping_default());
+        return (shaders_mapping_default());
     }
 
 }
