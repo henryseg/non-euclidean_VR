@@ -23,15 +23,11 @@ export class NativeCamera extends VRCamera {
         }
     }
 
-    /**
-     * build the GLSL code needed to declare the camera
-     * @param {ShaderBuilder} shaderBuilder - the shader builder
-     * @param {number} side - the side (left of right) (used for stereographic camera)
-     */
-    sidedShader(shaderBuilder, side) {
-        shaderBuilder.addClass('NativeCamera', struct);
-        shaderBuilder.addUniform('camera', 'NativeCamera', this.fakeCameras[side]);
-        shaderBuilder.addChunk(mapping);
+    static glslClass() {
+        return struct;
     }
 
+    static glslMapping() {
+        return mapping;
+    }
 }

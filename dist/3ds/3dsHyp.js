@@ -1724,7 +1724,7 @@ module.exports = "   \n                                                     \n  
 /***/ 4375:
 /***/ ((module) => {
 
-module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct NativeCamera {\n    float fov;                      \n    float minDist;                                      \n    float maxDist;                                      \n    int maxSteps;                                                        \n    float safetyDist;                                                                               \n    float threshold;                                           \n    RelPosition position;                                                                             \n    mat4 matrix;                                                  \n    mat4 matrixInverse;                                                    \n    float ipDist;                                                                                                   \n};"
+module.exports = "                                                                                                                        \n          \n          \n                                                                                               \n                                                                                                                        \nstruct Camera {\n    float fov;                      \n    float minDist;                                      \n    float maxDist;                                      \n    int maxSteps;                                                        \n    float safetyDist;                                                                               \n    float threshold;                                           \n    RelPosition position;                                                                             \n    mat4 matrix;                                                  \n    mat4 matrixInverse;                                                    \n    float ipDist;                                                                                                   \n};"
 
 /***/ }),
 
@@ -5317,7 +5317,6 @@ class Camera {
             shaderBuilder.addUniform('camera', 'Camera', this.fakeCameras[side]);
         }
         shaderBuilder.addChunk(this.constructor.glslMapping());
-
     }
 }
 // EXTERNAL MODULE: ./src/core/cameras/sphereCamera/shaders/vertex.glsl
@@ -12534,15 +12533,12 @@ class NativeCamera extends VRCamera {
         }
     }
 
-    /**
-     * build the GLSL code needed to declare the camera
-     * @param {ShaderBuilder} shaderBuilder - the shader builder
-     * @param {number} side - the side (left of right) (used for stereographic camera)
-     */
-    sidedShader(shaderBuilder, side) {
-        shaderBuilder.addClass('NativeCamera', (native_shaders_struct_default()));
-        shaderBuilder.addUniform('camera', 'NativeCamera', this.fakeCameras[side]);
-        shaderBuilder.addChunk((native_shaders_mapping_default()));
+    static glslClass() {
+        return (native_shaders_struct_default());
+    }
+
+    static glslMapping() {
+        return (native_shaders_mapping_default());
     }
 
 }

@@ -33,37 +33,25 @@ export class ThurstonVR {
         // loading the polyfill if WebXR is not supported
         new WebXRPolyfill.default();
 
-
-        /**
-         * The underlying subgroup
-         * @type {TeleportationSet}
-         */
-        this.set = set;
-
         /**
          * A callback called at each frame
          * @type {Function}
          */
         this.callback = undefined;
 
-        /**
-         * The non-euclidean camera
-         * @type {VRCamera}
-         */
-        this._camera = params.camera !== undefined ? params.camera : new VRCamera({set: this.set});
-
         const fog = new ExpFog(new Color(0, 0, 0), 0.07);
-        /**
-         * The non-euclidean scene
-         * @type {Scene}
-         */
-        this.scene = new Scene({fog: fog});
 
         /**
          * The non-euclidean renderer
          * @type {VRRenderer}
          */
-        this.renderer = new VRRenderer(this.camera, this.scene, {}, {antialias: true});
+        this.renderer = new VRRenderer(
+            params.camera !== undefined ? params.camera : new VRCamera({set: set}),
+            new Scene({fog: fog}),
+            {},
+            {antialias: true}
+        );
+
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
@@ -137,14 +125,38 @@ export class ThurstonVR {
         this.VRControlsDrag = new DragVRControls(this.camera.position, controller1);
     }
 
+    /**
+     * Shortcut to access the camera
+     * @return {Camera}
+     */
     get camera() {
-        return this._camera;
+        return this.renderer.camera;
     }
 
     set camera(camera) {
-        this._camera = camera;
         this.renderer.camera = camera;
     }
+
+    /**
+     * Shortcut to access the scene
+     * @return {Scene}
+     */
+    get scene() {
+        return this.renderer.scene;
+    }
+
+    set scene(scene) {
+        this.renderer.scene = scene;
+    }
+
+    /**
+     * Shortcut to access the teleportation set
+     * @return {TeleportationSet}
+     */
+    get set(){
+        return this.camera.position.set;
+    }
+
 
 
 

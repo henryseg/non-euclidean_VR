@@ -25,36 +25,23 @@ export class ThurstonLite {
      * - {string} keyboard - the type of keyboard (french, american, etc)
      */
     constructor(set, params = {}) {
-        /**
-         * The underlying subgroup
-         * @type {TeleportationSet}
-         */
-        this.set = set;
+
         /**
          * A callback called at each frame
          * @type {Function}
          */
         this.callback = undefined;
 
-
         const fog = new ExpFog(new Color(0, 0, 0), 0.07);
-        /**
-         * The non-euclidean scene
-         * @type {Scene}
-         */
-        this.scene = new Scene({fog: fog});
-
-        /**
-         * The non-euclidean camera for the basic renderer
-         * @type {Camera}
-         */
-        this._camera = new SphereCamera({set: this.set});
-
         /**
          * Non-euclidean renderer for basic renderer
          * @type {BasicRenderer}
          */
-        this.renderer = new BasicRenderer(this.camera, this.scene, {});
+        this.renderer = new BasicRenderer(
+            params.camera !== undefined ? params.camera : new SphereCamera({set: set}),
+            new Scene({fog: fog}),
+            {}
+        );
         this.setPixelRatio(window.devicePixelRatio);
         this.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(new Color(0, 0, 0.2), 1);
@@ -95,15 +82,37 @@ export class ThurstonLite {
         this.gui = undefined;
     }
 
+    /**
+     * Shortcut to access the camera
+     * @return {Camera}
+     */
     get camera() {
-        return this._camera;
+        return this.renderer.camera;
     }
 
     set camera(camera) {
-        this._camera = camera;
         this.renderer.camera = camera;
     }
 
+    /**
+     * Shortcut to access the scene
+     * @return {Scene}
+     */
+    get scene() {
+        return this.renderer.scene;
+    }
+
+    set scene(scene) {
+        this.renderer.scene = scene;
+    }
+
+    /**
+     * Shortcut to access the teleportation set
+     * @return {TeleportationSet}
+     */
+    get set(){
+        return this.camera.position.set;
+    }
 
     setPixelRatio(value) {
         this.renderer.setPixelRatio(value);

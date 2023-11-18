@@ -88,5 +88,4 @@ export class SphereCamera extends Camera {
     static glslMapping() {
         return mapping;
     }
-
 }

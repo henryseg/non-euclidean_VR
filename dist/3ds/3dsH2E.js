@@ -5201,7 +5201,6 @@ class Camera {
             shaderBuilder.addUniform('camera', 'Camera', this.fakeCameras[side]);
         }
         shaderBuilder.addChunk(this.constructor.glslMapping());
-
     }
 }
 // EXTERNAL MODULE: ./src/core/cameras/sphereCamera/shaders/vertex.glsl

@@ -165,6 +165,5 @@ export class Camera {
             shaderBuilder.addUniform('camera', 'Camera', this.fakeCameras[side]);
         }
         shaderBuilder.addChunk(this.constructor.glslMapping());
-
     }
 }
